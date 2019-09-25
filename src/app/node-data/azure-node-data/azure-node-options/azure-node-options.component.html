@@ -1,5 +1,6 @@
 <form [formGroup]="form"
-      fxLayout="column">
+      fxLayout="column"
+      *ngIf="!hideOptional">
   <div fxFlex>
     <div fxLayout="row"
          class="km-azure-options">

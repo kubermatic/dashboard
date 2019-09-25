@@ -15,9 +15,11 @@ import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
 
 export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
+
   form: FormGroup;
   loadingNetworks = false;
   loadingFolders = false;
+  hideOptional = true;
   folders: VSphereFolder[] = [];
 
   private _selectedPreset: string;
@@ -50,6 +52,10 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
     this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.cluster.spec.cloud.vsphere = data.cloudSpec.vsphere;
       this._setUsernamePassword();
+    });
+
+    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.hideOptional = data.hideOptional;
     });
 
     this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {

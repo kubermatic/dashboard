@@ -3,7 +3,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {DatacenterService} from '../../../core/services';
+import {DatacenterService, WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../../shared/entity/ClusterEntity';
 import {OperatingSystemSpec} from '../../../shared/entity/NodeEntity';
@@ -18,10 +18,13 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() cloudSpec: CloudSpec;
   form: FormGroup;
+  hideOptional = true;
   defaultTemplate = '';
   private _unsubscribe = new Subject<void>();
 
-  constructor(private addNodeService: NodeDataService, private dcService: DatacenterService) {}
+  constructor(
+      private addNodeService: NodeDataService, private dcService: DatacenterService,
+      private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -46,6 +49,10 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
     if (this.nodeData.spec.cloud.vsphere.template === '') {
       this.setImage(this.nodeData.spec.operatingSystem);
     }
+
+    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.hideOptional = data.hideOptional;
+    });
   }
 
   ngOnDestroy(): void {
@@ -83,7 +90,8 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
   }
 
   getVSphereOptionsData(): NodeProviderData {
-    const providerData: NodeProviderData = {
+    const isValid = !!this.nodeData.valid ? this.nodeData.valid : this.form.valid;
+    return {
       spec: {
         vsphere: {
           cpus: this.nodeData.spec.cloud.vsphere.cpus,
@@ -91,7 +99,7 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
           template: this.form.controls.template.value,
         },
       },
-      valid: this.nodeData.valid,
+      valid: isValid,
     };
 
     if (!!this.vsphereOptionsForm.controls.diskSizeGB.value) {

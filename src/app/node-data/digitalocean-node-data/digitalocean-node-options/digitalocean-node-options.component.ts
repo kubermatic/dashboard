@@ -3,6 +3,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
+import {WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
@@ -15,10 +16,12 @@ import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 export class DigitaloceanNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() isInWizard: boolean;
+
+  hideOptional = true;
   form: FormGroup;
   private _unsubscribe = new Subject<void>();
 
-  constructor(private addNodeService: NodeDataService) {}
+  constructor(private addNodeService: NodeDataService, private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -32,6 +35,10 @@ export class DigitaloceanNodeOptionsComponent implements OnInit, OnDestroy {
     });
 
     this.addNodeService.changeNodeProviderData(this.getDoOptionsData());
+
+    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.hideOptional = data.hideOptional;
+    });
   }
 
   ngOnDestroy(): void {

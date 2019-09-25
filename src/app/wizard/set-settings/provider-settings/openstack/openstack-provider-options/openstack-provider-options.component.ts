@@ -15,6 +15,7 @@ import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
 export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
 
+  hideOptional = true;
   form: FormGroup;
   subnetIds: OpenstackSubnet[] = [];
   networks: OpenstackNetwork[] = [];
@@ -25,7 +26,7 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
   private _loadingOptionalSettings = false;
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _wizard: WizardService) {}
+  constructor(private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -37,7 +38,8 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
     if (this._hasRequiredCredentials()) {
       this._loadOptionalSettings();
     }
-    this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
+    this._wizardService.changeClusterProviderSettings(
+        this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
 
     merge(
         this.form.controls.network.valueChanges, this.form.controls.subnetId.valueChanges,
@@ -45,7 +47,8 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
         .pipe(distinctUntilChanged())
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(() => {
-          this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
+          this._wizardService.changeClusterProviderSettings(
+              this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
         });
 
     this.form.controls.network.valueChanges.pipe(distinctUntilChanged())
@@ -58,11 +61,12 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
           }
         });
 
-    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+    this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
       if (newCredentials) {
         this._selectedPreset = newCredentials;
         this.form.disable();
-        this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
+        this._wizardService.changeClusterProviderSettings(
+            this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
         return;
       }
 
@@ -71,7 +75,7 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
       }
     });
 
-    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+    this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.cluster.spec.cloud.openstack = data.cloudSpec.openstack;
       if (this._hasRequiredCredentials()) {
         this._loadOptionalSettings();
@@ -79,6 +83,10 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
       } else {
         this.form.disable();
       }
+    });
+
+    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.hideOptional = data.hideOptional;
     });
   }
 
@@ -134,7 +142,7 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
 
   private _loadOptionalSettings(): void {
     this._loadingOptionalSettings = true;
-    this._wizard.provider(NodeProvider.OPENSTACK)
+    this._wizardService.provider(NodeProvider.OPENSTACK)
         .username(this.cluster.spec.cloud.openstack.username)
         .password(this.cluster.spec.cloud.openstack.password)
         .tenant(this.cluster.spec.cloud.openstack.tenant)
@@ -155,7 +163,7 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
               this._loadingOptionalSettings = false;
             });
 
-    this._wizard.provider(NodeProvider.OPENSTACK)
+    this._wizardService.provider(NodeProvider.OPENSTACK)
         .username(this.cluster.spec.cloud.openstack.username)
         .password(this.cluster.spec.cloud.openstack.password)
         .tenant(this.cluster.spec.cloud.openstack.tenant)
@@ -180,7 +188,7 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
 
   private _loadSubnetIds(): void {
     this._loadingSubnetIds = true;
-    this._wizard.provider(NodeProvider.OPENSTACK)
+    this._wizardService.provider(NodeProvider.OPENSTACK)
         .username(this.cluster.spec.cloud.openstack.username)
         .password(this.cluster.spec.cloud.openstack.password)
         .tenant(this.cluster.spec.cloud.openstack.tenant)

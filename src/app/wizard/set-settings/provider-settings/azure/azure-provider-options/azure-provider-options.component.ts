@@ -13,12 +13,14 @@ import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterFo
 })
 export class AzureProviderOptionsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
+
+  hideOptional = true;
   form: FormGroup;
 
   private _selectedPreset: string;
   private _unsubscribe: Subject<any> = new Subject();
 
-  constructor(private readonly _wizard: WizardService) {}
+  constructor(private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -30,14 +32,19 @@ export class AzureProviderOptionsComponent implements OnInit, OnDestroy {
     });
 
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
+      this._wizardService.changeClusterProviderSettings(
+          this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
     });
 
-    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+    this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.cluster.spec.cloud.azure = data.cloudSpec.azure;
     });
 
-    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.hideOptional = data.hideOptional;
+    });
+
+    this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
       if (newCredentials) {
         this._selectedPreset = newCredentials;
         this.form.disable();

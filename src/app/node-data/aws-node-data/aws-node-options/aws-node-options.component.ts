@@ -3,6 +3,7 @@ import {FormArray, FormControl, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
+import {WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
@@ -16,12 +17,13 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() isInWizard: boolean;
 
+  hideOptional = true;
   form: FormGroup;
   tags: FormArray;
 
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _addNodeService: NodeDataService) {}
+  constructor(private readonly _addNodeService: NodeDataService, private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
     const tagList = new FormArray([]);
@@ -48,6 +50,10 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    });
+
+    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.hideOptional = data.hideOptional;
     });
 
     this._addNodeService.nodeProviderDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {

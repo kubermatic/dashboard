@@ -3,6 +3,7 @@ import {FormArray, FormControl, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
+import {WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
@@ -14,11 +15,12 @@ import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 export class GCPNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
 
+  hideOptional = true;
   form: FormGroup;
   labels: FormArray;
   private _unsubscribe: Subject<any> = new Subject();
 
-  constructor(private readonly _nodeDataService: NodeDataService) {}
+  constructor(private readonly _nodeDataService: NodeDataService, private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
     const labelList = new FormArray([]);
@@ -45,6 +47,10 @@ export class GCPNodeOptionsComponent implements OnInit, OnDestroy {
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._nodeDataService.changeNodeProviderData(this.getNodeProviderData());
+    });
+
+    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.hideOptional = data.hideOptional;
     });
 
     this._nodeDataService.changeNodeProviderData(this.getNodeProviderData());

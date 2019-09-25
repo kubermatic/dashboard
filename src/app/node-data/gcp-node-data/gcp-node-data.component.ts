@@ -28,7 +28,6 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
   machineTypes: GCPMachineSize[] = [];
   zones: GCPZone[] = [];
   form: FormGroup;
-  hideOptional = true;
   private _loadingZones = false;
   private _loadingDiskTypes = false;
   private _loadingSizes = false;
@@ -51,10 +50,6 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._nodeDataService.changeNodeProviderData(this.getNodeProviderData());
-    });
-
-    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.hideOptional = data.hideOptional;
     });
 
     this._nodeDataService.changeNodeProviderData(this.getNodeProviderData());

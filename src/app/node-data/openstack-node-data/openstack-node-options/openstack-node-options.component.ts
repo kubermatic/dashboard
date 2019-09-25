@@ -3,6 +3,7 @@ import {FormArray, FormControl, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
+import {WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../../shared/entity/ClusterEntity';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
@@ -17,11 +18,13 @@ export class OpenstackNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() cloudSpec: CloudSpec;
   @Input() isInWizard: boolean;
+
+  hideOptional = true;
   form: FormGroup;
   tags: FormArray;
   private _unsubscribe = new Subject<void>();
 
-  constructor(private addNodeService: NodeDataService) {}
+  constructor(private addNodeService: NodeDataService, private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
     const tagList = new FormArray([]);
@@ -47,6 +50,10 @@ export class OpenstackNodeOptionsComponent implements OnInit, OnDestroy {
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getOsOptionsData());
+    });
+
+    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.hideOptional = data.hideOptional;
     });
   }
 

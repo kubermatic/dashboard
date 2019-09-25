@@ -24,7 +24,6 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
 
   sizes: PacketSize[] = [];
   form: FormGroup;
-  hideOptional = true;
   loadingSizes = false;
 
   private _unsubscribe: Subject<any> = new Subject();
@@ -42,10 +41,6 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(() => this._addNodeService.changeNodeProviderData(this._getNodeProviderData()));
-
-    this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.hideOptional = data.hideOptional;
-    });
 
     this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.cloudSpec = data.cloudSpec;

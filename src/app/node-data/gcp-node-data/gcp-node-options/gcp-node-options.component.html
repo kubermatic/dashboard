@@ -1,5 +1,6 @@
 <form [formGroup]="form"
-      fxLayout="column">
+      fxLayout="column"
+      *ngIf="!hideOptional">
 
   <mat-form-field>
     <mat-label>Tags</mat-label>

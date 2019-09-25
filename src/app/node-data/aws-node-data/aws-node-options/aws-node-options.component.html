@@ -1,5 +1,6 @@
 <form [formGroup]="form"
-      fxLayout="column">
+      fxLayout="column"
+      *ngIf="!hideOptional">
 
   <mat-checkbox id="assignPublicIP"
                 formControlName="assignPublicIP">Assign Public IP</mat-checkbox>

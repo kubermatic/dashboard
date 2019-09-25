@@ -1,5 +1,6 @@
 <form [formGroup]="form"
-      fxLayout="column">
+      fxLayout="column"
+      *ngIf="!hideOptional">
   <mat-form-field fxFlex
                   class="km-with-hint">
     <mat-label>{{getOptionalSettingsFormState('Security Group')}}</mat-label>

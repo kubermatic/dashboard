@@ -26,7 +26,6 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   sizes: AzureSizes[] = [];
   form: FormGroup;
   datacenter: DataCenterEntity;
-  hideOptional = true;
   loadingSizes = false;
 
   private _unsubscribe = new Subject<void>();
@@ -43,10 +42,6 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
-    });
-
-    this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.hideOptional = data.hideOptional;
     });
 
     this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {

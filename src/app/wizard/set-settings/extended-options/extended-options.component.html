@@ -5,7 +5,7 @@
      fxLayoutGap="30px">
   <mat-card fxFlex="50%"
             class="km-ext-opt">
-    <mat-card-header>
+    <mat-card-header *ngIf="isExtended">
       <mat-card-title class="km-color-primary"
                       *ngIf="!cluster.spec.cloud.digitalocean">Extended Provider Settings</mat-card-title>
     </mat-card-header>
@@ -15,7 +15,7 @@
   </mat-card>
   <mat-card fxFlex="50%"
             class="km-ext-opt">
-    <mat-card-header>
+    <mat-card-header *ngIf="isExtended">
       <mat-card-title class="km-color-primary">Extended Node Settings</mat-card-title>
     </mat-card-header>
     <mat-card-content fxLayout="column">

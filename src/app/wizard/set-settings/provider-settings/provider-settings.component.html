@@ -35,7 +35,7 @@
 </kubermatic-kubevirt-cluster-settings>
 
 <!-- Extended Options -->
-<ng-container *ngIf="!hideOptional && !isInWizard">
+<ng-container *ngIf="!isInWizard">
   <kubermatic-cluster-provider-options [cluster]="cluster"></kubermatic-cluster-provider-options>
 </ng-container>
 
