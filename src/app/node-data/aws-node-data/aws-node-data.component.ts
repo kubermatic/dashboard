@@ -234,23 +234,15 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(
             (subnets) => {
-              this.subnetIds = subnets.sort((a, b) => {
-                return a.name.localeCompare(b.name);
-              });
-
-              this._subnetMap = {};
-              this.subnetIds.forEach(subnet => {
-                const find = this.subnetAZ.find(x => x === subnet.availability_zone);
-                if (!find) {
-                  this._subnetMap[subnet.availability_zone] = [];
-                }
-                this._subnetMap[subnet.availability_zone].push(subnet);
-              });
+              this.fillSubnetMap(subnets);
 
               if (this.subnetIds.length === 0) {
                 this.form.controls.subnetId.setValue('');
                 this._noSubnets = true;
               } else {
+                if (this.nodeData.spec.cloud.aws.subnetId === '') {
+                  this.form.controls.subnetId.setValue(this._subnetMap[this.subnetAZ[0]][0].id);
+                }
                 this._noSubnets = false;
               }
 
@@ -264,6 +256,33 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
             () => {
               this._loadingSubnetIds = false;
             });
+  }
+
+  fillSubnetMap(subnets: AWSSubnet[]): void {
+    this.sortSubnets(subnets);
+
+    this._subnetMap = {};
+    this.subnetIds.forEach(subnet => {
+      this.fillSubnetsMapWithAZ(subnet);
+    });
+  }
+
+  sortSubnets(subnets: AWSSubnet[]): void {
+    this.subnetIds = subnets.sort((a, b) => {
+      return a.name.localeCompare(b.name);
+    });
+  }
+
+  fillSubnetsMapWithAZ(subnet: AWSSubnet): void {
+    const find = this.subnetAZ.find(x => x === subnet.availability_zone);
+    if (!find) {
+      this._subnetMap[subnet.availability_zone] = [];
+    }
+    this.fillSubnetsMapWithSubnets(subnet);
+  }
+
+  fillSubnetsMapWithSubnets(subnet: AWSSubnet): void {
+    this._subnetMap[subnet.availability_zone].push(subnet);
   }
 
   getAZFromSubnet(subnetId: string): string {
