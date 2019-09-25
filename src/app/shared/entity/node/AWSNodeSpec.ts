@@ -6,4 +6,5 @@ export class AWSNodeSpec {
   tags: object;
   subnetId: string;
   availabilityZone: string;
+  assignPublicIP?: boolean;
 }
