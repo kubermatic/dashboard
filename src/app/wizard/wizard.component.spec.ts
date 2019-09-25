@@ -19,6 +19,7 @@ import {DigitaloceanNodeDataComponent} from '../node-data/digitalocean-node-data
 import {DigitaloceanOptionsComponent} from '../node-data/digitalocean-node-data/digitalocean-options/digitalocean-options.component';
 import {GCPNodeDataComponent} from '../node-data/gcp-node-data/gcp-node-data.component';
 import {HetznerNodeDataComponent} from '../node-data/hetzner-node-data/hetzner-node-data.component';
+import {KubeVirtNodeDataComponent} from '../node-data/kubevirt-add-node/kubevirt-node-data.component';
 import {NodeDataComponent} from '../node-data/node-data.component';
 import {OpenstackNodeDataComponent} from '../node-data/openstack-node-data/openstack-node-data.component';
 import {OpenstackOptionsComponent} from '../node-data/openstack-node-data/openstack-options/openstack-options.component';
@@ -47,6 +48,7 @@ import {BringyourownClusterSettingsComponent} from './set-settings/provider-sett
 import {DigitaloceanClusterSettingsComponent} from './set-settings/provider-settings/digitalocean/digitalocean.component';
 import {GCPClusterSettingsComponent} from './set-settings/provider-settings/gcp/gcp.component';
 import {HetznerClusterSettingsComponent} from './set-settings/provider-settings/hetzner/hetzner.component';
+import {KubeVirtClusterSettingsComponent} from './set-settings/provider-settings/kubevirt/kubevirt.component';
 import {OpenstackClusterSettingsComponent} from './set-settings/provider-settings/openstack/openstack.component';
 import {PacketClusterSettingsComponent} from './set-settings/provider-settings/packet/packet.component';
 import {ClusterProviderSettingsComponent} from './set-settings/provider-settings/provider-settings.component';
@@ -111,6 +113,8 @@ describe('WizardComponent', () => {
             SetMachineNetworksComponent,
             SetProviderComponent,
             SetDatacenterComponent,
+            KubeVirtClusterSettingsComponent,
+            KubeVirtNodeDataComponent,
             SummaryComponent,
           ],
           providers: [
