@@ -13,7 +13,7 @@ import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterFo
 export class GCPProviderOptionsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
 
-  hideOptional: true;
+  hideOptional = true;
   form: FormGroup;
 
   private _selectedPreset: string;

@@ -1,13 +1,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {merge, Subject} from 'rxjs';
-import {debounceTime, take, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../../core/services';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
-import {AWSVPC} from '../../../../shared/entity/provider/aws/AWS';
 import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm';
-import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
 
@@ -18,9 +16,7 @@ import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   form: FormGroup;
-  vpcIds: AWSVPC[] = [];
 
-  private _loadingVPCs = false;
   private _formHelper: FormHelper;
   private _unsubscribe = new Subject<void>();
 
@@ -30,7 +26,6 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       accessKeyId: new FormControl(this.cluster.spec.cloud.aws.accessKeyId, Validators.required),
       secretAccessKey: new FormControl(this.cluster.spec.cloud.aws.secretAccessKey, Validators.required),
-      vpcId: new FormControl(this.cluster.spec.cloud.aws.vpcId, Validators.pattern('vpc-(\\w{8}|\\w{17})')),
     });
 
     this._formHelper = new FormHelper(this.form);
@@ -38,21 +33,6 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
         this.form.controls.accessKeyId,
         this.form.controls.secretAccessKey,
     );
-
-    this._loadVPCs();
-    this.checkVPCState();
-
-    merge(this.form.controls.accessKeyId.valueChanges, this.form.controls.secretAccessKey.valueChanges)
-        .pipe(debounceTime(1000))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(() => {
-          if (this._hasRequiredCredentials()) {
-            this._loadVPCs();
-            this.checkVPCState();
-          } else {
-            this.clearVpcId();
-          }
-        });
 
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this._formHelper.areControlsValid() ? this._wizard.onCustomPresetsDisable.emit(false) :
@@ -75,89 +55,13 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _hasRequiredCredentials(): boolean {
-    return !(this.form.controls.accessKeyId.value === '' || this.form.controls.secretAccessKey.value === '');
-  }
-
-  clearVpcId(): void {
-    this.vpcIds = [];
-    this.form.controls.vpcId.setValue('');
-    this.checkVPCState();
-  }
-
-  getVPCFormState(): string {
-    if (!this._loadingVPCs && !this._hasRequiredCredentials()) {
-      return 'VPC ID';
-    } else if (this._loadingVPCs) {
-      return 'Loading VPC IDs...';
-    } else if (this.vpcIds.length === 0) {
-      return 'No VPC IDs available';
-    } else {
-      return 'VPC ID';
-    }
-  }
-
-  private _loadVPCs(): void {
-    if (!this._hasRequiredCredentials()) {
-      return;
-    }
-
-    this._loadingVPCs = true;
-    this._wizard.provider(NodeProvider.AWS)
-        .accessKeyID(this.form.controls.accessKeyId.value)
-        .secretAccessKey(this.form.controls.secretAccessKey.value)
-        .vpcs(this.cluster.spec.cloud.dc)
-        .pipe(take(1))
-        .subscribe(
-            (vpcs) => {
-              this.vpcIds = vpcs.sort((a, b) => {
-                return a.name.localeCompare(b.name);
-              });
-
-              if (this.vpcIds.length === 0) {
-                this.form.controls.vpcId.setValue('');
-              } else {
-                const defaultVpc = this.vpcIds.find(x => x.isDefault);
-                if (defaultVpc) {
-                  this.form.controls.vpcId.setValue(defaultVpc.vpcId);
-                }
-              }
-
-              this._loadingVPCs = false;
-              this.checkVPCState();
-            },
-            () => {
-              this.clearVpcId();
-              this._loadingVPCs = false;
-            },
-            () => {
-              this._loadingVPCs = false;
-            });
-  }
-
-  checkVPCState(): void {
-    if (this.vpcIds.length === 0 && this.form.controls.vpcId.enabled) {
-      this.form.controls.vpcId.disable();
-    } else if (this.vpcIds.length > 0 && this.form.controls.vpcId.disabled) {
-      this.form.controls.vpcId.enable();
-    }
-  }
-
-  getVPCIdHint(): string {
-    return (!this._loadingVPCs && !this._hasRequiredCredentials()) ? 'Please enter your credentials first.' : '';
-  }
-
-  getVPCOptionName(vpc: AWSVPC): string {
-    return vpc.name !== '' ? vpc.name + ' (' + vpc.vpcId + ')' : vpc.vpcId;
-  }
-
   private _clusterProviderSettingsForm(valid: boolean): ClusterProviderSettingsForm {
     return {
       cloudSpec: {
         aws: {
           accessKeyId: this.form.controls.accessKeyId.value,
           secretAccessKey: this.form.controls.secretAccessKey.value,
-          vpcId: this.form.controls.vpcId.value,
+          vpcId: this.cluster.spec.cloud.aws.vpcId,
           securityGroupID: this.cluster.spec.cloud.aws.securityGroupID,
           routeTableId: this.cluster.spec.cloud.aws.routeTableId,
           instanceProfileName: this.cluster.spec.cloud.aws.instanceProfileName,
