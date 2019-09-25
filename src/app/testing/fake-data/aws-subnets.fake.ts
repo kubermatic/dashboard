@@ -20,6 +20,20 @@ export function fakeAwsSubnets(): AWSSubnet[] {
     },
     {
       'name': '',
+      'id': 'subnet-3cee5e54',
+      'availability_zone': 'eu-central-1a',
+      'availability_zone_id': 'euc1-az2',
+      'ipv4cidr': '172.31.0.0/20',
+      'ipv6cidr': '',
+      'tags': [
+        {'key': 'kubernetes.io/cluster/m4q97kxmsw', 'value': ''},
+      ],
+      'state': 'available',
+      'available_ip_address_count': 4084,
+      'default': true
+    },
+    {
+      'name': '',
       'id': 'subnet-f3427db9',
       'availability_zone': 'eu-central-1c',
       'availability_zone_id': 'euc1-az1',

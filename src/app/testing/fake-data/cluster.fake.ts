@@ -200,7 +200,7 @@ export function fakeAWSCluster(): ClusterEntity {
     name: 'nifty-haibt',
     spec: {
       cloud: {
-        dc: 'do-fra1',
+        dc: 'aws-fra1',
         digitalocean: null,
         aws: {
           accessKeyId: 'aaaaaaaaaaaa',
