@@ -158,7 +158,7 @@
 </form>
 
 <!-- Extended Node Options -->
-<ng-container *ngIf="!hideOptional && !isInWizard">
+<ng-container *ngIf="!isInWizard">
   <kubermatic-node-data-options [nodeData]="nodeData"
                                 [cloudSpec]="cluster.spec.cloud"
                                 [isInWizard]="isInWizard"></kubermatic-node-data-options>
