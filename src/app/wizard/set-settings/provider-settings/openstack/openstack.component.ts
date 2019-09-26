@@ -97,25 +97,29 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
           }
         });
 
-    this.form.controls.tenant.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe((value: string) => {
-      this._enableTenantID(value === '');
+    this.form.controls.tenant.valueChanges.pipe(distinctUntilChanged())
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((value: string) => {
+          this._enableTenantID(value === '');
 
-      if (this._hasRequiredCredentials()) {
-        this._loadFloatingIPPools();
-      }
+          if (this._hasRequiredCredentials()) {
+            this._loadFloatingIPPools();
+          }
 
-      this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
-    });
+          this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
+        });
 
-    this.form.controls.tenantID.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe((value: string) => {
-      this._enableTenant(value === '');
+    this.form.controls.tenantID.valueChanges.pipe(distinctUntilChanged())
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((value: string) => {
+          this._enableTenant(value === '');
 
-      if (this._hasRequiredCredentials()) {
-        this._loadFloatingIPPools();
-      }
+          if (this._hasRequiredCredentials()) {
+            this._loadFloatingIPPools();
+          }
 
-      this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
-    });
+          this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
+        });
 
     merge(this.form.controls.tenant.valueChanges, this.form.controls.tenantID.valueChanges)
         .pipe(debounceTime(this._debounceTime))
@@ -138,7 +142,11 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
         });
 
 
-    this.form.valueChanges.pipe(debounceTime(this._debounceTime))
+    this.form.valueChanges
+        .pipe(distinctUntilChanged(
+            (x: {[key: string]: string}, y: {[key: string]: string}): boolean =>
+                Object.keys(y).every(key => (!(key in x) && y[key] === '') || x[key] === y[key])))
+        .pipe(debounceTime(this._debounceTime))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(
             () => this._formHelper.areControlsValid() ? this._wizard.onCustomPresetsDisable.emit(false) :

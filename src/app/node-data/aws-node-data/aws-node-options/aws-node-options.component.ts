@@ -79,7 +79,7 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
           diskSize: this.nodeData.spec.cloud.aws.diskSize,
           ami: this.nodeData.spec.cloud.aws.ami,
           volumeType: this.nodeData.spec.cloud.aws.volumeType,
-          subnetId: this.nodeData.spec.cloud.aws.subnetId,
+          subnetID: this.nodeData.spec.cloud.aws.subnetID,
           availabilityZone: this.nodeData.spec.cloud.aws.availabilityZone,
           assignPublicIP: this.form.controls.assignPublicIP.value,
           tags: tagMap,
