@@ -88,7 +88,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.801.2",
-    "@angular/cli": "8.3.5",
+    "@angular/cli": "8.3.6",
     "@angular/compiler-cli": "8.2.2",
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
     "@ngrx/store": "8.3.0",
