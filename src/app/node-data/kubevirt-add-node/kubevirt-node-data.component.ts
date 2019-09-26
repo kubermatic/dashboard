@@ -22,12 +22,18 @@ export class KubeVirtNodeDataComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.formGroup = new FormGroup({
-      cpus: new FormControl(this.nodeData.spec.cloud.kubevirt.cpus, [Validators.required]),
-      memory: new FormControl(this.nodeData.spec.cloud.kubevirt.memory, [Validators.required]),
+      cpus: new FormControl(
+          this.nodeData.spec.cloud.kubevirt.cpus || '1',
+          [Validators.required, Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/)]),
+      memory: new FormControl(
+          this.nodeData.spec.cloud.kubevirt.memory || '2Gi',
+          [Validators.required, Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/)]),
       namespace: new FormControl(this.nodeData.spec.cloud.kubevirt.namespace, [Validators.required]),
       sourceURL: new FormControl(this.nodeData.spec.cloud.kubevirt.sourceURL, [Validators.required]),
       storageClassName: new FormControl(this.nodeData.spec.cloud.kubevirt.storageClassName, [Validators.required]),
-      pvcSize: new FormControl(this.nodeData.spec.cloud.kubevirt.pvcSize, [Validators.required]),
+      pvcSize: new FormControl(
+          this.nodeData.spec.cloud.kubevirt.pvcSize || '10Gi',
+          [Validators.required, Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/)]),
     });
 
     this.formGroup.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {

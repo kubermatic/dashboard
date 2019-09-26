@@ -9,6 +9,9 @@
     <mat-error *ngIf="formGroup.controls.cpus.hasError('required')">
       Number of CPUs is <strong>required</strong>.
     </mat-error>
+    <mat-error *ngIf="formGroup.controls.cpus.hasError('pattern')">
+      Wrong quantity format, use values like 2, 3Gi and 2M.
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field>
@@ -19,6 +22,9 @@
            autocomplete="off">
     <mat-error *ngIf="formGroup.controls.memory.hasError('required')">
       Memory is <strong>required</strong>.
+    </mat-error>
+    <mat-error *ngIf="formGroup.controls.memory.hasError('pattern')">
+      Wrong quantity format, use values like 2, 3Gi and 2M.
     </mat-error>
   </mat-form-field>
 
@@ -42,6 +48,9 @@
            autocomplete="off">
     <mat-error *ngIf="formGroup.controls.pvcSize.hasError('required')">
       PVC Size is <strong>required</strong>.
+    </mat-error>
+    <mat-error *ngIf="formGroup.controls.pvcSize.hasError('pattern')">
+      Wrong quantity format, use values like 2, 3Gi and 2M.
     </mat-error>
   </mat-form-field>
 
