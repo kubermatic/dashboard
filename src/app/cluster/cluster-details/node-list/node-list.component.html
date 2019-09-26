@@ -218,6 +218,31 @@
               <div value>{{element.spec.cloud.openstack.image}}</div>
             </km-property>
 
+            <km-property *ngIf="element.spec.cloud.kubevirt">
+              <div key>Number of CPUs</div>
+              <div value>{{element.spec.cloud.kubevirt.cpus}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.kubevirt">
+              <div key>Memory</div>
+              <div value>{{element.spec.cloud.kubevirt.memory}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.kubevirt">
+              <div key>PVC Size</div>
+              <div value>{{element.spec.cloud.kubevirt.pvcSize}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.kubevirt">
+              <div key>Storage Class Name</div>
+              <div value>{{element.spec.cloud.kubevirt.storageClassName}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.kubevirt">
+              <div key>Namespace</div>
+              <div value>{{element.spec.cloud.kubevirt.namespace}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.kubevirt">
+              <div key>Source URL</div>
+              <div value>{{element.spec.cloud.kubevirt.sourceURL}}</div>
+            </km-property>
+
             <km-property *ngIf="element.spec.cloud.vsphere">
               <div key>Number of CPU's</div>
               <div value>{{element.spec.cloud.vsphere.cpus}}</div>
