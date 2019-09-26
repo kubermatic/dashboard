@@ -334,14 +334,17 @@
                  class="km-warning">Not enough IPs left. Reduce number of nodes or add more machine networks.</p>
             </div>
 
-            <div *ngIf="nodeData.spec.cloud.aws && nodeData.spec.cloud.aws.assignPublicIP !== undefined">
-              <div class="km-summary-row">
-                <span class="km-summary-left">
-                  <i [ngClass]="{'km-icon-disabled': !nodeData.spec.cloud.aws.assignPublicIP, 'km-icon-running': nodeData.spec.cloud.aws.assignPublicIP}"></i>
-                </span>
-                <span>Assign Public IP</span>
+            <!-- AWS Node Options -->
+            <ng-container *ngIf="cluster.spec.cloud.aws">
+              <div *ngIf="nodeData.spec.cloud.aws.assignPublicIP !== undefined">
+                <div class="km-summary-row">
+                  <span class="km-summary-left">
+                    <i [ngClass]="{'km-icon-disabled': !nodeData.spec.cloud.aws.assignPublicIP, 'km-icon-running': nodeData.spec.cloud.aws.assignPublicIP}"></i>
+                  </span>
+                  <span>Assign Public IP</span>
+                </div>
               </div>
-            </div>
+            </ng-container>
 
             <!-- DO Node Options -->
             <ng-container *ngIf="cluster.spec.cloud.digitalocean">
