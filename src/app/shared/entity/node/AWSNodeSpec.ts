@@ -4,7 +4,7 @@ export class AWSNodeSpec {
   volumeType: string;
   ami: string;
   tags: object;
-  subnetId: string;
+  subnetID: string;
   availabilityZone: string;
   assignPublicIP?: boolean;
 }
