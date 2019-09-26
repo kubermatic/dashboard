@@ -235,7 +235,9 @@
 
             <!-- GCP Nodes -->
             <ng-container *ngIf="cluster.spec.cloud.gcp">
-              <div class="km-summary-row km-summary-row-with-margin">Disk {{nodeData.spec.cloud.gcp.diskSize}} GB, {{nodeData.spec.cloud.gcp.diskType}}</div>
+              <div class="km-summary-row km-summary-row-with-margin">
+                Disk {{nodeData.spec.cloud.gcp.diskSize}} GB, {{nodeData.spec.cloud.gcp.diskType}}
+              </div>
               <km-property>
                 <div key>Machine Type</div>
                 <div value>{{nodeData.spec.cloud.gcp.machineType}}</div>
@@ -243,6 +245,29 @@
               <km-property>
                 <div key>Zone</div>
                 <div value>{{nodeData.spec.cloud.gcp.zone}}</div>
+              </km-property>
+            </ng-container>
+
+            <!-- KubeVirt Nodes -->
+            <ng-container *ngIf="cluster.spec.cloud.kubevirt">
+              <div class="km-summary-row km-summary-row-with-margin">
+                {{nodeData.spec.cloud.kubevirt.cpus}} CPU, {{nodeData.spec.cloud.kubevirt.memory}} memory
+              </div>
+              <km-property>
+                <div key>PVC Size</div>
+                <div value>{{nodeData.spec.cloud.kubevirt.pvcSize}}</div>
+              </km-property>
+              <km-property>
+                <div key>Storage Class Name</div>
+                <div value>{{nodeData.spec.cloud.kubevirt.storageClassName}}</div>
+              </km-property>
+              <km-property>
+                <div key>Source URL</div>
+                <div value>{{nodeData.spec.cloud.kubevirt.sourceURL}}</div>
+              </km-property>
+              <km-property>
+                <div key>Namespace</div>
+                <div value>{{nodeData.spec.cloud.kubevirt.namespace}}</div>
               </km-property>
             </ng-container>
 
