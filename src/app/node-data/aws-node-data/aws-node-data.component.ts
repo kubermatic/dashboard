@@ -57,7 +57,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       ami: new FormControl(this.nodeData.spec.cloud.aws.ami),
       assignPublicIP: new FormControl(this.nodeData.spec.cloud.aws.assignPublicIP),
       tags: tagList,
-      subnetId: new FormControl(this.nodeData.spec.cloud.aws.subnetId, Validators.required),
+      subnetID: new FormControl(this.nodeData.spec.cloud.aws.subnetID, Validators.required),
     });
 
     this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
@@ -109,12 +109,12 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   clearSubnetId(): void {
     this.subnetIds = [];
     this._subnetMap = {};
-    this.form.controls.subnetId.setValue('');
+    this.form.controls.subnetID.setValue('');
     this.checkSubnetState();
   }
 
   getNodeProviderData(): NodeProviderData {
-    const azFromSubnet = this.getAZFromSubnet(this.form.controls.subnetId.value);
+    const azFromSubnet = this.getAZFromSubnet(this.form.controls.subnetID.value);
     const tagMap = {};
     for (const i in this.form.controls.tags.value) {
       if (this.form.controls.tags.value[i].key !== '' && this.form.controls.tags.value[i].value !== '') {
@@ -130,7 +130,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
           ami: this.form.controls.ami.value,
           tags: tagMap,
           volumeType: this.form.controls.disk_type.value,
-          subnetId: this.form.controls.subnetId.value,
+          subnetID: this.form.controls.subnetID.value,
           availabilityZone: azFromSubnet,
           assignPublicIP: this.form.controls.assignPublicIP.value,
         },
@@ -237,11 +237,11 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
               this.fillSubnetMap(subnets);
 
               if (this.subnetIds.length === 0) {
-                this.form.controls.subnetId.setValue('');
+                this.form.controls.subnetID.setValue('');
                 this._noSubnets = true;
               } else {
-                if (this.nodeData.spec.cloud.aws.subnetId === '') {
-                  this.form.controls.subnetId.setValue(this._subnetMap[this.subnetAZ[0]][0].id);
+                if (this.nodeData.spec.cloud.aws.subnetID === '') {
+                  this.form.controls.subnetID.setValue(this._subnetMap[this.subnetAZ[0]][0].id);
                 }
                 this._noSubnets = false;
               }
@@ -322,10 +322,10 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   }
 
   checkSubnetState(): void {
-    if (this.subnetIds.length === 0 && this.form.controls.subnetId.enabled) {
-      this.form.controls.subnetId.disable();
-    } else if (this.subnetIds.length > 0 && this.form.controls.subnetId.disabled) {
-      this.form.controls.subnetId.enable();
+    if (this.subnetIds.length === 0 && this.form.controls.subnetID.enabled) {
+      this.form.controls.subnetID.disable();
+    } else if (this.subnetIds.length > 0 && this.form.controls.subnetID.disabled) {
+      this.form.controls.subnetID.enable();
     }
   }
 }
