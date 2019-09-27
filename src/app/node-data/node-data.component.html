@@ -88,6 +88,11 @@
                                 [clusterId]="cluster.id"
                                 [nodeData]="nodeData"></kubermatic-vsphere-node-data>
 
+  <kubermatic-kubevirt-node-data *ngIf="cluster.spec.cloud.kubevirt"
+                                 [cloudSpec]="cluster.spec.cloud"
+                                 [clusterId]="cluster.id"
+                                 [nodeData]="nodeData"></kubermatic-kubevirt-node-data>
+
   <kubermatic-azure-node-data *ngIf="cluster.spec.cloud.azure"
                               [cloudSpec]="cluster.spec.cloud"
                               [nodeData]="nodeData"
