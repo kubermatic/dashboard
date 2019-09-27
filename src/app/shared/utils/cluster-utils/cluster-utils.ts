@@ -25,6 +25,8 @@ export class ClusterUtils {
       return 'packet';
     } else if (cloud.gcp) {
       return 'gcp';
+    } else if (cloud.kubevirt) {
+      return 'kubevirt';
     }
   }
 
