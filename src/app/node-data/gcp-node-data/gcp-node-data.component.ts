@@ -9,6 +9,7 @@ import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '../../shared/entity/provider/gcp/GCP';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
+import {objectFromForm} from '../../shared/utils/common-utils';
 
 @Component({
   selector: 'kubermatic-gcp-node-data',
@@ -303,13 +304,6 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
   }
 
   getNodeProviderData(): NodeProviderData {
-    const labelsMap = {};
-    for (const i in this.form.controls.labels.value) {
-      if (this.form.controls.labels.value[i].key !== '' && this.form.controls.labels.value[i].value !== '') {
-        labelsMap[this.form.controls.labels.value[i].key] = this.form.controls.labels.value[i].value;
-      }
-    }
-
     let gcpTags: string[] = [];
     if ((this.form.controls.tags.value).length > 0) {
       gcpTags = (this.form.controls.tags.value).split(',').map(tag => tag.trim());
@@ -324,7 +318,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
           machineType: this.form.controls.machineType.value,
           preemptible: this.form.controls.preemptible.value,
           zone: this.form.controls.zone.value,
-          labels: labelsMap,
+          labels: objectFromForm(this.form.controls.labels),
           tags: gcpTags,
         },
       },
