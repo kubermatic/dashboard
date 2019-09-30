@@ -117,7 +117,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
     const azFromSubnet = this.getAZFromSubnet(this.form.controls.subnetID.value);
     const tagMap = {};
     for (const i in this.form.controls.tags.value) {
-      if (this.form.controls.tags.value[i].key !== '' && this.form.controls.tags.value[i].value !== '') {
+      if (this.form.controls.tags.value[i].key !== '') {
         tagMap[this.form.controls.tags.value[i].key] = this.form.controls.tags.value[i].value;
       }
     }
