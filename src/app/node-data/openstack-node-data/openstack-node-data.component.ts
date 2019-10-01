@@ -141,7 +141,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
           diskSize: this._getCurrentFlavor() && this.osNodeForm.controls.disk_size.value > 0 &&
                   this.osNodeForm.controls.disk_size.value !== this._getCurrentFlavor().disk ?
               this.osNodeForm.controls.disk_size.value :
-              undefined,
+              null,
         },
       },
       valid: this.osNodeForm.valid,

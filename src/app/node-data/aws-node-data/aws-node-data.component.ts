@@ -9,6 +9,7 @@ import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {AWSSize, AWSSubnet} from '../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
+import {objectFromForm} from '../../shared/utils/common-utils';
 
 @Component({
   selector: 'kubermatic-aws-node-data',
@@ -114,24 +115,16 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   }
 
   getNodeProviderData(): NodeProviderData {
-    const azFromSubnet = this.getAZFromSubnet(this.form.controls.subnetID.value);
-    const tagMap = {};
-    for (const i in this.form.controls.tags.value) {
-      if (this.form.controls.tags.value[i].key !== '' && this.form.controls.tags.value[i].value !== '') {
-        tagMap[this.form.controls.tags.value[i].key] = this.form.controls.tags.value[i].value;
-      }
-    }
-
     return {
       spec: {
         aws: {
           instanceType: this.form.controls.size.value,
           diskSize: this.form.controls.disk_size.value,
           ami: this.form.controls.ami.value,
-          tags: tagMap,
+          tags: objectFromForm(this.form.controls.tags),
           volumeType: this.form.controls.disk_type.value,
           subnetID: this.form.controls.subnetID.value,
-          availabilityZone: azFromSubnet,
+          availabilityZone: this.getAZFromSubnet(this.form.controls.subnetID.value),
           assignPublicIP: this.form.controls.assignPublicIP.value,
         },
       },
