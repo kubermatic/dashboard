@@ -12,6 +12,7 @@ import {CreateProjectModel} from '../../model/CreateProjectModel';
 })
 export class AddProjectDialogComponent implements OnInit {
   addProjectForm: FormGroup;
+  labels: object;
 
   constructor(
       private readonly _apiService: ApiService,
@@ -24,7 +25,10 @@ export class AddProjectDialogComponent implements OnInit {
   }
 
   addProject(): void {
-    const createProject: CreateProjectModel = {name: this.addProjectForm.controls.name.value};
+    const createProject: CreateProjectModel = {
+      name: this.addProjectForm.controls.name.value,
+      labels: this.labels,
+    };
     this._apiService.createProject(createProject).subscribe((res) => {
       this._matDialogRef.close(res);
       NotificationActions.success(`Project ${createProject.name} is added successfully`);

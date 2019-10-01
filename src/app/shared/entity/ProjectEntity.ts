@@ -4,6 +4,7 @@ export class ProjectEntity {
   id: string;
   name: string;
   status: string;
+  labels: object;
   owners: ProjectOwners[];
 }
 
@@ -23,4 +24,5 @@ export class OwnerProjects {
 
 export class EditProjectEntity {
   name: string;
+  labels: object;
 }
