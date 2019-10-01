@@ -1,8 +1,9 @@
 export class CreateProjectModel {
   name: string;
-  labels: object;
+  labels?: object;
 
-  constructor(name: string) {
+  constructor(name: string, labels?: object) {
     this.name = name;
+    this.labels = labels;
   }
 }
