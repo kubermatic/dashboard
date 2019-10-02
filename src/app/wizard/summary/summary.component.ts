@@ -62,7 +62,7 @@ export class SummaryComponent implements OnInit {
   }
 
   displayTags(tags: object): boolean {
-    return Object.keys(tags).length > 0;
+    return !!tags && Object.keys(tags).length > 0;
   }
 
   displayNoProviderTags(): boolean {
