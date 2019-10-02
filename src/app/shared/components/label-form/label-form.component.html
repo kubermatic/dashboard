@@ -52,7 +52,7 @@
       </mat-form-field>
       <button mat-icon-button
               class="km-label-form-delete-button"
-              *ngIf="isRemovable()"
+              [disabled]="!isRemovable(i)"
               (click)="deleteLabel(i)">
         <i class="fa km-icon-delete"
            aria-hidden="true"></i>
