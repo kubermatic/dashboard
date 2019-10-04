@@ -42,6 +42,9 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       private readonly _apiService: ApiService, private readonly _dcService: DatacenterService) {}
 
   ngOnInit(): void {
+    const isInEdit = !!this.nodeData.name;  // Existing node deployment will always have assigned name.
+    const assignPublicIP = isInEdit ? this.nodeData.spec.cloud.aws.assignPublicIP : true;  // Default to true.
+
     const tagList = new FormArray([]);
     for (const i in this.nodeData.spec.cloud.aws.tags) {
       if (this.nodeData.spec.cloud.aws.tags.hasOwnProperty(i)) {
@@ -51,12 +54,13 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
         }));
       }
     }
+
     this.form = new FormGroup({
       size: new FormControl({value: this.nodeData.spec.cloud.aws.instanceType, disabled: true}, Validators.required),
       disk_size: new FormControl(this.nodeData.spec.cloud.aws.diskSize, Validators.required),
       disk_type: new FormControl(this.nodeData.spec.cloud.aws.volumeType, Validators.required),
       ami: new FormControl(this.nodeData.spec.cloud.aws.ami),
-      assignPublicIP: new FormControl(this.nodeData.spec.cloud.aws.assignPublicIP),
+      assignPublicIP: new FormControl(assignPublicIP),
       tags: tagList,
       subnetID: new FormControl(this.nodeData.spec.cloud.aws.subnetID, Validators.required),
     });
