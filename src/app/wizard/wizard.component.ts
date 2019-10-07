@@ -88,6 +88,8 @@ export class WizardComponent implements OnInit, OnDestroy {
         this.cluster.name = this._clusterSpecFormData.name;
         this.cluster.spec.version = this._clusterSpecFormData.version;
         this.cluster.type = this._clusterSpecFormData.type;
+        this.cluster.spec.usePodSecurityPolicyAdmissionPlugin =
+            this._clusterSpecFormData.usePodSecurityPolicyAdmissionPlugin;
 
         if (this._clusterSpecFormData.type === ClusterType.OpenShift) {
           this.cluster.spec.openshift = {
