@@ -23,6 +23,12 @@
           <div class="km-summary-row">
             <span class="km-provider-logo km-provider-logo-{{providerFormData.provider}}"></span>
           </div>
+          <div class="km-summary-row">
+            <span class="km-summary-left">
+              <i [ngClass]="{'km-icon-disabled': !cluster.spec.usePodSecurityPolicyAdmissionPlugin, 'km-icon-running': cluster.spec.usePodSecurityPolicyAdmissionPlugin}"></i>
+            </span>
+            <span>Pod Security Policy</span>
+          </div>
         </mat-card-content>
 
         <mat-card-header>

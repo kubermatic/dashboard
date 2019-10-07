@@ -32,6 +32,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       version: new FormControl(this.cluster.spec.version),
       type: new FormControl(this.cluster.type),
       imagePullSecret: new FormControl(),
+      usePodSecurityPolicyAdmissionPlugin: new FormControl(this.cluster.spec.usePodSecurityPolicyAdmissionPlugin),
     });
 
     if (this.clusterSpecForm.controls.type.value === '') {
@@ -102,6 +103,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       type: this.clusterSpecForm.controls.type.value,
       version: this.clusterSpecForm.controls.version.value,
       imagePullSecret: this.clusterSpecForm.controls.imagePullSecret.value,
+      usePodSecurityPolicyAdmissionPlugin: this.clusterSpecForm.controls.usePodSecurityPolicyAdmissionPlugin.value,
       valid: this.clusterSpecForm.valid,
     });
   }
@@ -122,6 +124,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       type: this.clusterSpecForm.controls.type.value,
       version: this.clusterSpecForm.controls.version.value,
       imagePullSecret: this.clusterSpecForm.controls.imagePullSecret.value,
+      usePodSecurityPolicyAdmissionPlugin: this.clusterSpecForm.controls.usePodSecurityPolicyAdmissionPlugin.value,
       valid: false,
     });
   }
