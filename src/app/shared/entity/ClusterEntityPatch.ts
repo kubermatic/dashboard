@@ -10,7 +10,6 @@ export class ClusterEntityPatch {
 export class ClusterSpecPatch {
   cloud?: CloudSpecPatch;
   version?: string;
-  humanReadableName?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   openshift?: OpenShiftPatch;
 }
