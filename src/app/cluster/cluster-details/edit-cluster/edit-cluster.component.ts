@@ -30,9 +30,7 @@ export class EditClusterComponent implements OnInit {
 
   editCluster(): void {
     const clusterEntityPatch: ClusterEntityPatch = {
-      spec: {
-        humanReadableName: this.editClusterForm.controls.name.value,
-      },
+      name: this.editClusterForm.controls.name.value,
     };
 
     this._cluster.patch(this.projectID, this.cluster.id, this.datacenter.metadata.name, clusterEntityPatch)
