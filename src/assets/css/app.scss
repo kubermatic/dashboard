@@ -859,6 +859,10 @@ div.km-form-group-labels {
   }
 }
 
+.mat-icon-button[disabled] * {
+  cursor: auto;
+}
+
 // Inputs.
 mat-form-field.mat-form-field {
   color: $text-color;

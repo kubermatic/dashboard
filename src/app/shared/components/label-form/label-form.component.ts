@@ -73,13 +73,13 @@ export class LabelFormComponent implements OnInit {
     this._addLabel();
   }
 
+  isRemovable(index: number): boolean {
+    return index < this.labelArray.length - 1;
+  }
+
   deleteLabel(index: number): void {
     this.labelArray.removeAt(index);
     this._updateLabelsObject();
-  }
-
-  isRemovable(): boolean {
-    return this.labelArray.length > 1;
   }
 
   check(index: number): void {
