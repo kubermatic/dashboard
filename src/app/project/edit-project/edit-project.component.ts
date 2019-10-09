@@ -24,6 +24,7 @@ export class EditProjectComponent implements OnInit {
   editProject(): void {
     const editProjectEntity: EditProjectEntity = {
       name: this.editProjectForm.controls.name.value,
+      labels: this.project.labels,
     };
 
     this.api.editProject(this.project.id, editProjectEntity).subscribe((project) => {
