@@ -39,16 +39,16 @@ export class EditClusterComponent implements OnInit {
   }
 
   editCluster(): void {
-    const clusterEntityPatch: ClusterEntityPatch = {
+    const patch: ClusterEntityPatch = {
       name: this.form.controls.name.value,
       labels: this.labels,
     };
 
-    this._clusterService.patch(this.projectID, this.cluster.id, this.datacenter.metadata.name, clusterEntityPatch)
+    this._clusterService.patch(this.projectID, this.cluster.id, this.datacenter.metadata.name, patch)
         .subscribe((cluster) => {
           this._matDialogRef.close(cluster);
           this._clusterService.onClusterUpdate.next();
-          NotificationActions.success(`Cluster ${this.cluster.name} has been edited successfully`);
+          NotificationActions.success(`Cluster ${this.cluster.name} has been successfully edited`);
         });
   }
 }
