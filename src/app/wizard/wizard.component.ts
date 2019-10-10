@@ -327,6 +327,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     return {
       cluster: {
         name: this.cluster.name,
+        labels: this.cluster.labels,
         spec: this.cluster.spec,
         type: this.cluster.type,
         sshKeys: keyNames,
