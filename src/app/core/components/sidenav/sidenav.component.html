@@ -17,7 +17,8 @@
 
       <div [matTooltip]="getTooltip('sshKeys')">
         <mat-list-item [ngClass]="getMenuItemClass('sshKeys')">
-          <a mat-line
+          <a id="km-nav-item-sshkeys"
+             mat-line
              fxLayoutAlign=" center"
              [routerLink]="getRouterLink('sshkeys')"
              [ngClass]="getLinkClass('sshkeys')">
