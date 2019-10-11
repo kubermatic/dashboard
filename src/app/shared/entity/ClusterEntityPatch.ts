@@ -1,6 +1,8 @@
 // Patch object definitions for ClusterEntity.
 // Please note that these objects do not have to contain all the fields of equivalent classes.
 
+import {AuditLoggingSettings} from './ClusterEntity';
+
 export class ClusterEntityPatch {
   id?: string;
   name?: string;
@@ -11,6 +13,7 @@ export class ClusterSpecPatch {
   cloud?: CloudSpecPatch;
   version?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
+  auditLogging?: AuditLoggingSettings;
   openshift?: OpenShiftPatch;
 }
 

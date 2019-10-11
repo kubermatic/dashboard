@@ -25,12 +25,18 @@ export class EditClusterComponent implements OnInit {
     this.editClusterForm = new FormGroup({
       name: new FormControl(
           this.cluster.name, [Validators.required, Validators.minLength(3), Validators.pattern('[a-zA-Z0-9-]*')]),
+      auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
     });
   }
 
   editCluster(): void {
     const clusterEntityPatch: ClusterEntityPatch = {
       name: this.editClusterForm.controls.name.value,
+      spec: {
+        auditLogging: {
+          enabled: this.editClusterForm.controls.auditLogging.value,
+        }
+      },
     };
 
     this._cluster.patch(this.projectID, this.cluster.id, this.datacenter.metadata.name, clusterEntityPatch)
