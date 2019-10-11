@@ -131,9 +131,14 @@ export class CloudSpec {
 export class ClusterSpec {
   cloud: CloudSpec;
   machineNetworks?: MachineNetwork[];
+  auditLogging?: AuditLoggingSettings;
   version?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   openshift?: OpenShift;
+}
+
+export class AuditLoggingSettings {
+  enabled?: boolean;
 }
 
 export class OpenShift {

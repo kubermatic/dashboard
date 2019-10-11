@@ -25,6 +25,12 @@
           </div>
           <div class="km-summary-row">
             <span class="km-summary-left">
+              <i [ngClass]="{'km-icon-disabled': !cluster.spec.auditLogging, 'km-icon-running': cluster.spec.auditLogging}"></i>
+            </span>
+            <span>Audit Logging</span>
+          </div>
+          <div class="km-summary-row">
+            <span class="km-summary-left">
               <i [ngClass]="{'km-icon-disabled': !cluster.spec.usePodSecurityPolicyAdmissionPlugin, 'km-icon-running': cluster.spec.usePodSecurityPolicyAdmissionPlugin}"></i>
             </span>
             <span>Pod Security Policy</span>

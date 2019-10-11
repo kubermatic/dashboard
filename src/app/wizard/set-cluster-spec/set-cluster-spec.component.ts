@@ -28,11 +28,17 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.clusterSpecForm = new FormGroup({
       name: new FormControl(
-          this.cluster.name, [Validators.required, Validators.minLength(5), Validators.pattern('[a-zA-Z0-9-]*')]),
+          this.cluster.name,
+          [
+            Validators.required,
+            Validators.minLength(5),
+            Validators.pattern('[a-zA-Z0-9-]*'),
+          ]),
       version: new FormControl(this.cluster.spec.version),
       type: new FormControl(this.cluster.type),
       imagePullSecret: new FormControl(),
       usePodSecurityPolicyAdmissionPlugin: new FormControl(this.cluster.spec.usePodSecurityPolicyAdmissionPlugin),
+      auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
     });
 
     if (this.clusterSpecForm.controls.type.value === '') {
@@ -104,6 +110,9 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       version: this.clusterSpecForm.controls.version.value,
       imagePullSecret: this.clusterSpecForm.controls.imagePullSecret.value,
       usePodSecurityPolicyAdmissionPlugin: this.clusterSpecForm.controls.usePodSecurityPolicyAdmissionPlugin.value,
+      auditLogging: {
+        enabled: this.clusterSpecForm.controls.auditLogging.value,
+      },
       valid: this.clusterSpecForm.valid,
     });
   }
@@ -125,6 +134,9 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       version: this.clusterSpecForm.controls.version.value,
       imagePullSecret: this.clusterSpecForm.controls.imagePullSecret.value,
       usePodSecurityPolicyAdmissionPlugin: this.clusterSpecForm.controls.usePodSecurityPolicyAdmissionPlugin.value,
+      auditLogging: {
+        enabled: this.clusterSpecForm.controls.auditLogging.value,
+      },
       valid: false,
     });
   }
