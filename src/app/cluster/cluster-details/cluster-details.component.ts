@@ -15,10 +15,10 @@ import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {Config, GroupConfig} from '../../shared/model/Config';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
+import {ClusterType} from '../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
 import {NodeService} from '../services/node.service';
 
-import {ClusterConnectComponent} from './cluster-connect/cluster-connect.component';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/cluster-delete-confirmation.component';
 import {ConfigurePodSecurityComponent} from './configure-pod-security/configure-pod-security.component';
 import {EditClusterComponent} from './edit-cluster/edit-cluster.component';
@@ -174,13 +174,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  connectClusterDialog(): void {
-    const modal = this._matDialog.open(ClusterConnectComponent);
-    modal.componentInstance.cluster = this.cluster;
-    modal.componentInstance.datacenter = this.datacenter;
-    modal.componentInstance.projectID = this.projectID;
-  }
-
   shareConfigDialog(): void {
     const modal = this._matDialog.open(ShareKubeconfigComponent);
     modal.componentInstance.cluster = this.cluster;
@@ -192,6 +185,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     return this.isClusterAPIRunning ?
         this._api.getKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id) :
         '';
+  }
+
+  getProxyURL(): string {
+    return this.cluster.type === ClusterType.OpenShift ?
+        this._api.getOpenshiftProxyURL(this.projectID, this.datacenter.metadata.name, this.cluster.id) :
+        this._api.getDashboardProxyURL(this.projectID, this.datacenter.metadata.name, this.cluster.id);
   }
 
   isLoaded(): boolean {
