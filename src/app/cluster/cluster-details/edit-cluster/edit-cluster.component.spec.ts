@@ -61,22 +61,22 @@ describe('EditClusterComponent', () => {
      }));
 
   it('should have valid form after creating', () => {
-    expect(component.editClusterForm.valid).toBeTruthy();
+    expect(component.form.valid).toBeTruthy();
   });
 
   it('should have required fields', () => {
-    component.editClusterForm.controls.name.patchValue('');
-    expect(component.editClusterForm.valid).toBeFalsy('form is not valid');
-    expect(component.editClusterForm.controls.name.valid).toBeFalsy('name field is not valid');
-    expect(component.editClusterForm.controls.name.hasError('required')).toBeTruthy('name field has required error');
+    component.form.controls.name.patchValue('');
+    expect(component.form.valid).toBeFalsy('form is not valid');
+    expect(component.form.controls.name.valid).toBeFalsy('name field is not valid');
+    expect(component.form.controls.name.hasError('required')).toBeTruthy('name field has required error');
 
-    component.editClusterForm.controls.name.patchValue('new-cluster-name');
-    expect(component.editClusterForm.controls.name.hasError('required'))
+    component.form.controls.name.patchValue('new-cluster-name');
+    expect(component.form.controls.name.hasError('required'))
         .toBeFalsy('name field has no required error after setting name');
   });
 
   it('should call editCluster method', fakeAsync(() => {
-       component.editClusterForm.controls.name.patchValue('new-cluster-name');
+       component.form.controls.name.patchValue('new-cluster-name');
        component.editCluster();
        tick();
 

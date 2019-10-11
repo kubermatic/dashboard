@@ -1,5 +1,6 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material';
+import * as _ from 'lodash';
 import {Observable, of} from 'rxjs';
 import {catchError, first, flatMap, map} from 'rxjs/operators';
 
@@ -96,7 +97,7 @@ export class NodeService {
         nodeData: {
           count: nd.spec.replicas,
           name: nd.name,
-          spec: JSON.parse(JSON.stringify(nd.spec.template)),  // Deep copy method from MDN.
+          spec: _.cloneDeep(nd.spec.template),
           valid: true,
         },
       }

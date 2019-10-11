@@ -29,6 +29,19 @@
             </span>
             <span>Pod Security Policy</span>
           </div>
+          <div *ngIf="cluster.labels && displayTags(cluster.labels)"
+               class="km-summary-tags">
+            <div class="km-summary-row">Cluster Labels</div>
+            <km-labels [labels]="cluster.labels"></km-labels>
+          </div>
+          <div *ngIf="!cluster.labels || !displayTags(cluster.labels)">
+            <div class="km-summary-row">
+              <span class="km-summary-left">
+                <i class="km-icon-disabled"></i>
+              </span>
+              <span>Cluster Labels</span>
+            </div>
+          </div>
         </mat-card-content>
 
         <mat-card-header>

@@ -5,6 +5,7 @@ import {NodeProvider} from './NodeProviderConstants';
 export class ClusterSpecForm {
   name: string;
   type: string;
+  labels: object;
   version: string;
   imagePullSecret?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;

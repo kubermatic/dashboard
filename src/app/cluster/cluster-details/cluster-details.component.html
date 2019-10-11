@@ -134,6 +134,13 @@
           </div>
         </km-property>
 
+        <km-property *ngIf="cluster.labels">
+          <div key>Labels</div>
+          <div value>
+            <km-labels [labels]="cluster.labels"></km-labels>
+          </div>
+        </km-property>
+
       </div>
 
       <km-cluster-secrets [cluster]="cluster"
