@@ -37,7 +37,8 @@
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button (click)="addSSHKey()"
+    <button id="km-add-ssh-key-dialog-save"
+            (click)="addSSHKey()"
             mat-flat-button
             [disabled]="!addSSHKeyForm.valid">
       Add SSH key

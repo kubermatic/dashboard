@@ -1,7 +1,8 @@
 <div fxLayout>
   <div fxFlex
        align="right">
-    <button mat-flat-button
+    <button id="km-add-ssh-key-top-btn"
+            mat-flat-button
             type="button"
             (click)="addSshKey()"
             [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.create">
