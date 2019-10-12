@@ -37,12 +37,13 @@
 
         Add Node Deployment
       </button>
-      <button class="km-connect-kubeconfig-btn"
-              (click)="connectClusterDialog()"
-              mat-flat-button
-              [disabled]="!isClusterRunning">
+      <a class="km-connect-kubeconfig-btn"
+         [href]="getProxyURL()"
+         target="_blank"
+         mat-flat-button
+         [disabled]="!isClusterRunning || !isEditEnabled()">
         Connect
-      </button>
+      </a>
     </div>
   </div>
 

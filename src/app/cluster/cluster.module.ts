@@ -6,7 +6,6 @@ import {SharedModule} from '../shared/shared.module';
 
 import {AddMachineNetworkComponent} from './cluster-details/add-machine-network/add-machine-network.component';
 import {ChangeClusterVersionComponent} from './cluster-details/change-cluster-version/change-cluster-version.component';
-import {ClusterConnectComponent} from './cluster-details/cluster-connect/cluster-connect.component';
 import {ClusterDeleteConfirmationComponent} from './cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
 import {ClusterDetailsComponent} from './cluster-details/cluster-details.component';
 import {ClusterSecretsComponent} from './cluster-details/cluster-secrets/cluster-secrets.component';
@@ -50,7 +49,6 @@ const entryComponents: any[] = [
   ChangeClusterVersionComponent,
   NodeDataModalComponent,
   ClusterSecretsComponent,
-  ClusterConnectComponent,
   EditClusterComponent,
   RevokeAdminTokenComponent,
   AddMachineNetworkComponent,
