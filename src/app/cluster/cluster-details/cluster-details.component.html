@@ -129,6 +129,14 @@
           </div>
         </km-property>
 
+        <km-boolean-property label="Audit Logging"
+                             [value]="!!cluster.spec.auditLogging && cluster.spec.auditLogging.enabled">
+        </km-boolean-property>
+
+        <km-boolean-property label="Pod Security Policy"
+                             [value]="cluster.spec.usePodSecurityPolicyAdmissionPlugin">
+        </km-boolean-property>
+
         <km-property>
           <div value>
             <km-ssh-key-list [sshKeys]="sshKeys"></km-ssh-key-list>

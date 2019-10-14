@@ -22,6 +22,9 @@
             Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
           </mat-error>
         </mat-form-field>
+        <mat-checkbox formControlName="auditLogging">
+          Audit Logging
+        </mat-checkbox>
       </form>
       <km-label-form title="Labels"
                      [(labels)]="labels"></km-label-form>

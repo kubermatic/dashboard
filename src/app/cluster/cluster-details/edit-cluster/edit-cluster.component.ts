@@ -35,6 +35,7 @@ export class EditClusterComponent implements OnInit {
             Validators.minLength(3),
             Validators.pattern('[a-zA-Z0-9-]*'),
           ]),
+      auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
     });
   }
 
@@ -42,6 +43,11 @@ export class EditClusterComponent implements OnInit {
     const patch: ClusterEntityPatch = {
       name: this.form.controls.name.value,
       labels: this.labels,
+      spec: {
+        auditLogging: {
+          enabled: this.form.controls.auditLogging.value,
+        }
+      },
     };
 
     this._clusterService.patch(this.projectID, this.cluster.id, this.datacenter.metadata.name, patch)

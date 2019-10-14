@@ -88,6 +88,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         this.cluster.name = this._clusterSpecFormData.name;
         this.cluster.spec.version = this._clusterSpecFormData.version;
         this.cluster.type = this._clusterSpecFormData.type;
+        this.cluster.spec.auditLogging = this._clusterSpecFormData.auditLogging;
         this.cluster.labels = this._clusterSpecFormData.labels;
         this.cluster.spec.usePodSecurityPolicyAdmissionPlugin =
             this._clusterSpecFormData.usePodSecurityPolicyAdmissionPlugin;
