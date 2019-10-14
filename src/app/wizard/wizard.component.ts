@@ -26,7 +26,7 @@ import {ClusterType} from '../shared/utils/cluster-utils/cluster-utils';
 })
 export class WizardComponent implements OnInit, OnDestroy {
   private _machineNetworksFormData: MachineNetworkForm[] = [{valid: false, cidr: '', dnsServers: [''], gateway: ''}];
-  private _clusterSpecFormData: ClusterSpecForm = {valid: false, name: '', type: '', version: ''};
+  private _clusterSpecFormData: ClusterSpecForm = {valid: false, name: '', type: '', version: '', labels: {}};
   private _clusterProviderSettingsFormData: ClusterProviderSettingsForm = {valid: false};
   private _setMachineNetworksFormData: SetMachineNetworksForm = {
     valid: false,
@@ -89,6 +89,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         this.cluster.spec.version = this._clusterSpecFormData.version;
         this.cluster.type = this._clusterSpecFormData.type;
         this.cluster.spec.auditLogging = this._clusterSpecFormData.auditLogging;
+        this.cluster.labels = this._clusterSpecFormData.labels;
         this.cluster.spec.usePodSecurityPolicyAdmissionPlugin =
             this._clusterSpecFormData.usePodSecurityPolicyAdmissionPlugin;
 
@@ -327,6 +328,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     return {
       cluster: {
         name: this.cluster.name,
+        labels: this.cluster.labels,
         spec: this.cluster.spec,
         type: this.cluster.type,
         sshKeys: keyNames,

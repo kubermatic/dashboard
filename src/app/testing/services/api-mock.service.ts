@@ -183,6 +183,14 @@ export class ApiMockService {
   getPacketSizes(): Observable<PacketSize[]> {
     return of(fakePacketSizes());
   }
+
+  getDashboardProxyURL(): string {
+    return '';
+  }
+
+  getOpenshiftProxyURL(): string {
+    return '';
+  }
 }
 
 export function asyncData<T>(data: T): Observable<T> {

@@ -16,6 +16,7 @@ import {ClusterType, ClusterUtils} from '../../shared/utils/cluster-utils/cluste
 
 export class SetClusterSpecComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
+  labels: object;
   clusterSpecForm: FormGroup;
   masterVersions: MasterVersion[] = [];
   defaultVersion: string;
@@ -107,6 +108,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     this._wizardService.changeClusterSpec({
       name: this.clusterSpecForm.controls.name.value,
       type: this.clusterSpecForm.controls.type.value,
+      labels: this.labels,
       version: this.clusterSpecForm.controls.version.value,
       imagePullSecret: this.clusterSpecForm.controls.imagePullSecret.value,
       usePodSecurityPolicyAdmissionPlugin: this.clusterSpecForm.controls.usePodSecurityPolicyAdmissionPlugin.value,
@@ -131,6 +133,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     this._wizardService.changeClusterSpec({
       name: this.clusterSpecForm.controls.name.value,
       type: this.clusterSpecForm.controls.type.value,
+      labels: this.labels,
       version: this.clusterSpecForm.controls.version.value,
       imagePullSecret: this.clusterSpecForm.controls.imagePullSecret.value,
       usePodSecurityPolicyAdmissionPlugin: this.clusterSpecForm.controls.usePodSecurityPolicyAdmissionPlugin.value,

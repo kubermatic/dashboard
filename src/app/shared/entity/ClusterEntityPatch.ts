@@ -6,6 +6,7 @@ import {AuditLoggingSettings} from './ClusterEntity';
 export class ClusterEntityPatch {
   id?: string;
   name?: string;
+  labels?: object;
   spec?: ClusterSpecPatch;
 }
 

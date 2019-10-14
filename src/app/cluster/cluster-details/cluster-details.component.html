@@ -37,12 +37,13 @@
 
         Add Node Deployment
       </button>
-      <button class="km-connect-kubeconfig-btn"
-              (click)="connectClusterDialog()"
-              mat-flat-button
-              [disabled]="!isClusterRunning">
+      <a class="km-connect-kubeconfig-btn"
+         [href]="getProxyURL()"
+         target="_blank"
+         mat-flat-button
+         [disabled]="!isClusterRunning || !isEditEnabled()">
         Connect
-      </button>
+      </a>
     </div>
   </div>
 
@@ -139,6 +140,13 @@
         <km-property>
           <div value>
             <km-ssh-key-list [sshKeys]="sshKeys"></km-ssh-key-list>
+          </div>
+        </km-property>
+
+        <km-property *ngIf="cluster.labels">
+          <div key>Labels</div>
+          <div value>
+            <km-labels [labels]="cluster.labels"></km-labels>
           </div>
         </km-property>
 
