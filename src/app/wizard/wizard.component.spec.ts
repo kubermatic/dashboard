@@ -28,6 +28,7 @@ import {NodeDataComponent} from '../node-data/node-data.component';
 import {OpenstackNodeDataComponent} from '../node-data/openstack-node-data/openstack-node-data.component';
 import {OpenstackNodeOptionsComponent} from '../node-data/openstack-node-data/openstack-node-options/openstack-node-options.component';
 import {PacketNodeDataComponent} from '../node-data/packet-node-data/packet-node-data.component';
+import {PacketNodeOptionsComponent} from '../node-data/packet-node-data/packet-node-options/packet-node-options.component';
 import {VSphereNodeDataComponent} from '../node-data/vsphere-add-node/vsphere-node-data.component';
 import {VSphereNodeOptionsComponent} from '../node-data/vsphere-add-node/vsphere-node-options/vsphere-node-options.component';
 import {SharedModule} from '../shared/shared.module';
@@ -116,6 +117,7 @@ describe('WizardComponent', () => {
             AzureProviderOptionsComponent,
             PacketClusterSettingsComponent,
             PacketNodeDataComponent,
+            PacketNodeOptionsComponent,
             NodeDataComponent,
             NodeDataOptionsComponent,
             OpenstackNodeDataComponent,
