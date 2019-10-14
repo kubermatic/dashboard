@@ -6,7 +6,7 @@ import {takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
-import {objectFromForm} from '../../../shared/utils/common-utils';
+import {addKeyValuePair, objectFromForm} from '../../../shared/utils/common-utils';
 
 @Component({
   selector: 'kubermatic-gcp-node-options',
@@ -35,10 +35,7 @@ export class GCPNodeOptionsComponent implements OnInit, OnDestroy {
     }
 
     if (labelList.length === 0) {
-      labelList.push(new FormGroup({
-        key: new FormControl(''),
-        value: new FormControl(''),
-      }));
+      labelList.push(addKeyValuePair());
     }
 
     this.form = new FormGroup({
@@ -91,10 +88,7 @@ export class GCPNodeOptionsComponent implements OnInit, OnDestroy {
 
   addLabel(): void {
     this.labels = this.form.get('labels') as FormArray;
-    this.labels.push(new FormGroup({
-      key: new FormControl(''),
-      value: new FormControl(''),
-    }));
+    this.labels.push(addKeyValuePair());
   }
 
   deleteLabel(index: number): void {

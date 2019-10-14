@@ -6,7 +6,7 @@ import {WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
-import {objectFromForm} from '../../../shared/utils/common-utils';
+import {addKeyValuePair, objectFromForm} from '../../../shared/utils/common-utils';
 
 @Component({
   selector: 'kubermatic-azure-node-options',
@@ -37,10 +37,7 @@ export class AzureNodeOptionsComponent implements OnInit, OnDestroy {
     }
 
     if (tagList.length === 0) {
-      tagList.push(new FormGroup({
-        key: new FormControl(''),
-        value: new FormControl(''),
-      }));
+      tagList.push(addKeyValuePair());
     }
 
     this.form = new FormGroup({
@@ -70,10 +67,7 @@ export class AzureNodeOptionsComponent implements OnInit, OnDestroy {
 
   addTag(): void {
     this.tags = this.form.get('tags') as FormArray;
-    this.tags.push(new FormGroup({
-      key: new FormControl(''),
-      value: new FormControl(''),
-    }));
+    this.tags.push(addKeyValuePair());
   }
 
   deleteTag(index: number): void {
