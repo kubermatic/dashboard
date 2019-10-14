@@ -22,6 +22,7 @@ import {OpenstackNodeDataComponent} from './openstack-node-data/openstack-node-d
 
 import {OpenstackNodeOptionsComponent} from './openstack-node-data/openstack-node-options/openstack-node-options.component';
 import {PacketNodeDataComponent} from './packet-node-data/packet-node-data.component';
+import {PacketNodeOptionsComponent} from './packet-node-data/packet-node-options/packet-node-options.component';
 import {VSphereNodeDataComponent} from './vsphere-add-node/vsphere-node-data.component';
 
 import {VSphereNodeOptionsComponent} from './vsphere-add-node/vsphere-node-options/vsphere-node-options.component';
@@ -41,6 +42,7 @@ const components: any[] = [
   AzureNodeDataComponent,
   AzureNodeOptionsComponent,
   PacketNodeDataComponent,
+  PacketNodeOptionsComponent,
   GCPNodeDataComponent,
   GCPNodeOptionsComponent,
   KubeVirtNodeDataComponent,

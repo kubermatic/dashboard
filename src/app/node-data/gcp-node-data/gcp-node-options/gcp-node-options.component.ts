@@ -6,6 +6,7 @@ import {takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
+import {objectFromForm} from '../../../shared/utils/common-utils';
 
 @Component({
   selector: 'kubermatic-gcp-node-options',
@@ -62,13 +63,6 @@ export class GCPNodeOptionsComponent implements OnInit, OnDestroy {
   }
 
   getNodeProviderData(): NodeProviderData {
-    const labelsMap = {};
-    for (const i in this.form.controls.labels.value) {
-      if (this.form.controls.labels.value[i].key !== '' && this.form.controls.labels.value[i].value !== '') {
-        labelsMap[this.form.controls.labels.value[i].key] = this.form.controls.labels.value[i].value;
-      }
-    }
-
     let gcpTags: string[] = [];
     if ((this.form.controls.tags.value).length > 0) {
       gcpTags = (this.form.controls.tags.value).split(',').map(tag => tag.trim());
@@ -83,7 +77,7 @@ export class GCPNodeOptionsComponent implements OnInit, OnDestroy {
           machineType: this.nodeData.spec.cloud.gcp.machineType,
           preemptible: this.nodeData.spec.cloud.gcp.preemptible,
           zone: this.nodeData.spec.cloud.gcp.zone,
-          labels: labelsMap,
+          labels: objectFromForm(this.form.controls.labels),
           tags: gcpTags,
         },
       },

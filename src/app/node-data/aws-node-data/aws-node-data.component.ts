@@ -10,7 +10,6 @@ import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {AWSSize, AWSSubnet} from '../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
-import {objectFromForm} from '../../shared/utils/common-utils';
 
 @Component({
   selector: 'kubermatic-aws-node-data',
@@ -41,25 +40,11 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       private readonly _apiService: ApiService, private readonly _dcService: DatacenterService) {}
 
   ngOnInit(): void {
-    const isInEdit = !!this.nodeData.name;  // Existing node deployment will always have assigned name.
-    const assignPublicIP = isInEdit ? this.nodeData.spec.cloud.aws.assignPublicIP : true;  // Default to true.
-
-    const tagList = new FormArray([]);
-    for (const i in this.nodeData.spec.cloud.aws.tags) {
-      if (this.nodeData.spec.cloud.aws.tags.hasOwnProperty(i)) {
-        tagList.push(new FormGroup({
-          key: new FormControl(i),
-          value: new FormControl(this.nodeData.spec.cloud.aws.tags[i]),
-        }));
-      }
-    }
-
     this.form = new FormGroup({
       size: new FormControl({value: this.nodeData.spec.cloud.aws.instanceType, disabled: true}, Validators.required),
       disk_size: new FormControl(this.nodeData.spec.cloud.aws.diskSize, Validators.required),
       disk_type: new FormControl(this.nodeData.spec.cloud.aws.volumeType, Validators.required),
       ami: new FormControl(this.nodeData.spec.cloud.aws.ami),
-      assignPublicIP: new FormControl(this.nodeData.spec.cloud.aws.assignPublicIP),
       subnetID: new FormControl(this.nodeData.spec.cloud.aws.subnetID, Validators.required),
     });
 
@@ -78,6 +63,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       this.nodeData.spec.cloud.aws = data.spec.aws;
       this.nodeData.valid = data.valid;
     });
+
     this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       if ((data.cloudSpec.aws.vpcId !== '' && data.cloudSpec.aws.accessKeyId !== '' &&
            data.cloudSpec.aws.secretAccessKey !== '') ||
@@ -118,15 +104,12 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   }
 
   getNodeProviderData(): NodeProviderData {
-    const azFromSubnet = this.getAZFromSubnet(this.form.controls.subnetID.value);
-
     return {
       spec: {
         aws: {
           instanceType: this.form.controls.size.value,
           diskSize: this.form.controls.disk_size.value,
           ami: this.form.controls.ami.value,
-          tags: objectFromForm(this.form.controls.tags),
           volumeType: this.form.controls.disk_type.value,
           subnetID: this.form.controls.subnetID.value,
           availabilityZone: this.getAZFromSubnet(this.form.controls.subnetID.value),

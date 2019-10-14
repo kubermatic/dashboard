@@ -36,7 +36,6 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.form = new FormGroup({
       size: new FormControl(this.nodeData.spec.cloud.packet.instanceType, Validators.required),
-      tags: new FormControl(this.nodeData.spec.cloud.packet.tags.toString().replace(/\,/g, ', ')),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
@@ -104,16 +103,11 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
   }
 
   private _getNodeProviderData(): NodeProviderData {
-    let packetTags: string[] = [];
-    if ((this.form.controls.tags.value).length > 0) {
-      packetTags = (this.form.controls.tags.value).split(',').map(tag => tag.trim());
-    }
-
     return {
       spec: {
         packet: {
           instanceType: this.form.controls.size.value,
-          tags: packetTags,
+          tags: this.nodeData.spec.cloud.packet.tags,
         },
       },
       valid: this.form.valid,

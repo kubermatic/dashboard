@@ -6,6 +6,7 @@ import {WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
+import {objectFromForm} from '../../../shared/utils/common-utils';
 
 @Component({
   selector: 'kubermatic-azure-node-options',
@@ -81,19 +82,12 @@ export class AzureNodeOptionsComponent implements OnInit, OnDestroy {
   }
 
   getNodeProviderData(): NodeProviderData {
-    const tagMap = {};
-    for (const i in this.form.controls.tags.value) {
-      if (this.form.controls.tags.value[i].key !== '' && this.form.controls.tags.value[i].value !== '') {
-        tagMap[this.form.controls.tags.value[i].key] = this.form.controls.tags.value[i].value;
-      }
-    }
-
     return {
       spec: {
         azure: {
           size: this.nodeData.spec.cloud.azure.size,
           assignPublicIP: this.form.controls.assignPublicIP.value,
-          tags: tagMap,
+          tags: objectFromForm(this.form.controls.tags),
         },
       },
       valid: this.nodeData.valid,

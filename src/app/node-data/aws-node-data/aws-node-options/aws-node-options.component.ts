@@ -6,6 +6,7 @@ import {takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
+import {objectFromForm} from '../../../shared/utils/common-utils';
 
 @Component({
   selector: 'kubermatic-aws-node-options',
@@ -26,6 +27,9 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
   constructor(private readonly _addNodeService: NodeDataService, private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
+    const isInEdit = !!this.nodeData.name;  // Existing node deployment will always have assigned name.
+    const assignPublicIP = isInEdit ? this.nodeData.spec.cloud.aws.assignPublicIP : true;  // Default to true.
+
     const tagList = new FormArray([]);
     for (const i in this.nodeData.spec.cloud.aws.tags) {
       if (this.nodeData.spec.cloud.aws.tags.hasOwnProperty(i)) {
@@ -44,7 +48,7 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
     }
 
     this.form = new FormGroup({
-      assignPublicIP: new FormControl(this.nodeData.spec.cloud.aws.assignPublicIP),
+      assignPublicIP: new FormControl(assignPublicIP),
       tags: tagList,
     });
 
@@ -65,13 +69,6 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
   }
 
   getNodeProviderData(): NodeProviderData {
-    const tagMap = {};
-    for (const i in this.form.controls.tags.value) {
-      if (this.form.controls.tags.value[i].key !== '' && this.form.controls.tags.value[i].value !== '') {
-        tagMap[this.form.controls.tags.value[i].key] = this.form.controls.tags.value[i].value;
-      }
-    }
-
     return {
       spec: {
         aws: {
@@ -82,7 +79,7 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
           subnetID: this.nodeData.spec.cloud.aws.subnetID,
           availabilityZone: this.nodeData.spec.cloud.aws.availabilityZone,
           assignPublicIP: this.form.controls.assignPublicIP.value,
-          tags: tagMap,
+          tags: objectFromForm(this.form.controls.tags),
         },
       },
       valid: this.nodeData.valid,

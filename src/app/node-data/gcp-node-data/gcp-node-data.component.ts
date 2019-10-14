@@ -9,7 +9,6 @@ import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '../../shared/entity/provider/gcp/GCP';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
-import {objectFromForm} from '../../shared/utils/common-utils';
 
 @Component({
   selector: 'kubermatic-gcp-node-data',
@@ -294,6 +293,8 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
           machineType: this.form.controls.machineType.value,
           preemptible: this.form.controls.preemptible.value,
           zone: this.form.controls.zone.value,
+          labels: this.nodeData.spec.cloud.gcp.labels,
+          tags: this.nodeData.spec.cloud.gcp.tags,
         },
       },
       valid: this.form.valid,
