@@ -5,7 +5,9 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core'
   templateUrl: './labels.component.html',
 })
 export class LabelsComponent implements OnInit, OnChanges {
-  @Input() labels: object = {};
+  @Input() labels = {};
+  @Input() limit: number;
+  @Input() emptyMessage = 'No assigned labels';
   labelKeys: string[] = [];
 
   ngOnInit(): void {
