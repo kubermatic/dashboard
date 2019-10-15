@@ -12,6 +12,7 @@
     </div>
   </mat-chip-list>
   <span *ngIf="limit && labelKeys.length > limit"
+        [matTooltip]="getHiddenLabels()"
         class="km-text">
     +{{labelKeys.length - limit}}
   </span>

@@ -18,6 +18,17 @@ export class LabelsComponent implements OnInit, OnChanges {
     this._updateLabelKeys();
   }
 
+  getHiddenLabels(): string {
+    let hiddenLabels = '';
+    for (let i = this.limit; i < this.labelKeys.length; i++) {
+      hiddenLabels += `${this.labelKeys[i]}: ${this.labels[this.labelKeys[i]]}`;
+      if (i < this.labelKeys.length - 1) {
+        hiddenLabels += ', ';
+      }
+    }
+    return hiddenLabels;
+  }
+
   private _updateLabelKeys(): void {
     this.labelKeys = [];
     if (Array.isArray(this.labels)) {
