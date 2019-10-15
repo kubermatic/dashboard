@@ -30,7 +30,7 @@ export class NodeDeploymentListComponent implements OnInit, OnDestroy {
   @Input() isNodeDeploymentLoadFinished: boolean;
   @Output() changeNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
   dataSource = new MatTableDataSource<NodeDeploymentEntity>();
-  displayedColumns: string[] = ['status', 'name', 'replicas', 'ver', 'os', 'created', 'actions'];
+  displayedColumns: string[] = ['status', 'name', 'labels', 'replicas', 'ver', 'os', 'created', 'actions'];
 
   private _unsubscribe: Subject<any> = new Subject();
   private _currentGroupConfig: GroupConfig;

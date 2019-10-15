@@ -27,7 +27,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   seedDC: DataCenterEntity[] = [];
   health: HealthEntity[] = [];
   provider = [];
-  displayedColumns: string[] = ['status', 'name', 'provider', 'region', 'type', 'actions'];
+  displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'region', 'type', 'actions'];
   dataSource = new MatTableDataSource<ClusterEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   private _unsubscribe: Subject<any> = new Subject();
