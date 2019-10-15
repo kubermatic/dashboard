@@ -15,24 +15,32 @@ export class VSphereNodeDataComponent implements OnInit, OnDestroy {
   @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
   @Input() clusterId: string;
-
   vsphereNodeForm: FormGroup;
-
   private _unsubscribe = new Subject<void>();
 
-  constructor(private addNodeService: NodeDataService) {}
+  constructor(private _nodeDataService: NodeDataService) {}
 
   ngOnInit(): void {
     this.vsphereNodeForm = new FormGroup({
-      cpu: new FormControl(this.nodeData.spec.cloud.vsphere.cpus, [Validators.required, Validators.min(1)]),
-      memory: new FormControl(this.nodeData.spec.cloud.vsphere.memory, [Validators.required, Validators.min(512)]),
+      cpu: new FormControl(
+          this.nodeData.spec.cloud.vsphere.cpus,
+          [
+            Validators.required,
+            Validators.min(1),
+          ]),
+      memory: new FormControl(
+          this.nodeData.spec.cloud.vsphere.memory,
+          [
+            Validators.required,
+            Validators.min(512),
+          ]),
     });
 
     this.vsphereNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+      this._nodeDataService.changeNodeProviderData(this.getNodeProviderData());
     });
 
-    this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    this._nodeDataService.changeNodeProviderData(this.getNodeProviderData());
   }
 
   ngOnDestroy(): void {

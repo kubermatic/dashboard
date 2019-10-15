@@ -90,16 +90,21 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
   }
 
   getVSphereOptionsData(): NodeProviderData {
-    return {
+    const providerData: NodeProviderData = {
       spec: {
         vsphere: {
           cpus: this.nodeData.spec.cloud.vsphere.cpus,
           memory: this.nodeData.spec.cloud.vsphere.memory,
           template: this.vsphereOptionsForm.controls.template.value,
-          diskSizeGB: this.vsphereOptionsForm.controls.diskSizeGB.value,
         },
       },
       valid: this.vsphereOptionsForm.valid,
     };
+
+    if (!!this.vsphereOptionsForm.controls.diskSizeGB.value) {
+      providerData.spec.vsphere.diskSizeGB = this.vsphereOptionsForm.controls.diskSizeGB.value;
+    }
+
+    return providerData;
   }
 }
