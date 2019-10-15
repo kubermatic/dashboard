@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
+import * as _ from 'lodash';
+
 import {ApiService} from '../../core/services';
 import {NotificationActions} from '../../redux/actions/notification.actions';
 import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
@@ -11,20 +13,23 @@ import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntit
 })
 export class EditProjectComponent implements OnInit {
   @Input() project: ProjectEntity;
-  editProjectForm: FormGroup;
+  labels: object;
+  form: FormGroup;
 
   constructor(private api: ApiService, private dialogRef: MatDialogRef<EditProjectComponent>) {}
 
   ngOnInit(): void {
-    this.editProjectForm = new FormGroup({
+    this.labels = _.cloneDeep(this.project.labels);
+
+    this.form = new FormGroup({
       name: new FormControl(this.project.name, [Validators.required]),
     });
   }
 
   editProject(): void {
     const editProjectEntity: EditProjectEntity = {
-      name: this.editProjectForm.controls.name.value,
-      labels: this.project.labels,
+      name: this.form.controls.name.value,
+      labels: this.labels,
     };
 
     this.api.editProject(this.project.id, editProjectEntity).subscribe((project) => {

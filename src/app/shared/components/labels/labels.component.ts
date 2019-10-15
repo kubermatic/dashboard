@@ -5,7 +5,9 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core'
   templateUrl: './labels.component.html',
 })
 export class LabelsComponent implements OnInit, OnChanges {
-  @Input() labels: object = {};
+  @Input() labels = {};
+  @Input() limit: number;
+  @Input() emptyMessage = 'No assigned labels';
   labelKeys: string[] = [];
 
   ngOnInit(): void {
@@ -14,6 +16,17 @@ export class LabelsComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     this._updateLabelKeys();
+  }
+
+  getHiddenLabels(): string {
+    let hiddenLabels = '';
+    for (let i = this.limit; i < this.labelKeys.length; i++) {
+      hiddenLabels += `${this.labelKeys[i]}: ${this.labels[this.labelKeys[i]]}`;
+      if (i < this.labelKeys.length - 1) {
+        hiddenLabels += ', ';
+      }
+    }
+    return hiddenLabels;
   }
 
   private _updateLabelKeys(): void {
