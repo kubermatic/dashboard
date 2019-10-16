@@ -1,0 +1,22 @@
+@import "../../../../assets/css/colors";
+@import "../../../../assets/css/variables";
+
+.km-addon-container {
+  border: 1px solid $separator;
+  border-radius: 5px;
+  font-size: $subhead-font-size-base;
+  height: 8 * $baseline-grid;
+  width: 250px;
+
+  .km-addon-menu {
+    border-left: 1px solid $separator;
+    height: 8 * $baseline-grid;
+    min-width: 4.5 * $baseline-grid;
+  }
+}
+
+.km-new-addon-container {
+  border: 1px dashed $separator;
+  color: $medium-text-color;
+  cursor: pointer;
+}

@@ -12,6 +12,7 @@ import {ClipboardModule} from 'ngx-clipboard';
 
 import {AddProjectDialogComponent} from './components/add-project-dialog/add-project-dialog.component';
 import {AddSshKeyDialogComponent} from './components/add-ssh-key-dialog/add-ssh-key-dialog.component';
+import {AddonsListComponent} from './components/addon-list/addon-list.component';
 import {BooleanPropertyComponent} from './components/boolean-property/boolean-property.component';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 import {DialogTitleComponent} from './components/dialog-title/dialog-title.component';
@@ -83,6 +84,7 @@ const modules: any[] = [
     RelativeTimePipe,
     RelativeTimeComponent,
     SSHKeyListComponent,
+    AddonsListComponent,
   ],
   exports: [
     ...modules,
@@ -100,6 +102,7 @@ const modules: any[] = [
     RelativeTimePipe,
     RelativeTimeComponent,
     SSHKeyListComponent,
+    AddonsListComponent,
   ],
   entryComponents: [
     AddProjectDialogComponent,

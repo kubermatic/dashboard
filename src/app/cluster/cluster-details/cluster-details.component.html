@@ -179,11 +179,18 @@
                           [isClusterRunning]="isClusterAPIRunning"></kubermatic-node-list>
   </div>
 
-  <km-addon-list [cluster]="cluster"
-                 [clusterHealthStatus]="clusterHealthStatus"
-                 [datacenter]="datacenter"
-                 [isClusterRunning]="isClusterAPIRunning"
-                 [projectID]="projectID"></km-addon-list>
+  <mat-card class="km-with-table-header">
+    <mat-card-header>
+      <mat-card-title>Addons</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="km-addon-card-content">
+      <km-addon-list [cluster]="cluster"
+                     [clusterHealthStatus]="clusterHealthStatus"
+                     [datacenter]="datacenter"
+                     [isClusterRunning]="isClusterAPIRunning"
+                     [projectID]="projectID"></km-addon-list>
+    </mat-card-content>
+  </mat-card>
 
   <km-event-list [events]="events"></km-event-list>
 

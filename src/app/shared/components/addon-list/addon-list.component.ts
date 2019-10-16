@@ -16,6 +16,7 @@ export class AddonsListComponent implements OnInit, OnDestroy {
   @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
   // private _unsubscribe: Subject<any> = new Subject();
+  installedAddons: string[] = ['dashboard', 'node-exporter', 'grafana'];
 
   constructor() {}
 

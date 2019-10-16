@@ -1,0 +1,19 @@
+<div fxLayout="row wrap"
+     fxLayoutGap="10px">
+  <div *ngFor="let installedAddon of installedAddons"
+       fxLayoutAlign="center center"
+       class="km-addon-container">
+    <div fxFlex
+         fxLayoutAlign="center center">
+      {{installedAddon}}
+    </div>
+    <div fxLayoutAlign="center center"
+         class="km-addon-menu">
+      :
+    </div>
+  </div>
+  <div fxLayoutAlign="center center"
+       class="km-addon-container km-new-addon-container">
+    + Addon
+  </div>
+</div>
