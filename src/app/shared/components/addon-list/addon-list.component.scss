@@ -12,8 +12,14 @@
 
   .km-addon-menu {
     border-left: 1px solid $separator;
-    height: 8 * $baseline-grid;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    height: 8 * $baseline-grid - 2px;
     min-width: 4.5 * $baseline-grid;
+
+    &:hover {
+      background-color: $grey-background;
+    }
   }
 }
 
@@ -21,4 +27,9 @@
   border: 1px dashed $separator;
   color: $medium-text-color;
   cursor: pointer;
+
+  &:hover {
+    background-color: $grey-background;
+    border: 1px solid $separator;
+  }
 }
