@@ -3,6 +3,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {ApiService, ClusterService} from '../../../core/services';
+import {AddonEntity} from '../../entity/AddonEntity';
 import {ClusterEntity} from '../../entity/ClusterEntity';
 import {DataCenterEntity} from '../../entity/DatacenterEntity';
 import {ClusterHealthStatus} from '../../utils/health-status/cluster-health-status';
@@ -18,7 +19,7 @@ export class AddonsListComponent implements OnInit, OnDestroy {
   @Input() projectID: string;
   @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
-  installedAddons: any[] = [];
+  installedAddons: AddonEntity[] = [];
   accessibleAddons: string[] = [];
   private _unsubscribe: Subject<any> = new Subject();
 
@@ -39,5 +40,9 @@ export class AddonsListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  areAllAddonsInstalled(): boolean {
+    return this.installedAddons.length === this.accessibleAddons.length;
   }
 }

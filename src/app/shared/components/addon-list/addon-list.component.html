@@ -13,9 +13,9 @@
     </div>
   </div>
   <div fxLayoutAlign="center center"
-       class="km-addon-container km-new-addon-container">
+       class="km-addon-container km-new-addon-container"
+       [ngClass]="{'disabled': areAllAddonsInstalled()}"
+       [matTooltip]="areAllAddonsInstalled() ? 'There are no more accessible addons to install.' : ''">
     + Addon
   </div>
 </div>
-
-<div style="background: yellow; margin-top: 20px;">DEBUG: {{installedAddons | json}}</div>

@@ -28,7 +28,13 @@
   color: $medium-text-color;
   cursor: pointer;
 
-  &:hover {
+  &.disabled {
+    border: 1px dashed #f1f3f4;
+    color: $light-text-color;
+    cursor: default;
+  }
+
+  &:hover:not(.disabled) {
     background-color: $grey-background;
     border: 1px solid $separator;
   }

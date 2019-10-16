@@ -3,10 +3,12 @@ import {Injectable} from '@angular/core';
 import {merge, Observable, of, timer} from 'rxjs';
 import {catchError, shareReplay, switchMapTo} from 'rxjs/operators';
 import {Subject} from 'rxjs/Subject';
+
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
 import {TaintFormComponent} from '../../../shared/components/taint-form/taint-form.component';
+import {AddonEntity} from '../../../shared/entity/AddonEntity';
 import {ClusterEntity, Finalizer, MasterVersion} from '../../../shared/entity/ClusterEntity';
 import {CloudSpecPatch, ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
 import {EventEntity} from '../../../shared/entity/EventEntity';
@@ -148,9 +150,9 @@ export class ClusterService {
     return this._http.delete(url);
   }
 
-  addons(cluster: string, dc: string, projectID: string): Observable<any[]> {
+  addons(cluster: string, dc: string, projectID: string): Observable<AddonEntity[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/addons`;
-    return this._http.get<any[]>(url);
+    return this._http.get<AddonEntity[]>(url);
   }
 
   private _getClusters(projectID: string): Observable<ClusterEntity[]> {
