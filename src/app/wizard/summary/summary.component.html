@@ -25,7 +25,7 @@
           </div>
           <div class="km-summary-row">
             <span class="km-summary-left">
-              <i [ngClass]="{'km-icon-disabled': !cluster.spec.auditLogging, 'km-icon-running': cluster.spec.auditLogging}"></i>
+              <i [ngClass]="{'km-icon-disabled': !cluster.spec.auditLogging?.enabled, 'km-icon-running': cluster.spec.auditLogging?.enabled}"></i>
             </span>
             <span>Audit Logging</span>
           </div>
