@@ -32,9 +32,10 @@ export class EditProjectComponent implements OnInit {
       labels: this.labels,
     };
 
-    // Remove nullified labels as project uses PUT endpoint, not PATCH.
-    // TODO: Make the labels component customizable to return patch or entity (without nullified fields).
-    // TODO: Add and use PATCH endpoint for project editing.
+    // Remove nullified labels as project uses PUT endpoint, not PATCH, and labels component returns patch object.
+    // TODO: Make the labels component customizable so it can return patch (current implementation)
+    //  or entity (without nullified labels).
+    // TODO: Implement and use PATCH endpoint for project edits.
     for (const label in project.labels) {
       if (project.labels.hasOwnProperty(label) && project.labels[label] === null) {
         delete project.labels[label];
