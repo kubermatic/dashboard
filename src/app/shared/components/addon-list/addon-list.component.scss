@@ -4,8 +4,10 @@
 .km-addon-container {
   border: 1px solid $separator;
   border-radius: 5px;
+  color: $text-color;
   font-size: $subhead-font-size-base;
   height: 8 * $baseline-grid;
+  outline: none;
   width: 250px;
 
   .km-addon-menu {
