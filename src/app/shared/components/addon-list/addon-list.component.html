@@ -5,7 +5,7 @@
        class="km-addon-container">
     <div fxFlex
          fxLayoutAlign="center center">
-      {{installedAddon}}
+      {{installedAddon.name}}
     </div>
     <div fxLayoutAlign="center center"
          class="km-addon-menu">
@@ -17,3 +17,5 @@
     + Addon
   </div>
 </div>
+
+<div style="background: yellow; margin-top: 20px;">DEBUG: {{installedAddons | json}}</div>

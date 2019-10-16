@@ -148,6 +148,11 @@ export class ClusterService {
     return this._http.delete(url);
   }
 
+  addons(cluster: string, dc: string, projectID: string): Observable<any[]> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/addons`;
+    return this._http.get<any[]>(url);
+  }
+
   private _getClusters(projectID: string): Observable<ClusterEntity[]> {
     const url = `${this._restRoot}/projects/${projectID}/clusters`;
     return this._http.get<ClusterEntity[]>(url).pipe(catchError(() => of<ClusterEntity[]>()));

@@ -1,8 +1,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
+import {ApiService, ClusterService} from '../../../core/services';
+import {ClusterEntity} from '../../entity/ClusterEntity';
+import {DataCenterEntity} from '../../entity/DatacenterEntity';
+import {ClusterHealthStatus} from '../../utils/health-status/cluster-health-status';
 
 @Component({
   selector: 'km-addon-list',
@@ -15,12 +18,26 @@ export class AddonsListComponent implements OnInit, OnDestroy {
   @Input() projectID: string;
   @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
-  // private _unsubscribe: Subject<any> = new Subject();
-  installedAddons: string[] = ['dashboard', 'node-exporter', 'grafana'];
+  installedAddons: any[] = [];
+  accessibleAddons: string[] = [];
+  private _unsubscribe: Subject<any> = new Subject();
 
-  constructor() {}
+  constructor(private readonly _apiService: ApiService, private readonly _clusterService: ClusterService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this._apiService.getAccessibleAddons().pipe(takeUntil(this._unsubscribe)).subscribe(accessibleAddons => {
+      this.accessibleAddons = accessibleAddons;
+    });
 
-  ngOnDestroy(): void {}
+    this._clusterService.addons(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(installedAddons => {
+          this.installedAddons = installedAddons;
+        });
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
 }

@@ -255,6 +255,11 @@ export class ApiService {
     return this._http.delete(url);
   }
 
+  getAccessibleAddons(): Observable<string[]> {
+    const url = `${this._restRoot}/addons`;
+    return this._http.get<string[]>(url);
+  }
+
   getSwaggerJson(): Observable<any> {
     const url = '/api/swagger.json';
     return this._http.get(url);
