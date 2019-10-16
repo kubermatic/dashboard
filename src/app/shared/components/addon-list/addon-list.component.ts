@@ -19,7 +19,7 @@ export class AddonsListComponent implements OnInit, OnDestroy {
   @Input() projectID: string;
   @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
-  installedAddons: AddonEntity[] = [];
+  installedAddons: AddonEntity[] = [];  // TODO: Provide it via @Input so we can reuse component in the wizard.
   accessibleAddons: string[] = [];
   private _unsubscribe: Subject<any> = new Subject();
 
@@ -41,6 +41,8 @@ export class AddonsListComponent implements OnInit, OnDestroy {
     this._unsubscribe.next();
     this._unsubscribe.complete();
   }
+
+  // TODO: How add and edit will work from wizard?
 
   areAllAddonsInstalled(): boolean {
     return this.installedAddons.length === this.accessibleAddons.length;

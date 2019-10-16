@@ -7,10 +7,19 @@
          fxLayoutAlign="center center">
       {{installedAddon.name}}
     </div>
-    <div fxLayoutAlign="center center"
+    <div [matMenuTriggerFor]="menu"
+         fxLayoutAlign="center center"
          class="km-addon-menu">
       <mat-icon>more_vert</mat-icon>
     </div>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <span>Edit</span>
+      </button>
+      <button mat-menu-item>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
   </div>
   <div fxLayoutAlign="center center"
        class="km-addon-container km-new-addon-container"
