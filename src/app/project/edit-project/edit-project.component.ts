@@ -27,12 +27,22 @@ export class EditProjectComponent implements OnInit {
   }
 
   editProject(): void {
-    const editProjectEntity: EditProjectEntity = {
+    const project: EditProjectEntity = {
       name: this.form.controls.name.value,
       labels: this.labels,
     };
 
-    this.api.editProject(this.project.id, editProjectEntity).subscribe((project) => {
+    // Remove nullified labels as project uses PUT endpoint, not PATCH, and labels component returns patch object.
+    // TODO: Make the labels component customizable so it can return patch (current implementation)
+    //  or entity (without nullified labels).
+    // TODO: Implement and use PATCH endpoint for project edits.
+    for (const label in project.labels) {
+      if (project.labels.hasOwnProperty(label) && project.labels[label] === null) {
+        delete project.labels[label];
+      }
+    }
+
+    this.api.editProject(this.project.id, project).subscribe((project) => {
       this.dialogRef.close(project);
       NotificationActions.success(`Project ${this.project.name} has been edited successfully`);
     });
