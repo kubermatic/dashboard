@@ -179,6 +179,12 @@
                           [isClusterRunning]="isClusterAPIRunning"></kubermatic-node-list>
   </div>
 
+  <km-addon-list [cluster]="cluster"
+                 [clusterHealthStatus]="clusterHealthStatus"
+                 [datacenter]="datacenter"
+                 [isClusterRunning]="isClusterAPIRunning"
+                 [projectID]="projectID"></km-addon-list>
+
   <km-event-list [events]="events"></km-event-list>
 
 </ng-container>
