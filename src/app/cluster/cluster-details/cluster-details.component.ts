@@ -6,6 +6,7 @@ import {first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, ClusterService, DatacenterService, UserService} from '../../core/services';
+import {NotificationActions} from '../../redux/actions/notification.actions';
 import {AddonEntity} from '../../shared/entity/AddonEntity';
 import {ClusterEntity, getClusterProvider, MasterVersion} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
@@ -254,7 +255,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   handleAddonDeletion(addon: AddonEntity): void {
-    // TODO
+    this._clusterService.deleteAddon(addon.id, this.projectID, this.cluster.id, this.datacenter.metadata.name)
+        .pipe(first())
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(() => {
+          NotificationActions.success(`The ${addon.name} addon has been removed from the ${this.cluster.name} cluster`);
+        });
   }
 
   ngOnDestroy(): void {
