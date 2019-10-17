@@ -1,9 +1,13 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {first, takeUntil} from 'rxjs/operators';
 
 import {ApiService} from '../../../core/services';
 import {AddonEntity} from '../../entity/AddonEntity';
+import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
+
+import {EditAddonDialogComponent} from './edit-addon-dialog/edit-addon-dialog.component';
 
 @Component({
   selector: 'km-addon-list',
@@ -13,10 +17,17 @@ import {AddonEntity} from '../../entity/AddonEntity';
 export class AddonsListComponent implements OnInit, OnDestroy {
   @Input() addons: AddonEntity[] = [];
   @Input() isClusterReady = true;
+
+  // Usage of event emitters allows to handle edits and deletions in multiple ways in different places.
+  // Thanks to them this component can be used inside wizard (performing actions on a local addons array)
+  // and also in the cluster view (calling API endpoints to perform any action).
+  @Output() editAddon = new EventEmitter<AddonEntity>();
+  @Output() deleteAddon = new EventEmitter<AddonEntity>();
+
   accessibleAddons: string[] = [];
   private _unsubscribe: Subject<any> = new Subject();
 
-  constructor(private readonly _apiService: ApiService) {}
+  constructor(private readonly _apiService: ApiService, private readonly _matDialog: MatDialog) {}
 
   ngOnInit(): void {
     this._apiService.getAccessibleAddons().pipe(takeUntil(this._unsubscribe)).subscribe(accessibleAddons => {
@@ -46,5 +57,32 @@ export class AddonsListComponent implements OnInit, OnDestroy {
     } else {
       return '';
     }
+  }
+
+  edit(addon: AddonEntity): void {
+    const dialog = this._matDialog.open(EditAddonDialogComponent);
+    dialog.componentInstance.addon = addon;
+    dialog.afterClosed().pipe(first()).subscribe(editedAddon => {
+      if (!!editedAddon) {
+        this.editAddon.emit(editedAddon);
+      }
+    });
+  }
+
+  delete(addon: AddonEntity): void {
+    const config: MatDialogConfig = {
+      data: {
+        title: 'Delete Addon',
+        message: `Are you sure you want to permanently delete addon "<strong>${addon.name}</strong>"?`,
+        confirmLabel: 'Delete',
+      },
+    };
+
+    const dialog = this._matDialog.open(ConfirmationDialogComponent, config);
+    dialog.afterClosed().pipe(first()).subscribe(isConfirmed => {
+      if (!!isConfirmed) {
+        this.deleteAddon.emit(addon);
+      }
+    });
   }
 }

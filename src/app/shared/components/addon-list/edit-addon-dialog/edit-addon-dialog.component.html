@@ -2,9 +2,18 @@
   <km-dialog-title title="Edit Addon"></km-dialog-title>
   <mat-dialog-content>
     <div class="mat-dialog-content">
-
-      name addon etc.
-
+      <div fxLayout="row wrap">
+        <km-property>
+          <div key>Name</div>
+          <div value>{{addon.name}}</div>
+        </km-property>
+        <km-property>
+          <div key>Created</div>
+          <div value>
+            <km-relative-time [date]="addon.creationTimestamp"></km-relative-time>
+          </div>
+        </km-property>
+      </div>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>

@@ -13,10 +13,12 @@
       <mat-icon>more_vert</mat-icon>
     </div>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item>
+      <button mat-menu-item
+              (click)="edit(addon)">
         <span>Edit</span>
       </button>
-      <button mat-menu-item>
+      <button mat-menu-item
+              (click)="delete(addon)">
         <span>Delete</span>
       </button>
     </mat-menu>

@@ -253,6 +253,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.projectID = this.projectID;
   }
 
+  handleAddonDeletion(addon: AddonEntity): void {
+    // TODO
+  }
+
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
