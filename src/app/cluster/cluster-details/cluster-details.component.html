@@ -184,11 +184,8 @@
       <mat-card-title>Addons</mat-card-title>
     </mat-card-header>
     <mat-card-content class="km-addon-card-content">
-      <km-addon-list [cluster]="cluster"
-                     [clusterHealthStatus]="clusterHealthStatus"
-                     [datacenter]="datacenter"
-                     [isClusterRunning]="isClusterAPIRunning"
-                     [projectID]="projectID"></km-addon-list>
+      <km-addon-list [addons]="addons"
+                     [isClusterReady]="isClusterRunning"></km-addon-list>
     </mat-card-content>
   </mat-card>
 

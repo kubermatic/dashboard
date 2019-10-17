@@ -2,11 +2,8 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {ApiService, ClusterService} from '../../../core/services';
+import {ApiService} from '../../../core/services';
 import {AddonEntity} from '../../entity/AddonEntity';
-import {ClusterEntity} from '../../entity/ClusterEntity';
-import {DataCenterEntity} from '../../entity/DatacenterEntity';
-import {ClusterHealthStatus} from '../../utils/health-status/cluster-health-status';
 
 @Component({
   selector: 'km-addon-list',
@@ -14,27 +11,17 @@ import {ClusterHealthStatus} from '../../utils/health-status/cluster-health-stat
   styleUrls: ['addon-list.component.scss'],
 })
 export class AddonsListComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  @Input() datacenter: DataCenterEntity;
-  @Input() projectID: string;
-  @Input() clusterHealthStatus: ClusterHealthStatus;
-  @Input() isClusterRunning: boolean;
-  installedAddons: AddonEntity[] = [];  // TODO: Provide it via @Input so we can reuse component in the wizard.
+  @Input() addons: AddonEntity[] = [];
+  @Input() isClusterReady = true;
   accessibleAddons: string[] = [];
   private _unsubscribe: Subject<any> = new Subject();
 
-  constructor(private readonly _apiService: ApiService, private readonly _clusterService: ClusterService) {}
+  constructor(private readonly _apiService: ApiService) {}
 
   ngOnInit(): void {
     this._apiService.getAccessibleAddons().pipe(takeUntil(this._unsubscribe)).subscribe(accessibleAddons => {
       this.accessibleAddons = accessibleAddons;
     });
-
-    this._clusterService.addons(this.cluster.id, this.datacenter.metadata.name, this.projectID)
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(installedAddons => {
-          this.installedAddons = installedAddons;
-        });
   }
 
   ngOnDestroy(): void {
@@ -42,9 +29,22 @@ export class AddonsListComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  // TODO: How add and edit will work from wizard?
+  getAddBtnClass(): string {
+    return !this.isClusterReady || this.accessibleAddons.length === 0 ||
+            this.addons.length === this.accessibleAddons.length ?
+        'disabled' :
+        '';
+  }
 
-  areAllAddonsInstalled(): boolean {
-    return this.installedAddons.length === this.accessibleAddons.length;
+  getAddBtnTooltip(): string {
+    if (!this.isClusterReady) {
+      return 'The cluster is not ready yet.';
+    } else if (this.accessibleAddons.length === 0) {
+      return 'There are no accessible addons.';
+    } else if (this.addons.length === this.accessibleAddons.length) {
+      return 'All accessible addons are already installed.';
+    } else {
+      return '';
+    }
   }
 }

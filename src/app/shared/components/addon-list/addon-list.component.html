@@ -1,11 +1,11 @@
 <div fxLayout="row wrap"
      fxLayoutGap="10px">
-  <div *ngFor="let installedAddon of installedAddons"
+  <div *ngFor="let addon of addons"
        fxLayoutAlign="center center"
        class="km-addon-container">
     <div fxFlex
          fxLayoutAlign="center center">
-      {{installedAddon.name}}
+      {{addon.name}}
     </div>
     <div [matMenuTriggerFor]="menu"
          fxLayoutAlign="center center"
@@ -23,8 +23,8 @@
   </div>
   <div fxLayoutAlign="center center"
        class="km-addon-container km-new-addon-container"
-       [ngClass]="{'disabled': areAllAddonsInstalled()}"
-       [matTooltip]="areAllAddonsInstalled() ? 'There are no more accessible addons to install.' : ''">
+       [ngClass]="getAddBtnClass()"
+       [matTooltip]="getAddBtnTooltip()">
     + Addon
   </div>
 </div>
