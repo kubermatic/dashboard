@@ -3,5 +3,10 @@ export class AddonEntity {
   deletionTimestamp?: Date;
   id: string;
   name: string;
-  spec: object;
+  spec: AddonSpec;
+}
+
+export class AddonSpec {
+  isDefault?: boolean;
+  variables?: object;
 }
