@@ -91,7 +91,7 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
 
   getVSphereOptionsData(): NodeProviderData {
     const isValid = !!this.nodeData.valid ? this.nodeData.valid : this.form.valid;
-    return {
+    const providerData: NodeProviderData = {
       spec: {
         vsphere: {
           cpus: this.nodeData.spec.cloud.vsphere.cpus,
@@ -102,8 +102,8 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
       valid: isValid,
     };
 
-    if (!!this.vsphereOptionsForm.controls.diskSizeGB.value) {
-      providerData.spec.vsphere.diskSizeGB = this.vsphereOptionsForm.controls.diskSizeGB.value;
+    if (!!this.form.controls.diskSizeGB.value) {
+      providerData.spec.vsphere.diskSizeGB = this.form.controls.diskSizeGB.value;
     }
 
     return providerData;
