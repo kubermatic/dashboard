@@ -79,7 +79,7 @@ export class AddonsListComponent implements OnInit, OnDestroy {
     };
 
     if (addon.spec.isDefault) {
-      config.data.warning = 'This is a default addon. It means it will be recreated after deletion.';
+      config.data.warning = 'This is a default addon. It will be automatically restored after deletion.';
     }
 
     const dialog = this._matDialog.open(ConfirmationDialogComponent, config);
