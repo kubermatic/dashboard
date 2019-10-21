@@ -254,6 +254,15 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.projectID = this.projectID;
   }
 
+  handleAddonCreation(addon: AddonEntity): void {
+    this._clusterService.createAddon(addon, this.projectID, this.cluster.id, this.datacenter.metadata.name)
+        .pipe(first())
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(() => {
+          NotificationActions.success(`The ${addon.name} addon has been added to the ${this.cluster.name} cluster`);
+        });
+  }
+
   handleAddonDeletion(addon: AddonEntity): void {
     this._clusterService.deleteAddon(addon.id, this.projectID, this.cluster.id, this.datacenter.metadata.name)
         .pipe(first())

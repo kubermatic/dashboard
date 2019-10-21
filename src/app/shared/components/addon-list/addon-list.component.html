@@ -14,10 +14,6 @@
     </div>
     <mat-menu #menu="matMenu">
       <button mat-menu-item
-              (click)="edit(addon)">
-        <span>Edit</span>
-      </button>
-      <button mat-menu-item
               (click)="delete(addon)">
         <span>Delete</span>
       </button>
@@ -25,6 +21,7 @@
   </div>
   <div fxLayoutAlign="center center"
        class="km-addon-container km-new-addon-container"
+       (click)="add()"
        [ngClass]="getAddBtnClass()"
        [matTooltip]="getAddBtnTooltip()">
     + Addon

@@ -1,9 +1,9 @@
 export class AddonEntity {
-  creationTimestamp: Date;
+  creationTimestamp?: Date;
   deletionTimestamp?: Date;
-  id: string;
+  id?: string;
   name: string;
-  spec: AddonSpec;
+  spec?: AddonSpec;
 }
 
 export class AddonSpec {
