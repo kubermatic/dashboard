@@ -1,6 +1,6 @@
 import {NgReduxFormModule} from '@angular-redux/form';
 import {NgReduxModule} from '@angular-redux/store';
-import {APP_INITIALIZER, NgModule} from '@angular/core';
+import {APP_INITIALIZER, Injector, NgModule} from '@angular/core';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MAT_TOOLTIP_DEFAULT_OPTIONS, MatFormFieldDefaultOptions} from '@angular/material';
 import {GestureConfig} from '@angular/material/core';
 import {BrowserModule, HAMMER_GESTURE_CONFIG} from '@angular/platform-browser';
@@ -88,4 +88,19 @@ const appearance: MatFormFieldDefaultOptions = {
 })
 
 export class AppModule {
+  private static _injector: Injector;
+
+  static set injector(i: Injector) {
+    if (!this._injector) {
+      this._injector = i;
+    }
+  }
+
+  static get injector(): Injector {
+    return this._injector;
+  }
+
+  constructor(injector: Injector) {
+    AppModule.injector = injector;
+  }
 }

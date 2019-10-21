@@ -4,7 +4,6 @@ import {Observable} from 'rxjs';
 import {map, shareReplay} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {Auth} from '../auth/auth.service';
 
 @Injectable()
 export class DatacenterService {
@@ -13,15 +12,12 @@ export class DatacenterService {
 
   private dataCenterCache: Observable<DataCenterEntity[]>;
 
-  constructor(private http: HttpClient, private auth: Auth) {
-    const token = this.auth.getBearerToken();
-    this.headers = this.headers.set('Authorization', 'Bearer ' + token);
-  }
+  constructor(private readonly _http: HttpClient) {}
 
   getDataCenters(): Observable<DataCenterEntity[]> {
     const url = `${this.restRoot}/dc`;
     if (!this.dataCenterCache) {
-      this.dataCenterCache = this.http.get<DataCenterEntity[]>(url, {headers: this.headers})
+      this.dataCenterCache = this._http.get<DataCenterEntity[]>(url, {headers: this.headers})
                                  .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this.dataCenterCache;
