@@ -32,7 +32,6 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this._apiService.getAccessibleAddons().pipe(takeUntil(this._unsubscribe)).subscribe(accessibleAddons => {
       this.accessibleAddons = accessibleAddons;
-      this.accessibleAddons = this.accessibleAddons.concat(['dashboard']);
       this._updateInstallableAddons();
     });
   }
