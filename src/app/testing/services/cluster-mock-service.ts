@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {defer, Observable, of, Subject} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
-import {ProviderSettingsPatch} from '../../core/services/cluster/cluster.service';
 
+import {ProviderSettingsPatch} from '../../core/services/cluster/cluster.service';
+import {AddonEntity} from '../../shared/entity/AddonEntity';
 import {ClusterEntity, MasterVersion} from '../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../shared/entity/ClusterEntityPatch';
 import {EventEntity} from '../../shared/entity/EventEntity';
@@ -99,6 +100,10 @@ export class ClusterMockService {
 
   events(projectID: string, clusterID: string, datacenter: string): Observable<EventEntity[]> {
     return of(fakeEvents());
+  }
+
+  addons(projectID: string, cluster: string, dc: string): Observable<AddonEntity[]> {
+    return of([]);
   }
 
   refreshClusters(): void {}

@@ -179,6 +179,18 @@
                           [isClusterRunning]="isClusterAPIRunning"></kubermatic-node-list>
   </div>
 
+  <mat-card class="km-with-table-header">
+    <mat-card-header>
+      <mat-card-title>Addons</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="km-addon-card-content">
+      <km-addon-list [addons]="addons"
+                     [isClusterReady]="isClusterRunning"
+                     (addAddon)="handleAddonCreation($event)"
+                     (deleteAddon)="handleAddonDeletion($event)"></km-addon-list>
+    </mat-card-content>
+  </mat-card>
+
   <km-event-list [events]="events"></km-event-list>
 
 </ng-container>

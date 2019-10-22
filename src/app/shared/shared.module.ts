@@ -12,6 +12,8 @@ import {ClipboardModule} from 'ngx-clipboard';
 
 import {AddProjectDialogComponent} from './components/add-project-dialog/add-project-dialog.component';
 import {AddSshKeyDialogComponent} from './components/add-ssh-key-dialog/add-ssh-key-dialog.component';
+import {AddAddonDialogComponent} from './components/addon-list/add-addon-dialog/add-addon-dialog.component';
+import {AddonsListComponent} from './components/addon-list/addon-list.component';
 import {BooleanPropertyComponent} from './components/boolean-property/boolean-property.component';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 import {DialogTitleComponent} from './components/dialog-title/dialog-title.component';
@@ -64,48 +66,42 @@ const modules: any[] = [
   MatPaginatorModule,
 ];
 
+const components: any[] = [
+  BooleanPropertyComponent,
+  DialogTitleComponent,
+  PropertyComponent,
+  EventListComponent,
+  LabelFormComponent,
+  LabelsComponent,
+  TaintFormComponent,
+  TaintsComponent,
+  RelativeTimePipe,
+  RelativeTimeComponent,
+  SSHKeyListComponent,
+  AddonsListComponent,
+];
+
+const entryComponents: any[] = [
+  AddProjectDialogComponent,
+  AddSshKeyDialogComponent,
+  ConfirmationDialogComponent,
+  AddAddonDialogComponent,
+];
+
 @NgModule({
   imports: [
     ...modules,
   ],
   declarations: [
-    AddProjectDialogComponent,
-    AddSshKeyDialogComponent,
-    BooleanPropertyComponent,
-    ConfirmationDialogComponent,
-    DialogTitleComponent,
-    PropertyComponent,
-    EventListComponent,
-    LabelFormComponent,
-    LabelsComponent,
-    TaintFormComponent,
-    TaintsComponent,
-    RelativeTimePipe,
-    RelativeTimeComponent,
-    SSHKeyListComponent,
+    ...components,
+    ...entryComponents,
   ],
   exports: [
     ...modules,
-    AddProjectDialogComponent,
-    AddSshKeyDialogComponent,
-    BooleanPropertyComponent,
-    ConfirmationDialogComponent,
-    DialogTitleComponent,
-    PropertyComponent,
-    EventListComponent,
-    LabelFormComponent,
-    LabelsComponent,
-    TaintFormComponent,
-    TaintsComponent,
-    RelativeTimePipe,
-    RelativeTimeComponent,
-    SSHKeyListComponent,
+    ...components,
+    ...entryComponents,
   ],
-  entryComponents: [
-    AddProjectDialogComponent,
-    AddSshKeyDialogComponent,
-    ConfirmationDialogComponent,
-  ],
+  entryComponents: [...entryComponents],
 })
 
 export class SharedModule {

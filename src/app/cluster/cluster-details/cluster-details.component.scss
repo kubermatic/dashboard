@@ -12,6 +12,10 @@ button:disabled {
   }
 }
 
+.km-addon-card-content {
+  padding: 0 (7 * $baseline-grid);
+}
+
 // setting menu
 .km-cluster-detail-actions {
   padding-bottom: 1.875 * $baseline-grid;
