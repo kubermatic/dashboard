@@ -16,15 +16,6 @@ describe('Node Deployments Story', () => {
   const initialNodeDeploymentName = prefixedString('e2e-test-nd');
   const initialNodeDeploymentReplicas = '1';
 
-  before(() => {
-    cy.clearCookies();
-  });
-
-  beforeEach(() => {
-    cy.server();
-    Cypress.Cookies.preserveOnce('token', 'nonce');
-  });
-
   it('should login', () => {
     login(email, password);
     cy.url().should(Condition.Include, 'projects');
