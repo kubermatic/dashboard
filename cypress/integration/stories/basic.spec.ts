@@ -14,16 +14,7 @@ describe('Basic Story', () => {
   const newUserEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
   let projectName = prefixedString('e2e-test-project');
   const clusterName = prefixedString('e2e-test-cluster');
-  
-  before(() => {
-    cy.clearCookies();
-  });
-  
-  beforeEach(() => {
-    cy.server();
-    Cypress.Cookies.preserveOnce('token', 'nonce');
-  });
-  
+
   it('should login', () => {
     login(email, password);
 
@@ -41,7 +32,7 @@ describe('Basic Story', () => {
   it('should go to wizard', () => {
     ClustersPage.openWizard();
   });
-  
+
   it('should create a new cluster', () => {
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn().click();
@@ -88,7 +79,7 @@ describe('Basic Story', () => {
   it('should go to the projects page', () => {
     ProjectsPage.visit();
   });
-  
+
   it('should edit created project name', () => {
     ProjectsPage.getEditProjectBtn(projectName).click();
 
@@ -102,7 +93,7 @@ describe('Basic Story', () => {
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
   });
-  
+
   it('should logout', () => {
     logout();
   });

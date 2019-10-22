@@ -66,9 +66,10 @@ export class ServiceAccountsPage {
   }
 
   static visit(): void {
-    cy.get('#km-nav-item-service-accounts').click();
-    this.waitForRefresh();
-    this.verifyUrl();
+    cy.get('#km-nav-item-service-accounts').click().then(() => {
+      this.waitForRefresh();
+      this.verifyUrl();
+    });
   }
 
   static addServiceAccount(name: string, group: Group): void {
