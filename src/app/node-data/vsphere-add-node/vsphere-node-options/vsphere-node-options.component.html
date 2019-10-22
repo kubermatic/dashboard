@@ -1,8 +1,8 @@
-<form [formGroup]="vsphereOptionsForm"
-      fxLayout="column">
+<form [formGroup]="form"
+      fxLayout="column"
+      *ngIf="!hideOptional">
   <div fxFlex="100%">
-    <mat-form-field fxFlex
-                    *ngIf="!hideOptional">
+    <mat-form-field fxFlex>
       <mat-label>Disk Size in GB</mat-label>
       <input matInput
              formControlName="diskSizeGB"
@@ -11,8 +11,7 @@
     </mat-form-field>
   </div>
   <div fxFlex="100%">
-    <mat-form-field fxFlex
-                    *ngIf="!hideOptional">
+    <mat-form-field fxFlex>
       <mat-label>VM Template</mat-label>
       <input matInput
              formControlName="template"

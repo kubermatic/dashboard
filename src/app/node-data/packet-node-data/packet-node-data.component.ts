@@ -24,7 +24,6 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
 
   sizes: PacketSize[] = [];
   form: FormGroup;
-  hideOptional = true;
   loadingSizes = false;
 
   private _unsubscribe: Subject<any> = new Subject();
@@ -37,15 +36,10 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.form = new FormGroup({
       size: new FormControl(this.nodeData.spec.cloud.packet.instanceType, Validators.required),
-      tags: new FormControl(this.nodeData.spec.cloud.packet.tags.toString().replace(/\,/g, ', ')),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(() => this._addNodeService.changeNodeProviderData(this._getNodeProviderData()));
-
-    this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.hideOptional = data.hideOptional;
-    });
 
     this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.cloudSpec = data.cloudSpec;
@@ -109,16 +103,11 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
   }
 
   private _getNodeProviderData(): NodeProviderData {
-    let packetTags: string[] = [];
-    if ((this.form.controls.tags.value).length > 0) {
-      packetTags = (this.form.controls.tags.value).split(',').map(tag => tag.trim());
-    }
-
     return {
       spec: {
         packet: {
           instanceType: this.form.controls.size.value,
-          tags: packetTags,
+          tags: this.nodeData.spec.cloud.packet.tags,
         },
       },
       valid: this.form.valid,

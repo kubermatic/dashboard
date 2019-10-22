@@ -1,0 +1,12 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      *ngIf="!hideOptional">
+  <mat-form-field>
+    <mat-label>Tags</mat-label>
+    <textarea matInput
+              id="tags"
+              formControlName="tags"
+              matTextareaAutosize></textarea>
+    <mat-hint>Seperate tags with commas.</mat-hint>
+  </mat-form-field>
+</form>

@@ -3,13 +3,14 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {DatacenterService, WizardService} from '../../../core/services';
+import {DatacenterService} from '../../../core/services/datacenter/datacenter.service';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
+import {WizardService} from '../../../core/services/wizard/wizard.service';
 import {SharedModule} from '../../../shared/shared.module';
-import {fakeOpenstackCluster} from '../../../testing/fake-data/cluster.fake';
+import {fakeVSphereCluster} from '../../../testing/fake-data/cluster.fake';
 import {nodeDataFake} from '../../../testing/fake-data/node.fake';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
-import {OpenstackOptionsComponent} from './openstack-options.component';
+import {VSphereNodeOptionsComponent} from './vsphere-node-options.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -19,9 +20,9 @@ const modules: any[] = [
   HttpClientModule,
 ];
 
-describe('OpenstackOptionsComponent', () => {
-  let fixture: ComponentFixture<OpenstackOptionsComponent>;
-  let component: OpenstackOptionsComponent;
+describe('VSphereNodeOptionsComponent', () => {
+  let fixture: ComponentFixture<VSphereNodeOptionsComponent>;
+  let component: VSphereNodeOptionsComponent;
 
   beforeEach(async(() => {
     TestBed
@@ -30,7 +31,7 @@ describe('OpenstackOptionsComponent', () => {
             ...modules,
           ],
           declarations: [
-            OpenstackOptionsComponent,
+            VSphereNodeOptionsComponent,
           ],
           providers: [NodeDataService, WizardService, {provide: DatacenterService, useClass: DatacenterMockService}],
         })
@@ -38,9 +39,9 @@ describe('OpenstackOptionsComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OpenstackOptionsComponent);
+    fixture = TestBed.createComponent(VSphereNodeOptionsComponent);
     component = fixture.componentInstance;
-    component.cloudSpec = fakeOpenstackCluster().spec.cloud;
+    component.cloudSpec = fakeVSphereCluster().spec.cloud;
     component.nodeData = nodeDataFake();
     fixture.detectChanges();
   });
@@ -50,15 +51,14 @@ describe('OpenstackOptionsComponent', () => {
   });
 
   it('should have valid form when initializing', () => {
-    expect(component.osOptionsForm.valid).toBeTruthy();
+    expect(component.form.valid).toBeTruthy();
   });
 
-  it('should call getOsOptionsData method', () => {
-    component.osOptionsForm.controls.image.patchValue('test-image');
+  it('should call getVSphereOptionsData method', () => {
+    component.form.controls.template.patchValue('test-template');
+    component.form.controls.diskSizeGB.patchValue(256);
     fixture.detectChanges();
-    expect(component.getOsOptionsData()).toEqual({
-      spec: {openstack: {flavor: 'm1.small', image: 'test-image', useFloatingIP: false, tags: {}, diskSize: undefined}},
-      valid: true
-    });
+    expect(component.getVSphereOptionsData())
+        .toEqual({spec: {vsphere: {cpus: 1, memory: 512, template: 'test-template', diskSizeGB: 256}}, valid: true});
   });
 });

@@ -1,25 +1,15 @@
-<form [formGroup]="osOptionsForm"
-      fxLayout="column">
-  <div fxFlex="100%">
-    <mat-form-field fxFlex>
-      <mat-label>Image*</mat-label>
-      <input matInput
-             formControlName="image"
-             autocomplete="off">
-    </mat-form-field>
-  </div>
-
-  <div class="km-form-group-tags-header"
-       *ngIf="!hideOptional">
+<form [formGroup]="form"
+      fxLayout="column"
+      *ngIf="!hideOptional">
+  <div [ngClass]="isInWizard ? 'km-form-group-tags-header km-tags-in-wizard' : 'km-form-group-tags-header'">
     Tags
     <i class="fa fa-plus"
        aria-hidden="true"
        (click)="addTag()"></i>
   </div>
-  <div class="km-form-group-tags"
-       *ngIf="!hideOptional">
+  <div class="km-form-group-tags">
     <div fxFlex="100%"
-         *ngFor="let tag of getTagForm(osOptionsForm); let i=index"
+         *ngFor="let tag of getTagForm(form); let i=index"
          formArrayName="tags">
       <div class="km-form-group-tags-inner"
            [formGroupName]="i">
