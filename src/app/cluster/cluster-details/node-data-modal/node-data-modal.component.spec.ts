@@ -130,14 +130,4 @@ describe('NodeDataModalData', () => {
     const actions = fixture.debugElement.query(By.css('.mat-dialog-actions'));
     expect(actions).not.toBeNull();
   });
-
-  it('should not show node recreation warning if spec was not changed', () => {
-    component.data.nodeData.spec = component.data.nodeDeployment.spec.template;
-    expect(component.isRecreationWarningVisible()).toBeFalsy();
-  });
-
-  it('should show node recreation warning if spec was changed', () => {
-    component.data.nodeData.spec.versions.kubelet = 'changed';
-    expect(component.isRecreationWarningVisible()).toBeTruthy();
-  });
 });
