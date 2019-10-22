@@ -11,15 +11,6 @@ describe('Multi owner Story', () => {
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const newUserEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
   const projectName = prefixedString('e2e-test-project');
-  
-  before(() => {
-    cy.clearCookies();
-  });
-
-  beforeEach(() => {
-    cy.server();
-    Cypress.Cookies.preserveOnce('token', 'nonce');
-  });
 
   it('should login as a first owner', () => {
     login(email, password);

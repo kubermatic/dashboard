@@ -15,7 +15,7 @@ RUN curl -L https://storage.googleapis.com/kubernetes-helm/helm-v2.12.1-linux-am
 	mv kind-linux-amd64 /usr/local/bin/kind && \
 	mv yq_linux_amd64 /usr/local/bin/yq
 
-FROM cypress/browsers:node11.13.0-chrome73
+FROM cypress/browsers:node12.6.0-chrome77
 
 RUN apt-get update -qq && apt-get install -y \
     bash \
@@ -24,6 +24,7 @@ RUN apt-get update -qq && apt-get install -y \
 
 # Install Docker from Docker Inc. repositories.
 RUN curl -sSL https://get.docker.com/ | sh
+RUN npm i -g cypress
 
 COPY --from=download /usr/local/bin/helm /usr/local/bin/helm
 COPY --from=download /usr/local/bin/kubectl /usr/local/bin/kubectl
