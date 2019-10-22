@@ -87,6 +87,10 @@ export class ApiMockService {
     return of(this.token);
   }
 
+  editViewerToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
+    return of(this.token);
+  }
+
   getMasterVersions(): Observable<MasterVersion[]> {
     return of(this.masterVersions);
   }

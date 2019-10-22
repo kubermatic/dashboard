@@ -29,6 +29,7 @@ import {NodeDeploymentDetailsComponent} from './cluster-details/node-deployment-
 import {NodeDeploymentListComponent} from './cluster-details/node-deployment-list/node-deployment-list.component';
 import {NodeListComponent} from './cluster-details/node-list/node-list.component';
 import {RevokeAdminTokenComponent} from './cluster-details/revoke-admin-token/revoke-admin-token.component';
+import {RevokeViewerTokenComponent} from './cluster-details/revoke-viewer-token/revoke-viewer-token.component';
 import {ShareKubeconfigComponent} from './cluster-details/share-kubeconfig/share-kubeconfig.component';
 import {VersionPickerComponent} from './cluster-details/version-picker/version-picker.component';
 import {ClusterListComponent} from './cluster-list/cluster-list.component';
@@ -51,6 +52,7 @@ const entryComponents: any[] = [
   ClusterSecretsComponent,
   EditClusterComponent,
   RevokeAdminTokenComponent,
+  RevokeViewerTokenComponent,
   AddMachineNetworkComponent,
   EditProviderSettingsComponent,
   ConfigurePodSecurityComponent,

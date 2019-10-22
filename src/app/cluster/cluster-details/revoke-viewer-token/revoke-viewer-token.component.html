@@ -1,0 +1,14 @@
+  <km-dialog-title title="Revoke Viewer Token"></km-dialog-title>
+
+  <mat-dialog-content>
+    <div class="mat-dialog-content">
+      <p>You are on the way to revoke the viewer token for the cluster "{{ cluster.name }}".</p>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button (click)="revokeViewerToken()"
+            mat-flat-button
+            [disabled]="!viewerToken">
+      Revoke
+    </button>
+  </mat-dialog-actions>

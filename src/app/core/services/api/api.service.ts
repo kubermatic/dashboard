@@ -123,6 +123,11 @@ export class ApiService {
     return this._http.put<Token>(url, token);
   }
 
+  editViewerToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/viewertoken`;
+    return this._http.put<Token>(url, token);
+  }
+
   getAWSSubnets(projectId: string, dc: string, clusterId: string): Observable<AWSSubnet[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/aws/subnets`;
     return this._http.get<AWSSubnet[]>(url);

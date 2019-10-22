@@ -1,5 +1,5 @@
 import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
-import {MatDialogRef} from '@angular/material';
+import {MatDialog, MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
@@ -10,8 +10,9 @@ import {asyncData} from '../../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {fakeAWSCluster} from '../../../testing/fake-data/cluster.fake';
 import {EditClusterComponent} from './edit-cluster.component';
-import {ClusterService} from '../../../core/services';
+import {ClusterService, UserService} from '../../../core/services';
 import {fakeAWSDatacenter} from '../../../testing/fake-data/datacenter.fake';
+import {UserMockService} from '../../../testing/services/user-mock.service';
 import {Subject} from 'rxjs';
 
 const modules: any[] = [
@@ -41,7 +42,9 @@ describe('EditClusterComponent', () => {
           ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},
+            {provide: UserService, useClass: UserMockService},
             {provide: ClusterService, useValue: clusterServiceMock},
+            MatDialog,
           ],
         })
         .compileComponents();
