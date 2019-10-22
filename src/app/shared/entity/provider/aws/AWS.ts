@@ -9,6 +9,7 @@ export class AWSSubnet {
   state: string;
   available_ip_address_count: number;
   default: boolean;
+  isDefaultSubnet?: boolean;
 }
 
 export class AWSTags {
