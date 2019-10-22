@@ -54,9 +54,10 @@ export class ClustersPage {
   }
 
   static visit(): void {
-    cy.get('#km-nav-item-clusters').click();
-    this.waitForRefresh();
-    this.verifyUrl();
+    cy.get('#km-nav-item-clusters').click().then(() => {
+      this.waitForRefresh();
+      this.verifyUrl();
+    });
   }
 
   static openWizard(): void {

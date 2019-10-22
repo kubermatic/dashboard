@@ -70,9 +70,10 @@ export class MembersPage {
   }
 
   static visit(): void {
-    cy.get('#km-nav-item-members').click();
-    this.waitForRefresh();
-    this.verifyUrl();
+    cy.get('#km-nav-item-members').click().then(() => {
+      this.waitForRefresh();
+      this.verifyUrl();
+    });
   }
 
   static addMember(email: string, group: Group): void {
@@ -80,8 +81,8 @@ export class MembersPage {
     this.getAddMemberDialogEmailInput().type(email).should(Condition.HaveValue, email);
     this.getAddMemberDialogGroupCombobox().click();
     this.getMemberDialogGroup(group).click();
-    this.getAddMemberDialogSaveBtn().should(Condition.NotBe, 'disabled').click();
     this.waitForRefresh();
+    this.getAddMemberDialogSaveBtn().should(Condition.NotBe, 'disabled').click();
     this.getTable().should(Condition.Contain, email);
   }
 
