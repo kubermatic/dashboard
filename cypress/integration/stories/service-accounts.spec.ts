@@ -12,15 +12,6 @@ describe('Service Accounts Story', () => {
   const serviceAccountName = 'test-sa';
   const tokenName = 'test-token';
 
-  before(() => {
-    cy.clearCookies();
-  });
-  
-  beforeEach(() => {
-    cy.server();
-    Cypress.Cookies.preserveOnce('token', 'nonce');
-  });
-  
   it('should login', () => {
     login(email, password);
     cy.url().should(Condition.Include, 'projects');
@@ -65,7 +56,7 @@ describe('Service Accounts Story', () => {
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
   });
-  
+
   it('should logout', () => {
     logout();
   });
