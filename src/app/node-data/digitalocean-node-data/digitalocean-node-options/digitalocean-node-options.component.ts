@@ -3,34 +3,42 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
+import {WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
-  selector: 'kubermatic-digitalocean-options',
-  templateUrl: './digitalocean-options.component.html',
-  styleUrls: ['./digitalocean-options.component.scss'],
+  selector: 'kubermatic-digitalocean-node-options',
+  templateUrl: './digitalocean-node-options.component.html',
+  styleUrls: ['./digitalocean-node-options.component.scss'],
 })
 
-export class DigitaloceanOptionsComponent implements OnInit, OnDestroy {
+export class DigitaloceanNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
-  doOptionsForm: FormGroup;
+  @Input() isInWizard: boolean;
+
+  hideOptional = true;
+  form: FormGroup;
   private _unsubscribe = new Subject<void>();
 
-  constructor(private addNodeService: NodeDataService) {}
+  constructor(private addNodeService: NodeDataService, private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
-    this.doOptionsForm = new FormGroup({
+    this.form = new FormGroup({
       backups: new FormControl(this.nodeData.spec.cloud.digitalocean.backups),
       ipv6: new FormControl(this.nodeData.spec.cloud.digitalocean.ipv6),
       monitoring: new FormControl(this.nodeData.spec.cloud.digitalocean.monitoring),
       tags: new FormControl(this.nodeData.spec.cloud.digitalocean.tags.toString().replace(/,/g, ', ')),
     });
-    this.doOptionsForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getDoOptionsData());
     });
 
     this.addNodeService.changeNodeProviderData(this.getDoOptionsData());
+
+    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.hideOptional = data.hideOptional;
+    });
   }
 
   ngOnDestroy(): void {
@@ -40,8 +48,8 @@ export class DigitaloceanOptionsComponent implements OnInit, OnDestroy {
 
   getDoOptionsData(): NodeProviderData {
     let doTags: string[] = [];
-    if ((this.doOptionsForm.controls.tags.value).length > 0) {
-      doTags = (this.doOptionsForm.controls.tags.value).split(',').map(tag => tag.trim());
+    if ((this.form.controls.tags.value).length > 0) {
+      doTags = (this.form.controls.tags.value).split(',').map(tag => tag.trim());
       doTags.map(tag => tag.trim());
     }
 
@@ -49,9 +57,9 @@ export class DigitaloceanOptionsComponent implements OnInit, OnDestroy {
       spec: {
         digitalocean: {
           size: this.nodeData.spec.cloud.digitalocean.size,
-          backups: this.doOptionsForm.controls.backups.value,
-          ipv6: this.doOptionsForm.controls.ipv6.value,
-          monitoring: this.doOptionsForm.controls.monitoring.value,
+          backups: this.form.controls.backups.value,
+          ipv6: this.form.controls.ipv6.value,
+          monitoring: this.form.controls.monitoring.value,
           tags: doTags,
         },
       },

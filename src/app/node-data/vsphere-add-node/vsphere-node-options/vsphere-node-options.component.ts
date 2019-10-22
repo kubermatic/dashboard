@@ -10,24 +10,24 @@ import {OperatingSystemSpec} from '../../../shared/entity/NodeEntity';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
-  selector: 'kubermatic-vsphere-options',
-  templateUrl: './vsphere-options.component.html',
+  selector: 'kubermatic-vsphere-node-options',
+  templateUrl: './vsphere-node-options.component.html',
 })
 
-export class VSphereOptionsComponent implements OnInit, OnDestroy {
+export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() cloudSpec: CloudSpec;
-  vsphereOptionsForm: FormGroup;
+  form: FormGroup;
   hideOptional = true;
   defaultTemplate = '';
   private _unsubscribe = new Subject<void>();
 
   constructor(
       private addNodeService: NodeDataService, private dcService: DatacenterService,
-      private wizardService: WizardService) {}
+      private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
-    this.vsphereOptionsForm = new FormGroup({
+    this.form = new FormGroup({
       diskSizeGB: new FormControl(this.nodeData.spec.cloud.vsphere.diskSizeGB),
       template: new FormControl(this.nodeData.spec.cloud.vsphere.template),
     });
@@ -36,7 +36,7 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
       this.defaultTemplate = res.spec.vsphere.templates.ubuntu;
     });
 
-    this.vsphereOptionsForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
     });
 
@@ -45,14 +45,14 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
       this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
     });
 
-    this.wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.hideOptional = data.hideOptional;
-    });
-
     this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
     if (this.nodeData.spec.cloud.vsphere.template === '') {
       this.setImage(this.nodeData.spec.operatingSystem);
     }
+
+    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.hideOptional = data.hideOptional;
+    });
   }
 
   ngOnDestroy(): void {
@@ -78,31 +78,32 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
 
       if (operatingSystem.ubuntu) {
         this.defaultTemplate = ubuntuTemplate;
-        return this.vsphereOptionsForm.controls.template.setValue(ubuntuTemplate);
+        return this.form.controls.template.setValue(ubuntuTemplate);
       } else if (operatingSystem.centos) {
         this.defaultTemplate = centosTemplate;
-        return this.vsphereOptionsForm.controls.template.setValue(centosTemplate);
+        return this.form.controls.template.setValue(centosTemplate);
       } else if (operatingSystem.containerLinux) {
         this.defaultTemplate = coreosTemplate;
-        return this.vsphereOptionsForm.controls.template.setValue(coreosTemplate);
+        return this.form.controls.template.setValue(coreosTemplate);
       }
     });
   }
 
   getVSphereOptionsData(): NodeProviderData {
+    const isValid = !!this.nodeData.valid ? this.nodeData.valid : this.form.valid;
     const providerData: NodeProviderData = {
       spec: {
         vsphere: {
           cpus: this.nodeData.spec.cloud.vsphere.cpus,
           memory: this.nodeData.spec.cloud.vsphere.memory,
-          template: this.vsphereOptionsForm.controls.template.value,
+          template: this.form.controls.template.value,
         },
       },
-      valid: this.vsphereOptionsForm.valid,
+      valid: isValid,
     };
 
-    if (!!this.vsphereOptionsForm.controls.diskSizeGB.value) {
-      providerData.spec.vsphere.diskSizeGB = this.vsphereOptionsForm.controls.diskSizeGB.value;
+    if (!!this.form.controls.diskSizeGB.value) {
+      providerData.spec.vsphere.diskSizeGB = this.form.controls.diskSizeGB.value;
     }
 
     return providerData;

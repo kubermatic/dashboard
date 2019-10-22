@@ -1,4 +1,4 @@
-<form [formGroup]="vsphereNodeForm"
+<form [formGroup]="form"
       fxLayout="column">
   <div fxFlex
        class="mat-select-container">
@@ -9,10 +9,10 @@
              min="1"
              type="number"
              autocomplete="off">
-      <mat-error *ngIf="vsphereNodeForm.controls.cpu.hasError('required')">
+      <mat-error *ngIf="form.controls.cpu.hasError('required')">
         Number of CPUs is <strong>required</strong>.
       </mat-error>
-      <mat-error *ngIf="vsphereNodeForm.controls.cpu.hasError('min')">
+      <mat-error *ngIf="form.controls.cpu.hasError('min')">
         Number of CPUs have to be at least 1.
       </mat-error>
     </mat-form-field>

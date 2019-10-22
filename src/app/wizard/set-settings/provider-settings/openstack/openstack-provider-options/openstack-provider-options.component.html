@@ -1,0 +1,46 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      *ngIf="!hideOptional">
+  <mat-form-field fxFlex
+                  class="km-with-hint">
+    <mat-label>{{getOptionalSettingsFormState('Security Group')}}</mat-label>
+    <mat-select [placeholder]="getOptionalSettingsFormState('Security Group')"
+                disableOptionCentering
+                formControlName="securityGroup">
+      <mat-option *ngFor="let item of securityGroups"
+                  [value]="item.name">
+        {{item.name}}
+      </mat-option>
+    </mat-select>
+    <mat-hint><span *ngIf="showHint('optionalSettings')">Please enter a Project first.</span> When specified, all worker nodes will be attached to this security group. If not specified, a security group will be created.</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field fxFlex
+                  class="km-with-hint">
+    <mat-label>{{getOptionalSettingsFormState('Network')}}</mat-label>
+    <mat-select [placeholder]="getOptionalSettingsFormState('Network')"
+                disableOptionCentering
+                formControlName="network">
+      <mat-option *ngFor="let item of networks"
+                  [value]="item.name">
+        {{item.name}}
+      </mat-option>
+    </mat-select>
+    <mat-hint><span *ngIf="showHint('optionalSettings')">Please enter a Project first.</span> When specified, all worker nodes will be attached to this network. If not specified, a network, subnet & router will be created.</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field fxFlex
+                  class="km-with-hint">
+    <mat-label>{{getSubnetIDFormState()}}</mat-label>
+    <mat-select [placeholder]="getSubnetIDFormState()"
+                disableOptionCentering
+                formControlName="subnetId">
+      <mat-option *ngFor="let subnet of subnetIds"
+                  [value]="subnet.id">
+        {{subnet.name}}
+      </mat-option>
+    </mat-select>
+    <mat-hint *ngIf="showHint('subnetId')">Please enter a Network first.</mat-hint>
+  </mat-form-field>
+
+</form>
