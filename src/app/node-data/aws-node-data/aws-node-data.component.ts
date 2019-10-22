@@ -206,7 +206,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
                 this._noSubnets = true;
               } else {
                 if (this.nodeData.spec.cloud.aws.subnetID === '') {
-                  this.form.controls.subnetID.setValue(this._subnetMap[this.subnetAZ[0]][0].id);
+                  this.form.controls.subnetID.setValue(this._getDefaultSubnet(subnets));
                 }
                 this._noSubnets = false;
               }
@@ -221,6 +221,15 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
             () => {
               this._loadingSubnetIds = false;
             });
+  }
+
+  private _getDefaultSubnet(subnets: AWSSubnet[]): string {
+    if (subnets.length < 1) {
+      return '';
+    }
+
+    const defaultSubnet = subnets.find(s => s.isDefaultSubnet);
+    return defaultSubnet ? defaultSubnet.id : subnets[0].id;
   }
 
   fillSubnetMap(subnets: AWSSubnet[]): void {

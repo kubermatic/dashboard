@@ -35,6 +35,7 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
   @Output() editNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
   nodeDC: DataCenterEntity;
   isExtended = false;
+  isRecreationWarningVisible = false;
   private _initialNodeSpec: NodeSpec;
   private _unsubscribe = new Subject<void>();
 
@@ -71,8 +72,10 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
       this.data.nodeData.spec.versions = getEmptyNodeVersionSpec();
     }
 
-    this.nodeDataService.nodeDataChanges$.pipe(takeUntil(this._unsubscribe))
-        .subscribe(async data => this.data.nodeData = await data);
+    this.nodeDataService.nodeDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(async data => {
+      this.data.nodeData = await data;
+      this.isRecreationWarningVisible = this._isRecreationWarningVisible();
+    });
 
     this.googleAnalyticsService.emitEvent('clusterOverview', 'addNodeDialogOpened');
   }
@@ -87,7 +90,7 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
     this.wizardService.changeSettingsFormView({hideOptional: !this.isExtended});
   }
 
-  isRecreationWarningVisible(): boolean {
+  private _isRecreationWarningVisible(): boolean {
     return this.data.editMode && !_.isEqual(objectDiff(this._initialNodeSpec, this.data.nodeData.spec), {});
   }
 
