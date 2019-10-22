@@ -55,16 +55,17 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  canAdd(): boolean {
+    return this.isClusterReady && this.accessibleAddons.length > 0 && this.addons.length < this.accessibleAddons.length;
+  }
+
   getAddBtnClass(): string {
-    return !this.isClusterReady || this.accessibleAddons.length === 0 ||
-            this.addons.length === this.accessibleAddons.length ?
-        'disabled' :
-        '';
+    return !this.canAdd() ? 'disabled' : '';
   }
 
   getAddBtnTooltip(): string {
     if (!this.isClusterReady) {
-      return 'The cluster is not ready yet.';
+      return 'The cluster is not ready.';
     } else if (this.accessibleAddons.length === 0) {
       return 'There are no accessible addons.';
     } else if (this.addons.length === this.accessibleAddons.length) {
@@ -75,13 +76,15 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   add(): void {
-    const dialog = this._matDialog.open(AddAddonDialogComponent);
-    dialog.componentInstance.installableAddons = this.installableAddons;
-    dialog.afterClosed().pipe(first()).subscribe(addedAddon => {
-      if (!!addedAddon) {
-        this.addAddon.emit(addedAddon);
-      }
-    });
+    if (this.canAdd()) {
+      const dialog = this._matDialog.open(AddAddonDialogComponent);
+      dialog.componentInstance.installableAddons = this.installableAddons;
+      dialog.afterClosed().pipe(first()).subscribe(addedAddon => {
+        if (!!addedAddon) {
+          this.addAddon.emit(addedAddon);
+        }
+      });
+    }
   }
 
   delete(addon: AddonEntity): void {
