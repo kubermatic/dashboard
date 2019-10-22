@@ -29,12 +29,6 @@
 
       <km-label-form title="Labels"
                      [(labels)]="labels"></km-label-form>
-
-      <h3>Revoke Token</h3>
-      <button id="km-edit-cluster-dialog-revoke-viewer-btn"
-              mat-flat-button
-              (click)="revokeViewerToken()"
-              [disabled]="!isRevokeViewerTokenEnabled">Revoke Viewer Token</button>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>

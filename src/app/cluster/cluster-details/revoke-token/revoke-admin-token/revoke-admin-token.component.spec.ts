@@ -4,14 +4,14 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import Spy = jasmine.Spy;
 
-import {ApiService} from '../../../core/services';
-import {SharedModule} from '../../../shared/shared.module';
-import {fakeDigitaloceanCluster, fakeToken} from '../../../testing/fake-data/cluster.fake';
-import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
-import {fakeProject} from '../../../testing/fake-data/project.fake';
-import {asyncData} from '../../../testing/services/api-mock.service';
-import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
-import {RevokeViewerTokenComponent} from './revoke-viewer-token.component';
+import {ApiService} from '../../../../core/services';
+import {SharedModule} from '../../../../shared/shared.module';
+import {fakeDigitaloceanCluster, fakeToken} from '../../../../testing/fake-data/cluster.fake';
+import {fakeDigitaloceanDatacenter} from '../../../../testing/fake-data/datacenter.fake';
+import {fakeProject} from '../../../../testing/fake-data/project.fake';
+import {asyncData} from '../../../../testing/services/api-mock.service';
+import {MatDialogRefMock} from '../../../../testing/services/mat-dialog-ref-mock';
+import {RevokeAdminTokenComponent} from './revoke-admin-token.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -19,14 +19,14 @@ const modules: any[] = [
   SharedModule,
 ];
 
-describe('RevokeViewerTokenComponent', () => {
-  let fixture: ComponentFixture<RevokeViewerTokenComponent>;
-  let component: RevokeViewerTokenComponent;
+describe('RevokeAdminTokenComponent', () => {
+  let fixture: ComponentFixture<RevokeAdminTokenComponent>;
+  let component: RevokeAdminTokenComponent;
   let editTokenSpy: Spy;
 
   beforeEach(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['editViewerToken']);
-    editTokenSpy = apiMock.editViewerToken.and.returnValue(asyncData(fakeToken()));
+    const apiMock = jasmine.createSpyObj('ApiService', ['editToken']);
+    editTokenSpy = apiMock.editToken.and.returnValue(asyncData(fakeToken()));
 
     TestBed
         .configureTestingModule({
@@ -34,7 +34,7 @@ describe('RevokeViewerTokenComponent', () => {
             ...modules,
           ],
           declarations: [
-            RevokeViewerTokenComponent,
+            RevokeAdminTokenComponent,
           ],
           providers: [
             {provide: ApiService, useValue: apiMock},
@@ -45,7 +45,7 @@ describe('RevokeViewerTokenComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RevokeViewerTokenComponent);
+    fixture = TestBed.createComponent(RevokeAdminTokenComponent);
     component = fixture.componentInstance;
   });
 
@@ -53,14 +53,14 @@ describe('RevokeViewerTokenComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call editViewerToken method', fakeAsync(() => {
+  it('should call editToken method', fakeAsync(() => {
        component.projectID = fakeProject().id;
        component.cluster = fakeDigitaloceanCluster();
        component.datacenter = fakeDigitaloceanDatacenter();
-       component.viewerToken = fakeToken();
+       component.adminToken = fakeToken();
 
        fixture.detectChanges();
-       component.revokeViewerToken();
+       component.revokeAdminToken();
        tick();
        expect(editTokenSpy.and.callThrough()).toHaveBeenCalled();
      }));

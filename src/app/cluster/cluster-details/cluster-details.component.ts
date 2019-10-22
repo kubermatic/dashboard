@@ -24,7 +24,7 @@ import {ConfigurePodSecurityComponent} from './configure-pod-security/configure-
 import {EditClusterComponent} from './edit-cluster/edit-cluster.component';
 import {EditProviderSettingsComponent} from './edit-provider-settings/edit-provider-settings.component';
 import {EditSSHKeysComponent} from './edit-sshkeys/edit-sshkeys.component';
-import {RevokeAdminTokenComponent} from './revoke-admin-token/revoke-admin-token.component';
+import {RevokeTokenComponent} from './revoke-token/revoke-token.component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/share-kubeconfig.component';
 
 @Component({
@@ -230,12 +230,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  isRevokeAdminTokenEnabled(): boolean {
+  isRevokeTokenEnabled(): boolean {
     return !this._currentGroupConfig || this._currentGroupConfig.clusters.edit;
   }
 
-  revokeAdminToken(): void {
-    const dialogRef = this._matDialog.open(RevokeAdminTokenComponent);
+  revokeToken(): void {
+    const dialogRef = this._matDialog.open(RevokeTokenComponent);
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;
     dialogRef.componentInstance.projectID = this.projectID;

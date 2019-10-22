@@ -1,14 +1,13 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialog, MatDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material';
 import * as _ from 'lodash';
 
-import {ClusterService, UserService} from '../../../core/services';
+import {ClusterService} from '../../../core/services';
 import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {RevokeViewerTokenComponent} from '../revoke-viewer-token/revoke-viewer-token.component';
 
 @Component({
   selector: 'kubermatic-edit-cluster',
@@ -20,11 +19,10 @@ export class EditClusterComponent implements OnInit {
   @Input() projectID: string;
   form: FormGroup;
   labels: object;
-  private _currentUserGroup: string;
 
   constructor(
-      private readonly _clusterService: ClusterService, private readonly _userService: UserService,
-      private readonly _matDialog: MatDialog, private readonly _matDialogRef: MatDialogRef<EditClusterComponent>) {}
+      private readonly _clusterService: ClusterService,
+      private readonly _matDialogRef: MatDialogRef<EditClusterComponent>) {}
 
   ngOnInit(): void {
     this.labels = _.cloneDeep(this.cluster.labels);
@@ -39,8 +37,6 @@ export class EditClusterComponent implements OnInit {
           ]),
       auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
     });
-
-    this._userService.currentUserGroup(this.projectID).subscribe(userGroup => this._currentUserGroup = userGroup);
   }
 
   editCluster(): void {
@@ -60,16 +56,5 @@ export class EditClusterComponent implements OnInit {
           this._clusterService.onClusterUpdate.next();
           NotificationActions.success(`Cluster ${this.cluster.name} has been successfully edited`);
         });
-  }
-
-  isRevokeViewerTokenEnabled(): boolean {
-    return !this._currentUserGroup || this._currentUserGroup === 'owners' || this._currentUserGroup === 'editors';
-  }
-
-  revokeViewerToken(): void {
-    const dialogRef = this._matDialog.open(RevokeViewerTokenComponent);
-    dialogRef.componentInstance.cluster = this.cluster;
-    dialogRef.componentInstance.datacenter = this.datacenter;
-    dialogRef.componentInstance.projectID = this.projectID;
   }
 }
