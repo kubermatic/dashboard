@@ -1,45 +1,44 @@
+<!-- Custom Presets -->
 <kubermatic-custom-presets-settings>
 </kubermatic-custom-presets-settings>
 
-<kubermatic-digitalocean-cluster-settings [cluster]="cluster"
-                                          *ngIf="cluster.spec.cloud.digitalocean">
-</kubermatic-digitalocean-cluster-settings>
+<!-- Cluster Provider Settings -->
+<kubermatic-digitalocean-cluster-settings *ngIf="cluster.spec.cloud.digitalocean"
+                                          [cluster]="cluster"></kubermatic-digitalocean-cluster-settings>
 
-<kubermatic-aws-cluster-settings [cluster]="cluster"
-                                 *ngIf="cluster.spec.cloud.aws">
-</kubermatic-aws-cluster-settings>
+<kubermatic-aws-cluster-settings *ngIf="cluster.spec.cloud.aws"
+                                 [cluster]="cluster"></kubermatic-aws-cluster-settings>
 
-<kubermatic-openstack-cluster-settings [cluster]="cluster"
-                                       *ngIf="cluster.spec.cloud.openstack">
-</kubermatic-openstack-cluster-settings>
+<kubermatic-openstack-cluster-settings *ngIf="cluster.spec.cloud.openstack"
+                                       [cluster]="cluster"></kubermatic-openstack-cluster-settings>
 
-<kubermatic-bringyourown-cluster-settings [cluster]="cluster"
-                                          *ngIf="cluster.spec.cloud.bringyourown">
-</kubermatic-bringyourown-cluster-settings>
+<kubermatic-bringyourown-cluster-settings *ngIf="cluster.spec.cloud.bringyourown"
+                                          [cluster]="cluster"></kubermatic-bringyourown-cluster-settings>
 
-<kubermatic-hetzner-cluster-settings [cluster]="cluster"
-                                     *ngIf="cluster.spec.cloud.hetzner">
-</kubermatic-hetzner-cluster-settings>
+<kubermatic-hetzner-cluster-settings *ngIf="cluster.spec.cloud.hetzner"
+                                     [cluster]="cluster"></kubermatic-hetzner-cluster-settings>
 
-<kubermatic-vsphere-cluster-settings [cluster]="cluster"
-                                     *ngIf="cluster.spec.cloud.vsphere">
-</kubermatic-vsphere-cluster-settings>
+<kubermatic-vsphere-cluster-settings *ngIf="cluster.spec.cloud.vsphere"
+                                     [cluster]="cluster"></kubermatic-vsphere-cluster-settings>
 
-<kubermatic-azure-cluster-settings [cluster]="cluster"
-                                   *ngIf="cluster.spec.cloud.azure">
-</kubermatic-azure-cluster-settings>
+<kubermatic-azure-cluster-settings *ngIf="cluster.spec.cloud.azure"
+                                   [cluster]="cluster"></kubermatic-azure-cluster-settings>
 
-<kubermatic-packet-cluster-settings [cluster]="cluster"
-                                    *ngIf="cluster.spec.cloud.packet">
-</kubermatic-packet-cluster-settings>
+<kubermatic-packet-cluster-settings *ngIf="cluster.spec.cloud.packet"
+                                    [cluster]="cluster"></kubermatic-packet-cluster-settings>
 
-<kubermatic-gcp-cluster-settings [cluster]="cluster"
-                                 *ngIf="cluster.spec.cloud.gcp">
-</kubermatic-gcp-cluster-settings>
+<kubermatic-gcp-cluster-settings *ngIf="cluster.spec.cloud.gcp"
+                                 [cluster]="cluster"></kubermatic-gcp-cluster-settings>
 
 <kubermatic-kubevirt-cluster-settings [cluster]="cluster"
                                       *ngIf="cluster.spec.cloud.kubevirt">
 </kubermatic-kubevirt-cluster-settings>
 
+<!-- Extended Options -->
+<ng-container *ngIf="!isInWizard">
+  <kubermatic-cluster-provider-options [cluster]="cluster"></kubermatic-cluster-provider-options>
+</ng-container>
+
+<!-- SSH Keys -->
 <kubermatic-cluster-ssh-keys [cluster]="cluster"
                              [selectedKeys]="clusterSSHKeys"></kubermatic-cluster-ssh-keys>

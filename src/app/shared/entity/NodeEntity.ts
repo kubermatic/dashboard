@@ -112,7 +112,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
         diskSize: 25,
         volumeType: 'standard',
         ami: '',
-        tags: {'': ''},
+        tags: {},
         subnetID: '',
         availabilityZone: '',
       } as AWSNodeSpec;
@@ -129,7 +129,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
         flavor: '',
         image: '',
         useFloatingIP: false,
-        tags: {'': ''},
+        tags: {},
       } as OpenstackNodeSpec;
     case NodeProvider.VSPHERE:
       return {
@@ -145,7 +145,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
       return {
         size: '',
         assignPublicIP: false,
-        tags: {'': ''},
+        tags: {},
       } as AzureNodeSpec;
     case NodeProvider.PACKET:
       return {
@@ -160,7 +160,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
         preemptible: false,
         zone: '',
         tags: [],
-        labels: {'': ''},
+        labels: {},
       } as GCPNodeSpec;
   }
   return {};

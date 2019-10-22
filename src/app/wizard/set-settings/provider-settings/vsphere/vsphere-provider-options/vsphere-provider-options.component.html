@@ -1,0 +1,53 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      *ngIf="!hideOptional">
+  <mat-form-field fxFlex>
+    <mat-label>VSphere Cloud Provider Username</mat-label>
+    <input matInput
+           formControlName="username"
+           name="username"
+           type="text"
+           autocomplete="off">
+  </mat-form-field>
+  <mat-form-field fxFlex>
+    <mat-label>VSphere Cloud Provider Password</mat-label>
+    <input matInput
+           formControlName="password"
+           name="password"
+           type="password"
+           autocomplete="off">
+  </mat-form-field>
+  <mat-form-field fxFlex>
+    <mat-label>{{getNetworkFormState()}}</mat-label>
+    <mat-select [placeholder]="getNetworkFormState()"
+                disableOptionCentering
+                panelClass="km-optgroup-dropdown"
+                formControlName="vmNetName">
+      <mat-optgroup *ngFor="let type of networkTypes"
+                    [label]="type">
+        <mat-option *ngFor="let item of getNetworks(type)"
+                    [value]="item.absolutePath">
+          {{item.relativePath}}
+        </mat-option>
+      </mat-optgroup>
+    </mat-select>
+    <mat-hint *ngIf="showNetworkHint()">Please enter your credentials first.</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>{{getFolderFormState()}}</mat-label>
+    <input matInput
+           formControlName="folder"
+           name="folder"
+           [placeholder]="getFolderFormState()"
+           [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let item of folders"
+                  [value]="item.path">
+        {{item.path}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-hint *ngIf="showFolderHint()">Please enter your credentials first.</mat-hint>
+  </mat-form-field>
+
+</form>

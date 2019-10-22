@@ -54,4 +54,4 @@ docker logs -f controller &
 expose.sh
 
 npm run versioninfo
-npm run e2e:local
+WAIT_ON_TIMEOUT=600000 npm run e2e:local

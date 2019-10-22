@@ -18,7 +18,7 @@ export class SetSettingsComponent {
   constructor(private wizardService: WizardService) {}
 
   extend(): void {
-    this.isExtended = true;
+    this.isExtended = !this.isExtended;
     this.wizardService.changeSettingsFormView({hideOptional: !this.isExtended});
   }
 }

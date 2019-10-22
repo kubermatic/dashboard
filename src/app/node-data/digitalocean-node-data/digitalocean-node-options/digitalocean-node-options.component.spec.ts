@@ -1,22 +1,25 @@
+import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {nodeDataFake} from '../../../testing/fake-data/node.fake';
-import {DigitaloceanOptionsComponent} from './digitalocean-options.component';
+import {DigitaloceanNodeOptionsComponent} from './digitalocean-node-options.component';
 
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SharedModule,
   ReactiveFormsModule,
+  HttpClientModule,
 ];
 
-describe('DigitaloceanOptionsComponent', () => {
-  let fixture: ComponentFixture<DigitaloceanOptionsComponent>;
-  let component: DigitaloceanOptionsComponent;
+describe('DigitaloceanNodeOptionsComponent', () => {
+  let fixture: ComponentFixture<DigitaloceanNodeOptionsComponent>;
+  let component: DigitaloceanNodeOptionsComponent;
 
   beforeEach(async(() => {
     TestBed
@@ -25,17 +28,18 @@ describe('DigitaloceanOptionsComponent', () => {
             ...modules,
           ],
           declarations: [
-            DigitaloceanOptionsComponent,
+            DigitaloceanNodeOptionsComponent,
           ],
           providers: [
             NodeDataService,
+            WizardService,
           ],
         })
         .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DigitaloceanOptionsComponent);
+    fixture = TestBed.createComponent(DigitaloceanNodeOptionsComponent);
     component = fixture.componentInstance;
     component.nodeData = nodeDataFake();
     fixture.detectChanges();
@@ -46,12 +50,12 @@ describe('DigitaloceanOptionsComponent', () => {
   });
 
   it('should have valid form when initializing', () => {
-    expect(component.doOptionsForm.valid).toBeTruthy();
+    expect(component.form.valid).toBeTruthy();
   });
 
   it('should call getDoOptionsData method', () => {
-    component.doOptionsForm.controls.tags.patchValue('test-tag1, test-tag2');
-    component.doOptionsForm.controls.ipv6.patchValue(true);
+    component.form.controls.tags.patchValue('test-tag1, test-tag2');
+    component.form.controls.ipv6.patchValue(true);
     fixture.detectChanges();
 
     expect(component.getDoOptionsData()).toEqual({

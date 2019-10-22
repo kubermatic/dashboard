@@ -1,0 +1,29 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      *ngIf="!hideOptional">
+  <mat-form-field fxFlex
+                  *ngIf="!hideOptional">
+    <mat-label>Network</mat-label>
+    <input id="km-gcp-network-input"
+           matInput
+           formControlName="network"
+           type="password"
+           autocomplete="off">
+    <mat-error *ngIf="form.controls.network.hasError('required')">
+      Network is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex
+                  *ngIf="!hideOptional">
+    <mat-label>Subnetwork</mat-label>
+    <input id="km-gcp-subnetwork-input"
+           matInput
+           formControlName="subnetwork"
+           type="password"
+           autocomplete="off">
+    <mat-error *ngIf="form.controls.subnetwork.hasError('required')">
+      Subnetwork is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+</form>

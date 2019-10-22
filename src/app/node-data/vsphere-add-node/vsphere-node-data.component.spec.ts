@@ -51,6 +51,6 @@ describe('VSphereNodeDataComponent', () => {
 
   it('form valid when initializing since vsphere has sane defaults for required fields', () => {
     fixture.detectChanges();
-    expect(component.vsphereNodeForm.valid).toBeTruthy();
+    expect(component.form.valid).toBeTruthy();
   });
 });
