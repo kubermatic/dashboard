@@ -6,6 +6,8 @@ import {first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, ClusterService, DatacenterService, UserService} from '../../core/services';
+import {NotificationActions} from '../../redux/actions/notification.actions';
+import {AddonEntity} from '../../shared/entity/AddonEntity';
 import {ClusterEntity, getClusterProvider, MasterVersion} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {EventEntity} from '../../shared/entity/EventEntity';
@@ -48,6 +50,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   config: Config = {share_kubeconfig: false};
   projectID: string;
   events: EventEntity[] = [];
+  addons: AddonEntity[] = [];
   upgrades: MasterVersion[] = [];
   private _unsubscribe: Subject<any> = new Subject();
   private _currentGroupConfig: GroupConfig;
@@ -108,17 +111,20 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                   .concat(
                       this._canReloadNodes() ?
                           [
+                            this._clusterService.addons(this.projectID, this.cluster.id, this.datacenter.metadata.name),
                             this._clusterService.nodes(this.projectID, this.cluster.id, this.datacenter.metadata.name),
                             this._api.getNodeDeployments(this.cluster.id, this.datacenter.metadata.name, this.projectID)
                           ] :
-                          [of([]), of([])],
+                          [of([]), of([]), of([])],
                   );
 
           return combineLatest(reload$);
         }))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(
-            ([upgrades, nodes, nodeDeployments]: [MasterVersion[], NodeEntity[], NodeDeploymentEntity[]]) => {
+            ([upgrades, addons, nodes,
+              nodeDeployments]: [MasterVersion[], AddonEntity[], NodeEntity[], NodeDeploymentEntity[]]) => {
+              this.addons = addons;
               this.nodes = nodes;
               this.nodeDeployments = nodeDeployments;
               this.isNodeDeploymentLoadFinished = true;
@@ -246,6 +252,24 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;
     dialogRef.componentInstance.projectID = this.projectID;
+  }
+
+  handleAddonCreation(addon: AddonEntity): void {
+    this._clusterService.createAddon(addon, this.projectID, this.cluster.id, this.datacenter.metadata.name)
+        .pipe(first())
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(() => {
+          NotificationActions.success(`The ${addon.name} addon has been added to the ${this.cluster.name} cluster`);
+        });
+  }
+
+  handleAddonDeletion(addon: AddonEntity): void {
+    this._clusterService.deleteAddon(addon.id, this.projectID, this.cluster.id, this.datacenter.metadata.name)
+        .pipe(first())
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(() => {
+          NotificationActions.success(`The ${addon.name} addon has been removed from the ${this.cluster.name} cluster`);
+        });
   }
 
   ngOnDestroy(): void {
