@@ -18,14 +18,15 @@
         </mat-form-field>
       </form>
       <km-label-form title="Labels"
-                     [(labels)]="labels"></km-label-form>
+                     [(labels)]="labels"
+                     (valid)="isLabelFormValid = $event"></km-label-form>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button id="km-add-project-dialog-save"
             mat-flat-button
             (click)="addProject()"
-            [disabled]="!addProjectForm.valid">
+            [disabled]="!addProjectForm.valid || !isLabelFormValid">
       Save
     </button>
   </mat-dialog-actions>

@@ -26,6 +26,7 @@ export class LabelFormComponent implements OnInit {
   @Input() title = 'Labels';
   @Input() labels: object;
   @Output() labelsChange = new EventEmitter<object>();
+  @Output() valid = new EventEmitter<boolean>();
   labelsForm: FormGroup;
   initialLabels: object;
 
@@ -86,6 +87,7 @@ export class LabelFormComponent implements OnInit {
     this._addLabelIfNeeded();
     this._validateKey(index);
     this._updateLabelsObject();
+    this.valid.emit(this.labelsForm.valid);
   }
 
   private _addLabelIfNeeded(): void {

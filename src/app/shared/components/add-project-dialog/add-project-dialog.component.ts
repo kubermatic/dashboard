@@ -13,6 +13,7 @@ import {CreateProjectModel} from '../../model/CreateProjectModel';
 export class AddProjectDialogComponent implements OnInit {
   addProjectForm: FormGroup;
   labels: object;
+  isLabelFormValid = true;
 
   constructor(
       private readonly _apiService: ApiService,
