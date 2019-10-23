@@ -4,6 +4,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 
+import {CoreModule} from '../core/core.module';
 import {ApiService, ClusterService, DatacenterService, ProjectService, WizardService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
@@ -62,6 +63,7 @@ describe('NodeDataComponent', () => {
             BrowserAnimationsModule,
             SharedModule,
             HttpClientModule,
+            CoreModule,
           ],
           declarations: [
             NodeDataComponent,

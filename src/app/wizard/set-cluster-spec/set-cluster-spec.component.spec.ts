@@ -5,6 +5,7 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {AppConfigService} from '../../app-config.service';
+import {CoreModule} from '../../core/core.module';
 import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {MachineNetworksModule} from '../../machine-networks/machine-networks.module';
@@ -25,6 +26,7 @@ const modules: any[] = [
   SharedModule,
   MachineNetworksModule,
   HttpClientModule,
+  CoreModule,
 ];
 
 describe('SetClusterSpecComponent', () => {

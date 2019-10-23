@@ -1,6 +1,6 @@
 import {Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angular/core';
 
-import {AbstractControl, FormArray, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {AbstractControl, AsyncValidatorFn, FormArray, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {SlideInOut} from '../../animations/slideinout';
 import {LabelFormValidators} from '../../validators/label-form.validators';
 
@@ -25,6 +25,7 @@ import {LabelFormValidators} from '../../validators/label-form.validators';
 export class LabelFormComponent implements OnInit {
   @Input() title = 'Labels';
   @Input() labels: object;
+  @Input() asyncKeyValidators: AsyncValidatorFn[] = [];
   @Output() labelsChange = new EventEmitter<object>();
   labelsForm: FormGroup;
   initialLabels: object;
@@ -103,7 +104,8 @@ export class LabelFormComponent implements OnInit {
           LabelFormValidators.labelKeyPrefixLength,
           LabelFormValidators.labelKeyNamePattern,
           LabelFormValidators.labelKeyPrefixPattern,
-        ])
+        ]),
+        Validators.composeAsync(this.asyncKeyValidators)
       ],
       value: [
         {value, disabled: false}, Validators.compose([
