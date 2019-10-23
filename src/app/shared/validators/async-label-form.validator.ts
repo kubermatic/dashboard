@@ -2,15 +2,15 @@ import {AbstractControl, AsyncValidator, AsyncValidatorFn, ValidationErrors} fro
 import {Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
-import {AppModule} from '../../app.module';
 import {LabelService} from '../../core/services';
+import {GlobalModule} from '../../core/services/global/global.module';
 import {ResourceLabelMap, ResourceType} from '../entity/LabelsEntity';
 
 export class RestrictedLabelKeyNameValidator implements AsyncValidator {
   private readonly _labelService: LabelService;
 
   constructor(private readonly _resourceType: ResourceType) {
-    this._labelService = AppModule.injector.get(LabelService);
+    this._labelService = GlobalModule.injector.get(LabelService);
   }
 
   validate(control: AbstractControl): Promise<ValidationErrors|null>|Observable<ValidationErrors|null> {
