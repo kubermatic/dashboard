@@ -8,9 +8,11 @@ import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {ClusterEntity, MasterVersion} from '../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../shared/entity/DatacenterEntity';
+import {ResourceType} from '../shared/entity/LabelsEntity';
 import {OperatingSystemSpec} from '../shared/entity/NodeEntity';
 import {NodeData, NodeProviderData} from '../shared/model/NodeSpecChange';
 import {ClusterUtils} from '../shared/utils/cluster-utils/cluster-utils';
+import {AsyncValidators} from '../shared/validators/async-label-form.validator';
 import {NoIpsLeftValidator} from '../shared/validators/no-ips-left.validator';
 
 @Component({
@@ -31,6 +33,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   operatingSystemForm: FormGroup;
   hideOptional = true;
   versions: string[] = [];
+  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.NodeDeployment)];
   private _unsubscribe = new Subject<void>();
   private providerData: NodeProviderData = {valid: false};
 

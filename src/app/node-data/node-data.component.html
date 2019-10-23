@@ -166,7 +166,8 @@
 
 <!-- Node Labels & Taints -->
 <km-label-form title="Node Labels"
-               [(labels)]="nodeData.spec.labels"></km-label-form>
+               [(labels)]="nodeData.spec.labels"
+               [asyncKeyValidators]=asyncLabelValidators></km-label-form>
 
 <km-taint-form title="Node Taints"
                [(taints)]="nodeData.spec.taints"></km-taint-form>
