@@ -2,19 +2,11 @@
   <mat-card-title>Provider Credentials</mat-card-title>
 </mat-card-header>
 
-<kubermatic-aws-provider-settings [cluster]="cluster"
-                                  *ngIf="!!cluster.spec.cloud.aws"></kubermatic-aws-provider-settings>
-<kubermatic-digitalocean-provider-settings [cluster]="cluster"
-                                           *ngIf="!!cluster.spec.cloud.digitalocean"></kubermatic-digitalocean-provider-settings>
-<kubermatic-hetzner-provider-settings [cluster]="cluster"
-                                      *ngIf="!!cluster.spec.cloud.hetzner"></kubermatic-hetzner-provider-settings>
-<kubermatic-openstack-provider-settings [cluster]="cluster"
-                                        *ngIf="!!cluster.spec.cloud.openstack"></kubermatic-openstack-provider-settings>
-<kubermatic-vsphere-provider-settings [cluster]="cluster"
-                                      *ngIf="!!cluster.spec.cloud.vsphere"></kubermatic-vsphere-provider-settings>
-<kubermatic-azure-provider-settings [cluster]="cluster"
-                                    *ngIf="!!cluster.spec.cloud.azure"></kubermatic-azure-provider-settings>
-<kubermatic-packet-provider-settings [cluster]="cluster"
-                                     *ngIf="!!cluster.spec.cloud.packet"></kubermatic-packet-provider-settings>
-<kubermatic-gcp-provider-settings [cluster]="cluster"
-                                  *ngIf="!!cluster.spec.cloud.gcp"></kubermatic-gcp-provider-settings>
+<kubermatic-aws-provider-settings *ngIf="!!cluster.spec.cloud.aws"></kubermatic-aws-provider-settings>
+<kubermatic-digitalocean-provider-settings *ngIf="!!cluster.spec.cloud.digitalocean"></kubermatic-digitalocean-provider-settings>
+<kubermatic-hetzner-provider-settings *ngIf="!!cluster.spec.cloud.hetzner"></kubermatic-hetzner-provider-settings>
+<kubermatic-openstack-provider-settings *ngIf="!!cluster.spec.cloud.openstack"></kubermatic-openstack-provider-settings>
+<kubermatic-vsphere-provider-settings *ngIf="!!cluster.spec.cloud.vsphere"></kubermatic-vsphere-provider-settings>
+<kubermatic-azure-provider-settings *ngIf="!!cluster.spec.cloud.azure"></kubermatic-azure-provider-settings>
+<kubermatic-packet-provider-settings *ngIf="!!cluster.spec.cloud.packet"></kubermatic-packet-provider-settings>
+<kubermatic-gcp-provider-settings *ngIf="!!cluster.spec.cloud.gcp"></kubermatic-gcp-provider-settings>

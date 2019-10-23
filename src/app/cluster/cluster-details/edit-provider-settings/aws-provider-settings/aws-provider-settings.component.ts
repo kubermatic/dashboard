@@ -1,11 +1,10 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
 import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-aws-provider-settings',
@@ -13,7 +12,6 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 })
 
 export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
   form: FormGroup;
   private _formData = {accessKeyId: '', secretAccessKey: ''};
   private _unsubscribe = new Subject<void>();
@@ -25,8 +23,6 @@ export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
       accessKeyId: new FormControl(''),
       secretAccessKey: new FormControl(''),
     });
-
-    this.setValidators();
 
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       if (data.accessKeyId !== this._formData.accessKeyId || data.secretAccessKey !== this._formData.secretAccessKey) {
@@ -58,13 +54,8 @@ export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
     this.form.controls.secretAccessKey.updateValueAndValidity();
   }
 
-  getPlaceholder(field: string): string {
-    switch (field) {
-      case 'accessKeyId':
-        return !this.accessKeyId.value && !this.secretAccessKey.value ? 'Access Key ID' : 'Access Key ID*';
-      case 'secretAccessKey':
-        return !this.accessKeyId.value && !this.secretAccessKey.value ? 'Secret Access Key' : 'Secret Access Key*';
-    }
+  isRequiredField(): string {
+    return !this.accessKeyId.value && !this.secretAccessKey.value ? '' : '*';
   }
 
   ngOnDestroy(): void {

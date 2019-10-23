@@ -1,7 +1,7 @@
 <form [formGroup]="form"
       fxLayout="column">
   <mat-form-field fxFlex>
-    <mat-label>{{getPlaceholder('accessKeyId')}}</mat-label>
+    <mat-label>Access Key ID{{isRequiredField()}}</mat-label>
     <input matInput
            formControlName="accessKeyId"
            name="accessKeyId"
@@ -12,7 +12,7 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
-    <mat-label>{{getPlaceholder('secretAccessKey')}}</mat-label>
+    <mat-label>Secret Access Key{{isRequiredField()}}</mat-label>
     <input matInput
            formControlName="secretAccessKey"
            name="secretAccessKey"
