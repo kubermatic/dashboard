@@ -24,7 +24,6 @@ import {NodeService} from '../services/node.service';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/cluster-delete-confirmation.component';
 import {ConfigurePodSecurityComponent} from './configure-pod-security/configure-pod-security.component';
 import {EditClusterComponent} from './edit-cluster/edit-cluster.component';
-import {EditProviderSettingsComponent} from './edit-provider-settings/edit-provider-settings.component';
 import {EditSSHKeysComponent} from './edit-sshkeys/edit-sshkeys.component';
 import {RevokeAdminTokenComponent} from './revoke-admin-token/revoke-admin-token.component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/share-kubeconfig.component';
@@ -205,12 +204,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   isEditEnabled(): boolean {
     return !this._currentGroupConfig || this._currentGroupConfig.clusters.edit;
-  }
-
-  editProviderSettings(): void {
-    const modal = this._matDialog.open(EditProviderSettingsComponent);
-    modal.componentInstance.cluster = this.cluster;
-    modal.componentInstance.datacenter = this.datacenter;
   }
 
   editCluster(): void {

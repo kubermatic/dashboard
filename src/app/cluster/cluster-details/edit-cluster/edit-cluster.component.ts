@@ -1,9 +1,12 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
 import * as _ from 'lodash';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 import {ClusterService} from '../../../core/services';
+import {ProviderSettingsPatch} from '../../../core/services/cluster/cluster.service';
 import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
@@ -12,13 +15,20 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 @Component({
   selector: 'kubermatic-edit-cluster',
   templateUrl: './edit-cluster.component.html',
+  styleUrls: ['./edit-cluster.component.scss'],
 })
-export class EditClusterComponent implements OnInit {
+export class EditClusterComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
   form: FormGroup;
   labels: object;
+  providerSettingsPatch: ProviderSettingsPatch = {
+    isValid: true,
+    cloudSpecPatch: {},
+  };
+
+  private _unsubscribe = new Subject<void>();
 
   constructor(
       private readonly _clusterService: ClusterService,
@@ -37,6 +47,9 @@ export class EditClusterComponent implements OnInit {
           ]),
       auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
     });
+
+    this._clusterService.providerSettingsPatchChanges$.pipe(takeUntil(this._unsubscribe))
+        .subscribe(async patch => this.providerSettingsPatch = await patch);
   }
 
   editCluster(): void {
@@ -44,6 +57,7 @@ export class EditClusterComponent implements OnInit {
       name: this.form.controls.name.value,
       labels: this.labels,
       spec: {
+        cloud: this.providerSettingsPatch.cloudSpecPatch,
         auditLogging: {
           enabled: this.form.controls.auditLogging.value,
         }
@@ -56,5 +70,10 @@ export class EditClusterComponent implements OnInit {
           this._clusterService.onClusterUpdate.next();
           NotificationActions.success(`Cluster ${this.cluster.name} has been successfully edited`);
         });
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 }

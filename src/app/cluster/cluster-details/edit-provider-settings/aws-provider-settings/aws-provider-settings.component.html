@@ -1,24 +1,24 @@
-<form [formGroup]="awsProviderSettingsForm"
+<form [formGroup]="form"
       fxLayout="column">
   <mat-form-field fxFlex>
-    <mat-label>Access Key ID*</mat-label>
+    <mat-label>{{getPlaceholder('accessKeyId')}}</mat-label>
     <input matInput
            formControlName="accessKeyId"
            name="accessKeyId"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="awsProviderSettingsForm.controls.accessKeyId.hasError('required')">
+    <mat-error *ngIf="form.controls.accessKeyId.hasError('required')">
       Access key ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
-    <mat-label>Secret Access Key*</mat-label>
+    <mat-label>{{getPlaceholder('secretAccessKey')}}</mat-label>
     <input matInput
            formControlName="secretAccessKey"
            name="secretAccessKey"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="awsProviderSettingsForm.controls.secretAccessKey.hasError('required')">
+    <mat-error *ngIf="form.controls.secretAccessKey.hasError('required')">
       Secret Access Key is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
