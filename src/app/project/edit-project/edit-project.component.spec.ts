@@ -10,12 +10,14 @@ import {fakeProject} from '../../testing/fake-data/project.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
 import {EditProjectComponent} from './edit-project.component';
+import {CoreModule} from '../../core/core.module';
 
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
   SharedModule,
+  CoreModule,
 ];
 
 describe('EditProjectComponent', () => {
