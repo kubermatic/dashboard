@@ -43,15 +43,15 @@ export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
 
   setValidators(): void {
     if (!this.accessKeyId.value && !this.secretAccessKey.value) {
-      this.form.controls.accessKeyId.clearValidators();
-      this.form.controls.secretAccessKey.clearValidators();
+      this.accessKeyId.clearValidators();
+      this.secretAccessKey.clearValidators();
     } else {
       this.accessKeyId.setValidators([Validators.required]);
       this.secretAccessKey.setValidators([Validators.required]);
     }
 
-    this.form.controls.accessKeyId.updateValueAndValidity();
-    this.form.controls.secretAccessKey.updateValueAndValidity();
+    this.accessKeyId.updateValueAndValidity();
+    this.secretAccessKey.updateValueAndValidity();
   }
 
   isRequiredField(): string {

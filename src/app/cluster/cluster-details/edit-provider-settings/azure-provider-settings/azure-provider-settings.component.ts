@@ -54,10 +54,10 @@ export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
 
   setValidators(): void {
     if (!this.clientID.value && !this.clientSecret.value && !this.subscriptionID.value && !this.tenantID.value) {
-      this.form.controls.clientID.clearValidators();
-      this.form.controls.clientSecret.clearValidators();
-      this.form.controls.subscriptionID.clearValidators();
-      this.form.controls.tenantID.clearValidators();
+      this.clientID.clearValidators();
+      this.clientSecret.clearValidators();
+      this.subscriptionID.clearValidators();
+      this.tenantID.clearValidators();
     } else {
       this.clientID.setValidators([Validators.required]);
       this.clientSecret.setValidators([Validators.required]);
@@ -65,10 +65,10 @@ export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
       this.tenantID.setValidators([Validators.required]);
     }
 
-    this.form.controls.clientID.updateValueAndValidity();
-    this.form.controls.clientSecret.updateValueAndValidity();
-    this.form.controls.subscriptionID.updateValueAndValidity();
-    this.form.controls.tenantID.updateValueAndValidity();
+    this.clientID.updateValueAndValidity();
+    this.clientSecret.updateValueAndValidity();
+    this.subscriptionID.updateValueAndValidity();
+    this.tenantID.updateValueAndValidity();
   }
 
   isRequiredField(): string {
