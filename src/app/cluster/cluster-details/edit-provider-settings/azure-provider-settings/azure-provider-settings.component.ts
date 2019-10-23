@@ -72,8 +72,9 @@ export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
   }
 
   isRequiredField(): string {
-    return !this.clientID.value && !this.clientSecret.value && !this.subscriptionID.value && !this.tenantID.value ? '' :
-                                                                                                                    '*';
+    return (!this.clientID.value && !this.clientSecret.value && !this.subscriptionID.value && !this.tenantID.value) ?
+        '' :
+        '*';
   }
 
   ngOnDestroy(): void {
