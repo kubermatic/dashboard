@@ -1,6 +1,8 @@
-import {Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators} from '@angular/forms';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
-import {AbstractControl, FormArray, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {SlideInOut} from '../../animations/slideinout';
 import {LabelFormValidators} from '../../validators/label-form.validators';
 
@@ -22,13 +24,13 @@ import {LabelFormValidators} from '../../validators/label-form.validators';
   ],
   animations: [SlideInOut]
 })
-export class LabelFormComponent implements OnInit {
+export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccessor, Validator {
   @Input() title = 'Labels';
   @Input() labels: object;
   @Output() labelsChange = new EventEmitter<object>();
-  @Output() valid = new EventEmitter<boolean>();
   labelsForm: FormGroup;
   initialLabels: object;
+  private _unsubscribe = new Subject<void>();
 
   constructor(private readonly _formBuilder: FormBuilder) {}
 
@@ -74,6 +76,35 @@ export class LabelFormComponent implements OnInit {
     this._addLabel();
   }
 
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
+  onTouched(): void {}
+
+  writeValue(obj: any): void {
+    if (obj) {
+      this.labelsForm.setValue(obj, {emitEvent: false});
+    }
+  }
+
+  registerOnChange(fn: any): void {
+    this.labelsForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(fn);
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    isDisabled ? this.labelsForm.disable() : this.labelsForm.enable();
+  }
+
+  validate(control: AbstractControl): ValidationErrors|null {
+    return this.labelsForm.valid ? null : {invalidForm: {valid: false, message: 'Labels are invalid.'}};
+  }
+
   isRemovable(index: number): boolean {
     return index < this.labelArray.length - 1;
   }
@@ -81,14 +112,12 @@ export class LabelFormComponent implements OnInit {
   deleteLabel(index: number): void {
     this.labelArray.removeAt(index);
     this._updateLabelsObject();
-    this.valid.emit(this.labelsForm.valid);
   }
 
   check(index: number): void {
     this._addLabelIfNeeded();
     this._validateKey(index);
     this._updateLabelsObject();
-    this.valid.emit(this.labelsForm.valid);
   }
 
   private _addLabelIfNeeded(): void {

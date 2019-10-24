@@ -16,16 +16,17 @@
             Name is <strong>required</strong>.
           </mat-error>
         </mat-form-field>
+        <km-label-form title="Labels"
+                       [(labels)]="labels"
+                       formControlName="labels"></km-label-form>
       </form>
-      <km-label-form title="Labels"
-                     [(labels)]="labels"></km-label-form>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button id="km-edit-project-dialog-edit-btn"
             mat-flat-button
             (click)="editProject()"
-            [disabled]="!form.valid">
+            [disabled]="form.invalid">
       Edit
     </button>
   </mat-dialog-actions>

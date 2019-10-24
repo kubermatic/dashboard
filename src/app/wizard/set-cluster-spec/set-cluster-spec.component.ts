@@ -40,6 +40,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       imagePullSecret: new FormControl(),
       usePodSecurityPolicyAdmissionPlugin: new FormControl(this.cluster.spec.usePodSecurityPolicyAdmissionPlugin),
       auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
+      labels: new FormControl(''),
     });
 
     if (this.clusterSpecForm.controls.type.value === '') {

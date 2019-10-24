@@ -11,23 +11,23 @@ import {CreateProjectModel} from '../../model/CreateProjectModel';
   styleUrls: ['./add-project-dialog.component.scss'],
 })
 export class AddProjectDialogComponent implements OnInit {
-  addProjectForm: FormGroup;
+  form: FormGroup;
   labels: object;
-  isLabelFormValid = true;
 
   constructor(
       private readonly _apiService: ApiService,
       private readonly _matDialogRef: MatDialogRef<AddProjectDialogComponent>) {}
 
   ngOnInit(): void {
-    this.addProjectForm = new FormGroup({
+    this.form = new FormGroup({
       name: new FormControl('', [Validators.required]),
+      labels: new FormControl(''),
     });
   }
 
   addProject(): void {
     const createProject: CreateProjectModel = {
-      name: this.addProjectForm.controls.name.value,
+      name: this.form.controls.name.value,
       labels: this.labels,
     };
     this._apiService.createProject(createProject).subscribe((res) => {

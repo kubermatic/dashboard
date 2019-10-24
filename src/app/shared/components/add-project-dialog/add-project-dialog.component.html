@@ -2,7 +2,7 @@
   <km-dialog-title title="Add Project"></km-dialog-title>
   <mat-dialog-content>
     <div class="mat-dialog-content">
-      <form [formGroup]="addProjectForm"
+      <form [formGroup]="form"
             fxLayout="column">
         <mat-form-field fxFlex>
           <mat-label>Name*</mat-label>
@@ -12,21 +12,21 @@
                  type="text"
                  autocomplete="off"
                  cdkFocusInitial>
-          <mat-error *ngIf="addProjectForm.controls.name.hasError('required')">
+          <mat-error *ngIf="form.controls.name.hasError('required')">
             Name is <strong>required</strong>.
           </mat-error>
         </mat-form-field>
+        <km-label-form title="Labels"
+                       [(labels)]="labels"
+                       formControlName="labels"></km-label-form>
       </form>
-      <km-label-form title="Labels"
-                     [(labels)]="labels"
-                     (valid)="isLabelFormValid = $event"></km-label-form>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button id="km-add-project-dialog-save"
             mat-flat-button
             (click)="addProject()"
-            [disabled]="!addProjectForm.valid || !isLabelFormValid">
+            [disabled]="form.invalid">
       Save
     </button>
   </mat-dialog-actions>
