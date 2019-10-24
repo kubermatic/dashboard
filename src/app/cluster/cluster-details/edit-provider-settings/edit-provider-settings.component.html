@@ -8,5 +8,6 @@
 <kubermatic-openstack-provider-settings *ngIf="!!cluster.spec.cloud.openstack"></kubermatic-openstack-provider-settings>
 <kubermatic-vsphere-provider-settings *ngIf="!!cluster.spec.cloud.vsphere"></kubermatic-vsphere-provider-settings>
 <kubermatic-azure-provider-settings *ngIf="!!cluster.spec.cloud.azure"></kubermatic-azure-provider-settings>
-<kubermatic-packet-provider-settings *ngIf="!!cluster.spec.cloud.packet"></kubermatic-packet-provider-settings>
+<kubermatic-packet-provider-settings *ngIf="!!cluster.spec.cloud.packet"
+                                     [cluster]="cluster"></kubermatic-packet-provider-settings>
 <kubermatic-gcp-provider-settings *ngIf="!!cluster.spec.cloud.gcp"></kubermatic-gcp-provider-settings>
