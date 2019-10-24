@@ -15,6 +15,7 @@ import {DigitaloceanProviderSettingsComponent} from '../digitalocean-provider-se
 import {EditProviderSettingsComponent} from '../edit-provider-settings.component';
 import {GCPProviderSettingsComponent} from '../gcp-provider-settings/gcp-provider-settings.component';
 import {HetznerProviderSettingsComponent} from '../hetzner-provider-settings/hetzner-provider-settings.component';
+import {KubevirtProviderSettingsComponent} from '../kubevirt-provider-settings/kubevirt-provider-settings.component';
 import {OpenstackProviderSettingsComponent} from '../openstack-provider-settings/openstack-provider-settings.component';
 import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/vsphere-provider-settings.component';
 
@@ -47,6 +48,7 @@ describe('PacketProviderSettingsComponent', () => {
             DigitaloceanProviderSettingsComponent,
             PacketProviderSettingsComponent,
             GCPProviderSettingsComponent,
+            KubevirtProviderSettingsComponent,
           ],
           providers: [
             {provide: ApiService, useClass: ApiMockService},

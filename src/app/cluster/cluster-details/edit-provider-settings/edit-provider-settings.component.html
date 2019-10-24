@@ -11,3 +11,4 @@
 <kubermatic-packet-provider-settings *ngIf="!!cluster.spec.cloud.packet"
                                      [cluster]="cluster"></kubermatic-packet-provider-settings>
 <kubermatic-gcp-provider-settings *ngIf="!!cluster.spec.cloud.gcp"></kubermatic-gcp-provider-settings>
+<kubermatic-kubevirt-provider-settings *ngIf="!!cluster.spec.cloud.kubevirt"></kubermatic-kubevirt-provider-settings>

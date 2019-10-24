@@ -15,6 +15,8 @@ import {RouterStub} from '../../../testing/router-stubs';
 import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
+import {KubevirtProviderSettingsComponent} from '../kubevirt-provider-settings/kubevirt-provider-settings.component';
+
 import {AWSProviderSettingsComponent} from './aws-provider-settings/aws-provider-settings.component';
 import {AzureProviderSettingsComponent} from './azure-provider-settings/azure-provider-settings.component';
 import {DigitaloceanProviderSettingsComponent} from './digitalocean-provider-settings/digitalocean-provider-settings.component';
@@ -52,6 +54,7 @@ describe('EditProviderSettingsComponent', () => {
             AzureProviderSettingsComponent,
             PacketProviderSettingsComponent,
             GCPProviderSettingsComponent,
+            KubevirtProviderSettingsComponent,
           ],
           providers: [
             {provide: ClusterService, useClass: ClusterMockService},
