@@ -60,7 +60,7 @@ describe('AddProjectDialogComponent', () => {
      }));
 
   it('should call createProject method', fakeAsync(() => {
-       component.addProjectForm.controls.name.patchValue('new-project-name');
+       component.form.controls.name.patchValue('new-project-name');
        component.addProject();
        tick();
 

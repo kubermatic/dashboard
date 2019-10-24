@@ -53,6 +53,8 @@ describe('EditClusterComponent', () => {
     fixture = TestBed.createComponent(EditClusterComponent);
     component = fixture.componentInstance;
     component.cluster = fakeAWSCluster();
+    component.labels = {};
+    component.asyncLabelValidators = [];
     component.datacenter = fakeAWSDatacenter();
     component.projectID = fakeProject().id;
     fixture.detectChanges();

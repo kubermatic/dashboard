@@ -49,6 +49,8 @@ describe('EditProjectComponent', () => {
     fixture = TestBed.createComponent(EditProjectComponent);
     component = fixture.componentInstance;
     component.project = fakeProject();
+    component.labels = {};
+    component.asyncLabelValidators = [];
     fixture.detectChanges();
   }));
 
