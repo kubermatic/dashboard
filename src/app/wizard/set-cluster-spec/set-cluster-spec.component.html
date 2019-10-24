@@ -107,6 +107,7 @@
         </div>
         <km-label-form title="Labels"
                        [(labels)]="labels"
+                       [asyncKeyValidators]=asyncLabelValidators
                        formControlName="labels"
                        fxFlex="100"></km-label-form>
       </form>

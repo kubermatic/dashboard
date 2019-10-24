@@ -27,6 +27,7 @@
         </mat-checkbox>
         <km-label-form title="Labels"
                        [(labels)]="labels"
+                       [asyncKeyValidators]=asyncLabelValidators
                        formControlName="labels"></km-label-form>
       </form>
     </div>

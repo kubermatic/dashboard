@@ -34,6 +34,9 @@
                    i18n>
           Name is too long.
         </mat-error>
+        <mat-error *ngIf="label.get('key').errors?.labelKeyNameRestricted">
+          Restricted label name.
+        </mat-error>
       </mat-form-field>
       <mat-form-field fxFlex="45">
         <mat-label>Value</mat-label>

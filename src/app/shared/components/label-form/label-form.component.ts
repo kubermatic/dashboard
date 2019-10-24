@@ -1,5 +1,5 @@
 import {Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators} from '@angular/forms';
+import {AbstractControl, AsyncValidatorFn, ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -27,6 +27,7 @@ import {LabelFormValidators} from '../../validators/label-form.validators';
 export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccessor, Validator {
   @Input() title = 'Labels';
   @Input() labels: object;
+  @Input() asyncKeyValidators: AsyncValidatorFn[] = [];
   @Output() labelsChange = new EventEmitter<object>();
   labelsForm: FormGroup;
   initialLabels: object;
@@ -135,7 +136,8 @@ export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccess
           LabelFormValidators.labelKeyPrefixLength,
           LabelFormValidators.labelKeyNamePattern,
           LabelFormValidators.labelKeyPrefixPattern,
-        ])
+        ]),
+        Validators.composeAsync(this.asyncKeyValidators)
       ],
       value: [
         {value, disabled: false}, Validators.compose([
