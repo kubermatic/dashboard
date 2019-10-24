@@ -23,10 +23,6 @@ export class HetznerProviderSettingsComponent implements OnInit, OnDestroy {
       token: new FormControl(''),
     });
 
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-    });
-
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       if (data.token !== this._formData.token) {
         this._formData = data;
