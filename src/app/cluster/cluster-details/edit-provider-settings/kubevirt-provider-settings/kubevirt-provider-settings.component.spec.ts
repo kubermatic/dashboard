@@ -64,7 +64,7 @@ describe('KubevirtProviderSettingsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('form invalid after creating', () => {
-    expect(component.form.valid).toBeFalsy();
+  it('form valid after creating', () => {
+    expect(component.form.valid).toBeTruthy();
   });
 });

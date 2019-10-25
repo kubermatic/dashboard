@@ -5,7 +5,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {ClusterService} from '../../../../core/services';
 import {SharedModule} from '../../../../shared/shared.module';
-import {fakeVSphereCluster} from '../../../../testing/fake-data/cluster.fake';
 import {ClusterMockService} from '../../../../testing/services/cluster-mock-service';
 import {MatDialogRefMock} from '../../../../testing/services/mat-dialog-ref-mock';
 import {AWSProviderSettingsComponent} from '../aws-provider-settings/aws-provider-settings.component';
@@ -60,17 +59,6 @@ describe('VSphereProviderSettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(VSphereProviderSettingsComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeVSphereCluster();
-    component.cluster.spec.cloud.vsphere = {
-      username: '',
-      password: '',
-      vmNetName: '',
-      folder: '',
-      infraManagementUser: {
-        username: '',
-        password: '',
-      },
-    };
     fixture.detectChanges();
   });
 
@@ -78,26 +66,7 @@ describe('VSphereProviderSettingsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('form invalid after creating', () => {
-    expect(component.vsphereProviderSettingsForm.valid).toBeFalsy();
-  });
-
-  it('required fields', () => {
-    expect(component.vsphereProviderSettingsForm.valid).toBeFalsy('form is initially not valid');
-    expect(component.vsphereProviderSettingsForm.controls.infraManagementUsername.valid)
-        .toBeFalsy('username field is initially not valid');
-    expect(component.vsphereProviderSettingsForm.controls.infraManagementUsername.hasError('required'))
-        .toBeTruthy('username field has initially required error');
-    expect(component.vsphereProviderSettingsForm.controls.infraManagementPassword.valid)
-        .toBeFalsy('password field is initially not valid');
-    expect(component.vsphereProviderSettingsForm.controls.infraManagementPassword.hasError('required'))
-        .toBeTruthy('password field has initially required error');
-
-    component.vsphereProviderSettingsForm.controls.infraManagementUsername.patchValue('foo');
-    expect(component.vsphereProviderSettingsForm.controls.infraManagementUsername.hasError('required'))
-        .toBeFalsy('username field has no required error after setting foo');
-    component.vsphereProviderSettingsForm.controls.infraManagementPassword.patchValue('foo');
-    expect(component.vsphereProviderSettingsForm.controls.infraManagementPassword.hasError('required'))
-        .toBeFalsy('password field has no required error after setting foo');
+  it('form valid after creating', () => {
+    expect(component.form.valid).toBeTruthy();
   });
 });

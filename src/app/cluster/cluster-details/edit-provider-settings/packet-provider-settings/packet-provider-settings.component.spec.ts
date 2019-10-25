@@ -73,20 +73,7 @@ describe('PacketProviderSettingsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should initially have invalid form', () => {
-    expect(component.packetProviderSettingsForm.valid).toBeFalsy();
-  });
-
-  it('should correctly verify form validity', () => {
-    expect(component.packetProviderSettingsForm.valid).toBeFalsy('form is initially not valid');
-    expect(component.packetProviderSettingsForm.controls.apiKey.valid).toBeFalsy('apiKey field is initially not valid');
-    expect(component.packetProviderSettingsForm.controls.apiKey.hasError('required'))
-        .toBeTruthy('apiKey field has initially required error');
-    expect(component.packetProviderSettingsForm.controls.projectID.valid)
-        .toBeFalsy('projectID field is initially not valid');
-    expect(component.packetProviderSettingsForm.controls.projectID.hasError('required'))
-        .toBeTruthy('projectID field has initially required error');
-    expect(component.packetProviderSettingsForm.controls.billingCycle.valid)
-        .toBeTruthy('billingCycle field is initially valid');
+  it('form valid after creating', () => {
+    expect(component.form.valid).toBeTruthy();
   });
 });

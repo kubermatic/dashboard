@@ -5,7 +5,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {ClusterService} from '../../../../core/services';
 import {SharedModule} from '../../../../shared/shared.module';
-import {fakeDigitaloceanCluster} from '../../../../testing/fake-data/cluster.fake';
 import {ClusterMockService} from '../../../../testing/services/cluster-mock-service';
 import {MatDialogRefMock} from '../../../../testing/services/mat-dialog-ref-mock';
 import {AWSProviderSettingsComponent} from '../aws-provider-settings/aws-provider-settings.component';
@@ -59,8 +58,6 @@ describe('DigitaloceanProviderSettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DigitaloceanProviderSettingsComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeDigitaloceanCluster();
-    component.cluster.spec.cloud.digitalocean.token = '';
     fixture.detectChanges();
   });
 
@@ -68,39 +65,7 @@ describe('DigitaloceanProviderSettingsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('form invalid after creating', () => {
-    expect(component.digitaloceanProviderSettingsForm.valid).toBeFalsy();
-  });
-
-  it('token field validity', () => {
-    expect(component.digitaloceanProviderSettingsForm.valid).toBeFalsy('form is initially not valid');
-    expect(component.digitaloceanProviderSettingsForm.controls.token.valid)
-        .toBeFalsy('token field is initially not valid');
-    expect(component.digitaloceanProviderSettingsForm.controls.token.hasError('required'))
-        .toBeTruthy('token field has initially required error');
-
-    component.digitaloceanProviderSettingsForm.controls.token.patchValue('foo');
-    expect(component.digitaloceanProviderSettingsForm.controls.token.hasError('required'))
-        .toBeFalsy('token field has no required error after setting foo');
-    expect(component.digitaloceanProviderSettingsForm.controls.token.hasError('minlength'))
-        .toBeTruthy('token field has min length error after setting foo');
-
-    component.digitaloceanProviderSettingsForm.controls.token.patchValue(
-        '1234567890123456789012345678901234567890123456789012345678901234567890');
-    expect(component.digitaloceanProviderSettingsForm.controls.token.hasError('required'))
-        .toBeFalsy('token field has no required error after setting 70 chars');
-    expect(component.digitaloceanProviderSettingsForm.controls.token.hasError('minlength'))
-        .toBeFalsy('token field has no min length error after setting 70 chars');
-    expect(component.digitaloceanProviderSettingsForm.controls.token.hasError('maxlength'))
-        .toBeTruthy('token field has max length error after setting 70 chars');
-
-    component.digitaloceanProviderSettingsForm.controls.token.patchValue(
-        'vhn92zesby42uw9f31wzn1e01ia4tso5tq2x52xyihidhma62yonrp4ebu9nlc6p');
-    expect(component.digitaloceanProviderSettingsForm.controls.token.hasError('required'))
-        .toBeFalsy('token field has no required error after setting valid token');
-    expect(component.digitaloceanProviderSettingsForm.controls.token.hasError('minlength'))
-        .toBeFalsy('token field has no min length error after setting valid token');
-    expect(component.digitaloceanProviderSettingsForm.controls.token.hasError('maxlength'))
-        .toBeFalsy('token field has no max length error after setting valid token');
+  it('form valid after creating', () => {
+    expect(component.form.valid).toBeTruthy();
   });
 });
