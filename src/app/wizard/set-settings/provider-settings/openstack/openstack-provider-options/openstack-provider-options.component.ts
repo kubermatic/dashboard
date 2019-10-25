@@ -62,14 +62,12 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
         });
 
     this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+      this._selectedPreset = newCredentials;
       if (newCredentials) {
-        this._selectedPreset = newCredentials;
         this.form.disable();
         this._wizardService.changeClusterProviderSettings(
             this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
         return;
-      } else {
-        this._selectedPreset = '';
       }
 
       if (this._hasRequiredCredentials()) {
@@ -157,6 +155,11 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
               });
 
               this._enableNetwork(this.networks.length !== 0);
+              this._loadingOptionalSettings = false;
+            },
+            () => {
+              this._loadingOptionalSettings = false;
+              this._resetControls(this.form.controls.network);
             },
             () => {
               this._loadingOptionalSettings = false;
@@ -179,6 +182,10 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
 
               this._enableSecurityGroup(this.securityGroups.length !== 0);
               this._loadingOptionalSettings = false;
+            },
+            () => {
+              this._loadingOptionalSettings = false;
+              this._resetControls(this.form.controls.securityGroup);
             },
             () => {
               this._loadingOptionalSettings = false;
@@ -208,6 +215,10 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
 
               this._enableSubnetID(this.subnetIds.length !== 0);
               this._loadingSubnetIds = false;
+            },
+            () => {
+              this._loadingSubnetIds = false;
+              this._resetControls(this.form.controls.subnetId);
             },
             () => {
               this._loadingSubnetIds = false;

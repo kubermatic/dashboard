@@ -64,14 +64,11 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
     });
 
     this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+      this._selectedPreset = newCredentials;
       if (newCredentials) {
-        this._selectedPreset = newCredentials;
         this.form.disable();
         return;
-      } else {
-        this._selectedPreset = '';
       }
-
       this.form.enable();
     });
   }
@@ -218,7 +215,7 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
             (folders) => {
               if (folders.length > 0) {
                 const sortedFolders = folders.sort((a, b) => {
-                  return (a.path < b.path ? -1 : 1) * ('asc' ? 1 : -1);
+                  return a.path.localeCompare(b.path);
                 });
 
                 this.folders = sortedFolders;
