@@ -68,6 +68,8 @@ export class AWSProviderOptionsComponent implements OnInit, OnDestroy {
         this._selectedPreset = newCredentials;
         this.form.disable();
         return;
+      } else {
+        this._selectedPreset = '';
       }
 
       this.form.enable();
@@ -90,7 +92,7 @@ export class AWSProviderOptionsComponent implements OnInit, OnDestroy {
       return 'VPC ID';
     } else if (this._loadingVPCs && !this._selectedPreset) {
       return 'Loading VPC IDs...';
-    } else if (this.vpcIds.length === 0) {
+    } else if (this.vpcIds.length === 0 && !this._selectedPreset) {
       return 'No VPC IDs available';
     } else {
       return 'VPC ID';
