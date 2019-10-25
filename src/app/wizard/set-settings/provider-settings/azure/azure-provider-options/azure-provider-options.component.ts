@@ -49,6 +49,8 @@ export class AzureProviderOptionsComponent implements OnInit, OnDestroy {
         this._selectedPreset = newCredentials;
         this.form.disable();
         return;
+      } else {
+        this._selectedPreset = '';
       }
 
       this.form.enable();
