@@ -27,7 +27,7 @@
     <button id="km-add-project-dialog-save"
             mat-flat-button
             (click)="addProject()"
-            [disabled]="form.invalid">
+            [disabled]="!form.valid">
       Save
     </button>
   </mat-dialog-actions>

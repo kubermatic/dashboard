@@ -27,7 +27,7 @@
     <button id="km-edit-project-dialog-edit-btn"
             mat-flat-button
             (click)="editProject()"
-            [disabled]="form.invalid">
+            [disabled]="!form.valid">
       Edit
     </button>
   </mat-dialog-actions>

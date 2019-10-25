@@ -38,7 +38,7 @@
     <button id="km-edit-cluster-dialog-edit-btn"
             mat-flat-button
             (click)="editCluster()"
-            [disabled]="form.invalid || !providerSettingsPatch.isValid">
+            [disabled]="!form.valid || !providerSettingsPatch.isValid">
       Edit
     </button>
   </mat-dialog-actions>

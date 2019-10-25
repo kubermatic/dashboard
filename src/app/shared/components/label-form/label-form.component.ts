@@ -1,6 +1,6 @@
-import {Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {AbstractControl, AsyncValidatorFn, ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators} from '@angular/forms';
-import {Subject} from 'rxjs';
+import {Component, DoCheck, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {AbstractControl, AsyncValidator, AsyncValidatorFn, ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_ASYNC_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validators} from '@angular/forms';
+import {Observable, of, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {SlideInOut} from '../../animations/slideinout';
@@ -17,26 +17,26 @@ import {LabelFormValidators} from '../../validators/label-form.validators';
       multi: true,
     },
     {
-      provide: NG_VALIDATORS,
+      provide: NG_ASYNC_VALIDATORS,
       useExisting: forwardRef(() => LabelFormComponent),
       multi: true,
     }
   ],
   animations: [SlideInOut]
 })
-export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccessor, Validator {
+export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccessor, AsyncValidator, DoCheck {
   @Input() title = 'Labels';
   @Input() labels: object;
   @Input() asyncKeyValidators: AsyncValidatorFn[] = [];
   @Output() labelsChange = new EventEmitter<object>();
-  labelsForm: FormGroup;
+  form: FormGroup;
   initialLabels: object;
   private _unsubscribe = new Subject<void>();
 
   constructor(private readonly _formBuilder: FormBuilder) {}
 
   get labelArray(): FormArray {
-    return this.labelsForm.get('labels') as FormArray;
+    return this.form.get('labels') as FormArray;
   }
 
   static filterNullifiedKeys(labels: object): object {
@@ -58,7 +58,7 @@ export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccess
 
   ngOnInit(): void {
     // Initialize labels form.
-    this.labelsForm = this._formBuilder.group({labels: this._formBuilder.array([])});
+    this.form = this._formBuilder.group({labels: this._formBuilder.array([])});
 
     // Make sure that labels object exist.
     if (!this.labels) {
@@ -77,6 +77,10 @@ export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccess
     this._addLabel();
   }
 
+  ngDoCheck(): void {
+    this.form.updateValueAndValidity();
+  }
+
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
@@ -86,12 +90,12 @@ export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccess
 
   writeValue(obj: any): void {
     if (obj) {
-      this.labelsForm.setValue(obj, {emitEvent: false});
+      this.form.setValue(obj, {emitEvent: false});
     }
   }
 
   registerOnChange(fn: any): void {
-    this.labelsForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(fn);
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(fn);
   }
 
   registerOnTouched(fn: any): void {
@@ -99,11 +103,11 @@ export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccess
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.labelsForm.disable() : this.labelsForm.enable();
+    isDisabled ? this.form.disable() : this.form.enable();
   }
 
-  validate(control: AbstractControl): ValidationErrors|null {
-    return this.labelsForm.valid ? null : {invalidForm: {valid: false, message: 'Labels are invalid.'}};
+  validate(control: AbstractControl): Observable<ValidationErrors|null> {
+    return of(this.form.valid ? null : {invalid: true});
   }
 
   isRemovable(index: number): boolean {
@@ -155,7 +159,7 @@ export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccess
       elem.setErrors({validLabelKeyUniqueness: true});
     }
 
-    this.labelsForm.updateValueAndValidity();
+    this.form.updateValueAndValidity();
   }
 
   private _isKeyDuplicated(index: number): boolean {
