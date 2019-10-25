@@ -37,34 +37,38 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
     });
 
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this.loadNetworks();
-      this.checkNetworkState();
-      this.loadFolders();
-      this.checkFolderState();
-
       this._wizardService.changeClusterProviderSettings(this.getVSphereOptionsData(this._hasRequiredCredentials()));
     });
 
     this.checkNetworkState();
+    this.checkFolderState();
     this._setUsernamePassword();
     this._wizardService.changeClusterProviderSettings(this.getVSphereOptionsData(this._hasRequiredCredentials()));
-
-    this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.cluster.spec.cloud.vsphere = data.cloudSpec.vsphere;
-      this._setUsernamePassword();
-    });
 
     this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
     });
 
+    this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.cluster.spec.cloud.vsphere = data.cloudSpec.vsphere;
+      this._setUsernamePassword();
+      if (this._hasRequiredCredentials()) {
+        this.loadNetworks();
+        this.checkNetworkState();
+        this.loadFolders();
+        this.checkFolderState();
+      } else {
+        this.clearNetworks();
+        this.clearFolders();
+      }
+    });
+
     this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+      this._selectedPreset = newCredentials;
       if (newCredentials) {
-        this._selectedPreset = newCredentials;
         this.form.disable();
         return;
       }
-
       this.form.enable();
     });
   }
@@ -72,6 +76,18 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  clearNetworks(): void {
+    this._networkMap = {};
+    this.form.controls.vmNetName.setValue('');
+    this.checkNetworkState();
+  }
+
+  clearFolders(): void {
+    this.folders = [];
+    this.form.controls.folder.setValue('');
+    this.checkFolderState();
   }
 
   private _hasRequiredCredentials(): boolean {
@@ -112,25 +128,34 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
         .datacenter(this.cluster.spec.cloud.dc)
         .networks()
         .pipe(takeUntil(this._unsubscribe))
-        .subscribe((networks) => {
-          if (networks.length > 0) {
-            this._networkMap = {};
-            networks.forEach(network => {
-              const find = this.networkTypes.find(x => x === network.type);
-              if (!find) {
-                this._networkMap[network.type] = [];
-              }
-              this._networkMap[network.type].push(network);
-            });
+        .subscribe(
+            (networks) => {
+              if (networks.length > 0) {
+                this._networkMap = {};
+                networks.forEach(network => {
+                  const find = this.networkTypes.find(x => x === network.type);
+                  if (!find) {
+                    this._networkMap[network.type] = [];
+                  }
+                  this._networkMap[network.type].push(network);
+                });
 
-            if (this.form.controls.vmNetName.value !== '0') {
-              this.form.controls.vmNetName.setValue(this.cluster.spec.cloud.vsphere.vmNetName);
-            }
-          } else {
-            this._networkMap = {};
-          }
-          this.loadingNetworks = false;
-        });
+                if (this.form.controls.vmNetName.value !== '0') {
+                  this.form.controls.vmNetName.setValue(this.cluster.spec.cloud.vsphere.vmNetName);
+                }
+              } else {
+                this._networkMap = {};
+              }
+              this.loadingNetworks = false;
+              this.checkNetworkState();
+            },
+            () => {
+              this.clearNetworks();
+              this.loadingNetworks = false;
+            },
+            () => {
+              this.loadingNetworks = false;
+            });
   }
 
   get networkTypes(): string[] {
@@ -144,9 +169,9 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   getNetworkFormState(): string {
     if (!this.loadingNetworks && !this._hasRequiredCredentials()) {
       return 'Network';
-    } else if (this.loadingNetworks) {
+    } else if (this.loadingNetworks && !this._selectedPreset) {
       return 'Loading Networks...';
-    } else if (!this.loadingNetworks && this.networkTypes.length === 0) {
+    } else if (!this._selectedPreset && this.networkTypes.length === 0) {
       return 'No Networks available';
     } else {
       return 'Network';
@@ -186,29 +211,37 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
         .datacenter(this.cluster.spec.cloud.dc)
         .folders()
         .pipe(takeUntil(this._unsubscribe))
-        .subscribe((folders) => {
-          if (folders.length > 0) {
-            const sortedFolders = folders.sort((a, b) => {
-              return (a.path < b.path ? -1 : 1) * ('asc' ? 1 : -1);
-            });
+        .subscribe(
+            (folders) => {
+              if (folders.length > 0) {
+                const sortedFolders = folders.sort((a, b) => {
+                  return a.path.localeCompare(b.path);
+                });
 
-            this.folders = sortedFolders;
-            if (sortedFolders.length > 0 && this.form.controls.folder.value !== '0') {
-              this.form.controls.folder.setValue(this.cluster.spec.cloud.vsphere.folder);
-            }
-          } else {
-            this.folders = [];
-          }
-          this.loadingFolders = false;
-        });
+                this.folders = sortedFolders;
+                if (sortedFolders.length > 0 && this.form.controls.folder.value !== '0') {
+                  this.form.controls.folder.setValue(this.cluster.spec.cloud.vsphere.folder);
+                }
+              } else {
+                this.folders = [];
+              }
+              this.loadingFolders = false;
+            },
+            () => {
+              this.clearFolders();
+              this.loadingFolders = false;
+            },
+            () => {
+              this.loadingFolders = false;
+            });
   }
 
   getFolderFormState(): string {
     if (!this.loadingFolders && !this._hasRequiredCredentials()) {
       return 'Folder';
-    } else if (this.loadingFolders) {
+    } else if (this.loadingFolders && !this._selectedPreset) {
       return 'Loading Folders...';
-    } else if (!this.loadingFolders && this.folders.length === 0) {
+    } else if (!this._selectedPreset && this.folders.length === 0) {
       return 'No Folders available';
     } else {
       return 'Folder';

@@ -94,7 +94,7 @@ export class WizardService {
   }
 
   selectCustomPreset(presetName: string): void {
-    this.onCustomPresetSelect.next(presetName);
+    this.onCustomPresetSelect.next(!!presetName ? presetName : '');
   }
 
   provider(provider: NodeProvider.AWS): AWS;
