@@ -1,11 +1,10 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 
 import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-digitalocean-provider-settings',
@@ -13,22 +12,42 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 })
 
 export class DigitaloceanProviderSettingsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  digitaloceanProviderSettingsForm: FormGroup;
+  form: FormGroup;
+  private _formData = {token: ''};
   private _unsubscribe = new Subject<void>();
 
   constructor(private clusterService: ClusterService) {}
 
   ngOnInit(): void {
-    this.digitaloceanProviderSettingsForm = new FormGroup({
-      token: new FormControl(
-          this.cluster.spec.cloud.digitalocean.token,
-          [Validators.required, Validators.minLength(64), Validators.maxLength(64)]),
+    this.form = new FormGroup({
+      token: new FormControl(''),
     });
 
-    this.digitaloceanProviderSettingsForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
+    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      if (data.token !== this._formData.token) {
+        this._formData = data;
+        this.setValidators();
+        this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
+      }
     });
+  }
+
+  get token(): AbstractControl {
+    return this.form.controls.token;
+  }
+
+  setValidators(): void {
+    if (!this.token.value) {
+      this.token.clearValidators();
+    } else {
+      this.token.setValidators([Validators.required, Validators.minLength(64), Validators.maxLength(64)]);
+    }
+
+    this.token.updateValueAndValidity();
+  }
+
+  isRequiredField(): string {
+    return !this.token.value ? '' : '*';
   }
 
   ngOnDestroy(): void {
@@ -40,10 +59,10 @@ export class DigitaloceanProviderSettingsComponent implements OnInit, OnDestroy 
     return {
       cloudSpecPatch: {
         digitalocean: {
-          token: this.digitaloceanProviderSettingsForm.controls.token.value,
+          token: this.form.controls.token.value,
         },
       },
-      isValid: this.digitaloceanProviderSettingsForm.valid,
+      isValid: this.form.valid,
     };
   }
 }

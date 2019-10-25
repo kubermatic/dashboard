@@ -31,6 +31,7 @@ export class CloudSpecPatch {
   hetzner?: HetznerCloudSpecPatch;
   azure?: AzureCloudSpecPatch;
   gcp?: GCPCloudSpecPatch;
+  kubevirt?: KubevirtCloudSpecPatch;
 }
 
 export class DigitaloceanCloudSpecPatch {
@@ -77,4 +78,8 @@ export class VSphereCloudSpecPatch {
 export class VSphereInfraManagementUser {
   username?: string;
   password?: string;
+}
+
+export class KubevirtCloudSpecPatch {
+  kubeconfig?: string;
 }
