@@ -26,12 +26,14 @@ import {OpenstackProviderSettingsComponent} from '../edit-provider-settings/open
 import {PacketProviderSettingsComponent} from '../edit-provider-settings/packet-provider-settings/packet-provider-settings.component';
 import {VSphereProviderSettingsComponent} from '../edit-provider-settings/vsphere-provider-settings/vsphere-provider-settings.component';
 import {Subject} from 'rxjs';
+import {CoreModule} from '../../../core/core.module';
 
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
   SharedModule,
+  CoreModule,
 ];
 
 describe('EditClusterComponent', () => {

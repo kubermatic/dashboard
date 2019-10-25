@@ -1,9 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
+
 import {ApiService} from '../../../core/services';
 import {NotificationActions} from '../../../redux/actions/notification.actions';
+import {ResourceType} from '../../entity/LabelsEntity';
 import {CreateProjectModel} from '../../model/CreateProjectModel';
+import {AsyncValidators} from '../../validators/async-label-form.validator';
 
 @Component({
   selector: 'kubermatic-add-project-dialog',
@@ -13,6 +16,7 @@ import {CreateProjectModel} from '../../model/CreateProjectModel';
 export class AddProjectDialogComponent implements OnInit {
   addProjectForm: FormGroup;
   labels: object;
+  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Project)];
 
   constructor(
       private readonly _apiService: ApiService,
