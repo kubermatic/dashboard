@@ -6,7 +6,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ClusterService} from '../../../../core/services';
 import {ApiService} from '../../../../core/services/api/api.service';
 import {SharedModule} from '../../../../shared/shared.module';
-import {fakeOpenstackCluster} from '../../../../testing/fake-data/cluster.fake';
 import {ApiMockService} from '../../../../testing/services/api-mock.service';
 import {ClusterMockService} from '../../../../testing/services/cluster-mock-service';
 import {MatDialogRefMock} from '../../../../testing/services/mat-dialog-ref-mock';
@@ -16,6 +15,7 @@ import {DigitaloceanProviderSettingsComponent} from '../digitalocean-provider-se
 import {EditProviderSettingsComponent} from '../edit-provider-settings.component';
 import {GCPProviderSettingsComponent} from '../gcp-provider-settings/gcp-provider-settings.component';
 import {HetznerProviderSettingsComponent} from '../hetzner-provider-settings/hetzner-provider-settings.component';
+import {KubevirtProviderSettingsComponent} from '../kubevirt-provider-settings/kubevirt-provider-settings.component';
 import {OpenstackProviderSettingsComponent} from '../openstack-provider-settings/openstack-provider-settings.component';
 import {PacketProviderSettingsComponent} from '../packet-provider-settings/packet-provider-settings.component';
 import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/vsphere-provider-settings.component';
@@ -46,6 +46,7 @@ describe('OpenstackProviderSettingsComponent', () => {
             AzureProviderSettingsComponent,
             PacketProviderSettingsComponent,
             GCPProviderSettingsComponent,
+            KubevirtProviderSettingsComponent,
           ],
           providers: [
             {provide: ClusterService, useClass: ClusterMockService},
@@ -59,18 +60,6 @@ describe('OpenstackProviderSettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(OpenstackProviderSettingsComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeOpenstackCluster();
-    component.cluster.spec.cloud.openstack = {
-      password: '',
-      username: '',
-      tenant: '',
-      tenantID: '',
-      domain: '',
-      network: '',
-      securityGroups: '',
-      floatingIpPool: '',
-      subnetID: '',
-    };
     fixture.detectChanges();
   });
 
@@ -78,27 +67,7 @@ describe('OpenstackProviderSettingsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('form invalid after creating', () => {
-    expect(component.openstackProviderSettingsForm.valid).toBeFalsy();
-  });
-
-  it('form required values', () => {
-    expect(component.openstackProviderSettingsForm.valid).toBeFalsy('form is invalid with empty defaults');
-    expect(component.openstackProviderSettingsForm.controls.username.hasError('required'))
-        .toBeTruthy('username field has required error');
-    expect(component.openstackProviderSettingsForm.controls.password.hasError('required'))
-        .toBeTruthy('password field has required error');
-
-    component.openstackProviderSettingsForm.controls.username.patchValue('foo');
-    expect(component.openstackProviderSettingsForm.controls.username.hasError('required'))
-        .toBeFalsy('username has no required error after setting value');
-    expect(component.openstackProviderSettingsForm.valid)
-        .toBeFalsy('form is still invalid after setting only username');
-
-    component.openstackProviderSettingsForm.controls.password.patchValue('bar');
-    expect(component.openstackProviderSettingsForm.controls.password.hasError('required'))
-        .toBeFalsy('password field has no required error after setting value');
-    expect(component.openstackProviderSettingsForm.valid)
-        .toBeTruthy('form is valid after setting both username and password');
+  it('form valid after creating', () => {
+    expect(component.form.valid).toBeTruthy();
   });
 });

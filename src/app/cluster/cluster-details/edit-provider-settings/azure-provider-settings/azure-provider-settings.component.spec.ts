@@ -5,7 +5,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {ClusterService} from '../../../../core/services';
 import {SharedModule} from '../../../../shared/shared.module';
-import {fakeAzureCluster} from '../../../../testing/fake-data/cluster.fake';
 import {ClusterMockService} from '../../../../testing/services/cluster-mock-service';
 import {MatDialogRefMock} from '../../../../testing/services/mat-dialog-ref-mock';
 import {AWSProviderSettingsComponent} from '../aws-provider-settings/aws-provider-settings.component';
@@ -13,6 +12,7 @@ import {DigitaloceanProviderSettingsComponent} from '../digitalocean-provider-se
 import {EditProviderSettingsComponent} from '../edit-provider-settings.component';
 import {GCPProviderSettingsComponent} from '../gcp-provider-settings/gcp-provider-settings.component';
 import {HetznerProviderSettingsComponent} from '../hetzner-provider-settings/hetzner-provider-settings.component';
+import {KubevirtProviderSettingsComponent} from '../kubevirt-provider-settings/kubevirt-provider-settings.component';
 import {OpenstackProviderSettingsComponent} from '../openstack-provider-settings/openstack-provider-settings.component';
 import {PacketProviderSettingsComponent} from '../packet-provider-settings/packet-provider-settings.component';
 import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/vsphere-provider-settings.component';
@@ -45,6 +45,7 @@ describe('AzureProviderSettingsComponent', () => {
             AzureProviderSettingsComponent,
             PacketProviderSettingsComponent,
             GCPProviderSettingsComponent,
+            KubevirtProviderSettingsComponent,
           ],
           providers: [
             {provide: ClusterService, useClass: ClusterMockService},
@@ -57,18 +58,6 @@ describe('AzureProviderSettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AzureProviderSettingsComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeAzureCluster();
-    component.cluster.spec.cloud.azure = {
-      clientID: '',
-      clientSecret: '',
-      resourceGroup: '',
-      routeTable: '',
-      securityGroup: '',
-      subnet: '',
-      subscriptionID: '',
-      tenantID: '',
-      vnet: '',
-    };
     fixture.detectChanges();
   });
 
@@ -76,49 +65,7 @@ describe('AzureProviderSettingsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('form invalid after creating', () => {
-    expect(component.azureProviderSettingsForm.valid).toBeFalsy();
-  });
-
-  it('form required values', () => {
-    component.azureProviderSettingsForm.reset();
-    fixture.detectChanges();
-
-    expect(component.azureProviderSettingsForm.valid).toBeFalsy('form is invalid with empty defaults');
-    expect(component.azureProviderSettingsForm.controls.clientID.hasError('required'))
-        .toBeTruthy('client ID field has required error');
-    expect(component.azureProviderSettingsForm.controls.clientSecret.hasError('required'))
-        .toBeTruthy('client secret field has required error');
-    expect(component.azureProviderSettingsForm.controls.tenantID.hasError('required'))
-        .toBeTruthy('tenant ID field has required error');
-    expect(component.azureProviderSettingsForm.controls.subscriptionID.hasError('required'))
-        .toBeTruthy('subscription ID field has required error');
-
-    component.azureProviderSettingsForm.controls.clientID.patchValue('foo');
-    fixture.detectChanges();
-    expect(component.azureProviderSettingsForm.controls.clientID.hasError('required'))
-        .toBeFalsy('client ID has no required error after setting value');
-    expect(component.azureProviderSettingsForm.valid).toBeFalsy('form is still invalid after setting only client ID');
-
-    component.azureProviderSettingsForm.controls.clientSecret.patchValue('bar');
-    fixture.detectChanges();
-    expect(component.azureProviderSettingsForm.controls.clientSecret.hasError('required'))
-        .toBeFalsy('client secret field has no required error after setting value');
-    expect(component.azureProviderSettingsForm.valid)
-        .toBeFalsy('form is still invalid after setting both client ID and client secret');
-
-    component.azureProviderSettingsForm.controls.tenantID.patchValue('tenant');
-    fixture.detectChanges();
-    expect(component.azureProviderSettingsForm.controls.tenantID.hasError('required'))
-        .toBeFalsy('tenant ID field has no required error after setting value');
-    expect(component.azureProviderSettingsForm.valid)
-        .toBeFalsy('form is still invalid after setting client ID, client secret and tenant ID');
-
-    component.azureProviderSettingsForm.controls.subscriptionID.patchValue('subscription');
-    fixture.detectChanges();
-    expect(component.azureProviderSettingsForm.controls.subscriptionID.hasError('required'))
-        .toBeFalsy('subscription ID field has no required error after setting value');
-    expect(component.azureProviderSettingsForm.valid)
-        .toBeTruthy('form is still invalid after setting client ID, client secret, tenant ID and subscription ID');
+  it('form valid after creating', () => {
+    expect(component.form.valid).toBeTruthy();
   });
 });

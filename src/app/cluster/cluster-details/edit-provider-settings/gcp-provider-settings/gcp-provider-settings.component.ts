@@ -1,10 +1,9 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-gcp-provider-settings',
@@ -12,20 +11,42 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 })
 
 export class GCPProviderSettingsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  gcpProviderSettingsForm: FormGroup;
+  form: FormGroup;
+  private _formData = {serviceAccount: ''};
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(private clusterService: ClusterService) {}
 
   ngOnInit(): void {
-    this.gcpProviderSettingsForm = new FormGroup({
-      serviceAccount: new FormControl(this.cluster.spec.cloud.gcp.serviceAccount, [Validators.required]),
+    this.form = new FormGroup({
+      serviceAccount: new FormControl(''),
     });
 
-    this.gcpProviderSettingsForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
+    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      if (data.serviceAccount !== this._formData.serviceAccount) {
+        this._formData = data;
+        this.setValidators();
+        this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
+      }
     });
+  }
+
+  get serviceAccount(): AbstractControl {
+    return this.form.controls.serviceAccount;
+  }
+
+  setValidators(): void {
+    if (!this.serviceAccount.value) {
+      this.serviceAccount.clearValidators();
+    } else {
+      this.serviceAccount.setValidators([Validators.required]);
+    }
+
+    this.serviceAccount.updateValueAndValidity();
+  }
+
+  isRequiredField(): string {
+    return !this.serviceAccount.value ? '' : '*';
   }
 
   ngOnDestroy(): void {
@@ -37,10 +58,10 @@ export class GCPProviderSettingsComponent implements OnInit, OnDestroy {
     return {
       cloudSpecPatch: {
         gcp: {
-          serviceAccount: this.gcpProviderSettingsForm.controls.serviceAccount.value,
+          serviceAccount: this.form.controls.serviceAccount.value,
         },
       },
-      isValid: this.gcpProviderSettingsForm.valid,
+      isValid: this.form.valid,
     };
   }
 }
