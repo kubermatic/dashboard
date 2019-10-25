@@ -7,25 +7,24 @@ import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
 
 @Component({
-  selector: 'kubermatic-openstack-provider-settings',
-  templateUrl: './openstack-provider-settings.component.html',
+  selector: 'kubermatic-kubevirt-provider-settings',
+  templateUrl: './kubevirt-provider-settings.component.html',
 })
 
-export class OpenstackProviderSettingsComponent implements OnInit, OnDestroy {
+export class KubevirtProviderSettingsComponent implements OnInit, OnDestroy {
   form: FormGroup;
-  private _formData = {username: '', password: ''};
+  private _formData = {kubeconfig: ''};
   private _unsubscribe = new Subject<void>();
 
   constructor(private clusterService: ClusterService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      username: new FormControl(''),
-      password: new FormControl(''),
+      kubeconfig: new FormControl(''),
     });
 
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      if (data.username !== this._formData.username || data.password !== this._formData.password) {
+      if (data.kubeconfig !== this._formData.kubeconfig) {
         this._formData = data;
         this.setValidators();
         this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
@@ -33,29 +32,22 @@ export class OpenstackProviderSettingsComponent implements OnInit, OnDestroy {
     });
   }
 
-  get username(): AbstractControl {
-    return this.form.controls.username;
-  }
-
-  get password(): AbstractControl {
-    return this.form.controls.password;
+  get kubeconfig(): AbstractControl {
+    return this.form.controls.kubeconfig;
   }
 
   setValidators(): void {
-    if (!this.username.value && !this.password.value) {
-      this.username.clearValidators();
-      this.password.clearValidators();
+    if (!this.kubeconfig.value) {
+      this.kubeconfig.clearValidators();
     } else {
-      this.username.setValidators([Validators.required]);
-      this.password.setValidators([Validators.required]);
+      this.kubeconfig.setValidators([Validators.required]);
     }
 
-    this.username.updateValueAndValidity();
-    this.password.updateValueAndValidity();
+    this.kubeconfig.updateValueAndValidity();
   }
 
   isRequiredField(): string {
-    return !this.username.value && !this.password.value ? '' : '*';
+    return !this.kubeconfig.value ? '' : '*';
   }
 
   ngOnDestroy(): void {
@@ -66,9 +58,8 @@ export class OpenstackProviderSettingsComponent implements OnInit, OnDestroy {
   getProviderSettingsPatch(): ProviderSettingsPatch {
     return {
       cloudSpecPatch: {
-        openstack: {
-          password: this.form.controls.password.value,
-          username: this.form.controls.username.value,
+        kubevirt: {
+          kubeconfig: this.form.controls.kubeconfig.value,
         },
       },
       isValid: this.form.valid,

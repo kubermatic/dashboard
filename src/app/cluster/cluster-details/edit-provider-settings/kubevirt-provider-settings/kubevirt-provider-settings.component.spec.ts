@@ -16,8 +16,7 @@ import {HetznerProviderSettingsComponent} from '../hetzner-provider-settings/het
 import {KubevirtProviderSettingsComponent} from '../kubevirt-provider-settings/kubevirt-provider-settings.component';
 import {OpenstackProviderSettingsComponent} from '../openstack-provider-settings/openstack-provider-settings.component';
 import {PacketProviderSettingsComponent} from '../packet-provider-settings/packet-provider-settings.component';
-
-import {VSphereProviderSettingsComponent} from './vsphere-provider-settings.component';
+import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/vsphere-provider-settings.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -25,9 +24,9 @@ const modules: any[] = [
   SharedModule,
 ];
 
-describe('VSphereProviderSettingsComponent', () => {
-  let fixture: ComponentFixture<VSphereProviderSettingsComponent>;
-  let component: VSphereProviderSettingsComponent;
+describe('KubevirtProviderSettingsComponent', () => {
+  let fixture: ComponentFixture<KubevirtProviderSettingsComponent>;
+  let component: KubevirtProviderSettingsComponent;
 
   beforeEach(() => {
     TestBed
@@ -48,7 +47,6 @@ describe('VSphereProviderSettingsComponent', () => {
             KubevirtProviderSettingsComponent,
           ],
           providers: [
-            ClusterService,
             {provide: ClusterService, useClass: ClusterMockService},
             {provide: MatDialogRef, useClass: MatDialogRefMock},
           ],
@@ -57,12 +55,12 @@ describe('VSphereProviderSettingsComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(VSphereProviderSettingsComponent);
+    fixture = TestBed.createComponent(KubevirtProviderSettingsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should initialize', () => {
+  it('should create the kubevirt provider settings cmp', () => {
     expect(component).toBeTruthy();
   });
 

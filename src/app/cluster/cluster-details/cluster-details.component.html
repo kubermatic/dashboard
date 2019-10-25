@@ -74,11 +74,6 @@
             <span>Edit Cluster</span>
           </button>
           <button mat-menu-item
-                  (click)="editProviderSettings()"
-                  [disabled]="!isEditEnabled()">
-            <span>Edit Settings</span>
-          </button>
-          <button mat-menu-item
                   (click)="editSSHKeys()"
                   [disabled]="!isSSHKeysEditEnabled()">
             <span>Manage SSH keys</span>
