@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {interval, Subject} from 'rxjs';
-import {debounce, first, map, switchMap, takeUntil} from 'rxjs/operators';
+import {debounce, first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, WizardService} from '../../core/services';
@@ -66,8 +66,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
         .subscribe(this._setDefaultVersion.bind(this));
 
     this.clusterSpecForm.valueChanges.pipe(takeUntil(this._unsubscribe))
-        .pipe(map(() => this._invalidateStep()))
-        .pipe(debounce(() => interval(500)))
+        .pipe(debounce(() => interval(100)))
         .subscribe(() => {
           this._setClusterTypeValidators();
           this.setClusterSpec();
@@ -132,20 +131,5 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
         this.clusterSpecForm.controls.version.setValue(version.version);
       }
     }
-  }
-
-  private _invalidateStep(): void {
-    this._wizardService.changeClusterSpec({
-      name: this.clusterSpecForm.controls.name.value,
-      type: this.clusterSpecForm.controls.type.value,
-      labels: this.labels,
-      version: this.clusterSpecForm.controls.version.value,
-      imagePullSecret: this.clusterSpecForm.controls.imagePullSecret.value,
-      usePodSecurityPolicyAdmissionPlugin: this.clusterSpecForm.controls.usePodSecurityPolicyAdmissionPlugin.value,
-      auditLogging: {
-        enabled: this.clusterSpecForm.controls.auditLogging.value,
-      },
-      valid: false,
-    });
   }
 }
