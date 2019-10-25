@@ -68,6 +68,8 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
         this._wizardService.changeClusterProviderSettings(
             this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
         return;
+      } else {
+        this._selectedPreset = '';
       }
 
       if (this._hasRequiredCredentials()) {
@@ -79,9 +81,6 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
       this.cluster.spec.cloud.openstack = data.cloudSpec.openstack;
       if (this._hasRequiredCredentials()) {
         this._loadOptionalSettings();
-        this.form.enable();
-      } else {
-        this.form.disable();
       }
     });
 
