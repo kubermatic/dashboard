@@ -39,6 +39,7 @@ export class EditClusterComponent implements OnInit {
             Validators.pattern('[a-zA-Z0-9-]*'),
           ]),
       auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
+      labels: new FormControl(''),
     });
   }
 

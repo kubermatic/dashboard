@@ -78,6 +78,8 @@ describe('SetClusterSpecComponent', () => {
       },
       type: '',
     };
+    component.labels = {};
+    component.asyncLabelValidators = [];
     fixture.detectChanges();
     nameGenerator = fixture.debugElement.injector.get(ClusterNameGenerator);
   };

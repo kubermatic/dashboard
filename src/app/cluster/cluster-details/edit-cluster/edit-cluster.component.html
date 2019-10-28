@@ -3,7 +3,8 @@
   <mat-dialog-content>
     <div class="mat-dialog-content">
       <form [formGroup]="form"
-            fxLayout="column">
+            fxLayout="column"
+            class="km-edit-cluster-form">
         <mat-form-field fxFlex>
           <mat-label>Name*</mat-label>
           <input id="km-edit-cluster-dialog-input"
@@ -25,17 +26,19 @@
         <mat-checkbox formControlName="auditLogging">
           Audit Logging
         </mat-checkbox>
+        <km-label-form title="Labels"
+                       [(labels)]="labels"
+                       [asyncKeyValidators]=asyncLabelValidators
+                       formControlName="labels"></km-label-form>
       </form>
-      <km-label-form title="Labels"
-                     [(labels)]="labels"
-                     [asyncKeyValidators]="asyncLabelValidators"></km-label-form>
+      <kubermatic-edit-provider-settings [cluster]="cluster"></kubermatic-edit-provider-settings>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button id="km-edit-cluster-dialog-edit-btn"
             mat-flat-button
             (click)="editCluster()"
-            [disabled]="!form.valid">
+            [disabled]="!form.valid || !providerSettingsPatch.isValid">
       Edit
     </button>
   </mat-dialog-actions>

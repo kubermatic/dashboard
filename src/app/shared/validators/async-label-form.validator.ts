@@ -1,5 +1,5 @@
 import {AbstractControl, AsyncValidator, AsyncValidatorFn, ValidationErrors} from '@angular/forms';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
 import {LabelService} from '../../core/services';
@@ -13,7 +13,7 @@ export class RestrictedLabelKeyNameValidator implements AsyncValidator {
     this._labelService = GlobalModule.injector.get(LabelService);
   }
 
-  validate(control: AbstractControl): Promise<ValidationErrors|null>|Observable<ValidationErrors|null> {
+  validate(control: AbstractControl): Observable<ValidationErrors|null> {
     const value = control.value.toString();
     return this._labelService.systemLabels.pipe(
         map((labels: ResourceLabelMap) => {
@@ -25,7 +25,7 @@ export class RestrictedLabelKeyNameValidator implements AsyncValidator {
 
           return null;
         }),
-        catchError(() => null));
+        catchError(() => of(null)));
   }
 }
 

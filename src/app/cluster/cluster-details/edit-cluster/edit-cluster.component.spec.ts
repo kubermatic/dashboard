@@ -55,6 +55,8 @@ describe('EditClusterComponent', () => {
     component.cluster = fakeAWSCluster();
     component.datacenter = fakeAWSDatacenter();
     component.projectID = fakeProject().id;
+    component.labels = {};
+    component.asyncLabelValidators = [];
     fixture.detectChanges();
   }));
 
