@@ -79,6 +79,8 @@ describe('EditClusterComponent', () => {
     component.cluster = fakeDigitaloceanCluster();
     component.datacenter = fakeDigitaloceanDatacenter();
     component.projectID = fakeProject().id;
+    component.labels = {};
+    component.asyncLabelValidators = [];
     fixture.detectChanges();
   }));
 
