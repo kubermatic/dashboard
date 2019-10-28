@@ -1,17 +1,20 @@
 // Patch object definitions for ClusterEntity.
 // Please note that these objects do not have to contain all the fields of equivalent classes.
 
+import {AuditLoggingSettings} from './ClusterEntity';
+
 export class ClusterEntityPatch {
   id?: string;
   name?: string;
+  labels?: object;
   spec?: ClusterSpecPatch;
 }
 
 export class ClusterSpecPatch {
   cloud?: CloudSpecPatch;
   version?: string;
-  humanReadableName?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
+  auditLogging?: AuditLoggingSettings;
   openshift?: OpenShiftPatch;
 }
 
@@ -28,6 +31,7 @@ export class CloudSpecPatch {
   hetzner?: HetznerCloudSpecPatch;
   azure?: AzureCloudSpecPatch;
   gcp?: GCPCloudSpecPatch;
+  kubevirt?: KubevirtCloudSpecPatch;
 }
 
 export class DigitaloceanCloudSpecPatch {
@@ -74,4 +78,8 @@ export class VSphereCloudSpecPatch {
 export class VSphereInfraManagementUser {
   username?: string;
   password?: string;
+}
+
+export class KubevirtCloudSpecPatch {
+  kubeconfig?: string;
 }

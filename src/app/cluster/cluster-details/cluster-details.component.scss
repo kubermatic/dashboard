@@ -12,6 +12,10 @@ button:disabled {
   }
 }
 
+.km-addon-card-content {
+  padding: 0 (7 * $baseline-grid);
+}
+
 // setting menu
 .km-cluster-detail-actions {
   padding-bottom: 1.875 * $baseline-grid;
@@ -57,8 +61,7 @@ button:disabled {
   min-width: 14 * $baseline-grid;
   min-height: 3.5 * $baseline-grid;
 
-  &.km-provider-logo-aws,
-  &.km-provider-logo-gcp {
+  &.km-provider-logo-aws {
     min-width: 5 * $baseline-grid;
   }
 }

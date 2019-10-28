@@ -16,7 +16,7 @@ export class ConfigurePodSecurityComponent {
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
   confirmation = '';
-  expectedConfirmation = 'i know what i am doing';
+  expectedConfirmation = 'enable';
 
   constructor(
       private readonly _clusterService: ClusterService,

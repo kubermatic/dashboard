@@ -39,6 +39,10 @@ export class ApiMockService {
   serviceAccountTokens: ServiceAccountTokenEntity[] = fakeServiceAccountTokens();
   vsphereNetworks: VSphereNetwork[] = fakeVSphereNetworks();
 
+  getAccessibleAddons(): Observable<string[]> {
+    return of([]);
+  }
+
   getNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeploymentEntity[]> {
     return of(nodeDeploymentsFake());
   }
@@ -182,6 +186,14 @@ export class ApiMockService {
 
   getPacketSizes(): Observable<PacketSize[]> {
     return of(fakePacketSizes());
+  }
+
+  getDashboardProxyURL(): string {
+    return '';
+  }
+
+  getOpenshiftProxyURL(): string {
+    return '';
   }
 }
 

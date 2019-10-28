@@ -48,6 +48,15 @@
               ]
             },
             "e2e": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -56,6 +65,15 @@
               ]
             },
             "e2e-local": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -81,9 +99,11 @@
               "proxyConfig": "./proxy-local.conf.json"
             },
             "e2e": {
+              "hmr": false,
               "browserTarget": "kubermatic:build:e2e"
             },
             "e2e-local": {
+              "hmr": false,
               "browserTarget": "kubermatic:build:e2e-local",
               "proxyConfig": "./proxy-local.conf.json"
             }

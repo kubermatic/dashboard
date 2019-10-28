@@ -9,4 +9,10 @@ import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 export class ClusterProviderSettingsComponent {
   @Input() cluster: ClusterEntity;
   @Input() clusterSSHKeys: SSHKeyEntity[] = [];
+
+  constructor() {}
+
+  isInWizard(): boolean {
+    return !this.cluster.id || this.cluster.id === '';
+  }
 }

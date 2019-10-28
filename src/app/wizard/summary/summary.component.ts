@@ -46,7 +46,7 @@ export class SummaryComponent implements OnInit {
   }
 
   hasAWSProviderOptions(): boolean {
-    return this.cluster.spec.cloud.aws.securityGroup !== '' || this.cluster.spec.cloud.aws.vpcId !== '' ||
+    return this.cluster.spec.cloud.aws.securityGroupID !== '' || this.cluster.spec.cloud.aws.vpcId !== '' ||
         this.cluster.spec.cloud.aws.vpcId !== '' || this.cluster.spec.cloud.aws.routeTableId !== '' ||
         this.cluster.spec.cloud.aws.instanceProfileName !== '' || this.cluster.spec.cloud.aws.roleARN !== '';
   }
@@ -62,7 +62,7 @@ export class SummaryComponent implements OnInit {
   }
 
   displayTags(tags: object): boolean {
-    return Object.keys(tags).length > 0;
+    return !!tags && Object.keys(tags).length > 0;
   }
 
   displayNoProviderTags(): boolean {

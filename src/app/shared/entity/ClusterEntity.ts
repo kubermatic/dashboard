@@ -8,6 +8,7 @@ import {DigitaloceanCloudSpec} from './cloud/DigitaloceanCloudSpec';
 import {FakeCloudSpec} from './cloud/FakeCloudSpec';
 import {GCPCloudSpec} from './cloud/GCPCloudSpec';
 import {HetznerCloudSpec} from './cloud/HetznerCloudSpec';
+import {KubeVirtCloudSpec} from './cloud/KubeVirtCloudSpec';
 import {OpenstackCloudSpec} from './cloud/OpenstackCloudSpec';
 import {PacketCloudSpec} from './cloud/PacketCloudSpec';
 import {VSphereCloudSpec} from './cloud/VSphereCloudSpec';
@@ -33,6 +34,7 @@ export class ClusterEntity {
   spec: ClusterSpec;
   status?: Status;
   type: string;
+  labels?: object;
   credential?: string;
 }
 
@@ -44,7 +46,7 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
         secretAccessKey: '',
         routeTableId: '',
         vpcId: '',
-        securityGroup: '',
+        securityGroupID: '',
         instanceProfileName: '',
         roleARN: '',
       } as AWSCloudSpec;
@@ -99,6 +101,8 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
       } as AzureCloudSpec;
     case NodeProvider.PACKET:
       return {} as PacketCloudSpec;
+    case NodeProvider.KUBEVIRT:
+      return {kubeconfig: ''} as KubeVirtCloudSpec;
     case NodeProvider.GCP:
       return {
         network: '',
@@ -122,14 +126,20 @@ export class CloudSpec {
   azure?: AzureCloudSpec;
   fake?: FakeCloudSpec;
   gcp?: GCPCloudSpec;
+  kubevirt?: KubeVirtCloudSpec;
 }
 
 export class ClusterSpec {
   cloud: CloudSpec;
   machineNetworks?: MachineNetwork[];
+  auditLogging?: AuditLoggingSettings;
   version?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   openshift?: OpenShift;
+}
+
+export class AuditLoggingSettings {
+  enabled?: boolean;
 }
 
 export class OpenShift {

@@ -2,11 +2,14 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {interval, Subject} from 'rxjs';
 import {debounce, first, map, switchMap, takeUntil} from 'rxjs/operators';
+
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {ClusterEntity, MasterVersion} from '../../shared/entity/ClusterEntity';
+import {ResourceType} from '../../shared/entity/LabelsEntity';
 import {ClusterType, ClusterUtils} from '../../shared/utils/cluster-utils/cluster-utils';
+import {AsyncValidators} from '../../shared/validators/async-label-form.validator';
 
 @Component({
   selector: 'kubermatic-set-cluster-spec',
@@ -16,9 +19,11 @@ import {ClusterType, ClusterUtils} from '../../shared/utils/cluster-utils/cluste
 
 export class SetClusterSpecComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
+  labels: object;
   clusterSpecForm: FormGroup;
   masterVersions: MasterVersion[] = [];
   defaultVersion: string;
+  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
@@ -28,10 +33,17 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.clusterSpecForm = new FormGroup({
       name: new FormControl(
-          this.cluster.name, [Validators.required, Validators.minLength(5), Validators.pattern('[a-zA-Z0-9-]*')]),
+          this.cluster.name,
+          [
+            Validators.required,
+            Validators.minLength(5),
+            Validators.pattern('[a-zA-Z0-9-]*'),
+          ]),
       version: new FormControl(this.cluster.spec.version),
       type: new FormControl(this.cluster.type),
       imagePullSecret: new FormControl(),
+      usePodSecurityPolicyAdmissionPlugin: new FormControl(this.cluster.spec.usePodSecurityPolicyAdmissionPlugin),
+      auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
     });
 
     if (this.clusterSpecForm.controls.type.value === '') {
@@ -100,8 +112,13 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     this._wizardService.changeClusterSpec({
       name: this.clusterSpecForm.controls.name.value,
       type: this.clusterSpecForm.controls.type.value,
+      labels: this.labels,
       version: this.clusterSpecForm.controls.version.value,
       imagePullSecret: this.clusterSpecForm.controls.imagePullSecret.value,
+      usePodSecurityPolicyAdmissionPlugin: this.clusterSpecForm.controls.usePodSecurityPolicyAdmissionPlugin.value,
+      auditLogging: {
+        enabled: this.clusterSpecForm.controls.auditLogging.value,
+      },
       valid: this.clusterSpecForm.valid,
     });
   }
@@ -120,8 +137,13 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     this._wizardService.changeClusterSpec({
       name: this.clusterSpecForm.controls.name.value,
       type: this.clusterSpecForm.controls.type.value,
+      labels: this.labels,
       version: this.clusterSpecForm.controls.version.value,
       imagePullSecret: this.clusterSpecForm.controls.imagePullSecret.value,
+      usePodSecurityPolicyAdmissionPlugin: this.clusterSpecForm.controls.usePodSecurityPolicyAdmissionPlugin.value,
+      auditLogging: {
+        enabled: this.clusterSpecForm.controls.auditLogging.value,
+      },
       valid: false,
     });
   }

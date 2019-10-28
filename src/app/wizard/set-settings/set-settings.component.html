@@ -5,7 +5,10 @@
        fxLayout.sm="column"
        fxLayout.xs="column"
        fxLayoutGap="30px">
-    <mat-card fxFlex="50%">
+    <mat-card fxFlex="50%"
+              fxFlex.md="100%"
+              fxFlex.sm="100%"
+              fxFlex.xs="100%">
       <mat-card-header>
         <mat-card-title class="km-color-primary">Provider Credentials</mat-card-title>
       </mat-card-header>
@@ -15,7 +18,10 @@
       </mat-card-content>
     </mat-card>
     <mat-card class="node-settings-card"
-              fxFlex="50%">
+              fxFlex="50%"
+              fxFlex.md="100%"
+              fxFlex.sm="100%"
+              fxFlex.xs="100%">
       <mat-card-header>
         <mat-card-title class="km-color-primary">Node Settings</mat-card-title>
       </mat-card-header>
@@ -29,18 +35,24 @@
   </div>
 
   <div class="km-wizard-settings-extended-wrapper"
-       *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.packet && !cluster.spec.cloud.bringyourown && !isExtended"
+       *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.kubevirt && !cluster.spec.cloud.bringyourown"
        fxFlex>
     <div class="km-wizard-settings-extended-divider"
          fxFlex>
     </div>
     <div class="km-wizard-settings-extended-btn"
          (click)="extend()">
-      <span>Show extended options&nbsp;</span>
-      <i class="km-icon-arrow-down"></i>
+      <span *ngIf="!isExtended">Show extended options&nbsp;</span>
+      <span *ngIf="isExtended">Hide extended options&nbsp;</span>
+      <i [ngClass]="isExtended ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
     </div>
     <div class="km-wizard-settings-extended-divider"
          fxFlex>
     </div>
   </div>
+
+  <kubermatic-extended-options [cluster]="cluster"
+                               [nodeData]="nodeData"
+                               [isExtended]="isExtended"></kubermatic-extended-options>
+
 </div>

@@ -1,17 +1,12 @@
-import {CloudSpec} from '../../shared/entity/ClusterEntity';
+import {ProviderSettingsPatch} from '../../core/services/cluster/cluster.service';
 
-export function doCloudSpecFake(): CloudSpec {
+export function doPatchCloudSpecFake(): ProviderSettingsPatch {
   return {
-    dc: 'datacenter1',
-    digitalocean: {
-      token: 'foo-bar',
+    cloudSpecPatch: {
+      digitalocean: {
+        token: 'hjdfzur8e9rejkdfjuier898erijdfuier9re8difuer8fdiufdir8idfuuiiui',
+      },
     },
-    aws: null,
-    baremetal: null,
-    bringyourown: null,
-    openstack: null,
-    vsphere: null,
-    hetzner: null,
-    azure: null,
+    isValid: true,
   };
 }

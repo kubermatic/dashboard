@@ -3,8 +3,9 @@
 
 $type-toggle-width: 150px;
 
-.km-cluster-spec {
-  display: flex;
+.km-icon-warning {
+  background-color: $indicator-orange;
+  margin: (.5 * $baseline-grid) 0;
 }
 
 .km-randomize-btn {

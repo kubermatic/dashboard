@@ -42,7 +42,7 @@ describe('AWSClusterSettingsComponent', () => {
       accessKeyId: '',
       secretAccessKey: '',
       routeTableId: '',
-      securityGroup: '',
+      securityGroupID: '',
       vpcId: '',
       instanceProfileName: '',
       roleARN: '',

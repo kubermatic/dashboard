@@ -1,31 +1,31 @@
-<form [formGroup]="packetProviderSettingsForm"
+<form [formGroup]="form"
       fxLayout="column">
   <mat-form-field fxFlex>
-    <mat-label>API Token*</mat-label>
+    <mat-label>API Token{{isRequiredField()}}</mat-label>
     <input matInput
            formControlName="apiKey"
            name="apiKey"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="packetProviderSettingsForm.controls.apiKey.hasError('required')">
+    <mat-error *ngIf="form.controls.apiKey.hasError('required')">
       Packet API key is <strong>required</strong>.
     </mat-error>
-    <mat-error *ngIf="packetProviderSettingsForm.controls.apiKey.hasError('maxlength')">
+    <mat-error *ngIf="form.controls.apiKey.hasError('maxlength')">
       Packet API key must be less than <strong>256</strong> characters long.
     </mat-error>
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>Project ID*</mat-label>
+    <mat-label>Project ID{{isRequiredField()}}</mat-label>
     <input matInput
            formControlName="projectID"
            name="projectID"
            type="text"
            autocomplete="off">
-    <mat-error *ngIf="packetProviderSettingsForm.controls.projectID.hasError('required')">
+    <mat-error *ngIf="form.controls.projectID.hasError('required')">
       Packet project ID is <strong>required</strong>.
     </mat-error>
-    <mat-error *ngIf="packetProviderSettingsForm.controls.projectID.hasError('maxlength')">
+    <mat-error *ngIf="form.controls.projectID.hasError('maxlength')">
       Packet project ID must be less than <strong>256</strong> characters long.
     </mat-error>
   </mat-form-field>

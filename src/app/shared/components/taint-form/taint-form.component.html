@@ -16,23 +16,23 @@
                formControlName="key">
         <mat-error *ngIf="taint.get('key').errors?.validLabelKeyUniqueness"
                    i18n>
-          Key is not unique
+          Key is not unique.
         </mat-error>
         <mat-error *ngIf="taint.get('key').errors?.validLabelKeyPrefixPattern"
                    i18n>
-          Prefix not allowed
+          Prefix not allowed.
         </mat-error>
         <mat-error *ngIf="taint.get('key').errors?.validLabelKeyNamePattern"
                    i18n>
-          Name not allowed
+          Name not allowed.
         </mat-error>
         <mat-error *ngIf="taint.get('key').errors?.validLabelKeyPrefixLength"
                    i18n>
-          Prefix is too long
+          Prefix is too long.
         </mat-error>
         <mat-error *ngIf="taint.get('key').errors?.validLabelKeyNameLength"
                    i18n>
-          Name is too long
+          Name is too long.
         </mat-error>
       </mat-form-field>
       <mat-form-field fxFlex="29">
@@ -43,11 +43,15 @@
                formControlName="value">
         <mat-error *ngIf="taint.get('value').errors?.validLabelValuePattern"
                    i18n>
-          Value not allowed
+          Value not allowed.
         </mat-error>
         <mat-error *ngIf="taint.get('value').errors?.validLabelValueLength"
                    i18n>
-          Value is too long
+          Value is too long.
+        </mat-error>
+        <mat-error *ngIf="taint.get('value').errors?.required"
+                   i18n>
+          Value is required.
         </mat-error>
       </mat-form-field>
       <mat-form-field fxFlex="29">

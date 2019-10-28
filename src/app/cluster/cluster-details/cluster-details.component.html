@@ -37,12 +37,13 @@
 
         Add Node Deployment
       </button>
-      <button class="km-connect-kubeconfig-btn"
-              (click)="connectClusterDialog()"
-              mat-flat-button
-              [disabled]="!isClusterRunning">
+      <a class="km-connect-kubeconfig-btn"
+         [href]="getProxyURL()"
+         target="_blank"
+         mat-flat-button
+         [disabled]="!isClusterRunning || !isEditEnabled()">
         Connect
-      </button>
+      </a>
     </div>
   </div>
 
@@ -71,11 +72,6 @@
                   (click)="editCluster()"
                   [disabled]="!isClusterRunning || !isEditEnabled()">
             <span>Edit Cluster</span>
-          </button>
-          <button mat-menu-item
-                  (click)="editProviderSettings()"
-                  [disabled]="!isEditEnabled()">
-            <span>Edit Settings</span>
           </button>
           <button mat-menu-item
                   (click)="editSSHKeys()"
@@ -128,9 +124,24 @@
           </div>
         </km-property>
 
+        <km-boolean-property label="Audit Logging"
+                             [value]="!!cluster.spec.auditLogging && cluster.spec.auditLogging.enabled">
+        </km-boolean-property>
+
+        <km-boolean-property label="Pod Security Policy"
+                             [value]="cluster.spec.usePodSecurityPolicyAdmissionPlugin">
+        </km-boolean-property>
+
         <km-property>
           <div value>
             <km-ssh-key-list [sshKeys]="sshKeys"></km-ssh-key-list>
+          </div>
+        </km-property>
+
+        <km-property *ngIf="cluster.labels">
+          <div key>Labels</div>
+          <div value>
+            <km-labels [labels]="cluster.labels"></km-labels>
           </div>
         </km-property>
 
@@ -162,6 +173,18 @@
                           [clusterHealthStatus]="clusterHealthStatus"
                           [isClusterRunning]="isClusterAPIRunning"></kubermatic-node-list>
   </div>
+
+  <mat-card class="km-with-table-header">
+    <mat-card-header>
+      <mat-card-title>Addons</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="km-addon-card-content">
+      <km-addon-list [addons]="addons"
+                     [isClusterReady]="isClusterRunning"
+                     (addAddon)="handleAddonCreation($event)"
+                     (deleteAddon)="handleAddonDeletion($event)"></km-addon-list>
+    </mat-card-content>
+  </mat-card>
 
   <km-event-list [events]="events"></km-event-list>
 

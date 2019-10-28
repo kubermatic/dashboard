@@ -4,6 +4,12 @@
   <mat-dialog-content>
     <div class="mat-dialog-content">
       <p [innerHTML]="data.message"></p>
+      <div *ngIf="!!data.warning"
+           class="km-dialog-warning"
+           fxLayoutAlign=" center">
+        <i class="km-icon-warning"></i>
+        <span [innerHTML]="data.warning"></span>
+      </div>
       <mat-form-field *ngIf="!!data.compareName && data.compareName.length > 0">
         <mat-label>{{data.inputPlaceholder}}</mat-label>
         <input id="km-confirmation-dialog-input"

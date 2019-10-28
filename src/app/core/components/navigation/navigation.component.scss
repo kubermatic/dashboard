@@ -21,6 +21,7 @@ ng2-slim-loading-bar {
   position: fixed;
   width: 100%;
   z-index: 2;
+  top: 0;
 
   .km-header-logo {
     display: block;
@@ -42,14 +43,12 @@ ng2-slim-loading-bar {
       margin: (1.25 * $baseline-grid) (1.875 * $baseline-grid) (1.25 * $baseline-grid) 0;
       font-weight: 500;
     }
-
-    .km-logout {
-      padding-left: 1.875 * $baseline-grid;
-      margin-right: 3.125 * $baseline-grid;
-      font-weight: 500;
-      line-height: 2.2 * $line-height;
-    }
   }
+}
+
+.mat-menu-item,
+.mat-menu-item[disabled] {
+  color: $text-color;
 }
 
 .km-button {

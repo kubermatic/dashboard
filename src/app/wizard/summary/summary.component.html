@@ -23,6 +23,31 @@
           <div class="km-summary-row">
             <span class="km-provider-logo km-provider-logo-{{providerFormData.provider}}"></span>
           </div>
+          <div class="km-summary-row">
+            <span class="km-summary-left">
+              <i [ngClass]="{'km-icon-disabled': !cluster.spec.auditLogging?.enabled, 'km-icon-running': cluster.spec.auditLogging?.enabled}"></i>
+            </span>
+            <span>Audit Logging</span>
+          </div>
+          <div class="km-summary-row">
+            <span class="km-summary-left">
+              <i [ngClass]="{'km-icon-disabled': !cluster.spec.usePodSecurityPolicyAdmissionPlugin, 'km-icon-running': cluster.spec.usePodSecurityPolicyAdmissionPlugin}"></i>
+            </span>
+            <span>Pod Security Policy</span>
+          </div>
+          <div *ngIf="cluster.labels && displayTags(cluster.labels)"
+               class="km-summary-tags">
+            <div class="km-summary-row">Cluster Labels</div>
+            <km-labels [labels]="cluster.labels"></km-labels>
+          </div>
+          <div *ngIf="!cluster.labels || !displayTags(cluster.labels)">
+            <div class="km-summary-row">
+              <span class="km-summary-left">
+                <i class="km-icon-disabled"></i>
+              </span>
+              <span>Cluster Labels</span>
+            </div>
+          </div>
         </mat-card-content>
 
         <mat-card-header>
@@ -112,9 +137,9 @@
 
               <!-- AWS -->
               <ng-container *ngIf="cluster.spec.cloud.aws">
-                <km-property *ngIf="cluster.spec.cloud.aws.securityGroup">
+                <km-property *ngIf="cluster.spec.cloud.aws.securityGroupID">
                   <div key>Security Group ID</div>
-                  <div value>{{cluster.spec.cloud.aws.securityGroup}}</div>
+                  <div value>{{cluster.spec.cloud.aws.securityGroupID}}</div>
                 </km-property>
                 <km-property *ngIf="cluster.spec.cloud.aws.vpcId">
                   <div key>VPC ID</div>
@@ -235,7 +260,9 @@
 
             <!-- GCP Nodes -->
             <ng-container *ngIf="cluster.spec.cloud.gcp">
-              <div class="km-summary-row km-summary-row-with-margin">Disk {{nodeData.spec.cloud.gcp.diskSize}} GB, {{nodeData.spec.cloud.gcp.diskType}}</div>
+              <div class="km-summary-row km-summary-row-with-margin">
+                Disk {{nodeData.spec.cloud.gcp.diskSize}} GB, {{nodeData.spec.cloud.gcp.diskType}}
+              </div>
               <km-property>
                 <div key>Machine Type</div>
                 <div value>{{nodeData.spec.cloud.gcp.machineType}}</div>
@@ -243,6 +270,29 @@
               <km-property>
                 <div key>Zone</div>
                 <div value>{{nodeData.spec.cloud.gcp.zone}}</div>
+              </km-property>
+            </ng-container>
+
+            <!-- KubeVirt Nodes -->
+            <ng-container *ngIf="cluster.spec.cloud.kubevirt">
+              <div class="km-summary-row km-summary-row-with-margin">
+                {{nodeData.spec.cloud.kubevirt.cpus}} CPU, {{nodeData.spec.cloud.kubevirt.memory}} memory
+              </div>
+              <km-property>
+                <div key>PVC Size</div>
+                <div value>{{nodeData.spec.cloud.kubevirt.pvcSize}}</div>
+              </km-property>
+              <km-property>
+                <div key>Storage Class Name</div>
+                <div value>{{nodeData.spec.cloud.kubevirt.storageClassName}}</div>
+              </km-property>
+              <km-property>
+                <div key>Source URL</div>
+                <div value>{{nodeData.spec.cloud.kubevirt.sourceURL}}</div>
+              </km-property>
+              <km-property>
+                <div key>Namespace</div>
+                <div value>{{nodeData.spec.cloud.kubevirt.namespace}}</div>
               </km-property>
             </ng-container>
 
@@ -255,9 +305,9 @@
             <ng-container *ngIf="cluster.spec.cloud.aws">
               <div class="km-summary-row">{{nodeData.spec.cloud.aws.instanceType}}</div>
               <div class="km-summary-row km-summary-row-with-margin">Disk {{nodeData.spec.cloud.aws.diskSize}} GB, {{nodeData.spec.cloud.aws.volumeType}}</div>
-              <km-property *ngIf="nodeData.spec.cloud.aws.subnetId">
+              <km-property *ngIf="nodeData.spec.cloud.aws.subnetID">
                 <div key>Subnet ID</div>
-                <div value>{{nodeData.spec.cloud.aws.subnetId}}</div>
+                <div value>{{nodeData.spec.cloud.aws.subnetID}}</div>
               </km-property>
               <km-property *ngIf="nodeData.spec.cloud.aws.availabilityZone">
                 <div key>Availability Zone</div>
@@ -308,6 +358,18 @@
               <p *ngIf="noMoreIpsLeft"
                  class="km-warning">Not enough IPs left. Reduce number of nodes or add more machine networks.</p>
             </div>
+
+            <!-- AWS Node Options -->
+            <ng-container *ngIf="cluster.spec.cloud.aws">
+              <div *ngIf="nodeData.spec.cloud.aws.assignPublicIP !== undefined">
+                <div class="km-summary-row">
+                  <span class="km-summary-left">
+                    <i [ngClass]="{'km-icon-disabled': !nodeData.spec.cloud.aws.assignPublicIP, 'km-icon-running': nodeData.spec.cloud.aws.assignPublicIP}"></i>
+                  </span>
+                  <span>Assign Public IP</span>
+                </div>
+              </div>
+            </ng-container>
 
             <!-- DO Node Options -->
             <ng-container *ngIf="cluster.spec.cloud.digitalocean">

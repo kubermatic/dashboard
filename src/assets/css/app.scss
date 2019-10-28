@@ -644,6 +644,10 @@ mat-list-item.disabled {
   color: $indicator-red !important;
 }
 
+.km-text {
+  color: $text-color;
+}
+
 .km-muted {
   color: $light-text-color;
 }
@@ -703,6 +707,10 @@ div.km-form-group-labels {
 .km-add-node-inner .km-form-group-tags-inner mat-form-field,
 .km-add-node-inner .km-form-group-labels-inner mat-form-field {
   width: 45% !important;
+}
+
+.km-tags-in-wizard {
+  margin-top: 5px;
 }
 
 // Card headers.
@@ -857,6 +865,10 @@ div.km-form-group-labels {
     text-decoration: none;
     pointer-events: none;
   }
+}
+
+.mat-icon-button[disabled] * {
+  cursor: auto;
 }
 
 // Inputs.

@@ -159,6 +159,14 @@ export class ApiService {
     return `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/kubeconfig?token=${this._token}`;
   }
 
+  getDashboardProxyURL(projectID: string, dc: string, clusterID: string): string {
+    return `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/dashboard/proxy`;
+  }
+
+  getOpenshiftProxyURL(projectID: string, dc: string, clusterID: string): string {
+    return `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/openshift/console/login`;
+  }
+
   getShareKubeconfigURL(projectID: string, dc: string, clusterID: string, userID: string): string {
     return `${this._location}/${this._restRoot}/kubeconfig?project_id=${projectID}&datacenter=${dc}&cluster_id=${
         clusterID}&user_id=${userID}`;
@@ -245,6 +253,11 @@ export class ApiService {
       Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
     return this._http.delete(url);
+  }
+
+  getAccessibleAddons(): Observable<string[]> {
+    const url = `${this._restRoot}/addons`;
+    return this._http.get<string[]>(url);
   }
 
   getSwaggerJson(): Observable<any> {

@@ -46,47 +46,69 @@
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="clusterSpecForm"
-            class="km-cluster-spec">
+            fxLayout="row wrap">
+        <div fxFlex="100"
+             fxLayout="row">
+          <mat-button-toggle-group group="clusterSpecTypeGroup"
+                                   class="km-cluster-spec-type"
+                                   formControlName="type"
+                                   *ngIf="hasMultipleTypes()">
+            <mat-button-toggle value="kubernetes"
+                               *ngIf="!hideType('kubernetes')">
+              <i class="km-icon-kubernetes"></i>
+              Kubernetes
+            </mat-button-toggle>
+            <mat-button-toggle value="openshift"
+                               *ngIf="!hideType('openshift')">
+              <i class="km-icon-openshift"></i>
+              OpenShift
+            </mat-button-toggle>
+          </mat-button-toggle-group>
 
-        <mat-button-toggle-group group="clusterSpecTypeGroup"
-                                 class="km-cluster-spec-type"
-                                 formControlName="type"
-                                 *ngIf="hasMultipleTypes()">
-          <mat-button-toggle value="kubernetes"
-                             *ngIf="!hideType('kubernetes')">
-            <i class="km-icon-kubernetes"></i>
-            Kubernetes
-          </mat-button-toggle>
-          <mat-button-toggle value="openshift"
-                             *ngIf="!hideType('openshift')">
-            <i class="km-icon-openshift"></i>
-            OpenShift
-          </mat-button-toggle>
-        </mat-button-toggle-group>
+          <mat-form-field class="km-version-inline">
+            <mat-label>Version</mat-label>
+            <mat-select formControlName="version"
+                        disableOptionCentering>
+              <mat-option *ngFor="let version of masterVersions"
+                          [value]="version.version">
+                {{ version.version }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
-        <mat-form-field class="km-version-inline">
-          <mat-label>Version</mat-label>
-          <mat-select formControlName="version"
-                      disableOptionCentering>
-            <mat-option *ngFor="let version of masterVersions"
-                        [value]="version.version">
-              {{ version.version }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+          <mat-form-field *ngIf="isOpenShiftSelected()"
+                          class="km-imagepullsecret-inline">
+            <mat-label>Image Pull Secret*</mat-label>
+            <input matInput
+                   formControlName="imagePullSecret"
+                   type="text"
+                   title="imagePullSecret">
+            <mat-error *ngIf="clusterSpecForm.controls.imagePullSecret.hasError('required')">
+              Image Pull Secret is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-        <mat-form-field *ngIf="isOpenShiftSelected()"
-                        class="km-imagepullsecret-inline">
-          <mat-label>Image Pull Secret*</mat-label>
-          <input matInput
-                 formControlName="imagePullSecret"
-                 type="text"
-                 title="imagePullSecret">
-          <mat-error *ngIf="clusterSpecForm.controls.imagePullSecret.hasError('required')">
-            Image Pull Secret is <strong>required</strong>.
-          </mat-error>
-        </mat-form-field>
+        <div fxLayout="row"
+             fxLayoutGap="16px">
+          <mat-checkbox formControlName="auditLogging">
+            Audit Logging
+          </mat-checkbox>
+          <div fxLayout="row"
+               fxLayoutGap="8px">
+            <mat-checkbox formControlName="usePodSecurityPolicyAdmissionPlugin">
+              Pod Security Policy
+            </mat-checkbox>
+            <i *ngIf="clusterSpecForm.controls.usePodSecurityPolicyAdmissionPlugin.value"
+               class="km-icon-warning"
+               matTooltip="Activating Pod Security Policy will mean that a lot of Pod specifications, Operators and Helm charts will not work out of the box. Make sure that you know the consequences of activating this feature.">
+            </i>
+          </div>
+        </div>
       </form>
+      <km-label-form title="Labels"
+                     [(labels)]="labels"
+                     [asyncKeyValidators]=asyncLabelValidators></km-label-form>
     </mat-card-content>
   </mat-card>
 </div>

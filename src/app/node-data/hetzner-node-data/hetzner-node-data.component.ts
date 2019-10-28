@@ -22,7 +22,7 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
   @Input() seedDCName: string;
 
   types: HetznerTypes = {dedicated: [], standard: []};
-  hetznerNodeForm: FormGroup;
+  form: FormGroup;
   loadingTypes = false;
   private _unsubscribe = new Subject<void>();
   private _selectedCredentials: string;
@@ -32,17 +32,17 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
       private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
-    this.hetznerNodeForm = new FormGroup({
+    this.form = new FormGroup({
       type: new FormControl(this.nodeData.spec.cloud.hetzner.type, Validators.required),
     });
 
-    this.hetznerNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
     });
 
     this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.cloudSpec = data.cloudSpec;
-      this.hetznerNodeForm.controls.type.setValue('');
+      this.form.controls.type.setValue('');
       this.types = {dedicated: [], standard: []};
       this.checkTypeState();
 
@@ -71,9 +71,9 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
 
   checkTypeState(): void {
     if (this.types.standard.length === 0 && this.types.dedicated.length === 0) {
-      this.hetznerNodeForm.controls.type.disable();
+      this.form.controls.type.disable();
     } else {
-      this.hetznerNodeForm.controls.type.enable();
+      this.form.controls.type.enable();
     }
   }
 
@@ -110,7 +110,7 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
         .subscribe((data) => {
           this.types = data;
           if (this.nodeData.spec.cloud.hetzner.type === '') {
-            this.hetznerNodeForm.controls.type.setValue(this.types.standard[0].name);
+            this.form.controls.type.setValue(this.types.standard[0].name);
           }
 
           this.loadingTypes = false;
@@ -122,10 +122,10 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
     return {
       spec: {
         hetzner: {
-          type: this.hetznerNodeForm.controls.type.value,
+          type: this.form.controls.type.value,
         },
       },
-      valid: this.hetznerNodeForm.valid,
+      valid: this.form.valid,
     };
   }
 }
