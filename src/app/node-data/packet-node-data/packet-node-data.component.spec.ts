@@ -50,13 +50,8 @@ describe('PacketNodeDataComponent', () => {
     component.nodeData = nodeDataFake();
   });
 
-  it('should create the add node cmp', () => {
+  it('should create the add node cmp for packet', () => {
     expect(component).toBeTruthy();
     fixture.detectChanges();
-  });
-
-  it('form valid when initializing since Packet has sane defaults for required fields', () => {
-    fixture.detectChanges();
-    expect(component.form.valid).toBeTruthy();
   });
 });

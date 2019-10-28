@@ -1,11 +1,10 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 
 import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-azure-provider-settings',
@@ -13,23 +12,69 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 })
 
 export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  azureProviderSettingsForm: FormGroup;
+  form: FormGroup;
+  private _formData = {clientID: '', clientSecret: '', subscriptionID: '', tenantID: ''};
   private _unsubscribe = new Subject<void>();
 
   constructor(private clusterService: ClusterService) {}
 
   ngOnInit(): void {
-    this.azureProviderSettingsForm = new FormGroup({
-      clientID: new FormControl(this.cluster.spec.cloud.azure.clientID, [Validators.required]),
-      clientSecret: new FormControl(this.cluster.spec.cloud.azure.clientSecret, [Validators.required]),
-      subscriptionID: new FormControl(this.cluster.spec.cloud.azure.subscriptionID, [Validators.required]),
-      tenantID: new FormControl(this.cluster.spec.cloud.azure.tenantID, [Validators.required]),
+    this.form = new FormGroup({
+      clientID: new FormControl(''),
+      clientSecret: new FormControl(''),
+      subscriptionID: new FormControl(''),
+      tenantID: new FormControl(''),
     });
 
-    this.azureProviderSettingsForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
+    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      if (data.clientID !== this._formData.clientID || data.clientSecret !== this._formData.clientSecret ||
+          data.subscriptionID !== this._formData.subscriptionID || data.tenantID !== this._formData.tenantID) {
+        this._formData = data;
+        this.setValidators();
+        this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
+      }
     });
+  }
+
+  get clientID(): AbstractControl {
+    return this.form.controls.clientID;
+  }
+
+  get clientSecret(): AbstractControl {
+    return this.form.controls.clientSecret;
+  }
+
+  get subscriptionID(): AbstractControl {
+    return this.form.controls.subscriptionID;
+  }
+
+  get tenantID(): AbstractControl {
+    return this.form.controls.tenantID;
+  }
+
+  setValidators(): void {
+    if (!this.clientID.value && !this.clientSecret.value && !this.subscriptionID.value && !this.tenantID.value) {
+      this.clientID.clearValidators();
+      this.clientSecret.clearValidators();
+      this.subscriptionID.clearValidators();
+      this.tenantID.clearValidators();
+    } else {
+      this.clientID.setValidators([Validators.required]);
+      this.clientSecret.setValidators([Validators.required]);
+      this.subscriptionID.setValidators([Validators.required]);
+      this.tenantID.setValidators([Validators.required]);
+    }
+
+    this.clientID.updateValueAndValidity();
+    this.clientSecret.updateValueAndValidity();
+    this.subscriptionID.updateValueAndValidity();
+    this.tenantID.updateValueAndValidity();
+  }
+
+  isRequiredField(): string {
+    return (!this.clientID.value && !this.clientSecret.value && !this.subscriptionID.value && !this.tenantID.value) ?
+        '' :
+        '*';
   }
 
   ngOnDestroy(): void {
@@ -41,13 +86,13 @@ export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
     return {
       cloudSpecPatch: {
         azure: {
-          clientID: this.azureProviderSettingsForm.controls.clientID.value,
-          clientSecret: this.azureProviderSettingsForm.controls.clientSecret.value,
-          subscriptionID: this.azureProviderSettingsForm.controls.subscriptionID.value,
-          tenantID: this.azureProviderSettingsForm.controls.tenantID.value,
+          clientID: this.form.controls.clientID.value,
+          clientSecret: this.form.controls.clientSecret.value,
+          subscriptionID: this.form.controls.subscriptionID.value,
+          tenantID: this.form.controls.tenantID.value,
         },
       },
-      isValid: this.azureProviderSettingsForm.valid,
+      isValid: this.form.valid,
     };
   }
 }

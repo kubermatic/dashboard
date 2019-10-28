@@ -1,0 +1,25 @@
+<kubermatic-aws-node-options *ngIf="cloudSpec.aws"
+                             [nodeData]="nodeData"
+                             [isInWizard]="isInWizard"></kubermatic-aws-node-options>
+
+<kubermatic-azure-node-options *ngIf="cloudSpec.azure"
+                               [nodeData]="nodeData"></kubermatic-azure-node-options>
+
+<kubermatic-digitalocean-node-options *ngIf="cloudSpec.digitalocean"
+                                      [nodeData]="nodeData"
+                                      [isInWizard]="isInWizard"></kubermatic-digitalocean-node-options>
+
+<kubermatic-gcp-node-options *ngIf="cloudSpec.gcp"
+                             [nodeData]="nodeData"></kubermatic-gcp-node-options>
+
+<kubermatic-openstack-node-options *ngIf="cloudSpec.openstack"
+                                   [nodeData]="nodeData"
+                                   [cloudSpec]="cloudSpec"
+                                   [isInWizard]="isInWizard"></kubermatic-openstack-node-options>
+
+<kubermatic-packet-node-options *ngIf="cloudSpec.packet"
+                                [nodeData]="nodeData"></kubermatic-packet-node-options>
+
+<kubermatic-vsphere-node-options *ngIf="cloudSpec.vsphere"
+                                 [nodeData]="nodeData"
+                                 [cloudSpec]="cloudSpec"></kubermatic-vsphere-node-options>

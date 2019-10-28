@@ -6,7 +6,7 @@
 }
 
 .km-wizard-settings-extended-wrapper {
-  margin-top: 4 * $baseline-grid;
+  margin: (4 * $baseline-grid) 0 (2.5 * $baseline-grid) 0;
 
   .km-wizard-settings-extended-divider {
     height: 1px;
@@ -20,7 +20,8 @@
     margin: $baseline-grid;
     user-select: none;
 
-    .km-icon-arrow-down {
+    .km-icon-arrow-down,
+    .km-icon-arrow-up {
       background: $medium-text-color;
     }
   }

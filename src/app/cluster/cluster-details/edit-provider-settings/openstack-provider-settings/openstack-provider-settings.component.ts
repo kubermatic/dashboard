@@ -1,11 +1,10 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 
 import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-openstack-provider-settings',
@@ -13,22 +12,50 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 })
 
 export class OpenstackProviderSettingsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
-
-  openstackProviderSettingsForm: FormGroup;
+  form: FormGroup;
+  private _formData = {username: '', password: ''};
   private _unsubscribe = new Subject<void>();
 
   constructor(private clusterService: ClusterService) {}
 
   ngOnInit(): void {
-    this.openstackProviderSettingsForm = new FormGroup({
-      username: new FormControl(this.cluster.spec.cloud.openstack.username, [Validators.required]),
-      password: new FormControl(this.cluster.spec.cloud.openstack.password, [Validators.required]),
+    this.form = new FormGroup({
+      username: new FormControl(''),
+      password: new FormControl(''),
     });
 
-    this.openstackProviderSettingsForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
+    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      if (data.username !== this._formData.username || data.password !== this._formData.password) {
+        this._formData = data;
+        this.setValidators();
+        this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
+      }
     });
+  }
+
+  get username(): AbstractControl {
+    return this.form.controls.username;
+  }
+
+  get password(): AbstractControl {
+    return this.form.controls.password;
+  }
+
+  setValidators(): void {
+    if (!this.username.value && !this.password.value) {
+      this.username.clearValidators();
+      this.password.clearValidators();
+    } else {
+      this.username.setValidators([Validators.required]);
+      this.password.setValidators([Validators.required]);
+    }
+
+    this.username.updateValueAndValidity();
+    this.password.updateValueAndValidity();
+  }
+
+  isRequiredField(): string {
+    return !this.username.value && !this.password.value ? '' : '*';
   }
 
   ngOnDestroy(): void {
@@ -40,11 +67,11 @@ export class OpenstackProviderSettingsComponent implements OnInit, OnDestroy {
     return {
       cloudSpecPatch: {
         openstack: {
-          password: this.openstackProviderSettingsForm.controls.password.value,
-          username: this.openstackProviderSettingsForm.controls.username.value,
+          password: this.form.controls.password.value,
+          username: this.form.controls.username.value,
         },
       },
-      isValid: this.openstackProviderSettingsForm.valid,
+      isValid: this.form.valid,
     };
   }
 }

@@ -58,6 +58,6 @@ describe('HetznerNodeDataComponent', () => {
   });
 
   it('form invalid when initializing', () => {
-    expect(component.hetznerNodeForm.valid).toBeFalsy();
+    expect(component.form.valid).toBeFalsy();
   });
 });

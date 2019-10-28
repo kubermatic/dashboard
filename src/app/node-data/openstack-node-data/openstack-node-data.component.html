@@ -1,10 +1,10 @@
-<form [formGroup]="osNodeForm"
+<form [formGroup]="form"
       fxLayout="column">
   <div fxFlex
        class="mat-select-container">
     <div fxLayout="row"
          fxLayoutGap="10px">
-      <mat-form-field class="km-with-hint">
+      <mat-form-field>
         <mat-label>{{getFlavorsFormState()}}</mat-label>
         <mat-select formControlName="flavor"
                     disableOptionCentering
@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <ng-container *ngIf="!!osNodeForm.controls.customDiskSize.value">
+    <ng-container *ngIf="!!form.controls.customDiskSize.value">
       <mat-form-field>
         <mat-label>Disk Size in GB</mat-label>
         <input matInput
@@ -39,15 +39,22 @@
         <mat-hint>An additional network storage volume will be created and used as the disk for the VM.</mat-hint>
       </mat-form-field>
     </ng-container>
-
-    <div class="km-floating-ip-checkbox">
-      <mat-checkbox fxFlex="50%"
-                    formControlName="useFloatingIP">
-        Allocate Floating IP
-        <i *ngIf="isFloatingIPEnforced()"
-           class="fa fa-info-circle km-floating-ip-checkbox-info-icon"
-           matTooltip="Floating IP usage is enforced by selected datacenter"></i>
-      </mat-checkbox>
-    </div>
   </div>
+
+  <div class="km-floating-ip-checkbox">
+    <mat-checkbox fxFlex="50%"
+                  formControlName="useFloatingIP">
+      Allocate Floating IP
+      <i *ngIf="isFloatingIPEnforced()"
+         class="fa fa-info-circle km-floating-ip-checkbox-info-icon"
+         matTooltip="Floating IP usage is enforced by selected datacenter"></i>
+    </mat-checkbox>
+  </div>
+
+  <mat-form-field>
+    <mat-label>Image*</mat-label>
+    <input matInput
+           formControlName="image"
+           autocomplete="off">
+  </mat-form-field>
 </form>

@@ -15,12 +15,14 @@ import {ProjectMockService} from '../../../testing/services/project-mock.service
 import {SharedModule} from '../../shared.module';
 
 import {AddProjectDialogComponent} from './add-project-dialog.component';
+import {CoreModule} from '../../../core/core.module';
 
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
   SharedModule,
+  CoreModule,
 ];
 
 describe('AddProjectDialogComponent', () => {

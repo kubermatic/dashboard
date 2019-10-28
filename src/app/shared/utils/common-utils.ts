@@ -1,4 +1,4 @@
-import {AbstractControl} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
 import * as _ from 'lodash';
 
 export function objectDiff(object: any, base: any): any {
@@ -17,4 +17,11 @@ export function objectFromForm(control: AbstractControl, allowEmptyValue = true,
     }
   }
   return _.isEqual(object, {}) && returnNullIfEmpty ? null : object;
+}
+
+export function addKeyValuePair(): FormGroup {
+  return new FormGroup({
+    key: new FormControl(''),
+    value: new FormControl(''),
+  });
 }

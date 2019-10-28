@@ -7,23 +7,29 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
+import {CoreModule} from '../../../core/core.module';
 import {ApiService, ClusterService, DatacenterService, ProjectService, WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {ClusterNameGenerator} from '../../../core/util/name-generator.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {AWSNodeDataComponent} from '../../../node-data/aws-node-data/aws-node-data.component';
+import {AWSNodeOptionsComponent} from '../../../node-data/aws-node-data/aws-node-options/aws-node-options.component';
 import {AzureNodeDataComponent} from '../../../node-data/azure-node-data/azure-node-data.component';
+import {AzureNodeOptionsComponent} from '../../../node-data/azure-node-data/azure-node-options/azure-node-options.component';
 import {DigitaloceanNodeDataComponent} from '../../../node-data/digitalocean-node-data/digitalocean-node-data.component';
-import {DigitaloceanOptionsComponent} from '../../../node-data/digitalocean-node-data/digitalocean-options/digitalocean-options.component';
+import {DigitaloceanNodeOptionsComponent} from '../../../node-data/digitalocean-node-data/digitalocean-node-options/digitalocean-node-options.component';
 import {GCPNodeDataComponent} from '../../../node-data/gcp-node-data/gcp-node-data.component';
+import {GCPNodeOptionsComponent} from '../../../node-data/gcp-node-data/gcp-node-options/gcp-node-options.component';
 import {HetznerNodeDataComponent} from '../../../node-data/hetzner-node-data/hetzner-node-data.component';
 import {KubeVirtNodeDataComponent} from '../../../node-data/kubevirt-add-node/kubevirt-node-data.component';
+import {NodeDataOptionsComponent} from '../../../node-data/node-data-options/node-data-options.component';
 import {NodeDataComponent} from '../../../node-data/node-data.component';
 import {OpenstackNodeDataComponent} from '../../../node-data/openstack-node-data/openstack-node-data.component';
-import {OpenstackOptionsComponent} from '../../../node-data/openstack-node-data/openstack-options/openstack-options.component';
+import {OpenstackNodeOptionsComponent} from '../../../node-data/openstack-node-data/openstack-node-options/openstack-node-options.component';
 import {PacketNodeDataComponent} from '../../../node-data/packet-node-data/packet-node-data.component';
+import {PacketNodeOptionsComponent} from '../../../node-data/packet-node-data/packet-node-options/packet-node-options.component';
 import {VSphereNodeDataComponent} from '../../../node-data/vsphere-add-node/vsphere-node-data.component';
-import {VSphereOptionsComponent} from '../../../node-data/vsphere-add-node/vsphere-options/vsphere-options.component';
+import {VSphereNodeOptionsComponent} from '../../../node-data/vsphere-add-node/vsphere-node-options/vsphere-node-options.component';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
@@ -56,21 +62,27 @@ describe('NodeDataModalData', () => {
             NgReduxTestingModule,
             SharedModule,
             MatTabsModule,
+            CoreModule,
           ],
           declarations: [
             NodeDataModalComponent,
             NodeDataComponent,
+            NodeDataOptionsComponent,
             OpenstackNodeDataComponent,
-            OpenstackOptionsComponent,
+            OpenstackNodeOptionsComponent,
             AWSNodeDataComponent,
+            AWSNodeOptionsComponent,
             DigitaloceanNodeDataComponent,
-            DigitaloceanOptionsComponent,
+            DigitaloceanNodeOptionsComponent,
             HetznerNodeDataComponent,
             VSphereNodeDataComponent,
-            VSphereOptionsComponent,
+            VSphereNodeOptionsComponent,
             AzureNodeDataComponent,
+            AzureNodeOptionsComponent,
             PacketNodeDataComponent,
+            PacketNodeOptionsComponent,
             GCPNodeDataComponent,
+            GCPNodeOptionsComponent,
             KubeVirtNodeDataComponent,
           ],
           providers: [
@@ -119,15 +131,5 @@ describe('NodeDataModalData', () => {
   it('should render action buttons', () => {
     const actions = fixture.debugElement.query(By.css('.mat-dialog-actions'));
     expect(actions).not.toBeNull();
-  });
-
-  it('should not show node recreation warning if spec was not changed', () => {
-    component.data.nodeData.spec = component.data.nodeDeployment.spec.template;
-    expect(component.isRecreationWarningVisible()).toBeFalsy();
-  });
-
-  it('should show node recreation warning if spec was changed', () => {
-    component.data.nodeData.spec.versions.kubelet = 'changed';
-    expect(component.isRecreationWarningVisible()).toBeTruthy();
   });
 });

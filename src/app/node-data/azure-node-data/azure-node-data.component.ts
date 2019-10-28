@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {EMPTY, iif, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 import {ApiService, DatacenterService, WizardService} from '../../core/services';
@@ -24,10 +24,8 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   @Input() seedDCName: string;
 
   sizes: AzureSizes[] = [];
-  azureNodeForm: FormGroup;
-  tags: FormArray;
+  form: FormGroup;
   datacenter: DataCenterEntity;
-  hideOptional = true;
   loadingSizes = false;
 
   private _unsubscribe = new Subject<void>();
@@ -38,33 +36,17 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
       private readonly _api: ApiService, private readonly _dcService: DatacenterService) {}
 
   ngOnInit(): void {
-    const tagList = new FormArray([]);
-    for (const i in this.nodeData.spec.cloud.azure.tags) {
-      if (this.nodeData.spec.cloud.azure.tags.hasOwnProperty(i)) {
-        tagList.push(new FormGroup({
-          key: new FormControl(i),
-          value: new FormControl(this.nodeData.spec.cloud.azure.tags[i]),
-        }));
-      }
-    }
-
-    this.azureNodeForm = new FormGroup({
+    this.form = new FormGroup({
       size: new FormControl(this.nodeData.spec.cloud.azure.size, Validators.required),
-      assignPublicIP: new FormControl(this.nodeData.spec.cloud.azure.assignPublicIP),
-      tags: tagList,
     });
 
-    this.azureNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
-    });
-
-    this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.hideOptional = data.hideOptional;
     });
 
     this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.cloudSpec = data.cloudSpec;
-      this.azureNodeForm.controls.size.setValue('');
+      this.form.controls.size.setValue('');
       this.sizes = [];
       this.checkSizeState();
       if (data.cloudSpec.azure.clientID !== '' || data.cloudSpec.azure.clientSecret !== '' ||
@@ -116,14 +98,14 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
 
   checkSizeState(): void {
     if (this.sizes.length === 0) {
-      this.azureNodeForm.controls.size.disable();
+      this.form.controls.size.disable();
     } else {
-      this.azureNodeForm.controls.size.enable();
+      this.form.controls.size.enable();
     }
   }
 
   showSizeHint(): boolean {
-    return (!this.loadingSizes && this.isMissingCredentials()) && this.isInWizard();
+    return (!this.loadingSizes && this.isMissingCredentials() && !this._selectedPreset) && this.isInWizard();
   }
 
   reloadAzureSizes(): void {
@@ -149,7 +131,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
         .subscribe(data => {
           this.sizes = data;
           if (this.nodeData.spec.cloud.azure.size === '') {
-            this.azureNodeForm.controls.size.setValue(this.sizes[0].name);
+            this.form.controls.size.setValue(this.sizes[0].name);
           }
 
           this.loadingSizes = false;
@@ -175,41 +157,16 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
     this._unsubscribe.complete();
   }
 
-  getTagForm(form): any {
-    return form.get('tags').controls;
-  }
-
-  addTag(): void {
-    this.tags = this.azureNodeForm.get('tags') as FormArray;
-    this.tags.push(new FormGroup({
-      key: new FormControl(''),
-      value: new FormControl(''),
-    }));
-  }
-
-  deleteTag(index: number): void {
-    const arrayControl = this.azureNodeForm.get('tags') as FormArray;
-    arrayControl.removeAt(index);
-  }
-
   getNodeProviderData(): NodeProviderData {
-    const tagMap = {};
-    for (const i in this.azureNodeForm.controls.tags.value) {
-      if (this.azureNodeForm.controls.tags.value[i].key !== '' &&
-          this.azureNodeForm.controls.tags.value[i].value !== '') {
-        tagMap[this.azureNodeForm.controls.tags.value[i].key] = this.azureNodeForm.controls.tags.value[i].value;
-      }
-    }
-
     return {
       spec: {
         azure: {
-          size: this.azureNodeForm.controls.size.value,
-          assignPublicIP: this.azureNodeForm.controls.assignPublicIP.value,
-          tags: tagMap,
+          size: this.form.controls.size.value,
+          assignPublicIP: this.nodeData.spec.cloud.azure.assignPublicIP,
+          tags: this.nodeData.spec.cloud.azure.tags,
         },
       },
-      valid: this.sizes.length > 0 && this.azureNodeForm.valid,
+      valid: this.sizes.length > 0 && this.form.valid,
     };
   }
 }

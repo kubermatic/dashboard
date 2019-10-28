@@ -1,0 +1,32 @@
+<div id="km-add-project-dialog">
+  <km-dialog-title title="Add Addon"></km-dialog-title>
+  <mat-dialog-content>
+    <div class="mat-dialog-content">
+      <form [formGroup]="form"
+            fxLayout="column">
+        <mat-form-field fxFlex>
+          <mat-label>Name*</mat-label>
+          <mat-select panelClass="km-add-dialog-dropdown"
+                      disableOptionCentering
+                      formControlName="name">
+            <mat-option *ngFor="let installableAddon of installableAddons"
+                        [value]="installableAddon">
+              {{installableAddon}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls.name.hasError('required')">
+            Name is <strong>required</strong>.
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button id="km-add-project-dialog-save"
+            mat-flat-button
+            (click)="add()"
+            [disabled]="!form.valid">
+      Add
+    </button>
+  </mat-dialog-actions>
+</div>

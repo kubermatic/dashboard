@@ -6,6 +6,8 @@ import {first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, ClusterService, DatacenterService, UserService} from '../../core/services';
+import {NotificationActions} from '../../redux/actions/notification.actions';
+import {AddonEntity} from '../../shared/entity/AddonEntity';
 import {ClusterEntity, getClusterProvider, MasterVersion} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {EventEntity} from '../../shared/entity/EventEntity';
@@ -22,7 +24,6 @@ import {NodeService} from '../services/node.service';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/cluster-delete-confirmation.component';
 import {ConfigurePodSecurityComponent} from './configure-pod-security/configure-pod-security.component';
 import {EditClusterComponent} from './edit-cluster/edit-cluster.component';
-import {EditProviderSettingsComponent} from './edit-provider-settings/edit-provider-settings.component';
 import {EditSSHKeysComponent} from './edit-sshkeys/edit-sshkeys.component';
 import {RevokeTokenComponent} from './revoke-token/revoke-token.component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/share-kubeconfig.component';
@@ -48,6 +49,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   config: Config = {share_kubeconfig: false};
   projectID: string;
   events: EventEntity[] = [];
+  addons: AddonEntity[] = [];
   upgrades: MasterVersion[] = [];
   private _unsubscribe: Subject<any> = new Subject();
   private _currentGroupConfig: GroupConfig;
@@ -108,17 +110,20 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                   .concat(
                       this._canReloadNodes() ?
                           [
+                            this._clusterService.addons(this.projectID, this.cluster.id, this.datacenter.metadata.name),
                             this._clusterService.nodes(this.projectID, this.cluster.id, this.datacenter.metadata.name),
                             this._api.getNodeDeployments(this.cluster.id, this.datacenter.metadata.name, this.projectID)
                           ] :
-                          [of([]), of([])],
+                          [of([]), of([]), of([])],
                   );
 
           return combineLatest(reload$);
         }))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(
-            ([upgrades, nodes, nodeDeployments]: [MasterVersion[], NodeEntity[], NodeDeploymentEntity[]]) => {
+            ([upgrades, addons, nodes,
+              nodeDeployments]: [MasterVersion[], AddonEntity[], NodeEntity[], NodeDeploymentEntity[]]) => {
+              this.addons = addons;
               this.nodes = nodes;
               this.nodeDeployments = nodeDeployments;
               this.isNodeDeploymentLoadFinished = true;
@@ -201,12 +206,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     return !this._currentGroupConfig || this._currentGroupConfig.clusters.edit;
   }
 
-  editProviderSettings(): void {
-    const modal = this._matDialog.open(EditProviderSettingsComponent);
-    modal.componentInstance.cluster = this.cluster;
-    modal.componentInstance.datacenter = this.datacenter;
-  }
-
   editCluster(): void {
     const modal = this._matDialog.open(EditClusterComponent);
     modal.componentInstance.cluster = this.cluster;
@@ -246,6 +245,24 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;
     dialogRef.componentInstance.projectID = this.projectID;
+  }
+
+  handleAddonCreation(addon: AddonEntity): void {
+    this._clusterService.createAddon(addon, this.projectID, this.cluster.id, this.datacenter.metadata.name)
+        .pipe(first())
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(() => {
+          NotificationActions.success(`The ${addon.name} addon has been added to the ${this.cluster.name} cluster`);
+        });
+  }
+
+  handleAddonDeletion(addon: AddonEntity): void {
+    this._clusterService.deleteAddon(addon.id, this.projectID, this.cluster.id, this.datacenter.metadata.name)
+        .pipe(first())
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(() => {
+          NotificationActions.success(`The ${addon.name} addon has been removed from the ${this.cluster.name} cluster`);
+        });
   }
 
   ngOnDestroy(): void {

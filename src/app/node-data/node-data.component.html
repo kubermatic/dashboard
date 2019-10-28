@@ -55,6 +55,7 @@
                             [seedDCName]="seedDCName"
                             [nodeData]="nodeData"></kubermatic-aws-node-data>
 
+
   <kubermatic-digitalocean-node-data *ngIf="cluster.spec.cloud.digitalocean"
                                      [cloudSpec]="cluster.spec.cloud"
                                      [nodeData]="nodeData"
@@ -156,17 +157,17 @@
   </div>
 </form>
 
-<kubermatic-openstack-options *ngIf="cluster.spec.cloud.openstack"
-                              [nodeData]="nodeData"
-                              [cloudSpec]="cluster.spec.cloud"></kubermatic-openstack-options>
-<kubermatic-vsphere-options *ngIf="cluster.spec.cloud.vsphere"
-                            [nodeData]="nodeData"
-                            [cloudSpec]="cluster.spec.cloud"></kubermatic-vsphere-options>
-<kubermatic-digitalocean-options *ngIf="cluster.spec.cloud.digitalocean && !hideOptional"
-                                 [nodeData]="nodeData"></kubermatic-digitalocean-options>
+<!-- Extended Node Options -->
+<ng-container *ngIf="!isInWizard">
+  <kubermatic-node-data-options [nodeData]="nodeData"
+                                [cloudSpec]="cluster.spec.cloud"
+                                [isInWizard]="isInWizard"></kubermatic-node-data-options>
+</ng-container>
 
+<!-- Node Labels & Taints -->
 <km-label-form title="Node Labels"
-               [(labels)]="nodeData.spec.labels"></km-label-form>
+               [(labels)]="nodeData.spec.labels"
+               [asyncKeyValidators]=asyncLabelValidators></km-label-form>
 
 <km-taint-form title="Node Taints"
                [(taints)]="nodeData.spec.taints"></km-taint-form>

@@ -1,5 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {EMPTY, iif, Subject} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
 
@@ -9,7 +10,6 @@ import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {AWSSize, AWSSubnet} from '../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
-import {objectFromForm} from '../../shared/utils/common-utils';
 
 @Component({
   selector: 'kubermatic-aws-node-data',
@@ -26,8 +26,6 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   sizes: AWSSize[] = [];
   diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
   form: FormGroup;
-  tags: FormArray;
-  hideOptional = true;
   subnetIds: AWSSubnet[] = [];
 
   private _subnetMap: {[type: string]: AWSSubnet[]} = {};
@@ -42,26 +40,11 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       private readonly _apiService: ApiService, private readonly _dcService: DatacenterService) {}
 
   ngOnInit(): void {
-    const isInEdit = !!this.nodeData.name;  // Existing node deployment will always have assigned name.
-    const assignPublicIP = isInEdit ? this.nodeData.spec.cloud.aws.assignPublicIP : true;  // Default to true.
-
-    const tagList = new FormArray([]);
-    for (const i in this.nodeData.spec.cloud.aws.tags) {
-      if (this.nodeData.spec.cloud.aws.tags.hasOwnProperty(i)) {
-        tagList.push(new FormGroup({
-          key: new FormControl(i),
-          value: new FormControl(this.nodeData.spec.cloud.aws.tags[i]),
-        }));
-      }
-    }
-
     this.form = new FormGroup({
       size: new FormControl({value: this.nodeData.spec.cloud.aws.instanceType, disabled: true}, Validators.required),
       disk_size: new FormControl(this.nodeData.spec.cloud.aws.diskSize, Validators.required),
       disk_type: new FormControl(this.nodeData.spec.cloud.aws.volumeType, Validators.required),
       ami: new FormControl(this.nodeData.spec.cloud.aws.ami),
-      assignPublicIP: new FormControl(assignPublicIP),
-      tags: tagList,
       subnetID: new FormControl(this.nodeData.spec.cloud.aws.subnetID, Validators.required),
     });
 
@@ -76,8 +59,9 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
     });
 
-    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.hideOptional = data.hideOptional;
+    this._addNodeService.nodeProviderDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.nodeData.spec.cloud.aws = data.spec.aws;
+      this.nodeData.valid = data.valid;
     });
 
     this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
@@ -114,6 +98,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   clearSubnetId(): void {
     this.subnetIds = [];
     this._subnetMap = {};
+
     this.form.controls.subnetID.setValue('');
     this.checkSubnetState();
   }
@@ -125,32 +110,15 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
           instanceType: this.form.controls.size.value,
           diskSize: this.form.controls.disk_size.value,
           ami: this.form.controls.ami.value,
-          tags: objectFromForm(this.form.controls.tags),
           volumeType: this.form.controls.disk_type.value,
           subnetID: this.form.controls.subnetID.value,
           availabilityZone: this.getAZFromSubnet(this.form.controls.subnetID.value),
-          assignPublicIP: this.form.controls.assignPublicIP.value,
+          assignPublicIP: this.nodeData.spec.cloud.aws.assignPublicIP,
+          tags: this.nodeData.spec.cloud.aws.tags,
         },
       },
       valid: this.form.valid,
     };
-  }
-
-  getTagForm(form): any {
-    return form.get('tags').controls;
-  }
-
-  addTag(): void {
-    this.tags = this.form.get('tags') as FormArray;
-    this.tags.push(new FormGroup({
-      key: new FormControl(''),
-      value: new FormControl(''),
-    }));
-  }
-
-  deleteTag(index: number): void {
-    const arrayControl = this.form.get('tags') as FormArray;
-    arrayControl.removeAt(index);
   }
 
   ngOnDestroy(): void {
@@ -238,7 +206,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
                 this._noSubnets = true;
               } else {
                 if (this.nodeData.spec.cloud.aws.subnetID === '') {
-                  this.form.controls.subnetID.setValue(this._subnetMap[this.subnetAZ[0]][0].id);
+                  this.form.controls.subnetID.setValue(this._getDefaultSubnet(subnets));
                 }
                 this._noSubnets = false;
               }
@@ -253,6 +221,15 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
             () => {
               this._loadingSubnetIds = false;
             });
+  }
+
+  private _getDefaultSubnet(subnets: AWSSubnet[]): string {
+    if (subnets.length < 1) {
+      return '';
+    }
+
+    const defaultSubnet = subnets.find(s => s.isDefaultSubnet);
+    return defaultSubnet ? defaultSubnet.id : subnets[0].id;
   }
 
   fillSubnetMap(subnets: AWSSubnet[]): void {

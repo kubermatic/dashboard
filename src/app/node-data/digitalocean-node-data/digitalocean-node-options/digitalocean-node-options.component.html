@@ -1,0 +1,29 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      *ngIf="!hideOptional">
+  <mat-card-header *ngIf="!isInWizard">
+    <mat-card-title>DigitalOcean Options</mat-card-title>
+  </mat-card-header>
+  <div fxFlex="100%">
+    <div class="km-node-options">
+      <mat-checkbox id="backups"
+                    formControlName="backups">Backups</mat-checkbox>
+    </div>
+    <div class="km-node-options">
+      <mat-checkbox id="ipv6"
+                    formControlName="ipv6">IPv6</mat-checkbox>
+    </div>
+    <div class="km-node-options">
+      <mat-checkbox id="monitoring"
+                    formControlName="monitoring">Monitoring</mat-checkbox>
+    </div>
+    <mat-form-field class="km-node-tags">
+      <mat-label>Tags</mat-label>
+      <textarea matInput
+                id="tags"
+                formControlName="tags"
+                matTextareaAutosize></textarea>
+      <mat-hint>Seperate tags with commas.</mat-hint>
+    </mat-form-field>
+  </div>
+</form>

@@ -8,7 +8,6 @@ export enum Group {
 }
 
 export function reloadUsers(): void {
-  MembersPage.waitForRefresh();
   ClustersPage.visit();
   MembersPage.visit();
 }
