@@ -1,23 +1,21 @@
-<mat-card class="white"
-          style="margin-bottom: 20px">
-  <mat-card-header style="margin-left: 20px; margin-bottom: 20px">
+<mat-card class="white">
+  <mat-card-header>
     <mat-card-title>Settings</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <div *ngIf="!!settings">
-      <div fxFlex="25"
-           style="margin-left: 10px">Items per page: {{settings.itemsPerPage}}</div>
-      <mat-slider [max]="25"
-                  [min]="5"
-                  [step]="5"
-                  [(value)]="settings.itemsPerPage"
-                  (change)="onSettingsChange()"
-                  fxFlex="25"
-                  color="primary"
-                  fxFlexAlign=" start"></mat-slider>
-      <km-settings-status [isSaved]="settings.itemsPerPage === _apiSettings.itemsPerPage"></km-settings-status>
+      <div>
+        <div fxFlex="25">Items per page: {{settings.itemsPerPage}}</div>
+        <mat-slider [max]="25"
+                    [min]="5"
+                    [step]="5"
+                    [(value)]="settings.itemsPerPage"
+                    (change)="onSettingsChange()"
+                    fxFlex="72"
+                    color="primary"
+                    fxFlexAlign=" start"></mat-slider>
+        <km-settings-status [isSaved]="settings.itemsPerPage === _apiSettings.itemsPerPage"></km-settings-status>
+      </div>
     </div>
   </mat-card-content>
 </mat-card>
-
-<!--TODO: Styling, sidebar.-->

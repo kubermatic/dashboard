@@ -1,11 +1,10 @@
-.km-theme-default {
-  background: lightskyblue;
-}
+@import "../../../assets/css/colors";
+@import "../../../assets/css/variables";
 
-.km-theme-dark {
-  background: black;
-}
+.mat-card {
+  padding: (3.75 * $baseline-grid) (7 * $baseline-grid);
 
-.km-theme-comic-sans {
-  background: hotpink;
+  .mat-card-header {
+    margin-bottom: 2 * $baseline-grid;
+  }
 }

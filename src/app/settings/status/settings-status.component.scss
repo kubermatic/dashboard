@@ -2,6 +2,7 @@
 @import "../../../assets/css/variables";
 
 .km-settings-status-container {
+  left: 2 * $baseline-grid;
   position: relative;
   top: .4 * $baseline-grid;
 
