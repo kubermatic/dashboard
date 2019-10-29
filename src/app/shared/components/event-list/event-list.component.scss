@@ -17,6 +17,10 @@
 mat-card-header {
   padding: 0 !important;
   cursor: pointer;
+
+  .mat-card-title {
+    padding: 8px 0 16px !important;
+  }
 }
 
 .km-toggled-events {
