@@ -26,13 +26,12 @@
         <mat-checkbox formControlName="auditLogging">
           Audit Logging
         </mat-checkbox>
+        <km-label-form title="Labels"
+                       [(labels)]="labels"
+                       [asyncKeyValidators]=asyncLabelValidators
+                       formControlName="labels"></km-label-form>
       </form>
-
       <kubermatic-edit-provider-settings [cluster]="cluster"></kubermatic-edit-provider-settings>
-
-      <km-label-form title="Labels"
-                     [(labels)]="labels"
-                     [asyncKeyValidators]="asyncLabelValidators"></km-label-form>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>

@@ -52,6 +52,8 @@ describe('AddProjectDialogComponent', () => {
   beforeEach(async(() => {
     fixture = TestBed.createComponent(AddProjectDialogComponent);
     component = fixture.componentInstance;
+    component.labels = {};
+    component.asyncLabelValidators = [];
     fixture.detectChanges();
   }));
 
@@ -60,7 +62,7 @@ describe('AddProjectDialogComponent', () => {
      }));
 
   it('should call createProject method', fakeAsync(() => {
-       component.addProjectForm.controls.name.patchValue('new-project-name');
+       component.form.controls.name.patchValue('new-project-name');
        component.addProject();
        tick();
 

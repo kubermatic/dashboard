@@ -1,0 +1,25 @@
+<div id="km-revoke-token-dialog">
+  <km-dialog-title title="Revoke Token"></km-dialog-title>
+  <mat-dialog-content>
+    <div class="mat-dialog-content">
+      <button id="km-revoke-token-dialog-revoke-admin-btn"
+              mat-flat-button
+              color="alternative"
+              (click)="revokeAdminToken()"
+              [disabled]="!isRevokeAdminTokenEnabled">Revoke Admin Token</button>
+
+      <button id="km-revoke-token-dialog-revoke-viewer-btn"
+              mat-flat-button
+              color="alternative"
+              (click)="revokeViewerToken()"
+              [disabled]="!isRevokeViewerTokenEnabled">Revoke Viewer Token</button>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button id="km-revoke-token-close-btn"
+            mat-flat-button
+            mat-dialog-close>
+      Close
+    </button>
+  </mat-dialog-actions>
+</div>

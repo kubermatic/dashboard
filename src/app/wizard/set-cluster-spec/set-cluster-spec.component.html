@@ -105,10 +105,12 @@
             </i>
           </div>
         </div>
+        <km-label-form title="Labels"
+                       [(labels)]="labels"
+                       [asyncKeyValidators]=asyncLabelValidators
+                       formControlName="labels"
+                       fxFlex="100"></km-label-form>
       </form>
-      <km-label-form title="Labels"
-                     [(labels)]="labels"
-                     [asyncKeyValidators]=asyncLabelValidators></km-label-form>
     </mat-card-content>
   </mat-card>
 </div>
