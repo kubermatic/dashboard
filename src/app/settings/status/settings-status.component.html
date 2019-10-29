@@ -1,7 +1,7 @@
 <div class="km-settings-status-container">
   <i class="km-icon-running"
      [@fadeInOut]="isSaveConfirmationVisible"></i>
-  <mat-spinner *ngIf="!isSaved"
+  <mat-spinner [@fadeInOut]="!isSaved"
                color="accent"
                class="km-spinner"
                [diameter]="22"></mat-spinner>
