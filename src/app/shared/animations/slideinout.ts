@@ -10,5 +10,19 @@ export const SlideInOut = trigger('slideInOut', [
           overflow: 'hidden',
           height: '0px',
         })),
-  transition('true => false', animate('400ms ease-in-out')), transition('false => true', animate('400ms ease-in-out'))
+  transition('true => false', animate('400ms ease-in-out')),
+  transition('false => true', animate('400ms ease-in-out')),
+]);
+
+export const fadeOut = trigger('fadeOut', [
+  state('true', style({
+          overflow: 'hidden',
+          height: '*',
+        })),
+  state('false', style({
+          opacity: '0',
+          overflow: 'hidden',
+        })),
+  transition('true => false', animate('800ms ease-in-out')),
+  transition('false => true', animate('800ms ease-in-out')),
 ]);

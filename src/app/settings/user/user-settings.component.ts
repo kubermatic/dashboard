@@ -7,7 +7,6 @@ import {SettingsService} from '../../core/services/settings/settings.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
 import {UserSettings} from '../../shared/entity/MemberEntity';
 
-
 @Component({
   selector: 'kubermatic-user-settings',
   templateUrl: 'user-settings.component.html',

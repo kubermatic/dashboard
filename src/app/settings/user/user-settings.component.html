@@ -3,7 +3,6 @@
   <mat-card-header style="margin-left: 20px; margin-bottom: 20px">
     <mat-card-title>Settings</mat-card-title>
   </mat-card-header>
-
   <mat-card-content>
     <div *ngIf="!!settings">
       <div fxFlex="25"
@@ -16,10 +15,7 @@
                   fxFlex="25"
                   color="primary"
                   fxFlexAlign=" start"></mat-slider>
-      <mat-spinner *ngIf="settings.itemsPerPage !== _apiSettings.itemsPerPage"
-                   color="accent"
-                   class="km-spinner"
-                   [diameter]="25"></mat-spinner>
+      <km-settings-status [isSaved]="settings.itemsPerPage === _apiSettings.itemsPerPage"></km-settings-status>
     </div>
   </mat-card-content>
 </mat-card>

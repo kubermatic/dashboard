@@ -1,0 +1,20 @@
+@import "../../../assets/css/colors";
+@import "../../../assets/css/variables";
+
+.km-settings-status-container {
+  position: relative;
+  top: .4 * $baseline-grid;
+
+  i {
+    position: absolute;
+    top: 1.5 * $baseline-grid;
+    height: 3 * $baseline-grid;
+  }
+
+  mat-spinner {
+    position: absolute;
+    top: 5 * $baseline-grid;
+    left: -.5 * $baseline-grid;
+    height: 3 * $baseline-grid;
+  }
+}
