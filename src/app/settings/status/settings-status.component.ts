@@ -1,16 +1,16 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {fadeOut} from '../../shared/animations/slideinout';
+import {fadeInOut} from '../../shared/animations/fade';
 
 @Component({
   selector: 'km-settings-status',
   templateUrl: './settings-status.component.html',
   styleUrls: ['./settings-status.component.scss'],
-  animations: [fadeOut],
+  animations: [fadeInOut],
 })
 
 export class SettingsStatusComponent implements OnChanges {
   @Input() isSaved = true;
-  @Input() confirmationTimeout = 2000;
+  @Input() confirmationTimeout = 3000;
   isSaveConfirmationVisible = false;
 
   ngOnChanges(changes: SimpleChanges): void {

@@ -1,7 +1,6 @@
 import {Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angular/core';
 
 import {AbstractControl, AsyncValidatorFn, FormArray, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {SlideInOut} from '../../animations/slideinout';
 import {LabelFormValidators} from '../../validators/label-form.validators';
 
 @Component({
@@ -20,7 +19,6 @@ import {LabelFormValidators} from '../../validators/label-form.validators';
       multi: true,
     }
   ],
-  animations: [SlideInOut]
 })
 export class LabelFormComponent implements OnInit {
   @Input() title = 'Labels';
