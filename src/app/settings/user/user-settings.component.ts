@@ -1,4 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
@@ -18,7 +19,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _settingsService: SettingsService) {}
+  constructor(private readonly _settingsService: SettingsService, private readonly _router: Router) {}
 
   ngOnInit(): void {
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
@@ -47,5 +48,9 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
 
   onSettingsChange(): void {
     this._settingsChange.next();
+  }
+
+  return(): void {
+    this._router.navigate(['/projects']);
   }
 }
