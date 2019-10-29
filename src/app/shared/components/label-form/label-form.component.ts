@@ -1,6 +1,5 @@
 import {Component, DoCheck, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {AbstractControl, AsyncValidator, AsyncValidatorFn, ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_ASYNC_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validators} from '@angular/forms';
-import {AbstractControl, AsyncValidatorFn, FormArray, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Observable, of, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
