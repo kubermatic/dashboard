@@ -7,6 +7,7 @@ import {ClusterService, DatacenterService, ProjectService, WizardService} from '
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {ClusterEntity, MasterVersion} from '../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../shared/entity/DatacenterEntity';
 import {OperatingSystemSpec} from '../shared/entity/NodeEntity';
 import {NodeData, NodeProviderData} from '../shared/model/NodeSpecChange';
 import {ClusterUtils} from '../shared/utils/cluster-utils/cluster-utils';
@@ -22,6 +23,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() existingNodesCount: number;
   @Input() isInWizard = false;
+  @Input() seedDc: DataCenterEntity;
   isNameDisabled: boolean;
   projectId: string;
   seedDCName: string;
@@ -38,6 +40,9 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       private readonly _clusterService: ClusterService) {}
 
   ngOnInit(): void {
+    if (!!this.seedDc) {
+      this.seedDCName = this.seedDc.metadata.name;
+    }
     const initialKubeletVersion = this.nodeData.spec.versions.kubelet;
     this._project.selectedProject.pipe(takeUntil(this._unsubscribe)).subscribe(project => this.projectId = project.id);
     this.isNameDisabled = this.nodeData.name && this.nodeData.name.length > 0 && !this.isInWizard;
