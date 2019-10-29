@@ -31,7 +31,8 @@
                        [asyncKeyValidators]=asyncLabelValidators
                        formControlName="labels"></km-label-form>
       </form>
-      <kubermatic-edit-provider-settings [cluster]="cluster"></kubermatic-edit-provider-settings>
+      <kubermatic-edit-provider-settings [cluster]="cluster"
+                                         *ngIf="!cluster.spec.cloud.bringyourown"></kubermatic-edit-provider-settings>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
