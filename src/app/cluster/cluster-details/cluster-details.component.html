@@ -62,8 +62,7 @@
       <div class="km-provider-menu">
         <button mat-icon-button
                 class="km-provider-menu-btn"
-                [matMenuTriggerFor]="menu"
-                *ngIf="!cluster.spec.cloud.bringyourown">
+                [matMenuTriggerFor]="menu">
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu"
@@ -75,7 +74,8 @@
           </button>
           <button mat-menu-item
                   (click)="editSSHKeys()"
-                  [disabled]="!isSSHKeysEditEnabled()">
+                  [disabled]="!isSSHKeysEditEnabled()"
+                  *ngIf="!cluster.spec.cloud.bringyourown">
             <span>Manage SSH keys</span>
           </button>
 
