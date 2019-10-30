@@ -8,6 +8,7 @@ import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService, Auth, ClusterService, DatacenterService, ProjectService, UserService} from '../../../core/services';
+import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
@@ -21,6 +22,7 @@ import {AuthMockService} from '../../../testing/services/auth-mock.service';
 import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
 import {NodeMockService} from '../../../testing/services/node-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
+import {SettingsMockService} from '../../../testing/services/settings-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
 import {NodeService} from '../../services/node.service';
 import {NodeListComponent} from '../node-list/node-list.component';
@@ -71,6 +73,7 @@ describe('NodeDeploymentDetailsComponent', () => {
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             {provide: NodeService, useClass: NodeMockService},
+            {provide: SettingsService, useClass: SettingsMockService},
             GoogleAnalyticsService,
           ],
         })
