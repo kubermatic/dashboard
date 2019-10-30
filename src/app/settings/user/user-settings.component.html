@@ -1,6 +1,13 @@
 <div fxLayout>
   <div fxFlex
        align="right">
+    <button id="km-delete-cluster-btn"
+            mat-flat-button
+            color="tertiary"
+            (click)="restoreDefaults()">
+      Restore Defaults
+    </button>
+    <div fxFlex></div>
     <button mat-flat-button
             type="button"
             (click)="return()">

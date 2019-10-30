@@ -28,6 +28,10 @@ export class SettingsService {
     return this._userSettings$;
   }
 
+  get defaultUserSettings(): UserSettings {
+    return DEFAULT_USER_SETTINGS;
+  }
+
   private _getUserSettings(defaultOnError = false): Observable<UserSettings> {
     const url = `${this.restRoot}/me/settings`;
     const observable = this._http.get<UserSettings>(url);

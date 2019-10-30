@@ -50,6 +50,11 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     this._settingsChange.next();
   }
 
+  restoreDefaults(): void {
+    this.settings = this._settingsService.defaultUserSettings;
+    this._settingsChange.next();
+  }
+
   return(): void {
     this._router.navigate(['/projects']);
   }
