@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormArray, FormControl, FormGroup} from '@angular/forms';
+import {FormControl, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../core/services';
@@ -19,7 +19,6 @@ export class AzureNodeOptionsComponent implements OnInit, OnDestroy {
 
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.NodeDeployment)];
   form: FormGroup;
-  tags: FormArray;
   datacenter: DataCenterEntity;
   hideOptional = true;
 

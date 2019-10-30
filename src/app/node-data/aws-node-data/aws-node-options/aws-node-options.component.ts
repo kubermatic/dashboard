@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormArray, FormControl, FormGroup} from '@angular/forms';
+import {FormControl, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -21,7 +21,6 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.NodeDeployment)];
   hideOptional = true;
   form: FormGroup;
-  tags: FormArray;
 
   private _unsubscribe = new Subject<void>();
 
