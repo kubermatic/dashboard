@@ -1,35 +1,4 @@
-<form [formGroup]="form"
-      fxLayout="column"
-      *ngIf="!hideOptional">
-  <div [ngClass]="isInWizard ? 'km-form-group-tags-header km-tags-in-wizard' : 'km-form-group-tags-header'">
-    Tags
-    <i class="fa fa-plus"
-       aria-hidden="true"
-       (click)="addTag()"></i>
-  </div>
-  <div class="km-form-group-tags">
-    <div fxFlex="100%"
-         *ngFor="let tag of getTagForm(form); let i=index"
-         formArrayName="tags">
-      <div class="km-form-group-tags-inner"
-           [formGroupName]="i">
-        <mat-form-field fxFlex="42%">
-          <mat-label>Key</mat-label>
-          <input matInput
-                 formControlName="key"
-                 autocomplete="off">
-        </mat-form-field>
-        <span class="km-seperator">:</span>
-        <mat-form-field fxFlex="42%">
-          <mat-label>Value</mat-label>
-          <input matInput
-                 formControlName="value"
-                 autocomplete="off">
-        </mat-form-field>
-        <i class="fa fa-times"
-           aria-hidden="true"
-           (click)="deleteTag(i)"></i>
-      </div>
-    </div>
-  </div>
-</form>
+<km-label-form *ngIf="!hideOptional"
+               title="Provider Tags"
+               [(labels)]="nodeData.spec.cloud.openstack.tags"
+               [asyncKeyValidators]=asyncLabelValidators></km-label-form>
