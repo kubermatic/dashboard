@@ -5,8 +5,9 @@ import {takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
+import {ResourceType} from '../../../shared/entity/LabelsEntity';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
-import {addKeyValuePair, objectFromForm} from '../../../shared/utils/common-utils';
+import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
 
 @Component({
   selector: 'kubermatic-aws-node-options',
@@ -17,6 +18,7 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() isInWizard: boolean;
 
+  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.NodeDeployment)];
   hideOptional = true;
   form: FormGroup;
   tags: FormArray;
@@ -29,23 +31,8 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
     const isInEdit = !!this.nodeData.name;  // Existing node deployment will always have assigned name.
     const assignPublicIP = isInEdit ? this.nodeData.spec.cloud.aws.assignPublicIP : true;  // Default to true.
 
-    const tagList = new FormArray([]);
-    for (const i in this.nodeData.spec.cloud.aws.tags) {
-      if (this.nodeData.spec.cloud.aws.tags.hasOwnProperty(i)) {
-        tagList.push(new FormGroup({
-          key: new FormControl(i),
-          value: new FormControl(this.nodeData.spec.cloud.aws.tags[i]),
-        }));
-      }
-    }
-
-    if (tagList.length === 0) {
-      tagList.push(addKeyValuePair());
-    }
-
     this.form = new FormGroup({
       assignPublicIP: new FormControl(assignPublicIP),
-      tags: tagList,
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -75,25 +62,11 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
           subnetID: this.nodeData.spec.cloud.aws.subnetID,
           availabilityZone: this.nodeData.spec.cloud.aws.availabilityZone,
           assignPublicIP: this.form.controls.assignPublicIP.value,
-          tags: objectFromForm(this.form.controls.tags),
+          tags: this.nodeData.spec.cloud.aws.tags,
         },
       },
       valid: this.nodeData.valid,
     };
-  }
-
-  getTagForm(form): any {
-    return form.get('tags').controls;
-  }
-
-  addTag(): void {
-    this.tags = this.form.get('tags') as FormArray;
-    this.tags.push(addKeyValuePair());
-  }
-
-  deleteTag(index: number): void {
-    const arrayControl = this.form.get('tags') as FormArray;
-    arrayControl.removeAt(index);
   }
 
   ngOnDestroy(): void {
