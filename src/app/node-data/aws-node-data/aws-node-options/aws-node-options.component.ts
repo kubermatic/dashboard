@@ -16,7 +16,6 @@ import {AsyncValidators} from '../../../shared/validators/async-label-form.valid
 
 export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
-  @Input() isInWizard: boolean;
 
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.NodeDeployment)];
   hideOptional = true;

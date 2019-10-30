@@ -3,7 +3,6 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../core/services';
-import {CloudSpec} from '../../../shared/entity/ClusterEntity';
 import {ResourceType} from '../../../shared/entity/LabelsEntity';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
@@ -16,8 +15,6 @@ import {AsyncValidators} from '../../../shared/validators/async-label-form.valid
 
 export class OpenstackNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
-  @Input() cloudSpec: CloudSpec;
-  @Input() isInWizard: boolean;
 
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.NodeDeployment)];
   hideOptional = true;
