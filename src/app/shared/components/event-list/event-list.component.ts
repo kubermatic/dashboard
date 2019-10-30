@@ -1,5 +1,7 @@
-import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {EventEntity} from '../../entity/EventEntity';
@@ -9,7 +11,7 @@ import {EventEntity} from '../../entity/EventEntity';
   templateUrl: './event-list.component.html',
   styleUrls: ['./event-list.component.scss'],
 })
-export class EventListComponent implements OnInit, OnChanges {
+export class EventListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() events: EventEntity[] = [];
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -19,6 +21,7 @@ export class EventListComponent implements OnInit, OnChanges {
   dataSource = new MatTableDataSource<EventEntity>();
   displayedColumns: string[] =
       ['status', 'message', 'involvedObjectName', 'involvedObjectKind', 'count', 'lastTimestamp'];
+  private _unsubscribe = new Subject<void>();
 
   constructor(private readonly _settingsService: SettingsService) {}
 
@@ -30,7 +33,7 @@ export class EventListComponent implements OnInit, OnChanges {
     this.sort.active = 'lastTimestamp';
     this.sort.direction = 'desc';
 
-    this._settingsService.userSettings.subscribe(settings => {
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
       this.dataSource.paginator = this.paginator;  // Force refresh.
     });
@@ -38,6 +41,11 @@ export class EventListComponent implements OnInit, OnChanges {
 
   ngOnChanges(): void {
     this.dataSource.data = this.events;
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getTypeIcon(event: EventEntity): string {
