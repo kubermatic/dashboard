@@ -1,6 +1,7 @@
 import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 
+import {SettingsService} from '../../../core/services/settings/settings.service';
 import {EventEntity} from '../../entity/EventEntity';
 
 @Component({
@@ -19,12 +20,20 @@ export class EventListComponent implements OnInit, OnChanges {
   displayedColumns: string[] =
       ['status', 'message', 'involvedObjectName', 'involvedObjectKind', 'count', 'lastTimestamp'];
 
+  constructor(private readonly _settingsService: SettingsService) {}
+
   ngOnInit(): void {
     this.dataSource.data = this.events;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+
     this.sort.active = 'lastTimestamp';
     this.sort.direction = 'desc';
+
+    this._settingsService.userSettings.subscribe(settings => {
+      this.paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = this.paginator;  // Force refresh.
+    });
   }
 
   ngOnChanges(): void {
