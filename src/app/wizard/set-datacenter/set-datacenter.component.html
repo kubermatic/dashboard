@@ -10,7 +10,7 @@
       <mat-button-toggle *ngFor="let datacenter of datacenters;"
                          value="{{datacenter.metadata.name}}"
                          (click)="this.changeClusterDatacenter()">
-        <span class="flag-icon flag-icon-{{ datacenter.spec.country.toLowerCase() }}">
+        <span class="flag-icon flag-icon-{{datacenter.spec.country.toLowerCase()}}">
         </span>
         <div class="km-location"
              [innerHtml]="getLocationName(datacenter)"></div>
