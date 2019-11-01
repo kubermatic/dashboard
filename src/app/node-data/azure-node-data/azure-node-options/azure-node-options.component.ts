@@ -5,9 +5,7 @@ import {takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {ResourceType} from '../../../shared/entity/LabelsEntity';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
-import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
 
 @Component({
   selector: 'kubermatic-azure-node-options',
@@ -17,7 +15,6 @@ import {AsyncValidators} from '../../../shared/validators/async-label-form.valid
 export class AzureNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
 
-  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.NodeDeployment)];
   form: FormGroup;
   datacenter: DataCenterEntity;
   hideOptional = true;

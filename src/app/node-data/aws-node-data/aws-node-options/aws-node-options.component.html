@@ -6,6 +6,5 @@
                 formControlName="assignPublicIP">Assign Public IP</mat-checkbox>
 
   <km-label-form title="Provider Tags"
-                 [(labels)]="nodeData.spec.cloud.aws.tags"
-                 [asyncKeyValidators]=asyncLabelValidators></km-label-form>
+                 [(labels)]="nodeData.spec.cloud.aws.tags"></km-label-form>
 </form>

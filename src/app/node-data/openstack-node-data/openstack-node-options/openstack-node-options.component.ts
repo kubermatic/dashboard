@@ -3,9 +3,8 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../core/services';
-import {ResourceType} from '../../../shared/entity/LabelsEntity';
+import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
-import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
 
 @Component({
   selector: 'kubermatic-openstack-node-options',
@@ -16,16 +15,17 @@ import {AsyncValidators} from '../../../shared/validators/async-label-form.valid
 export class OpenstackNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
 
-  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.NodeDeployment)];
   hideOptional = true;
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _wizardService: WizardService) {}
+  constructor(private readonly _nodeDataService: NodeDataService, private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
     this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
     });
+
+    this._nodeDataService.changeNodeProviderData(this.getNodeProviderData());
   }
 
   ngOnDestroy(): void {
@@ -33,7 +33,7 @@ export class OpenstackNodeOptionsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getOsOptionsData(): NodeProviderData {
+  getNodeProviderData(): NodeProviderData {
     return {
       spec: {
         openstack: {
