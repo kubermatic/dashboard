@@ -21,9 +21,8 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "src/assets/css/_main.scss",
-              "node_modules/flag-icon-css/css/flag-icon.min.css",
-              "node_modules/swagger-ui/dist/swagger-ui.css"
+              "node_modules/swagger-ui/dist/swagger-ui.css",
+              "src/assets/css/_main.scss"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js"
@@ -127,8 +126,7 @@
               "node_modules/jquery/dist/jquery.js"
             ],
             "styles": [
-              "src/assets/css/_main.scss",
-              "node_modules/flag-icon-css/css/flag-icon.min.css"
+              "src/assets/css/_main.scss"
             ],
             "assets": [
               "src/assets",
