@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, shareReplay, switchMap} from 'rxjs/operators';
+import {catchError, map, shareReplay, switchMap} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {UserSettings} from '../../../shared/entity/MemberEntity';
@@ -23,6 +23,7 @@ export class SettingsService {
     if (!this._userSettings$) {
       this._userSettings$ = merge(this._refreshTimer$, this._settingsRefresh$)
                                 .pipe(switchMap(() => this._getUserSettings(true)))
+                                .pipe(map(settings => this._defaultUserSettings(settings)))
                                 .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this._userSettings$;
@@ -34,16 +35,7 @@ export class SettingsService {
     return defaultOnError ? observable.pipe(catchError(() => of(DEFAULT_USER_SETTINGS))) : observable;
   }
 
-  refreshUserSettings(): void {
-    this._settingsRefresh$.next();
-  }
-
-  patchUserSettings(patch: UserSettings): Observable<UserSettings> {
-    const url = `${this.restRoot}/me/settings`;
-    return this._http.patch<UserSettings>(url, patch);
-  }
-
-  defaultUserSettings(settings: UserSettings): UserSettings {
+  private _defaultUserSettings(settings: UserSettings): UserSettings {
     if (!settings) {
       return DEFAULT_USER_SETTINGS;
     }
@@ -53,5 +45,14 @@ export class SettingsService {
     });
 
     return settings;
+  }
+
+  refreshUserSettings(): void {
+    this._settingsRefresh$.next();
+  }
+
+  patchUserSettings(patch: UserSettings): Observable<UserSettings> {
+    const url = `${this.restRoot}/me/settings`;
+    return this._http.patch<UserSettings>(url, patch);
   }
 }
