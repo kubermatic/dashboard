@@ -23,6 +23,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      settings = this._settingsService.defaultUserSettings(settings);
       if (!_.isEqual(settings, this._apiSettings)) {
         if (this._apiSettings) {
           NotificationActions.success('Successfully applied external settings update');

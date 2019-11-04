@@ -28,10 +28,6 @@ export class SettingsService {
     return this._userSettings$;
   }
 
-  get defaultUserSettings(): UserSettings {
-    return DEFAULT_USER_SETTINGS;
-  }
-
   private _getUserSettings(defaultOnError = false): Observable<UserSettings> {
     const url = `${this.restRoot}/me/settings`;
     const observable = this._http.get<UserSettings>(url);
@@ -45,5 +41,17 @@ export class SettingsService {
   patchUserSettings(patch: UserSettings): Observable<UserSettings> {
     const url = `${this.restRoot}/me/settings`;
     return this._http.patch<UserSettings>(url, patch);
+  }
+
+  defaultUserSettings(settings: UserSettings): UserSettings {
+    if (!settings) {
+      return DEFAULT_USER_SETTINGS;
+    }
+
+    Object.keys(DEFAULT_USER_SETTINGS).forEach(key => {
+      settings[key] = settings[key] || DEFAULT_USER_SETTINGS[key];
+    });
+
+    return settings;
   }
 }
