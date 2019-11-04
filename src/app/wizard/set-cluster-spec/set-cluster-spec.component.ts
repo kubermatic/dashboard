@@ -7,9 +7,7 @@ import {AppConfigService} from '../../app-config.service';
 import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {ClusterEntity, MasterVersion} from '../../shared/entity/ClusterEntity';
-import {ResourceType} from '../../shared/entity/LabelsEntity';
 import {ClusterType, ClusterUtils} from '../../shared/utils/cluster-utils/cluster-utils';
-import {AsyncValidators} from '../../shared/validators/async-label-form.validator';
 
 @Component({
   selector: 'kubermatic-set-cluster-spec',
@@ -23,7 +21,6 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   clusterSpecForm: FormGroup;
   masterVersions: MasterVersion[] = [];
   defaultVersion: string;
-  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(

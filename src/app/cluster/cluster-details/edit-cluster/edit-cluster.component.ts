@@ -8,8 +8,6 @@ import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {ResourceType} from '../../../shared/entity/LabelsEntity';
-import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
 
 @Component({
   selector: 'kubermatic-edit-cluster',
@@ -21,7 +19,6 @@ export class EditClusterComponent implements OnInit {
   @Input() projectID: string;
   form: FormGroup;
   labels: object;
-  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
 
   constructor(
       private readonly _clusterService: ClusterService,

@@ -53,7 +53,6 @@ describe('AddProjectDialogComponent', () => {
     fixture = TestBed.createComponent(AddProjectDialogComponent);
     component = fixture.componentInstance;
     component.labels = {};
-    component.asyncLabelValidators = [];
     fixture.detectChanges();
   }));
 

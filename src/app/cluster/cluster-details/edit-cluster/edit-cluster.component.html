@@ -28,7 +28,6 @@
         </mat-checkbox>
         <km-label-form title="Labels"
                        [(labels)]="labels"
-                       [asyncKeyValidators]=asyncLabelValidators
                        formControlName="labels"></km-label-form>
       </form>
       <kubermatic-edit-provider-settings [cluster]="cluster"></kubermatic-edit-provider-settings>
@@ -38,7 +37,7 @@
     <button id="km-edit-cluster-dialog-edit-btn"
             mat-flat-button
             (click)="editCluster()"
-            [disabled]="!form.valid || !providerSettingsPatch.isValid">
+            [disabled]="!form.valid">
       Edit
     </button>
   </mat-dialog-actions>

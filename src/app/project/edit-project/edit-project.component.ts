@@ -5,9 +5,7 @@ import * as _ from 'lodash';
 
 import {ApiService} from '../../core/services';
 import {NotificationActions} from '../../redux/actions/notification.actions';
-import {ResourceType} from '../../shared/entity/LabelsEntity';
 import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
-import {AsyncValidators} from '../../shared/validators/async-label-form.validator';
 
 @Component({
   selector: 'kubermatic-edit-project',
@@ -17,7 +15,6 @@ export class EditProjectComponent implements OnInit {
   @Input() project: ProjectEntity;
   labels: object;
   form: FormGroup;
-  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Project)];
 
   constructor(private api: ApiService, private dialogRef: MatDialogRef<EditProjectComponent>) {}
 
