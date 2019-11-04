@@ -69,8 +69,9 @@ export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccess
     this.initialLabels = this.labels;
 
     // Setup labels form with label data.
-    if (Object.keys(LabelFormComponent.filterNullifiedKeys(this.labels)).length > 0) {
-      Object.keys(LabelFormComponent.filterNullifiedKeys(this.labels)).forEach(key => {
+    const filteredLabels = Object.keys(LabelFormComponent.filterNullifiedKeys(this.labels));
+    if (filteredLabels.length > 0) {
+      filteredLabels.forEach(key => {
         this._addLabel(key, this.labels[key]);
       });
     }
