@@ -23,6 +23,11 @@
           <mat-divider></mat-divider>
 
           <button mat-menu-item
+                  (click)="goToAccount()">
+            <span>Account</span>
+          </button>
+
+          <button mat-menu-item
                   id="km-navbar-logout-btn"
                   *ngIf="isAuthenticated()"
                   (click)="logout()">

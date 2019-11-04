@@ -1,0 +1,32 @@
+<div fxLayout>
+  <div fxFlex
+       align="right">
+    <button mat-flat-button
+            type="button"
+            (click)="return()">
+      Return
+    </button>
+  </div>
+</div>
+
+<mat-card class="white">
+  <mat-card-header>
+    <mat-card-title>Settings</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="!!settings">
+      <div>
+        <div fxFlex="25">Items per page: {{settings.itemsPerPage}}</div>
+        <mat-slider [max]="25"
+                    [min]="5"
+                    [step]="5"
+                    [(value)]="settings.itemsPerPage"
+                    (change)="onSettingsChange()"
+                    fxFlex="72"
+                    color="primary"
+                    fxFlexAlign=" start"></mat-slider>
+        <km-settings-status [isSaved]="settings.itemsPerPage === _apiSettings.itemsPerPage"></km-settings-status>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -37,4 +37,8 @@ export class NavigationComponent implements OnInit {
   getOIDCProviderURL(): string {
     return this._auth.getOIDCProviderURL();
   }
+
+  goToAccount(): void {
+    this._router.navigate(['account']);
+  }
 }

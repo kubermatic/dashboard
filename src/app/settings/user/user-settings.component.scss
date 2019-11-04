@@ -1,0 +1,11 @@
+@import "../../../assets/css/colors";
+@import "../../../assets/css/variables";
+
+.mat-card {
+  margin-top: 3 * $baseline-grid;
+  padding: (3.75 * $baseline-grid) (7 * $baseline-grid);
+
+  .mat-card-header {
+    margin-bottom: 2 * $baseline-grid;
+  }
+}

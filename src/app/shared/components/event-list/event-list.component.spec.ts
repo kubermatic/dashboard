@@ -2,9 +2,12 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
-import {EventEntity} from '../../entity/EventEntity';
 
+import {SettingsService} from '../../../core/services/settings/settings.service';
+import {SettingsMockService} from '../../../testing/services/settings-mock.service';
+import {EventEntity} from '../../entity/EventEntity';
 import {SharedModule} from '../../shared.module';
+
 import {EventListComponent} from './event-list.component';
 
 const modules: any[] = [
@@ -22,6 +25,9 @@ describe('EventListComponent', () => {
     TestBed
         .configureTestingModule({
           imports: [...modules],
+          providers: [
+            {provide: SettingsService, useClass: SettingsMockService},
+          ],
         })
         .compileComponents();
   });

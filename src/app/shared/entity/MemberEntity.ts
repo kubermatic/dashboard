@@ -4,7 +4,14 @@ export class MemberEntity {
   email: string;
   id: string;
   name: string;
+  settings?: UserSettings;
   projects: MemberProject[];
+}
+
+export class UserSettings {
+  selectedTheme?: string;
+  selextedProjectId?: string;
+  itemsPerPage?: number;
 }
 
 export class MemberProject {

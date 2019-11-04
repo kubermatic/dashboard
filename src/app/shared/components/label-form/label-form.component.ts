@@ -3,7 +3,6 @@ import {AbstractControl, AsyncValidator, AsyncValidatorFn, ControlValueAccessor,
 import {Observable, of, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {SlideInOut} from '../../animations/slideinout';
 import {LabelFormValidators} from '../../validators/label-form.validators';
 
 @Component({
@@ -22,7 +21,6 @@ import {LabelFormValidators} from '../../validators/label-form.validators';
       multi: true,
     }
   ],
-  animations: [SlideInOut]
 })
 export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccessor, AsyncValidator, DoCheck {
   @Input() title = 'Labels';

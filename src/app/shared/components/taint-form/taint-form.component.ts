@@ -1,6 +1,5 @@
 import {Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {SlideInOut} from '../../animations/slideinout';
 import {Taint} from '../../entity/NodeEntity';
 import {LabelFormValidators} from '../../validators/label-form.validators';
 import {TaintFormValidators} from '../../validators/taint-form.validators';
@@ -21,7 +20,6 @@ import {TaintFormValidators} from '../../validators/taint-form.validators';
       multi: true,
     }
   ],
-  animations: [SlideInOut]
 })
 export class TaintFormComponent implements OnInit {
   @Input() title = 'Taints';
