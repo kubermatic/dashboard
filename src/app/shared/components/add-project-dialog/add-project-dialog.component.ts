@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
+
 import {ApiService} from '../../../core/services';
 import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {CreateProjectModel} from '../../model/CreateProjectModel';
@@ -11,7 +12,7 @@ import {CreateProjectModel} from '../../model/CreateProjectModel';
   styleUrls: ['./add-project-dialog.component.scss'],
 })
 export class AddProjectDialogComponent implements OnInit {
-  addProjectForm: FormGroup;
+  form: FormGroup;
   labels: object;
 
   constructor(
@@ -19,14 +20,15 @@ export class AddProjectDialogComponent implements OnInit {
       private readonly _matDialogRef: MatDialogRef<AddProjectDialogComponent>) {}
 
   ngOnInit(): void {
-    this.addProjectForm = new FormGroup({
+    this.form = new FormGroup({
       name: new FormControl('', [Validators.required]),
+      labels: new FormControl(''),
     });
   }
 
   addProject(): void {
     const createProject: CreateProjectModel = {
-      name: this.addProjectForm.controls.name.value,
+      name: this.form.controls.name.value,
       labels: this.labels,
     };
     this._apiService.createProject(createProject).subscribe((res) => {

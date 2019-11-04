@@ -3,7 +3,8 @@
   <mat-dialog-content>
     <div class="mat-dialog-content">
       <form [formGroup]="form"
-            fxLayout="column">
+            fxLayout="column"
+            class="km-edit-cluster-form">
         <mat-form-field fxFlex>
           <mat-label>Name*</mat-label>
           <input id="km-edit-cluster-dialog-input"
@@ -25,9 +26,10 @@
         <mat-checkbox formControlName="auditLogging">
           Audit Logging
         </mat-checkbox>
+        <km-label-form title="Labels"
+                       [(labels)]="labels"
+                       formControlName="labels"></km-label-form>
       </form>
-      <km-label-form title="Labels"
-                     [(labels)]="labels"></km-label-form>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>

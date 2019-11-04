@@ -23,6 +23,7 @@ export class EditProjectComponent implements OnInit {
 
     this.form = new FormGroup({
       name: new FormControl(this.project.name, [Validators.required]),
+      labels: new FormControl(''),
     });
   }
 

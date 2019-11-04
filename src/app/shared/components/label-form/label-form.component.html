@@ -1,7 +1,7 @@
 <mat-card-header>
   <mat-card-title>{{title}}</mat-card-title>
 </mat-card-header>
-<form [formGroup]="labelsForm"
+<form [formGroup]="form"
       fxLayout="column">
   <div formArrayName="labels">
     <div *ngFor="let label of labelArray.controls; let i = index;"
@@ -33,6 +33,9 @@
         <mat-error *ngIf="label.get('key').errors?.validLabelKeyNameLength"
                    i18n>
           Name is too long.
+        </mat-error>
+        <mat-error *ngIf="label.get('key').errors?.labelKeyNameRestricted">
+          Restricted label name.
         </mat-error>
       </mat-form-field>
       <mat-form-field fxFlex="45">

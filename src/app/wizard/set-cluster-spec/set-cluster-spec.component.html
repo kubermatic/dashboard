@@ -105,9 +105,11 @@
             </i>
           </div>
         </div>
+        <km-label-form title="Labels"
+                       [(labels)]="labels"
+                       formControlName="labels"
+                       fxFlex="100"></km-label-form>
       </form>
-      <km-label-form title="Labels"
-                     [(labels)]="labels"></km-label-form>
     </mat-card-content>
   </mat-card>
 </div>

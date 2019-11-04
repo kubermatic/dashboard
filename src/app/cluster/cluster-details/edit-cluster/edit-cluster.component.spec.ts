@@ -13,12 +13,14 @@ import {EditClusterComponent} from './edit-cluster.component';
 import {ClusterService} from '../../../core/services';
 import {fakeAWSDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {Subject} from 'rxjs';
+import {CoreModule} from '../../../core/core.module';
 
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
   SharedModule,
+  CoreModule,
 ];
 
 describe('EditClusterComponent', () => {
@@ -53,6 +55,7 @@ describe('EditClusterComponent', () => {
     component.cluster = fakeAWSCluster();
     component.datacenter = fakeAWSDatacenter();
     component.projectID = fakeProject().id;
+    component.labels = {};
     fixture.detectChanges();
   }));
 

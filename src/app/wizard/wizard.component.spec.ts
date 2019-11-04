@@ -7,6 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../app-config.service';
+import {CoreModule} from '../core/core.module';
 import {ApiService, ClusterService, DatacenterService, ProjectService, WizardService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {StepsService} from '../core/services/wizard/steps.service';
@@ -92,6 +93,7 @@ describe('WizardComponent', () => {
             MatTabsModule,
             MachineNetworksModule,
             HttpClientModule,
+            CoreModule,
           ],
           declarations: [
             ExtendedOptionsComponent,
