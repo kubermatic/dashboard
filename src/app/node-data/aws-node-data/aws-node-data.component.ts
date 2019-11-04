@@ -50,9 +50,6 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
 
     this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
       this._selectedPreset = credentials;
-      if (!credentials) {
-        this.clearSubnetId();
-      }
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {

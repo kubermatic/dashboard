@@ -34,6 +34,7 @@ export interface NodeDataModalData {
 export class NodeDataModalComponent implements OnInit, OnDestroy {
   @Output() editNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
   nodeDC: DataCenterEntity;
+  seedDC: DataCenterEntity;
   isExtended = false;
   isRecreationWarningVisible = false;
   private _initialNodeSpec: NodeSpec;
@@ -45,6 +46,8 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
       public googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
+    this.seedDC = this.data.datacenter;
+
     if (this.data.editMode && this.data.nodeDeployment) {
       // Using data.nodeDeployment as it is not a deep copy created using JSON parse & stringify like data.NodeData.
       this._initialNodeSpec = this.data.nodeDeployment.spec.template;
