@@ -35,6 +35,11 @@ const appRoutes: Routes = [
         path: 'projects/:projectID/dc/:seedDc/clusters',
         loadChildren: './cluster/cluster.module#ClusterModule',
       },
+      {path: 'account', loadChildren: './settings/user/user-settings.module#UserSettingsModule'},
+      {
+        path: 'settings',
+        loadChildren: './settings/global/global-settings.module#GlobalSettingsModule',
+      },
       {
         path: '',
         loadChildren: './pages/pages.module#PagesModule',

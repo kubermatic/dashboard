@@ -23,6 +23,7 @@ import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, L
 import {ApiService, Auth, AuthGuard, AuthzGuard, ClusterService, DatacenterService, LabelService, ParamsService, WizardService} from './services';
 import {GlobalModule} from './services/global/global.module';
 import {NodeDataService} from './services/node-data/node-data.service';
+import {SettingsService} from './services/settings/settings.service';
 import {StepsService} from './services/wizard/steps.service';
 import {ClusterNameGenerator} from './util/name-generator.service';
 import {ProgressBrowserXhr} from './util/ProgressBrowserXhr';
@@ -64,6 +65,7 @@ const services: any[] = [
   ClusterService,
   ParamsService,
   LabelService,
+  SettingsService,
 ];
 
 const interceptors: any[] = [
