@@ -6,7 +6,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../../shared/shared.module';
-import {fakeOpenstackCluster} from '../../../testing/fake-data/cluster.fake';
 import {nodeDataFake} from '../../../testing/fake-data/node.fake';
 import {OpenstackNodeOptionsComponent} from './openstack-node-options.component';
 
@@ -42,7 +41,6 @@ describe('OpenstackNodeOptionsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(OpenstackNodeOptionsComponent);
     component = fixture.componentInstance;
-    component.cloudSpec = fakeOpenstackCluster().spec.cloud;
     component.nodeData = nodeDataFake();
     fixture.detectChanges();
   });
