@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {LabelFormComponent} from '../../shared/components/label-form/label-form.component';
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {getIpCount} from '../../shared/functions/get-ip-count';
@@ -62,7 +63,7 @@ export class SummaryComponent implements OnInit {
   }
 
   displayTags(tags: object): boolean {
-    return !!tags && Object.keys(tags).length > 0;
+    return !!tags && Object.keys(LabelFormComponent.filterNullifiedKeys(tags)).length > 0;
   }
 
   displayNoProviderTags(): boolean {

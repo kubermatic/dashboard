@@ -9,37 +9,6 @@
     </div>
   </div>
 
-  <div class="km-form-group-tags-header">
-    Tags
-    <i class="fa fa-plus"
-       style="float: right;"
-       aria-hidden="true"
-       (click)="addTag()"></i>
-  </div>
-  <div class="km-form-group-tags">
-    <div fxFlex="100%"
-         *ngFor="let tag of getTagForm(form); let i=index"
-         formArrayName="tags">
-      <div class="km-form-group-tags-inner"
-           [formGroupName]="i">
-        <mat-form-field fxFlex="42%">
-          <mat-label>Key</mat-label>
-          <input matInput
-                 formControlName="key"
-                 autocomplete="off">
-        </mat-form-field>
-        <span class="km-seperator">:</span>
-        <mat-form-field fxFlex="42%">
-          <mat-label>Value</mat-label>
-          <input matInput
-                 formControlName="value"
-                 autocomplete="off">
-        </mat-form-field>
-        <i class="fa fa-times"
-           aria-hidden="true"
-           (click)="deleteTag(i)"></i>
-      </div>
-    </div>
-  </div>
-
+  <km-label-form title="Provider Tags"
+                 [(labels)]="nodeData.spec.cloud.azure.tags"></km-label-form>
 </form>

@@ -663,52 +663,6 @@ mat-list-item.disabled {
 }
 
 // Tags
-div.km-form-group-tags-header,
-div.km-form-group-labels-header {
-  margin: (3.75 * $baseline-grid) 0 (1.25 * $baseline-grid);
-  font-size: $body-font-size-base;
-  font-weight: bold;
-  border-bottom: 1px solid $border;
-  padding-bottom: 1.875 * $baseline-grid;
-
-  i.fa-plus {
-    cursor: pointer;
-  }
-}
-
-div.km-form-group-tags,
-div.km-form-group-labels {
-  display: flex;
-  flex-direction: column;
-
-  div.km-form-group-tags-inner,
-  div.km-form-group-labels-inner {
-    display: flex;
-  }
-
-  span.km-seperator {
-    display: flex;
-    flex: 1 1 10%;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    padding-bottom: 0.75 * $baseline-grid;
-  }
-
-  i.fa-times {
-    display: flex;
-    flex: 1 1 6%;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-}
-
-.km-add-node-inner .km-form-group-tags-inner mat-form-field,
-.km-add-node-inner .km-form-group-labels-inner mat-form-field {
-  width: 45% !important;
-}
-
 .km-tags-in-wizard {
   margin-top: 5px;
 }

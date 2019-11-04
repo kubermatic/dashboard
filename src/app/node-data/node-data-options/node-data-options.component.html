@@ -1,6 +1,5 @@
 <kubermatic-aws-node-options *ngIf="cloudSpec.aws"
-                             [nodeData]="nodeData"
-                             [isInWizard]="isInWizard"></kubermatic-aws-node-options>
+                             [nodeData]="nodeData"></kubermatic-aws-node-options>
 
 <kubermatic-azure-node-options *ngIf="cloudSpec.azure"
                                [nodeData]="nodeData"></kubermatic-azure-node-options>
@@ -13,9 +12,7 @@
                              [nodeData]="nodeData"></kubermatic-gcp-node-options>
 
 <kubermatic-openstack-node-options *ngIf="cloudSpec.openstack"
-                                   [nodeData]="nodeData"
-                                   [cloudSpec]="cloudSpec"
-                                   [isInWizard]="isInWizard"></kubermatic-openstack-node-options>
+                                   [nodeData]="nodeData"></kubermatic-openstack-node-options>
 
 <kubermatic-packet-node-options *ngIf="cloudSpec.packet"
                                 [nodeData]="nodeData"></kubermatic-packet-node-options>
