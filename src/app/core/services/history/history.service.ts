@@ -11,17 +11,19 @@ export class HistoryService {
   constructor(private readonly _injector: Injector) {}
 
   init(): void {
-    this._router = this._injector.get(Router);
+    if (!this._router) {
+      this._router = this._injector.get(Router);
 
-    this._router.events.pipe(filter(e => e instanceof NavigationEnd))
-        .pipe(pairwise())
-        .subscribe((e: [NavigationEnd, NavigationEnd]) => {
-          this._previousStateUrl = e[0].url;
-          this._currentStateUrl = e[1].url;
-        });
+      this._router.events.pipe(filter(e => e instanceof NavigationEnd))
+          .pipe(pairwise())
+          .subscribe((e: [NavigationEnd, NavigationEnd]) => {
+            this._previousStateUrl = e[0].url;
+            this._currentStateUrl = e[1].url;
+          });
+    }
   }
 
-  goToPreviousState(defaultState: string): Promise<boolean> {
+  goBack(defaultState: string): Promise<boolean> {
     if (this._previousStateUrl && this._previousStateUrl !== this._currentStateUrl) {
       return this._router.navigateByUrl(this._previousStateUrl);
     }
