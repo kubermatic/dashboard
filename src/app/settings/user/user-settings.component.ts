@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
 
+import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
 import {UserSettings} from '../../shared/entity/MemberEntity';
@@ -19,7 +19,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _settingsService: SettingsService, private readonly _router: Router) {}
+  constructor(private readonly _settingsService: SettingsService, private readonly _historyService: HistoryService) {}
 
   ngOnInit(): void {
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
@@ -50,7 +50,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     this._settingsChange.next();
   }
 
-  return(): void {
-    this._router.navigate(['/projects']);
+  goBack(): void {
+    this._historyService.goBack('/projects');
   }
 }

@@ -22,6 +22,7 @@ import {SidenavComponent} from './components/sidenav/sidenav.component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
 import {ApiService, Auth, AuthGuard, AuthzGuard, ClusterService, DatacenterService, LabelService, ParamsService, WizardService} from './services';
 import {GlobalModule} from './services/global/global.module';
+import {HistoryService} from './services/history/history.service';
 import {NodeDataService} from './services/node-data/node-data.service';
 import {SettingsService} from './services/settings/settings.service';
 import {StepsService} from './services/wizard/steps.service';
@@ -65,6 +66,7 @@ const services: any[] = [
   ClusterService,
   ParamsService,
   LabelService,
+  HistoryService,
   SettingsService,
 ];
 
