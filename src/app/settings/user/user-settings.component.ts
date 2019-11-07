@@ -1,12 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
+import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
+import {UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
-import {UserSettings} from '../../shared/entity/MemberEntity';
+import {MemberEntity, UserSettings} from '../../shared/entity/MemberEntity';
 
 @Component({
   selector: 'kubermatic-user-settings',
@@ -14,14 +15,20 @@ import {UserSettings} from '../../shared/entity/MemberEntity';
   styleUrls: ['user-settings.component.scss'],
 })
 export class UserSettingsComponent implements OnInit, OnDestroy {
+  itemsPerPageOptions = [5, 10, 15, 20, 25];
+  user: MemberEntity;
   settings: UserSettings;              // Local settings copy. User can edit it.
   private _apiSettings: UserSettings;  // Original settings from the API. Cannot be edited by the user.
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _settingsService: SettingsService, private readonly _historyService: HistoryService) {}
+  constructor(
+      private readonly _userService: UserService, private readonly _settingsService: SettingsService,
+      private readonly _historyService: HistoryService) {}
 
   ngOnInit(): void {
+    this._userService.loggedInUser.pipe(first()).subscribe(user => this.user = user);
+
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(settings, this._apiSettings)) {
         if (this._apiSettings) {
