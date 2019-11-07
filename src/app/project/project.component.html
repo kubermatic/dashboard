@@ -22,7 +22,7 @@
 </div>
 
 <!-- Table View -->
-<div [hidden]="showCards">
+<div *ngIf="!showCards">
   <mat-card class="km-with-table-header km-project-view">
     <mat-card-content>
       <table class="km-table"
@@ -167,12 +167,11 @@
 </div>
 
 <!-- Cards View -->
-<div [hidden]="!showCards">
+<div *ngIf="showCards">
   <div class="km-project-cards-view"
        fxFlex
        fxLayout="row"
-       fxLayoutGap="20px"
-       [fxHide]="!showCards">
+       fxLayoutGap="20px">
 
     <mat-card *ngFor="let project of projects"
               (click)="selectProject(project)">

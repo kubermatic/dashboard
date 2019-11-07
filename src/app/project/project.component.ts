@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 import {Router} from '@angular/router';
 import {CookieService} from 'ngx-cookie-service';
@@ -22,7 +22,7 @@ import {EditProjectComponent} from './edit-project/edit-project.component';
   styleUrls: ['./project.component.scss'],
 })
 
-export class ProjectComponent implements OnInit, OnDestroy {
+export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   projects: ProjectEntity[] = [];
   isInitializing = true;
   clusterCount = [];
@@ -41,10 +41,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
       private readonly _cookieService: CookieService) {}
 
   ngOnInit(): void {
-    this.dataSource.sort = this.sort;
-    this.sort.active = 'name';
-    this.sort.direction = 'asc';
-
     this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe(projects => {
       this.projects = projects;
       this._sortProjectOwners();
@@ -57,6 +53,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
       this.isInitializing = false;
     });
+  }
+
+  ngOnChanges(): void {
+    this.dataSource.data = this.projects;
+    this.dataSource.sort = this.sort;
+    this.sort.active = 'name';
+    this.sort.direction = 'asc';
   }
 
   ngOnDestroy(): void {
