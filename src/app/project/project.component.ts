@@ -30,6 +30,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   rawRole = [];
   displayedColumns: string[] = ['status', 'name', 'labels', 'id', 'role', 'clusters', 'owners', 'actions'];
   dataSource = new MatTableDataSource<ProjectEntity>();
+  showCards = false;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   private _unsubscribe: Subject<any> = new Subject();
 
@@ -93,6 +94,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
+  changeView(): void {
+    this.showCards = !this.showCards;
+  }
+
   selectProject(project: ProjectEntity): void {
     this._projectService.selectProject(project);
   }
@@ -137,6 +142,34 @@ export class ProjectComponent implements OnInit, OnDestroy {
     // if last displayed name is not complete, show it in tooltip
     return count > 30 ? this.getOwnerNameArray(owners).slice(truncatedLength - 1, owners.length).join(', ') :
                         this.getOwnerNameArray(owners).slice(truncatedLength, owners.length).join(', ');
+  }
+
+  getLabelsLength(project: ProjectEntity): number {
+    return project.labels ? Object.keys(project.labels).length : 0;
+  }
+
+  getLabelsTooltip(project: ProjectEntity): string {
+    let labels = '';
+    let counter = 0;
+    const labelLength = this.getLabelsLength(project);
+
+    if (labelLength > 0) {
+      for (const key in project.labels) {
+        if (project.labels.hasOwnProperty(key)) {
+          counter++;
+          if (project.labels[key]) {
+            labels += `${key}: ${project.labels[key]}`;
+          } else {
+            labels += `${key}`;
+          }
+
+          if (counter < labelLength) {
+            labels += `, `;
+          }
+        }
+      }
+    }
+    return labels;
   }
 
   isProjectActive(project: ProjectEntity): boolean {

@@ -146,6 +146,7 @@
   mask-repeat: no-repeat;
   mask-size: contain;
   cursor: pointer;
+  background-color: $text-color;
 }
 
 .km-icon-key {
@@ -265,6 +266,56 @@
   mask-repeat: no-repeat;
   mask-size: contain;
   background: $indicator-red;
+}
+
+.km-icon-labels {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  mask: url("/assets/images/icons/labels.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  background-color: $text-color;
+}
+
+.km-icon-owner {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  mask: url("/assets/images/icons/owner.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  background-color: $text-color;
+}
+
+.km-icon-role {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  mask: url("/assets/images/icons/role.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  background-color: $text-color;
+}
+
+.km-icon-projects-table {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  mask: url("/assets/images/icons/projects-table.svg");
+  mask-repeat: no-repeat;
+  mask-size: cover;
+  background-color: $text-color;
+}
+
+.km-icon-projects-card {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  mask: url("/assets/images/icons/projects-cards.svg");
+  mask-repeat: no-repeat;
+  mask-size: cover;
+  background-color: $text-color;
 }
 
 .km-icon-kubernetes {

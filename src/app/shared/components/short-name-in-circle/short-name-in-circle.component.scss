@@ -1,0 +1,31 @@
+@import "../../../../assets/css/colors";
+@import "../../../../assets/css/variables";
+
+.km-short-name-box {
+  display: flex;
+}
+
+.km-short-name-circle-wrapper {
+  margin-left: -5px;
+}
+
+.km-short-name-circle {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  line-height: 30px;
+  text-align: center;
+  border-radius: 50%;
+  border: 2px solid $separator;
+  align-items: center;
+  justify-content: center;
+  background-color: $white-background;
+
+  &.km-hidden-owners {
+    background-color: $separator;
+  }
+
+  &:first-child {
+    margin-left: 0;
+  }
+}

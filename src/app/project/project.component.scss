@@ -21,3 +21,107 @@
   color: $medium-text-color;
   margin-left: -0.375 * $baseline-grid;
 }
+
+.km-project-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+mat-button-toggle-group {
+  border-radius: 5px;
+}
+
+mat-button-toggle {
+  margin-right: 0;
+  min-height: 40px;
+  max-height: 40px;
+  min-width: 50px;
+  max-width: 50px;
+  border-color: $dropdown-border;
+  background-color: $grey-background;
+
+  &:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  &:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  &:hover {
+    border: 1px solid $dropdown-border;
+  }
+}
+
+.mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle:hover {
+  border: 1px solid $dropdown-border;
+}
+
+.mat-button-toggle-checked {
+  border-left: 1px solid $dropdown-border;
+  background-color: $dropdown-border;
+}
+
+.km-project-cards-view {
+  flex-wrap: wrap;
+
+  mat-card {
+    min-width: 330px;
+    max-width: 330px;
+    min-height: 204px;
+    max-height: 204px;
+    margin-top: 20px;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  mat-card-header {
+    border-bottom: 1px solid $separator;
+    padding: 20px;
+  }
+
+  mat-card-title {
+    margin: 0;
+    padding: 0;
+    line-height: 23px;
+  }
+
+  mat-card-subtitle {
+    margin: 0;
+    padding: 5px 0 0 0;
+    line-height: 16px;
+  }
+
+  .km-project-cards-status {
+    display: flex;
+    align-items: center;
+    height: auto;
+    width: 35px;
+  }
+
+  mat-card-content {
+    padding: 20px;
+  }
+
+  .km-project-cards-content-row {
+    display: flex;
+    align-items: center;
+    line-height: 40px;
+
+    i {
+      padding-right: 10px;
+    }
+
+    span {
+      display: flex;
+      align-items: center;
+
+      &:first-child {
+        padding-right: 30px;
+      }
+    }
+  }
+}
