@@ -76,6 +76,11 @@ mat-button-toggle {
     margin-top: 20px;
     padding: 0;
     cursor: pointer;
+    box-shadow: $border-box-shadow !important;
+
+    &:hover {
+      box-shadow: $border-box-shadow-hover !important;
+    }
   }
 
   mat-card-header {

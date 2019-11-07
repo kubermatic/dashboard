@@ -172,6 +172,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
     return labels;
   }
 
+  getOwnerForCard(owners: ProjectOwners[]): string {
+    // will only be called if owners === 1
+    return owners[0].name.length >= 19 ? `${owners[0].name.substring(0, 19)}...` : `${owners[0].name}`;
+  }
+
   isProjectActive(project: ProjectEntity): boolean {
     return ProjectUtils.isProjectActive(project);
   }

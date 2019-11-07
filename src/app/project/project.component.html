@@ -196,7 +196,8 @@
         <div class="km-project-cards-content-row">
           <span>
             <i class="km-icon-owner"></i>
-            <span *ngIf="project.owners.length === 1">{{getOwners(project.owners)}}</span>
+            <span *ngIf="project.owners.length === 1"
+                  [matTooltip]="getOwners(project.owners)">{{getOwnerForCard(project.owners)}}</span>
             <km-short-name-in-circle *ngIf="project.owners.length > 1"
                                      [owners]="project.owners"
                                      [limit]="2"></km-short-name-in-circle>

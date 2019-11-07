@@ -585,8 +585,7 @@ mat-card-header > div > mat-card-title > div {
 
 // tooltip
 .mat-tooltip {
-  background-color: $light-primary !important;
-  opacity: 100% !important;
+  background-color: $primary-light !important;
   margin-top: 0.625 * $baseline-grid !important;
   font-size: $caption-font-size-base !important;
 }
