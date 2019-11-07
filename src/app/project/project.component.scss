@@ -29,26 +29,26 @@
 }
 
 mat-button-toggle-group {
-  border-radius: 5px;
+  border-radius: $border-radius;
 }
 
 mat-button-toggle {
   margin-right: 0;
-  min-height: 40px;
-  max-height: 40px;
-  min-width: 50px;
-  max-width: 50px;
+  min-height: 5 * $baseline-grid;
+  max-height: 5 * $baseline-grid;
+  min-width: 6.25 * $baseline-grid;
+  max-width: 6.25 * $baseline-grid;
   border-color: $dropdown-border;
   background-color: $grey-background;
 
   &:first-child {
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+    border-top-left-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
   }
 
   &:last-child {
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-top-right-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
   }
 
   &:hover {
@@ -74,11 +74,11 @@ mat-button-toggle {
   }
 
   mat-card {
-    min-width: 330px;
-    max-width: 330px;
-    min-height: 204px;
-    max-height: 204px;
-    margin-top: 20px;
+    min-width: 41.25 * $baseline-grid;
+    max-width: 41.25 * $baseline-grid;
+    min-height: 25.5 * $baseline-grid;
+    max-height: 25.5 * $baseline-grid;
+    margin-top: 2.5 * $baseline-grid;
     padding: 0;
     cursor: pointer;
     box-shadow: $border-box-shadow !important;
@@ -95,41 +95,41 @@ mat-button-toggle {
 
   mat-card-header {
     border-bottom: 1px solid $separator;
-    padding: 20px;
+    padding: 2.5 * $baseline-grid;
   }
 
   mat-card-title {
     margin: 0;
     padding: 0;
-    line-height: 23px;
-    max-width: 190px;
-    min-width: 190px;
+    line-height: 2.3 * $line-height;
+    max-width: 23.75 * $baseline-grid;
+    min-width: 23.75 * $baseline-grid;
   }
 
   mat-card-subtitle {
     margin: 0;
-    padding: 5px 0 0 0;
-    line-height: 16px;
+    padding: (0.625 * $baseline-grid) 0 0 0;
+    line-height: 1.6 * $line-height;
   }
 
   .km-project-cards-status {
     display: flex;
     align-items: center;
     height: auto;
-    width: 35px;
+    width: 4.375 * $baseline-grid;
   }
 
   mat-card-content {
-    padding: 20px;
+    padding: 2.5 * $baseline-grid;
   }
 
   .km-project-cards-content-row {
     display: flex;
     align-items: center;
-    line-height: 40px;
+    line-height: 4 * $line-height;
 
     i {
-      padding-right: 10px;
+      padding-right: 1.25 * $baseline-grid;
     }
 
     span {
@@ -137,7 +137,7 @@ mat-button-toggle {
       align-items: center;
 
       &:first-child {
-        padding-right: 30px;
+        padding-right: 3.75 * $baseline-grid;
       }
     }
   }
