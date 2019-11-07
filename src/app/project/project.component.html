@@ -182,8 +182,11 @@
              [ngClass]="getProjectStateIconClass(project)"
              class="km-health-state"></i>
         </div>
-        <mat-card-title [matTooltip]="getProjectTooltip(project.name)">{{getName(project.name)}}</mat-card-title>
-        <mat-card-subtitle><strong>ID</strong> {{project.id}}</mat-card-subtitle>
+        <mat-card-title [matTooltip]="getProjectTooltip(project.name)"
+                        [attr.id]="'km-project-name-' + project.name">{{getName(project.name)}}</mat-card-title>
+        <mat-card-subtitle>
+          <strong>ID</strong> {{project.id}}
+        </mat-card-subtitle>
         <div class="km-project-item-actions">
           <button mat-icon-button
                   [attr.id]="'km-edit-project-' + project.name"

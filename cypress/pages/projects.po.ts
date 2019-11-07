@@ -39,10 +39,6 @@ export class ProjectsPage {
     return cy.get('#km-edit-project-dialog-edit-btn');
   }
 
-  static getTable(): Cypress.Chainable<any> {
-    return cy.get('tbody');
-  }
-
   // Utils.
 
   static waitForRefresh(): void {
@@ -73,7 +69,7 @@ export class ProjectsPage {
     this.getAddProjectInput().type(projectName).should(Condition.HaveValue, projectName);
     this.getAddProjectConfirmBtn().should(Condition.NotBe, 'disabled').click().then(() => {
       this.waitForRefresh();
-      this.getTable().should(Condition.Contain, projectName);
+      this.getProjectItem(projectName).should(Condition.HaveLength, 1);
     });
   }
 
