@@ -30,7 +30,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   rawRole = [];
   displayedColumns: string[] = ['status', 'name', 'labels', 'id', 'role', 'clusters', 'owners', 'actions'];
   dataSource = new MatTableDataSource<ProjectEntity>();
-  showCards = false;
+  showCards = true;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   private _unsubscribe: Subject<any> = new Subject();
 
