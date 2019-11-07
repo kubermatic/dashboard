@@ -68,6 +68,11 @@ mat-button-toggle {
 .km-project-cards-view {
   flex-wrap: wrap;
 
+  .km-project-item-actions button {
+    opacity: 0;
+    transition: visibility 0s 0s, opacity 0s ease-out;
+  }
+
   mat-card {
     min-width: 330px;
     max-width: 330px;
@@ -80,6 +85,11 @@ mat-button-toggle {
 
     &:hover {
       box-shadow: $border-box-shadow-hover !important;
+
+      button {
+        opacity: 1;
+        transition: opacity 0.1s ease-out;
+      }
     }
   }
 
@@ -92,6 +102,8 @@ mat-button-toggle {
     margin: 0;
     padding: 0;
     line-height: 23px;
+    max-width: 190px;
+    min-width: 190px;
   }
 
   mat-card-subtitle {

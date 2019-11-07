@@ -21,6 +21,7 @@
   </div>
 </div>
 
+<!-- Table View -->
 <div [hidden]="showCards">
   <mat-card class="km-with-table-header km-project-view">
     <mat-card-content>
@@ -165,6 +166,7 @@
   </mat-card>
 </div>
 
+<!-- Cards View -->
 <div [hidden]="!showCards">
   <div class="km-project-cards-view"
        fxFlex
@@ -181,8 +183,24 @@
              [ngClass]="getProjectStateIconClass(project)"
              class="km-health-state"></i>
         </div>
-        <mat-card-title>{{project.name}}</mat-card-title>
+        <mat-card-title [matTooltip]="getProjectTooltip(project.name)">{{getName(project.name)}}</mat-card-title>
         <mat-card-subtitle><strong>ID</strong> {{project.id}}</mat-card-subtitle>
+        <div class="km-project-item-actions">
+          <button mat-icon-button
+                  [attr.id]="'km-edit-project-' + project.name"
+                  matTooltip="Edit Project"
+                  (click)="editProject(project, $event)"
+                  [disabled]="!isEditEnabled(project)">
+            <i class="km-icon-edit"></i>
+          </button>
+          <button mat-icon-button
+                  [attr.id]="'km-delete-project-' + project.name"
+                  matTooltip="Delete Project"
+                  (click)="deleteProject(project, $event)"
+                  [disabled]="!isDeleteEnabled(project)">
+            <i class="km-icon-delete"></i>
+          </button>
+        </div>
       </mat-card-header>
       <mat-card-content>
         <div class="km-project-cards-content-row">
@@ -197,7 +215,7 @@
           <span>
             <i class="km-icon-owner"></i>
             <span *ngIf="project.owners.length === 1"
-                  [matTooltip]="getOwners(project.owners)">{{getOwnerForCard(project.owners)}}</span>
+                  [matTooltip]="getOwners(project.owners)">{{getName(project.owners[0].name)}}</span>
             <km-short-name-in-circle *ngIf="project.owners.length > 1"
                                      [owners]="project.owners"
                                      [limit]="2"></km-short-name-in-circle>
@@ -206,5 +224,46 @@
         </div>
       </mat-card-content>
     </mat-card>
+
+
+    <!-- <mat-card>
+      <mat-card-header>
+        <div mat-card-avatar
+             class="km-project-cards-status">
+          <i [matTooltip]="Running"
+             class="km-health-state"></i>
+        </div>
+        <mat-card-title>getProjectName(proj</mat-card-title>
+        <mat-card-subtitle><strong>ID</strong> project.id</mat-card-subtitle>
+        <div class="km-project-item-actions">
+          <button mat-icon-button
+                  matTooltip="Edit Project">
+            <i class="km-icon-edit"></i>
+          </button>
+          <button mat-icon-button
+                  matTooltip="Delete Project">
+            <i class="km-icon-delete"></i>
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="km-project-cards-content-row">
+          <span><i class="km-icon-cluster"></i> project.id</span>
+          <span>
+            <i class="km-icon-labels"></i>
+            getLabelsLength(project)
+          </span>
+        </div>
+
+        <div class="km-project-cards-content-row">
+          <span>
+            <i class="km-icon-owner"></i>
+            <span>getOwnerForCard(project.owners)</span>
+          </span>
+          <span><i class="km-icon-role"></i> role[project.id]</span>
+        </div>
+      </mat-card-content>
+    </mat-card> -->
+
   </div>
 </div>
