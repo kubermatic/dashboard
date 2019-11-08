@@ -1,0 +1,35 @@
+<div fxLayout>
+  <div fxFlex
+       align="right">
+    <button mat-flat-button
+            type="button"
+            (click)="goBack()">
+      Go Back
+    </button>
+  </div>
+</div>
+
+<mat-card class="white">
+  <mat-card-header>
+    <mat-card-title>Admin Settings</mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    <div *ngIf="!!settings"
+         class="km-admin-settings">
+      <div>
+        <div class="km-admin-settings-entry-label">Node Deployment</div>
+        <mat-form-field fxFlex="15">
+          <mat-label>Initial Node Deployment Replicas</mat-label>
+          <input matInput
+                 type="number"
+                 min="0"
+                 autocomplete="off"
+                 [(ngModel)]="settings.defaultNodeCount"
+                 (change)="onSettingsChange()">
+        </mat-form-field>
+        <km-settings-status [isSaved]="settings.defaultNodeCount === _apiSettings.defaultNodeCount"></km-settings-status>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

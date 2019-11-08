@@ -58,7 +58,7 @@ export class KubermaticComponent implements OnInit {
 
   private _handleSidenav(url: string): void {
     if (this.sidenav) {
-      if (url === '/projects' || url === '/rest-api' || url === '/account') {
+      if (url === '/projects' || url === '/rest-api' || url === '/account' || url === '/settings') {
         this.sidenav.close();
       } else {
         this.sidenav.open();

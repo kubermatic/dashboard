@@ -1,0 +1,26 @@
+@import "../../../assets/css/colors";
+@import "../../../assets/css/variables";
+
+.mat-card {
+  color: $text-color;
+  margin-top: 3 * $baseline-grid;
+  padding: 3.75 * $baseline-grid;
+
+  .mat-card-header {
+    padding: 0 (3.75 * $baseline-grid) (3.75 * $baseline-grid);
+  }
+
+  .km-admin-settings {
+    font-size: $subhead-font-size-base;
+    padding: 3.75 * $baseline-grid;
+
+    .km-admin-settings-entry-label {
+      width: 20 * $baseline-grid;
+      line-height: 8 * $baseline-grid;
+    }
+
+    km-settings-status {
+      margin-top: 10px;
+    }
+  }
+}

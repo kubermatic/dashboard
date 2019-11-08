@@ -41,4 +41,12 @@ export class NavigationComponent implements OnInit {
   goToAccount(): void {
     this._router.navigate(['account']);
   }
+
+  isAdminPanelVisible(): boolean {
+    return !!this.currentUser && false;  // TODO: Switch false to this.currentUser.isAdmin;
+  }
+
+  goToAdminPanel(): void {
+    this._router.navigate(['settings']);
+  }
 }
