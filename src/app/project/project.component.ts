@@ -34,17 +34,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   sort: MatSort;
   @ViewChild(MatSort, {static: false})
   set matSort(ms: MatSort) {
-    const isViewInit = !this.sort && !!ms;  // If true, view is being initialized.
-
     this.sort = ms;
     this.setDataSourceAttributes();
-
-    if (isViewInit) {
-      setTimeout(() => {
-        this.sort.active = 'name';
-        this.sort.direction = 'asc';
-      }, 100);
-    }
+    // TODO: Set default sorting
   }
   private _unsubscribe: Subject<any> = new Subject();
 
@@ -69,6 +61,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
       this.isInitializing = false;
     });
+  }
+
+  ngAfterViewInit(): void {
+    if (!this.showCards) {
+      this.sort._stateChanges.subscribe(() => {
+        this.sort.active = 'name';
+        this.sort.direction = 'asc';
+      });
+    }
   }
 
   ngOnDestroy(): void {
