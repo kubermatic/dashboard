@@ -2,6 +2,7 @@ export class MemberEntity {
   creationTimestamp: Date;
   deletionTimestamp?: Date;
   email: string;
+  isAdmin?: boolean;
   id: string;
   name: string;
   settings?: UserSettings;

@@ -21,9 +21,11 @@
          fxFlex="50">
       <div class="km-user"></div>
       <div>
-        <div class="km-account-info-name">{{user.name}}</div>
+        <div class="km-account-info-name">
+          <span>{{user.name}}</span>
+          <span *ngIf="user.isAdmin">&nbsp;(Administrator)</span>
+        </div>
         <div class="km-account-info-email">{{user.email}}</div>
-        <!-- TODO: Show info if user is an administrator. -->
       </div>
     </div>
     <div *ngIf="!!settings"

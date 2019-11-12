@@ -43,7 +43,7 @@ export class NavigationComponent implements OnInit {
   }
 
   isAdminPanelVisible(): boolean {
-    return !!this.currentUser && false;  // TODO: Switch false to this.currentUser.isAdmin;
+    return !!this.currentUser && this.currentUser.isAdmin;
   }
 
   goToAdminPanel(): void {

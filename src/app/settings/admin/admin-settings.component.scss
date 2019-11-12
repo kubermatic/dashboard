@@ -14,13 +14,35 @@
     font-size: $subhead-font-size-base;
     padding: 3.75 * $baseline-grid;
 
-    .km-admin-settings-entry-label {
-      width: 20 * $baseline-grid;
+    .km-admin-settings-label {
+      width: 35 * $baseline-grid;
       line-height: 8 * $baseline-grid;
+    }
+
+    .km-admin-settings-field-nd {
+      width: 25.5 * $baseline-grid;
+    }
+
+    mat-checkbox {
+      margin: (.66 * $baseline-grid) (6 * $baseline-grid) 0 0;
     }
 
     km-settings-status {
       margin-top: 10px;
     }
   }
+}
+
+.km-info-icon {
+  background-color: $separator;
+  border-radius: 50%;
+  color: $medium-text-color;
+  cursor: pointer;
+  display: inline-block;
+  font-size: $body-font-size-base;
+  height: 18px;
+  line-height: 18px;
+  margin-left: .5 * $baseline-grid;
+  text-align: center;
+  width: 18px;
 }

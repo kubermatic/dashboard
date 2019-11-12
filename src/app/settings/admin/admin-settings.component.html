@@ -17,13 +17,36 @@
   <mat-card-content>
     <div *ngIf="!!settings"
          class="km-admin-settings">
-      <div>
-        <div class="km-admin-settings-entry-label">Node Deployment</div>
-        <mat-form-field fxFlex="15">
+      <div fxLayout="row">
+        <div class="km-admin-settings-label">
+          <span>Cleanup on Cluster Deletion</span>
+          <div class="km-info-icon"
+               matTooltip="Set &quot;clean up connected load balancers&quot; and &quot;clean up connected volumes (PVs and PVCS)&quot; checkboxes on Cluster Deletion to enabled by default. Enable &quot;Enforce&quot; to make users unable to edit the checkboxes.">i</div>
+        </div>
+        <mat-checkbox>Enable by Default</mat-checkbox>
+        <mat-checkbox>Enforce</mat-checkbox>
+        <km-settings-status [isSaved]="true"></km-settings-status>
+      </div>
+
+      <div fxLayout="row">
+        <div class="km-admin-settings-label">
+          <span>Displayed Distributions</span>
+          <div class="km-info-icon"
+               matTooltip="Deactivate the distributions you want to hide from the users.">i</div>
+        </div>
+        Kubernetes
+        Openshift
+        <km-settings-status [isSaved]="true"></km-settings-status>
+      </div>
+
+      <div fxLayout="row">
+        <div class="km-admin-settings-label">Node Deployment</div>
+        <mat-form-field class="km-admin-settings-field-nd">
           <mat-label>Initial Node Deployment Replicas</mat-label>
           <input matInput
                  type="number"
                  min="0"
+                 max="50"
                  autocomplete="off"
                  [(ngModel)]="settings.defaultNodeCount"
                  (change)="onSettingsChange()">
