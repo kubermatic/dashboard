@@ -63,15 +63,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngAfterViewInit(): void {
-    if (!this.showCards) {
-      this.sort._stateChanges.subscribe(() => {
-        this.sort.active = 'name';
-        this.sort.direction = 'asc';
-      });
-    }
-  }
-
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
