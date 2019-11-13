@@ -10,7 +10,7 @@ export class CleanupOptions {
 }
 
 export enum ClusterTypeOptions {
-  All,
-  Kubernetes,
-  OpenShift,
+  All = 0,
+  Kubernetes = 1,
+  OpenShift = 2,
 }

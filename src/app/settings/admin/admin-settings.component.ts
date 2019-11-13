@@ -7,8 +7,7 @@ import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
-import {AdminSettings} from '../../shared/entity/AdminSettings';
-import {MemberEntity} from '../../shared/entity/MemberEntity';
+import {AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
 import {objectDiff} from '../../shared/utils/common-utils';
 
 @Component({
@@ -17,7 +16,7 @@ import {objectDiff} from '../../shared/utils/common-utils';
   styleUrls: ['admin-settings.component.scss'],
 })
 export class AdminSettingsComponent implements OnInit, OnDestroy {
-  user: MemberEntity;
+  selectedDistro = [];
   settings: AdminSettings;     // Local settings copy. User can edit it.
   apiSettings: AdminSettings;  // Original settings from the API. Cannot be edited by the user.
   private _settingsChange = new Subject<void>();
@@ -31,18 +30,14 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
         if (this.apiSettings) {
           NotificationActions.success('Successfully applied external settings update');
         }
-        this.apiSettings = settings;
-        this.settings = _.cloneDeep(this.apiSettings);
+        this._applySettings(settings);
       }
     });
 
     this._settingsChange.pipe(debounceTime(1000))
         .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(() => this._settingsService.patchAdminSettings(objectDiff(this.settings, this.apiSettings))))
-        .subscribe(settings => {
-          this.apiSettings = settings;
-          this.settings = _.cloneDeep(this.apiSettings);
-        });
+        .subscribe(settings => this._applySettings(settings));
   }
 
   ngOnDestroy(): void {
@@ -50,8 +45,46 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  private _applySettings(settings: AdminSettings): void {
+    this.apiSettings = settings;
+    this.settings = _.cloneDeep(this.apiSettings);
+    this._setDistro(this.settings.clusterTypeOptions);
+  }
+
   onSettingsChange(): void {
     this._settingsChange.next();
+  }
+
+  onDistroChange(group: MatButtonToggleGroup): void {
+    this.settings.clusterTypeOptions = this._getDistro(group);
+    this.onSettingsChange();
+  }
+
+  private _getDistro(group: MatButtonToggleGroup): ClusterTypeOptions {
+    const isKubernetesSelected = group.value && group.value.indexOf('kubernetes') > -1;
+    const isOpenshiftSelected = group.value && group.value.indexOf('openshift') > -1;
+
+    if (isKubernetesSelected && isOpenshiftSelected) {
+      return ClusterTypeOptions.All;
+    } else if (isKubernetesSelected) {
+      return ClusterTypeOptions.Kubernetes;
+    } else {
+      return ClusterTypeOptions.OpenShift;
+    }
+  }
+
+  private _setDistro(distro: ClusterTypeOptions): void {
+    switch (distro) {
+      case ClusterTypeOptions.All:
+        this.selectedDistro = ['kubernetes', 'openshift'];
+        break;
+      case ClusterTypeOptions.Kubernetes:
+        this.selectedDistro = ['kubernetes'];
+        break;
+      case ClusterTypeOptions.OpenShift:
+        this.selectedDistro = ['openshift'];
+        break;
+    }
   }
 
   isLastDistro(group: MatButtonToggleGroup, distro: string): boolean {
