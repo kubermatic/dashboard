@@ -1,3 +1,4 @@
+FROM golang:1.12.13-alpine3.10 as go
 FROM docker:18.06.3-ce-dind as download
 
 ENV HELM_VERSION="2.12.1"
@@ -29,12 +30,15 @@ RUN curl -L https://storage.googleapis.com/kubernetes-helm/helm-v${HELM_VERSION}
 
 FROM docker:18.06.3-ce-dind
 
+ENV PATH=$PATH:/usr/local/go/bin
+ENV GOROOT=/usr/local/go
+ENV GOPATH=/root/go
+
 RUN apk update && \
     apk add --no-cache \
     curl \
     jq \
     bash \
-    go \
     make \
     git \
     python \
@@ -47,6 +51,7 @@ COPY --from=download /usr/local/bin/kubectl /usr/local/bin/kubectl
 COPY --from=download /usr/local/bin/yq /usr/local/bin/yq
 COPY --from=download /usr/local/bin/kind /usr/local/bin/kind
 COPY --from=download /usr/local/bin/vault /usr/local/bin/vault
+COPY --from=go /usr/local/go /usr/local/go
 COPY utils/ opt/e2e/
 COPY start.sh /start.sh
 COPY kindest.tar /kindest.tar
