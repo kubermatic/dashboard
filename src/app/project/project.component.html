@@ -1,6 +1,17 @@
 <div fxLayout>
   <div fxFlex
-       align="right">
+       class="km-project-top-bar">
+    <mat-button-toggle-group group="projectsView"
+                             (change)="changeView()">
+      <mat-button-toggle value="projectscard"
+                         [checked]="showCards">
+        <i class="km-icon-projects-card"></i>
+      </mat-button-toggle>
+      <mat-button-toggle value="projectstable"
+                         [checked]="!showCards">
+        <i class="km-icon-projects-table"></i>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
     <button id="km-add-project-top-btn"
             mat-flat-button
             type="button"
@@ -10,144 +21,210 @@
   </div>
 </div>
 
-<mat-card class="km-with-table-header km-project-view">
-  <mat-card-content>
-    <table class="km-table"
-           mat-table
-           matSort
-           [dataSource]="getDataSource()">
-      <ng-container matColumnDef="status">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell"></th>
-        <td mat-cell
-            *matCellDef="let element">
-          <i [matTooltip]="element.status"
-             [ngClass]="getProjectStateIconClass(element)"
+<!-- Table View -->
+<div *ngIf="!showCards">
+  <mat-card class="km-with-table-header km-project-view">
+    <mat-card-content>
+      <table class="km-table"
+             mat-table
+             matSort
+             [dataSource]="getDataSource()">
+        <ng-container matColumnDef="status">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell"></th>
+          <td mat-cell
+              *matCellDef="let element">
+            <i [matTooltip]="element.status"
+               [ngClass]="getProjectStateIconClass(element)"
+               class="km-health-state"></i>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell"
+              mat-sort-header>Name</th>
+          <td mat-cell
+              *matCellDef="let element"
+              [attr.id]="'km-project-name-' + element.name">{{element.name}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="labels">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell">Labels</th>
+          <td mat-cell
+              *matCellDef="let element">
+            <km-labels [labels]="element.labels"
+                       [limit]="2"
+                       emptyMessage="-"></km-labels>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell"
+              mat-sort-header>ID</th>
+          <td mat-cell
+              *matCellDef="let element">{{element.id}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="role">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell">Role</th>
+          <td mat-cell
+              *matCellDef="let element">{{role[element.id]}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="clusters">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell">Clusters</th>
+          <td mat-cell
+              *matCellDef="let element">{{clusterCount[element.id]}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="owners">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell">Owners</th>
+          <td mat-cell
+              *matCellDef="let element"
+              class="km-project-item-owner">
+            {{getOwners(element.owners)}}
+            <p class="km-project-more-owner"
+               *ngIf="isMoreOwners(element.owners)"
+               [matTooltip]="getMoreOwners(element.owners)"> ...
+              <span *ngIf="getMoreOwnersCount(element.owners) > 0">+{{getMoreOwnersCount(element.owners)}}</span>
+            </p>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell
+              *matHeaderCellDef
+              class="km-header-cell"></th>
+          <td mat-cell
+              *matCellDef="let element">
+            <div class="km-table-actions km-project-item-actions">
+              <ng-container [ngSwitch]="!!element.deletionTimestamp">
+                <ng-container *ngSwitchCase="true">
+                  <mat-spinner [diameter]="25"
+                               class="km-spinner"
+                               color="accent"></mat-spinner>
+                </ng-container>
+
+                <ng-container *ngSwitchCase="false">
+                  <button mat-icon-button
+                          [attr.id]="'km-edit-project-' + element.name"
+                          matTooltip="Edit Project"
+                          (click)="editProject(element, $event)"
+                          [disabled]="!isEditEnabled(element)">
+                    <i class="km-icon-edit"></i>
+                  </button>
+                  <button mat-icon-button
+                          [attr.id]="'km-delete-project-' + element.name"
+                          matTooltip="Delete Project"
+                          (click)="deleteProject(element, $event)"
+                          [disabled]="!isDeleteEnabled(element)">
+                    <i class="km-icon-delete"></i>
+                  </button>
+                </ng-container>
+              </ng-container>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row
+            class="km-header-row"
+            *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            class="km-mat-row"
+            [ngClass]="{'km-clickable': isProjectActive(row)}"
+            (click)="selectProject(row)"></tr>
+      </table>
+
+      <ng-container *ngIf="!projects || projects.length === 0">
+        <div class="km-row km-no-item"
+             *ngIf="!isInitializing">
+          No projects available.
+        </div>
+        <div class="km-row"
+             *ngIf="isInitializing">
+          <mat-spinner color="accent"
+                       class="km-projects-spinner"
+                       [diameter]="25"></mat-spinner>
+        </div>
+      </ng-container>
+
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- Cards View -->
+<div *ngIf="showCards">
+  <div class="km-project-cards-view"
+       fxFlex
+       fxLayout="row"
+       fxLayoutGap="20px">
+
+    <mat-card *ngFor="let project of projects"
+              (click)="selectProject(project)">
+      <mat-card-header>
+        <div mat-card-avatar
+             class="km-project-cards-status">
+          <i [matTooltip]="project.status"
+             [ngClass]="getProjectStateIconClass(project)"
              class="km-health-state"></i>
-        </td>
-      </ng-container>
+        </div>
+        <mat-card-title [matTooltip]="getProjectTooltip(project.name)"
+                        [attr.id]="'km-project-name-' + project.name">{{getName(project.name)}}</mat-card-title>
+        <mat-card-subtitle>
+          <strong>ID</strong> {{project.id}}
+        </mat-card-subtitle>
+        <div class="km-project-item-actions">
+          <button mat-icon-button
+                  [attr.id]="'km-edit-project-' + project.name"
+                  matTooltip="Edit Project"
+                  (click)="editProject(project, $event)"
+                  [disabled]="!isEditEnabled(project)">
+            <i class="km-icon-edit"></i>
+          </button>
+          <button mat-icon-button
+                  [attr.id]="'km-delete-project-' + project.name"
+                  matTooltip="Delete Project"
+                  (click)="deleteProject(project, $event)"
+                  [disabled]="!isDeleteEnabled(project)">
+            <i class="km-icon-delete"></i>
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="km-project-cards-content-row">
+          <span><i class="km-icon-cluster"></i> {{clusterCount[project.id]}}</span>
+          <span [matTooltip]="getLabelsTooltip(project)">
+            <i class="km-icon-labels"></i>
+            {{getLabelsLength(project)}}
+          </span>
+        </div>
 
-      <ng-container matColumnDef="name">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell"
-            mat-sort-header>Name</th>
-        <td mat-cell
-            *matCellDef="let element"
-            [attr.id]="'km-project-name-' + element.name">{{element.name}}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="labels">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell">Labels</th>
-        <td mat-cell
-            *matCellDef="let element">
-          <km-labels [labels]="element.labels"
-                     [limit]="2"
-                     emptyMessage="-"></km-labels>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="id">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell"
-            mat-sort-header>ID</th>
-        <td mat-cell
-            *matCellDef="let element">{{element.id}}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="role">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell">Role</th>
-        <td mat-cell
-            *matCellDef="let element">{{role[element.id]}}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="clusters">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell">Clusters</th>
-        <td mat-cell
-            *matCellDef="let element">{{clusterCount[element.id]}}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="owners">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell">Owners</th>
-        <td mat-cell
-            *matCellDef="let element"
-            class="km-project-item-owner">
-          {{getOwners(element.owners)}}
-          <p class="km-project-more-owner"
-             *ngIf="isMoreOwners(element.owners)"
-             [matTooltip]="getMoreOwners(element.owners)"> ...
-            <span *ngIf="getMoreOwnersCount(element.owners) > 0">+{{getMoreOwnersCount(element.owners)}}</span>
-          </p>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell"></th>
-        <td mat-cell
-            *matCellDef="let element">
-          <div class="km-table-actions km-project-item-actions">
-            <ng-container [ngSwitch]="!!element.deletionTimestamp">
-              <ng-container *ngSwitchCase="true">
-                <mat-spinner [diameter]="25"
-                             class="km-spinner"
-                             color="accent"></mat-spinner>
-              </ng-container>
-
-              <ng-container *ngSwitchCase="false">
-                <button mat-icon-button
-                        [attr.id]="'km-edit-project-' + element.name"
-                        matTooltip="Edit Project"
-                        (click)="editProject(element, $event)"
-                        [disabled]="!isEditEnabled(element)">
-                  <i class="km-icon-edit"></i>
-                </button>
-                <button mat-icon-button
-                        [attr.id]="'km-delete-project-' + element.name"
-                        matTooltip="Delete Project"
-                        (click)="deleteProject(element, $event)"
-                        [disabled]="!isDeleteEnabled(element)">
-                  <i class="km-icon-delete"></i>
-                </button>
-              </ng-container>
-            </ng-container>
-          </div>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row
-          class="km-header-row"
-          *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row
-          *matRowDef="let row; columns: displayedColumns"
-          class="km-mat-row"
-          [ngClass]="{'km-clickable': isProjectActive(row)}"
-          (click)="selectProject(row)"></tr>
-    </table>
-
-    <ng-container *ngIf="!projects || projects.length === 0">
-      <div class="km-row km-no-item"
-           *ngIf="!isInitializing">
-        No projects available.
-      </div>
-      <div class="km-row"
-           *ngIf="isInitializing">
-        <mat-spinner color="accent"
-                     class="km-projects-spinner"
-                     [diameter]="25"></mat-spinner>
-      </div>
-    </ng-container>
-
-  </mat-card-content>
-</mat-card>
+        <div class="km-project-cards-content-row">
+          <span>
+            <i class="km-icon-owner"></i>
+            <span *ngIf="project.owners.length === 1"
+                  [matTooltip]="getOwners(project.owners)">{{getName(project.owners[0].name)}}</span>
+            <km-short-name-in-circle *ngIf="project.owners.length > 1"
+                                     [owners]="project.owners"
+                                     [limit]="2"></km-short-name-in-circle>
+          </span>
+          <span><i class="km-icon-role"></i> {{role[project.id]}}</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

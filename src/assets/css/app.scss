@@ -291,12 +291,17 @@ mat-button-toggle-group {
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100%;
 
     .km-provider-logo {
       min-height: 28px;
       max-height: 28px !important;
       max-width: 90px !important;
     }
+  }
+
+  .mat-button-toggle-button {
+    height: 100%;
   }
 }
 
@@ -585,8 +590,9 @@ mat-card-header > div > mat-card-title > div {
 
 // tooltip
 .mat-tooltip {
-  background-color: $light-primary !important;
+  background-color: $primary-light !important;
   margin-top: 0.625 * $baseline-grid !important;
+  font-size: $caption-font-size-base !important;
 }
 
 // button shadow

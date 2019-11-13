@@ -48,7 +48,7 @@ describe('Multi owner Story', () => {
   });
 
   it('should check if multi owner project is in list', () => {
-    ProjectsPage.getTable().should(Condition.Contain, projectName);
+    ProjectsPage.getProjectItem(projectName).should(Condition.HaveLength, 1);
   });
 
   it('should select project', () => {
