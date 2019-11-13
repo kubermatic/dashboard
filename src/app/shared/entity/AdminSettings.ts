@@ -1,10 +1,16 @@
 export class AdminSettings {
   cleanupOptions: CleanupOptions;
-  clusterTypeOptions: number;  // TODO: Change it to enum.
+  clusterTypeOptions: ClusterTypeOptions;
   defaultNodeCount: number;
 }
 
 export class CleanupOptions {
   Enabled: boolean;
   Enforced: boolean;
+}
+
+export enum ClusterTypeOptions {
+  All,
+  Kubernetes,
+  OpenShift,
 }
