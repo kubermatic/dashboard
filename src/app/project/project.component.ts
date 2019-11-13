@@ -30,7 +30,14 @@ export class ProjectComponent implements OnInit, OnDestroy {
   rawRole = [];
   displayedColumns: string[] = ['status', 'name', 'labels', 'id', 'role', 'clusters', 'owners', 'actions'];
   dataSource = new MatTableDataSource<ProjectEntity>();
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  showCards = true;
+  sort: MatSort;
+  @ViewChild(MatSort, {static: false})
+  set matSort(ms: MatSort) {
+    this.sort = ms;
+    this.setDataSourceAttributes();
+    // TODO: Set default sorting
+  }
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
@@ -40,9 +47,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       private readonly _cookieService: CookieService) {}
 
   ngOnInit(): void {
-    this.dataSource.sort = this.sort;
-    this.sort.active = 'name';
-    this.sort.direction = 'asc';
+    this.dataSource.data = this.projects;
 
     this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe(projects => {
       this.projects = projects;
@@ -68,6 +73,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
     return this.dataSource;
   }
 
+  setDataSourceAttributes(): void {
+    this.dataSource.sort = this.sort;
+  }
+
   private _sortProjectOwners(): void {
     this.projects.forEach(project => {
       project.owners = project.owners.sort((a, b) => a.name.localeCompare(b.name));
@@ -91,6 +100,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this.rawRole[project.id] = group;
       });
     });
+  }
+
+  changeView(): void {
+    this.showCards = !this.showCards;
   }
 
   selectProject(project: ProjectEntity): void {
@@ -137,6 +150,42 @@ export class ProjectComponent implements OnInit, OnDestroy {
     // if last displayed name is not complete, show it in tooltip
     return count > 30 ? this.getOwnerNameArray(owners).slice(truncatedLength - 1, owners.length).join(', ') :
                         this.getOwnerNameArray(owners).slice(truncatedLength, owners.length).join(', ');
+  }
+
+  getLabelsLength(project: ProjectEntity): number {
+    return project.labels ? Object.keys(project.labels).length : 0;
+  }
+
+  getLabelsTooltip(project: ProjectEntity): string {
+    let labels = '';
+    let counter = 0;
+    const labelLength = this.getLabelsLength(project);
+
+    if (labelLength > 0) {
+      for (const key in project.labels) {
+        if (project.labels.hasOwnProperty(key)) {
+          counter++;
+          if (project.labels[key]) {
+            labels += `${key}: ${project.labels[key]}`;
+          } else {
+            labels += `${key}`;
+          }
+
+          if (counter < labelLength) {
+            labels += `, `;
+          }
+        }
+      }
+    }
+    return labels;
+  }
+
+  getName(name: string): string {
+    return name.length > 19 ? `${name.substring(0, 19)}...` : `${name}`;
+  }
+
+  getProjectTooltip(name: string): string {
+    return name.length > 19 ? name : '';
   }
 
   isProjectActive(project: ProjectEntity): boolean {

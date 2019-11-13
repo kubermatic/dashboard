@@ -1,0 +1,17 @@
+<div fxLayout="row"
+     [matTooltip]="getHiddenOwners()">
+  <span *ngIf="shortNames.length > 0"
+        class="km-short-name-box">
+    <span class="km-short-name-circle-wrapper"
+          *ngFor="let shortName of shortNames; let i = index">
+      <span class="km-short-name-circle"
+            *ngIf="!limit || i < limit">
+        {{shortName}}
+      </span>
+    </span>
+  </span>
+  <span *ngIf="limit && shortNames.length > limit"
+        class="km-short-name-circle km-hidden-owners">
+    +{{shortNames.length - limit}}
+  </span>
+</div>
