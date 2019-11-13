@@ -14,6 +14,10 @@ const DEFAULT_USER_SETTINGS: UserSettings = {
 
 const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   defaultNodeCount: 1,
+  cleanupOptions: {
+    Enforced: false,
+    Enabled: false,
+  }
 };
 
 @Injectable()

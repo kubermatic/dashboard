@@ -16,8 +16,8 @@ import {MemberEntity} from '../../shared/entity/MemberEntity';
 })
 export class AdminSettingsComponent implements OnInit, OnDestroy {
   user: MemberEntity;
-  settings: AdminSettings;              // Local settings copy. User can edit it.
-  private _apiSettings: AdminSettings;  // Original settings from the API. Cannot be edited by the user.
+  settings: AdminSettings;     // Local settings copy. User can edit it.
+  apiSettings: AdminSettings;  // Original settings from the API. Cannot be edited by the user.
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 
@@ -25,12 +25,12 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      if (!_.isEqual(settings, this._apiSettings)) {
-        if (this._apiSettings) {
+      if (!_.isEqual(settings, this.apiSettings)) {
+        if (this.apiSettings) {
           NotificationActions.success('Successfully applied external settings update');
         }
-        this._apiSettings = settings;
-        this.settings = _.cloneDeep(this._apiSettings);
+        this.apiSettings = settings;
+        this.settings = _.cloneDeep(this.apiSettings);
       }
     });
 
@@ -38,8 +38,8 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(() => this._settingsService.patchAdminSettings(this.settings)))
         .subscribe(settings => {
-          this._apiSettings = settings;
-          this.settings = _.cloneDeep(this._apiSettings);
+          this.apiSettings = settings;
+          this.settings = _.cloneDeep(this.apiSettings);
         });
   }
 
@@ -55,5 +55,9 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
   goBack(): void {
     this._historyService.goBack('/projects');
+  }
+
+  isEqual(a: any, b: any): boolean {
+    return _.isEqual(a, b);
   }
 }

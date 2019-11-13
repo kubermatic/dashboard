@@ -17,8 +17,8 @@ import {MemberEntity, UserSettings} from '../../shared/entity/MemberEntity';
 export class UserSettingsComponent implements OnInit, OnDestroy {
   itemsPerPageOptions = [5, 10, 15, 20, 25];
   user: MemberEntity;
-  settings: UserSettings;              // Local settings copy. User can edit it.
-  private _apiSettings: UserSettings;  // Original settings from the API. Cannot be edited by the user.
+  settings: UserSettings;     // Local settings copy. User can edit it.
+  apiSettings: UserSettings;  // Original settings from the API. Cannot be edited by the user.
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 
@@ -30,12 +30,12 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     this._userService.loggedInUser.pipe(first()).subscribe(user => this.user = user);
 
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      if (!_.isEqual(settings, this._apiSettings)) {
-        if (this._apiSettings) {
+      if (!_.isEqual(settings, this.apiSettings)) {
+        if (this.apiSettings) {
           NotificationActions.success('Successfully applied external settings update');
         }
-        this._apiSettings = settings;
-        this.settings = _.cloneDeep(this._apiSettings);
+        this.apiSettings = settings;
+        this.settings = _.cloneDeep(this.apiSettings);
       }
     });
 
@@ -43,8 +43,8 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(() => this._settingsService.patchUserSettings(this.settings)))
         .subscribe(settings => {
-          this._apiSettings = settings;
-          this.settings = _.cloneDeep(this._apiSettings);
+          this.apiSettings = settings;
+          this.settings = _.cloneDeep(this.apiSettings);
         });
   }
 
