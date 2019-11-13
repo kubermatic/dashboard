@@ -1,4 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MatButtonToggleGroup} from '@angular/material/button-toggle';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
@@ -51,6 +52,10 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
   onSettingsChange(): void {
     this._settingsChange.next();
+  }
+
+  isLastDistro(group: MatButtonToggleGroup, distro: string): boolean {
+    return group.value && group.value.length <= 1 && group.value.indexOf(distro) > -1;
   }
 
   resetDefaults(): void {
