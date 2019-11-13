@@ -53,6 +53,11 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     this._settingsChange.next();
   }
 
+  resetDefaults(): void {
+    this.settings = this._settingsService.defaultAdminSettings;
+    this.onSettingsChange();
+  }
+
   goBack(): void {
     this._historyService.goBack('/projects');
   }

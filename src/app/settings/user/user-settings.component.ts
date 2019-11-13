@@ -61,4 +61,8 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   goBack(): void {
     this._historyService.goBack('/projects');
   }
+
+  isEqual(a: any, b: any): boolean {
+    return _.isEqual(a, b);
+  }
 }

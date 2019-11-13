@@ -1,6 +1,7 @@
 export class AdminSettings {
-  defaultNodeCount: number;
   cleanupOptions: CleanupOptions;
+  clusterTypeOptions: number;  // TODO: Change it to enum.
+  defaultNodeCount: number;
 }
 
 export class CleanupOptions {

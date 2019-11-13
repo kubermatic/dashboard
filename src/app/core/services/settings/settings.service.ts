@@ -13,11 +13,12 @@ const DEFAULT_USER_SETTINGS: UserSettings = {
 };
 
 const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
-  defaultNodeCount: 1,
   cleanupOptions: {
     Enforced: false,
     Enabled: false,
-  }
+  },
+  clusterTypeOptions: 0,
+  defaultNodeCount: 1,
 };
 
 @Injectable()
@@ -76,6 +77,10 @@ export class SettingsService {
                                  .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this._adminSettings$;
+  }
+
+  get defaultAdminSettings(): AdminSettings {
+    return DEFAULT_ADMIN_SETTINGS;
   }
 
   private _getAdminSettings(defaultOnError = false): Observable<AdminSettings> {

@@ -44,7 +44,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <km-settings-status [isSaved]="settings.itemsPerPage === apiSettings.itemsPerPage"></km-settings-status>
+        <km-settings-status [isSaved]="isEqual(settings.itemsPerPage, apiSettings.itemsPerPage)"></km-settings-status>
       </div>
     </div>
   </mat-card-content>
