@@ -8,6 +8,7 @@ import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
 import {MemberEntity, UserSettings} from '../../shared/entity/MemberEntity';
+import {objectDiff} from '../../shared/utils/common-utils';
 
 @Component({
   selector: 'kubermatic-user-settings',
@@ -41,7 +42,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
 
     this._settingsChange.pipe(debounceTime(1000))
         .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(() => this._settingsService.patchUserSettings(this.settings)))
+        .pipe(switchMap(() => this._settingsService.patchUserSettings(objectDiff(this.settings, this.apiSettings))))
         .subscribe(settings => {
           this.apiSettings = settings;
           this.settings = _.cloneDeep(this.apiSettings);
@@ -53,7 +54,6 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  // TODO: Send only part of the data that has changed.
   onSettingsChange(): void {
     this._settingsChange.next();
   }

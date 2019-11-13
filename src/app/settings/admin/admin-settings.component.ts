@@ -8,6 +8,7 @@ import {SettingsService} from '../../core/services/settings/settings.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
 import {AdminSettings} from '../../shared/entity/AdminSettings';
 import {MemberEntity} from '../../shared/entity/MemberEntity';
+import {objectDiff} from '../../shared/utils/common-utils';
 
 @Component({
   selector: 'kubermatic-admin-settings',
@@ -36,7 +37,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
     this._settingsChange.pipe(debounceTime(1000))
         .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(() => this._settingsService.patchAdminSettings(this.settings)))
+        .pipe(switchMap(() => this._settingsService.patchAdminSettings(objectDiff(this.settings, this.apiSettings))))
         .subscribe(settings => {
           this.apiSettings = settings;
           this.settings = _.cloneDeep(this.apiSettings);
@@ -48,7 +49,6 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  // TODO: Send only part of the data that has changed.
   onSettingsChange(): void {
     this._settingsChange.next();
   }
