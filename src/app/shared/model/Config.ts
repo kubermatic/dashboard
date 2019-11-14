@@ -8,8 +8,6 @@ export interface Config {
   openstack?: {wizard_use_default_user?: boolean;};
   google_analytics_code?: string;
   google_analytics_config?: object;
-  cleanup_cluster?: boolean;
-  enforce_cleanup_cluster?: boolean;
   custom_links?: CustomLink[];
   oidc_provider_url?: string;
   oidc_provider_scope?: string;

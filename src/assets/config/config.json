@@ -1,6 +1,4 @@
 {
-  "cleanup_cluster":  false,
-  "enforce_cleanup_cluster":  false,
   "custom_links": [],
   "openstack": {
     "wizard_use_default_user": false
