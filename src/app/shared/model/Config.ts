@@ -1,7 +1,6 @@
 import {CustomLink} from '../utils/custom-link-utils/custom-link';
 
 export interface Config {
-  default_node_count?: number;
   show_demo_info?: boolean;
   show_terms_of_service?: boolean;
   show_api_docs?: boolean;
