@@ -6,7 +6,8 @@
   <mat-card>
     <!-- Cluster Spec -->
     <kubermatic-set-cluster-spec [cluster]="cluster"
-                                 *ngIf="currentStep.name === 'set-cluster-spec'"></kubermatic-set-cluster-spec>
+                                 [settings]="settings"
+                                 *ngIf="settings && currentStep.name === 'set-cluster-spec'"></kubermatic-set-cluster-spec>
 
     <!-- Cluster Provider -->
     <kubermatic-set-provider [cluster]="cluster"

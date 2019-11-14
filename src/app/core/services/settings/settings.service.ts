@@ -5,7 +5,7 @@ import {catchError, map, shareReplay, switchMap} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
-import {AdminSettings} from '../../../shared/entity/AdminSettings';
+import {AdminSettings, ClusterTypeOptions} from '../../../shared/entity/AdminSettings';
 import {UserSettings} from '../../../shared/entity/MemberEntity';
 
 const DEFAULT_USER_SETTINGS: UserSettings = {
@@ -17,7 +17,7 @@ const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
     Enforced: false,
     Enabled: false,
   },
-  clusterTypeOptions: 0,
+  clusterTypeOptions: ClusterTypeOptions.All,
   defaultNodeCount: 1,
 };
 

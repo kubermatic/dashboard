@@ -122,26 +122,4 @@ describe('SetClusterSpecComponent', () => {
   it('should set type to kubernetes as default', () => {
     expect(component.clusterSpecForm.controls['type'].value).toEqual(ClusterType.Kubernetes);
   });
-
-  it('should set type to openshift as default if kubernetes is hidden', () => {
-    config.hide_kubernetes = true;
-    createComponent();
-    expect(component.clusterSpecForm.controls['type'].value).toEqual(ClusterType.OpenShift);
-  });
-
-  it('should show type toggle by default', () => {
-    expect(component.hasMultipleTypes()).toBeTruthy();
-  });
-
-  it('should not show type toggle if type openshift is hidden', () => {
-    config.hide_openshift = true;
-    createComponent();
-    expect(component.hasMultipleTypes()).toBeFalsy();
-  });
-
-  it('should not show type toggle if type kubernetes is hidden', () => {
-    config.hide_kubernetes = true;
-    createComponent();
-    expect(component.hasMultipleTypes()).toBeFalsy();
-  });
 });

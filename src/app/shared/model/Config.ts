@@ -15,8 +15,6 @@ export interface Config {
   oidc_provider_url?: string;
   oidc_provider_scope?: string;
   oidc_provider_client_id?: string;
-  hide_kubernetes?: boolean;
-  hide_openshift?: boolean;
 }
 
 export interface UserGroupConfig {

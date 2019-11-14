@@ -9,7 +9,5 @@
   "share_kubeconfig": false,
   "show_demo_info": false,
   "show_terms_of_service": false,
-  "show_api_docs": true,
-  "hide_kubernetes": false,
-  "hide_openshift": false
+  "show_api_docs": true
 }

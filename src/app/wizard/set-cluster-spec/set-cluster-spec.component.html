@@ -54,12 +54,12 @@
                                    formControlName="type"
                                    *ngIf="hasMultipleTypes()">
             <mat-button-toggle value="kubernetes"
-                               *ngIf="!hideType('kubernetes')">
+                               *ngIf="!hideKubernetes()">
               <i class="km-icon-kubernetes"></i>
               Kubernetes
             </mat-button-toggle>
             <mat-button-toggle value="openshift"
-                               *ngIf="!hideType('openshift')">
+                               *ngIf="!hideOpenShift()">
               <i class="km-icon-openshift"></i>
               OpenShift
             </mat-button-toggle>
