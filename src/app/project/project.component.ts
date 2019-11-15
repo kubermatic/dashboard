@@ -1,15 +1,18 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatDialogConfig, MatSort, MatSortHeader, MatTableDataSource, SortDirection} from '@angular/material';
 import {Router} from '@angular/router';
+import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {Auth, ClusterService, ProjectService, UserService} from '../core/services';
+import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {UserSettings} from '../shared/entity/MemberEntity';
 import {ProjectEntity, ProjectOwners} from '../shared/entity/ProjectEntity';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
@@ -34,20 +37,49 @@ export class ProjectComponent implements OnInit, OnDestroy {
   sort: MatSort;
   @ViewChild(MatSort, {static: false})
   set matSort(ms: MatSort) {
+    const isViewInit = !this.sort && !!ms;  // If true, view is being initialized.
+
     this.sort = ms;
     this.setDataSourceAttributes();
-    // TODO: Set default sorting
+
+    if (isViewInit) {
+      setTimeout(() => {
+        // dirty hack to set sorting arrow:
+        // use _handleClick() will trigger column's click event
+        // therefor set initial sorting direction the opposite direciton
+        this.sort.direction = 'desc' as SortDirection;
+        const sortHeader = this.sort.sortables.get('name') as MatSortHeader;
+        sortHeader._handleClick();
+      }, 100);
+    }
   }
+  settings: UserSettings;
+  private _settingsChange = new Subject<void>();
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
       private readonly _clusterService: ClusterService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _matDialog: MatDialog,
       private readonly _googleAnalyticsService: GoogleAnalyticsService, private readonly _router: Router,
-      private readonly _cookieService: CookieService) {}
+      private readonly _cookieService: CookieService, private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.projects;
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      if (this.settings) {
+        return;
+      }
+      this.settings = settings;
+      this.showCards = !settings.selectProjectTableView;
+    });
+
+    this._settingsChange.pipe(debounceTime(1000))
+        .pipe(takeUntil(this._unsubscribe))
+        .pipe(switchMap(() => this._settingsService.patchUserSettings({'selectProjectTableView': !this.showCards})))
+        .subscribe(settings => {
+          this.settings = settings;
+          this.showCards = !settings.selectProjectTableView;
+        });
 
     this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe(projects => {
       this.projects = projects;
@@ -58,7 +90,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
       if (this._shouldRedirectToCluster()) {
         this._redirectToCluster();
       }
-
       this.isInitializing = false;
     });
   }
@@ -104,6 +135,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   changeView(): void {
     this.showCards = !this.showCards;
+    this.settings.selectProjectTableView = !this.settings.selectProjectTableView;
+    this._settingsChange.next();
   }
 
   selectProject(project: ProjectEntity): void {

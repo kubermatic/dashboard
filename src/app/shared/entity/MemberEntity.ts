@@ -10,8 +10,9 @@ export class MemberEntity {
 
 export class UserSettings {
   selectedTheme?: string;
-  selextedProjectId?: string;
+  selectedProjectId?: string;
   itemsPerPage?: number;
+  selectProjectTableView?: boolean;
 }
 
 export class MemberProject {
