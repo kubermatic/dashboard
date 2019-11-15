@@ -1,5 +1,6 @@
 @import "../../assets/css/colors";
 @import "../../assets/css/variables";
+@import "../../assets/css/fonts";
 
 .km-projects-spinner {
   margin: (2.5 * $baseline-grid) auto !important;
@@ -73,6 +74,11 @@ mat-button-toggle {
     transition: visibility 0s 0s, opacity 0s ease-out;
   }
 
+  .km-icon-cluster {
+    width: 24px;
+    height: 24px;
+  }
+
   mat-card {
     min-width: 41.25 * $baseline-grid;
     max-width: 41.25 * $baseline-grid;
@@ -110,6 +116,11 @@ mat-button-toggle {
     margin: 0;
     padding: (0.625 * $baseline-grid) 0 0 0;
     line-height: 1.6 * $line-height;
+
+    strong {
+      font-family: $primary-font-mono;
+      margin-right: 0.625 * $baseline-grid;
+    }
   }
 
   .km-project-cards-status {
