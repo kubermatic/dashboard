@@ -14,6 +14,7 @@ import {ConfirmationDialogComponent} from '../../shared/components/confirmation-
 import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
 import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
+import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.component';
 
 @Component({
   selector: 'kubermatic-admin-settings',
@@ -141,16 +142,25 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
       },
     };
 
-    this._matDialog.open(ConfirmationDialogComponent, dialogConfig).afterClosed().subscribe((isConfirmed: boolean) => {
-      if (isConfirmed) {
-        admin.isAdmin = false;
-        this._settingsService.setAdmin(admin).pipe(first()).subscribe(() => {
-          NotificationActions.success(`${admin.name} was deleted from admin group`);
-          this._settingsService.refreshAdmins();
+    this._matDialog.open(ConfirmationDialogComponent, dialogConfig)
+        .afterClosed()
+        .pipe(first())
+        .subscribe((isConfirmed: boolean) => {
+          if (isConfirmed) {
+            admin.isAdmin = false;
+            this._settingsService.setAdmin(admin).pipe(first()).subscribe(() => {
+              NotificationActions.success(`${admin.name} was deleted from admin group`);
+              this._settingsService.refreshAdmins();
+            });
+          }
         });
+  }
+
+  addAdmin(): void {
+    this._matDialog.open(AddAdminDialogComponent).afterClosed().pipe(first()).subscribe((admin) => {
+      if (admin) {
+        this._settingsService.refreshAdmins();
       }
     });
   }
-
-  addAdmin(admin: AdminEntity): void {}
 }
