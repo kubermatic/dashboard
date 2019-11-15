@@ -6,3 +6,4 @@ spec:
   email: roxy2@loodse.com
   id: 1413636a43ddc27da27e47614faedff24b4ab19c9d9f2b45dd1b89d9_KUBE
   name: roxy2
+  admin: true
