@@ -4,18 +4,16 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import {AppConfigService} from '../../app-config.service';
 import {CoreModule} from '../../core/core.module';
 import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {MachineNetworksModule} from '../../machine-networks/machine-networks.module';
-import {Config} from '../../shared/model/Config';
 import {SharedModule} from '../../shared/shared.module';
 import {ClusterType} from '../../shared/utils/cluster-utils/cluster-utils';
-import {fakeAppConfig} from '../../testing/fake-data/appConfig.fake';
 import {masterVersionsFake} from '../../testing/fake-data/cluster-spec.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {ClusterNameGeneratorMock} from '../../testing/services/name-generator-mock.service';
+import {DEFAULT_ADMIN_SETTINGS_MOCK} from '../../testing/services/settings-mock.service';
 
 import {SetClusterSpecComponent} from './set-cluster-spec.component';
 
@@ -33,14 +31,10 @@ describe('SetClusterSpecComponent', () => {
   let fixture: ComponentFixture<SetClusterSpecComponent>;
   let component: SetClusterSpecComponent;
   let nameGenerator: ClusterNameGenerator;
-  let config: Config;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getMasterVersions']);
     apiMock.getMasterVersions.and.returnValue(asyncData(masterVersionsFake()));
-    const appConfigServiceMock = jasmine.createSpyObj('AppConfigService', ['getConfig']);
-    config = fakeAppConfig() as Config;
-    appConfigServiceMock.getConfig.and.returnValue(config);
     TestBed
         .configureTestingModule({
           imports: [
@@ -53,7 +47,6 @@ describe('SetClusterSpecComponent', () => {
             HttpClient,
             WizardService,
             {provide: ApiService, useValue: apiMock},
-            {provide: AppConfigService, useValue: appConfigServiceMock},
             {provide: ClusterNameGenerator, useClass: ClusterNameGeneratorMock},
           ],
         })
@@ -80,6 +73,7 @@ describe('SetClusterSpecComponent', () => {
     };
     component.labels = {};
     component.asyncLabelValidators = [];
+    component.settings = DEFAULT_ADMIN_SETTINGS_MOCK;
     fixture.detectChanges();
     nameGenerator = fixture.debugElement.injector.get(ClusterNameGenerator);
   };
