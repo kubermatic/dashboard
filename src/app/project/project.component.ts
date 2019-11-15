@@ -53,8 +53,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       }, 100);
     }
   }
-  settings: UserSettings;              // Local settings copy. User can edit it.
-  private _apiSettings: UserSettings;  // Original settings from the API. Cannot be edited by the user.
+  settings: UserSettings;
   private _settingsChange = new Subject<void>();
   private _unsubscribe: Subject<any> = new Subject();
 
@@ -67,23 +66,19 @@ export class ProjectComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.dataSource.data = this.projects;
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      if (!_.isEqual(settings, this._apiSettings)) {
-        if (this._apiSettings) {
-          return;
-        }
-        this._apiSettings = settings;
-        this.showCards = !!settings.selectProjectTableView ? false : true;
-        this.settings = _.cloneDeep(this._apiSettings);
+      if (this.settings) {
+        return;
       }
+      this.settings = settings;
+      this.showCards = !settings.selectProjectTableView;
     });
 
     this._settingsChange.pipe(debounceTime(1000))
         .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(() => this._settingsService.patchUserSettings(this.settings)))
         .subscribe(settings => {
-          this._apiSettings = settings;
-          this.showCards = !!settings.selectProjectTableView ? false : true;
-          this.settings = _.cloneDeep(this._apiSettings);
+          this.settings = settings;
+          this.showCards = !settings.selectProjectTableView;
         });
 
     this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe(projects => {
