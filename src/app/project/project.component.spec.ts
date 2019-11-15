@@ -9,6 +9,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {AppConfigService} from '../app-config.service';
 import {CoreModule} from '../core/core.module';
 import {ClusterService, DatacenterService, ProjectService, UserService} from '../core/services';
+import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {SharedModule} from '../shared/shared.module';
 import {DialogTestModule, NoopConfirmDialogComponent} from '../testing/components/noop-confirmation-dialog.component';
@@ -48,6 +49,7 @@ describe('ProjectComponent', () => {
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             {provide: DatacenterService, useClass: DatacenterMockService},
+            SettingsService,
             MatDialog,
             GoogleAnalyticsService,
             CookieService,
