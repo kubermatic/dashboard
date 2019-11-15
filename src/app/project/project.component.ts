@@ -75,7 +75,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
     this._settingsChange.pipe(debounceTime(1000))
         .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(() => this._settingsService.patchUserSettings(this.settings)))
+        .pipe(switchMap(() => this._settingsService.patchUserSettings({'selectProjectTableView': !this.showCards})))
         .subscribe(settings => {
           this.settings = settings;
           this.showCards = !settings.selectProjectTableView;
@@ -134,6 +134,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   changeView(): void {
+    this.showCards = !this.showCards;
     this.settings.selectProjectTableView = !this.settings.selectProjectTableView;
     this._settingsChange.next();
   }
