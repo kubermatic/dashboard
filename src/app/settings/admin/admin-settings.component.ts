@@ -1,13 +1,16 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatButtonToggleGroup} from '@angular/material/button-toggle';
+import {MatTableDataSource} from '@angular/material/table';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
+import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
+import {UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
-import {AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
+import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
+import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
 
 @Component({
@@ -16,15 +19,27 @@ import {objectDiff} from '../../shared/utils/common-utils';
   styleUrls: ['admin-settings.component.scss'],
 })
 export class AdminSettingsComponent implements OnInit, OnDestroy {
+  user: MemberEntity;
+  admins = [];
+  dataSource = new MatTableDataSource<AdminEntity>();
+  displayedColumns: string[] = ['name', 'email', 'actions'];
   selectedDistro = [];
   settings: AdminSettings;     // Local settings copy. User can edit it.
   apiSettings: AdminSettings;  // Original settings from the API. Cannot be edited by the user.
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _settingsService: SettingsService, private readonly _historyService: HistoryService) {}
+  constructor(
+      private readonly _userService: UserService, private readonly _settingsService: SettingsService,
+      private readonly _historyService: HistoryService) {}
 
   ngOnInit(): void {
+    this._userService.loggedInUser.pipe(first()).subscribe(user => this.user = user);
+
+    this._settingsService.admins.pipe(takeUntil(this._unsubscribe)).subscribe(admins => {
+      this.admins = admins;
+    });
+
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(settings, this.apiSettings)) {
         if (this.apiSettings) {
@@ -103,4 +118,15 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   isEqual(a: any, b: any): boolean {
     return _.isEqual(a, b);
   }
+
+  getDataSource(): MatTableDataSource<AdminEntity> {
+    this.dataSource.data = this.admins;
+    return this.dataSource;
+  }
+
+  isDeleteAdminEnabled(admin: AdminEntity): boolean {
+    return !!this.user && admin.email !== this.user.email;
+  }
+
+  deleteAdmin(admin: AdminEntity): void {}
 }

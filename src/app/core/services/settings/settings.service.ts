@@ -5,7 +5,7 @@ import {catchError, map, shareReplay, switchMap} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
-import {AdminSettings, ClusterTypeOptions} from '../../../shared/entity/AdminSettings';
+import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../../shared/entity/AdminSettings';
 import {UserSettings} from '../../../shared/entity/MemberEntity';
 
 const DEFAULT_USER_SETTINGS: UserSettings = {
@@ -108,5 +108,10 @@ export class SettingsService {
   patchAdminSettings(patch: any): Observable<AdminSettings> {
     const url = `${this.restRoot}/admin/settings`;
     return this._http.patch<AdminSettings>(url, patch);
+  }
+
+  get admins(): Observable<AdminEntity[]> {
+    const url = `${this.restRoot}/admin`;
+    return this._http.get<AdminEntity[]>(url);
   }
 }

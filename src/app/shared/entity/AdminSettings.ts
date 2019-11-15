@@ -14,3 +14,9 @@ export enum ClusterTypeOptions {
   Kubernetes = 1,
   OpenShift = 2,
 }
+
+export class AdminEntity {
+  name?: string;
+  email?: string;
+  isAdmin?: boolean;
+}
