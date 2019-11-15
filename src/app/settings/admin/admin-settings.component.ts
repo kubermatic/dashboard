@@ -1,5 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatButtonToggleGroup} from '@angular/material/button-toggle';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -9,6 +10,7 @@ import {UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
+import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
 import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
@@ -31,7 +33,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
   constructor(
       private readonly _userService: UserService, private readonly _settingsService: SettingsService,
-      private readonly _historyService: HistoryService) {}
+      private readonly _historyService: HistoryService, private readonly _matDialog: MatDialog) {}
 
   ngOnInit(): void {
     this._userService.loggedInUser.pipe(first()).subscribe(user => this.user = user);
@@ -128,5 +130,27 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     return !!this.user && admin.email !== this.user.email;
   }
 
-  deleteAdmin(admin: AdminEntity): void {}
+  deleteAdmin(admin: AdminEntity): void {
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        title: 'Delete Admin',
+        message: `Are you sure you want to take admin rights from ${admin.name}?`,
+        confirmLabel: 'Delete',
+      },
+    };
+
+    this._matDialog.open(ConfirmationDialogComponent, dialogConfig).afterClosed().subscribe((isConfirmed: boolean) => {
+      if (isConfirmed) {
+        admin.isAdmin = false;
+        this._settingsService.setAdmin(admin).pipe(first()).subscribe(() => {
+          NotificationActions.success(`${admin.name} was deleted from admin group`);
+          this._settingsService.refreshAdmins();
+        });
+      }
+    });
+  }
+
+  addAdmin(admin: AdminEntity): void {}
 }

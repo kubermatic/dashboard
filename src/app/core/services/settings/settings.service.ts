@@ -28,6 +28,8 @@ export class SettingsService {
   private _userSettingsRefresh$: Subject<any> = new Subject();
   private _adminSettings$: Observable<AdminSettings>;
   private _adminSettingsRefresh$: Subject<any> = new Subject();
+  private _admins$: Observable<AdminEntity[]>;
+  private _adminsRefresh$: Subject<any> = new Subject();
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 5);
 
   constructor(private _http: HttpClient, private _appConfig: AppConfigService) {}
@@ -111,7 +113,25 @@ export class SettingsService {
   }
 
   get admins(): Observable<AdminEntity[]> {
+    if (!this._admins$) {
+      this._admins$ = merge(this._refreshTimer$, this._adminsRefresh$)
+                          .pipe(switchMap(() => this._getAdmins()))
+                          .pipe(shareReplay({refCount: true, bufferSize: 1}));
+    }
+    return this._admins$;
+  }
+
+  private _getAdmins(): Observable<AdminEntity[]> {
     const url = `${this.restRoot}/admin`;
     return this._http.get<AdminEntity[]>(url);
+  }
+
+  refreshAdmins(): void {
+    this._adminsRefresh$.next();
+  }
+
+  setAdmin(admin: AdminEntity): Observable<AdminEntity> {
+    const url = `${this.restRoot}/admin`;
+    return this._http.put<AdminEntity>(url, admin);
   }
 }
