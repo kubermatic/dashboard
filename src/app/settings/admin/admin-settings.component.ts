@@ -1,6 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatButtonToggleGroup} from '@angular/material/button-toggle';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -14,6 +15,7 @@ import {ConfirmationDialogComponent} from '../../shared/components/confirmation-
 import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
 import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
+
 import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.component';
 
 @Component({
@@ -26,6 +28,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   admins = [];
   dataSource = new MatTableDataSource<AdminEntity>();
   displayedColumns: string[] = ['name', 'email', 'actions'];
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
   selectedDistro = [];
   settings: AdminSettings;     // Local settings copy. User can edit it.
   apiSettings: AdminSettings;  // Original settings from the API. Cannot be edited by the user.
@@ -37,6 +40,10 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
       private readonly _historyService: HistoryService, private readonly _matDialog: MatDialog) {}
 
   ngOnInit(): void {
+    this.dataSource.sort = this.sort;
+    this.sort.active = 'name';
+    this.sort.direction = 'asc';
+
     this._userService.loggedInUser.pipe(first()).subscribe(user => this.user = user);
 
     this._settingsService.admins.pipe(takeUntil(this._unsubscribe)).subscribe(admins => {
