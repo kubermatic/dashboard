@@ -9,9 +9,7 @@ import {AppConfigService} from '../../../app-config.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {RouterTestingModule} from '../../../testing/router-stubs';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
-import {AuthMockService} from '../../../testing/services/auth-mock.service';
 import {DEFAULT_ADMIN_SETTINGS_MOCK, DEFAULT_USER_SETTINGS_MOCK} from '../../../testing/services/settings-mock.service';
-import {Auth} from '../auth/auth.service';
 
 import {SettingsService} from './settings.service';
 
@@ -32,7 +30,6 @@ describe('SettingsService', () => {
       ],
       providers: [
         SettingsService,
-        {provide: Auth, useClass: AuthMockService},
         {provide: AppConfigService, useClass: AppConfigMockService},
       ],
     });

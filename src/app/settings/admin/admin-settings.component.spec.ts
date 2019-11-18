@@ -37,7 +37,8 @@ describe('AdminSettingsComponent', () => {
           providers: [
             {provide: UserService, useClass: UserMockService},
             {provide: SettingsService, useClass: SettingsMockService},
-            {provide: MatDialogRef, useClass: MatDialogRefMock}, HistoryService
+            {provide: MatDialogRef, useClass: MatDialogRefMock},
+            HistoryService,
           ],
         })
         .compileComponents();
