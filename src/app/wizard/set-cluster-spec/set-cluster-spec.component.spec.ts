@@ -96,7 +96,7 @@ describe('SetClusterSpecComponent', () => {
     name.setValue('test-name');
     expect(name.hasError('required')).toBeFalsy('name field has no required error');
 
-    expect(component.clusterSpecForm.valid).toBeTruthy('form is valid');
+    expect(component.clusterSpecForm.controls.name.valid).toBeTruthy('field is valid');
   });
 
   it('should call generateName method', () => {
