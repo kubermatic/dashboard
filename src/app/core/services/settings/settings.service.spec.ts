@@ -9,7 +9,6 @@ import {AppConfigService} from '../../../app-config.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {RouterTestingModule} from '../../../testing/router-stubs';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
-import {DEFAULT_ADMIN_SETTINGS_MOCK, DEFAULT_USER_SETTINGS_MOCK} from '../../../testing/services/settings-mock.service';
 
 import {SettingsService} from './settings.service';
 
@@ -38,10 +37,5 @@ describe('SettingsService', () => {
 
   it('should be created', () => {
     expect(settingsService).toBeTruthy();
-  });
-
-  it('should have up-to-date mocks', () => {
-    expect(settingsService.defaultAdminSettings).toEqual(DEFAULT_ADMIN_SETTINGS_MOCK);
-    expect(settingsService.defaultUserSettings).toEqual(DEFAULT_USER_SETTINGS_MOCK);
   });
 });

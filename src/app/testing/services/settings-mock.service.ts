@@ -6,6 +6,7 @@ import {UserSettings} from '../../shared/entity/MemberEntity';
 
 export const DEFAULT_USER_SETTINGS_MOCK: UserSettings = {
   itemsPerPage: 10,
+  selectProjectTableView: false,
 };
 
 export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
