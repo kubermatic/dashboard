@@ -10,6 +10,7 @@ import {UserSettings} from '../../../shared/entity/MemberEntity';
 
 const DEFAULT_USER_SETTINGS: UserSettings = {
   itemsPerPage: 10,
+  selectProjectTableView: false,
 };
 
 const DEFAULT_ADMIN_SETTINGS: AdminSettings = {

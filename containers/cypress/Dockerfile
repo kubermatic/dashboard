@@ -24,7 +24,7 @@ RUN apt-get update -qq && apt-get install -y \
 
 # Install Docker from Docker Inc. repositories.
 RUN curl -sSL https://get.docker.com/ | sh
-RUN npm i -g cypress
+RUN npm i -g cypress@3.6.0
 
 COPY --from=download /usr/local/bin/helm /usr/local/bin/helm
 COPY --from=download /usr/local/bin/kubectl /usr/local/bin/kubectl

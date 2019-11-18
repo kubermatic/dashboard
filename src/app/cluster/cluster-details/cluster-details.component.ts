@@ -17,7 +17,7 @@ import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {Config, GroupConfig} from '../../shared/model/Config';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
-import {ClusterType} from '../../shared/utils/cluster-utils/cluster-utils';
+import {ClusterType, ClusterUtils} from '../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
 import {NodeService} from '../services/node.service';
 
@@ -263,6 +263,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         .subscribe(() => {
           NotificationActions.success(`The ${addon.name} addon has been removed from the ${this.cluster.name} cluster`);
         });
+  }
+
+  getConnectName(): string {
+    return ClusterUtils.isOpenshiftType(this.cluster) ? 'Open Console' : 'Open Dashboard';
   }
 
   ngOnDestroy(): void {

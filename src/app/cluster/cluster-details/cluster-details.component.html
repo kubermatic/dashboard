@@ -42,7 +42,7 @@
          target="_blank"
          mat-flat-button
          [disabled]="!isClusterRunning || !isEditEnabled()">
-        Connect
+        {{getConnectName()}}
       </a>
     </div>
   </div>
