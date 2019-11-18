@@ -282,13 +282,13 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
 
   getSubnetIDFormState(): string {
     if (!this._loadingSubnetIds && (!this._hasCredentials() || this.cloudSpec.aws.vpcId === '')) {
-      return 'Subnet ID*';
+      return 'Subnet ID & Availability Zone*';
     } else if (this._loadingSubnetIds && !this._noSubnets) {
-      return 'Loading Subnet IDs...';
+      return 'Loading Subnet IDs & Availability Zones...';
     } else if (this.cloudSpec.aws.vpcId !== '' && this.subnetIds.length === 0 || this._noSubnets) {
-      return 'No Subnet IDs available';
+      return 'No Subnet IDs & Availability Zones available';
     } else {
-      return 'Subnet ID*';
+      return 'Subnet ID & Availability Zone*';
     }
   }
 
