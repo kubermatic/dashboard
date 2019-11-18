@@ -8,6 +8,7 @@ import {CoreModule} from '../../core/core.module';
 import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {MachineNetworksModule} from '../../machine-networks/machine-networks.module';
+import {ClusterTypeOptions} from '../../shared/entity/AdminSettings';
 import {SharedModule} from '../../shared/shared.module';
 import {ClusterType} from '../../shared/utils/cluster-utils/cluster-utils';
 import {masterVersionsFake} from '../../testing/fake-data/cluster-spec.fake';
@@ -115,5 +116,20 @@ describe('SetClusterSpecComponent', () => {
 
   it('should set type to kubernetes as default', () => {
     expect(component.clusterSpecForm.controls['type'].value).toEqual(ClusterType.Kubernetes);
+  });
+
+  it('should show type toggle by default', () => {
+    component.settings.clusterTypeOptions = ClusterTypeOptions.All;
+    expect(component.hasMultipleTypes()).toBeTruthy();
+  });
+
+  it('should not show type toggle if type openshift is hidden', () => {
+    component.settings.clusterTypeOptions = ClusterTypeOptions.Kubernetes;
+    expect(component.hasMultipleTypes()).toBeFalsy();
+  });
+
+  it('should not show type toggle if type kubernetes is hidden', () => {
+    component.settings.clusterTypeOptions = ClusterTypeOptions.OpenShift;
+    expect(component.hasMultipleTypes()).toBeFalsy();
   });
 });
