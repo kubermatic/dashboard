@@ -1,0 +1,107 @@
+@import "../../../assets/css/colors";
+@import "../../../assets/css/variables";
+
+.mat-card {
+  color: $text-color;
+  margin-top: 3 * $baseline-grid;
+  padding: (3.75 * $baseline-grid) 0;
+
+  .mat-card-header {
+    padding: 0 (7.5 * $baseline-grid);
+  }
+
+  &.white {
+    .mat-card-header {
+      padding-bottom: 3.75 * $baseline-grid;
+    }
+
+    .mat-card-content {
+      padding: 0 (3.75 * $baseline-grid);
+    }
+  }
+
+  .km-table td:first-child,
+  .km-table th:first-child {
+    padding-left: 7.5 * $baseline-grid;
+  }
+
+  .km-admin-settings {
+    font-size: $subhead-font-size-base;
+    padding: 3.75 * $baseline-grid;
+
+    .km-admin-settings-label {
+      width: 35 * $baseline-grid;
+      line-height: 8 * $baseline-grid;
+    }
+
+    .km-info-icon {
+      background-color: $separator;
+      border-radius: 50%;
+      color: $medium-text-color;
+      cursor: pointer;
+      display: inline-block;
+      font-size: $body-font-size-base;
+      height: 18px;
+      line-height: 18px;
+      margin-left: .5 * $baseline-grid;
+      text-align: center;
+      width: 18px;
+    }
+
+    .km-admin-settings-field-distro {
+      mat-button-toggle {
+        min-height: 50px;
+        max-height: 50px;
+        min-width: 150px;
+        max-width: 150px;
+        border-radius: $border-radius;
+
+        i {
+          -webkit-filter: grayscale(100%);
+          -ms-filter: grayscale(100%);
+          filter: grayscale(100%);
+        }
+
+        &:hover {
+          background-color: transparent;
+          border: 1px solid $primary;
+          transition: all .5s ease;
+        }
+
+        &.mat-button-toggle-checked {
+          background-color: transparent;
+          border: 1px solid $primary;
+
+          i {
+            -webkit-filter: none;
+            -ms-filter: none;
+            filter: none;
+          }
+        }
+
+        ::ng-deep.mat-button-toggle-label-content {
+          color: $text-color;
+          font-weight: normal;
+          font-size: $subhead-font-size-base;
+        }
+      }
+    }
+
+    .km-admin-settings-field-nd {
+      width: 25.5 * $baseline-grid;
+    }
+
+    mat-checkbox {
+      margin: (.66 * $baseline-grid) (6 * $baseline-grid) 0 0;
+    }
+
+    km-settings-status {
+      margin-top: 10px;
+    }
+  }
+}
+
+.km-admin-item-actions {
+  display: flex;
+  justify-content: flex-end;
+}

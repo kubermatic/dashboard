@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {fadeInOut} from '../../shared/animations/fade';
+import {fadeInOut} from '../../animations/fade';
 
 @Component({
   selector: 'km-settings-status',

@@ -3,12 +3,13 @@ import {Router} from '@angular/router';
 import {forkJoin, of, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
-import {AppConfigService} from '../app-config.service';
 import {ClusterService, ProjectService, WizardService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
+import {SettingsService} from '../core/services/settings/settings.service';
 import {Step, StepsService} from '../core/services/wizard/steps.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
+import {AdminSettings} from '../shared/entity/AdminSettings';
 import {ClusterEntity, getEmptyCloudProviderSpec} from '../shared/entity/ClusterEntity';
 import {getEmptyNodeProviderSpec, getEmptyNodeVersionSpec, getEmptyOperatingSystemSpec} from '../shared/entity/NodeEntity';
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
@@ -35,6 +36,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   };
   private _unsubscribe: Subject<any> = new Subject();
 
+  settings: AdminSettings;
   steps: Step[] = [];
   currentStep: Step;
   currentStepIndex = 0;
@@ -51,31 +53,17 @@ export class WizardComponent implements OnInit, OnDestroy {
       private readonly _stepsService: StepsService, private readonly _router: Router,
       private readonly _projectService: ProjectService, private readonly _clusterService: ClusterService,
       private readonly _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _appConfigService: AppConfigService) {
-    const defaultNodeCount = this._appConfigService.getConfig().default_node_count || 3;
-    this.cluster = {
-      name: '',
-      spec: {
-        version: '',
-        cloud: {
-          dc: '',
-        },
-        machineNetworks: [],
-      },
-      type: '',
-    };
-
-    this.addNodeData = {
-      spec: {
-        cloud: {},
-        operatingSystem: {},
-        versions: {},
-      },
-      count: defaultNodeCount,
-    };
+      private readonly _settingsService: SettingsService) {
+    this.cluster = {name: '', spec: {version: '', cloud: {dc: ''}, machineNetworks: []}, type: ''};
+    this.addNodeData = {spec: {cloud: {}, operatingSystem: {}, versions: {}}, count: 3};
   }
 
   ngOnInit(): void {
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.settings = settings;
+      this.addNodeData.count = settings.defaultNodeCount;
+    });
+
     this.updateSteps();
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
         .subscribe(project => this.project = project);
