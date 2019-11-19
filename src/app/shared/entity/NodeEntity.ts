@@ -134,7 +134,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
     case NodeProvider.VSPHERE:
       return {
         cpus: 1,
-        memory: 512,
+        memory: 2000,
         template: '',
       } as VSphereNodeSpec;
     case NodeProvider.HETZNER:
