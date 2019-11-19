@@ -1,15 +1,10 @@
 {
-  "cleanup_cluster":  false,
-  "enforce_cleanup_cluster":  false,
   "custom_links": [],
-  "default_node_count": 3,
   "openstack": {
     "wizard_use_default_user": false
   },
   "share_kubeconfig": false,
   "show_demo_info": false,
   "show_terms_of_service": false,
-  "show_api_docs": true,
-  "hide_kubernetes": false,
-  "hide_openshift": false
+  "show_api_docs": true
 }

@@ -22,6 +22,7 @@ import {LabelFormComponent} from './components/label-form/label-form.component';
 import {LabelsComponent} from './components/labels/labels.component';
 import {PropertyComponent} from './components/property/property.component';
 import {RelativeTimeComponent} from './components/relativetime/relative-time.component';
+import {SettingsStatusComponent} from './components/settings-status/settings-status.component';
 import {ShortNameInCircleComponent} from './components/short-name-in-circle/short-name-in-circle.component';
 import {SSHKeyListComponent} from './components/ssh-key-list/ssh-key-list.component';
 import {TaintFormComponent} from './components/taint-form/taint-form.component';
@@ -80,6 +81,7 @@ const components: any[] = [
   RelativeTimeComponent,
   SSHKeyListComponent,
   AddonsListComponent,
+  SettingsStatusComponent,
   ShortNameInCircleComponent,
 ];
 

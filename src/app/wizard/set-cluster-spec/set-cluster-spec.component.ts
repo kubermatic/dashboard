@@ -3,9 +3,9 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {interval, Subject} from 'rxjs';
 import {debounce, first, switchMap, takeUntil} from 'rxjs/operators';
 
-import {AppConfigService} from '../../app-config.service';
 import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
+import {AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
 import {ClusterEntity, MasterVersion} from '../../shared/entity/ClusterEntity';
 import {ResourceType} from '../../shared/entity/LabelsEntity';
 import {ClusterType, ClusterUtils} from '../../shared/utils/cluster-utils/cluster-utils';
@@ -19,6 +19,7 @@ import {AsyncValidators} from '../../shared/validators/async-label-form.validato
 
 export class SetClusterSpecComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
+  @Input() settings: AdminSettings;
   labels: object;
   clusterSpecForm: FormGroup;
   masterVersions: MasterVersion[] = [];
@@ -28,7 +29,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
 
   constructor(
       private readonly _nameGenerator: ClusterNameGenerator, private readonly _api: ApiService,
-      private readonly _wizardService: WizardService, private _appConfig: AppConfigService) {}
+      private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.clusterSpecForm = new FormGroup({
@@ -48,9 +49,9 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     });
 
     if (this.clusterSpecForm.controls.type.value === '') {
-      if (!this.hideType(ClusterType.Kubernetes)) {
+      if (!this.hideKubernetes()) {
         this.clusterSpecForm.controls.type.setValue(ClusterType.Kubernetes);
-      } else if (!this.hideType(ClusterType.OpenShift)) {
+      } else if (!this.hideOpenShift()) {
         this.clusterSpecForm.controls.type.setValue(ClusterType.OpenShift);
       }
     }
@@ -100,12 +101,16 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     return ClusterUtils.getVersionHeadline(type, isKubelet);
   }
 
-  hideType(type: string): boolean {
-    return !!this._appConfig.getConfig()['hide_' + type] ? this._appConfig.getConfig()['hide_' + type] : false;
+  hideKubernetes(): boolean {
+    return this.settings.clusterTypeOptions === ClusterTypeOptions.OpenShift;
+  }
+
+  hideOpenShift(): boolean {
+    return this.settings.clusterTypeOptions === ClusterTypeOptions.Kubernetes;
   }
 
   hasMultipleTypes(): boolean {
-    return !this.hideType(ClusterType.Kubernetes) && !this.hideType(ClusterType.OpenShift);
+    return this.settings.clusterTypeOptions === ClusterTypeOptions.All;
   }
 
   setClusterSpec(): void {
