@@ -188,6 +188,10 @@
 
   <km-event-list [events]="events"></km-event-list>
 
+  <kubermatic-rbac [cluster]="cluster"
+                   [datacenter]="datacenter"
+                   [projectID]="projectID"></kubermatic-rbac>
+
 </ng-container>
 
 <div *ngIf="!isLoaded()">

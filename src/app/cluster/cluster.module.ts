@@ -29,6 +29,8 @@ import {ClusterPanelComponent} from './cluster-details/node-deployment-details/c
 import {NodeDeploymentDetailsComponent} from './cluster-details/node-deployment-details/node-deployment-details.component';
 import {NodeDeploymentListComponent} from './cluster-details/node-deployment-list/node-deployment-list.component';
 import {NodeListComponent} from './cluster-details/node-list/node-list.component';
+import {AddBindingComponent} from './cluster-details/rbac/add-binding/add-binding.component';
+import {RBACComponent} from './cluster-details/rbac/rbac.component';
 import {RevokeAdminTokenComponent} from './cluster-details/revoke-token/revoke-admin-token/revoke-admin-token.component';
 import {RevokeTokenComponent} from './cluster-details/revoke-token/revoke-token.component';
 import {RevokeViewerTokenComponent} from './cluster-details/revoke-token/revoke-viewer-token/revoke-viewer-token.component';
@@ -45,6 +47,7 @@ const components: any[] = [
   NodeDeploymentDetailsComponent,
   ClusterListComponent,
   MachineNetworksDisplayComponent,
+  RBACComponent,
 ];
 
 const entryComponents: any[] = [
@@ -72,6 +75,7 @@ const entryComponents: any[] = [
   AddClusterSSHKeysComponent,
   ShareKubeconfigComponent,
   ClusterPanelComponent,
+  AddBindingComponent,
 ];
 
 @NgModule({
