@@ -1,10 +1,6 @@
 {
-  "custom_links": [],
   "openstack": {
     "wizard_use_default_user": false
   },
-  "share_kubeconfig": false,
-  "show_demo_info": false,
-  "show_terms_of_service": false,
-  "show_api_docs": true
+  "share_kubeconfig": false
 }

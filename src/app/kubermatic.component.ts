@@ -1,12 +1,16 @@
 import {DevToolsExtension, NgRedux} from '@angular-redux/store';
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from '@angular/material';
 import {NavigationEnd, Router} from '@angular/router';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from './app-config.service';
 import {Auth} from './core/services';
+import {SettingsService} from './core/services/settings/settings.service';
 import {GoogleAnalyticsService} from './google-analytics.service';
 import {INITIAL_STATE, Store, StoreReducer} from './redux/store';
+import {AdminSettings} from './shared/entity/AdminSettings';
 import {VersionInfo} from './shared/entity/VersionInfo';
 import {Config} from './shared/model/Config';
 
@@ -15,15 +19,17 @@ import {Config} from './shared/model/Config';
   templateUrl: './kubermatic.component.html',
   styleUrls: ['./kubermatic.component.scss'],
 })
-export class KubermaticComponent implements OnInit {
+export class KubermaticComponent implements OnInit, OnDestroy {
   @ViewChild('sidenav', {static: false}) sidenav: MatSidenav;
-  config: Config = {show_demo_info: false, show_terms_of_service: false};
+  config: Config = {};
+  settings: AdminSettings;
   version: VersionInfo;
+  private _unsubscribe = new Subject<void>();
 
   constructor(
       public auth: Auth, private ngRedux: NgRedux<Store>, private devTools: DevToolsExtension,
-      private appConfigService: AppConfigService, public router: Router,
-      public googleAnalyticsService: GoogleAnalyticsService) {
+      private appConfigService: AppConfigService, private readonly _settingsService: SettingsService,
+      public router: Router, public googleAnalyticsService: GoogleAnalyticsService) {
     let enhancers = [];
     if (this.devTools.isEnabled()) {
       enhancers = [...enhancers, this.devTools.enhancer()];
@@ -34,6 +40,7 @@ export class KubermaticComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(s => this.settings = s);
     this.config = this.appConfigService.getConfig();
     this.version = this.appConfigService.getGitVersion();
     if (this.config.google_analytics_code) {
@@ -45,6 +52,11 @@ export class KubermaticComponent implements OnInit {
     }
 
     this._registerCustomCSS();
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   private _registerRouterWatch(): void {

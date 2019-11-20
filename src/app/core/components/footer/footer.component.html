@@ -12,7 +12,7 @@
 
   <div fxFlexAlign=" center"
        fxLayout="row"
-       *ngIf="showApiDocs()">
+       *ngIf="settings.displayAPIDocs">
     <div class="km-separator">–</div>
     <a routerLink="rest-api">
       API
@@ -29,20 +29,20 @@
 
   <div fxFlex
        fxLayoutAlign=" center">
-    <div *ngIf="showTermsOfService()"
+    <div *ngIf="settings.displayTermsOfService"
          fxLayoutAlign=" center">
       <div class="km-separator">|</div>
       <a routerLink="terms-of-service">Terms of Service</a>
     </div>
 
-    <div *ngIf="isDemoSystem()"
+    <div *ngIf="settings.displayDemoInfo"
          fxLayoutAlign=" center">
       <div class="km-separator">|</div>
       <div>Demo system</div>
     </div>
   </div>
 
-  <div *ngFor="let link of customLinks"
+  <div *ngFor="let link of getCustomLinks()"
        fxFlexAlign="center"
        fxLayoutAlign="end center">
     <a [href]="link.url"

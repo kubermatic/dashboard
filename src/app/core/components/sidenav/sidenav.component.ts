@@ -5,11 +5,11 @@ import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
-import {AppConfigService} from '../../../app-config.service';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {GroupConfig} from '../../../shared/model/Config';
-import {CustomLink, CustomLinkLocation} from '../../../shared/utils/custom-link-utils/custom-link';
+import {CustomLink, CustomLinkLocation, filterCustomLinks} from '../../../shared/utils/custom-link-utils/custom-link';
 import {ProjectService, UserService} from '../../services';
+import {SettingsService} from '../../services/settings/settings.service';
 
 @Component({
   selector: 'kubermatic-sidenav',
@@ -25,10 +25,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   constructor(
       public dialog: MatDialog, private _router: Router, private readonly _projectService: ProjectService,
-      private readonly _userService: UserService, private readonly _appConfigService: AppConfigService) {}
+      private readonly _userService: UserService, private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
-    this.customLinks = this._appConfigService.getCustomLinks(CustomLinkLocation.Default);
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe))
+        .subscribe(s => this.customLinks = filterCustomLinks(s.customLinks, CustomLinkLocation.Default));
 
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(project => {

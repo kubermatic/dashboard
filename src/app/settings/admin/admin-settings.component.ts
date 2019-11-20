@@ -62,7 +62,10 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     this._settingsChange.pipe(debounceTime(1000))
         .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(() => this._settingsService.patchAdminSettings(objectDiff(this.settings, this.apiSettings))))
-        .subscribe(settings => this._applySettings(settings));
+        .subscribe(settings => {
+          this._applySettings(settings);
+          this._settingsService.refreshAdminSettings();
+        });
   }
 
   ngOnDestroy(): void {
