@@ -35,6 +35,7 @@ export class ClusterEntity {
   status?: Status;
   type: string;
   labels?: object;
+  inheritedLabels?: object;
   credential?: string;
 }
 

@@ -25,6 +25,7 @@ import {LabelFormValidators} from '../../validators/label-form.validators';
 export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccessor, AsyncValidator, DoCheck {
   @Input() title = 'Labels';
   @Input() labels: object;
+  @Input() inheritedLabels: object = {};
   @Input() asyncKeyValidators: AsyncValidatorFn[] = [];
   @Output() labelsChange = new EventEmitter<object>();
   form: FormGroup;
@@ -62,6 +63,8 @@ export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccess
     if (!this.labels) {
       this.labels = {};
     }
+
+    this.inheritedLabels = this.inheritedLabels ? this.inheritedLabels : {};
 
     // Save initial state of labels.
     this.initialLabels = this.labels;
@@ -112,7 +115,7 @@ export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccess
   }
 
   isRemovable(index: number): boolean {
-    return index < this.labelArray.length - 1;
+    return index < this.labelArray.length - 1 && !this._isInherited(Object.keys(this.labels)[index]);
   }
 
   deleteLabel(index: number): void {
@@ -126,6 +129,10 @@ export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccess
     this._updateLabelsObject();
   }
 
+  private _isInherited(labelKey: string): boolean {
+    return Object.keys(this.inheritedLabels).includes(labelKey);
+  }
+
   private _addLabelIfNeeded(): void {
     const lastLabel = this.labelArray.at(this.labelArray.length - 1);
     if (LabelFormComponent._isFilled(lastLabel)) {
@@ -136,7 +143,7 @@ export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccess
   private _addLabel(key = '', value = ''): void {
     this.labelArray.push(this._formBuilder.group({
       key: [
-        {value: key, disabled: false}, Validators.compose([
+        {value: key, disabled: this._isInherited(key)}, Validators.compose([
           LabelFormValidators.labelKeyNameLength,
           LabelFormValidators.labelKeyPrefixLength,
           LabelFormValidators.labelKeyNamePattern,
@@ -145,7 +152,7 @@ export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccess
         Validators.composeAsync(this.asyncKeyValidators)
       ],
       value: [
-        {value, disabled: false}, Validators.compose([
+        {value, disabled: this._isInherited(key)}, Validators.compose([
           LabelFormValidators.labelValueLength,
           LabelFormValidators.labelValuePattern,
         ])
