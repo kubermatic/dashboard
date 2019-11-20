@@ -32,10 +32,11 @@
           </mat-form-field>
 
           <mat-form-field fxFlex>
-            <mat-label>Role*</mat-label>
+            <mat-label>{{getRoleFormState()}}</mat-label>
             <mat-select formControlName="role"
                         panelClass="km-add-dialog-dropdown"
-                        disableOptionCentering>
+                        disableOptionCentering
+                        [placeholder]="getRoleFormState()">
               <mat-option *ngFor="let role of clusterRoles"
                           [value]="role.id">
                 {{role.name}}
@@ -61,10 +62,11 @@
           </mat-form-field>
 
           <mat-form-field fxFlex>
-            <mat-label>Role*</mat-label>
+            <mat-label>{{getRoleFormState()}}</mat-label>
             <mat-select formControlName="role"
                         panelClass="km-add-dialog-dropdown"
-                        disableOptionCentering>
+                        disableOptionCentering
+                        [placeholder]="getRoleFormState()">
               <mat-option *ngFor="let role of roles"
                           [value]="role.id">
                 {{role.name}}

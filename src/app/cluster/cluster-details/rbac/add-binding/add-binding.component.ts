@@ -81,6 +81,21 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     this.namespace.updateValueAndValidity();
   }
 
+  getRoleFormState(): string {
+    let roleLength = 0;
+    if (!!this.clusterRoles || !!this.roles) {
+      roleLength = this.bindingType === 'cluster' ? this.clusterRoles.length : this.roles.length;
+    }
+
+    if (!!roleLength) {
+      return 'Role*';
+    } else if (!roleLength) {
+      return 'No Roles available';
+    } else {
+      return 'Role*';
+    }
+  }
+
   addBinding(): void {
     this.bindingType === 'cluster' ? this.addClusterBinding() : this.addNamespaceBinding();
   }
