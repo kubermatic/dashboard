@@ -1,6 +1,29 @@
+@import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
 
 .km-rbac-add-binding-btn {
   height: 5 * $baseline-grid;
   min-width: 14.5 * $baseline-grid;
+}
+
+h2 {
+  font-weight: normal;
+  font-size: $card-title-font-size;
+  color: $text-color;
+  padding: 0 56px;
+  margin-bottom: 0;
+}
+
+tr:first-child th:first-child,
+.km-table td:first-child {
+  padding-left: 56px;
+}
+
+tr:last-child th:last-child,
+.km-table td:last-child {
+  padding-right: 56px;
+}
+
+.km-table-actions {
+  float: right;
 }

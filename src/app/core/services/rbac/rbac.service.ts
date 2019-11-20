@@ -1,9 +1,9 @@
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 
 import {environment} from '../../../../environments/environment';
-import {ClusterRole, ClusterRoleClusterBinding, ClusterRoleClusterBindingPatch, ClusterRoleName, ClusterRolePatch, CreateClusterRoleClusterBinding, CreateRoleBinding, Namespace, Role, RoleBinding, RoleBindingPatch, RoleName, RolePatch} from '../../../shared/entity/RBACEntity';
+import {Binding, ClusterBinding, ClusterRole, ClusterRoleClusterBindingPatch, ClusterRoleName, ClusterRolePatch, CreateBinding, CreateClusterBinding, Namespace, Role, RoleBindingPatch, RoleName, RolePatch} from '../../../shared/entity/RBACEntity';
 
 @Injectable()
 export class RBACService {
@@ -38,41 +38,45 @@ export class RBACService {
     return this._http.patch<ClusterRole>(url, patch);
   }
 
-  getClusterRoleClusterBindings(clusterID: string, dc: string, projectID: string, roleID: string):
-      Observable<ClusterRoleClusterBinding[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/clusterroles​/${
-        roleID}​/clusterbindings`;
-    return this._http.get<ClusterRoleClusterBinding[]>(url);
+  getClusterBindings(clusterID: string, dc: string, projectID: string): Observable<ClusterBinding[]> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/clusterbindings`;
+    return this._http.get<ClusterBinding[]>(url);
   }
 
-  createClusterRoleClusterBinding(
+  createClusterBinding(
       clusterID: string, dc: string, projectID: string, roleID: string,
-      createClusterRole: CreateClusterRoleClusterBinding): Observable<ClusterRoleClusterBinding> {
+      createClusterRole: CreateClusterBinding): Observable<ClusterBinding> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/clusterroles​/${
         roleID}​/clusterbindings`;
-    return this._http.post<ClusterRoleClusterBinding>(url, createClusterRole);
+    return this._http.post<ClusterBinding>(url, createClusterRole);
   }
 
   getClusterRoleClusterBinding(clusterID: string, dc: string, projectID: string, roleID: string, bindingID: string):
-      Observable<ClusterRoleClusterBinding> {
+      Observable<ClusterBinding> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/clusterroles/${
         roleID}​/clusterbindings​/${bindingID}`;
-    return this._http.get<ClusterRoleClusterBinding>(url);
+    return this._http.get<ClusterBinding>(url);
   }
 
-  deleteClusterRoleClusterBinding(clusterID: string, dc: string, projectID: string, roleID: string, bindingID: string):
+  deleteClusterBinding(clusterID: string, dc: string, projectID: string, roleID: string, name: string):
       Observable<any> {
+    const options = {
+      headers: new HttpHeaders(),
+      body: {
+        userEmail: name,
+      },
+    };
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/clusterroles/${
-        roleID}​/clusterbindings​/${bindingID}`;
-    return this._http.delete(url);
+        roleID}​/clusterbindings`;
+    return this._http.delete(url, options);
   }
 
-  patchClusterRoleClusterBinding(
+  patchClusterBinding(
       clusterID: string, dc: string, projectID: string, roleID: string, bindingID: string,
-      patch: ClusterRoleClusterBindingPatch): Observable<ClusterRoleClusterBinding> {
+      patch: ClusterRoleClusterBindingPatch): Observable<ClusterBinding> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/clusterroles/${
         roleID}​/clusterbindings​/${bindingID}`;
-    return this._http.patch<ClusterRoleClusterBinding>(url, patch);
+    return this._http.patch<ClusterBinding>(url, patch);
   }
 
   getNamespaces(clusterID: string, dc: string, projectID: string): Observable<Namespace[]> {
@@ -114,42 +118,44 @@ export class RBACService {
     return this._http.patch<Role>(url, patch);
   }
 
-  getRoleBindings(clusterID: string, dc: string, projectID: string, roleID: string, namespace: string):
-      Observable<RoleBinding[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/roles/${namespace}​/${
-        roleID}/bindings`;
-    return this._http.get<RoleBinding[]>(url);
+  getBindings(clusterID: string, dc: string, projectID: string): Observable<Binding[]> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/bindings`;
+    return this._http.get<Binding[]>(url);
   }
 
-  createRoleBindings(
+  createBinding(
       clusterID: string, dc: string, projectID: string, roleID: string, namespace: string,
-      createRole: CreateRoleBinding): Observable<RoleBinding> {
+      createRole: CreateBinding): Observable<Binding> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/roles/${namespace}​/${
         roleID}/bindings`;
-    return this._http.post<RoleBinding>(url, createRole);
+    return this._http.post<Binding>(url, createRole);
   }
 
-  getRoleBinding(
-      clusterID: string, dc: string, projectID: string, roleID: string, namespace: string,
-      bindingID: string): Observable<RoleBinding> {
+  getBinding(clusterID: string, dc: string, projectID: string, roleID: string, namespace: string, bindingID: string):
+      Observable<Binding> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/roles/${namespace}​/${
         roleID}/bindings/${bindingID}`;
-    return this._http.get<RoleBinding>(url);
+    return this._http.get<Binding>(url);
   }
 
-  patchRoleBinding(
+  patchBinding(
       clusterID: string, dc: string, projectID: string, roleID: string, namespace: string, bindingID: string,
-      patch: RoleBindingPatch): Observable<RoleBinding> {
+      patch: RoleBindingPatch): Observable<Binding> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/roles/${namespace}​/${
         roleID}/bindings/${bindingID}`;
-    return this._http.patch<RoleBinding>(url, patch);
+    return this._http.patch<Binding>(url, patch);
   }
 
-  deleteRoleBinding(
-      clusterID: string, dc: string, projectID: string, roleID: string, namespace: string,
-      bindingID: string): Observable<any> {
+  deleteBinding(clusterID: string, dc: string, projectID: string, roleID: string, namespace: string, name: string):
+      Observable<any> {
+    const options = {
+      headers: new HttpHeaders(),
+      body: {
+        userEmail: name,
+      },
+    };
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/roles/${namespace}​/${
-        roleID}/bindings/${bindingID}`;
-    return this._http.delete(url);
+        roleID}/bindings`;
+    return this._http.delete(url, options);
   }
 }

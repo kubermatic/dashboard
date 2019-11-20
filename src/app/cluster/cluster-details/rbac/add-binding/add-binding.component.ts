@@ -8,7 +8,7 @@ import {RBACService} from '../../../../core/services';
 import {NotificationActions} from '../../../../redux/actions/notification.actions';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
-import {ClusterRole, CreateClusterRoleClusterBinding, CreateRoleBinding, Namespace, Role} from '../../../../shared/entity/RBACEntity';
+import {ClusterRole, CreateBinding, CreateClusterBinding, Namespace, Role} from '../../../../shared/entity/RBACEntity';
 
 @Component({
   selector: 'kubermatic-add-binding',
@@ -86,13 +86,13 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   }
 
   addClusterBinding(): void {
-    const clusterBinding: CreateClusterRoleClusterBinding = {
+    const clusterBinding: CreateClusterBinding = {
       email: this.form.controls.email.value,
       role: this.form.controls.role.value,
     };
 
     this._rbacService
-        .createClusterRoleClusterBinding(
+        .createClusterBinding(
             this.cluster.id, this.datacenter.metadata.name, this.projectID, clusterBinding.role, clusterBinding)
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((binding) => {
@@ -102,14 +102,14 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   }
 
   addNamespaceBinding(): void {
-    const namespaceBinding: CreateRoleBinding = {
+    const namespaceBinding: CreateBinding = {
       email: this.form.controls.email.value,
       role: this.form.controls.role.value,
       namespace: this.form.controls.namespace.value,
     };
 
     this._rbacService
-        .createRoleBindings(
+        .createBinding(
             this.cluster.id, this.datacenter.metadata.name, this.projectID, namespaceBinding.role,
             namespaceBinding.namespace, namespaceBinding)
         .pipe(takeUntil(this._unsubscribe))

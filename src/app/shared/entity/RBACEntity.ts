@@ -12,12 +12,12 @@ export class ClusterRole {
 
 export class ClusterRolePatch {}
 
-export class ClusterRoleClusterBinding {
+export class ClusterBinding {
   roleRefName: string;
   subjects: Subjects[];
 }
 
-export class CreateClusterRoleClusterBinding {
+export class CreateClusterBinding {
   email: string;
   role: string;
 }
@@ -44,17 +44,13 @@ export class Role {
 
 export class RolePatch {}
 
-export class RoleBinding {
-  creationTimestamp?: Date;
-  deletionTimestamp?: Date;
-  id: string;
-  name: string;
+export class Binding {
   namespace: string;
   roleRefName: string;
   subjects: Subjects[];
 }
 
-export class CreateRoleBinding {
+export class CreateBinding {
   email: string;
   role: string;
   namespace: string;
@@ -71,7 +67,18 @@ export class Rules {
 }
 
 export class Subjects {
-  apiGroup: string;
-  kind: string;
+  apiGroup?: string;
+  kind?: string;
+  name?: string;
+}
+
+export class SimpleClusterBinding {
   name: string;
+  role: string;
+}
+
+export class SimpleBinding {
+  name: string;
+  role: string;
+  namespace: string;
 }
