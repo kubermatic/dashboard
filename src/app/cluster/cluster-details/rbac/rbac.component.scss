@@ -10,18 +10,18 @@ h2 {
   font-weight: normal;
   font-size: $card-title-font-size;
   color: $text-color;
-  padding: 0 56px;
+  padding: 0 (7 * $baseline-grid);
   margin-bottom: 0;
 }
 
 tr:first-child th:first-child,
 .km-table td:first-child {
-  padding-left: 56px;
+  padding-left: 7 * $baseline-grid;
 }
 
 tr:last-child th:last-child,
 .km-table td:last-child {
-  padding-right: 56px;
+  padding-right: 7 * $baseline-grid;
 }
 
 .km-table-actions {
