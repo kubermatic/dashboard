@@ -1,6 +1,5 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Subject} from 'rxjs';
 
 import {CustomLink} from '../../../shared/utils/custom-link-utils/custom-link';
 
@@ -9,12 +8,11 @@ import {CustomLink} from '../../../shared/utils/custom-link-utils/custom-link';
   templateUrl: './custom-links-form.component.html',
   styleUrls: ['./custom-links-form.component.scss'],
 })
-export class CustomLinksFormComponent implements OnInit, OnDestroy {
+export class CustomLinksFormComponent implements OnInit {
   @Input() customLinks: CustomLink[] = [];
-  @Output() customLinksChange = new EventEmitter<object>();
+  @Output() customLinksChange = new EventEmitter<CustomLink[]>();
   initialcustomLinks: CustomLink[];
   form: FormGroup;
-  private _unsubscribe = new Subject<void>();
 
   constructor(private readonly _formBuilder: FormBuilder) {}
 
@@ -27,11 +25,6 @@ export class CustomLinksFormComponent implements OnInit, OnDestroy {
     this.form = this._formBuilder.group({customLinks: this._formBuilder.array([])});
     this.customLinks.forEach(customLink => this._addCustomLink(customLink.label, customLink.url));
     this._addCustomLink();
-  }
-
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
   }
 
   isRemovable(index: number): boolean {
@@ -61,8 +54,8 @@ export class CustomLinksFormComponent implements OnInit, OnDestroy {
 
   private _addCustomLink(label = '', url = ''): void {
     this.customLinksArray.push(this._formBuilder.group({
-      label: [{value: label}, Validators.required],
-      url: [{value: url}, Validators.required],
+      label: [{value: label, disabled: false}, Validators.required],
+      url: [{value: url, disabled: false}, Validators.required],
     }));
   }
 
