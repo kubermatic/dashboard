@@ -28,6 +28,7 @@
         </mat-checkbox>
         <km-label-form title="Labels"
                        [(labels)]="labels"
+                       [inheritedLabels]="cluster.inheritedLabels"
                        [asyncKeyValidators]=asyncLabelValidators
                        formControlName="labels"></km-label-form>
       </form>
