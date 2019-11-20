@@ -36,7 +36,7 @@
                matTooltip="Customize your theme or improve the workflow by adding links in the sidebar or footer.">i</div>
         </div>
         <div fxLayout="column">
-          <div>{{settings.customLinks | json}}</div>
+          <km-custom-links-form [(customLinks)]="settings.customLinks"></km-custom-links-form>
           <div>
             <mat-checkbox [(ngModel)]="settings.displayAPIDocs"
                           (change)="onSettingsChange()">Display API Docs</mat-checkbox>

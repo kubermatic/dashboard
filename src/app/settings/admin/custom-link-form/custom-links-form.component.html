@@ -1,0 +1,33 @@
+<form [formGroup]="form"
+      fxLayout="column">
+  <div formArrayName="customLinks">
+    <div *ngFor="let label of customLinksArray.controls; let i = index;"
+         [formGroupName]="i"
+         fxLayout="row"
+         fxLayoutGap="10px">
+      <mat-form-field fxFlex="45">
+        <mat-label>Label</mat-label>
+        <input matInput
+               (keyup)="check()"
+               name="label"
+               formControlName="label">
+      </mat-form-field>
+      <mat-form-field fxFlex="45">
+        <mat-label>URL</mat-label>
+        <input matInput
+               (keyup)="check()"
+               name="url"
+               formControlName="url">
+      </mat-form-field>
+      <button mat-icon-button
+              class="km-custom-links-form-delete-button"
+              [disabled]="!isRemovable(i)"
+              (click)="deleteLabel(i)">
+        <i class="fa km-icon-delete"
+           aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+</form>
+
+{{customLinks | json}}
