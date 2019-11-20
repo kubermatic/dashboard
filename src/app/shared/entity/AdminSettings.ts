@@ -1,7 +1,13 @@
+import {CustomLink} from '../utils/custom-link-utils/custom-link';
+
 export class AdminSettings {
   cleanupOptions: CleanupOptions;
   clusterTypeOptions: ClusterTypeOptions;
+  customLinks: CustomLink[];
   defaultNodeCount: number;
+  displayAPIDocs: boolean;
+  displayDemoInfo: boolean;
+  displayTermsOfService: boolean;
 }
 
 export class CleanupOptions {

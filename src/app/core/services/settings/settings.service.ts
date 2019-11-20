@@ -19,7 +19,11 @@ const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
     Enabled: false,
   },
   clusterTypeOptions: ClusterTypeOptions.All,
+  customLinks: [],
   defaultNodeCount: 1,
+  displayAPIDocs: true,
+  displayDemoInfo: false,
+  displayTermsOfService: false,
 };
 
 @Injectable()
