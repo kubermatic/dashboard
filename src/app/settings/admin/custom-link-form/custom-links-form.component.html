@@ -1,7 +1,7 @@
 <form [formGroup]="form"
       fxLayout="column">
   <div formArrayName="customLinks">
-    <div *ngFor="let label of customLinksArray.controls; let i = index;"
+    <div *ngFor="let control of customLinksArray.controls; let i = index;"
          [formGroupName]="i"
          fxLayout="row"
          fxLayoutGap="10px">
@@ -11,6 +11,10 @@
                (keyup)="check()"
                name="label"
                formControlName="label">
+        <mat-error *ngIf="control.get('label').errors?.required"
+                   i18n>
+          Label is required.
+        </mat-error>
       </mat-form-field>
       <mat-form-field fxFlex="40">
         <mat-label>URL</mat-label>
@@ -18,6 +22,10 @@
                (keyup)="check()"
                name="url"
                formControlName="url">
+        <mat-error *ngIf="control.get('url').errors?.required"
+                   i18n>
+          URL is required.
+        </mat-error>
       </mat-form-field>
       <mat-form-field fxFlex="25">
         <mat-label>Icon</mat-label>

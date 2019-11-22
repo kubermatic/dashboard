@@ -66,7 +66,12 @@ export class CustomLinksFormComponent implements OnInit {
     const customLinks = [];
     this.customLinksArray.getRawValue().forEach(raw => {
       if (raw.label.length !== 0 && raw.url.length !== 0) {
-        customLinks.push({label: raw.label, url: raw.url} as CustomLink);
+        customLinks.push({
+          label: raw.label,
+          url: raw.url,
+          icon: raw.icon,
+          location: raw.location,
+        } as CustomLink);
       }
     });
 
