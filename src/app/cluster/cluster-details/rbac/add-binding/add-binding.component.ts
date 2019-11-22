@@ -2,13 +2,13 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatButtonToggleChange, MatDialogRef} from '@angular/material';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 
 import {RBACService} from '../../../../core/services';
 import {NotificationActions} from '../../../../redux/actions/notification.actions';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
-import {ClusterRole, CreateBinding, CreateClusterBinding, Namespace, Role} from '../../../../shared/entity/RBACEntity';
+import {ClusterRoleName, CreateBinding, CreateClusterBinding, RoleName} from '../../../../shared/entity/RBACEntity';
 
 @Component({
   selector: 'kubermatic-add-binding',
@@ -22,9 +22,8 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   @Input() projectID: string;
   form: FormGroup;
   bindingType = 'cluster';
-  clusterRoles: ClusterRole[];
-  roles: Role[];
-  namespaces: Namespace[];
+  clusterRoles: ClusterRoleName[];
+  roles: RoleName[];
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -37,25 +36,30 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       namespace: new FormControl(''),
     });
 
-    this._rbacService.getClusterRoles(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+    this._rbacService.getClusterRoleNames(this.cluster.id, this.datacenter.metadata.name, this.projectID)
         .pipe(takeUntil(this._unsubscribe))
-        .subscribe((clusterRoles: ClusterRole[]) => {
-          this.clusterRoles = clusterRoles;
+        .subscribe((clusterRoles: ClusterRoleName[]) => {
+          this.clusterRoles = clusterRoles.sort((a, b) => {
+            return a.name.localeCompare(b.name);
+          });
         });
 
-    this._rbacService.getRoles(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+    this._rbacService.getRoleNames(this.cluster.id, this.datacenter.metadata.name, this.projectID)
         .pipe(takeUntil(this._unsubscribe))
-        .subscribe((roles: Role[]) => {
-          this.roles = roles;
+        .subscribe((roles: RoleName[]) => {
+          this.roles = roles.sort((a, b) => {
+            return a.name.localeCompare(b.name);
+          });
         });
 
-    this._rbacService.getNamespaces(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+    this.form.controls.role.valueChanges.pipe(debounceTime(1000))
         .pipe(takeUntil(this._unsubscribe))
-        .subscribe((namespaces: Namespace[]) => {
-          this.namespaces = namespaces;
+        .subscribe((data) => {
+          this.checkNamespaceState();
         });
 
     this.setValidators();
+    this.checkNamespaceState();
   }
 
   ngOnDestroy(): void {
@@ -66,6 +70,10 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   changeView(event: MatButtonToggleChange): void {
     this.bindingType = event.value;
     this.setValidators();
+  }
+
+  get role(): AbstractControl {
+    return this.form.controls.role;
   }
 
   get namespace(): AbstractControl {
@@ -93,6 +101,39 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       return 'No Roles available';
     } else {
       return 'Role*';
+    }
+  }
+
+  getNamespaceFormState(): string {
+    let roleLength = 0;
+    if (!!this.clusterRoles || !!this.roles) {
+      roleLength = this.bindingType === 'cluster' ? this.clusterRoles.length : this.roles.length;
+    }
+
+    if (this.role.value !== '') {
+      return 'Namespace*';
+    } else if (this.role.value === '' && !!roleLength) {
+      return 'Please select a Role first';
+    } else if (!roleLength) {
+      return 'No Namespaces available';
+    } else {
+      return 'Namespace*';
+    }
+  }
+
+  checkNamespaceState(): void {
+    if (this.role.value === '' && this.namespace.enabled) {
+      this.namespace.disable();
+    } else if (this.role.value !== '' && this.namespace.disabled) {
+      this.namespace.enable();
+    }
+  }
+
+  getNamespaces(): string[] {
+    for (const i in this.roles) {
+      if (this.roles[i].name === this.role.value) {
+        return this.roles[i].namespace;
+      }
     }
   }
 

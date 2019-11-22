@@ -37,7 +37,7 @@
                         disableOptionCentering
                         [placeholder]="getRoleFormState()">
               <mat-option *ngFor="let role of clusterRoles"
-                          [value]="role.id">
+                          [value]="role.name">
                 {{role.name}}
               </mat-option>
             </mat-select>
@@ -67,7 +67,7 @@
                         disableOptionCentering
                         [placeholder]="getRoleFormState()">
               <mat-option *ngFor="let role of roles"
-                          [value]="role.id">
+                          [value]="role.name">
                 {{role.name}}
               </mat-option>
             </mat-select>
@@ -77,13 +77,14 @@
           </mat-form-field>
 
           <mat-form-field fxFlex>
-            <mat-label>Namespace*</mat-label>
+            <mat-label>{{getNamespaceFormState()}}</mat-label>
             <mat-select formControlName="namespace"
                         panelClass="km-add-dialog-dropdown"
-                        disableOptionCentering>
-              <mat-option *ngFor="let namespace of namespaces"
-                          [value]="namespace.id">
-                {{namespace.name}}
+                        disableOptionCentering
+                        [placeholder]="getNamespaceFormState()">
+              <mat-option *ngFor="let namespace of getNamespaces()"
+                          [value]="namespace">
+                {{namespace}}
               </mat-option>
             </mat-select>
             <mat-error *ngIf="form.controls.namespace.hasError('required')">
