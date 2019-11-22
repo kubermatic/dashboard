@@ -35,7 +35,8 @@
           <div class="km-info-icon"
                matTooltip="Customize your theme or improve the workflow by adding links in the sidebar or footer.">i</div>
         </div>
-        <div fxLayout="column">
+        <div fxFlex
+             fxLayout="column">
           <km-custom-links-form [(customLinks)]="settings.customLinks"></km-custom-links-form>
           <div>
             <mat-checkbox [(ngModel)]="settings.displayAPIDocs"

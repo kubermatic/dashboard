@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 
-import {CustomLink} from '../../../shared/utils/custom-link-utils/custom-link';
+import {CustomLink, CustomLinkLocation} from '../../../shared/utils/custom-link-utils/custom-link';
 
 @Component({
   selector: 'km-custom-links-form',
@@ -23,7 +23,8 @@ export class CustomLinksFormComponent implements OnInit {
   ngOnInit(): void {
     this.initialcustomLinks = this.customLinks;
     this.form = this._formBuilder.group({customLinks: this._formBuilder.array([])});
-    this.customLinks.forEach(customLink => this._addCustomLink(customLink.label, customLink.url));
+    this.customLinks.forEach(
+        customLink => this._addCustomLink(customLink.label, customLink.url, customLink.icon, customLink.location));
     this._addCustomLink();
   }
 
@@ -52,10 +53,12 @@ export class CustomLinksFormComponent implements OnInit {
     }
   }
 
-  private _addCustomLink(label = '', url = ''): void {
+  private _addCustomLink(label = '', url = '', icon = '', location = CustomLinkLocation.Default): void {
     this.customLinksArray.push(this._formBuilder.group({
       label: [{value: label, disabled: false}, Validators.required],
       url: [{value: url, disabled: false}, Validators.required],
+      icon: [{value: icon, disabled: false}],
+      location: [{value: location, disabled: false}],
     }));
   }
 

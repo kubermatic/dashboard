@@ -5,19 +5,33 @@
          [formGroupName]="i"
          fxLayout="row"
          fxLayoutGap="10px">
-      <mat-form-field fxFlex="45">
+      <mat-form-field fxFlex="25">
         <mat-label>Label</mat-label>
         <input matInput
                (keyup)="check()"
                name="label"
                formControlName="label">
       </mat-form-field>
-      <mat-form-field fxFlex="45">
+      <mat-form-field fxFlex="40">
         <mat-label>URL</mat-label>
         <input matInput
                (keyup)="check()"
                name="url"
                formControlName="url">
+      </mat-form-field>
+      <mat-form-field fxFlex="25">
+        <mat-label>Icon</mat-label>
+        <input matInput
+               (keyup)="check()"
+               name="icon"
+               formControlName="icon">
+      </mat-form-field>
+      <mat-form-field fxFlex="10">
+        <mat-label>Location</mat-label>
+        <input matInput
+               (keyup)="check()"
+               name="location"
+               formControlName="location">
       </mat-form-field>
       <button mat-icon-button
               class="km-custom-links-form-delete-button"
@@ -29,5 +43,3 @@
     </div>
   </div>
 </form>
-
-{{customLinks | json}}
