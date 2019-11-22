@@ -75,13 +75,6 @@ export class CustomLinksFormComponent implements OnInit {
       }
     });
 
-    // Nullify initial labels data (it is needed to make edit work as it uses JSON Merge Patch).
-    // Object.keys(this.initialcustomLinks).forEach(initialKey => {
-    //   if (!labelsObject.hasOwnProperty(initialKey)) {
-    //     labelsObject[initialKey] = null;
-    //   }
-    // });
-
     this.customLinks = customLinks;
     this.customLinksChange.emit(this.customLinks);
   }
