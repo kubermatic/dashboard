@@ -61,7 +61,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
     this._settingsChange.pipe(debounceTime(1000))
         .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(() => this._settingsService.patchAdminSettings(objectDiff(this.settings, this.apiSettings))))
+        .pipe(switchMap(() => this._settingsService.patchAdminSettings(this._preparePatch())))
         .subscribe(settings => {
           this._applySettings(settings);
           this._settingsService.refreshAdminSettings();
@@ -77,6 +77,12 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     this.apiSettings = settings;
     this.settings = _.cloneDeep(this.apiSettings);
     this._setDistro(this.settings.clusterTypeOptions);
+  }
+
+  private _preparePatch(): AdminSettings {
+    const patch: AdminSettings = objectDiff(this.settings, this.apiSettings);
+    patch.customLinks = this.settings.customLinks;
+    return patch;
   }
 
   onSettingsChange(): void {

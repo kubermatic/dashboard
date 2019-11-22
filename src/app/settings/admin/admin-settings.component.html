@@ -37,7 +37,8 @@
         </div>
         <div fxFlex
              fxLayout="column">
-          <km-custom-links-form [(customLinks)]="settings.customLinks"></km-custom-links-form>
+          <km-custom-links-form [(customLinks)]="settings.customLinks"
+                                (customLinksChange)="onSettingsChange()"></km-custom-links-form>
           <div>
             <mat-checkbox [(ngModel)]="settings.displayAPIDocs"
                           (change)="onSettingsChange()">Display API Docs</mat-checkbox>
