@@ -10,8 +10,6 @@ export class ClusterRole {
   rules: Rules[];
 }
 
-export class ClusterRolePatch {}
-
 export class ClusterBinding {
   roleRefName: string;
   subjects: Subjects[];
@@ -21,8 +19,6 @@ export class CreateClusterBinding {
   email: string;
   role: string;
 }
-
-export class ClusterRoleClusterBindingPatch {}
 
 export class Namespace {
   name: string;
@@ -42,8 +38,6 @@ export class Role {
   rules: Rules[];
 }
 
-export class RolePatch {}
-
 export class Binding {
   namespace: string;
   roleRefName: string;
@@ -55,8 +49,6 @@ export class CreateBinding {
   role: string;
   namespace: string;
 }
-
-export class RoleBindingPatch {}
 
 export class Rules {
   apiGroups: string[];
