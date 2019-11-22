@@ -6,6 +6,19 @@
   min-width: 14.5 * $baseline-grid;
 }
 
+.mat-card.km-with-table-header .mat-card-header {
+  padding-left: 0;
+  cursor: pointer;
+}
+
+.km-toggled-rbac {
+  padding-bottom: $baseline-grid;
+
+  mat-card-header {
+    border-radius: $border-radius;
+  }
+}
+
 h2 {
   font-weight: normal;
   font-size: $card-title-font-size;

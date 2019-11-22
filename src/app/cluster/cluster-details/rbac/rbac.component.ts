@@ -23,6 +23,7 @@ export class RBACComponent implements OnInit, OnDestroy {
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
 
+  isShowRBAC = false;
   dataSourceCluster = new MatTableDataSource<SimpleClusterBinding>();
   displayedColumnsCluster: string[] = ['name', 'clusterRole', 'actions'];
   clusterBindings: SimpleClusterBinding[];
@@ -71,6 +72,10 @@ export class RBACComponent implements OnInit, OnDestroy {
   getDataSourceNamespace(): MatTableDataSource<SimpleBinding> {
     this.dataSourceNamespace.data = this.bindings;
     return this.dataSourceNamespace;
+  }
+
+  toggleRBAC(): void {
+    this.isShowRBAC = !this.isShowRBAC;
   }
 
   createSimpleClusterBinding(bindings: ClusterBinding[]): SimpleClusterBinding[] {
