@@ -269,6 +269,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     return ClusterUtils.isOpenshiftType(this.cluster) ? 'Open Console' : 'Open Dashboard';
   }
 
+  isRBACEnabled(): boolean {
+    return !!this._currentGroupConfig && !!this._currentGroupConfig.rbac.view;
+  }
+
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();

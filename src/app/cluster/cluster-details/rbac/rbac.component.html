@@ -8,6 +8,7 @@
             class="km-rbac-add-binding-btn"
             color="alternative"
             *ngIf="isShowRBAC"
+            [disabled]="!isClusterRunning"
             (click)="addBinding()">
       Add Binding
     </button>
@@ -74,8 +75,15 @@
     </table>
 
     <ng-container *ngIf="!clusterBindings || clusterBindings.length === 0">
-      <div class="km-row km-no-item">
+      <div class="km-row km-no-item"
+           *ngIf="isClusterRunning">
         No bindings available.
+      </div>
+      <div class="km-row"
+           *ngIf="!isClusterRunning">
+        <mat-spinner color="accent"
+                     class="km-spinner"
+                     [diameter]="25"></mat-spinner>
       </div>
     </ng-container>
 
@@ -149,8 +157,15 @@
     </table>
 
     <ng-container *ngIf="!bindings || bindings.length === 0">
-      <div class="km-row km-no-item">
+      <div class="km-row km-no-item"
+           *ngIf="isClusterRunning">
         No bindings available.
+      </div>
+      <div class="km-row"
+           *ngIf="!isClusterRunning">
+        <mat-spinner color="accent"
+                     class="km-spinner"
+                     [diameter]="25"></mat-spinner>
       </div>
     </ng-container>
   </mat-card-content>
