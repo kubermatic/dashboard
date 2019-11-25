@@ -5,7 +5,7 @@ import {combineLatest, of, Subject} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, ClusterService, DatacenterService, UserService} from '../../core/services';
+import {ApiService, ClusterService, DatacenterService, RBACService, UserService} from '../../core/services';
 import {NotificationActions} from '../../redux/actions/notification.actions';
 import {AddonEntity} from '../../shared/entity/AddonEntity';
 import {ClusterEntity, getClusterProvider, MasterVersion} from '../../shared/entity/ClusterEntity';
@@ -14,6 +14,7 @@ import {EventEntity} from '../../shared/entity/EventEntity';
 import {HealthEntity, HealthState} from '../../shared/entity/HealthEntity';
 import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
+import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '../../shared/entity/RBACEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {Config, GroupConfig} from '../../shared/model/Config';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
@@ -51,6 +52,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   events: EventEntity[] = [];
   addons: AddonEntity[] = [];
   upgrades: MasterVersion[] = [];
+  clusterBindings: SimpleClusterBinding[] = [];
+  bindings: SimpleBinding[] = [];
   private _unsubscribe: Subject<any> = new Subject();
   private _currentGroupConfig: GroupConfig;
 
@@ -59,7 +62,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       private readonly _clusterService: ClusterService, private readonly _matDialog: MatDialog,
       private readonly _datacenterService: DatacenterService, private readonly _appConfigService: AppConfigService,
       private readonly _node: NodeService, private readonly _userService: UserService,
-      private readonly _api: ApiService) {}
+      private readonly _api: ApiService, private readonly _rbacService: RBACService) {}
 
   ngOnInit(): void {
     this.config = this._appConfigService.getConfig();
@@ -108,11 +111,21 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                         this._clusterService.upgrades(this.projectID, this.cluster.id, this.datacenter.metadata.name) :
                         of([]))
                   .concat(
+                      this._canReloadBindings() ?
+                          [
+                            this._rbacService.getClusterBindings(
+                                this.cluster.id, this.datacenter.metadata.name, this.projectID),
+                            this._rbacService.getBindings(
+                                this.cluster.id, this.datacenter.metadata.name, this.projectID)
+                          ] :
+                          [of([]), of([])])
+                  .concat(
                       this._canReloadNodes() ?
                           [
                             this._clusterService.addons(this.projectID, this.cluster.id, this.datacenter.metadata.name),
                             this._clusterService.nodes(this.projectID, this.cluster.id, this.datacenter.metadata.name),
                             this._api.getNodeDeployments(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+
                           ] :
                           [of([]), of([]), of([])],
                   );
@@ -121,9 +134,17 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         }))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(
-            ([upgrades, addons, nodes,
-              nodeDeployments]: [MasterVersion[], AddonEntity[], NodeEntity[], NodeDeploymentEntity[]]) => {
+            ([
+              upgrades,
+              clusterBindings,
+              bindings,
+              addons,
+              nodes,
+              nodeDeployments,
+            ]: [MasterVersion[], ClusterBinding[], Binding[], AddonEntity[], NodeEntity[], NodeDeploymentEntity[]]) => {
               this.addons = addons;
+              this.clusterBindings = this.createSimpleClusterBinding(clusterBindings);
+              this.bindings = this.createSimpleBinding(bindings);
               this.nodes = nodes;
               this.nodeDeployments = nodeDeployments;
               this.isNodeDeploymentLoadFinished = true;
@@ -141,6 +162,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         HealthState.isUp(this.health.machineController);
   }
 
+  private _canReloadBindings(): boolean {
+    return this.cluster && HealthEntity.allHealthy(this.health) && this.isRBACEnabled();
+  }
+
   private _canReloadNodes(): boolean {
     return this.cluster && HealthEntity.allHealthy(this.health);
   }
@@ -151,6 +176,35 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   isAddNodeDeploymentsEnabled(): boolean {
     return this.isClusterRunning && (!this._currentGroupConfig || this._currentGroupConfig.nodeDeployments.create);
+  }
+
+  createSimpleClusterBinding(bindings: ClusterBinding[]): SimpleClusterBinding[] {
+    const clusterBindingArray = [];
+    for (const i in bindings) {
+      if (bindings.hasOwnProperty(i)) {
+        for (const j in bindings[i].subjects) {
+          if (bindings[i].subjects.hasOwnProperty(j)) {
+            clusterBindingArray.push({name: bindings[i].subjects[j].name, role: bindings[i].roleRefName});
+          }
+        }
+      }
+    }
+    return clusterBindingArray;
+  }
+
+  createSimpleBinding(bindings: Binding[]): SimpleBinding[] {
+    const bindingArray = [];
+    for (const i in bindings) {
+      if (bindings.hasOwnProperty(i)) {
+        for (const j in bindings[i].subjects) {
+          if (bindings[i].subjects.hasOwnProperty(j)) {
+            bindingArray.push(
+                {name: bindings[i].subjects[j].name, role: bindings[i].roleRefName, namespace: bindings[i].namespace});
+          }
+        }
+      }
+    }
+    return bindingArray;
   }
 
   addNode(): void {

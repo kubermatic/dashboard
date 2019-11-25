@@ -8,7 +8,7 @@ import {RBACService} from '../../../../core/services';
 import {NotificationActions} from '../../../../redux/actions/notification.actions';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
-import {ClusterRoleName, CreateBinding, CreateClusterBinding, RoleName} from '../../../../shared/entity/RBACEntity';
+import {ClusterRoleName, CreateBinding, RoleName} from '../../../../shared/entity/RBACEntity';
 
 @Component({
   selector: 'kubermatic-add-binding',
@@ -153,36 +153,34 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   }
 
   addClusterBinding(): void {
-    const clusterBinding: CreateClusterBinding = {
-      email: this.form.controls.email.value,
-      role: this.form.controls.role.value,
+    const clusterBinding: CreateBinding = {
+      userEmail: this.form.controls.email.value,
     };
 
     this._rbacService
         .createClusterBinding(
-            this.cluster.id, this.datacenter.metadata.name, this.projectID, clusterBinding.role, clusterBinding)
+            this.cluster.id, this.datacenter.metadata.name, this.projectID, this.form.controls.role.value,
+            clusterBinding)
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((binding) => {
           this._matDialogRef.close(binding);
-          NotificationActions.success(`${clusterBinding.email} has been added successfully`);
+          NotificationActions.success(`${clusterBinding.userEmail} has been added successfully`);
         });
   }
 
   addNamespaceBinding(): void {
     const namespaceBinding: CreateBinding = {
-      email: this.form.controls.email.value,
-      role: this.form.controls.role.value,
-      namespace: this.form.controls.namespace.value,
+      userEmail: this.form.controls.email.value,
     };
 
     this._rbacService
         .createBinding(
-            this.cluster.id, this.datacenter.metadata.name, this.projectID, namespaceBinding.role,
-            namespaceBinding.namespace, namespaceBinding)
+            this.cluster.id, this.datacenter.metadata.name, this.projectID, this.form.controls.role.value,
+            this.form.controls.namespace.value, namespaceBinding)
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((binding) => {
           this._matDialogRef.close(binding);
-          NotificationActions.success(`${namespaceBinding.email} has been added successfully`);
+          NotificationActions.success(`${namespaceBinding.userEmail} has been added successfully`);
         });
   }
 }

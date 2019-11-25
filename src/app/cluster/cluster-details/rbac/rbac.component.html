@@ -9,7 +9,7 @@
             color="alternative"
             *ngIf="isShowRBAC"
             [disabled]="!isClusterRunning"
-            (click)="addBinding()">
+            (click)="addBinding($event)">
       Add Binding
     </button>
   </mat-card-header>
@@ -55,7 +55,7 @@
               <ng-container *ngSwitchCase="false">
                 <button mat-icon-button
                         matTooltip="Delete Binding"
-                        (click)="deleteClusterBinding(element)">
+                        (click)="deleteClusterBinding(element, $event)">
                   <i class="km-icon-delete"
                      aria-hidden="true"></i>
                 </button>
@@ -137,7 +137,7 @@
               <ng-container *ngSwitchCase="false">
                 <button mat-icon-button
                         matTooltip="Delete Binding"
-                        (click)="deleteBinding(element)">
+                        (click)="deleteBinding(element, $event)">
                   <i class="km-icon-delete"
                      aria-hidden="true"></i>
                 </button>

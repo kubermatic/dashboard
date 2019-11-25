@@ -15,11 +15,6 @@ export class ClusterBinding {
   subjects: Subjects[];
 }
 
-export class CreateClusterBinding {
-  email: string;
-  role: string;
-}
-
 export class Namespace {
   name: string;
 }
@@ -45,9 +40,7 @@ export class Binding {
 }
 
 export class CreateBinding {
-  email: string;
-  role: string;
-  namespace: string;
+  userEmail: string;
 }
 
 export class Rules {

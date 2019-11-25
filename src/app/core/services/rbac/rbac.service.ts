@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 
 import {environment} from '../../../../environments/environment';
-import {Binding, ClusterBinding, ClusterRole, ClusterRoleName, CreateBinding, CreateClusterBinding, Namespace, Role, RoleName} from '../../../shared/entity/RBACEntity';
+import {Binding, ClusterBinding, ClusterRole, ClusterRoleName, CreateBinding, Namespace, Role, RoleName} from '../../../shared/entity/RBACEntity';
 
 @Injectable()
 export class RBACService {
@@ -44,9 +44,9 @@ export class RBACService {
 
   createClusterBinding(
       clusterID: string, dc: string, projectID: string, roleID: string,
-      createClusterRole: CreateClusterBinding): Observable<ClusterBinding> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/clusterroles​/${
-        roleID}​/clusterbindings`;
+      createClusterRole: CreateBinding): Observable<ClusterBinding> {
+    const url =
+        `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/clusterroles/${roleID}/clusterbindings`;
     return this._http.post<ClusterBinding>(url, createClusterRole);
   }
 
@@ -58,8 +58,8 @@ export class RBACService {
         userEmail: name,
       },
     };
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/clusterroles/${
-        roleID}​/clusterbindings`;
+    const url =
+        `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/clusterroles/${roleID}/clusterbindings`;
     return this._http.delete(url, options);
   }
 
@@ -89,14 +89,12 @@ export class RBACService {
   }
 
   deleteRole(clusterID: string, dc: string, projectID: string, roleID: string, namespace: string): Observable<any> {
-    const url =
-        `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/roles/${namespace}​/${roleID}`;
+    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/roles/${namespace}/${roleID}`;
     return this._http.delete(url);
   }
 
   patchRole(clusterID: string, dc: string, projectID: string, roleID: string, namespace: string): Observable<Role> {
-    const url =
-        `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/roles/${namespace}​/${roleID}`;
+    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/roles/${namespace}/${roleID}`;
     return this._http.patch<Role>(url, {});
   }
 
@@ -108,8 +106,8 @@ export class RBACService {
   createBinding(
       clusterID: string, dc: string, projectID: string, roleID: string, namespace: string,
       createRole: CreateBinding): Observable<Binding> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/roles/${namespace}​/${
-        roleID}/bindings`;
+    const url =
+        `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/roles/${namespace}/${roleID}/bindings`;
     return this._http.post<Binding>(url, createRole);
   }
 
@@ -121,8 +119,8 @@ export class RBACService {
         userEmail: name,
       },
     };
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/roles/${namespace}​/${
-        roleID}/bindings`;
+    const url =
+        `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/roles/${namespace}/${roleID}/bindings`;
     return this._http.delete(url, options);
   }
 }
