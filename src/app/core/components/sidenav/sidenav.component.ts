@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {Router} from '@angular/router';
+import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
@@ -28,8 +29,12 @@ export class SidenavComponent implements OnInit, OnDestroy {
       private readonly _userService: UserService, private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
-    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe))
-        .subscribe(s => this.customLinks = filterCustomLinks(s.customLinks, CustomLinkLocation.Default));
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      const filtered = filterCustomLinks(settings.customLinks, CustomLinkLocation.Default);
+      if (!_.isEqual(this.customLinks, filtered)) {
+        this.customLinks = filtered;
+      }
+    });
 
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(project => {
