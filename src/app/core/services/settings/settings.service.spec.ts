@@ -5,10 +5,12 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
+import {Auth} from '..';
 import {AppConfigService} from '../../../app-config.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {RouterTestingModule} from '../../../testing/router-stubs';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
+import {AuthMockService} from '../../../testing/services/auth-mock.service';
 
 import {SettingsService} from './settings.service';
 
@@ -30,6 +32,7 @@ describe('SettingsService', () => {
       providers: [
         SettingsService,
         {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: Auth, useClass: AuthMockService},
       ],
     });
     settingsService = TestBed.get(SettingsService);
