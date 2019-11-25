@@ -37,6 +37,14 @@ export class ClusterEntity {
   labels?: object;
   inheritedLabels?: object;
   credential?: string;
+
+  static NewEmptyClusterEntity(): ClusterEntity {
+    return {
+      spec: {
+        cloud: {} as CloudSpec,
+      } as ClusterSpec,
+    } as ClusterEntity;
+  }
 }
 
 export function getEmptyCloudProviderSpec(provider: NodeProvider): object {

@@ -2,9 +2,10 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {MatStepper} from '@angular/material/stepper';
 import {ReplaySubject} from 'rxjs';
 
-import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../shared/entity/ClusterEntity';
+import {CloudSpec, ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterType} from '../../../shared/utils/cluster-utils/cluster-utils';
+import {StepRegistry, WizardStep} from '../../../wizard-new/step/step';
 
 @Injectable()
 export class NewWizardService {
@@ -14,15 +15,13 @@ export class NewWizardService {
   readonly presetStatusChanges = new EventEmitter<boolean>();
   readonly presetChanges = new EventEmitter<string>();
   readonly clusterTypeChanges = new EventEmitter<ClusterType>();
+  readonly stepConfigChanges = new ReplaySubject<WizardStep>();
 
-  private _clusterEntity: ClusterEntity = {
-    spec: {
-      cloud: {} as CloudSpec,
-    } as ClusterSpec,
-  } as ClusterEntity;
+  private _clusterEntity: ClusterEntity = ClusterEntity.NewEmptyClusterEntity();
   private _stepper: MatStepper;
   private _preset: string;
   private _clusterType: ClusterType;
+  private _steps: WizardStep[];
 
   set cluster(cluster: ClusterEntity) {
     this._clusterEntity = {...this._clusterEntity, ...cluster};
@@ -33,6 +32,12 @@ export class NewWizardService {
   }
 
   set provider(provider: NodeProvider) {
+    if (provider === NodeProvider.BRINGYOUROWN) {
+      this.hideStep(StepRegistry.Settings);
+    } else {
+      this.showStep(StepRegistry.Settings);
+    }
+
     this._clusterEntity.spec.cloud = {} as CloudSpec;
     this._clusterEntity.spec.cloud[provider] = {};
     this.providerChanges.emit(provider);
@@ -81,7 +86,33 @@ export class NewWizardService {
     return this._clusterType;
   }
 
+  get steps(): WizardStep[] {
+    return this._steps;
+  }
+
+  set steps(steps: WizardStep[]) {
+    this._steps = steps;
+  }
+
   enablePresets(enable: boolean): void {
     this.presetStatusChanges.emit(enable);
+  }
+
+  hideStep(step: StepRegistry): void {
+    this.steps.forEach((item, idx) => {
+      if (item.name === step) {
+        this.steps[idx].required = false;
+        this.stepConfigChanges.next();
+      }
+    });
+  }
+
+  showStep(step: StepRegistry): void {
+    this.steps.forEach((item, idx) => {
+      if (item.name === step) {
+        this.steps[idx].required = true;
+        this.stepConfigChanges.next(this.steps[idx]);
+      }
+    });
   }
 }

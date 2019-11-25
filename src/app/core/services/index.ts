@@ -3,6 +3,7 @@ import {AuthGuard, AuthzGuard} from './auth/auth.guard';
 import {Auth} from './auth/auth.service';
 import {ClusterService} from './cluster/cluster.service';
 import {DatacenterService} from './datacenter/datacenter.service';
+import {HistoryService} from './history/history.service';
 import {LabelService} from './label/label.service';
 import {NotificationService} from './notification/notification.service';
 import {ParamsService} from './params/params.service';
@@ -20,6 +21,7 @@ export {
   AuthzGuard,
   ClusterService,
   DatacenterService,
+  HistoryService,
   LabelService,
   NotificationService,
   NewWizardService,
