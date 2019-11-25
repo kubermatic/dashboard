@@ -2,6 +2,7 @@ import {DevToolsExtension, NgRedux} from '@angular-redux/store';
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from '@angular/material';
 import {NavigationEnd, Router} from '@angular/router';
+import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -40,7 +41,12 @@ export class KubermaticComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(s => this.settings = s);
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      if (!_.isEqual(this.settings, settings)) {
+        this.settings = settings;
+      }
+    });
+
     this.config = this.appConfigService.getConfig();
     this.version = this.appConfigService.getGitVersion();
     if (this.config.google_analytics_code) {
