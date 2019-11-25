@@ -14,7 +14,7 @@ import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
 import {nodesFake} from '../../testing/fake-data/node.fake';
-import {fakeBindings, fakeClusterBindings} from '../../testing/fake-data/rbac.fake';
+import {fakeBindings, fakeClusterBindings, fakeSimpleBindings, fakeSimpleClusterBindings} from '../../testing/fake-data/rbac.fake';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../testing/router-stubs';
 import {ApiMockService, asyncData} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
@@ -144,5 +144,15 @@ describe('ClusterDetailsComponent', () => {
        expect(de).not.toBeNull('element should be rendered after requests');
 
        discardPeriodicTasks();
+     }));
+
+  it('should create simple cluster binding for rbac', fakeAsync(() => {
+       const simpleClusterBindings = component.createSimpleClusterBinding(fakeClusterBindings());
+       expect(simpleClusterBindings).toEqual(fakeSimpleClusterBindings());
+     }));
+
+  it('should create simple binding for rbac', fakeAsync(() => {
+       const simpleBindings = component.createSimpleBinding(fakeBindings());
+       expect(simpleBindings).toEqual(fakeSimpleBindings());
      }));
 });

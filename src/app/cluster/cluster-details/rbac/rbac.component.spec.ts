@@ -1,4 +1,4 @@
-import {async, ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialog} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -12,9 +12,8 @@ import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
-import {fakeBindings, fakeClusterBindings, fakeSimpleBindings, fakeSimpleClusterBindings} from '../../../testing/fake-data/rbac.fake';
+import {fakeSimpleBindings, fakeSimpleClusterBindings} from '../../../testing/fake-data/rbac.fake';
 import {RouterStub} from '../../../testing/router-stubs';
-import {asyncData} from '../../../testing/services/api-mock.service';
 
 import {RBACComponent} from './rbac.component';
 
@@ -30,10 +29,7 @@ describe('RBACComponent', () => {
   let component: RBACComponent;
 
   beforeEach(async(() => {
-    const rbacMock = jasmine.createSpyObj(
-        'RBACService', ['getClusterBindings', 'getBindings', 'deleteClusterBinding', 'deleteBinding']);
-    rbacMock.getClusterBindings.and.returnValue(asyncData([fakeClusterBindings()]));
-    rbacMock.getBindings.and.returnValue(asyncData([fakeBindings()]));
+    const rbacMock = jasmine.createSpyObj('RBACService', ['deleteClusterBinding', 'deleteBinding']);
     rbacMock.deleteClusterBinding.and.returnValue(of(null));
     rbacMock.deleteBinding.and.returnValue(of(null));
 
@@ -61,20 +57,12 @@ describe('RBACComponent', () => {
     component.cluster = fakeDigitaloceanCluster();
     component.datacenter = fakeDigitaloceanDatacenter();
     component.projectID = fakeProject().id;
+    component.clusterBindings = fakeSimpleClusterBindings();
+    component.bindings = fakeSimpleBindings();
     fixture.detectChanges();
   });
 
   it('should create the rbac cmp', async(() => {
        expect(component).toBeTruthy();
-     }));
-
-  it('should create simple cluster binding', fakeAsync(() => {
-       const simpleClusterBindings = component.createSimpleClusterBinding(fakeClusterBindings());
-       expect(simpleClusterBindings).toEqual(fakeSimpleClusterBindings());
-     }));
-
-  it('should create simple binding', fakeAsync(() => {
-       const simpleBindings = component.createSimpleBinding(fakeBindings());
-       expect(simpleBindings).toEqual(fakeSimpleBindings());
      }));
 });
