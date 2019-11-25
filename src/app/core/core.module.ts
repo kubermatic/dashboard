@@ -20,27 +20,13 @@ import {NotificationComponent} from './components/notification/notification.comp
 import {ProjectSelectorComponent} from './components/sidenav/project/selector.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
-import {
-  ApiService,
-  Auth,
-  AuthGuard,
-  AuthzGuard,
-  ClusterService,
-  DatacenterService,
-  LabelService,
-  ParamsService,
-  WizardService,
-  NewWizardService,
-  RBACService, PresetsService
-} from './services';
+import {ApiService, Auth, AuthGuard, AuthzGuard, ClusterService, DatacenterService, HistoryService, LabelService, NewWizardService, ParamsService, PresetsService, RBACService, WizardService,} from './services';
 import {GlobalModule} from './services/global/global.module';
-import {HistoryService} from './services/history/history.service';
 import {NodeDataService} from './services/node-data/node-data.service';
 import {SettingsService} from './services/settings/settings.service';
 import {StepsService} from './services/wizard/steps.service';
 import {ClusterNameGenerator} from './util/name-generator.service';
 import {ProgressBrowserXhr} from './util/ProgressBrowserXhr';
-import {GlobalModule} from "./services/global/global.module";
 
 const modules: any[] = [
   CommonModule,

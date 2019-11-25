@@ -103,7 +103,6 @@ export class TaintFormComponent implements OnInit {
       ],
       value: [
         {value: taint ? taint.value : '', disabled: false}, Validators.compose([
-          Validators.required,
           TaintFormValidators.taintValueLength,
           LabelFormValidators.labelValuePattern,
         ])
