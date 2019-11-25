@@ -83,7 +83,7 @@ export class RBACComponent implements OnInit, OnDestroy {
     for (const i in bindings) {
       if (bindings.hasOwnProperty(i)) {
         for (const j in bindings[i].subjects) {
-          if (bindings[i].subjects.hasOwnProperty(i)) {
+          if (bindings[i].subjects.hasOwnProperty(j)) {
             clusterBindingArray.push({name: bindings[i].subjects[j].name, role: bindings[i].roleRefName});
           }
         }
@@ -97,7 +97,7 @@ export class RBACComponent implements OnInit, OnDestroy {
     for (const i in bindings) {
       if (bindings.hasOwnProperty(i)) {
         for (const j in bindings[i].subjects) {
-          if (bindings[i].subjects.hasOwnProperty(i)) {
+          if (bindings[i].subjects.hasOwnProperty(j)) {
             bindingArray.push(
                 {name: bindings[i].subjects[j].name, role: bindings[i].roleRefName, namespace: bindings[i].namespace});
           }

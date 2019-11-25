@@ -39,23 +39,33 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     this._rbacService.getClusterRoleNames(this.cluster.id, this.datacenter.metadata.name, this.projectID)
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((clusterRoles: ClusterRoleName[]) => {
-          this.clusterRoles = clusterRoles.sort((a, b) => {
-            return a.name.localeCompare(b.name);
-          });
+          if (clusterRoles.length > 0) {
+            this.clusterRoles = clusterRoles.sort((a, b) => {
+              return a.name.localeCompare(b.name);
+            });
+          } else {
+            this.clusterRoles = [];
+          }
         });
 
     this._rbacService.getRoleNames(this.cluster.id, this.datacenter.metadata.name, this.projectID)
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((roles: RoleName[]) => {
-          this.roles = roles.sort((a, b) => {
-            return a.name.localeCompare(b.name);
-          });
+          if (roles.length > 0) {
+            this.roles = roles.sort((a, b) => {
+              return a.name.localeCompare(b.name);
+            });
+          } else {
+            this.roles = [];
+          }
         });
 
     this.form.controls.role.valueChanges.pipe(debounceTime(1000))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((data) => {
-          this.checkNamespaceState();
+          if (this.bindingType === 'namespace') {
+            this.checkNamespaceState();
+          }
         });
 
     this.setValidators();
@@ -70,6 +80,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   changeView(event: MatButtonToggleChange): void {
     this.bindingType = event.value;
     this.setValidators();
+    this.checkNamespaceState();
   }
 
   get role(): AbstractControl {
@@ -106,8 +117,8 @@ export class AddBindingComponent implements OnInit, OnDestroy {
 
   getNamespaceFormState(): string {
     let roleLength = 0;
-    if (!!this.clusterRoles || !!this.roles) {
-      roleLength = this.bindingType === 'cluster' ? this.clusterRoles.length : this.roles.length;
+    if (!!this.roles) {
+      roleLength = this.roles.length;
     }
 
     if (this.role.value !== '') {
