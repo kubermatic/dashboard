@@ -45,8 +45,8 @@ export class AzureProviderOptionsComponent implements OnInit, OnDestroy {
     });
 
     this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+      this._selectedPreset = newCredentials;
       if (newCredentials) {
-        this._selectedPreset = newCredentials;
         this.form.disable();
         return;
       }
