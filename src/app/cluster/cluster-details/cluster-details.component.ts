@@ -180,30 +180,21 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   createSimpleClusterBinding(bindings: ClusterBinding[]): SimpleClusterBinding[] {
     const clusterBindingArray = [];
-    for (const i in bindings) {
-      if (bindings.hasOwnProperty(i)) {
-        for (const j in bindings[i].subjects) {
-          if (bindings[i].subjects.hasOwnProperty(j)) {
-            clusterBindingArray.push({name: bindings[i].subjects[j].name, role: bindings[i].roleRefName});
-          }
-        }
-      }
-    }
+    bindings.forEach(binding => {
+      binding.subjects.forEach(subject => {
+        clusterBindingArray.push({name: subject.name, role: binding.roleRefName});
+      });
+    });
     return clusterBindingArray;
   }
 
   createSimpleBinding(bindings: Binding[]): SimpleBinding[] {
     const bindingArray = [];
-    for (const i in bindings) {
-      if (bindings.hasOwnProperty(i)) {
-        for (const j in bindings[i].subjects) {
-          if (bindings[i].subjects.hasOwnProperty(j)) {
-            bindingArray.push(
-                {name: bindings[i].subjects[j].name, role: bindings[i].roleRefName, namespace: bindings[i].namespace});
-          }
-        }
-      }
-    }
+    bindings.forEach(binding => {
+      binding.subjects.forEach(subject => {
+        bindingArray.push({name: subject.name, role: binding.roleRefName, namespace: binding.namespace});
+      });
+    });
     return bindingArray;
   }
 
