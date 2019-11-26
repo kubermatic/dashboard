@@ -1,8 +1,9 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {merge, Observable, of, Subject, timer} from 'rxjs';
+import {iif, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, map, shareReplay, switchMap} from 'rxjs/operators';
 
+import {Auth} from '..';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../../shared/entity/AdminSettings';
@@ -19,7 +20,11 @@ const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
     Enabled: false,
   },
   clusterTypeOptions: ClusterTypeOptions.All,
+  customLinks: [],
   defaultNodeCount: 1,
+  displayAPIDocs: true,
+  displayDemoInfo: false,
+  displayTermsOfService: false,
 };
 
 @Injectable()
@@ -31,9 +36,11 @@ export class SettingsService {
   private _adminSettingsRefresh$: Subject<any> = new Subject();
   private _admins$: Observable<AdminEntity[]>;
   private _adminsRefresh$: Subject<any> = new Subject();
-  private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 5);
+  private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * 5);
 
-  constructor(private _http: HttpClient, private _appConfig: AppConfigService) {}
+  constructor(
+      private readonly _httpClient: HttpClient, private readonly _appConfigService: AppConfigService,
+      private readonly _auth: Auth) {}
 
   get userSettings(): Observable<UserSettings> {
     if (!this._userSettings$) {
@@ -51,7 +58,7 @@ export class SettingsService {
 
   private _getUserSettings(defaultOnError = false): Observable<UserSettings> {
     const url = `${this.restRoot}/me/settings`;
-    const observable = this._http.get<UserSettings>(url);
+    const observable = this._httpClient.get<UserSettings>(url);
     return defaultOnError ? observable.pipe(catchError(() => of(DEFAULT_USER_SETTINGS))) : observable;
   }
 
@@ -73,15 +80,18 @@ export class SettingsService {
 
   patchUserSettings(patch: UserSettings): Observable<UserSettings> {
     const url = `${this.restRoot}/me/settings`;
-    return this._http.patch<UserSettings>(url, patch);
+    return this._httpClient.patch<UserSettings>(url, patch);
   }
 
   get adminSettings(): Observable<AdminSettings> {
     if (!this._adminSettings$) {
-      this._adminSettings$ = merge(this._refreshTimer$, this._adminSettingsRefresh$)
-                                 .pipe(switchMap(() => this._getAdminSettings(true)))
-                                 .pipe(map(settings => this._defaultAdminSettings(settings)))
-                                 .pipe(shareReplay({refCount: true, bufferSize: 1}));
+      this._adminSettings$ =
+          merge(this._refreshTimer$, this._adminSettingsRefresh$)
+              .pipe(switchMap(
+                  () =>
+                      iif(() => this._auth.authenticated(), this._getAdminSettings(true), of(DEFAULT_ADMIN_SETTINGS))))
+              .pipe(map(settings => this._defaultAdminSettings(settings)))
+              .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this._adminSettings$;
   }
@@ -92,7 +102,7 @@ export class SettingsService {
 
   private _getAdminSettings(defaultOnError = false): Observable<AdminSettings> {
     const url = `${this.restRoot}/admin/settings`;
-    const observable = this._http.get<AdminSettings>(url);
+    const observable = this._httpClient.get<AdminSettings>(url);
     return defaultOnError ? observable.pipe(catchError(() => of(DEFAULT_ADMIN_SETTINGS))) : observable;
   }
 
@@ -114,7 +124,7 @@ export class SettingsService {
 
   patchAdminSettings(patch: any): Observable<AdminSettings> {
     const url = `${this.restRoot}/admin/settings`;
-    return this._http.patch<AdminSettings>(url, patch);
+    return this._httpClient.patch<AdminSettings>(url, patch);
   }
 
   get admins(): Observable<AdminEntity[]> {
@@ -128,7 +138,7 @@ export class SettingsService {
 
   private _getAdmins(): Observable<AdminEntity[]> {
     const url = `${this.restRoot}/admin`;
-    return this._http.get<AdminEntity[]>(url);
+    return this._httpClient.get<AdminEntity[]>(url);
   }
 
   refreshAdmins(): void {
@@ -137,6 +147,6 @@ export class SettingsService {
 
   setAdmin(admin: AdminEntity): Observable<AdminEntity> {
     const url = `${this.restRoot}/admin`;
-    return this._http.put<AdminEntity>(url, admin);
+    return this._httpClient.put<AdminEntity>(url, admin);
   }
 }

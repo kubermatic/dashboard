@@ -7,7 +7,6 @@ import {environment} from '../environments/environment';
 import {NotificationActions} from './redux/actions/notification.actions';
 import {VersionInfo} from './shared/entity/VersionInfo';
 import {Config, UserGroupConfig} from './shared/model/Config';
-import {CustomLink, CustomLinkLocation} from './shared/utils/custom-link-utils/custom-link';
 
 @Injectable()
 export class AppConfigService {
@@ -91,21 +90,6 @@ export class AppConfigService {
 
   getCustomCSS(): string {
     return environment.customCSS;
-  }
-
-  getCustomLinks(location?: CustomLinkLocation): CustomLink[] {
-    let links = [];
-    if (this._appConfig && this._appConfig.custom_links) {
-      links = this._appConfig.custom_links.filter(link => {
-        // Return all links if the location param is not specified.
-        return !location
-            // Return link if location does match.
-            || location === link.location
-            // Return link if default location was specified and link config is missing or is invalid.
-            || (location === CustomLinkLocation.Default && !Object.values(CustomLinkLocation).includes(link.location));
-      });
-    }
-    return links;
   }
 
   getRefreshTimeBase(): number {

@@ -31,6 +31,28 @@
          class="km-admin-settings">
       <div fxLayout="row">
         <div class="km-admin-settings-label">
+          <span>Custom Links</span>
+          <div class="km-info-icon"
+               matTooltip="Customize your theme or improve the workflow by adding links in the sidebar or footer.">i</div>
+        </div>
+        <div fxFlex
+             fxLayout="column">
+          <km-custom-links-form [(customLinks)]="settings.customLinks"
+                                (customLinksChange)="onSettingsChange()"></km-custom-links-form>
+          <div fxLayout="row">
+            <mat-checkbox [(ngModel)]="settings.displayAPIDocs"
+                          (change)="onSettingsChange()">Display API Docs</mat-checkbox>
+            <mat-checkbox [(ngModel)]="settings.displayTermsOfService"
+                          (change)="onSettingsChange()">Display Terms of Service</mat-checkbox>
+            <mat-checkbox [(ngModel)]="settings.displayDemoInfo"
+                          (change)="onSettingsChange()">Display Demo Information</mat-checkbox>
+            <km-settings-status [isSaved]="isCustomLinksEqual()"></km-settings-status>
+          </div>
+        </div>
+      </div>
+
+      <div fxLayout="row">
+        <div class="km-admin-settings-label">
           <span>Cleanup on Cluster Deletion</span>
           <div class="km-info-icon"
                matTooltip="Set &quot;clean up connected load balancers&quot; and &quot;clean up connected volumes (PVs and PVCS)&quot; checkboxes on Cluster Deletion to enabled by default. Enable &quot;Enforce&quot; to make users unable to edit the checkboxes.">i</div>

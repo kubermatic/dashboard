@@ -61,8 +61,11 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
     this._settingsChange.pipe(debounceTime(1000))
         .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(() => this._settingsService.patchAdminSettings(objectDiff(this.settings, this.apiSettings))))
-        .subscribe(settings => this._applySettings(settings));
+        .pipe(switchMap(() => this._settingsService.patchAdminSettings(this._getPatch())))
+        .subscribe(settings => {
+          this._applySettings(settings);
+          this._settingsService.refreshAdminSettings();
+        });
   }
 
   ngOnDestroy(): void {
@@ -74,6 +77,16 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     this.apiSettings = settings;
     this.settings = _.cloneDeep(this.apiSettings);
     this._setDistro(this.settings.clusterTypeOptions);
+  }
+
+  private _getPatch(): AdminSettings {
+    const patch: AdminSettings = objectDiff(this.settings, this.apiSettings);
+
+    if (patch.customLinks) {
+      patch.customLinks = this.settings.customLinks;
+    }
+
+    return patch;
   }
 
   onSettingsChange(): void {
@@ -127,6 +140,13 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
   isEqual(a: any, b: any): boolean {
     return _.isEqual(a, b);
+  }
+
+  isCustomLinksEqual(): boolean {
+    return this.isEqual(this.settings.customLinks, this.apiSettings.customLinks) &&
+        this.isEqual(this.settings.displayAPIDocs, this.apiSettings.displayAPIDocs) &&
+        this.isEqual(this.settings.displayDemoInfo, this.apiSettings.displayDemoInfo) &&
+        this.isEqual(this.settings.displayTermsOfService, this.apiSettings.displayTermsOfService);
   }
 
   getDataSource(): MatTableDataSource<AdminEntity> {
