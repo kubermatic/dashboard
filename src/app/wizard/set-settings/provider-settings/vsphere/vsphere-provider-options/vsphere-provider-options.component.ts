@@ -140,6 +140,12 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
                   this._networkMap[network.type].push(network);
                 });
 
+                this.networkTypes.forEach(type => {
+                  this._networkMap[type] = this._networkMap[type].sort((a, b) => {
+                    return a.name.localeCompare(b.name);
+                  });
+                });
+
                 if (this.form.controls.vmNetName.value !== '0') {
                   this.form.controls.vmNetName.setValue(this.cluster.spec.cloud.vsphere.vmNetName);
                 }
@@ -159,7 +165,9 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   get networkTypes(): string[] {
-    return Object.keys(this._networkMap);
+    return Object.keys(this._networkMap).sort((a, b) => {
+      return a.localeCompare(b);
+    });
   }
 
   getNetworks(type: string): VSphereNetwork[] {
