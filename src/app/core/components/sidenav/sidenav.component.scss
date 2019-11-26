@@ -33,7 +33,15 @@
       display: flex;
       align-items: center;
 
-      &:hover,
+      &:hover {
+        color: $secondary-light;
+        background-color: $primary-active;
+
+        i {
+          background-color: $secondary-light;
+        }
+      }
+
       &.active {
         color: $secondary-light;
         background-color: $primary-light;
