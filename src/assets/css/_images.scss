@@ -235,6 +235,17 @@
   background-color: $text-color;
 }
 
+.km-icon-info {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  background-image: url("/assets/images/icons/info.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: left;
+}
+
 .km-icon-running {
   display: inline-block;
   margin-right: $baseline-grid;

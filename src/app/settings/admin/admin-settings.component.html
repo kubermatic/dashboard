@@ -30,10 +30,12 @@
     <div *ngIf="!!settings"
          class="km-admin-settings">
       <div fxLayout="row">
-        <div class="km-admin-settings-label">
-          <span>Custom Links</span>
-          <div class="km-info-icon"
-               matTooltip="Customize your theme or improve the workflow by adding links in the sidebar or footer.">i</div>
+        <div>
+          <div class="km-admin-settings-label">
+            <span>Custom Links</span>
+            <div class="km-icon-info"
+                 matTooltip="Customize your theme or improve the workflow by adding links in the sidebar or footer."></div>
+          </div>
         </div>
         <div fxFlex
              fxLayout="column">
@@ -54,8 +56,8 @@
       <div fxLayout="row">
         <div class="km-admin-settings-label">
           <span>Cleanup on Cluster Deletion</span>
-          <div class="km-info-icon"
-               matTooltip="Set &quot;clean up connected load balancers&quot; and &quot;clean up connected volumes (PVs and PVCS)&quot; checkboxes on Cluster Deletion to enabled by default. Enable &quot;Enforce&quot; to make users unable to edit the checkboxes.">i</div>
+          <div class="km-icon-icon"
+               matTooltip="Set &quot;clean up connected load balancers&quot; and &quot;clean up connected volumes (PVs and PVCS)&quot; checkboxes on Cluster Deletion to enabled by default. Enable &quot;Enforce&quot; to make users unable to edit the checkboxes."></div>
         </div>
         <mat-checkbox [(ngModel)]="settings.cleanupOptions.Enabled"
                       (change)="onSettingsChange()">Enable by Default</mat-checkbox>
@@ -67,8 +69,8 @@
       <div fxLayout="row">
         <div class="km-admin-settings-label">
           <span>Displayed Distributions</span>
-          <div class="km-info-icon"
-               matTooltip="Deactivate the distributions you want to hide from the users. At least one distribution has to be enabled.">i</div>
+          <div class="km-icon-info"
+               matTooltip="Deactivate the distributions you want to hide from the users. At least one distribution has to be enabled."></div>
         </div>
         <mat-button-toggle-group #group="matButtonToggleGroup"
                                  [value]="selectedDistro"

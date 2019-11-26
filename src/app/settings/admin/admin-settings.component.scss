@@ -32,20 +32,14 @@
     .km-admin-settings-label {
       width: 35 * $baseline-grid;
       line-height: 8 * $baseline-grid;
+      display: flex;
+      align-items: center;
     }
 
-    .km-info-icon {
-      background-color: $separator;
-      border-radius: 50%;
-      color: $medium-text-color;
-      cursor: pointer;
-      display: inline-block;
-      font-size: $body-font-size-base;
-      height: 18px;
+    .km-icon-info {
       line-height: 18px;
       margin-left: .5 * $baseline-grid;
       text-align: center;
-      width: 18px;
     }
 
     .km-admin-settings-field-distro {

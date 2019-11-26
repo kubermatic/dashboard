@@ -53,9 +53,14 @@
   margin: (2.5 * $baseline-grid) auto !important;
 }
 
-i.fa-info-circle {
-  color: $light-button-color;
-  padding-left: 0.625 * $baseline-grid;
+i.km-icon-info {
+  margin-left: 0.625 * $baseline-grid;
+}
+
+.mat-column-name,
+.km-node-info {
+  display: flex;
+  align-items: center;
 }
 
 i.fa-exclamation-triangle {
