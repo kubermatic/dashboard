@@ -974,8 +974,12 @@ mat-hint a {
 .mat-option {
   padding: 0 0 0 (1.25 * $baseline-grid) !important;
 
-  &:hover,
   &.mat-active {
+    background-color: $grey-background !important;
+    color: $text-color !important;
+  }
+
+  &:hover {
     background-color: $secondary-light !important;
     color: $text-color !important;
   }
