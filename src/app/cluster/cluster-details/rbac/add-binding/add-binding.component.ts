@@ -116,10 +116,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   }
 
   getNamespaceFormState(): string {
-    let roleLength = 0;
-    if (!!this.roles) {
-      roleLength = this.roles.length;
-    }
+    const roleLength = !!this.roles ? this.roles.length : 0;
 
     if (this.role.value !== '') {
       return 'Namespace*';

@@ -20,7 +20,7 @@
 }
 
 .mat-card-title {
-  padding: 8px 0 16px !important;
+  padding: $baseline-grid 0 (2 * $baseline-grid) !important;
 }
 
 h2 {

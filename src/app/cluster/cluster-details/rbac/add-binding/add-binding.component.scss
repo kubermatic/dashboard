@@ -28,15 +28,15 @@ mat-button-toggle {
   }
 
   &:hover {
-    border: 1px solid $primary;
+    border: (0.125 * $baseline-grid) solid $primary;
   }
 }
 
 .mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle-checked {
-  border-left: 1px solid $primary;
+  border-left: (0.125 * $baseline-grid) solid $primary;
 }
 
 .mat-button-toggle-checked {
-  border: 1px solid $primary;
+  border: (0.125 * $baseline-grid) solid $primary;
   background-color: $white-background;
 }
