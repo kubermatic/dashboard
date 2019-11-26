@@ -1,0 +1,55 @@
+<form [formGroup]="form"
+      fxLayout="column">
+  <div formArrayName="customLinks">
+    <div *ngFor="let control of customLinksArray.controls; let i = index;"
+         [formGroupName]="i"
+         fxLayout="row"
+         fxLayoutGap="10px">
+      <mat-form-field fxFlex="25">
+        <mat-label>Label</mat-label>
+        <input matInput
+               (keyup)="check()"
+               name="label"
+               formControlName="label">
+        <mat-error *ngIf="control.get('label').errors?.required"
+                   i18n>
+          Label is required.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="40">
+        <mat-label>URL</mat-label>
+        <input matInput
+               (keyup)="check()"
+               name="url"
+               formControlName="url">
+        <mat-error *ngIf="control.get('url').errors?.required"
+                   i18n>
+          URL is required.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="25">
+        <mat-label>Icon</mat-label>
+        <input matInput
+               (keyup)="check()"
+               name="icon"
+               formControlName="icon">
+      </mat-form-field>
+      <mat-form-field fxFlex="10">
+        <mat-label>Location</mat-label>
+        <mat-select formControlName="location"
+                    disableOptionCentering
+                    (selectionChange)="check()">
+          <mat-option value="default">Default</mat-option>
+          <mat-option value="footer">Footer</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-icon-button
+              class="km-custom-links-form-delete-button"
+              [disabled]="!isRemovable(i)"
+              (click)="deleteLabel(i)">
+        <i class="fa km-icon-delete"
+           aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+</form>

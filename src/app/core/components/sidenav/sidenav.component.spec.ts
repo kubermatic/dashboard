@@ -8,17 +8,17 @@ import {Router} from '@angular/router';
 import {MockComponent} from 'ng2-mock-component';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
-import {AppConfigService} from '../../../app-config.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeProjects} from '../../../testing/fake-data/project.fake';
 import {RouterLinkStubDirective, RouterTestingModule} from '../../../testing/router-stubs';
-import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
+import {SettingsMockService} from '../../../testing/services/settings-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
 import {click} from '../../../testing/utils/click-handler';
 import {ProjectService, UserService} from '../../services';
-import {ProjectSelectorComponent} from './project/selector.component';
+import {SettingsService} from '../../services/settings/settings.service';
 
+import {ProjectSelectorComponent} from './project/selector.component';
 import {SidenavComponent} from './sidenav.component';
 
 const modules: any[] = [
@@ -53,7 +53,7 @@ describe('SidenavComponent', () => {
           providers: [
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: UserService, useClass: UserMockService},
-            {provide: AppConfigService, useClass: AppConfigMockService},
+            {provide: SettingsService, useClass: SettingsMockService},
             {
               provide: Router,
               useValue: {

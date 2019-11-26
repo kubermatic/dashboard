@@ -19,6 +19,7 @@ import {UserMockService} from '../../testing/services/user-mock.service';
 
 import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.component';
 import {AdminSettingsComponent} from './admin-settings.component';
+import {CustomLinksFormComponent} from './custom-link-form/custom-links-form.component';
 
 describe('AdminSettingsComponent', () => {
   let fixture: ComponentFixture<AdminSettingsComponent>;
@@ -37,6 +38,7 @@ describe('AdminSettingsComponent', () => {
           declarations: [
             AdminSettingsComponent,
             AddAdminDialogComponent,
+            CustomLinksFormComponent,
           ],
           providers: [
             {provide: UserService, useClass: UserMockService},

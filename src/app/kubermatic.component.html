@@ -21,8 +21,9 @@
           <kubermatic-notification></kubermatic-notification>
           <router-outlet></router-outlet>
         </div>
-        <kubermatic-footer [version]="version"
-                           [config]="config"
+        <kubermatic-footer *ngIf="!!settings"
+                           [version]="version"
+                           [settings]="settings"
                            [authenticated]="auth.authenticated()"></kubermatic-footer>
       </div>
     </mat-sidenav-container>
