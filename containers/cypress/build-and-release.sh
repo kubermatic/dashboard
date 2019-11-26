@@ -4,7 +4,7 @@ set -e
 
 IMG_REPO="quay.io/kubermatic"
 IMG_NAME="e2e-kind-cypress"
-IMG_VERSION="v1.0.6"
+IMG_VERSION="v1.0.7"
 
 # Preloaded images
 IMG_KIND="kindest/node:v1.13.4"
