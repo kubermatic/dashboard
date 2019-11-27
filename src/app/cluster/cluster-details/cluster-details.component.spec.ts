@@ -149,10 +149,12 @@ describe('ClusterDetailsComponent', () => {
   it('should create simple cluster binding for rbac', fakeAsync(() => {
        const simpleClusterBindings = component.createSimpleClusterBinding(fakeClusterBindings());
        expect(simpleClusterBindings).toEqual(fakeSimpleClusterBindings());
+       discardPeriodicTasks();
      }));
 
   it('should create simple binding for rbac', fakeAsync(() => {
        const simpleBindings = component.createSimpleBinding(fakeBindings());
        expect(simpleBindings).toEqual(fakeSimpleBindings());
+       discardPeriodicTasks();
      }));
 });

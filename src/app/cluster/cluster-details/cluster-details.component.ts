@@ -118,7 +118,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                             this._rbacService.getBindings(
                                 this.cluster.id, this.datacenter.metadata.name, this.projectID)
                           ] :
-                          [of([]), of([])])
+                          [of([]), of([])],
+                      )
                   .concat(
                       this._canReloadNodes() ?
                           [
@@ -143,12 +144,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               nodeDeployments,
             ]: [MasterVersion[], ClusterBinding[], Binding[], AddonEntity[], NodeEntity[], NodeDeploymentEntity[]]) => {
               this.addons = addons;
-              this.clusterBindings = this.createSimpleClusterBinding(clusterBindings);
-              this.bindings = this.createSimpleBinding(bindings);
               this.nodes = nodes;
               this.nodeDeployments = nodeDeployments;
               this.isNodeDeploymentLoadFinished = true;
               this.upgrades = upgrades;
+              this.clusterBindings = this.createSimpleClusterBinding(clusterBindings);
+              this.bindings = this.createSimpleBinding(bindings);
             },
             (error) => {
               if (error.status === 404) {
@@ -180,20 +181,24 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   createSimpleClusterBinding(bindings: ClusterBinding[]): SimpleClusterBinding[] {
     const clusterBindingArray = [];
-    bindings.forEach(binding => {
-      binding.subjects.forEach(subject => {
-        clusterBindingArray.push({name: subject.name, role: binding.roleRefName});
-      });
+    bindings.forEach((binding) => {
+      if (!!binding.subjects) {
+        binding.subjects.map((subject) => {
+          clusterBindingArray.push({name: subject.name, role: binding.roleRefName});
+        });
+      }
     });
     return clusterBindingArray;
   }
 
   createSimpleBinding(bindings: Binding[]): SimpleBinding[] {
     const bindingArray = [];
-    bindings.forEach(binding => {
-      binding.subjects.forEach(subject => {
-        bindingArray.push({name: subject.name, role: binding.roleRefName, namespace: binding.namespace});
-      });
+    bindings.forEach((binding) => {
+      if (!!binding.subjects) {
+        binding.subjects.map((subject) => {
+          bindingArray.push({name: subject.name, role: binding.roleRefName, namespace: binding.namespace});
+        });
+      }
     });
     return bindingArray;
   }

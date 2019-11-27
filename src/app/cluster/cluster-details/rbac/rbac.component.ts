@@ -23,8 +23,8 @@ export class RBACComponent implements OnInit, OnDestroy {
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
-  @Input() clusterBindings: SimpleClusterBinding[];
-  @Input() bindings: SimpleBinding[];
+  @Input() clusterBindings: SimpleClusterBinding[] = [];
+  @Input() bindings: SimpleBinding[] = [];
 
   isShowRBAC = false;
   dataSourceCluster = new MatTableDataSource<SimpleClusterBinding>();
