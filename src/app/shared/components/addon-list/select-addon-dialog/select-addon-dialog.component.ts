@@ -1,32 +1,24 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, Input} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 import {AddonConfigEntity, AddonEntity} from '../../../entity/AddonEntity';
 
 @Component({
-  selector: 'km-add-addon-dialog',
-  templateUrl: './add-addon-dialog.component.html',
-  styleUrls: ['./add-addon-dialog.component.scss'],
+  selector: 'km-select-addon-dialog',
+  templateUrl: './select-addon-dialog.component.html',
+  styleUrls: ['./select-addon-dialog.component.scss'],
 })
-export class AddAddonDialogComponent implements OnInit {
+export class SelectAddonDialogComponent {
   @Input() installableAddons: string[] = [];
   @Input() addonConfigs = new Map<string, AddonConfigEntity>();
-  form: FormGroup;
 
-  constructor(public dialogRef: MatDialogRef<AddAddonDialogComponent>, private readonly _domSanitizer: DomSanitizer) {}
-
-  ngOnInit(): void {
-    this.form = new FormGroup({name: new FormControl('', [Validators.required])});
-
-    if (this.installableAddons.length > 0) {
-      this.form.controls.name.setValue(this.installableAddons[0]);
-    }
-  }
+  constructor(
+      public dialogRef: MatDialogRef<SelectAddonDialogComponent>, private readonly _domSanitizer: DomSanitizer) {}
 
   hasLogo(name: string): boolean {
-    return !!this.addonConfigs.get(name);
+    const addonConfig = this.addonConfigs.get(name);
+    return !!addonConfig && !!addonConfig.spec.logo;
   }
 
   getAddonLogo(name: string): SafeUrl {

@@ -8,7 +8,7 @@ import {ApiService} from '../../../core/services';
 import {AddonConfigEntity, AddonEntity} from '../../entity/AddonEntity';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
 
-import {AddAddonDialogComponent} from './add-addon-dialog/add-addon-dialog.component';
+import {SelectAddonDialogComponent} from './select-addon-dialog/select-addon-dialog.component';
 
 @Component({
   selector: 'km-addon-list',
@@ -67,7 +67,8 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   hasLogo(name: string): boolean {
-    return !!this.addonConfigs.get(name);
+    const addonConfig = this.addonConfigs.get(name);
+    return !!addonConfig && !!addonConfig.spec.logo;
   }
 
   getAddonLogo(name: string): SafeUrl {
@@ -95,7 +96,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
 
   add(): void {
     if (this.canAdd()) {
-      const dialog = this._matDialog.open(AddAddonDialogComponent);
+      const dialog = this._matDialog.open(SelectAddonDialogComponent);
       dialog.componentInstance.installableAddons = this.installableAddons;
       dialog.componentInstance.addonConfigs = this.addonConfigs;
       dialog.afterClosed().pipe(first()).subscribe(addedAddon => {

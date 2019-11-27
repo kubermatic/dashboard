@@ -1,0 +1,19 @@
+<km-dialog-title title="Select Addon"></km-dialog-title>
+<mat-dialog-content>
+  <div class="mat-dialog-content">
+    <div *ngFor="let installableAddon of installableAddons"
+         (click)="add(installableAddon)"
+         class="km-select-addon-dialog-option-container">
+      <img *ngIf="hasLogo(installableAddon)"
+           [src]="getAddonLogo(installableAddon)"
+           [alt]="installableAddon">
+      <div *ngIf="!hasLogo(installableAddon)">
+        {{installableAddon}}
+      </div>
+      <div *ngIf="!!getAddonDescription(installableAddon)"
+           class="km-select-addon-dialog-option-desc">
+        {{getAddonDescription(installableAddon)}}
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
