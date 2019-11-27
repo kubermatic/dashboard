@@ -20,7 +20,7 @@ import {NotificationComponent} from './components/notification/notification.comp
 import {ProjectSelectorComponent} from './components/sidenav/project/selector.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
-import {ApiService, Auth, AuthGuard, AuthzGuard, ClusterService, DatacenterService, LabelService, ParamsService, WizardService} from './services';
+import {ApiService, Auth, AuthGuard, AuthzGuard, ClusterService, DatacenterService, LabelService, ParamsService, RBACService, WizardService} from './services';
 import {GlobalModule} from './services/global/global.module';
 import {HistoryService} from './services/history/history.service';
 import {NodeDataService} from './services/node-data/node-data.service';
@@ -68,6 +68,7 @@ const services: any[] = [
   LabelService,
   HistoryService,
   SettingsService,
+  RBACService,
 ];
 
 const interceptors: any[] = [

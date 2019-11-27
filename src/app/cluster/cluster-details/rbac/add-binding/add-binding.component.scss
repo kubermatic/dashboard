@@ -1,0 +1,42 @@
+@import "../../../../../assets/css/colors";
+@import "../../../../../assets/css/variables";
+
+mat-button-toggle-group {
+  border-radius: $border-radius;
+  margin-bottom: 3.75 * $baseline-grid;
+}
+
+mat-button-toggle {
+  margin-right: 0;
+  min-height: 5 * $baseline-grid;
+  max-height: 5 * $baseline-grid;
+  border-color: $grey-background;
+  background-color: $grey-background;
+
+  &:first-child {
+    min-width: 10.25 * $baseline-grid;
+    max-width: 10.25 * $baseline-grid;
+    border-top-left-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
+  }
+
+  &:last-child {
+    min-width: 14.25 * $baseline-grid;
+    max-width: 14.25 * $baseline-grid;
+    border-top-right-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
+  }
+
+  &:hover {
+    border: (0.125 * $baseline-grid) solid $primary;
+  }
+}
+
+.mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle-checked {
+  border-left: (0.125 * $baseline-grid) solid $primary;
+}
+
+.mat-button-toggle-checked {
+  border: (0.125 * $baseline-grid) solid $primary;
+  background-color: $white-background;
+}
