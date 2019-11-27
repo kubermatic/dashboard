@@ -89,3 +89,9 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
 .mat-icon-button i {
   background-color: transparent;
 }
+
+km-label-form,
+km-taint-form {
+  display: block;
+  margin-top: 20px;
+}
