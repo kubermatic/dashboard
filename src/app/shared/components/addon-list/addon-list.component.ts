@@ -82,9 +82,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getAddBtnTooltip(): string {
-    if (!this.isClusterReady) {
-      return 'The cluster is not ready.';
-    } else if (this.accessibleAddons.length === 0) {
+    if (this.accessibleAddons.length === 0) {
       return 'There are no accessible addons.';
     } else if (this.addons.length === this.accessibleAddons.length) {
       return 'All accessible addons are already installed.';
