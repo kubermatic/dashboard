@@ -1,12 +1,14 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
 
 import {ApiService} from '../../../core/services';
-import {AddonEntity} from '../../entity/AddonEntity';
+import {AddonConfigEntity, AddonEntity} from '../../entity/AddonEntity';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
-import {AddAddonDialogComponent} from './add-addon-dialog/add-addon-dialog.component';
+
+import {SelectAddonDialogComponent} from './select-addon-dialog/select-addon-dialog.component';
 
 @Component({
   selector: 'km-addon-list',
@@ -25,14 +27,23 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
 
   accessibleAddons: string[] = [];
   installableAddons: string[] = [];
+  addonConfigs = new Map<string, AddonConfigEntity>();
   private _unsubscribe: Subject<any> = new Subject();
 
-  constructor(private readonly _apiService: ApiService, private readonly _matDialog: MatDialog) {}
+  constructor(
+      private readonly _apiService: ApiService, private readonly _matDialog: MatDialog,
+      private readonly _domSanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     this._apiService.getAccessibleAddons().pipe(takeUntil(this._unsubscribe)).subscribe(accessibleAddons => {
       this.accessibleAddons = accessibleAddons;
       this._updateInstallableAddons();
+    });
+
+    this._apiService.addonConfigs.pipe(takeUntil(this._unsubscribe)).subscribe(addonConfigs => {
+      const map = new Map();
+      addonConfigs.forEach(addonConfig => map.set(addonConfig.name, addonConfig));
+      this.addonConfigs = map;
     });
   }
 
@@ -55,6 +66,16 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  hasLogo(name: string): boolean {
+    const addonConfig = this.addonConfigs.get(name);
+    return !!addonConfig && !!addonConfig.spec.logo;
+  }
+
+  getAddonLogo(name: string): SafeUrl {
+    return this._domSanitizer.bypassSecurityTrustUrl(
+        `data:image/svg+xml;base64,${this.addonConfigs.get(name).spec.logo}`);
+  }
+
   canAdd(): boolean {
     return this.isClusterReady && this.accessibleAddons.length > 0 && this.addons.length < this.accessibleAddons.length;
   }
@@ -64,9 +85,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getAddBtnTooltip(): string {
-    if (!this.isClusterReady) {
-      return 'The cluster is not ready.';
-    } else if (this.accessibleAddons.length === 0) {
+    if (this.accessibleAddons.length === 0) {
       return 'There are no accessible addons.';
     } else if (this.addons.length === this.accessibleAddons.length) {
       return 'All accessible addons are already installed.';
@@ -77,8 +96,9 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
 
   add(): void {
     if (this.canAdd()) {
-      const dialog = this._matDialog.open(AddAddonDialogComponent);
+      const dialog = this._matDialog.open(SelectAddonDialogComponent);
       dialog.componentInstance.installableAddons = this.installableAddons;
+      dialog.componentInstance.addonConfigs = this.addonConfigs;
       dialog.afterClosed().pipe(first()).subscribe(addedAddon => {
         if (!!addedAddon) {
           this.addAddon.emit(addedAddon);

@@ -12,8 +12,9 @@ import {ClipboardModule} from 'ngx-clipboard';
 
 import {AddProjectDialogComponent} from './components/add-project-dialog/add-project-dialog.component';
 import {AddSshKeyDialogComponent} from './components/add-ssh-key-dialog/add-ssh-key-dialog.component';
-import {AddAddonDialogComponent} from './components/addon-list/add-addon-dialog/add-addon-dialog.component';
 import {AddonsListComponent} from './components/addon-list/addon-list.component';
+import {InstallAddonDialogComponent} from './components/addon-list/install-addon-dialog/install-addon-dialog.component';
+import {SelectAddonDialogComponent} from './components/addon-list/select-addon-dialog/select-addon-dialog.component';
 import {BooleanPropertyComponent} from './components/boolean-property/boolean-property.component';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 import {DialogTitleComponent} from './components/dialog-title/dialog-title.component';
@@ -86,10 +87,8 @@ const components: any[] = [
 ];
 
 const entryComponents: any[] = [
-  AddProjectDialogComponent,
-  AddSshKeyDialogComponent,
-  ConfirmationDialogComponent,
-  AddAddonDialogComponent,
+  AddProjectDialogComponent, AddSshKeyDialogComponent, ConfirmationDialogComponent, SelectAddonDialogComponent,
+  InstallAddonDialogComponent
 ];
 
 @NgModule({
