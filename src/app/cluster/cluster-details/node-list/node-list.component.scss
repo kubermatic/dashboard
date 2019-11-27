@@ -37,20 +37,11 @@
   justify-content: flex-end;
 }
 
-.km-spinner {
-  float: right;
-  margin: 0.625 * $baseline-grid;
-}
-
 .km-btn-remove-node-wrapper {
   padding-right: 2.5 * $baseline-grid;
   position: relative;
   justify-content: flex-end;
   display: flex;
-}
-
-.km-node-list-spinner {
-  margin: (2.5 * $baseline-grid) auto !important;
 }
 
 i.km-icon-info {

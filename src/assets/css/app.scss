@@ -17,7 +17,7 @@ body {
 // spinner
 .km-spinner {
   position: absolute;
-  top: 0;
+  top: $baseline-grid;
   left: 0;
   right: 0;
   bottom: 0;
