@@ -188,6 +188,14 @@
 
   <km-event-list [events]="events"></km-event-list>
 
+  <kubermatic-rbac *ngIf="isRBACEnabled()"
+                   [cluster]="cluster"
+                   [datacenter]="datacenter"
+                   [projectID]="projectID"
+                   [isClusterRunning]="isClusterRunning"
+                   [clusterBindings]="clusterBindings"
+                   [bindings]="bindings"></kubermatic-rbac>
+
 </ng-container>
 
 <div *ngIf="!isLoaded()">

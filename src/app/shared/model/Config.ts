@@ -27,6 +27,7 @@ export class GroupConfig {
   nodeDeployments?: NodeDeployments;
   serviceaccounts?: ServiceAccounts;
   serviceaccountToken?: ServiceAccountToken;
+  rbac?: RBAC;
 }
 
 export class Projects implements Viewable {
@@ -79,6 +80,13 @@ export class ServiceAccounts implements Viewable {
 }
 
 export class ServiceAccountToken implements Viewable {
+  view?: boolean;
+  edit?: boolean;
+  create?: boolean;
+  delete?: boolean;
+}
+
+export class RBAC implements Viewable {
   view?: boolean;
   edit?: boolean;
   create?: boolean;
