@@ -39,6 +39,10 @@ export class ApiMockService {
   serviceAccountTokens: ServiceAccountTokenEntity[] = fakeServiceAccountTokens();
   vsphereNetworks: VSphereNetwork[] = fakeVSphereNetworks();
 
+  get addonConfigs(): Observable<any> {
+    return of([]);
+  }
+
   getAccessibleAddons(): Observable<string[]> {
     return of([]);
   }
