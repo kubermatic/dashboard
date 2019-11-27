@@ -1,11 +1,13 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {DomSanitizer} from '@angular/platform-browser';
 import {Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
 
 import {ApiService} from '../../../core/services';
-import {AddonEntity} from '../../entity/AddonEntity';
+import {AddonConfigEntity, AddonEntity} from '../../entity/AddonEntity';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
+
 import {AddAddonDialogComponent} from './add-addon-dialog/add-addon-dialog.component';
 
 @Component({
@@ -25,9 +27,12 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
 
   accessibleAddons: string[] = [];
   installableAddons: string[] = [];
+  addonConfigs = new Map<string, AddonConfigEntity>();
   private _unsubscribe: Subject<any> = new Subject();
 
-  constructor(private readonly _apiService: ApiService, private readonly _matDialog: MatDialog) {}
+  constructor(
+      private readonly _apiService: ApiService, private readonly _matDialog: MatDialog,
+      private readonly _domSanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     this._apiService.getAccessibleAddons().pipe(takeUntil(this._unsubscribe)).subscribe(accessibleAddons => {
@@ -35,7 +40,11 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
       this._updateInstallableAddons();
     });
 
-    this._apiService.addonConfigs.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {});
+    this._apiService.addonConfigs.pipe(takeUntil(this._unsubscribe)).subscribe(addonConfigs => {
+      const map = new Map();
+      addonConfigs.forEach(addonConfig => map.set(addonConfig.name, addonConfig));
+      this.addonConfigs = map;
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -55,6 +64,13 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     this.installableAddons = this.accessibleAddons.filter(accessibleAddon => {
       return installedAddons.indexOf(accessibleAddon) < 0;
     });
+  }
+
+  getAddonLogo(name: string): any {
+    const addonConfig = this.addonConfigs.get(name);
+    return addonConfig ?
+        this._domSanitizer.bypassSecurityTrustUrl(`data:image/svg+xml;base64,${addonConfig.spec.logo}`) :
+        '';
   }
 
   canAdd(): boolean {

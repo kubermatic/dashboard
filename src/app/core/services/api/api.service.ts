@@ -32,7 +32,7 @@ export class ApiService {
   private _restRoot: string = environment.restRoot;
   private readonly _token: string;
   private _addonConfigs$: Observable<any>;
-  private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 5);
+  private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 30);
 
   constructor(
       private readonly _http: HttpClient, private readonly _auth: Auth, private readonly _appConfig: AppConfigService) {

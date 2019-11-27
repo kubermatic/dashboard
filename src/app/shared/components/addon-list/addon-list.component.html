@@ -5,7 +5,7 @@
        class="km-addon-container">
     <div fxFlex
          fxLayoutAlign="center center">
-      {{addon.name}}
+      <img [src]="getAddonLogo(addon.name)">
     </div>
     <div [matMenuTriggerFor]="menu"
          fxLayoutAlign="center center"
