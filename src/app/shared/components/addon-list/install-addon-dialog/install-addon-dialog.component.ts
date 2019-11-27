@@ -10,6 +10,7 @@ import {AddonConfigEntity, AddonEntity} from '../../../entity/AddonEntity';
   styleUrls: ['./install-addon-dialog.component.scss'],
 })
 export class InstallAddonDialogComponent {
+  @Input() addonName: string;
   @Input() addonConfig: AddonConfigEntity;
 
   constructor(
@@ -23,7 +24,7 @@ export class InstallAddonDialogComponent {
     return this._domSanitizer.bypassSecurityTrustUrl(`data:image/svg+xml;base64,${this.addonConfig.spec.logo}`);
   }
 
-  add(name: string): void {
-    this.dialogRef.close({name} as AddonEntity);
+  install(): void {
+    this.dialogRef.close({name: this.addonName} as AddonEntity);
   }
 }

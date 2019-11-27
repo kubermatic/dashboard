@@ -6,22 +6,9 @@
   padding: 0;
 }
 
-.km-add-addon-dialog-option-container {
-  box-shadow: 0 0 0 1px $separator;
-  border-radius: $border-radius;
-  cursor: pointer;
-  padding: 3 * $baseline-grid;
-  margin: $baseline-grid 0;
-
-  &:hover {
-    box-shadow: 0 0 0 2px $quaternary-hover;
-    transition: all .5s ease;
-  }
-
-  .km-add-addon-dialog-option-desc {
-    color: $text-color;
-    font-size: $body-font-size-base;
-    line-height: $subhead-font-size-base;
-    margin-top: 2 * $baseline-grid;
-  }
+.km-install-addon-dialog-option-desc {
+  color: $text-color;
+  font-size: $subhead-font-size-base;
+  line-height: $head-font-size-base;
+  margin-top: 2.5 * $baseline-grid;
 }

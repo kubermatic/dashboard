@@ -668,6 +668,10 @@ mat-list-item.disabled {
   outline: none;
 }
 
+.km-hidden {
+  visibility: hidden !important;
+}
+
 // Tags
 .km-tags-in-wizard {
   margin-top: 5px;
