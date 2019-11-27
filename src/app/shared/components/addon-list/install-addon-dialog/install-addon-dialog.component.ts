@@ -21,7 +21,8 @@ export class InstallAddonDialogComponent {
   }
 
   getAddonLogo(): SafeUrl {
-    return this._domSanitizer.bypassSecurityTrustUrl(`data:image/svg+xml;base64,${this.addonConfig.spec.logo}`);
+    return this._domSanitizer.bypassSecurityTrustUrl(
+        `data:image/${this.addonConfig.spec.logoFormat};base64,${this.addonConfig.spec.logo}`);
   }
 
   install(): void {

@@ -72,8 +72,9 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getAddonLogo(name: string): SafeUrl {
+    const addonConfig = this.addonConfigs.get(name);
     return this._domSanitizer.bypassSecurityTrustUrl(
-        `data:image/svg+xml;base64,${this.addonConfigs.get(name).spec.logo}`);
+        `data:image/${addonConfig.spec.logoFormat};base64,${addonConfig.spec.logo}`);
   }
 
   canAdd(): boolean {
