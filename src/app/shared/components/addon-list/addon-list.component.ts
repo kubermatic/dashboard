@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {DomSanitizer} from '@angular/platform-browser';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
 
@@ -66,11 +66,13 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  getAddonLogo(name: string): any {
-    const addonConfig = this.addonConfigs.get(name);
-    return addonConfig ?
-        this._domSanitizer.bypassSecurityTrustUrl(`data:image/svg+xml;base64,${addonConfig.spec.logo}`) :
-        '';
+  hasLogo(name: string): boolean {
+    return !!this.addonConfigs.get(name);
+  }
+
+  getAddonLogo(name: string): SafeUrl {
+    return this._domSanitizer.bypassSecurityTrustUrl(
+        `data:image/svg+xml;base64,${this.addonConfigs.get(name).spec.logo}`);
   }
 
   canAdd(): boolean {
@@ -95,6 +97,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     if (this.canAdd()) {
       const dialog = this._matDialog.open(AddAddonDialogComponent);
       dialog.componentInstance.installableAddons = this.installableAddons;
+      dialog.componentInstance.addonConfigs = this.addonConfigs;
       dialog.afterClosed().pipe(first()).subscribe(addedAddon => {
         if (!!addedAddon) {
           this.addAddon.emit(addedAddon);

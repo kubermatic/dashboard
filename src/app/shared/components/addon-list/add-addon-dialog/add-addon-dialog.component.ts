@@ -1,8 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
-import {AddonEntity} from '../../../entity/AddonEntity';
+import {AddonConfigEntity, AddonEntity} from '../../../entity/AddonEntity';
 
 @Component({
   selector: 'km-add-addon-dialog',
@@ -11,25 +12,34 @@ import {AddonEntity} from '../../../entity/AddonEntity';
 })
 export class AddAddonDialogComponent implements OnInit {
   @Input() installableAddons: string[] = [];
+  @Input() addonConfigs = new Map<string, AddonConfigEntity>();
   form: FormGroup;
 
-  constructor(public dialogRef: MatDialogRef<AddAddonDialogComponent>) {}
+  constructor(public dialogRef: MatDialogRef<AddAddonDialogComponent>, private readonly _domSanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      name: new FormControl('', [Validators.required]),
-    });
+    this.form = new FormGroup({name: new FormControl('', [Validators.required])});
 
     if (this.installableAddons.length > 0) {
       this.form.controls.name.setValue(this.installableAddons[0]);
     }
   }
 
-  add(): void {
-    const addon: AddonEntity = {
-      name: this.form.controls.name.value,
-    };
+  hasLogo(name: string): boolean {
+    return !!this.addonConfigs.get(name);
+  }
 
-    this.dialogRef.close(addon);
+  getAddonLogo(name: string): SafeUrl {
+    return this._domSanitizer.bypassSecurityTrustUrl(
+        `data:image/svg+xml;base64,${this.addonConfigs.get(name).spec.logo}`);
+  }
+
+  getAddonDescription(name: string): string {
+    const addonConfig = this.addonConfigs.get(name);
+    return addonConfig ? addonConfig.spec.description : '';
+  }
+
+  add(name: string): void {
+    this.dialogRef.close({name} as AddonEntity);
   }
 }
