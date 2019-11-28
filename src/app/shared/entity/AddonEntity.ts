@@ -22,6 +22,7 @@ export class AddonConfigEntity {
 export class AddonConfigSpec {
   description: string;
   logo: string;
+  logoFormat: string;
   formSpec: AddonFormSpec[];
 }
 
