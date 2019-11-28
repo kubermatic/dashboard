@@ -17,11 +17,12 @@ export class InstallAddonDialogComponent {
       public dialogRef: MatDialogRef<InstallAddonDialogComponent>, private readonly _domSanitizer: DomSanitizer) {}
 
   hasLogo(): boolean {
-    return !!this.addonConfig && !!this.addonConfig.spec.logo;
+    return !!this.addonConfig && !!this.addonConfig.spec.logo && !!this.addonConfig.spec.logoFormat;
   }
 
   getAddonLogo(): SafeUrl {
-    return this._domSanitizer.bypassSecurityTrustUrl(`data:image/svg+xml;base64,${this.addonConfig.spec.logo}`);
+    return this._domSanitizer.bypassSecurityTrustUrl(
+        `data:image/${this.addonConfig.spec.logoFormat};base64,${this.addonConfig.spec.logo}`);
   }
 
   install(): void {
