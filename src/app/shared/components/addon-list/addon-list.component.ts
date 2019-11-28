@@ -68,7 +68,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
 
   hasLogo(name: string): boolean {
     const addonConfig = this.addonConfigs.get(name);
-    return !!addonConfig && !!addonConfig.spec.logo;
+    return !!addonConfig && !!addonConfig.spec.logo && !!addonConfig.spec.logoFormat;
   }
 
   getAddonLogo(name: string): SafeUrl {

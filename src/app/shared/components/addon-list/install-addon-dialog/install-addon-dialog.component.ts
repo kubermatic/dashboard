@@ -17,7 +17,7 @@ export class InstallAddonDialogComponent {
       public dialogRef: MatDialogRef<InstallAddonDialogComponent>, private readonly _domSanitizer: DomSanitizer) {}
 
   hasLogo(): boolean {
-    return !!this.addonConfig && !!this.addonConfig.spec.logo;
+    return !!this.addonConfig && !!this.addonConfig.spec.logo && !!this.addonConfig.spec.logoFormat;
   }
 
   getAddonLogo(): SafeUrl {
