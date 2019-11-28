@@ -91,7 +91,7 @@
     "@angular/cli": "8.3.19",
     "@angular/compiler-cli": "8.2.2",
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
-    "@ngrx/store": "8.4.0",
+    "@ngrx/store": "8.5.2",
     "@types/jasmine": "3.5.0",
     "@types/lodash": "4.14.149",
     "@types/node": "12.12.14",
