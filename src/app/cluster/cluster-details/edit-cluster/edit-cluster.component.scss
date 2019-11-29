@@ -1,3 +1,11 @@
+@import "../../../../assets/css/colors";
+@import "../../../../assets/css/variables";
+
 .km-edit-cluster-form {
   margin-bottom: 30px;
+}
+
+.km-icon-warning {
+  background-color: $indicator-orange;
+  margin: (.5 * $baseline-grid) 0;
 }
