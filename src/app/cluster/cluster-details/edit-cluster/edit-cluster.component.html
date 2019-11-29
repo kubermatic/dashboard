@@ -23,9 +23,20 @@
             Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
           </mat-error>
         </mat-form-field>
-        <mat-checkbox formControlName="auditLogging">
-          Audit Logging
-        </mat-checkbox>
+        <div fxLayout="row"
+             fxLayoutGap="16px">
+          <mat-checkbox formControlName="auditLogging">Audit Logging</mat-checkbox>
+          <div fxLayout="row"
+               fxLayoutGap="8px">
+            <mat-checkbox formControlName="usePodSecurityPolicyAdmissionPlugin">
+              Pod Security Policy
+            </mat-checkbox>
+            <i *ngIf="form.controls.usePodSecurityPolicyAdmissionPlugin.value"
+               class="km-icon-warning"
+               matTooltip="Activating Pod Security Policy will mean that a lot of Pod specifications, Operators and Helm charts will not work out of the box. Make sure that you know the consequences of activating this feature.">
+            </i>
+          </div>
+        </div>
         <km-label-form title="Labels"
                        [(labels)]="labels"
                        [inheritedLabels]="cluster.inheritedLabels"

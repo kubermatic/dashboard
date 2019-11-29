@@ -23,7 +23,6 @@ import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-heal
 import {NodeService} from '../services/node.service';
 
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/cluster-delete-confirmation.component';
-import {ConfigurePodSecurityComponent} from './configure-pod-security/configure-pod-security.component';
 import {EditClusterComponent} from './edit-cluster/edit-cluster.component';
 import {EditSSHKeysComponent} from './edit-sshkeys/edit-sshkeys.component';
 import {RevokeTokenComponent} from './revoke-token/revoke-token.component';
@@ -285,13 +284,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   revokeToken(): void {
     const dialogRef = this._matDialog.open(RevokeTokenComponent);
-    dialogRef.componentInstance.cluster = this.cluster;
-    dialogRef.componentInstance.datacenter = this.datacenter;
-    dialogRef.componentInstance.projectID = this.projectID;
-  }
-
-  configPodSecurity(): void {
-    const dialogRef = this._matDialog.open(ConfigurePodSecurityComponent);
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;
     dialogRef.componentInstance.projectID = this.projectID;
