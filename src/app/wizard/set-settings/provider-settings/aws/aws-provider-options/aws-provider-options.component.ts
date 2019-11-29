@@ -23,6 +23,7 @@ export class AWSProviderOptionsComponent implements OnInit, OnDestroy {
   private _loadingVPCs = false;
   private _selectedPreset: string;
   private _unsubscribe = new Subject<void>();
+  private _hasValidCredentials = false;
 
   constructor(private readonly _wizardService: WizardService) {}
 
@@ -37,7 +38,7 @@ export class AWSProviderOptionsComponent implements OnInit, OnDestroy {
       vpcId: new FormControl(this.cluster.spec.cloud.aws.vpcId, Validators.pattern('vpc-(\\w{8}|\\w{17})')),
     });
 
-    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((_) => {
       this._wizardService.changeClusterProviderSettings(
           this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
     });
@@ -67,9 +68,11 @@ export class AWSProviderOptionsComponent implements OnInit, OnDestroy {
       this._selectedPreset = newCredentials;
       if (newCredentials) {
         this.form.disable();
+        this._hasValidCredentials = true;
         return;
       }
 
+      this._hasValidCredentials = false;
       this.form.enable();
     });
   }
@@ -124,14 +127,12 @@ export class AWSProviderOptionsComponent implements OnInit, OnDestroy {
               }
 
               this._loadingVPCs = false;
+              this._hasValidCredentials = true;
               this.checkVPCState();
             },
             () => {
-              this.clearVpcId();
               this._loadingVPCs = false;
-            },
-            () => {
-              this._loadingVPCs = false;
+              this._hasValidCredentials = false;
             });
   }
 
@@ -165,7 +166,7 @@ export class AWSProviderOptionsComponent implements OnInit, OnDestroy {
         },
         dc: this.cluster.spec.cloud.dc,
       },
-      valid: isValid,
+      valid: isValid && this._hasValidCredentials,
     };
   }
 
