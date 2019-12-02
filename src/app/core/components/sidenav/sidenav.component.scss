@@ -52,7 +52,8 @@
       }
 
       i {
-        width: 20px;
+        width: 3 * $baseline-grid;
+        height: 3 * $baseline-grid;
         margin-right: 2 * $baseline-grid;
       }
     }
