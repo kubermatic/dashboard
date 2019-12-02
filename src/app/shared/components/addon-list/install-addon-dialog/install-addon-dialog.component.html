@@ -10,6 +10,22 @@
       {{addonConfig.spec.description}}
     </div>
   </div>
+  <form [formGroup]="form">
+    <div *ngFor="let control of addonConfig.spec.formSpec">
+      <mat-form-field *ngIf="control.type === 'text' || control.type === 'number'">
+        <mat-label>{{control.displayName}}{{control.required ? '*' : ''}}</mat-label>
+        <input matInput
+               [formControlName]="control.internalName"
+               [type]="control.type"
+               [title]="control.displayName">
+      </mat-form-field>
+
+      <mat-checkbox *ngIf="control.type === 'boolean'"
+                    [formControlName]="control.internalName">
+        {{control.displayName}}
+      </mat-checkbox>
+    </div>
+  </form>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
