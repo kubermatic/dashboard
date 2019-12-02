@@ -145,7 +145,7 @@ export class NodeService {
       hasBackdrop: true,
       data: {
         title: 'Delete Node Deployment',
-        message: `Are you sure you want to permanently delete node deployment "<strong>${nd.name}</strong>"?`,
+        message: `Delete "<strong>${nd.name}</strong>" permanently`,
         confirmLabel: 'Delete',
       },
     };
