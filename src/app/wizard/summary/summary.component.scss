@@ -27,16 +27,7 @@ mat-card {
 
 .km-provider-logo {
   max-width: 100px !important;
-
-  &.km-provider-logo-aws,
-  &.km-provider-logo-gcp {
-    margin-top: 1.25 * $baseline-grid;
-  }
-
-  &.km-provider-logo-vsphere,
-  &.km-provider-logo-bringyourown {
-    margin-top: 0.6 * $baseline-grid;
-  }
+  margin: (1.25 * $baseline-grid) 0;
 }
 
 .km-os-image {
