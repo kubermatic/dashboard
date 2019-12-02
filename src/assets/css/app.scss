@@ -1069,3 +1069,9 @@ mat-chip-list {
 .mat-menu-panel {
   min-height: auto !important;
 }
+
+// Confirmation Dialogs
+#km-confirmation-dialog mat-dialog-content,
+#km-delete-cluster-dialog mat-dialog-content {
+  margin-bottom: 3.75 * $baseline-grid;
+}
