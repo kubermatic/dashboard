@@ -17,6 +17,7 @@
     </div>
     <mat-menu #menu="matMenu">
       <button mat-menu-item
+              [disabled]="!canEdit"
               (click)="delete(addon)">
         <span>Delete</span>
       </button>
