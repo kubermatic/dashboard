@@ -29,6 +29,14 @@
     font-size: $subhead-font-size-base;
     padding: 3.75 * $baseline-grid;
 
+    .km-admin-settings-nd-container {
+      margin-top: 1.5 * $baseline-grid;
+    }
+
+    .km-admin-settings-distro-container km-settings-status {
+      margin-top: .2 * $baseline-grid;
+    }
+
     .km-admin-settings-label {
       width: 35 * $baseline-grid;
       line-height: 8 * $baseline-grid;

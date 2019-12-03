@@ -64,7 +64,8 @@
         <km-settings-status [isSaved]="isEqual(settings.cleanupOptions, apiSettings.cleanupOptions)"></km-settings-status>
       </div>
 
-      <div fxLayout="row">
+      <div fxLayout="row"
+           class="km-admin-settings-distro-container">
         <div class="km-admin-settings-label">
           <span>Displayed Distributions</span>
           <div class="km-info-icon"
@@ -89,7 +90,8 @@
         <km-settings-status [isSaved]="isEqual(settings.clusterTypeOptions, apiSettings.clusterTypeOptions)"></km-settings-status>
       </div>
 
-      <div fxLayout="row">
+      <div fxLayout="row"
+           class="km-admin-settings-nd-container">
         <div class="km-admin-settings-label">Node Deployment</div>
         <mat-form-field class="km-admin-settings-field-nd">
           <mat-label>Initial Node Deployment Replicas</mat-label>
