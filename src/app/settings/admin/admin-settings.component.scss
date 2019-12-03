@@ -25,6 +25,11 @@
     padding-left: 7.5 * $baseline-grid;
   }
 
+  .km-table td:last-child,
+  .km-table th:last-child {
+    padding-right: 7.5 * $baseline-grid !important;
+  }
+
   .km-admin-settings {
     font-size: $subhead-font-size-base;
     padding: 3.75 * $baseline-grid;
