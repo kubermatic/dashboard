@@ -15,4 +15,8 @@
 
 form {
   margin: (2 * $baseline-grid) 0;
+
+  .km-install-addon-boolean-container {
+    margin-bottom: (2 * $baseline-grid);
+  }
 }

@@ -28,10 +28,13 @@
                   [title]="control.displayName"></textarea>
       </mat-form-field>
 
-      <mat-checkbox *ngIf="control.type === 'boolean'"
-                    [formControlName]="control.internalName">
-        {{control.displayName}}
-      </mat-checkbox>
+      <div *ngIf="control.type === 'boolean'"
+           class="km-install-addon-boolean-container">
+        <mat-checkbox [formControlName]="control.internalName">
+          {{control.displayName}}
+        </mat-checkbox>
+      </div>
+
     </div>
   </form>
 </mat-dialog-content>
