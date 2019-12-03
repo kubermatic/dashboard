@@ -19,14 +19,24 @@ export class InstallAddonDialogComponent implements OnInit {
     return control.required ? [Validators.required] : [];
   }
 
+  private static _getFormState(control: AddonFormSpec): string|number {
+    return control.type === 'number' ? 0 : '';
+  }
+
   constructor(
       public dialogRef: MatDialogRef<InstallAddonDialogComponent>, private readonly _domSanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     const group = {};
-    this.addonConfig.spec.formSpec.forEach(control => {
-      group[control.internalName] = new FormControl('', InstallAddonDialogComponent._getControlValidators(control));
-    });
+    if (this.addonConfig.spec.formSpec) {
+      this.addonConfig.spec.formSpec.forEach(control => {
+        group[control.internalName] = new FormControl(
+            InstallAddonDialogComponent._getFormState(control),
+            InstallAddonDialogComponent._getControlValidators(control),
+        );
+      });
+    }
+
     this.form = new FormGroup(group);
   }
 
