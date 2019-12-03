@@ -12,3 +12,11 @@
   line-height: $head-font-size-base;
   margin-top: 2.5 * $baseline-grid;
 }
+
+form {
+  margin: (2 * $baseline-grid) 0;
+
+  .km-install-addon-boolean-container {
+    margin-bottom: (2 * $baseline-grid);
+  }
+}

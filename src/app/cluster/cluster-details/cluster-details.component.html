@@ -175,6 +175,7 @@
     <mat-card-content class="km-addon-card-content">
       <km-addon-list [addons]="addons"
                      [isClusterReady]="isClusterRunning"
+                     [canEdit]="isEditEnabled()"
                      (addAddon)="handleAddonCreation($event)"
                      (deleteAddon)="handleAddonDeletion($event)"></km-addon-list>
     </mat-card-content>
