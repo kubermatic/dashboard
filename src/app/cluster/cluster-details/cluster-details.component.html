@@ -41,7 +41,7 @@
          [href]="getProxyURL()"
          target="_blank"
          mat-flat-button
-         [disabled]="!isClusterRunning || !isEditEnabled()">
+         [disabled]="!isClusterRunning || (!isEditEnabled() && isOpenshiftCluster())">
         {{getConnectName()}}
       </a>
     </div>

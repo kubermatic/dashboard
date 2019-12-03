@@ -255,6 +255,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     return !this._currentGroupConfig || this._currentGroupConfig.clusters.edit;
   }
 
+  isOpenshiftCluster(): boolean {
+    return this.cluster.type === ClusterType.OpenShift;
+  }
+
   editCluster(): void {
     const modal = this._matDialog.open(EditClusterComponent);
     modal.componentInstance.cluster = this.cluster;
