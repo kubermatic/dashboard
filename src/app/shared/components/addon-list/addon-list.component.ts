@@ -18,6 +18,7 @@ import {SelectAddonDialogComponent} from './select-addon-dialog/select-addon-dia
 export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() addons: AddonEntity[] = [];
   @Input() isClusterReady = true;
+  @Input() canEdit = true;
 
   // Usage of event emitters allows to handle edits and deletions in multiple ways in different places.
   // Thanks to them this component can be used inside wizard (performing actions on a local addons array)
@@ -78,7 +79,8 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   canAdd(): boolean {
-    return this.isClusterReady && this.accessibleAddons.length > 0 && this.addons.length < this.accessibleAddons.length;
+    return this.isClusterReady && this.canEdit && this.accessibleAddons.length > 0 &&
+        this.addons.length < this.accessibleAddons.length;
   }
 
   getAddBtnClass(): string {
@@ -86,7 +88,9 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getAddBtnTooltip(): string {
-    if (this.accessibleAddons.length === 0) {
+    if (!this.canEdit) {
+      return 'You have no permissions to edit addons in this cluster.';
+    } else if (this.accessibleAddons.length === 0) {
       return 'There are no accessible addons.';
     } else if (this.addons.length === this.accessibleAddons.length) {
       return 'All accessible addons are already installed.';
