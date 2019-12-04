@@ -8,6 +8,7 @@ import {ApiService} from '../../../core/services';
 import {AddonConfigEntity, AddonEntity} from '../../entity/AddonEntity';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
 
+import {EditAddonDialogComponent} from './edit-addon-dialog/edit-addon-dialog.component';
 import {SelectAddonDialogComponent} from './select-addon-dialog/select-addon-dialog.component';
 
 @Component({
@@ -24,6 +25,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   // Thanks to them this component can be used inside wizard (performing actions on a local addons array)
   // and also in the cluster view (calling API endpoints to perform any action).
   @Output() addAddon = new EventEmitter<AddonEntity>();
+  @Output() editAddon = new EventEmitter<AddonEntity>();
   @Output() deleteAddon = new EventEmitter<AddonEntity>();
 
   accessibleAddons: string[] = [];
@@ -110,6 +112,17 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
         }
       });
     }
+  }
+
+  edit(addon: AddonEntity): void {
+    const dialog = this._matDialog.open(EditAddonDialogComponent);
+    dialog.componentInstance.addon = addon;
+    dialog.componentInstance.addonConfig = this.addonConfigs.get(addon.name);
+    dialog.afterClosed().pipe(first()).subscribe(editedAddon => {
+      if (!!editedAddon) {
+        this.editAddon.emit(editedAddon);
+      }
+    });
   }
 
   delete(addon: AddonEntity): void {

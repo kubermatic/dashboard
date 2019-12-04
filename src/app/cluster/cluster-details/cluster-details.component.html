@@ -177,6 +177,7 @@
                      [isClusterReady]="isClusterRunning"
                      [canEdit]="isEditEnabled()"
                      (addAddon)="handleAddonCreation($event)"
+                     (editAddon)="handleAddonEdition($event)"
                      (deleteAddon)="handleAddonDeletion($event)"></km-addon-list>
     </mat-card-content>
   </mat-card>
