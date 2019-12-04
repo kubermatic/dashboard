@@ -19,3 +19,6 @@ import 'hammerjs';
 
 // @ts-ignore
 window.Buffer = window.Buffer || require('buffer').Buffer;
+
+// Add global to window, assigning the value of window itself.
+(window as any).global = window;
