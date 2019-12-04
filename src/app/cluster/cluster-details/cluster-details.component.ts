@@ -298,7 +298,18 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         .pipe(first())
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(() => {
+          this.reloadAddons();
           NotificationActions.success(`The ${addon.name} addon has been added to the ${this.cluster.name} cluster`);
+        });
+  }
+
+  handleAddonEdition(addon: AddonEntity): void {
+    this._clusterService.editAddon(addon, this.projectID, this.cluster.id, this.datacenter.metadata.name)
+        .pipe(first())
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(() => {
+          this.reloadAddons();
+          NotificationActions.success(`The ${addon.name} addon has been updated`);
         });
   }
 
@@ -307,8 +318,19 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         .pipe(first())
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(() => {
+          this.reloadAddons();
           NotificationActions.success(`The ${addon.name} addon has been removed from the ${this.cluster.name} cluster`);
         });
+  }
+
+  reloadAddons(): void {
+    if (this.projectID && this.cluster && this.datacenter) {
+      this._clusterService.addons(this.projectID, this.cluster.id, this.datacenter.metadata.name)
+          .pipe(first())
+          .subscribe(addons => {
+            this.addons = addons;
+          });
+    }
   }
 
   getConnectName(): string {

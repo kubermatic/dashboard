@@ -1,0 +1,22 @@
+@import "../../../../../assets/css/colors";
+@import "../../../../../assets/css/variables";
+
+.mat-dialog-container {
+  width: 200px;
+  padding: 0;
+}
+
+.km-install-addon-dialog-option-desc {
+  color: $text-color;
+  font-size: $subhead-font-size-base;
+  line-height: $head-font-size-base;
+  margin-top: 2.5 * $baseline-grid;
+}
+
+form {
+  margin: (2 * $baseline-grid) 0;
+
+  .km-install-addon-boolean-container {
+    margin-bottom: (2 * $baseline-grid);
+  }
+}
