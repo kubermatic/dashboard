@@ -8,7 +8,6 @@ const webpackOptions = {
       exclude: [/node_modules/],
       use: [{
         loader: 'ts-loader',
-        transpileOnly: true,
         options: {configFile: 'cypress/tsconfig.e2e.json'}
       }]
     }]
