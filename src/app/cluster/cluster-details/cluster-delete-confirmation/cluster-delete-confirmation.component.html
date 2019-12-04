@@ -17,11 +17,13 @@
              #clusterNameInput>
     </mat-form-field>
 
-    <div class="km-delete-cluster-checkbox">
+    <div class="km-delete-cluster-checkbox"
+         [matTooltip]="getCheckboxTooltip()">
       <mat-checkbox formControlName="clusterLBCleanupCheckbox">Cleanup connected Load Balancers</mat-checkbox>
     </div>
 
-    <div class="km-delete-cluster-checkbox">
+    <div class="km-delete-cluster-checkbox"
+         [matTooltip]="getCheckboxTooltip()">
       <mat-checkbox formControlName="clusterVolumeCleanupCheckbox">Cleanup connected volumes (PVs and PVCs)</mat-checkbox>
     </div>
 

@@ -13,11 +13,6 @@
             (click)="goBack()">
       Go Back
     </button>
-    <button mat-flat-button
-            type="button"
-            (click)="addAdmin()">
-      Add Administrator
-    </button>
   </div>
 </div>
 
@@ -64,7 +59,8 @@
         <km-settings-status [isSaved]="isEqual(settings.cleanupOptions, apiSettings.cleanupOptions)"></km-settings-status>
       </div>
 
-      <div fxLayout="row">
+      <div fxLayout="row"
+           class="km-admin-settings-distro-container">
         <div class="km-admin-settings-label">
           <span>Displayed Distributions</span>
           <div class="km-info-icon"
@@ -89,7 +85,8 @@
         <km-settings-status [isSaved]="isEqual(settings.clusterTypeOptions, apiSettings.clusterTypeOptions)"></km-settings-status>
       </div>
 
-      <div fxLayout="row">
+      <div fxLayout="row"
+           class="km-admin-settings-nd-container">
         <div class="km-admin-settings-label">Node Deployment</div>
         <mat-form-field class="km-admin-settings-field-nd">
           <mat-label>Initial Node Deployment Replicas</mat-label>
@@ -110,6 +107,12 @@
 <mat-card class="km-with-table-header">
   <mat-card-header>
     <mat-card-title>Administrators</mat-card-title>
+    <div fxFlex></div>
+    <button mat-icon-button
+            matTooltip="Add Administrator"
+            (click)="addAdmin()">
+      <i class="km-icon-add"></i>
+    </button>
   </mat-card-header>
   <mat-card-content>
     <table class="km-table"

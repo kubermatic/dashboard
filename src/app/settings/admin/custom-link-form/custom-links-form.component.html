@@ -5,7 +5,7 @@
          [formGroupName]="i"
          fxLayout="row"
          fxLayoutGap="10px">
-      <mat-form-field fxFlex="25">
+      <mat-form-field fxFlex="22">
         <mat-label>Label</mat-label>
         <input matInput
                (keyup)="check()"
@@ -34,12 +34,12 @@
                name="icon"
                formControlName="icon">
       </mat-form-field>
-      <mat-form-field fxFlex="10">
+      <mat-form-field fxFlex="13">
         <mat-label>Location</mat-label>
         <mat-select formControlName="location"
                     disableOptionCentering
                     (selectionChange)="check()">
-          <mat-option value="default">Default</mat-option>
+          <mat-option value="default">Sidebar</mat-option>
           <mat-option value="footer">Footer</mat-option>
         </mat-select>
       </mat-form-field>

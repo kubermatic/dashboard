@@ -55,6 +55,12 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
     this._googleAnalyticsService.emitEvent('clusterOverview', 'deleteClusterDialogOpened');
   }
 
+  getCheckboxTooltip(): string {
+    return this.settings && this.settings.cleanupOptions.Enforced ?
+        'These settings are enforced by the admin and cannot be changed.' :
+        '';
+  }
+
   ngDoCheck(): void {
     this.clusterNameInputRef.nativeElement.focus();
   }
