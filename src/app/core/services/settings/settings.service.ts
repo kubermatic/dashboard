@@ -36,7 +36,7 @@ export class SettingsService {
   private _adminSettingsRefresh$: Subject<any> = new Subject();
   private _admins$: Observable<AdminEntity[]>;
   private _adminsRefresh$: Subject<any> = new Subject();
-  private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * 500);
+  private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * 5);
 
   constructor(
       private readonly _httpClient: HttpClient, private readonly _appConfigService: AppConfigService,
