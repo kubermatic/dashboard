@@ -75,17 +75,24 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
+        </div>
 
+        <div fxLayout="row"
+             class="km-imagepullsecret-form-field">
           <mat-form-field *ngIf="isOpenShiftSelected()"
                           class="km-imagepullsecret-inline">
             <mat-label>Image Pull Secret*</mat-label>
-            <input matInput
-                   formControlName="imagePullSecret"
-                   type="text"
-                   title="imagePullSecret">
+            <textarea matInput
+                      rows=3
+                      formControlName="imagePullSecret"
+                      type="text-area"
+                      title="imagePullSecret"></textarea>
             <mat-error *ngIf="clusterSpecForm.controls.imagePullSecret.hasError('required')">
               Image Pull Secret is <strong>required</strong>.
             </mat-error>
+            <mat-hint>This is a JSON document containing your Docker registry credentials, see&nbsp;<a target="_blank"
+                 rel="noopener"
+                 href="https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/">here</a>&nbsp;for more information</mat-hint>
           </mat-form-field>
         </div>
 

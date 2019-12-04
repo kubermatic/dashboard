@@ -92,9 +92,13 @@ $type-toggle-width: 150px;
   max-width: 16.25 * $baseline-grid;
 }
 
-.km-imagepullsecret-inline {
-  margin-left: 2.5 * $baseline-grid;
-  min-width: 20 * $baseline-grid;
+.km-imagepullsecret-form-field {
+  width: 98%;
+
+  .km-imagepullsecret-inline {
+    min-width: 20 * $baseline-grid;
+    margin-bottom: 3.75 * $baseline-grid;
+  }
 }
 
 km-label-form {
