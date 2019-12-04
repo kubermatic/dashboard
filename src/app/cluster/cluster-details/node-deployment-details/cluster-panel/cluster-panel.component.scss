@@ -21,11 +21,20 @@ $panel-margin: -$content-padding;
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-top: -$baseline-grid;
+
+      .mat-icon-button {
+        width: 5.25 * $baseline-grid;
+        height: 5.25 * $baseline-grid;
+
+        &:hover:not([disabled]) {
+          background-color: $hover-dark;
+        }
+      }
     }
 
     .km-icon-arrow-left {
       background-color: $text-color;
-      margin-top: -$baseline-grid;
     }
 
     .mat-divider {
