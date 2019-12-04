@@ -10,7 +10,7 @@
     "start": "npm run versioninfo && ng serve --hmr",
     "start:local": "npm run versioninfo && ng serve --hmr --configuration=local",
     "start:e2e": "npm run versioninfo && ng serve --configuration=e2e",
-    "start:e2e-local": "npm run versioninfo && ng serve --configuration=e2e-local",
+    "start:e2e-local": "npm run versioninfo && node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng serve --configuration=e2e-local",
     "build": "npm run versioninfo && ng build --prod",
     "test": "ng test --browsers=ChromeHeadless --watch=false",
     "cy": "cypress run --record false --browser chrome",
