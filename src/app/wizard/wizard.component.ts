@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {forkJoin, of, Subject} from 'rxjs';
-import {switchMap, takeUntil} from 'rxjs/operators';
+import {first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {ClusterService, ProjectService, WizardService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
@@ -59,9 +59,11 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this._settingsService.adminSettings.pipe(first()).subscribe(
+        settings => this.addNodeData.count = settings.defaultNodeCount);
+
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.settings = settings;
-      this.addNodeData.count = settings.defaultNodeCount;
     });
 
     this.updateSteps();

@@ -4,11 +4,11 @@
 .km-settings-status-container {
   left: 3 * $baseline-grid;
   position: relative;
-  top: .3 * $baseline-grid;
+  top: 0;
 
   mat-spinner {
     position: absolute;
-    top: -1 * $baseline-grid;
+    top: -.5 * $baseline-grid;
     left: -.5 * $baseline-grid;
     height: 3 * $baseline-grid;
   }

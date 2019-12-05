@@ -21,7 +21,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  margin: auto;
+  margin: 2 * $baseline-grid auto;
 }
 
 // global
@@ -674,6 +674,10 @@ mat-list-item.disabled {
 .km-clickable {
   cursor: pointer;
   outline: none;
+}
+
+.km-hidden {
+  visibility: hidden !important;
 }
 
 // Tags

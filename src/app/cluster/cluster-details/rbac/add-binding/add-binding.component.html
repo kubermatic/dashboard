@@ -1,0 +1,106 @@
+<div id="km-add-binding-dialog">
+  <km-dialog-title title="Add Binding"></km-dialog-title>
+  <mat-dialog-content>
+    <div class="mat-dialog-content">
+
+      <mat-button-toggle-group group="bindingType"
+                               (change)="changeView($event)">
+        <mat-button-toggle value="cluster"
+                           [checked]="bindingType === 'cluster'">
+          Cluster
+        </mat-button-toggle>
+        <mat-button-toggle value="namespace"
+                           [checked]="bindingType === 'namespace'">
+          Namespace
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+
+      <form [formGroup]="form"
+            fxLayout="column">
+        <ng-container *ngIf="bindingType === 'cluster'">
+          <mat-form-field fxFlex>
+            <mat-label>User Email*</mat-label>
+            <input id="km-add-binding-dialog-email-input"
+                   matInput
+                   formControlName="email"
+                   type="email"
+                   autocomplete="off">
+            <mat-error *ngIf="form.controls.email.hasError('required')">
+              User Email is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field fxFlex>
+            <mat-label>{{getRoleFormState()}}</mat-label>
+            <mat-select formControlName="role"
+                        panelClass="km-add-dialog-dropdown"
+                        disableOptionCentering
+                        [placeholder]="getRoleFormState()">
+              <mat-option *ngFor="let role of clusterRoles"
+                          [value]="role.name">
+                {{role.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls.role.hasError('required')">
+              Role is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+        </ng-container>
+
+        <ng-container *ngIf="bindingType === 'namespace'">
+          <mat-form-field fxFlex>
+            <mat-label>User Email*</mat-label>
+            <input id="km-add-binding-dialog-email-input"
+                   matInput
+                   formControlName="email"
+                   type="email"
+                   autocomplete="off">
+            <mat-error *ngIf="form.controls.email.hasError('required')">
+              User Email is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field fxFlex>
+            <mat-label>{{getRoleFormState()}}</mat-label>
+            <mat-select formControlName="role"
+                        panelClass="km-add-dialog-dropdown"
+                        disableOptionCentering
+                        [placeholder]="getRoleFormState()">
+              <mat-option *ngFor="let role of roles"
+                          [value]="role.name">
+                {{role.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls.role.hasError('required')">
+              Role is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field fxFlex>
+            <mat-label>{{getNamespaceFormState()}}</mat-label>
+            <mat-select formControlName="namespace"
+                        panelClass="km-add-dialog-dropdown"
+                        disableOptionCentering
+                        [placeholder]="getNamespaceFormState()">
+              <mat-option *ngFor="let namespace of getNamespaces()"
+                          [value]="namespace">
+                {{namespace}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls.namespace.hasError('required')">
+              Namespace is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+        </ng-container>
+      </form>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button id="km-add-binding-dialog-add-btn"
+            mat-flat-button
+            (click)="addBinding()"
+            [disabled]="!form.valid">
+      Add Binding
+    </button>
+  </mat-dialog-actions>
+</div>

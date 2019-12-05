@@ -37,6 +37,7 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
   seedDC: DataCenterEntity;
   isExtended = false;
   isRecreationWarningVisible = false;
+  nodeDataValid = false;
   private _initialNodeSpec: NodeSpec;
   private _unsubscribe = new Subject<void>();
 

@@ -246,6 +246,22 @@
   background-position: left;
 }
 
+.km-icon-add {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  mask: url("/assets/images/icons/close.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  cursor: pointer;
+  background-color: $text-color;
+  transform: rotate(45deg);
+
+  &:disabled {
+    background-color: $disabled-button-color;
+  }
+}
+
 .km-icon-running {
   display: inline-block;
   margin-right: $baseline-grid;

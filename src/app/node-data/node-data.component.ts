@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
@@ -26,10 +26,11 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   @Input() existingNodesCount: number;
   @Input() isInWizard = false;
   @Input() seedDc: DataCenterEntity;
+  @Output() valid = new EventEmitter<boolean>();
   isNameDisabled: boolean;
   projectId: string;
   seedDCName: string;
-  nodeForm: FormGroup;
+  form: FormGroup;
   operatingSystemForm: FormGroup;
   hideOptional = true;
   versions: string[] = [];
@@ -50,7 +51,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
     this._project.selectedProject.pipe(takeUntil(this._unsubscribe)).subscribe(project => this.projectId = project.id);
     this.isNameDisabled = this.nodeData.name && this.nodeData.name.length > 0 && !this.isInWizard;
 
-    this.nodeForm = new FormGroup({
+    this.form = new FormGroup({
       count: new FormControl(
           this.nodeData.count,
           [Validators.required, Validators.min(0), NoIpsLeftValidator(this.cluster, this.existingNodesCount)]),
@@ -63,10 +64,10 @@ export class NodeDataComponent implements OnInit, OnDestroy {
     });
 
     if (!this.isInWizard) {
-      this.nodeForm.addControl('kubelet', new FormControl());
+      this.form.addControl('kubelet', new FormControl());
     }
 
-    this.nodeForm.controls.count.markAsTouched();
+    this.form.controls.count.markAsTouched();
 
     const distUpgradeOnBootUbuntu =
         !!this.nodeData.spec.operatingSystem.ubuntu && this.nodeData.spec.operatingSystem.ubuntu.distUpgradeOnBoot;
@@ -81,9 +82,10 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       disableAutoUpdate: new FormControl(disableAutoUpdate),
     });
 
-    this.nodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.addNodeService.changeNodeData(this.getAddNodeData());
       this.addNodeService.changeNodeOperatingSystemData(this.getOSSpec());
+      this.valid.emit(this.form.valid);
     });
 
     this.operatingSystemForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -111,13 +113,13 @@ export class NodeDataComponent implements OnInit, OnDestroy {
               if (this.versions.length > 0) {
                 if (this.versions.includes(initialKubeletVersion)) {
                   // First, try to default to kubelet version from node data (edit mode).
-                  this.nodeForm.patchValue({kubelet: initialKubeletVersion});
+                  this.form.patchValue({kubelet: initialKubeletVersion});
                 } else if (this.versions.includes(this.cluster.spec.version)) {
                   // Then, try to default to control plane version from cluster (adding new node).
-                  this.nodeForm.patchValue({kubelet: this.cluster.spec.version});
+                  this.form.patchValue({kubelet: this.cluster.spec.version});
                 } else {
                   // Otherwise, just pick newest version from the list as default.
-                  this.nodeForm.patchValue({kubelet: this.versions[this.versions.length - 1]});
+                  this.form.patchValue({kubelet: this.versions[this.versions.length - 1]});
                 }
               }
             });
@@ -131,7 +133,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   }
 
   getOSSpec(): OperatingSystemSpec {
-    switch (this.nodeForm.controls.operatingSystem.value) {
+    switch (this.form.controls.operatingSystem.value) {
       case 'ubuntu':
         return {
           ubuntu: {
@@ -160,7 +162,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   }
 
   generateName(): void {
-    this.nodeForm.patchValue({name: this.nameGenerator.generateName()});
+    this.form.patchValue({name: this.nameGenerator.generateName()});
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
@@ -175,7 +177,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
     let versions = {};
     if (!this.isInWizard) {
       versions = {
-        kubelet: this.nodeForm.controls.kubelet.value,
+        kubelet: this.form.controls.kubelet.value,
       };
     }
 
@@ -187,8 +189,8 @@ export class NodeDataComponent implements OnInit, OnDestroy {
         taints: this.nodeData.spec.taints,
         versions,
       },
-      name: this.nodeForm.controls.name.value,
-      count: this.nodeForm.controls.count.value,
+      name: this.form.controls.name.value,
+      count: this.form.controls.count.value,
       valid: this.providerData.valid,
     };
   }

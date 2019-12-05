@@ -51,6 +51,12 @@ export function fakeUserGroupConfig(): UserGroupConfig {
         create: true,
         delete: true,
       },
+      rbac: {
+        view: true,
+        edit: true,
+        create: true,
+        delete: true,
+      },
     },
     editors: {
       projects: {
@@ -101,6 +107,12 @@ export function fakeUserGroupConfig(): UserGroupConfig {
         create: false,
         delete: false,
       },
+      rbac: {
+        view: true,
+        edit: true,
+        create: true,
+        delete: true,
+      },
     },
     viewers: {
       projects: {
@@ -146,6 +158,12 @@ export function fakeUserGroupConfig(): UserGroupConfig {
         delete: false,
       },
       serviceaccountToken: {
+        view: false,
+        edit: false,
+        create: false,
+        delete: false,
+      },
+      rbac: {
         view: false,
         edit: false,
         create: false,
