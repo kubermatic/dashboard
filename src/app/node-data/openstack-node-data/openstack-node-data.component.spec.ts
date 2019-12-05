@@ -68,13 +68,13 @@ describe('OpenstackNodeDataComponent', () => {
     spyOn(component, 'isInWizard').and.returnValue(false);
 
     fixture.detectChanges();
-    const tooltipEl = fixture.debugElement.query(By.css('.km-floating-ip-checkbox-info-icon'));
+    const tooltipEl = fixture.debugElement.query(By.css('.km-icon-info'));
     expect(tooltipEl).not.toBeNull();
     expect(component.form.controls.useFloatingIP.disabled).toBeTruthy();
   });
 
   it('should enable floating ip checkbox when not enforced by datacenter', () => {
-    const tooltipEl = fixture.debugElement.query(By.css('.km-floating-ip-checkbox-info-icon'));
+    const tooltipEl = fixture.debugElement.query(By.css('.km-icon-info'));
     spyOn(component, 'isInWizard').and.returnValue(false);
 
     fixture.detectChanges();
