@@ -52,6 +52,7 @@ i.km-icon-info {
 .km-node-info {
   display: flex;
   align-items: center;
+  height: 6.25 * $baseline-grid;
 }
 
 i.fa-exclamation-triangle {

@@ -61,6 +61,8 @@ body {
     font-weight: normal;
     border-bottom: none;
     padding: 0;
+    line-height: 2.5 * $line-height;
+    height: 5 * $baseline-grid;
   }
 
   .km-header-cell:last-of-type {
@@ -83,7 +85,7 @@ body {
   td.mat-cell {
     border-top: 1px solid $separator;
     border-bottom-width: 0;
-    line-height: 5 * $line-height;
+    line-height: 2.5 * $line-height;
     padding-right: 2 * $baseline-grid;
     font-size: $subhead-font-size-base;
 
