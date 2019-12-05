@@ -41,7 +41,7 @@
          [href]="getProxyURL()"
          target="_blank"
          mat-flat-button
-         [disabled]="!isClusterRunning || !isEditEnabled()">
+         [disabled]="!isClusterRunning || (!isEditEnabled() && isOpenshiftCluster())">
         {{getConnectName()}}
       </a>
     </div>
@@ -83,12 +83,6 @@
                   (click)="revokeToken()"
                   [disabled]="!isRevokeTokenEnabled()">
             <span>Revoke Token</span>
-          </button>
-
-          <button mat-menu-item
-                  (click)="configPodSecurity()"
-                  [disabled]="!isEditEnabled()">
-            <span>Configure Pod Security Policy</span>
           </button>
         </mat-menu>
       </div>
@@ -183,12 +177,22 @@
     <mat-card-content class="km-addon-card-content">
       <km-addon-list [addons]="addons"
                      [isClusterReady]="isClusterRunning"
+                     [canEdit]="isEditEnabled()"
                      (addAddon)="handleAddonCreation($event)"
+                     (editAddon)="handleAddonEdition($event)"
                      (deleteAddon)="handleAddonDeletion($event)"></km-addon-list>
     </mat-card-content>
   </mat-card>
 
   <km-event-list [events]="events"></km-event-list>
+
+  <kubermatic-rbac *ngIf="isRBACEnabled()"
+                   [cluster]="cluster"
+                   [datacenter]="datacenter"
+                   [projectID]="projectID"
+                   [isClusterRunning]="isClusterRunning"
+                   [clusterBindings]="clusterBindings"
+                   [bindings]="bindings"></kubermatic-rbac>
 
 </ng-container>
 

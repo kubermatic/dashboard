@@ -1,4 +1,4 @@
-<form [formGroup]="nodeForm"
+<form [formGroup]="form"
       fxLayout="column">
   <div fxLayout="row"
        fxLayoutGap="16px">
@@ -18,7 +18,7 @@
         <i class="km-icon-randomize"></i>
       </button>
       <mat-hint *ngIf="!isNameDisabled">Leave it empty to use server-side generation.</mat-hint>
-      <mat-error *ngIf="nodeForm.controls.name.hasError('pattern')">
+      <mat-error *ngIf="form.controls.name.hasError('pattern')">
         Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
       </mat-error>
     </mat-form-field>
@@ -32,8 +32,8 @@
            type="number"
            min="0"
            autocomplete="off">
-    <mat-error *ngIf="nodeForm.controls.count.hasError('required')">Number of replicas is required.</mat-error>
-    <mat-error *ngIf="nodeForm.controls.count.hasError('ipsMissing')">Not enough IPs left. Reduce number of replicas or add more machine networks.</mat-error>
+    <mat-error *ngIf="form.controls.count.hasError('required')">Number of replicas is required.</mat-error>
+    <mat-error *ngIf="form.controls.count.hasError('ipsMissing')">Not enough IPs left. Reduce number of replicas or add more machine networks.</mat-error>
   </mat-form-field>
 
   <mat-form-field *ngIf="!isInWizard">
@@ -132,7 +132,7 @@
       fxLayout="column">
   <div fxFlex="100%">
     <!-- Options for Ubuntu -->
-    <div *ngIf="nodeForm.controls.operatingSystem.value === 'ubuntu'"
+    <div *ngIf="form.controls.operatingSystem.value === 'ubuntu'"
          class="km-os-options"
          [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'km-with-margin' : ''">
       <mat-checkbox id="distUpgradeOnBootUbuntu"
@@ -140,7 +140,7 @@
     </div>
 
     <!-- Options for CentOS -->
-    <div *ngIf="nodeForm.controls.operatingSystem.value === 'centos'"
+    <div *ngIf="form.controls.operatingSystem.value === 'centos'"
          class="km-os-options"
          [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'km-with-margin' : ''">
       <mat-checkbox id="distUpgradeOnBootCentos"
@@ -148,7 +148,7 @@
     </div>
 
     <!-- Options for Container Linux -->
-    <div *ngIf="nodeForm.controls.operatingSystem.value === 'containerLinux'"
+    <div *ngIf="form.controls.operatingSystem.value === 'containerLinux'"
          class="km-os-options"
          [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'km-with-margin' : ''">
       <mat-checkbox id="disableAutoUpdate"

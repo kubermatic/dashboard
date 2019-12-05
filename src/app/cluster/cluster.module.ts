@@ -9,7 +9,6 @@ import {ChangeClusterVersionComponent} from './cluster-details/change-cluster-ve
 import {ClusterDeleteConfirmationComponent} from './cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
 import {ClusterDetailsComponent} from './cluster-details/cluster-details.component';
 import {ClusterSecretsComponent} from './cluster-details/cluster-secrets/cluster-secrets.component';
-import {ConfigurePodSecurityComponent} from './cluster-details/configure-pod-security/configure-pod-security.component';
 import {EditClusterComponent} from './cluster-details/edit-cluster/edit-cluster.component';
 import {AWSProviderSettingsComponent} from './cluster-details/edit-provider-settings/aws-provider-settings/aws-provider-settings.component';
 import {AzureProviderSettingsComponent} from './cluster-details/edit-provider-settings/azure-provider-settings/azure-provider-settings.component';
@@ -29,6 +28,8 @@ import {ClusterPanelComponent} from './cluster-details/node-deployment-details/c
 import {NodeDeploymentDetailsComponent} from './cluster-details/node-deployment-details/node-deployment-details.component';
 import {NodeDeploymentListComponent} from './cluster-details/node-deployment-list/node-deployment-list.component';
 import {NodeListComponent} from './cluster-details/node-list/node-list.component';
+import {AddBindingComponent} from './cluster-details/rbac/add-binding/add-binding.component';
+import {RBACComponent} from './cluster-details/rbac/rbac.component';
 import {RevokeAdminTokenComponent} from './cluster-details/revoke-token/revoke-admin-token/revoke-admin-token.component';
 import {RevokeTokenComponent} from './cluster-details/revoke-token/revoke-token.component';
 import {RevokeViewerTokenComponent} from './cluster-details/revoke-token/revoke-viewer-token/revoke-viewer-token.component';
@@ -45,6 +46,7 @@ const components: any[] = [
   NodeDeploymentDetailsComponent,
   ClusterListComponent,
   MachineNetworksDisplayComponent,
+  RBACComponent,
 ];
 
 const entryComponents: any[] = [
@@ -58,7 +60,6 @@ const entryComponents: any[] = [
   RevokeViewerTokenComponent,
   AddMachineNetworkComponent,
   EditProviderSettingsComponent,
-  ConfigurePodSecurityComponent,
   AWSProviderSettingsComponent,
   DigitaloceanProviderSettingsComponent,
   HetznerProviderSettingsComponent,
@@ -72,6 +73,7 @@ const entryComponents: any[] = [
   AddClusterSSHKeysComponent,
   ShareKubeconfigComponent,
   ClusterPanelComponent,
+  AddBindingComponent,
 ];
 
 @NgModule({

@@ -4,6 +4,7 @@
     <kubermatic-node-data [cluster]="data.cluster"
                           [nodeData]="data.nodeData"
                           [existingNodesCount]="data.existingNodesCount"
+                          (valid)="nodeDataValid = $event"
                           [seedDc]="seedDC"></kubermatic-node-data>
   </mat-dialog-content>
   <mat-dialog-actions>
@@ -21,7 +22,7 @@
     </i>
     <button mat-flat-button
             [mat-dialog-close]="data"
-            [disabled]="!data?.nodeData?.valid"
+            [disabled]="!data?.nodeData?.valid || !nodeDataValid"
             class="btn btn-primary">
       {{getDialogLabel()}}
     </button>

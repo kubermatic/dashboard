@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-CONTROLLER_IMAGE="quay.io/kubermatic/cluster-exposer:v1.0.0"
+CONTROLLER_IMAGE="quay.io/kubermatic/cluster-exposer:v2.0.0"
 
 if [[ -z ${JOB_NAME} ]]; then
 	echo "This script should only be running in a CI environment."
