@@ -1085,3 +1085,7 @@ mat-chip-list {
 #km-delete-cluster-dialog mat-dialog-content {
   margin-bottom: 3.75 * $baseline-grid;
 }
+
+.km-pod-security-policy-row {
+  align-items: center;
+}
