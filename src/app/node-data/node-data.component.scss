@@ -36,17 +36,17 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
 
   .mat-button-toggle {
     border-radius: $border-radius;
-    max-width: 170px;
-    min-width: 120px;
-    min-height: 60px;
-    max-height: 60px;
+    max-width: 21.25 * $baseline-grid;
+    min-width: 15 * $baseline-grid;
+    min-height: 7.5 * $baseline-grid;
+    max-height: 7.5 * $baseline-grid;
     outline: none;
     margin-bottom: 1.25 * $baseline-grid;
 
     i {
       margin-right: 1.25 * $baseline-grid;
-      min-width: 28px;
-      min-height: 28px;
+      min-width: 3.5 * $baseline-grid;
+      min-height: 3.5 * $baseline-grid;
       -webkit-filter: grayscale(100%);
       -moz-filter: grayscale(100%);
       -ms-filter: grayscale(100%);
@@ -88,4 +88,14 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
 
 .mat-icon-button i {
   background-color: transparent;
+}
+
+km-label-form,
+km-taint-form {
+  display: block;
+  margin-top: 2.5 * $baseline-grid;
+}
+
+::ng-deep .km-form-in-node-modal .km-label-form-delete-button {
+  margin-top: 1.75 * $baseline-grid !important;
 }

@@ -75,17 +75,24 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
+        </div>
 
+        <div fxLayout="row"
+             class="km-imagepullsecret-form-field">
           <mat-form-field *ngIf="isOpenShiftSelected()"
                           class="km-imagepullsecret-inline">
             <mat-label>Image Pull Secret*</mat-label>
-            <input matInput
-                   formControlName="imagePullSecret"
-                   type="text"
-                   title="imagePullSecret">
+            <textarea matInput
+                      rows=3
+                      formControlName="imagePullSecret"
+                      type="text-area"
+                      title="imagePullSecret"></textarea>
             <mat-error *ngIf="clusterSpecForm.controls.imagePullSecret.hasError('required')">
               Image Pull Secret is <strong>required</strong>.
             </mat-error>
+            <mat-hint>This is a JSON document containing your Docker registry credentials, see&nbsp;<a target="_blank"
+                 rel="noopener"
+                 href="https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/">here</a>&nbsp;for more information</mat-hint>
           </mat-form-field>
         </div>
 
@@ -93,10 +100,13 @@
              fxLayoutGap="16px">
           <mat-checkbox formControlName="auditLogging">Audit Logging</mat-checkbox>
           <div fxLayout="row"
-               fxLayoutGap="8px">
+               fxLayoutGap="8px"
+               class="km-pod-security-policy-row">
             <mat-checkbox formControlName="usePodSecurityPolicyAdmissionPlugin">
               Pod Security Policy
             </mat-checkbox>
+            <i class="km-icon-info"
+               matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
             <i *ngIf="clusterSpecForm.controls.usePodSecurityPolicyAdmissionPlugin.value"
                class="km-icon-warning"
                matTooltip="Activating Pod Security Policy will mean that a lot of Pod specifications, Operators and Helm charts will not work out of the box. Make sure that you know the consequences of activating this feature.">

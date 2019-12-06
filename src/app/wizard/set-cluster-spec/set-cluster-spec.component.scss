@@ -38,12 +38,12 @@ $type-toggle-width: 150px;
   max-width: $type-toggle-width * 2 + $baseline-grid;
 
   mat-button-toggle {
-    min-height: 50px;
-    max-height: 50px;
+    min-height: 6.25 * $baseline-grid;
+    max-height: 6.25 * $baseline-grid;
     min-width: $type-toggle-width;
     max-width: $type-toggle-width;
     margin: (0.25 * $baseline-grid) 0 0 0;
-    border-width: 2px;
+    border-width: 0.25 * $baseline-grid;
     background-color: $grey-background;
 
     i {
@@ -54,7 +54,7 @@ $type-toggle-width: 150px;
 
     &:hover {
       background-color: transparent;
-      border: 2px solid $quaternary;
+      border: (0.25 * $baseline-grid) solid $quaternary;
       transition: all .5s ease;
     }
 
@@ -70,7 +70,7 @@ $type-toggle-width: 150px;
 
     &.mat-button-toggle-checked {
       background-color: transparent;
-      border: 2px solid $primary;
+      border: (0.25 * $baseline-grid) solid $primary;
 
       i {
         -webkit-filter: none;
@@ -89,10 +89,18 @@ $type-toggle-width: 150px;
 
 .km-version-inline {
   width: auto;
-  max-width: 130px;
+  max-width: 16.25 * $baseline-grid;
 }
 
-.km-imagepullsecret-inline {
-  margin-left: 2.5 * $baseline-grid;
-  min-width: 160px;
+.km-imagepullsecret-form-field {
+  width: 98%;
+
+  .km-imagepullsecret-inline {
+    min-width: 20 * $baseline-grid;
+    margin-bottom: 3.75 * $baseline-grid;
+  }
+}
+
+km-label-form {
+  margin-top: 3.75 * $baseline-grid;
 }

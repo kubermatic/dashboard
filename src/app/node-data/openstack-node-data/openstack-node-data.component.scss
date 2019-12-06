@@ -9,13 +9,6 @@
   width: 100%;
 }
 
-.km-floating-ip-checkbox-info-icon,
-.km-custom-disk-size-info-icon {
-  color: $light-text-color;
-  padding-left: $baseline-grid / 2;
-  position: relative;
-}
-
 .km-custom-disk-size {
   height: 51px;
   display: flex;
@@ -24,4 +17,14 @@
     margin-top: auto;
     margin-bottom: auto;
   }
+}
+
+::ng-deep .km-floating-ip-checkbox .mat-checkbox-label,
+::ng-deep .km-custom-disk-size .mat-checkbox-label {
+  display: flex;
+  align-items: center;
+}
+
+.km-icon-info {
+  margin-left: 0.625 * $baseline-grid;
 }

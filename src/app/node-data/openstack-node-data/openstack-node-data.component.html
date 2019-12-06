@@ -21,7 +21,7 @@
         <mat-checkbox id="customDiskSize"
                       formControlName="customDiskSize">
           Custom disk
-          <i class="fa fa-info-circle km-custom-disk-size-info-icon"
+          <i class="km-icon-info km-custom-disk-size-info-icon"
              matTooltip="If you enable custom disk, an additional network storage volume will be created and used as the disk for the VM."></i>
         </mat-checkbox>
       </div>
@@ -46,7 +46,7 @@
                   formControlName="useFloatingIP">
       Allocate Floating IP
       <i *ngIf="isFloatingIPEnforced()"
-         class="fa fa-info-circle km-floating-ip-checkbox-info-icon"
+         class="km-icon-info"
          matTooltip="Floating IP usage is enforced by selected datacenter"></i>
     </mat-checkbox>
   </div>

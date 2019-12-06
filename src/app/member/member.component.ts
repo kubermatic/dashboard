@@ -122,8 +122,8 @@ export class MemberComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Member',
-        message: `Are you sure you want to permanently delete member "<strong>${member.name}</strong>"
-          from project "<strong>${this._selectedProject.name}</strong>"?`,
+        message: `Delete member "<strong>${member.name}</strong>" from project "<strong>${
+            this._selectedProject.name}</strong>"?`,
         confirmLabel: 'Delete',
       },
     };
