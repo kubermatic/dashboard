@@ -119,11 +119,13 @@
         </km-property>
 
         <km-boolean-property label="Audit Logging"
-                             [value]="!!cluster.spec.auditLogging && cluster.spec.auditLogging.enabled">
+                             [value]="!!cluster.spec.auditLogging && cluster.spec.auditLogging.enabled"
+                             *ngIf="!!cluster.spec.auditLogging && !!cluster.spec.auditLogging.enabled">
         </km-boolean-property>
 
         <km-boolean-property label="Pod Security Policy"
-                             [value]="cluster.spec.usePodSecurityPolicyAdmissionPlugin">
+                             [value]="cluster.spec.usePodSecurityPolicyAdmissionPlugin"
+                             *ngIf="!!cluster.spec.usePodSecurityPolicyAdmissionPlugin">
         </km-boolean-property>
 
         <km-property>

@@ -33,8 +33,8 @@
 // icons
 .km-icon-delete {
   display: inline-block;
-  width: 18px;
-  height: 18px;
+  width: 2.25 * $baseline-grid;
+  height: 2.25 * $baseline-grid;
   mask: url("/assets/images/icons/trash.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -48,8 +48,8 @@
 
 .km-icon-edit {
   display: inline-block;
-  width: 18px;
-  height: 18px;
+  width: 2.25 * $baseline-grid;
+  height: 2.25 * $baseline-grid;
   mask: url("/assets/images/icons/edit.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -63,8 +63,8 @@
 
 .km-icon-regenerate {
   display: inline-block;
-  width: 18px;
-  height: 18px;
+  width: 2.25 * $baseline-grid;
+  height: 2.25 * $baseline-grid;
   mask: url("/assets/images/icons/regenerate.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -110,8 +110,8 @@
 
 .km-icon-download {
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: 2.5 * $baseline-grid;
+  height: 2.5 * $baseline-grid;
   mask: url("/assets/images/icons/download.svg");
   mask-repeat: no-repeat;
   mask-size: cover;
@@ -120,8 +120,8 @@
 
 .km-icon-share {
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: 2.5 * $baseline-grid;
+  height: 2.5 * $baseline-grid;
   mask: url("/assets/images/icons/share.svg");
   mask-repeat: no-repeat;
   mask-size: cover;
@@ -130,8 +130,8 @@
 
 .km-icon-copy {
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: 2.5 * $baseline-grid;
+  height: 2.5 * $baseline-grid;
   mask: url("/assets/images/icons/copy.svg");
   mask-repeat: no-repeat;
   mask-size: cover;
@@ -140,8 +140,8 @@
 
 .km-icon-cluster {
   display: inline-block;
-  width: 22px;
-  height: 22px;
+  width: 2.75 * $baseline-grid;
+  height: 2.75 * $baseline-grid;
   mask: url("/assets/images/icons/clusters.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -151,8 +151,8 @@
 
 .km-icon-key {
   display: inline-block;
-  width: 22px;
-  height: 22px;
+  width: 2.75 * $baseline-grid;
+  height: 2.75 * $baseline-grid;
   mask: url("/assets/images/icons/ssh-keys.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -161,8 +161,8 @@
 
 .km-icon-member {
   display: inline-block;
-  width: 22px;
-  height: 22px;
+  width: 2.75 * $baseline-grid;
+  height: 2.75 * $baseline-grid;
   mask: url("/assets/images/icons/members.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -171,8 +171,8 @@
 
 .km-icon-serviceaccount {
   display: inline-block;
-  width: 22px;
-  height: 22px;
+  width: 2.75 * $baseline-grid;
+  height: 2.75 * $baseline-grid;
   mask: url("/assets/images/icons/service-accounts.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -181,8 +181,8 @@
 
 .km-icon-randomize {
   display: inline-block;
-  width: 16px;
-  height: 16px;
+  width: 2 * $baseline-grid;
+  height: 2 * $baseline-grid;
   background-image: url("/assets/images/icons/randomize.svg");
   background-repeat: no-repeat;
   background-size: cover;
@@ -192,8 +192,8 @@
 
 .km-icon-arrow-down {
   display: inline-block;
-  width: 12px;
-  height: 12px;
+  width: 1.5 * $baseline-grid;
+  height: 1.5 * $baseline-grid;
   mask: url("/assets/images/icons/arrow-down.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -202,8 +202,8 @@
 
 .km-icon-arrow-up {
   display: inline-block;
-  width: 12px;
-  height: 12px;
+  width: 1.5 * $baseline-grid;
+  height: 1.5 * $baseline-grid;
   mask: url("/assets/images/icons/arrow-down.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -214,11 +214,11 @@
 
 .km-icon-arrow-left {
   display: inline-block;
-  width: 14px;
-  height: 14px;
+  width: 1.75 * $baseline-grid;
+  height: 1.75 * $baseline-grid;
   mask: url("/assets/images/icons/arrow-down.svg");
   mask-repeat: no-repeat;
-  mask-size: 16px;
+  mask-size: 2 * $baseline-grid;
   cursor: pointer;
   margin: 0;
   padding: 0;
@@ -227,12 +227,23 @@
 }
 
 .km-icon-close {
-  width: 20px;
-  height: 20px;
+  width: 2.5 * $baseline-grid;
+  height: 2.5 * $baseline-grid;
   mask: url("/assets/images/icons/close.svg");
   mask-repeat: no-repeat;
   mask-size: cover;
   background-color: $text-color;
+}
+
+.km-icon-info {
+  display: inline-block;
+  width: 2 * $baseline-grid;
+  height: 2 * $baseline-grid;
+  cursor: pointer;
+  background-image: url("/assets/images/icons/info.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: left;
 }
 
 .km-icon-add {
@@ -286,8 +297,8 @@
 
 .km-icon-labels {
   display: inline-block;
-  width: 24px;
-  height: 24px;
+  width: 3 * $baseline-grid;
+  height: 3 * $baseline-grid;
   mask: url("/assets/images/icons/labels.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -296,8 +307,8 @@
 
 .km-icon-owner {
   display: inline-block;
-  width: 24px;
-  height: 24px;
+  width: 3 * $baseline-grid;
+  height: 3 * $baseline-grid;
   mask: url("/assets/images/icons/owner.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -306,8 +317,8 @@
 
 .km-icon-role {
   display: inline-block;
-  width: 24px;
-  height: 24px;
+  width: 3 * $baseline-grid;
+  height: 3 * $baseline-grid;
   mask: url("/assets/images/icons/role.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -316,8 +327,8 @@
 
 .km-icon-projects-table {
   display: inline-block;
-  width: 24px;
-  height: 24px;
+  width: 3 * $baseline-grid;
+  height: 3 * $baseline-grid;
   mask: url("/assets/images/icons/projects-table.svg");
   mask-repeat: no-repeat;
   mask-size: cover;
@@ -326,8 +337,8 @@
 
 .km-icon-projects-card {
   display: inline-block;
-  width: 24px;
-  height: 24px;
+  width: 3 * $baseline-grid;
+  height: 3 * $baseline-grid;
   mask: url("/assets/images/icons/projects-cards.svg");
   mask-repeat: no-repeat;
   mask-size: cover;
@@ -336,9 +347,9 @@
 
 .km-icon-kubernetes {
   display: inline-block;
-  width: 30px;
-  height: 30px;
-  margin-right: 10px;
+  width: 3.75 * $baseline-grid;
+  height: 3.75 * $baseline-grid;
+  margin-right: 1.25 * $baseline-grid;
   background-image: url("/assets/images/icons/kubernetes.svg");
   background-repeat: no-repeat;
   background-size: cover;
@@ -346,9 +357,9 @@
 
 .km-icon-openshift {
   display: inline-block;
-  width: 30px;
-  height: 30px;
-  margin-right: 10px;
+  width: 3.75 * $baseline-grid;
+  height: 3.75 * $baseline-grid;
+  margin-right: 1.25 * $baseline-grid;
   background-image: url("/assets/images/icons/openshift.svg");
   background-repeat: no-repeat;
   background-size: cover;
@@ -360,7 +371,7 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: left;
-  min-height: 30px;
+  min-height: 3.75 * $baseline-grid;
 }
 
 .km-provider-logo-azure {
@@ -368,7 +379,7 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: left;
-  min-height: 30px;
+  min-height: 3.75 * $baseline-grid;
 }
 
 .km-provider-logo-baremetal {
@@ -376,7 +387,7 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: left;
-  min-height: 30px;
+  min-height: 3.75 * $baseline-grid;
 }
 
 .km-provider-logo-bringyourown {
@@ -384,7 +395,7 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: left;
-  min-height: 30px;
+  min-height: 3.75 * $baseline-grid;
 }
 
 .km-provider-logo-digitalocean {
@@ -392,7 +403,7 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: left;
-  min-height: 30px;
+  min-height: 3.75 * $baseline-grid;
 }
 
 .km-provider-logo-fake {
@@ -400,7 +411,7 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: left;
-  min-height: 30px;
+  min-height: 3.75 * $baseline-grid;
 }
 
 .km-provider-logo-gcp {
@@ -408,7 +419,7 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: left;
-  min-height: 30px;
+  min-height: 3.75 * $baseline-grid;
 }
 
 .km-provider-logo-hetzner {
@@ -416,7 +427,7 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: left;
-  min-height: 30px;
+  min-height: 3.75 * $baseline-grid;
 }
 
 .km-provider-logo-loodsecluster {
@@ -424,7 +435,7 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: left;
-  min-height: 30px;
+  min-height: 3.75 * $baseline-grid;
 }
 
 .km-provider-logo-openstack {
@@ -432,7 +443,7 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: left;
-  min-height: 30px;
+  min-height: 3.75 * $baseline-grid;
 }
 
 .km-provider-logo-packet {
@@ -440,7 +451,7 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: left;
-  min-height: 30px;
+  min-height: 3.75 * $baseline-grid;
 }
 
 .km-provider-logo-kubevirt {
@@ -448,7 +459,7 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: left;
-  min-height: 30px;
+  min-height: 3.75 * $baseline-grid;
 }
 
 .km-provider-logo-vsphere {
@@ -456,7 +467,7 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: left;
-  min-height: 30px;
+  min-height: 3.75 * $baseline-grid;
 }
 
 // Operating system logos.

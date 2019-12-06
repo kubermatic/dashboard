@@ -17,7 +17,7 @@ body {
 // spinner
 .km-spinner {
   position: absolute;
-  top: 0;
+  top: $baseline-grid;
   left: 0;
   right: 0;
   bottom: 0;
@@ -61,6 +61,8 @@ body {
     font-weight: normal;
     border-bottom: none;
     padding: 0;
+    line-height: 2.5 * $line-height;
+    height: 5 * $baseline-grid;
   }
 
   .km-header-cell:last-of-type {
@@ -83,7 +85,7 @@ body {
   td.mat-cell {
     border-top: 1px solid $separator;
     border-bottom-width: 0;
-    line-height: 5 * $line-height;
+    line-height: 2.5 * $line-height;
     padding-right: 2 * $baseline-grid;
     font-size: $subhead-font-size-base;
 
@@ -324,10 +326,16 @@ mat-button-toggle-group[group='providerGroup'] {
   }
 }
 
-mat-button-toggle-group[group='datacenterGroup'] .mat-button-toggle-label-content {
-  padding: 0 (0.625 * $baseline-grid);
-  width: 100%;
-  display: inline-block;
+mat-button-toggle-group[group='datacenterGroup'] {
+  .mat-button-toggle-button {
+    display: flex;
+  }
+
+  .mat-button-toggle-label-content {
+    padding: 0 (0.625 * $baseline-grid);
+    width: 100%;
+    display: inline-block;
+  }
 }
 
 mat-button-toggle-group[group='providerGroup'] .mat-button-toggle-label-content {
@@ -741,6 +749,10 @@ mat-list-item.disabled {
   color: $indicator-red;
 }
 
+.blue {
+  color: $indicator-blue;
+}
+
 // Row width.
 .mat-column-status,
 .mat-column-stateArrow {
@@ -978,8 +990,12 @@ mat-hint a {
 .mat-option {
   padding: 0 0 0 (1.25 * $baseline-grid) !important;
 
-  &:hover,
   &.mat-active {
+    background-color: $grey-background !important;
+    color: $text-color !important;
+  }
+
+  &:hover {
     background-color: $secondary-light !important;
     color: $text-color !important;
   }
@@ -1062,4 +1078,14 @@ mat-chip-list {
 
 .mat-menu-panel {
   min-height: auto !important;
+}
+
+// Confirmation Dialogs
+#km-confirmation-dialog mat-dialog-content,
+#km-delete-cluster-dialog mat-dialog-content {
+  margin-bottom: 3.75 * $baseline-grid;
+}
+
+.km-pod-security-policy-row {
+  align-items: center;
 }

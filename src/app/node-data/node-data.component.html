@@ -167,7 +167,9 @@
 <!-- Node Labels & Taints -->
 <km-label-form title="Node Labels"
                [(labels)]="nodeData.spec.labels"
-               [asyncKeyValidators]=asyncLabelValidators></km-label-form>
+               [asyncKeyValidators]=asyncLabelValidators
+               [ngClass]="!isInWizard ? 'km-form-in-node-modal' : ''"></km-label-form>
 
 <km-taint-form title="Node Taints"
-               [(taints)]="nodeData.spec.taints"></km-taint-form>
+               [(taints)]="nodeData.spec.taints"
+               [ngClass]="!isInWizard ? 'km-form-in-node-modal' : ''"></km-taint-form>
