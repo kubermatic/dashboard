@@ -35,6 +35,7 @@
         <div fxFlex
              fxLayout="column">
           <km-custom-links-form [(customLinks)]="settings.customLinks"
+                                [apiCustomLinks]="apiSettings.customLinks"
                                 (customLinksChange)="onSettingsChange()"></km-custom-links-form>
           <div fxLayout="row">
             <mat-checkbox [(ngModel)]="settings.displayAPIDocs"
@@ -43,7 +44,7 @@
                           (change)="onSettingsChange()">Display Terms of Service</mat-checkbox>
             <mat-checkbox [(ngModel)]="settings.displayDemoInfo"
                           (change)="onSettingsChange()">Display Demo Information</mat-checkbox>
-            <km-settings-status [isSaved]="isCustomLinksEqual()"></km-settings-status>
+            <km-settings-status [isSaved]="isDisplayLinksEqual()"></km-settings-status>
           </div>
         </div>
       </div>
