@@ -23,7 +23,9 @@ RUN apt-get update -qq && apt-get install -y \
     bash \
     jq \
     git && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    curl --fail -L https://dl.google.com/go/go1.12.12.linux-amd64.tar.gz|tar -C /usr/local -xvz && \
+    echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
 
 # Install Docker from Docker Inc. repositories.
 RUN curl -sSL https://get.docker.com/ | sh
