@@ -22,7 +22,8 @@ presubmits:
     containers:
     - image: quay.io/kubermatic/e2e-kind-cypress:v1.1.1
       command:
-      - ./hack/e2e/ci-e2e.sh
+      - make
+      - run-e2e-ci-v2
       securityContext:
         privileged: true
       resources:
