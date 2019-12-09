@@ -7,7 +7,7 @@ presubmits:
   # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
   - org: kubermatic
     repo: kubermatic
-    base_ref: re-use-ci-for-api
+    base_ref: master
     clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
   labels:
     preset-digitalocean: "true"
