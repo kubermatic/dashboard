@@ -16,6 +16,7 @@ curl --fail -LO \
 unzip vault_*.zip
 chmod +x vault
 mv vault /usr/local/bin
+apt update && apt install -y jq
 
 export KUBERMATIC_SKIP_BUILDING=true
 export KUBERMATIC_VERSION=latest

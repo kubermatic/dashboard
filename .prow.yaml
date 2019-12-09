@@ -19,8 +19,6 @@ presubmits:
     preset-kind-volume-mounts: "true"
     preset-vault: "true"
   spec:
-    nodeSelector:
-      kubermatic.io/dedicated: "true"
     containers:
     - image: quay.io/kubermatic/e2e-kind-cypress:v1.0.7
       command:
