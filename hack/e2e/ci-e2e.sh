@@ -9,6 +9,14 @@ export CYPRESS_KUBERMATIC_DEX_DEV_E2E_PASSWORD="password"
 
 export CYPRESS_RECORD_KEY=7859bcb8-1d2a-4d56-b7f5-ca70b93f944c
 
+# TODO: Move into image
+export VAULT_VERSION="1.2.3"
+curl --fail -LO \
+  https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip
+unzip vault_*.zip
+chmod +x vault
+mv vault /usr/local/bin
+
 export KUBERMATIC_SKIP_BUILDING=true
 export KUBERMATIC_VERSION=latest
 source ${GOPATH}/src/github.com/kubermatic/kubermatic/api/hack/ci/ci-setup-kubermatic-in-kind.sh
