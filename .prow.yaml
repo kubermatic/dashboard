@@ -1,0 +1,42 @@
+presubmits:
+- name: pull-dashboard-e2e
+  always_run: true
+  decorate: true
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
+  extra_refs:
+  # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
+  - org: kubermatic
+    repo: kubermatic
+    base_ref: re-use-ci-for-api
+    clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
+  labels:
+    preset-digitalocean: "true"
+    preset-openstack: "true"
+    preset-azure: "true"
+    preset-gce: "true"
+    preset-kubeconfig-ci: "true"
+    preset-docker-pull: "true"
+    preset-kind-volume-mounts: "true"
+    preset-vault: "true"
+  spec:
+    nodeSelector:
+      kubermatic.io/dedicated: "true"
+    containers:
+    - image: quay.io/kubermatic/e2e-kind-cypress:v1.0.7
+      command:
+      - hack/e2e/ci-e2e.sh
+      securityContext:
+        privileged: true
+      resources:
+        requests:
+          memory: 6Gi
+          cpu: 2
+        limits:
+          memory: 6Gi
+          cpu: 2
+      env:
+      - name: SERVICE_ACCOUNT_KEY
+        valueFrom:
+          secretKeyRef:
+            name: e2e-ci
+            key: serviceAccountSigningKey
