@@ -11,13 +11,8 @@ export CYPRESS_RECORD_KEY=7859bcb8-1d2a-4d56-b7f5-ca70b93f944c
 
 export KUBERMATIC_SKIP_BUILDING=true
 export KUBERMATIC_VERSION=latest
-# Debug
-function debug {
-  originalRC=$?
-  sleep 1h
-  return $originalRC
-}
-trap debug EXIT
+
+export CACHE_VERSION="$(git -C ../kubermatic rev-parse HEAD)"
 source ${GOPATH}/src/github.com/kubermatic/kubermatic/api/hack/ci/ci-setup-kubermatic-in-kind.sh
 
 
