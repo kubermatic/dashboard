@@ -1,5 +1,4 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -16,20 +15,11 @@ export class GCPNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
 
   hideOptional = true;
-  form: FormGroup;
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(private readonly _nodeDataService: NodeDataService, private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      tags: new FormControl(this.nodeData.spec.cloud.gcp.tags.toString().replace(/\,/g, ', ')),
-    });
-
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this._nodeDataService.changeNodeProviderData(this.getNodeProviderData());
-    });
-
     this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
     });
@@ -43,12 +33,6 @@ export class GCPNodeOptionsComponent implements OnInit, OnDestroy {
   }
 
   getNodeProviderData(): NodeProviderData {
-    let gcpTags: string[] = [];
-    if ((this.form.controls.tags.value).length > 0) {
-      gcpTags = (this.form.controls.tags.value).split(',').map(tag => tag.trim());
-      gcpTags.map(tag => tag.trim());
-    }
-
     return {
       spec: {
         gcp: {
@@ -58,7 +42,7 @@ export class GCPNodeOptionsComponent implements OnInit, OnDestroy {
           preemptible: this.nodeData.spec.cloud.gcp.preemptible,
           zone: this.nodeData.spec.cloud.gcp.zone,
           labels: this.nodeData.spec.cloud.gcp.labels,
-          tags: gcpTags,
+          tags: this.nodeData.spec.cloud.gcp.tags,
         },
       },
       valid: this.nodeData.valid,

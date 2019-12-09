@@ -1,7 +1,7 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
-import {MatAutocompleteModule, MatCardModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule, MatTooltipModule} from '@angular/material';
+import {MatAutocompleteModule, MatCardModule, MatCheckboxModule, MatChipsModule, MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule, MatTooltipModule} from '@angular/material';
 
 import {SharedModule} from '../shared/shared.module';
 
@@ -61,6 +61,7 @@ const components: any[] = [
     MatCardModule,
     MatAutocompleteModule,
     MatTooltipModule,
+    MatChipsModule,
   ],
   declarations: [
     ...components,
