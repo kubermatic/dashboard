@@ -20,7 +20,7 @@ presubmits:
     preset-vault: "true"
   spec:
     containers:
-    - image: quay.io/kubermatic/e2e-kind-cypress:v1.0.7
+    - image: quay.io/kubermatic/e2e-kind-cypress:v1.1.0
       command:
       - hack/e2e/ci-e2e.sh
       securityContext:
