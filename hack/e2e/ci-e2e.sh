@@ -16,5 +16,6 @@ export CACHE_VERSION="$(git -C ../kubermatic rev-parse HEAD)"
 source ${GOPATH}/src/github.com/kubermatic/kubermatic/api/hack/ci/ci-setup-kubermatic-in-kind.sh
 
 
+cd ${GOPATH}/src/github.com/kubermatic/dashboard-v2
 npm run versioninfo
 WAIT_ON_TIMEOUT=600000 npm run e2e:local
