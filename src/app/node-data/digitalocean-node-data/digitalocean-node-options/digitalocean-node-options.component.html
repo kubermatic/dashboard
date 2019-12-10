@@ -17,13 +17,9 @@
       <mat-checkbox id="monitoring"
                     formControlName="monitoring">Monitoring</mat-checkbox>
     </div>
-    <mat-form-field class="km-node-tags">
-      <mat-label>Tags</mat-label>
-      <textarea matInput
-                id="tags"
-                formControlName="tags"
-                matTextareaAutosize></textarea>
-      <mat-hint>Seperate tags with commas.</mat-hint>
-    </mat-form-field>
   </div>
 </form>
+
+<km-tag-list *ngIf="!hideOptional"
+             title="Provider Tags"
+             [tags]="nodeData.spec.cloud.digitalocean.tags"></km-tag-list>

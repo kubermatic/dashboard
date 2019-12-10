@@ -54,15 +54,11 @@ describe('DigitaloceanNodeOptionsComponent', () => {
   });
 
   it('should call getDoOptionsData method', () => {
-    component.form.controls.tags.patchValue('test-tag1, test-tag2');
     component.form.controls.ipv6.patchValue(true);
     fixture.detectChanges();
 
     expect(component.getDoOptionsData()).toEqual({
-      spec: {
-        digitalocean:
-            {size: 's-1vcpu-1gb', backups: false, ipv6: true, monitoring: false, tags: ['test-tag1', 'test-tag2']}
-      },
+      spec: {digitalocean: {size: 's-1vcpu-1gb', backups: false, ipv6: true, monitoring: false, tags: []}},
       valid: true
     });
   });

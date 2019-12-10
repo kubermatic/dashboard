@@ -1,16 +1,7 @@
-<form [formGroup]="form"
-      fxLayout="column"
-      *ngIf="!hideOptional">
+<km-tag-list *ngIf="!hideOptional"
+             title="Provider Tags"
+             [tags]="nodeData.spec.cloud.gcp.tags"></km-tag-list>
 
-  <mat-form-field>
-    <mat-label>Tags</mat-label>
-    <textarea matInput
-              id="tags"
-              formControlName="tags"
-              matTextareaAutosize></textarea>
-    <mat-hint>Seperate tags with commas.</mat-hint>
-  </mat-form-field>
-
-  <km-label-form title="Provider Labels"
-                 [(labels)]="nodeData.spec.cloud.gcp.labels"></km-label-form>
-</form>
+<km-label-form *ngIf="!hideOptional"
+               title="Provider Labels"
+               [(labels)]="nodeData.spec.cloud.gcp.labels"></km-label-form>
