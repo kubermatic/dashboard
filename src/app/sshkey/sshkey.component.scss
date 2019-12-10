@@ -1,4 +1,3 @@
-@import "../../assets/css/colors";
 @import "../../assets/css/variables";
 
 .km-key-publickey {
@@ -11,14 +10,12 @@
 }
 
 .km-publickey-wrapper {
-  background-color: $light-background;
   box-shadow: $border-box-shadow-inset;
   padding: (1.875 * $baseline-grid) (3.75 * $baseline-grid) (2.5 * $baseline-grid) (7.5 * $baseline-grid);
 
   .km-publickey-content {
     .km-publickey-name {
       text-transform: uppercase;
-      color: $text-color;
       line-height: 3 * $line-height;
     }
 

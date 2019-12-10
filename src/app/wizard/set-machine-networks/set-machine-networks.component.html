@@ -13,7 +13,7 @@
                           formControlName="checkMachineNetworks">Do not use DHCP for worker address allocation</mat-checkbox>
           </h4>
           <p *ngIf="!nodeData.spec.operatingSystem.containerLinux"
-             class="km-warning">Please note: Machine Networks are only available for Container Linux. You've choosen {{getOperatingSystem()}}.</p>
+             class="km-warning km-red">Please note: Machine Networks are only available for Container Linux. You've choosen {{getOperatingSystem()}}.</p>
         </form>
       </mat-card-title>
     </mat-card-header>

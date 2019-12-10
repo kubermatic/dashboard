@@ -1,18 +1,8 @@
-@import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
 
-.km-option-add-project {
-  color: $light-text-color;
-}
-
-.container {
+.km-sidenav {
   width: $sidenav-width;
-  background-color: $alternative-dark;
   height: 100%;
-
-  * {
-    color: $secondary;
-  }
 
   .mat-nav-list {
     padding: 0 !important;
@@ -20,11 +10,6 @@
     .mat-list-item,
     a {
       height: $toolbar-height;
-
-      &.km-projects {
-        height: $toolbar-height - ($sidenav-border-width / 2);
-        border-bottom: $alternative solid $sidenav-border-width;
-      }
     }
 
     a {
@@ -33,33 +18,11 @@
       display: flex;
       align-items: center;
 
-      &:hover {
-        color: $secondary-light;
-        background-color: $primary-active;
-
-        i {
-          background-color: $secondary-light;
-        }
-      }
-
-      &.active {
-        color: $secondary-light;
-        background-color: $primary-light;
-
-        i {
-          background-color: $secondary-light;
-        }
-      }
-
       i {
         width: 3 * $baseline-grid;
         height: 3 * $baseline-grid;
         margin-right: 2 * $baseline-grid;
       }
-    }
-
-    .mat-list-item i {
-      background-color: $secondary;
     }
 
     .km-disabled {
@@ -70,9 +33,6 @@
   }
 
   .km-nav-custom-container {
-    background-color: $primary-dark;
-    border-top: $primary-light solid $sidenav-border-width;
-
     .mat-list-item a {
       font-size: $subhead-font-size-base;
 
@@ -86,12 +46,8 @@
         cursor: pointer;
       }
 
-      &:hover {
-        background-color: $alternative-dark;
-
-        i {
-          -webkit-filter: brightness(115%);
-        }
+      &:hover i {
+        -webkit-filter: brightness(115%);
       }
     }
 
@@ -106,7 +62,6 @@
   }
 
   .km-sidenav-bottom {
-    border-top: $primary-light solid $sidenav-border-width;
     font-size: $subhead-font-size-base;
 
     .mat-list-item a i {

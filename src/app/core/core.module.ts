@@ -1,7 +1,6 @@
 import {CommonModule} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {NgModule, Optional, SkipSelf} from '@angular/core';
-import {BrowserXhr} from '@angular/http';
 import {RouterModule} from '@angular/router';
 import {SimpleNotificationsModule} from 'angular2-notifications';
 
@@ -27,7 +26,6 @@ import {NodeDataService} from './services/node-data/node-data.service';
 import {SettingsService} from './services/settings/settings.service';
 import {StepsService} from './services/wizard/steps.service';
 import {ClusterNameGenerator} from './util/name-generator.service';
-import {ProgressBrowserXhr} from './util/ProgressBrowserXhr';
 
 const modules: any[] = [
   CommonModule,
@@ -103,10 +101,6 @@ const interceptors: any[] = [
   ],
   providers: [
     ...services,
-    {
-      provide: BrowserXhr,
-      useClass: ProgressBrowserXhr,
-    },
     ...interceptors,
   ],
   exports: [

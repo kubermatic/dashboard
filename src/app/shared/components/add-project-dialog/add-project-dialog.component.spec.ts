@@ -3,7 +3,6 @@ import {MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import Spy = jasmine.Spy;
 
 import {ApiService, ProjectService} from '../../../core/services';
@@ -20,7 +19,6 @@ import {CoreModule} from '../../../core/core.module';
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
   SharedModule,
   CoreModule,
 ];

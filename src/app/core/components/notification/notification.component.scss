@@ -1,5 +1,4 @@
 @import "../../../../assets/css/colors";
-@import "../../../../assets/css/fonts";
 @import "../../../../assets/css/variables";
 
 .simple-notification-wrapper {
@@ -8,10 +7,8 @@
 }
 
 .km-notification {
-  background: $white-background !important;
   border-radius: $notification-border-radius;
   box-shadow: $elevation-8dp;
-  color: $text-color !important;
   min-height: unset !important;
   padding: unset !important;
   z-index: 2000 !important;

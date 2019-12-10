@@ -4,7 +4,6 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {ClusterService, WizardService} from '../../../core/services';
 import {MachineNetworksComponent} from '../../../machine-networks/machine-networks.component';
 import {SharedModule} from '../../../shared/shared.module';
@@ -20,7 +19,6 @@ const modules: any[] = [
   BrowserModule,
   HttpClientModule,
   BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
   RouterTestingModule,
   NgReduxTestingModule,
   SharedModule,

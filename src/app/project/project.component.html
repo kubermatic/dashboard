@@ -206,23 +206,23 @@
       </mat-card-header>
       <mat-card-content>
         <div class="km-project-cards-content-row">
-          <span><i class="km-icon-cluster"></i> {{clusterCount[project.id]}}</span>
+          <span><i class="km-icon-mask km-icon-cluster"></i> {{clusterCount[project.id]}}</span>
           <span [matTooltip]="getLabelsTooltip(project)">
-            <i class="km-icon-labels"></i>
+            <i class="km-icon-mask km-icon-labels"></i>
             {{getLabelsLength(project)}}
           </span>
         </div>
 
         <div class="km-project-cards-content-row">
           <span>
-            <i class="km-icon-owner"></i>
+            <i class="km-icon-mask km-icon-owner"></i>
             <span *ngIf="project.owners.length === 1"
                   [matTooltip]="getOwners(project.owners)">{{getName(project.owners[0].name)}}</span>
             <km-short-name-in-circle *ngIf="project.owners.length > 1"
                                      [owners]="project.owners"
                                      [limit]="2"></km-short-name-in-circle>
           </span>
-          <span><i class="km-icon-role"></i> {{role[project.id]}}</span>
+          <span><i class="km-icon-mask km-icon-role"></i>{{role[project.id]}}</span>
         </div>
       </mat-card-content>
     </mat-card>

@@ -15,19 +15,14 @@
   background-size: cover;
 }
 
-// login & logout & user
-.km-login {
-  background-image: url("/assets/images/icons/login.svg");
-  background-repeat: no-repeat;
-  background-size: auto 12px;
-  background-position: center left;
-}
-
 .km-user {
-  background-image: url("/assets/images/icons/user.svg");
-  background-repeat: no-repeat;
-  background-size: auto 24px;
-  background-position: center;
+  mask: url("/assets/images/icons/user.svg");
+  mask-repeat: no-repeat;
+  mask-size: auto;
+  mask-position: center;
+  width: 2.25 * $baseline-grid;
+  height: 2.25 * $baseline-grid;
+  background-color: $default-color;
 }
 
 // icons
@@ -39,7 +34,7 @@
   mask-repeat: no-repeat;
   mask-size: contain;
   cursor: pointer;
-  background-color: $text-color;
+  background-color: $default-color;
 
   &:disabled {
     background-color: $disabled-button-color;
@@ -54,7 +49,7 @@
   mask-repeat: no-repeat;
   mask-size: contain;
   cursor: pointer;
-  background-color: $text-color;
+  background-color: $default-color;
 
   &:disabled {
     background-color: $disabled-button-color;
@@ -69,7 +64,7 @@
   mask-repeat: no-repeat;
   mask-size: contain;
   cursor: pointer;
-  background-color: $text-color;
+  background-color: $default-color;
 
   &:disabled {
     background-color: $disabled-button-color;
@@ -146,7 +141,7 @@
   mask-repeat: no-repeat;
   mask-size: contain;
   cursor: pointer;
-  background-color: $text-color;
+  background-color: $default-color;
 }
 
 .km-icon-key {
@@ -197,7 +192,7 @@
   mask: url("/assets/images/icons/arrow-down.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
-  background-color: $text-color;
+  background-color: $default-color;
 }
 
 .km-icon-arrow-up {
@@ -207,7 +202,7 @@
   mask: url("/assets/images/icons/arrow-down.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
-  background-color: $text-color;
+  background-color: $default-color;
   -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
 }
@@ -232,7 +227,7 @@
   mask: url("/assets/images/icons/close.svg");
   mask-repeat: no-repeat;
   mask-size: cover;
-  background-color: $text-color;
+  background-color: $default-color;
 }
 
 .km-icon-info {
@@ -254,7 +249,7 @@
   mask-repeat: no-repeat;
   mask-size: contain;
   cursor: pointer;
-  background-color: $text-color;
+  background-color: $default-color;
   transform: rotate(45deg);
 
   &:disabled {
@@ -302,7 +297,7 @@
   mask: url("/assets/images/icons/labels.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
-  background-color: $text-color;
+  background-color: $default-color;
 }
 
 .km-icon-owner {
@@ -312,7 +307,7 @@
   mask: url("/assets/images/icons/owner.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
-  background-color: $text-color;
+  background-color: $default-color;
 }
 
 .km-icon-role {
@@ -322,7 +317,7 @@
   mask: url("/assets/images/icons/role.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
-  background-color: $text-color;
+  background-color: $default-color;
 }
 
 .km-icon-projects-table {
@@ -332,7 +327,7 @@
   mask: url("/assets/images/icons/projects-table.svg");
   mask-repeat: no-repeat;
   mask-size: cover;
-  background-color: $text-color;
+  background-color: $default-color;
 }
 
 .km-icon-projects-card {
@@ -342,7 +337,7 @@
   mask: url("/assets/images/icons/projects-cards.svg");
   mask-repeat: no-repeat;
   mask-size: cover;
-  background-color: $text-color;
+  background-color: $default-color;
 }
 
 .km-icon-kubernetes {
@@ -363,6 +358,26 @@
   background-image: url("/assets/images/icons/openshift.svg");
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.km-icon-sun {
+  display: inline-block;
+  width: 3 * $baseline-grid;
+  height: 3 * $baseline-grid;
+  margin-right: 1.25 * $baseline-grid;
+  mask-image: url("/assets/images/icons/sun.svg");
+  mask-repeat: no-repeat;
+  mask-size: cover;
+}
+
+.km-icon-moon {
+  display: inline-block;
+  width: 3 * $baseline-grid;
+  height: 3 * $baseline-grid;
+  margin-right: 1.25 * $baseline-grid;
+  mask-image: url("/assets/images/icons/moon.svg");
+  mask-repeat: no-repeat;
+  mask-size: cover;
 }
 
 // provider logos

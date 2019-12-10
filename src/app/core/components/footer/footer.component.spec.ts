@@ -4,7 +4,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {SharedModule} from '../../../shared/shared.module';
 import {RouterStub} from '../../../testing/router-stubs';
@@ -20,7 +19,6 @@ const modules: any[] = [
   HttpClientModule,
   RouterTestingModule,
   BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
   SharedModule,
 ];
 

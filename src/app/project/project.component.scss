@@ -1,6 +1,5 @@
 @import "../../assets/css/colors";
 @import "../../assets/css/variables";
-@import "../../assets/css/fonts";
 
 .km-projects-spinner {
   margin: (2.5 * $baseline-grid) auto !important;
@@ -118,7 +117,7 @@ mat-button-toggle {
     line-height: 1.6 * $line-height;
 
     strong {
-      font-family: $primary-font-mono;
+      font-family: $font-primary-mono;
       margin-right: 0.625 * $baseline-grid;
     }
   }

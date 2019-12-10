@@ -13,18 +13,6 @@ footer {
   }
 }
 
-.km-light-footer {
-  * {
-    color: $white-text-color;
-  }
-}
-
-.km-dark-footer {
-  * {
-    color: $footer-text-color;
-  }
-}
-
 .km-separator {
   padding: 0 $baseline-grid;
 }
@@ -41,6 +29,6 @@ i {
   -webkit-filter: grayscale(100%);
 
   &:hover {
-    opacity: 0.7;
+    opacity: .75;
   }
 }

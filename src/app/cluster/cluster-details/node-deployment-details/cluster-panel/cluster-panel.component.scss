@@ -4,10 +4,7 @@
 $panel-margin: -$content-padding;
 
 .km-cluster-panel-container {
-  background: $separator;
-  border-bottom: 1px solid $dropdown-border;
-  color: $text-color;
-  height: $toolbar-height + $baseline-grid / 4;
+  height: $toolbar-height + $sidenav-border-width;
   margin: $panel-margin $panel-margin $content-padding $panel-margin;
   padding: 0 $content-padding 0 0;
 

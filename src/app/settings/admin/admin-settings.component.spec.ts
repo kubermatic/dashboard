@@ -4,7 +4,6 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
@@ -32,7 +31,6 @@ describe('AdminSettingsComponent', () => {
             BrowserModule,
             RouterTestingModule,
             BrowserAnimationsModule,
-            SlimLoadingBarModule.forRoot(),
             SharedModule,
           ],
           declarations: [

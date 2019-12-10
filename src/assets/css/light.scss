@@ -1,0 +1,59 @@
+@import "~@angular/material/theming";
+@import "theme";
+
+$km-primary-light: (
+  50: #a5aeb8, // Footer color.
+  100: #00a3d9, // Sidenav divider top.
+  200: #31586f, // Sidenav divider bottom.
+  300: #b9ccdf, // Sidenav text.
+  400: #03223b, // Sidenav custom links background.
+  500: #dcf3fa, // Sidenav text light.
+  600: #31586f, // Sidenav background active.
+  700: #234d66, // Sidenav background hover.
+  800: #203f58,
+  900: #01579b,
+  A100: #80d8ff,
+  A200: #40c4ff,
+  A400: #00b0ff,
+  A700: #0091ea,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $dark-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $dark-primary-text,
+    A400: $dark-primary-text,
+    A700: $light-primary-text,
+  )
+);
+
+$primary: mat-palette($km-primary-light, 700, 500, 800);
+$lighter: mat-palette($mat-light-blue, 100, 200, 300);
+$accent:  mat-palette($mat-pink, 500, 600, 700);
+
+$light-theme: mat-light-theme($primary, $lighter, $accent);
+
+// sass-lint:disable function-name-format
+$background: map-get($light-theme, background);
+$background: map_merge($background, (background: #edeff0));
+$background: map_merge($background, (app-bar: #fff));
+$light-theme: map_merge($light-theme, (background: $background));
+
+$foreground: map-get($light-theme, foreground);
+$foreground: map_merge($foreground, (text: #4d555c));
+$foreground: map_merge($foreground, (secondary-text: #bcc5d0));
+$foreground: map_merge($foreground, (divider: #e0e3e5));
+$light-theme: map_merge($light-theme, (foreground: $foreground));
+// sass-lint:enable function-name-format
+
+.light {
+  @include angular-material-theme($light-theme);
+  @include km-theme($light-theme);
+}

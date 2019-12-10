@@ -13,20 +13,6 @@
   }
 }
 
-.km-health-state {
-  i.red {
-    color: $indicator-red;
-  }
-
-  i.green {
-    color: $indicator-green;
-  }
-
-  i.orange {
-    color: $indicator-orange;
-  }
-}
-
 .km-node-ip-addresses {
   display: block;
   line-height: 2 * $line-height;
@@ -68,14 +54,6 @@ i.fa-exclamation-triangle {
   mat-card-content {
     margin-top: 1.875 * $baseline-grid;
     border: none !important;
-  }
-
-  .fa-check {
-    color: $indicator-green;
-  }
-
-  .fa-times {
-    color: $indicator-red;
   }
 }
 

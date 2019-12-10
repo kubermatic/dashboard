@@ -2,9 +2,7 @@
 @import "../../../../assets/css/variables";
 
 .km-addon-container {
-  border: 1px solid $separator;
   border-radius: 5px;
-  color: $text-color;
   font-size: $subhead-font-size-base;
   height: 8 * $baseline-grid;
   outline: none;
@@ -24,7 +22,6 @@
 }
 
 .km-new-addon-container {
-  border: 1px dashed $separator;
   color: $medium-text-color;
   cursor: pointer;
 

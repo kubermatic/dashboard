@@ -1,5 +1,5 @@
 @import "../../../assets/css/colors";
-@import "../../../assets/css/fonts";
+@import "../../../assets/css/variables";
 
 .km-frontpage-bg {
   background-color: $frontpage-background;
@@ -8,7 +8,6 @@
   width: 100%;
   top: 0;
   left: 0;
-  z-index: -1;
 }
 
 .km-frontpage-content {
@@ -16,11 +15,12 @@
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
+  z-index: 1;
 
   .km-frontpage-inner-text {
     text-align: center;
     color: $white-text-color;
-    font-family: $secondary-font;
+    font-family: $font-secondary;
     font-size: 28px;
     font-weight: 500;
     line-height: 42px;
@@ -31,7 +31,7 @@
     background-color: #fff;
     color: $alternative-dark;
     font-size: 20px;
-    font-family: $primary-font-sans-serif;
+    font-family: $font-primary;
     font-weight: 500 !important;
     line-height: 50px !important;
     width: 200px;

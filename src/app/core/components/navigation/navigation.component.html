@@ -1,8 +1,6 @@
 <header>
-  <ng2-slim-loading-bar color="white"
-                        height="2px"></ng2-slim-loading-bar>
   <div fxLayout
-       class="km-navigation-bar">
+       class="km-navbar">
     <a class="km-header-logo"
        routerLink="projects"></a>
     <div *ngIf="isAuthenticated()"
@@ -10,9 +8,11 @@
          fxFlex>
       <button mat-icon-button
               [matMenuTriggerFor]="menu"
-              class="km-user"
+              class="km-user-menu"
               id="km-navbar-user-menu">
-        <mat-menu #menu="matMenu">
+        <i class="km-icon-mask km-user"></i>
+        <mat-menu #menu="matMenu"
+                  class="km-user-menu">
           <button mat-menu-item
                   *ngIf="currentUser && !!currentUser.name"
                   (click)="$event.stopPropagation()"

@@ -4,7 +4,6 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService, Auth, ClusterService, DatacenterService, ProjectService, UserService} from '../../../core/services';
@@ -53,7 +52,6 @@ describe('NodeDeploymentDetailsComponent', () => {
             BrowserModule,
             HttpClientModule,
             BrowserAnimationsModule,
-            SlimLoadingBarModule.forRoot(),
             RouterTestingModule,
             SharedModule,
           ],

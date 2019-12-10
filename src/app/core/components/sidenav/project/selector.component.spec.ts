@@ -5,7 +5,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {MockComponent} from 'ng2-mock-component';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../../../app-config.service';
 import {ProjectEntity} from '../../../../shared/entity/ProjectEntity';
@@ -26,7 +25,6 @@ const modules: any[] = [
   RouterTestingModule,
   HttpClientModule,
   BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
   SharedModule,
 ];
 

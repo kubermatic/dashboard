@@ -3,7 +3,6 @@ import {MatDialog} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
 import Spy = jasmine.Spy;
 
@@ -37,7 +36,6 @@ describe('ServiceAccountTokenComponent', () => {
           imports: [
             BrowserModule,
             BrowserAnimationsModule,
-            SlimLoadingBarModule.forRoot(),
             RouterTestingModule,
             SharedModule,
             DialogTestModule,

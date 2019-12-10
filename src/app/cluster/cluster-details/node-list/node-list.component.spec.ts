@@ -2,7 +2,6 @@ import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/t
 import {MatDialog} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../../../app-config.service';
@@ -28,7 +27,6 @@ class MatDialogMock {
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
   SharedModule,
 ];
 

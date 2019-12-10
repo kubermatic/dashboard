@@ -2,7 +2,6 @@ import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/t
 import {MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import Spy = jasmine.Spy;
 import {ApiService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
@@ -15,7 +14,6 @@ import {EditServiceAccountComponent} from './edit-serviceaccount.component';
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
   SharedModule,
 ];
 

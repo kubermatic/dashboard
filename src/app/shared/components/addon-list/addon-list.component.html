@@ -3,7 +3,7 @@
      fxLayoutGap="10px">
   <div *ngFor="let addon of addons"
        fxLayoutAlign="center center"
-       class="km-addon-container">
+       class="km-addon-container km-border">
     <div fxFlex
          fxLayoutAlign="center center">
       <span *ngIf="!hasLogo(addon.name)">{{addon.name}}</span>
@@ -29,7 +29,7 @@
     </mat-menu>
   </div>
   <div fxLayoutAlign="center center"
-       class="km-addon-container km-new-addon-container"
+       class="km-addon-container km-new-addon-container km-border-dashed"
        (click)="add()"
        [ngClass]="getAddBtnClass()"
        [matTooltip]="getAddBtnTooltip()">

@@ -1,4 +1,3 @@
-@import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
 
 .km-rbac-add-binding-btn {
@@ -26,7 +25,6 @@
 h2 {
   font-weight: normal;
   font-size: $card-title-font-size;
-  color: $text-color;
   padding: 0 (7 * $baseline-grid);
   margin-bottom: 0;
 }

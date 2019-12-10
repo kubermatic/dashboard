@@ -1,3 +1,10 @@
+$font-primary: 'Roboto', Helvetica, Arial, sans-serif;
+$font-primary-mono: 'Roboto Mono', monospace;
+$font-secondary: 'Ubuntu', sans-serif;
+
+$default-background: #edeff0;
+$default-color: #4d555c;
+
 @function rem($multiplier) {
   $font-size: 10px;
 
@@ -39,3 +46,4 @@ $notification-content-padding: 2.5 * $baseline-grid;
 $notification-side-padding: 3.75 * $baseline-grid;
 
 $line-height: 10px;
+$scrollbar-size: 6px;

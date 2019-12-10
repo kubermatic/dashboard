@@ -1,46 +1,1221 @@
+@import "variables";
+@import "colors";
 @import "~@angular/material/theming";
 
 @include mat-core();
 
-$km-light-blue: (
-  50: #e1f5fe,
-  100: #b3e5fc,
-  200: #81d4fa,
-  300: #4fc3f7,
-  400: #29b6f6,
-  500: #03a9f4,
-  600: #039be5,
-  700: #0081ae,
-  800: #0277bd,
-  900: #01579b,
-  A100: #80d8ff,
-  A200: #40c4ff,
-  A400: #00b0ff,
-  A700: #0091ea,
-  contrast: (
-    50: $dark-primary-text,
-    100: $dark-primary-text,
-    200: $dark-primary-text,
-    300: $dark-primary-text,
-    400: $dark-primary-text,
-    500: $light-primary-text,
-    600: $light-primary-text,
-    700: $light-primary-text,
-    800: $light-primary-text,
-    900: $light-primary-text,
-    A100: $dark-primary-text,
-    A200: $dark-primary-text,
-    A400: $dark-primary-text,
-    A700: $light-primary-text,
-  )
-);
+@mixin km-theme($theme) {
+  $palette-primary: map-get($theme, primary);
+  $palette-accent: map-get($theme, accent);
+  $palette-warn: map-get($theme, warn);
+  $palette-foreground: map-get($theme, foreground);
+  $palette-background: map-get($theme, background);
 
-// Customizations go here, for instance:
-$primary: mat-palette($km-light-blue, 700, 500, 800);
-$lighter: mat-palette($mat-light-blue, 100, 200, 300);
-$accent:  mat-palette($mat-pink, 500, 600, 700);
+  $background-hover: mat-color($palette-background, hover);
+  $background-card: mat-color($palette-background, card);
+  $background-card-accent: rgba($background-hover, .02);
 
-// Create the theme object (a Sass map containing all of the palettes).
-$app-theme: mat-light-theme($primary, $lighter, $accent);
+  $sidenav-text: mat-color($palette-primary, 300);
+  $sidenav-text-light: mat-color($palette-primary, 500);
+  $sidenav-background: mat-color($palette-primary, 800);
+  $sidenav-background-custom: mat-color($palette-primary, 400);
+  $sidenav-background-active: mat-color($palette-primary, 600);
+  $sidenav-background-hover: mat-color($palette-primary, 700);
+  $sidenav-divider: mat-color($palette-primary, 200);
+  $sidenav-divider-top: mat-color($palette-primary, 100);
 
-@include angular-material-theme($app-theme);
+  $primary: #0081ae;
+  $primary-hover: #00a3d9;
+  $primary-light: #31586f;
+  $primary-dark: #03223b;
+  $primary-active: #234d66;
+
+  $alternative: #00a3d9;
+  $alternative-dark: #203f58;
+  $alternative-light: #edf9fc;
+  $alternative-text: #1b658f;
+
+  $quaternary: #3bc6ad;
+  $quaternary-hover: #21dfa9;
+  $quaternary-dark: #1c8282;
+
+  $tertiary-hover: #fafcfc;
+
+  $indicator-green: #1dc67f;
+  $indicator-orange: #f7b500;
+  $indicator-red: #eb5757;
+  $indicator-blue: #00a3d9;
+
+  $text: mat-color($palette-foreground, text);
+  $text-muted: mat-color($palette-foreground, secondary-text);
+  $text-footer: mat-color($palette-primary, 50);
+  $text-white: #fff;
+
+  $background: mat-color($palette-background, background);
+  $background-navbar: mat-color($palette-background, app-bar);
+
+  $divider: mat-color($palette-foreground, divider);
+  $shadow: 0 4px 4px rgba(#000, .08);
+
+  $disabled-button-color: #d4d4d4;
+
+  $table-row-hover: rgba($divider, .5);
+
+  $chip-background: $divider;
+  $chip-accent: mat-color($palette-background, card);
+
+  $scrollbar-background: mat-color($palette-background, card);
+  $scrollbar-color: $divider;
+
+  $transition: all .5s ease;
+
+  .km-notification {
+    background: $background-card !important;
+    color: $text !important;
+  }
+
+  .km-serviceaccount-token-wrapper,
+  .km-publickey-wrapper {
+    background-color: $background-card-accent;
+  }
+
+  .km-red {
+    color: $indicator-red;
+  }
+
+  .km-text {
+    color: $text;
+  }
+
+  .km-text-muted {
+    color: $text-muted;
+  }
+
+  .km-border {
+    border: 1px solid $divider;
+  }
+
+  .km-border-dashed {
+    border: 1px dashed $divider;
+  }
+
+  .km-icon {
+    color: $text;
+  }
+
+  .km-icon-mask {
+    background-color: $text;
+  }
+
+  .km-main,
+  .km-main > div,
+  footer {
+    background-color: $background;
+  }
+
+  .km-navbar {
+    background-color: $background-navbar;
+    box-shadow: $shadow;
+  }
+
+  .km-footer * {
+    color: $text-footer;
+  }
+
+  .km-login-footer * {
+    color: $text-white;
+  }
+
+  .km-terms * {
+    color: $text;
+  }
+
+  .mat-card,
+  .mat.card * {
+    color: $text;
+  }
+
+  .mat-header-cell,
+  .mat-sort-header-button {
+    color: $text !important;
+  }
+
+  [aria-sort='ascending'] .mat-sort-header-arrow .mat-sort-header-indicator {
+    &::before {
+      content: "";
+      background-color: $text;
+      mask: url("/assets/images/icons/arrow-up.svg");
+      mask-repeat: no-repeat;
+      mask-position: center;
+      min-height: 8px;
+      min-width: 8px;
+      position: absolute;
+      top: 1px;
+    }
+  }
+
+  [aria-sort='descending'] .mat-sort-header-arrow .mat-sort-header-indicator {
+    &::before {
+      content: "";
+      background-color: $text;
+      mask: url("/assets/images/icons/arrow-down.svg");
+      mask-repeat: no-repeat;
+      mask-position: center;
+      min-height: 8px;
+      min-width: 8px;
+      position: absolute;
+      top: -8px;
+    }
+  }
+
+  td.mat-cell {
+    border-top: 1px solid $divider;
+  }
+
+  .km-mat-row.km-clickable:hover {
+    background-color: $table-row-hover;
+  }
+
+  .mat-drawer-container {
+    background-color: transparent;
+  }
+
+  .mat-drawer-side {
+    border: none !important;
+  }
+
+  .mat-chip.mat-standard-chip {
+    background: $divider;
+    border: 1px solid $divider;
+    color: $text;
+
+    div.km-chip-accent {
+      background: $chip-accent;
+    }
+  }
+
+  .mat-button,
+  .mat-flat-button,
+  .mat-raised-button {
+    font-size: $subhead-font-size-base;
+    line-height: 5 * $baseline-grid !important;
+    background-color: $primary;
+    color: #fff;
+
+    &:not(:first-child) {
+      margin-left: 1.25 * $baseline-grid !important;
+    }
+
+    &:hover:not([disabled]) {
+      background-color: $primary-hover;
+    }
+
+    &.mat-alternative:not([disabled]) {
+      background-color: $quaternary;
+
+      &:hover {
+        background-color: $quaternary-hover;
+      }
+    }
+
+    &.mat-tertiary:not([disabled]) {
+      background-color: transparent;
+      color: $text-muted;
+      border: 1px solid $divider;
+
+      &:hover {
+        background-color: $tertiary-hover;
+      }
+    }
+
+    &.mat-pure:not([disabled]) {
+      background-color: transparent;
+      color: $text-muted;
+      border: none;
+
+      &:hover {
+        background-color: $tertiary-hover;
+      }
+    }
+
+    &.km-small-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 5 * $baseline-grid;
+      min-width: unset;
+    }
+  }
+
+  .mat-icon-button {
+    i {
+      background-color: $text;
+    }
+
+    a {
+      display: flex;
+      justify-content: center;
+    }
+
+    &:hover:not([disabled]) {
+      background-color: $divider;
+    }
+
+    &:disabled i {
+      background-color: $disabled-button-color;
+    }
+
+    &:disabled a {
+      cursor: default;
+      text-decoration: none;
+      pointer-events: none;
+    }
+  }
+
+  .mat-icon-button[disabled] * {
+    cursor: auto;
+  }
+
+  .mat-button-toggle-group-appearance-standard .mat-button-toggle {
+    border: solid 1px $divider;
+
+    &.mat-button-toggle-checked {
+      background-color: transparent;
+      border: 1px solid $primary;
+    }
+
+    &:hover {
+      border: solid 1px $primary;
+      transition: $transition;
+    }
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: $divider;
+  }
+
+  .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+    color: $primary;
+  }
+
+  mat-form-field.mat-form-field {
+    color: $text;
+    width: 100%;
+
+    &.km-with-hint {
+      margin-bottom: 1.875 * $baseline-grid;
+    }
+  }
+
+  span.mat-select-value-text {
+    color: $text;
+  }
+
+  div.mat-form-field-outline.mat-form-field-outline-thick {
+    color: $quaternary;
+  }
+
+  mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) div.mat-form-field-flex:hover label {
+    transition: all .2s ease;
+    color: $quaternary-dark;
+  }
+
+  mat-form-field.mat-focused:not(.ng-invalid) label {
+    color: $alternative-text !important;
+  }
+
+  mat-hint a {
+    color: $primary;
+    text-decoration: none;
+  }
+
+  .mat-checkbox-checked .mat-checkbox-background {
+    background-color: $primary !important;
+  }
+
+  .mat-checkbox-disabled .mat-checkbox-background {
+    background-color: $disabled-button-color !important;
+  }
+
+  .mat-checkbox-frame {
+    border: 2px solid $divider;
+    border-radius: $border-radius;
+  }
+
+  .mat-select-arrow {
+    background-color: $text;
+  }
+
+  .mat-button-toggle {
+    .mat-button-toggle-label-content {
+      color: $text;
+    }
+  }
+
+  .green {
+    color: $indicator-green;
+  }
+
+  .orange {
+    color: $indicator-orange;
+  }
+
+  .red {
+    color: $indicator-red;
+  }
+
+  .blue {
+    color: $indicator-blue;
+  }
+
+  .km-spinner {
+    position: absolute;
+    top: $baseline-grid;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 2 * $baseline-grid auto;
+  }
+
+  .km-table {
+    width: 100%;
+    border-radius: $border-radius;
+    border-collapse: separate;
+    border-spacing: 0;
+
+    tr:first-child th:first-child {
+      border-top-left-radius: $border-radius;
+    }
+
+    tr:first-child th:last-child {
+      border-top-right-radius: $border-radius;
+    }
+
+    td:first-child:not(.km-serviceaccount-token):not(.km-key-publickey) {
+      padding-left: 3.75 * $baseline-grid;
+    }
+
+    td:last-child:not(.km-serviceaccount-token):not(.km-key-publickey) {
+      padding-right: 3.75 * $baseline-grid !important;
+    }
+
+    .km-header-row {
+      border-radius: $border-radius;
+      border-collapse: separate;
+      line-height: 4 * $line-height;
+    }
+
+    .km-header-cell,
+    .mat-sort-header-button {
+      font-size: $body-font-size-base;
+      font-weight: normal;
+      border-bottom: none;
+      padding: 0;
+      line-height: 2.5 * $line-height;
+      height: 5 * $baseline-grid;
+    }
+
+    .km-header-cell:last-of-type {
+      padding-right: 3.75 * $baseline-grid;
+    }
+
+    .km-header-cell:first-of-type {
+      padding-left: 3.75 * $baseline-grid;
+    }
+
+    .mat-header-row {
+      height: auto;
+      line-height: 4 * $line-height;
+    }
+
+    td.mat-cell {
+      border-bottom-width: 0;
+      line-height: 2.5 * $line-height;
+      padding-right: 2 * $baseline-grid;
+      font-size: $subhead-font-size-base;
+
+      &:last-of-type {
+        padding-right: 2 * $baseline-grid;
+      }
+
+      &:first-of-type {
+        padding-left: 2 * $baseline-grid;
+      }
+
+      &.mat-column-provider {
+        padding-top: .5 * $baseline-grid;
+        padding-bottom: .5 * $baseline-grid;
+      }
+    }
+
+    // transition for buttons in tables
+    .km-table-actions button {
+      opacity: 0;
+      margin-left: 0.625 * $baseline-grid;
+      transition: visibility 0s 0s, opacity 0s ease-out;
+    }
+
+    tr:hover button {
+      opacity: 1;
+      transition: opacity 0.1s ease-out;
+    }
+  }
+
+  .km-table-dropdown {
+    margin: 0;
+    padding: 0 !important;
+
+    *:not(i) {
+      background-color: transparent;
+    }
+
+    background-color: transparent;
+
+    tr:first-child td:first-child {
+      border-top-left-radius: $border-radius;
+    }
+
+    tr:first-child td:last-child {
+      border-top-right-radius: $border-radius;
+    }
+
+    td.mat-cell {
+      border-top: 1px solid $dropdown-border;
+    }
+
+    td:first-child {
+      border-left: 1px solid $dropdown-border;
+    }
+
+    td:last-child {
+      border-right: 1px solid $dropdown-border;
+    }
+  }
+
+  .km-paginator {
+    border-radius: 0 0 $border-radius $border-radius;
+    border-top: 1px solid $divider;
+  }
+
+  .mat-button-toggle-group-appearance-standard {
+    border: none !important;
+  }
+
+  .km-mat-footer-row {
+    padding: 0;
+    border-style: solid dashed dashed dashed;
+    border-width: 1px;
+    border-color: $dropdown-border;
+    border-bottom-right-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
+
+    &:hover {
+      background-color: $hover;
+    }
+
+    button {
+      background-color: transparent;
+      width: 100%;
+      line-height: 5 * $baseline-grid;
+      color: $medium-text-color;
+      font-weight: normal;
+      font-size: $subhead-font-size-base;
+    }
+  }
+
+  .mat-card-content {
+    p {
+      color: $light-button-color;
+      font-size: $caption-font-size-base;
+      margin: 0 0 (1.875 * $baseline-grid);
+    }
+
+    button {
+      border: none;
+      color: $primary;
+      outline: none;
+      cursor: pointer;
+      font-size: $body-font-size-base;
+      font-weight: 600;
+      padding: 0;
+    }
+  }
+
+  // Notifications
+  simple-notifications * {
+    cursor: auto;
+    z-index: 2000;
+  }
+
+  // Sidenav
+  .mat-nav-list {
+    .mat-list-item-content {
+      padding: 0 !important;
+    }
+  }
+
+  // Projects
+  .km-project-toggle {
+    .mat-tab-header {
+      border-bottom: none;
+    }
+
+    .mat-ink-bar {
+      visibility: hidden !important;
+      height: 0;
+    }
+
+    .mat-tab-label {
+      background-color: $secondary !important;
+      opacity: 1;
+      margin-right: 0.375 * $baseline-grid;
+      padding: 0;
+
+      &.mat-tab-disabled {
+        background-color: $disabled-button-color !important;
+      }
+
+      &.mat-tab-label-active {
+        opacity: 1;
+
+        .mat-tab-label-content {
+          width: 100%;
+          height: 100%;
+          background-color: $primary;
+          color: $white-text-color;
+        }
+      }
+
+      .mat-tab-label-content {
+        text-transform: uppercase;
+        font-size: $subhead-font-size-base;
+      }
+    }
+  }
+
+  // Step Provider and Datacenter
+  mat-button-toggle-group {
+    background-color: transparent;
+    box-shadow: none !important;
+
+    mat-button-toggle {
+      margin-right: 1.25 * $baseline-grid;
+      display: flex;
+      align-items: center;
+      background-color: $white-text-color;
+      border: 1px solid $border;
+      cursor: pointer;
+      max-width: 150px;
+      min-width: 150px;
+      min-height: 60px;
+      max-height: 60px;
+    }
+
+    .mat-button-toggle-label {
+      width: 100%;
+      height: 100%;
+    }
+
+    .mat-button-toggle-label-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+
+      .km-provider-logo {
+        min-height: 28px;
+        max-height: 28px !important;
+        max-width: 90px !important;
+      }
+    }
+
+    .mat-button-toggle-button {
+      height: 100%;
+    }
+  }
+
+  mat-button-toggle-group[group='datacenterGroup'],
+  mat-button-toggle-group[group='providerGroup'] {
+    .mat-button-toggle {
+      border-radius: $border-radius;
+    }
+
+    .mat-button-toggle-button {
+      height: 100%;
+      text-align: left;
+      padding: 0 (1.25 * $baseline-grid);
+    }
+  }
+
+  mat-button-toggle-group[group='datacenterGroup'] {
+    .mat-button-toggle-button {
+      display: flex;
+    }
+
+    .mat-button-toggle-label-content {
+      padding: 0 (0.625 * $baseline-grid);
+      width: 100%;
+      display: inline-block;
+    }
+  }
+
+  mat-button-toggle-group[group='providerGroup'] .mat-button-toggle-label-content {
+    height: 100%;
+    padding: 0 (1.25 * $baseline-grid);
+  }
+
+  mat-card-header > div > mat-card-title > div {
+    margin: $baseline-grid 0;
+    font-size: $body-font-size-base;
+  }
+
+  .mat-card.km-with-table-header {
+    padding: (3.75 * $baseline-grid) 0;
+    margin: (2.5 * $baseline-grid) 0 0 0;
+    box-shadow: $border-box-shadow !important;
+    border-radius: $border-radius !important;
+
+    .mat-card-header {
+      padding: 0 7 * $baseline-grid;
+      margin: 0;
+      line-height: 1.6 * $line-height;
+      border-radius: $border-radius $border-radius 0 0;
+    }
+
+    &.km-small .mat-card-header {
+      font-size: $small-font-size-base !important;
+      line-height: 1.6 * $line-height;
+    }
+
+    .mat-card-content {
+      line-height: 5 * $line-height;
+
+      &.km-row,
+      .km-row {
+        line-height: 5 * $line-height;
+        padding: 0 (3.75 * $baseline-grid);
+        border-top: 1px solid $divider;
+
+        &.km-small {
+          padding: (1.25 * $baseline-grid) (3 * $baseline-grid);
+          margin: 0;
+          line-height: 2 * $line-height;
+        }
+
+        &.km-accordion {
+          padding-bottom: 0;
+
+          > div:first-child {
+            padding-bottom: 10px;
+          }
+        }
+
+        div {
+          outline: none;
+        }
+
+        &.km-odd {
+          background-color: $medium-background;
+        }
+
+        &.km-status-running:hover {
+          background-color: $light-background;
+        }
+
+        &.km-status-waiting {
+          background-color: $pending;
+
+          &:hover {
+            background-color: $pending-hover;
+          }
+        }
+
+        &.km-status-failed,
+        &.km-status-deleting {
+          background-color: $deleting;
+
+          &:hover {
+            background-color: $deleting-hover;
+          }
+        }
+
+        &.km-no-item,
+        .km-no-item {
+          text-align: center;
+          font-size: $body-font-size-base;
+        }
+
+        p {
+          line-height: normal;
+          color: $text;
+          margin: 0;
+          font-size: $body-font-size-base;
+        }
+
+        .km-region {
+          align-items: center;
+
+          .flag-icon {
+            font-size: $head-font-size-base;
+            margin-right: 1.25 * $baseline-grid;
+          }
+        }
+      }
+    }
+  }
+
+  .km-provider-logo {
+    display: block;
+    height: 100% !important;
+    width: 100% !important;
+    max-height: 30px !important;
+    max-width: 70px !important;
+  }
+
+  .mat-card.white {
+    padding: (3.75 * $baseline-grid) 0;
+    margin: 0;
+    box-shadow: $border-box-shadow !important;
+    border-radius: $border-radius !important;
+
+    &.km-cluster-details {
+      padding: (3.75 * $baseline-grid) 0 0 0;
+    }
+
+    &.km-status-waiting {
+      background-color: $pending;
+    }
+
+    &.km-status-failed,
+    &.km-status-deleting {
+      background-color: $deleting;
+    }
+
+    .mat-card-header {
+      margin: 0;
+
+      .mat-card-header-text {
+        width: 100%;
+
+        .mat-card-title {
+          padding: 0;
+          margin: 0;
+          align-items: baseline;
+        }
+      }
+    }
+
+    .mat-card-content {
+      line-height: 5 * $line-height;
+
+      &.km-row,
+      .km-row {
+        line-height: 5 * $line-height;
+        padding: 0;
+      }
+    }
+  }
+
+  // copy text
+  .km-copy {
+    cursor: pointer;
+
+    &:hover {
+      color: $primary;
+    }
+
+    &:active {
+      color: $light-primary;
+    }
+  }
+
+  // List Header sorting arrow
+  .mat-sort-header-arrow {
+    margin: auto 0 auto (0.75 * $baseline-grid) !important;
+
+    .mat-sort-header-stem,
+    .mat-sort-header-pointer-left,
+    .mat-sort-header-pointer-right,
+    .mat-sort-header-pointer-middle {
+      background: none;
+    }
+  }
+
+  // mat card remove border
+  .mat-card {
+    box-shadow: none !important;
+  }
+
+  // button shadow
+  .mat-raised-button {
+    height: 30px;
+    line-height: 1.6 * $line-height !important;
+    margin-left: 0.625 * $baseline-grid !important;
+    font-weight: 500 !important;
+  }
+
+  // overlay background
+  .mat-button-focus-overlay {
+    background-color: transparent !important;
+  }
+
+  // cluster details: edit provider settings
+  .km-provider-edit-settings,
+  .km-machine-networks-settings {
+    .mat-menu-content {
+      padding: 0 !important;
+    }
+  }
+
+  mat-list-item.disabled {
+    i {
+      opacity: 0.3;
+    }
+  }
+
+  .km-btn-in-box:disabled {
+    color: $disabled-button-color;
+  }
+
+  .km-action-button-icon {
+    margin-right: 0.625 * $baseline-grid;
+  }
+
+  .km-link:hover {
+    cursor: pointer;
+    color: $primary;
+  }
+
+  .km-clickable {
+    cursor: pointer;
+    outline: none;
+  }
+
+  .km-hidden {
+    visibility: hidden !important;
+  }
+
+  // Tags.
+  .km-tags-in-wizard {
+    margin-top: 5px;
+  }
+
+  // Card headers.
+  .mat-card-header .mat-card-title {
+    padding: $baseline-grid 0 (2 * $baseline-grid);
+    font-size: 20px;
+    font-weight: normal !important;
+
+    i {
+      font-size: $subhead-font-size-base-lg;
+      margin: 0 (2.5 * $baseline-grid);
+    }
+  }
+
+  .mat-card-header-text {
+    margin: 0 !important;
+  }
+
+  // Card contents.
+  .km-content-wrap {
+    display: flex;
+    flex-flow: row wrap;
+    padding: $baseline-grid (7 * $baseline-grid) 0 !important;
+  }
+
+  // Card "expansion panel".
+  .km-card-expansion-panel {
+    font-size: $subhead-font-size-base;
+    margin: 0 (7 * $baseline-grid);
+    padding: (1 * $baseline-grid) 0;
+
+    & > div {
+      cursor: default;
+      margin-right: 6 * $baseline-grid;
+
+      & > span {
+        margin-right: 2 * $baseline-grid;
+        margin-top: $baseline-grid / 4;
+      }
+    }
+
+    .km-icon-failed,
+    .km-icon-disabled,
+    .km-icon-running,
+    .fa {
+      width: $subhead-font-size-base;
+      height: $subhead-font-size-base;
+      font-size: $subhead-font-size-base;
+    }
+  }
+
+  // Row width.
+  .mat-column-status,
+  .mat-column-stateArrow {
+    width: $baseline-grid;
+  }
+
+  // Inputs.
+
+  // Dialogs.
+  .mat-dialog-container {
+    min-width: $dialog-width !important;
+    max-width: $dialog-width !important;
+    color: $text;
+
+    .mat-dialog-title {
+      font-weight: normal;
+    }
+
+    .mat-dialog-content {
+      font-size: $subhead-font-size-base;
+      font-weight: 400;
+      max-height: $dialog-max-height;
+      overflow: unset;
+
+      a {
+        text-decoration: none;
+        color: $primary;
+      }
+
+      p {
+        margin: 0 0 $baseline-grid;
+      }
+
+      .km-dialog-warning {
+        display: flex;
+        margin: 2 * $baseline-grid 0;
+      }
+    }
+
+    .mat-dialog-actions {
+      justify-content: flex-end;
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  // Tooltips.
+  .mat-tooltip-panel {
+    height: 4 * $baseline-grid;
+  }
+
+  // Code blocks.
+  .km-code-block {
+    background-color: $grey-background;
+    border-radius: $baseline-grid / 1.5;
+    margin: ($baseline-grid * 2) 0;
+    padding: ($baseline-grid * 1.5) ($baseline-grid * 2);
+    font-size: $body-font-size-base;
+    line-height: 2 * $line-height;
+    font-family: $font-primary-mono;
+    color: $text;
+  }
+
+  // Font colors.
+  .km-color-primary {
+    color: $primary !important;
+  }
+
+  // Dropdowns.
+  .mat-select-panel {
+    margin-top: 3.75 * $baseline-grid !important;
+    margin-left: 0.75 * $baseline-grid !important;
+    min-width: calc(100% + 20px) !important;
+    max-width: calc(100% + 20px) !important;
+    transform-origin: 50% 0 0 !important;
+
+    &.ng-animating {
+      visibility: hidden;
+    }
+  }
+
+  .km-optgroup-dropdown {
+    margin-left: 2.75 * $baseline-grid !important;
+  }
+
+  .km-sshkey-dropdown {
+    margin-left: 3.75 * $baseline-grid !important;
+  }
+
+  .km-add-dialog-dropdown {
+    margin-top: 4.25 * $baseline-grid !important;
+  }
+
+  .mat-optgroup-label {
+    font-size: $caption-font-size-base !important;
+    line-height: 3.5 * $line-height !important;
+    height: 3.5 * $line-height !important;
+    padding-left: 1.25 * $baseline-grid !important;
+    border-top: 1px solid $border !important;
+  }
+
+  .mat-option {
+    padding: 0 0 0 (1.25 * $baseline-grid) !important;
+
+    &.mat-active {
+      background-color: $grey-background !important;
+      color: $text !important;
+    }
+
+    &:hover {
+      background-color: $secondary-light !important;
+      color: $text !important;
+    }
+  }
+
+  .mat-select-arrow-wrapper {
+    top: 3px;
+    right: 0;
+    position: relative;
+  }
+
+  .mat-select-arrow {
+    display: inline-block;
+    width: 6px !important;
+    height: 6px !important;
+    mask: url("/assets/images/icons/arrow-down.svg");
+    mask-repeat: no-repeat;
+    mask-size: contain;
+  }
+
+  .mat-form-field.mat-focused.mat-primary .mat-select-arrow-wrapper {
+    right: 5px;
+
+    .mat-select-arrow {
+      -webkit-transform: rotate(180deg);
+      transform: rotate(180deg);
+    }
+  }
+
+  // Chips.
+  mat-chip-list {
+    cursor: default;
+
+    &:not(.km-chip-list-with-input) {
+      pointer-events: none;
+    }
+  }
+
+  .mat-chip.mat-standard-chip {
+    border-radius: $border-radius;
+    font-size: $body-font-size-base;
+    font-weight: normal;
+    line-height: $subhead-font-size-base;
+    max-height: 22px;
+    min-height: 22px;
+    padding: (0.375 * $baseline-grid) (1.25 * $baseline-grid);
+
+    &.km-chip-container {
+      padding: 0;
+    }
+
+    div {
+      align-items: center;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      padding: (0.375 * $baseline-grid) (1.25 * $baseline-grid);
+    }
+  }
+
+  // Menus.
+  .mat-menu-item {
+    padding: 0 (1.25 * $baseline-grid) !important;
+    line-height: 4.2 * $line-height !important;
+    height: 42px !important;
+
+    .mat-icon {
+      margin-right: 0 !important;
+    }
+  }
+
+  .mat-menu-content {
+    padding: 0 !important;
+  }
+
+  .mat-menu-panel {
+    min-height: auto !important;
+  }
+
+  // Confirmation dialogs.
+  #km-confirmation-dialog mat-dialog-content,
+  #km-delete-cluster-dialog mat-dialog-content {
+    margin-bottom: 3.75 * $baseline-grid;
+  }
+
+  .km-pod-security-policy-row {
+    align-items: center;
+  }
+
+  .km-cluster-panel-container {
+    background: $divider;
+    border-bottom: 1px solid $text-muted;
+    color: $text;
+  }
+
+  .mat-tooltip {
+    background-color: $primary-light !important;
+    font-size: $caption-font-size-base !important;
+    margin-top: 0.625 * $baseline-grid !important;
+  }
+
+  ::-webkit-scrollbar {
+    width: $scrollbar-size;
+    height: $scrollbar-size;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: $scrollbar-color;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: $scrollbar-background;
+  }
+
+  // Component styles.
+  .km-project-selector {
+    border-bottom: $sidenav-divider-top solid $sidenav-border-width;
+  }
+
+  .km-nav-custom-container {
+    background-color: $sidenav-background-custom;
+    border-top: $sidenav-divider solid $sidenav-border-width;
+  }
+
+  .km-sidenav-bottom {
+    border-top: $sidenav-divider solid $sidenav-border-width;
+  }
+
+  .km-sidenav {
+    background-color: $sidenav-background;
+
+    * {
+      color: $sidenav-text;
+    }
+
+    i {
+      background-color: $sidenav-text;
+    }
+
+    .mat-list-item a {
+      &:hover {
+        color: $sidenav-text-light;
+        background-color: $sidenav-background-hover;
+
+        i {
+          background-color: $sidenav-text-light;
+        }
+      }
+
+      &.active {
+        color: $sidenav-text-light;
+        background-color: $sidenav-background-active;
+
+        i {
+          background-color: $sidenav-text-light;
+        }
+      }
+    }
+  }
+}

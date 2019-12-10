@@ -4,7 +4,6 @@ import {MatButtonToggleModule, MatDialog, MatTabsModule} from '@angular/material
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {CoreModule} from '../core/core.module';
 import {ApiService, ClusterService, DatacenterService, ProjectService, WizardService} from '../core/services';
@@ -86,7 +85,6 @@ describe('WizardComponent', () => {
           imports: [
             BrowserModule,
             BrowserAnimationsModule,
-            SlimLoadingBarModule.forRoot(),
             RouterTestingModule,
             SharedModule,
             MatButtonToggleModule,

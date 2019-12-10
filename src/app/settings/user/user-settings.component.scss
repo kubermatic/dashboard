@@ -1,8 +1,6 @@
-@import "../../../assets/css/colors";
 @import "../../../assets/css/variables";
 
 .mat-card {
-  color: $text-color;
   margin-top: 3 * $baseline-grid;
   padding: 3.75 * $baseline-grid;
 
@@ -44,8 +42,27 @@
       line-height: 8 * $baseline-grid;
     }
 
-    km-settings-status {
-      margin-top: 10px;
+    .km-account-settings-toggle {
+      mat-button-toggle {
+        min-height: 50px;
+        max-height: 50px;
+        min-width: 150px;
+        max-width: 150px;
+        border-radius: $border-radius;
+
+        ::ng-deep.mat-button-toggle-label-content {
+          font-weight: normal;
+          font-size: $subhead-font-size-base;
+        }
+      }
+    }
+
+    .km-settings-status-margin {
+      margin-top: 1.25 * $baseline-grid;
+    }
+
+    .km-settings-status-margin-sm {
+      margin-top: .5 * $baseline-grid;
     }
   }
 }

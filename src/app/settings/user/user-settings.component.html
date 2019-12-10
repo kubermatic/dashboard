@@ -19,7 +19,7 @@
          class="km-account-info"
          fxLayout="row"
          fxFlex="50">
-      <div class="km-user"></div>
+      <div class="km-icon-mask km-user"></div>
       <div>
         <div class="km-account-info-name">
           <span>{{user.name}}</span>
@@ -44,7 +44,25 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <km-settings-status [isSaved]="isEqual(settings.itemsPerPage, apiSettings.itemsPerPage)"></km-settings-status>
+        <km-settings-status [isSaved]="isEqual(settings.itemsPerPage, apiSettings.itemsPerPage)"
+                            class="km-settings-status-margin"></km-settings-status>
+      </div>
+      <div fxLayout="row">
+        <div class="km-account-settings-entry-label">Theme</div>
+        <mat-button-toggle-group [(value)]="settings.selectedTheme"
+                                 (change)="onSettingsChange()"
+                                 class="km-account-settings-toggle">
+          <mat-button-toggle value="light">
+            <i class="km-icon-mask km-icon-sun"></i>
+            Light
+          </mat-button-toggle>
+          <mat-button-toggle value="dark">
+            <i class="km-icon-mask km-icon-moon"></i>
+            Dark
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+        <km-settings-status [isSaved]="isEqual(settings.selectedTheme, apiSettings.selectedTheme)"
+                            class="km-settings-status-margin-sm"></km-settings-status>
       </div>
     </div>
   </mat-card-content>

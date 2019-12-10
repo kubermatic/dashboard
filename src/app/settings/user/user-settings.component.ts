@@ -7,7 +7,7 @@ import {UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
-import {MemberEntity, UserSettings} from '../../shared/entity/MemberEntity';
+import {MemberEntity, Theme, UserSettings} from '../../shared/entity/MemberEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
 
 @Component({
@@ -17,6 +17,7 @@ import {objectDiff} from '../../shared/utils/common-utils';
 })
 export class UserSettingsComponent implements OnInit, OnDestroy {
   itemsPerPageOptions = [5, 10, 15, 20, 25];
+  Theme = Theme;
   user: MemberEntity;
   settings: UserSettings;     // Local settings copy. User can edit it.
   apiSettings: UserSettings;  // Original settings from the API. Cannot be edited by the user.
@@ -46,6 +47,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
         .subscribe(settings => {
           this.apiSettings = settings;
           this.settings = _.cloneDeep(this.apiSettings);
+          this._settingsService.refreshUserSettings();
         });
   }
 
