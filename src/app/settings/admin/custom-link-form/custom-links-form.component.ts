@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import * as _ from 'lodash';
 
 import {CustomLink, CustomLinkLocation} from '../../../shared/utils/custom-link-utils/custom-link';
 
@@ -11,7 +12,7 @@ import {CustomLink, CustomLinkLocation} from '../../../shared/utils/custom-link-
 export class CustomLinksFormComponent implements OnInit {
   @Input() customLinks: CustomLink[] = [];
   @Output() customLinksChange = new EventEmitter<CustomLink[]>();
-  initialcustomLinks: CustomLink[];
+  @Input() apiCustomLinks: CustomLink[] = [];
   form: FormGroup;
 
   constructor(private readonly _formBuilder: FormBuilder) {}
@@ -21,7 +22,6 @@ export class CustomLinksFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initialcustomLinks = this.customLinks;
     this.form = this._formBuilder.group({customLinks: this._formBuilder.array([])});
     this.customLinks.forEach(
         customLink => this._addCustomLink(customLink.label, customLink.url, customLink.icon, customLink.location));
@@ -40,6 +40,18 @@ export class CustomLinksFormComponent implements OnInit {
   check(): void {
     this._addLabelIfNeeded();
     this._updateLabelsObject();
+  }
+
+  isSaved(index: number): boolean {
+    const customLink = this.customLinksArray.getRawValue()[index] as CustomLink;
+
+    // Check save status only for valid links, invalid will not be saved anyways.
+    if (!customLink.label || !customLink.url) {
+      return true;
+    }
+
+    // Check if link is already part of links returned from the API.
+    return this.apiCustomLinks && this.apiCustomLinks.filter(cl => _.isEqual(cl, customLink)).length > 0;
   }
 
   private static _isFilled(customLink: AbstractControl): boolean {
@@ -66,12 +78,7 @@ export class CustomLinksFormComponent implements OnInit {
     const customLinks = [];
     this.customLinksArray.getRawValue().forEach(raw => {
       if (raw.label.length !== 0 && raw.url.length !== 0) {
-        customLinks.push({
-          label: raw.label,
-          url: raw.url,
-          icon: raw.icon,
-          location: raw.location,
-        } as CustomLink);
+        customLinks.push(raw);
       }
     });
 

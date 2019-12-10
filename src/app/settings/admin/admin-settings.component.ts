@@ -142,9 +142,8 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     return _.isEqual(a, b);
   }
 
-  isCustomLinksEqual(): boolean {
-    return this.isEqual(this.settings.customLinks, this.apiSettings.customLinks) &&
-        this.isEqual(this.settings.displayAPIDocs, this.apiSettings.displayAPIDocs) &&
+  isDisplayLinksEqual(): boolean {
+    return this.isEqual(this.settings.displayAPIDocs, this.apiSettings.displayAPIDocs) &&
         this.isEqual(this.settings.displayDemoInfo, this.apiSettings.displayDemoInfo) &&
         this.isEqual(this.settings.displayTermsOfService, this.apiSettings.displayTermsOfService);
   }
