@@ -1,5 +1,5 @@
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {MatChipInputEvent} from '@angular/material/chips';
 
 @Component({
@@ -7,21 +7,14 @@ import {MatChipInputEvent} from '@angular/material/chips';
   templateUrl: './tag-list.component.html',
 })
 
-export class TagListComponent implements OnInit {
+export class TagListComponent {
   @Input() title = 'Tags';
-  @Input() tags: string[];
+  @Input() tags: string[] = [];
   @Output() tagsChange = new EventEmitter<object>();
   addOnBlur = true;
   selectable = false;
   removable = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-
-  ngOnInit(): void {
-    // Make sure that tags array exist.
-    if (!this.tags) {
-      this.tags = [];
-    }
-  }
 
   addTag(event: MatChipInputEvent): void {
     const input = event.input;
