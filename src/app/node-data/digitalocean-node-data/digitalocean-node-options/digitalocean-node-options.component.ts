@@ -19,6 +19,7 @@ export class DigitaloceanNodeOptionsComponent implements OnInit, OnDestroy {
 
   hideOptional = true;
   form: FormGroup;
+
   private _unsubscribe = new Subject<void>();
 
   constructor(private addNodeService: NodeDataService, private readonly _wizardService: WizardService) {}
@@ -28,8 +29,8 @@ export class DigitaloceanNodeOptionsComponent implements OnInit, OnDestroy {
       backups: new FormControl(this.nodeData.spec.cloud.digitalocean.backups),
       ipv6: new FormControl(this.nodeData.spec.cloud.digitalocean.ipv6),
       monitoring: new FormControl(this.nodeData.spec.cloud.digitalocean.monitoring),
-      tags: new FormControl(this.nodeData.spec.cloud.digitalocean.tags.toString().replace(/,/g, ', ')),
     });
+
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getDoOptionsData());
     });
@@ -47,12 +48,6 @@ export class DigitaloceanNodeOptionsComponent implements OnInit, OnDestroy {
   }
 
   getDoOptionsData(): NodeProviderData {
-    let doTags: string[] = [];
-    if ((this.form.controls.tags.value).length > 0) {
-      doTags = (this.form.controls.tags.value).split(',').map(tag => tag.trim());
-      doTags.map(tag => tag.trim());
-    }
-
     return {
       spec: {
         digitalocean: {
@@ -60,7 +55,7 @@ export class DigitaloceanNodeOptionsComponent implements OnInit, OnDestroy {
           backups: this.form.controls.backups.value,
           ipv6: this.form.controls.ipv6.value,
           monitoring: this.form.controls.monitoring.value,
-          tags: doTags,
+          tags: this.nodeData.spec.cloud.digitalocean.tags,
         },
       },
       valid: this.nodeData.valid,

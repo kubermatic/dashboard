@@ -1029,7 +1029,10 @@ mat-hint a {
 // Chips.
 mat-chip-list {
   cursor: default;
-  pointer-events: none;
+
+  &:not(.km-chip-list-with-input) {
+    pointer-events: none;
+  }
 }
 
 .mat-chip.mat-standard-chip {

@@ -27,6 +27,7 @@ import {RelativeTimeComponent} from './components/relativetime/relative-time.com
 import {SettingsStatusComponent} from './components/settings-status/settings-status.component';
 import {ShortNameInCircleComponent} from './components/short-name-in-circle/short-name-in-circle.component';
 import {SSHKeyListComponent} from './components/ssh-key-list/ssh-key-list.component';
+import {TagListComponent} from './components/tag-list/tag-list.component';
 import {TaintFormComponent} from './components/taint-form/taint-form.component';
 import {TaintsComponent} from './components/taints/taints.component';
 import {RelativeTimePipe} from './pipes/relativetime';
@@ -85,6 +86,7 @@ const components: any[] = [
   AddonsListComponent,
   SettingsStatusComponent,
   ShortNameInCircleComponent,
+  TagListComponent,
 ];
 
 const entryComponents: any[] = [
