@@ -1,12 +1,14 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {Subject} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {debounceTime, map, startWith, takeUntil} from 'rxjs/operators';
+
 import {WizardService} from '../../../../../core/services';
 import {ClusterEntity} from '../../../../../shared/entity/ClusterEntity';
 import {VSphereFolder, VSphereNetwork} from '../../../../../shared/entity/provider/vsphere/VSphereEntity';
 import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
+import {filterArrayOptions, filterObjectOptions} from '../../../../../shared/utils/common-utils';
 
 @Component({
   selector: 'kubermatic-vsphere-provider-options',
@@ -21,6 +23,8 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   loadingFolders = false;
   hideOptional = true;
   folders: VSphereFolder[] = [];
+  filteredFolders: Observable<VSphereFolder[]>;
+  filteredNetworks: {[type: string]: VSphereNetwork[]} = {};
 
   private _selectedPreset: string;
   private _networkMap: {[type: string]: VSphereNetwork[]} = {};
@@ -71,6 +75,24 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
       }
       this.form.enable();
     });
+
+    this.filteredFolders = this.form.controls.folder.valueChanges.pipe(
+        debounceTime(1000), takeUntil(this._unsubscribe), startWith(''),
+        map(value => filterArrayOptions(value, 'path', this.folders)));
+
+    this.form.controls.vmNetName.valueChanges
+        .pipe(
+            debounceTime(1000),
+            takeUntil(this._unsubscribe),
+            startWith(''),
+            )
+        .subscribe(value => {
+          if (this.form.controls.vmNetName.value !== '') {
+            this.filteredNetworks = filterObjectOptions(value, 'relativePath', this._networkMap);
+          } else {
+            this.filteredNetworks = this._networkMap;
+          }
+        });
   }
 
   ngOnDestroy(): void {
@@ -171,7 +193,11 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   getNetworks(type: string): VSphereNetwork[] {
-    return this._networkMap[type];
+    if (this.form.controls.vmNetName.value === '') {
+      return this._networkMap[type];
+    } else {
+      return this.filteredNetworks[type];
+    }
   }
 
   getNetworkFormState(): string {
