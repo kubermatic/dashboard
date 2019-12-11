@@ -294,7 +294,19 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
     return !this.loadingFolders && !this._hasRequiredCredentials();
   }
 
+  isValidNetworkName(): boolean {
+    this.networkTypes.forEach(type => {
+      for (const i of this._networkMap[type]) {
+        if (i.absolutePath === this.form.controls.vmNetName.value) {
+          return true;
+        }
+      }
+    });
+    return false;
+  }
+
   getVSphereOptionsData(isValid: boolean): ClusterProviderSettingsForm {
+    this.isValidNetworkName();
     let cloudUser = this.cluster.spec.cloud.vsphere.infraManagementUser.username;
     let cloudPassword = this.cluster.spec.cloud.vsphere.infraManagementUser.password;
 
@@ -312,7 +324,7 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
           },
           username: cloudUser,
           password: cloudPassword,
-          vmNetName: this.form.controls.vmNetName.value,
+          vmNetName: this.isValidNetworkName() ? this.form.controls.vmNetName.value : '',
           folder: this.form.controls.folder.value,
         },
         dc: this.cluster.spec.cloud.dc,
