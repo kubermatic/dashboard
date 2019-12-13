@@ -295,18 +295,24 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   isValidNetworkName(): boolean {
+    let isValid = false;
+
+    if (this.cluster.spec.cloud.vsphere.vmNetName !== '' && this.networkTypes.length === 0) {
+      isValid = true;
+    }
+
     this.networkTypes.forEach(type => {
       for (const i of this._networkMap[type]) {
         if (i.absolutePath === this.form.controls.vmNetName.value) {
-          return true;
+          isValid = true;
         }
       }
     });
-    return false;
+
+    return isValid;
   }
 
   getVSphereOptionsData(isValid: boolean): ClusterProviderSettingsForm {
-    this.isValidNetworkName();
     let cloudUser = this.cluster.spec.cloud.vsphere.infraManagementUser.username;
     let cloudPassword = this.cluster.spec.cloud.vsphere.infraManagementUser.password;
 
