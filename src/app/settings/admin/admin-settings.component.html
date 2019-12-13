@@ -1,0 +1,177 @@
+<div fxLayout>
+  <div fxFlex
+       align="right">
+    <button mat-flat-button
+            type="button"
+            color="tertiary"
+            (click)="resetDefaults()">
+      Reset to Default
+    </button>
+    <div fxFlex></div>
+    <button mat-flat-button
+            type="button"
+            (click)="goBack()">
+      Go Back
+    </button>
+  </div>
+</div>
+
+<mat-card class="white">
+  <mat-card-header>
+    <mat-card-title>Admin Settings</mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    <div *ngIf="!!settings"
+         class="km-admin-settings">
+      <div fxLayout="row">
+        <div>
+          <div class="km-admin-settings-label">
+            <span>Custom Links</span>
+            <div class="km-icon-info"
+                 matTooltip="Customize your theme or improve the workflow by adding links in the sidebar or footer."></div>
+          </div>
+        </div>
+        <div fxFlex
+             fxLayout="column">
+          <km-custom-links-form [(customLinks)]="settings.customLinks"
+                                [apiCustomLinks]="apiSettings.customLinks"
+                                (customLinksChange)="onSettingsChange()"></km-custom-links-form>
+          <div fxLayout="row">
+            <mat-checkbox [(ngModel)]="settings.displayAPIDocs"
+                          (change)="onSettingsChange()">Display API Docs</mat-checkbox>
+            <mat-checkbox [(ngModel)]="settings.displayTermsOfService"
+                          (change)="onSettingsChange()">Display Terms of Service</mat-checkbox>
+            <mat-checkbox [(ngModel)]="settings.displayDemoInfo"
+                          (change)="onSettingsChange()">Display Demo Information</mat-checkbox>
+            <km-settings-status [isSaved]="isDisplayLinksEqual()"></km-settings-status>
+          </div>
+        </div>
+      </div>
+
+      <div fxLayout="row">
+        <div class="km-admin-settings-label">
+          <span>Cleanup on Cluster Deletion</span>
+          <div class="km-icon-icon"
+               matTooltip="Set &quot;clean up connected load balancers&quot; and &quot;clean up connected volumes (PVs and PVCS)&quot; checkboxes on Cluster Deletion to enabled by default. Enable &quot;Enforce&quot; to make users unable to edit the checkboxes."></div>
+        </div>
+        <mat-checkbox [(ngModel)]="settings.cleanupOptions.Enabled"
+                      (change)="onSettingsChange()">Enable by Default</mat-checkbox>
+        <mat-checkbox [(ngModel)]="settings.cleanupOptions.Enforced"
+                      (change)="onSettingsChange()">Enforce</mat-checkbox>
+        <km-settings-status [isSaved]="isEqual(settings.cleanupOptions, apiSettings.cleanupOptions)"></km-settings-status>
+      </div>
+
+      <div fxLayout="row"
+           class="km-admin-settings-distro-container">
+        <div class="km-admin-settings-label">
+          <span>Displayed Distributions</span>
+          <div class="km-icon-info"
+               matTooltip="Deactivate the distributions you want to hide from the users. At least one distribution has to be enabled."></div>
+        </div>
+        <mat-button-toggle-group #group="matButtonToggleGroup"
+                                 [value]="selectedDistro"
+                                 (change)="onDistroChange(group)"
+                                 class="km-admin-settings-field-distro"
+                                 multiple="true">
+          <mat-button-toggle value="kubernetes"
+                             [disabled]="isLastDistro(group, 'kubernetes')">
+            <i class="km-icon-kubernetes"></i>
+            Kubernetes
+          </mat-button-toggle>
+          <mat-button-toggle value="openshift"
+                             [disabled]="isLastDistro(group, 'openshift')">
+            <i class="km-icon-openshift"></i>
+            OpenShift
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+        <km-settings-status [isSaved]="isEqual(settings.clusterTypeOptions, apiSettings.clusterTypeOptions)"></km-settings-status>
+      </div>
+
+      <div fxLayout="row"
+           class="km-admin-settings-nd-container">
+        <div class="km-admin-settings-label">Node Deployment</div>
+        <mat-form-field class="km-admin-settings-field-nd">
+          <mat-label>Initial Node Deployment Replicas</mat-label>
+          <input matInput
+                 type="number"
+                 min="0"
+                 max="50"
+                 autocomplete="off"
+                 [(ngModel)]="settings.defaultNodeCount"
+                 (change)="onSettingsChange()">
+        </mat-form-field>
+        <km-settings-status [isSaved]="isEqual(settings.defaultNodeCount, apiSettings.defaultNodeCount)"></km-settings-status>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="km-with-table-header">
+  <mat-card-header>
+    <mat-card-title>Administrators</mat-card-title>
+    <div fxFlex></div>
+    <button mat-icon-button
+            matTooltip="Add Administrator"
+            (click)="addAdmin()">
+      <i class="km-icon-add"></i>
+    </button>
+  </mat-card-header>
+  <mat-card-content>
+    <table class="km-table"
+           mat-table
+           matSort
+           [dataSource]="getDataSource()">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Name</th>
+        <td mat-cell
+            *matCellDef="let element">{{element.name}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Email</th>
+        <td mat-cell
+            *matCellDef="let element">{{element?.email}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div class="km-table-actions km-admin-item-actions">
+            <button mat-icon-button
+                    matTooltip="Delete Admin"
+                    (click)="deleteAdmin(element)"
+                    [disabled]="!isDeleteAdminEnabled(element)">
+              <i class="km-icon-delete"></i>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="km-mat-row"></tr>
+    </table>
+
+    <ng-container *ngIf="admins.length === 0">
+      <div class="km-row">
+        <mat-spinner color="accent"
+                     class="km-spinner"
+                     [diameter]="25"></mat-spinner>
+      </div>
+    </ng-container>
+
+  </mat-card-content>
+</mat-card>

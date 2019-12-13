@@ -1,5 +1,6 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material';
+import * as _ from 'lodash';
 import {Observable, of} from 'rxjs';
 import {catchError, first, flatMap, map} from 'rxjs/operators';
 
@@ -96,7 +97,7 @@ export class NodeService {
         nodeData: {
           count: nd.spec.replicas,
           name: nd.name,
-          spec: JSON.parse(JSON.stringify(nd.spec.template)),  // Deep copy method from MDN.
+          spec: _.cloneDeep(nd.spec.template),
           valid: true,
         },
       }
@@ -144,7 +145,7 @@ export class NodeService {
       hasBackdrop: true,
       data: {
         title: 'Delete Node Deployment',
-        message: `Are you sure you want to permanently delete node deployment "<strong>${nd.name}</strong>"?`,
+        message: `Delete "<strong>${nd.name}</strong>" permanently?`,
         confirmLabel: 'Delete',
       },
     };

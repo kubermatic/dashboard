@@ -1,16 +1,16 @@
-<form [formGroup]="digitaloceanProviderSettingsForm"
+<form [formGroup]="form"
       fxLayout="column">
   <mat-form-field fxFlex>
-    <mat-label>API Token*</mat-label>
+    <mat-label>API Token{{isRequiredField()}}</mat-label>
     <input matInput
            formControlName="token"
            name="token"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="(digitaloceanProviderSettingsForm.controls.token.hasError('minlength') || digitaloceanProviderSettingsForm.controls.token.hasError('maxlength'))">
+    <mat-error *ngIf="(form.controls.token.hasError('minlength') || form.controls.token.hasError('maxlength'))">
       DigitalOcean Personal Access Tokens must be exactly <strong>64</strong> characters long.
     </mat-error>
-    <mat-error *ngIf="digitaloceanProviderSettingsForm.controls.token.hasError('required')">
+    <mat-error *ngIf="form.controls.token.hasError('required')">
       API Token is <strong>required</strong>.
     </mat-error>
   </mat-form-field>

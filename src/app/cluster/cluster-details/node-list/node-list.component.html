@@ -42,13 +42,13 @@
             *matCellDef="let element">
           <ng-container *ngIf="!element.spec.cloud.aws">
             {{element.name}}
-            <i class="fa fa-info-circle"
+            <i class="km-icon-info"
                matTooltip="{{getInfo(element)}}"
                *ngIf="showInfo(element)"></i>
           </ng-container>
           <ng-container *ngIf="element.spec.cloud.aws">
             {{getNodeName(element)}}
-            <i class="fa fa-info-circle"
+            <i class="km-icon-info"
                matTooltip="{{getInfo(element)}}"
                *ngIf="showInfo(element)"></i>
           </ng-container>
@@ -192,9 +192,10 @@
 
             <km-property *ngIf="element.spec.sshUserName">
               <div key
+                   class="km-node-info"
                    matTooltip="Use this username if you need to connect to your nodes via SSH.">
                 SSH Key Username
-                <i class="fa fa-info-circle"></i>
+                <i class="km-icon-info"></i>
               </div>
               <div value>{{element.spec.sshUserName}}</div>
             </km-property>
@@ -216,6 +217,31 @@
             <km-property *ngIf="element.spec.cloud.openstack">
               <div key>Node Image</div>
               <div value>{{element.spec.cloud.openstack.image}}</div>
+            </km-property>
+
+            <km-property *ngIf="element.spec.cloud.kubevirt">
+              <div key>Number of CPUs</div>
+              <div value>{{element.spec.cloud.kubevirt.cpus}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.kubevirt">
+              <div key>Memory</div>
+              <div value>{{element.spec.cloud.kubevirt.memory}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.kubevirt">
+              <div key>PVC Size</div>
+              <div value>{{element.spec.cloud.kubevirt.pvcSize}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.kubevirt">
+              <div key>Storage Class Name</div>
+              <div value>{{element.spec.cloud.kubevirt.storageClassName}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.kubevirt">
+              <div key>Namespace</div>
+              <div value>{{element.spec.cloud.kubevirt.namespace}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.kubevirt">
+              <div key>Source URL</div>
+              <div value>{{element.spec.cloud.kubevirt.sourceURL}}</div>
             </km-property>
 
             <km-property *ngIf="element.spec.cloud.vsphere">

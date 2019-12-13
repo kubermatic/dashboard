@@ -1,9 +1,10 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
-import {catchError} from 'rxjs/operators';
+import {Observable, of, timer} from 'rxjs';
+import {catchError, shareReplay, switchMap} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
+import {AppConfigService} from '../../../app-config.service';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
 import {TaintFormComponent} from '../../../shared/components/taint-form/taint-form.component';
 import {ClusterEntity, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
@@ -30,9 +31,20 @@ export class ApiService {
   private _location: string = window.location.protocol + '//' + window.location.host;
   private _restRoot: string = environment.restRoot;
   private readonly _token: string;
+  private _addonConfigs$: Observable<any>;
+  private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 30);
 
-  constructor(private readonly _http: HttpClient, private readonly _auth: Auth) {
+  constructor(
+      private readonly _http: HttpClient, private readonly _auth: Auth, private readonly _appConfig: AppConfigService) {
     this._token = this._auth.getBearerToken();
+  }
+
+  get addonConfigs(): Observable<any> {
+    if (!this._addonConfigs$) {
+      this._addonConfigs$ = this._refreshTimer$.pipe(switchMap(() => this._http.get(`${this._restRoot}/addonconfigs`)))
+                                .pipe(shareReplay({refCount: true, bufferSize: 1}));
+    }
+    return this._addonConfigs$;
   }
 
   createNodeDeployment(cluster: ClusterEntity, nd: NodeDeploymentEntity, dc: string, projectID: string):
@@ -128,6 +140,11 @@ export class ApiService {
     return this._http.put<Token>(url, token);
   }
 
+  editViewerToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/viewertoken`;
+    return this._http.put<Token>(url, token);
+  }
+
   getAWSSubnets(projectId: string, dc: string, clusterId: string): Observable<AWSSubnet[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/aws/subnets`;
     return this._http.get<AWSSubnet[]>(url);
@@ -162,6 +179,14 @@ export class ApiService {
 
   getKubeconfigURL(projectID: string, dc: string, clusterID: string): string {
     return `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/kubeconfig?token=${this._token}`;
+  }
+
+  getDashboardProxyURL(projectID: string, dc: string, clusterID: string): string {
+    return `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/dashboard/proxy`;
+  }
+
+  getOpenshiftProxyURL(projectID: string, dc: string, clusterID: string): string {
+    return `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/openshift/console/login`;
   }
 
   getShareKubeconfigURL(projectID: string, dc: string, clusterID: string, userID: string): string {
@@ -250,6 +275,11 @@ export class ApiService {
       Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
     return this._http.delete(url);
+  }
+
+  getAccessibleAddons(): Observable<string[]> {
+    const url = `${this._restRoot}/addons`;
+    return this._http.get<string[]>(url);
   }
 
   getSwaggerJson(): Observable<any> {

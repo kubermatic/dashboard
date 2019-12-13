@@ -5,6 +5,7 @@ import {AzureNodeSpec} from './node/AzureNodeSpec';
 import {DigitaloceanNodeSpec} from './node/DigitaloceanNodeSpec';
 import {GCPNodeSpec} from './node/GCPNodeSpec';
 import {HetznerNodeSpec} from './node/HetznerNodeSpec';
+import {KubeVirtNodeSpec} from './node/KubeVirtNodeSpec';
 import {OpenstackNodeSpec} from './node/OpenstackNodeSpec';
 import {PacketNodeSpec} from './node/PacketNodeSpec';
 import {VSphereNodeSpec} from './node/VSphereNodeSpec';
@@ -50,6 +51,7 @@ export class NodeCloudSpec {
   vsphere?: VSphereNodeSpec;
   azure?: AzureNodeSpec;
   gcp?: GCPNodeSpec;
+  kubevirt?: KubeVirtNodeSpec;
 }
 
 export class OperatingSystemSpec {
@@ -120,8 +122,8 @@ export function getEmptyNodeProviderSpec(provider: string): object {
         diskSize: 25,
         volumeType: 'standard',
         ami: '',
-        tags: {'': ''},
-        subnetId: '',
+        tags: {},
+        subnetID: '',
         availabilityZone: '',
       } as AWSNodeSpec;
     case NodeProvider.DIGITALOCEAN:
@@ -137,12 +139,12 @@ export function getEmptyNodeProviderSpec(provider: string): object {
         flavor: '',
         image: '',
         useFloatingIP: false,
-        tags: {'': ''},
+        tags: {},
       } as OpenstackNodeSpec;
     case NodeProvider.VSPHERE:
       return {
         cpus: 1,
-        memory: 512,
+        memory: 2000,
         template: '',
       } as VSphereNodeSpec;
     case NodeProvider.HETZNER:
@@ -153,7 +155,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
       return {
         size: '',
         assignPublicIP: false,
-        tags: {'': ''},
+        tags: {},
       } as AzureNodeSpec;
     case NodeProvider.PACKET:
       return {
@@ -168,7 +170,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
         preemptible: false,
         zone: '',
         tags: [],
-        labels: {'': ''},
+        labels: {},
       } as GCPNodeSpec;
   }
   return {};

@@ -39,10 +39,6 @@ export class ProjectsPage {
     return cy.get('#km-edit-project-dialog-edit-btn');
   }
 
-  static getTable(): Cypress.Chainable<any> {
-    return cy.get('tbody');
-  }
-
   // Utils.
 
   static waitForRefresh(): void {
@@ -54,24 +50,27 @@ export class ProjectsPage {
   }
 
   static visit(): void {
-    cy.get('#km-nav-item-projects').click();
-    this.waitForRefresh();
-    this.verifyUrl();
+    cy.get('#km-nav-item-projects').click().then(() => {
+      this.waitForRefresh();
+      this.verifyUrl();
+    });
   }
 
   static selectProject(projectName: string): void {
     this.getProjectItem(projectName).should(Condition.HaveLength, 1);
-    this.getActiveProjects().should(Condition.HaveLength, 1).click();
-    ClustersPage.waitForRefresh();
-    ClustersPage.verifyUrl();
+    this.getActiveProjects().should(Condition.HaveLength, 1).wait(500).click().then(() => {
+      ClustersPage.waitForRefresh();
+      ClustersPage.verifyUrl();
+    });
   }
 
   static addProject(projectName: string): void {
     this.getAddProjectBtn().should(Condition.NotBe, 'disabled').click();
     this.getAddProjectInput().type(projectName).should(Condition.HaveValue, projectName);
-    this.getAddProjectConfirmBtn().should(Condition.NotBe, 'disabled').click();
-    this.waitForRefresh();
-    this.getTable().should(Condition.Contain, projectName);
+    this.getAddProjectConfirmBtn().should(Condition.NotBe, 'disabled').click().then(() => {
+      this.waitForRefresh();
+      this.getProjectItem(projectName).should(Condition.HaveLength, 1);
+    });
   }
 
   static deleteProject(projectName: string): void {

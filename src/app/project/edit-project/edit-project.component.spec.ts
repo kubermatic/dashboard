@@ -10,12 +10,14 @@ import {fakeProject} from '../../testing/fake-data/project.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
 import {EditProjectComponent} from './edit-project.component';
+import {CoreModule} from '../../core/core.module';
 
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
   SharedModule,
+  CoreModule,
 ];
 
 describe('EditProjectComponent', () => {
@@ -47,6 +49,8 @@ describe('EditProjectComponent', () => {
     fixture = TestBed.createComponent(EditProjectComponent);
     component = fixture.componentInstance;
     component.project = fakeProject();
+    component.labels = {};
+    component.asyncLabelValidators = [];
     fixture.detectChanges();
   }));
 
@@ -55,22 +59,22 @@ describe('EditProjectComponent', () => {
      }));
 
   it('should have valid form after creating', () => {
-    expect(component.editProjectForm.valid).toBeTruthy();
+    expect(component.form.valid).toBeTruthy();
   });
 
   it('should have required fields', () => {
-    component.editProjectForm.controls.name.patchValue('');
-    expect(component.editProjectForm.valid).toBeFalsy('form is not valid');
-    expect(component.editProjectForm.controls.name.valid).toBeFalsy('name field is not valid');
-    expect(component.editProjectForm.controls.name.hasError('required')).toBeTruthy('name field has required error');
+    component.form.controls.name.patchValue('');
+    expect(component.form.valid).toBeFalsy('form is not valid');
+    expect(component.form.controls.name.valid).toBeFalsy('name field is not valid');
+    expect(component.form.controls.name.hasError('required')).toBeTruthy('name field has required error');
 
-    component.editProjectForm.controls.name.patchValue('new-project-name');
-    expect(component.editProjectForm.controls.name.hasError('required'))
+    component.form.controls.name.patchValue('new-project-name');
+    expect(component.form.controls.name.hasError('required'))
         .toBeFalsy('name field has no required error after setting name');
   });
 
   it('should call editProject method', fakeAsync(() => {
-       component.editProjectForm.controls.name.patchValue('new-project-name');
+       component.form.controls.name.patchValue('new-project-name');
        component.editProject();
        tick();
 

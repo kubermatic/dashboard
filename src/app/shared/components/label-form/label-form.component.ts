@@ -1,7 +1,8 @@
-import {Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angular/core';
+import {Component, DoCheck, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {AbstractControl, AsyncValidator, AsyncValidatorFn, ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_ASYNC_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validators} from '@angular/forms';
+import {Observable, of, Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
-import {AbstractControl, FormArray, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {SlideInOut} from '../../animations/slideinout';
 import {LabelFormValidators} from '../../validators/label-form.validators';
 
 @Component({
@@ -15,24 +16,26 @@ import {LabelFormValidators} from '../../validators/label-form.validators';
       multi: true,
     },
     {
-      provide: NG_VALIDATORS,
+      provide: NG_ASYNC_VALIDATORS,
       useExisting: forwardRef(() => LabelFormComponent),
       multi: true,
     }
   ],
-  animations: [SlideInOut]
 })
-export class LabelFormComponent implements OnInit {
+export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccessor, AsyncValidator, DoCheck {
   @Input() title = 'Labels';
   @Input() labels: object;
+  @Input() inheritedLabels: object = {};
+  @Input() asyncKeyValidators: AsyncValidatorFn[] = [];
   @Output() labelsChange = new EventEmitter<object>();
-  labelsForm: FormGroup;
+  form: FormGroup;
   initialLabels: object;
+  private _unsubscribe = new Subject<void>();
 
   constructor(private readonly _formBuilder: FormBuilder) {}
 
   get labelArray(): FormArray {
-    return this.labelsForm.get('labels') as FormArray;
+    return this.form.get('labels') as FormArray;
   }
 
   static filterNullifiedKeys(labels: object): object {
@@ -54,23 +57,65 @@ export class LabelFormComponent implements OnInit {
 
   ngOnInit(): void {
     // Initialize labels form.
-    this.labelsForm = this._formBuilder.group({labels: this._formBuilder.array([])});
+    this.form = this._formBuilder.group({labels: this._formBuilder.array([])});
 
     // Make sure that labels object exist.
     if (!this.labels) {
       this.labels = {};
     }
 
+    this.inheritedLabels = this.inheritedLabels ? this.inheritedLabels : {};
+
     // Save initial state of labels.
     this.initialLabels = this.labels;
 
     // Setup labels form with label data.
-    Object.keys(this.labels).forEach(key => {
-      this._addLabel(key, this.labels[key]);
-    });
+    const filteredLabels = Object.keys(LabelFormComponent.filterNullifiedKeys(this.labels));
+    if (filteredLabels.length > 0) {
+      filteredLabels.forEach(key => {
+        this._addLabel(key, this.labels[key]);
+      });
+    }
 
     // Add initial label for the user.
     this._addLabel();
+  }
+
+  ngDoCheck(): void {
+    this.form.updateValueAndValidity();
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
+  onTouched(): void {}
+
+  writeValue(obj: any): void {
+    if (obj) {
+      this.form.setValue(obj, {emitEvent: false});
+    }
+  }
+
+  registerOnChange(fn: any): void {
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(fn);
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    isDisabled ? this.form.disable() : this.form.enable();
+  }
+
+  validate(control: AbstractControl): Observable<ValidationErrors|null> {
+    return of(this.form.valid ? null : {invalid: true});
+  }
+
+  isRemovable(index: number): boolean {
+    return index < this.labelArray.length - 1 && !this._isInherited(Object.keys(this.labels)[index]);
   }
 
   deleteLabel(index: number): void {
@@ -78,14 +123,14 @@ export class LabelFormComponent implements OnInit {
     this._updateLabelsObject();
   }
 
-  isRemovable(): boolean {
-    return this.labelArray.length > 1;
-  }
-
   check(index: number): void {
     this._addLabelIfNeeded();
     this._validateKey(index);
     this._updateLabelsObject();
+  }
+
+  private _isInherited(labelKey: string): boolean {
+    return Object.keys(this.inheritedLabels).includes(labelKey);
   }
 
   private _addLabelIfNeeded(): void {
@@ -98,15 +143,16 @@ export class LabelFormComponent implements OnInit {
   private _addLabel(key = '', value = ''): void {
     this.labelArray.push(this._formBuilder.group({
       key: [
-        {value: key, disabled: false}, Validators.compose([
+        {value: key, disabled: this._isInherited(key)}, Validators.compose([
           LabelFormValidators.labelKeyNameLength,
           LabelFormValidators.labelKeyPrefixLength,
           LabelFormValidators.labelKeyNamePattern,
           LabelFormValidators.labelKeyPrefixPattern,
-        ])
+        ]),
+        Validators.composeAsync(this.asyncKeyValidators)
       ],
       value: [
-        {value, disabled: false}, Validators.compose([
+        {value, disabled: this._isInherited(key)}, Validators.compose([
           LabelFormValidators.labelValueLength,
           LabelFormValidators.labelValuePattern,
         ])
@@ -121,7 +167,7 @@ export class LabelFormComponent implements OnInit {
       elem.setErrors({validLabelKeyUniqueness: true});
     }
 
-    this.labelsForm.updateValueAndValidity();
+    this.form.updateValueAndValidity();
   }
 
   private _isKeyDuplicated(index: number): boolean {

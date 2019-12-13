@@ -1,10 +1,14 @@
-import {Component, DoCheck, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, DoCheck, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
-import {AppConfigService} from '../../../app-config.service';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+
 import {ClusterService} from '../../../core/services';
+import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {NotificationActions} from '../../../redux/actions/notification.actions';
+import {AdminSettings} from '../../../shared/entity/AdminSettings';
 import {ClusterEntity, Finalizer} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 
@@ -13,39 +17,61 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
   templateUrl: './cluster-delete-confirmation.component.html',
   styleUrls: ['cluster-delete-confirmation.component.scss'],
 })
-export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
+export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
   @ViewChild('clusterNameInput', {static: true}) clusterNameInputRef: ElementRef;
-
   deleteForm: FormGroup;
   inputName = '';
+  settings: AdminSettings;
+  private _unsubscribe = new Subject<void>();
 
   constructor(
-      private readonly _clusterService: ClusterService,
+      private readonly _clusterService: ClusterService, private readonly _settingsService: SettingsService,
       private readonly _dialogRef: MatDialogRef<ClusterDeleteConfirmationComponent>,
-      private readonly _googleAnalyticsService: GoogleAnalyticsService, private readonly _appConfig: AppConfigService) {
-  }
+      private readonly _googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
     this.deleteForm = new FormGroup({
-      clusterLBCleanupCheckbox: new FormControl({value: this.selectCheckbox(), disabled: this.disableCheckbox()}),
-      clusterVolumeCleanupCheckbox: new FormControl({value: this.selectCheckbox(), disabled: this.disableCheckbox()}),
+      clusterLBCleanupCheckbox: new FormControl({value: false}),
+      clusterVolumeCleanupCheckbox: new FormControl({value: false}),
     });
+
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.settings = settings;
+      this.deleteForm.controls.clusterLBCleanupCheckbox.setValue(this.settings.cleanupOptions.Enabled);
+      this.deleteForm.controls.clusterVolumeCleanupCheckbox.setValue(this.settings.cleanupOptions.Enabled);
+      if (this.settings.cleanupOptions.Enforced) {
+        this.deleteForm.controls.clusterLBCleanupCheckbox.disable();
+        this.deleteForm.controls.clusterVolumeCleanupCheckbox.disable();
+      } else {
+        this.deleteForm.controls.clusterLBCleanupCheckbox.enable();
+        this.deleteForm.controls.clusterVolumeCleanupCheckbox.enable();
+      }
+      this.deleteForm.updateValueAndValidity();
+    });
+
     this._googleAnalyticsService.emitEvent('clusterOverview', 'deleteClusterDialogOpened');
   }
 
-  selectCheckbox(): boolean {
-    return !!this._appConfig.getConfig().enforce_cleanup_cluster || !!this._appConfig.getConfig().cleanup_cluster;
-  }
-
-  disableCheckbox(): boolean {
-    return !!this._appConfig.getConfig().enforce_cleanup_cluster;
+  getCheckboxTooltip(): string {
+    return this.settings && this.settings.cleanupOptions.Enforced ?
+        'These settings are enforced by the admin and cannot be changed.' :
+        '';
   }
 
   ngDoCheck(): void {
     this.clusterNameInputRef.nativeElement.focus();
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
+  showWarning(): boolean {
+    return this.settings && !this.settings.cleanupOptions.Enforced;
   }
 
   onChange(event: any): void {

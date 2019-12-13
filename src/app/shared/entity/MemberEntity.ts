@@ -2,9 +2,18 @@ export class MemberEntity {
   creationTimestamp: Date;
   deletionTimestamp?: Date;
   email: string;
+  isAdmin?: boolean;
   id: string;
   name: string;
+  settings?: UserSettings;
   projects: MemberProject[];
+}
+
+export class UserSettings {
+  selectedTheme?: string;
+  selectedProjectId?: string;
+  itemsPerPage?: number;
+  selectProjectTableView?: boolean;
 }
 
 export class MemberProject {

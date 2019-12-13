@@ -1,0 +1,43 @@
+<div *ngIf="isClusterReady"
+     fxLayout="row wrap"
+     fxLayoutGap="10px">
+  <div *ngFor="let addon of addons"
+       fxLayoutAlign="center center"
+       class="km-addon-container">
+    <div fxFlex
+         fxLayoutAlign="center center">
+      <span *ngIf="!hasLogo(addon.name)">{{addon.name}}</span>
+      <img *ngIf="hasLogo(addon.name)"
+           [src]="getAddonLogo(addon.name)">
+    </div>
+    <div [matMenuTriggerFor]="menu"
+         fxLayoutAlign="center center"
+         class="km-addon-menu">
+      <mat-icon>more_vert</mat-icon>
+    </div>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item
+              [disabled]="!canEdit"
+              (click)="edit(addon)">
+        <span>Edit</span>
+      </button>
+      <button mat-menu-item
+              [disabled]="!canEdit"
+              (click)="delete(addon)">
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+  </div>
+  <div fxLayoutAlign="center center"
+       class="km-addon-container km-new-addon-container"
+       (click)="add()"
+       [ngClass]="getAddBtnClass()"
+       [matTooltip]="getAddBtnTooltip()">
+    + Addon
+  </div>
+</div>
+<mat-spinner *ngIf="!isClusterReady"
+             matTooltip="The cluster is not ready."
+             [diameter]="25"
+             color="accent"
+             class="km-spinner"></mat-spinner>

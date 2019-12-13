@@ -4,7 +4,10 @@
   <km-dialog-title title="Delete Cluster"></km-dialog-title>
 
   <mat-dialog-content>
-    <p>Are you sure you want to permanently delete cluster "<strong>{{cluster.name}}</strong>"?</p>
+    <p>Delete cluster "<strong ngxClipboard
+              [cbContent]="cluster.name"
+              matTooltip="Click to copy"
+              class="km-copy">{{cluster.name}}</strong>" permanently?</p>
 
     <mat-form-field>
       <mat-label>Cluster Name*</mat-label>
@@ -17,16 +20,18 @@
              #clusterNameInput>
     </mat-form-field>
 
-    <div class="km-delete-cluster-checkbox">
+    <div class="km-delete-cluster-checkbox"
+         [matTooltip]="getCheckboxTooltip()">
       <mat-checkbox formControlName="clusterLBCleanupCheckbox">Cleanup connected Load Balancers</mat-checkbox>
     </div>
 
-    <div class="km-delete-cluster-checkbox">
+    <div class="km-delete-cluster-checkbox"
+         [matTooltip]="getCheckboxTooltip()">
       <mat-checkbox formControlName="clusterVolumeCleanupCheckbox">Cleanup connected volumes (PVs and PVCs)</mat-checkbox>
     </div>
 
     <div class="km-dialog-warning"
-         *ngIf="!disableCheckbox()">
+         *ngIf="showWarning()">
       <i class="km-icon-warning"></i>
       <div>Deactivating clean up may result in leftover resources at your provider.</div>
     </div>

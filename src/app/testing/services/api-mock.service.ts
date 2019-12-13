@@ -39,6 +39,14 @@ export class ApiMockService {
   serviceAccountTokens: ServiceAccountTokenEntity[] = fakeServiceAccountTokens();
   vsphereNetworks: VSphereNetwork[] = fakeVSphereNetworks();
 
+  get addonConfigs(): Observable<any> {
+    return of([]);
+  }
+
+  getAccessibleAddons(): Observable<string[]> {
+    return of([]);
+  }
+
   getNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeploymentEntity[]> {
     return of(nodeDeploymentsFake());
   }
@@ -84,6 +92,10 @@ export class ApiMockService {
   }
 
   editToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
+    return of(this.token);
+  }
+
+  editViewerToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
     return of(this.token);
   }
 
@@ -182,6 +194,14 @@ export class ApiMockService {
 
   getPacketSizes(): Observable<PacketSize[]> {
     return of(fakePacketSizes());
+  }
+
+  getDashboardProxyURL(): string {
+    return '';
+  }
+
+  getOpenshiftProxyURL(): string {
+    return '';
   }
 }
 

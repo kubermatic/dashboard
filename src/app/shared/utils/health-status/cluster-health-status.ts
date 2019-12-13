@@ -23,8 +23,7 @@ export class ClusterHealthStatus extends HealthStatus {
   }
 
   static isClusterRunning(c: ClusterEntity, h: HealthEntity): boolean {
-    return !!h && HealthState.isUp(h.apiserver) && HealthState.isUp(h.scheduler) && HealthState.isUp(h.controller) &&
-        HealthState.isUp(h.machineController) && HealthState.isUp(h.etcd) && !c.deletionTimestamp;
+    return !!h && HealthEntity.allHealthy(h) && !c.deletionTimestamp;
   }
 
   static isClusterAPIRunning(c: ClusterEntity, h: HealthEntity): boolean {

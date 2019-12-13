@@ -17,11 +17,11 @@ body {
 // spinner
 .km-spinner {
   position: absolute;
-  top: 0;
+  top: $baseline-grid;
   left: 0;
   right: 0;
   bottom: 0;
-  margin: auto;
+  margin: 2 * $baseline-grid auto;
 }
 
 // global
@@ -61,6 +61,8 @@ body {
     font-weight: normal;
     border-bottom: none;
     padding: 0;
+    line-height: 2.5 * $line-height;
+    height: 5 * $baseline-grid;
   }
 
   .km-header-cell:last-of-type {
@@ -83,7 +85,7 @@ body {
   td.mat-cell {
     border-top: 1px solid $separator;
     border-bottom-width: 0;
-    line-height: 5 * $line-height;
+    line-height: 2.5 * $line-height;
     padding-right: 2 * $baseline-grid;
     font-size: $subhead-font-size-base;
 
@@ -291,12 +293,17 @@ mat-button-toggle-group {
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100%;
 
     .km-provider-logo {
       min-height: 28px;
       max-height: 28px !important;
       max-width: 90px !important;
     }
+  }
+
+  .mat-button-toggle-button {
+    height: 100%;
   }
 }
 
@@ -319,10 +326,16 @@ mat-button-toggle-group[group='providerGroup'] {
   }
 }
 
-mat-button-toggle-group[group='datacenterGroup'] .mat-button-toggle-label-content {
-  padding: 0 (0.625 * $baseline-grid);
-  width: 100%;
-  display: inline-block;
+mat-button-toggle-group[group='datacenterGroup'] {
+  .mat-button-toggle-button {
+    display: flex;
+  }
+
+  .mat-button-toggle-label-content {
+    padding: 0 (0.625 * $baseline-grid);
+    width: 100%;
+    display: inline-block;
+  }
 }
 
 mat-button-toggle-group[group='providerGroup'] .mat-button-toggle-label-content {
@@ -576,8 +589,9 @@ mat-card-header > div > mat-card-title > div {
 
 // tooltip
 .mat-tooltip {
-  background-color: $light-primary !important;
+  background-color: $primary-light !important;
   margin-top: 0.625 * $baseline-grid !important;
+  font-size: $caption-font-size-base !important;
 }
 
 // button shadow
@@ -635,6 +649,10 @@ mat-list-item.disabled {
   color: $indicator-red !important;
 }
 
+.km-text {
+  color: $text-color;
+}
+
 .km-muted {
   color: $light-text-color;
 }
@@ -649,51 +667,13 @@ mat-list-item.disabled {
   outline: none;
 }
 
+.km-hidden {
+  visibility: hidden !important;
+}
+
 // Tags
-div.km-form-group-tags-header,
-div.km-form-group-labels-header {
-  margin: (3.75 * $baseline-grid) 0 (1.25 * $baseline-grid);
-  font-size: $body-font-size-base;
-  font-weight: bold;
-  border-bottom: 1px solid $border;
-  padding-bottom: 1.875 * $baseline-grid;
-
-  i.fa-plus {
-    cursor: pointer;
-  }
-}
-
-div.km-form-group-tags,
-div.km-form-group-labels {
-  display: flex;
-  flex-direction: column;
-
-  div.km-form-group-tags-inner,
-  div.km-form-group-labels-inner {
-    display: flex;
-  }
-
-  span.km-seperator {
-    display: flex;
-    flex: 1 1 10%;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    padding-bottom: 0.75 * $baseline-grid;
-  }
-
-  i.fa-times {
-    display: flex;
-    flex: 1 1 6%;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-}
-
-.km-add-node-inner .km-form-group-tags-inner mat-form-field,
-.km-add-node-inner .km-form-group-labels-inner mat-form-field {
-  width: 45% !important;
+.km-tags-in-wizard {
+  margin-top: 5px;
 }
 
 // Cards.
@@ -762,6 +742,10 @@ div.km-form-group-labels {
 
 .red {
   color: $indicator-red;
+}
+
+.blue {
+  color: $indicator-blue;
 }
 
 // Row width.
@@ -852,6 +836,10 @@ div.km-form-group-labels {
     text-decoration: none;
     pointer-events: none;
   }
+}
+
+.mat-icon-button[disabled] * {
+  cursor: auto;
 }
 
 // Inputs.
@@ -997,8 +985,12 @@ mat-hint a {
 .mat-option {
   padding: 0 0 0 (1.25 * $baseline-grid) !important;
 
-  &:hover,
   &.mat-active {
+    background-color: $grey-background !important;
+    color: $text-color !important;
+  }
+
+  &:hover {
     background-color: $secondary-light !important;
     color: $text-color !important;
   }
@@ -1032,7 +1024,10 @@ mat-hint a {
 // Chips.
 mat-chip-list {
   cursor: default;
-  pointer-events: none;
+
+  &:not(.km-chip-list-with-input) {
+    pointer-events: none;
+  }
 }
 
 .mat-chip.mat-standard-chip {
@@ -1081,4 +1076,14 @@ mat-chip-list {
 
 .mat-menu-panel {
   min-height: auto !important;
+}
+
+// Confirmation Dialogs
+#km-confirmation-dialog mat-dialog-content,
+#km-delete-cluster-dialog mat-dialog-content {
+  margin-bottom: 3.75 * $baseline-grid;
+}
+
+.km-pod-security-policy-row {
+  align-items: center;
 }

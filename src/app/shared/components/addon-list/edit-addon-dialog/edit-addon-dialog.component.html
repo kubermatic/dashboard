@@ -1,0 +1,45 @@
+<km-dialog-title title="Edit Addon"></km-dialog-title>
+<mat-dialog-content>
+  <div class="mat-dialog-content">
+    <img *ngIf="hasLogo()"
+         [src]="getAddonLogo()"
+         [alt]="addon.name">
+    <div *ngIf="!hasLogo()">{{addon.name}}</div>
+    <div *ngIf="!!addonConfig?.spec?.description"
+         class="km-install-addon-dialog-option-desc">
+      {{addonConfig.spec.description}}
+    </div>
+  </div>
+  <form [formGroup]="form">
+    <div *ngFor="let control of addonConfig.spec.formSpec">
+      <mat-form-field *ngIf="['text', 'number'].includes(control.type)">
+        <mat-label>{{control.displayName}}{{control.required ? '*' : ''}}</mat-label>
+        <input matInput
+               [formControlName]="control.internalName"
+               [type]="control.type"
+               [title]="control.displayName">
+      </mat-form-field>
+
+      <mat-form-field *ngIf="control.type === 'text-area'">
+        <mat-label>{{control.displayName}}{{control.required ? '*' : ''}}</mat-label>
+        <textarea matInput
+                  [formControlName]="control.internalName"
+                  [type]="control.type"
+                  [title]="control.displayName"></textarea>
+      </mat-form-field>
+
+      <div *ngIf="control.type === 'boolean'"
+           class="km-install-addon-boolean-container">
+        <mat-checkbox [formControlName]="control.internalName">
+          {{control.displayName}}
+        </mat-checkbox>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button
+          (click)="edit()">
+    Edit
+  </button>
+</mat-dialog-actions>

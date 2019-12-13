@@ -1,0 +1,25 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      *ngIf="!hideOptional">
+  <mat-card-header *ngIf="!isInWizard">
+    <mat-card-title>DigitalOcean Options</mat-card-title>
+  </mat-card-header>
+  <div fxFlex="100%">
+    <div class="km-node-options">
+      <mat-checkbox id="backups"
+                    formControlName="backups">Backups</mat-checkbox>
+    </div>
+    <div class="km-node-options">
+      <mat-checkbox id="ipv6"
+                    formControlName="ipv6">IPv6</mat-checkbox>
+    </div>
+    <div class="km-node-options">
+      <mat-checkbox id="monitoring"
+                    formControlName="monitoring">Monitoring</mat-checkbox>
+    </div>
+  </div>
+</form>
+
+<km-tag-list *ngIf="!hideOptional"
+             title="Provider Tags"
+             [tags]="nodeData.spec.cloud.digitalocean.tags"></km-tag-list>

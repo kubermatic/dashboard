@@ -2,14 +2,18 @@
 @import "../../../assets/css/variables";
 
 .km-icon-delete {
-  width: 14px;
-  height: 14px;
+  width: 1.75 * $baseline-grid;
+  height: 1.75 * $baseline-grid;
 }
 
 button:disabled {
   .km-icon-delete {
     color: $disabled-text-color;
   }
+}
+
+.km-addon-card-content {
+  padding: 0 (7 * $baseline-grid);
 }
 
 // setting menu
@@ -21,8 +25,8 @@ button:disabled {
   }
 
   .mat-icon-button i {
-    height: 24px;
-    width: 24px;
+    height: 3 * $baseline-grid;
+    width: 3 * $baseline-grid;
   }
 }
 
@@ -43,8 +47,8 @@ button:disabled {
 }
 
 .mat-icon.km-icon-edit {
-  width: 18px !important;
-  height: 18px !important;
+  width: 2.25 * $baseline-grid !important;
+  height: 2.25 * $baseline-grid !important;
 }
 
 .km-provider-logo-value {
@@ -78,4 +82,8 @@ button:disabled {
   .mat-card-title {
     margin-bottom: 2 * $baseline-grid !important;
   }
+}
+
+.mat-card-header .mat-card-title {
+  padding: $baseline-grid 0 (2.25 * $baseline-grid) 0;
 }

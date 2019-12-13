@@ -2,7 +2,8 @@ import {NgReduxFormModule} from '@angular-redux/form';
 import {NgReduxModule} from '@angular-redux/store';
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MAT_TOOLTIP_DEFAULT_OPTIONS, MatFormFieldDefaultOptions} from '@angular/material';
-import {BrowserModule} from '@angular/platform-browser';
+import {GestureConfig} from '@angular/material/core';
+import {BrowserModule, HAMMER_GESTURE_CONFIG} from '@angular/platform-browser';
 import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 import {CookieService} from 'ngx-cookie-service';
@@ -14,6 +15,7 @@ import {AppConfigService} from './app-config.service';
 import {AppRoutingModule} from './app-routing.module';
 import {CoreModule} from './core/core.module';
 import {ProjectService, UserService} from './core/services';
+import {HistoryService} from './core/services/history/history.service';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {GoogleAnalyticsService} from './google-analytics.service';
 import {KubermaticComponent} from './kubermatic.component';
@@ -26,11 +28,14 @@ import {EditServiceAccountTokenComponent} from './serviceaccount/serviceaccount-
 import {TokenDialogComponent} from './serviceaccount/serviceaccount-token/token-dialog/token-dialog.component';
 import {SharedModule} from './shared/shared.module';
 
-const appInitializerFn = (appConfig: AppConfigService): Function => {
-  return () => appConfig.loadAppConfig()
-                   .then(() => appConfig.loadUserGroupConfig())
-                   .then(() => appConfig.loadGitVersion())
-                   .then(() => appConfig.checkCustomCSS());
+const appInitializerFn = (appConfigService: AppConfigService, historyService: HistoryService): Function => {
+  return () => {
+    historyService.init();
+    return appConfigService.loadAppConfig()
+        .then(() => appConfigService.loadUserGroupConfig())
+        .then(() => appConfigService.loadGitVersion())
+        .then(() => appConfigService.checkCustomCSS());
+  };
 };
 
 const appearance: MatFormFieldDefaultOptions = {
@@ -58,7 +63,10 @@ const appearance: MatFormFieldDefaultOptions = {
       provide: APP_INITIALIZER,
       useFactory: appInitializerFn,
       multi: true,
-      deps: [AppConfigService],
+      deps: [
+        AppConfigService,
+        HistoryService,
+      ],
     },
     {
       provide: MAT_TOOLTIP_DEFAULT_OPTIONS,
@@ -68,6 +76,7 @@ const appearance: MatFormFieldDefaultOptions = {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: appearance,
     },
+    {provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig},
     CookieService,
     ProjectService,
     UserService,

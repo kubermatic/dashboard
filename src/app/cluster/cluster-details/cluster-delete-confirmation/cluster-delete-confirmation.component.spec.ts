@@ -6,8 +6,10 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
+
 import {AppConfigService} from '../../../app-config.service';
 import {ClusterService, DatacenterService} from '../../../core/services';
+import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
@@ -18,6 +20,8 @@ import {AppConfigMockService} from '../../../testing/services/app-config-mock.se
 import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
+import {SettingsMockService} from '../../../testing/services/settings-mock.service';
+
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation.component';
 
 const modules: any[] = [
@@ -50,6 +54,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
             {provide: Router, useClass: RouterStub},
             GoogleAnalyticsService,
             {provide: AppConfigService, useClass: AppConfigMockService},
+            {provide: SettingsService, useClass: SettingsMockService},
           ],
         })
         .compileComponents();

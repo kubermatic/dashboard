@@ -146,7 +146,7 @@ export class NodeListComponent implements OnInit {
   }
 
   displayTags(tags: object): boolean {
-    return Object.keys(tags).length > 0;
+    return !!tags && Object.keys(tags).length > 0;
   }
 
   toggleNodeItem(element: NodeEntity): void {

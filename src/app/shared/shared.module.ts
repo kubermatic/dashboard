@@ -12,6 +12,10 @@ import {ClipboardModule} from 'ngx-clipboard';
 
 import {AddProjectDialogComponent} from './components/add-project-dialog/add-project-dialog.component';
 import {AddSshKeyDialogComponent} from './components/add-ssh-key-dialog/add-ssh-key-dialog.component';
+import {AddonsListComponent} from './components/addon-list/addon-list.component';
+import {EditAddonDialogComponent} from './components/addon-list/edit-addon-dialog/edit-addon-dialog.component';
+import {InstallAddonDialogComponent} from './components/addon-list/install-addon-dialog/install-addon-dialog.component';
+import {SelectAddonDialogComponent} from './components/addon-list/select-addon-dialog/select-addon-dialog.component';
 import {BooleanPropertyComponent} from './components/boolean-property/boolean-property.component';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 import {DialogTitleComponent} from './components/dialog-title/dialog-title.component';
@@ -20,7 +24,10 @@ import {LabelFormComponent} from './components/label-form/label-form.component';
 import {LabelsComponent} from './components/labels/labels.component';
 import {PropertyComponent} from './components/property/property.component';
 import {RelativeTimeComponent} from './components/relativetime/relative-time.component';
+import {SettingsStatusComponent} from './components/settings-status/settings-status.component';
+import {ShortNameInCircleComponent} from './components/short-name-in-circle/short-name-in-circle.component';
 import {SSHKeyListComponent} from './components/ssh-key-list/ssh-key-list.component';
+import {TagListComponent} from './components/tag-list/tag-list.component';
 import {TaintFormComponent} from './components/taint-form/taint-form.component';
 import {TaintsComponent} from './components/taints/taints.component';
 import {RelativeTimePipe} from './pipes/relativetime';
@@ -64,48 +71,47 @@ const modules: any[] = [
   MatPaginatorModule,
 ];
 
+const components: any[] = [
+  BooleanPropertyComponent,
+  DialogTitleComponent,
+  PropertyComponent,
+  EventListComponent,
+  LabelFormComponent,
+  LabelsComponent,
+  TaintFormComponent,
+  TaintsComponent,
+  RelativeTimePipe,
+  RelativeTimeComponent,
+  SSHKeyListComponent,
+  AddonsListComponent,
+  SettingsStatusComponent,
+  ShortNameInCircleComponent,
+  TagListComponent,
+];
+
+const entryComponents: any[] = [
+  AddProjectDialogComponent,
+  AddSshKeyDialogComponent,
+  ConfirmationDialogComponent,
+  SelectAddonDialogComponent,
+  InstallAddonDialogComponent,
+  EditAddonDialogComponent,
+];
+
 @NgModule({
   imports: [
     ...modules,
   ],
   declarations: [
-    AddProjectDialogComponent,
-    AddSshKeyDialogComponent,
-    BooleanPropertyComponent,
-    ConfirmationDialogComponent,
-    DialogTitleComponent,
-    PropertyComponent,
-    EventListComponent,
-    LabelFormComponent,
-    LabelsComponent,
-    TaintFormComponent,
-    TaintsComponent,
-    RelativeTimePipe,
-    RelativeTimeComponent,
-    SSHKeyListComponent,
+    ...components,
+    ...entryComponents,
   ],
   exports: [
     ...modules,
-    AddProjectDialogComponent,
-    AddSshKeyDialogComponent,
-    BooleanPropertyComponent,
-    ConfirmationDialogComponent,
-    DialogTitleComponent,
-    PropertyComponent,
-    EventListComponent,
-    LabelFormComponent,
-    LabelsComponent,
-    TaintFormComponent,
-    TaintsComponent,
-    RelativeTimePipe,
-    RelativeTimeComponent,
-    SSHKeyListComponent,
+    ...components,
+    ...entryComponents,
   ],
-  entryComponents: [
-    AddProjectDialogComponent,
-    AddSshKeyDialogComponent,
-    ConfirmationDialogComponent,
-  ],
+  entryComponents: [...entryComponents],
 })
 
 export class SharedModule {

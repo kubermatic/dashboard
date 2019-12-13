@@ -3,7 +3,9 @@
   <mat-dialog-content class="km-add-node-outer">
     <kubermatic-node-data [cluster]="data.cluster"
                           [nodeData]="data.nodeData"
-                          [existingNodesCount]="data.existingNodesCount"></kubermatic-node-data>
+                          [existingNodesCount]="data.existingNodesCount"
+                          (valid)="nodeDataValid = $event"
+                          [seedDc]="seedDC"></kubermatic-node-data>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-flat-button
@@ -14,13 +16,13 @@
       <span *ngIf="isExtended">Hide Advanced Settings</span>
     </button>
     <div fxFlex></div>
-    <i *ngIf="isRecreationWarningVisible()"
+    <i *ngIf="isRecreationWarningVisible"
        class="km-icon-warning"
        matTooltip="You have changed node specification. All nodes will be recreated.">
     </i>
     <button mat-flat-button
             [mat-dialog-close]="data"
-            [disabled]="!data?.nodeData?.valid"
+            [disabled]="!data?.nodeData?.valid || !nodeDataValid"
             class="btn btn-primary">
       {{getDialogLabel()}}
     </button>

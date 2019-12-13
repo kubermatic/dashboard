@@ -6,14 +6,12 @@ import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
-import {AppConfigService} from '../../../app-config.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {RouterStub} from '../../../testing/router-stubs';
-import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../../testing/services/auth-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
-import {Auth, ProjectService, UserService} from '../../services/index';
+import {Auth, ProjectService, UserService} from '../../services';
 
 import {FooterComponent} from './footer.component';
 
@@ -44,7 +42,6 @@ describe('FooterComponent', () => {
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: Router, useClass: RouterStub},
             {provide: Auth, useClass: AuthMockService},
-            {provide: AppConfigService, useClass: AppConfigMockService},
           ],
         })
         .compileComponents();
@@ -55,25 +52,7 @@ describe('FooterComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should create the cmp', async(() => {
+  it('should initialize', async(() => {
        expect(component).toBeTruthy();
-     }));
-
-  it('should show terms of service', async(() => {
-       component.config = {show_terms_of_service: true};
-       expect(component.showTermsOfService()).toBeTruthy();
-     }));
-
-  it('should hide terms of service', async(() => {
-       expect(component.showTermsOfService()).toBeFalsy();
-     }));
-
-  it('should show demo system info', async(() => {
-       component.config = {show_demo_info: true};
-       expect(component.isDemoSystem()).toBeTruthy();
-     }));
-
-  it('should hide demo system info', async(() => {
-       expect(component.isDemoSystem()).toBeFalsy();
      }));
 });

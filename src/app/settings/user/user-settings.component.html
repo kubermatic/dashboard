@@ -1,0 +1,51 @@
+<div fxLayout>
+  <div fxFlex
+       align="right">
+    <button mat-flat-button
+            type="button"
+            (click)="goBack()">
+      Go Back
+    </button>
+  </div>
+</div>
+
+<mat-card class="white">
+  <mat-card-header>
+    <mat-card-title>Account</mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    <div *ngIf="!!user"
+         class="km-account-info"
+         fxLayout="row"
+         fxFlex="50">
+      <div class="km-user"></div>
+      <div>
+        <div class="km-account-info-name">
+          <span>{{user.name}}</span>
+          <span *ngIf="user.isAdmin">&nbsp;(Administrator)</span>
+        </div>
+        <div class="km-account-info-email">{{user.email}}</div>
+      </div>
+    </div>
+    <div *ngIf="!!settings"
+         class="km-account-settings"
+         fxFlex="50">
+      <div class="km-account-settings-header">User Settings</div>
+      <div>
+        <div class="km-account-settings-entry-label">Items per page</div>
+        <mat-form-field fxFlex="15">
+          <mat-select disableOptionCentering
+                      [(ngModel)]="settings.itemsPerPage"
+                      (selectionChange)="onSettingsChange()">
+            <mat-option *ngFor="let itemsPerPageOption of itemsPerPageOptions"
+                        [value]="itemsPerPageOption">
+              {{itemsPerPageOption}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <km-settings-status [isSaved]="isEqual(settings.itemsPerPage, apiSettings.itemsPerPage)"></km-settings-status>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

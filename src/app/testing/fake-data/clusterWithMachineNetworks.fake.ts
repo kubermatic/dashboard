@@ -9,12 +9,6 @@ export function fakeClusterWithMachineNetwork(): ClusterEntity {
     spec: {
       cloud: {
         dc: 'vsphere-hetzner',
-        digitalocean: null,
-        aws: null,
-        openstack: null,
-        baremetal: null,
-        bringyourown: null,
-        hetzner: null,
         vsphere: {
           username: 'foo',
           password: 'bar',
@@ -25,7 +19,6 @@ export function fakeClusterWithMachineNetwork(): ClusterEntity {
             password: 'bar',
           },
         },
-        azure: null,
       },
       version: '1.8.5',
       machineNetworks: [
@@ -53,12 +46,6 @@ export function fakeGatewayInCidr(): ClusterEntity {
     spec: {
       cloud: {
         dc: 'vsphere-hetzner',
-        digitalocean: null,
-        aws: null,
-        openstack: null,
-        baremetal: null,
-        bringyourown: null,
-        hetzner: null,
         vsphere: {
           username: 'foo',
           password: 'bar',
@@ -69,7 +56,6 @@ export function fakeGatewayInCidr(): ClusterEntity {
             password: 'bar',
           },
         },
-        azure: null,
       },
       version: '1.8.5',
       machineNetworks: [
@@ -97,12 +83,6 @@ export function fakeGatewayNotInCidr(): ClusterEntity {
     spec: {
       cloud: {
         dc: 'vsphere-hetzner',
-        digitalocean: null,
-        aws: null,
-        openstack: null,
-        baremetal: null,
-        bringyourown: null,
-        hetzner: null,
         vsphere: {
           username: 'foo',
           password: 'bar',
@@ -113,7 +93,6 @@ export function fakeGatewayNotInCidr(): ClusterEntity {
             password: 'bar',
           },
         },
-        azure: null,
       },
       version: '1.8.5',
       machineNetworks: [

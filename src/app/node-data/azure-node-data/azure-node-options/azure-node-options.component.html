@@ -1,0 +1,14 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      *ngIf="!hideOptional">
+  <div fxFlex>
+    <div fxLayout="row"
+         class="km-azure-options">
+      <mat-checkbox id="assignPublicIP"
+                    formControlName="assignPublicIP">Assign Public IP</mat-checkbox>
+    </div>
+  </div>
+
+  <km-label-form title="Provider Tags"
+                 [(labels)]="nodeData.spec.cloud.azure.tags"></km-label-form>
+</form>

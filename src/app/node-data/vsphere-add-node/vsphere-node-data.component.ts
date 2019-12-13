@@ -16,23 +16,33 @@ export class VSphereNodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() clusterId: string;
 
-  vsphereNodeForm: FormGroup;
-
+  form: FormGroup;
   private _unsubscribe = new Subject<void>();
 
-  constructor(private addNodeService: NodeDataService) {}
+
+  constructor(private _nodeDataService: NodeDataService) {}
 
   ngOnInit(): void {
-    this.vsphereNodeForm = new FormGroup({
-      cpu: new FormControl(this.nodeData.spec.cloud.vsphere.cpus, [Validators.required, Validators.min(1)]),
-      memory: new FormControl(this.nodeData.spec.cloud.vsphere.memory, [Validators.required, Validators.min(512)]),
+    this.form = new FormGroup({
+      cpu: new FormControl(
+          this.nodeData.spec.cloud.vsphere.cpus,
+          [
+            Validators.required,
+            Validators.min(1),
+          ]),
+      memory: new FormControl(
+          this.nodeData.spec.cloud.vsphere.memory,
+          [
+            Validators.required,
+            Validators.min(512),
+          ]),
     });
 
-    this.vsphereNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      this._nodeDataService.changeNodeProviderData(this.getNodeProviderData());
     });
 
-    this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    this._nodeDataService.changeNodeProviderData(this.getNodeProviderData());
   }
 
   ngOnDestroy(): void {
@@ -48,13 +58,13 @@ export class VSphereNodeDataComponent implements OnInit, OnDestroy {
     return {
       spec: {
         vsphere: {
-          cpus: this.vsphereNodeForm.controls.cpu.value,
-          memory: this.vsphereNodeForm.controls.memory.value,
+          cpus: this.form.controls.cpu.value,
+          memory: this.form.controls.memory.value,
           template: this.nodeData.spec.cloud.vsphere.template,
           diskSizeGB: this.nodeData.spec.cloud.vsphere.diskSizeGB,
         },
       },
-      valid: this.vsphereNodeForm.valid,
+      valid: this.form.valid,
     };
   }
 }

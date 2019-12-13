@@ -1,15 +1,18 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatDialogConfig, MatSort, MatSortHeader, MatTableDataSource, SortDirection} from '@angular/material';
 import {Router} from '@angular/router';
+import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {Auth, ClusterService, ProjectService, UserService} from '../core/services';
+import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {UserSettings} from '../shared/entity/MemberEntity';
 import {ProjectEntity, ProjectOwners} from '../shared/entity/ProjectEntity';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
@@ -28,21 +31,55 @@ export class ProjectComponent implements OnInit, OnDestroy {
   clusterCount = [];
   role = [];
   rawRole = [];
-  displayedColumns: string[] = ['status', 'name', 'id', 'role', 'clusters', 'owners', 'actions'];
+  displayedColumns: string[] = ['status', 'name', 'labels', 'id', 'role', 'clusters', 'owners', 'actions'];
   dataSource = new MatTableDataSource<ProjectEntity>();
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  showCards = true;
+  sort: MatSort;
+  @ViewChild(MatSort, {static: false})
+  set matSort(ms: MatSort) {
+    const isViewInit = !this.sort && !!ms;  // If true, view is being initialized.
+
+    this.sort = ms;
+    this.setDataSourceAttributes();
+
+    if (isViewInit) {
+      setTimeout(() => {
+        // dirty hack to set sorting arrow:
+        // use _handleClick() will trigger column's click event
+        // therefor set initial sorting direction the opposite direciton
+        this.sort.direction = 'desc' as SortDirection;
+        const sortHeader = this.sort.sortables.get('name') as MatSortHeader;
+        sortHeader._handleClick();
+      }, 100);
+    }
+  }
+  settings: UserSettings;
+  private _settingsChange = new Subject<void>();
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
       private readonly _clusterService: ClusterService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _matDialog: MatDialog,
       private readonly _googleAnalyticsService: GoogleAnalyticsService, private readonly _router: Router,
-      private readonly _cookieService: CookieService) {}
+      private readonly _cookieService: CookieService, private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
-    this.dataSource.sort = this.sort;
-    this.sort.active = 'name';
-    this.sort.direction = 'asc';
+    this.dataSource.data = this.projects;
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      if (this.settings) {
+        return;
+      }
+      this.settings = settings;
+      this.showCards = !settings.selectProjectTableView;
+    });
+
+    this._settingsChange.pipe(debounceTime(1000))
+        .pipe(takeUntil(this._unsubscribe))
+        .pipe(switchMap(() => this._settingsService.patchUserSettings({'selectProjectTableView': !this.showCards})))
+        .subscribe(settings => {
+          this.settings = settings;
+          this.showCards = !settings.selectProjectTableView;
+        });
 
     this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe(projects => {
       this.projects = projects;
@@ -53,7 +90,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
       if (this._shouldRedirectToCluster()) {
         this._redirectToCluster();
       }
-
       this.isInitializing = false;
     });
   }
@@ -66,6 +102,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
   getDataSource(): MatTableDataSource<ProjectEntity> {
     this.dataSource.data = this.projects;
     return this.dataSource;
+  }
+
+  setDataSourceAttributes(): void {
+    this.dataSource.sort = this.sort;
   }
 
   private _sortProjectOwners(): void {
@@ -91,6 +131,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this.rawRole[project.id] = group;
       });
     });
+  }
+
+  changeView(): void {
+    this.showCards = !this.showCards;
+    this.settings.selectProjectTableView = !this.settings.selectProjectTableView;
+    this._settingsChange.next();
   }
 
   selectProject(project: ProjectEntity): void {
@@ -137,6 +183,42 @@ export class ProjectComponent implements OnInit, OnDestroy {
     // if last displayed name is not complete, show it in tooltip
     return count > 30 ? this.getOwnerNameArray(owners).slice(truncatedLength - 1, owners.length).join(', ') :
                         this.getOwnerNameArray(owners).slice(truncatedLength, owners.length).join(', ');
+  }
+
+  getLabelsLength(project: ProjectEntity): number {
+    return project.labels ? Object.keys(project.labels).length : 0;
+  }
+
+  getLabelsTooltip(project: ProjectEntity): string {
+    let labels = '';
+    let counter = 0;
+    const labelLength = this.getLabelsLength(project);
+
+    if (labelLength > 0) {
+      for (const key in project.labels) {
+        if (project.labels.hasOwnProperty(key)) {
+          counter++;
+          if (project.labels[key]) {
+            labels += `${key}: ${project.labels[key]}`;
+          } else {
+            labels += `${key}`;
+          }
+
+          if (counter < labelLength) {
+            labels += `, `;
+          }
+        }
+      }
+    }
+    return labels;
+  }
+
+  getName(name: string): string {
+    return name.length > 19 ? `${name.substring(0, 19)}...` : `${name}`;
+  }
+
+  getProjectTooltip(name: string): string {
+    return name.length > 19 ? name : '';
   }
 
   isProjectActive(project: ProjectEntity): boolean {

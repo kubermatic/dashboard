@@ -28,12 +28,4 @@ mat-button-toggle-group[group='datacenterGroup'] {
       line-height: 1.4 * $line-height;
     }
   }
-
-  .flag-icon {
-    line-height: 2 * $line-height;
-    height: 20px;
-    width: 20px;
-    transform: scaleX(1.5);
-    display: inline-block;
-  }
 }

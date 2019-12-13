@@ -2,8 +2,9 @@
   <km-dialog-title title="Edit Cluster"></km-dialog-title>
   <mat-dialog-content>
     <div class="mat-dialog-content">
-      <form [formGroup]="editClusterForm"
-            fxLayout="column">
+      <form [formGroup]="form"
+            fxLayout="column"
+            class="km-edit-cluster-form">
         <mat-form-field fxFlex>
           <mat-label>Name*</mat-label>
           <input id="km-edit-cluster-dialog-input"
@@ -12,25 +13,48 @@
                  type="text"
                  autocomplete="off"
                  cdkFocusInitial>
-          <mat-error *ngIf="editClusterForm.controls.name.hasError('required')">
+          <mat-error *ngIf="form.controls.name.hasError('required')">
             Name is <strong>required</strong>.
           </mat-error>
-          <mat-error *ngIf="editClusterForm.controls.name.hasError('minlength')">
-            Name must be at least {{ editClusterForm.controls.name.getError('minlength').requiredLength }} characters.
+          <mat-error *ngIf="form.controls.name.hasError('minlength')">
+            Name must be at least {{form.controls.name.getError('minlength').requiredLength}} characters.
           </mat-error>
-          <mat-error *ngIf="editClusterForm.controls.name.hasError('pattern')">
+          <mat-error *ngIf="form.controls.name.hasError('pattern')">
             Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
           </mat-error>
         </mat-form-field>
-
+        <div fxLayout="row"
+             fxLayoutGap="16px">
+          <mat-checkbox formControlName="auditLogging">Audit Logging</mat-checkbox>
+          <div fxLayout="row"
+               fxLayoutGap="8px"
+               class="km-pod-security-policy-row">
+            <mat-checkbox formControlName="usePodSecurityPolicyAdmissionPlugin">
+              Pod Security Policy
+            </mat-checkbox>
+            <i class="km-icon-info"
+               matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
+            <i *ngIf="form.controls.usePodSecurityPolicyAdmissionPlugin.value"
+               class="km-icon-warning"
+               matTooltip="Activating Pod Security Policy will mean that a lot of Pod specifications, Operators and Helm charts will not work out of the box. Make sure that you know the consequences of activating this feature.">
+            </i>
+          </div>
+        </div>
+        <km-label-form title="Labels"
+                       [(labels)]="labels"
+                       [inheritedLabels]="cluster.inheritedLabels"
+                       [asyncKeyValidators]=asyncLabelValidators
+                       formControlName="labels"></km-label-form>
       </form>
+      <kubermatic-edit-provider-settings [cluster]="cluster"
+                                         *ngIf="!cluster.spec.cloud.bringyourown"></kubermatic-edit-provider-settings>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button id="km-edit-cluster-dialog-edit-btn"
             mat-flat-button
             (click)="editCluster()"
-            [disabled]="!editClusterForm.valid">
+            [disabled]="!form.valid || !providerSettingsPatch.isValid">
       Edit
     </button>
   </mat-dialog-actions>

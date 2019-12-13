@@ -69,8 +69,8 @@ export class ServiceAccountTokenComponent implements OnInit {
       hasBackdrop: true,
       data: {
         title: 'Regenerate Token',
-        message: `Are you sure you want to regenerate token "<strong>${token.name}</strong>"
-          for service account "<strong>${this.serviceaccount.name}</strong>"?`,
+        message: `Regenerate token "<strong>${token.name}</strong>" for service account "<strong>${
+            this.serviceaccount.name}</strong>"?`,
         confirmLabel: 'Regenerate',
       },
     };
@@ -104,8 +104,8 @@ export class ServiceAccountTokenComponent implements OnInit {
       hasBackdrop: true,
       data: {
         title: 'Delete Token',
-        message: `Are you sure you want to permanently delete token "<strong>${token.name}</strong>"
-          from service account "<strong>${this.serviceaccount.name}</strong>"?`,
+        message: `Delete token "<strong>${token.name}</strong>" from service account "<strong>${
+            this.serviceaccount.name}</strong>" permanently?`,
         confirmLabel: 'Delete',
       },
     };

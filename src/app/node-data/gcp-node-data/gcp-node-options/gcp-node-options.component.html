@@ -1,0 +1,7 @@
+<km-tag-list *ngIf="!hideOptional"
+             title="Provider Tags"
+             [tags]="nodeData.spec.cloud.gcp.tags"></km-tag-list>
+
+<km-label-form *ngIf="!hideOptional"
+               title="Provider Labels"
+               [(labels)]="nodeData.spec.cloud.gcp.labels"></km-label-form>

@@ -1,0 +1,46 @@
+@import "../../../../assets/css/colors";
+@import "../../../../assets/css/variables";
+
+.km-rbac-add-binding-btn {
+  height: 5 * $baseline-grid;
+  min-width: 14.5 * $baseline-grid;
+}
+
+.mat-card.km-with-table-header .mat-card-header {
+  padding-left: 0;
+  cursor: pointer;
+}
+
+.km-toggled-rbac {
+  padding-bottom: $baseline-grid;
+
+  mat-card-header {
+    border-radius: $border-radius;
+  }
+}
+
+.mat-card-title {
+  padding: $baseline-grid 0 (2 * $baseline-grid) !important;
+}
+
+h2 {
+  font-weight: normal;
+  font-size: $card-title-font-size;
+  color: $text-color;
+  padding: 0 (7 * $baseline-grid);
+  margin-bottom: 0;
+}
+
+tr:first-child th:first-child,
+.km-table td:first-child {
+  padding-left: 7 * $baseline-grid;
+}
+
+tr:last-child th:last-child,
+.km-table td:last-child {
+  padding-right: 7 * $baseline-grid;
+}
+
+.km-table-actions {
+  float: right;
+}

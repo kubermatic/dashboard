@@ -2,6 +2,12 @@
 @import "font-awesome/font-awesome";
 @import "ubuntu-font/ubuntu";
 
+// Load Icon Flags CSS.
+$flag-icon-square-path: '/4x3';
+$flag-icon-css-path: '../../../node_modules/flag-icon-css/flags';
+
+@import '../../../node_modules/flag-icon-css/sass/flag-icon';
+
 // Load Angular Material theme.
 @import "theme";
 

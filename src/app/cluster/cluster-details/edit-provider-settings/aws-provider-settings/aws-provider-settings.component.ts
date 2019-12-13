@@ -1,11 +1,10 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 
 import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-aws-provider-settings',
@@ -13,21 +12,50 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 })
 
 export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  awsProviderSettingsForm: FormGroup;
+  form: FormGroup;
+  private _formData = {accessKeyId: '', secretAccessKey: ''};
   private _unsubscribe = new Subject<void>();
 
   constructor(private clusterService: ClusterService) {}
 
   ngOnInit(): void {
-    this.awsProviderSettingsForm = new FormGroup({
-      accessKeyId: new FormControl(this.cluster.spec.cloud.aws.accessKeyId, [Validators.required]),
-      secretAccessKey: new FormControl(this.cluster.spec.cloud.aws.secretAccessKey, [Validators.required]),
+    this.form = new FormGroup({
+      accessKeyId: new FormControl(''),
+      secretAccessKey: new FormControl(''),
     });
 
-    this.awsProviderSettingsForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
+    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      if (data.accessKeyId !== this._formData.accessKeyId || data.secretAccessKey !== this._formData.secretAccessKey) {
+        this._formData = data;
+        this.setValidators();
+        this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
+      }
     });
+  }
+
+  get accessKeyId(): AbstractControl {
+    return this.form.controls.accessKeyId;
+  }
+
+  get secretAccessKey(): AbstractControl {
+    return this.form.controls.secretAccessKey;
+  }
+
+  setValidators(): void {
+    if (!this.accessKeyId.value && !this.secretAccessKey.value) {
+      this.accessKeyId.clearValidators();
+      this.secretAccessKey.clearValidators();
+    } else {
+      this.accessKeyId.setValidators([Validators.required]);
+      this.secretAccessKey.setValidators([Validators.required]);
+    }
+
+    this.accessKeyId.updateValueAndValidity();
+    this.secretAccessKey.updateValueAndValidity();
+  }
+
+  isRequiredField(): string {
+    return !this.accessKeyId.value && !this.secretAccessKey.value ? '' : '*';
   }
 
   ngOnDestroy(): void {
@@ -39,11 +67,11 @@ export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
     return {
       cloudSpecPatch: {
         aws: {
-          accessKeyId: this.awsProviderSettingsForm.controls.accessKeyId.value,
-          secretAccessKey: this.awsProviderSettingsForm.controls.secretAccessKey.value,
+          accessKeyId: this.form.controls.accessKeyId.value,
+          secretAccessKey: this.form.controls.secretAccessKey.value,
         },
       },
-      isValid: this.awsProviderSettingsForm.valid,
+      isValid: this.form.valid,
     };
   }
 }

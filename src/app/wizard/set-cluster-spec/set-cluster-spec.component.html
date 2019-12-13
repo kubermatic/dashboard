@@ -46,46 +46,78 @@
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="clusterSpecForm"
-            class="km-cluster-spec">
+            fxLayout="row wrap">
+        <div fxFlex="100"
+             fxLayout="row">
+          <mat-button-toggle-group group="clusterSpecTypeGroup"
+                                   class="km-cluster-spec-type"
+                                   formControlName="type"
+                                   *ngIf="hasMultipleTypes()">
+            <mat-button-toggle value="kubernetes"
+                               *ngIf="!hideKubernetes()">
+              <i class="km-icon-kubernetes"></i>
+              Kubernetes
+            </mat-button-toggle>
+            <mat-button-toggle value="openshift"
+                               *ngIf="!hideOpenShift()">
+              <i class="km-icon-openshift"></i>
+              OpenShift
+            </mat-button-toggle>
+          </mat-button-toggle-group>
 
-        <mat-button-toggle-group group="clusterSpecTypeGroup"
-                                 class="km-cluster-spec-type"
-                                 formControlName="type"
-                                 *ngIf="hasMultipleTypes()">
-          <mat-button-toggle value="kubernetes"
-                             *ngIf="!hideType('kubernetes')">
-            <i class="km-icon-kubernetes"></i>
-            Kubernetes
-          </mat-button-toggle>
-          <mat-button-toggle value="openshift"
-                             *ngIf="!hideType('openshift')">
-            <i class="km-icon-openshift"></i>
-            OpenShift
-          </mat-button-toggle>
-        </mat-button-toggle-group>
+          <mat-form-field class="km-version-inline">
+            <mat-label>Version</mat-label>
+            <mat-select formControlName="version"
+                        disableOptionCentering>
+              <mat-option *ngFor="let version of masterVersions"
+                          [value]="version.version">
+                {{ version.version }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-        <mat-form-field class="km-version-inline">
-          <mat-label>Version</mat-label>
-          <mat-select formControlName="version"
-                      disableOptionCentering>
-            <mat-option *ngFor="let version of masterVersions"
-                        [value]="version.version">
-              {{ version.version }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+        <div fxLayout="row"
+             class="km-imagepullsecret-form-field">
+          <mat-form-field *ngIf="isOpenShiftSelected()"
+                          class="km-imagepullsecret-inline">
+            <mat-label>Image Pull Secret*</mat-label>
+            <textarea matInput
+                      rows=3
+                      formControlName="imagePullSecret"
+                      type="text-area"
+                      title="imagePullSecret"></textarea>
+            <mat-error *ngIf="clusterSpecForm.controls.imagePullSecret.hasError('required')">
+              Image Pull Secret is <strong>required</strong>.
+            </mat-error>
+            <mat-hint>This is a JSON document containing your Docker registry credentials, see&nbsp;<a target="_blank"
+                 rel="noopener"
+                 href="https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/">here</a>&nbsp;for more information</mat-hint>
+          </mat-form-field>
+        </div>
 
-        <mat-form-field *ngIf="isOpenShiftSelected()"
-                        class="km-imagepullsecret-inline">
-          <mat-label>Image Pull Secret*</mat-label>
-          <input matInput
-                 formControlName="imagePullSecret"
-                 type="text"
-                 title="imagePullSecret">
-          <mat-error *ngIf="clusterSpecForm.controls.imagePullSecret.hasError('required')">
-            Image Pull Secret is <strong>required</strong>.
-          </mat-error>
-        </mat-form-field>
+        <div fxLayout="row"
+             fxLayoutGap="16px">
+          <mat-checkbox formControlName="auditLogging">Audit Logging</mat-checkbox>
+          <div fxLayout="row"
+               fxLayoutGap="8px"
+               class="km-pod-security-policy-row">
+            <mat-checkbox formControlName="usePodSecurityPolicyAdmissionPlugin">
+              Pod Security Policy
+            </mat-checkbox>
+            <i class="km-icon-info"
+               matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
+            <i *ngIf="clusterSpecForm.controls.usePodSecurityPolicyAdmissionPlugin.value"
+               class="km-icon-warning"
+               matTooltip="Activating Pod Security Policy will mean that a lot of Pod specifications, Operators and Helm charts will not work out of the box. Make sure that you know the consequences of activating this feature.">
+            </i>
+          </div>
+        </div>
+        <km-label-form title="Labels"
+                       [(labels)]="labels"
+                       [asyncKeyValidators]=asyncLabelValidators
+                       formControlName="labels"
+                       fxFlex="100"></km-label-form>
       </form>
     </mat-card-content>
   </mat-card>

@@ -1,47 +1,47 @@
-<form [formGroup]="azureProviderSettingsForm"
+<form [formGroup]="form"
       fxLayout="column">
   <mat-form-field fxFlex>
-    <mat-label>Client ID*</mat-label>
+    <mat-label>Client ID{{isRequiredField()}}</mat-label>
     <input matInput
            formControlName="clientID"
            name="clientID"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="azureProviderSettingsForm.controls.clientID.hasError('required')">
+    <mat-error *ngIf="form.controls.clientID.hasError('required')">
       Client ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>Client Secret*</mat-label>
+    <mat-label>Client Secret{{isRequiredField()}}</mat-label>
     <input matInput
            formControlName="clientSecret"
            name="clientSecret"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="azureProviderSettingsForm.controls.clientSecret.hasError('required')">
+    <mat-error *ngIf="form.controls.clientSecret.hasError('required')">
       Client Secret is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>Tenant ID*</mat-label>
+    <mat-label>Tenant ID{{isRequiredField()}}</mat-label>
     <input matInput
            formControlName="tenantID"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="azureProviderSettingsForm.controls.tenantID.hasError('required')">
+    <mat-error *ngIf="form.controls.tenantID.hasError('required')">
       Tenant ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>Subscription ID*</mat-label>
+    <mat-label>Subscription ID{{isRequiredField()}}</mat-label>
     <input matInput
            formControlName="subscriptionID"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="azureProviderSettingsForm.controls.subscriptionID.hasError('required')">
+    <mat-error *ngIf="form.controls.subscriptionID.hasError('required')">
       Subscription ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>

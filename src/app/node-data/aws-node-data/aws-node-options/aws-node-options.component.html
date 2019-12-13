@@ -1,0 +1,10 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      *ngIf="!hideOptional">
+
+  <mat-checkbox id="assignPublicIP"
+                formControlName="assignPublicIP">Assign Public IP</mat-checkbox>
+
+  <km-label-form title="Provider Tags"
+                 [(labels)]="nodeData.spec.cloud.aws.tags"></km-label-form>
+</form>
