@@ -209,6 +209,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+    this._wizardService.selectCustomPreset(null);
   }
 
   updateSteps(): void {
