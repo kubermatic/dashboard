@@ -118,7 +118,7 @@
     "ngrx-store-logger": "0.2.4",
     "node-gyp": "6.0.1",
     "request": "2.88.0",
-    "serialize-javascript": "2.1.1",
+    "serialize-javascript": "2.1.2",
     "start-server-and-test": "1.10.6",
     "stylelint": "12.0.0",
     "stylelint-config-standard": "19.0.0",
