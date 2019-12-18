@@ -34,6 +34,7 @@
         </mat-option>
       </mat-optgroup>
     </mat-autocomplete>
+    <mat-error *ngIf="form.controls.vmNetName.hasError('mustBeInList')">Input doesn't match options.</mat-error>
     <mat-hint *ngIf="showNetworkHint()">Please enter your credentials first.</mat-hint>
   </mat-form-field>
 

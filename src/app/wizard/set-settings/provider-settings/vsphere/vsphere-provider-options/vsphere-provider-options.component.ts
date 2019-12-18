@@ -9,6 +9,7 @@ import {VSphereFolder, VSphereNetwork} from '../../../../../shared/entity/provid
 import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
 import {filterArrayOptions, filterObjectOptions} from '../../../../../shared/utils/common-utils';
+import {AutocompleteFilterValidators} from '../../../../../shared/validators/autocomplete-filter.validator';
 
 @Component({
   selector: 'kubermatic-vsphere-provider-options',
@@ -36,7 +37,9 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       username: new FormControl(this.cluster.spec.cloud.vsphere.username),
       password: new FormControl(this.cluster.spec.cloud.vsphere.password),
-      vmNetName: new FormControl(this.cluster.spec.cloud.vsphere.vmNetName),
+      vmNetName: new FormControl(
+          this.cluster.spec.cloud.vsphere.vmNetName,
+          [AutocompleteFilterValidators.objectMustBeInList(this._networkMap, 'absolutePath', false)]),
       folder: new FormControl(this.cluster.spec.cloud.vsphere.folder),
     });
 
@@ -80,18 +83,15 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
         debounceTime(1000), takeUntil(this._unsubscribe), startWith(''),
         map(value => filterArrayOptions(value, 'path', this.folders)));
 
-    this.form.controls.vmNetName.valueChanges
-        .pipe(
-            debounceTime(1000),
-            takeUntil(this._unsubscribe),
-            startWith(''),
-            )
+    this.form.controls.vmNetName.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
         .subscribe(value => {
-          if (this.form.controls.vmNetName.value !== '') {
+          if (value !== '') {
             this.filteredNetworks = filterObjectOptions(value, 'relativePath', this._networkMap);
           } else {
             this.filteredNetworks = this._networkMap;
           }
+          this.form.controls.vmNetName.setValidators(
+              [AutocompleteFilterValidators.objectMustBeInList(this._networkMap, 'absolutePath', false)]);
         });
   }
 
@@ -294,22 +294,8 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
     return !this.loadingFolders && !this._hasRequiredCredentials();
   }
 
-  isValidNetworkName(): boolean {
-    let isValid = false;
-
-    if (this.cluster.spec.cloud.vsphere.vmNetName !== '' && this.networkTypes.length === 0) {
-      isValid = true;
-    }
-
-    this.networkTypes.forEach(type => {
-      for (const i of this._networkMap[type]) {
-        if (i.absolutePath === this.form.controls.vmNetName.value) {
-          isValid = true;
-        }
-      }
-    });
-
-    return isValid;
+  networkIsValid(): boolean {
+    return (this.cluster.spec.cloud.vsphere.vmNetName !== '' || this.form.controls.vmNetName.valid);
   }
 
   getVSphereOptionsData(isValid: boolean): ClusterProviderSettingsForm {
@@ -330,7 +316,7 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
           },
           username: cloudUser,
           password: cloudPassword,
-          vmNetName: this.isValidNetworkName() ? this.form.controls.vmNetName.value : '',
+          vmNetName: this.networkIsValid() ? this.form.controls.vmNetName.value : '',
           folder: this.form.controls.folder.value,
         },
         dc: this.cluster.spec.cloud.dc,
