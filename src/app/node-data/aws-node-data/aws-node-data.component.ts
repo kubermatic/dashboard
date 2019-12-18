@@ -303,7 +303,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   }
 
   getSubnetToAZ(az: string): AWSSubnet[] {
-    return this.form.controls.subnetID.value === '' ? this.subnetIds[az] : this.filteredSubnets[az];
+    return this.form.controls.subnetID.value === '' ? this._subnetMap[az] : this.filteredSubnets[az];
   }
 
   getSubnetOptionName(subnet: AWSSubnet): string {

@@ -81,6 +81,8 @@ describe('AWSNodeDataComponent', () => {
     expect(component.subnetAZ).toEqual([]);
 
     component.fillSubnetMap(fakeAwsSubnets());
+    component.form.controls.subnetID.setValue('');
+    fixture.detectChanges();
     expect(component.subnetAZ).toEqual(['eu-central-1a', 'eu-central-1c', 'eu-central-1b']);
     expect(component.getSubnetToAZ('eu-central-1a')).toEqual([
       {
