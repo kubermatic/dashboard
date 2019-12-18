@@ -34,7 +34,7 @@
         </mat-option>
       </mat-optgroup>
     </mat-autocomplete>
-    <mat-error *ngIf="form.controls.vmNetName.hasError('mustBeInList')">Input doesn't match options.</mat-error>
+    <mat-error *ngIf="form.controls.vmNetName.hasError('mustBeInList')">Input doesn't match options. Please choose from given options.</mat-error>
     <mat-hint *ngIf="showNetworkHint()">Please enter your credentials first.</mat-hint>
   </mat-form-field>
 
@@ -46,7 +46,7 @@
            [placeholder]="getFolderFormState()"
            [matAutocomplete]="autoFolders">
     <mat-autocomplete #autoFolders="matAutocomplete">
-      <mat-option *ngFor="let item of filteredFolders | async"
+      <mat-option *ngFor="let item of filteredFolders"
                   [value]="item.path">
         {{item.path}}
       </mat-option>

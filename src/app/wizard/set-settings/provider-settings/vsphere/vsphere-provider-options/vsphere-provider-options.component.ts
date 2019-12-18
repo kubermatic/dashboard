@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {Observable, Subject} from 'rxjs';
-import {debounceTime, map, startWith, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {debounceTime, startWith, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../../../core/services';
 import {ClusterEntity} from '../../../../../shared/entity/ClusterEntity';
@@ -24,7 +24,7 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   loadingFolders = false;
   hideOptional = true;
   folders: VSphereFolder[] = [];
-  filteredFolders: Observable<VSphereFolder[]>;
+  filteredFolders: VSphereFolder[] = [];
   filteredNetworks: {[type: string]: VSphereNetwork[]} = {};
 
   private _selectedPreset: string;
@@ -79,13 +79,18 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
       this.form.enable();
     });
 
-    this.filteredFolders = this.form.controls.folder.valueChanges.pipe(
-        debounceTime(1000), takeUntil(this._unsubscribe), startWith(''),
-        map(value => filterArrayOptions(value, 'path', this.folders)));
+    this.form.controls.folder.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+        .subscribe(value => {
+          if (value !== '' && !this.form.controls.folder.pristine) {
+            this.filteredFolders = filterArrayOptions(value, 'path', this.folders);
+          } else {
+            this.filteredFolders = this.folders;
+          }
+        });
 
     this.form.controls.vmNetName.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
         .subscribe(value => {
-          if (value !== '') {
+          if (value !== '' && !this.form.controls.vmNetName.pristine) {
             this.filteredNetworks = filterObjectOptions(value, 'relativePath', this._networkMap);
           } else {
             this.filteredNetworks = this._networkMap;
