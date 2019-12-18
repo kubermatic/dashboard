@@ -6,6 +6,7 @@ export interface Config {
   oidc_provider_url?: string;
   oidc_provider_scope?: string;
   oidc_provider_client_id?: string;
+  oidc_connector_id?: string;
 }
 
 export interface UserGroupConfig {
