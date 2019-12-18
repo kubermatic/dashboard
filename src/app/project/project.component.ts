@@ -214,7 +214,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   getName(name: string): string {
-    return name.length > 19 ? `${name.substring(0, 19)}...` : `${name}`;
+    return name.length > 19 ? `${name.substring(0, 15)}...` : `${name}`;
   }
 
   getProjectTooltip(name: string): string {
