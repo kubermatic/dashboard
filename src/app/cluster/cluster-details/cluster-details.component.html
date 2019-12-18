@@ -41,7 +41,8 @@
          [href]="getProxyURL()"
          target="_blank"
          mat-flat-button
-         [disabled]="!isClusterRunning || (!isEditEnabled() && isOpenshiftCluster())">
+         [disabled]="!isClusterRunning || (!isEditEnabled() && isOpenshiftCluster())"
+         *ngIf="(settings.adminSettings | async).enableDashboard">
         {{getConnectName()}}
       </a>
     </div>
