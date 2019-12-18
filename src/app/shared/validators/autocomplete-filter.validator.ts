@@ -1,7 +1,7 @@
 import {FormControl} from '@angular/forms';
 
 export class AutocompleteFilterValidators {
-  static arrayMustBeInList =
+  static mustBeInArrayList =
       (list: any[], key: string, isRequired: boolean) => {
         return (control: FormControl) => {
           let isInside = false;
@@ -26,15 +26,11 @@ export class AutocompleteFilterValidators {
             });
           }
 
-          if (isInside) {
-            return null;
-          } else {
-            return {mustBeInList: {valid: false}};
-          }
+          return isInside ? null : {mustBeInList: {valid: false}};
         };
       }
 
-  static objectMustBeInList = (list: any, key: string, isRequired: boolean) => {
+  static mustBeInObjectList = (list: any, key: string, isRequired: boolean) => {
     return (control: FormControl) => {
       let isInside = false;
       const valueToCompare: string|boolean = typeof control['value'] === 'object' ?
@@ -59,11 +55,7 @@ export class AutocompleteFilterValidators {
         });
       }
 
-      if (isInside) {
-        return null;
-      } else {
-        return {mustBeInList: {valid: false}};
-      }
+      return isInside ? null : {mustBeInList: {valid: false}};
     };
   }
 }

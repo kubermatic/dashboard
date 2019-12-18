@@ -39,7 +39,7 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       type: new FormControl(
           this.nodeData.spec.cloud.hetzner.type,
-          [Validators.required, AutocompleteFilterValidators.objectMustBeInList(this.types, 'name', true)]),
+          [Validators.required, AutocompleteFilterValidators.mustBeInObjectList(this.types, 'name', true)]),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -69,7 +69,7 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
             this.filteredTypes = this.types;
           }
           this.form.controls.type.setValidators(
-              [AutocompleteFilterValidators.objectMustBeInList(this.types, 'name', true)]);
+              [AutocompleteFilterValidators.mustBeInObjectList(this.types, 'name', true)]);
           this.form.controls.type.updateValueAndValidity();
         });
 

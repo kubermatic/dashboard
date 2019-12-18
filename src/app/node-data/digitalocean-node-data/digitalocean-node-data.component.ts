@@ -39,7 +39,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
     this.form = new FormGroup({
       size: new FormControl(
           this.nodeData.spec.cloud.digitalocean.size,
-          [Validators.required, AutocompleteFilterValidators.objectMustBeInList(this.sizes, 'slug', true)]),
+          [Validators.required, AutocompleteFilterValidators.mustBeInObjectList(this.sizes, 'slug', true)]),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
@@ -68,7 +68,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
             this.filteredSizes = this.sizes;
           }
           this.form.controls.size.setValidators(
-              [Validators.required, AutocompleteFilterValidators.objectMustBeInList(this.sizes, 'slug', true)]);
+              [Validators.required, AutocompleteFilterValidators.mustBeInObjectList(this.sizes, 'slug', true)]);
           this.form.controls.size.updateValueAndValidity();
         });
 

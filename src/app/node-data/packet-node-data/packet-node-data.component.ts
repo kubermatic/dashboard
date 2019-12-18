@@ -40,7 +40,7 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       size: new FormControl(
           this.nodeData.spec.cloud.packet.instanceType,
-          [Validators.required, AutocompleteFilterValidators.arrayMustBeInList(this.sizes, 'name', true)]),
+          [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true)]),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
@@ -69,7 +69,7 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
             this.filteredSizes = this.sizes;
           }
           this.form.controls.size.setValidators(
-              [Validators.required, AutocompleteFilterValidators.arrayMustBeInList(this.sizes, 'name', true)]);
+              [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true)]);
         });
 
     this._checkSizeState();

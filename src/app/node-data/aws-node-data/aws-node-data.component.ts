@@ -47,13 +47,13 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       size: new FormControl(
           {value: this.nodeData.spec.cloud.aws.instanceType, disabled: true},
-          [Validators.required, AutocompleteFilterValidators.arrayMustBeInList(this.sizes, 'name', true)]),
+          [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true)]),
       disk_size: new FormControl(this.nodeData.spec.cloud.aws.diskSize, Validators.required),
       disk_type: new FormControl(this.nodeData.spec.cloud.aws.volumeType, Validators.required),
       ami: new FormControl(this.nodeData.spec.cloud.aws.ami),
       subnetID: new FormControl(
           this.nodeData.spec.cloud.aws.subnetID,
-          [Validators.required, AutocompleteFilterValidators.objectMustBeInList(this._subnetMap, 'id', true)]),
+          [Validators.required, AutocompleteFilterValidators.mustBeInObjectList(this._subnetMap, 'id', true)]),
     });
 
     this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
@@ -72,7 +72,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
             this.filteredSubnets = this._subnetMap;
           }
           this.form.controls.subnetID.setValidators(
-              [Validators.required, AutocompleteFilterValidators.objectMustBeInList(this._subnetMap, 'id', true)]);
+              [Validators.required, AutocompleteFilterValidators.mustBeInObjectList(this._subnetMap, 'id', true)]);
         });
 
     this.form.controls.size.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
@@ -83,7 +83,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
             this.filteredSizes = this.sizes;
           }
           this.form.controls.size.setValidators(
-              [Validators.required, AutocompleteFilterValidators.arrayMustBeInList(this.sizes, 'name', true)]);
+              [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true)]);
         });
 
     this._addNodeService.nodeProviderDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {

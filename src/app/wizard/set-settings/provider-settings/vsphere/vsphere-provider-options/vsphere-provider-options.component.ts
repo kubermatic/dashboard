@@ -39,7 +39,7 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
       password: new FormControl(this.cluster.spec.cloud.vsphere.password),
       vmNetName: new FormControl(
           this.cluster.spec.cloud.vsphere.vmNetName,
-          [AutocompleteFilterValidators.objectMustBeInList(this._networkMap, 'absolutePath', false)]),
+          [AutocompleteFilterValidators.mustBeInObjectList(this._networkMap, 'absolutePath', false)]),
       folder: new FormControl(this.cluster.spec.cloud.vsphere.folder),
     });
 
@@ -96,7 +96,7 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
             this.filteredNetworks = this._networkMap;
           }
           this.form.controls.vmNetName.setValidators(
-              [AutocompleteFilterValidators.objectMustBeInList(this._networkMap, 'absolutePath', false)]);
+              [AutocompleteFilterValidators.mustBeInObjectList(this._networkMap, 'absolutePath', false)]);
         });
   }
 
@@ -198,11 +198,7 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   getNetworks(type: string): VSphereNetwork[] {
-    if (this.form.controls.vmNetName.value === '') {
-      return this._networkMap[type];
-    } else {
-      return this.filteredNetworks[type];
-    }
+    return this.form.controls.vmNetName.value === '' ? this._networkMap[type] : this.filteredNetworks[type];
   }
 
   getNetworkFormState(): string {

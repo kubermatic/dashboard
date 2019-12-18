@@ -43,7 +43,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
     this.form = new FormGroup({
       size: new FormControl(
           this.nodeData.spec.cloud.azure.size,
-          [Validators.required, AutocompleteFilterValidators.arrayMustBeInList(this.sizes, 'name', true)]),
+          [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true)]),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -73,7 +73,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
             this.filteredSizes = this.sizes;
           }
           this.form.controls.size.setValidators(
-              [Validators.required, AutocompleteFilterValidators.arrayMustBeInList(this.sizes, 'name', true)]);
+              [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true)]);
         });
 
     this.loadDatacenter();

@@ -40,7 +40,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       flavor: new FormControl(
           this.nodeData.spec.cloud.openstack.flavor,
-          [Validators.required, AutocompleteFilterValidators.arrayMustBeInList(this.flavors, 'slug', true)]),
+          [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.flavors, 'slug', true)]),
       useFloatingIP: new FormControl(this.nodeData.spec.cloud.openstack.useFloatingIP),
       disk_size: new FormControl(
           this.nodeData.spec.cloud.openstack.diskSize > 0 ? this.nodeData.spec.cloud.openstack.diskSize : ''),
@@ -60,7 +60,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
             this.filteredFlavors = this.flavors;
           }
           this.form.controls.flavor.setValidators(
-              [Validators.required, AutocompleteFilterValidators.arrayMustBeInList(this.flavors, 'slug', true)]);
+              [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.flavors, 'slug', true)]);
         });
 
     this._addNodeService.changeNodeProviderData(this._getNodeProviderData());
