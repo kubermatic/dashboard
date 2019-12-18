@@ -1,13 +1,15 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {iif, Subject} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {debounceTime, first, startWith, takeUntil} from 'rxjs/operators';
 import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {HetznerTypes} from '../../shared/entity/provider/hetzner/TypeEntity';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
+import {filterObjectOptions} from '../../shared/utils/common-utils';
+import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 
 @Component({
   selector: 'kubermatic-hetzner-node-data',
@@ -24,6 +26,8 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
   types: HetznerTypes = {dedicated: [], standard: []};
   form: FormGroup;
   loadingTypes = false;
+  filteredTypes: HetznerTypes = {dedicated: [], standard: []};
+
   private _unsubscribe = new Subject<void>();
   private _selectedCredentials: string;
 
@@ -33,7 +37,9 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      type: new FormControl(this.nodeData.spec.cloud.hetzner.type, Validators.required),
+      type: new FormControl(
+          this.nodeData.spec.cloud.hetzner.type,
+          [Validators.required, AutocompleteFilterValidators.objectMustBeInList(this.types, 'name', true)]),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -54,6 +60,18 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
     this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
       this._selectedCredentials = credentials;
     });
+
+    this.form.controls.type.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+        .subscribe(value => {
+          if (value !== '' && !this.form.controls.type.pristine) {
+            this.filteredTypes = filterObjectOptions(value, 'name', this.types);
+          } else {
+            this.filteredTypes = this.types;
+          }
+          this.form.controls.type.setValidators(
+              [AutocompleteFilterValidators.objectMustBeInList(this.types, 'name', true)]);
+          this.form.controls.type.updateValueAndValidity();
+        });
 
     this.checkTypeState();
     this.reloadHetznerTypes();
