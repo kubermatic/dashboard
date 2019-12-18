@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {iif, Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, first, takeUntil} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, first, startWith, takeUntil} from 'rxjs/operators';
 
 import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
@@ -9,6 +9,8 @@ import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '../../shared/entity/provider/gcp/GCP';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
+import {filterArrayOptions} from '../../shared/utils/common-utils';
+import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 
 @Component({
   selector: 'kubermatic-gcp-node-data',
@@ -27,6 +29,8 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
   machineTypes: GCPMachineSize[] = [];
   zones: GCPZone[] = [];
   form: FormGroup;
+  filteredMachineTypes: GCPMachineSize[] = [];
+
   private _loadingZones = false;
   private _loadingDiskTypes = false;
   private _loadingSizes = false;
@@ -41,8 +45,9 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       diskSize: new FormControl(this.nodeData.spec.cloud.gcp.diskSize, Validators.required),
       diskType: new FormControl({value: this.nodeData.spec.cloud.gcp.diskType, disabled: true}, Validators.required),
-      machineType:
-          new FormControl({value: this.nodeData.spec.cloud.gcp.machineType, disabled: true}, Validators.required),
+      machineType: new FormControl(
+          {value: this.nodeData.spec.cloud.gcp.machineType, disabled: true},
+          [Validators.required, AutocompleteFilterValidators.arrayMustBeInList(this.machineTypes, 'name', true)]),
       zone: new FormControl({value: this.nodeData.spec.cloud.gcp.zone, disabled: true}, Validators.required),
       preemptible: new FormControl(this.nodeData.spec.cloud.gcp.preemptible),
     });
@@ -72,6 +77,17 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
           this.nodeData.spec.cloud.gcp.zone = value;
           this._reloadSizes();
           this._reloadDiskTypes();
+        });
+
+    this.form.controls.machineType.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+        .subscribe(value => {
+          if (value !== '' && !this.form.controls.machineType.pristine) {
+            this.filteredMachineTypes = filterArrayOptions(value, 'name', this.machineTypes);
+          } else {
+            this.filteredMachineTypes = this.machineTypes;
+          }
+          this.form.controls.machineType.setValidators(
+              [Validators.required, AutocompleteFilterValidators.arrayMustBeInList(this.machineTypes, 'name', true)]);
         });
 
     this._reloadZones();
