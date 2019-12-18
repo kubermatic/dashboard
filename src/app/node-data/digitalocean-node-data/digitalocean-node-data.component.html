@@ -4,25 +4,29 @@
        class="mat-select-container">
     <mat-form-field class="km-with-hint">
       <mat-label>{{getSizesFormState()}}</mat-label>
-      <mat-select formControlName="size"
-                  disableOptionCentering
-                  [panelClass]="isInWizard() ? 'km-optgroup-dropdown' : 'km-optgroup-dropdown km-add-dialog-dropdown'"
-                  [placeholder]="getSizesFormState()">
+      <input matInput
+             formControlName="size"
+             name="size"
+             [placeholder]="getSizesFormState()"
+             [matAutocomplete]="autoSizes">
+      <mat-autocomplete #autoSizes="matAutocomplete">
         <mat-optgroup *ngIf="sizes.standard.length > 0"
                       label="Standard Droplets">
-          <mat-option *ngFor="let size of sizes.standard"
+          <mat-option *ngFor="let size of filteredSizes.standard"
                       [value]="size.slug">
             {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
           </mat-option>
         </mat-optgroup>
         <mat-optgroup *ngIf="sizes.optimized.length > 0"
                       label="Optimized Droplets">
-          <mat-option *ngFor="let size of sizes.optimized"
+          <mat-option *ngFor="let size of filteredSizes.optimized"
                       [value]="size.slug">
             {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
           </mat-option>
         </mat-optgroup>
-      </mat-select>
+      </mat-autocomplete>
+      <mat-error *ngIf="form.controls.size.hasError('mustBeInList') && !form.controls.size.hasError('required')">Input doesn't match options. Please choose from given options.</mat-error>
+      <mat-error *ngIf="form.controls.size.hasError('required')">Size is <strong>required</strong>.</mat-error>
       <mat-hint *ngIf="showSizeHint()">Please enter a valid token first.</mat-hint>
     </mat-form-field>
   </div>
