@@ -20,6 +20,8 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
   displayAPIDocs: true,
   displayDemoInfo: false,
   displayTermsOfService: false,
+  enableDashboard: true,
+  enableOIDCKubeconfig: false,
 };
 
 @Injectable()

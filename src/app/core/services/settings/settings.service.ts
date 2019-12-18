@@ -25,6 +25,8 @@ const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   displayAPIDocs: true,
   displayDemoInfo: false,
   displayTermsOfService: false,
+  enableDashboard: true,
+  enableOIDCKubeconfig: false,
 };
 
 @Injectable()

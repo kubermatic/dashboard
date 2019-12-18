@@ -86,6 +86,8 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       this.addNodeService.changeNodeData(this.getAddNodeData());
       this.addNodeService.changeNodeOperatingSystemData(this.getOSSpec());
       this.valid.emit(this.form.valid);
+      this.providerData.valid = this.form.valid;
+      this.addNodeService.changeNodeProviderData(this.providerData);
     });
 
     this.operatingSystemForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
