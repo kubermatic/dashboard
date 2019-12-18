@@ -1,7 +1,8 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {EMPTY, iif, Subject} from 'rxjs';
-import {switchMap, takeUntil} from 'rxjs/operators';
+import {debounceTime, startWith, switchMap, takeUntil} from 'rxjs/operators';
+
 import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
@@ -9,6 +10,8 @@ import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {AzureSizes} from '../../shared/entity/provider/azure/AzureSizeEntity';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
+import {filterArrayOptions} from '../../shared/utils/common-utils';
+import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 
 @Component({
   selector: 'kubermatic-azure-node-data',
@@ -27,6 +30,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   form: FormGroup;
   datacenter: DataCenterEntity;
   loadingSizes = false;
+  filteredSizes: AzureSizes[] = [];
 
   private _unsubscribe = new Subject<void>();
   private _selectedPreset: string;
@@ -37,7 +41,9 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      size: new FormControl(this.nodeData.spec.cloud.azure.size, Validators.required),
+      size: new FormControl(
+          this.nodeData.spec.cloud.azure.size,
+          [Validators.required, AutocompleteFilterValidators.arrayMustBeInList(this.sizes, 'name', true)]),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -58,6 +64,17 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
       this._selectedPreset = preset;
     });
+
+    this.form.controls.size.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+        .subscribe(value => {
+          if (value !== '' && !this.form.controls.size.pristine) {
+            this.filteredSizes = filterArrayOptions(value, 'name', this.sizes);
+          } else {
+            this.filteredSizes = this.sizes;
+          }
+          this.form.controls.size.setValidators(
+              [Validators.required, AutocompleteFilterValidators.arrayMustBeInList(this.sizes, 'name', true)]);
+        });
 
     this.loadDatacenter();
     this.checkSizeState();
