@@ -25,3 +25,17 @@ export function addKeyValuePair(): FormGroup {
     value: new FormControl(''),
   });
 }
+
+export function filterArrayOptions(value: string, field: string, options: any): any {
+  const filterValue = value.toLowerCase();
+  return options.filter(option => option[field].toLowerCase().includes(filterValue));
+}
+
+export function filterObjectOptions(value: string, field: string, options: any): any {
+  const result = {};
+  const filterValue = value.toLowerCase();
+  Object.keys(options).forEach(key => {
+    result[key] = options[key].filter(option => option[field].toLowerCase().includes(filterValue));
+  });
+  return result;
+}

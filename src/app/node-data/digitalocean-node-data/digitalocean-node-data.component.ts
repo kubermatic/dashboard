@@ -1,13 +1,15 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {iif, Subject} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {debounceTime, first, startWith, takeUntil} from 'rxjs/operators';
 import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
+import {filterObjectOptions} from '../../shared/utils/common-utils';
+import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 
 @Component({
   selector: 'kubermatic-digitalocean-node-data',
@@ -24,6 +26,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
   sizes: DigitaloceanSizes = {optimized: [], standard: []};
   form: FormGroup;
   loadingSizes = false;
+  filteredSizes: DigitaloceanSizes = {optimized: [], standard: []};
 
   private _unsubscribe = new Subject<void>();
   private _selectedCredentials: string;
@@ -34,7 +37,9 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      size: new FormControl(this.nodeData.spec.cloud.digitalocean.size, Validators.required),
+      size: new FormControl(
+          this.nodeData.spec.cloud.digitalocean.size,
+          [Validators.required, AutocompleteFilterValidators.mustBeInObjectList(this.sizes, 'slug', true)]),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
@@ -55,6 +60,18 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
       this._selectedCredentials = credentials;
     });
 
+    this.form.controls.size.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+        .subscribe(value => {
+          if (value !== '' && !this.form.controls.size.pristine) {
+            this.filteredSizes = filterObjectOptions(value, 'slug', this.sizes);
+          } else {
+            this.filteredSizes = this.sizes;
+          }
+          this.form.controls.size.setValidators(
+              [Validators.required, AutocompleteFilterValidators.mustBeInObjectList(this.sizes, 'slug', true)]);
+          this.form.controls.size.updateValueAndValidity();
+        });
+
     this.checkSizeState();
     this.reloadDigitaloceanSizes();
     this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
@@ -70,6 +87,8 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
     } else {
       this.form.controls.size.enable();
     }
+
+    this.form.controls.size.updateValueAndValidity();
   }
 
   getSizesFormState(): string {
