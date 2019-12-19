@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {iif, Subject} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {debounceTime, first, startWith, takeUntil} from 'rxjs/operators';
 
 import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
@@ -9,6 +9,8 @@ import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {PacketSize} from '../../shared/entity/packet/PacketSizeEntity';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
+import {filterArrayOptions} from '../../shared/utils/common-utils';
+import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 
 @Component({
   selector: 'kubermatic-packet-node-data',
@@ -25,6 +27,7 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
   sizes: PacketSize[] = [];
   form: FormGroup;
   loadingSizes = false;
+  filteredSizes: PacketSize[] = [];
 
   private _unsubscribe: Subject<any> = new Subject();
   private _selectedCredentials: string;
@@ -35,7 +38,9 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      size: new FormControl(this.nodeData.spec.cloud.packet.instanceType, Validators.required),
+      size: new FormControl(
+          this.nodeData.spec.cloud.packet.instanceType,
+          [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true)]),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
@@ -55,6 +60,17 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
       this._selectedCredentials = credentials;
     });
+
+    this.form.controls.size.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+        .subscribe(value => {
+          if (value !== '' && !this.form.controls.size.pristine) {
+            this.filteredSizes = filterArrayOptions(value, 'name', this.sizes);
+          } else {
+            this.filteredSizes = this.sizes;
+          }
+          this.form.controls.size.setValidators(
+              [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true)]);
+        });
 
     this._checkSizeState();
     this._reloadPacketSizes();
@@ -129,7 +145,11 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
         .pipe(first())
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((sizes: PacketSize[]) => {
-          this.sizes = sizes;
+          sizes.forEach(size => {
+            if (size.memory !== 'N/A') {
+              this.sizes.push(size);
+            }
+          });
           if (this.nodeData.spec.cloud.packet.instanceType === '' && this.sizes.length) {
             this.form.controls.size.setValue(this.sizes[0].name);
           }

@@ -2,7 +2,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {EMPTY, iif, Subject} from 'rxjs';
-import {switchMap, take, takeUntil} from 'rxjs/operators';
+import {debounceTime, startWith, switchMap, take, takeUntil} from 'rxjs/operators';
 
 import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
@@ -10,6 +10,8 @@ import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {AWSSize, AWSSubnet} from '../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
+import {filterArrayOptions, filterObjectOptions} from '../../shared/utils/common-utils';
+import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 
 @Component({
   selector: 'kubermatic-aws-node-data',
@@ -27,6 +29,8 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
   form: FormGroup;
   subnetIds: AWSSubnet[] = [];
+  filteredSubnets: {[type: string]: AWSSubnet[]} = {};
+  filteredSizes: AWSSize[] = [];
 
   private _subnetMap: {[type: string]: AWSSubnet[]} = {};
   private _loadingSubnetIds = false;
@@ -41,11 +45,15 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      size: new FormControl({value: this.nodeData.spec.cloud.aws.instanceType, disabled: true}, Validators.required),
+      size: new FormControl(
+          {value: this.nodeData.spec.cloud.aws.instanceType, disabled: true},
+          [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true)]),
       disk_size: new FormControl(this.nodeData.spec.cloud.aws.diskSize, Validators.required),
       disk_type: new FormControl(this.nodeData.spec.cloud.aws.volumeType, Validators.required),
       ami: new FormControl(this.nodeData.spec.cloud.aws.ami),
-      subnetID: new FormControl(this.nodeData.spec.cloud.aws.subnetID, Validators.required),
+      subnetID: new FormControl(
+          this.nodeData.spec.cloud.aws.subnetID,
+          [Validators.required, AutocompleteFilterValidators.mustBeInObjectList(this._subnetMap, 'id', true)]),
     });
 
     this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
@@ -55,6 +63,28 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
     });
+
+    this.form.controls.subnetID.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+        .subscribe(value => {
+          if (value !== '' && !this.form.controls.subnetID.pristine) {
+            this.filteredSubnets = filterObjectOptions(value, 'id', this._subnetMap);
+          } else {
+            this.filteredSubnets = this._subnetMap;
+          }
+          this.form.controls.subnetID.setValidators(
+              [Validators.required, AutocompleteFilterValidators.mustBeInObjectList(this._subnetMap, 'id', true)]);
+        });
+
+    this.form.controls.size.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+        .subscribe(value => {
+          if (value !== '' && !this.form.controls.size.pristine) {
+            this.filteredSizes = filterArrayOptions(value, 'name', this.sizes);
+          } else {
+            this.filteredSizes = this.sizes;
+          }
+          this.form.controls.size.setValidators(
+              [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true)]);
+        });
 
     this._addNodeService.nodeProviderDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.nodeData.spec.cloud.aws = data.spec.aws;
@@ -273,7 +303,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   }
 
   getSubnetToAZ(az: string): AWSSubnet[] {
-    return this._subnetMap[az];
+    return this.form.controls.subnetID.value === '' ? this._subnetMap[az] : this.filteredSubnets[az];
   }
 
   getSubnetOptionName(subnet: AWSSubnet): string {

@@ -4,14 +4,19 @@
        class="mat-select-container">
     <mat-form-field>
       <mat-label>Node Size*</mat-label>
-      <mat-select formControlName="size"
-                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
-                  disableOptionCentering>
-        <mat-option *ngFor="let size of sizes"
+      <input matInput
+             formControlName="size"
+             name="size"
+             placeholder="Node Size*"
+             [matAutocomplete]="autoSize">
+      <mat-autocomplete #autoSize="matAutocomplete">
+        <mat-option *ngFor="let size of filteredSizes"
                     [value]="size.name">
           {{size.name}} ({{size.vcpus}} vCPU, {{size.memory}} GB RAM, {{size.price | number: '1.2-5'}} USD per hour)
         </mat-option>
-      </mat-select>
+      </mat-autocomplete>
+      <mat-error *ngIf="form.controls.size.hasError('mustBeInList') && !form.controls.size.hasError('required')">Input doesn't match options. Please choose from given options.</mat-error>
+      <mat-error *ngIf="form.controls.size.hasError('required')">Size is <strong>required</strong>.</mat-error>
       <mat-hint>{{getSizeHint()}}</mat-hint>
     </mat-form-field>
   </div>
@@ -47,8 +52,8 @@
            formControlName="subnetID"
            name="subnetID"
            [placeholder]="getSubnetIDFormState()"
-           [matAutocomplete]="auto">
-    <mat-autocomplete #auto="matAutocomplete">
+           [matAutocomplete]="autoSubnets">
+    <mat-autocomplete #autoSubnets="matAutocomplete">
       <mat-optgroup *ngFor="let az of subnetAZ"
                     [label]="az">
         <mat-option *ngFor="let subnet of getSubnetToAZ(az)"
@@ -57,6 +62,8 @@
         </mat-option>
       </mat-optgroup>
     </mat-autocomplete>
+    <mat-error *ngIf="form.controls.subnetID.hasError('mustBeInList') && !form.controls.subnetID.hasError('required')">Input doesn't match options. Please choose from given options.</mat-error>
+    <mat-error *ngIf="form.controls.subnetID.hasError('required')">Subnet ID & Availability Zone is <strong>required</strong>.</mat-error>
     <mat-hint>{{getSubnetIDHint()}}</mat-hint>
   </mat-form-field>
 

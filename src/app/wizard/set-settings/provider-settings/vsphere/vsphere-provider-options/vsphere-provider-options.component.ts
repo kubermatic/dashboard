@@ -1,12 +1,15 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import {debounceTime, startWith, takeUntil} from 'rxjs/operators';
+
 import {WizardService} from '../../../../../core/services';
 import {ClusterEntity} from '../../../../../shared/entity/ClusterEntity';
 import {VSphereFolder, VSphereNetwork} from '../../../../../shared/entity/provider/vsphere/VSphereEntity';
 import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
+import {filterArrayOptions, filterObjectOptions} from '../../../../../shared/utils/common-utils';
+import {AutocompleteFilterValidators} from '../../../../../shared/validators/autocomplete-filter.validator';
 
 @Component({
   selector: 'kubermatic-vsphere-provider-options',
@@ -21,6 +24,8 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   loadingFolders = false;
   hideOptional = true;
   folders: VSphereFolder[] = [];
+  filteredFolders: VSphereFolder[] = [];
+  filteredNetworks: {[type: string]: VSphereNetwork[]} = {};
 
   private _selectedPreset: string;
   private _networkMap: {[type: string]: VSphereNetwork[]} = {};
@@ -32,7 +37,9 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       username: new FormControl(this.cluster.spec.cloud.vsphere.username),
       password: new FormControl(this.cluster.spec.cloud.vsphere.password),
-      vmNetName: new FormControl(this.cluster.spec.cloud.vsphere.vmNetName),
+      vmNetName: new FormControl(
+          this.cluster.spec.cloud.vsphere.vmNetName,
+          [AutocompleteFilterValidators.mustBeInObjectList(this._networkMap, 'absolutePath', false)]),
       folder: new FormControl(this.cluster.spec.cloud.vsphere.folder),
     });
 
@@ -71,6 +78,26 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
       }
       this.form.enable();
     });
+
+    this.form.controls.folder.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+        .subscribe(value => {
+          if (value !== '' && !this.form.controls.folder.pristine) {
+            this.filteredFolders = filterArrayOptions(value, 'path', this.folders);
+          } else {
+            this.filteredFolders = this.folders;
+          }
+        });
+
+    this.form.controls.vmNetName.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+        .subscribe(value => {
+          if (value !== '' && !this.form.controls.vmNetName.pristine) {
+            this.filteredNetworks = filterObjectOptions(value, 'relativePath', this._networkMap);
+          } else {
+            this.filteredNetworks = this._networkMap;
+          }
+          this.form.controls.vmNetName.setValidators(
+              [AutocompleteFilterValidators.mustBeInObjectList(this._networkMap, 'absolutePath', false)]);
+        });
   }
 
   ngOnDestroy(): void {
@@ -171,7 +198,7 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   getNetworks(type: string): VSphereNetwork[] {
-    return this._networkMap[type];
+    return this.form.controls.vmNetName.value === '' ? this._networkMap[type] : this.filteredNetworks[type];
   }
 
   getNetworkFormState(): string {
@@ -268,6 +295,10 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
     return !this.loadingFolders && !this._hasRequiredCredentials();
   }
 
+  networkIsValid(): boolean {
+    return (this.cluster.spec.cloud.vsphere.vmNetName !== '' || this.form.controls.vmNetName.valid);
+  }
+
   getVSphereOptionsData(isValid: boolean): ClusterProviderSettingsForm {
     let cloudUser = this.cluster.spec.cloud.vsphere.infraManagementUser.username;
     let cloudPassword = this.cluster.spec.cloud.vsphere.infraManagementUser.password;
@@ -286,7 +317,7 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
           },
           username: cloudUser,
           password: cloudPassword,
-          vmNetName: this.form.controls.vmNetName.value,
+          vmNetName: this.networkIsValid() ? this.form.controls.vmNetName.value : '',
           folder: this.form.controls.folder.value,
         },
         dc: this.cluster.spec.cloud.dc,

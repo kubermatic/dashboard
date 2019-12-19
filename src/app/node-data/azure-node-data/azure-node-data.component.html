@@ -4,14 +4,19 @@
        class="mat-select-container">
     <mat-form-field class="km-with-hint">
       <mat-label>{{getSizesFormState()}}</mat-label>
-      <mat-select [placeholder]="getSizesFormState()"
-                  disableOptionCentering
-                  formControlName="size">
-        <mat-option *ngFor="let size of sizes"
+      <input matInput
+             formControlName="size"
+             name="size"
+             [placeholder]="getSizesFormState()"
+             [matAutocomplete]="autoSizes">
+      <mat-autocomplete #autoSizes="matAutocomplete">
+        <mat-option *ngFor="let size of filteredSizes"
                     [value]="size.name">
-          {{ size.name }}
+          {{size.name}}
         </mat-option>
-      </mat-select>
+      </mat-autocomplete>
+      <mat-error *ngIf="form.controls.size.hasError('mustBeInList') && !form.controls.size.hasError('required')">Input doesn't match options. Please choose from given options.</mat-error>
+      <mat-error *ngIf="form.controls.size.hasError('required')">Size is <strong>required</strong>.</mat-error>
       <mat-hint *ngIf="showSizeHint()">Please enter valid credentials first.</mat-hint>
     </mat-form-field>
   </div>

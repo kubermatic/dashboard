@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {iif, Subject} from 'rxjs';
-import {take, takeUntil} from 'rxjs/operators';
+import {debounceTime, startWith, take, takeUntil} from 'rxjs/operators';
 import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
@@ -9,6 +9,8 @@ import {OperatingSystemSpec} from '../../shared/entity/NodeEntity';
 import {OpenstackFlavor} from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
+import {filterArrayOptions} from '../../shared/utils/common-utils';
+import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 
 @Component({
   selector: 'kubermatic-openstack-node-data',
@@ -25,6 +27,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   flavors: OpenstackFlavor[] = [];
   loadingFlavors = false;
   form: FormGroup;
+  filteredFlavors: OpenstackFlavor[] = [];
 
   private _unsubscribe = new Subject<void>();
   private _selectedPreset: string;
@@ -35,7 +38,9 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      flavor: new FormControl(this.nodeData.spec.cloud.openstack.flavor, Validators.required),
+      flavor: new FormControl(
+          this.nodeData.spec.cloud.openstack.flavor,
+          [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.flavors, 'slug', true)]),
       useFloatingIP: new FormControl(this.nodeData.spec.cloud.openstack.useFloatingIP),
       disk_size: new FormControl(
           this.nodeData.spec.cloud.openstack.diskSize > 0 ? this.nodeData.spec.cloud.openstack.diskSize : ''),
@@ -46,6 +51,17 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._addNodeService.changeNodeProviderData(this._getNodeProviderData());
     });
+
+    this.form.controls.flavor.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+        .subscribe(value => {
+          if (value !== '' && !this.form.controls.flavor.pristine) {
+            this.filteredFlavors = filterArrayOptions(value, 'slug', this.flavors);
+          } else {
+            this.filteredFlavors = this.flavors;
+          }
+          this.form.controls.flavor.setValidators(
+              [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.flavors, 'slug', true)]);
+        });
 
     this._addNodeService.changeNodeProviderData(this._getNodeProviderData());
     this._loadFlavors();
