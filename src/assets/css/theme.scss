@@ -1307,4 +1307,117 @@
       }
     }
   }
+
+  // Application component styles. Keep them at the end of the file to be able to make them most important,
+  // more important than Angular Material overrides for example.
+  .km-version-picker-container {
+    margin: (.75 * $baseline-grid) (8 * $baseline-grid) (.75 * $baseline-grid) 0;
+
+    .km-version-picker {
+      height: 50px;
+
+      * {
+        cursor: default;
+      }
+
+      .mat-form-field-outline {
+        color: $divider !important;
+      }
+
+      .km-version-picker-type {
+        background: $divider;
+        border-bottom: 1px;
+        border-left: 1px;
+        border-right: 0;
+        border-top: 1px;
+        border-style: solid;
+        border-color: $divider;
+        border-radius: $border-radius 0 0 $border-radius;
+        height: 51px;
+        margin-top: -1px;
+        padding: $baseline-grid;
+        width: 50px;
+
+        i {
+          height: 30px;
+          width: 30px;
+          margin: 0 !important;
+        }
+      }
+
+      .mat-form-field {
+        font-size: $subhead-font-size-base;
+        margin-top: 2.5 * $baseline-grid;
+
+        div.mat-form-field-flex label {
+          color: $text-muted;
+        }
+
+        .mat-form-field-infix {
+          padding: (1.5 * $baseline-grid) 0 (1.5 * $baseline-grid) 0 !important;
+          width: 120px;
+        }
+
+        .mat-form-field-outline-end {
+          border-radius: 0 $border-radius $border-radius 0 !important;
+        }
+
+        .mat-form-field-outline-start {
+          border-radius: 0 !important;
+        }
+      }
+    }
+
+    .km-version-picker-disabled {
+      ::ng-deep .mat-select-arrow {
+        visibility: hidden;
+      }
+    }
+
+    .km-version-picker-enabled:hover {
+      * {
+        cursor: pointer;
+      }
+
+      .km-version-picker-type {
+        border-bottom: 2px;
+        border-left: 2px;
+        border-top: 2px;
+        border-style: solid;
+        border-color: $quaternary;
+        margin-left: -1px;
+        transition: all .5s ease;
+        width: 51px;
+      }
+
+      .mat-form-field-outline-thick {
+        color: $quaternary !important;
+        opacity: 1 !important;
+        transition: all .5s ease;
+      }
+
+      div.mat-form-field-flex label {
+        transition: all .5s ease;
+        color: $quaternary-dark !important;
+      }
+    }
+
+    .fa {
+      margin: 1.5 * $baseline-grid;
+      font-size: $card-title-font-size;
+    }
+  }
+
+  .km-select-addon-dialog-option-container {
+    box-shadow: 0 0 0 1px $divider;
+
+    &:hover {
+      box-shadow: 0 0 0 2px $quaternary-hover;
+      transition: all .5s ease;
+    }
+
+    .km-select-addon-dialog-option-desc {
+      color: $text;
+    }
+  }
 }

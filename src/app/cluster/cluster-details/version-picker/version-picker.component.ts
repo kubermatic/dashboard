@@ -12,7 +12,6 @@ import {ChangeClusterVersionComponent} from '../change-cluster-version/change-cl
 @Component({
   selector: 'km-version-picker',
   templateUrl: './version-picker.component.html',
-  styleUrls: ['./version-picker.component.scss'],
 })
 
 export class VersionPickerComponent implements OnInit, OnChanges {
