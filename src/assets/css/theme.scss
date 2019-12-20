@@ -232,16 +232,6 @@
     border: none !important;
   }
 
-  .mat-chip.mat-standard-chip {
-    background: $divider;
-    border: 1px solid $divider;
-    color: $text;
-
-    div.km-chip-accent {
-      background: $chip-accent;
-    }
-  }
-
   .mat-button,
   .mat-flat-button,
   .mat-raised-button {
@@ -424,10 +414,6 @@
   .mat-checkbox-frame {
     border: 2px solid $divider;
     border-radius: $border-radius;
-  }
-
-  .mat-select-arrow {
-    background-color: $text;
   }
 
   .mat-button-toggle {
@@ -1159,6 +1145,7 @@
   }
 
   .mat-select-arrow {
+    background-color: $text;
     display: inline-block;
     width: 6px !important;
     height: 6px !important;
@@ -1186,6 +1173,9 @@
   }
 
   .mat-chip.mat-standard-chip {
+    background: $divider;
+    border: 1px solid $divider;
+    color: $text;
     border-radius: $border-radius;
     font-size: $body-font-size-base;
     font-weight: normal;
@@ -1196,6 +1186,10 @@
 
     &.km-chip-container {
       padding: 0;
+    }
+
+    div.km-chip-accent {
+      background: $chip-accent;
     }
 
     div {
