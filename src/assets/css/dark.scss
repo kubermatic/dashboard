@@ -65,13 +65,10 @@ $dark-theme: map_merge($dark-theme, (foreground: $foreground));
     filter: brightness(1.35);
   }
 
-  // Make footer icons white as the rest of the footer.
-  footer i {
-    filter: invert(.25) brightness(100) contrast(100);
-  }
-
-  // Make provider logos white.
-  .km-provider-logo {
+  // Make footer icons, provider logos and addon logos white.
+  footer i,
+  .km-provider-logo,
+  .km-addon-logo {
     filter: invert(.25) brightness(100) contrast(100);
   }
 }

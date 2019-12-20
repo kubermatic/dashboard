@@ -1,4 +1,3 @@
-@import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
 
 .mat-tab-group {
@@ -9,9 +8,8 @@
   overflow-y: hidden;
 }
 
-.km-icon-warning {
+.km-icon-warning-orange {
   width: $baseline-grid * 3.5;
   height: $baseline-grid * 3.5;
-  background-color: $indicator-orange;
   background-size: $baseline-grid * 1.75;
 }

@@ -378,12 +378,48 @@
     text-decoration: none;
   }
 
+  .km-addon-container {
+    .km-addon-menu {
+      border-left: 1px solid $divider;
+
+      &:hover {
+        background-color: $background-card-accent;
+      }
+    }
+  }
+
+  .km-new-addon-container {
+    color: $text-footer;
+
+    &.disabled {
+      border: 1px dashed $background-card-accent;
+      color: $text-muted;
+    }
+
+    &:hover:not(.disabled) {
+      background-color: $background-card-accent;
+      border: 1px solid $divider;
+    }
+  }
+
   .mat-checkbox-checked .mat-checkbox-background {
     background-color: $primary !important;
   }
 
   .mat-checkbox-disabled .mat-checkbox-background {
     background-color: $disabled-button-color !important;
+  }
+
+  .km-icon-warning-orange {
+    background-color: $indicator-orange;
+  }
+
+  .km-summary-left {
+    color: $text;
+  }
+
+  .km-icon-key {
+    background: $text;
   }
 
   .mat-checkbox-frame {
@@ -769,10 +805,6 @@
 
         div {
           outline: none;
-        }
-
-        &.km-odd {
-          background-color: $medium-background;
         }
 
         &.km-status-running:hover {

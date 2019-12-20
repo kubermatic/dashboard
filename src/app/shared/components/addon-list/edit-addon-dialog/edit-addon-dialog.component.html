@@ -1,7 +1,8 @@
 <km-dialog-title title="Edit Addon"></km-dialog-title>
 <mat-dialog-content>
   <div class="mat-dialog-content">
-    <img *ngIf="hasLogo()"
+    <img class="km-addon-logo"
+         *ngIf="hasLogo()"
          [src]="getAddonLogo()"
          [alt]="addon.name">
     <div *ngIf="!hasLogo()">{{addon.name}}</div>
