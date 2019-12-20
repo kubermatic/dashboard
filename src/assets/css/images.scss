@@ -18,11 +18,12 @@
 .km-user {
   mask: url("/assets/images/icons/user.svg");
   mask-repeat: no-repeat;
-  mask-size: auto;
+  mask-size: contain;
   mask-position: center;
-  width: 2.25 * $baseline-grid;
-  height: 2.25 * $baseline-grid;
+  width: 3 * $baseline-grid;
+  height: 3 * $baseline-grid;
   background-color: $default-color;
+  display: inline-block;
 }
 
 // icons
