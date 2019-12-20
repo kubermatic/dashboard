@@ -53,6 +53,7 @@
 
   $background: mat-color($palette-background, background);
   $background-navbar: mat-color($palette-background, app-bar);
+  $project-switch: rgba(mat-color($palette-foreground, secondary-text), .7);
 
   $divider: mat-color($palette-foreground, divider);
   $shadow: 0 4px 4px rgba(#000, .08);
@@ -68,6 +69,34 @@
   $scrollbar-color: $divider;
 
   $transition: all .5s ease;
+
+  .km-project-view-switch {
+    mat-button-toggle {
+      border-color: $divider !important;
+
+      &:hover {
+        border: 1px solid $divider;
+      }
+    }
+
+    .mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle:hover {
+      border: 1px solid $divider;
+    }
+
+    .mat-button-toggle-checked {
+      border: 1px solid $divider;
+      background-color: $divider !important;
+    }
+  }
+
+  .km-short-name-circle {
+    border: 2px solid $divider;
+    background-color: $background-card;
+
+    &.km-hidden-owners {
+      background-color: $divider;
+    }
+  }
 
   .km-notification {
     background: $background-card !important;

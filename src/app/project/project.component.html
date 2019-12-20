@@ -1,15 +1,16 @@
 <div fxLayout>
   <div fxFlex
        class="km-project-top-bar">
-    <mat-button-toggle-group group="projectsView"
+    <mat-button-toggle-group class="km-project-view-switch"
+                             group="projectsView"
                              (change)="changeView()">
       <mat-button-toggle value="projectscard"
                          [checked]="showCards">
-        <i class="km-icon-projects-card"></i>
+        <i class="km-icon-mask km-icon-projects-card"></i>
       </mat-button-toggle>
       <mat-button-toggle value="projectstable"
                          [checked]="!showCards">
-        <i class="km-icon-projects-table"></i>
+        <i class="km-icon-mask km-icon-projects-table"></i>
       </mat-button-toggle>
     </mat-button-toggle-group>
     <button id="km-add-project-top-btn"
@@ -98,7 +99,7 @@
             {{getOwners(element.owners)}}
             <p class="km-project-more-owner"
                *ngIf="isMoreOwners(element.owners)"
-               [matTooltip]="getMoreOwners(element.owners)"> ...
+               [matTooltip]="getMoreOwners(element.owners)">&nbsp;...
               <span *ngIf="getMoreOwnersCount(element.owners) > 0">+{{getMoreOwnersCount(element.owners)}}</span>
             </p>
           </td>
@@ -204,6 +205,7 @@
           </button>
         </div>
       </mat-card-header>
+      <mat-divider></mat-divider>
       <mat-card-content>
         <div class="km-project-cards-content-row">
           <span><i class="km-icon-mask km-icon-cluster"></i> {{clusterCount[project.id]}}</span>
