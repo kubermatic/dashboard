@@ -1,7 +1,6 @@
 @import "colors";
 @import "variables";
 
-// Branding.
 .km-header-logo {
   background-image: url("/assets/images/branding/logo.svg");
   background-repeat: no-repeat;
@@ -26,7 +25,6 @@
   display: inline-block;
 }
 
-// icons
 .km-icon-delete {
   display: inline-block;
   width: 2.25 * $baseline-grid;
@@ -381,7 +379,6 @@
   mask-size: cover;
 }
 
-// provider logos
 .km-provider-logo-aws {
   background-image: url("/assets/images/clouds/aws.svg");
   background-repeat: no-repeat;
@@ -486,7 +483,6 @@
   min-height: 3.75 * $baseline-grid;
 }
 
-// Operating system logos.
 .km-os-image-centos {
   background-image: url("/assets/images/os/centos.svg");
   background-repeat: no-repeat;

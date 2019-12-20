@@ -13,7 +13,7 @@
     }
 
     a {
-      font-size: $subhead-font-size-base-lg;
+      font-size: $font-size-subhead-lg;
       padding: (1.25 * $baseline-grid) (3.75 * $baseline-grid) !important;
       display: flex;
       align-items: center;
@@ -34,7 +34,7 @@
 
   .km-nav-custom-container {
     .mat-list-item a {
-      font-size: $subhead-font-size-base;
+      font-size: $font-size-subhead;
 
       i {
         background-color: transparent;
@@ -53,7 +53,7 @@
 
     .km-custom-list-item {
       height: 6.25 * $baseline-grid;
-      font-size: $subhead-font-size-base;
+      font-size: $font-size-subhead;
 
       a {
         height: 6.25 * $baseline-grid;
@@ -62,7 +62,7 @@
   }
 
   .km-sidenav-bottom {
-    font-size: $subhead-font-size-base;
+    font-size: $font-size-subhead;
 
     .mat-list-item a i {
       width: 2 * $baseline-grid;

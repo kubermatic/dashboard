@@ -12,8 +12,8 @@
   margin: $baseline-grid 0;
 
   .km-select-addon-dialog-option-desc {
-    font-size: $body-font-size-base;
-    line-height: $subhead-font-size-base;
+    font-size: $font-size-body;
+    line-height: $font-size-subhead;
     margin-top: 2 * $baseline-grid;
   }
 }

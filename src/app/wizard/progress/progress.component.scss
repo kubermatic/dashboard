@@ -14,7 +14,7 @@
   .km-wizard-step {
     color: $medium-text-color;
     cursor: default;
-    font-size: $subhead-font-size-base;
+    font-size: $font-size-subhead;
     font-weight: normal;
     padding-top: $baseline-grid;
     user-select: none;
@@ -24,7 +24,7 @@
       border-radius: 50%;
       background: $separator;
       display: inline-flex;
-      font-size: $body-font-size-base;
+      font-size: $font-size-body;
       font-weight: normal;
       height: 3 * $baseline-grid;
       justify-content: center;

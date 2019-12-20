@@ -12,7 +12,7 @@ mat-card {
   display: flex;
   align-items: center;
   line-height: 2.4 * $line-height;
-  font-size: $subhead-font-size-base;
+  font-size: $font-size-subhead;
 
   &.km-summary-sshkeys {
     align-items: flex-start;
@@ -38,7 +38,7 @@ mat-card {
   display: flex;
   align-items: center;
   width: 4.25 * $baseline-grid;
-  font-size: $subhead-font-size-base;
+  font-size: $font-size-subhead;
 }
 
 .km-icon-key {

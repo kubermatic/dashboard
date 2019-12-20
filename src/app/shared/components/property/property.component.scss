@@ -6,14 +6,14 @@
 }
 
 .km-property-label {
-  font-size: $caption-font-size-base;
+  font-size: $font-size-caption;
   line-height: 1.75 * $baseline-grid;
   margin-bottom: $baseline-grid / 2;
   min-height: 1.75 * $baseline-grid;
 }
 
 .km-property-value {
-  font-size: $subhead-font-size-base;
+  font-size: $font-size-subhead;
   line-height: 3 * $baseline-grid;
   margin-bottom: $baseline-grid;
   min-height: 3 * $baseline-grid;

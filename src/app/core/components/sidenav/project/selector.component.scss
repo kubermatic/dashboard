@@ -28,19 +28,19 @@ a {
   }
 
   .mat-select-value-text {
-    font-size: $subhead-font-size-base-lg;
-    line-height: $subhead-font-size-base-lg + $baseline-grid / 2;
+    font-size: $font-size-subhead-lg;
+    line-height: $font-size-subhead-lg + $baseline-grid / 2;
   }
 
   .mat-select-placeholder {
     opacity: 0.4;
-    font-size: $subhead-font-size-base-lg;
-    line-height: $subhead-font-size-base-lg;
+    font-size: $font-size-subhead-lg;
+    line-height: $font-size-subhead-lg;
   }
 
   mat-label {
     margin: ($baseline-grid / 2) 0;
-    font-size: $caption-font-size-base;
-    line-height: $caption-font-size-base;
+    font-size: $font-size-caption;
+    line-height: $font-size-caption;
   }
 }

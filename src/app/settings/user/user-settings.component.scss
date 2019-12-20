@@ -18,21 +18,21 @@
     }
 
     .km-account-info-name {
-      font-size: $subhead-font-size-base-lg;
+      font-size: $font-size-subhead-lg;
       line-height: 21px;
     }
 
     .km-account-info-email {
-      font-size: $subhead-font-size-base;
+      font-size: $font-size-subhead;
     }
   }
 
   .km-account-settings {
-    font-size: $subhead-font-size-base;
+    font-size: $font-size-subhead;
     padding: 3.75 * $baseline-grid;
 
     .km-account-settings-header {
-      font-size: $subhead-font-size-base-lg;
+      font-size: $font-size-subhead-lg;
       line-height: 2.1 * $line-height;
       margin-bottom: 3 * $baseline-grid;
     }
@@ -52,7 +52,7 @@
 
         ::ng-deep.mat-button-toggle-label-content {
           font-weight: normal;
-          font-size: $subhead-font-size-base;
+          font-size: $font-size-subhead;
         }
       }
     }

@@ -16,7 +16,7 @@ mat-form-field.km-node-deployment-name {
 div.km-os-options {
   width: 100%;
   line-height: 3 * $line-height;
-  font-size: $body-font-size-base;
+  font-size: $font-size-body;
   display: flex;
   margin: 0 0 (1.25 * $baseline-grid);
 
@@ -68,7 +68,7 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
   }
 
   ::ng-deep .mat-button-toggle-label-content {
-    font-size: $subhead-font-size-base;
+    font-size: $font-size-subhead;
     font-weight: normal;
     color: $text-color;
   }

@@ -29,7 +29,7 @@
   }
 
   .km-admin-settings {
-    font-size: $subhead-font-size-base;
+    font-size: $font-size-subhead;
     padding: 3.75 * $baseline-grid;
 
     .km-admin-settings-nd-container {
@@ -84,7 +84,7 @@
 
         ::ng-deep.mat-button-toggle-label-content {
           font-weight: normal;
-          font-size: $subhead-font-size-base;
+          font-size: $font-size-subhead;
         }
       }
     }

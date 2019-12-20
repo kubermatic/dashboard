@@ -17,7 +17,7 @@
     h4 {
       font-weight: 400;
       margin: (1.25 * $baseline-grid) 0;
-      font-size: $subhead-font-size-base-lg;
+      font-size: $font-size-subhead-lg;
       color: $text-color;
     }
   }
@@ -42,7 +42,7 @@
 
 .km-project-status-info {
   color: $indicator-red;
-  font-size: $small-font-size-base;
+  font-size: $font-size-small;
   margin-left: 1.875 * $baseline-grid;
 }
 

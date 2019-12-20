@@ -6,8 +6,8 @@
 }
 
 .km-notification {
-  border-radius: $notification-border-radius;
-  box-shadow: $elevation-8dp;
+  border-radius: $border-radius;
+  box-shadow: $notification-border-box-shadow;
   min-height: unset !important;
   padding: unset !important;
   z-index: 2000 !important;
@@ -19,7 +19,7 @@
 
   .sn-title {
     display: flex;
-    font-size: $subhead-font-size-base !important;
+    font-size: $font-size-subhead !important;
     line-height: unset !important;
     padding: 0 !important;
 
@@ -29,7 +29,7 @@
 
     .km-notification-type {
       align-items: center;
-      border-radius: $notification-border-radius 0 0 $notification-border-radius;
+      border-radius: $border-radius 0 0 $border-radius;
       display: flex;
       height: inherit;
       justify-content: center;
@@ -48,7 +48,7 @@
       word-break: break-word;
 
       &.small {
-        font-size: $body-font-size-base !important;
+        font-size: $font-size-body !important;
       }
     }
 

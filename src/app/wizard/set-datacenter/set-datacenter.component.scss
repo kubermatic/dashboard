@@ -12,7 +12,7 @@ mat-button-toggle-group[group='datacenterGroup'] {
 
   div.km-location {
     font-weight: normal;
-    font-size: $subhead-font-size-base;
+    font-size: $font-size-subhead;
     line-height: 1.6 * $line-height;
     padding: 0 0 0 (1.875 * $baseline-grid);
     color: $text-color;
@@ -24,7 +24,7 @@ mat-button-toggle-group[group='datacenterGroup'] {
 
     ::ng-deep .km-country-prefix {
       display: block;
-      font-size: $caption-font-size-base;
+      font-size: $font-size-caption;
       line-height: 1.4 * $line-height;
     }
   }
