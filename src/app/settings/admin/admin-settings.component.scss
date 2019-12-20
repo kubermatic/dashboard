@@ -1,7 +1,7 @@
 @import "../../../assets/css/variables";
 
 .mat-card {
-  margin-top: 3 * $baseline-grid;
+  margin-top: 3 * $baseline-grid !important;
   padding: (3.75 * $baseline-grid) 0;
 
   .mat-card-header {
