@@ -2,8 +2,11 @@ $font-primary: 'Roboto', Helvetica, Arial, sans-serif;
 $font-primary-mono: 'Roboto Mono', monospace;
 $font-secondary: 'Ubuntu', sans-serif;
 
-$default-background: #edeff0;
-$default-color: #4d555c;
+$background-default: #edeff0;
+$background-frontpage: #001930;
+$background-frontpage-button: #fff;
+$text: #4d555c;
+$text-frontpage: #203f58;
 
 @function rem($multiplier) {
   $font-size: 10px;

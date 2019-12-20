@@ -15,6 +15,8 @@
   $background-card: mat-color($palette-background, card);
   $background-card-accent: rgba($background-hover, .02);
 
+  $base-bg: mat-color($palette-background, base);
+
   $sidenav-text: mat-color($palette-primary, 300);
   $sidenav-text-light: mat-color($palette-primary, 500);
   $sidenav-background: mat-color($palette-primary, 800);
@@ -70,6 +72,14 @@
 
   $transition: all .5s ease;
 
+  i.fa-exclamation-triangle {
+    color: $indicator-red;
+  }
+
+  .km-node-details {
+    background-color: $background-card-accent;
+  }
+
   .km-project-view-switch {
     mat-button-toggle {
       border-color: $divider !important;
@@ -101,6 +111,16 @@
   .km-notification {
     background: $background-card !important;
     color: $text !important;
+  }
+
+  .km-notification-type {
+    &.success {
+      background: $indicator-green;
+    }
+
+    &.error {
+      background: $indicator-red;
+    }
   }
 
   .km-serviceaccount-token-wrapper,
@@ -509,16 +529,24 @@
     }
 
     td.mat-cell {
-      border-top: 1px solid $dropdown-border;
+      border-top: 1px solid $divider;
     }
 
     td:first-child {
-      border-left: 1px solid $dropdown-border;
+      border-left: 1px solid $divider;
     }
 
     td:last-child {
-      border-right: 1px solid $dropdown-border;
+      border-right: 1px solid $divider;
     }
+  }
+
+  .km-no-item {
+    border-color: $divider !important;
+  }
+
+  #km-add-serviceaccount-token {
+    color: $text-muted;
   }
 
   .km-paginator {
@@ -534,19 +562,19 @@
     padding: 0;
     border-style: solid dashed dashed dashed;
     border-width: 1px;
-    border-color: $dropdown-border;
+    border-color: $divider;
     border-bottom-right-radius: $border-radius;
     border-bottom-left-radius: $border-radius;
 
     &:hover {
-      background-color: $hover;
+      background-color: $background-card-accent;
     }
 
     button {
       background-color: transparent;
       width: 100%;
       line-height: 5 * $baseline-grid;
-      color: $medium-text-color;
+      color: $text-muted;
       font-weight: normal;
       font-size: $subhead-font-size-base;
     }

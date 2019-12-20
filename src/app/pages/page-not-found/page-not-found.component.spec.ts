@@ -3,7 +3,7 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import {Auth} from '../../core/services/index';
+import {Auth} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {RouterStub} from '../../testing/router-stubs';
 import {AuthMockService} from '../../testing/services/auth-mock.service';
