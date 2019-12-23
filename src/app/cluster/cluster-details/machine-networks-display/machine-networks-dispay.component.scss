@@ -1,10 +1,4 @@
-@import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
-
-button:disabled {
-  color: $disabled-button-color;
-  cursor: default;
-}
 
 mat-card-header {
   padding: 0 (1.25 * $baseline-grid) 0 (7 * $baseline-grid) !important;
