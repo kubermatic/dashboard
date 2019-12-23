@@ -1,16 +1,4 @@
-@import "../../../assets/css/colors";
 @import "../../../assets/css/variables";
-
-.km-icon-delete {
-  width: 1.75 * $baseline-grid;
-  height: 1.75 * $baseline-grid;
-}
-
-button:disabled {
-  .km-icon-delete {
-    color: $disabled-text-color;
-  }
-}
 
 .km-addon-card-content {
   padding: 0 (7 * $baseline-grid);
@@ -28,10 +16,6 @@ button:disabled {
     height: 3 * $baseline-grid;
     width: 3 * $baseline-grid;
   }
-}
-
-.km-provider-menu-btn {
-  color: $text-color;
 }
 
 .km-provider-menu {

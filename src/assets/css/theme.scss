@@ -37,6 +37,8 @@
   $alternative-text: #1b658f;
 
   $secondary-light: #dcf3fa;
+  $secondary: #b9ccdf;
+  $secondary-dark: #b6ebfc;
 
   $quaternary: #3bc6ad;
   $quaternary-hover: #21dfa9;
@@ -513,7 +515,6 @@
       }
     }
 
-    // transition for buttons in tables
     .km-table-actions button {
       opacity: 0;
       margin-left: 0.625 * $baseline-grid;
@@ -575,6 +576,7 @@
   }
 
   .km-mat-footer-row {
+    color: $text-muted !important;
     padding: 0;
     border-style: solid dashed dashed dashed;
     border-width: 1px;
@@ -590,7 +592,7 @@
       background-color: transparent;
       width: 100%;
       line-height: 5 * $baseline-grid;
-      color: $text-muted;
+      color: $text-muted !important;
       font-weight: normal;
       font-size: $font-size-subhead;
     }
@@ -614,20 +616,17 @@
     }
   }
 
-  // Notifications
   simple-notifications * {
     cursor: auto;
     z-index: 2000;
   }
 
-  // Sidenav
   .mat-nav-list {
     .mat-list-item-content {
       padding: 0 !important;
     }
   }
 
-  // Projects
   .km-project-toggle {
     .mat-tab-header {
       border-bottom: none;
@@ -666,7 +665,6 @@
     }
   }
 
-  // Step Provider and Datacenter
   mat-button-toggle-group {
     background-color: transparent;
     box-shadow: none !important;
@@ -854,7 +852,6 @@
     }
   }
 
-  // copy text
   .km-copy {
     cursor: pointer;
 
@@ -863,11 +860,10 @@
     }
 
     &:active {
-      color: $light-primary;
+      color: lighten($primary, 0.5);
     }
   }
 
-  // List Header sorting arrow
   .mat-sort-header-arrow {
     margin: auto 0 auto (0.75 * $baseline-grid) !important;
 
@@ -879,12 +875,10 @@
     }
   }
 
-  // mat card remove border
   .mat-card {
     box-shadow: none !important;
   }
 
-  // button shadow
   .mat-raised-button {
     height: 30px;
     line-height: 1.6 * $line-height !important;
@@ -892,12 +886,10 @@
     font-weight: 500 !important;
   }
 
-  // overlay background
   .mat-button-focus-overlay {
     background-color: transparent !important;
   }
 
-  // cluster details: edit provider settings
   .km-provider-edit-settings,
   .km-machine-networks-settings {
     .mat-menu-content {
@@ -933,12 +925,10 @@
     visibility: hidden !important;
   }
 
-  // Tags.
   .km-tags-in-wizard {
     margin-top: 5px;
   }
 
-  // Card headers.
   .mat-card-header .mat-card-title {
     padding: $baseline-grid 0 (2 * $baseline-grid);
     font-size: 20px;
@@ -954,14 +944,12 @@
     margin: 0 !important;
   }
 
-  // Card contents.
   .km-content-wrap {
     display: flex;
     flex-flow: row wrap;
     padding: $baseline-grid (7 * $baseline-grid) 0 !important;
   }
 
-  // Card "expansion panel".
   .km-card-expansion-panel {
     font-size: $font-size-subhead;
     margin: 0 (7 * $baseline-grid);
@@ -987,15 +975,11 @@
     }
   }
 
-  // Row width.
   .mat-column-status,
   .mat-column-stateArrow {
     width: $baseline-grid;
   }
 
-  // Inputs.
-
-  // Dialogs.
   .mat-dialog-container {
     min-width: $dialog-width !important;
     max-width: $dialog-width !important;
@@ -1033,17 +1017,10 @@
     }
   }
 
-  // Tooltips.
   .mat-tooltip-panel {
     height: 4 * $baseline-grid;
   }
 
-  // Font colors.
-  .km-color-primary {
-    color: $primary !important;
-  }
-
-  // Dropdowns.
   .mat-select-panel {
     margin-top: 3.75 * $baseline-grid !important;
     margin-left: 0.75 * $baseline-grid !important;
@@ -1115,7 +1092,6 @@
     }
   }
 
-  // Chips.
   mat-chip-list {
     cursor: default;
 
@@ -1153,7 +1129,6 @@
     }
   }
 
-  // Menus.
   .mat-menu-item {
     padding: 0 (1.25 * $baseline-grid) !important;
     line-height: 4.2 * $line-height !important;
@@ -1172,7 +1147,6 @@
     min-height: auto !important;
   }
 
-  // Confirmation dialogs.
   #km-confirmation-dialog mat-dialog-content,
   #km-delete-cluster-dialog mat-dialog-content {
     margin-bottom: 3.75 * $baseline-grid;
@@ -1180,12 +1154,6 @@
 
   .km-pod-security-policy-row {
     align-items: center;
-  }
-
-  .km-cluster-panel-container {
-    background: $divider;
-    border-bottom: 1px solid $text-muted;
-    color: $text;
   }
 
   .mat-tooltip {
@@ -1207,7 +1175,6 @@
     background: $scrollbar-background;
   }
 
-  // Component styles.
   .km-project-selector {
     border-bottom: $sidenav-divider-top solid $sidenav-border-width;
   }
@@ -1253,8 +1220,7 @@
     }
   }
 
-  // Application component styles. Keep them at the end of the file to be able to make them most important,
-  // more important than Angular Material overrides for example.
+  // Application component styles - it's every class that starts with "km-" prefix.
   .km-spinner {
     position: absolute;
     top: $baseline-grid;
@@ -1273,6 +1239,136 @@
     line-height: 2 * $line-height;
     font-family: $font-primary-mono;
     color: $text;
+  }
+
+  .km-card-progress-bar.mat-card {
+    padding: (1.25 * $baseline-grid) (3.75 * $baseline-grid) (2.5 * $baseline-grid);
+
+    .mat-card-title {
+      margin-bottom: 0;
+      margin-top: 0;
+      padding-right: 1.875 * $baseline-grid;
+      text-align: center;
+    }
+
+    .km-wizard-step {
+      color: $text-muted;
+      cursor: default;
+      font-size: $font-size-subhead;
+      font-weight: normal;
+      padding-top: $baseline-grid;
+      user-select: none;
+
+      .km-wizard-step-number {
+        align-items: center;
+        border-radius: 50%;
+        background: $divider;
+        display: inline-flex;
+        font-size: $font-size-body;
+        font-weight: normal;
+        height: 3 * $baseline-grid;
+        justify-content: center;
+        margin-right: 1.75 * $baseline-grid;
+        width: 3 * $baseline-grid;
+      }
+
+      &.active {
+        color: $primary;
+        font-weight: 500;
+
+        .km-wizard-step-number {
+          background: $secondary-dark;
+        }
+      }
+
+      &.completed {
+        color: $primary;
+        cursor: pointer;
+
+        .km-wizard-step-number {
+          background: $secondary-dark;
+        }
+      }
+    }
+
+    .km-wizard-step-divider {
+      height: 1px;
+      background: $divider;
+      margin: (2.5 * $baseline-grid) (2.5 * $baseline-grid) 0 $baseline-grid;
+    }
+  }
+
+  .km-cluster-spec-type {
+    margin-right: 2.5 * $baseline-grid;
+    min-width: $type-toggle-width * 2 + $baseline-grid;
+    max-width: $type-toggle-width * 2 + $baseline-grid;
+
+    mat-button-toggle {
+      min-height: 6.25 * $baseline-grid;
+      max-height: 6.25 * $baseline-grid;
+      min-width: $type-toggle-width;
+      max-width: $type-toggle-width;
+      margin: (0.25 * $baseline-grid) 0 0 0;
+      border-width: 0.25 * $baseline-grid !important;
+      background-color: $background-card-accent;
+
+      i {
+        filter: grayscale(100%);
+      }
+
+      &:hover {
+        background-color: transparent;
+        border: (0.25 * $baseline-grid) solid $quaternary !important;
+        transition: all .5s ease;
+      }
+
+      &[value='kubernetes'] {
+        border-top-left-radius: $border-radius;
+        border-bottom-left-radius: $border-radius;
+      }
+
+      &[value='openshift'] {
+        border-top-right-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+      }
+
+      &.mat-button-toggle-checked {
+        background-color: transparent;
+        border: (0.25 * $baseline-grid) solid $primary !important;
+
+        i {
+          filter: none;
+        }
+      }
+    }
+
+    .mat-button-toggle-label-content {
+      color: $text;
+      font-weight: normal;
+      font-size: $font-size-subhead;
+    }
+  }
+
+  .km-wizard-settings-extended-wrapper {
+    margin: (4 * $baseline-grid) 0 (2.5 * $baseline-grid) 0;
+
+    .km-wizard-settings-extended-divider {
+      height: 1px;
+      background: $divider;
+      margin: (2 * $baseline-grid) 0;
+    }
+
+    .km-wizard-settings-extended-btn {
+      color: $text-muted;
+      cursor: pointer;
+      margin: $baseline-grid;
+      user-select: none;
+
+      .km-icon-arrow-down,
+      .km-icon-arrow-up {
+        background: $text-muted;
+      }
+    }
   }
 
   .km-version-picker-container {
@@ -1370,6 +1466,55 @@
     .fa {
       margin: 1.5 * $baseline-grid;
       font-size: $font-size-card-title;
+    }
+  }
+
+  .km-cluster-panel-container {
+    background: $background-card-accent;
+    border-bottom: 1px solid rgba($text, .1);
+    color: $text;
+    height: $toolbar-height + $sidenav-border-width;
+    margin: (-$content-padding) (-$content-padding) $content-padding (-$content-padding);
+    padding: 0 $content-padding 0 0;
+
+    .km-cluster-panel-container-positioning {
+      margin-top: $baseline-grid;
+
+      .km-cluster-panel-icon {
+        cursor: pointer;
+        height: 6.25 * $baseline-grid;
+        width: 11.875 * $baseline-grid;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: -$baseline-grid;
+
+        .mat-icon-button {
+          width: 5.25 * $baseline-grid;
+          height: 5.25 * $baseline-grid;
+
+          &:hover:not([disabled]) {
+            background-color: rgba($text, .1);
+          }
+        }
+      }
+
+      .km-icon-arrow-left {
+        background-color: $text;
+      }
+
+      .mat-divider {
+        border-color: rgba($text, .1);
+        height: 5 * $baseline-grid !important;
+        margin: (-$baseline-grid) (4 * $baseline-grid) 0 0 !important;
+      }
+
+      .km-cluster-type i {
+        filter: grayscale(100%);
+        height: 4 * $baseline-grid;
+        margin-right: 3 * $baseline-grid;
+        width: 4 * $baseline-grid;
+      }
     }
   }
 
