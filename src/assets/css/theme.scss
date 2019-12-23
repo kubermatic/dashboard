@@ -36,6 +36,8 @@
   $alternative-light: #edf9fc;
   $alternative-text: #1b658f;
 
+  $secondary-light: #dcf3fa;
+
   $quaternary: #3bc6ad;
   $quaternary-hover: #21dfa9;
   $quaternary-dark: #1c8282;
@@ -58,6 +60,8 @@
 
   $divider: mat-color($palette-foreground, divider);
   $shadow: 0 4px 4px rgba(#000, .08);
+
+  $light-button-color: #bdc6d1;
 
   $disabled-button-color: #d4d4d4;
 
@@ -157,7 +161,7 @@
 
   .km-main,
   .km-main > div,
-  footer {
+  .km-footer {
     background-color: $background;
   }
 
@@ -438,15 +442,6 @@
     color: $indicator-blue;
   }
 
-  .km-spinner {
-    position: absolute;
-    top: $baseline-grid;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: 2 * $baseline-grid auto;
-  }
-
   .km-table {
     width: 100%;
     border-radius: $border-radius;
@@ -660,7 +655,7 @@
           width: 100%;
           height: 100%;
           background-color: $primary;
-          color: $white-text-color;
+          //color: $white-text-color;
         }
       }
 
@@ -680,7 +675,6 @@
       margin-right: 1.25 * $baseline-grid;
       display: flex;
       align-items: center;
-      background-color: $white-text-color;
       border: 1px solid $border;
       cursor: pointer;
       max-width: 150px;
@@ -792,27 +786,6 @@
           outline: none;
         }
 
-        &.km-status-running:hover {
-          background-color: $light-background;
-        }
-
-        &.km-status-waiting {
-          background-color: $pending;
-
-          &:hover {
-            background-color: $pending-hover;
-          }
-        }
-
-        &.km-status-failed,
-        &.km-status-deleting {
-          background-color: $deleting;
-
-          &:hover {
-            background-color: $deleting-hover;
-          }
-        }
-
         &.km-no-item,
         .km-no-item {
           text-align: center;
@@ -854,15 +827,6 @@
 
     &.km-cluster-details {
       padding: (3.75 * $baseline-grid) 0 0 0;
-    }
-
-    &.km-status-waiting {
-      background-color: $pending;
-    }
-
-    &.km-status-failed,
-    &.km-status-deleting {
-      background-color: $deleting;
     }
 
     .mat-card-header {
@@ -1074,18 +1038,6 @@
     height: 4 * $baseline-grid;
   }
 
-  // Code blocks.
-  .km-code-block {
-    background-color: $grey-background;
-    border-radius: $baseline-grid / 1.5;
-    margin: ($baseline-grid * 2) 0;
-    padding: ($baseline-grid * 1.5) ($baseline-grid * 2);
-    font-size: $font-size-body;
-    line-height: 2 * $line-height;
-    font-family: $font-primary-mono;
-    color: $text;
-  }
-
   // Font colors.
   .km-color-primary {
     color: $primary !important;
@@ -1121,7 +1073,7 @@
     line-height: 3.5 * $line-height !important;
     height: 3.5 * $line-height !important;
     padding-left: 1.25 * $baseline-grid !important;
-    border-top: 1px solid $border !important;
+    border-top: 1px solid $divider !important;
   }
 
   .mat-option {
@@ -1303,6 +1255,26 @@
 
   // Application component styles. Keep them at the end of the file to be able to make them most important,
   // more important than Angular Material overrides for example.
+  .km-spinner {
+    position: absolute;
+    top: $baseline-grid;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 2 * $baseline-grid auto;
+  }
+
+  .km-code-block {
+    background-color: $divider;
+    border-radius: $baseline-grid / 1.5;
+    margin: ($baseline-grid * 2) 0;
+    padding: ($baseline-grid * 1.5) ($baseline-grid * 2);
+    font-size: $font-size-body;
+    line-height: 2 * $line-height;
+    font-family: $font-primary-mono;
+    color: $text;
+  }
+
   .km-version-picker-container {
     margin: (.75 * $baseline-grid) (8 * $baseline-grid) (.75 * $baseline-grid) 0;
 
