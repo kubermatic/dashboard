@@ -63,7 +63,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       private readonly _userService: UserService, private readonly _matDialog: MatDialog,
       private readonly _googleAnalyticsService: GoogleAnalyticsService, private readonly _router: Router,
       private readonly _cookieService: CookieService, private readonly _settingsService: SettingsService,
-      private _previousRouteService: PreviousRouteService) {}
+      private readonly _previousRouteService: PreviousRouteService) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.projects;
