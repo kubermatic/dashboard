@@ -25,7 +25,7 @@ export class FrontpageComponent implements OnInit {
       this._router.navigate(['/projects']);
     }
 
-    const nonceRegExp = /&nonce=(.*)$/;
+    const nonceRegExp = /[\?&#]nonce=([^&]+)/;
     const nonceStr = nonceRegExp.exec(this._auth.getOIDCProviderURL());
     if (!!nonceStr && nonceStr.length >= 2 && !!nonceStr[1]) {
       this._cookieService.set(Auth.Cookie.Nonce, nonceStr[1], null, '/', null, true);

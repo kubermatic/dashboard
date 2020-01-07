@@ -23,5 +23,4 @@ source ${GOPATH}/src/github.com/kubermatic/kubermatic/api/hack/ci/ci-setup-kuber
 echodate "Applying user"
 retry 2 kubectl apply -f $(dirname $0)/fixtures/user.yaml
 
-npm run versioninfo
 WAIT_ON_TIMEOUT=600000 npm run e2e:local

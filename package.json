@@ -4,7 +4,7 @@
   "version": "1.0.0-SNAPSHOT",
   "description": "Kubermatic",
   "repository": "https://github.com/kubermatic/dashboard-v2",
-  "license": "propietary",
+  "license": "proprietary",
   "angular-cli": {},
   "scripts": {
     "start": "npm run versioninfo && ng serve --hmr",
