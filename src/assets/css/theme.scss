@@ -54,30 +54,19 @@
   $text-muted: mat-color($palette-foreground, secondary-text);
   $text-footer: mat-color($palette-primary, 50);
   $text-white: #fff;
-
-  $border: #e3e8ec;
-
   $background: mat-color($palette-background, background);
   $background-navbar: mat-color($palette-background, app-bar);
   $project-switch: rgba(mat-color($palette-foreground, secondary-text), .7);
-
   $divider: mat-color($palette-foreground, divider);
   $shadow: 0 4px 4px rgba(#000, .08);
-
   $light-button-color: #bdc6d1;
-
   $disabled-button-color: #d4d4d4;
-
   $table-row-hover: rgba($divider, .5);
-
   $chip-background: $divider;
   $chip-accent: mat-color($palette-background, card);
-
   $scrollbar-background: mat-color($palette-background, card);
   $scrollbar-color: $divider;
-
   $grey-background: #edeff0;
-
   $transition: all .5s ease;
 
   i.fa-exclamation-triangle {
@@ -88,49 +77,6 @@
     background-color: $background-card-accent;
   }
 
-  .km-project-view-switch {
-    mat-button-toggle {
-      border-color: $divider !important;
-
-      &:hover {
-        border: 1px solid $divider;
-      }
-    }
-
-    .mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle:hover {
-      border: 1px solid $divider;
-    }
-
-    .mat-button-toggle-checked {
-      border: 1px solid $divider;
-      background-color: $divider !important;
-    }
-  }
-
-  .km-short-name-circle {
-    border: 2px solid $divider;
-    background-color: $background-card;
-
-    &.km-hidden-owners {
-      background-color: $divider;
-    }
-  }
-
-  .km-notification {
-    background: $background-card !important;
-    color: $text !important;
-  }
-
-  .km-notification-type {
-    &.success {
-      background: $indicator-green;
-    }
-
-    &.error {
-      background: $indicator-red;
-    }
-  }
-
   .km-serviceaccount-token-wrapper,
   .km-publickey-wrapper {
     background-color: $background-card-accent;
@@ -138,91 +84,6 @@
 
   .km-red {
     color: $indicator-red;
-  }
-
-  .km-text {
-    color: $text;
-  }
-
-  .km-text-muted {
-    color: $text-muted;
-  }
-
-  .km-border {
-    border: 1px solid $divider;
-  }
-
-  .km-border-dashed {
-    border: 1px dashed $divider;
-  }
-
-  .km-icon {
-    color: $text;
-  }
-
-  .km-icon-mask {
-    background-color: $text;
-  }
-
-  .km-main,
-  .km-main > div,
-  .km-footer {
-    background-color: $background;
-  }
-
-  .km-navbar {
-    background-color: $background-navbar;
-    box-shadow: $shadow;
-  }
-
-  .km-footer * {
-    color: $text-footer;
-  }
-
-  .km-login-footer * {
-    color: $text-white;
-  }
-
-  .km-terms * {
-    color: $text;
-  }
-
-  .mat-card,
-  .mat.card * {
-    color: $text;
-  }
-
-  .mat-header-cell,
-  .mat-sort-header-button {
-    color: $text !important;
-  }
-
-  [aria-sort='ascending'] .mat-sort-header-arrow .mat-sort-header-indicator {
-    &::before {
-      content: "";
-      background-color: $text;
-      mask: url("/assets/images/icons/arrow-up.svg");
-      mask-repeat: no-repeat;
-      mask-position: center;
-      min-height: 8px;
-      min-width: 8px;
-      position: absolute;
-      top: 1px;
-    }
-  }
-
-  [aria-sort='descending'] .mat-sort-header-arrow .mat-sort-header-indicator {
-    &::before {
-      content: "";
-      background-color: $text;
-      mask: url("/assets/images/icons/arrow-down.svg");
-      mask-repeat: no-repeat;
-      mask-position: center;
-      min-height: 8px;
-      min-width: 8px;
-      position: absolute;
-      top: -8px;
-    }
   }
 
   td.mat-cell {
@@ -239,6 +100,560 @@
 
   .mat-drawer-side {
     border: none !important;
+  }
+
+  .mat-button-toggle-group-appearance-standard .mat-button-toggle {
+    border: solid 1px $divider;
+
+    &.mat-button-toggle-checked {
+      background-color: transparent;
+      border: 1px solid $primary;
+    }
+
+    &:hover {
+      border: solid 1px $primary;
+      transition: $transition;
+    }
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: $divider;
+  }
+
+  .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+    color: $primary;
+  }
+
+  mat-form-field.mat-form-field {
+    color: $text;
+    width: 100%;
+
+    &.km-with-hint {
+      margin-bottom: 1.875 * $baseline-grid;
+    }
+  }
+
+  span.mat-select-value-text {
+    color: $text;
+  }
+
+  div.mat-form-field-outline.mat-form-field-outline-thick {
+    color: $quaternary;
+  }
+
+  mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) div.mat-form-field-flex:hover label {
+    transition: all .2s ease;
+    color: $quaternary-dark;
+  }
+
+  mat-form-field.mat-focused:not(.ng-invalid) label {
+    color: $alternative-text !important;
+  }
+
+  mat-hint a {
+    color: $primary;
+    text-decoration: none;
+  }
+
+  .mat-checkbox-checked .mat-checkbox-background {
+    background-color: $primary !important;
+  }
+
+  .mat-checkbox-disabled .mat-checkbox-background {
+    background-color: $disabled-button-color !important;
+  }
+
+  .km-icon-warning-orange {
+    background-color: $indicator-orange;
+  }
+
+  .km-summary-left {
+    color: $text;
+  }
+
+  .mat-checkbox-frame {
+    border: 2px solid $divider;
+    border-radius: $border-radius;
+  }
+
+  .mat-button-toggle {
+    .mat-button-toggle-label-content {
+      color: $text;
+    }
+  }
+
+  .green {
+    color: $indicator-green;
+  }
+
+  .orange {
+    color: $indicator-orange;
+  }
+
+  .red {
+    color: $indicator-red;
+  }
+
+  .blue {
+    color: $indicator-blue;
+  }
+
+  #km-add-serviceaccount-token {
+    color: $text-muted;
+  }
+
+  .km-mat-footer-row {
+    color: $text-muted !important;
+    padding: 0;
+    border-style: solid dashed dashed dashed;
+    border-width: 1px;
+    border-color: $divider;
+    border-bottom-right-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
+
+    &:hover {
+      background-color: $background-card-accent;
+    }
+
+    button {
+      background-color: transparent;
+      width: 100%;
+      line-height: 5 * $baseline-grid;
+      color: $text-muted !important;
+      font-weight: normal;
+      font-size: $font-size-subhead;
+    }
+  }
+
+  .mat-nav-list {
+    .mat-list-item-content {
+      padding: 0 !important;
+    }
+  }
+
+  .km-project-toggle {
+    .mat-tab-header {
+      border-bottom: none;
+    }
+
+    .mat-ink-bar {
+      visibility: hidden !important;
+      height: 0;
+    }
+
+    .mat-tab-label {
+      background-color: $secondary !important;
+      opacity: 1;
+      margin-right: 0.375 * $baseline-grid;
+      padding: 0;
+
+      &.mat-tab-disabled {
+        background-color: $disabled-button-color !important;
+      }
+
+      &.mat-tab-label-active {
+        opacity: 1;
+
+        .mat-tab-label-content {
+          width: 100%;
+          height: 100%;
+          background-color: $primary;
+          //color: $white-text-color;
+        }
+      }
+
+      .mat-tab-label-content {
+        text-transform: uppercase;
+        font-size: $font-size-subhead;
+      }
+    }
+  }
+
+  mat-card-header > div > mat-card-title > div {
+    margin: $baseline-grid 0;
+    font-size: $font-size-body;
+  }
+
+  .mat-card.km-with-table-header {
+    padding: (3.75 * $baseline-grid) 0;
+    margin: (2.5 * $baseline-grid) 0 0 0;
+    box-shadow: $border-box-shadow !important;
+    border-radius: $border-radius !important;
+
+    .mat-card-header {
+      padding: 0 7 * $baseline-grid;
+      margin: 0;
+      line-height: 1.6 * $line-height;
+      border-radius: $border-radius $border-radius 0 0;
+    }
+
+    &.km-small .mat-card-header {
+      font-size: $font-size-small !important;
+      line-height: 1.6 * $line-height;
+    }
+
+    .mat-card-content {
+      line-height: 5 * $line-height;
+
+      &.km-row,
+      .km-row {
+        line-height: 5 * $line-height;
+        padding: 0 (3.75 * $baseline-grid);
+        border-top: 1px solid $divider;
+
+        &.km-small {
+          padding: (1.25 * $baseline-grid) (3 * $baseline-grid);
+          margin: 0;
+          line-height: 2 * $line-height;
+        }
+
+        &.km-accordion {
+          padding-bottom: 0;
+
+          > div:first-child {
+            padding-bottom: 10px;
+          }
+        }
+
+        div {
+          outline: none;
+        }
+
+        &.km-no-item,
+        .km-no-item {
+          text-align: center;
+          font-size: $font-size-body;
+        }
+
+        p {
+          line-height: normal;
+          color: $text;
+          margin: 0;
+          font-size: $font-size-body;
+        }
+
+        .km-region {
+          align-items: center;
+
+          .flag-icon {
+            font-size: $font-size-head;
+            margin-right: 1.25 * $baseline-grid;
+          }
+        }
+      }
+    }
+  }
+
+  .mat-card.white {
+    padding: (3.75 * $baseline-grid) 0;
+    margin: 0;
+    box-shadow: $border-box-shadow !important;
+    border-radius: $border-radius !important;
+
+    &.km-cluster-details {
+      padding: (3.75 * $baseline-grid) 0 0 0;
+    }
+
+    .mat-card-header {
+      margin: 0;
+
+      .mat-card-header-text {
+        width: 100%;
+
+        .mat-card-title {
+          padding: 0;
+          margin: 0;
+          align-items: baseline;
+        }
+      }
+    }
+
+    .mat-card-content {
+      line-height: 5 * $line-height;
+
+      &.km-row,
+      .km-row {
+        line-height: 5 * $line-height;
+        padding: 0;
+      }
+    }
+  }
+
+  .mat-card {
+    box-shadow: none !important;
+  }
+
+  .mat-raised-button {
+    height: 30px;
+    line-height: 1.6 * $line-height !important;
+    margin-left: 0.625 * $baseline-grid !important;
+    font-weight: 500 !important;
+  }
+
+  .mat-button-focus-overlay {
+    background-color: transparent !important;
+  }
+
+  .km-provider-edit-settings,
+  .km-machine-networks-settings {
+    .mat-menu-content {
+      padding: 0 !important;
+    }
+  }
+
+  mat-list-item.disabled {
+    i {
+      opacity: 0.3;
+    }
+  }
+
+  .km-btn-in-box:disabled {
+    color: $disabled-button-color;
+  }
+
+  .km-action-button-icon {
+    margin-right: 0.625 * $baseline-grid;
+  }
+
+  .km-clickable {
+    cursor: pointer;
+    outline: none;
+  }
+
+  .km-hidden {
+    visibility: hidden !important;
+  }
+
+  .km-tags-in-wizard {
+    margin-top: 5px;
+  }
+
+  .mat-card-header .mat-card-title {
+    padding: $baseline-grid 0 (2 * $baseline-grid);
+    font-size: 20px;
+    font-weight: normal !important;
+
+    i {
+      font-size: $font-size-subhead-lg;
+      margin: 0 (2.5 * $baseline-grid);
+    }
+  }
+
+  .mat-card-header-text {
+    margin: 0 !important;
+  }
+
+  .mat-column-status,
+  .mat-column-stateArrow {
+    width: $baseline-grid;
+  }
+
+  .mat-tooltip-panel {
+    height: 4 * $baseline-grid;
+  }
+
+  .mat-select-panel {
+    margin-top: 3.75 * $baseline-grid !important;
+    margin-left: 0.75 * $baseline-grid !important;
+    min-width: calc(100% + 20px) !important;
+    max-width: calc(100% + 20px) !important;
+    transform-origin: 50% 0 0 !important;
+
+    &.ng-animating {
+      visibility: hidden;
+    }
+  }
+
+  .km-optgroup-dropdown {
+    margin-left: 2.75 * $baseline-grid !important;
+  }
+
+  .km-sshkey-dropdown {
+    margin-left: 3.75 * $baseline-grid !important;
+  }
+
+  .km-add-dialog-dropdown {
+    margin-top: 4.25 * $baseline-grid !important;
+  }
+
+  .mat-optgroup-label {
+    font-size: $font-size-caption !important;
+    line-height: 3.5 * $line-height !important;
+    height: 3.5 * $line-height !important;
+    padding-left: 1.25 * $baseline-grid !important;
+    border-top: 1px solid $divider !important;
+  }
+
+  .mat-option {
+    padding: 0 0 0 (1.25 * $baseline-grid) !important;
+
+    &.mat-active {
+      background-color: $grey-background !important;
+      color: $text !important;
+    }
+
+    &:hover {
+      background-color: $secondary-light !important;
+      color: $text !important;
+    }
+  }
+
+  .mat-select-arrow-wrapper {
+    top: 3px;
+    right: 0;
+    position: relative;
+  }
+
+  .mat-select-arrow {
+    background-color: $text;
+    display: inline-block;
+    width: 6px !important;
+    height: 6px !important;
+    mask: url("/assets/images/icons/arrow-down.svg");
+    mask-repeat: no-repeat;
+    mask-size: contain;
+  }
+
+  .mat-form-field.mat-focused.mat-primary .mat-select-arrow-wrapper {
+    right: 5px;
+
+    .mat-select-arrow {
+      -webkit-transform: rotate(180deg);
+      transform: rotate(180deg);
+    }
+  }
+
+  #km-confirmation-dialog mat-dialog-content,
+  #km-delete-cluster-dialog mat-dialog-content {
+    margin-bottom: 3.75 * $baseline-grid;
+  }
+
+  .km-pod-security-policy-row {
+    align-items: center;
+  }
+
+  .mat-tooltip {
+    background-color: $primary-light !important;
+    font-size: $font-size-caption !important;
+    margin-top: 0.625 * $baseline-grid !important;
+  }
+
+  ::-webkit-scrollbar {
+    width: $scrollbar-size;
+    height: $scrollbar-size;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: $scrollbar-color;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: $scrollbar-background;
+  }
+
+  #km-add-binding-dialog {
+    mat-button-toggle {
+      margin-right: 0;
+      min-height: 5 * $baseline-grid;
+      max-height: 5 * $baseline-grid;
+      border-color: $divider;
+      background-color: $divider;
+
+      &:first-child {
+        min-width: 10.25 * $baseline-grid;
+        max-width: 10.25 * $baseline-grid;
+        border-top-left-radius: $border-radius;
+        border-bottom-left-radius: $border-radius;
+      }
+
+      &:last-child {
+        min-width: 14.25 * $baseline-grid;
+        max-width: 14.25 * $baseline-grid;
+        border-top-right-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+      }
+
+      &:hover {
+        border: (0.125 * $baseline-grid) solid $primary;
+      }
+    }
+
+    .mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle-checked {
+      border-left: (0.125 * $baseline-grid) solid $primary;
+    }
+
+    .mat-button-toggle-checked {
+      border: (0.125 * $baseline-grid) solid $primary;
+      background-color: $background-card-accent;
+    }
+  }
+
+  // Angular Material overrides.
+  .mat-card,
+  .mat.card * {
+    color: $text;
+  }
+
+  .mat-header-cell,
+  .mat-sort-header-button {
+    color: $text !important;
+  }
+
+  .mat-sort-header-arrow {
+    margin: auto 0 auto (0.75 * $baseline-grid) !important;
+
+    .mat-sort-header-stem,
+    .mat-sort-header-pointer-left,
+    .mat-sort-header-pointer-right,
+    .mat-sort-header-pointer-middle {
+      background: none;
+    }
+  }
+
+  [aria-sort='ascending'] .mat-sort-header-arrow .mat-sort-header-indicator {
+    &::before {
+      content: "";
+      background-color: $text;
+      mask: url("/assets/images/icons/arrow-up.svg");
+      mask-repeat: no-repeat;
+      mask-position: center;
+      min-height: $baseline-grid;
+      min-width: $baseline-grid;
+      position: absolute;
+      top: 1px;
+    }
+  }
+
+  [aria-sort='descending'] .mat-sort-header-arrow .mat-sort-header-indicator {
+    &::before {
+      content: "";
+      background-color: $text;
+      mask: url("/assets/images/icons/arrow-down.svg");
+      mask-repeat: no-repeat;
+      mask-position: center;
+      min-height: $baseline-grid;
+      min-width: $baseline-grid;
+      position: absolute;
+      top: -$baseline-grid;
+    }
+  }
+
+  .mat-card-content {
+    p {
+      color: $light-button-color;
+      font-size: $font-size-caption;
+      margin: 0 0 (1.875 * $baseline-grid);
+    }
+
+    button {
+      border: none;
+      color: $primary;
+      outline: none;
+      cursor: pointer;
+      font-size: $font-size-body;
+      font-weight: 600;
+      padding: 0;
+    }
   }
 
   .mat-button,
@@ -323,128 +738,354 @@
     cursor: auto;
   }
 
-  .mat-button-toggle-group-appearance-standard .mat-button-toggle {
-    border: solid 1px $divider;
+  mat-button-toggle-group {
+    background-color: transparent;
+    box-shadow: none !important;
 
-    &.mat-button-toggle-checked {
-      background-color: transparent;
-      border: 1px solid $primary;
+    mat-button-toggle {
+      margin-right: 1.25 * $baseline-grid;
+      display: flex;
+      align-items: center;
+      border: 1px solid $divider;
+      cursor: pointer;
+      max-width: 150px;
+      min-width: 150px;
+      min-height: 60px;
+      max-height: 60px;
     }
+
+    .mat-button-toggle-label {
+      width: 100%;
+      height: 100%;
+    }
+
+    .mat-button-toggle-label-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+
+      .km-provider-logo {
+        min-height: 28px;
+        max-height: 28px !important;
+        max-width: 90px !important;
+      }
+    }
+
+    .mat-button-toggle-button {
+      height: 100%;
+    }
+  }
+
+  .mat-button-toggle-group-appearance-standard {
+    border: none !important;
+  }
+
+  mat-button-toggle-group[group='datacenterGroup'],
+  mat-button-toggle-group[group='providerGroup'] {
+    .mat-button-toggle {
+      border-radius: $border-radius;
+    }
+
+    .mat-button-toggle-button {
+      height: 100%;
+      text-align: left;
+      padding: 0 (1.25 * $baseline-grid);
+    }
+  }
+
+  mat-button-toggle-group[group='datacenterGroup'] {
+    .mat-button-toggle-button {
+      display: flex;
+    }
+
+    .mat-button-toggle-label-content {
+      padding: 0 (0.625 * $baseline-grid);
+      width: 100%;
+      display: inline-block;
+    }
+  }
+
+  mat-button-toggle-group[group='providerGroup'] .mat-button-toggle-label-content {
+    height: 100%;
+    padding: 0 (1.25 * $baseline-grid);
+  }
+
+  .mat-dialog-container {
+    min-width: $dialog-width !important;
+    max-width: $dialog-width !important;
+    color: $text;
+
+    .mat-dialog-title {
+      font-weight: normal;
+    }
+
+    .mat-dialog-content {
+      font-size: $font-size-subhead;
+      font-weight: 400;
+      max-height: $dialog-max-height;
+      overflow: unset;
+
+      a {
+        text-decoration: none;
+        color: $primary;
+      }
+
+      p {
+        margin: 0 0 $baseline-grid;
+      }
+
+      .km-dialog-warning {
+        display: flex;
+        margin: 2 * $baseline-grid 0;
+      }
+    }
+
+    .mat-dialog-actions {
+      justify-content: flex-end;
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  mat-chip-list {
+    cursor: default;
+
+    &:not(.km-chip-list-with-input) {
+      pointer-events: none;
+    }
+  }
+
+  .mat-chip.mat-standard-chip {
+    background: $divider;
+    border: 1px solid $divider;
+    color: $text;
+    border-radius: $border-radius;
+    font-size: $font-size-body;
+    font-weight: normal;
+    line-height: $font-size-subhead;
+    max-height: 22px;
+    min-height: 22px;
+    padding: (0.375 * $baseline-grid) (1.25 * $baseline-grid);
+
+    &.km-chip-container {
+      padding: 0;
+    }
+
+    div.km-chip-accent {
+      background: $chip-accent;
+    }
+
+    div {
+      align-items: center;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      padding: (0.375 * $baseline-grid) (1.25 * $baseline-grid);
+    }
+  }
+
+  .mat-menu-item {
+    padding: 0 (1.25 * $baseline-grid) !important;
+    line-height: 4.2 * $line-height !important;
+    height: 42px !important;
+
+    .mat-icon {
+      margin-right: 0 !important;
+    }
+  }
+
+  .mat-menu-content {
+    padding: 0 !important;
+  }
+
+  .mat-menu-panel {
+    min-height: auto !important;
+  }
+
+  // Application component styles (it's basically every class that starts with "km-" prefix).
+  .km-text {
+    color: $text;
+  }
+
+  .km-text-muted {
+    color: $text-muted;
+  }
+
+  .km-border {
+    border: 1px solid $divider;
+  }
+
+  .km-border-dashed {
+    border: 1px dashed $divider;
+  }
+
+  .km-icon {
+    color: $text;
+  }
+
+  .km-icon-mask {
+    background-color: $text;
+  }
+
+  .km-copy {
+    cursor: pointer;
+    outline: none;
 
     &:hover {
-      border: solid 1px $primary;
-      transition: $transition;
+      color: $primary;
+    }
+
+    &:active {
+      color: lighten($primary, 0.5);
     }
   }
 
-  .mat-form-field-appearance-outline .mat-form-field-outline {
-    color: $divider;
-  }
-
-  .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
-    color: $primary;
-  }
-
-  mat-form-field.mat-form-field {
+  .km-code-block {
+    background-color: $divider;
+    border-radius: $baseline-grid / 1.5;
+    margin: ($baseline-grid * 2) 0;
+    padding: ($baseline-grid * 1.5) ($baseline-grid * 2);
+    font-size: $font-size-body;
+    line-height: 2 * $line-height;
+    font-family: $font-primary-mono;
     color: $text;
-    width: 100%;
+  }
 
-    &.km-with-hint {
-      margin-bottom: 1.875 * $baseline-grid;
+  .km-content-wrap {
+    display: flex;
+    flex-flow: row wrap;
+    padding: $baseline-grid (7 * $baseline-grid) 0 !important;
+  }
+
+  .km-no-item {
+    border-color: $divider !important;
+  }
+
+  .km-spinner {
+    position: absolute;
+    top: $baseline-grid;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 2 * $baseline-grid auto;
+  }
+
+  .km-provider-logo {
+    display: block;
+    height: 100% !important;
+    width: 100% !important;
+    max-height: 30px !important;
+    max-width: 70px !important;
+  }
+
+  .km-main,
+  .km-main > div,
+  .km-footer {
+    background-color: $background;
+  }
+
+  .km-navbar {
+    background-color: $background-navbar;
+    box-shadow: $shadow;
+  }
+
+  .km-footer * {
+    color: $text-footer;
+  }
+
+  .km-terms * {
+    color: $text;
+  }
+
+  simple-notifications * {
+    cursor: auto;
+    z-index: 2000;
+  }
+
+  .km-notification {
+    background: $background-card !important;
+    color: $text !important;
+  }
+
+  .km-notification-type {
+    &.success {
+      background: $indicator-green;
+    }
+
+    &.error {
+      background: $indicator-red;
     }
   }
 
-  span.mat-select-value-text {
-    color: $text;
+  .km-project-selector {
+    border-bottom: $sidenav-divider-top solid $sidenav-border-width;
   }
 
-  div.mat-form-field-outline.mat-form-field-outline-thick {
-    color: $quaternary;
+  .km-sidenav-bottom {
+    border-top: $sidenav-divider solid $sidenav-border-width;
   }
 
-  mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) div.mat-form-field-flex:hover label {
-    transition: all .2s ease;
-    color: $quaternary-dark;
-  }
+  .km-sidenav {
+    background-color: $sidenav-background;
 
-  mat-form-field.mat-focused:not(.ng-invalid) label {
-    color: $alternative-text !important;
-  }
+    * {
+      color: $sidenav-text;
+    }
 
-  mat-hint a {
-    color: $primary;
-    text-decoration: none;
-  }
+    i {
+      background-color: $sidenav-text;
+    }
 
-  .km-addon-container {
-    .km-addon-menu {
-      border-left: 1px solid $divider;
-
+    .mat-list-item a {
       &:hover {
-        background-color: $background-card-accent;
+        color: $sidenav-text-light;
+        background-color: $sidenav-background-hover;
+
+        i {
+          background-color: $sidenav-text-light;
+        }
+      }
+
+      &.active {
+        color: $sidenav-text-light;
+        background-color: $sidenav-background-active;
+
+        i {
+          background-color: $sidenav-text-light;
+        }
       }
     }
   }
 
-  .km-new-addon-container {
-    color: $text-footer;
+  .km-nav-custom-container {
+    background-color: $sidenav-background-custom;
+    border-top: $sidenav-divider solid $sidenav-border-width;
+  }
 
-    &.disabled {
-      border: 1px dashed $background-card-accent;
-      color: $text-muted;
+  .km-card-expansion-panel {
+    font-size: $font-size-subhead;
+    margin: 0 (7 * $baseline-grid);
+    padding: (1 * $baseline-grid) 0;
+
+    & > div {
+      cursor: default;
+      margin-right: 6 * $baseline-grid;
+
+      & > span {
+        margin-right: 2 * $baseline-grid;
+        margin-top: $baseline-grid / 4;
+      }
     }
 
-    &:hover:not(.disabled) {
-      background-color: $background-card-accent;
-      border: 1px solid $divider;
+    .km-icon-failed,
+    .km-icon-disabled,
+    .km-icon-running,
+    .fa {
+      width: $font-size-subhead;
+      height: $font-size-subhead;
+      font-size: $font-size-subhead;
     }
-  }
-
-  .mat-checkbox-checked .mat-checkbox-background {
-    background-color: $primary !important;
-  }
-
-  .mat-checkbox-disabled .mat-checkbox-background {
-    background-color: $disabled-button-color !important;
-  }
-
-  .km-icon-warning-orange {
-    background-color: $indicator-orange;
-  }
-
-  .km-summary-left {
-    color: $text;
-  }
-
-  .km-icon-key {
-    background: $text;
-  }
-
-  .mat-checkbox-frame {
-    border: 2px solid $divider;
-    border-radius: $border-radius;
-  }
-
-  .mat-button-toggle {
-    .mat-button-toggle-label-content {
-      color: $text;
-    }
-  }
-
-  .green {
-    color: $indicator-green;
-  }
-
-  .orange {
-    color: $indicator-orange;
-  }
-
-  .red {
-    color: $indicator-red;
-  }
-
-  .blue {
-    color: $indicator-blue;
   }
 
   .km-table {
@@ -561,724 +1202,37 @@
     }
   }
 
-  .km-no-item {
-    border-color: $divider !important;
-  }
-
-  #km-add-serviceaccount-token {
-    color: $text-muted;
-  }
-
   .km-paginator {
     border-radius: 0 0 $border-radius $border-radius;
     border-top: 1px solid $divider;
   }
 
-  .mat-button-toggle-group-appearance-standard {
-    border: none !important;
-  }
-
-  .km-mat-footer-row {
-    color: $text-muted !important;
-    padding: 0;
-    border-style: solid dashed dashed dashed;
-    border-width: 1px;
-    border-color: $divider;
-    border-bottom-right-radius: $border-radius;
-    border-bottom-left-radius: $border-radius;
-
-    &:hover {
-      background-color: $background-card-accent;
-    }
-
-    button {
-      background-color: transparent;
-      width: 100%;
-      line-height: 5 * $baseline-grid;
-      color: $text-muted !important;
-      font-weight: normal;
-      font-size: $font-size-subhead;
-    }
-  }
-
-  .mat-card-content {
-    p {
-      color: $light-button-color;
-      font-size: $font-size-caption;
-      margin: 0 0 (1.875 * $baseline-grid);
-    }
-
-    button {
-      border: none;
-      color: $primary;
-      outline: none;
-      cursor: pointer;
-      font-size: $font-size-body;
-      font-weight: 600;
-      padding: 0;
-    }
-  }
-
-  simple-notifications * {
-    cursor: auto;
-    z-index: 2000;
-  }
-
-  .mat-nav-list {
-    .mat-list-item-content {
-      padding: 0 !important;
-    }
-  }
-
-  .km-project-toggle {
-    .mat-tab-header {
-      border-bottom: none;
-    }
-
-    .mat-ink-bar {
-      visibility: hidden !important;
-      height: 0;
-    }
-
-    .mat-tab-label {
-      background-color: $secondary !important;
-      opacity: 1;
-      margin-right: 0.375 * $baseline-grid;
-      padding: 0;
-
-      &.mat-tab-disabled {
-        background-color: $disabled-button-color !important;
-      }
-
-      &.mat-tab-label-active {
-        opacity: 1;
-
-        .mat-tab-label-content {
-          width: 100%;
-          height: 100%;
-          background-color: $primary;
-          //color: $white-text-color;
-        }
-      }
-
-      .mat-tab-label-content {
-        text-transform: uppercase;
-        font-size: $font-size-subhead;
-      }
-    }
-  }
-
-  mat-button-toggle-group {
-    background-color: transparent;
-    box-shadow: none !important;
-
+  .km-project-view-switch {
     mat-button-toggle {
-      margin-right: 1.25 * $baseline-grid;
-      display: flex;
-      align-items: center;
-      border: 1px solid $border;
-      cursor: pointer;
-      max-width: 150px;
-      min-width: 150px;
-      min-height: 60px;
-      max-height: 60px;
-    }
-
-    .mat-button-toggle-label {
-      width: 100%;
-      height: 100%;
-    }
-
-    .mat-button-toggle-label-content {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-
-      .km-provider-logo {
-        min-height: 28px;
-        max-height: 28px !important;
-        max-width: 90px !important;
-      }
-    }
-
-    .mat-button-toggle-button {
-      height: 100%;
-    }
-  }
-
-  mat-button-toggle-group[group='datacenterGroup'],
-  mat-button-toggle-group[group='providerGroup'] {
-    .mat-button-toggle {
-      border-radius: $border-radius;
-    }
-
-    .mat-button-toggle-button {
-      height: 100%;
-      text-align: left;
-      padding: 0 (1.25 * $baseline-grid);
-    }
-  }
-
-  mat-button-toggle-group[group='datacenterGroup'] {
-    .mat-button-toggle-button {
-      display: flex;
-    }
-
-    .mat-button-toggle-label-content {
-      padding: 0 (0.625 * $baseline-grid);
-      width: 100%;
-      display: inline-block;
-    }
-  }
-
-  mat-button-toggle-group[group='providerGroup'] .mat-button-toggle-label-content {
-    height: 100%;
-    padding: 0 (1.25 * $baseline-grid);
-  }
-
-  mat-card-header > div > mat-card-title > div {
-    margin: $baseline-grid 0;
-    font-size: $font-size-body;
-  }
-
-  .mat-card.km-with-table-header {
-    padding: (3.75 * $baseline-grid) 0;
-    margin: (2.5 * $baseline-grid) 0 0 0;
-    box-shadow: $border-box-shadow !important;
-    border-radius: $border-radius !important;
-
-    .mat-card-header {
-      padding: 0 7 * $baseline-grid;
-      margin: 0;
-      line-height: 1.6 * $line-height;
-      border-radius: $border-radius $border-radius 0 0;
-    }
-
-    &.km-small .mat-card-header {
-      font-size: $font-size-small !important;
-      line-height: 1.6 * $line-height;
-    }
-
-    .mat-card-content {
-      line-height: 5 * $line-height;
-
-      &.km-row,
-      .km-row {
-        line-height: 5 * $line-height;
-        padding: 0 (3.75 * $baseline-grid);
-        border-top: 1px solid $divider;
-
-        &.km-small {
-          padding: (1.25 * $baseline-grid) (3 * $baseline-grid);
-          margin: 0;
-          line-height: 2 * $line-height;
-        }
-
-        &.km-accordion {
-          padding-bottom: 0;
-
-          > div:first-child {
-            padding-bottom: 10px;
-          }
-        }
-
-        div {
-          outline: none;
-        }
-
-        &.km-no-item,
-        .km-no-item {
-          text-align: center;
-          font-size: $font-size-body;
-        }
-
-        p {
-          line-height: normal;
-          color: $text;
-          margin: 0;
-          font-size: $font-size-body;
-        }
-
-        .km-region {
-          align-items: center;
-
-          .flag-icon {
-            font-size: $font-size-head;
-            margin-right: 1.25 * $baseline-grid;
-          }
-        }
-      }
-    }
-  }
-
-  .km-provider-logo {
-    display: block;
-    height: 100% !important;
-    width: 100% !important;
-    max-height: 30px !important;
-    max-width: 70px !important;
-  }
-
-  .mat-card.white {
-    padding: (3.75 * $baseline-grid) 0;
-    margin: 0;
-    box-shadow: $border-box-shadow !important;
-    border-radius: $border-radius !important;
-
-    &.km-cluster-details {
-      padding: (3.75 * $baseline-grid) 0 0 0;
-    }
-
-    .mat-card-header {
-      margin: 0;
-
-      .mat-card-header-text {
-        width: 100%;
-
-        .mat-card-title {
-          padding: 0;
-          margin: 0;
-          align-items: baseline;
-        }
-      }
-    }
-
-    .mat-card-content {
-      line-height: 5 * $line-height;
-
-      &.km-row,
-      .km-row {
-        line-height: 5 * $line-height;
-        padding: 0;
-      }
-    }
-  }
-
-  .km-copy {
-    cursor: pointer;
-
-    &:hover {
-      color: $primary;
-    }
-
-    &:active {
-      color: lighten($primary, 0.5);
-    }
-  }
-
-  .mat-sort-header-arrow {
-    margin: auto 0 auto (0.75 * $baseline-grid) !important;
-
-    .mat-sort-header-stem,
-    .mat-sort-header-pointer-left,
-    .mat-sort-header-pointer-right,
-    .mat-sort-header-pointer-middle {
-      background: none;
-    }
-  }
-
-  .mat-card {
-    box-shadow: none !important;
-  }
-
-  .mat-raised-button {
-    height: 30px;
-    line-height: 1.6 * $line-height !important;
-    margin-left: 0.625 * $baseline-grid !important;
-    font-weight: 500 !important;
-  }
-
-  .mat-button-focus-overlay {
-    background-color: transparent !important;
-  }
-
-  .km-provider-edit-settings,
-  .km-machine-networks-settings {
-    .mat-menu-content {
-      padding: 0 !important;
-    }
-  }
-
-  mat-list-item.disabled {
-    i {
-      opacity: 0.3;
-    }
-  }
-
-  .km-btn-in-box:disabled {
-    color: $disabled-button-color;
-  }
-
-  .km-action-button-icon {
-    margin-right: 0.625 * $baseline-grid;
-  }
-
-  .km-link:hover {
-    cursor: pointer;
-    color: $primary;
-  }
-
-  .km-clickable {
-    cursor: pointer;
-    outline: none;
-  }
-
-  .km-hidden {
-    visibility: hidden !important;
-  }
-
-  .km-tags-in-wizard {
-    margin-top: 5px;
-  }
-
-  .mat-card-header .mat-card-title {
-    padding: $baseline-grid 0 (2 * $baseline-grid);
-    font-size: 20px;
-    font-weight: normal !important;
-
-    i {
-      font-size: $font-size-subhead-lg;
-      margin: 0 (2.5 * $baseline-grid);
-    }
-  }
-
-  .mat-card-header-text {
-    margin: 0 !important;
-  }
-
-  .km-content-wrap {
-    display: flex;
-    flex-flow: row wrap;
-    padding: $baseline-grid (7 * $baseline-grid) 0 !important;
-  }
-
-  .km-card-expansion-panel {
-    font-size: $font-size-subhead;
-    margin: 0 (7 * $baseline-grid);
-    padding: (1 * $baseline-grid) 0;
-
-    & > div {
-      cursor: default;
-      margin-right: 6 * $baseline-grid;
-
-      & > span {
-        margin-right: 2 * $baseline-grid;
-        margin-top: $baseline-grid / 4;
-      }
-    }
-
-    .km-icon-failed,
-    .km-icon-disabled,
-    .km-icon-running,
-    .fa {
-      width: $font-size-subhead;
-      height: $font-size-subhead;
-      font-size: $font-size-subhead;
-    }
-  }
-
-  .mat-column-status,
-  .mat-column-stateArrow {
-    width: $baseline-grid;
-  }
-
-  .mat-dialog-container {
-    min-width: $dialog-width !important;
-    max-width: $dialog-width !important;
-    color: $text;
-
-    .mat-dialog-title {
-      font-weight: normal;
-    }
-
-    .mat-dialog-content {
-      font-size: $font-size-subhead;
-      font-weight: 400;
-      max-height: $dialog-max-height;
-      overflow: unset;
-
-      a {
-        text-decoration: none;
-        color: $primary;
-      }
-
-      p {
-        margin: 0 0 $baseline-grid;
-      }
-
-      .km-dialog-warning {
-        display: flex;
-        margin: 2 * $baseline-grid 0;
-      }
-    }
-
-    .mat-dialog-actions {
-      justify-content: flex-end;
-      padding: 0;
-      margin: 0;
-    }
-  }
-
-  .mat-tooltip-panel {
-    height: 4 * $baseline-grid;
-  }
-
-  .mat-select-panel {
-    margin-top: 3.75 * $baseline-grid !important;
-    margin-left: 0.75 * $baseline-grid !important;
-    min-width: calc(100% + 20px) !important;
-    max-width: calc(100% + 20px) !important;
-    transform-origin: 50% 0 0 !important;
-
-    &.ng-animating {
-      visibility: hidden;
-    }
-  }
-
-  .km-optgroup-dropdown {
-    margin-left: 2.75 * $baseline-grid !important;
-  }
-
-  .km-sshkey-dropdown {
-    margin-left: 3.75 * $baseline-grid !important;
-  }
-
-  .km-add-dialog-dropdown {
-    margin-top: 4.25 * $baseline-grid !important;
-  }
-
-  .mat-optgroup-label {
-    font-size: $font-size-caption !important;
-    line-height: 3.5 * $line-height !important;
-    height: 3.5 * $line-height !important;
-    padding-left: 1.25 * $baseline-grid !important;
-    border-top: 1px solid $divider !important;
-  }
-
-  .mat-option {
-    padding: 0 0 0 (1.25 * $baseline-grid) !important;
-
-    &.mat-active {
-      background-color: $grey-background !important;
-      color: $text !important;
-    }
-
-    &:hover {
-      background-color: $secondary-light !important;
-      color: $text !important;
-    }
-  }
-
-  .mat-select-arrow-wrapper {
-    top: 3px;
-    right: 0;
-    position: relative;
-  }
-
-  .mat-select-arrow {
-    background-color: $text;
-    display: inline-block;
-    width: 6px !important;
-    height: 6px !important;
-    mask: url("/assets/images/icons/arrow-down.svg");
-    mask-repeat: no-repeat;
-    mask-size: contain;
-  }
-
-  .mat-form-field.mat-focused.mat-primary .mat-select-arrow-wrapper {
-    right: 5px;
-
-    .mat-select-arrow {
-      -webkit-transform: rotate(180deg);
-      transform: rotate(180deg);
-    }
-  }
-
-  mat-chip-list {
-    cursor: default;
-
-    &:not(.km-chip-list-with-input) {
-      pointer-events: none;
-    }
-  }
-
-  .mat-chip.mat-standard-chip {
-    background: $divider;
-    border: 1px solid $divider;
-    color: $text;
-    border-radius: $border-radius;
-    font-size: $font-size-body;
-    font-weight: normal;
-    line-height: $font-size-subhead;
-    max-height: 22px;
-    min-height: 22px;
-    padding: (0.375 * $baseline-grid) (1.25 * $baseline-grid);
-
-    &.km-chip-container {
-      padding: 0;
-    }
-
-    div.km-chip-accent {
-      background: $chip-accent;
-    }
-
-    div {
-      align-items: center;
-      display: flex;
-      height: 100%;
-      justify-content: center;
-      padding: (0.375 * $baseline-grid) (1.25 * $baseline-grid);
-    }
-  }
-
-  .mat-menu-item {
-    padding: 0 (1.25 * $baseline-grid) !important;
-    line-height: 4.2 * $line-height !important;
-    height: 42px !important;
-
-    .mat-icon {
-      margin-right: 0 !important;
-    }
-  }
-
-  .mat-menu-content {
-    padding: 0 !important;
-  }
-
-  .mat-menu-panel {
-    min-height: auto !important;
-  }
-
-  #km-confirmation-dialog mat-dialog-content,
-  #km-delete-cluster-dialog mat-dialog-content {
-    margin-bottom: 3.75 * $baseline-grid;
-  }
-
-  .km-pod-security-policy-row {
-    align-items: center;
-  }
-
-  .mat-tooltip {
-    background-color: $primary-light !important;
-    font-size: $font-size-caption !important;
-    margin-top: 0.625 * $baseline-grid !important;
-  }
-
-  ::-webkit-scrollbar {
-    width: $scrollbar-size;
-    height: $scrollbar-size;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: $scrollbar-color;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: $scrollbar-background;
-  }
-
-  .km-project-selector {
-    border-bottom: $sidenav-divider-top solid $sidenav-border-width;
-  }
-
-  .km-nav-custom-container {
-    background-color: $sidenav-background-custom;
-    border-top: $sidenav-divider solid $sidenav-border-width;
-  }
-
-  .km-sidenav-bottom {
-    border-top: $sidenav-divider solid $sidenav-border-width;
-  }
-
-  .km-sidenav {
-    background-color: $sidenav-background;
-
-    * {
-      color: $sidenav-text;
-    }
-
-    i {
-      background-color: $sidenav-text;
-    }
-
-    .mat-list-item a {
-      &:hover {
-        color: $sidenav-text-light;
-        background-color: $sidenav-background-hover;
-
-        i {
-          background-color: $sidenav-text-light;
-        }
-      }
-
-      &.active {
-        color: $sidenav-text-light;
-        background-color: $sidenav-background-active;
-
-        i {
-          background-color: $sidenav-text-light;
-        }
-      }
-    }
-  }
-
-  #km-add-binding-dialog {
-    mat-button-toggle {
-      margin-right: 0;
-      min-height: 5 * $baseline-grid;
-      max-height: 5 * $baseline-grid;
-      border-color: $divider;
-      background-color: $divider;
-
-      &:first-child {
-        min-width: 10.25 * $baseline-grid;
-        max-width: 10.25 * $baseline-grid;
-        border-top-left-radius: $border-radius;
-        border-bottom-left-radius: $border-radius;
-      }
-
-      &:last-child {
-        min-width: 14.25 * $baseline-grid;
-        max-width: 14.25 * $baseline-grid;
-        border-top-right-radius: $border-radius;
-        border-bottom-right-radius: $border-radius;
-      }
+      border-color: $divider !important;
 
       &:hover {
-        border: (0.125 * $baseline-grid) solid $primary;
+        border: 1px solid $divider;
       }
     }
 
-    .mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle-checked {
-      border-left: (0.125 * $baseline-grid) solid $primary;
+    .mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle:hover {
+      border: 1px solid $divider;
     }
 
     .mat-button-toggle-checked {
-      border: (0.125 * $baseline-grid) solid $primary;
-      background-color: $background-card-accent;
+      border: 1px solid $divider;
+      background-color: $divider !important;
     }
   }
 
-  // Application component styles - it's every class that starts with "km-" prefix.
-  .km-spinner {
-    position: absolute;
-    top: $baseline-grid;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: 2 * $baseline-grid auto;
-  }
+  .km-short-name-circle {
+    border: 2px solid $divider;
+    background-color: $background-card;
 
-  .km-code-block {
-    background-color: $divider;
-    border-radius: $baseline-grid / 1.5;
-    margin: ($baseline-grid * 2) 0;
-    padding: ($baseline-grid * 1.5) ($baseline-grid * 2);
-    font-size: $font-size-body;
-    line-height: 2 * $line-height;
-    font-family: $font-primary-mono;
-    color: $text;
+    &.km-hidden-owners {
+      background-color: $divider;
+    }
   }
 
   .km-card-progress-bar.mat-card {
@@ -1555,6 +1509,30 @@
         margin-right: 3 * $baseline-grid;
         width: 4 * $baseline-grid;
       }
+    }
+  }
+
+  .km-addon-container {
+    .km-addon-menu {
+      border-left: 1px solid $divider;
+
+      &:hover {
+        background-color: $background-card-accent;
+      }
+    }
+  }
+
+  .km-new-addon-container {
+    color: $text-footer;
+
+    &.disabled {
+      border: 1px dashed $background-card-accent;
+      color: $text-muted;
+    }
+
+    &:hover:not(.disabled) {
+      background-color: $background-card-accent;
+      border: 1px solid $divider;
     }
   }
 
