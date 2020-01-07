@@ -29,8 +29,8 @@ describe('AddBindingComponent', () => {
   let component: AddBindingComponent;
 
   beforeEach(async(() => {
-    const rbacMock = jasmine.createSpyObj(
-        'RBACService', ['getClusterRoleNames', 'getRoleNames', 'createClusterBinding', 'createBinding']);
+    const rbacMock =
+        jest.fn('RBACService', ['getClusterRoleNames', 'getRoleNames', 'createClusterBinding', 'createBinding']);
     rbacMock.getClusterRoleNames.and.returnValue(asyncData([fakeClusterRoleNames()]));
     rbacMock.getRoleNames.and.returnValue(asyncData([fakeRoleNames()]));
     rbacMock.createClusterBinding.and.returnValue(asyncData([fakeClusterBinding()]));

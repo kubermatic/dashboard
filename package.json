@@ -12,7 +12,8 @@
     "start:e2e": "npm run versioninfo && ng serve --configuration=e2e",
     "start:e2e-local": "npm run versioninfo && ng serve --configuration=e2e-local",
     "build": "npm run versioninfo && ng build --prod",
-    "test": "ng test --browsers=ChromeHeadless --watch=false",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "cy": "cypress run --record false --browser chrome",
     "e2e": "start-server-and-test start:e2e http-get://localhost:8000 cy",
     "e2e:local": "start-server-and-test start:e2e-local http-get://localhost:8000 cy",
@@ -45,6 +46,10 @@
       "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f ",
       "git add"
     ]
+  },
+  "jest": {
+    "preset": "jest-preset-angular",
+    "setupFilesAfterEnv": ["./src/base.spec.ts"]
   },
   "dependencies": {
     "@angular-redux/form": "9.0.1",
@@ -86,12 +91,13 @@
     "zone.js": "0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.801.2",
+    "@angular-devkit/build-angular": "0.803.21",
     "@angular/cli": "8.3.20",
     "@angular/compiler-cli": "8.2.14",
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
     "@ngrx/store": "8.5.2",
     "@types/jasmine": "3.5.0",
+    "@types/jest": "24.0.25",
     "@types/lodash": "4.14.149",
     "@types/node": "12.12.17",
     "codelyzer": "5.2.0",
@@ -100,6 +106,8 @@
     "husky": "3.1.0",
     "jasmine-core": "3.5.0",
     "jasmine-spec-reporter": "4.2.1",
+    "jest": "24.9.0",
+    "jest-preset-angular": "8.0.0",
     "js-beautify": "1.10.2",
     "karma": "4.4.1",
     "karma-chrome-launcher": "3.1.0",
@@ -109,7 +117,6 @@
     "karma-jasmine-html-reporter": "1.4.2",
     "karma-mocha-reporter": "2.2.5",
     "karma-parallel": "0.3.1",
-    "karma-remap-istanbul": "0.6.0",
     "license-checker": "25.0.1",
     "lint-staged": "9.5.0",
     "ng2-mock-component": "0.2.0",
