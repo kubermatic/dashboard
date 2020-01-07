@@ -124,10 +124,6 @@
     }
   }
 
-  span.mat-select-value-text {
-    color: $text;
-  }
-
   div.mat-form-field-outline.mat-form-field-outline-thick {
     color: $quaternary;
   }
@@ -168,12 +164,6 @@
 
   #km-add-serviceaccount-token {
     color: $text-muted;
-  }
-
-  .mat-nav-list {
-    .mat-list-item-content {
-      padding: 0 !important;
-    }
   }
 
   mat-card-header > div > mat-card-title > div {
@@ -290,13 +280,6 @@
     background-color: transparent !important;
   }
 
-  .km-provider-edit-settings,
-  .km-machine-networks-settings {
-    .mat-menu-content {
-      padding: 0 !important;
-    }
-  }
-
   mat-list-item.disabled {
     i {
       opacity: 0.3;
@@ -321,18 +304,6 @@
   .mat-column-status,
   .mat-column-stateArrow {
     width: $baseline-grid;
-  }
-
-  .mat-select-panel {
-    margin-top: 3.75 * $baseline-grid !important;
-    margin-left: 0.75 * $baseline-grid !important;
-    min-width: calc(100% + 20px) !important;
-    max-width: calc(100% + 20px) !important;
-    transform-origin: 50% 0 0 !important;
-
-    &.ng-animating {
-      visibility: hidden;
-    }
   }
 
   .km-optgroup-dropdown {
@@ -369,31 +340,6 @@
     }
   }
 
-  .mat-select-arrow-wrapper {
-    top: 3px;
-    right: 0;
-    position: relative;
-  }
-
-  .mat-select-arrow {
-    background-color: $text;
-    display: inline-block;
-    width: 6px !important;
-    height: 6px !important;
-    mask: url("/assets/images/icons/arrow-down.svg");
-    mask-repeat: no-repeat;
-    mask-size: contain;
-  }
-
-  .mat-form-field.mat-focused.mat-primary .mat-select-arrow-wrapper {
-    right: 5px;
-
-    .mat-select-arrow {
-      -webkit-transform: rotate(180deg);
-      transform: rotate(180deg);
-    }
-  }
-
   #km-confirmation-dialog mat-dialog-content,
   #km-delete-cluster-dialog mat-dialog-content {
     margin-bottom: 3.75 * $baseline-grid;
@@ -401,43 +347,6 @@
 
   .km-pod-security-policy-row {
     align-items: center;
-  }
-
-  #km-add-binding-dialog {
-    mat-button-toggle {
-      margin-right: 0;
-      min-height: 5 * $baseline-grid;
-      max-height: 5 * $baseline-grid;
-      border-color: $divider;
-      background-color: $divider;
-
-      &:first-child {
-        min-width: 10.25 * $baseline-grid;
-        max-width: 10.25 * $baseline-grid;
-        border-top-left-radius: $border-radius;
-        border-bottom-left-radius: $border-radius;
-      }
-
-      &:last-child {
-        min-width: 14.25 * $baseline-grid;
-        max-width: 14.25 * $baseline-grid;
-        border-top-right-radius: $border-radius;
-        border-bottom-right-radius: $border-radius;
-      }
-
-      &:hover {
-        border: (0.125 * $baseline-grid) solid $primary;
-      }
-    }
-
-    .mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle-checked {
-      border-left: (0.125 * $baseline-grid) solid $primary;
-    }
-
-    .mat-button-toggle-checked {
-      border: (0.125 * $baseline-grid) solid $primary;
-      background-color: $background-card-accent;
-    }
   }
 
   // TODO
@@ -765,6 +674,47 @@
     }
   }
 
+  .mat-select-panel {
+    margin-top: 3.75 * $baseline-grid !important;
+    margin-left: 0.75 * $baseline-grid !important;
+    min-width: calc(100% + 20px) !important;
+    max-width: calc(100% + 20px) !important;
+    transform-origin: 50% 0 0 !important;
+
+    &.ng-animating {
+      visibility: hidden;
+    }
+  }
+
+  .mat-select-arrow-wrapper {
+    top: 3px;
+    right: 0;
+    position: relative;
+  }
+
+  .mat-select-arrow {
+    background-color: $text;
+    display: inline-block;
+    width: 6px !important;
+    height: 6px !important;
+    mask: url("/assets/images/icons/arrow-down.svg");
+    mask-repeat: no-repeat;
+    mask-size: contain;
+  }
+
+  .mat-form-field.mat-focused.mat-primary .mat-select-arrow-wrapper {
+    right: 5px;
+
+    .mat-select-arrow {
+      -webkit-transform: rotate(180deg);
+      transform: rotate(180deg);
+    }
+  }
+
+  span.mat-select-value-text {
+    color: $text;
+  }
+
   .mat-menu-item {
     padding: 0 (1.25 * $baseline-grid) !important;
     line-height: 4.2 * $line-height !important;
@@ -781,6 +731,12 @@
 
   .mat-menu-panel {
     min-height: auto !important;
+  }
+
+  .mat-nav-list {
+    .mat-list-item-content {
+      padding: 0 !important;
+    }
   }
 
   // Application component styles (it's basically every class that starts with "km-" prefix).
@@ -1514,6 +1470,43 @@
 
     .km-select-addon-dialog-option-desc {
       color: $text;
+    }
+  }
+
+  .km-add-binding-dialog {
+    mat-button-toggle {
+      margin-right: 0;
+      min-height: 5 * $baseline-grid;
+      max-height: 5 * $baseline-grid;
+      border-color: $divider;
+      background-color: $divider;
+
+      &:first-child {
+        min-width: 10.25 * $baseline-grid;
+        max-width: 10.25 * $baseline-grid;
+        border-top-left-radius: $border-radius;
+        border-bottom-left-radius: $border-radius;
+      }
+
+      &:last-child {
+        min-width: 14.25 * $baseline-grid;
+        max-width: 14.25 * $baseline-grid;
+        border-top-right-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+      }
+
+      &:hover {
+        border: (0.125 * $baseline-grid) solid $primary;
+      }
+    }
+
+    .mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle-checked {
+      border-left: (0.125 * $baseline-grid) solid $primary;
+    }
+
+    .mat-button-toggle-checked {
+      border: (0.125 * $baseline-grid) solid $primary;
+      background-color: $background-card-accent;
     }
   }
 }
