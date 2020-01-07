@@ -1,174 +1,134 @@
 @import "variables";
 
+@mixin km-image($size) {
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  display: inline-block;
+  height: $size;
+  width: $size;
+}
+
+@mixin km-image-mask($size) {
+  @include km-image($size);
+
+  background-color: #4d555c;
+  mask-repeat: no-repeat !important;
+  mask-size: contain !important;
+  mask-position: center !important;
+
+  &:disabled {
+    background-color: #d4d4d4;
+  }
+}
+
 .km-header-logo {
   background-image: url("/assets/images/branding/logo.svg");
   background-repeat: no-repeat;
 }
 
-.km-frontpage-bg {
-  background: url("/assets/images/branding/bg.svg") no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+.km-frontpage-background {
+  @include km-image(100%);
+
+  background-image: url("/assets/images/branding/bg.svg");
+  background-attachment: fixed;
 }
 
 .km-user {
+  @include km-image-mask(3 * $baseline-grid);
+
   mask: url("/assets/images/icons/user.svg");
-  mask-repeat: no-repeat;
-  mask-size: contain;
-  mask-position: center;
-  width: 3 * $baseline-grid;
-  height: 3 * $baseline-grid;
-  background-color: #4d555c;
-  display: inline-block;
 }
 
 .km-icon-delete {
-  display: inline-block;
-  width: 2.25 * $baseline-grid;
-  height: 2.25 * $baseline-grid;
-  mask: url("/assets/images/icons/trash.svg");
-  mask-repeat: no-repeat;
-  mask-size: contain;
-  cursor: pointer;
-  background-color: #4d555c;
+  @include km-image-mask(2.25 * $baseline-grid);
 
-  &:disabled {
-    background-color: #d4d4d4;
-  }
+  mask: url("/assets/images/icons/trash.svg");
 }
 
 .km-icon-edit {
-  display: inline-block;
-  width: 2.25 * $baseline-grid;
-  height: 2.25 * $baseline-grid;
-  mask: url("/assets/images/icons/edit.svg");
-  mask-repeat: no-repeat;
-  mask-size: contain;
-  cursor: pointer;
-  background-color: #4d555c;
+  @include km-image-mask(2.25 * $baseline-grid);
 
-  &:disabled {
-    background-color: #d4d4d4;
-  }
+  mask: url("/assets/images/icons/edit.svg");
 }
 
 .km-icon-regenerate {
-  display: inline-block;
-  width: 2.25 * $baseline-grid;
-  height: 2.25 * $baseline-grid;
-  mask: url("/assets/images/icons/regenerate.svg");
-  mask-repeat: no-repeat;
-  mask-size: contain;
-  cursor: pointer;
-  background-color: #4d555c;
+  @include km-image-mask(2.25 * $baseline-grid);
 
-  &:disabled {
-    background-color: #d4d4d4;
-  }
+  mask: url("/assets/images/icons/regenerate.svg");
 }
 
 .km-icon-warning {
-  display: inline-block;
-  width: $baseline-grid * 2;
-  height: $baseline-grid * 2;
-  margin: ($baseline-grid / 2) ($baseline-grid * 1.8) ($baseline-grid / 2) 0;
-  background: #eb5757 url("/assets/images/icons/warning.svg") no-repeat;
-  background-size: $baseline-grid * 1.5;
-  background-position: center;
+  @include km-image($baseline-grid * 2);
+
+  background: #eb5757 url("/assets/images/icons/warning.svg");
+  background-size: $baseline-grid * 1.5 !important;
   border-radius: 50%;
+  margin: ($baseline-grid / 2) ($baseline-grid * 1.8) ($baseline-grid / 2) 0;
 }
 
 .km-icon-tick {
-  display: inline-block;
-  width: $baseline-grid * 2;
-  height: $baseline-grid * 2;
+  @include km-image($baseline-grid * 2);
+
+  background: #1dc67f url("/assets/images/icons/tick.svg");
+  background-size: $baseline-grid * 1.5 !important;
+  border-radius: 50%;
   margin: ($baseline-grid / 2) ($baseline-grid * 1.8) ($baseline-grid / 2) 0;
-  background: #1dc67f url("/assets/images/icons/tick.svg") no-repeat;
-  background-size: $baseline-grid * 1.5;
-  background-position: center;
-  border-radius: $baseline-grid;
 }
 
 .km-icon-tick-blue {
+  @include km-image-mask(1.5 * $baseline-grid);
+
   background-color: #0081ae;
-  display: inline-block;
-  width: $baseline-grid * 1.5;
-  height: $baseline-grid * 1.5;
-  mask: url("/assets/images/icons/tick.svg") no-repeat;
-  mask-repeat: no-repeat;
-  mask-size: cover;
+  mask: url("/assets/images/icons/tick.svg");
 }
 
 .km-icon-download {
-  display: inline-block;
-  width: 2.5 * $baseline-grid;
-  height: 2.5 * $baseline-grid;
+  @include km-image-mask(2.5 * $baseline-grid);
+
   mask: url("/assets/images/icons/download.svg");
-  mask-repeat: no-repeat;
-  mask-size: cover;
   background-color: #fff;
 }
 
 .km-icon-share {
-  display: inline-block;
-  width: 2.5 * $baseline-grid;
-  height: 2.5 * $baseline-grid;
+  @include km-image-mask(2.5 * $baseline-grid);
+
   mask: url("/assets/images/icons/share.svg");
-  mask-repeat: no-repeat;
-  mask-size: cover;
   background-color: #fff;
 }
 
 .km-icon-copy {
-  display: inline-block;
-  width: 2.5 * $baseline-grid;
-  height: 2.5 * $baseline-grid;
+  @include km-image-mask(2.5 * $baseline-grid);
+
   mask: url("/assets/images/icons/copy.svg");
-  mask-repeat: no-repeat;
-  mask-size: cover;
   background-color: #fff;
 }
 
 .km-icon-cluster {
-  display: inline-block;
-  width: 2.75 * $baseline-grid;
-  height: 2.75 * $baseline-grid;
+  @include km-image-mask(2.75 * $baseline-grid);
+
   mask: url("/assets/images/icons/clusters.svg");
-  mask-repeat: no-repeat;
-  mask-size: contain;
   cursor: pointer;
-  background-color: #4d555c;
 }
 
 .km-icon-key {
-  display: inline-block;
-  width: 2.75 * $baseline-grid;
-  height: 2.75 * $baseline-grid;
+  @include km-image-mask(2.75 * $baseline-grid);
+
   mask: url("/assets/images/icons/ssh-keys.svg");
-  mask-repeat: no-repeat;
-  mask-size: contain;
   cursor: pointer;
 }
 
 .km-icon-member {
-  display: inline-block;
-  width: 2.75 * $baseline-grid;
-  height: 2.75 * $baseline-grid;
+  @include km-image-mask(2.75 * $baseline-grid);
+
   mask: url("/assets/images/icons/members.svg");
-  mask-repeat: no-repeat;
-  mask-size: contain;
   cursor: pointer;
 }
 
 .km-icon-serviceaccount {
-  display: inline-block;
-  width: 2.75 * $baseline-grid;
-  height: 2.75 * $baseline-grid;
+  @include km-image-mask(2.75 * $baseline-grid);
+
   mask: url("/assets/images/icons/service-accounts.svg");
-  mask-repeat: no-repeat;
-  mask-size: contain;
   cursor: pointer;
 }
 
@@ -184,23 +144,15 @@
 }
 
 .km-icon-arrow-down {
-  display: inline-block;
-  width: 1.5 * $baseline-grid;
-  height: 1.5 * $baseline-grid;
+  @include km-image-mask(1.5 * $baseline-grid);
+
   mask: url("/assets/images/icons/arrow-down.svg");
-  mask-repeat: no-repeat;
-  mask-size: contain;
-  background-color: #4d555c;
 }
 
 .km-icon-arrow-up {
-  display: inline-block;
-  width: 1.5 * $baseline-grid;
-  height: 1.5 * $baseline-grid;
+  @include km-image-mask(1.5 * $baseline-grid);
+
   mask: url("/assets/images/icons/arrow-down.svg");
-  mask-repeat: no-repeat;
-  mask-size: contain;
-  background-color: #4d555c;
   -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
 }
@@ -220,12 +172,9 @@
 }
 
 .km-icon-close {
-  width: 2.5 * $baseline-grid;
-  height: 2.5 * $baseline-grid;
+  @include km-image-mask(2.5 * $baseline-grid);
+
   mask: url("/assets/images/icons/close.svg");
-  mask-repeat: no-repeat;
-  mask-size: cover;
-  background-color: #4d555c;
 }
 
 .km-icon-info {
@@ -240,102 +189,78 @@
 }
 
 .km-icon-add {
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  mask: url("/assets/images/icons/close.svg");
-  mask-repeat: no-repeat;
-  mask-size: contain;
-  cursor: pointer;
-  background-color: #4d555c;
-  transform: rotate(45deg);
+  @include km-image-mask(2.25 * $baseline-grid);
 
-  &:disabled {
-    background-color: #d4d4d4;
-  }
+  mask: url("/assets/images/icons/close.svg");
+  transform: rotate(45deg);
 }
 
 .km-icon-running {
-  display: inline-block;
+  @include km-image-mask(2 * $baseline-grid);
+
   margin-right: $baseline-grid;
-  width: 2 * $baseline-grid;
-  height: 2 * $baseline-grid;
   mask: url("/assets/images/icons/tick.svg");
-  mask-repeat: no-repeat;
-  mask-size: contain;
   background: #1dc67f;
 }
 
 .km-icon-failed {
-  display: inline-block;
+  @include km-image-mask(2 * $baseline-grid);
+
   margin-right: $baseline-grid;
-  width: 2 * $baseline-grid;
-  height: 2 * $baseline-grid;
   mask: url("/assets/images/icons/warning.svg");
-  mask-repeat: no-repeat;
-  mask-size: contain;
   background: #eb5757;
 }
 
 .km-icon-disabled {
-  display: inline-block;
+  @include km-image-mask(2 * $baseline-grid);
+
   margin-right: $baseline-grid;
-  width: 2 * $baseline-grid;
-  height: 2 * $baseline-grid;
   mask: url("/assets/images/icons/close.svg");
-  mask-repeat: no-repeat;
-  mask-size: contain;
-  background: #7e868f;
+  background-color: #7e868f;
 }
 
 .km-icon-labels {
-  display: inline-block;
-  width: 3 * $baseline-grid;
-  height: 3 * $baseline-grid;
+  @include km-image-mask(3 * $baseline-grid);
+
   mask: url("/assets/images/icons/labels.svg");
-  mask-repeat: no-repeat;
-  mask-size: contain;
-  background-color: #4d555c;
 }
 
 .km-icon-owner {
-  display: inline-block;
-  width: 3 * $baseline-grid;
-  height: 3 * $baseline-grid;
+  @include km-image-mask(3 * $baseline-grid);
+
   mask: url("/assets/images/icons/owner.svg");
-  mask-repeat: no-repeat;
-  mask-size: contain;
-  background-color: #4d555c;
 }
 
 .km-icon-role {
-  display: inline-block;
-  width: 3 * $baseline-grid;
-  height: 3 * $baseline-grid;
+  @include km-image-mask(3 * $baseline-grid);
+
   mask: url("/assets/images/icons/role.svg");
-  mask-repeat: no-repeat;
-  mask-size: contain;
-  background-color: #4d555c;
 }
 
 .km-icon-projects-table {
-  display: inline-block;
-  width: 3 * $baseline-grid;
-  height: 3 * $baseline-grid;
+  @include km-image-mask(3 * $baseline-grid);
+
   mask: url("/assets/images/icons/projects-table.svg");
-  mask-repeat: no-repeat;
-  mask-size: cover;
-  background-color: #4d555c;
 }
 
 .km-icon-projects-card {
-  display: inline-block;
-  width: 3 * $baseline-grid;
-  height: 3 * $baseline-grid;
+  @include km-image-mask(3 * $baseline-grid);
+
   mask: url("/assets/images/icons/projects-cards.svg");
-  mask-repeat: no-repeat;
-  mask-size: cover;
-  background-color: #4d555c;
+}
+
+.km-icon-sun {
+  @include km-image-mask(3 * $baseline-grid);
+
+  margin-right: 1.25 * $baseline-grid;
+  mask-image: url("/assets/images/icons/sun.svg");
+}
+
+.km-icon-moon {
+  @include km-image-mask(3 * $baseline-grid);
+
+  margin-right: 1.25 * $baseline-grid;
+  mask-image: url("/assets/images/icons/moon.svg");
 }
 
 .km-icon-kubernetes {
@@ -356,26 +281,6 @@
   background-image: url("/assets/images/icons/openshift.svg");
   background-repeat: no-repeat;
   background-size: cover;
-}
-
-.km-icon-sun {
-  display: inline-block;
-  width: 3 * $baseline-grid;
-  height: 3 * $baseline-grid;
-  margin-right: 1.25 * $baseline-grid;
-  mask-image: url("/assets/images/icons/sun.svg");
-  mask-repeat: no-repeat;
-  mask-size: cover;
-}
-
-.km-icon-moon {
-  display: inline-block;
-  width: 3 * $baseline-grid;
-  height: 3 * $baseline-grid;
-  margin-right: 1.25 * $baseline-grid;
-  mask-image: url("/assets/images/icons/moon.svg");
-  mask-repeat: no-repeat;
-  mask-size: cover;
 }
 
 .km-provider-logo-aws {

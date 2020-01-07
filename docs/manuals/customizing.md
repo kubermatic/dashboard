@@ -98,7 +98,7 @@ footer .km-footer-nav ul li a i {
   color: green;
 }
 
-div .km-frontpage-bg {
+div .km-frontpage-background {
   background-color: red !important;
 }
 
