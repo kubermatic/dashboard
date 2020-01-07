@@ -1,7 +1,7 @@
 @import "../../../assets/css/variables";
 
 .km-frontpage-bg {
-  background-color: $background-frontpage;
+  background-color: #001930;
   position: absolute;
   height: 100%;
   width: 100%;
@@ -18,7 +18,7 @@
 
   .km-frontpage-inner-text {
     text-align: center;
-    color: $background-frontpage-button;
+    color: #fff;
     font-family: $font-secondary;
     font-size: 28px;
     font-weight: 500;
@@ -27,8 +27,8 @@
   }
 
   .mat-raised-button {
-    background-color: $background-frontpage-button;
-    color: $text-frontpage;
+    background-color: #fff;
+    color: #203f58;
     font-size: 20px;
     font-family: $font-primary;
     font-weight: 500 !important;

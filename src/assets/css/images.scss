@@ -20,7 +20,7 @@
   mask-position: center;
   width: 3 * $baseline-grid;
   height: 3 * $baseline-grid;
-  background-color: $text;
+  background-color: #4d555c;
   display: inline-block;
 }
 
@@ -32,7 +32,7 @@
   mask-repeat: no-repeat;
   mask-size: contain;
   cursor: pointer;
-  background-color: $text;
+  background-color: #4d555c;
 
   &:disabled {
     background-color: #d4d4d4;
@@ -47,7 +47,7 @@
   mask-repeat: no-repeat;
   mask-size: contain;
   cursor: pointer;
-  background-color: $text;
+  background-color: #4d555c;
 
   &:disabled {
     background-color: #d4d4d4;
@@ -62,7 +62,7 @@
   mask-repeat: no-repeat;
   mask-size: contain;
   cursor: pointer;
-  background-color: $text;
+  background-color: #4d555c;
 
   &:disabled {
     background-color: #d4d4d4;
@@ -108,7 +108,7 @@
   mask: url("/assets/images/icons/download.svg");
   mask-repeat: no-repeat;
   mask-size: cover;
-  background-color: $text-button;
+  background-color: #fff;
 }
 
 .km-icon-share {
@@ -118,7 +118,7 @@
   mask: url("/assets/images/icons/share.svg");
   mask-repeat: no-repeat;
   mask-size: cover;
-  background-color: $text-button;
+  background-color: #fff;
 }
 
 .km-icon-copy {
@@ -128,7 +128,7 @@
   mask: url("/assets/images/icons/copy.svg");
   mask-repeat: no-repeat;
   mask-size: cover;
-  background-color: $text-button;
+  background-color: #fff;
 }
 
 .km-icon-cluster {
@@ -139,7 +139,7 @@
   mask-repeat: no-repeat;
   mask-size: contain;
   cursor: pointer;
-  background-color: $text;
+  background-color: #4d555c;
 }
 
 .km-icon-key {
@@ -190,7 +190,7 @@
   mask: url("/assets/images/icons/arrow-down.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
-  background-color: $text;
+  background-color: #4d555c;
 }
 
 .km-icon-arrow-up {
@@ -200,7 +200,7 @@
   mask: url("/assets/images/icons/arrow-down.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
-  background-color: $text;
+  background-color: #4d555c;
   -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
 }
@@ -225,7 +225,7 @@
   mask: url("/assets/images/icons/close.svg");
   mask-repeat: no-repeat;
   mask-size: cover;
-  background-color: $text;
+  background-color: #4d555c;
 }
 
 .km-icon-info {
@@ -247,7 +247,7 @@
   mask-repeat: no-repeat;
   mask-size: contain;
   cursor: pointer;
-  background-color: $text;
+  background-color: #4d555c;
   transform: rotate(45deg);
 
   &:disabled {
@@ -295,7 +295,7 @@
   mask: url("/assets/images/icons/labels.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
-  background-color: $text;
+  background-color: #4d555c;
 }
 
 .km-icon-owner {
@@ -305,7 +305,7 @@
   mask: url("/assets/images/icons/owner.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
-  background-color: $text;
+  background-color: #4d555c;
 }
 
 .km-icon-role {
@@ -315,7 +315,7 @@
   mask: url("/assets/images/icons/role.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
-  background-color: $text;
+  background-color: #4d555c;
 }
 
 .km-icon-projects-table {
@@ -325,7 +325,7 @@
   mask: url("/assets/images/icons/projects-table.svg");
   mask-repeat: no-repeat;
   mask-size: cover;
-  background-color: $text;
+  background-color: #4d555c;
 }
 
 .km-icon-projects-card {
@@ -335,7 +335,7 @@
   mask: url("/assets/images/icons/projects-cards.svg");
   mask-repeat: no-repeat;
   mask-size: cover;
-  background-color: $text;
+  background-color: #4d555c;
 }
 
 .km-icon-kubernetes {
