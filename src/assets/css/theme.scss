@@ -1,5 +1,4 @@
 @import "variables";
-@import "colors";
 @import "~@angular/material/theming";
 
 @include mat-core();
@@ -56,6 +55,8 @@
   $text-footer: mat-color($palette-primary, 50);
   $text-white: #fff;
 
+  $border: #e3e8ec;
+
   $background: mat-color($palette-background, background);
   $background-navbar: mat-color($palette-background, app-bar);
   $project-switch: rgba(mat-color($palette-foreground, secondary-text), .7);
@@ -74,6 +75,8 @@
 
   $scrollbar-background: mat-color($palette-background, card);
   $scrollbar-color: $divider;
+
+  $grey-background: #edeff0;
 
   $transition: all .5s ease;
 

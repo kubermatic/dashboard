@@ -1,4 +1,3 @@
-@import "colors";
 @import "variables";
 
 .km-header-logo {
@@ -36,7 +35,7 @@
   background-color: $text;
 
   &:disabled {
-    background-color: $disabled-button-color;
+    background-color: #d4d4d4;
   }
 }
 
@@ -51,7 +50,7 @@
   background-color: $text;
 
   &:disabled {
-    background-color: $disabled-button-color;
+    background-color: #d4d4d4;
   }
 }
 
@@ -66,7 +65,7 @@
   background-color: $text;
 
   &:disabled {
-    background-color: $disabled-button-color;
+    background-color: #d4d4d4;
   }
 }
 
@@ -75,7 +74,7 @@
   width: $baseline-grid * 2;
   height: $baseline-grid * 2;
   margin: ($baseline-grid / 2) ($baseline-grid * 1.8) ($baseline-grid / 2) 0;
-  background: $indicator-red url("/assets/images/icons/warning.svg") no-repeat;
+  background: #eb5757 url("/assets/images/icons/warning.svg") no-repeat;
   background-size: $baseline-grid * 1.5;
   background-position: center;
   border-radius: 50%;
@@ -86,14 +85,14 @@
   width: $baseline-grid * 2;
   height: $baseline-grid * 2;
   margin: ($baseline-grid / 2) ($baseline-grid * 1.8) ($baseline-grid / 2) 0;
-  background: $indicator-green url("/assets/images/icons/tick.svg") no-repeat;
+  background: #1dc67f url("/assets/images/icons/tick.svg") no-repeat;
   background-size: $baseline-grid * 1.5;
   background-position: center;
   border-radius: $baseline-grid;
 }
 
 .km-icon-tick-blue {
-  background-color: $primary;
+  background-color: #0081ae;
   display: inline-block;
   width: $baseline-grid * 1.5;
   height: $baseline-grid * 1.5;
@@ -252,7 +251,7 @@
   transform: rotate(45deg);
 
   &:disabled {
-    background-color: $disabled-button-color;
+    background-color: #d4d4d4;
   }
 }
 
@@ -264,7 +263,7 @@
   mask: url("/assets/images/icons/tick.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
-  background: $indicator-green;
+  background: #1dc67f;
 }
 
 .km-icon-failed {
@@ -275,7 +274,7 @@
   mask: url("/assets/images/icons/warning.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
-  background: $indicator-red;
+  background: #eb5757;
 }
 
 .km-icon-disabled {
@@ -286,7 +285,7 @@
   mask: url("/assets/images/icons/close.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
-  background: $medium-text-color;
+  background: #7e868f;
 }
 
 .km-icon-labels {
