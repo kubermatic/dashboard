@@ -73,15 +73,6 @@
     color: $indicator-red;
   }
 
-  .km-node-details {
-    background-color: $background-card-accent;
-  }
-
-  .km-serviceaccount-token-wrapper,
-  .km-publickey-wrapper {
-    background-color: $background-card-accent;
-  }
-
   .km-red {
     color: $indicator-red;
   }
@@ -155,31 +146,8 @@
     text-decoration: none;
   }
 
-  .mat-checkbox-checked .mat-checkbox-background {
-    background-color: $primary !important;
-  }
-
-  .mat-checkbox-disabled .mat-checkbox-background {
-    background-color: $disabled-button-color !important;
-  }
-
   .km-icon-warning-orange {
     background-color: $indicator-orange;
-  }
-
-  .km-summary-left {
-    color: $text;
-  }
-
-  .mat-checkbox-frame {
-    border: 2px solid $divider;
-    border-radius: $border-radius;
-  }
-
-  .mat-button-toggle {
-    .mat-button-toggle-label-content {
-      color: $text;
-    }
   }
 
   .green {
@@ -202,70 +170,9 @@
     color: $text-muted;
   }
 
-  .km-mat-footer-row {
-    color: $text-muted !important;
-    padding: 0;
-    border-style: solid dashed dashed dashed;
-    border-width: 1px;
-    border-color: $divider;
-    border-bottom-right-radius: $border-radius;
-    border-bottom-left-radius: $border-radius;
-
-    &:hover {
-      background-color: $background-card-accent;
-    }
-
-    button {
-      background-color: transparent;
-      width: 100%;
-      line-height: 5 * $baseline-grid;
-      color: $text-muted !important;
-      font-weight: normal;
-      font-size: $font-size-subhead;
-    }
-  }
-
   .mat-nav-list {
     .mat-list-item-content {
       padding: 0 !important;
-    }
-  }
-
-  .km-project-toggle {
-    .mat-tab-header {
-      border-bottom: none;
-    }
-
-    .mat-ink-bar {
-      visibility: hidden !important;
-      height: 0;
-    }
-
-    .mat-tab-label {
-      background-color: $secondary !important;
-      opacity: 1;
-      margin-right: 0.375 * $baseline-grid;
-      padding: 0;
-
-      &.mat-tab-disabled {
-        background-color: $disabled-button-color !important;
-      }
-
-      &.mat-tab-label-active {
-        opacity: 1;
-
-        .mat-tab-label-content {
-          width: 100%;
-          height: 100%;
-          background-color: $primary;
-          //color: $white-text-color;
-        }
-      }
-
-      .mat-tab-label-content {
-        text-transform: uppercase;
-        font-size: $font-size-subhead;
-      }
     }
   }
 
@@ -379,17 +286,6 @@
     }
   }
 
-  .mat-card {
-    box-shadow: none !important;
-  }
-
-  .mat-raised-button {
-    height: 30px;
-    line-height: 1.6 * $line-height !important;
-    margin-left: 0.625 * $baseline-grid !important;
-    font-weight: 500 !important;
-  }
-
   .mat-button-focus-overlay {
     background-color: transparent !important;
   }
@@ -405,27 +301,6 @@
     i {
       opacity: 0.3;
     }
-  }
-
-  .km-btn-in-box:disabled {
-    color: $disabled-button-color;
-  }
-
-  .km-action-button-icon {
-    margin-right: 0.625 * $baseline-grid;
-  }
-
-  .km-clickable {
-    cursor: pointer;
-    outline: none;
-  }
-
-  .km-hidden {
-    visibility: hidden !important;
-  }
-
-  .km-tags-in-wizard {
-    margin-top: 5px;
   }
 
   .mat-card-header .mat-card-title {
@@ -446,10 +321,6 @@
   .mat-column-status,
   .mat-column-stateArrow {
     width: $baseline-grid;
-  }
-
-  .mat-tooltip-panel {
-    height: 4 * $baseline-grid;
   }
 
   .mat-select-panel {
@@ -532,25 +403,6 @@
     align-items: center;
   }
 
-  .mat-tooltip {
-    background-color: $primary-light !important;
-    font-size: $font-size-caption !important;
-    margin-top: 0.625 * $baseline-grid !important;
-  }
-
-  ::-webkit-scrollbar {
-    width: $scrollbar-size;
-    height: $scrollbar-size;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: $scrollbar-color;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: $scrollbar-background;
-  }
-
   #km-add-binding-dialog {
     mat-button-toggle {
       margin-right: 0;
@@ -588,9 +440,23 @@
     }
   }
 
+  // TODO
+  // TODO
+  // TODO
+
   // Angular Material overrides.
-  .mat-card,
-  .mat.card * {
+  .mat-tooltip-panel {
+    height: 4 * $baseline-grid;
+  }
+
+  .mat-tooltip {
+    background-color: $primary-light !important;
+    font-size: $font-size-caption !important;
+    margin-top: 0.625 * $baseline-grid !important;
+  }
+
+  .mat-card {
+    box-shadow: none !important;
     color: $text;
   }
 
@@ -738,6 +604,19 @@
     cursor: auto;
   }
 
+  .mat-checkbox-checked .mat-checkbox-background {
+    background-color: $primary !important;
+  }
+
+  .mat-checkbox-disabled .mat-checkbox-background {
+    background-color: $disabled-button-color !important;
+  }
+
+  .mat-checkbox-frame {
+    border: 2px solid $divider;
+    border-radius: $border-radius;
+  }
+
   mat-button-toggle-group {
     background-color: transparent;
     box-shadow: none !important;
@@ -760,6 +639,7 @@
     }
 
     .mat-button-toggle-label-content {
+      color: $text;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -904,6 +784,19 @@
   }
 
   // Application component styles (it's basically every class that starts with "km-" prefix).
+  ::-webkit-scrollbar {
+    width: $scrollbar-size;
+    height: $scrollbar-size;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: $scrollbar-color;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: $scrollbar-background;
+  }
+
   .km-text {
     color: $text;
   }
@@ -926,6 +819,15 @@
 
   .km-icon-mask {
     background-color: $text;
+  }
+
+  .km-hidden {
+    visibility: hidden !important;
+  }
+
+  .km-clickable {
+    cursor: pointer;
+    outline: none;
   }
 
   .km-copy {
@@ -1088,6 +990,12 @@
     }
   }
 
+  .km-serviceaccount-token-wrapper,
+  .km-publickey-wrapper,
+  .km-node-details {
+    background-color: $background-card-accent;
+  }
+
   .km-table {
     width: 100%;
     border-radius: $border-radius;
@@ -1202,9 +1110,69 @@
     }
   }
 
+  .km-mat-footer-row {
+    color: $text-muted !important;
+    padding: 0;
+    border-style: solid dashed dashed dashed;
+    border-width: 1px;
+    border-color: $divider;
+    border-bottom-right-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
+
+    &:hover {
+      background-color: $background-card-accent;
+    }
+
+    button {
+      background-color: transparent;
+      width: 100%;
+      line-height: 5 * $baseline-grid;
+      color: $text-muted !important;
+      font-weight: normal;
+      font-size: $font-size-subhead;
+    }
+  }
+
   .km-paginator {
     border-radius: 0 0 $border-radius $border-radius;
     border-top: 1px solid $divider;
+  }
+
+  .km-project-toggle {
+    .mat-tab-header {
+      border-bottom: none;
+    }
+
+    .mat-ink-bar {
+      visibility: hidden !important;
+      height: 0;
+    }
+
+    .mat-tab-label {
+      background-color: $secondary !important;
+      opacity: 1;
+      margin-right: 0.375 * $baseline-grid;
+      padding: 0;
+
+      &.mat-tab-disabled {
+        background-color: $disabled-button-color !important;
+      }
+
+      &.mat-tab-label-active {
+        opacity: 1;
+
+        .mat-tab-label-content {
+          width: 100%;
+          height: 100%;
+          background-color: $primary;
+        }
+      }
+
+      .mat-tab-label-content {
+        text-transform: uppercase;
+        font-size: $font-size-subhead;
+      }
+    }
   }
 
   .km-project-view-switch {

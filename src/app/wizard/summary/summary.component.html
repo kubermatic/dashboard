@@ -24,13 +24,13 @@
             <span class="km-provider-logo km-provider-logo-{{providerFormData.provider}}"></span>
           </div>
           <div class="km-summary-row">
-            <span class="km-summary-left">
+            <span class="km-summary-left km-text">
               <i [ngClass]="{'km-icon-disabled': !cluster.spec.auditLogging?.enabled, 'km-icon-running': cluster.spec.auditLogging?.enabled}"></i>
             </span>
             <span>Audit Logging</span>
           </div>
           <div class="km-summary-row">
-            <span class="km-summary-left">
+            <span class="km-summary-left km-text">
               <i [ngClass]="{'km-icon-disabled': !cluster.spec.usePodSecurityPolicyAdmissionPlugin, 'km-icon-running': cluster.spec.usePodSecurityPolicyAdmissionPlugin}"></i>
             </span>
             <span>Pod Security Policy</span>
@@ -42,7 +42,7 @@
           </div>
           <div *ngIf="!cluster.labels || !displayTags(cluster.labels)">
             <div class="km-summary-row">
-              <span class="km-summary-left">
+              <span class="km-summary-left km-text">
                 <i class="km-icon-disabled"></i>
               </span>
               <span>Cluster Labels</span>
@@ -55,28 +55,28 @@
         </mat-card-header>
         <mat-card-content>
           <div class="km-summary-row km-summary-row-with-margin">
-            <span class="km-summary-left km-summary-os">
+            <span class="km-summary-left km-text km-summary-os">
               <i class="km-os-image km-os-image-{{getOperatingSystemLogoClass()}}"></i>
             </span>
             <span>{{getOperatingSystem()}}</span>
           </div>
           <div class="km-summary-row"
                *ngIf="nodeData.spec.operatingSystem.ubuntu">
-            <span class="km-summary-left">
+            <span class="km-summary-left km-text">
               <i [ngClass]="nodeData.spec.operatingSystem.ubuntu.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></i>
             </span>
             <span>Upgrade system on first boot</span>
           </div>
           <div class="km-summary-row"
                *ngIf="nodeData.spec.operatingSystem.centos">
-            <span class="km-summary-left">
+            <span class="km-summary-left km-text">
               <i [ngClass]="nodeData.spec.operatingSystem.centos.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></i>
             </span>
             <span>Upgrade system on first boot</span>
           </div>
           <div class="km-summary-row"
                *ngIf="nodeData.spec.operatingSystem.containerLinux">
-            <span class="km-summary-left">
+            <span class="km-summary-left km-text">
               <i [ngClass]="nodeData.spec.operatingSystem.containerLinux.disableAutoUpdate ? 'km-icon-running' : 'km-icon-disabled'"></i>
             </span>
             <span>Disable auto-update</span>
@@ -89,7 +89,7 @@
           </mat-card-header>
           <mat-card-content>
             <div class="km-summary-row km-summary-sshkeys">
-              <span class="km-summary-left"><i class="km-icon-key"></i></span>
+              <span class="km-summary-left km-text"><i class="km-icon-key"></i></span>
               <span>{{getSSHKeyNames()}}</span>
             </div>
           </mat-card-content>
@@ -351,7 +351,7 @@
 
             <!-- Initial Node Replicas -->
             <div [ngClass]="noMoreIpsLeft ? 'km-summary-row km-warning km-red' : 'km-summary-row' ">
-              <span class="km-summary-left">{{nodeData.count}}</span>
+              <span class="km-summary-left km-text">{{nodeData.count}}</span>
               <span>Initial Deployment Replicas</span>
             </div>
             <div class="km-summary-row">
@@ -363,7 +363,7 @@
             <ng-container *ngIf="cluster.spec.cloud.aws">
               <div *ngIf="nodeData.spec.cloud.aws.assignPublicIP !== undefined">
                 <div class="km-summary-row">
-                  <span class="km-summary-left">
+                  <span class="km-summary-left km-text">
                     <i [ngClass]="{'km-icon-disabled': !nodeData.spec.cloud.aws.assignPublicIP, 'km-icon-running': nodeData.spec.cloud.aws.assignPublicIP}"></i>
                   </span>
                   <span>Assign Public IP</span>
@@ -374,19 +374,19 @@
             <!-- DO Node Options -->
             <ng-container *ngIf="cluster.spec.cloud.digitalocean">
               <div class="km-summary-row">
-                <span class="km-summary-left">
+                <span class="km-summary-left km-text">
                   <i [ngClass]="nodeData.spec.cloud.digitalocean.backups ? 'km-icon-running' : 'km-icon-disabled'"></i>
                 </span>
                 <span>Backups</span>
               </div>
               <div class="km-summary-row">
-                <span class="km-summary-left">
+                <span class="km-summary-left km-text">
                   <i [ngClass]="nodeData.spec.cloud.digitalocean.ipv6 ? 'km-icon-running' : 'km-icon-disabled'"></i>
                 </span>
                 <span>IPv6</span>
               </div>
               <div class="km-summary-row">
-                <span class="km-summary-left">
+                <span class="km-summary-left km-text">
                   <i [ngClass]="nodeData.spec.cloud.digitalocean.monitoring ? 'km-icon-running' : 'km-icon-disabled'"></i>
                 </span>
                 <span>Monitoring</span>
@@ -396,7 +396,7 @@
             <!-- GCP Node Options -->
             <ng-container *ngIf="cluster.spec.cloud.gcp">
               <div class="km-summary-row">
-                <span class="km-summary-left">
+                <span class="km-summary-left km-text">
                   <i [ngClass]="nodeData.spec.cloud.gcp.preemptible ? 'km-icon-running' : 'km-icon-disabled'"></i>
                 </span>
                 <span>Preemptible</span>
@@ -406,7 +406,7 @@
             <!-- Openstack Node Options -->
             <ng-container *ngIf="cluster.spec.cloud.openstack">
               <div class="km-summary-row">
-                <span class="km-summary-left">
+                <span class="km-summary-left km-text">
                   <i [ngClass]="nodeData.spec.cloud.openstack.useFloatingIP ? 'km-icon-running' : 'km-icon-disabled'"></i>
                 </span>
                 <span>Allocate Floating IP</span>
@@ -416,7 +416,7 @@
             <!-- Azure Node Options -->
             <ng-container *ngIf="cluster.spec.cloud.azure">
               <div class="km-summary-row">
-                <span class="km-summary-left">
+                <span class="km-summary-left km-text">
                   <i [ngClass]="nodeData.spec.cloud.azure.assignPublicIP ? 'km-icon-running' : 'km-icon-disabled'"></i>
                 </span>
                 <span>Assign Public IP</span>
@@ -474,7 +474,7 @@
             <!-- No Provider Tags -->
             <ng-container *ngIf="displayNoProviderTags()">
               <div class="km-summary-row">
-                <span class="km-summary-left">
+                <span class="km-summary-left km-text">
                   <i class="km-icon-disabled"></i>
                 </span>
                 <span>Provider Tags</span>
@@ -490,7 +490,7 @@
             </ng-container>
             <ng-container *ngIf="nodeData.spec.cloud.gcp && !displayTags(nodeData.spec.cloud.gcp.labels)">
               <div class="km-summary-row">
-                <span class="km-summary-left">
+                <span class="km-summary-left km-text">
                   <i class="km-icon-disabled"></i>
                 </span>
                 <span>Provider Labels</span>
@@ -505,7 +505,7 @@
             </div>
             <div *ngIf="!nodeData.spec.labels || !displayTags(nodeData.spec.labels)">
               <div class="km-summary-row">
-                <span class="km-summary-left">
+                <span class="km-summary-left km-text">
                   <i class="km-icon-disabled"></i>
                 </span>
                 <span>Node Labels</span>
@@ -520,7 +520,7 @@
             </div>
             <div *ngIf="!nodeData.spec.taints || nodeData.spec.taints.length === 0">
               <div class="km-summary-row">
-                <span class="km-summary-left">
+                <span class="km-summary-left km-text">
                   <i class="km-icon-disabled"></i>
                 </span>
                 <span>Node Taints</span>
