@@ -3,11 +3,12 @@ import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
-import {UserService} from '../../core/services';
+import {ProjectService, UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
 import {MemberEntity, UserSettings} from '../../shared/entity/MemberEntity';
+import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
 
 @Component({
@@ -17,6 +18,7 @@ import {objectDiff} from '../../shared/utils/common-utils';
 })
 export class UserSettingsComponent implements OnInit, OnDestroy {
   itemsPerPageOptions = [5, 10, 15, 20, 25];
+  projects: ProjectEntity[] = [];
   user: MemberEntity;
   settings: UserSettings;     // Local settings copy. User can edit it.
   apiSettings: UserSettings;  // Original settings from the API. Cannot be edited by the user.
@@ -25,7 +27,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
 
   constructor(
       private readonly _userService: UserService, private readonly _settingsService: SettingsService,
-      private readonly _historyService: HistoryService) {}
+      private readonly _historyService: HistoryService, private readonly _projectService: ProjectService) {}
 
   ngOnInit(): void {
     this._userService.loggedInUser.pipe(first()).subscribe(user => this.user = user);
@@ -47,6 +49,10 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
           this.apiSettings = settings;
           this.settings = _.cloneDeep(this.apiSettings);
         });
+
+    this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe(projects => {
+      this.projects = projects;
+    });
   }
 
   ngOnDestroy(): void {
@@ -64,5 +70,9 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
 
   isEqual(a: any, b: any): boolean {
     return _.isEqual(a, b);
+  }
+
+  hasDefaultProject(): string {
+    return !!this.settings.selectedProjectId ? '' : '--';
   }
 }

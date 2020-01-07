@@ -7,6 +7,7 @@ import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {Auth, ClusterService, ProjectService, UserService} from '../core/services';
+import {PreviousRouteService} from '../core/services/previous-route/previous-route.service';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
@@ -61,7 +62,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
       private readonly _clusterService: ClusterService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _matDialog: MatDialog,
       private readonly _googleAnalyticsService: GoogleAnalyticsService, private readonly _router: Router,
-      private readonly _cookieService: CookieService, private readonly _settingsService: SettingsService) {}
+      private readonly _cookieService: CookieService, private readonly _settingsService: SettingsService,
+      private _previousRouteService: PreviousRouteService) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.projects;
@@ -71,6 +73,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       }
       this.settings = settings;
       this.showCards = !settings.selectProjectTableView;
+      this.selectDefaultProject();
     });
 
     this._settingsChange.pipe(debounceTime(1000))
@@ -91,6 +94,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this._redirectToCluster();
       }
       this.isInitializing = false;
+      this.selectDefaultProject();
     });
   }
 
@@ -141,6 +145,14 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   selectProject(project: ProjectEntity): void {
     this._projectService.selectProject(project);
+  }
+
+  selectDefaultProject(): void {
+    if (!!this.settings && !!this.projects && !!this.settings.selectedProjectId &&
+        this._previousRouteService.getPreviousUrl() === '/projects') {
+      const defaultProject = this.projects.find((x) => x.id === this.settings.selectedProjectId);
+      this.selectProject(defaultProject);
+    }
   }
 
   getOwnerNameArray(owners: ProjectOwners[]): string[] {
