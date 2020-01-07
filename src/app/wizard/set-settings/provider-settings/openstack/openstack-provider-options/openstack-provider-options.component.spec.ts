@@ -7,7 +7,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {WizardService} from '../../../../../core/services';
 import {ClusterProviderSettingsForm, ClusterSettingsFormView} from '../../../../../shared/model/ClusterForm';
-import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
 import {SharedModule} from '../../../../../shared/shared.module';
 import {fakeOpenstackCluster} from '../../../../../testing/fake-data/cluster.fake';
 import {openstackNetworksFake, openstackSecurityGroupsFake, openstackSortedNetworksFake, openstackSubnetIdsFake} from '../../../../../testing/fake-data/wizard.fake';
@@ -15,44 +14,51 @@ import {asyncData} from '../../../../../testing/services/api-mock.service';
 
 import {OpenstackProviderOptionsComponent} from './openstack-provider-options.component';
 
-import Spy = jasmine.Spy;
 
 describe('OpenstackProviderOptionsComponent', () => {
   let fixture: ComponentFixture<OpenstackProviderOptionsComponent>;
   let component: OpenstackProviderOptionsComponent;
-  let networksMock: Spy;
-  let securityGroupsMock: Spy;
-  let subnetIdsMock: Spy;
+  let networksMock;
+  let securityGroupsMock;
+  let subnetIdsMock;
   let wizardMock;
   let providerMock;
 
   beforeEach(async(() => {
-    wizardMock = jasmine.createSpyObj('WizardService', ['provider', 'changeClusterProviderSettings']);
-    providerMock = jasmine.createSpyObj('Provider', [
-      'networks', 'securityGroups', 'subnets', 'username', 'password', 'domain', 'datacenter', 'tenant', 'tenantID'
-    ]);
+    wizardMock = {'provider': jest.fn(), 'changeClusterProviderSettings': jest.fn()};
+    providerMock = {
+      'networks': jest.fn(),
+      'securityGroups': jest.fn(),
+      'subnets': jest.fn(),
+      'username': jest.fn(),
+      'password': jest.fn(),
+      'domain': jest.fn(),
+      'datacenter': jest.fn(),
+      'tenant': jest.fn(),
+      'tenantID': jest.fn()
+    };
 
-    wizardMock.changeClusterProviderSettings.and.callThrough();
+    wizardMock.changeClusterProviderSettings.mockImplementation();
     wizardMock.onCustomPresetsDisable = new EventEmitter<boolean>();
     wizardMock.onCustomPresetSelect = new EventEmitter<string>();
     wizardMock.clusterSettingsFormViewChanged$ = new EventEmitter<ClusterSettingsFormView>();
     wizardMock.clusterProviderSettingsFormChanges$ = new EventEmitter<ClusterProviderSettingsForm>();
 
-    providerMock.username.and.returnValue(providerMock);
-    providerMock.password.and.returnValue(providerMock);
-    providerMock.domain.and.returnValue(providerMock);
-    providerMock.datacenter.and.returnValue(providerMock);
-    providerMock.tenant.and.returnValue(providerMock);
-    providerMock.tenantID.and.returnValue(providerMock);
+    providerMock.username.mockReturnValue(providerMock);
+    providerMock.password.mockReturnValue(providerMock);
+    providerMock.domain.mockReturnValue(providerMock);
+    providerMock.datacenter.mockReturnValue(providerMock);
+    providerMock.tenant.mockReturnValue(providerMock);
+    providerMock.tenantID.mockReturnValue(providerMock);
 
-    networksMock = wizardMock.provider.withArgs(NodeProvider.OPENSTACK).and.returnValue(providerMock.networks);
-    providerMock.networks.and.returnValue(asyncData(openstackNetworksFake()));
+    networksMock = wizardMock.provider.mockReturnValue(providerMock.networks);
+    providerMock.networks.mockReturnValue(asyncData(openstackNetworksFake()));
 
-    securityGroupsMock = wizardMock.provider.withArgs(NodeProvider.OPENSTACK).and.returnValue(providerMock);
-    providerMock.securityGroups.and.returnValue(asyncData(openstackSecurityGroupsFake()));
+    securityGroupsMock = wizardMock.provider.mockReturnValue(providerMock);
+    providerMock.securityGroups.mockReturnValue(asyncData(openstackSecurityGroupsFake()));
 
-    subnetIdsMock = wizardMock.provider.withArgs(NodeProvider.OPENSTACK).and.returnValue(providerMock);
-    providerMock.subnets.and.returnValue(asyncData(openstackSubnetIdsFake()));
+    subnetIdsMock = wizardMock.provider.mockReturnValue(providerMock);
+    providerMock.subnets.mockReturnValue(asyncData(openstackSubnetIdsFake()));
 
     TestBed
         .configureTestingModule({

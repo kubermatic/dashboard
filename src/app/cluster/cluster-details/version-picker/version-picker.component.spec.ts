@@ -103,8 +103,8 @@ describe('VersionPickerComponent', () => {
        ];
        fixture.detectChanges();
        tick();
-       expect(component.updatesAvailable).toEqual(true, 'Updates should be available');
-       expect(component.downgradesAvailable).toEqual(false, 'Downgrades should not be available');
+       expect(component.updatesAvailable).toEqual(true);
+       expect(component.downgradesAvailable).toEqual(false);
        discardPeriodicTasks();
      }));
 
@@ -117,8 +117,8 @@ describe('VersionPickerComponent', () => {
        ];
        fixture.detectChanges();
        tick();
-       expect(component.updatesAvailable).toEqual(false, 'Updates should not be available');
-       expect(component.downgradesAvailable).toEqual(false, 'Downgrades should not be available');
+       expect(component.updatesAvailable).toEqual(false);
+       expect(component.downgradesAvailable).toEqual(false);
        discardPeriodicTasks();
      }));
 
@@ -135,8 +135,8 @@ describe('VersionPickerComponent', () => {
        ];
        fixture.detectChanges();
        tick();
-       expect(component.updatesAvailable).toEqual(false, 'Updates should not be available');
-       expect(component.downgradesAvailable).toEqual(true, 'Downgrades should be available');
+       expect(component.updatesAvailable).toEqual(false);
+       expect(component.downgradesAvailable).toEqual(true);
        discardPeriodicTasks();
      }));
 
@@ -157,8 +157,8 @@ describe('VersionPickerComponent', () => {
        ];
        fixture.detectChanges();
        tick();
-       expect(component.updatesAvailable).toEqual(true, 'Updates should be available');
-       expect(component.downgradesAvailable).toEqual(true, 'Downgrades should be available');
+       expect(component.updatesAvailable).toEqual(true);
+       expect(component.downgradesAvailable).toEqual(true);
        discardPeriodicTasks();
      }));
 

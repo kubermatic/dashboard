@@ -25,11 +25,11 @@ describe('AzureNodeOptionsComponent', () => {
   let component: AzureNodeOptionsComponent;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getAzureSizes', 'getAzureSizesForWizard']);
-    apiMock.getAzureSizes.and.returnValue(asyncData(fakeAzureSizes()));
-    apiMock.getAzureSizesForWizard.and.returnValue(asyncData(fakeAzureSizes()));
-    const datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
-    datacenterMock.getDataCenter.and.returnValue(asyncData(fakeAzureDatacenter()));
+    const apiMock = {'getAzureSizes': jest.fn(), 'getAzureSizesForWizard': jest.fn()};
+    apiMock.getAzureSizes.mockReturnValue(asyncData(fakeAzureSizes()));
+    apiMock.getAzureSizesForWizard.mockReturnValue(asyncData(fakeAzureSizes()));
+    const datacenterMock = {'getDataCenter': jest.fn()};
+    datacenterMock.getDataCenter.mockReturnValue(asyncData(fakeAzureDatacenter()));
 
     TestBed
         .configureTestingModule({

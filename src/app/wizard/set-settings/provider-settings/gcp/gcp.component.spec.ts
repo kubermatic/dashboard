@@ -49,13 +49,11 @@ describe('GCPClusterSettingsComponent', () => {
   });
 
   it('serviceAccount field validity', () => {
-    expect(component.form.valid).toBeFalsy('form is initially not valid');
-    expect(component.form.controls.serviceAccount.valid).toBeFalsy('serviceAccount field is initially not valid');
-    expect(component.form.controls.serviceAccount.hasError('required'))
-        .toBeTruthy('serviceAccount field has initially required error');
+    expect(component.form.valid).toBeFalsy();
+    expect(component.form.controls.serviceAccount.valid).toBeFalsy();
+    expect(component.form.controls.serviceAccount.hasError('required')).toBeTruthy();
 
     component.form.controls.serviceAccount.patchValue('foo');
-    expect(component.form.controls.serviceAccount.hasError('required'))
-        .toBeFalsy('serviceAccount field has no required error after setting foo');
+    expect(component.form.controls.serviceAccount.hasError('required')).toBeFalsy();
   });
 });

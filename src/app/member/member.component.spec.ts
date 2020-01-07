@@ -5,7 +5,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
-import Spy = jasmine.Spy;
+
 
 import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
@@ -24,12 +24,12 @@ describe('MemberComponent', () => {
   let fixture: ComponentFixture<MemberComponent>;
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let component: MemberComponent;
-  let deleteMembersSpy: Spy;
+  let deleteMembersSpy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getMembers', 'deleteMembers']);
-    apiMock.getMembers.and.returnValue(asyncData(fakeMembers()));
-    deleteMembersSpy = apiMock.deleteMembers.and.returnValue(of(null));
+    const apiMock = {'getMembers': jest.fn(), 'deleteMembers': jest.fn()};
+    apiMock.getMembers.mockReturnValue(asyncData(fakeMembers()));
+    deleteMembersSpy = apiMock.deleteMembers.mockReturnValue(of(null));
 
     TestBed
         .configureTestingModule({
@@ -87,6 +87,6 @@ describe('MemberComponent', () => {
        fixture.detectChanges();
        tick(15000);
 
-       expect(deleteMembersSpy.and.callThrough()).toHaveBeenCalled();
+       expect(deleteMembersSpy).toHaveBeenCalled();
      }));
 });

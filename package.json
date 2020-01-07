@@ -47,10 +47,6 @@
       "git add"
     ]
   },
-  "jest": {
-    "preset": "jest-preset-angular",
-    "setupFilesAfterEnv": ["./src/base.spec.ts"]
-  },
   "dependencies": {
     "@angular-redux/form": "9.0.1",
     "@angular-redux/store": "9.0.0",
@@ -96,7 +92,6 @@
     "@angular/compiler-cli": "8.2.14",
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
     "@ngrx/store": "8.5.2",
-    "@types/jasmine": "3.5.0",
     "@types/jest": "24.0.25",
     "@types/lodash": "4.14.149",
     "@types/node": "12.12.17",
@@ -104,19 +99,9 @@
     "cypress": "3.6.1",
     "gts": "0.9.0",
     "husky": "3.1.0",
-    "jasmine-core": "3.5.0",
-    "jasmine-spec-reporter": "4.2.1",
     "jest": "24.9.0",
     "jest-preset-angular": "8.0.0",
     "js-beautify": "1.10.2",
-    "karma": "4.4.1",
-    "karma-chrome-launcher": "3.1.0",
-    "karma-cli": "2.0.0",
-    "karma-coverage-istanbul-reporter": "2.1.1",
-    "karma-jasmine": "2.0.1",
-    "karma-jasmine-html-reporter": "1.4.2",
-    "karma-mocha-reporter": "2.2.5",
-    "karma-parallel": "0.3.1",
     "license-checker": "25.0.1",
     "lint-staged": "9.5.0",
     "ng2-mock-component": "0.2.0",

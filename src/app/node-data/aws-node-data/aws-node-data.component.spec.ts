@@ -30,10 +30,10 @@ describe('AWSNodeDataComponent', () => {
   let apiMock;
 
   beforeEach(async(() => {
-    apiMock = jasmine.createSpyObj('ApiService', ['getAWSSubnets']);
-    apiMock.getAWSSubnets.and.returnValue(asyncData(fakeAwsSubnets()));
-    datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
-    datacenterMock.getDataCenter.and.returnValue(asyncData(fakeAWSDatacenter()));
+    apiMock = {'getAWSSubnets': jest.fn()};
+    apiMock.getAWSSubnets.mockReturnValue(asyncData(fakeAwsSubnets()));
+    datacenterMock = {'getDataCenter': jest.fn()};
+    datacenterMock.getDataCenter.mockReturnValue(asyncData(fakeAWSDatacenter()));
 
     TestBed
         .configureTestingModule({

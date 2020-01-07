@@ -19,8 +19,8 @@ describe('ShareKubeconfigComponent', () => {
   let fixture: ComponentFixture<ShareKubeconfigComponent>;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getShareKubeconfigURL']);
-    const authMock = jasmine.createSpyObj('Auth', ['authenticated']);
+    const apiMock = {'getShareKubeconfigURL': jest.fn()};
+    const authMock = {'authenticated': jest.fn()};
     TestBed
         .configureTestingModule({
           imports: [
