@@ -10,11 +10,24 @@
   $palette-foreground: map-get($theme, foreground);
   $palette-background: map-get($theme, background);
 
+  $text: mat-color($palette-foreground, text);
+  $text-muted: mat-color($palette-foreground, secondary-text);
+  $text-footer: mat-color($palette-primary, 50);
+  $text-white: #fff;
+
+  $background: mat-color($palette-background, background);
   $background-hover: mat-color($palette-background, hover);
   $background-card: mat-color($palette-background, card);
   $background-card-accent: rgba($background-hover, .02);
+  $background-navbar: mat-color($palette-background, app-bar);
 
-  $base-bg: mat-color($palette-background, base);
+  $divider: mat-color($palette-foreground, divider);
+
+  $chip-accent: mat-color($palette-background, card);
+  $chip-background: $divider;
+
+  $scrollbar-background: mat-color($palette-background, card);
+  $scrollbar-color: $divider;
 
   $sidenav-text: mat-color($palette-primary, 300);
   $sidenav-text-light: mat-color($palette-primary, 500);
@@ -50,24 +63,18 @@
   $indicator-red: #eb5757;
   $indicator-blue: #00a3d9;
 
-  $text: mat-color($palette-foreground, text);
-  $text-muted: mat-color($palette-foreground, secondary-text);
-  $text-footer: mat-color($palette-primary, 50);
-  $text-white: #fff;
-  $background: mat-color($palette-background, background);
-  $background-navbar: mat-color($palette-background, app-bar);
-  $project-switch: rgba(mat-color($palette-foreground, secondary-text), .7);
-  $divider: mat-color($palette-foreground, divider);
-  $shadow: 0 4px 4px rgba(#000, .08);
-  $light-button-color: #bdc6d1;
-  $disabled-button-color: #d4d4d4;
-  $table-row-hover: rgba($divider, .5);
-  $chip-background: $divider;
-  $chip-accent: mat-color($palette-background, card);
-  $scrollbar-background: mat-color($palette-background, card);
-  $scrollbar-color: $divider;
-  $grey-background: #edeff0;
   $transition: all .5s ease;
+
+  // TODO
+  // TODO
+  // TODO
+  // TODO
+  // TODO
+
+  $project-switch: rgba(mat-color($palette-foreground, secondary-text), .7);
+  $shadow: 0 4px 4px rgba(#000, .08);
+  $disabled-button-color: #d4d4d4;
+  $grey-background: #edeff0;
 
   i.fa-exclamation-triangle {
     color: $indicator-red;
@@ -79,67 +86,6 @@
 
   td.mat-cell {
     border-top: 1px solid $divider;
-  }
-
-  .km-mat-row.km-clickable:hover {
-    background-color: $table-row-hover;
-  }
-
-  .mat-drawer-container {
-    background-color: transparent;
-  }
-
-  .mat-drawer-side {
-    border: none !important;
-  }
-
-  .mat-button-toggle-group-appearance-standard .mat-button-toggle {
-    border: solid 1px $divider;
-
-    &.mat-button-toggle-checked {
-      background-color: transparent;
-      border: 1px solid $primary;
-    }
-
-    &:hover {
-      border: solid 1px $primary;
-      transition: $transition;
-    }
-  }
-
-  .mat-form-field-appearance-outline .mat-form-field-outline {
-    color: $divider;
-  }
-
-  .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
-    color: $primary;
-  }
-
-  mat-form-field.mat-form-field {
-    color: $text;
-    width: 100%;
-
-    &.km-with-hint {
-      margin-bottom: 1.875 * $baseline-grid;
-    }
-  }
-
-  div.mat-form-field-outline.mat-form-field-outline-thick {
-    color: $quaternary;
-  }
-
-  mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) div.mat-form-field-flex:hover label {
-    transition: all .2s ease;
-    color: $quaternary-dark;
-  }
-
-  mat-form-field.mat-focused:not(.ng-invalid) label {
-    color: $alternative-text !important;
-  }
-
-  mat-hint a {
-    color: $primary;
-    text-decoration: none;
   }
 
   .km-icon-warning-orange {
@@ -202,14 +148,6 @@
           padding: (1.25 * $baseline-grid) (3 * $baseline-grid);
           margin: 0;
           line-height: 2 * $line-height;
-        }
-
-        &.km-accordion {
-          padding-bottom: 0;
-
-          > div:first-child {
-            padding-bottom: 10px;
-          }
         }
 
         div {
@@ -276,14 +214,44 @@
     }
   }
 
-  .mat-button-focus-overlay {
-    background-color: transparent !important;
+  #km-confirmation-dialog mat-dialog-content,
+  #km-delete-cluster-dialog mat-dialog-content {
+    margin-bottom: 3.75 * $baseline-grid;
   }
 
-  mat-list-item.disabled {
-    i {
-      opacity: 0.3;
-    }
+  // TODO
+  // TODO
+  // TODO
+  // TODO
+  // TODO
+
+  // Angular Material overrides.
+  .mat-drawer-container {
+    background-color: transparent;
+  }
+
+  .mat-drawer-side {
+    border: none !important;
+  }
+
+  .mat-tooltip-panel {
+    height: 4 * $baseline-grid;
+  }
+
+  .mat-tooltip {
+    background-color: $primary-light !important;
+    font-size: $font-size-caption !important;
+    margin-top: 0.625 * $baseline-grid !important;
+  }
+
+  .mat-card {
+    box-shadow: none !important;
+    color: $text;
+  }
+
+  .mat-header-cell,
+  .mat-sort-header-button {
+    color: $text !important;
   }
 
   .mat-card-header .mat-card-title {
@@ -304,74 +272,6 @@
   .mat-column-status,
   .mat-column-stateArrow {
     width: $baseline-grid;
-  }
-
-  .km-optgroup-dropdown {
-    margin-left: 2.75 * $baseline-grid !important;
-  }
-
-  .km-sshkey-dropdown {
-    margin-left: 3.75 * $baseline-grid !important;
-  }
-
-  .km-add-dialog-dropdown {
-    margin-top: 4.25 * $baseline-grid !important;
-  }
-
-  .mat-optgroup-label {
-    font-size: $font-size-caption !important;
-    line-height: 3.5 * $line-height !important;
-    height: 3.5 * $line-height !important;
-    padding-left: 1.25 * $baseline-grid !important;
-    border-top: 1px solid $divider !important;
-  }
-
-  .mat-option {
-    padding: 0 0 0 (1.25 * $baseline-grid) !important;
-
-    &.mat-active {
-      background-color: $grey-background !important;
-      color: $text !important;
-    }
-
-    &:hover {
-      background-color: $secondary-light !important;
-      color: $text !important;
-    }
-  }
-
-  #km-confirmation-dialog mat-dialog-content,
-  #km-delete-cluster-dialog mat-dialog-content {
-    margin-bottom: 3.75 * $baseline-grid;
-  }
-
-  .km-pod-security-policy-row {
-    align-items: center;
-  }
-
-  // TODO
-  // TODO
-  // TODO
-
-  // Angular Material overrides.
-  .mat-tooltip-panel {
-    height: 4 * $baseline-grid;
-  }
-
-  .mat-tooltip {
-    background-color: $primary-light !important;
-    font-size: $font-size-caption !important;
-    margin-top: 0.625 * $baseline-grid !important;
-  }
-
-  .mat-card {
-    box-shadow: none !important;
-    color: $text;
-  }
-
-  .mat-header-cell,
-  .mat-sort-header-button {
-    color: $text !important;
   }
 
   .mat-sort-header-arrow {
@@ -415,7 +315,7 @@
 
   .mat-card-content {
     p {
-      color: $light-button-color;
+      color: $text-muted;
       font-size: $font-size-caption;
       margin: 0 0 (1.875 * $baseline-grid);
     }
@@ -429,6 +329,41 @@
       font-weight: 600;
       padding: 0;
     }
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: $divider;
+  }
+
+  .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+    color: $primary;
+  }
+
+  mat-form-field.mat-form-field {
+    color: $text;
+    width: 100%;
+
+    &.km-with-hint {
+      margin-bottom: 1.875 * $baseline-grid;
+    }
+  }
+
+  div.mat-form-field-outline.mat-form-field-outline-thick {
+    color: $quaternary;
+  }
+
+  mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) div.mat-form-field-flex:hover label {
+    transition: all .2s ease;
+    color: $quaternary-dark;
+  }
+
+  mat-form-field.mat-focused:not(.ng-invalid) label {
+    color: $alternative-text !important;
+  }
+
+  mat-hint a {
+    color: $primary;
+    text-decoration: none;
   }
 
   .mat-button,
@@ -513,6 +448,10 @@
     cursor: auto;
   }
 
+  .mat-button-focus-overlay {
+    background-color: transparent !important;
+  }
+
   .mat-checkbox-checked .mat-checkbox-background {
     background-color: $primary !important;
   }
@@ -568,6 +507,20 @@
 
   .mat-button-toggle-group-appearance-standard {
     border: none !important;
+
+    .mat-button-toggle {
+      border: solid 1px $divider;
+
+      &.mat-button-toggle-checked {
+        background-color: transparent;
+        border: 1px solid $primary;
+      }
+
+      &:hover {
+        border: solid 1px $primary;
+        transition: $transition;
+      }
+    }
   }
 
   mat-button-toggle-group[group='datacenterGroup'],
@@ -715,6 +668,28 @@
     color: $text;
   }
 
+  .mat-optgroup-label {
+    font-size: $font-size-caption !important;
+    line-height: 3.5 * $line-height !important;
+    height: 3.5 * $line-height !important;
+    padding-left: 1.25 * $baseline-grid !important;
+    border-top: 1px solid $divider !important;
+  }
+
+  .mat-option {
+    padding: 0 0 0 (1.25 * $baseline-grid) !important;
+
+    &.mat-active {
+      background-color: $grey-background !important;
+      color: $text !important;
+    }
+
+    &:hover {
+      background-color: $secondary-light !important;
+      color: $text !important;
+    }
+  }
+
   .mat-menu-item {
     padding: 0 (1.25 * $baseline-grid) !important;
     line-height: 4.2 * $line-height !important;
@@ -737,6 +712,10 @@
     .mat-list-item-content {
       padding: 0 !important;
     }
+  }
+
+  mat-list-item.disabled i {
+    opacity: 0.3;
   }
 
   // Application component styles (it's basically every class that starts with "km-" prefix).
@@ -1064,6 +1043,10 @@
     td:last-child {
       border-right: 1px solid $divider;
     }
+  }
+
+  .km-mat-row.km-clickable:hover {
+    background-color: $background-hover;
   }
 
   .km-mat-footer-row {
@@ -1508,5 +1491,21 @@
       border: (0.125 * $baseline-grid) solid $primary;
       background-color: $background-card-accent;
     }
+  }
+
+  .km-optgroup-dropdown {
+    margin-left: 2.75 * $baseline-grid !important;
+  }
+
+  .km-sshkey-dropdown {
+    margin-left: 3.75 * $baseline-grid !important;
+  }
+
+  .km-add-dialog-dropdown {
+    margin-top: 4.25 * $baseline-grid !important;
+  }
+
+  .km-pod-security-policy-row {
+    align-items: center;
   }
 }
