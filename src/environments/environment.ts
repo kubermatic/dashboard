@@ -14,5 +14,6 @@ export const environment = {
   restRootV3: 'api/v3',
   digitalOceanRestRoot: 'https://api.digitalocean.com/v2',
   oidcProviderUrl: 'https://dev.kubermatic.io/dex/auth',
+  oidcConnectorId: null,
   animations: true,
 };

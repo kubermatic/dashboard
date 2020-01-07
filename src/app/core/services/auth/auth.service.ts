@@ -31,20 +31,20 @@ export class Auth {
   }
 
   getOIDCProviderURL(): string {
-    const baseUrl = this._appConfigService.getConfig().oidc_provider_url ?
-        this._appConfigService.getConfig().oidc_provider_url :
-        environment.oidcProviderUrl;
+    const config = this._appConfigService.getConfig();
+    const baseUrl = config.oidc_provider_url ? config.oidc_provider_url : environment.oidcProviderUrl;
+    const connectorId = config.oidc_connector_id ? config.oidc_connector_id : environment.oidcConnectorId;
+    const scope = config.oidc_provider_scope ? config.oidc_provider_scope : this._defaultScope;
+    const clientId = config.oidc_provider_client_id ? config.oidc_provider_client_id : this._clientId;
 
-    const scope = this._appConfigService.getConfig().oidc_provider_scope ?
-        this._appConfigService.getConfig().oidc_provider_scope :
-        this._defaultScope;
-
-    const clientId = this._appConfigService.getConfig().oidc_provider_client_id ?
-        this._appConfigService.getConfig().oidc_provider_client_id :
-        this._clientId;
-
-    return `${baseUrl}?response_type=${this._responseType}&client_id=${clientId}` +
+    let url = `${baseUrl}?response_type=${this._responseType}&client_id=${clientId}` +
         `&redirect_uri=${this._redirectUri}&scope=${scope}&nonce=${this._nonce}`;
+
+    if (connectorId) {
+      url += `&connector_id=${connectorId}`;
+    }
+
+    return url;
   }
 
   getBearerToken(): string {
