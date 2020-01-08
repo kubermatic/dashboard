@@ -45,7 +45,18 @@ export class KubermaticComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.config = this.appConfigService.getConfig();
+    this.version = this.appConfigService.getGitVersion();
+    if (this.config.google_analytics_code) {
+      this.googleAnalyticsService.activate(
+          this.config.google_analytics_code,
+          this.config.google_analytics_config,
+          this.router.url,
+      );
+    }
+
     this._applyTheme(this._theme);
+    this._registerCustomCSS();
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(this.settings, settings)) {
@@ -59,18 +70,6 @@ export class KubermaticComponent implements OnInit, OnDestroy {
         this._theme = settings.selectedTheme;
       }
     });
-
-    this.config = this.appConfigService.getConfig();
-    this.version = this.appConfigService.getGitVersion();
-    if (this.config.google_analytics_code) {
-      this.googleAnalyticsService.activate(
-          this.config.google_analytics_code,
-          this.config.google_analytics_config,
-          this.router.url,
-      );
-    }
-
-    this._registerCustomCSS();
   }
 
   ngOnDestroy(): void {
@@ -79,15 +78,17 @@ export class KubermaticComponent implements OnInit, OnDestroy {
   }
 
   private _applyTheme(newTheme: Theme, oldTheme: Theme = null): void {
-    if (oldTheme) {
-      this._overlayContainer.getContainerElement().classList.remove(oldTheme);
-    }
+    if (!this.config.disable_themes) {
+      if (oldTheme) {
+        this._overlayContainer.getContainerElement().classList.remove(oldTheme);
+      }
 
-    this._overlayContainer.getContainerElement().classList.add(newTheme);
-    this._elementRef.nativeElement.classList.add(newTheme);
+      this._overlayContainer.getContainerElement().classList.add(newTheme);
+      this._elementRef.nativeElement.classList.add(newTheme);
 
-    if (oldTheme) {
-      this._elementRef.nativeElement.classList.remove(oldTheme);
+      if (oldTheme) {
+        this._elementRef.nativeElement.classList.remove(oldTheme);
+      }
     }
   }
 

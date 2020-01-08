@@ -3,11 +3,12 @@ import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
+import {AppConfigService} from '../../app-config.service';
 import {UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
-import {MemberEntity, Theme, UserSettings} from '../../shared/entity/MemberEntity';
+import {MemberEntity, UserSettings} from '../../shared/entity/MemberEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
 
 @Component({
@@ -16,8 +17,8 @@ import {objectDiff} from '../../shared/utils/common-utils';
   styleUrls: ['user-settings.component.scss'],
 })
 export class UserSettingsComponent implements OnInit, OnDestroy {
+  enableThemes = false;
   itemsPerPageOptions = [5, 10, 15, 20, 25];
-  Theme = Theme;
   user: MemberEntity;
   settings: UserSettings;     // Local settings copy. User can edit it.
   apiSettings: UserSettings;  // Original settings from the API. Cannot be edited by the user.
@@ -26,9 +27,11 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
 
   constructor(
       private readonly _userService: UserService, private readonly _settingsService: SettingsService,
-      private readonly _historyService: HistoryService) {}
+      private readonly _historyService: HistoryService, private readonly _appConfigService: AppConfigService) {}
 
   ngOnInit(): void {
+    this.enableThemes = !this._appConfigService.getConfig().disable_themes;
+
     this._userService.loggedInUser.pipe(first()).subscribe(user => this.user = user);
 
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
