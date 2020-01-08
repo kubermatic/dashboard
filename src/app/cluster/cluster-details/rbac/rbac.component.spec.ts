@@ -27,9 +27,9 @@ describe('RBACComponent', () => {
   let component: RBACComponent;
 
   beforeEach(async(() => {
-    const rbacMock = jasmine.createSpyObj('RBACService', ['deleteClusterBinding', 'deleteBinding']);
-    rbacMock.deleteClusterBinding.and.returnValue(of(null));
-    rbacMock.deleteBinding.and.returnValue(of(null));
+    const rbacMock = {'deleteClusterBinding': jest.fn(), 'deleteBinding': jest.fn()};
+    rbacMock.deleteClusterBinding.mockReturnValue(of(null));
+    rbacMock.deleteBinding.mockReturnValue(of(null));
 
     TestBed
         .configureTestingModule({

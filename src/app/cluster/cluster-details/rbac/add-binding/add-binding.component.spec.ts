@@ -27,12 +27,17 @@ describe('AddBindingComponent', () => {
   let component: AddBindingComponent;
 
   beforeEach(async(() => {
-    const rbacMock = jasmine.createSpyObj(
-        'RBACService', ['getClusterRoleNames', 'getRoleNames', 'createClusterBinding', 'createBinding']);
-    rbacMock.getClusterRoleNames.and.returnValue(asyncData([fakeClusterRoleNames()]));
-    rbacMock.getRoleNames.and.returnValue(asyncData([fakeRoleNames()]));
-    rbacMock.createClusterBinding.and.returnValue(asyncData([fakeClusterBinding()]));
-    rbacMock.createBinding.and.returnValue(asyncData([fakeBinding()]));
+    const rbacMock = {
+      'getClusterRoleNames': jest.fn(),
+      'getRoleNames': jest.fn(),
+      'createClusterBinding': jest.fn(),
+      'createBinding': jest.fn(),
+    };
+
+    rbacMock.getClusterRoleNames.mockReturnValue(asyncData([fakeClusterRoleNames()]));
+    rbacMock.getRoleNames.mockReturnValue(asyncData([fakeRoleNames()]));
+    rbacMock.createClusterBinding.mockReturnValue(asyncData([fakeClusterBinding()]));
+    rbacMock.createBinding.mockReturnValue(asyncData([fakeBinding()]));
 
     TestBed
         .configureTestingModule({
@@ -69,7 +74,7 @@ describe('AddBindingComponent', () => {
        component.form.controls.email.setValue('');
        component.form.controls.role.setValue('');
        fixture.detectChanges();
-       expect(component.form.valid).toBeFalsy('cluster form could not be empty ');
+       expect(component.form.valid).toBeFalsy();
 
        component.form.controls.email.setValue('test@example.de');
        component.form.controls.role.setValue('role-1');
@@ -84,13 +89,13 @@ describe('AddBindingComponent', () => {
        component.form.controls.email.setValue('');
        component.form.controls.role.setValue('');
        fixture.detectChanges();
-       expect(component.form.valid).toBeFalsy('namespace form could not be empty');
+       expect(component.form.valid).toBeFalsy();
 
        component.form.controls.email.setValue('test@example.de');
        component.form.controls.role.setValue('role-1');
        fixture.detectChanges();
        component.checkNamespaceState();
-       expect(component.form.valid).toBeFalsy('field namespace could not be empty');
+       expect(component.form.valid).toBeFalsy();
 
        component.form.controls.namespace.setValue('default');
        fixture.detectChanges();

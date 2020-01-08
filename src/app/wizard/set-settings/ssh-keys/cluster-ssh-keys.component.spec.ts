@@ -22,8 +22,8 @@ describe('ClusterSSHKeys', () => {
   let component: ClusterSSHKeysComponent;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getSSHKeys']);
-    apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
+    const apiMock = {'getSSHKeys': jest.fn()};
+    apiMock.getSSHKeys.mockReturnValue(asyncData(fakeSSHKeys()));
 
     TestBed
         .configureTestingModule({
@@ -63,6 +63,6 @@ describe('ClusterSSHKeys', () => {
   });
 
   it('no ssh keys are required', () => {
-    expect(component.keysForm.controls.keys.hasError('required')).toBeFalsy('no keys are required');
+    expect(component.keysForm.controls.keys.hasError('required')).toBeFalsy();
   });
 });

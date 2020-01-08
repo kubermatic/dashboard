@@ -23,8 +23,8 @@ describe('EditServiceAccountTokenComponent', () => {
   let component: EditServiceAccountTokenComponent;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['patchServiceAccountToken']);
-    apiMock.patchServiceAccountToken.and.returnValue(asyncData(fakeServiceAccountToken()));
+    const apiMock = {'patchServiceAccountToken': jest.fn()};
+    apiMock.patchServiceAccountToken.mockReturnValue(asyncData(fakeServiceAccountToken()));
 
     TestBed
         .configureTestingModule({

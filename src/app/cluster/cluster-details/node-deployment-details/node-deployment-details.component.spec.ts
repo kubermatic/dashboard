@@ -38,13 +38,16 @@ describe('NodeDeploymentDetailsComponent', () => {
   let dcMock;
 
   beforeEach(async(() => {
-    apiMock = jasmine.createSpyObj(
-        'ApiService', ['getNodeDeploymentNodes', 'getNodeDeployment', 'getNodeDeploymentNodesEvents']);
-    apiMock.getNodeDeployment.and.returnValue(asyncData(nodeDeploymentsFake()[0]));
-    apiMock.getNodeDeploymentNodes.and.returnValue(asyncData(nodesFake()));
-    apiMock.getNodeDeploymentNodesEvents.and.returnValue(asyncData([]));
-    dcMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
-    dcMock.getDataCenter.and.returnValue(asyncData(fakeDigitaloceanDatacenter()));
+    apiMock = {
+      'getNodeDeploymentNodes': jest.fn(),
+      'getNodeDeployment': jest.fn(),
+      'getNodeDeploymentNodesEvents': jest.fn()
+    };
+    apiMock.getNodeDeployment.mockReturnValue(asyncData(nodeDeploymentsFake()[0]));
+    apiMock.getNodeDeploymentNodes.mockReturnValue(asyncData(nodesFake()));
+    apiMock.getNodeDeploymentNodesEvents.mockReturnValue(asyncData([]));
+    dcMock = {'getDataCenter': jest.fn()};
+    dcMock.getDataCenter.mockReturnValue(asyncData(fakeDigitaloceanDatacenter()));
 
     TestBed
         .configureTestingModule({
@@ -96,7 +99,7 @@ describe('NodeDeploymentDetailsComponent', () => {
       nodeDeploymentID: component.nodeDeployment.id,
     };
 
-    spyOn(component, 'isInitialized').and.returnValue(true);
+    jest.spyOn(component, 'isInitialized').mockReturnValue(true);
 
     fixture.debugElement.injector.get(ApiService);
     fixture.detectChanges();

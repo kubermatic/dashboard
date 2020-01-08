@@ -2,14 +2,15 @@ import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/t
 import {MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import Spy = jasmine.Spy;
+
 import {ApiService, ProjectService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
-import {fakeServiceAccount} from '../../testing/fake-data/serviceaccount.fake';
 import {fakeProject} from '../../testing/fake-data/project.fake';
+import {fakeServiceAccount} from '../../testing/fake-data/serviceaccount.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '../../testing/services/project-mock.service';
+
 import {AddServiceAccountComponent} from './add-serviceaccount.component';
 
 const modules: any[] = [
@@ -21,11 +22,11 @@ const modules: any[] = [
 describe('AddServiceAccountComponent', () => {
   let fixture: ComponentFixture<AddServiceAccountComponent>;
   let component: AddServiceAccountComponent;
-  let createServiceAccountSpy: Spy;
+  let createServiceAccountSpy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['createServiceAccount']);
-    createServiceAccountSpy = apiMock.createServiceAccount.and.returnValue(asyncData(fakeServiceAccount()));
+    const apiMock = {'createServiceAccount': jest.fn()};
+    createServiceAccountSpy = apiMock.createServiceAccount.mockReturnValue(asyncData(fakeServiceAccount()));
 
     TestBed
         .configureTestingModule({
@@ -59,14 +60,12 @@ describe('AddServiceAccountComponent', () => {
   });
 
   it('should have required fields', () => {
-    expect(component.addServiceAccountForm.valid).toBeFalsy('form is initially not valid');
-    expect(component.addServiceAccountForm.controls.name.valid).toBeFalsy('name field is initially not valid');
-    expect(component.addServiceAccountForm.controls.name.hasError('required'))
-        .toBeTruthy('name field has initially required error');
+    expect(component.addServiceAccountForm.valid).toBeFalsy();
+    expect(component.addServiceAccountForm.controls.name.valid).toBeFalsy();
+    expect(component.addServiceAccountForm.controls.name.hasError('required')).toBeTruthy();
 
     component.addServiceAccountForm.controls.name.patchValue('test-service-account');
-    expect(component.addServiceAccountForm.controls.name.hasError('required'))
-        .toBeFalsy('name field has no required error after setting name');
+    expect(component.addServiceAccountForm.controls.name.hasError('required')).toBeFalsy();
   });
 
   it('should call addServiceAccount method', fakeAsync(() => {
@@ -76,6 +75,6 @@ describe('AddServiceAccountComponent', () => {
        component.addServiceAccount();
        tick();
 
-       expect(createServiceAccountSpy.and.callThrough()).toHaveBeenCalled();
+       expect(createServiceAccountSpy).toHaveBeenCalled();
      }));
 });

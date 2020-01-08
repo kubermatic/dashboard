@@ -3,7 +3,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {of} from 'rxjs';
+import {BehaviorSubject, of} from 'rxjs';
 import {environment} from '../../../../environments/environment';
 import {WizardService} from '../../../core/services';
 import {PresetListEntity} from '../../../shared/entity/provider/credentials/PresetListEntity';
@@ -53,7 +53,8 @@ describe('CustomPresetsSettingsComponent', () => {
 
   it('should show no presets available label', () => {
     const provider = NodeProvider.DIGITALOCEAN;
-    spyOnProperty(wizardService, 'clusterProviderFormChanges$').and.returnValue(of({provider} as ClusterProviderForm));
+    jest.spyOn(wizardService, 'clusterProviderFormChanges$', 'get')
+        .mockReturnValue(of({provider} as ClusterProviderForm) as BehaviorSubject<ClusterProviderForm>);
 
     fixture.detectChanges();
 
@@ -66,7 +67,8 @@ describe('CustomPresetsSettingsComponent', () => {
 
   it('should show custom preset label', () => {
     const provider = NodeProvider.DIGITALOCEAN;
-    spyOnProperty(wizardService, 'clusterProviderFormChanges$').and.returnValue(of({provider} as ClusterProviderForm));
+    jest.spyOn(wizardService, 'clusterProviderFormChanges$', 'get')
+        .mockReturnValue(of({provider} as ClusterProviderForm) as BehaviorSubject<ClusterProviderForm>);
 
     fixture.detectChanges();
 

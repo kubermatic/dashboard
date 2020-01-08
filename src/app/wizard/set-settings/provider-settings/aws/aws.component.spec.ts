@@ -63,22 +63,18 @@ describe('AWSClusterSettingsComponent', () => {
     component.form.reset();
     fixture.detectChanges();
 
-    expect(component.form.valid).toBeFalsy('form is invalid with empty defaults');
-    expect(component.form.controls.accessKeyId.hasError('required'))
-        .toBeTruthy('access key id field has required error');
-    expect(component.form.controls.secretAccessKey.hasError('required'))
-        .toBeTruthy('secret access key field has required error');
+    expect(component.form.valid).toBeFalsy();
+    expect(component.form.controls.accessKeyId.hasError('required')).toBeTruthy();
+    expect(component.form.controls.secretAccessKey.hasError('required')).toBeTruthy();
 
     component.form.controls.accessKeyId.patchValue('foo');
     fixture.detectChanges();
-    expect(component.form.controls.accessKeyId.hasError('required'))
-        .toBeFalsy('access key id has no required error after setting value');
-    expect(component.form.valid).toBeFalsy('form is still invalid after setting only access key id');
+    expect(component.form.controls.accessKeyId.hasError('required')).toBeFalsy();
+    expect(component.form.valid).toBeFalsy();
 
     component.form.controls.secretAccessKey.patchValue('bar');
     fixture.detectChanges();
-    expect(component.form.controls.secretAccessKey.hasError('required'))
-        .toBeFalsy('secret access key field has no required error after setting value');
-    expect(component.form.valid).toBeTruthy('form is valid after setting both access key id and secret access key');
+    expect(component.form.controls.secretAccessKey.hasError('required')).toBeFalsy();
+    expect(component.form.valid).toBeTruthy();
   });
 });

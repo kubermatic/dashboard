@@ -15,7 +15,7 @@ import {RouterStub} from '../../../testing/router-stubs';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {ChangeClusterVersionComponent} from './change-cluster-version.component';
-import Spy = jasmine.Spy;
+
 
 const modules: any[] = [
   BrowserModule,
@@ -26,13 +26,13 @@ const modules: any[] = [
 describe('ChangeClusterVersionComponent', () => {
   let fixture: ComponentFixture<ChangeClusterVersionComponent>;
   let component: ChangeClusterVersionComponent;
-  let patchClusterSpy: Spy;
-  let upgradeClusterNodeDeploymentsSpy: Spy;
+  let patchClusterSpy;
+  let upgradeClusterNodeDeploymentsSpy;
 
   beforeEach(async(() => {
-    const clusterServiceMock = jasmine.createSpyObj('ClusterService', ['patch', 'upgradeNodeDeployments']);
-    patchClusterSpy = clusterServiceMock.patch.and.returnValue(of(fakeDigitaloceanCluster()));
-    upgradeClusterNodeDeploymentsSpy = clusterServiceMock.upgradeNodeDeployments.and.returnValue(of(null));
+    const clusterServiceMock = {'patch': jest.fn(), 'upgradeNodeDeployments': jest.fn()};
+    patchClusterSpy = clusterServiceMock.patch.mockReturnValue(of(fakeDigitaloceanCluster()));
+    upgradeClusterNodeDeploymentsSpy = clusterServiceMock.upgradeNodeDeployments.mockReturnValue(of(null));
 
     TestBed
         .configureTestingModule({
@@ -73,7 +73,7 @@ describe('ChangeClusterVersionComponent', () => {
        fixture.detectChanges();
        component.changeVersion();
        tick();
-       expect(patchClusterSpy.and.callThrough()).toHaveBeenCalledTimes(1);
+       expect(patchClusterSpy).toHaveBeenCalledTimes(1);
      }));
 
   it('should call upgradeClusterNodeDeployments method', fakeAsync(() => {
@@ -86,6 +86,6 @@ describe('ChangeClusterVersionComponent', () => {
        component.upgradeNodeDeployments();
        tick();
 
-       expect(upgradeClusterNodeDeploymentsSpy.and.callThrough()).toHaveBeenCalled();
+       expect(upgradeClusterNodeDeploymentsSpy).toHaveBeenCalled();
      }));
 });

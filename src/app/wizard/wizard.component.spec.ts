@@ -75,10 +75,10 @@ describe('WizardComponent', () => {
   let component: WizardComponent;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['createCluster', 'getCluster', 'getMasterVersions']);
-    apiMock.createCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
-    apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
-    apiMock.getMasterVersions.and.returnValue(asyncData(masterVersionsFake()));
+    const apiMock = {'createCluster': jest.fn(), 'getCluster': jest.fn(), 'getMasterVersions': jest.fn()};
+    apiMock.createCluster.mockReturnValue(asyncData(fakeDigitaloceanCluster()));
+    apiMock.getCluster.mockReturnValue(asyncData(fakeDigitaloceanCluster()));
+    apiMock.getMasterVersions.mockReturnValue(asyncData(masterVersionsFake()));
 
     TestBed
         .configureTestingModule({
@@ -172,6 +172,6 @@ describe('WizardComponent', () => {
   });
 
   it('initially start with step 0', () => {
-    expect(component.currentStepIndex).toBe(0, 'initially start with step 0');
+    expect(component.currentStepIndex).toBe(0);
   });
 });

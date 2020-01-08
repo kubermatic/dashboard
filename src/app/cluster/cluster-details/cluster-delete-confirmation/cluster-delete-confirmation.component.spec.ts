@@ -93,11 +93,11 @@ describe('ClusterDeleteConfirmationComponent', () => {
        component.projectID = fakeProject().id;
 
        fixture.detectChanges();
-       const spyDeleteCluster = spyOn(clusterService, 'delete').and.returnValue(of(null));
+       const spyDeleteCluster = jest.spyOn(clusterService, 'delete').mockReturnValue(of(null));
 
        component.deleteCluster();
        tick();
 
-       expect(spyDeleteCluster.and.callThrough()).toHaveBeenCalled();
+       expect(spyDeleteCluster).toHaveBeenCalled();
      }));
 });

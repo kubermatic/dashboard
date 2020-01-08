@@ -57,8 +57,8 @@ describe('NavigationComponent', () => {
 
   it('should tell Router to navigate when user logout', inject([Router], (router: Router) => {
        authService = fixture.debugElement.injector.get(Auth) as any;
-       const spyNavigate = spyOn(router, 'navigate');
-       const spyLogOut = spyOn(authService, 'logout');
+       const spyNavigate = jest.spyOn(router, 'navigate');
+       const spyLogOut = jest.spyOn(authService, 'logout');
 
        component.logout();
 

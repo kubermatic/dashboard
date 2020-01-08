@@ -72,12 +72,12 @@ describe('NodeComponent', () => {
        const event = new MouseEvent('click');
 
        fixture.detectChanges();
-       const spyDeleteClusterNode = spyOn(clusterService, 'deleteNode').and.returnValue(of(null));
+       const spyDeleteClusterNode = jest.spyOn(clusterService, 'deleteNode').mockReturnValue(of(null));
 
        component.deleteNodeDialog(nodeFake(), event);
        tick();
 
-       expect(spyDeleteClusterNode.and.callThrough()).toHaveBeenCalledTimes(1);
+       expect(spyDeleteClusterNode).toHaveBeenCalledTimes(1);
      }));
 
   it('should get operating system name', () => {

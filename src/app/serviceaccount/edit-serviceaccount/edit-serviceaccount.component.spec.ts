@@ -2,13 +2,14 @@ import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/t
 import {MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import Spy = jasmine.Spy;
+
 import {ApiService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
-import {fakeServiceAccount} from '../../testing/fake-data/serviceaccount.fake';
 import {fakeProject} from '../../testing/fake-data/project.fake';
+import {fakeServiceAccount} from '../../testing/fake-data/serviceaccount.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
+
 import {EditServiceAccountComponent} from './edit-serviceaccount.component';
 
 const modules: any[] = [
@@ -20,11 +21,11 @@ const modules: any[] = [
 describe('EditServiceAccountComponent', () => {
   let fixture: ComponentFixture<EditServiceAccountComponent>;
   let component: EditServiceAccountComponent;
-  let editServiceAccountSpy: Spy;
+  let editServiceAccountSpy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['editServiceAccount']);
-    editServiceAccountSpy = apiMock.editServiceAccount.and.returnValue(asyncData(fakeServiceAccount()));
+    const apiMock = {'editServiceAccount': jest.fn()};
+    editServiceAccountSpy = apiMock.editServiceAccount.mockReturnValue(asyncData(fakeServiceAccount()));
 
     TestBed
         .configureTestingModule({
@@ -64,6 +65,6 @@ describe('EditServiceAccountComponent', () => {
        component.editServiceAccount();
        tick();
 
-       expect(editServiceAccountSpy.and.callThrough()).toHaveBeenCalled();
+       expect(editServiceAccountSpy).toHaveBeenCalled();
      }));
 });
