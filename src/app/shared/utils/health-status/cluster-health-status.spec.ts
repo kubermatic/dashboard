@@ -13,13 +13,10 @@ describe('ClusterHealthStatus', () => {
   it('should return correct status for clusters', () => {
     expect(ClusterHealthStatus.getHealthStatus(cluster, health))
         .toEqual(
-            new ClusterHealthStatus(HealthStatusMessage.Running, HealthStatusColor.Green, HealthStatusCss.Running),
-            'should be correct for running cluster');
+            new ClusterHealthStatus(HealthStatusMessage.Running, HealthStatusColor.Green, HealthStatusCss.Running));
     expect(ClusterHealthStatus.getHealthStatus(cluster, healthProvisioning))
-        .toEqual(
-            new ClusterHealthStatus(
-                HealthStatusMessage.Provisioning, HealthStatusColor.Orange, HealthStatusCss.Provisioning),
-            'should be correct for provisioning cluster');
+        .toEqual(new ClusterHealthStatus(
+            HealthStatusMessage.Provisioning, HealthStatusColor.Orange, HealthStatusCss.Provisioning));
   });
 
   it('should return if cluster is running', () => {

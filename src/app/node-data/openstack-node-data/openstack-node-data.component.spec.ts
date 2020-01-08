@@ -22,9 +22,9 @@ describe('OpenstackNodeDataComponent', () => {
   let component: OpenstackNodeDataComponent;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getOpenStackFlavorsForWizard', 'getOpenStackFlavors']);
-    apiMock.getOpenStackFlavorsForWizard.and.returnValue(asyncData(fakeOpenstackFlavors()));
-    apiMock.getOpenStackFlavors.and.returnValue(asyncData(fakeOpenstackFlavors()));
+    const apiMock = {'getOpenStackFlavorsForWizard': jest.fn(), 'getOpenStackFlavors': jest.fn()};
+    apiMock.getOpenStackFlavorsForWizard.mockReturnValue(asyncData(fakeOpenstackFlavors()));
+    apiMock.getOpenStackFlavors.mockReturnValue(asyncData(fakeOpenstackFlavors()));
 
     TestBed
         .configureTestingModule({
@@ -64,8 +64,8 @@ describe('OpenstackNodeDataComponent', () => {
     const datacenterService = TestBed.get(DatacenterService);
     const dc = fakeOpenstackDatacenter();
     dc.spec.openstack.enforce_floating_ip = true;
-    spyOn(datacenterService, 'getDataCenter').and.returnValue(of(dc));
-    spyOn(component, 'isInWizard').and.returnValue(false);
+    jest.spyOn(datacenterService, 'getDataCenter').mockReturnValue(of(dc));
+    jest.spyOn(component, 'isInWizard').mockReturnValue(false);
 
     fixture.detectChanges();
     const tooltipEl = fixture.debugElement.query(By.css('.km-floating-ip-checkbox .km-icon-info'));
@@ -75,7 +75,7 @@ describe('OpenstackNodeDataComponent', () => {
 
   it('should enable floating ip checkbox when not enforced by datacenter', () => {
     const tooltipEl = fixture.debugElement.query(By.css('.km-floating-ip-checkbox .km-icon-info'));
-    spyOn(component, 'isInWizard').and.returnValue(false);
+    jest.spyOn(component, 'isInWizard').mockReturnValue(false);
 
     fixture.detectChanges();
     expect(tooltipEl).toBeNull();

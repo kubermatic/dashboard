@@ -1,6 +1,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatButtonToggleGroup} from '@angular/material/button-toggle';
-import {MatDialogRef} from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
@@ -13,6 +13,7 @@ import {AdminEntity} from '../../shared/entity/AdminSettings';
 import {SharedModule} from '../../shared/shared.module';
 import {ClusterType} from '../../shared/utils/cluster-utils/cluster-utils';
 import {fakeMember} from '../../testing/fake-data/member.fake';
+import {MatDialogMock} from '../../testing/services/mat-dialog-mock';
 import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
 import {SettingsMockService} from '../../testing/services/settings-mock.service';
 import {UserMockService} from '../../testing/services/user-mock.service';
@@ -44,6 +45,7 @@ describe('AdminSettingsComponent', () => {
             {provide: UserService, useClass: UserMockService},
             {provide: SettingsService, useClass: SettingsMockService},
             {provide: MatDialogRef, useClass: MatDialogRefMock},
+            {provide: MatDialog, useClass: MatDialogMock},
             HistoryService,
           ],
         })

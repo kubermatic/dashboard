@@ -2,7 +2,7 @@ import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing'
 import {MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import Spy = jasmine.Spy;
+
 
 import {ApiService} from '../../../../core/services';
 import {SharedModule} from '../../../../shared/shared.module';
@@ -22,11 +22,11 @@ const modules: any[] = [
 describe('RevokeViewerTokenComponent', () => {
   let fixture: ComponentFixture<RevokeViewerTokenComponent>;
   let component: RevokeViewerTokenComponent;
-  let editTokenSpy: Spy;
+  let editTokenSpy;
 
   beforeEach(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['editViewerToken']);
-    editTokenSpy = apiMock.editViewerToken.and.returnValue(asyncData(fakeToken()));
+    const apiMock = {'editViewerToken': jest.fn()};
+    editTokenSpy = apiMock.editViewerToken.mockReturnValue(asyncData(fakeToken()));
 
     TestBed
         .configureTestingModule({
@@ -62,6 +62,6 @@ describe('RevokeViewerTokenComponent', () => {
        fixture.detectChanges();
        component.revokeViewerToken();
        tick();
-       expect(editTokenSpy.and.callThrough()).toHaveBeenCalled();
+       expect(editTokenSpy).toHaveBeenCalled();
      }));
 });
