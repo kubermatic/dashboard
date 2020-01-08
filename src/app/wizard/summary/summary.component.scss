@@ -1,13 +1,5 @@
 @import "../../../assets/css/variables";
 
-mat-card {
-  padding: 0;
-}
-
-.km-summary mat-card-content {
-  margin-bottom: 3 * $baseline-grid;
-}
-
 .km-summary-row {
   display: flex;
   align-items: center;

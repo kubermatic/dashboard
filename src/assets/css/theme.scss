@@ -22,6 +22,7 @@
   $background-navbar: mat-color($palette-background, app-bar);
 
   $divider: mat-color($palette-foreground, divider);
+  $shadow: 0 4px 4px rgba(#000, .08);
 
   $chip-accent: mat-color($palette-background, card);
   $chip-background: $divider;
@@ -37,6 +38,8 @@
   $sidenav-background-hover: mat-color($palette-primary, 700);
   $sidenav-divider: mat-color($palette-primary, 200);
   $sidenav-divider-top: mat-color($palette-primary, 100);
+
+  $project-switch: rgba(mat-color($palette-foreground, secondary-text), .7);
 
   $primary: #0081ae;
   $primary-hover: #00a3d9;
@@ -65,167 +68,179 @@
 
   $transition: all .5s ease;
 
-  // TODO
-  // TODO
-  // TODO
-  // TODO
-  // TODO
-
-  $project-switch: rgba(mat-color($palette-foreground, secondary-text), .7);
-  $shadow: 0 4px 4px rgba(#000, .08);
   $disabled-button-color: #d4d4d4;
-  $grey-background: #edeff0;
 
-  i.fa-exclamation-triangle {
-    color: $indicator-red;
+  #km-confirmation-dialog,
+  #km-delete-cluster-dialog mat-dialog-content {
+    margin-bottom: 3.75 * $baseline-grid;
   }
 
-  .km-red {
-    color: $indicator-red;
-  }
-
-  td.mat-cell {
-    border-top: 1px solid $divider;
-  }
-
-  .km-icon-warning-orange {
-    background-color: $indicator-orange;
-  }
-
-  .green {
-    color: $indicator-green;
-  }
-
-  .orange {
-    color: $indicator-orange;
-  }
-
-  .red {
-    color: $indicator-red;
-  }
-
-  .blue {
-    color: $indicator-blue;
-  }
-
-  #km-add-serviceaccount-token {
-    color: $text-muted;
-  }
-
+  // Angular Material overrides.
   mat-card-header > div > mat-card-title > div {
     margin: $baseline-grid 0;
     font-size: $font-size-body;
   }
 
-  .mat-card.km-with-table-header {
-    padding: (3.75 * $baseline-grid) 0;
-    margin: (2.5 * $baseline-grid) 0 0 0;
-    box-shadow: $border-box-shadow !important;
+  .mat-card {
     border-radius: $border-radius !important;
+    box-shadow: $border-box-shadow !important;
+    color: $text;
+    margin: 0;
+    padding: (3.75 * $baseline-grid) 0;
 
-    .mat-card-header {
-      padding: 0 7 * $baseline-grid;
-      margin: 0;
-      line-height: 1.6 * $line-height;
-      border-radius: $border-radius $border-radius 0 0;
-    }
+    &.km-with-table-header {
+      margin: (2.5 * $baseline-grid) 0 0 0;
 
-    &.km-small .mat-card-header {
-      font-size: $font-size-small !important;
-      line-height: 1.6 * $line-height;
-    }
+      .mat-card-header {
+        padding: 0 7 * $baseline-grid;
+        margin: 0;
+        line-height: 1.6 * $line-height;
+        border-radius: $border-radius $border-radius 0 0;
+      }
 
-    .mat-card-content {
-      line-height: 5 * $line-height;
+      &.km-small .mat-card-header {
+        font-size: $font-size-small !important;
+        line-height: 1.6 * $line-height;
+      }
 
-      &.km-row,
-      .km-row {
+      .mat-card-content {
         line-height: 5 * $line-height;
-        padding: 0 (3.75 * $baseline-grid);
-        border-top: 1px solid $divider;
 
-        &.km-small {
-          padding: (1.25 * $baseline-grid) (3 * $baseline-grid);
-          margin: 0;
-          line-height: 2 * $line-height;
-        }
+        &.km-row,
+        .km-row {
+          line-height: 5 * $line-height;
+          padding: 0 (3.75 * $baseline-grid);
+          border-top: 1px solid $divider;
 
-        div {
-          outline: none;
-        }
+          &.km-small {
+            padding: (1.25 * $baseline-grid) (3 * $baseline-grid);
+            margin: 0;
+            line-height: 2 * $line-height;
+          }
 
-        &.km-no-item,
-        .km-no-item {
-          text-align: center;
-          font-size: $font-size-body;
-        }
+          div {
+            outline: none;
+          }
 
-        p {
-          line-height: normal;
-          color: $text;
-          margin: 0;
-          font-size: $font-size-body;
-        }
+          &.km-no-item,
+          .km-no-item {
+            text-align: center;
+            font-size: $font-size-body;
+          }
 
-        .km-region {
-          align-items: center;
+          p {
+            line-height: normal;
+            color: $text;
+            margin: 0;
+            font-size: $font-size-body;
+          }
 
-          .flag-icon {
-            font-size: $font-size-head;
-            margin-right: 1.25 * $baseline-grid;
+          .km-region {
+            align-items: center;
+
+            .flag-icon {
+              font-size: $font-size-head;
+              margin-right: 1.25 * $baseline-grid;
+            }
           }
         }
       }
     }
-  }
 
-  .mat-card.white {
-    padding: (3.75 * $baseline-grid) 0;
-    margin: 0;
-    box-shadow: $border-box-shadow !important;
-    border-radius: $border-radius !important;
+    &.white {
+      &.km-cluster-details {
+        padding: (3.75 * $baseline-grid) 0 0 0;
+      }
 
-    &.km-cluster-details {
-      padding: (3.75 * $baseline-grid) 0 0 0;
-    }
+      .mat-card-header {
+        margin: 0;
 
-    .mat-card-header {
-      margin: 0;
+        .mat-card-header-text {
+          width: 100%;
 
-      .mat-card-header-text {
-        width: 100%;
+          .mat-card-title {
+            padding: 0;
+            margin: 0;
+            align-items: baseline;
+          }
+        }
+      }
 
-        .mat-card-title {
+      .mat-card-content {
+        line-height: 5 * $line-height;
+
+        &.km-row,
+        .km-row {
+          line-height: 5 * $line-height;
           padding: 0;
-          margin: 0;
-          align-items: baseline;
         }
       }
     }
 
-    .mat-card-content {
-      line-height: 5 * $line-height;
+    &.km-card-transparent {
+      box-shadow: none !important;
+    }
 
-      &.km-row,
-      .km-row {
-        line-height: 5 * $line-height;
-        padding: 0;
+    &.km-card-progress-bar {
+      box-shadow: none !important;
+      border-radius: $border-radius $border-radius 0 0 !important;
+      padding: (1.25 * $baseline-grid) (3.75 * $baseline-grid) (2.5 * $baseline-grid);
+
+      .mat-card-title {
+        margin-bottom: 0;
+        margin-top: 0;
+        padding-right: 1.875 * $baseline-grid;
+        text-align: center;
+      }
+
+      .km-wizard-step {
+        color: $text-muted;
+        cursor: default;
+        font-size: $font-size-subhead;
+        font-weight: normal;
+        padding-top: $baseline-grid;
+        user-select: none;
+
+        .km-wizard-step-number {
+          align-items: center;
+          border-radius: 50%;
+          background: $divider;
+          display: inline-flex;
+          font-size: $font-size-body;
+          font-weight: normal;
+          height: 3 * $baseline-grid;
+          justify-content: center;
+          margin-right: 1.75 * $baseline-grid;
+          width: 3 * $baseline-grid;
+        }
+
+        &.active {
+          color: $primary;
+          font-weight: 500;
+
+          .km-wizard-step-number {
+            background: $secondary-dark;
+          }
+        }
+
+        &.completed {
+          color: $primary;
+          cursor: pointer;
+
+          .km-wizard-step-number {
+            background: $secondary-dark;
+          }
+        }
+      }
+
+      .km-wizard-step-divider {
+        height: 1px;
+        background: $divider;
+        margin: (2.5 * $baseline-grid) (2.5 * $baseline-grid) 0 $baseline-grid;
       }
     }
   }
 
-  #km-confirmation-dialog mat-dialog-content,
-  #km-delete-cluster-dialog mat-dialog-content {
-    margin-bottom: 3.75 * $baseline-grid;
-  }
-
-  // TODO
-  // TODO
-  // TODO
-  // TODO
-  // TODO
-
-  // Angular Material overrides.
   .mat-drawer-container {
     background-color: transparent;
   }
@@ -244,14 +259,13 @@
     margin-top: 0.625 * $baseline-grid !important;
   }
 
-  .mat-card {
-    box-shadow: none !important;
-    color: $text;
-  }
-
   .mat-header-cell,
   .mat-sort-header-button {
     color: $text !important;
+  }
+
+  td.mat-cell {
+    border-top: 1px solid $divider;
   }
 
   .mat-card-header .mat-card-title {
@@ -680,7 +694,7 @@
     padding: 0 0 0 (1.25 * $baseline-grid) !important;
 
     &.mat-active {
-      background-color: $grey-background !important;
+      background-color: $background-card-accent !important;
       color: $text !important;
     }
 
@@ -738,6 +752,22 @@
 
   .km-text-muted {
     color: $text-muted;
+  }
+
+  .km-green {
+    color: $indicator-green;
+  }
+
+  .km-orange {
+    color: $indicator-orange;
+  }
+
+  .km-red {
+    color: $indicator-red;
+  }
+
+  .km-blue {
+    color: $indicator-blue;
   }
 
   .km-border {
@@ -1139,63 +1169,6 @@
 
     &.km-hidden-owners {
       background-color: $divider;
-    }
-  }
-
-  .km-card-progress-bar.mat-card {
-    padding: (1.25 * $baseline-grid) (3.75 * $baseline-grid) (2.5 * $baseline-grid);
-
-    .mat-card-title {
-      margin-bottom: 0;
-      margin-top: 0;
-      padding-right: 1.875 * $baseline-grid;
-      text-align: center;
-    }
-
-    .km-wizard-step {
-      color: $text-muted;
-      cursor: default;
-      font-size: $font-size-subhead;
-      font-weight: normal;
-      padding-top: $baseline-grid;
-      user-select: none;
-
-      .km-wizard-step-number {
-        align-items: center;
-        border-radius: 50%;
-        background: $divider;
-        display: inline-flex;
-        font-size: $font-size-body;
-        font-weight: normal;
-        height: 3 * $baseline-grid;
-        justify-content: center;
-        margin-right: 1.75 * $baseline-grid;
-        width: 3 * $baseline-grid;
-      }
-
-      &.active {
-        color: $primary;
-        font-weight: 500;
-
-        .km-wizard-step-number {
-          background: $secondary-dark;
-        }
-      }
-
-      &.completed {
-        color: $primary;
-        cursor: pointer;
-
-        .km-wizard-step-number {
-          background: $secondary-dark;
-        }
-      }
-    }
-
-    .km-wizard-step-divider {
-      height: 1px;
-      background: $divider;
-      margin: (2.5 * $baseline-grid) (2.5 * $baseline-grid) 0 $baseline-grid;
     }
   }
 

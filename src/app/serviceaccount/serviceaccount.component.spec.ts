@@ -19,6 +19,7 @@ import {ProjectMockService} from '../testing/services/project-mock.service';
 import {UserMockService} from '../testing/services/user-mock.service';
 import {ServiceAccountTokenComponent} from './serviceaccount-token/serviceaccount-token.component';
 import {ServiceAccountComponent} from './serviceaccount.component';
+import {HealthStatusColor} from '../shared/utils/health-status/health-status';
 
 describe('ServiceAccountComponent', () => {
   let fixture: ComponentFixture<ServiceAccountComponent>;
@@ -74,7 +75,7 @@ describe('ServiceAccountComponent', () => {
   });
 
   it('should get correct state icon class', () => {
-    expect(component.getStateIconClass('Active')).toBe('fa fa-circle green');
+    expect(component.getStateIconClass('Active')).toBe(HealthStatusColor.Green);
   });
 
   it('should get correct group display name', () => {

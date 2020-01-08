@@ -3,7 +3,7 @@
      fxLayout.sm="column"
      fxLayout.xs="column"
      fxLayoutGap="20px">
-  <mat-card class="km-set-cluster-spec"
+  <mat-card class="km-set-cluster-spec km-card-transparent"
             fxFlex>
     <mat-card-header>
       <mat-card-title>Cluster</mat-card-title>
@@ -39,7 +39,7 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="km-set-cluster-spec"
+  <mat-card class="km-set-cluster-spec km-card-transparent"
             fxFlex>
     <mat-card-header>
       <mat-card-title>Specification</mat-card-title>
@@ -108,7 +108,7 @@
             <i class="km-icon-info"
                matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
             <i *ngIf="clusterSpecForm.controls.usePodSecurityPolicyAdmissionPlugin.value"
-               class="km-icon-warning km-icon-warning-orange"
+               class="km-icon-warning km-orange"
                matTooltip="Activating Pod Security Policy will mean that a lot of Pod specifications, Operators and Helm charts will not work out of the box. Make sure that you know the consequences of activating this feature.">
             </i>
           </div>
