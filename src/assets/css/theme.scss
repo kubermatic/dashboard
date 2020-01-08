@@ -366,8 +366,9 @@
     color: $quaternary-dark;
   }
 
-  mat-form-field.mat-focused:not(.ng-invalid) label {
-    color: $alternative-text !important;
+  mat-form-field.mat-focused:not(.ng-invalid) label.mat-form-field-label,
+  mat-form-field.mat-focused.ng-pristine:not(.ng-touched) label.mat-form-field-label {
+    color: $alternative-text;
   }
 
   mat-hint a {
