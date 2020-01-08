@@ -3,14 +3,15 @@ import {MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
-import Spy = jasmine.Spy;
+
+import {CoreModule} from '../../core/core.module';
 import {ApiService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeProject} from '../../testing/fake-data/project.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
+
 import {EditProjectComponent} from './edit-project.component';
-import {CoreModule} from '../../core/core.module';
 
 const modules: any[] = [
   BrowserModule,
@@ -23,11 +24,11 @@ const modules: any[] = [
 describe('EditProjectComponent', () => {
   let fixture: ComponentFixture<EditProjectComponent>;
   let component: EditProjectComponent;
-  let editProjectSpy: Spy;
+  let editProjectSpy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['editProject']);
-    editProjectSpy = apiMock.editProject.and.returnValue(asyncData(fakeProject()));
+    const apiMock = {'editProject': jest.fn()};
+    editProjectSpy = apiMock.editProject.mockReturnValue(asyncData(fakeProject()));
 
     TestBed
         .configureTestingModule({
@@ -64,13 +65,12 @@ describe('EditProjectComponent', () => {
 
   it('should have required fields', () => {
     component.form.controls.name.patchValue('');
-    expect(component.form.valid).toBeFalsy('form is not valid');
-    expect(component.form.controls.name.valid).toBeFalsy('name field is not valid');
-    expect(component.form.controls.name.hasError('required')).toBeTruthy('name field has required error');
+    expect(component.form.valid).toBeFalsy();
+    expect(component.form.controls.name.valid).toBeFalsy();
+    expect(component.form.controls.name.hasError('required')).toBeTruthy();
 
     component.form.controls.name.patchValue('new-project-name');
-    expect(component.form.controls.name.hasError('required'))
-        .toBeFalsy('name field has no required error after setting name');
+    expect(component.form.controls.name.hasError('required')).toBeFalsy();
   });
 
   it('should call editProject method', fakeAsync(() => {
@@ -78,6 +78,6 @@ describe('EditProjectComponent', () => {
        component.editProject();
        tick();
 
-       expect(editProjectSpy.and.callThrough()).toHaveBeenCalled();
+       expect(editProjectSpy).toHaveBeenCalled();
      }));
 });

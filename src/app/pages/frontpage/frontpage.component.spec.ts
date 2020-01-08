@@ -58,11 +58,11 @@ describe('FrontpageComponent', () => {
      }));
 
   it('should navigate to clusters list if authenticated', () => {
-    const spyNavigate = spyOn(router, 'navigate');
+    const spyNavigate = jest.spyOn(router, 'navigate');
     authService.isAuth = true;
 
     fixture.detectChanges();
 
-    expect(spyNavigate.and.callThrough()).toHaveBeenCalledTimes(1);
+    expect(spyNavigate).toHaveBeenCalledTimes(1);
   });
 });

@@ -78,7 +78,7 @@ describe('KubermaticComponent', () => {
     fixture.detectChanges();
 
     const de = fixture.debugElement.query(By.css('.mat-sidenav'));
-    expect(de).not.toBeNull('sidenav should not be rendered');
+    expect(de).not.toBeNull();
   });
 
   it('should not show sidenav', () => {
@@ -86,6 +86,6 @@ describe('KubermaticComponent', () => {
     fixture.detectChanges();
 
     const de = fixture.debugElement.query(By.css('.mat-sidenav'));
-    expect(de).toBeNull('sidenav should not be rendered');
+    expect(de).toBeNull();
   });
 });

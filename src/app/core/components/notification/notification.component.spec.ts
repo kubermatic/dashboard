@@ -59,7 +59,7 @@ describe('NotificationComponent', () => {
   it('should call success notification', fakeAsync(() => {
        const notificationService: NotificationMockService =
            fixture.debugElement.injector.get(NotificationsService) as any;
-       const spyNotification = spyOn(notificationService, 'success');
+       const spyNotification = jest.spyOn(notificationService, 'success');
 
        setMockNgRedux(fixture, {type: NotificationToastType.success, content: 'Success'});
 
@@ -72,7 +72,7 @@ describe('NotificationComponent', () => {
   it('should call error notification', fakeAsync(() => {
        const notificationService: NotificationMockService =
            fixture.debugElement.injector.get(NotificationsService) as any;
-       const spyNotification = spyOn(notificationService, 'error');
+       const spyNotification = jest.spyOn(notificationService, 'error');
 
        setMockNgRedux(fixture, {type: NotificationToastType.error, content: 'Error'});
 

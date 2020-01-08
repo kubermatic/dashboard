@@ -82,9 +82,8 @@ describe('SidenavComponent', () => {
 
   it('should get RouterLinks from template', () => {
     fixture.detectChanges();
-    expect(links.length).toBe(5, 'should have 5 links');
-    expect(links[0].linkParams)
-        .toBe(`/projects/${fakeProjects()[0].id}/clusters`, 'first link should go to clusters page');
+    expect(links.length).toBe(5);
+    expect(links[0].linkParams).toBe(`/projects/${fakeProjects()[0].id}/clusters`);
   });
 
 
@@ -92,7 +91,7 @@ describe('SidenavComponent', () => {
     fixture.detectChanges();
     const clustersLinkDe = linkDes[0];
     const clustersLink = links[0];
-    expect(clustersLink.navigatedTo).toBeNull('link should not have navigated yet');
+    expect(clustersLink.navigatedTo).toBeNull();
 
     click(clustersLinkDe);
     fixture.detectChanges();

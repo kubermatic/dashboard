@@ -5,7 +5,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
-import Spy = jasmine.Spy;
 
 import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
@@ -25,14 +24,17 @@ describe('ServiceAccountComponent', () => {
   let fixture: ComponentFixture<ServiceAccountComponent>;
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let component: ServiceAccountComponent;
-  let deleteServiceAccountSpy: Spy;
+  let deleteServiceAccountSpy;
 
   beforeEach(async(() => {
-    const apiMock =
-        jasmine.createSpyObj('ApiService', ['getServiceAccounts', 'getServiceAccountTokens', 'deleteServiceAccount']);
-    apiMock.getServiceAccounts.and.returnValue(asyncData(fakeServiceAccounts()));
-    apiMock.getServiceAccountTokens.and.returnValue(asyncData(fakeServiceAccountTokens()));
-    deleteServiceAccountSpy = apiMock.deleteServiceAccount.and.returnValue(of(null));
+    const apiMock = {
+      'getServiceAccounts': jest.fn(),
+      'getServiceAccountTokens': jest.fn(),
+      'deleteServiceAccount': jest.fn()
+    };
+    apiMock.getServiceAccounts.mockReturnValue(asyncData(fakeServiceAccounts()));
+    apiMock.getServiceAccountTokens.mockReturnValue(asyncData(fakeServiceAccountTokens()));
+    deleteServiceAccountSpy = apiMock.deleteServiceAccount.mockReturnValue(of(null));
 
     TestBed
         .configureTestingModule({
@@ -101,6 +103,6 @@ describe('ServiceAccountComponent', () => {
        fixture.detectChanges();
        tick(15000);
 
-       expect(deleteServiceAccountSpy.and.callThrough()).toHaveBeenCalled();
+       expect(deleteServiceAccountSpy).toHaveBeenCalled();
      }));
 });

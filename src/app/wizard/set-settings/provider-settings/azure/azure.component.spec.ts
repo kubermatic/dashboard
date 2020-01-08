@@ -63,38 +63,30 @@ describe('AzureClusterSettingsComponent', () => {
     component.form.reset();
     fixture.detectChanges();
 
-    expect(component.form.valid).toBeFalsy('form is invalid with empty defaults');
-    expect(component.form.controls.clientID.hasError('required')).toBeTruthy('client ID field has required error');
-    expect(component.form.controls.clientSecret.hasError('required'))
-        .toBeTruthy('client secret field has required error');
-    expect(component.form.controls.tenantID.hasError('required')).toBeTruthy('tenant ID field has required error');
-    expect(component.form.controls.subscriptionID.hasError('required'))
-        .toBeTruthy('subscription ID field has required error');
+    expect(component.form.valid).toBeFalsy();
+    expect(component.form.controls.clientID.hasError('required')).toBeTruthy();
+    expect(component.form.controls.clientSecret.hasError('required')).toBeTruthy();
+    expect(component.form.controls.tenantID.hasError('required')).toBeTruthy();
+    expect(component.form.controls.subscriptionID.hasError('required')).toBeTruthy();
 
     component.form.controls.clientID.patchValue('foo');
     fixture.detectChanges();
-    expect(component.form.controls.clientID.hasError('required'))
-        .toBeFalsy('client ID has no required error after setting value');
-    expect(component.form.valid).toBeFalsy('form is still invalid after setting only client ID');
+    expect(component.form.controls.clientID.hasError('required')).toBeFalsy();
+    expect(component.form.valid).toBeFalsy();
 
     component.form.controls.clientSecret.patchValue('bar');
     fixture.detectChanges();
-    expect(component.form.controls.clientSecret.hasError('required'))
-        .toBeFalsy('client secret field has no required error after setting value');
-    expect(component.form.valid).toBeFalsy('form is still invalid after setting both client ID and client secret');
+    expect(component.form.controls.clientSecret.hasError('required')).toBeFalsy();
+    expect(component.form.valid).toBeFalsy();
 
     component.form.controls.tenantID.patchValue('tenant');
     fixture.detectChanges();
-    expect(component.form.controls.tenantID.hasError('required'))
-        .toBeFalsy('tenant ID field has no required error after setting value');
-    expect(component.form.valid)
-        .toBeFalsy('form is still invalid after setting client ID, client secret and tenant ID');
+    expect(component.form.controls.tenantID.hasError('required')).toBeFalsy();
+    expect(component.form.valid).toBeFalsy();
 
     component.form.controls.subscriptionID.patchValue('subscription');
     fixture.detectChanges();
-    expect(component.form.controls.subscriptionID.hasError('required'))
-        .toBeFalsy('subscription ID field has no required error after setting value');
-    expect(component.form.valid)
-        .toBeTruthy('form is still invalid after setting client ID, client secret, tenant ID and subscription ID');
+    expect(component.form.controls.subscriptionID.hasError('required')).toBeFalsy();
+    expect(component.form.valid).toBeTruthy();
   });
 });

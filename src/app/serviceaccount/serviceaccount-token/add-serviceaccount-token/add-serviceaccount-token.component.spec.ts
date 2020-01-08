@@ -27,8 +27,8 @@ describe('AddServiceAccountTokenComponent', () => {
   let component: AddServiceAccountTokenComponent;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['createServiceAccountToken']);
-    apiMock.createServiceAccountToken.and.returnValue(asyncData(fakeServiceAccountTokens()));
+    const apiMock = {'createServiceAccountToken': jest.fn()};
+    apiMock.createServiceAccountToken.mockReturnValue(asyncData(fakeServiceAccountTokens()));
 
     TestBed
         .configureTestingModule({
@@ -66,13 +66,11 @@ describe('AddServiceAccountTokenComponent', () => {
   });
 
   it('should have required fields', () => {
-    expect(component.addServiceAccountTokenForm.valid).toBeFalsy('form is initially not valid');
-    expect(component.addServiceAccountTokenForm.controls.name.valid).toBeFalsy('name field is initially not valid');
-    expect(component.addServiceAccountTokenForm.controls.name.hasError('required'))
-        .toBeTruthy('name field has initially required error');
+    expect(component.addServiceAccountTokenForm.valid).toBeFalsy();
+    expect(component.addServiceAccountTokenForm.controls.name.valid).toBeFalsy();
+    expect(component.addServiceAccountTokenForm.controls.name.hasError('required')).toBeTruthy();
 
     component.addServiceAccountTokenForm.controls.name.patchValue('test-service-account-token');
-    expect(component.addServiceAccountTokenForm.controls.name.hasError('required'))
-        .toBeFalsy('name field has no required error after setting name');
+    expect(component.addServiceAccountTokenForm.controls.name.hasError('required')).toBeFalsy();
   });
 });

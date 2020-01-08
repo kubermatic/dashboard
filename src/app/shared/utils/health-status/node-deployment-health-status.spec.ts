@@ -8,12 +8,8 @@ describe('NodeDeploymentHealthStatus', () => {
     const nds = nodeDeploymentsFake();
 
     expect(NodeDeploymentHealthStatus.getHealthStatus(nds[0]))
-        .toEqual(
-            new NodeDeploymentHealthStatus(HealthStatusMessage.Running, HealthStatusColor.Green),
-            'should be correct for running node deployment');
+        .toEqual(new NodeDeploymentHealthStatus(HealthStatusMessage.Running, HealthStatusColor.Green));
     expect(NodeDeploymentHealthStatus.getHealthStatus(nds[1]))
-        .toEqual(
-            new NodeDeploymentHealthStatus(HealthStatusMessage.Provisioning, HealthStatusColor.Orange),
-            'should be correct for provisioning node deployment');
+        .toEqual(new NodeDeploymentHealthStatus(HealthStatusMessage.Provisioning, HealthStatusColor.Orange));
   });
 });

@@ -31,8 +31,8 @@ describe('ClusterSecretsComponent', () => {
   let component: ClusterSecretsComponent;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getClusterHealth']);
-    apiMock.getClusterHealth.and.returnValue(asyncData([fakeHealth()]));
+    const apiMock = {'getClusterHealth': jest.fn()};
+    apiMock.getClusterHealth.mockReturnValue(asyncData([fakeHealth()]));
 
     TestBed
         .configureTestingModule({

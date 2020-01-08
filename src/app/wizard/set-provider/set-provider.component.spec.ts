@@ -16,8 +16,8 @@ describe('SetProviderComponent', () => {
   let component: SetProviderComponent;
 
   beforeEach(async(() => {
-    const dcMock = jasmine.createSpyObj('DatacenterService', ['getDataCenters']);
-    dcMock.getDataCenters.and.returnValue(asyncData(fakeNodeDatacenters()));
+    const dcMock = {'getDataCenters': jest.fn()};
+    dcMock.getDataCenters.mockReturnValue(asyncData(fakeNodeDatacenters()));
 
     TestBed
         .configureTestingModule({
