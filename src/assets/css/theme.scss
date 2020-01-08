@@ -12,6 +12,7 @@
 
   $text: mat-color($palette-foreground, text);
   $text-muted: mat-color($palette-foreground, secondary-text);
+  $text-disabled: mat-color($palette-foreground, disabled-text);
   $text-footer: mat-color($palette-primary, 50);
   $text-white: #fff;
 
@@ -19,6 +20,7 @@
   $background-hover: mat-color($palette-background, hover);
   $background-card: mat-color($palette-background, card);
   $background-card-accent: rgba($background-hover, .02);
+  $background-button-disabled: mat-color($palette-background, disabled-button);
   $background-navbar: mat-color($palette-background, app-bar);
 
   $divider: mat-color($palette-foreground, divider);
@@ -67,13 +69,6 @@
   $indicator-blue: #00a3d9;
 
   $transition: all .5s ease;
-
-  $disabled-button-color: #d4d4d4;
-
-  #km-confirmation-dialog,
-  #km-delete-cluster-dialog mat-dialog-content {
-    margin-bottom: 3.75 * $baseline-grid;
-  }
 
   // Angular Material overrides.
   mat-card-header > div > mat-card-title > div {
@@ -448,7 +443,7 @@
     }
 
     &:disabled i {
-      background-color: $disabled-button-color;
+      background-color: $background-button-disabled;
     }
 
     &:disabled a {
@@ -471,7 +466,7 @@
   }
 
   .mat-checkbox-disabled .mat-checkbox-background {
-    background-color: $disabled-button-color !important;
+    background-color: $background-button-disabled !important;
   }
 
   .mat-checkbox-frame {
@@ -1124,7 +1119,7 @@
       padding: 0;
 
       &.mat-tab-disabled {
-        background-color: $disabled-button-color !important;
+        background-color: $background-button-disabled !important;
       }
 
       &.mat-tab-label-active {
@@ -1480,5 +1475,10 @@
 
   .km-pod-security-policy-row {
     align-items: center;
+  }
+
+  .km-confirmation-dialog,
+  .km-delete-cluster-dialog mat-dialog-content {
+    margin-bottom: 3.75 * $baseline-grid;
   }
 }
