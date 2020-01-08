@@ -59,10 +59,9 @@ $dark-theme: map_merge($dark-theme, (foreground: $foreground));
   @include angular-material-theme($dark-theme);
   @include km-theme($dark-theme);
 
-  // Make header logo brighter.
-  // TODO: Make text white and brighten only the fish.
+  // Swap header logo.
   .km-header-logo {
-    filter: brightness(1.35);
+    background-image: url("/assets/images/branding/logo-dark.svg") !important;
   }
 
   // Make icons and logos white.
