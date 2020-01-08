@@ -687,16 +687,7 @@
 
   .mat-option {
     padding: 0 0 0 (1.25 * $baseline-grid) !important;
-
-    &.mat-active {
-      background-color: $background-card-accent !important;
-      color: $text !important;
-    }
-
-    &:hover {
-      background-color: $secondary-light !important;
-      color: $text !important;
-    }
+    color: $text !important;
   }
 
   .mat-menu-item {
