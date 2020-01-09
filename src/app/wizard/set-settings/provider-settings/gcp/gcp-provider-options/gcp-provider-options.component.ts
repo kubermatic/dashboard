@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
-import {debounceTime, take, takeUntil} from 'rxjs/operators';
+import {debounceTime, first, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../../../core/services/wizard/wizard.service';
 import {ClusterEntity} from '../../../../../shared/entity/ClusterEntity';
 import {GCPNetwork} from '../../../../../shared/entity/provider/gcp/GCP';
@@ -81,7 +81,8 @@ export class GCPProviderOptionsComponent implements OnInit, OnDestroy {
     this._wizardService.provider(NodeProvider.GCP)
         .serviceAccount(this.cluster.spec.cloud.gcp.serviceAccount)
         .networks()
-        .pipe(take(1))
+        .pipe(first())
+        .pipe(takeUntil(this._unsubscribe))
         .subscribe(
             (networks) => {
               this.networks = networks.sort((a, b) => {
@@ -112,7 +113,7 @@ export class GCPProviderOptionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  getNetworkHint(): boolean {
+  showNetworkHint(): boolean {
     return !this._loadingNetworks && !this._hasRequiredCredentials();
   }
 
