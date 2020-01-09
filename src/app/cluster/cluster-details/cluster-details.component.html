@@ -171,6 +171,14 @@
                           [isClusterRunning]="isClusterAPIRunning"></kubermatic-node-list>
   </div>
 
+  <kubermatic-rbac *ngIf="isRBACEnabled()"
+                   [cluster]="cluster"
+                   [datacenter]="datacenter"
+                   [projectID]="projectID"
+                   [isClusterRunning]="isClusterRunning"
+                   [clusterBindings]="clusterBindings"
+                   [bindings]="bindings"></kubermatic-rbac>
+
   <mat-card class="km-with-table-header">
     <mat-card-header>
       <mat-card-title>Addons</mat-card-title>
@@ -186,14 +194,6 @@
   </mat-card>
 
   <km-event-list [events]="events"></km-event-list>
-
-  <kubermatic-rbac *ngIf="isRBACEnabled()"
-                   [cluster]="cluster"
-                   [datacenter]="datacenter"
-                   [projectID]="projectID"
-                   [isClusterRunning]="isClusterRunning"
-                   [clusterBindings]="clusterBindings"
-                   [bindings]="bindings"></kubermatic-rbac>
 
 </ng-container>
 
