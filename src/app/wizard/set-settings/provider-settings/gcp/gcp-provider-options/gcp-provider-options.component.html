@@ -2,20 +2,23 @@
       fxLayout="column"
       *ngIf="!hideOptional">
   <mat-form-field fxFlex
-                  *ngIf="!hideOptional">
-    <mat-label>Network</mat-label>
-    <input id="km-gcp-network-input"
-           matInput
+                  class="km-with-hint">
+    <mat-label>{{getNetworkFormState()}}</mat-label>
+    <input matInput
            formControlName="network"
-           type="password"
-           autocomplete="off">
-    <mat-error *ngIf="form.controls.network.hasError('required')">
-      Network is <strong>required</strong>.
-    </mat-error>
+           name="network"
+           [placeholder]="getNetworkFormState()"
+           [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let network of networks"
+                  [value]="network.name">
+        {{network.name}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-hint *ngIf="getNetworkHint()">Please enter valid credentials first.</mat-hint>
   </mat-form-field>
 
-  <mat-form-field fxFlex
-                  *ngIf="!hideOptional">
+  <mat-form-field fxFlex>
     <mat-label>Subnetwork</mat-label>
     <input id="km-gcp-subnetwork-input"
            matInput
