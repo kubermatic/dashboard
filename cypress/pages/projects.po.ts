@@ -8,7 +8,7 @@ export class ProjectsPage {
   }
 
   static getActiveProjects(): Cypress.Chainable<any> {
-    return cy.get('i.km-health-state.fa.fa-circle.km-green');
+    return cy.get('i.km-health-state.fa.fa-circle.km-success');
   }
 
   static getAddProjectBtn(): Cypress.Chainable<any> {

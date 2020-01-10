@@ -352,13 +352,13 @@
         </ng-container>
 
         <!-- Initial Node Replicas -->
-        <div [ngClass]="noMoreIpsLeft ? 'km-summary-row km-warning km-red' : 'km-summary-row' ">
+        <div [ngClass]="noMoreIpsLeft ? 'km-summary-row km-warning km-error' : 'km-summary-row' ">
           <span class="km-summary-left km-text">{{nodeData.count}}</span>
           <span>Initial Deployment Replicas</span>
         </div>
         <div class="km-summary-row">
           <p *ngIf="noMoreIpsLeft"
-             class="km-warning km-red">Not enough IPs left. Reduce number of nodes or add more machine networks.</p>
+             class="km-warning km-error">Not enough IPs left. Reduce number of nodes or add more machine networks.</p>
         </div>
 
         <!-- AWS Node Options -->
