@@ -9,7 +9,7 @@
            mat-table
            multiTemplateDataRows
            matSort
-           [dataSource]="getDataSource()">
+           [dataSource]="dataSource">
 
       <ng-container matColumnDef="stateArrow">
         <th mat-header-cell
@@ -345,6 +345,11 @@
     <div class="km-row km-no-item"
          *ngIf="!nodes || nodes.length === 0">
       No nodes available.
+    </div>
+
+    <div [hidden]="!isPaginatorVisible()">
+      <mat-paginator showFirstLastButtons
+                     class="km-paginator"></mat-paginator>
     </div>
 
     <mat-card [fxShow]="!!cluster.spec.cloud.bringyourown"

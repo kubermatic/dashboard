@@ -1,7 +1,10 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 import {ClusterService} from '../../../core/services';
+import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -20,7 +23,7 @@ import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
   styleUrls: ['node-list.component.scss'],
 })
 
-export class NodeListComponent implements OnInit {
+export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodes: NodeEntity[] = [];
@@ -40,21 +43,34 @@ export class NodeListComponent implements OnInit {
   toggledColumns: string[] = ['nodeDetails'];
   dataSource = new MatTableDataSource<NodeEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   shouldToggleNodeItem = (index, item) => this.isShowNodeItem[item.id];
+  private _unsubscribe = new Subject<void>();
 
   constructor(
       private readonly _matDialog: MatDialog, private readonly _clusterService: ClusterService,
-      private readonly _googleAnalyticsService: GoogleAnalyticsService) {}
+      private readonly _googleAnalyticsService: GoogleAnalyticsService,
+      private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
+    this.dataSource.data = this.nodes;
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
+
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = this.paginator;  // Force refresh.
+    });
   }
 
-  getDataSource(): MatTableDataSource<NodeEntity> {
+  ngOnChanges(): void {
     this.dataSource.data = this.nodes;
-    return this.dataSource;
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
@@ -157,5 +173,13 @@ export class NodeListComponent implements OnInit {
 
   getSystemLogoClass(node: NodeEntity): string {
     return NodeUtils.getOperatingSystemLogoClass(node.spec);
+  }
+
+  hasItems(): boolean {
+    return this.nodes && this.nodes.length > 0;
+  }
+
+  isPaginatorVisible(): boolean {
+    return this.hasItems() && this.paginator && this.nodes.length > this.paginator.pageSize;
   }
 }
