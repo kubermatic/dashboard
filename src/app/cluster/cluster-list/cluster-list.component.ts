@@ -1,10 +1,11 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatSort, MatTableDataSource} from '@angular/material';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EMPTY, forkJoin, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, distinctUntilChanged, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {ClusterService, DatacenterService, ProjectService, UserService} from '../../core/services';
+import {SettingsService} from '../../core/services/settings/settings.service';
 import {CloudSpec, ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
@@ -20,7 +21,7 @@ import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-del
   templateUrl: './cluster-list.component.html',
   styleUrls: ['./cluster-list.component.scss'],
 })
-export class ClusterListComponent implements OnInit, OnDestroy {
+export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   clusters: ClusterEntity[] = [];
   isInitialized = true;
   nodeDC: DataCenterEntity[] = [];
@@ -30,6 +31,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'region', 'type', 'actions'];
   dataSource = new MatTableDataSource<ClusterEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private _unsubscribe: Subject<any> = new Subject();
   private _selectedProject = {} as ProjectEntity;
   private _currentGroupConfig: GroupConfig;
@@ -38,13 +40,20 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       private readonly _clusterService: ClusterService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _router: Router,
       private readonly _datacenterService: DatacenterService, private readonly _activeRoute: ActivatedRoute,
-      private readonly _matDialog: MatDialog) {}
+      private readonly _matDialog: MatDialog, private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
     this._selectedProject.id = this._activeRoute.snapshot.paramMap.get('projectID');
+    this.dataSource.data = this.clusters;
     this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
+
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = this.paginator;  // Force refresh.
+    });
 
     this._projectService.selectedProject
         .pipe(switchMap(project => {
@@ -61,6 +70,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
         .pipe(switchMap(project => this._clusterService.clusters(project.id)))
         .pipe(switchMap((clusters: ClusterEntity[]) => {
           this.clusters = clusters;
+          this.dataSource.data = this.clusters;
           this.isInitialized = false;
 
           return forkJoin(clusters.map(cluster => {
@@ -81,14 +91,13 @@ export class ClusterListComponent implements OnInit, OnDestroy {
         .subscribe();
   }
 
+  ngOnChanges(): void {
+    this.dataSource.data = this.clusters;
+  }
+
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-  }
-
-  getDataSource(): MatTableDataSource<ClusterEntity> {
-    this.dataSource.data = this.clusters;
-    return this.dataSource;
   }
 
   getHealthStatus(cluster: ClusterEntity): ClusterHealthStatus {
@@ -122,5 +131,13 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     modal.componentInstance.cluster = cluster;
     modal.componentInstance.datacenter = this.seedDC[cluster.id];
     modal.componentInstance.projectID = this._selectedProject.id;
+  }
+
+  hasItems(): boolean {
+    return this.clusters && this.clusters.length > 0;
+  }
+
+  isPaginatorVisible(): boolean {
+    return this.hasItems() && this.paginator && this.clusters.length > this.paginator.pageSize;
   }
 }
