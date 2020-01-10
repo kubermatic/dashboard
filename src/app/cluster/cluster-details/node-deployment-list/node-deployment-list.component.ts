@@ -1,10 +1,11 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {MatTableDataSource} from '@angular/material';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {ProjectService, UserService} from '../../../core/services';
+import {SettingsService} from '../../../core/services/settings/settings.service';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
@@ -20,7 +21,7 @@ import {NodeService} from '../../services/node.service';
   templateUrl: 'node-deployment-list.component.html',
   styleUrls: ['node-deployment-list.component.scss'],
 })
-export class NodeDeploymentListComponent implements OnInit, OnDestroy {
+export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodeDeployments: NodeDeploymentEntity[] = [];
@@ -29,6 +30,7 @@ export class NodeDeploymentListComponent implements OnInit, OnDestroy {
   @Input() isClusterRunning: boolean;
   @Input() isNodeDeploymentLoadFinished: boolean;
   @Output() changeNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   dataSource = new MatTableDataSource<NodeDeploymentEntity>();
   displayedColumns: string[] = ['status', 'name', 'labels', 'replicas', 'ver', 'os', 'created', 'actions'];
 
@@ -37,10 +39,17 @@ export class NodeDeploymentListComponent implements OnInit, OnDestroy {
 
   constructor(
       private readonly _router: Router, private readonly _nodeService: NodeService,
-      private readonly _projectService: ProjectService, private readonly _userService: UserService) {}
+      private readonly _projectService: ProjectService, private readonly _userService: UserService,
+      private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.nodeDeployments ? this.nodeDeployments : [];
+    this.dataSource.paginator = this.paginator;
+
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = this.paginator;  // Force refresh.
+    });
 
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(project => this._userService.currentUserGroup(project.id)))
@@ -49,6 +58,10 @@ export class NodeDeploymentListComponent implements OnInit, OnDestroy {
     if (this.cluster.spec.cloud.aws) {
       this.displayedColumns = ['status', 'name', 'replicas', 'ver', 'availabilityZone', 'os', 'created', 'actions'];
     }
+  }
+
+  ngOnChanges(): void {
+    this.dataSource.data = this.nodeDeployments ? this.nodeDeployments : [];
   }
 
   ngOnDestroy(): void {
@@ -100,5 +113,13 @@ export class NodeDeploymentListComponent implements OnInit, OnDestroy {
         .showNodeDeploymentDeleteDialog(
             nd, this.cluster.id, this.projectID, this.datacenter.metadata.name, this.changeNodeDeployment)
         .subscribe(() => {});
+  }
+
+  hasItems(): boolean {
+    return !!this.nodeDeployments && this.nodeDeployments.length > 0;
+  }
+
+  isPaginatorVisible(): boolean {
+    return this.hasItems() && this.paginator && this.nodeDeployments.length > this.paginator.pageSize;
   }
 }
