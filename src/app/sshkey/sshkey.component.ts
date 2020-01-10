@@ -1,9 +1,11 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {Subject, timer} from 'rxjs';
 import {retry, switchMap, takeUntil} from 'rxjs/operators';
+
 import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
+import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
 import {AddSshKeyDialogComponent} from '../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
@@ -17,7 +19,7 @@ import {UserGroupConfig} from '../shared/model/Config';
   styleUrls: ['./sshkey.component.scss'],
 })
 
-export class SSHKeyComponent implements OnInit, OnDestroy {
+export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   loading = true;
   sshKeys: SSHKeyEntity[] = [];
   userGroup: string;
@@ -28,19 +30,26 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
   toggledColumns: string[] = ['publickey'];
   dataSource = new MatTableDataSource<SSHKeyEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
       private readonly _api: ApiService, private readonly _userService: UserService,
       private readonly _appConfigService: AppConfigService, public dialog: MatDialog,
       private readonly _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _projectService: ProjectService) {}
+      private readonly _projectService: ProjectService, private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this._appConfigService.getUserGroupConfig();
+    this.dataSource.data = this.sshKeys;
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
+
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = this.paginator;  // Force refresh.
+    });
 
     this._projectService.selectedProject
         .pipe(switchMap(project => {
@@ -55,17 +64,16 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
         .subscribe(() => this.refreshSSHKeys());
   }
 
+  ngOnChanges(): void {
+    this.dataSource.data = this.sshKeys;
+  }
+
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
   }
 
   shouldTogglePublicKey = (index, item) => this.isShowPublicKey[item.id];
-
-  getDataSource(): MatTableDataSource<SSHKeyEntity> {
-    this.dataSource.data = this.sshKeys;
-    return this.dataSource;
-  }
 
   getPublicKeyName(sshKey: SSHKeyEntity): string {
     return sshKey.spec.publicKey.split(' ')[0];
@@ -78,6 +86,7 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
   refreshSSHKeys(): void {
     this._api.getSSHKeys(this.projectID).pipe(retry(3)).pipe(takeUntil(this._unsubscribe)).subscribe((res) => {
       this.sshKeys = res;
+      this.dataSource.data = this.sshKeys;
       this.loading = false;
     });
   }
@@ -120,5 +129,13 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
 
   togglePublicKey(element: SSHKeyEntity): void {
     this.isShowPublicKey[element.id] = !this.isShowPublicKey[element.id];
+  }
+
+  hasItems(): boolean {
+    return this.sshKeys && this.sshKeys.length > 0;
+  }
+
+  isPaginatorVisible(): boolean {
+    return this.hasItems() && this.paginator && this.sshKeys.length > this.paginator.pageSize;
   }
 }

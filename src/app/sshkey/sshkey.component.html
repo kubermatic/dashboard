@@ -17,7 +17,7 @@
            mat-table
            multiTemplateDataRows
            matSort
-           [dataSource]="getDataSource()">
+           [dataSource]="dataSource">
 
       <ng-container matColumnDef="stateArrow">
         <th mat-header-cell
@@ -131,5 +131,9 @@
       </div>
     </ng-container>
 
+    <div [hidden]="!isPaginatorVisible()">
+      <mat-paginator showFirstLastButtons
+                     class="km-paginator"></mat-paginator>
+    </div>
   </mat-card-content>
 </mat-card>
