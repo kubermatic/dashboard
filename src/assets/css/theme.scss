@@ -11,7 +11,7 @@
   $palette-background: map-get($theme, background);
 
   $text: mat-color($palette-foreground, text);
-  $text-muted: mat-color($palette-foreground, secondary-text);
+  $text-secondary: mat-color($palette-foreground, secondary-text);
   $text-disabled: mat-color($palette-foreground, disabled-text);
   $text-footer: mat-color($palette-primary, 50);
   $text-white: #fff;
@@ -19,9 +19,9 @@
   $background: mat-color($palette-background, background);
   $background-hover: mat-color($palette-background, hover);
   $background-card: mat-color($palette-background, card);
-  $background-card-accent: rgba($background-hover, .02);
-  $background-button-disabled: mat-color($palette-background, disabled-button);
-  $background-navbar: mat-color($palette-background, app-bar);
+  $background-card-hover: rgba($background-hover, .02);
+  $background-disabled-button: mat-color($palette-background, disabled-button);
+  $background-app-bar: mat-color($palette-background, app-bar);
 
   $divider: mat-color($palette-foreground, divider);
   $shadow: 0 4px 4px rgba(#000, .08);
@@ -60,8 +60,6 @@
   $quaternary: #3bc6ad;
   $quaternary-hover: #21dfa9;
   $quaternary-dark: #1c8282;
-
-  $tertiary-hover: #fafcfc;
 
   $indicator-green: #1dc67f;
   $indicator-orange: #f7b500;
@@ -189,7 +187,7 @@
       }
 
       .km-wizard-step {
-        color: $text-muted;
+        color: $text-secondary;
         cursor: default;
         font-size: $font-size-subhead;
         font-weight: normal;
@@ -324,7 +322,7 @@
 
   .mat-card-content {
     p {
-      color: $text-muted;
+      color: $text-secondary;
       font-size: $font-size-caption;
       margin: 0 0 (1.875 * $baseline-grid);
     }
@@ -402,21 +400,21 @@
 
     &.mat-tertiary:not([disabled]) {
       background-color: transparent;
-      color: $text-muted;
+      color: $text-secondary;
       border: 1px solid $divider;
 
       &:hover {
-        background-color: $tertiary-hover;
+        background-color: $background-card-hover;
       }
     }
 
     &.mat-pure:not([disabled]) {
       background-color: transparent;
-      color: $text-muted;
+      color: $text-secondary;
       border: none;
 
       &:hover {
-        background-color: $tertiary-hover;
+        background-color: $background-card-hover;
       }
     }
 
@@ -444,7 +442,7 @@
     }
 
     &:disabled i {
-      background-color: $background-button-disabled;
+      background-color: $background-disabled-button;
     }
 
     &:disabled a {
@@ -467,7 +465,7 @@
   }
 
   .mat-checkbox-disabled .mat-checkbox-background {
-    background-color: $background-button-disabled !important;
+    background-color: $background-disabled-button !important;
   }
 
   .mat-checkbox-frame {
@@ -738,7 +736,7 @@
   }
 
   .km-text-muted {
-    color: $text-muted;
+    color: $text-secondary;
   }
 
   .km-green {
@@ -839,7 +837,7 @@
   }
 
   .km-navbar {
-    background-color: $background-navbar;
+    background-color: $background-app-bar;
     box-shadow: $shadow;
   }
 
@@ -944,7 +942,7 @@
   .km-serviceaccount-token-wrapper,
   .km-publickey-wrapper,
   .km-node-details {
-    background-color: $background-card-accent;
+    background-color: $background-card-hover;
   }
 
   .km-table {
@@ -1066,7 +1064,7 @@
   }
 
   .km-mat-footer-row {
-    color: $text-muted !important;
+    color: $text-secondary !important;
     padding: 0;
     border-style: solid dashed dashed dashed;
     border-width: 1px;
@@ -1075,14 +1073,14 @@
     border-bottom-left-radius: $border-radius;
 
     &:hover {
-      background-color: $background-card-accent;
+      background-color: $background-card-hover;
     }
 
     button {
       background-color: transparent;
       width: 100%;
       line-height: 5 * $baseline-grid;
-      color: $text-muted !important;
+      color: $text-secondary !important;
       font-weight: normal;
       font-size: $font-size-subhead;
     }
@@ -1110,7 +1108,7 @@
       padding: 0;
 
       &.mat-tab-disabled {
-        background-color: $background-button-disabled !important;
+        background-color: $background-disabled-button !important;
       }
 
       &.mat-tab-label-active {
@@ -1170,7 +1168,7 @@
       max-width: $type-toggle-width;
       margin: (0.25 * $baseline-grid) 0 0 0;
       border-width: 0.25 * $baseline-grid !important;
-      background-color: $background-card-accent;
+      background-color: $background-card-hover;
 
       i {
         filter: grayscale(100%);
@@ -1219,14 +1217,14 @@
     }
 
     .km-wizard-settings-extended-btn {
-      color: $text-muted;
+      color: $text-secondary;
       cursor: pointer;
       margin: $baseline-grid;
       user-select: none;
 
       .km-icon-arrow-down,
       .km-icon-arrow-up {
-        background: $text-muted;
+        background: $text-secondary;
       }
     }
   }
@@ -1271,7 +1269,7 @@
         margin-top: 2.5 * $baseline-grid;
 
         div.mat-form-field-flex label {
-          color: $text-muted;
+          color: $text-secondary;
         }
 
         .mat-form-field-infix {
@@ -1330,7 +1328,7 @@
   }
 
   .km-cluster-panel-container {
-    background: $background-card-accent;
+    background: $background-card-hover;
     border-bottom: 1px solid rgba($text, .1);
     color: $text;
     height: $toolbar-height + $sidenav-border-width;
@@ -1383,7 +1381,7 @@
       border-left: 1px solid $divider;
 
       &:hover {
-        background-color: $background-card-accent;
+        background-color: $background-card-hover;
       }
     }
   }
@@ -1392,12 +1390,12 @@
     color: $text-footer;
 
     &.disabled {
-      border: 1px dashed $background-card-accent;
-      color: $text-muted;
+      border: 1px dashed $background-card-hover;
+      color: $text-secondary;
     }
 
     &:hover:not(.disabled) {
-      background-color: $background-card-accent;
+      background-color: $background-card-hover;
       border: 1px solid $divider;
     }
   }
@@ -1448,7 +1446,7 @@
 
     .mat-button-toggle-checked {
       border: (0.125 * $baseline-grid) solid $primary;
-      background-color: $background-card-accent;
+      background-color: $background-card-hover;
     }
   }
 
@@ -1471,5 +1469,21 @@
   .km-confirmation-dialog,
   .km-delete-cluster-dialog mat-dialog-content {
     margin-bottom: 3.75 * $baseline-grid;
+  }
+
+  .km-swagger-container {
+    .info *,
+    .schemes-title,
+    .model-title {
+      color: $text;
+    }
+
+    a {
+      color: $primary !important;
+    }
+
+    .scheme-container {
+      background-color: transparent;
+    }
   }
 }

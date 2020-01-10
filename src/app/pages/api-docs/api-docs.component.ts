@@ -7,7 +7,6 @@ import {ApiService, Auth} from '../../core/services';
 @Component({
   selector: 'kubermatic-api-docs',
   templateUrl: './api-docs.component.html',
-  styleUrls: ['./api-docs.component.scss'],
 })
 export class ApiDocsComponent implements OnInit {
   constructor(
@@ -19,7 +18,7 @@ export class ApiDocsComponent implements OnInit {
       swaggerSpec.host = this._document.location.host;
       swaggerSpec.schemes = [this._document.location.protocol.replace(':', '')];
       SwaggerUI({
-        dom_id: '#swaggerContainer',
+        dom_id: '#km-swagger-container',
         spec: swaggerSpec,
         requestInterceptor: (req) => {
           const token = this._auth.getBearerToken();
