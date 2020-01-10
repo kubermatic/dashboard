@@ -1,4 +1,13 @@
-<mat-card>
+<div>
+  <div fxFlex></div>
+  <button mat-flat-button
+          (click)="backToApp()"
+          color="primary"
+          type="button">Go Back
+  </button>
+</div>
+
+<mat-card class="km-api-docs">
   <mat-card-content>
     <div id="km-swagger-container"
          class="km-swagger-container"></div>

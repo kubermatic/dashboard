@@ -17,6 +17,14 @@ import {Theme} from './shared/entity/MemberEntity';
 import {VersionInfo} from './shared/entity/VersionInfo';
 import {Config} from './shared/model/Config';
 
+const PAGES_WIITHOUT_MENU = [
+  '/projects',
+  '/account',
+  '/settings',
+  '/rest-api',
+  '/terms-of-service',
+];
+
 @Component({
   selector: 'kubermatic-root',
   templateUrl: './kubermatic.component.html',
@@ -103,7 +111,7 @@ export class KubermaticComponent implements OnInit, OnDestroy {
 
   private _handleSidenav(url: string): void {
     if (this.sidenav) {
-      if (url === '/projects' || url === '/rest-api' || url === '/account' || url === '/settings') {
+      if (PAGES_WIITHOUT_MENU.includes(url)) {
         this.sidenav.close();
       } else {
         this.sidenav.open();
