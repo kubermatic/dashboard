@@ -9,7 +9,7 @@ import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {PacketSize} from '../../shared/entity/packet/PacketSizeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
-import {GCPDiskType, GCPMachineSize, GCPZone} from '../../shared/entity/provider/gcp/GCP';
+import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPZone} from '../../shared/entity/provider/gcp/GCP';
 import {VSphereNetwork} from '../../shared/entity/provider/vsphere/VSphereEntity';
 import {CreateServiceAccountEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
@@ -185,6 +185,10 @@ export class ApiMockService {
   }
 
   getGCPZones(projectId: string, dc: string, clusterId: string): Observable<GCPZone[]> {
+    return of([]);
+  }
+
+  getGCPNetworks(projectId: string, dc: string, clusterId: string): Observable<GCPNetwork[]> {
     return of([]);
   }
 

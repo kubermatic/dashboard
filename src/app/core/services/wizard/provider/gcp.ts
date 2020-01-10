@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 
-import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../../shared/entity/provider/gcp/GCP';
+import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPZone} from '../../../../shared/entity/provider/gcp/GCP';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
@@ -53,6 +53,14 @@ export class GCP extends Provider {
     }
     const url = `${this._restRoot}/providers/${this._provider}/${dc}/zones`;
     return this._http.get<GCPZone[]>(url, {headers: this._headers});
+  }
+
+  networks(): Observable<GCPNetwork[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+    const url = `${this._restRoot}/providers/${this._provider}/networks`;
+    return this._http.get<GCPNetwork[]>(url, {headers: this._headers});
   }
 }
 
