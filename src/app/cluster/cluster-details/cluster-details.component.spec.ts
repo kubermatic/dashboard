@@ -31,7 +31,7 @@ import {NodeService} from '../services/node.service';
 
 import {ClusterDetailsComponent} from './cluster-details.component';
 import {ClusterSecretsComponent} from './cluster-secrets/cluster-secrets.component';
-import {MachineNetworksDisplayComponent} from './machine-networks-display/machine-networks-dispay.component';
+import {MachineNetworksDisplayComponent} from './machine-networks-display/machine-networks-display.component';
 import {NodeDeploymentListComponent} from './node-deployment-list/node-deployment-list.component';
 import {NodeListComponent} from './node-list/node-list.component';
 import {RBACComponent} from './rbac/rbac.component';
