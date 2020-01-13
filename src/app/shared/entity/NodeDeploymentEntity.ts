@@ -13,6 +13,7 @@ export class NodeDeploymentSpec {
   replicas: number;
   template: NodeSpec;
   paused?: boolean;
+  dynamicConfig?: boolean;
 }
 
 export class NodeDeploymentStatus {
