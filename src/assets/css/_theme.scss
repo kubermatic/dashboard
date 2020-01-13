@@ -173,65 +173,6 @@
     &.km-card-transparent {
       box-shadow: none !important;
     }
-
-    &.km-card-progress-bar {
-      box-shadow: none !important;
-      border-radius: $border-radius $border-radius 0 0 !important;
-      padding: (1.25 * $baseline-grid) (3.75 * $baseline-grid) (2.5 * $baseline-grid);
-
-      .mat-card-title {
-        margin-bottom: 0;
-        margin-top: 0;
-        padding-right: 1.875 * $baseline-grid;
-        text-align: center;
-      }
-
-      .km-wizard-step {
-        color: $text-secondary;
-        cursor: default;
-        font-size: $font-size-subhead;
-        font-weight: normal;
-        padding-top: $baseline-grid;
-        user-select: none;
-
-        .km-wizard-step-number {
-          align-items: center;
-          border-radius: 50%;
-          background: $divider;
-          display: inline-flex;
-          font-size: $font-size-body;
-          font-weight: normal;
-          height: 3 * $baseline-grid;
-          justify-content: center;
-          margin-right: 1.75 * $baseline-grid;
-          width: 3 * $baseline-grid;
-        }
-
-        &.active {
-          color: $primary;
-          font-weight: 500;
-
-          .km-wizard-step-number {
-            background: $secondary-dark;
-          }
-        }
-
-        &.completed {
-          color: $primary;
-          cursor: pointer;
-
-          .km-wizard-step-number {
-            background: $secondary-dark;
-          }
-        }
-      }
-
-      .km-wizard-step-divider {
-        height: 1px;
-        background: $divider;
-        margin: (2.5 * $baseline-grid) (2.5 * $baseline-grid) 0 $baseline-grid;
-      }
-    }
   }
 
   .mat-drawer-container {
@@ -1222,6 +1163,62 @@
       .km-icon-arrow-up {
         background: $text-secondary;
       }
+    }
+  }
+
+  .km-card-progress-bar {
+    box-shadow: none !important;
+    border-radius: $border-radius $border-radius 0 0 !important;
+    padding-bottom: 2.5 * $baseline-grid;
+
+    .km-wizard-step {
+      color: $text-secondary;
+      cursor: default;
+      font-size: $font-size-subhead;
+      font-weight: 400;
+      padding-top: $baseline-grid;
+      margin-bottom: 0;
+      margin-top: 0;
+      padding-right: 1.875 * $baseline-grid;
+      text-align: center;
+      user-select: none;
+
+      .km-wizard-step-number {
+        align-items: center;
+        border-radius: 50%;
+        background: $divider;
+        display: inline-flex;
+        font-size: $font-size-body;
+        font-weight: normal;
+        height: 3 * $baseline-grid;
+        justify-content: center;
+        margin-right: 1.75 * $baseline-grid;
+        width: 3 * $baseline-grid;
+      }
+
+      &.active {
+        color: $primary;
+        font-weight: 500 !important;
+
+        .km-wizard-step-number {
+          background: $secondary-dark;
+        }
+      }
+
+      &.completed {
+        color: $primary;
+        cursor: pointer;
+
+        .km-wizard-step-number {
+          background: $secondary-dark;
+        }
+      }
+    }
+
+    .km-wizard-step-divider {
+      height: 1px;
+      background: $divider;
+      margin: (2.5 * $baseline-grid) (2.5 * $baseline-grid) 0 $baseline-grid;
     }
   }
 
