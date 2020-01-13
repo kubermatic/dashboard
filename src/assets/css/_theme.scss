@@ -14,7 +14,6 @@
   $text-secondary: mat-color($palette-foreground, secondary-text);
   $text-disabled: mat-color($palette-foreground, disabled-text);
   $text-footer: mat-color($palette-primary, 50);
-  $text-white: #fff;
 
   $background: mat-color($palette-background, background);
   $background-hover: mat-color($palette-background, hover);
@@ -22,12 +21,10 @@
   $background-card-hover: rgba($background-hover, .02);
   $background-disabled-button: mat-color($palette-background, disabled-button);
   $background-app-bar: mat-color($palette-background, app-bar);
+  $background-tooltip: #31586f;
 
   $divider: mat-color($palette-foreground, divider);
   $shadow: 0 4px 4px rgba(#000, .08);
-
-  $chip-accent: mat-color($palette-background, card);
-  $chip-background: $divider;
 
   $scrollbar-background: mat-color($palette-background, card);
   $scrollbar-color: $divider;
@@ -41,30 +38,25 @@
   $sidenav-divider: mat-color($palette-primary, 200);
   $sidenav-divider-top: mat-color($palette-primary, 100);
 
+  $chip-accent: mat-color($palette-background, card);
+  $chip-background: $divider;
+
   $project-switch: rgba(mat-color($palette-foreground, secondary-text), .7);
+
+  $wizard-step-background: #b6ebfc;
+  $wizard-step-active-background: #b9ccdf;
 
   $primary: #0081ae;
   $primary-hover: #00a3d9;
-  $primary-light: #31586f;
-  $primary-active: #234d66;
+  $primary-dark: #1b658f;
 
-  $alternative: #00a3d9;
-  $alternative-dark: #203f58;
-  $alternative-light: #edf9fc;
-  $alternative-text: #1b658f;
-
-  $secondary-light: #dcf3fa;
-  $secondary: #b9ccdf;
-  $secondary-dark: #b6ebfc;
-
-  $quaternary: #3bc6ad;
-  $quaternary-hover: #21dfa9;
-  $quaternary-dark: #1c8282;
+  $secondary: #3bc6ad;
+  $secondary-hover: #21dfa9;
+  $secondary-dark: #1c8282;
 
   $indicator-green: #1dc67f;
   $indicator-orange: #f7b500;
   $indicator-red: #eb5757;
-  $indicator-blue: #00a3d9;
 
   $transition: all .5s ease;
 
@@ -188,7 +180,7 @@
   }
 
   .mat-tooltip {
-    background-color: $primary-light !important;
+    background-color: $background-tooltip !important;
     font-size: $font-size-caption !important;
     margin-top: 0.625 * $baseline-grid !important;
   }
@@ -297,17 +289,17 @@
   }
 
   div.mat-form-field-outline.mat-form-field-outline-thick {
-    color: $quaternary;
+    color: $secondary;
   }
 
   mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) div.mat-form-field-flex:hover label {
     transition: all .2s ease;
-    color: $quaternary-dark;
+    color: $secondary-dark;
   }
 
   mat-form-field.mat-focused:not(.ng-invalid) label.mat-form-field-label,
   mat-form-field.mat-focused.ng-pristine:not(.ng-touched) label.mat-form-field-label {
-    color: $alternative-text;
+    color: $primary-dark;
   }
 
   mat-hint a {
@@ -332,10 +324,10 @@
     }
 
     &.mat-alternative:not([disabled]) {
-      background-color: $quaternary;
+      background-color: $secondary;
 
       &:hover {
-        background-color: $quaternary-hover;
+        background-color: $secondary-hover;
       }
     }
 
@@ -678,6 +670,10 @@
 
   .km-text-muted {
     color: $text-secondary;
+  }
+
+  .km-info {
+    color: $primary-hover;
   }
 
   .km-success {
@@ -1039,7 +1035,7 @@
     }
 
     .mat-tab-label {
-      background-color: $secondary !important;
+      background-color: $wizard-step-active-background !important;
       opacity: 1;
       margin-right: 0.375 * $baseline-grid;
       padding: 0;
@@ -1113,7 +1109,7 @@
 
       &:hover {
         background-color: transparent;
-        border: (0.25 * $baseline-grid) solid $quaternary !important;
+        border: (0.25 * $baseline-grid) solid $secondary !important;
         transition: all .5s ease;
       }
 
@@ -1201,7 +1197,7 @@
         font-weight: 500 !important;
 
         .km-wizard-step-number {
-          background: $secondary-dark;
+          background: $wizard-step-background;
         }
       }
 
@@ -1210,7 +1206,7 @@
         cursor: pointer;
 
         .km-wizard-step-number {
-          background: $secondary-dark;
+          background: $wizard-step-background;
         }
       }
     }
@@ -1296,21 +1292,21 @@
         border-left: 2px;
         border-top: 2px;
         border-style: solid;
-        border-color: $quaternary;
+        border-color: $secondary;
         margin-left: -1px;
         transition: all .5s ease;
         width: 51px;
       }
 
       .mat-form-field-outline-thick {
-        color: $quaternary !important;
+        color: $secondary !important;
         opacity: 1 !important;
         transition: all .5s ease;
       }
 
       div.mat-form-field-flex label {
         transition: all .5s ease;
-        color: $quaternary-dark !important;
+        color: $secondary-dark !important;
       }
     }
 
@@ -1397,7 +1393,7 @@
     box-shadow: 0 0 0 1px $divider;
 
     &:hover {
-      box-shadow: 0 0 0 2px $quaternary-hover;
+      box-shadow: 0 0 0 2px $secondary-hover;
       transition: all .5s ease;
     }
 
