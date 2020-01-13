@@ -361,6 +361,16 @@
              class="km-warning km-error">Not enough IPs left. Reduce number of nodes or add more machine networks.</p>
         </div>
 
+        <div class="km-summary-row">
+          <span class="km-summary-left km-text">
+            <i *ngIf="!nodeData.dynamicConfig"
+               class="km-icon-disabled"></i>
+            <i *ngIf="nodeData.dynamicConfig"
+               class="km-icon-running"></i>
+          </span>
+          <span>Dynamic kubelet config</span>
+        </div>
+
         <!-- AWS Node Options -->
         <ng-container *ngIf="cluster.spec.cloud.aws">
           <div *ngIf="nodeData.spec.cloud.aws.assignPublicIP !== undefined">

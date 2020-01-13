@@ -5,6 +5,7 @@ export class NodeData {
   spec?: NodeSpec;
   count?: number;
   valid?: boolean;
+  dynamicConfig?: boolean;
 }
 
 export class NodeProviderData {

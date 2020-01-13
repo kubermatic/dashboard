@@ -8,6 +8,7 @@ export class NodeDeploymentSpecPatch {
   replicas?: number;
   template?: NodeSpecPatch;
   paused?: boolean;
+  dynamicConfig?: boolean;
 }
 
 export class NodeSpecPatch {

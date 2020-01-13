@@ -23,6 +23,7 @@ export class NodeService {
       spec: {
         template: nodeData.spec,
         replicas: nodeData.count,
+        dynamicConfig: nodeData.dynamicConfig,
       },
     };
   }
@@ -32,6 +33,7 @@ export class NodeService {
       spec: {
         replicas: data.nodeData.count,
         template: data.nodeData.spec,
+        dynamicConfig: data.nodeData.dynamicConfig,
       },
     };
 
@@ -99,7 +101,8 @@ export class NodeService {
           name: nd.name,
           spec: _.cloneDeep(nd.spec.template),
           valid: true,
-        },
+          dynamicConfig: nd.spec.dynamicConfig,
+        } as NodeData,
       }
     });
 
