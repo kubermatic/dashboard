@@ -1,22 +1,25 @@
 import {Injectable} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
+import {filter} from 'rxjs/operators';
 
 @Injectable()
 export class PreviousRouteService {
-  private previousUrl: string;
-  private currentUrl: string;
+  private history = [];
 
-  constructor(private router: Router) {
-    this.currentUrl = this.router.url;
-    router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.previousUrl = this.currentUrl;
-        this.currentUrl = event.url;
-      }
-    });
+  constructor(private router: Router) {}
+
+  loadRouting(): void {
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+        .subscribe((urlAfterRedirects: NavigationEnd) => {
+          this.history = [...this.history, urlAfterRedirects];
+        });
+  }
+
+  getHistory(): string[] {
+    return this.history;
   }
 
   getPreviousUrl(): string {
-    return this.previousUrl;
+    return this.history[this.history.length - 2] || '/';
   }
 }

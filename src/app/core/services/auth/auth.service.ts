@@ -5,6 +5,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {RandomString} from '../../../shared/functions/generate-random-string';
+import {PreviousRouteService} from '../previous-route/previous-route.service';
 
 @Injectable()
 export class Auth {
@@ -14,7 +15,9 @@ export class Auth {
   private readonly _defaultScope = 'openid email profile groups';
   private readonly _redirectUri = window.location.protocol + '//' + window.location.host + '/projects';
 
-  constructor(private readonly _cookieService: CookieService, private readonly _appConfigService: AppConfigService) {
+  constructor(
+      private readonly _cookieService: CookieService, private readonly _appConfigService: AppConfigService,
+      private readonly _previousRouteService: PreviousRouteService) {
     const token = this.getTokenFromQuery();
     const nonce = this.getNonce();
     if (!!token && !!nonce) {
@@ -27,6 +30,7 @@ export class Auth {
         this._cookieService.set(Auth.Cookie.Token, token, 1, '/', 'localhost');
         this._cookieService.set(Auth.Cookie.Token, token, 1, '/', '127.0.0.1');
       }
+      this._previousRouteService.loadRouting();
     }
   }
 

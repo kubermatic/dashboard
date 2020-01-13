@@ -29,7 +29,8 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
 
   constructor(
       private readonly _userService: UserService, private readonly _settingsService: SettingsService,
-      private readonly _historyService: HistoryService, private readonly _appConfigService: AppConfigService, private readonly _projectService: ProjectService) {}
+      private readonly _historyService: HistoryService, private readonly _appConfigService: AppConfigService,
+      private readonly _projectService: ProjectService) {}
 
   ngOnInit(): void {
     this.enableThemes = !this._appConfigService.getConfig().disable_themes;

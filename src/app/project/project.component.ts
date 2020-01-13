@@ -149,7 +149,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   selectDefaultProject(): void {
     if (!!this.settings && !!this.projects && !!this.settings.selectedProjectId &&
-        this._previousRouteService.getPreviousUrl() === '/projects') {
+        this._previousRouteService.getPreviousUrl() === '/' && this._previousRouteService.getHistory().length === 1) {
       const defaultProject = this.projects.find((x) => x.id === this.settings.selectedProjectId);
       this.selectProject(defaultProject);
     }
