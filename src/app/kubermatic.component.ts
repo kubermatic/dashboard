@@ -23,6 +23,7 @@ const PAGES_WIITHOUT_MENU = [
   '/settings',
   '/rest-api',
   '/terms-of-service',
+  '/404',
 ];
 
 @Component({
