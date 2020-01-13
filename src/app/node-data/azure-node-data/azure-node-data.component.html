@@ -12,7 +12,7 @@
       <mat-autocomplete #autoSizes="matAutocomplete">
         <mat-option *ngFor="let size of filteredSizes"
                     [value]="size.name">
-          {{size.name}}
+          {{size.name}} ({{size.numberOfCores}} vCPU, {{size.memoryInMB}} MB RAM)
         </mat-option>
       </mat-autocomplete>
       <mat-error *ngIf="form.controls.size.hasError('mustBeInList') && !form.controls.size.hasError('required')">Input doesn't match options. Please choose from given options.</mat-error>
