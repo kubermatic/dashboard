@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
+import {AppConfigService} from '../../app-config.service';
 import {UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
@@ -16,6 +17,7 @@ import {objectDiff} from '../../shared/utils/common-utils';
   styleUrls: ['user-settings.component.scss'],
 })
 export class UserSettingsComponent implements OnInit, OnDestroy {
+  enableThemes = false;
   itemsPerPageOptions = [5, 10, 15, 20, 25];
   user: MemberEntity;
   settings: UserSettings;     // Local settings copy. User can edit it.
@@ -25,9 +27,11 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
 
   constructor(
       private readonly _userService: UserService, private readonly _settingsService: SettingsService,
-      private readonly _historyService: HistoryService) {}
+      private readonly _historyService: HistoryService, private readonly _appConfigService: AppConfigService) {}
 
   ngOnInit(): void {
+    this.enableThemes = !this._appConfigService.getConfig().disable_themes;
+
     this._userService.loggedInUser.pipe(first()).subscribe(user => this.user = user);
 
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
@@ -46,6 +50,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
         .subscribe(settings => {
           this.apiSettings = settings;
           this.settings = _.cloneDeep(this.apiSettings);
+          this._settingsService.refreshUserSettings();
         });
   }
 

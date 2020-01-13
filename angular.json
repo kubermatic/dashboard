@@ -22,7 +22,7 @@
             ],
             "styles": [
               "node_modules/swagger-ui/dist/swagger-ui.css",
-              "src/assets/css/_main.scss"
+              "src/assets/css/main.scss"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js"
@@ -126,7 +126,7 @@
               "node_modules/jquery/dist/jquery.js"
             ],
             "styles": [
-              "src/assets/css/_main.scss"
+              "src/assets/css/main.scss"
             ],
             "assets": [
               "src/assets",

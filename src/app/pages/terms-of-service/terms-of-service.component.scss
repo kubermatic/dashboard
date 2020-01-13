@@ -1,11 +1,11 @@
-@import "../../../assets/css/colors";
+@import "../../../assets/css/variables";
 
-.km-page-terms-of-service {
+.km-terms {
   font-size: 14px;
-  margin-bottom: 60px;
+  padding: (5 * $baseline-grid) (7 * $baseline-grid);
+  margin-top: 2.5 * $baseline-grid;
 
   p {
-    color: $text-color;
     font-size: 14px;
   }
 

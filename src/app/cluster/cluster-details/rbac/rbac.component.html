@@ -4,13 +4,13 @@
       <i [ngClass]="isShowRBAC ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
       RBAC
     </mat-card-title>
-    <button mat-flat-button
-            class="km-rbac-add-binding-btn"
-            color="alternative"
+    <div fxFlex></div>
+    <button mat-icon-button
+            matTooltip="Add Binding"
             *ngIf="isShowRBAC"
             [disabled]="!isClusterRunning"
             (click)="addBinding($event)">
-      Add Binding
+      <i class="km-icon-add"></i>
     </button>
   </mat-card-header>
   <mat-card-content *ngIf="isShowRBAC">

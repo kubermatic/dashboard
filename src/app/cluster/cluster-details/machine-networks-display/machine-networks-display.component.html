@@ -2,21 +2,13 @@
           *ngIf="!!cluster.spec.machineNetworks">
   <mat-card-header>
     <mat-card-title>Machine Networks</mat-card-title>
-    <div class="km-provider-menu">
-      <button mat-icon-button
-              class="km-provider-menu-btn"
-              [matMenuTriggerFor]="menu"
-              *ngIf="!cluster.spec.cloud.bringyourown">
-        <mat-icon>more_vert</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu"
-                class="km-machine-networks-settings">
-        <button mat-menu-item
-                (click)="addMachineNetwork()">
-          <span>Add Machine Network</span>
-        </button>
-      </mat-menu>
-    </div>
+    <div fxFlex></div>
+    <button mat-icon-button
+            matTooltip="Add Machine Network"
+            *ngIf="!cluster.spec.cloud.bringyourown"
+            (click)="addMachineNetwork()">
+      <i class="km-icon-add"></i>
+    </button>
   </mat-card-header>
 
   <mat-card-content>

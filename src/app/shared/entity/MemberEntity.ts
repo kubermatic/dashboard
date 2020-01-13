@@ -10,10 +10,15 @@ export class MemberEntity {
 }
 
 export class UserSettings {
-  selectedTheme?: string;
+  selectedTheme?: Theme;
   selectedProjectId?: string;
   itemsPerPage?: number;
   selectProjectTableView?: boolean;
+}
+
+export enum Theme {
+  Light = 'light',
+  Dark = 'dark',
 }
 
 export class MemberProject {

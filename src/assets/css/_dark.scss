@@ -1,0 +1,74 @@
+@import "~@angular/material/theming";
+@import "theme";
+
+$km-primary-dark: (
+  50: #fff, // Footer color.
+  100: #575859, // Sidenav divider top.
+  200: #373738, // Sidenav divider bottom.
+  300: #fff, // Sidenav text.
+  400: #1c1c1d, // Sidenav custom links background.
+  500: #fff, // Sidenav text light.
+  600: #343536, // Sidenav background active.
+  700: #3c3d3e, // Sidenav background hover.
+  800: #2b2b2c,
+  900: #01579b,
+  A100: #80d8ff,
+  A200: #40c4ff,
+  A400: #00b0ff,
+  A700: #0091ea,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $dark-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $dark-primary-text,
+    A400: $dark-primary-text,
+    A700: $light-primary-text,
+  )
+);
+
+$primary: mat-palette($km-primary-dark, 700, 500, 800);
+$lighter: mat-palette($mat-light-blue, 100, 200, 300);
+$accent:  mat-palette($mat-pink, 500, 600, 700);
+
+$dark-theme: mat-dark-theme($primary, $lighter, $accent);
+
+// sass-lint:disable function-name-format
+$background: map-get($dark-theme, background);
+$background: map_merge($background, (background: #121212));
+$background: map_merge($background, (app-bar: #2b2b2c));
+$background: map_merge($background, (card: #1c1c1d));
+$background: map_merge($background, (dialog: #1c1c1d));
+$dark-theme: map_merge($dark-theme, (background: $background));
+
+$foreground: map-get($dark-theme, foreground);
+$foreground: map_merge($foreground, (text: #fff));
+$foreground: map_merge($foreground, (secondary-text: #b8b8b8));
+$foreground: map_merge($foreground, (divider: #373738));
+$dark-theme: map_merge($dark-theme, (foreground: $foreground));
+// sass-lint:enable function-name-format
+
+.dark {
+  @include angular-material-theme($dark-theme);
+  @include km-theme($dark-theme);
+
+  // Swap header logo.
+  .km-header-logo {
+    background-image: url("/assets/images/branding/logo-dark.svg") !important;
+  }
+
+  // Make icons and logos white.
+  .km-provider-logo,
+  .km-addon-logo,
+  footer i,
+  *[class*="km-os-image-"] {
+    filter: invert(.25) brightness(100) contrast(100);
+  }
+}

@@ -1,5 +1,3 @@
-@import "../../../../assets/css/colors";
-@import "../../../../assets/css/fonts";
 @import "../../../../assets/css/variables";
 
 .simple-notification-wrapper {
@@ -8,10 +6,8 @@
 }
 
 .km-notification {
-  background: $white-background !important;
-  border-radius: $notification-border-radius;
-  box-shadow: $elevation-8dp;
-  color: $text-color !important;
+  border-radius: $border-radius;
+  box-shadow: $notification-border-box-shadow;
   min-height: unset !important;
   padding: unset !important;
   z-index: 2000 !important;
@@ -23,7 +19,7 @@
 
   .sn-title {
     display: flex;
-    font-size: $subhead-font-size-base !important;
+    font-size: $font-size-subhead !important;
     line-height: unset !important;
     padding: 0 !important;
 
@@ -33,20 +29,12 @@
 
     .km-notification-type {
       align-items: center;
-      border-radius: $notification-border-radius 0 0 $notification-border-radius;
+      border-radius: $border-radius 0 0 $border-radius;
       display: flex;
       height: inherit;
       justify-content: center;
       margin: 0 auto;
       width: $notification-side-padding !important;
-
-      &.success {
-        background: $indicator-green;
-      }
-
-      &.error {
-        background: $indicator-red;
-      }
 
       i {
         background-size: 2 * $baseline-grid;
@@ -60,7 +48,7 @@
       word-break: break-word;
 
       &.small {
-        font-size: $body-font-size-base !important;
+        font-size: $font-size-body !important;
       }
     }
 

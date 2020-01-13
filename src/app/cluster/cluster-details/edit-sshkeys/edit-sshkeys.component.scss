@@ -1,4 +1,3 @@
-@import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
 
 .km-content-edit-sshkeys {
@@ -12,13 +11,8 @@
 }
 
 .km-mat-footer-row button {
-  color: $medium-text-color;
   font-weight: normal;
   line-height: 5 * $line-height;
-
-  &:hover {
-    background-color: $hover;
-  }
 }
 
 .km-mat-footer-row.km-no-sshkeys {

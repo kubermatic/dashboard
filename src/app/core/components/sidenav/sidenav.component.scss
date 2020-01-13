@@ -1,18 +1,8 @@
-@import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
 
-.km-option-add-project {
-  color: $light-text-color;
-}
-
-.container {
+.km-sidenav {
   width: $sidenav-width;
-  background-color: $alternative-dark;
   height: 100%;
-
-  * {
-    color: $secondary;
-  }
 
   .mat-nav-list {
     padding: 0 !important;
@@ -20,46 +10,19 @@
     .mat-list-item,
     a {
       height: $toolbar-height;
-
-      &.km-projects {
-        height: $toolbar-height - ($sidenav-border-width / 2);
-        border-bottom: $alternative solid $sidenav-border-width;
-      }
     }
 
     a {
-      font-size: $subhead-font-size-base-lg;
+      font-size: $font-size-subhead-lg;
       padding: (1.25 * $baseline-grid) (3.75 * $baseline-grid) !important;
       display: flex;
       align-items: center;
-
-      &:hover {
-        color: $secondary-light;
-        background-color: $primary-active;
-
-        i {
-          background-color: $secondary-light;
-        }
-      }
-
-      &.active {
-        color: $secondary-light;
-        background-color: $primary-light;
-
-        i {
-          background-color: $secondary-light;
-        }
-      }
 
       i {
         width: 3 * $baseline-grid;
         height: 3 * $baseline-grid;
         margin-right: 2 * $baseline-grid;
       }
-    }
-
-    .mat-list-item i {
-      background-color: $secondary;
     }
 
     .km-disabled {
@@ -70,11 +33,8 @@
   }
 
   .km-nav-custom-container {
-    background-color: $primary-dark;
-    border-top: $primary-light solid $sidenav-border-width;
-
     .mat-list-item a {
-      font-size: $subhead-font-size-base;
+      font-size: $font-size-subhead;
 
       i {
         background-color: transparent;
@@ -86,18 +46,14 @@
         cursor: pointer;
       }
 
-      &:hover {
-        background-color: $alternative-dark;
-
-        i {
-          -webkit-filter: brightness(115%);
-        }
+      &:hover i {
+        -webkit-filter: brightness(115%);
       }
     }
 
     .km-custom-list-item {
       height: 6.25 * $baseline-grid;
-      font-size: $subhead-font-size-base;
+      font-size: $font-size-subhead;
 
       a {
         height: 6.25 * $baseline-grid;
@@ -106,8 +62,7 @@
   }
 
   .km-sidenav-bottom {
-    border-top: $primary-light solid $sidenav-border-width;
-    font-size: $subhead-font-size-base;
+    font-size: $font-size-subhead;
 
     .mat-list-item a i {
       width: 2 * $baseline-grid;

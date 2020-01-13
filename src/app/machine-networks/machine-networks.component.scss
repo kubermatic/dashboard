@@ -1,17 +1,14 @@
-@import '../../assets/css/colors';
 @import '../../assets/css/variables';
 
 h2 {
   font-weight: 400;
   margin-top: 0;
-  color: $text-color;
 }
 
 h3 {
   display: inline-block;
   font-weight: 400;
   margin: 0;
-  color: $text-color;
 }
 
 .km-machine-networks {
@@ -23,10 +20,8 @@ h3 {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border: 1px dashed $border;
   border-radius: 5px;
   height: 6.25 * $baseline-grid;
-  color: $text-color;
   font-weight: 400;
 }
 

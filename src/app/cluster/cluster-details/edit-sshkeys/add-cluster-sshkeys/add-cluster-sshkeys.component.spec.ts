@@ -2,7 +2,6 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialog, MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {AppConfigService} from '../../../../app-config.service';
 import {ApiService, ClusterService, ProjectService, UserService} from '../../../../core/services';
 import {SharedModule} from '../../../../shared/shared.module';
@@ -17,7 +16,6 @@ import {AddClusterSSHKeysComponent} from './add-cluster-sshkeys.component';
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
   SharedModule,
 ];
 
