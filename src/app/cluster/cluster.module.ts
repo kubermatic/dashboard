@@ -22,7 +22,7 @@ import {PacketProviderSettingsComponent} from './cluster-details/edit-provider-s
 import {VSphereProviderSettingsComponent} from './cluster-details/edit-provider-settings/vsphere-provider-settings/vsphere-provider-settings.component';
 import {AddClusterSSHKeysComponent} from './cluster-details/edit-sshkeys/add-cluster-sshkeys/add-cluster-sshkeys.component';
 import {EditSSHKeysComponent} from './cluster-details/edit-sshkeys/edit-sshkeys.component';
-import {MachineNetworksDisplayComponent} from './cluster-details/machine-networks-display/machine-networks-dispay.component';
+import {MachineNetworksDisplayComponent} from './cluster-details/machine-networks-display/machine-networks-display.component';
 import {NodeDataModalComponent} from './cluster-details/node-data-modal/node-data-modal.component';
 import {ClusterPanelComponent} from './cluster-details/node-deployment-details/cluster-panel/cluster-panel.component';
 import {NodeDeploymentDetailsComponent} from './cluster-details/node-deployment-details/node-deployment-details.component';

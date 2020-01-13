@@ -4,7 +4,6 @@ import {MatDialogRef} from '@angular/material';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../../../app-config.service';
@@ -28,7 +27,6 @@ const modules: any[] = [
   BrowserModule,
   HttpClientModule,
   BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
   RouterTestingModule,
   SharedModule,
 ];
@@ -95,11 +93,11 @@ describe('ClusterDeleteConfirmationComponent', () => {
        component.projectID = fakeProject().id;
 
        fixture.detectChanges();
-       const spyDeleteCluster = spyOn(clusterService, 'delete').and.returnValue(of(null));
+       const spyDeleteCluster = jest.spyOn(clusterService, 'delete').mockReturnValue(of(null));
 
        component.deleteCluster();
        tick();
 
-       expect(spyDeleteCluster.and.callThrough()).toHaveBeenCalled();
+       expect(spyDeleteCluster).toHaveBeenCalled();
      }));
 });

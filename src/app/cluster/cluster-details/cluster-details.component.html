@@ -17,7 +17,7 @@
               [disabled]="!isClusterRunning"
               *ngIf="!!config.share_kubeconfig"
               matTooltip="Share">
-        <i class="km-icon-share"></i>
+        <i class="km-icon-mask km-icon-share"></i>
       </button>
       <button class="km-download-kubeconfig-btn"
               mat-icon-button
@@ -26,7 +26,7 @@
         <a href="{{getDownloadURL()}}"
            target="_blank"
            rel="noopener">
-          <i class="km-icon-download"></i>
+          <i class="km-icon-mask km-icon-download"></i>
         </a>
       </button>
       <button mat-flat-button
@@ -150,9 +150,9 @@
     </mat-card-content>
   </mat-card>
 
-  <kubermatic-machine-networks-dispay [cluster]="cluster"
-                                      [datacenter]="datacenter"
-                                      [projectID]="projectID"></kubermatic-machine-networks-dispay>
+  <km-machine-networks-display [cluster]="cluster"
+                               [datacenter]="datacenter"
+                               [projectID]="projectID"></km-machine-networks-display>
 
   <kubermatic-node-deployment-list [cluster]="cluster"
                                    [nodeDeployments]="nodeDeployments"
@@ -171,6 +171,14 @@
                           [isClusterRunning]="isClusterAPIRunning"></kubermatic-node-list>
   </div>
 
+  <kubermatic-rbac *ngIf="isRBACEnabled()"
+                   [cluster]="cluster"
+                   [datacenter]="datacenter"
+                   [projectID]="projectID"
+                   [isClusterRunning]="isClusterRunning"
+                   [clusterBindings]="clusterBindings"
+                   [bindings]="bindings"></kubermatic-rbac>
+
   <mat-card class="km-with-table-header">
     <mat-card-header>
       <mat-card-title>Addons</mat-card-title>
@@ -186,14 +194,6 @@
   </mat-card>
 
   <km-event-list [events]="events"></km-event-list>
-
-  <kubermatic-rbac *ngIf="isRBACEnabled()"
-                   [cluster]="cluster"
-                   [datacenter]="datacenter"
-                   [projectID]="projectID"
-                   [isClusterRunning]="isClusterRunning"
-                   [clusterBindings]="clusterBindings"
-                   [bindings]="bindings"></kubermatic-rbac>
 
 </ng-container>
 

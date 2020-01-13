@@ -1,4 +1,5 @@
 export interface Config {
+  disable_themes?: boolean;
   share_kubeconfig?: boolean;
   openstack?: {wizard_use_default_user?: boolean;};
   google_analytics_code?: string;
@@ -6,6 +7,7 @@ export interface Config {
   oidc_provider_url?: string;
   oidc_provider_scope?: string;
   oidc_provider_client_id?: string;
+  oidc_connector_id?: string;
 }
 
 export interface UserGroupConfig {

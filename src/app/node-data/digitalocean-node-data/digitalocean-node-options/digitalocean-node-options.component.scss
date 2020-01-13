@@ -3,7 +3,7 @@
 div.km-node-options {
   width: 100%;
   line-height: 3 * $line-height;
-  font-size: $body-font-size-base;
+  font-size: $font-size-body;
   display: flex;
 
   mat-checkbox,
@@ -16,6 +16,6 @@ textarea.mat-input-element {
   line-height: 2 * $baseline-grid;
 }
 
-.km-node-tags {
-  margin-top: 1.25 * $baseline-grid;
+.km-node-options-form {
+  margin-bottom: 2 * $baseline-grid;
 }

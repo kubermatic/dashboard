@@ -13,3 +13,11 @@ export class GCPDiskType {
 export class GCPZone {
   name: string;
 }
+
+export class GCPNetwork {
+  id: string;
+  name: string;
+  autoCreateSubnetworks: boolean;
+  subnetworks: string[];
+  kind: string;
+}

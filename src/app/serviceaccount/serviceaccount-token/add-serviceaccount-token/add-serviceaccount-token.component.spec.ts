@@ -2,7 +2,6 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialog, MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {ApiService, ProjectService} from '../../../core/services';
 import {SharedModule} from '../../../shared/shared.module';
@@ -18,7 +17,6 @@ import {AddServiceAccountTokenComponent} from './add-serviceaccount-token.compon
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
   SharedModule,
 ];
 
@@ -27,8 +25,8 @@ describe('AddServiceAccountTokenComponent', () => {
   let component: AddServiceAccountTokenComponent;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['createServiceAccountToken']);
-    apiMock.createServiceAccountToken.and.returnValue(asyncData(fakeServiceAccountTokens()));
+    const apiMock = {'createServiceAccountToken': jest.fn()};
+    apiMock.createServiceAccountToken.mockReturnValue(asyncData(fakeServiceAccountTokens()));
 
     TestBed
         .configureTestingModule({
@@ -66,13 +64,11 @@ describe('AddServiceAccountTokenComponent', () => {
   });
 
   it('should have required fields', () => {
-    expect(component.addServiceAccountTokenForm.valid).toBeFalsy('form is initially not valid');
-    expect(component.addServiceAccountTokenForm.controls.name.valid).toBeFalsy('name field is initially not valid');
-    expect(component.addServiceAccountTokenForm.controls.name.hasError('required'))
-        .toBeTruthy('name field has initially required error');
+    expect(component.addServiceAccountTokenForm.valid).toBeFalsy();
+    expect(component.addServiceAccountTokenForm.controls.name.valid).toBeFalsy();
+    expect(component.addServiceAccountTokenForm.controls.name.hasError('required')).toBeTruthy();
 
     component.addServiceAccountTokenForm.controls.name.patchValue('test-service-account-token');
-    expect(component.addServiceAccountTokenForm.controls.name.hasError('required'))
-        .toBeFalsy('name field has no required error after setting name');
+    expect(component.addServiceAccountTokenForm.controls.name.hasError('required')).toBeFalsy();
   });
 });

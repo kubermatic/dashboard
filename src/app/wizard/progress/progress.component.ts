@@ -4,7 +4,6 @@ import {Step, StepsService} from '../../core/services/wizard/steps.service';
 @Component({
   selector: 'kubermatic-progress',
   templateUrl: 'progress.component.html',
-  styleUrls: ['progress.component.scss'],
 })
 export class ProgressComponent {
   @Input() steps: Step[] = [];

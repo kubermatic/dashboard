@@ -3,14 +3,13 @@ import {MatDialog, MatTabsModule} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
-import Spy = jasmine.Spy;
 
 import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {SharedModule} from '../shared/shared.module';
+import {HealthStatusColor} from '../shared/utils/health-status/health-status';
 import {DialogTestModule, NoopConfirmDialogComponent} from '../testing/components/noop-confirmation-dialog.component';
 import {fakeServiceAccounts, fakeServiceAccountTokens} from '../testing/fake-data/serviceaccount.fake';
 import {RouterStub, RouterTestingModule} from '../testing/router-stubs';
@@ -18,6 +17,7 @@ import {asyncData} from '../testing/services/api-mock.service';
 import {AppConfigMockService} from '../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../testing/services/project-mock.service';
 import {UserMockService} from '../testing/services/user-mock.service';
+
 import {ServiceAccountTokenComponent} from './serviceaccount-token/serviceaccount-token.component';
 import {ServiceAccountComponent} from './serviceaccount.component';
 
@@ -25,21 +25,23 @@ describe('ServiceAccountComponent', () => {
   let fixture: ComponentFixture<ServiceAccountComponent>;
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let component: ServiceAccountComponent;
-  let deleteServiceAccountSpy: Spy;
+  let deleteServiceAccountSpy;
 
   beforeEach(async(() => {
-    const apiMock =
-        jasmine.createSpyObj('ApiService', ['getServiceAccounts', 'getServiceAccountTokens', 'deleteServiceAccount']);
-    apiMock.getServiceAccounts.and.returnValue(asyncData(fakeServiceAccounts()));
-    apiMock.getServiceAccountTokens.and.returnValue(asyncData(fakeServiceAccountTokens()));
-    deleteServiceAccountSpy = apiMock.deleteServiceAccount.and.returnValue(of(null));
+    const apiMock = {
+      'getServiceAccounts': jest.fn(),
+      'getServiceAccountTokens': jest.fn(),
+      'deleteServiceAccount': jest.fn()
+    };
+    apiMock.getServiceAccounts.mockReturnValue(asyncData(fakeServiceAccounts()));
+    apiMock.getServiceAccountTokens.mockReturnValue(asyncData(fakeServiceAccountTokens()));
+    deleteServiceAccountSpy = apiMock.deleteServiceAccount.mockReturnValue(of(null));
 
     TestBed
         .configureTestingModule({
           imports: [
             BrowserModule,
             BrowserAnimationsModule,
-            SlimLoadingBarModule.forRoot(),
             RouterTestingModule,
             SharedModule,
             MatTabsModule,
@@ -76,7 +78,7 @@ describe('ServiceAccountComponent', () => {
   });
 
   it('should get correct state icon class', () => {
-    expect(component.getStateIconClass('Active')).toBe('fa fa-circle green');
+    expect(component.getStateIconClass('Active')).toBe(HealthStatusColor.Green);
   });
 
   it('should get correct group display name', () => {
@@ -101,6 +103,6 @@ describe('ServiceAccountComponent', () => {
        fixture.detectChanges();
        tick(15000);
 
-       expect(deleteServiceAccountSpy.and.callThrough()).toHaveBeenCalled();
+       expect(deleteServiceAccountSpy).toHaveBeenCalled();
      }));
 });

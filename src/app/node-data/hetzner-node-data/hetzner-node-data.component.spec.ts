@@ -25,8 +25,8 @@ describe('HetznerNodeDataComponent', () => {
   let component: HetznerNodeDataComponent;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getHetznerTypes']);
-    apiMock.getHetznerTypes.and.returnValue(asyncData(fakeHetznerTypes()));
+    const apiMock = {'getHetznerTypes': jest.fn()};
+    apiMock.getHetznerTypes.mockReturnValue(asyncData(fakeHetznerTypes()));
 
     TestBed
         .configureTestingModule({

@@ -3,7 +3,6 @@ import {MatDialog, MatTabsModule} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../app-config.service';
@@ -21,26 +20,25 @@ import {UserMockService} from '../testing/services/user-mock.service';
 
 import {SSHKeyComponent} from './sshkey.component';
 
-import Spy = jasmine.Spy;
+
 
 describe('SSHKeyComponent', () => {
   let fixture: ComponentFixture<SSHKeyComponent>;
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let component: SSHKeyComponent;
   let activatedRoute: ActivatedRouteStub;
-  let deleteSSHKeySpy: Spy;
+  let deleteSSHKeySpy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getSSHKeys', 'deleteSSHKey']);
-    apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
-    deleteSSHKeySpy = apiMock.deleteSSHKey.and.returnValue(of(null));
+    const apiMock = {'getSSHKeys': jest.fn(), 'deleteSSHKey': jest.fn()};
+    apiMock.getSSHKeys.mockReturnValue(asyncData(fakeSSHKeys()));
+    deleteSSHKeySpy = apiMock.deleteSSHKey.mockReturnValue(of(null));
 
     TestBed
         .configureTestingModule({
           imports: [
             BrowserModule,
             BrowserAnimationsModule,
-            SlimLoadingBarModule.forRoot(),
             RouterTestingModule,
             SharedModule,
             MatTabsModule,
@@ -102,6 +100,6 @@ describe('SSHKeyComponent', () => {
        fixture.detectChanges();
        tick(15000);
 
-       expect(deleteSSHKeySpy.and.callThrough()).toHaveBeenCalled();
+       expect(deleteSSHKeySpy).toHaveBeenCalled();
      }));
 });

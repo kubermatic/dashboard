@@ -9,7 +9,6 @@ import {AppConfigService} from '../../../../app-config.service';
 import {Auth, WizardService} from '../../../../core/services';
 import {ClusterProviderSettingsForm, ClusterSettingsFormView} from '../../../../shared/model/ClusterForm';
 import {Config} from '../../../../shared/model/Config';
-import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {SharedModule} from '../../../../shared/shared.module';
 import {fakeOpenstackCluster} from '../../../../testing/fake-data/cluster.fake';
 import {fakeOpenstackDatacenter} from '../../../../testing/fake-data/datacenter.fake';
@@ -19,55 +18,65 @@ import {AuthMockService} from '../../../../testing/services/auth-mock.service';
 
 import {OpenstackClusterSettingsComponent} from './openstack.component';
 
-import Spy = jasmine.Spy;
 
 describe('OpenstackClusterSettingsComponent', () => {
   let fixture: ComponentFixture<OpenstackClusterSettingsComponent>;
   let component: OpenstackClusterSettingsComponent;
   let config: Config;
-  let tenantsMock: Spy;
-  let networksMock: Spy;
+  let tenantsMock;
+  let networksMock;
   let wizardMock;
   let providerMock;
 
   beforeEach(async(() => {
-    wizardMock =
-        jasmine.createSpyObj('WizardService', ['provider', 'getSelectedDatacenter', 'changeClusterProviderSettings']);
-    providerMock = jasmine.createSpyObj('Provider', [
-      'tenants', 'networks', 'securityGroups', 'subnets', 'username', 'password', 'domain', 'datacenter', 'tenant',
-      'tenantID'
-    ]);
+    wizardMock = {
+      'provider': jest.fn(),
+      'getSelectedDatacenter': jest.fn(),
+      'changeClusterProviderSettings': jest.fn()
+    };
 
-    wizardMock.changeClusterProviderSettings.and.callThrough();
+    providerMock = {
+      'tenants': jest.fn(),
+      'networks': jest.fn(),
+      'securityGroups': jest.fn(),
+      'subnets': jest.fn(),
+      'username': jest.fn(),
+      'password': jest.fn(),
+      'domain': jest.fn(),
+      'datacenter': jest.fn(),
+      'tenant': jest.fn(),
+      'tenantID': jest.fn()
+    };
+
     wizardMock.onCustomPresetsDisable = new EventEmitter<boolean>();
     wizardMock.onCustomPresetSelect = new EventEmitter<string>();
     wizardMock.clusterSettingsFormViewChanged$ = new EventEmitter<ClusterSettingsFormView>();
     wizardMock.clusterProviderSettingsFormChanges$ = new EventEmitter<ClusterProviderSettingsForm>();
 
-    providerMock.username.and.returnValue(providerMock);
-    providerMock.password.and.returnValue(providerMock);
-    providerMock.domain.and.returnValue(providerMock);
-    providerMock.datacenter.and.returnValue(providerMock);
-    providerMock.tenant.and.returnValue(providerMock);
-    providerMock.tenantID.and.returnValue(providerMock);
+    providerMock.username.mockReturnValue(providerMock);
+    providerMock.password.mockReturnValue(providerMock);
+    providerMock.domain.mockReturnValue(providerMock);
+    providerMock.datacenter.mockReturnValue(providerMock);
+    providerMock.tenant.mockReturnValue(providerMock);
+    providerMock.tenantID.mockReturnValue(providerMock);
 
-    wizardMock.getSelectedDatacenter.and.returnValue(fakeOpenstackDatacenter());
+    wizardMock.getSelectedDatacenter.mockReturnValue(fakeOpenstackDatacenter());
 
-    tenantsMock = wizardMock.provider.withArgs(NodeProvider.OPENSTACK).and.returnValue(providerMock);
-    providerMock.tenants.and.returnValue(asyncData(openstackTenantsFake()));
+    tenantsMock = wizardMock.provider.mockReturnValue(providerMock);
+    providerMock.tenants.mockReturnValue(asyncData(openstackTenantsFake()));
 
-    networksMock = wizardMock.provider.withArgs(NodeProvider.OPENSTACK).and.returnValue(providerMock);
-    providerMock.networks.and.returnValue(asyncData(openstackNetworksFake()));
+    networksMock = wizardMock.provider.mockReturnValue(providerMock);
+    providerMock.networks.mockReturnValue(asyncData(openstackNetworksFake()));
 
-    wizardMock.provider.withArgs(NodeProvider.OPENSTACK).and.returnValue(providerMock);
-    providerMock.securityGroups.and.returnValue(asyncData(openstackSecurityGroupsFake()));
+    wizardMock.provider.mockReturnValue(providerMock);
+    providerMock.securityGroups.mockReturnValue(asyncData(openstackSecurityGroupsFake()));
 
-    wizardMock.provider.withArgs(NodeProvider.OPENSTACK).and.returnValue(providerMock);
-    providerMock.subnets.and.returnValue(asyncData(openstackSubnetIdsFake()));
+    wizardMock.provider.mockReturnValue(providerMock);
+    providerMock.subnets.mockReturnValue(asyncData(openstackSubnetIdsFake()));
 
-    const appConfigServiceMock = jasmine.createSpyObj('AppConfigService', ['getConfig']);
+    const appConfigServiceMock = {'getConfig': jest.fn()};
     config = {} as Config;
-    appConfigServiceMock.getConfig.and.returnValue(config);
+    appConfigServiceMock.getConfig.mockReturnValue(config);
 
     TestBed
         .configureTestingModule({
@@ -124,7 +133,7 @@ describe('OpenstackClusterSettingsComponent', () => {
     it('should show floating ip pool and make it required', () => {
       const dc = fakeOpenstackDatacenter();
       dc.spec.openstack.enforce_floating_ip = true;
-      wizardMock.getSelectedDatacenter.and.returnValue(dc);
+      wizardMock.getSelectedDatacenter.mockReturnValue(dc);
 
       fixture.detectChanges();
       const el = fixture.debugElement.query(By.css('#km-floating-ip-pool-field'));
@@ -146,7 +155,7 @@ describe('OpenstackClusterSettingsComponent', () => {
          component.form.controls.domain.setValue('domain');
          fixture.detectChanges();
          tick(1001);
-         expect(tenantsMock.and.callThrough()).toHaveBeenCalled();
+         expect(tenantsMock).toHaveBeenCalled();
          expect(component.tenants).toEqual([
            {
              id: 'id789',

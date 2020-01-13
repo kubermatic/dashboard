@@ -4,7 +4,8 @@
     <div *ngFor="let installableAddon of installableAddons"
          (click)="select(installableAddon)"
          class="km-select-addon-dialog-option-container">
-      <img *ngIf="hasLogo(installableAddon)"
+      <img class="km-addon-logo"
+           *ngIf="hasLogo(installableAddon)"
            [src]="getAddonLogo(installableAddon)"
            [alt]="installableAddon">
       <div *ngIf="!hasLogo(installableAddon)">

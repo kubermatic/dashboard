@@ -3,7 +3,6 @@ import {HttpClientModule} from '@angular/common/http';
 import {TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {Auth} from '..';
 import {AppConfigService} from '../../../app-config.service';
@@ -24,7 +23,6 @@ describe('SettingsService', () => {
         BrowserModule,
         HttpClientModule,
         BrowserAnimationsModule,
-        SlimLoadingBarModule.forRoot(),
         RouterTestingModule,
         NgReduxTestingModule,
         SharedModule,

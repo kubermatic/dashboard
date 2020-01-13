@@ -3,35 +3,33 @@ import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/t
 import {MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
-import Spy = jasmine.Spy;
+import {Subject} from 'rxjs';
+import {CoreModule} from '../../../core/core.module';
+import {ClusterService, ProviderSettingsPatch} from '../../../core/services/cluster/cluster.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {doPatchCloudSpecFake} from '../../../testing/fake-data/cloud-spec.fake';
+import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
+import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
-import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {EditClusterComponent} from './edit-cluster.component';
-import {ClusterService, ProviderSettingsPatch} from '../../../core/services/cluster/cluster.service';
-import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
-import {EditProviderSettingsComponent} from '../edit-provider-settings/edit-provider-settings.component';
 import {AWSProviderSettingsComponent} from '../edit-provider-settings/aws-provider-settings/aws-provider-settings.component';
 import {AzureProviderSettingsComponent} from '../edit-provider-settings/azure-provider-settings/azure-provider-settings.component';
 import {DigitaloceanProviderSettingsComponent} from '../edit-provider-settings/digitalocean-provider-settings/digitalocean-provider-settings.component';
+import {EditProviderSettingsComponent} from '../edit-provider-settings/edit-provider-settings.component';
 import {GCPProviderSettingsComponent} from '../edit-provider-settings/gcp-provider-settings/gcp-provider-settings.component';
 import {HetznerProviderSettingsComponent} from '../edit-provider-settings/hetzner-provider-settings/hetzner-provider-settings.component';
 import {KubevirtProviderSettingsComponent} from '../edit-provider-settings/kubevirt-provider-settings/kubevirt-provider-settings.component';
 import {OpenstackProviderSettingsComponent} from '../edit-provider-settings/openstack-provider-settings/openstack-provider-settings.component';
 import {PacketProviderSettingsComponent} from '../edit-provider-settings/packet-provider-settings/packet-provider-settings.component';
 import {VSphereProviderSettingsComponent} from '../edit-provider-settings/vsphere-provider-settings/vsphere-provider-settings.component';
-import {Subject} from 'rxjs';
-import {CoreModule} from '../../../core/core.module';
+
+import {EditClusterComponent} from './edit-cluster.component';
 
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
   SharedModule,
   CoreModule,
 ];
@@ -39,13 +37,16 @@ const modules: any[] = [
 describe('EditClusterComponent', () => {
   let fixture: ComponentFixture<EditClusterComponent>;
   let component: EditClusterComponent;
-  let editClusterSpy: Spy;
+  let editClusterSpy;
 
   beforeEach(async(() => {
-    const clusterServiceMock = jasmine.createSpyObj('ClusterService', ['patch', 'changeProviderSettingsPatch']);
-    clusterServiceMock.providerSettingsPatchChanges$ = new EventEmitter<ProviderSettingsPatch>();
-    clusterServiceMock.onClusterUpdate = new Subject<void>();
-    editClusterSpy = clusterServiceMock.patch.and.returnValue(asyncData(fakeDigitaloceanCluster()));
+    const clusterServiceMock = {
+      'patch': jest.fn(),
+      'changeProviderSettingsPatch': jest.fn(),
+      'providerSettingsPatchChanges$': new EventEmitter<ProviderSettingsPatch>(),
+      'onClusterUpdate': new Subject<void>(),
+    };
+    editClusterSpy = clusterServiceMock.patch.mockReturnValue(asyncData(fakeDigitaloceanCluster()));
 
     TestBed
         .configureTestingModule({
@@ -94,13 +95,12 @@ describe('EditClusterComponent', () => {
 
   it('should have required fields', () => {
     component.form.controls.name.patchValue('');
-    expect(component.form.valid).toBeFalsy('form is not valid');
-    expect(component.form.controls.name.valid).toBeFalsy('name field is not valid');
-    expect(component.form.controls.name.hasError('required')).toBeTruthy('name field has required error');
+    expect(component.form.valid).toBeFalsy();
+    expect(component.form.controls.name.valid).toBeFalsy();
+    expect(component.form.controls.name.hasError('required')).toBeTruthy();
 
     component.form.controls.name.patchValue('new-cluster-name');
-    expect(component.form.controls.name.hasError('required'))
-        .toBeFalsy('name field has no required error after setting name');
+    expect(component.form.controls.name.hasError('required')).toBeFalsy();
   });
 
   it('should call editCluster method', fakeAsync(() => {
@@ -111,6 +111,6 @@ describe('EditClusterComponent', () => {
        component.editCluster();
        tick();
 
-       expect(editClusterSpy.and.callThrough()).toHaveBeenCalled();
+       expect(editClusterSpy).toHaveBeenCalled();
      }));
 });

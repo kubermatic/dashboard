@@ -7,11 +7,12 @@ import {Auth} from '..';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../../shared/entity/AdminSettings';
-import {UserSettings} from '../../../shared/entity/MemberEntity';
+import {Theme, UserSettings} from '../../../shared/entity/MemberEntity';
 
 const DEFAULT_USER_SETTINGS: UserSettings = {
   itemsPerPage: 10,
   selectProjectTableView: false,
+  selectedTheme: Theme.Light,
 };
 
 const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
@@ -46,10 +47,12 @@ export class SettingsService {
 
   get userSettings(): Observable<UserSettings> {
     if (!this._userSettings$) {
-      this._userSettings$ = merge(this._refreshTimer$, this._userSettingsRefresh$)
-                                .pipe(switchMap(() => this._getUserSettings(true)))
-                                .pipe(map(settings => this._defaultUserSettings(settings)))
-                                .pipe(shareReplay({refCount: true, bufferSize: 1}));
+      this._userSettings$ =
+          merge(this._refreshTimer$, this._userSettingsRefresh$)
+              .pipe(switchMap(
+                  () => iif(() => this._auth.authenticated(), this._getUserSettings(true), of(DEFAULT_USER_SETTINGS))))
+              .pipe(map(settings => this._defaultUserSettings(settings)))
+              .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this._userSettings$;
   }
@@ -70,6 +73,10 @@ export class SettingsService {
     });
 
     return settings;
+  }
+
+  refreshUserSettings(): void {
+    this._userSettingsRefresh$.next();
   }
 
   patchUserSettings(patch: UserSettings): Observable<UserSettings> {

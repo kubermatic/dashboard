@@ -3,9 +3,7 @@ import {MatDialog} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
-import Spy = jasmine.Spy;
 
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, ProjectService, UserService} from '../../core/services';
@@ -26,18 +24,17 @@ describe('ServiceAccountTokenComponent', () => {
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let noopToken: ComponentFixture<NoopTokenDialogComponent>;
   let component: ServiceAccountTokenComponent;
-  let deleteServiceAccountTokenSpy: Spy;
+  let deleteServiceAccountTokenSpy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['deleteServiceAccountToken']);
-    deleteServiceAccountTokenSpy = apiMock.deleteServiceAccountToken.and.returnValue(of(null));
+    const apiMock = {'deleteServiceAccountToken': jest.fn()};
+    deleteServiceAccountTokenSpy = apiMock.deleteServiceAccountToken.mockReturnValue(of(null));
 
     TestBed
         .configureTestingModule({
           imports: [
             BrowserModule,
             BrowserAnimationsModule,
-            SlimLoadingBarModule.forRoot(),
             RouterTestingModule,
             SharedModule,
             DialogTestModule,
@@ -94,6 +91,6 @@ describe('ServiceAccountTokenComponent', () => {
        fixture.detectChanges();
        tick(15000);
 
-       expect(deleteServiceAccountTokenSpy.and.callThrough()).toHaveBeenCalled();
+       expect(deleteServiceAccountTokenSpy).toHaveBeenCalled();
      }));
 });

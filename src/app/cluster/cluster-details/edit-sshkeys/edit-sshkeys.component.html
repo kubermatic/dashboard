@@ -61,7 +61,7 @@
         <ng-container>
           <div class="km-mat-row km-mat-footer-row"
                [ngClass]="isTableVisible() ? '' : 'km-no-sshkeys'">
-            <button id="km-add-sshkey-to-cluster"
+            <button id="km-add-sshkey-to-cluster km-text-muted"
                     (click)="addSshKey()"
                     [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.create">+ Add SSH key</button>
           </div>

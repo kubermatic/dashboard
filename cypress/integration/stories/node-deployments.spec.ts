@@ -39,7 +39,7 @@ describe('Node Deployments Story', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
     WizardPage.getDatacenterBtn(Datacenter.Frankfurt).click();
     WizardPage.getCustomPresetsCombobox().click();
-    WizardPage.getCustomPresetsValue('loodse').click();
+    WizardPage.getCustomPresetsValue('e2e-digitalocean').click();
     wait('**/providers/digitalocean/sizes');
     WizardPage.getNodeNameInput().type(initialNodeDeploymentName).should(Condition.HaveValue, initialNodeDeploymentName);
     WizardPage.getNodeCountInput().clear().type(initialNodeDeploymentReplicas).should(Condition.HaveValue, initialNodeDeploymentReplicas);
