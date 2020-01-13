@@ -63,6 +63,7 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
         },
         count: 1,
         valid: true,
+        dynamicConfig: false,
       };
     }
 

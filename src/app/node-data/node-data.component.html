@@ -157,6 +157,13 @@
   </div>
 </form>
 
+<form [formGroup]="nodeDataForm">
+  <div class="km-os-options">
+    <mat-checkbox id="dynamicConfig"
+                  formControlName="dynamicConfig">Dynamic kubelet config</mat-checkbox>
+  </div>
+</form>
+
 <!-- Extended Node Options -->
 <ng-container *ngIf="!isInWizard">
   <kubermatic-node-data-options [nodeData]="nodeData"
