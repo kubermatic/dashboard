@@ -664,6 +664,14 @@
     background: $scrollbar-background;
   }
 
+  .km-header {
+    color: $text;
+    font-size: $font-size-card-title;
+    padding: $baseline-grid 0 (2 * $baseline-grid);
+    margin: 1.5 * $baseline-grid 0;
+    line-height: 1.6 * $line-height;
+  }
+
   .km-text {
     color: $text;
   }
