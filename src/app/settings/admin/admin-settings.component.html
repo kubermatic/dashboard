@@ -72,7 +72,7 @@
         <mat-button-toggle-group #group="matButtonToggleGroup"
                                  [value]="selectedDistro"
                                  (change)="onDistroChange(group)"
-                                 class="km-admin-settings-field-distro"
+                                 class="km-account-settings-toggle"
                                  multiple="true">
           <mat-button-toggle value="kubernetes"
                              [disabled]="isLastDistro(group, 'kubernetes')">

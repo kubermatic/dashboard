@@ -1,0 +1,1485 @@
+@import "variables";
+@import "~@angular/material/theming";
+
+@include mat-core();
+
+@mixin km-theme($theme) {
+  $palette-primary: map-get($theme, primary);
+  $palette-accent: map-get($theme, accent);
+  $palette-warn: map-get($theme, warn);
+  $palette-foreground: map-get($theme, foreground);
+  $palette-background: map-get($theme, background);
+
+  $text: mat-color($palette-foreground, text);
+  $text-secondary: mat-color($palette-foreground, secondary-text);
+  $text-disabled: mat-color($palette-foreground, disabled-text);
+  $text-footer: mat-color($palette-primary, 50);
+  $text-white: #fff;
+
+  $background: mat-color($palette-background, background);
+  $background-hover: mat-color($palette-background, hover);
+  $background-card: mat-color($palette-background, card);
+  $background-card-hover: rgba($background-hover, .02);
+  $background-disabled-button: mat-color($palette-background, disabled-button);
+  $background-app-bar: mat-color($palette-background, app-bar);
+
+  $divider: mat-color($palette-foreground, divider);
+  $shadow: 0 4px 4px rgba(#000, .08);
+
+  $chip-accent: mat-color($palette-background, card);
+  $chip-background: $divider;
+
+  $scrollbar-background: mat-color($palette-background, card);
+  $scrollbar-color: $divider;
+
+  $sidenav-text: mat-color($palette-primary, 300);
+  $sidenav-text-light: mat-color($palette-primary, 500);
+  $sidenav-background: mat-color($palette-primary, 800);
+  $sidenav-background-custom: mat-color($palette-primary, 400);
+  $sidenav-background-active: mat-color($palette-primary, 600);
+  $sidenav-background-hover: mat-color($palette-primary, 700);
+  $sidenav-divider: mat-color($palette-primary, 200);
+  $sidenav-divider-top: mat-color($palette-primary, 100);
+
+  $project-switch: rgba(mat-color($palette-foreground, secondary-text), .7);
+
+  $primary: #0081ae;
+  $primary-hover: #00a3d9;
+  $primary-light: #31586f;
+  $primary-active: #234d66;
+
+  $alternative: #00a3d9;
+  $alternative-dark: #203f58;
+  $alternative-light: #edf9fc;
+  $alternative-text: #1b658f;
+
+  $secondary-light: #dcf3fa;
+  $secondary: #b9ccdf;
+  $secondary-dark: #b6ebfc;
+
+  $quaternary: #3bc6ad;
+  $quaternary-hover: #21dfa9;
+  $quaternary-dark: #1c8282;
+
+  $indicator-green: #1dc67f;
+  $indicator-orange: #f7b500;
+  $indicator-red: #eb5757;
+  $indicator-blue: #00a3d9;
+
+  $transition: all .5s ease;
+
+  // Angular Material overrides.
+  mat-card-header > div > mat-card-title > div {
+    margin: $baseline-grid 0;
+    font-size: $font-size-body;
+  }
+
+  .mat-card {
+    border-radius: $border-radius !important;
+    box-shadow: $border-box-shadow !important;
+    color: $text;
+    margin: 0;
+    padding: (3.75 * $baseline-grid) 0;
+
+    &.km-with-table-header {
+      margin: (2.5 * $baseline-grid) 0 0 0;
+
+      .mat-card-header {
+        padding: 0 7 * $baseline-grid;
+        margin: 0;
+        line-height: 1.6 * $line-height;
+        border-radius: $border-radius $border-radius 0 0;
+      }
+
+      &.km-small .mat-card-header {
+        font-size: $font-size-small !important;
+        line-height: 1.6 * $line-height;
+      }
+
+      .mat-card-content {
+        line-height: 5 * $line-height;
+
+        &.km-row,
+        .km-row {
+          line-height: 5 * $line-height;
+          padding: 0 (3.75 * $baseline-grid);
+          border-top: 1px solid $divider;
+
+          &.km-small {
+            padding: (1.25 * $baseline-grid) (3 * $baseline-grid);
+            margin: 0;
+            line-height: 2 * $line-height;
+          }
+
+          div {
+            outline: none;
+          }
+
+          &.km-no-item,
+          .km-no-item {
+            text-align: center;
+            font-size: $font-size-body;
+          }
+
+          p {
+            line-height: normal;
+            color: $text;
+            margin: 0;
+            font-size: $font-size-body;
+          }
+
+          .km-region {
+            align-items: center;
+
+            .flag-icon {
+              font-size: $font-size-head;
+              margin-right: 1.25 * $baseline-grid;
+            }
+          }
+        }
+      }
+    }
+
+    &.white {
+      &.km-cluster-details {
+        padding: (3.75 * $baseline-grid) 0 0 0;
+      }
+
+      .mat-card-header {
+        margin: 0;
+
+        .mat-card-header-text {
+          width: 100%;
+
+          .mat-card-title {
+            padding: 0;
+            margin: 0;
+            align-items: baseline;
+          }
+        }
+      }
+
+      .mat-card-content {
+        line-height: 5 * $line-height;
+
+        &.km-row,
+        .km-row {
+          line-height: 5 * $line-height;
+          padding: 0;
+        }
+      }
+    }
+
+    &.km-card-transparent {
+      box-shadow: none !important;
+    }
+
+    &.km-card-progress-bar {
+      box-shadow: none !important;
+      border-radius: $border-radius $border-radius 0 0 !important;
+      padding: (1.25 * $baseline-grid) (3.75 * $baseline-grid) (2.5 * $baseline-grid);
+
+      .mat-card-title {
+        margin-bottom: 0;
+        margin-top: 0;
+        padding-right: 1.875 * $baseline-grid;
+        text-align: center;
+      }
+
+      .km-wizard-step {
+        color: $text-secondary;
+        cursor: default;
+        font-size: $font-size-subhead;
+        font-weight: normal;
+        padding-top: $baseline-grid;
+        user-select: none;
+
+        .km-wizard-step-number {
+          align-items: center;
+          border-radius: 50%;
+          background: $divider;
+          display: inline-flex;
+          font-size: $font-size-body;
+          font-weight: normal;
+          height: 3 * $baseline-grid;
+          justify-content: center;
+          margin-right: 1.75 * $baseline-grid;
+          width: 3 * $baseline-grid;
+        }
+
+        &.active {
+          color: $primary;
+          font-weight: 500;
+
+          .km-wizard-step-number {
+            background: $secondary-dark;
+          }
+        }
+
+        &.completed {
+          color: $primary;
+          cursor: pointer;
+
+          .km-wizard-step-number {
+            background: $secondary-dark;
+          }
+        }
+      }
+
+      .km-wizard-step-divider {
+        height: 1px;
+        background: $divider;
+        margin: (2.5 * $baseline-grid) (2.5 * $baseline-grid) 0 $baseline-grid;
+      }
+    }
+  }
+
+  .mat-drawer-container {
+    background-color: transparent;
+  }
+
+  .mat-drawer-side {
+    border: none !important;
+  }
+
+  .mat-tooltip-panel {
+    height: 4 * $baseline-grid;
+  }
+
+  .mat-tooltip {
+    background-color: $primary-light !important;
+    font-size: $font-size-caption !important;
+    margin-top: 0.625 * $baseline-grid !important;
+  }
+
+  .mat-header-cell,
+  .mat-sort-header-button {
+    color: $text !important;
+  }
+
+  td.mat-cell {
+    border-top: 1px solid $divider;
+  }
+
+  .mat-card-header .mat-card-title {
+    padding: $baseline-grid 0 (2 * $baseline-grid);
+    font-size: 20px;
+    font-weight: normal !important;
+
+    i {
+      font-size: $font-size-subhead-lg;
+      margin: 0 (2.5 * $baseline-grid);
+    }
+  }
+
+  .mat-card-header-text {
+    margin: 0 !important;
+  }
+
+  .mat-column-status,
+  .mat-column-stateArrow {
+    width: $baseline-grid;
+  }
+
+  .mat-sort-header-arrow {
+    margin: auto 0 auto (0.75 * $baseline-grid) !important;
+
+    .mat-sort-header-stem,
+    .mat-sort-header-pointer-left,
+    .mat-sort-header-pointer-right,
+    .mat-sort-header-pointer-middle {
+      background: none;
+    }
+  }
+
+  [aria-sort='ascending'] .mat-sort-header-arrow .mat-sort-header-indicator {
+    &::before {
+      content: "";
+      background-color: $text;
+      mask: url("/assets/images/icons/arrow-up.svg");
+      mask-repeat: no-repeat;
+      mask-position: center;
+      min-height: $baseline-grid;
+      min-width: $baseline-grid;
+      position: absolute;
+      top: 1px;
+    }
+  }
+
+  [aria-sort='descending'] .mat-sort-header-arrow .mat-sort-header-indicator {
+    &::before {
+      content: "";
+      background-color: $text;
+      mask: url("/assets/images/icons/arrow-down.svg");
+      mask-repeat: no-repeat;
+      mask-position: center;
+      min-height: $baseline-grid;
+      min-width: $baseline-grid;
+      position: absolute;
+      top: -$baseline-grid;
+    }
+  }
+
+  .mat-card-content {
+    p {
+      color: $text-secondary;
+      font-size: $font-size-caption;
+      margin: 0 0 (1.875 * $baseline-grid);
+    }
+
+    button {
+      border: none;
+      color: $primary;
+      outline: none;
+      cursor: pointer;
+      font-size: $font-size-body;
+      font-weight: 600;
+      padding: 0;
+    }
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: $divider;
+  }
+
+  .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+    color: $primary;
+  }
+
+  mat-form-field.mat-form-field {
+    color: $text;
+    width: 100%;
+
+    &.km-with-hint {
+      margin-bottom: 1.875 * $baseline-grid;
+    }
+  }
+
+  div.mat-form-field-outline.mat-form-field-outline-thick {
+    color: $quaternary;
+  }
+
+  mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) div.mat-form-field-flex:hover label {
+    transition: all .2s ease;
+    color: $quaternary-dark;
+  }
+
+  mat-form-field.mat-focused:not(.ng-invalid) label.mat-form-field-label,
+  mat-form-field.mat-focused.ng-pristine:not(.ng-touched) label.mat-form-field-label {
+    color: $alternative-text;
+  }
+
+  mat-hint a {
+    color: $primary;
+    text-decoration: none;
+  }
+
+  .mat-button,
+  .mat-flat-button,
+  .mat-raised-button {
+    font-size: $font-size-subhead;
+    line-height: 5 * $baseline-grid !important;
+    background-color: $primary;
+    color: #fff;
+
+    &:not(:first-child) {
+      margin-left: 1.25 * $baseline-grid !important;
+    }
+
+    &:hover:not([disabled]) {
+      background-color: $primary-hover;
+    }
+
+    &.mat-alternative:not([disabled]) {
+      background-color: $quaternary;
+
+      &:hover {
+        background-color: $quaternary-hover;
+      }
+    }
+
+    &.mat-tertiary:not([disabled]) {
+      background-color: transparent;
+      color: $text-secondary;
+      border: 1px solid $divider;
+
+      &:hover {
+        background-color: $background-card-hover;
+      }
+    }
+
+    &.mat-pure:not([disabled]) {
+      background-color: transparent;
+      color: $text-secondary;
+      border: none;
+
+      &:hover {
+        background-color: $background-card-hover;
+      }
+    }
+
+    &.km-small-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 5 * $baseline-grid;
+      min-width: unset;
+    }
+  }
+
+  .mat-icon-button {
+    i {
+      background-color: $text;
+    }
+
+    a {
+      display: flex;
+      justify-content: center;
+    }
+
+    &:hover:not([disabled]) {
+      background-color: $divider;
+    }
+
+    &:disabled i {
+      background-color: $background-disabled-button;
+    }
+
+    &:disabled a {
+      cursor: default;
+      text-decoration: none;
+      pointer-events: none;
+    }
+  }
+
+  .mat-icon-button[disabled] * {
+    cursor: auto;
+  }
+
+  .mat-button-focus-overlay {
+    background-color: transparent !important;
+  }
+
+  .mat-checkbox-checked .mat-checkbox-background {
+    background-color: $primary !important;
+  }
+
+  .mat-checkbox-disabled .mat-checkbox-background {
+    background-color: $background-disabled-button !important;
+  }
+
+  .mat-checkbox-frame {
+    border: 2px solid $divider;
+    border-radius: $border-radius;
+  }
+
+  mat-button-toggle-group {
+    background-color: transparent;
+    box-shadow: none !important;
+
+    mat-button-toggle {
+      margin-right: 1.25 * $baseline-grid;
+      display: flex;
+      align-items: center;
+      border: 1px solid $divider;
+      cursor: pointer;
+      max-width: 150px;
+      min-width: 150px;
+      min-height: 60px;
+      max-height: 60px;
+    }
+
+    .mat-button-toggle-label {
+      width: 100%;
+      height: 100%;
+    }
+
+    .mat-button-toggle-label-content {
+      color: $text;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+
+      .km-provider-logo {
+        min-height: 28px;
+        max-height: 28px !important;
+        max-width: 90px !important;
+      }
+    }
+
+    .mat-button-toggle-button {
+      height: 100%;
+    }
+  }
+
+  .mat-button-toggle-group-appearance-standard {
+    border: none !important;
+
+    .mat-button-toggle {
+      border: solid 1px $divider;
+
+      &.mat-button-toggle-checked {
+        background-color: transparent;
+        border: 1px solid $primary;
+      }
+
+      &:hover {
+        border: solid 1px $primary;
+        transition: $transition;
+      }
+    }
+  }
+
+  mat-button-toggle-group[group='datacenterGroup'],
+  mat-button-toggle-group[group='providerGroup'] {
+    .mat-button-toggle {
+      border-radius: $border-radius;
+    }
+
+    .mat-button-toggle-button {
+      height: 100%;
+      text-align: left;
+      padding: 0 (1.25 * $baseline-grid);
+    }
+  }
+
+  mat-button-toggle-group[group='datacenterGroup'] {
+    .mat-button-toggle-button {
+      display: flex;
+    }
+
+    .mat-button-toggle-label-content {
+      padding: 0 (0.625 * $baseline-grid);
+      width: 100%;
+      display: inline-block;
+    }
+  }
+
+  mat-button-toggle-group[group='providerGroup'] .mat-button-toggle-label-content {
+    height: 100%;
+    padding: 0 (1.25 * $baseline-grid);
+  }
+
+  .mat-dialog-container {
+    min-width: $dialog-width !important;
+    max-width: $dialog-width !important;
+    color: $text;
+
+    .mat-dialog-title {
+      font-weight: normal;
+    }
+
+    .mat-dialog-content {
+      font-size: $font-size-subhead;
+      font-weight: 400;
+      max-height: $dialog-max-height;
+      overflow: unset;
+
+      a {
+        text-decoration: none;
+        color: $primary;
+      }
+
+      p {
+        margin: 0 0 $baseline-grid;
+      }
+
+      .km-dialog-warning {
+        display: flex;
+        margin: 2 * $baseline-grid 0;
+      }
+    }
+
+    .mat-dialog-actions {
+      justify-content: flex-end;
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  mat-chip-list {
+    cursor: default;
+
+    &:not(.km-chip-list-with-input) {
+      pointer-events: none;
+    }
+  }
+
+  .mat-chip.mat-standard-chip {
+    background: $divider;
+    border: 1px solid $divider;
+    color: $text;
+    border-radius: $border-radius;
+    font-size: $font-size-body;
+    font-weight: normal;
+    line-height: $font-size-subhead;
+    max-height: 22px;
+    min-height: 22px;
+    padding: (0.375 * $baseline-grid) (1.25 * $baseline-grid);
+
+    &.km-chip-container {
+      padding: 0;
+    }
+
+    div.km-chip-accent {
+      background: $chip-accent;
+    }
+
+    div {
+      align-items: center;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      padding: (0.375 * $baseline-grid) (1.25 * $baseline-grid);
+    }
+  }
+
+  .mat-select-panel {
+    margin-top: 3.75 * $baseline-grid !important;
+    margin-left: 0.75 * $baseline-grid !important;
+    min-width: calc(100% + 20px) !important;
+    max-width: calc(100% + 20px) !important;
+    transform-origin: 50% 0 0 !important;
+
+    &.ng-animating {
+      visibility: hidden;
+    }
+  }
+
+  .mat-select-arrow-wrapper {
+    top: 3px;
+    right: 0;
+    position: relative;
+  }
+
+  .mat-select-arrow {
+    background-color: $text;
+    display: inline-block;
+    width: 6px !important;
+    height: 6px !important;
+    mask: url("/assets/images/icons/arrow-down.svg");
+    mask-repeat: no-repeat;
+    mask-size: contain;
+  }
+
+  .mat-form-field.mat-focused.mat-primary .mat-select-arrow-wrapper {
+    right: 5px;
+
+    .mat-select-arrow {
+      -webkit-transform: rotate(180deg);
+      transform: rotate(180deg);
+    }
+  }
+
+  span.mat-select-value-text {
+    color: $text;
+  }
+
+  .mat-optgroup-label {
+    font-size: $font-size-caption !important;
+    line-height: 3.5 * $line-height !important;
+    height: 3.5 * $line-height !important;
+    padding-left: 1.25 * $baseline-grid !important;
+    border-top: 1px solid $divider !important;
+  }
+
+  .mat-option {
+    padding: 0 0 0 (1.25 * $baseline-grid) !important;
+    color: $text !important;
+  }
+
+  .mat-menu-item {
+    padding: 0 (1.25 * $baseline-grid) !important;
+    line-height: 4.2 * $line-height !important;
+    height: 42px !important;
+
+    .mat-icon {
+      margin-right: 0 !important;
+    }
+  }
+
+  .mat-menu-content {
+    padding: 0 !important;
+  }
+
+  .mat-menu-panel {
+    min-height: auto !important;
+  }
+
+  .mat-nav-list {
+    .mat-list-item-content {
+      padding: 0 !important;
+    }
+  }
+
+  mat-list-item.disabled i {
+    opacity: 0.3;
+  }
+
+  // Application component styles (it's basically every class that starts with "km-" prefix).
+  ::-webkit-scrollbar {
+    width: $scrollbar-size;
+    height: $scrollbar-size;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: $scrollbar-color;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: $scrollbar-background;
+  }
+
+  .km-text {
+    color: $text;
+  }
+
+  .km-text-muted {
+    color: $text-secondary;
+  }
+
+  .km-success {
+    color: $indicator-green;
+  }
+
+  .km-warning {
+    color: $indicator-orange;
+  }
+
+  .km-error {
+    color: $indicator-red;
+  }
+
+  .km-border {
+    border: 1px solid $divider;
+  }
+
+  .km-border-dashed {
+    border: 1px dashed $divider;
+  }
+
+  .km-icon {
+    color: $text;
+  }
+
+  .km-icon-mask {
+    background-color: $text;
+  }
+
+  .km-hidden {
+    visibility: hidden !important;
+  }
+
+  .km-clickable {
+    cursor: pointer;
+    outline: none;
+  }
+
+  .km-copy {
+    cursor: pointer;
+    outline: none;
+
+    &:hover {
+      color: $primary;
+    }
+
+    &:active {
+      color: lighten($primary, 0.5);
+    }
+  }
+
+  .km-code-block {
+    background-color: $divider;
+    border-radius: $baseline-grid / 1.5;
+    margin: ($baseline-grid * 2) 0;
+    padding: ($baseline-grid * 1.5) ($baseline-grid * 2);
+    font-size: $font-size-body;
+    line-height: 2 * $line-height;
+    font-family: $font-primary-mono;
+    color: $text;
+  }
+
+  .km-content-wrap {
+    display: flex;
+    flex-flow: row wrap;
+    padding: $baseline-grid (7 * $baseline-grid) 0 !important;
+  }
+
+  .km-no-item {
+    border-color: $divider !important;
+  }
+
+  .km-spinner {
+    top: $baseline-grid;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 2 * $baseline-grid auto;
+  }
+
+  .km-provider-logo {
+    display: block;
+    height: 100% !important;
+    width: 100% !important;
+    max-height: 30px !important;
+    max-width: 70px !important;
+  }
+
+  .km-main,
+  .km-main > div,
+  .km-footer {
+    background-color: $background;
+  }
+
+  .km-navbar {
+    background-color: $background-app-bar;
+    box-shadow: $shadow;
+  }
+
+  .km-footer * {
+    color: $text-footer;
+  }
+
+  .km-terms * {
+    color: $text;
+  }
+
+  simple-notifications * {
+    cursor: auto;
+    z-index: 2000;
+  }
+
+  .km-notification {
+    background: $background-card !important;
+    color: $text !important;
+  }
+
+  .km-notification-type {
+    &.success {
+      background: $indicator-green;
+    }
+
+    &.error {
+      background: $indicator-red;
+    }
+  }
+
+  .km-project-selector {
+    border-bottom: $sidenav-divider-top solid $sidenav-border-width;
+  }
+
+  .km-sidenav-bottom {
+    border-top: $sidenav-divider solid $sidenav-border-width;
+  }
+
+  .km-sidenav {
+    background-color: $sidenav-background;
+
+    * {
+      color: $sidenav-text;
+    }
+
+    i {
+      background-color: $sidenav-text;
+    }
+
+    .mat-list-item a {
+      &:hover {
+        color: $sidenav-text-light;
+        background-color: $sidenav-background-hover;
+
+        i {
+          background-color: $sidenav-text-light;
+        }
+      }
+
+      &.active {
+        color: $sidenav-text-light;
+        background-color: $sidenav-background-active;
+
+        i {
+          background-color: $sidenav-text-light;
+        }
+      }
+    }
+  }
+
+  .km-nav-custom-container {
+    background-color: $sidenav-background-custom;
+    border-top: $sidenav-divider solid $sidenav-border-width;
+  }
+
+  .km-card-expansion-panel {
+    font-size: $font-size-subhead;
+    margin: 0 (7 * $baseline-grid);
+    padding: (1 * $baseline-grid) 0;
+
+    & > div {
+      cursor: default;
+      margin-right: 6 * $baseline-grid;
+
+      & > span {
+        margin-right: 2 * $baseline-grid;
+        margin-top: $baseline-grid / 4;
+      }
+    }
+
+    .km-icon-failed,
+    .km-icon-disabled,
+    .km-icon-running,
+    .fa {
+      width: $font-size-subhead;
+      height: $font-size-subhead;
+      font-size: $font-size-subhead;
+    }
+  }
+
+  .km-serviceaccount-token-wrapper,
+  .km-publickey-wrapper,
+  .km-node-details {
+    background-color: $background-card-hover;
+  }
+
+  .km-table {
+    width: 100%;
+    border-radius: $border-radius;
+    border-collapse: separate;
+    border-spacing: 0;
+
+    tr:first-child th:first-child {
+      border-top-left-radius: $border-radius;
+    }
+
+    tr:first-child th:last-child {
+      border-top-right-radius: $border-radius;
+    }
+
+    td:first-child:not(.km-serviceaccount-token):not(.km-key-publickey) {
+      padding-left: 3.75 * $baseline-grid;
+    }
+
+    td:last-child:not(.km-serviceaccount-token):not(.km-key-publickey) {
+      padding-right: 3.75 * $baseline-grid !important;
+    }
+
+    .km-header-row {
+      border-radius: $border-radius;
+      border-collapse: separate;
+      line-height: 4 * $line-height;
+    }
+
+    .km-header-cell,
+    .mat-sort-header-button {
+      font-size: $font-size-body;
+      font-weight: normal;
+      border-bottom: none;
+      padding: 0;
+      line-height: 2.5 * $line-height;
+      height: 5 * $baseline-grid;
+    }
+
+    .km-header-cell:last-of-type {
+      padding-right: 3.75 * $baseline-grid;
+    }
+
+    .km-header-cell:first-of-type {
+      padding-left: 3.75 * $baseline-grid;
+    }
+
+    .mat-header-row {
+      height: auto;
+      line-height: 4 * $line-height;
+    }
+
+    td.mat-cell {
+      border-bottom-width: 0;
+      line-height: 2.5 * $line-height;
+      padding-right: 2 * $baseline-grid;
+      font-size: $font-size-subhead;
+
+      &:last-of-type {
+        padding-right: 2 * $baseline-grid;
+      }
+
+      &:first-of-type {
+        padding-left: 2 * $baseline-grid;
+      }
+
+      &.mat-column-provider {
+        padding-top: .5 * $baseline-grid;
+        padding-bottom: .5 * $baseline-grid;
+      }
+    }
+
+    .km-table-actions button {
+      opacity: 0;
+      margin-left: 0.625 * $baseline-grid;
+      transition: visibility 0s 0s, opacity 0s ease-out;
+    }
+
+    tr:hover button {
+      opacity: 1;
+      transition: opacity 0.1s ease-out;
+    }
+  }
+
+  .km-table-dropdown {
+    margin: 0;
+    padding: 0 !important;
+
+    *:not(i) {
+      background-color: transparent;
+    }
+
+    background-color: transparent;
+
+    tr:first-child td:first-child {
+      border-top-left-radius: $border-radius;
+    }
+
+    tr:first-child td:last-child {
+      border-top-right-radius: $border-radius;
+    }
+
+    td.mat-cell {
+      border-top: 1px solid $divider;
+    }
+
+    td:first-child {
+      border-left: 1px solid $divider;
+    }
+
+    td:last-child {
+      border-right: 1px solid $divider;
+    }
+  }
+
+  .km-mat-row.km-clickable:hover {
+    background-color: $background-hover;
+  }
+
+  .km-mat-footer-row {
+    color: $text-secondary !important;
+    padding: 0;
+    border-style: solid dashed dashed dashed;
+    border-width: 1px;
+    border-color: $divider;
+    border-bottom-right-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
+
+    &:hover {
+      background-color: $background-card-hover;
+    }
+
+    button {
+      background-color: transparent;
+      width: 100%;
+      line-height: 5 * $baseline-grid;
+      color: $text-secondary !important;
+      font-weight: normal;
+      font-size: $font-size-subhead;
+    }
+  }
+
+  .km-paginator {
+    border-radius: 0 0 $border-radius $border-radius;
+    border-top: 1px solid $divider;
+  }
+
+  .km-project-toggle {
+    .mat-tab-header {
+      border-bottom: none;
+    }
+
+    .mat-ink-bar {
+      visibility: hidden !important;
+      height: 0;
+    }
+
+    .mat-tab-label {
+      background-color: $secondary !important;
+      opacity: 1;
+      margin-right: 0.375 * $baseline-grid;
+      padding: 0;
+
+      &.mat-tab-disabled {
+        background-color: $background-disabled-button !important;
+      }
+
+      &.mat-tab-label-active {
+        opacity: 1;
+
+        .mat-tab-label-content {
+          width: 100%;
+          height: 100%;
+          background-color: $primary;
+        }
+      }
+
+      .mat-tab-label-content {
+        text-transform: uppercase;
+        font-size: $font-size-subhead;
+      }
+    }
+  }
+
+  .km-project-view-switch {
+    mat-button-toggle {
+      border-color: $divider !important;
+
+      &:hover {
+        border: 1px solid $divider;
+      }
+    }
+
+    .mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle:hover {
+      border: 1px solid $divider;
+    }
+
+    .mat-button-toggle-checked {
+      border: 1px solid $divider;
+      background-color: $divider !important;
+    }
+  }
+
+  .km-short-name-circle {
+    border: 2px solid $divider;
+    background-color: $background-card;
+
+    &.km-hidden-owners {
+      background-color: $divider;
+    }
+  }
+
+  .km-cluster-spec-type {
+    margin-right: 2.5 * $baseline-grid;
+    min-width: $type-toggle-width * 2 + $baseline-grid;
+    max-width: $type-toggle-width * 2 + $baseline-grid;
+
+    mat-button-toggle {
+      min-height: 6.25 * $baseline-grid;
+      max-height: 6.25 * $baseline-grid;
+      min-width: $type-toggle-width;
+      max-width: $type-toggle-width;
+      margin: (0.25 * $baseline-grid) 0 0 0;
+      border-width: 0.25 * $baseline-grid !important;
+      background-color: $background-card-hover;
+
+      i {
+        filter: grayscale(100%);
+      }
+
+      &:hover {
+        background-color: transparent;
+        border: (0.25 * $baseline-grid) solid $quaternary !important;
+        transition: all .5s ease;
+      }
+
+      &[value='kubernetes'] {
+        border-top-left-radius: $border-radius;
+        border-bottom-left-radius: $border-radius;
+      }
+
+      &[value='openshift'] {
+        border-top-right-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+      }
+
+      &.mat-button-toggle-checked {
+        background-color: transparent;
+        border: (0.25 * $baseline-grid) solid $primary !important;
+
+        i {
+          filter: none;
+        }
+      }
+    }
+
+    .mat-button-toggle-label-content {
+      color: $text;
+      font-weight: normal;
+      font-size: $font-size-subhead;
+    }
+  }
+
+  .km-wizard-settings-extended-wrapper {
+    margin: (4 * $baseline-grid) 0 (2.5 * $baseline-grid) 0;
+
+    .km-wizard-settings-extended-divider {
+      height: 1px;
+      background: $divider;
+      margin: (2 * $baseline-grid) 0;
+    }
+
+    .km-wizard-settings-extended-btn {
+      color: $text-secondary;
+      cursor: pointer;
+      margin: $baseline-grid;
+      user-select: none;
+
+      .km-icon-arrow-down,
+      .km-icon-arrow-up {
+        background: $text-secondary;
+      }
+    }
+  }
+
+  .km-version-picker-container {
+    margin: (.75 * $baseline-grid) (8 * $baseline-grid) (.75 * $baseline-grid) 0;
+
+    .km-version-picker {
+      height: 50px;
+
+      * {
+        cursor: default;
+      }
+
+      .mat-form-field-outline {
+        color: $divider !important;
+      }
+
+      .km-version-picker-type {
+        background: $divider;
+        border-bottom: 1px;
+        border-left: 1px;
+        border-right: 0;
+        border-top: 1px;
+        border-style: solid;
+        border-color: $divider;
+        border-radius: $border-radius 0 0 $border-radius;
+        height: 51px;
+        margin-top: -1px;
+        padding: $baseline-grid;
+        width: 50px;
+
+        i {
+          height: 30px;
+          width: 30px;
+          margin: 0 !important;
+        }
+      }
+
+      .mat-form-field {
+        font-size: $font-size-subhead;
+        margin-top: 2.5 * $baseline-grid;
+
+        div.mat-form-field-flex label {
+          color: $text-secondary;
+        }
+
+        .mat-form-field-infix {
+          padding: (1.5 * $baseline-grid) 0 (1.5 * $baseline-grid) 0 !important;
+          width: 120px;
+        }
+
+        .mat-form-field-outline-end {
+          border-radius: 0 $border-radius $border-radius 0 !important;
+        }
+
+        .mat-form-field-outline-start {
+          border-radius: 0 !important;
+        }
+      }
+    }
+
+    .km-version-picker-disabled {
+      ::ng-deep .mat-select-arrow {
+        visibility: hidden;
+      }
+    }
+
+    .km-version-picker-enabled:hover {
+      * {
+        cursor: pointer;
+      }
+
+      .km-version-picker-type {
+        border-bottom: 2px;
+        border-left: 2px;
+        border-top: 2px;
+        border-style: solid;
+        border-color: $quaternary;
+        margin-left: -1px;
+        transition: all .5s ease;
+        width: 51px;
+      }
+
+      .mat-form-field-outline-thick {
+        color: $quaternary !important;
+        opacity: 1 !important;
+        transition: all .5s ease;
+      }
+
+      div.mat-form-field-flex label {
+        transition: all .5s ease;
+        color: $quaternary-dark !important;
+      }
+    }
+
+    .fa {
+      margin: 1.5 * $baseline-grid;
+      font-size: $font-size-card-title;
+    }
+  }
+
+  .km-cluster-panel-container {
+    background: $background-card-hover;
+    border-bottom: 1px solid rgba($text, .1);
+    color: $text;
+    height: $toolbar-height + $sidenav-border-width;
+    margin: (-$content-padding) (-$content-padding) $content-padding (-$content-padding);
+    padding: 0 $content-padding 0 0;
+
+    .km-cluster-panel-container-positioning {
+      margin-top: $baseline-grid;
+
+      .km-cluster-panel-icon {
+        cursor: pointer;
+        height: 6.25 * $baseline-grid;
+        width: 11.875 * $baseline-grid;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: -$baseline-grid;
+
+        .mat-icon-button {
+          width: 5.25 * $baseline-grid;
+          height: 5.25 * $baseline-grid;
+
+          &:hover:not([disabled]) {
+            background-color: rgba($text, .1);
+          }
+        }
+      }
+
+      .km-icon-arrow-left {
+        background-color: $text;
+      }
+
+      .mat-divider {
+        border-color: rgba($text, .1);
+        height: 5 * $baseline-grid !important;
+        margin: (-$baseline-grid) (4 * $baseline-grid) 0 0 !important;
+      }
+
+      .km-cluster-type i {
+        filter: grayscale(100%);
+        height: 4 * $baseline-grid;
+        margin-right: 3 * $baseline-grid;
+        width: 4 * $baseline-grid;
+      }
+    }
+  }
+
+  .km-addon-container {
+    .km-addon-menu {
+      border-left: 1px solid $divider;
+
+      &:hover {
+        background-color: $background-card-hover;
+      }
+    }
+  }
+
+  .km-new-addon-container {
+    color: $text-footer;
+
+    &.disabled {
+      border: 1px dashed $background-card-hover;
+      color: $text-secondary;
+    }
+
+    &:hover:not(.disabled) {
+      background-color: $background-card-hover;
+      border: 1px solid $divider;
+    }
+  }
+
+  .km-select-addon-dialog-option-container {
+    box-shadow: 0 0 0 1px $divider;
+
+    &:hover {
+      box-shadow: 0 0 0 2px $quaternary-hover;
+      transition: all .5s ease;
+    }
+
+    .km-select-addon-dialog-option-desc {
+      color: $text;
+    }
+  }
+
+  .km-add-binding-dialog {
+    mat-button-toggle {
+      margin-right: 0;
+      min-height: 5 * $baseline-grid;
+      max-height: 5 * $baseline-grid;
+      border-color: $divider;
+      background-color: $divider;
+
+      &:first-child {
+        min-width: 10.25 * $baseline-grid;
+        max-width: 10.25 * $baseline-grid;
+        border-top-left-radius: $border-radius;
+        border-bottom-left-radius: $border-radius;
+      }
+
+      &:last-child {
+        min-width: 14.25 * $baseline-grid;
+        max-width: 14.25 * $baseline-grid;
+        border-top-right-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+      }
+
+      &:hover {
+        border: (0.125 * $baseline-grid) solid $primary;
+      }
+    }
+
+    .mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle-checked {
+      border-left: (0.125 * $baseline-grid) solid $primary;
+    }
+
+    .mat-button-toggle-checked {
+      border: (0.125 * $baseline-grid) solid $primary;
+      background-color: $background-card-hover;
+    }
+  }
+
+  .km-optgroup-dropdown {
+    margin-left: 2.75 * $baseline-grid !important;
+  }
+
+  .km-sshkey-dropdown {
+    margin-left: 3.75 * $baseline-grid !important;
+  }
+
+  .km-add-dialog-dropdown {
+    margin-top: 4.25 * $baseline-grid !important;
+  }
+
+  .km-pod-security-policy-row {
+    align-items: center;
+  }
+
+  .km-confirmation-dialog,
+  .km-delete-cluster-dialog mat-dialog-content {
+    margin-bottom: 3.75 * $baseline-grid;
+  }
+
+  .km-swagger-container {
+    .info *,
+    .schemes-title,
+    .model-title {
+      color: $text;
+    }
+
+    a {
+      color: $primary !important;
+    }
+
+    .scheme-container {
+      background-color: transparent;
+    }
+  }
+}

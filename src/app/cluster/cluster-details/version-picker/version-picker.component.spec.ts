@@ -5,7 +5,6 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService, Auth, ClusterService, DatacenterService, ProjectService, UserService} from '../../../core/services';
@@ -24,7 +23,7 @@ import {ProjectMockService} from '../../../testing/services/project-mock.service
 import {UserMockService} from '../../../testing/services/user-mock.service';
 import {NodeService} from '../../services/node.service';
 import {ClusterSecretsComponent} from '../cluster-secrets/cluster-secrets.component';
-import {MachineNetworksDisplayComponent} from '../machine-networks-display/machine-networks-dispay.component';
+import {MachineNetworksDisplayComponent} from '../machine-networks-display/machine-networks-display.component';
 import {NodeDeploymentListComponent} from '../node-deployment-list/node-deployment-list.component';
 import {NodeListComponent} from '../node-list/node-list.component';
 
@@ -42,7 +41,6 @@ describe('VersionPickerComponent', () => {
             BrowserModule,
             HttpClientModule,
             BrowserAnimationsModule,
-            SlimLoadingBarModule.forRoot(),
             RouterTestingModule,
             SharedModule,
           ],

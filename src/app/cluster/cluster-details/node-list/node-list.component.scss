@@ -1,31 +1,4 @@
-@import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
-
-.km-conditionsMessage {
-  border-top: 1px solid $light-border;
-  margin-bottom: 1.25 * $baseline-grid;
-  margin-top: -20px;
-  line-height: 4 * $line-height;
-
-  p {
-    margin: 0 auto;
-    color: $indicator-red;
-  }
-}
-
-.km-health-state {
-  i.red {
-    color: $indicator-red;
-  }
-
-  i.green {
-    color: $indicator-green;
-  }
-
-  i.orange {
-    color: $indicator-orange;
-  }
-}
 
 .km-node-ip-addresses {
   display: block;
@@ -35,13 +8,6 @@
 .km-node-item-actions {
   display: flex;
   justify-content: flex-end;
-}
-
-.km-btn-remove-node-wrapper {
-  padding-right: 2.5 * $baseline-grid;
-  position: relative;
-  justify-content: flex-end;
-  display: flex;
 }
 
 i.km-icon-info {
@@ -56,26 +22,16 @@ i.km-icon-info {
 }
 
 i.fa-exclamation-triangle {
-  color: $indicator-red;
   padding-left: 0.625 * $baseline-grid;
 }
 
 .km-node-details {
-  background-color: $light-background;
   box-shadow: $border-box-shadow-inset;
   padding: (1.875 * $baseline-grid) (3.75 * $baseline-grid) (2.5 * $baseline-grid) (7.5 * $baseline-grid);
 
   mat-card-content {
     margin-top: 1.875 * $baseline-grid;
     border: none !important;
-  }
-
-  .fa-check {
-    color: $indicator-green;
-  }
-
-  .fa-times {
-    color: $indicator-red;
   }
 }
 

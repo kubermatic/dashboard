@@ -1,4 +1,3 @@
-@import "../../../../../assets/css/colors";
 @import "../../../../../assets/css/variables";
 
 .mat-dialog-container {
@@ -7,9 +6,8 @@
 }
 
 .km-install-addon-dialog-option-desc {
-  color: $text-color;
-  font-size: $subhead-font-size-base;
-  line-height: $head-font-size-base;
+  font-size: $font-size-subhead;
+  line-height: $font-size-head;
   margin-top: 2.5 * $baseline-grid;
 }
 

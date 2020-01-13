@@ -1,4 +1,3 @@
-@import '../../../../assets/css/colors';
 @import '../../../../assets/css/variables';
 
 .km-property-container {
@@ -6,16 +5,14 @@
 }
 
 .km-property-label {
-  color: $medium-text-color;
-  font-size: $caption-font-size-base;
+  font-size: $font-size-caption;
   line-height: 1.75 * $baseline-grid;
   margin-bottom: $baseline-grid / 2;
   min-height: 1.75 * $baseline-grid;
 }
 
 .km-property-value {
-  color: $text-color;
-  font-size: $subhead-font-size-base;
+  font-size: $font-size-subhead;
   line-height: 3 * $baseline-grid;
   margin-bottom: $baseline-grid;
   min-height: 3 * $baseline-grid;

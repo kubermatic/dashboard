@@ -3,9 +3,8 @@ import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/t
 import {MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
-import {Subject} from 'rxjs';
 
+import {Subject} from 'rxjs';
 import {CoreModule} from '../../../core/core.module';
 import {ClusterService, ProviderSettingsPatch} from '../../../core/services/cluster/cluster.service';
 import {SharedModule} from '../../../shared/shared.module';
@@ -31,7 +30,6 @@ import {EditClusterComponent} from './edit-cluster.component';
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
   SharedModule,
   CoreModule,
 ];

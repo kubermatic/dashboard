@@ -2,7 +2,6 @@ import {async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed} from 
 import {MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {CoreModule} from '../../../../core/core.module';
 import {RBACService} from '../../../../core/services';
@@ -19,7 +18,6 @@ import {AddBindingComponent} from './add-binding.component';
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
   SharedModule,
   CoreModule,
 ];

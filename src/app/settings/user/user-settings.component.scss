@@ -1,9 +1,7 @@
-@import "../../../assets/css/colors";
 @import "../../../assets/css/variables";
 
 .mat-card {
-  color: $text-color;
-  margin-top: 3 * $baseline-grid;
+  margin-top: 3 * $baseline-grid !important;
   padding: 3.75 * $baseline-grid;
 
   .mat-card-header {
@@ -20,21 +18,21 @@
     }
 
     .km-account-info-name {
-      font-size: $subhead-font-size-base-lg;
+      font-size: $font-size-subhead-lg;
       line-height: 21px;
     }
 
     .km-account-info-email {
-      font-size: $subhead-font-size-base;
+      font-size: $font-size-subhead;
     }
   }
 
   .km-account-settings {
-    font-size: $subhead-font-size-base;
+    font-size: $font-size-subhead;
     padding: 3.75 * $baseline-grid;
 
     .km-account-settings-header {
-      font-size: $subhead-font-size-base-lg;
+      font-size: $font-size-subhead-lg;
       line-height: 2.1 * $line-height;
       margin-bottom: 3 * $baseline-grid;
     }
@@ -44,8 +42,27 @@
       line-height: 8 * $baseline-grid;
     }
 
-    km-settings-status {
-      margin-top: 10px;
+    .km-account-settings-toggle {
+      mat-button-toggle {
+        min-height: 50px;
+        max-height: 50px;
+        min-width: 150px;
+        max-width: 150px;
+        border-radius: $border-radius;
+
+        ::ng-deep.mat-button-toggle-label-content {
+          font-weight: normal;
+          font-size: $font-size-subhead;
+        }
+      }
+    }
+
+    .km-settings-status-margin {
+      margin-top: 1.25 * $baseline-grid;
+    }
+
+    .km-settings-status-margin-sm {
+      margin-top: .5 * $baseline-grid;
     }
   }
 }

@@ -5,7 +5,6 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../../app-config.service';
@@ -32,7 +31,7 @@ import {NodeService} from '../services/node.service';
 
 import {ClusterDetailsComponent} from './cluster-details.component';
 import {ClusterSecretsComponent} from './cluster-secrets/cluster-secrets.component';
-import {MachineNetworksDisplayComponent} from './machine-networks-display/machine-networks-dispay.component';
+import {MachineNetworksDisplayComponent} from './machine-networks-display/machine-networks-display.component';
 import {NodeDeploymentListComponent} from './node-deployment-list/node-deployment-list.component';
 import {NodeListComponent} from './node-list/node-list.component';
 import {RBACComponent} from './rbac/rbac.component';
@@ -61,7 +60,6 @@ describe('ClusterDetailsComponent', () => {
             BrowserModule,
             HttpClientModule,
             BrowserAnimationsModule,
-            SlimLoadingBarModule.forRoot(),
             RouterTestingModule,
             SharedModule,
           ],

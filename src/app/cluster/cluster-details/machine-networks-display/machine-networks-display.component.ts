@@ -7,9 +7,9 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {AddMachineNetworkComponent} from '../add-machine-network/add-machine-network.component';
 
 @Component({
-  selector: 'kubermatic-machine-networks-dispay',
-  templateUrl: './machine-networks-dispay.component.html',
-  styleUrls: ['./machine-networks-dispay.component.scss'],
+  selector: 'km-machine-networks-display',
+  templateUrl: './machine-networks-display.component.html',
+  styleUrls: ['./machine-networks-display.component.scss'],
 })
 
 export class MachineNetworksDisplayComponent {

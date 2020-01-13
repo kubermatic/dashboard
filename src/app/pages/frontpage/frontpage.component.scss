@@ -1,14 +1,12 @@
-@import "../../../assets/css/colors";
-@import "../../../assets/css/fonts";
+@import "../../../assets/css/variables";
 
-.km-frontpage-bg {
-  background-color: $frontpage-background;
+.km-frontpage-background {
+  background-color: #001930;
   position: absolute;
   height: 100%;
   width: 100%;
   top: 0;
   left: 0;
-  z-index: -1;
 }
 
 .km-frontpage-content {
@@ -16,11 +14,12 @@
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
+  z-index: 1;
 
   .km-frontpage-inner-text {
     text-align: center;
-    color: $white-text-color;
-    font-family: $secondary-font;
+    color: #fff;
+    font-family: $font-secondary;
     font-size: 28px;
     font-weight: 500;
     line-height: 42px;
@@ -29,9 +28,9 @@
 
   .mat-raised-button {
     background-color: #fff;
-    color: $alternative-dark;
+    color: #203f58;
     font-size: 20px;
-    font-family: $primary-font-sans-serif;
+    font-family: $font-primary;
     font-weight: 500 !important;
     line-height: 50px !important;
     width: 200px;

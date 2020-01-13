@@ -4,19 +4,18 @@
      fxLayout.xs="column"
      fxLayoutGap="30px">
   <mat-card fxFlex="50%"
-            class="km-ext-opt">
+            class="km-ext-opt km-card-transparent">
     <mat-card-header *ngIf="isExtended">
-      <mat-card-title class="km-color-primary"
-                      *ngIf="!cluster.spec.cloud.digitalocean && !cluster.spec.cloud.packet">Extended Provider Settings</mat-card-title>
+      <mat-card-title *ngIf="!cluster.spec.cloud.digitalocean && !cluster.spec.cloud.packet">Extended Provider Settings</mat-card-title>
     </mat-card-header>
     <mat-card-content fxLayout="column">
       <kubermatic-cluster-provider-options [cluster]="cluster"></kubermatic-cluster-provider-options>
     </mat-card-content>
   </mat-card>
   <mat-card fxFlex="50%"
-            class="km-ext-opt">
+            class="km-ext-opt km-card-transparent">
     <mat-card-header *ngIf="isExtended">
-      <mat-card-title class="km-color-primary">Extended Node Settings</mat-card-title>
+      <mat-card-title>Extended Node Settings</mat-card-title>
     </mat-card-header>
     <mat-card-content fxLayout="column">
       <kubermatic-node-data-options [nodeData]="nodeData"

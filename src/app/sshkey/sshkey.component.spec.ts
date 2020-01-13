@@ -3,7 +3,6 @@ import {MatDialog, MatTabsModule} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../app-config.service';
@@ -40,7 +39,6 @@ describe('SSHKeyComponent', () => {
           imports: [
             BrowserModule,
             BrowserAnimationsModule,
-            SlimLoadingBarModule.forRoot(),
             RouterTestingModule,
             SharedModule,
             MatTabsModule,

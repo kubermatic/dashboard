@@ -1,22 +1,11 @@
-@import "../../../assets/css/colors";
 @import "../../../assets/css/variables";
 
 $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 
-// global mobile
 @media screen and (max-width: $MOBILE_RESOLUTION_BREAKPOINT) {
   .btn-text-default {
     display: none;
   }
-}
-
-.km-button.white {
-  color: $primary;
-  height: 3.75 * $baseline-grid;
-  line-height: 3 * $line-height;
-  text-decoration: none;
-  font-size: $body-font-size-base;
-  font-weight: 500;
 }
 
 .km-cluster-type {

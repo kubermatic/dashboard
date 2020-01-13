@@ -5,7 +5,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {ProjectService} from '../../../core/services';
 import {SharedModule} from '../../../shared/shared.module';
@@ -19,7 +18,6 @@ const modules: any[] = [
   BrowserModule,
   HttpClientModule,
   BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
   RouterTestingModule,
   NgReduxTestingModule,
   SharedModule,
