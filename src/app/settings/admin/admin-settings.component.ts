@@ -1,6 +1,7 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatButtonToggleGroup} from '@angular/material/button-toggle';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import * as _ from 'lodash';
@@ -23,12 +24,13 @@ import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.compo
   templateUrl: 'admin-settings.component.html',
   styleUrls: ['admin-settings.component.scss'],
 })
-export class AdminSettingsComponent implements OnInit, OnDestroy {
+export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   user: MemberEntity;
   admins = [];
   dataSource = new MatTableDataSource<AdminEntity>();
   displayedColumns: string[] = ['name', 'email', 'actions'];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   selectedDistro = [];
   settings: AdminSettings;     // Local settings copy. User can edit it.
   apiSettings: AdminSettings;  // Original settings from the API. Cannot be edited by the user.
@@ -40,7 +42,9 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
       private readonly _historyService: HistoryService, private readonly _matDialog: MatDialog) {}
 
   ngOnInit(): void {
+    this.dataSource.data = this.admins;
     this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
@@ -48,6 +52,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
     this._settingsService.admins.pipe(takeUntil(this._unsubscribe)).subscribe(admins => {
       this.admins = admins;
+      this.dataSource.data = this.admins;
     });
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
@@ -66,6 +71,15 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
           this._applySettings(settings);
           this._settingsService.refreshAdminSettings();
         });
+
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = this.paginator;  // Force refresh.
+    });
+  }
+
+  ngOnChanges(): void {
+    this.dataSource.data = this.admins;
   }
 
   ngOnDestroy(): void {
@@ -148,11 +162,6 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
         this.isEqual(this.settings.displayTermsOfService, this.apiSettings.displayTermsOfService);
   }
 
-  getDataSource(): MatTableDataSource<AdminEntity> {
-    this.dataSource.data = this.admins;
-    return this.dataSource;
-  }
-
   isDeleteAdminEnabled(admin: AdminEntity): boolean {
     return !!this.user && admin.email !== this.user.email;
   }
@@ -188,5 +197,13 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
         this._settingsService.refreshAdmins();
       }
     });
+  }
+
+  hasItems(): boolean {
+    return this.admins && this.admins.length > 0;
+  }
+
+  isPaginatorVisible(): boolean {
+    return this.hasItems() && this.paginator && this.admins.length > this.paginator.pageSize;
   }
 }
