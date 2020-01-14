@@ -12,6 +12,9 @@ export class PreviousRouteService {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd))
         .subscribe((urlAfterRedirects: NavigationEnd) => {
           this.history = [...this.history, urlAfterRedirects];
+          if (this.history.length > 10) {
+            this.history.splice(0, 1);
+          }
         });
   }
 
