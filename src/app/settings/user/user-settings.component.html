@@ -34,7 +34,7 @@
       <div class="km-account-settings-header">User Settings</div>
       <div>
         <div class="km-account-settings-entry-label">Items per page</div>
-        <mat-form-field fxFlex="15">
+        <mat-form-field fxFlex="35">
           <mat-select disableOptionCentering
                       [(ngModel)]="settings.itemsPerPage"
                       (selectionChange)="onSettingsChange()">
@@ -65,6 +65,28 @@
         <km-settings-status [isSaved]="isEqual(settings.selectedTheme, apiSettings.selectedTheme)"
                             class="km-settings-status-margin-sm"></km-settings-status>
       </div>
+
+      <div>
+        <div class="km-account-settings-entry-label">
+          <span>Default Project</span>
+          <div class="km-icon-info"
+               matTooltip="Selecting a default project will automatically redirected you to it after login."></div>
+        </div>
+        <mat-form-field fxFlex="35">
+          <mat-select disableOptionCentering
+                      [(ngModel)]="settings.selectedProjectId"
+                      (selectionChange)="onSettingsChange()"
+                      [placeholder]="hasDefaultProject()">
+            <mat-option value="">-- None --</mat-option>
+            <mat-option *ngFor="let project of projects"
+                        [value]="project.id">
+              {{project.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <km-settings-status [isSaved]="isEqual(settings.selectedProjectId, apiSettings.selectedProjectId)"></km-settings-status>
+      </div>
+
     </div>
   </mat-card-content>
 </mat-card>
