@@ -114,7 +114,8 @@
           class="km-mat-row km-clickable"
           (click)="togglePublicKey(row)"></tr>
       <tr mat-row
-          *matRowDef="let row; let i=index; columns: toggledColumns; when: shouldTogglePublicKey"
+          *matRowDef="let row; let i=index; columns: toggledColumns;"
+          [ngClass]="isShowPublicKey[row.id] ? '' : 'km-table-collapse'"
           class="km-mat-row"></tr>
     </table>
 

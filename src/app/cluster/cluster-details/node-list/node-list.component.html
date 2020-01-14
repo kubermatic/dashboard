@@ -338,7 +338,8 @@
           class="km-mat-row km-clickable"
           (click)="toggleNodeItem(row)"></tr>
       <tr mat-row
-          *matRowDef="let row; let i=index; columns: toggledColumns; when: shouldToggleNodeItem"
+          *matRowDef="let row; let i=index; columns: toggledColumns;"
+          [ngClass]="isShowNodeItem[row.id] ? '' : 'km-table-collapse'"
           class="km-mat-row"></tr>
     </table>
 

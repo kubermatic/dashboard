@@ -35,7 +35,6 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   dataSource = new MatTableDataSource<ServiceAccountEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  shouldToggleToken = (index, item) => this.isShowToken[item.id];
   private _unsubscribe: Subject<any> = new Subject();
   private _serviceAccountUpdate: Subject<any> = new Subject();
   private _selectedProject = {} as ProjectEntity;

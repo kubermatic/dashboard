@@ -44,7 +44,6 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   dataSource = new MatTableDataSource<NodeEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  shouldToggleNodeItem = (index, item) => this.isShowNodeItem[item.id];
   private _unsubscribe = new Subject<void>();
 
   constructor(

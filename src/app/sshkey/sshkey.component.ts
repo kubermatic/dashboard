@@ -73,8 +73,6 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  shouldTogglePublicKey = (index, item) => this.isShowPublicKey[item.id];
-
   getPublicKeyName(sshKey: SSHKeyEntity): string {
     return sshKey.spec.publicKey.split(' ')[0];
   }
