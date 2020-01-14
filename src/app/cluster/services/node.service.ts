@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {MatDialog, MatDialogConfig} from '@angular/material';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import * as _ from 'lodash';
 import {Observable, of} from 'rxjs';
 import {catchError, first, flatMap, map} from 'rxjs/operators';

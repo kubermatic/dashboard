@@ -1,5 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 import {first, switchMap} from 'rxjs/operators';
 
 import {ApiService, ProjectService, UserService} from '../../core/services';

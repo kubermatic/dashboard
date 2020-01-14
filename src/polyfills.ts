@@ -15,8 +15,6 @@ import 'core-js/es/symbol';
 
 import 'zone.js/dist/zone';
 
-import 'hammerjs';
-
 // @ts-ignore
 window.Buffer = window.Buffer || require('buffer').Buffer;
 

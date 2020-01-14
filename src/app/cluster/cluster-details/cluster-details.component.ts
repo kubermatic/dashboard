@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {combineLatest, of, Subject} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';

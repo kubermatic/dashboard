@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material/dialog';
 
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {NotificationActions} from '../../../redux/actions/notification.actions';

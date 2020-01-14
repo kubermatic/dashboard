@@ -1,5 +1,7 @@
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {first, switchMap, switchMapTo, takeUntil} from 'rxjs/operators';
 
@@ -17,6 +19,7 @@ import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 
 import {AddServiceAccountComponent} from './add-serviceaccount/add-serviceaccount.component';
 import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceaccount.component';
+import {MatPaginator} from "@angular/material/paginator";
 
 @Component({
   selector: 'kubermatic-serviceaccount',

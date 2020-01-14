@@ -1,5 +1,7 @@
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 import {Subject, timer} from 'rxjs';
 import {retry, switchMap, takeUntil} from 'rxjs/operators';
 
@@ -12,6 +14,7 @@ import {AddSshKeyDialogComponent} from '../shared/components/add-ssh-key-dialog/
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
 import {UserGroupConfig} from '../shared/model/Config';
+import {MatPaginator} from "@angular/material/paginator";
 
 @Component({
   selector: 'kubermatic-sshkey',

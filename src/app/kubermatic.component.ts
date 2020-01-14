@@ -1,7 +1,7 @@
 import {DevToolsExtension, NgRedux} from '@angular-redux/store';
 import {OverlayContainer} from '@angular/cdk/overlay';
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatSidenav} from '@angular/material';
+import {MatSidenav} from '@angular/material/sidenav';
 import {NavigationEnd, Router} from '@angular/router';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';

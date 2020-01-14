@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {HealthEntity, HealthState} from '../../../shared/entity/HealthEntity';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';

@@ -1,6 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatButtonToggleChange, MatDialogRef} from '@angular/material';
+import {MatButtonToggleChange} from '@angular/material/button-toggle';
+import {MatDialogRef} from '@angular/material/dialog';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 

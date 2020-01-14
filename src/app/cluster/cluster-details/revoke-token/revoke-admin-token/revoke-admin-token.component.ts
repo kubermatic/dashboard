@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {MatDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material/dialog';
 import {ApiService} from '../../../../core/services';
 import {NotificationActions} from '../../../../redux/actions/notification.actions';
 import {ClusterEntity, Token} from '../../../../shared/entity/ClusterEntity';
