@@ -2,6 +2,7 @@ import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core'
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {NotificationsService} from 'angular2-notifications';
 import {Subject, timer} from 'rxjs';
 import {retry, switchMap, takeUntil} from 'rxjs/operators';
 
@@ -9,7 +10,6 @@ import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
-import {NotificationActions} from '../redux/actions/notification.actions';
 import {AddSshKeyDialogComponent} from '../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
@@ -40,7 +40,9 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
       private readonly _api: ApiService, private readonly _userService: UserService,
       private readonly _appConfigService: AppConfigService, public dialog: MatDialog,
       private readonly _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _projectService: ProjectService, private readonly _settingsService: SettingsService) {}
+      private readonly _projectService: ProjectService,
+      private readonly _notificationService: NotificationsService,
+      private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this._appConfigService.getUserGroupConfig();
@@ -121,7 +123,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
         this._api.deleteSSHKey(sshKey.id, this.projectID).subscribe(() => {
-          NotificationActions.success(`SSH key ${sshKey.name} has been removed from project ${this.projectID}`);
+          this._notificationService.success(`SSH key ${sshKey.name} has been removed from project ${this.projectID}`);
           this._googleAnalyticsService.emitEvent('sshKeyOverview', 'SshKeyDeleted');
         });
       }

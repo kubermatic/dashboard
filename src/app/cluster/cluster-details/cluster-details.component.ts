@@ -1,13 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
+import {NotificationsService} from 'angular2-notifications';
 import {combineLatest, of, Subject} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, ClusterService, DatacenterService, RBACService, UserService} from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
-import {NotificationActions} from '../../redux/actions/notification.actions';
 import {AddonEntity} from '../../shared/entity/AddonEntity';
 import {ClusterEntity, getClusterProvider, MasterVersion} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
@@ -63,7 +63,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       private readonly _datacenterService: DatacenterService, private readonly _appConfigService: AppConfigService,
       private readonly _node: NodeService, private readonly _userService: UserService,
       private readonly _api: ApiService, private readonly _rbacService: RBACService,
-      readonly settings: SettingsService) {}
+      private readonly _notificationService: NotificationsService, readonly settings: SettingsService) {}
 
   ngOnInit(): void {
     this.config = this._appConfigService.getConfig();
@@ -301,7 +301,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(() => {
           this.reloadAddons();
-          NotificationActions.success(`The ${addon.name} addon has been added to the ${this.cluster.name} cluster`);
+          this._notificationService.success(
+              `The ${addon.name} addon has been added to the ${this.cluster.name} cluster`);
         });
   }
 
@@ -311,7 +312,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(() => {
           this.reloadAddons();
-          NotificationActions.success(`The ${addon.name} addon has been updated`);
+          this._notificationService.success(`The ${addon.name} addon has been updated`);
         });
   }
 
@@ -321,7 +322,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(() => {
           this.reloadAddons();
-          NotificationActions.success(`The ${addon.name} addon has been removed from the ${this.cluster.name} cluster`);
+          this._notificationService.success(
+              `The ${addon.name} addon has been removed from the ${this.cluster.name} cluster`);
         });
   }
 

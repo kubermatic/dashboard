@@ -1,6 +1,5 @@
 
 
-import {NgReduxFormModule} from '@angular-redux/form';
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
@@ -33,8 +32,8 @@ import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import {CustomFormsModule} from 'ng2-validation';
 import {ClipboardModule} from 'ngx-clipboard';
+import {CustomFormsModule} from 'ngx-custom-validators';
 
 import {AddProjectDialogComponent} from './components/add-project-dialog/add-project-dialog.component';
 import {AddSshKeyDialogComponent} from './components/add-ssh-key-dialog/add-ssh-key-dialog.component';
@@ -64,8 +63,8 @@ const modules: any[] = [
   MatSidenavModule,      MatSnackBarModule, MatToolbarModule,     MatTooltipModule,     MatSelectModule,
   MatAutocompleteModule, MatCheckboxModule, MatMenuModule,        MatChipsModule,       MatCardModule,
   MatDialogModule,       MatSliderModule,   MatSlideToggleModule, MatProgressBarModule, MatExpansionModule,
-  MatSortModule,         MatTableModule,    MatDividerModule,     ClipboardModule,      NgReduxFormModule,
-  MatButtonToggleModule, MatTabsModule,     MatOptionModule,      MatFormFieldModule,   MatPaginatorModule,
+  MatSortModule,         MatTableModule,    MatDividerModule,     ClipboardModule,      MatButtonToggleModule,
+  MatTabsModule,         MatOptionModule,   MatFormFieldModule,   MatPaginatorModule,
 ];
 
 const components: any[] = [

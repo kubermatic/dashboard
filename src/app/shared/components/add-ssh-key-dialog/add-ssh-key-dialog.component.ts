@@ -1,9 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
+import {NotificationsService} from 'angular2-notifications';
+
 import {ApiService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {SSHKeyEntity} from '../../entity/SSHKeyEntity';
 import {SSHKeyFormValidator} from '../../validators/ssh-key-form.validator';
 
@@ -18,8 +19,8 @@ export class AddSshKeyDialogComponent implements OnInit {
 
   constructor(
       private api: ApiService, private formBuilder: FormBuilder,
-      private dialogRef: MatDialogRef<AddSshKeyDialogComponent>,
-      public googleAnalyticsService: GoogleAnalyticsService) {}
+      private dialogRef: MatDialogRef<AddSshKeyDialogComponent>, public googleAnalyticsService: GoogleAnalyticsService,
+      private readonly _notificationService: NotificationsService) {}
 
   ngOnInit(): void {
     this.addSSHKeyForm = this.formBuilder.group({
@@ -34,7 +35,7 @@ export class AddSshKeyDialogComponent implements OnInit {
     const key = this.addSSHKeyForm.controls['key'].value;
 
     this.api.addSSHKey(new SSHKeyEntity(name, null, key), this.projectID).subscribe((result) => {
-      NotificationActions.success(`SSH key ${name} added successfully to project`);
+      this._notificationService.success(`SSH key ${name} added successfully to project`);
       this.googleAnalyticsService.emitEvent('addSshKey', 'sshKeyAdded');
       this.dialogRef.close(result);
     });

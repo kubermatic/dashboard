@@ -1,4 +1,3 @@
-import {NgReduxTestingModule} from '@angular-redux/store/testing';
 import {HttpClientModule} from '@angular/common/http';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserModule, By} from '@angular/platform-browser';
@@ -24,7 +23,6 @@ const modules: any[] = [
   RouterTestingModule,
   SimpleNotificationsModule.forRoot(),
   RouterTestingModule,
-  NgReduxTestingModule,
   BrowserAnimationsModule,
   SharedModule,
   CoreModule,

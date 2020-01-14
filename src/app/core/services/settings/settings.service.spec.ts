@@ -1,4 +1,3 @@
-import {NgReduxTestingModule} from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import {HttpClientModule} from '@angular/common/http';
 import {TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
@@ -24,7 +23,6 @@ describe('SettingsService', () => {
         HttpClientModule,
         BrowserAnimationsModule,
         RouterTestingModule,
-        NgReduxTestingModule,
         SharedModule,
       ],
       providers: [

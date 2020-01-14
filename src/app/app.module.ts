@@ -1,5 +1,3 @@
-import {NgReduxFormModule} from '@angular-redux/form';
-import {NgReduxModule} from '@angular-redux/store';
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions} from '@angular/material/form-field';
 import {MAT_TOOLTIP_DEFAULT_OPTIONS} from '@angular/material/tooltip';
@@ -49,8 +47,6 @@ const appearance: MatFormFieldDefaultOptions = {
     BrowserModule,
     environment.animations ? BrowserAnimationsModule : NoopAnimationsModule,
     AppRoutingModule,
-    NgReduxFormModule,
-    NgReduxModule,
     RouterModule,
   ],
   declarations: [

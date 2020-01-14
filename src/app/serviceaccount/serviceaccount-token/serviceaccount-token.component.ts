@@ -2,15 +2,16 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {NotificationsService} from 'angular2-notifications';
 import {first, switchMap} from 'rxjs/operators';
 
 import {ApiService, ProjectService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
-import {NotificationActions} from '../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {ServiceAccountEntity, ServiceAccountTokenEntity} from '../../shared/entity/ServiceAccountEntity';
 import {GroupConfig} from '../../shared/model/Config';
+
 import {AddServiceAccountTokenComponent} from './add-serviceaccount-token/add-serviceaccount-token.component';
 import {EditServiceAccountTokenComponent} from './edit-serviceaccount-token/edit-serviceaccount-token.component';
 import {TokenDialogComponent} from './token-dialog/token-dialog.component';
@@ -34,7 +35,7 @@ export class ServiceAccountTokenComponent implements OnInit {
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _matDialog: MatDialog) {}
+      private readonly _matDialog: MatDialog, private readonly _notificationService: NotificationsService) {}
 
   ngOnInit(): void {
     this.dataSource.sort = this.sort;
@@ -86,7 +87,7 @@ export class ServiceAccountTokenComponent implements OnInit {
             .pipe(first())
             .subscribe((token) => {
               this.openTokenDialog(token);
-              NotificationActions.success(`Token ${token.name} has been regenerated.`);
+              this._notificationService.success(`Token ${token.name} has been regenerated.`);
               this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenRegenerated');
             });
       }
@@ -120,7 +121,7 @@ export class ServiceAccountTokenComponent implements OnInit {
         this._apiService.deleteServiceAccountToken(this._selectedProject.id, this.serviceaccount, token)
             .pipe(first())
             .subscribe(() => {
-              NotificationActions.success(
+              this._notificationService.success(
                   `Token ${token.name} has been removed from Service Account ${this.serviceaccount.name}`);
               this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenDeleted');
             });

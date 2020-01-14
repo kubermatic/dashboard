@@ -1,13 +1,13 @@
 import {Component, DoCheck, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
+import {NotificationsService} from 'angular2-notifications';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {ClusterService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {AdminSettings} from '../../../shared/entity/AdminSettings';
 import {ClusterEntity, Finalizer} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
@@ -30,7 +30,8 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
   constructor(
       private readonly _clusterService: ClusterService, private readonly _settingsService: SettingsService,
       private readonly _dialogRef: MatDialogRef<ClusterDeleteConfirmationComponent>,
-      private readonly _googleAnalyticsService: GoogleAnalyticsService) {}
+      private readonly _googleAnalyticsService: GoogleAnalyticsService,
+      private readonly _notificationService: NotificationsService) {}
 
   ngOnInit(): void {
     this.deleteForm = new FormGroup({
@@ -92,7 +93,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
             [Finalizer.DeleteVolumes]: !!this.deleteForm.controls.clusterVolumeCleanupCheckbox.value,
           })
           .subscribe(() => {
-            NotificationActions.success(`Cluster ${this.cluster.name} is being deleted`);
+            this._notificationService.success(`Cluster ${this.cluster.name} is being deleted`);
             this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterDeleted');
             this._clusterService.refreshClusters();
           });

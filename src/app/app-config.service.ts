@@ -1,10 +1,10 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable, Injector} from '@angular/core';
+import {NotificationsService} from 'angular2-notifications';
 import {first, tap} from 'rxjs/operators';
 
 import {environment} from '../environments/environment';
 
-import {NotificationActions} from './redux/actions/notification.actions';
 import {VersionInfo} from './shared/entity/VersionInfo';
 import {Config, UserGroupConfig} from './shared/model/Config';
 
@@ -16,8 +16,8 @@ export class AppConfigService {
   private _hasCustomCSS: boolean;
   private http: HttpClient;
 
-  constructor(private inj: Injector) {
-    this.http = this.inj.get(HttpClient);
+  constructor(private readonly _inj: Injector, private readonly _notificationService: NotificationsService) {
+    this.http = this._inj.get(HttpClient);
   }
 
   loadAppConfig(): Promise<{}> {
@@ -27,7 +27,7 @@ export class AppConfigService {
               this._appConfig = resp as Config;
             },
             () => {
-              NotificationActions.error(`Could not read configuration file`);
+              this._notificationService.error(`Could not read configuration file`);
             }))
         .toPromise();
   }
@@ -43,7 +43,7 @@ export class AppConfigService {
               this._userGroupConfig = resp as UserGroupConfig;
             },
             () => {
-              NotificationActions.error(`Could not read user group configuration file`);
+              this._notificationService.error(`Could not read user group configuration file`);
             }))
         .toPromise();
   }
@@ -59,7 +59,7 @@ export class AppConfigService {
               this._gitVersion = resp as VersionInfo;
             },
             () => {
-              NotificationActions.error(`Could not read Git version file`);
+              this._notificationService.error(`Could not read Git version file`);
             }))
         .toPromise();
   }

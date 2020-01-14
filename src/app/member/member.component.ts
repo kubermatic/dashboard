@@ -10,7 +10,6 @@ import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
-import {NotificationActions} from '../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {MemberEntity} from '../shared/entity/MemberEntity';
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
@@ -43,7 +42,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
       private readonly _matDialog: MatDialog, private readonly _userService: UserService,
       private readonly _googleAnalyticsService: GoogleAnalyticsService, private readonly _appConfig: AppConfigService,
-      private readonly _settingsService: SettingsService) {}
+      private readonly _notificationService: NotificationsService, private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.members;
@@ -146,7 +145,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
     dialogRef.afterClosed().pipe(first()).subscribe(isConfirmed => {
       if (isConfirmed) {
         this._apiService.deleteMembers(this._selectedProject.id, member).pipe(first()).subscribe(() => {
-          NotificationActions.success(
+          this._notificationService.success(
               `Member ${member.name} has been removed from project ${this._selectedProject.name}`);
           this._googleAnalyticsService.emitEvent('memberOverview', 'MemberDeleted');
         });

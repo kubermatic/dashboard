@@ -4,6 +4,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {NotificationsService} from 'angular2-notifications';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
@@ -11,7 +12,6 @@ import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 import {UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
-import {NotificationActions} from '../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
 import {MemberEntity} from '../../shared/entity/MemberEntity';
@@ -39,7 +39,8 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
       private readonly _userService: UserService, private readonly _settingsService: SettingsService,
-      private readonly _historyService: HistoryService, private readonly _matDialog: MatDialog) {}
+      private readonly _historyService: HistoryService, private readonly _matDialog: MatDialog,
+      private readonly _notificationService: NotificationsService) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.admins;
@@ -58,7 +59,7 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(settings, this.apiSettings)) {
         if (this.apiSettings) {
-          NotificationActions.success('Successfully applied external settings update');
+          this._notificationService.success('Successfully applied external settings update');
         }
         this._applySettings(settings);
       }
@@ -184,7 +185,7 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
           if (isConfirmed) {
             admin.isAdmin = false;
             this._settingsService.setAdmin(admin).pipe(first()).subscribe(() => {
-              NotificationActions.success(`${admin.name} was deleted from admin group`);
+              this._notificationService.success(`${admin.name} was deleted from admin group`);
               this._settingsService.refreshAdmins();
             });
           }

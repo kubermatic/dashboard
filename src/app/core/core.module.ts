@@ -15,7 +15,6 @@ import {SharedModule} from '../shared/shared.module';
 
 import {FooterComponent} from './components/footer/footer.component';
 import {NavigationComponent} from './components/navigation/navigation.component';
-import {NotificationComponent} from './components/notification/notification.component';
 import {ProjectSelectorComponent} from './components/sidenav/project/selector.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
@@ -41,7 +40,6 @@ const components: any[] = [
   SidenavComponent,
   ProjectSelectorComponent,
   NavigationComponent,
-  NotificationComponent,
   AddMemberComponent,
   EditMemberComponent,
   AddServiceAccountComponent,

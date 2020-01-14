@@ -1,10 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
+import {NotificationsService} from 'angular2-notifications';
 import {first} from 'rxjs/operators';
 
 import {ApiService} from '../../../core/services';
-import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../../shared/entity/ServiceAccountEntity';
 
@@ -21,7 +21,8 @@ export class EditServiceAccountTokenComponent implements OnInit {
 
   constructor(
       private readonly _apiService: ApiService,
-      private readonly _matDialogRef: MatDialogRef<EditServiceAccountTokenComponent>) {}
+      private readonly _matDialogRef: MatDialogRef<EditServiceAccountTokenComponent>,
+      private readonly _notificationService: NotificationsService) {}
 
   ngOnInit(): void {
     this.editServiceAccountTokenForm = new FormGroup({
@@ -39,7 +40,7 @@ export class EditServiceAccountTokenComponent implements OnInit {
         .pipe(first())
         .subscribe(() => {
           this._matDialogRef.close(true);
-          NotificationActions.success(`Token ${this.token.name} is edited successfully`);
+          this._notificationService.success(`Token ${this.token.name} is edited successfully`);
         });
   }
 }

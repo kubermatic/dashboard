@@ -1,11 +1,13 @@
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {NotificationsService} from 'angular2-notifications';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {NotificationActions} from '../../../redux/actions/notification.actions';
 
 @Injectable()
 export class ErrorNotificationsInterceptor implements HttpInterceptor {
+  constructor(private readonly _notificationService: NotificationsService) {}
+
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(tap(() => {}, (errorInstance) => {
       if (!errorInstance) {
@@ -13,10 +15,10 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
       }
 
       if (!!errorInstance.error && !!errorInstance.error.error) {
-        NotificationActions.error(`Error ${errorInstance.status}: ${
+        this._notificationService.error(`Error ${errorInstance.status}: ${
             errorInstance.error.error.message || errorInstance.message || errorInstance.statusText}`);
       } else {
-        NotificationActions.error(`${errorInstance.status}: ${errorInstance.statusText}`);
+        this._notificationService.error(`${errorInstance.status}: ${errorInstance.statusText}`);
       }
     }));
   }

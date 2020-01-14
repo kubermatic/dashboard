@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
+import {NotificationsService} from 'angular2-notifications';
 
 import {SettingsService} from '../../../core/services/settings/settings.service';
-import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {AdminEntity} from '../../../shared/entity/AdminSettings';
 
 
@@ -17,7 +17,8 @@ export class AddAdminDialogComponent implements OnInit {
 
   constructor(
       private readonly _settingsService: SettingsService,
-      private readonly _matDialogRef: MatDialogRef<AddAdminDialogComponent>) {}
+      private readonly _matDialogRef: MatDialogRef<AddAdminDialogComponent>,
+      private readonly _notificationService: NotificationsService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -32,7 +33,7 @@ export class AddAdminDialogComponent implements OnInit {
     };
 
     this._settingsService.setAdmin(adminEntity).subscribe((admin) => {
-      NotificationActions.success(`${admin.name} was successfully added to admin group`);
+      this._notificationService.success(`${admin.name} was successfully added to admin group`);
       this._matDialogRef.close(admin);
     });
   }

@@ -1,11 +1,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
+import {NotificationsService} from 'angular2-notifications';
 import {Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
 
 import {ClusterService, ProjectService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
@@ -27,7 +27,8 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   constructor(
       private _clusterService: ClusterService, private _projectService: ProjectService,
       private _dialogRef: MatDialogRef<ChangeClusterVersionComponent>,
-      public _googleAnalyticsService: GoogleAnalyticsService) {}
+      public _googleAnalyticsService: GoogleAnalyticsService,
+      private readonly _notificationService: NotificationsService) {}
 
   ngOnInit(): void {
     if (this.controlPlaneVersions.length > 0) {
@@ -47,7 +48,8 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
     };
 
     this._clusterService.patch(this.project.id, this.cluster.id, this.datacenter.metadata.name, patch).subscribe(() => {
-      NotificationActions.success(`Cluster ${this.cluster.name} is being updated to version ${this.selectedVersion}`);
+      this._notificationService.success(
+          `Cluster ${this.cluster.name} is being updated to version ${this.selectedVersion}`);
       this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChanged');
 
       if (this.isNodeDeploymentUpgradeEnabled) {
@@ -63,7 +65,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
         .upgradeNodeDeployments(this.project.id, this.cluster.id, this.datacenter.metadata.name, this.selectedVersion)
         .pipe(first())
         .subscribe(() => {
-          NotificationActions.success(`Node Deployments from cluster ${
+          this._notificationService.success(`Node Deployments from cluster ${
               this.cluster.name} are being updated to version ${this.selectedVersion}`);
         });
   }

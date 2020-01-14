@@ -13,7 +13,6 @@ import {Auth, ClusterService, ProjectService, UserService} from '../core/service
 import {PreviousRouteService} from '../core/services/previous-route/previous-route.service';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
-import {NotificationActions} from '../redux/actions/notification.actions';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {UserSettings} from '../shared/entity/MemberEntity';
@@ -82,6 +81,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       private readonly _userService: UserService, private readonly _matDialog: MatDialog,
       private readonly _googleAnalyticsService: GoogleAnalyticsService, private readonly _router: Router,
       private readonly _cookieService: CookieService, private readonly _settingsService: SettingsService,
+      private readonly _notificationService: NotificationsService,
       private readonly _previousRouteService: PreviousRouteService) {}
 
   ngOnInit(): void {
@@ -311,7 +311,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
         this._projectService.delete(project.id).subscribe(() => {
-          NotificationActions.success(`Project ${project.name} is being deleted`);
+          this._notificationService.success(`Project ${project.name} is being deleted`);
           this._googleAnalyticsService.emitEvent('projectOverview', 'ProjectDeleted');
           this._projectService.onProjectsUpdate.next();
         });

@@ -1,4 +1,3 @@
-import {NgReduxTestingModule} from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
@@ -27,7 +26,6 @@ describe('ShareKubeconfigComponent', () => {
             HttpClientModule,
             BrowserAnimationsModule,
             RouterTestingModule,
-            NgReduxTestingModule,
             SharedModule,
           ],
           declarations: [ShareKubeconfigComponent],

@@ -1,12 +1,12 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {NotificationsService} from 'angular2-notifications';
 import * as _ from 'lodash';
 import {Observable, of} from 'rxjs';
 import {catchError, first, flatMap, map} from 'rxjs/operators';
 
 import {ApiService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
-import {NotificationActions} from '../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
@@ -48,17 +48,15 @@ export class NodeService {
   }
 
   constructor(
-      private readonly _apiService: ApiService,
-      private readonly _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _matDialog: MatDialog,
-  ) {}
+      private readonly _apiService: ApiService, private readonly _googleAnalyticsService: GoogleAnalyticsService,
+      private readonly _matDialog: MatDialog, private readonly _notificationService: NotificationsService) {}
 
   createNodeDeployment(nodeData: NodeData, dc: DataCenterEntity, cluster: ClusterEntity, project: string): void {
     this._apiService
         .createNodeDeployment(cluster, NodeService._getNodeDeploymentEntity(nodeData), dc.metadata.name, project)
         .pipe(first())
         .subscribe(() => {
-          NotificationActions.success(`Node Deployment for ${cluster.name} successfully created`);
+          this._notificationService.success(`Node Deployment for ${cluster.name} successfully created`);
           this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeAdded');
         });
   }
@@ -117,7 +115,8 @@ export class NodeService {
                             data.datacenter.metadata.name, data.projectID)
                         .pipe(first())
                         .pipe(catchError(() => {
-                          NotificationActions.error(`Could not update Node Deployment ${data.nodeDeployment.name}`);
+                          this._notificationService.error(
+                              `Could not update Node Deployment ${data.nodeDeployment.name}`);
                           this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdateFailed');
                           return of(undefined);
                         }));
@@ -128,7 +127,7 @@ export class NodeService {
             (nd: NodeDeploymentEntity):
                 Observable<boolean> => {
                   if (nd) {
-                    NotificationActions.success(`Node Deployment ${nd.name} updated successfully`);
+                    this._notificationService.success(`Node Deployment ${nd.name} updated successfully`);
                     this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdated');
                     if (changeEventEmitter) {
                       changeEventEmitter.emit(nd);
@@ -164,7 +163,7 @@ export class NodeService {
                     return this._apiService.deleteNodeDeployment(clusterID, nd, dcName, projectID)
                         .pipe(first())
                         .pipe(catchError(() => {
-                          NotificationActions.error(`Could not remove Node Deployment`);
+                          this._notificationService.error(`Could not remove Node Deployment`);
                           this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentDeleteFailed');
                           return of(false);
                         }));
@@ -175,7 +174,7 @@ export class NodeService {
             (data: any):
                 Observable<boolean> => {
                   if (data) {
-                    NotificationActions.success(`Node Deployment removed successfully`);
+                    this._notificationService.success(`Node Deployment removed successfully`);
                     this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentDeleted');
                     if (changeEventEmitter) {
                       changeEventEmitter.emit(nd);

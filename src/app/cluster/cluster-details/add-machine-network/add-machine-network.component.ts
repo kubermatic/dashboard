@@ -1,9 +1,10 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
+import {NotificationsService} from 'angular2-notifications';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+
 import {ClusterService, WizardService} from '../../../core/services';
-import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {MachineNetworkForm} from '../../../shared/model/ClusterForm';
@@ -22,7 +23,8 @@ export class AddMachineNetworkComponent implements OnInit, OnDestroy {
 
   constructor(
       private readonly _clusterService: ClusterService, private readonly _wizardService: WizardService,
-      private readonly _dialogRef: MatDialogRef<AddMachineNetworkComponent>) {}
+      private readonly _dialogRef: MatDialogRef<AddMachineNetworkComponent>,
+      private readonly _notificationService: NotificationsService) {}
 
   ngOnInit(): void {
     this._wizardService.machineNetworksFormChanges$.pipe(takeUntil(this._unsubscribe))
@@ -66,7 +68,7 @@ export class AddMachineNetworkComponent implements OnInit, OnDestroy {
       }
     }
     this._clusterService.cluster(this.projectID, this.cluster.id, this.datacenter.metadata.name).subscribe((res) => {
-      NotificationActions.success(`Machine Network(s) for ${this.cluster.name} successfully added`);
+      this._notificationService.success(`Machine Network(s) for ${this.cluster.name} successfully added`);
       this._dialogRef.close(res);
     });
   }

@@ -1,4 +1,3 @@
-import {DevToolsExtension, NgRedux} from '@angular-redux/store';
 import {OverlayContainer} from '@angular/cdk/overlay';
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
@@ -11,7 +10,6 @@ import {AppConfigService} from './app-config.service';
 import {Auth} from './core/services';
 import {SettingsService} from './core/services/settings/settings.service';
 import {GoogleAnalyticsService} from './google-analytics.service';
-import {INITIAL_STATE, Store, StoreReducer} from './redux/store';
 import {AdminSettings} from './shared/entity/AdminSettings';
 import {Theme} from './shared/entity/MemberEntity';
 import {VersionInfo} from './shared/entity/VersionInfo';
@@ -41,15 +39,8 @@ export class KubermaticComponent implements OnInit, OnDestroy {
 
   constructor(
       private readonly _overlayContainer: OverlayContainer, private readonly _elementRef: ElementRef, public auth: Auth,
-      private ngRedux: NgRedux<Store>, private devTools: DevToolsExtension, private appConfigService: AppConfigService,
-      private readonly _settingsService: SettingsService, public router: Router,
-      public googleAnalyticsService: GoogleAnalyticsService) {
-    let enhancers = [];
-    if (this.devTools.isEnabled()) {
-      enhancers = [...enhancers, this.devTools.enhancer()];
-    }
-    this.ngRedux.configureStore(StoreReducer, INITIAL_STATE, null, enhancers);
-
+      private appConfigService: AppConfigService, private readonly _settingsService: SettingsService,
+      public router: Router, public googleAnalyticsService: GoogleAnalyticsService) {
     this._registerRouterWatch();
   }
 
