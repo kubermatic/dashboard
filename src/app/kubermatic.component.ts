@@ -32,7 +32,7 @@ const PAGES_WIITHOUT_MENU = [
   styleUrls: ['./kubermatic.component.scss'],
 })
 export class KubermaticComponent implements OnInit, OnDestroy {
-  @ViewChild('sidenav', {static: false}) sidenav: MatSidenav;
+  @ViewChild('sidenav') sidenav: MatSidenav;
   config: Config = {};
   settings: AdminSettings;
   version: VersionInfo;

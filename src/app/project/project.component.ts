@@ -52,7 +52,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   sort: MatSort;
-  @ViewChild(MatSort, {static: false})
+  @ViewChild(MatSort)
   set matSort(ms: MatSort) {
     const isViewInit = !this.sort && !!ms;  // If true, view is being initialized.
 
