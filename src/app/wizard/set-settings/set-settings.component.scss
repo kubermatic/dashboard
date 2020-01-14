@@ -1,28 +1,5 @@
-@import "../../../assets/css/colors";
 @import "../../../assets/css/variables";
 
 .mat-card {
   padding: 0 !important;
-}
-
-.km-wizard-settings-extended-wrapper {
-  margin: (4 * $baseline-grid) 0 (2.5 * $baseline-grid) 0;
-
-  .km-wizard-settings-extended-divider {
-    height: 1px;
-    background: $separator;
-    margin: (2 * $baseline-grid) 0;
-  }
-
-  .km-wizard-settings-extended-btn {
-    color: $medium-text-color;
-    cursor: pointer;
-    margin: $baseline-grid;
-    user-select: none;
-
-    .km-icon-arrow-down,
-    .km-icon-arrow-up {
-      background: $medium-text-color;
-    }
-  }
 }

@@ -6,7 +6,7 @@ the CSS during the build, there are different approaches to it that will be desc
 This is the most obvious approach to customizing the application. However, it requires access to the repository as some
 of the sources need modifications. Its biggest advantage is possibility to reuse rules that are already defined.
 
-All the application-wide rules are stored inside `src/assets/css` directory, where `_main.scss` is the main file that
+All the application-wide rules are stored inside `src/assets/css` directory, where `main.scss` is the main file that
 imports all other files that are required. The recommended approach to override application default styling is to
 register custom CSS files inside `_main.scss` and override existing CSS files only if it is needed. Overriding existing
 files is required when for example color variables need to be changed application-wide.
@@ -98,7 +98,7 @@ footer .km-footer-nav ul li a i {
   color: green;
 }
 
-div .km-frontpage-bg {
+div .km-frontpage-background {
   background-color: red !important;
 }
 

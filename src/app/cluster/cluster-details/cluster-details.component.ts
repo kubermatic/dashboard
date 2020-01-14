@@ -6,6 +6,7 @@ import {first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, ClusterService, DatacenterService, RBACService, UserService} from '../../core/services';
+import {SettingsService} from '../../core/services/settings/settings.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
 import {AddonEntity} from '../../shared/entity/AddonEntity';
 import {ClusterEntity, getClusterProvider, MasterVersion} from '../../shared/entity/ClusterEntity';
@@ -62,7 +63,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       private readonly _clusterService: ClusterService, private readonly _matDialog: MatDialog,
       private readonly _datacenterService: DatacenterService, private readonly _appConfigService: AppConfigService,
       private readonly _node: NodeService, private readonly _userService: UserService,
-      private readonly _api: ApiService, private readonly _rbacService: RBACService) {}
+      private readonly _api: ApiService, private readonly _rbacService: RBACService,
+      readonly settings: SettingsService) {}
 
   ngOnInit(): void {
     this.config = this._appConfigService.getConfig();

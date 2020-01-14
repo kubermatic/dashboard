@@ -6,7 +6,6 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {MockComponent} from 'ng2-mock-component';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeProjects} from '../../../testing/fake-data/project.fake';
@@ -26,7 +25,6 @@ const modules: any[] = [
   RouterTestingModule,
   HttpClientModule,
   BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
   SharedModule,
 ];
 
@@ -82,9 +80,8 @@ describe('SidenavComponent', () => {
 
   it('should get RouterLinks from template', () => {
     fixture.detectChanges();
-    expect(links.length).toBe(5, 'should have 5 links');
-    expect(links[0].linkParams)
-        .toBe(`/projects/${fakeProjects()[0].id}/clusters`, 'first link should go to clusters page');
+    expect(links.length).toBe(5);
+    expect(links[0].linkParams).toBe(`/projects/${fakeProjects()[0].id}/clusters`);
   });
 
 
@@ -92,7 +89,7 @@ describe('SidenavComponent', () => {
     fixture.detectChanges();
     const clustersLinkDe = linkDes[0];
     const clustersLink = links[0];
-    expect(clustersLink.navigatedTo).toBeNull('link should not have navigated yet');
+    expect(clustersLink.navigatedTo).toBeNull();
 
     click(clustersLinkDe);
     fixture.detectChanges();

@@ -1,10 +1,4 @@
-@import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
-
-.km-rbac-add-binding-btn {
-  height: 5 * $baseline-grid;
-  min-width: 14.5 * $baseline-grid;
-}
 
 .mat-card.km-with-table-header .mat-card-header {
   padding-left: 0;
@@ -25,8 +19,7 @@
 
 h2 {
   font-weight: normal;
-  font-size: $card-title-font-size;
-  color: $text-color;
+  font-size: $font-size-card-title;
   padding: 0 (7 * $baseline-grid);
   margin-bottom: 0;
 }

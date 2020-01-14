@@ -1,5 +1,6 @@
 import {DevToolsExtension, NgRedux} from '@angular-redux/store';
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {OverlayContainer} from '@angular/cdk/overlay';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from '@angular/material';
 import {NavigationEnd, Router} from '@angular/router';
 import * as _ from 'lodash';
@@ -12,8 +13,18 @@ import {SettingsService} from './core/services/settings/settings.service';
 import {GoogleAnalyticsService} from './google-analytics.service';
 import {INITIAL_STATE, Store, StoreReducer} from './redux/store';
 import {AdminSettings} from './shared/entity/AdminSettings';
+import {Theme} from './shared/entity/MemberEntity';
 import {VersionInfo} from './shared/entity/VersionInfo';
 import {Config} from './shared/model/Config';
+
+const PAGES_WIITHOUT_MENU = [
+  '/projects',
+  '/account',
+  '/settings',
+  '/rest-api',
+  '/terms-of-service',
+  '/404',
+];
 
 @Component({
   selector: 'kubermatic-root',
@@ -25,12 +36,14 @@ export class KubermaticComponent implements OnInit, OnDestroy {
   config: Config = {};
   settings: AdminSettings;
   version: VersionInfo;
+  private _theme = Theme.Light;
   private _unsubscribe = new Subject<void>();
 
   constructor(
-      public auth: Auth, private ngRedux: NgRedux<Store>, private devTools: DevToolsExtension,
-      private appConfigService: AppConfigService, private readonly _settingsService: SettingsService,
-      public router: Router, public googleAnalyticsService: GoogleAnalyticsService) {
+      private readonly _overlayContainer: OverlayContainer, private readonly _elementRef: ElementRef, public auth: Auth,
+      private ngRedux: NgRedux<Store>, private devTools: DevToolsExtension, private appConfigService: AppConfigService,
+      private readonly _settingsService: SettingsService, public router: Router,
+      public googleAnalyticsService: GoogleAnalyticsService) {
     let enhancers = [];
     if (this.devTools.isEnabled()) {
       enhancers = [...enhancers, this.devTools.enhancer()];
@@ -41,12 +54,6 @@ export class KubermaticComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      if (!_.isEqual(this.settings, settings)) {
-        this.settings = settings;
-      }
-    });
-
     this.config = this.appConfigService.getConfig();
     this.version = this.appConfigService.getGitVersion();
     if (this.config.google_analytics_code) {
@@ -57,12 +64,41 @@ export class KubermaticComponent implements OnInit, OnDestroy {
       );
     }
 
+    this._applyTheme(this._theme);
     this._registerCustomCSS();
+
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      if (!_.isEqual(this.settings, settings)) {
+        this.settings = settings;
+      }
+    });
+
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      if (!_.isEqual(this._theme, settings.selectedTheme)) {
+        this._applyTheme(settings.selectedTheme, this._theme);
+        this._theme = settings.selectedTheme;
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  private _applyTheme(newTheme: Theme, oldTheme: Theme = null): void {
+    if (!this.config.disable_themes) {
+      if (oldTheme) {
+        this._overlayContainer.getContainerElement().classList.remove(oldTheme);
+      }
+
+      this._overlayContainer.getContainerElement().classList.add(newTheme);
+      this._elementRef.nativeElement.classList.add(newTheme);
+
+      if (oldTheme) {
+        this._elementRef.nativeElement.classList.remove(oldTheme);
+      }
+    }
   }
 
   private _registerRouterWatch(): void {
@@ -76,7 +112,7 @@ export class KubermaticComponent implements OnInit, OnDestroy {
 
   private _handleSidenav(url: string): void {
     if (this.sidenav) {
-      if (url === '/projects' || url === '/rest-api' || url === '/account' || url === '/settings') {
+      if (PAGES_WIITHOUT_MENU.includes(url)) {
         this.sidenav.close();
       } else {
         this.sidenav.open();

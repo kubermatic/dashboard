@@ -1,11 +1,9 @@
-@import "../../../assets/css/colors";
-
-.km-page-404 {
+.km-page-not-fount {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 500px;
+  min-height: 400px;
 
   button {
     width: 120px;
@@ -13,14 +11,9 @@
   }
 
   p {
-    color: $primary;
     text-align: center;
     margin: 0;
     font-size: 60px;
     font-weight: 600;
-  }
-
-  p.km-big-font {
-    font-size: 120px;
   }
 }

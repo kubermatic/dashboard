@@ -47,14 +47,19 @@
        class="mat-select-container">
     <mat-form-field>
       <mat-label>Machine Type*</mat-label>
-      <mat-select formControlName="machineType"
-                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
-                  disableOptionCentering>
-        <mat-option *ngFor="let type of machineTypes"
+      <input matInput
+             formControlName="machineType"
+             name="machineType"
+             placeholder="Machine Type*"
+             [matAutocomplete]="autoMachines">
+      <mat-autocomplete #autoMachines="matAutocomplete">
+        <mat-option *ngFor="let type of filteredMachineTypes"
                     [value]="type.name">
           {{type.name}} ({{type.description}})
         </mat-option>
-      </mat-select>
+      </mat-autocomplete>
+      <mat-error *ngIf="form.controls.machineType.hasError('mustBeInList') && !form.controls.machineType.hasError('required')">Input doesn't match options. Please choose from given options.</mat-error>
+      <mat-error *ngIf="form.controls.machineType.hasError('required')">Machine Type is <strong>required</strong>.</mat-error>
       <mat-hint>{{getSizeHint()}}</mat-hint>
     </mat-form-field>
   </div>

@@ -30,10 +30,10 @@ describe('AWSNodeDataComponent', () => {
   let apiMock;
 
   beforeEach(async(() => {
-    apiMock = jasmine.createSpyObj('ApiService', ['getAWSSubnets']);
-    apiMock.getAWSSubnets.and.returnValue(asyncData(fakeAwsSubnets()));
-    datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
-    datacenterMock.getDataCenter.and.returnValue(asyncData(fakeAWSDatacenter()));
+    apiMock = {'getAWSSubnets': jest.fn()};
+    apiMock.getAWSSubnets.mockReturnValue(asyncData(fakeAwsSubnets()));
+    datacenterMock = {'getDataCenter': jest.fn()};
+    datacenterMock.getDataCenter.mockReturnValue(asyncData(fakeAWSDatacenter()));
 
     TestBed
         .configureTestingModule({
@@ -81,6 +81,8 @@ describe('AWSNodeDataComponent', () => {
     expect(component.subnetAZ).toEqual([]);
 
     component.fillSubnetMap(fakeAwsSubnets());
+    component.form.controls.subnetID.setValue('');
+    fixture.detectChanges();
     expect(component.subnetAZ).toEqual(['eu-central-1a', 'eu-central-1c', 'eu-central-1b']);
     expect(component.getSubnetToAZ('eu-central-1a')).toEqual([
       {

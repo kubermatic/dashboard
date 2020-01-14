@@ -45,16 +45,20 @@ describe('NodeDataComponent', () => {
   let component: NodeDataComponent;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', [
-      'getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getOpenStackFlavors', 'getOpenStackFlavorsForWizard',
-      'nodeUpgrades', 'getAWSSubnets'
-    ]);
-    apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
-    apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes()));
-    apiMock.getOpenStackFlavors.and.returnValue(asyncData(fakeOpenstackFlavors()));
-    apiMock.getOpenStackFlavorsForWizard.and.returnValue(asyncData(fakeOpenstackFlavors()));
-    apiMock.nodeUpgrades.and.returnValue(asyncData(masterVersionsFake()));
-    apiMock.getAWSSubnets.and.returnValue(asyncData(fakeAwsSubnets()));
+    const apiMock = {
+      'getDigitaloceanSizes': jest.fn(),
+      'getDigitaloceanSizesForWizard': jest.fn(),
+      'getOpenStackFlavors': jest.fn(),
+      'getOpenStackFlavorsForWizard': jest.fn(),
+      'nodeUpgrades': jest.fn(),
+      'getAWSSubnets': jest.fn()
+    };
+    apiMock.getDigitaloceanSizes.mockReturnValue(asyncData(fakeDigitaloceanSizes()));
+    apiMock.getDigitaloceanSizesForWizard.mockReturnValue(asyncData(fakeDigitaloceanSizes()));
+    apiMock.getOpenStackFlavors.mockReturnValue(asyncData(fakeOpenstackFlavors()));
+    apiMock.getOpenStackFlavorsForWizard.mockReturnValue(asyncData(fakeOpenstackFlavors()));
+    apiMock.nodeUpgrades.mockReturnValue(asyncData(masterVersionsFake()));
+    apiMock.getAWSSubnets.mockReturnValue(asyncData(fakeAwsSubnets()));
 
     TestBed
         .configureTestingModule({

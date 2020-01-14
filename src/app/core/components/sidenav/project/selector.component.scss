@@ -1,13 +1,11 @@
 @import '../../../../../assets/css/variables';
-@import '../../../../../assets/css/colors';
 
 .mat-list-item,
 a {
   height: $toolbar-height;
 
-  &.km-projects {
-    height: $toolbar-height - ($sidenav-border-width / 2);
-    border-bottom: $alternative solid $sidenav-border-width;
+  &.km-project-selector {
+    height: $toolbar-height - $baseline-grid / 4;
   }
 }
 
@@ -18,10 +16,6 @@ a {
   padding: 0 (3.75 * $baseline-grid);
   width: 100%;
 
-  * {
-    color: $secondary;
-  }
-
   .mat-select-arrow {
     visibility: hidden;
   }
@@ -30,27 +24,23 @@ a {
     position: absolute;
     right: 3.5 * $baseline-grid;
     top: 16px;
-    background-color: $secondary;
     pointer-events: none;
-    color: $secondary-light;
   }
 
   .mat-select-value-text {
-    color: $secondary;
-    font-size: $subhead-font-size-base-lg;
-    line-height: $subhead-font-size-base-lg + $baseline-grid / 2;
+    font-size: $font-size-subhead-lg;
+    line-height: $font-size-subhead-lg + $baseline-grid / 2;
   }
 
   .mat-select-placeholder {
     opacity: 0.4;
-    color: $secondary;
-    font-size: $subhead-font-size-base-lg;
-    line-height: $subhead-font-size-base-lg;
+    font-size: $font-size-subhead-lg;
+    line-height: $font-size-subhead-lg;
   }
 
   mat-label {
     margin: ($baseline-grid / 2) 0;
-    font-size: $caption-font-size-base;
-    line-height: $caption-font-size-base;
+    font-size: $font-size-caption;
+    line-height: $font-size-caption;
   }
 }

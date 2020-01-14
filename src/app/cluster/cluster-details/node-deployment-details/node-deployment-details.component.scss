@@ -1,24 +1,11 @@
-@import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
 
 .km-node-deployment-health {
   text-align: center;
-
-  &.green {
-    color: $indicator-green;
-  }
-
-  &.orange {
-    color: $indicator-orange;
-  }
-
-  &.red {
-    color: $indicator-red;
-  }
 }
 
 .km-node-deployment-name {
-  font-size: $card-title-font-size !important;
+  font-size: $font-size-card-title !important;
 }
 
 mat-card-header {
@@ -29,23 +16,13 @@ mat-card-header {
   margin-right: 4 * $baseline-grid;
 
   .mat-icon-button {
-    color: $text-color;
     font-size: 2.5 * $baseline-grid;
   }
 
   .km-icon-delete {
-    background: $text-color;
     height: 2.5 * $baseline-grid;
     width: 2.5 * $baseline-grid;
   }
-}
-
-.fa-check {
-  color: $indicator-green !important;
-}
-
-.fa-times {
-  color: $indicator-red !important;
 }
 
 .km-provider-logo-value {

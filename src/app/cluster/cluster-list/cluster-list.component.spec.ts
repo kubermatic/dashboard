@@ -3,7 +3,6 @@ import {async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick}
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, Auth, ClusterService, DatacenterService, ProjectService, UserService} from '../../core/services';
@@ -19,18 +18,18 @@ import {ProjectMockService} from '../../testing/services/project-mock.service';
 import {UserMockService} from '../../testing/services/user-mock.service';
 
 import {ClusterListComponent} from './cluster-list.component';
-import Spy = jasmine.Spy;
+
 
 describe('ClusterListComponent', () => {
   let fixture: ComponentFixture<ClusterListComponent>;
   let component: ClusterListComponent;
-  let getClustersSpy: Spy;
+  let getClustersSpy;
   let activatedRoute: ActivatedRouteStub;
 
   beforeEach(async(() => {
-    const clusterServiceMock = jasmine.createSpyObj('ClusterService', ['clusters', 'health']);
-    getClustersSpy = clusterServiceMock.clusters.and.returnValue(asyncData([fakeAWSCluster()]));
-    clusterServiceMock.health.and.returnValue(asyncData([fakeHealth()]));
+    const clusterServiceMock = {'clusters': jest.fn(), 'health': jest.fn()};
+    getClustersSpy = clusterServiceMock.clusters.mockReturnValue(asyncData([fakeAWSCluster()]));
+    clusterServiceMock.health.mockReturnValue(asyncData([fakeHealth()]));
 
     TestBed
         .configureTestingModule({
@@ -38,7 +37,6 @@ describe('ClusterListComponent', () => {
             BrowserModule,
             HttpClientModule,
             BrowserAnimationsModule,
-            SlimLoadingBarModule.forRoot(),
             RouterTestingModule,
             SharedModule,
           ],
@@ -80,9 +78,9 @@ describe('ClusterListComponent', () => {
 
        const expectedCluster = fakeAWSCluster();
        // @ts-ignore
-       expectedCluster.creationTimestamp = jasmine.any(Date);
+       expectedCluster.creationTimestamp = expect.any(Date);
 
-       expect(getClustersSpy.and.callThrough()).toHaveBeenCalled();
+       expect(getClustersSpy).toHaveBeenCalled();
        expect(component.clusters).toEqual([expectedCluster]);
        discardPeriodicTasks();
      }));
@@ -93,7 +91,7 @@ describe('ClusterListComponent', () => {
 
        const de = fixture.debugElement.query(By.css('.km-with-table-header'));
 
-       expect(de).not.toBeNull('list should be rendered');
+       expect(de).not.toBeNull();
        discardPeriodicTasks();
      }));
 
@@ -102,7 +100,7 @@ describe('ClusterListComponent', () => {
 
        const de = fixture.debugElement.query(By.css('.km-no-item'));
 
-       expect(de).toBeNull('list should not be rendered');
+       expect(de).toBeNull();
        discardPeriodicTasks();
      }));
 });

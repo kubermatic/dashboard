@@ -32,6 +32,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   seedDCName: string;
   form: FormGroup;
   operatingSystemForm: FormGroup;
+  nodeDataForm: FormGroup;
   hideOptional = true;
   versions: string[] = [];
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.NodeDeployment)];
@@ -82,10 +83,20 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       disableAutoUpdate: new FormControl(disableAutoUpdate),
     });
 
+    this.nodeDataForm = new FormGroup({
+      dynamicConfig: new FormControl(this.nodeData.dynamicConfig),
+    });
+
+    this.nodeDataForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      this.addNodeService.changeNodeData(this.getAddNodeData());
+    });
+
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.addNodeService.changeNodeData(this.getAddNodeData());
       this.addNodeService.changeNodeOperatingSystemData(this.getOSSpec());
       this.valid.emit(this.form.valid);
+      this.providerData.valid = this.form.valid;
+      this.addNodeService.changeNodeProviderData(this.providerData);
     });
 
     this.operatingSystemForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -192,6 +203,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       name: this.form.controls.name.value,
       count: this.form.controls.count.value,
       valid: this.providerData.valid,
+      dynamicConfig: this.nodeDataForm.controls.dynamicConfig.value
     };
   }
 }

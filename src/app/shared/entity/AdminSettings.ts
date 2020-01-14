@@ -8,6 +8,8 @@ export class AdminSettings {
   displayAPIDocs: boolean;
   displayDemoInfo: boolean;
   displayTermsOfService: boolean;
+  enableDashboard: boolean;
+  enableOIDCKubeconfig: boolean;
 }
 
 export class CleanupOptions {

@@ -5,6 +5,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {RandomString} from '../../../shared/functions/generate-random-string';
+import {PreviousRouteService} from '../previous-route/previous-route.service';
 
 @Injectable()
 export class Auth {
@@ -14,7 +15,9 @@ export class Auth {
   private readonly _defaultScope = 'openid email profile groups';
   private readonly _redirectUri = window.location.protocol + '//' + window.location.host + '/projects';
 
-  constructor(private readonly _cookieService: CookieService, private readonly _appConfigService: AppConfigService) {
+  constructor(
+      private readonly _cookieService: CookieService, private readonly _appConfigService: AppConfigService,
+      private readonly _previousRouteService: PreviousRouteService) {
     const token = this.getTokenFromQuery();
     const nonce = this.getNonce();
     if (!!token && !!nonce) {
@@ -27,24 +30,25 @@ export class Auth {
         this._cookieService.set(Auth.Cookie.Token, token, 1, '/', 'localhost');
         this._cookieService.set(Auth.Cookie.Token, token, 1, '/', '127.0.0.1');
       }
+      this._previousRouteService.loadRouting();
     }
   }
 
   getOIDCProviderURL(): string {
-    const baseUrl = this._appConfigService.getConfig().oidc_provider_url ?
-        this._appConfigService.getConfig().oidc_provider_url :
-        environment.oidcProviderUrl;
+    const config = this._appConfigService.getConfig();
+    const baseUrl = config.oidc_provider_url ? config.oidc_provider_url : environment.oidcProviderUrl;
+    const connectorId = config.oidc_connector_id ? config.oidc_connector_id : environment.oidcConnectorId;
+    const scope = config.oidc_provider_scope ? config.oidc_provider_scope : this._defaultScope;
+    const clientId = config.oidc_provider_client_id ? config.oidc_provider_client_id : this._clientId;
 
-    const scope = this._appConfigService.getConfig().oidc_provider_scope ?
-        this._appConfigService.getConfig().oidc_provider_scope :
-        this._defaultScope;
-
-    const clientId = this._appConfigService.getConfig().oidc_provider_client_id ?
-        this._appConfigService.getConfig().oidc_provider_client_id :
-        this._clientId;
-
-    return `${baseUrl}?response_type=${this._responseType}&client_id=${clientId}` +
+    let url = `${baseUrl}?response_type=${this._responseType}&client_id=${clientId}` +
         `&redirect_uri=${this._redirectUri}&scope=${scope}&nonce=${this._nonce}`;
+
+    if (connectorId) {
+      url += `&connector_id=${connectorId}`;
+    }
+
+    return url;
   }
 
   getBearerToken(): string {

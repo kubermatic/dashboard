@@ -33,8 +33,8 @@ describe('SetClusterSpecComponent', () => {
   let nameGenerator: ClusterNameGenerator;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getMasterVersions']);
-    apiMock.getMasterVersions.and.returnValue(asyncData(masterVersionsFake()));
+    const apiMock = {'getMasterVersions': jest.fn()};
+    apiMock.getMasterVersions.mockReturnValue(asyncData(masterVersionsFake()));
     TestBed
         .configureTestingModule({
           imports: [
@@ -90,17 +90,17 @@ describe('SetClusterSpecComponent', () => {
 
   it('name field validity', () => {
     const name = component.clusterSpecForm.controls.name;
-    expect(name.hasError('required')).toBeTruthy('name field has required error');
+    expect(name.hasError('required')).toBeTruthy();
 
     name.setValue('test-name');
-    expect(name.hasError('required')).toBeFalsy('name field has no required error');
+    expect(name.hasError('required')).toBeFalsy();
 
-    expect(component.clusterSpecForm.controls.name.valid).toBeTruthy('field is valid');
+    expect(component.clusterSpecForm.controls.name.valid).toBeTruthy();
   });
 
   it('should call generateName method', () => {
     const generatedName = 'generated-name';
-    const spyGenerateName = spyOn(nameGenerator, 'generateName').and.returnValue(generatedName);
+    const spyGenerateName = jest.spyOn(nameGenerator, 'generateName').mockReturnValue(generatedName);
     fixture.detectChanges();
 
     component.generateName();
@@ -108,9 +108,9 @@ describe('SetClusterSpecComponent', () => {
 
     const nameElement = fixture.debugElement.query(By.css('#km-create-cluster-name-input')).nativeElement;
 
-    expect(spyGenerateName.and.callThrough()).toHaveBeenCalledTimes(1);
-    expect(component.clusterSpecForm.controls['name'].value).toBe(generatedName, 'should patch value');
-    expect(nameElement.value).toBe(generatedName, 'should display value in template');
+    expect(spyGenerateName).toHaveBeenCalledTimes(1);
+    expect(component.clusterSpecForm.controls['name'].value).toBe(generatedName);
+    expect(nameElement.value).toBe(generatedName);
   });
 
   it('should show type toggle by default', () => {

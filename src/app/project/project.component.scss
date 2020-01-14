@@ -1,6 +1,4 @@
-@import "../../assets/css/colors";
 @import "../../assets/css/variables";
-@import "../../assets/css/fonts";
 
 .km-projects-spinner {
   margin: (2.5 * $baseline-grid) auto !important;
@@ -17,10 +15,8 @@
 
 .km-project-more-owner {
   display: inline-block;
-  margin: 0;
-  font-size: $subhead-font-size-base;
-  color: $medium-text-color;
-  margin-left: -0.375 * $baseline-grid;
+  margin: 0 !important;
+  font-size: $font-size-subhead !important;
 }
 
 .km-project-top-bar {
@@ -29,41 +25,26 @@
   justify-content: flex-end;
 }
 
-mat-button-toggle-group {
+.km-project-view-switch {
   border-radius: $border-radius;
-}
 
-mat-button-toggle {
-  margin-right: 0;
-  min-height: 5 * $baseline-grid;
-  max-height: 5 * $baseline-grid;
-  min-width: 6.25 * $baseline-grid;
-  max-width: 6.25 * $baseline-grid;
-  border-color: $dropdown-border;
-  background-color: $grey-background;
+  mat-button-toggle {
+    margin-right: 0;
+    min-height: 5 * $baseline-grid;
+    max-height: 5 * $baseline-grid;
+    min-width: 6.25 * $baseline-grid;
+    max-width: 6.25 * $baseline-grid;
 
-  &:first-child {
-    border-top-left-radius: $border-radius;
-    border-bottom-left-radius: $border-radius;
+    &:first-child {
+      border-top-left-radius: $border-radius;
+      border-bottom-left-radius: $border-radius;
+    }
+
+    &:last-child {
+      border-top-right-radius: $border-radius;
+      border-bottom-right-radius: $border-radius;
+    }
   }
-
-  &:last-child {
-    border-top-right-radius: $border-radius;
-    border-bottom-right-radius: $border-radius;
-  }
-
-  &:hover {
-    border: 1px solid $dropdown-border;
-  }
-}
-
-.mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle:hover {
-  border: 1px solid $dropdown-border;
-}
-
-.mat-button-toggle-checked {
-  border-left: 1px solid $dropdown-border;
-  background-color: $dropdown-border;
 }
 
 .km-project-cards-view {
@@ -100,7 +81,6 @@ mat-button-toggle {
   }
 
   mat-card-header {
-    border-bottom: 1px solid $separator;
     padding: 2.5 * $baseline-grid;
   }
 
@@ -118,7 +98,7 @@ mat-button-toggle {
     line-height: 1.6 * $line-height;
 
     strong {
-      font-family: $primary-font-mono;
+      font-family: $font-primary-mono;
       margin-right: 0.625 * $baseline-grid;
     }
   }

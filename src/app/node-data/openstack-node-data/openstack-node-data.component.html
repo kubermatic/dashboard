@@ -6,15 +6,19 @@
          fxLayoutGap="10px">
       <mat-form-field>
         <mat-label>{{getFlavorsFormState()}}</mat-label>
-        <mat-select formControlName="flavor"
-                    disableOptionCentering
-                    [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
-                    [placeholder]="getFlavorsFormState()">
-          <mat-option *ngFor="let flavor of flavors"
+        <input matInput
+               formControlName="flavor"
+               name="flavor"
+               [placeholder]="getFlavorsFormState()"
+               [matAutocomplete]="autoFlavors">
+        <mat-autocomplete #autoFlavors="matAutocomplete">
+          <mat-option *ngFor="let flavor of filteredFlavors"
                       [value]="flavor.slug">
             {{flavor.slug}} - {{ flavor.memory / 1024 }} GB RAM, {{ flavor.vcpus }} CPU{{ (flavor.vcpus!=1) ? 's' : '' }}, {{ flavor.disk }} GB Disk
           </mat-option>
-        </mat-select>
+        </mat-autocomplete>
+        <mat-error *ngIf="form.controls.flavor.hasError('mustBeInList') && !form.controls.flavor.hasError('required')">Input doesn't match options. Please choose from given options.</mat-error>
+        <mat-error *ngIf="form.controls.flavor.hasError('required')">Flavor is <strong>required</strong>.</mat-error>
         <mat-hint *ngIf="showFlavorHint()">Please enter a valid token first.</mat-hint>
       </mat-form-field>
       <div class="km-custom-disk-size">

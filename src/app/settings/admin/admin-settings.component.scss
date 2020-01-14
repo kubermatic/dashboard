@@ -1,9 +1,7 @@
-@import "../../../assets/css/colors";
 @import "../../../assets/css/variables";
 
 .mat-card {
-  color: $text-color;
-  margin-top: 3 * $baseline-grid;
+  margin-top: 3 * $baseline-grid !important;
   padding: (3.75 * $baseline-grid) 0;
 
   .mat-card-header {
@@ -31,7 +29,7 @@
   }
 
   .km-admin-settings {
-    font-size: $subhead-font-size-base;
+    font-size: $font-size-subhead;
     padding: 3.75 * $baseline-grid;
 
     .km-admin-settings-nd-container {
@@ -55,7 +53,7 @@
       text-align: center;
     }
 
-    .km-admin-settings-field-distro {
+    .km-account-settings-toggle {
       mat-button-toggle {
         min-height: 50px;
         max-height: 50px;
@@ -71,13 +69,11 @@
 
         &:hover {
           background-color: transparent;
-          border: 1px solid $primary;
           transition: all .5s ease;
         }
 
         &.mat-button-toggle-checked {
           background-color: transparent;
-          border: 1px solid $primary;
 
           i {
             -webkit-filter: none;
@@ -87,9 +83,8 @@
         }
 
         ::ng-deep.mat-button-toggle-label-content {
-          color: $text-color;
           font-weight: normal;
-          font-size: $subhead-font-size-base;
+          font-size: $font-size-subhead;
         }
       }
     }

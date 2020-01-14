@@ -89,13 +89,7 @@ export class NodeListComponent implements OnInit {
   }
 
   getNodeHealthStatus(n: NodeEntity, i: number): object {
-    const hs = NodeHealthStatus.getHealthStatus(n);
-
-    if (i % 2 !== 0) {
-      hs.css += ' km-odd';
-    }
-
-    return hs;
+    return NodeHealthStatus.getHealthStatus(n);
   }
 
   getFormattedNodeMemory(memory: string): string {

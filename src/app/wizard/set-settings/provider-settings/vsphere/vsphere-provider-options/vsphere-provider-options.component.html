@@ -17,12 +17,15 @@
            type="password"
            autocomplete="off">
   </mat-form-field>
+
   <mat-form-field fxFlex>
     <mat-label>{{getNetworkFormState()}}</mat-label>
-    <mat-select [placeholder]="getNetworkFormState()"
-                disableOptionCentering
-                panelClass="km-optgroup-dropdown"
-                formControlName="vmNetName">
+    <input matInput
+           formControlName="vmNetName"
+           name="vmNetName"
+           [placeholder]="getNetworkFormState()"
+           [matAutocomplete]="autoNetworks">
+    <mat-autocomplete #autoNetworks="matAutocomplete">
       <mat-optgroup *ngFor="let type of networkTypes"
                     [label]="type">
         <mat-option *ngFor="let item of getNetworks(type)"
@@ -30,7 +33,8 @@
           {{item.relativePath}}
         </mat-option>
       </mat-optgroup>
-    </mat-select>
+    </mat-autocomplete>
+    <mat-error *ngIf="form.controls.vmNetName.hasError('mustBeInList')">Input doesn't match options. Please choose from given options.</mat-error>
     <mat-hint *ngIf="showNetworkHint()">Please enter your credentials first.</mat-hint>
   </mat-form-field>
 
@@ -40,9 +44,9 @@
            formControlName="folder"
            name="folder"
            [placeholder]="getFolderFormState()"
-           [matAutocomplete]="auto">
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let item of folders"
+           [matAutocomplete]="autoFolders">
+    <mat-autocomplete #autoFolders="matAutocomplete">
+      <mat-option *ngFor="let item of filteredFolders"
                   [value]="item.path">
         {{item.path}}
       </mat-option>

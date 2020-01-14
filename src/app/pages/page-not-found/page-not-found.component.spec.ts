@@ -3,8 +3,7 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
-import {Auth} from '../../core/services/index';
+import {Auth} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {RouterStub} from '../../testing/router-stubs';
 import {AuthMockService} from '../../testing/services/auth-mock.service';
@@ -15,7 +14,6 @@ const modules: any[] = [
   BrowserModule,
   RouterTestingModule,
   BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
   SharedModule,
 ];
 
@@ -55,28 +53,28 @@ describe('PageNotFoundComponent', () => {
      }));
 
   it('should navigate to clusters list', () => {
-    const spyNavigate = spyOn(router, 'navigate');
+    const spyNavigate = jest.spyOn(router, 'navigate');
     authService.isAuth = true;
 
     fixture.detectChanges();
     const deButton = fixture.debugElement.query(By.css('button'));
     click(deButton);
 
-    const navArgs = spyNavigate.calls.first().args[0];
-    expect(spyNavigate.and.callThrough()).toHaveBeenCalledTimes(1);
-    expect(navArgs[0]).toBe('/projects', 'should navigate to the projects list');
+    const navArgs = spyNavigate.mock.calls[0][0];
+    expect(spyNavigate).toHaveBeenCalledTimes(1);
+    expect(navArgs[0]).toBe('/projects');
   });
 
   it('should navigate to the front apge', () => {
-    const spyNavigate = spyOn(router, 'navigate');
+    const spyNavigate = jest.spyOn(router, 'navigate');
     authService.isAuth = false;
 
     fixture.detectChanges();
     const deButton = fixture.debugElement.query(By.css('button'));
     click(deButton);
 
-    const navArgs = spyNavigate.calls.first().args[0];
-    expect(spyNavigate.and.callThrough()).toHaveBeenCalledTimes(1);
-    expect(navArgs[0]).toBe('', 'should navigate to the front page');
+    const navArgs = spyNavigate.mock.calls[0][0];
+    expect(spyNavigate).toHaveBeenCalledTimes(1);
+    expect(navArgs[0]).toBe('');
   });
 });

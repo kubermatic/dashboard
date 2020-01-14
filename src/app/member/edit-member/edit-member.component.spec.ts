@@ -2,8 +2,6 @@ import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/t
 import {MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
-import Spy = jasmine.Spy;
 import {ApiService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeMember} from '../../testing/fake-data/member.fake';
@@ -15,18 +13,17 @@ import {EditMemberComponent} from './edit-member.component';
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
   SharedModule,
 ];
 
 describe('EditMemberComponent', () => {
   let fixture: ComponentFixture<EditMemberComponent>;
   let component: EditMemberComponent;
-  let editMemberSpy: Spy;
+  let editMemberSpy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['editMembers']);
-    editMemberSpy = apiMock.editMembers.and.returnValue(asyncData(fakeMember()));
+    const apiMock = {'editMembers': jest.fn()};
+    editMemberSpy = apiMock.editMembers.mockReturnValue(asyncData(fakeMember()));
 
     TestBed
         .configureTestingModule({
@@ -62,12 +59,11 @@ describe('EditMemberComponent', () => {
 
   it('should have required fields', () => {
     component.editMemberForm.controls.group.patchValue('');
-    expect(component.editMemberForm.controls.group.valid).toBeFalsy('group field is invalid if empty');
-    expect(component.editMemberForm.controls.group.hasError('required')).toBeTruthy('group field has required error');
+    expect(component.editMemberForm.controls.group.valid).toBeFalsy();
+    expect(component.editMemberForm.controls.group.hasError('required')).toBeTruthy();
 
     component.editMemberForm.controls.group.patchValue('editor');
-    expect(component.editMemberForm.controls.group.hasError('required'))
-        .toBeFalsy('group field has no required error after setting group');
+    expect(component.editMemberForm.controls.group.hasError('required')).toBeFalsy();
   });
 
   it('should call editMember method', fakeAsync(() => {
@@ -75,6 +71,6 @@ describe('EditMemberComponent', () => {
        component.editMember();
        tick();
 
-       expect(editMemberSpy.and.callThrough()).toHaveBeenCalled();
+       expect(editMemberSpy).toHaveBeenCalled();
      }));
 });

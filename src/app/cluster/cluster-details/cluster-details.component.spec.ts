@@ -1,10 +1,10 @@
 import {HttpClientModule} from '@angular/common/http';
-import {async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material';
+import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../../app-config.service';
@@ -21,6 +21,8 @@ import {AppConfigMockService} from '../../testing/services/app-config-mock.servi
 import {AuthMockService} from '../../testing/services/auth-mock.service';
 import {ClusterMockService} from '../../testing/services/cluster-mock-service';
 import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
+import {MatDialogMock} from '../../testing/services/mat-dialog-mock';
+import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
 import {NodeMockService} from '../../testing/services/node-mock.service';
 import {ProjectMockService} from '../../testing/services/project-mock.service';
 import {SettingsMockService} from '../../testing/services/settings-mock.service';
@@ -29,7 +31,7 @@ import {NodeService} from '../services/node.service';
 
 import {ClusterDetailsComponent} from './cluster-details.component';
 import {ClusterSecretsComponent} from './cluster-secrets/cluster-secrets.component';
-import {MachineNetworksDisplayComponent} from './machine-networks-display/machine-networks-dispay.component';
+import {MachineNetworksDisplayComponent} from './machine-networks-display/machine-networks-display.component';
 import {NodeDeploymentListComponent} from './node-deployment-list/node-deployment-list.component';
 import {NodeListComponent} from './node-list/node-list.component';
 import {RBACComponent} from './rbac/rbac.component';
@@ -41,12 +43,16 @@ describe('ClusterDetailsComponent', () => {
   let activatedRoute: ActivatedRouteStub;
 
   beforeEach(async(() => {
-    const rbacMock = jasmine.createSpyObj(
-        'RBACService', ['getClusterBindings', 'getBindings', 'deleteClusterBinding', 'deleteBinding']);
-    rbacMock.getClusterBindings.and.returnValue(asyncData([fakeClusterBindings()]));
-    rbacMock.getBindings.and.returnValue(asyncData([fakeBindings()]));
-    rbacMock.deleteClusterBinding.and.returnValue(of(null));
-    rbacMock.deleteBinding.and.returnValue(of(null));
+    const rbacMock = {
+      'getClusterBindings': jest.fn(),
+      'getBindings': jest.fn(),
+      'deleteClusterBinding': jest.fn(),
+      'deleteBinding': jest.fn()
+    };
+    rbacMock.getClusterBindings.mockReturnValue(asyncData([fakeClusterBindings()]));
+    rbacMock.getBindings.mockReturnValue(asyncData([fakeBindings()]));
+    rbacMock.deleteClusterBinding.mockReturnValue(of(null));
+    rbacMock.deleteBinding.mockReturnValue(of(null));
 
     TestBed
         .configureTestingModule({
@@ -54,7 +60,6 @@ describe('ClusterDetailsComponent', () => {
             BrowserModule,
             HttpClientModule,
             BrowserAnimationsModule,
-            SlimLoadingBarModule.forRoot(),
             RouterTestingModule,
             SharedModule,
           ],
@@ -80,7 +85,8 @@ describe('ClusterDetailsComponent', () => {
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: SettingsService, useClass: SettingsMockService},
             {provide: RBACService, useValue: rbacMock},
-            MatDialog,
+            {provide: MatDialogRef, useClass: MatDialogRefMock},
+            {provide: MatDialog, useClass: MatDialogMock},
             GoogleAnalyticsService,
           ],
         })
@@ -98,63 +104,38 @@ describe('ClusterDetailsComponent', () => {
     fixture.debugElement.query(By.css('.km-cluster-detail-actions'));
   });
 
-  it('should initialize', async(() => {
+  it('should initialize', (() => {
        expect(component).toBeTruthy();
      }));
 
   it('should get cluster', fakeAsync(() => {
        fixture.detectChanges();
-       tick();
 
        const expectedCluster = fakeDigitaloceanCluster();
-       // @ts-ignore
-       expectedCluster.creationTimestamp = jasmine.any(Date);
+       expectedCluster.creationTimestamp = expect.any(Date);
 
-       expect(component.cluster).toEqual(expectedCluster, 'should get cluster by api');
-       discardPeriodicTasks();
+       tick();
+       expect(component.cluster).toEqual(expectedCluster);
      }));
 
   it('should get nodes', fakeAsync(() => {
        fixture.detectChanges();
-       tick();
 
        const expectedNodes = nodesFake();
-       // @ts-ignore
-       expectedNodes[0].creationTimestamp = jasmine.any(Date);
-       // @ts-ignore
-       expectedNodes[1].creationTimestamp = jasmine.any(Date);
-
-       expect(component.nodes).toEqual(expectedNodes, 'should get nodes by api');
-
-       discardPeriodicTasks();
-     }));
-
-  it('should render template after requests', fakeAsync(() => {
-       fixture.detectChanges();
-       let de = fixture.debugElement.query(By.css('.km-cluster-detail-actions'));
-       const spinnerDe = fixture.debugElement.query(By.css('.km-spinner'));
-
-       expect(de).toBeNull('element should not be rendered before requests');
-       expect(spinnerDe).not.toBeNull('spinner should be rendered before requests');
+       expectedNodes[0].creationTimestamp = expect.any(Date);
+       expectedNodes[1].creationTimestamp = expect.any(Date);
 
        tick();
-       fixture.detectChanges();
-
-       de = fixture.debugElement.query(By.css('.km-cluster-detail-actions'));
-       expect(de).not.toBeNull('element should be rendered after requests');
-
-       discardPeriodicTasks();
+       expect(component.nodes).toEqual(expectedNodes);
      }));
 
-  it('should create simple cluster binding for rbac', fakeAsync(() => {
+  it('should create simple cluster binding for rbac', (() => {
        const simpleClusterBindings = component.createSimpleClusterBinding(fakeClusterBindings());
        expect(simpleClusterBindings).toEqual(fakeSimpleClusterBindings());
-       discardPeriodicTasks();
      }));
 
-  it('should create simple binding for rbac', fakeAsync(() => {
+  it('should create simple binding for rbac', (() => {
        const simpleBindings = component.createSimpleBinding(fakeBindings());
        expect(simpleBindings).toEqual(fakeSimpleBindings());
-       discardPeriodicTasks();
      }));
 });

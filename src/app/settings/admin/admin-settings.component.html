@@ -52,7 +52,7 @@
       <div fxLayout="row">
         <div class="km-admin-settings-label">
           <span>Cleanup on Cluster Deletion</span>
-          <div class="km-icon-icon"
+          <div class="km-icon-info"
                matTooltip="Set &quot;clean up connected load balancers&quot; and &quot;clean up connected volumes (PVs and PVCS)&quot; checkboxes on Cluster Deletion to enabled by default. Enable &quot;Enforce&quot; to make users unable to edit the checkboxes."></div>
         </div>
         <mat-checkbox [(ngModel)]="settings.cleanupOptions.Enabled"
@@ -72,7 +72,7 @@
         <mat-button-toggle-group #group="matButtonToggleGroup"
                                  [value]="selectedDistro"
                                  (change)="onDistroChange(group)"
-                                 class="km-admin-settings-field-distro"
+                                 class="km-account-settings-toggle"
                                  multiple="true">
           <mat-button-toggle value="kubernetes"
                              [disabled]="isLastDistro(group, 'kubernetes')">
@@ -92,7 +92,6 @@
            class="km-admin-settings-nd-container">
         <div class="km-admin-settings-label">Node Deployment</div>
         <mat-form-field class="km-admin-settings-field-nd">
-          <mat-label>Initial Node Deployment Replicas</mat-label>
           <input matInput
                  type="number"
                  min="0"
@@ -102,6 +101,17 @@
                  (change)="onSettingsChange()">
         </mat-form-field>
         <km-settings-status [isSaved]="isEqual(settings.defaultNodeCount, apiSettings.defaultNodeCount)"></km-settings-status>
+      </div>
+
+      <div fxLayout="row">
+        <div class="km-admin-settings-label">
+          <span>Enable Kubernetes Dashboard</span>
+          <div class="km-icon-info"
+               matTooltip="Show/Hide &quot;Open Dashboard&quot; button on cluster details and allow/block Kubernetes Dashboard access through the API."></div>
+        </div>
+        <mat-checkbox [(ngModel)]="settings.enableDashboard"
+                      (change)="onSettingsChange()"></mat-checkbox>
+        <km-settings-status [isSaved]="isEqual(settings.enableDashboard, apiSettings.enableDashboard)"></km-settings-status>
       </div>
     </div>
   </mat-card-content>

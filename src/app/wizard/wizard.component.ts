@@ -55,7 +55,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       private readonly _googleAnalyticsService: GoogleAnalyticsService,
       private readonly _settingsService: SettingsService) {
     this.cluster = {name: '', spec: {version: '', cloud: {dc: ''}, machineNetworks: []}, type: ''};
-    this.addNodeData = {spec: {cloud: {}, operatingSystem: {}, versions: {}}, count: 3};
+    this.addNodeData = {spec: {cloud: {}, operatingSystem: {}, versions: {}}, count: 3, dynamicConfig: false};
   }
 
   ngOnInit(): void {
@@ -209,6 +209,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+    this._wizardService.selectCustomPreset(null);
   }
 
   updateSteps(): void {
@@ -329,6 +330,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         spec: {
           template: this.addNodeData.spec,
           replicas: this.addNodeData.count,
+          dynamicConfig: this.addNodeData.dynamicConfig,
         },
       }
     };

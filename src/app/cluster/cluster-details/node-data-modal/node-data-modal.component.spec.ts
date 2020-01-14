@@ -5,7 +5,6 @@ import {MAT_DIALOG_DATA, MatDialogRef, MatTabsModule} from '@angular/material';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {CoreModule} from '../../../core/core.module';
 import {ApiService, ClusterService, DatacenterService, ProjectService, WizardService} from '../../../core/services';
@@ -57,7 +56,6 @@ describe('NodeDataModalData', () => {
             BrowserModule,
             HttpClientModule,
             BrowserAnimationsModule,
-            SlimLoadingBarModule.forRoot(),
             RouterTestingModule,
             NgReduxTestingModule,
             SharedModule,

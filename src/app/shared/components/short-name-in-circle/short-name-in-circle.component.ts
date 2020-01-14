@@ -31,10 +31,11 @@ export class ShortNameInCircleComponent implements OnInit, OnChanges {
 
   private _updateLabelKeys(): void {
     this.shortNames = [];
+
     for (const owner in this.owners) {
       if (this.owners.hasOwnProperty(owner)) {
         const capitalLetters = this.owners[owner].name.match(/\b(\w)/g);
-        const short = capitalLetters.join('').toUpperCase();
+        const short = capitalLetters.slice(0, 3).join('').toUpperCase();
         this.shortNames.push(short);
       }
     }

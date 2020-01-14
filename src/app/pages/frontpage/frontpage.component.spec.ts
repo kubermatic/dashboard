@@ -3,7 +3,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {CookieService} from 'ngx-cookie-service';
 
 import {Auth} from '../../core/services';
@@ -17,7 +16,6 @@ const modules: any[] = [
   BrowserModule,
   RouterTestingModule,
   BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
   SharedModule,
 ];
 
@@ -58,11 +56,11 @@ describe('FrontpageComponent', () => {
      }));
 
   it('should navigate to clusters list if authenticated', () => {
-    const spyNavigate = spyOn(router, 'navigate');
+    const spyNavigate = jest.spyOn(router, 'navigate');
     authService.isAuth = true;
 
     fixture.detectChanges();
 
-    expect(spyNavigate.and.callThrough()).toHaveBeenCalledTimes(1);
+    expect(spyNavigate).toHaveBeenCalledTimes(1);
   });
 });

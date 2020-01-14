@@ -8,6 +8,7 @@ import {CookieService} from 'ngx-cookie-service';
 
 import {AppConfigService} from '../../../app-config.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
+import {PreviousRouteService} from '../previous-route/previous-route.service';
 
 import {Auth} from './auth.service';
 
@@ -24,6 +25,7 @@ describe('Auth', () => {
           providers: [
             Auth,
             CookieService,
+            PreviousRouteService,
             {provide: AppConfigService, useClass: AppConfigMockService},
           ],
         })

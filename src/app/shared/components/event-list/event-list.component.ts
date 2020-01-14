@@ -5,6 +5,7 @@ import {takeUntil} from 'rxjs/operators';
 
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {EventEntity} from '../../entity/EventEntity';
+import {HealthStatusColor} from '../../utils/health-status/health-status';
 
 @Component({
   selector: 'km-event-list',
@@ -51,9 +52,9 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
   getTypeIcon(event: EventEntity): string {
     switch (event.type) {
       case 'Normal':
-        return 'fa fa-circle green';
+        return HealthStatusColor.Green;
       case 'Warning':
-        return 'fa fa-circle orange';
+        return HealthStatusColor.Orange;
       default:
         return 'fa fa-circle';
     }
@@ -73,9 +74,9 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
 
   getTypeIconForEvents(): string {
     if (this.events.filter((event) => event.type === 'Warning').length > 0) {
-      return 'fa fa-circle orange';
+      return HealthStatusColor.Orange;
     } else if (this.events.filter((event) => event.type === 'Normal').length > 0) {
-      return 'fa fa-circle green';
+      return HealthStatusColor.Green;
     } else {
       return '';
     }

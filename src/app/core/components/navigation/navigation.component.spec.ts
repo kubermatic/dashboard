@@ -5,7 +5,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {SharedModule} from '../../../shared/shared.module';
 import {AuthMockService} from '../../../testing/services/auth-mock.service';
@@ -20,7 +19,6 @@ const modules: any[] = [
   HttpClientModule,
   RouterTestingModule,
   BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
   SharedModule,
 ];
 
@@ -59,8 +57,8 @@ describe('NavigationComponent', () => {
 
   it('should tell Router to navigate when user logout', inject([Router], (router: Router) => {
        authService = fixture.debugElement.injector.get(Auth) as any;
-       const spyNavigate = spyOn(router, 'navigate');
-       const spyLogOut = spyOn(authService, 'logout');
+       const spyNavigate = jest.spyOn(router, 'navigate');
+       const spyLogOut = jest.spyOn(authService, 'logout');
 
        component.logout();
 
