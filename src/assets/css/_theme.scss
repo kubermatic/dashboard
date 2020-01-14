@@ -68,7 +68,7 @@
 
   $transition: all .5s ease;
 
-  // Angular Material overrides.
+  // Angular Material and other overrides.
   mat-card-header > div > mat-card-title > div {
     margin: $baseline-grid 0;
     font-size: $font-size-body;
@@ -715,6 +715,16 @@
 
   mat-list-item.disabled i {
     opacity: 0.3;
+  }
+
+  .ngx-charts {
+    text {
+      fill: $text;
+    }
+
+    .background-bar * {
+      fill: #444;
+    }
   }
 
   // Application component styles (it's basically every class that starts with "km-" prefix).

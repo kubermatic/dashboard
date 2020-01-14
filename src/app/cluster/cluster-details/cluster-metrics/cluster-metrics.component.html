@@ -4,29 +4,37 @@
      fxFlex
      fxLayout="row wrap"
      fxLayoutAlign=" center">
+  <ngx-charts-linear-gauge *ngIf="metrics?.nodes?.memoryTotalBytes && metrics?.nodes?.memoryAvailableBytes"
+                           [value]="metrics.nodes.memoryTotalBytes"
+                           [max]="metrics.nodes.memoryAvailableBytes"
+                           units="Nodes Memory (MiB)"
+                           [view]="[250, 85]"
+                           [scheme]="colorScheme"
+                           [animations]="false"></ngx-charts-linear-gauge>
 
-  <km-property>
-    <div key>Control Plane Memory Usage</div>
-    <div value>{{metrics.controlPlane.memoryTotalBytes}} bytes</div>
-  </km-property>
-  <km-property>
-    <div key>Control Plane CPU Usage</div>
-    <div value>{{metrics.controlPlane.cpuTotalMillicores}} milicores</div>
-  </km-property>
-
-  <km-property>
-    <div key>Nodes Memory Usage</div>
-    <div value>
-      {{metrics.nodes.memoryTotalBytes}}/{{metrics.nodes.memoryAvailableBytes}} bytes
-      ({{metrics.nodes.memoryUsedPercentage}}%)
-    </div>
-  </km-property>
-  <km-property>
-    <div key>Nodes CPU Usage</div>
-    <div value>
-      {{metrics.nodes.cpuTotalMillicores}}/{{metrics.nodes.cpuAvailableMillicores}} milicores
-      ({{metrics.nodes.cpuUsedPercentage}}%)
-    </div>
-  </km-property>
-
+  <ngx-charts-linear-gauge *ngIf="metrics?.nodes?.cpuTotalMillicores && metrics?.nodes?.cpuAvailableMillicores"
+                           [value]="metrics.nodes.cpuTotalMillicores"
+                           [valueFormatting]="cpuFormat"
+                           [max]="metrics.nodes.cpuAvailableMillicores"
+                           units="Nodes CPU Usage"
+                           [view]="[275, 85]"
+                           [scheme]="colorScheme"
+                           [animations]="false"></ngx-charts-linear-gauge>
 </div>
+
+<km-property>
+  <div key>Control Plane Memory Usage</div>
+  <div value>{{metrics?.controlPlane?.memoryTotalBytes}} MiB</div>
+</km-property>
+<km-property>
+  <div key>Control Plane CPU Usage</div>
+  <div value>{{metrics?.controlPlane?.cpuTotalMillicores}} milicores</div>
+</km-property>
+
+<km-property>
+  <div key>Nodes Memory Usage</div>
+  <div value>
+    {{metrics?.nodes?.memoryTotalBytes}}/{{metrics?.nodes?.memoryAvailableBytes}} MiB
+    ({{metrics?.nodes?.memoryUsedPercentage}}%)
+  </div>
+</km-property>
