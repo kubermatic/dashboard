@@ -67,7 +67,11 @@
       </div>
 
       <div>
-        <div class="km-account-settings-entry-label">Default Project</div>
+        <div class="km-account-settings-entry-label">
+          <span>Default Project</span>
+          <div class="km-icon-info"
+               matTooltip="Selecting a default project will automatically redirected you to it after login."></div>
+        </div>
         <mat-form-field fxFlex="35">
           <mat-select disableOptionCentering
                       [(ngModel)]="settings.selectedProjectId"

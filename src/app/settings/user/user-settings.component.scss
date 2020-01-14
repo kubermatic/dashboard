@@ -40,6 +40,10 @@
     .km-account-settings-entry-label {
       width: 20 * $baseline-grid;
       line-height: 8 * $baseline-grid;
+
+      span {
+        margin-right: .625 * $baseline-grid;
+      }
     }
 
     .km-account-settings-toggle {
