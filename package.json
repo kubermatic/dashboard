@@ -79,7 +79,7 @@
     "ngx-cookie-service": "2.2.0",
     "ngx-window-token": "2.0.1",
     "openstack-lib": "0.0.2",
-    "redux": "4.0.1",
+    "redux": "4.0.5",
     "rxjs": "6.5.4",
     "rxjs-compat": "6.5.4",
     "semver": "6.3.0",
