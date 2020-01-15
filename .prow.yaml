@@ -1,4 +1,29 @@
 presubmits:
+- name: pull-dashboard-headless
+  always_run: true
+  decorate: true
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
+  spec:
+    containers:
+      - image: quay.io/kubermatic/chrome-headless:v0.5
+        command:
+          - make
+        args:
+          - test-headless
+        resources:
+          requests:
+            cpu: 1
+            memory: 3Gi
+          limits:
+            cpu: 2
+            memory: 5Gi
+        env:
+          - name: CODECOV_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: kubermatic-codecov
+                key: token
+
 - name: pull-dashboard-e2e
   always_run: true
   decorate: true
