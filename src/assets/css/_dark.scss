@@ -42,16 +42,17 @@ $dark-theme: mat-dark-theme($primary, $lighter, $accent);
 
 // sass-lint:disable function-name-format
 $background: map-get($dark-theme, background);
-$background: map_merge($background, (background: #121212));
+$background: map_merge($background, (background: #000));
+$background: map_merge($background, (hover: #2d2d2e));
 $background: map_merge($background, (app-bar: #2b2b2c));
-$background: map_merge($background, (card: #1c1c1d));
+$background: map_merge($background, (card: #202021));
 $background: map_merge($background, (dialog: #1c1c1d));
 $dark-theme: map_merge($dark-theme, (background: $background));
 
 $foreground: map-get($dark-theme, foreground);
 $foreground: map_merge($foreground, (text: #fff));
 $foreground: map_merge($foreground, (secondary-text: #b8b8b8));
-$foreground: map_merge($foreground, (divider: #373738));
+$foreground: map_merge($foreground, (divider: #464647));
 $dark-theme: map_merge($dark-theme, (foreground: $foreground));
 // sass-lint:enable function-name-format
 

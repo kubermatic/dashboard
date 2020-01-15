@@ -70,19 +70,19 @@ describe('ClusterSecretsComponent', () => {
     expect(component.getIconClass(HealthState.down)).toBe('km-icon-failed');
   });
 
-  it('should set icon class `fa fa-circle-o-notch fa-spin blue`', () => {
+  it('should set icon class `fa fa-circle-o-notch fa-spin km-info`', () => {
     component.health = fakeHealthProvisioning();
-    expect(component.getIconClass(HealthState.provisioning)).toBe('fa fa-circle-o-notch fa-spin blue');
+    expect(component.getIconClass(HealthState.provisioning)).toBe('fa fa-circle-o-notch fa-spin km-info');
   });
 
   it('should set correct icon for controllers', () => {
     component.health = fakeHealthProvisioning();
     expect(component.getIcon('apiserver')).toBe('km-icon-running');
     expect(component.getIcon('controller')).toBe('km-icon-running');
-    expect(component.getIcon('etcd')).toBe('fa fa-circle-o-notch fa-spin blue');
-    expect(component.getIcon('scheduler')).toBe('fa fa-circle-o-notch fa-spin blue');
+    expect(component.getIcon('etcd')).toBe('fa fa-circle-o-notch fa-spin km-info');
+    expect(component.getIcon('scheduler')).toBe('fa fa-circle-o-notch fa-spin km-info');
     expect(component.getIcon('machineController')).toBe('km-icon-running');
-    expect(component.getIcon('userClusterControllerManager')).toBe('fa fa-circle-o-notch fa-spin blue');
+    expect(component.getIcon('userClusterControllerManager')).toBe('fa fa-circle-o-notch fa-spin km-info');
     expect(component.getIcon('test-controller')).toBe('');
   });
 

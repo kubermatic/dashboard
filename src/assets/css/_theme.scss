@@ -14,20 +14,16 @@
   $text-secondary: mat-color($palette-foreground, secondary-text);
   $text-disabled: mat-color($palette-foreground, disabled-text);
   $text-footer: mat-color($palette-primary, 50);
-  $text-white: #fff;
 
   $background: mat-color($palette-background, background);
   $background-hover: mat-color($palette-background, hover);
   $background-card: mat-color($palette-background, card);
-  $background-card-hover: rgba($background-hover, .02);
   $background-disabled-button: mat-color($palette-background, disabled-button);
   $background-app-bar: mat-color($palette-background, app-bar);
+  $background-tooltip: #31586f;
 
   $divider: mat-color($palette-foreground, divider);
   $shadow: 0 4px 4px rgba(#000, .08);
-
-  $chip-accent: mat-color($palette-background, card);
-  $chip-background: $divider;
 
   $scrollbar-background: mat-color($palette-background, card);
   $scrollbar-color: $divider;
@@ -41,30 +37,25 @@
   $sidenav-divider: mat-color($palette-primary, 200);
   $sidenav-divider-top: mat-color($palette-primary, 100);
 
+  $chip-accent: mat-color($palette-background, card);
+  $chip-background: $divider;
+
   $project-switch: rgba(mat-color($palette-foreground, secondary-text), .7);
+
+  $wizard-step-background: #b6ebfc;
+  $wizard-step-active-background: #b9ccdf;
 
   $primary: #0081ae;
   $primary-hover: #00a3d9;
-  $primary-light: #31586f;
-  $primary-active: #234d66;
+  $primary-dark: #1b658f;
 
-  $alternative: #00a3d9;
-  $alternative-dark: #203f58;
-  $alternative-light: #edf9fc;
-  $alternative-text: #1b658f;
-
-  $secondary-light: #dcf3fa;
-  $secondary: #b9ccdf;
-  $secondary-dark: #b6ebfc;
-
-  $quaternary: #3bc6ad;
-  $quaternary-hover: #21dfa9;
-  $quaternary-dark: #1c8282;
+  $secondary: #3bc6ad;
+  $secondary-hover: #21dfa9;
+  $secondary-dark: #1c8282;
 
   $indicator-green: #1dc67f;
   $indicator-orange: #f7b500;
   $indicator-red: #eb5757;
-  $indicator-blue: #00a3d9;
 
   $transition: all .5s ease;
 
@@ -169,69 +160,6 @@
         }
       }
     }
-
-    &.km-card-transparent {
-      box-shadow: none !important;
-    }
-
-    &.km-card-progress-bar {
-      box-shadow: none !important;
-      border-radius: $border-radius $border-radius 0 0 !important;
-      padding: (1.25 * $baseline-grid) (3.75 * $baseline-grid) (2.5 * $baseline-grid);
-
-      .mat-card-title {
-        margin-bottom: 0;
-        margin-top: 0;
-        padding-right: 1.875 * $baseline-grid;
-        text-align: center;
-      }
-
-      .km-wizard-step {
-        color: $text-secondary;
-        cursor: default;
-        font-size: $font-size-subhead;
-        font-weight: normal;
-        padding-top: $baseline-grid;
-        user-select: none;
-
-        .km-wizard-step-number {
-          align-items: center;
-          border-radius: 50%;
-          background: $divider;
-          display: inline-flex;
-          font-size: $font-size-body;
-          font-weight: normal;
-          height: 3 * $baseline-grid;
-          justify-content: center;
-          margin-right: 1.75 * $baseline-grid;
-          width: 3 * $baseline-grid;
-        }
-
-        &.active {
-          color: $primary;
-          font-weight: 500;
-
-          .km-wizard-step-number {
-            background: $secondary-dark;
-          }
-        }
-
-        &.completed {
-          color: $primary;
-          cursor: pointer;
-
-          .km-wizard-step-number {
-            background: $secondary-dark;
-          }
-        }
-      }
-
-      .km-wizard-step-divider {
-        height: 1px;
-        background: $divider;
-        margin: (2.5 * $baseline-grid) (2.5 * $baseline-grid) 0 $baseline-grid;
-      }
-    }
   }
 
   .mat-drawer-container {
@@ -247,7 +175,7 @@
   }
 
   .mat-tooltip {
-    background-color: $primary-light !important;
+    background-color: $background-tooltip !important;
     font-size: $font-size-caption !important;
     margin-top: 0.625 * $baseline-grid !important;
   }
@@ -356,17 +284,17 @@
   }
 
   div.mat-form-field-outline.mat-form-field-outline-thick {
-    color: $quaternary;
+    color: $secondary;
   }
 
   mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) div.mat-form-field-flex:hover label {
     transition: all .2s ease;
-    color: $quaternary-dark;
+    color: $secondary-dark;
   }
 
   mat-form-field.mat-focused:not(.ng-invalid) label.mat-form-field-label,
   mat-form-field.mat-focused.ng-pristine:not(.ng-touched) label.mat-form-field-label {
-    color: $alternative-text;
+    color: $primary-dark;
   }
 
   mat-hint a {
@@ -391,10 +319,10 @@
     }
 
     &.mat-alternative:not([disabled]) {
-      background-color: $quaternary;
+      background-color: $secondary;
 
       &:hover {
-        background-color: $quaternary-hover;
+        background-color: $secondary-hover;
       }
     }
 
@@ -404,7 +332,7 @@
       border: 1px solid $divider;
 
       &:hover {
-        background-color: $background-card-hover;
+        background-color: $background-hover;
       }
     }
 
@@ -414,7 +342,7 @@
       border: none;
 
       &:hover {
-        background-color: $background-card-hover;
+        background-color: $background-hover;
       }
     }
 
@@ -731,12 +659,24 @@
     background: $scrollbar-background;
   }
 
+  .km-header {
+    color: $text;
+    font-size: $font-size-card-title;
+    padding: $baseline-grid 0 (2 * $baseline-grid);
+    margin: 1.5 * $baseline-grid 0;
+    line-height: 1.6 * $line-height;
+  }
+
   .km-text {
     color: $text;
   }
 
   .km-text-muted {
     color: $text-secondary;
+  }
+
+  .km-info {
+    color: $primary-hover;
   }
 
   .km-success {
@@ -938,7 +878,7 @@
   .km-serviceaccount-token-wrapper,
   .km-publickey-wrapper,
   .km-node-details {
-    background-color: $background-card-hover;
+    background-color: $background-hover;
   }
 
   .km-table {
@@ -1069,7 +1009,7 @@
     border-bottom-left-radius: $border-radius;
 
     &:hover {
-      background-color: $background-card-hover;
+      background-color: $background-hover;
     }
 
     button {
@@ -1098,7 +1038,7 @@
     }
 
     .mat-tab-label {
-      background-color: $secondary !important;
+      background-color: $wizard-step-active-background !important;
       opacity: 1;
       margin-right: 0.375 * $baseline-grid;
       padding: 0;
@@ -1164,7 +1104,7 @@
       max-width: $type-toggle-width;
       margin: (0.25 * $baseline-grid) 0 0 0;
       border-width: 0.25 * $baseline-grid !important;
-      background-color: $background-card-hover;
+      background-color: $background-hover;
 
       i {
         filter: grayscale(100%);
@@ -1172,7 +1112,7 @@
 
       &:hover {
         background-color: transparent;
-        border: (0.25 * $baseline-grid) solid $quaternary !important;
+        border: (0.25 * $baseline-grid) solid $secondary !important;
         transition: all .5s ease;
       }
 
@@ -1222,6 +1162,62 @@
       .km-icon-arrow-up {
         background: $text-secondary;
       }
+    }
+  }
+
+  .km-card-progress-bar {
+    box-shadow: none !important;
+    border-radius: $border-radius $border-radius 0 0 !important;
+    padding-bottom: 2.5 * $baseline-grid;
+
+    .km-wizard-step {
+      color: $text-secondary;
+      cursor: default;
+      font-size: $font-size-subhead;
+      font-weight: 400;
+      padding-top: $baseline-grid;
+      margin-bottom: 0;
+      margin-top: 0;
+      padding-right: 1.875 * $baseline-grid;
+      text-align: center;
+      user-select: none;
+
+      .km-wizard-step-number {
+        align-items: center;
+        border-radius: 50%;
+        background: $divider;
+        display: inline-flex;
+        font-size: $font-size-body;
+        font-weight: normal;
+        height: 3 * $baseline-grid;
+        justify-content: center;
+        margin-right: 1.75 * $baseline-grid;
+        width: 3 * $baseline-grid;
+      }
+
+      &.active {
+        color: $primary;
+        font-weight: 500 !important;
+
+        .km-wizard-step-number {
+          background: $wizard-step-background;
+        }
+      }
+
+      &.completed {
+        color: $primary;
+        cursor: pointer;
+
+        .km-wizard-step-number {
+          background: $wizard-step-background;
+        }
+      }
+    }
+
+    .km-wizard-step-divider {
+      height: 1px;
+      background: $divider;
+      margin: (2.5 * $baseline-grid) (2.5 * $baseline-grid) 0 $baseline-grid;
     }
   }
 
@@ -1299,21 +1295,21 @@
         border-left: 2px;
         border-top: 2px;
         border-style: solid;
-        border-color: $quaternary;
+        border-color: $secondary;
         margin-left: -1px;
         transition: all .5s ease;
         width: 51px;
       }
 
       .mat-form-field-outline-thick {
-        color: $quaternary !important;
+        color: $secondary !important;
         opacity: 1 !important;
         transition: all .5s ease;
       }
 
       div.mat-form-field-flex label {
         transition: all .5s ease;
-        color: $quaternary-dark !important;
+        color: $secondary-dark !important;
       }
     }
 
@@ -1324,7 +1320,7 @@
   }
 
   .km-cluster-panel-container {
-    background: $background-card-hover;
+    background: $background-hover;
     border-bottom: 1px solid rgba($text, .1);
     color: $text;
     height: $toolbar-height + $sidenav-border-width;
@@ -1377,7 +1373,7 @@
       border-left: 1px solid $divider;
 
       &:hover {
-        background-color: $background-card-hover;
+        background-color: $background-hover;
       }
     }
   }
@@ -1386,12 +1382,12 @@
     color: $text-footer;
 
     &.disabled {
-      border: 1px dashed $background-card-hover;
+      border: 1px dashed $background-hover;
       color: $text-secondary;
     }
 
     &:hover:not(.disabled) {
-      background-color: $background-card-hover;
+      background-color: $background-hover;
       border: 1px solid $divider;
     }
   }
@@ -1400,7 +1396,7 @@
     box-shadow: 0 0 0 1px $divider;
 
     &:hover {
-      box-shadow: 0 0 0 2px $quaternary-hover;
+      box-shadow: 0 0 0 2px $secondary-hover;
       transition: all .5s ease;
     }
 
@@ -1442,7 +1438,7 @@
 
     .mat-button-toggle-checked {
       border: (0.125 * $baseline-grid) solid $primary;
-      background-color: $background-card-hover;
+      background-color: $background-hover;
     }
   }
 

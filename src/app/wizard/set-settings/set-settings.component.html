@@ -5,34 +5,24 @@
        fxLayout.sm="column"
        fxLayout.xs="column"
        fxLayoutGap="30px">
-    <mat-card class="km-card-transparent"
-              fxFlex="50%"
-              fxFlex.md="100%"
-              fxFlex.sm="100%"
-              fxFlex.xs="100%">
-      <mat-card-header>
-        <mat-card-title>Provider Credentials</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <kubermatic-cluster-provider-settings [cluster]="cluster"
-                                              [clusterSSHKeys]="clusterSSHKeys"></kubermatic-cluster-provider-settings>
-      </mat-card-content>
-    </mat-card>
-    <mat-card class="node-settings-card km-card-transparent"
-              fxFlex="50%"
-              fxFlex.md="100%"
-              fxFlex.sm="100%"
-              fxFlex.xs="100%">
-      <mat-card-header>
-        <mat-card-title>Node Settings</mat-card-title>
-      </mat-card-header>
-      <mat-card-content fxLayout="column">
-        <kubermatic-node-data [cluster]="cluster"
-                              [nodeData]="nodeData"
-                              [existingNodesCount]="0"
-                              isInWizard="true"></kubermatic-node-data>
-      </mat-card-content>
-    </mat-card>
+    <div fxFlex="50%"
+         fxFlex.md="100%"
+         fxFlex.sm="100%"
+         fxFlex.xs="100%">
+      <div class="km-header">Provider Credentials</div>
+      <kubermatic-cluster-provider-settings [cluster]="cluster"
+                                            [clusterSSHKeys]="clusterSSHKeys"></kubermatic-cluster-provider-settings>
+    </div>
+    <div fxFlex="50%"
+         fxFlex.md="100%"
+         fxFlex.sm="100%"
+         fxFlex.xs="100%">
+      <div class="km-header">Node Settings</div>
+      <kubermatic-node-data [cluster]="cluster"
+                            [nodeData]="nodeData"
+                            [existingNodesCount]="0"
+                            isInWizard="true"></kubermatic-node-data>
+    </div>
   </div>
 
   <div class="km-wizard-settings-extended-wrapper"

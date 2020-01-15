@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 import {Step, StepsService} from '../../core/services/wizard/steps.service';
 
 @Component({
-  selector: 'kubermatic-progress',
+  selector: 'km-wizard-progress',
   templateUrl: 'progress.component.html',
 })
 export class ProgressComponent {

@@ -118,11 +118,6 @@ export class ClusterService {
     return this._http.get<NodeEntity[]>(url).pipe(catchError(() => of<NodeEntity[]>()));
   }
 
-  createNode(projectID: string, clusterID: string, datacenter: string, node: NodeEntity): Observable<NodeEntity> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/nodes`;
-    return this._http.post<NodeEntity>(url, node);
-  }
-
   deleteNode(projectID: string, clusterID: string, datacenter: string, nodeID: string): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/nodes/${nodeID}`;
     return this._http.delete(url);

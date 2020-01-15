@@ -25,8 +25,8 @@ h2 {
 }
 
 tr:first-child th:first-child,
-.km-table td:first-child {
-  padding-left: 7 * $baseline-grid;
+tr:first-child td:first-child {
+  padding-left: 7 * $baseline-grid !important;
 }
 
 tr:last-child th:last-child,

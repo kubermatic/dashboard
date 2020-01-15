@@ -1,45 +1,12 @@
 @import "../../assets/css/variables";
 
 .mat-card {
-  margin-bottom: 50px;
   padding: (2 * $baseline-grid) (3.75 * $baseline-grid) (3.75 * $baseline-grid) (3.75 * $baseline-grid);
-
-  .mat-card-header {
-    padding: 0;
-    margin-bottom: 1.25 * $baseline-grid;
-    height: 6 * $baseline-grid;
-  }
-
-  .mat-card-title {
-    margin: 0;
-
-    h4 {
-      font-weight: 400;
-      margin: (1.25 * $baseline-grid) 0;
-      font-size: $font-size-subhead-lg;
-    }
-  }
-
-  .mat-card-content {
-    form {
-      padding-top: 1.25 * $baseline-grid;
-    }
-
-    p {
-      margin: 0 $baseline-grid (0.625 * $baseline-grid);
-    }
-  }
 }
 
-// Navigation buttons.
 .km-button-navigation {
   margin-top: 5 * $baseline-grid;
   text-align: left;
-}
-
-.km-wizard-wrapper {
-  box-shadow: $border-box-shadow;
-  border-radius: $border-radius;
 }
 
 ::ng-deep .mat-card-header .mat-card-title {
