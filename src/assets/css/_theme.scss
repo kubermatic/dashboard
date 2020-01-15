@@ -18,7 +18,6 @@
   $background: mat-color($palette-background, background);
   $background-hover: mat-color($palette-background, hover);
   $background-card: mat-color($palette-background, card);
-  $background-card-hover: rgba($background-hover, .02);
   $background-disabled-button: mat-color($palette-background, disabled-button);
   $background-app-bar: mat-color($palette-background, app-bar);
   $background-tooltip: #31586f;
@@ -333,7 +332,7 @@
       border: 1px solid $divider;
 
       &:hover {
-        background-color: $background-card-hover;
+        background-color: $background-hover;
       }
     }
 
@@ -343,7 +342,7 @@
       border: none;
 
       &:hover {
-        background-color: $background-card-hover;
+        background-color: $background-hover;
       }
     }
 
@@ -879,7 +878,7 @@
   .km-serviceaccount-token-wrapper,
   .km-publickey-wrapper,
   .km-node-details {
-    background-color: $background-card-hover;
+    background-color: $background-hover;
   }
 
   .km-table {
@@ -1010,7 +1009,7 @@
     border-bottom-left-radius: $border-radius;
 
     &:hover {
-      background-color: $background-card-hover;
+      background-color: $background-hover;
     }
 
     button {
@@ -1105,7 +1104,7 @@
       max-width: $type-toggle-width;
       margin: (0.25 * $baseline-grid) 0 0 0;
       border-width: 0.25 * $baseline-grid !important;
-      background-color: $background-card-hover;
+      background-color: $background-hover;
 
       i {
         filter: grayscale(100%);
@@ -1321,7 +1320,7 @@
   }
 
   .km-cluster-panel-container {
-    background: $background-card-hover;
+    background: $background-hover;
     border-bottom: 1px solid rgba($text, .1);
     color: $text;
     height: $toolbar-height + $sidenav-border-width;
@@ -1374,7 +1373,7 @@
       border-left: 1px solid $divider;
 
       &:hover {
-        background-color: $background-card-hover;
+        background-color: $background-hover;
       }
     }
   }
@@ -1383,12 +1382,12 @@
     color: $text-footer;
 
     &.disabled {
-      border: 1px dashed $background-card-hover;
+      border: 1px dashed $background-hover;
       color: $text-secondary;
     }
 
     &:hover:not(.disabled) {
-      background-color: $background-card-hover;
+      background-color: $background-hover;
       border: 1px solid $divider;
     }
   }
@@ -1439,7 +1438,7 @@
 
     .mat-button-toggle-checked {
       border: (0.125 * $baseline-grid) solid $primary;
-      background-color: $background-card-hover;
+      background-color: $background-hover;
     }
   }
 
