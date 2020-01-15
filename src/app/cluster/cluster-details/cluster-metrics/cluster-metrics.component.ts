@@ -1,4 +1,5 @@
 import {Component, Input} from '@angular/core';
+import {ClusterMetrics} from '../../../shared/entity/Metrics';
 
 @Component({
   selector: 'km-cluster-metrics',
@@ -7,5 +8,5 @@ import {Component, Input} from '@angular/core';
 })
 
 export class ClusterMetricsComponent {
-  @Input() metrics: any;
+  @Input() metrics: ClusterMetrics;
 }
