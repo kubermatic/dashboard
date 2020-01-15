@@ -6,7 +6,6 @@ import {NgModule} from '@angular/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule, MatChipsModule, MatDialogModule, MatDividerModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatOptionModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatSelectModule, MatSidenavModule, MatSliderModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule} from '@angular/material';
-import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {CustomFormsModule} from 'ng2-validation';
 import {ClipboardModule} from 'ngx-clipboard';
 
@@ -20,6 +19,7 @@ import {BooleanPropertyComponent} from './components/boolean-property/boolean-pr
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 import {DialogTitleComponent} from './components/dialog-title/dialog-title.component';
 import {EventListComponent} from './components/event-list/event-list.component';
+import {HorizontalUsageGraphComponent} from './components/horizontal-usage-graph/horizontal-usage-graph.component';
 import {LabelFormComponent} from './components/label-form/label-form.component';
 import {LabelsComponent} from './components/labels/labels.component';
 import {PropertyComponent} from './components/property/property.component';
@@ -40,7 +40,6 @@ const modules: any[] = [
   MatDialogModule,       MatSliderModule,   MatSlideToggleModule, MatProgressBarModule, MatExpansionModule,
   MatSortModule,         MatTableModule,    MatDividerModule,     ClipboardModule,      NgReduxFormModule,
   MatButtonToggleModule, MatTabsModule,     MatOptionModule,      MatFormFieldModule,   MatPaginatorModule,
-  NgxChartsModule,
 ];
 
 const components: any[] = [
@@ -59,6 +58,7 @@ const components: any[] = [
   SettingsStatusComponent,
   ShortNameInCircleComponent,
   TagListComponent,
+  HorizontalUsageGraphComponent,
 ];
 
 const entryComponents: any[] = [

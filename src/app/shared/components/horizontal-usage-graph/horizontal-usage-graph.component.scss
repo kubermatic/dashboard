@@ -1,0 +1,23 @@
+@import '../../../../assets/css/variables';
+
+.km-horizontal-usage-graph {
+  cursor: default;
+  min-width: 30 * $baseline-grid;
+  padding: $baseline-grid (8 * $baseline-grid) $baseline-grid 0;
+}
+
+.mat-progress-bar {
+  border-radius: .25 * $baseline-grid;
+  height: .66 * $baseline-grid;
+  margin: (.5 * $baseline-grid) 0;
+}
+
+.title {
+  font-size: $font-size-body;
+  line-height: 2 * $line-height;
+}
+
+.label {
+  font-size: $font-size-subhead;
+  line-height: 2.5 * $line-height;
+}

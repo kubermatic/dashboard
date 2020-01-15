@@ -717,14 +717,9 @@
     opacity: 0.3;
   }
 
-  .ngx-charts {
-    text {
-      fill: $text;
-    }
-
-    .background-bar * {
-      fill: #444;
-    }
+  .mat-progress-spinner circle,
+  .mat-spinner circle {
+    stroke: $primary !important;
   }
 
   // Application component styles (it's basically every class that starts with "km-" prefix).

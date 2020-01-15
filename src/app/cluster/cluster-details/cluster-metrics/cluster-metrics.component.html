@@ -1,40 +1,31 @@
 <mat-divider></mat-divider>
-
-<div class="km-card-expansion-panel"
+<div class="km-cluster-metrics"
      fxFlex
-     fxLayout="row wrap"
      fxLayoutAlign=" center">
-  <ngx-charts-linear-gauge *ngIf="metrics?.nodes?.memoryTotalBytes && metrics?.nodes?.memoryAvailableBytes"
-                           [value]="metrics.nodes.memoryTotalBytes"
-                           [max]="metrics.nodes.memoryAvailableBytes"
-                           units="Nodes Memory (MiB)"
-                           [view]="[250, 85]"
-                           [scheme]="colorScheme"
-                           [animations]="false"></ngx-charts-linear-gauge>
+  <div *ngIf="metrics"
+       class="km-card-expansion-panel"
+       fxFlex
+       fxLayout="row wrap"
+       fxLayoutAlign=" center">
+    <km-horizontal-usage-graph title="Nodes CPU Usage"
+                               unit="millicores"
+                               [used]="metrics?.nodes?.cpuTotalMillicores"
+                               [total]="metrics?.nodes?.cpuAvailableMillicores"></km-horizontal-usage-graph>
 
-  <ngx-charts-linear-gauge *ngIf="metrics?.nodes?.cpuTotalMillicores && metrics?.nodes?.cpuAvailableMillicores"
-                           [value]="metrics.nodes.cpuTotalMillicores"
-                           [valueFormatting]="cpuFormat"
-                           [max]="metrics.nodes.cpuAvailableMillicores"
-                           units="Nodes CPU Usage"
-                           [view]="[275, 85]"
-                           [scheme]="colorScheme"
-                           [animations]="false"></ngx-charts-linear-gauge>
-</div>
+    <km-horizontal-usage-graph title="Nodes Memory Usage"
+                               unit="MiB"
+                               [used]="metrics?.nodes?.memoryTotalBytes"
+                               [total]="metrics?.nodes?.memoryAvailableBytes"></km-horizontal-usage-graph>
 
-<km-property>
-  <div key>Control Plane Memory Usage</div>
-  <div value>{{metrics?.controlPlane?.memoryTotalBytes}} MiB</div>
-</km-property>
-<km-property>
-  <div key>Control Plane CPU Usage</div>
-  <div value>{{metrics?.controlPlane?.cpuTotalMillicores}} milicores</div>
-</km-property>
+    <km-horizontal-usage-graph title="Control Plane CPU Usage"
+                               unit="millicores"
+                               [used]="metrics?.controlPlane?.cpuTotalMillicores"></km-horizontal-usage-graph>
 
-<km-property>
-  <div key>Nodes Memory Usage</div>
-  <div value>
-    {{metrics?.nodes?.memoryTotalBytes}}/{{metrics?.nodes?.memoryAvailableBytes}} MiB
-    ({{metrics?.nodes?.memoryUsedPercentage}}%)
+    <km-horizontal-usage-graph title="Control Plane Memory Usage"
+                               unit="MiB"
+                               [used]="metrics?.controlPlane?.memoryTotalBytes"></km-horizontal-usage-graph>
   </div>
-</km-property>
+  <mat-spinner *ngIf="!metrics"
+               [diameter]="25"
+               class="km-spinner"></mat-spinner>
+</div>
