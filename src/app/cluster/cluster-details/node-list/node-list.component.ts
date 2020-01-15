@@ -52,7 +52,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
       private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
-    this.dataSource.data = this.nodes;
+    this.dataSource.data = !!this.nodes ? this.nodes : [];
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
@@ -64,7 +64,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(): void {
-    this.dataSource.data = this.nodes;
+    this.dataSource.data = !!this.nodes ? this.nodes : [];
   }
 
   ngOnDestroy(): void {
@@ -175,10 +175,10 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   hasItems(): boolean {
-    return this.nodes && this.nodes.length > 0;
+    return !!this.nodes && this.nodes.length > 0;
   }
 
   isPaginatorVisible(): boolean {
-    return this.hasItems() && this.paginator && this.nodes.length > this.paginator.pageSize;
+    return this.hasItems() && this.paginator && !!this.nodes && this.nodes.length > this.paginator.pageSize;
   }
 }

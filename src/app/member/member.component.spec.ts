@@ -5,9 +5,9 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {of} from 'rxjs';
 
-
 import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
+import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {SharedModule} from '../shared/shared.module';
 import {DialogTestModule, NoopConfirmDialogComponent} from '../testing/components/noop-confirmation-dialog.component';
@@ -16,7 +16,9 @@ import {RouterStub, RouterTestingModule} from '../testing/router-stubs';
 import {asyncData} from '../testing/services/api-mock.service';
 import {AppConfigMockService} from '../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../testing/services/project-mock.service';
+import {SettingsMockService} from '../testing/services/settings-mock.service';
 import {UserMockService} from '../testing/services/user-mock.service';
+
 import {MemberComponent} from './member.component';
 
 describe('MemberComponent', () => {
@@ -49,6 +51,7 @@ describe('MemberComponent', () => {
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
+            {provide: SettingsService, useClass: SettingsMockService},
             MatDialog,
             GoogleAnalyticsService,
           ],

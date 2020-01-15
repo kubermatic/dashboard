@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, Auth, ClusterService, DatacenterService, ProjectService, UserService} from '../../core/services';
+import {SettingsService} from '../../core/services/settings/settings.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeAWSCluster} from '../../testing/fake-data/cluster.fake';
 import {fakeHealth} from '../../testing/fake-data/health.fake';
@@ -15,6 +16,7 @@ import {AppConfigMockService} from '../../testing/services/app-config-mock.servi
 import {AuthMockService} from '../../testing/services/auth-mock.service';
 import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
 import {ProjectMockService} from '../../testing/services/project-mock.service';
+import {SettingsMockService} from '../../testing/services/settings-mock.service';
 import {UserMockService} from '../../testing/services/user-mock.service';
 
 import {ClusterListComponent} from './cluster-list.component';
@@ -53,6 +55,7 @@ describe('ClusterListComponent', () => {
             {provide: AppConfigService, useClass: AppConfigMockService},
             {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: ProjectService, useClass: ProjectMockService},
+            {provide: SettingsService, useClass: SettingsMockService},
           ],
         })
         .compileComponents();
