@@ -20,14 +20,6 @@
   background-color: transparent;
 }
 
-.km-set-cluster-spec {
-  padding: 0;
-
-  &:nth-child(1) {
-    padding-right: 2.5 * $baseline-grid;
-  }
-}
-
 .km-version-inline {
   width: auto;
   max-width: 16.25 * $baseline-grid;
