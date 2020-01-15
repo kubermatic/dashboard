@@ -1,0 +1,24 @@
+<div fxFlex
+     class="km-notification-container">
+  <div fxFlex
+       fxLayout="row"
+       class="km-notification-type"
+       [ngClass]="typeIconBackground">
+    <i fxFlexAlign="center"
+       [ngClass]="typeIconClassName"></i>
+  </div>
+
+  <div fxFlex="100"
+       fxFlexAlign="center"
+       class="km-notification-content km-notification-copy-action"
+       (click)="copyToClipboard()"
+       matTooltip="Click to copy">
+    {{ message }}
+  </div>
+
+  <div fxFlexAlign="center"
+       class="km-notification-close-container">
+    <button class="km-icon-close km-notification-close-action"
+            (click)="dismiss()"></button>
+  </div>
+</div>

@@ -2,12 +2,11 @@ import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core'
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {NotificationsService} from 'angular2-notifications';
 import {Subject, timer} from 'rxjs';
 import {retry, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
-import {ApiService, ProjectService, UserService} from '../core/services';
+import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddSshKeyDialogComponent} from '../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
@@ -41,7 +40,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
       private readonly _appConfigService: AppConfigService, public dialog: MatDialog,
       private readonly _googleAnalyticsService: GoogleAnalyticsService,
       private readonly _projectService: ProjectService,
-      private readonly _notificationService: NotificationsService,
+      private readonly _notificationService: NotificationService,
       private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {

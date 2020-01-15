@@ -1,0 +1,25 @@
+@import "../../../../assets/css/variables";
+
+.km-notification-type {
+  border-radius: $border-radius 0 0 $border-radius;
+  padding-left: 1.5 * $baseline-grid;
+}
+
+.km-notification-content {
+  font-size: $font-size-subhead;
+  padding: $baseline-grid (2.5 * $baseline-grid);
+  word-break: break-word;
+}
+
+.km-notification-copy-action,
+.km-notification-close-action {
+  cursor: pointer;
+}
+
+.km-notification-close-container {
+  padding: 0 (2 * $baseline-grid);
+}
+
+:host {
+  flex: 1 1 auto;
+}

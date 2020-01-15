@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {NotificationsService} from 'angular2-notifications';
 import * as _ from 'lodash';
 
+import {NotificationService} from '../../core/services';
 import {ApiService} from '../../core/services';
 import {ResourceType} from '../../shared/entity/LabelsEntity';
 import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
@@ -21,7 +21,7 @@ export class EditProjectComponent implements OnInit {
 
   constructor(
       private api: ApiService, private dialogRef: MatDialogRef<EditProjectComponent>,
-      private readonly _notificationService: NotificationsService) {}
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.labels = _.cloneDeep(this.project.labels);

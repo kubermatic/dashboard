@@ -31,7 +31,7 @@ describe('SettingsService', () => {
         {provide: Auth, useClass: AuthMockService},
       ],
     });
-    settingsService = TestBed.get(SettingsService);
+    settingsService = TestBed.inject(SettingsService);
   });
 
   it('should be created', () => {

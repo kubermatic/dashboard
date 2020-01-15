@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {NotificationsService} from 'angular2-notifications';
 import {first} from 'rxjs/operators';
 
+import {NotificationService} from '../../core/services';
 import {ApiService} from '../../core/services';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {ServiceAccountEntity} from '../../shared/entity/ServiceAccountEntity';
@@ -21,7 +21,7 @@ export class EditServiceAccountComponent implements OnInit {
   constructor(
       private readonly _apiService: ApiService,
       private readonly _matDialogRef: MatDialogRef<EditServiceAccountComponent>,
-      private readonly _notificationService: NotificationsService) {}
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.editServiceAccountForm = new FormGroup({

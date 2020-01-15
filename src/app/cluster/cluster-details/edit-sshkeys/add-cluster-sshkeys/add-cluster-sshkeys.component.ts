@@ -1,11 +1,10 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs';
 
 import {AppConfigService} from '../../../../app-config.service';
-import {ApiService, ClusterService, UserService} from '../../../../core/services';
+import {ApiService, ClusterService, NotificationService, UserService} from '../../../../core/services';
 import {AddSshKeyDialogComponent} from '../../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
@@ -35,7 +34,7 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
       private readonly _clusterService: ClusterService, private readonly _dialog: MatDialog,
       private readonly _appConfigService: AppConfigService, private readonly _userService: UserService,
       private readonly _dialogRef: MatDialogRef<AddClusterSSHKeysComponent>, private readonly _api: ApiService,
-      private readonly _notificationService: NotificationsService) {}
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this._appConfigService.getUserGroupConfig();

@@ -2,12 +2,11 @@ import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core'
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {NotificationsService} from 'angular2-notifications';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {first, switchMap, switchMapTo, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
-import {ApiService, ProjectService, UserService} from '../core/services';
+import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -47,7 +46,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _googleAnalyticsService: GoogleAnalyticsService,
       private readonly _matDialog: MatDialog, private readonly _appConfig: AppConfigService,
-      private readonly _notificationService: NotificationsService,
+      private readonly _notificationService: NotificationService,
       private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {

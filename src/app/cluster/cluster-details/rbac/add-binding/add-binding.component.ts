@@ -2,11 +2,10 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {MatDialogRef} from '@angular/material/dialog';
-import {NotificationsService} from 'angular2-notifications';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
-import {RBACService} from '../../../../core/services';
+import {NotificationService, RBACService} from '../../../../core/services';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
 import {ClusterRoleName, CreateBinding, RoleName} from '../../../../shared/entity/RBACEntity';
@@ -29,7 +28,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
 
   constructor(
       private readonly _rbacService: RBACService, private readonly _matDialogRef: MatDialogRef<AddBindingComponent>,
-      private readonly _notificationService: NotificationsService) {}
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({

@@ -32,7 +32,7 @@ describe('Service: UserService', () => {
         {provide: AppConfigService, useClass: AppConfigMockService},
       ],
     });
-    userService = TestBed.get(UserService);
+    userService = TestBed.inject(UserService);
   });
 
   it('should be created', () => {

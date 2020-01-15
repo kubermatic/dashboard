@@ -1,11 +1,10 @@
 import {Component, DoCheck, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {NotificationsService} from 'angular2-notifications';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {ClusterService} from '../../../core/services';
+import {ClusterService, NotificationService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {AdminSettings} from '../../../shared/entity/AdminSettings';
@@ -31,7 +30,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
       private readonly _clusterService: ClusterService, private readonly _settingsService: SettingsService,
       private readonly _dialogRef: MatDialogRef<ClusterDeleteConfirmationComponent>,
       private readonly _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _notificationService: NotificationsService) {}
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.deleteForm = new FormGroup({

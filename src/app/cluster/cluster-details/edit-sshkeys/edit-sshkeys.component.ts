@@ -2,12 +2,11 @@ import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {NotificationsService} from 'angular2-notifications';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../../app-config.service';
-import {ClusterService, UserService} from '../../../core/services';
+import {ClusterService, NotificationService, UserService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
@@ -44,7 +43,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
       private readonly _dialog: MatDialog,
       private readonly _clusterService: ClusterService,
       private readonly _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _notificationService: NotificationsService,
+      private readonly _notificationService: NotificationService,
   ) {}
 
   ngOnInit(): void {

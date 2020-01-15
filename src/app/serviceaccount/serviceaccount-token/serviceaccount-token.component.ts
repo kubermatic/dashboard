@@ -2,9 +2,9 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {NotificationsService} from 'angular2-notifications';
 import {first, switchMap} from 'rxjs/operators';
 
+import {NotificationService} from '../../core/services';
 import {ApiService, ProjectService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -35,7 +35,7 @@ export class ServiceAccountTokenComponent implements OnInit {
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _matDialog: MatDialog, private readonly _notificationService: NotificationsService) {}
+      private readonly _matDialog: MatDialog, private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.dataSource.sort = this.sort;

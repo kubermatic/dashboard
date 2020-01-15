@@ -1,9 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {NotificationsService} from 'angular2-notifications';
 
-import {ApiService} from '../../../core/services';
+import {ApiService, NotificationService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SSHKeyEntity} from '../../entity/SSHKeyEntity';
 import {SSHKeyFormValidator} from '../../validators/ssh-key-form.validator';
@@ -20,7 +19,7 @@ export class AddSshKeyDialogComponent implements OnInit {
   constructor(
       private api: ApiService, private formBuilder: FormBuilder,
       private dialogRef: MatDialogRef<AddSshKeyDialogComponent>, public googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _notificationService: NotificationsService) {}
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.addSSHKeyForm = this.formBuilder.group({

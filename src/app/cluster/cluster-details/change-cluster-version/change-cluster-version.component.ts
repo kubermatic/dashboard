@@ -1,10 +1,9 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import {NotificationsService} from 'angular2-notifications';
 import {Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
 
-import {ClusterService, ProjectService} from '../../../core/services';
+import {ClusterService, NotificationService, ProjectService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
@@ -28,7 +27,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
       private _clusterService: ClusterService, private _projectService: ProjectService,
       private _dialogRef: MatDialogRef<ChangeClusterVersionComponent>,
       public _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _notificationService: NotificationsService) {}
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     if (this.controlPlaneVersions.length > 0) {

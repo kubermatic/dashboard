@@ -4,11 +4,11 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {NotificationsService} from 'angular2-notifications';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
+import {NotificationService} from '../../core/services';
 import {UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
@@ -40,7 +40,7 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
       private readonly _userService: UserService, private readonly _settingsService: SettingsService,
       private readonly _historyService: HistoryService, private readonly _matDialog: MatDialog,
-      private readonly _notificationService: NotificationsService) {}
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.admins;

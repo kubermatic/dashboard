@@ -1,8 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import {NotificationsService} from 'angular2-notifications';
 
-import {ApiService} from '../../../../core/services';
+import {ApiService, NotificationService} from '../../../../core/services';
 import {ClusterEntity, Token} from '../../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
 
@@ -19,7 +18,7 @@ export class RevokeViewerTokenComponent {
 
   constructor(
       private readonly _api: ApiService, private readonly _dialogRef: MatDialogRef<RevokeViewerTokenComponent>,
-      private readonly _notificationService: NotificationsService) {}
+      private readonly _notificationService: NotificationService) {}
 
   revokeViewerToken(): void {
     this._api.editViewerToken(this.cluster, this.datacenter.metadata.name, this.projectID, this.viewerToken)

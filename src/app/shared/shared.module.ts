@@ -64,7 +64,7 @@ const modules: any[] = [
   MatAutocompleteModule, MatCheckboxModule, MatMenuModule,        MatChipsModule,       MatCardModule,
   MatDialogModule,       MatSliderModule,   MatSlideToggleModule, MatProgressBarModule, MatExpansionModule,
   MatSortModule,         MatTableModule,    MatDividerModule,     ClipboardModule,      MatButtonToggleModule,
-  MatTabsModule,         MatOptionModule,   MatFormFieldModule,   MatPaginatorModule,
+  MatTabsModule,         MatOptionModule,   MatFormFieldModule,   MatPaginatorModule,   MatSnackBarModule,
 ];
 
 const components: any[] = [

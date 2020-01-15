@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {NotificationsService} from 'angular2-notifications';
 
-import {ApiService} from '../../../core/services';
+import {ApiService, NotificationService} from '../../../core/services';
 import {ResourceType} from '../../entity/LabelsEntity';
 import {CreateProjectModel} from '../../model/CreateProjectModel';
 import {AsyncValidators} from '../../validators/async-label-form.validator';
@@ -20,7 +19,7 @@ export class AddProjectDialogComponent implements OnInit {
 
   constructor(
       private readonly _apiService: ApiService, private readonly _matDialogRef: MatDialogRef<AddProjectDialogComponent>,
-      private readonly _notificationService: NotificationsService) {}
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({

@@ -1,14 +1,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {NotificationsService} from 'angular2-notifications';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../app-config.service';
+import {NotificationService} from '../../core/services';
 import {ProjectService, UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
-import {MemberEntity, UserSettings} from '../../shared/entity/MemberEntity';
+import {MemberEntity, Theme, UserSettings} from '../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
 
@@ -31,7 +31,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   constructor(
       private readonly _userService: UserService, private readonly _settingsService: SettingsService,
       private readonly _historyService: HistoryService, private readonly _appConfigService: AppConfigService,
-      private readonly _notificationService: NotificationsService, private readonly _projectService: ProjectService) {}
+      private readonly _notificationService: NotificationService, private readonly _projectService: ProjectService) {}
 
   ngOnInit(): void {
     this.enableThemes = !this._appConfigService.getConfig().disable_themes;

@@ -764,7 +764,16 @@
 
   .km-notification {
     background: $background-card !important;
+    border-radius: $border-radius;
+    box-shadow: $notification-border-box-shadow;
     color: $text !important;
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 12 * $baseline-grid;
+    max-height: 20 * $baseline-grid;
+    max-width: 37.5 * $baseline-grid;
+    min-width: 37.5 * $baseline-grid;
+    padding: 0;
   }
 
   .km-notification-type {

@@ -1,12 +1,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {NotificationsService} from 'angular2-notifications';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {ClusterService} from '../../../core/services';
+import {ClusterService, NotificationService} from '../../../core/services';
 import {ProviderSettingsPatch} from '../../../core/services/cluster/cluster.service';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
@@ -36,7 +35,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   constructor(
       private readonly _clusterService: ClusterService,
       private readonly _matDialogRef: MatDialogRef<EditClusterComponent>,
-      private readonly _notificationService: NotificationsService) {}
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.labels = _.cloneDeep(this.cluster.labels);

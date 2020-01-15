@@ -6,7 +6,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {ClusterService} from '../../../core/services';
+import {ClusterService, NotificationService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -51,7 +51,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
       private readonly _matDialog: MatDialog, private readonly _clusterService: ClusterService,
       private readonly _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _notificationService: NotificationsService,
+      private readonly _notificationService: NotificationService,
       private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {

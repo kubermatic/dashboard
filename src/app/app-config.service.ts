@@ -1,10 +1,10 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable, Injector} from '@angular/core';
-import {NotificationsService} from 'angular2-notifications';
 import {first, tap} from 'rxjs/operators';
 
 import {environment} from '../environments/environment';
 
+import {NotificationService} from './core/services/notification/notification.service';
 import {VersionInfo} from './shared/entity/VersionInfo';
 import {Config, UserGroupConfig} from './shared/model/Config';
 
@@ -14,14 +14,16 @@ export class AppConfigService {
   private _userGroupConfig: UserGroupConfig;
   private _gitVersion: VersionInfo;
   private _hasCustomCSS: boolean;
-  private http: HttpClient;
+  private readonly _http: HttpClient;
+  private readonly _notificationService: NotificationService;
 
-  constructor(private readonly _inj: Injector, private readonly _notificationService: NotificationsService) {
-    this.http = this._inj.get(HttpClient);
+  constructor(private readonly _inj: Injector) {
+    this._http = this._inj.get(HttpClient);
+    this._notificationService = this._inj.get(NotificationService);
   }
 
   loadAppConfig(): Promise<{}> {
-    return this.http.get(environment.configUrl)
+    return this._http.get(environment.configUrl)
         .pipe(tap(
             (resp) => {
               this._appConfig = resp as Config;
@@ -37,7 +39,7 @@ export class AppConfigService {
   }
 
   loadUserGroupConfig(): Promise<{}> {
-    return this.http.get('../assets/config/userGroupConfig.json')
+    return this._http.get('../assets/config/userGroupConfig.json')
         .pipe(tap(
             (resp) => {
               this._userGroupConfig = resp as UserGroupConfig;
@@ -53,7 +55,7 @@ export class AppConfigService {
   }
 
   loadGitVersion(): Promise<{}> {
-    return this.http.get(environment.gitVersionUrl)
+    return this._http.get(environment.gitVersionUrl)
         .pipe(tap(
             (resp) => {
               this._gitVersion = resp as VersionInfo;
@@ -70,7 +72,7 @@ export class AppConfigService {
 
   checkCustomCSS(): Promise<{}> {
     return new Promise((resolve => {
-      this.http.head(environment.customCSS)
+      this._http.head(environment.customCSS)
           .pipe(first())
           .subscribe(
               () => {

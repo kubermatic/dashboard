@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {NotificationsService} from 'angular2-notifications';
+import {NotificationService} from '../../core/services';
 
 import {ApiService} from '../../core/services';
 import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity';
@@ -17,7 +17,7 @@ export class AddMemberComponent implements OnInit {
 
   constructor(
       private readonly _apiService: ApiService, private readonly _matDialogRef: MatDialogRef<AddMemberComponent>,
-      private readonly _notificationService: NotificationsService) {}
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.addMemberForm = new FormGroup({

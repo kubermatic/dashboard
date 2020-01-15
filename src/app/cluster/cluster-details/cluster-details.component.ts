@@ -1,12 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
-import {NotificationsService} from 'angular2-notifications';
 import {combineLatest, of, Subject} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, ClusterService, DatacenterService, RBACService, UserService} from '../../core/services';
+import {ApiService, ClusterService, DatacenterService, NotificationService, RBACService, UserService} from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {AddonEntity} from '../../shared/entity/AddonEntity';
 import {ClusterEntity, getClusterProvider, MasterVersion} from '../../shared/entity/ClusterEntity';
@@ -63,7 +62,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       private readonly _datacenterService: DatacenterService, private readonly _appConfigService: AppConfigService,
       private readonly _node: NodeService, private readonly _userService: UserService,
       private readonly _api: ApiService, private readonly _rbacService: RBACService,
-      private readonly _notificationService: NotificationsService, readonly settings: SettingsService) {}
+      private readonly _notificationService: NotificationService, readonly settings: SettingsService) {}
 
   ngOnInit(): void {
     this.config = this._appConfigService.getConfig();

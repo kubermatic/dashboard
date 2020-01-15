@@ -1,10 +1,10 @@
-import {EventEmitter, Injectable} from '@angular/core';
+import {EventEmitter, Injectable, Injector} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {NotificationsService} from 'angular2-notifications';
 import * as _ from 'lodash';
 import {Observable, of} from 'rxjs';
 import {catchError, first, flatMap, map} from 'rxjs/operators';
 
+import {NotificationService} from '../../core/services';
 import {ApiService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -17,6 +17,8 @@ import {NodeDataModalComponent, NodeDataModalData} from '../cluster-details/node
 
 @Injectable()
 export class NodeService {
+  private readonly _notificationService: NotificationService;
+
   private static _getNodeDeploymentEntity(nodeData: NodeData): NodeDeploymentEntity {
     return {
       name: nodeData.name,
@@ -49,7 +51,9 @@ export class NodeService {
 
   constructor(
       private readonly _apiService: ApiService, private readonly _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _matDialog: MatDialog, private readonly _notificationService: NotificationsService) {}
+      private readonly _matDialog: MatDialog, private readonly _inj: Injector) {
+    this._notificationService = this._inj.get(NotificationService);
+  }
 
   createNodeDeployment(nodeData: NodeData, dc: DataCenterEntity, cluster: ClusterEntity, project: string): void {
     this._apiService

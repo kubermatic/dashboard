@@ -9,7 +9,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
-import {Auth, ClusterService, ProjectService, UserService} from '../core/services';
+import {Auth, ClusterService, NotificationService, ProjectService, UserService} from '../core/services';
 import {PreviousRouteService} from '../core/services/previous-route/previous-route.service';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
@@ -81,7 +81,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       private readonly _userService: UserService, private readonly _matDialog: MatDialog,
       private readonly _googleAnalyticsService: GoogleAnalyticsService, private readonly _router: Router,
       private readonly _cookieService: CookieService, private readonly _settingsService: SettingsService,
-      private readonly _notificationService: NotificationsService,
+      private readonly _notificationService: NotificationService,
       private readonly _previousRouteService: PreviousRouteService) {}
 
   ngOnInit(): void {

@@ -1,11 +1,10 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
-import {NotificationsService} from 'angular2-notifications';
 import {Subject} from 'rxjs';
 import {first} from 'rxjs/operators';
 
-import {RBACService} from '../../../core/services';
+import {NotificationService, RBACService} from '../../../core/services';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
@@ -36,7 +35,7 @@ export class RBACComponent implements OnInit, OnDestroy {
 
   constructor(
       private readonly _rbacService: RBACService, private readonly _matDialog: MatDialog,
-      private readonly _notificationService: NotificationsService) {}
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.dataSourceCluster.data = this.clusterBindings;
