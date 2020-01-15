@@ -29,10 +29,10 @@ presubmits:
       resources:
         requests:
           memory: 6Gi
-          cpu: 2
+          cpu: 4
         limits:
           memory: 6Gi
-          cpu: 2
+          cpu: 4
       env:
       - name: SERVICE_ACCOUNT_KEY
         valueFrom:
