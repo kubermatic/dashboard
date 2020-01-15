@@ -10,6 +10,7 @@ import {TaintFormComponent} from '../../../shared/components/taint-form/taint-fo
 import {ClusterEntity, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
 import {EventEntity} from '../../../shared/entity/EventEntity';
 import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
+import {NodeMetrics} from '../../../shared/entity/Metrics';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeDeploymentPatch} from '../../../shared/entity/NodeDeploymentPatch';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
@@ -70,10 +71,10 @@ export class ApiService {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}/nodes`;
     return this._http.get<NodeEntity[]>(url);
   }
-
-  getNodeDeploymentNodesMetrics(ndId: string, cluster: string, dc: string, projectID: string): Observable<any[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}/metrics`;
-    return this._http.get<any[]>(url);
+  getNodeDeploymentNodesMetrics(ndId: string, cluster: string, dc: string, projectID: string): Observable<NodeMetrics> {
+    const url =
+        `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}/nodes/metrics`;
+    return this._http.get<NodeMetrics>(url);
   }
 
   getNodeDeploymentNodesEvents(ndId: string, cluster: string, dc: string, projectID: string):
