@@ -63,7 +63,6 @@
     "@angular/platform-browser": "8.2.14",
     "@angular/platform-browser-dynamic": "8.2.14",
     "@angular/router": "8.2.14",
-    "@swimlane/ngx-charts": "^13.0.1",
     "angular2-notifications": "2.0.0",
     "animate.css": "3.7.2",
     "buffer": "5.4.3",
