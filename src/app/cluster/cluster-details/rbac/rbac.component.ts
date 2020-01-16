@@ -138,19 +138,19 @@ export class RBACComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   hasClusterItems(): boolean {
-    return this.clusterBindings && this.clusterBindings.length > 0;
+    return !!this.clusterBindings && this.clusterBindings.length > 0;
   }
 
   isClusterPaginatorVisible(): boolean {
     return this.hasClusterItems() && this.paginatorCluster &&
-        this.clusterBindings.length < this.paginatorCluster.pageSize;
+        this.clusterBindings.length > this.paginatorCluster.pageSize;
   }
 
   hasNamespaceItems(): boolean {
-    return this.bindings && this.bindings.length > 0;
+    return !!this.bindings && this.bindings.length > 0;
   }
 
   isNamespacePaginatorVisible(): boolean {
-    return this.hasNamespaceItems() && this.paginatorCluster && this.bindings.length < this.paginatorCluster.pageSize;
+    return this.hasNamespaceItems() && this.paginatorCluster && this.bindings.length > this.paginatorCluster.pageSize;
   }
 }

@@ -60,7 +60,6 @@ describe('RBACComponent', () => {
     component.projectID = fakeProject().id;
     component.clusterBindings = fakeSimpleClusterBindings();
     component.bindings = fakeSimpleBindings();
-    fixture.detectChanges();
   });
 
   it('should create the rbac cmp', async(() => {
