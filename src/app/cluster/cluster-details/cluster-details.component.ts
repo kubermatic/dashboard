@@ -13,6 +13,7 @@ import {ClusterEntity, getClusterProvider, MasterVersion} from '../../shared/ent
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {EventEntity} from '../../shared/entity/EventEntity';
 import {HealthEntity, HealthState} from '../../shared/entity/HealthEntity';
+import {ClusterMetrics} from '../../shared/entity/Metrics';
 import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '../../shared/entity/RBACEntity';
@@ -49,7 +50,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   health: HealthEntity;
   config: Config = {share_kubeconfig: false};
   projectID: string;
-  metrics: any[] = [];
+  metrics: ClusterMetrics;
   events: EventEntity[] = [];
   addons: AddonEntity[] = [];
   upgrades: MasterVersion[] = [];
