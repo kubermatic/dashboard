@@ -104,16 +104,6 @@ export class NodeSystemInfo {
   containerRuntimeVersion: string;
 }
 
-export class NodeMetrics {
-  name: string;
-  cpuAvailableMillicores: number;
-  cpuTotalMillicores: number;
-  cpuUsedPercentage: number;
-  memoryAvailableBytes: number;
-  memoryTotalBytes: number;
-  memoryUsedPercentage: number;
-}
-
 export function getEmptyNodeProviderSpec(provider: string): object {
   switch (provider) {
     case NodeProvider.AWS:
