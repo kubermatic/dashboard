@@ -1,9 +1,10 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {MatDialog, MatDialogConfig, MatTableDataSource} from '@angular/material';
+import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig, MatPaginator, MatTableDataSource} from '@angular/material';
 import {Subject} from 'rxjs';
-import {first} from 'rxjs/operators';
+import {first, takeUntil} from 'rxjs/operators';
 
 import {RBACService} from '../../../core/services';
+import {SettingsService} from '../../../core/services/settings/settings.service';
 import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
@@ -18,7 +19,7 @@ import {AddBindingComponent} from './add-binding/add-binding.component';
   styleUrls: ['./rbac.component.scss'],
 })
 
-export class RBACComponent implements OnInit, OnDestroy {
+export class RBACComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
@@ -31,11 +32,31 @@ export class RBACComponent implements OnInit, OnDestroy {
   displayedColumnsCluster: string[] = ['name', 'clusterRole', 'actions'];
   dataSourceNamespace = new MatTableDataSource<SimpleBinding>();
   displayedColumnsNamespace: string[] = ['name', 'clusterRole', 'namespace', 'actions'];
+  @ViewChild('matPaginatorCluster', {static: false}) paginatorCluster: MatPaginator;
+  @ViewChild('matPaginatorNamespace', {static: false}) paginatorNamespace: MatPaginator;
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _rbacService: RBACService, private readonly _matDialog: MatDialog) {}
+  constructor(
+      private readonly _rbacService: RBACService, private readonly _matDialog: MatDialog,
+      private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
+    this.dataSourceCluster.data = this.clusterBindings;
+    this.dataSourceCluster.paginator = this.paginatorCluster;
+
+    this.dataSourceNamespace.data = this.bindings;
+    this.dataSourceNamespace.paginator = this.paginatorNamespace;
+
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.paginatorCluster.pageSize = settings.itemsPerPage;
+      this.dataSourceCluster.paginator = this.paginatorCluster;  // Force refresh.
+
+      this.paginatorNamespace.pageSize = settings.itemsPerPage;
+      this.dataSourceNamespace.paginator = this.paginatorNamespace;  // Force refresh.
+    });
+  }
+
+  ngOnChanges(): void {
     this.dataSourceCluster.data = this.clusterBindings;
     this.dataSourceNamespace.data = this.bindings;
   }
@@ -51,16 +72,6 @@ export class RBACComponent implements OnInit, OnDestroy {
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
     modal.componentInstance.projectID = this.projectID;
-  }
-
-  getDataSourceCluster(): MatTableDataSource<SimpleClusterBinding> {
-    this.dataSourceCluster.data = this.clusterBindings;
-    return this.dataSourceCluster;
-  }
-
-  getDataSourceNamespace(): MatTableDataSource<SimpleBinding> {
-    this.dataSourceNamespace.data = this.bindings;
-    return this.dataSourceNamespace;
   }
 
   toggleRBAC(): void {
@@ -124,5 +135,22 @@ export class RBACComponent implements OnInit, OnDestroy {
             });
       }
     });
+  }
+
+  hasClusterItems(): boolean {
+    return this.clusterBindings && this.clusterBindings.length > 0;
+  }
+
+  isClusterPaginatorVisible(): boolean {
+    return this.hasClusterItems() && this.paginatorCluster &&
+        this.clusterBindings.length < this.paginatorCluster.pageSize;
+  }
+
+  hasNamespaceItems(): boolean {
+    return this.bindings && this.bindings.length > 0;
+  }
+
+  isNamespacePaginatorVisible(): boolean {
+    return this.hasNamespaceItems() && this.paginatorCluster && this.bindings.length < this.paginatorCluster.pageSize;
   }
 }

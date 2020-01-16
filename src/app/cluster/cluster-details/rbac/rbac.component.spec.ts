@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {of} from 'rxjs';
 
 import {RBACService} from '../../../core/services';
+import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
@@ -13,6 +14,7 @@ import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {fakeSimpleBindings, fakeSimpleClusterBindings} from '../../../testing/fake-data/rbac.fake';
 import {RouterStub} from '../../../testing/router-stubs';
+import {SettingsMockService} from '../../../testing/services/settings-mock.service';
 
 import {RBACComponent} from './rbac.component';
 
@@ -42,6 +44,7 @@ describe('RBACComponent', () => {
           providers: [
             {provide: RBACService, useValue: rbacMock},
             {provide: Router, useClass: RouterStub},
+            {provide: SettingsService, useClass: SettingsMockService},
             MatDialog,
             GoogleAnalyticsService,
           ],
