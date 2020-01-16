@@ -13,15 +13,14 @@
       <i class="km-icon-add"></i>
     </button>
   </mat-card-header>
-  <mat-card-content>
-    <h2 *ngIf="isShowRBAC">Cluster</h2>
+  <mat-card-content *ngIf="isShowRBAC">
+    <h2>Cluster</h2>
     <table class="km-table"
            mat-table
-           [hidden]="!isShowRBAC"
            matSort
            matSortActive="name"
            matSortDirection="asc"
-           [dataSource]="dataSourceCluster">
+           [dataSource]="getDataSourceCluster()">
       <ng-container matColumnDef="name">
         <th mat-header-cell
             *matHeaderCellDef
@@ -75,7 +74,7 @@
           [attr.id]="row.id"></tr>
     </table>
 
-    <ng-container *ngIf="isShowRBAC && (!clusterBindings || clusterBindings.length === 0)">
+    <ng-container *ngIf="!clusterBindings || clusterBindings.length === 0">
       <div class="km-row km-no-item"
            *ngIf="isClusterRunning">
         No bindings available.
@@ -88,20 +87,13 @@
       </div>
     </ng-container>
 
-    <div [hidden]="!isClusterPaginatorVisible() || !isShowRBAC">
-      <mat-paginator #matPaginatorCluster
-                     showFirstLastButtons
-                     class="km-paginator"></mat-paginator>
-    </div>
-
-    <h2 *ngIf="isShowRBAC">Namespace</h2>
+    <h2>Namespace</h2>
     <table class="km-table"
            mat-table
-           [hidden]="!isShowRBAC"
            matSort
            matSortActive="name"
            matSortDirection="asc"
-           [dataSource]="dataSourceNamespace">
+           [dataSource]="getDataSourceNamespace()">
       <ng-container matColumnDef="name">
         <th mat-header-cell
             *matHeaderCellDef
@@ -163,7 +155,7 @@
           [attr.id]="row.id"></tr>
     </table>
 
-    <ng-container *ngIf="isShowRBAC && (!bindings || bindings.length === 0)">
+    <ng-container *ngIf="!bindings || bindings.length === 0">
       <div class="km-row km-no-item"
            *ngIf="isClusterRunning">
         No bindings available.
@@ -175,11 +167,5 @@
                      [diameter]="25"></mat-spinner>
       </div>
     </ng-container>
-
-    <div [hidden]="!isNamespacePaginatorVisible() || !isShowRBAC">
-      <mat-paginator #matPaginatorNamespace
-                     showFirstLastButtons
-                     class="km-paginator"></mat-paginator>
-    </div>
   </mat-card-content>
 </mat-card>
