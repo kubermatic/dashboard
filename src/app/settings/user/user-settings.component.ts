@@ -8,7 +8,7 @@ import {ProjectService, UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
-import {MemberEntity, UserSettings} from '../../shared/entity/MemberEntity';
+import {MemberEntity, Theme, UserSettings} from '../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
 
@@ -18,6 +18,7 @@ import {objectDiff} from '../../shared/utils/common-utils';
   styleUrls: ['user-settings.component.scss'],
 })
 export class UserSettingsComponent implements OnInit, OnDestroy {
+  Theme = Theme;
   enableThemes = false;
   itemsPerPageOptions = [5, 10, 15, 20, 25];
   projects: ProjectEntity[] = [];

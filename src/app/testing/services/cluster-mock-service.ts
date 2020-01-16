@@ -50,10 +50,6 @@ export class ClusterMockService {
     return asyncData(null);
   }
 
-  createNode(cluster: ClusterEntity, nodeModel: NodeEntity, dc: string, projectID: string): Observable<any> {
-    return asyncData(null);
-  }
-
   create(createClusterModel: CreateClusterModel, dc: string, projectID: string): Observable<ClusterEntity> {
     return asyncData(this._cluster);
   }

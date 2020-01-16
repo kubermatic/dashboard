@@ -53,11 +53,11 @@
         <mat-button-toggle-group [(value)]="settings.selectedTheme"
                                  (change)="onSettingsChange()"
                                  class="km-account-settings-toggle">
-          <mat-button-toggle value="light">
+          <mat-button-toggle [value]="Theme.Light">
             <i class="km-icon-mask km-icon-sun"></i>
             Light
           </mat-button-toggle>
-          <mat-button-toggle value="dark">
+          <mat-button-toggle [value]="Theme.Dark">
             <i class="km-icon-mask km-icon-moon"></i>
             Dark
           </mat-button-toggle>
