@@ -19,9 +19,6 @@
 
   $divider: mat-color($palette-foreground, divider);
 
-  $scrollbar-background: mat-color($palette-background, card);
-  $scrollbar-color: $divider;
-
   $chip-accent: mat-color($palette-background, card);
   $chip-background: $divider;
 
@@ -585,6 +582,11 @@
   .mat-option {
     padding: 0 0 0 (1.25 * $baseline-grid) !important;
     color: $text !important;
+    background-color: map-get($colors, option-background);
+
+    &:hover {
+      background-color: map-get($colors, option-background-hover) !important;
+    }
   }
 
   .mat-menu-item {
@@ -622,11 +624,11 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: $scrollbar-color;
+    background: map-get($colors, scrollbar);
   }
 
   ::-webkit-scrollbar-track {
-    background: $scrollbar-background;
+    background: map-get($colors, scrollbar-background);
   }
 
   .km-header {
@@ -1290,7 +1292,7 @@
   }
 
   .km-cluster-panel-container {
-    background: $background-hover;
+    background: rgba($text, .1);
     border-bottom: 1px solid rgba($text, .1);
     color: $text;
     height: $toolbar-height + $sidenav-border-width;
