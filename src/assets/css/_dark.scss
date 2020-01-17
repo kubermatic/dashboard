@@ -34,7 +34,7 @@ $background: map_merge($background, (background: #000));
 $background: map_merge($background, (hover: #2d2d2e));
 $background: map_merge($background, (app-bar: #2b2b2c));
 $background: map_merge($background, (card: #202021));
-$background: map_merge($background, (dialog: #1c1c1d));
+$background: map_merge($background, (dialog: #2b2b2c));
 $theme-dark: map_merge($theme-dark, (background: $background));
 
 $foreground: map-get($theme-dark, foreground);
