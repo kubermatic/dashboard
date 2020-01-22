@@ -1029,6 +1029,10 @@
   .km-paginator {
     border-radius: 0 0 $border-radius $border-radius;
     border-top: 1px solid $divider;
+
+    .mat-paginator-range-actions button:not([disabled]) {
+      color: $text-secondary;
+    }
   }
 
   .km-project-toggle {
