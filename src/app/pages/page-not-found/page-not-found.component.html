@@ -1,13 +1,16 @@
-<div>
-  <div fxFlex></div>
-  <button mat-flat-button
-          (click)="backToApp()"
-          color="primary"
-          type="button">Go Back
-  </button>
-</div>
-
-<div class="km-page-not-fount">
-  <p>Ooops!</p>
-  <p>Page not found</p>
+<div class="km-error-background">
+  <div class="km-error-content"
+       fxLayout="column"
+       fxLayoutAlign="center center">
+    <div class="km-page-not-found">
+      <p>404</p>
+      <p>Looks like you're lost</p>
+      <p>This page does not exist or is temporarily unavailable.</p>
+    </div>
+    <button mat-flat-button
+            (click)="backToApp()"
+            color="secondary"
+            type="button">Go to projects
+    </button>
+  </div>
 </div>
