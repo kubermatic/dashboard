@@ -8,6 +8,7 @@
   <div class="value km-text">
     <div *ngIf="!total">{{used}} {{unit}}</div>
     <mat-progress-bar *ngIf="total"
+                      class="km-property-usage-bar"
                       mode="determinate"
                       [value]="getPercentage()"
                       [matTooltip]="getTooltip()"></mat-progress-bar>
