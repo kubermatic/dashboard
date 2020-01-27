@@ -8,7 +8,6 @@ import {AddMachineNetworkComponent} from './cluster-details/add-machine-network/
 import {ChangeClusterVersionComponent} from './cluster-details/change-cluster-version/change-cluster-version.component';
 import {ClusterDeleteConfirmationComponent} from './cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
 import {ClusterDetailsComponent} from './cluster-details/cluster-details.component';
-import {ClusterMetricsComponent} from './cluster-details/cluster-metrics/cluster-metrics.component';
 import {ClusterSecretsComponent} from './cluster-details/cluster-secrets/cluster-secrets.component';
 import {EditClusterComponent} from './cluster-details/edit-cluster/edit-cluster.component';
 import {AWSProviderSettingsComponent} from './cluster-details/edit-provider-settings/aws-provider-settings/aws-provider-settings.component';
@@ -75,7 +74,6 @@ const entryComponents: any[] = [
   ShareKubeconfigComponent,
   ClusterPanelComponent,
   AddBindingComponent,
-  ClusterMetricsComponent,
 ];
 
 @NgModule({

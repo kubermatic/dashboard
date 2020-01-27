@@ -15,13 +15,13 @@ import {AddonsListComponent} from './components/addon-list/addon-list.component'
 import {EditAddonDialogComponent} from './components/addon-list/edit-addon-dialog/edit-addon-dialog.component';
 import {InstallAddonDialogComponent} from './components/addon-list/install-addon-dialog/install-addon-dialog.component';
 import {SelectAddonDialogComponent} from './components/addon-list/select-addon-dialog/select-addon-dialog.component';
-import {BooleanPropertyComponent} from './components/boolean-property/boolean-property.component';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 import {DialogTitleComponent} from './components/dialog-title/dialog-title.component';
 import {EventListComponent} from './components/event-list/event-list.component';
-import {HorizontalUsageGraphComponent} from './components/horizontal-usage-graph/horizontal-usage-graph.component';
 import {LabelFormComponent} from './components/label-form/label-form.component';
 import {LabelsComponent} from './components/labels/labels.component';
+import {PropertyBooleanComponent} from './components/property-boolean/property-boolean.component';
+import {PropertyUsageComponent} from './components/property-usage/property-usage.component';
 import {PropertyComponent} from './components/property/property.component';
 import {RelativeTimeComponent} from './components/relativetime/relative-time.component';
 import {SettingsStatusComponent} from './components/settings-status/settings-status.component';
@@ -43,7 +43,7 @@ const modules: any[] = [
 ];
 
 const components: any[] = [
-  BooleanPropertyComponent,
+  PropertyBooleanComponent,
   DialogTitleComponent,
   PropertyComponent,
   EventListComponent,
@@ -58,7 +58,7 @@ const components: any[] = [
   SettingsStatusComponent,
   ShortNameInCircleComponent,
   TagListComponent,
-  HorizontalUsageGraphComponent,
+  PropertyUsageComponent,
 ];
 
 const entryComponents: any[] = [

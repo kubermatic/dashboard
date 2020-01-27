@@ -6,7 +6,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {SharedModule} from '../../shared.module';
 
-import {HorizontalUsageGraphComponent} from './horizontal-usage-graph.component';
+import {PropertyBooleanComponent} from './property-boolean.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -14,9 +14,9 @@ const modules: any[] = [
   SharedModule,
 ];
 
-describe('HorizontalUsageGraphComponent', () => {
-  let fixture: ComponentFixture<HorizontalUsageGraphComponent>;
-  let component: HorizontalUsageGraphComponent;
+describe('PropertyBooleanComponent', () => {
+  let fixture: ComponentFixture<PropertyBooleanComponent>;
+  let component: PropertyBooleanComponent;
 
   beforeEach(() => {
     TestBed
@@ -31,7 +31,7 @@ describe('HorizontalUsageGraphComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HorizontalUsageGraphComponent);
+    fixture = TestBed.createComponent(PropertyBooleanComponent);
     component = fixture.componentInstance;
   });
 
