@@ -38,7 +38,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
           [
             Validators.required,
             Validators.minLength(5),
-            Validators.pattern('[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'),
+            Validators.pattern('[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'),
           ]),
       version: new FormControl(this.cluster.spec.version),
       type: new FormControl(this.cluster.type),

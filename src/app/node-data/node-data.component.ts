@@ -61,7 +61,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
           Validators.required),
       name: new FormControl(
           {value: this.nodeData.name, disabled: this.isNameDisabled},
-          [Validators.pattern('[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*')]),
+          [Validators.pattern('[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*')]),
     });
 
     if (!this.isInWizard) {
@@ -95,8 +95,10 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       this.addNodeService.changeNodeData(this.getAddNodeData());
       this.addNodeService.changeNodeOperatingSystemData(this.getOSSpec());
       this.valid.emit(this.form.valid);
+      this.nodeData.valid = this.form.valid;
       this.providerData.valid = this.form.valid;
       this.addNodeService.changeNodeProviderData(this.providerData);
+      this.addNodeService.changeNodeData(this.getAddNodeData());
     });
 
     this.operatingSystemForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -106,6 +108,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
 
     this.addNodeService.nodeProviderDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.providerData = data;
+      this.providerData.valid = this.providerData.valid && this.form.valid;
       this.addNodeService.changeNodeData(this.getAddNodeData());
     });
 
