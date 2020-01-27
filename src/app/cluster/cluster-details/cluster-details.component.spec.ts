@@ -30,7 +30,6 @@ import {UserMockService} from '../../testing/services/user-mock.service';
 import {NodeService} from '../services/node.service';
 
 import {ClusterDetailsComponent} from './cluster-details.component';
-import {ClusterMetricsComponent} from './cluster-metrics/cluster-metrics.component';
 import {ClusterSecretsComponent} from './cluster-secrets/cluster-secrets.component';
 import {MachineNetworksDisplayComponent} from './machine-networks-display/machine-networks-display.component';
 import {NodeDeploymentListComponent} from './node-deployment-list/node-deployment-list.component';
@@ -67,7 +66,6 @@ describe('ClusterDetailsComponent', () => {
           declarations: [
             ClusterDetailsComponent,
             ClusterSecretsComponent,
-            ClusterMetricsComponent,
             NodeListComponent,
             NodeDeploymentListComponent,
             MachineNetworksDisplayComponent,
