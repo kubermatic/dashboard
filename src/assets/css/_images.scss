@@ -35,6 +35,12 @@
   background-attachment: fixed;
 }
 
+.km-error-background {
+  @include km-image(80%);
+
+  background-image: url("/assets/images/branding/404-illustration-light.svg");
+}
+
 .km-user {
   @include km-image-mask(3 * $baseline-grid);
 

@@ -57,6 +57,10 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
     background-image: url("/assets/images/branding/logo-dark.svg") !important;
   }
 
+  .km-error-background {
+    background-image: url("/assets/images/branding/404-illustration-dark.svg") !important;
+  }
+
   // Make icons and logos white.
   .km-provider-logo,
   .km-addon-logo,
