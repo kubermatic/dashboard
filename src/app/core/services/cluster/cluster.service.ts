@@ -100,7 +100,7 @@ export class ClusterService {
 
   metrics(projectID: string, clusterID: string, datacenter: string): Observable<ClusterMetrics> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/metrics`;
-    return this._http.get<ClusterMetrics>(url).pipe(catchError(() => of<ClusterMetrics>()));
+    return this._http.get<ClusterMetrics>(url).pipe(catchError(() => of<ClusterMetrics>(undefined)));
   }
 
   events(projectID: string, clusterID: string, datacenter: string): Observable<EventEntity[]> {
