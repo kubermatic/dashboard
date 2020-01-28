@@ -6,7 +6,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {SharedModule} from '../../shared.module';
 
-import {BooleanPropertyComponent} from './boolean-property.component';
+import {PropertyBooleanComponent} from './property-boolean.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -14,9 +14,9 @@ const modules: any[] = [
   SharedModule,
 ];
 
-describe('BooleanPropertyComponent', () => {
-  let fixture: ComponentFixture<BooleanPropertyComponent>;
-  let component: BooleanPropertyComponent;
+describe('PropertyBooleanComponent', () => {
+  let fixture: ComponentFixture<PropertyBooleanComponent>;
+  let component: PropertyBooleanComponent;
 
   beforeEach(() => {
     TestBed
@@ -31,7 +31,7 @@ describe('BooleanPropertyComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BooleanPropertyComponent);
+    fixture = TestBed.createComponent(PropertyBooleanComponent);
     component = fixture.componentInstance;
   });
 

@@ -119,15 +119,15 @@
           </div>
         </km-property>
 
-        <km-boolean-property label="Audit Logging"
+        <km-property-boolean label="Audit Logging"
                              [value]="!!cluster.spec.auditLogging && cluster.spec.auditLogging.enabled"
                              *ngIf="!!cluster.spec.auditLogging && !!cluster.spec.auditLogging.enabled">
-        </km-boolean-property>
+        </km-property-boolean>
 
-        <km-boolean-property label="Pod Security Policy"
+        <km-property-boolean label="Pod Security Policy"
                              [value]="cluster.spec.usePodSecurityPolicyAdmissionPlugin"
                              *ngIf="!!cluster.spec.usePodSecurityPolicyAdmissionPlugin">
-        </km-boolean-property>
+        </km-property-boolean>
 
         <km-property>
           <div value>
@@ -141,7 +141,27 @@
             <km-labels [labels]="cluster.labels"></km-labels>
           </div>
         </km-property>
+      </div>
 
+      <div class="km-content-wrap"
+           *ngIf="metrics">
+        <km-property-usage title="Nodes CPU Usage"
+                           unit="millicores"
+                           [used]="metrics?.nodes?.cpuTotalMillicores"
+                           [total]="metrics?.nodes?.cpuAvailableMillicores"></km-property-usage>
+
+        <km-property-usage title="Nodes Memory Usage"
+                           unit="MiB"
+                           [used]="metrics?.nodes?.memoryTotalBytes"
+                           [total]="metrics?.nodes?.memoryAvailableBytes"></km-property-usage>
+
+        <km-property-usage title="Control Plane CPU Usage"
+                           unit="millicores"
+                           [used]="metrics?.controlPlane?.cpuTotalMillicores"></km-property-usage>
+
+        <km-property-usage title="Control Plane Memory Usage"
+                           unit="MiB"
+                           [used]="metrics?.controlPlane?.memoryTotalBytes"></km-property-usage>
       </div>
 
       <km-cluster-secrets [cluster]="cluster"
