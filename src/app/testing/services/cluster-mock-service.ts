@@ -8,6 +8,7 @@ import {ClusterEntity, MasterVersion} from '../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../shared/entity/ClusterEntityPatch';
 import {EventEntity} from '../../shared/entity/EventEntity';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
+import {ClusterMetrics} from '../../shared/entity/Metrics';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
@@ -80,6 +81,10 @@ export class ClusterMockService {
 
   nodes(projectID: string, clusterID: string, datacenter: string): Observable<NodeEntity[]> {
     return asyncData(nodesFake());
+  }
+
+  metrics(projectID: string, clusterID: string, datacenter: string): Observable<ClusterMetrics> {
+    return asyncData(null);
   }
 
   nodeUpgrades(controlPlaneVersion: string, type: string): Observable<MasterVersion[]> {

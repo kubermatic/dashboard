@@ -1,10 +1,10 @@
 import {Component, Input} from '@angular/core';
 
 @Component({
-  selector: 'km-boolean-property',
-  templateUrl: './boolean-property.component.html',
+  selector: 'km-property-boolean',
+  templateUrl: './property-boolean.component.html',
 })
-export class BooleanPropertyComponent {
+export class PropertyBooleanComponent {
   @Input() label: string;
   @Input() value: boolean;
 
