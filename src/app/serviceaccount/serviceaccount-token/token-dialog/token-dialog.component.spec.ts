@@ -31,7 +31,6 @@ describe('TokenDialogComponent', () => {
           imports: [
             ...modules,
           ],
-          declarations: [TokenDialogComponent],
           providers: [
             {provide: MAT_DIALOG_DATA, useValue: {serviceaccountToken: fakeServiceAccountToken()}},
             {provide: MatDialogRef, useValue: {}},

@@ -1,4 +1,4 @@
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, flush, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -6,11 +6,11 @@ import {Router} from '@angular/router';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, ProjectService, UserService} from '../../core/services';
+import {ApiService, NotificationService, ProjectService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {DialogTestModule, NoopConfirmDialogComponent} from '../../testing/components/noop-confirmation-dialog.component';
-import {NoopTokenDialogComponent, TokenDialogTestModule} from '../../testing/components/noop-token-dialog.component';
+import {NoopTokenDialogComponent} from '../../testing/components/noop-token-dialog.component';
 import {fakeServiceAccount, fakeServiceAccountTokens} from '../../testing/fake-data/serviceaccount.fake';
 import {RouterStub, RouterTestingModule} from '../../testing/router-stubs';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
@@ -38,7 +38,6 @@ describe('ServiceAccountTokenComponent', () => {
             RouterTestingModule,
             SharedModule,
             DialogTestModule,
-            TokenDialogTestModule,
           ],
           declarations: [
             ServiceAccountTokenComponent,
@@ -52,6 +51,7 @@ describe('ServiceAccountTokenComponent', () => {
             {provide: UserService, useClass: UserMockService},
             MatDialog,
             GoogleAnalyticsService,
+            NotificationService,
           ],
         })
         .compileComponents();
@@ -92,5 +92,7 @@ describe('ServiceAccountTokenComponent', () => {
        tick(15000);
 
        expect(deleteServiceAccountTokenSpy).toHaveBeenCalled();
+       fixture.destroy();
+       flush();
      }));
 });

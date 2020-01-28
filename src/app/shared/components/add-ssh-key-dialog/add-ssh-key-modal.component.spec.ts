@@ -3,12 +3,14 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 
-import {ApiService} from '../../../core/services';
+import {CoreModule} from '../../../core/core.module';
+import {ApiService, NotificationService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
@@ -28,6 +30,8 @@ const modules: any[] = [
   MatFormFieldModule,
   MatToolbarModule,
   MatInputModule,
+  MatSnackBarModule,
+  CoreModule,
 ];
 
 describe('AddSshKeyDialogComponent', () => {
@@ -50,6 +54,7 @@ describe('AddSshKeyDialogComponent', () => {
             {provide: ApiService, useClass: ApiMockService},
             {provide: Router, useClass: RouterStub},
             GoogleAnalyticsService,
+            NotificationService,
           ],
         })
         .compileComponents();

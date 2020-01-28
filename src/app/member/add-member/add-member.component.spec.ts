@@ -2,7 +2,7 @@ import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/t
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ApiService, ProjectService} from '../../core/services';
+import {ApiService, NotificationService, ProjectService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeMember} from '../../testing/fake-data/member.fake';
 import {fakeProject} from '../../testing/fake-data/project.fake';
@@ -38,6 +38,7 @@ describe('AddProjectComponent', () => {
             {provide: MatDialogRef, useClass: MatDialogRefMock},
             {provide: ApiService, useValue: apiMock},
             {provide: ProjectService, useClass: ProjectMockService},
+            NotificationService,
           ],
         })
         .compileComponents();

@@ -3,7 +3,8 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import {ApiService, ProjectService} from '../../core/services';
+import {CoreModule} from '../../core/core.module';
+import {ApiService, NotificationService, ProjectService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeProject} from '../../testing/fake-data/project.fake';
 import {fakeServiceAccount} from '../../testing/fake-data/serviceaccount.fake';
@@ -17,6 +18,7 @@ const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SharedModule,
+  CoreModule,
 ];
 
 describe('AddServiceAccountComponent', () => {
@@ -40,6 +42,7 @@ describe('AddServiceAccountComponent', () => {
             {provide: MatDialogRef, useClass: MatDialogRefMock},
             {provide: ApiService, useValue: apiMock},
             {provide: ProjectService, useClass: ProjectMockService},
+            NotificationService,
           ],
         })
         .compileComponents();

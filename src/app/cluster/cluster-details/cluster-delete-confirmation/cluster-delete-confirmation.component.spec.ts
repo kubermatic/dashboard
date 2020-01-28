@@ -7,7 +7,7 @@ import {Router} from '@angular/router';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../../../app-config.service';
-import {ClusterService, DatacenterService} from '../../../core/services';
+import {ClusterService, DatacenterService, NotificationService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
@@ -53,6 +53,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
             GoogleAnalyticsService,
             {provide: AppConfigService, useClass: AppConfigMockService},
             {provide: SettingsService, useClass: SettingsMockService},
+            NotificationService,
           ],
         })
         .compileComponents();

@@ -6,7 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 
 import {AppConfigService} from '../../../app-config.service';
-import {ApiService, Auth, ClusterService, DatacenterService, ProjectService, UserService} from '../../../core/services';
+import {ApiService, Auth, ClusterService, DatacenterService, NotificationService, ProjectService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
@@ -77,6 +77,7 @@ describe('NodeDeploymentDetailsComponent', () => {
             {provide: NodeService, useClass: NodeMockService},
             {provide: SettingsService, useClass: SettingsMockService},
             GoogleAnalyticsService,
+            NotificationService,
           ],
         })
         .compileComponents();

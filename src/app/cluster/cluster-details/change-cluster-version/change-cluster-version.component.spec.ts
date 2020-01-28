@@ -5,7 +5,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {of} from 'rxjs';
 
-import {ClusterService, ProjectService} from '../../../core/services';
+import {ClusterService, NotificationService, ProjectService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
@@ -49,6 +49,7 @@ describe('ChangeClusterVersionComponent', () => {
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: Router, useClass: RouterStub},
             GoogleAnalyticsService,
+            NotificationService,
           ],
         })
         .compileComponents();

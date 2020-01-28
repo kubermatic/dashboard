@@ -13,7 +13,8 @@
        class="km-notification-content km-notification-copy-action"
        (click)="copyToClipboard()"
        matTooltip="Click to copy">
-    {{ message }}
+    <ng-container *ngIf="message?.length <= 128; else truncated">{{ message }}</ng-container>
+    <ng-template #truncated>{{ message | slice:0:128 }}...</ng-template>
   </div>
 
   <div fxFlexAlign="center"

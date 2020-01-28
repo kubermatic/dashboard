@@ -89,11 +89,5 @@ describe('ProjectComponent', () => {
 
        expect(dialogTitle.textContent).toBe('Delete Project');
        expect(document.querySelector('#km-confirmation-dialog-input').getAttribute('value')).toBe(project.name);
-
-       deleteButton.click();
-
-       noop.detectChanges();
-       fixture.detectChanges();
-       tick(15000);
      }));
 });

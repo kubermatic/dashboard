@@ -7,6 +7,7 @@
 
 .km-notification-content {
   font-size: $font-size-subhead;
+  max-height: 100%;
   padding: $baseline-grid (2.5 * $baseline-grid);
   word-break: break-word;
 }

@@ -3,7 +3,7 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '../../../../app-config.service';
-import {ApiService, ClusterService, ProjectService, UserService} from '../../../../core/services';
+import {ApiService, ClusterService, NotificationService, ProjectService, UserService} from '../../../../core/services';
 import {SharedModule} from '../../../../shared/shared.module';
 import {ApiMockService} from '../../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../../testing/services/app-config-mock.service';
@@ -40,6 +40,7 @@ describe('AddClusterSSHKeysComponent', () => {
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             MatDialog,
+            NotificationService,
           ],
         })
         .compileComponents();

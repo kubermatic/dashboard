@@ -3,7 +3,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import {ApiService} from '../../../core/services';
+import {ApiService, NotificationService} from '../../../core/services';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {fakeServiceAccount, fakeServiceAccountToken} from '../../../testing/fake-data/serviceaccount.fake';
@@ -37,6 +37,7 @@ describe('EditServiceAccountTokenComponent', () => {
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},
             {provide: ApiService, useValue: apiMock},
+            NotificationService,
           ],
         })
         .compileComponents();
