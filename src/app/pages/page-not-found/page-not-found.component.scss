@@ -1,19 +1,57 @@
-.km-page-not-fount {
+.km-error-background {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
+  place-content: center;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-position: center top !important;
+}
 
-  button {
-    width: 120px;
-    margin-top: 40px;
-  }
+.km-page-not-found {
+  text-align: center;
+  z-index: 1;
 
   p {
-    text-align: center;
-    margin: 0;
-    font-size: 60px;
-    font-weight: 600;
+    font-size: 16px;
+    margin: 0 0 20px 0;
+
+    &:nth-child(1) {
+      font-size: 120px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    &:nth-child(2) {
+      font-size: 40px;
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+  }
+}
+
+@media screen and (max-height: 504px), screen and (max-width: 504px) {
+  .km-error-background {
+    height: 90% !important;
+  }
+
+  .km-page-not-found p {
+    margin: 0 0 10px 0;
+
+    &:nth-child(1) {
+      font-size: 80px;
+      margin-bottom: 0;
+    }
+
+    &:nth-child(2) {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: 504px) {
+  .km-error-background {
+    background-size: cover !important;
   }
 }
