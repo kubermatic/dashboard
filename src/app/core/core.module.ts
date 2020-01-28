@@ -13,11 +13,10 @@ import {SharedModule} from '../shared/shared.module';
 
 import {FooterComponent} from './components/footer/footer.component';
 import {NavigationComponent} from './components/navigation/navigation.component';
-import {NotificationComponent} from './components/notification/notification.component';
 import {ProjectSelectorComponent} from './components/sidenav/project/selector.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
-import {ApiService, Auth, AuthGuard, AuthzGuard, ClusterService, DatacenterService, LabelService, NotificationService, ParamsService, RBACService, WizardService,} from './services';
+import {ApiService, Auth, AuthGuard, AuthzGuard, ClusterService, DatacenterService, LabelService, ParamsService, RBACService, WizardService,} from './services';
 import {GlobalModule} from './services/global/global.module';
 import {HistoryService} from './services/history/history.service';
 import {NodeDataService} from './services/node-data/node-data.service';
@@ -45,7 +44,6 @@ const components: any[] = [
   AddServiceAccountTokenComponent,
   EditServiceAccountTokenComponent,
   FooterComponent,
-  NotificationComponent,
 ];
 
 const services: any[] = [
@@ -65,7 +63,6 @@ const services: any[] = [
   SettingsService,
   RBACService,
   PreviousRouteService,
-  NotificationService,
 ];
 
 const interceptors: any[] = [

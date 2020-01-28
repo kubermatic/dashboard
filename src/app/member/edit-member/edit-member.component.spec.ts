@@ -34,9 +34,6 @@ describe('EditMemberComponent', () => {
           imports: [
             ...modules,
           ],
-          declarations: [
-            EditMemberComponent,
-          ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},
             {provide: ApiService, useValue: apiMock},

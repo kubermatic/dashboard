@@ -3,8 +3,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {of} from 'rxjs';
-
-import {ClusterService, NotificationService} from '../../../core/services';
+import {ClusterService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
@@ -48,7 +47,6 @@ describe('NodeComponent', () => {
             {provide: MatDialog, useClass: MatDialogMock},
             {provide: SettingsService, useClass: SettingsMockService},
             GoogleAnalyticsService,
-            NotificationService,
           ],
         })
         .compileComponents();

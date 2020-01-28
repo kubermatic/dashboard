@@ -1,5 +1,6 @@
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
@@ -18,7 +19,6 @@ import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 
 import {AddServiceAccountComponent} from './add-serviceaccount/add-serviceaccount.component';
 import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceaccount.component';
-import {MatPaginator} from "@angular/material/paginator";
 
 @Component({
   selector: 'kubermatic-serviceaccount',
@@ -46,8 +46,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _googleAnalyticsService: GoogleAnalyticsService,
       private readonly _matDialog: MatDialog, private readonly _appConfig: AppConfigService,
-      private readonly _notificationService: NotificationService,
-      private readonly _settingsService: SettingsService) {}
+      private readonly _notificationService: NotificationService, private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.serviceAccounts;

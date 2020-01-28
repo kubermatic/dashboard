@@ -1,5 +1,3 @@
-
-
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
@@ -35,6 +33,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {ClipboardModule} from 'ngx-clipboard';
 import {CustomFormsModule} from 'ngx-custom-validators';
 
+import {NotificationComponent} from '../core/components/notification/notification.component';
+import {NotificationService} from '../core/services';
 import {TokenDialogComponent} from '../serviceaccount/serviceaccount-token/token-dialog/token-dialog.component';
 
 import {AddProjectDialogComponent} from './components/add-project-dialog/add-project-dialog.component';
@@ -86,6 +86,7 @@ const components: any[] = [
   ShortNameInCircleComponent,
   TagListComponent,
   TokenDialogComponent,
+  NotificationComponent,
 ];
 
 const entryComponents: any[] = [
@@ -96,6 +97,7 @@ const entryComponents: any[] = [
   InstallAddonDialogComponent,
   EditAddonDialogComponent,
   TokenDialogComponent,
+  NotificationComponent,
 ];
 
 @NgModule({
@@ -111,6 +113,7 @@ const entryComponents: any[] = [
     ...components,
     ...entryComponents,
   ],
+  providers: [NotificationService],
   entryComponents: [...entryComponents],
 })
 

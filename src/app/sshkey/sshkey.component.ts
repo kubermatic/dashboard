@@ -1,5 +1,6 @@
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Subject, timer} from 'rxjs';
@@ -13,7 +14,6 @@ import {AddSshKeyDialogComponent} from '../shared/components/add-ssh-key-dialog/
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
 import {UserGroupConfig} from '../shared/model/Config';
-import {MatPaginator} from "@angular/material/paginator";
 
 @Component({
   selector: 'kubermatic-sshkey',
@@ -39,8 +39,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
       private readonly _api: ApiService, private readonly _userService: UserService,
       private readonly _appConfigService: AppConfigService, public dialog: MatDialog,
       private readonly _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _projectService: ProjectService,
-      private readonly _notificationService: NotificationService,
+      private readonly _projectService: ProjectService, private readonly _notificationService: NotificationService,
       private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {

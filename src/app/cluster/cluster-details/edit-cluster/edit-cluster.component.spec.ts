@@ -4,6 +4,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Subject} from 'rxjs';
+
 import {CoreModule} from '../../../core/core.module';
 import {ClusterService, ProviderSettingsPatch} from '../../../core/services/cluster/cluster.service';
 import {SharedModule} from '../../../shared/shared.module';

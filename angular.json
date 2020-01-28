@@ -182,5 +182,8 @@
     "@schematics/angular:module": {},
     "@schematics/angular:pipe": {},
     "@schematics/angular:service": {}
+  },
+  "cli": {
+    "analytics": false
   }
 }

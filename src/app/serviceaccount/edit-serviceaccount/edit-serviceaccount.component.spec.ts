@@ -34,9 +34,6 @@ describe('EditServiceAccountComponent', () => {
           imports: [
             ...modules,
           ],
-          declarations: [
-            EditServiceAccountComponent,
-          ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},
             {provide: ApiService, useValue: apiMock},

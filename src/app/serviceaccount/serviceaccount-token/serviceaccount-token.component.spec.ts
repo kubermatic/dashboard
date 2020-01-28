@@ -6,18 +6,20 @@ import {Router} from '@angular/router';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../../app-config.service';
+import {CoreModule} from '../../core/core.module';
 import {ApiService, NotificationService, ProjectService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {DialogTestModule, NoopConfirmDialogComponent} from '../../testing/components/noop-confirmation-dialog.component';
-import {NoopTokenDialogComponent} from '../../testing/components/noop-token-dialog.component';
+import {NoopTokenDialogComponent, TokenDialogTestModule} from '../../testing/components/noop-token-dialog.component';
 import {fakeServiceAccount, fakeServiceAccountTokens} from '../../testing/fake-data/serviceaccount.fake';
-import {RouterStub, RouterTestingModule} from '../../testing/router-stubs';
+import {RouterStub} from '../../testing/router-stubs';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../../testing/services/project-mock.service';
 import {UserMockService} from '../../testing/services/user-mock.service';
+import {ServiceAccountModule} from '../serviceaccount.module';
+
 import {ServiceAccountTokenComponent} from './serviceaccount-token.component';
-import {TokenDialogComponent} from './token-dialog/token-dialog.component';
 
 describe('ServiceAccountTokenComponent', () => {
   let fixture: ComponentFixture<ServiceAccountTokenComponent>;
@@ -35,13 +37,11 @@ describe('ServiceAccountTokenComponent', () => {
           imports: [
             BrowserModule,
             BrowserAnimationsModule,
-            RouterTestingModule,
             SharedModule,
+            CoreModule,
+            ServiceAccountModule,
             DialogTestModule,
-          ],
-          declarations: [
-            ServiceAccountTokenComponent,
-            TokenDialogComponent,
+            TokenDialogTestModule,
           ],
           providers: [
             {provide: Router, useClass: RouterStub},

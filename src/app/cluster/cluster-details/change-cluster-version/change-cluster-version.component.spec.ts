@@ -14,8 +14,8 @@ import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {RouterStub} from '../../../testing/router-stubs';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
-import {ChangeClusterVersionComponent} from './change-cluster-version.component';
 
+import {ChangeClusterVersionComponent} from './change-cluster-version.component';
 
 const modules: any[] = [
   BrowserModule,

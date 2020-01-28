@@ -11,7 +11,6 @@ import {fakeServiceAccount, fakeServiceAccountTokens} from '../../../testing/fak
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
-import {TokenDialogComponent} from '../token-dialog/token-dialog.component';
 
 import {AddServiceAccountTokenComponent} from './add-serviceaccount-token.component';
 
@@ -34,10 +33,6 @@ describe('AddServiceAccountTokenComponent', () => {
         .configureTestingModule({
           imports: [
             ...modules,
-          ],
-          declarations: [
-            AddServiceAccountTokenComponent,
-            TokenDialogComponent,
           ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},

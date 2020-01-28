@@ -16,7 +16,6 @@ import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
 import {ApiMockService} from '../../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
-import {DialogTitleComponent} from '../dialog-title/dialog-title.component';
 
 import {AddSshKeyDialogComponent} from './add-ssh-key-dialog.component';
 
@@ -44,10 +43,6 @@ describe('AddSshKeyDialogComponent', () => {
         .configureTestingModule({
           imports: [
             ...modules,
-          ],
-          declarations: [
-            DialogTitleComponent,
-            AddSshKeyDialogComponent,
           ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},
