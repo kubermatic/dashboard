@@ -1,6 +1,6 @@
 import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {BrowserModule, By} from '@angular/platform-browser';
+import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
@@ -14,6 +14,7 @@ import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/no
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeBringyourownSeedDatacenter, fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {nodeDeploymentsFake, nodesFake} from '../../../testing/fake-data/node.fake';
+import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {ActivatedRouteStub, RouterStub} from '../../../testing/router-stubs';
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
@@ -91,26 +92,22 @@ describe('NodeDeploymentDetailsComponent', () => {
     component.cluster = fakeDigitaloceanCluster();
     component.datacenter = fakeDigitaloceanDatacenter();
     component.seedDatacenter = fakeBringyourownSeedDatacenter();
+    component.projectID = fakeProject().id;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
     activatedRoute.testParamMap = {
-      clusterName: component.cluster.id,
-      seedDc: component.datacenter.spec.seed,
-      nodeDeploymentID: component.nodeDeployment.id,
+      clusterName: fakeDigitaloceanCluster().id,
+      seedDc: fakeDigitaloceanDatacenter().spec.seed,
+      nodeDeploymentID: nodeDeploymentsFake()[0].id,
+      projectID: fakeProject().id,
     };
 
-    jest.spyOn(component, 'isInitialized').mockReturnValue(true);
-
-    fixture.debugElement.injector.get(ApiService);
     fixture.detectChanges();
+    fixture.debugElement.injector.get(ApiService);
   });
 
   it('should initialize', () => {
+    jest.spyOn(component, 'isInitialized').mockReturnValue(true);
     expect(component).toBeTruthy();
-  });
-
-  it('should render cluster name', () => {
-    const name = fixture.debugElement.query(By.css('.km-node-deployment-name'));
-    expect(name.nativeElement.textContent).toContain(component.nodeDeployment.name);
   });
 });

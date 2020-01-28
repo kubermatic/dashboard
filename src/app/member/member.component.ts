@@ -1,10 +1,11 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
-import {AppConfigService} from '../app-config.service';
 
+import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
+import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -22,13 +23,14 @@ import {EditMemberComponent} from './edit-member/edit-member.component';
   styleUrls: ['./member.component.scss'],
 })
 
-export class MemberComponent implements OnInit, OnDestroy {
+export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   members: MemberEntity[] = [];
   isInitializing = true;
   currentUser: MemberEntity;
   displayedColumns: string[] = ['name', 'email', 'group', 'actions'];
   dataSource = new MatTableDataSource<MemberEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private _unsubscribe: Subject<any> = new Subject();
   private _membersUpdate: Subject<any> = new Subject();
   private _currentGroupConfig: GroupConfig;
@@ -37,13 +39,20 @@ export class MemberComponent implements OnInit, OnDestroy {
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
       private readonly _matDialog: MatDialog, private readonly _userService: UserService,
-      private readonly _googleAnalyticsService: GoogleAnalyticsService, private readonly _appConfig: AppConfigService) {
-  }
+      private readonly _googleAnalyticsService: GoogleAnalyticsService, private readonly _appConfig: AppConfigService,
+      private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
+    this.dataSource.data = this.members;
     this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
+
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = this.paginator;  // Force refresh.
+    });
 
     this._userService.loggedInUser.pipe(first()).subscribe(user => this.currentUser = user);
 
@@ -60,18 +69,18 @@ export class MemberComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(members => {
           this.members = members;
+          this.dataSource.data = this.members;
           this.isInitializing = false;
         });
+  }
+
+  ngOnChanges(): void {
+    this.dataSource.data = this.members;
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-  }
-
-  getDataSource(): MatTableDataSource<MemberEntity> {
-    this.dataSource.data = this.members;
-    return this.dataSource;
   }
 
   getGroup(member: MemberEntity): string {
@@ -140,5 +149,13 @@ export class MemberComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  hasItems(): boolean {
+    return this.members && this.members.length > 0;
+  }
+
+  isPaginatorVisible(): boolean {
+    return this.hasItems() && this.paginator && this.members.length > this.paginator.pageSize;
   }
 }

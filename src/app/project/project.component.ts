@@ -1,5 +1,5 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig, MatSort, MatSortHeader, MatTableDataSource, SortDirection} from '@angular/material';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig, MatPaginator, MatSort, MatSortHeader, MatTableDataSource, SortDirection} from '@angular/material';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
@@ -26,7 +26,7 @@ import {EditProjectComponent} from './edit-project/edit-project.component';
   styleUrls: ['./project.component.scss'],
 })
 
-export class ProjectComponent implements OnInit, OnDestroy {
+export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   projects: ProjectEntity[] = [];
   isInitializing = true;
   clusterCount = [];
@@ -35,6 +35,22 @@ export class ProjectComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['status', 'name', 'labels', 'id', 'role', 'clusters', 'owners', 'actions'];
   dataSource = new MatTableDataSource<ProjectEntity>();
   showCards = true;
+  isPaginatorVisible = false;
+
+  paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: false})
+  set matPaginator(mp: MatPaginator) {
+    const isViewInit = !this.paginator && !!mp;  // If true, view is being initialized.
+    this.paginator = mp;
+    this.dataSource.paginator = this.paginator;
+    if (isViewInit) {
+      setTimeout(() => {
+        this.paginator.pageSize = this.settings.itemsPerPage;
+        this.isPaginatorVisible = this.isPaginatorVisibleFn();
+      }, 100);
+    }
+  }
+
   sort: MatSort;
   @ViewChild(MatSort, {static: false})
   set matSort(ms: MatSort) {
@@ -67,6 +83,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.dataSource.data = this.projects;
+
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (this.settings) {
         return;
@@ -86,6 +103,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
     this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe(projects => {
       this.projects = projects;
+      this.dataSource.data = this.projects;
       this._sortProjectOwners();
       this._loadClusterCounts();
       this._loadCurrentUserRoles();
@@ -103,9 +121,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getDataSource(): MatTableDataSource<ProjectEntity> {
+  ngOnChanges(): void {
     this.dataSource.data = this.projects;
-    return this.dataSource;
   }
 
   setDataSourceAttributes(): void {
@@ -307,5 +324,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   private _redirectToCluster(): void {
     this._router.navigate([`/projects/${this.projects[0].id}/clusters`]);
+  }
+
+  hasItems(): boolean {
+    return this.projects && this.projects.length > 0;
+  }
+
+  isPaginatorVisibleFn(): boolean {
+    return this.hasItems() && this.paginator && this.projects.length > this.paginator.pageSize;
   }
 }

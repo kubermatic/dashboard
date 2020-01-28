@@ -18,6 +18,7 @@ import {AppConfigMockService} from '../testing/services/app-config-mock.service'
 import {ClusterMockService} from '../testing/services/cluster-mock-service';
 import {DatacenterMockService} from '../testing/services/datacenter-mock.service';
 import {ProjectMockService} from '../testing/services/project-mock.service';
+import {SettingsMockService} from '../testing/services/settings-mock.service';
 import {UserMockService} from '../testing/services/user-mock.service';
 
 import {ProjectComponent} from './project.component';
@@ -46,7 +47,7 @@ describe('ProjectComponent', () => {
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             {provide: DatacenterService, useClass: DatacenterMockService},
-            SettingsService,
+            {provide: SettingsService, useClass: SettingsMockService},
             MatDialog,
             GoogleAnalyticsService,
             CookieService,

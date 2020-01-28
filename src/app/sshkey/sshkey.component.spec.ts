@@ -7,6 +7,7 @@ import {of} from 'rxjs';
 
 import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
+import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {SharedModule} from '../shared/shared.module';
 import {DialogTestModule, NoopConfirmDialogComponent} from '../testing/components/noop-confirmation-dialog.component';
@@ -16,6 +17,7 @@ import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../testing/ro
 import {asyncData} from '../testing/services/api-mock.service';
 import {AppConfigMockService} from '../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../testing/services/project-mock.service';
+import {SettingsMockService} from '../testing/services/settings-mock.service';
 import {UserMockService} from '../testing/services/user-mock.service';
 
 import {SSHKeyComponent} from './sshkey.component';
@@ -54,6 +56,7 @@ describe('SSHKeyComponent', () => {
             {provide: AppConfigService, useClass: AppConfigMockService},
             {provide: ActivatedRoute, useClass: ActivatedRouteStub},
             {provide: ProjectService, useClass: ProjectMockService},
+            {provide: SettingsService, useClass: SettingsMockService},
             MatDialog,
             GoogleAnalyticsService,
           ],
