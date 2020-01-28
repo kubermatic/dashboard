@@ -1,10 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialog, MatDialogRef} from '@angular/material';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {first} from 'rxjs/operators';
 
-import {ApiService} from '../../../core/services';
-import {NotificationActions} from '../../../redux/actions/notification.actions';
+import {ApiService, NotificationService} from '../../../core/services';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {CreateTokenEntity, ServiceAccountEntity, ServiceAccountTokenEntity} from '../../../shared/entity/ServiceAccountEntity';
 import {TokenDialogComponent} from '../token-dialog/token-dialog.component';
@@ -20,7 +19,8 @@ export class AddServiceAccountTokenComponent implements OnInit {
 
   constructor(
       private readonly _apiService: ApiService, private readonly _matDialog: MatDialog,
-      private readonly _matDialogRef: MatDialogRef<AddServiceAccountTokenComponent>) {}
+      private readonly _matDialogRef: MatDialogRef<AddServiceAccountTokenComponent>,
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.addServiceAccountTokenForm = new FormGroup({
@@ -37,7 +37,7 @@ export class AddServiceAccountTokenComponent implements OnInit {
         .pipe(first())
         .subscribe((token) => {
           this._matDialogRef.close(true);
-          NotificationActions.success(`Token ${
+          this._notificationService.success(`Token ${
               createServiceAccountToken.name} is added successfully to service account ${this.serviceaccount.name}`);
           this.openTokenDialog(token);
         });

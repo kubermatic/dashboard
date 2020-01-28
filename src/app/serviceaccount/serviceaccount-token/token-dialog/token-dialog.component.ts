@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MatDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {ServiceAccountTokenEntity} from '../../../shared/entity/ServiceAccountEntity';
 

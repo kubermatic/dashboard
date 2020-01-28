@@ -9,43 +9,43 @@ const appRoutes: Routes = [
     children: [
       {
         path: 'projects',
-        loadChildren: './project/project.module#ProjectModule',
+        loadChildren: () => import('./project/project.module').then(m => m.ProjectModule),
       },
       {
         path: 'projects/:projectID/wizard',
-        loadChildren: './wizard/wizard.module#WizardModule',
+        loadChildren: () => import('./wizard/wizard.module').then(m => m.WizardModule),
       },
       {
         path: 'projects/:projectID/sshkeys',
-        loadChildren: './sshkey/sshkey.module#SSHKeyModule',
+        loadChildren: () => import('./sshkey/sshkey.module').then(m => m.SSHKeyModule),
       },
       {
         path: 'projects/:projectID/members',
-        loadChildren: './member/member.module#MemberModule',
+        loadChildren: () => import('./member/member.module').then(m => m.MemberModule),
       },
       {
         path: 'projects/:projectID/serviceaccounts',
-        loadChildren: './serviceaccount/serviceaccount.module#ServiceAccountModule',
+        loadChildren: () => import('./serviceaccount/serviceaccount.module').then(m => m.ServiceAccountModule),
       },
       {
         path: 'projects/:projectID/clusters',
-        loadChildren: './cluster/cluster.module#ClusterModule',
+        loadChildren: () => import('./cluster/cluster.module').then(m => m.ClusterModule),
       },
       {
         path: 'projects/:projectID/dc/:seedDc/clusters',
-        loadChildren: './cluster/cluster.module#ClusterModule',
+        loadChildren: () => import('./cluster/cluster.module').then(m => m.ClusterModule),
       },
       {
         path: 'account',
-        loadChildren: './settings/user/user-settings.module#UserSettingsModule',
+        loadChildren: () => import('./settings/user/user-settings.module').then(m => m.UserSettingsModule),
       },
       {
         path: 'settings',
-        loadChildren: './settings/admin/admin-settings.module#AdminSettingsModule',
+        loadChildren: () => import('./settings/admin/admin-settings.module').then(m => m.AdminSettingsModule),
       },
       {
         path: '',
-        loadChildren: './pages/pages.module#PagesModule',
+        loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule),
       },
     ],
   },

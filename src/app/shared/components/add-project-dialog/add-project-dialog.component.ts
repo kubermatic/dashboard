@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material/dialog';
 
-import {ApiService} from '../../../core/services';
-import {NotificationActions} from '../../../redux/actions/notification.actions';
+import {ApiService, NotificationService} from '../../../core/services';
 import {ResourceType} from '../../entity/LabelsEntity';
 import {CreateProjectModel} from '../../model/CreateProjectModel';
 import {AsyncValidators} from '../../validators/async-label-form.validator';
@@ -19,8 +18,8 @@ export class AddProjectDialogComponent implements OnInit {
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Project)];
 
   constructor(
-      private readonly _apiService: ApiService,
-      private readonly _matDialogRef: MatDialogRef<AddProjectDialogComponent>) {}
+      private readonly _apiService: ApiService, private readonly _matDialogRef: MatDialogRef<AddProjectDialogComponent>,
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -36,7 +35,7 @@ export class AddProjectDialogComponent implements OnInit {
     };
     this._apiService.createProject(createProject).subscribe((res) => {
       this._matDialogRef.close(res);
-      NotificationActions.success(`Project ${createProject.name} is added successfully`);
+      this._notificationService.success(`Project ${createProject.name} is added successfully`);
     });
   }
 }

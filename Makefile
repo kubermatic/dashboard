@@ -38,7 +38,7 @@ run-e2e-ci-v2: install
 	./hack/e2e/ci-e2e.sh
 
 dist: install
-	@$(CC) run build -prod
+	@$(CC) run build
 
 build:
 	CGO_ENABLED=0 go build -ldflags '-w -extldflags '-static'' -o dashboard-v2 .

@@ -1,13 +1,13 @@
 import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
-import {MatDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../../../app-config.service';
-import {ClusterService, DatacenterService} from '../../../core/services';
+import {ClusterService, DatacenterService, NotificationService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
@@ -53,6 +53,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
             GoogleAnalyticsService,
             {provide: AppConfigService, useClass: AppConfigMockService},
             {provide: SettingsService, useClass: SettingsMockService},
+            NotificationService,
           ],
         })
         .compileComponents();

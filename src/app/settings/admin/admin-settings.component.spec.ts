@@ -5,7 +5,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
 
-import {UserService} from '../../core/services';
+import {NotificationService, UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {AdminEntity} from '../../shared/entity/AdminSettings';
@@ -45,6 +45,7 @@ describe('AdminSettingsComponent', () => {
             {provide: MatDialogRef, useClass: MatDialogRefMock},
             {provide: MatDialog, useClass: MatDialogMock},
             HistoryService,
+            NotificationService,
           ],
         })
         .compileComponents();

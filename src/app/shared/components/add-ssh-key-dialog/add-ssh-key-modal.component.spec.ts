@@ -1,17 +1,21 @@
 import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatDialogModule, MatDialogRef, MatFormFieldModule, MatInputModule, MatToolbarModule} from '@angular/material';
+import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatToolbarModule} from '@angular/material/toolbar';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 
-import {ApiService} from '../../../core/services';
+import {CoreModule} from '../../../core/core.module';
+import {ApiService, NotificationService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
 import {ApiMockService} from '../../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
-import {DialogTitleComponent} from '../dialog-title/dialog-title.component';
 
 import {AddSshKeyDialogComponent} from './add-ssh-key-dialog.component';
 
@@ -25,6 +29,8 @@ const modules: any[] = [
   MatFormFieldModule,
   MatToolbarModule,
   MatInputModule,
+  MatSnackBarModule,
+  CoreModule,
 ];
 
 describe('AddSshKeyDialogComponent', () => {
@@ -38,15 +44,12 @@ describe('AddSshKeyDialogComponent', () => {
           imports: [
             ...modules,
           ],
-          declarations: [
-            DialogTitleComponent,
-            AddSshKeyDialogComponent,
-          ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},
             {provide: ApiService, useClass: ApiMockService},
             {provide: Router, useClass: RouterStub},
             GoogleAnalyticsService,
+            NotificationService,
           ],
         })
         .compileComponents();

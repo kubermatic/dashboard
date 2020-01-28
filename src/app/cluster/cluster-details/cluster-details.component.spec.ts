@@ -1,6 +1,6 @@
 import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
-import {MatDialog} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -8,7 +8,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, Auth, ClusterService, DatacenterService, ProjectService, RBACService, UserService} from '../../core/services';
+import {ApiService, Auth, ClusterService, DatacenterService, NotificationService, ProjectService, RBACService, UserService} from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
@@ -88,6 +88,7 @@ describe('ClusterDetailsComponent', () => {
             {provide: MatDialogRef, useClass: MatDialogRefMock},
             {provide: MatDialog, useClass: MatDialogMock},
             GoogleAnalyticsService,
+            NotificationService,
           ],
         })
         .compileComponents();

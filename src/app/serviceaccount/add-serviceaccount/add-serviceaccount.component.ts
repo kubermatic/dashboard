@@ -1,10 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material/dialog';
 import {first} from 'rxjs/operators';
 
+import {NotificationService} from '../../core/services';
 import {ApiService} from '../../core/services';
-import {NotificationActions} from '../../redux/actions/notification.actions';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {CreateServiceAccountEntity} from '../../shared/entity/ServiceAccountEntity';
 
@@ -18,7 +18,8 @@ export class AddServiceAccountComponent implements OnInit {
 
   constructor(
       private readonly _apiService: ApiService,
-      private readonly _matDialogRef: MatDialogRef<AddServiceAccountComponent>) {}
+      private readonly _matDialogRef: MatDialogRef<AddServiceAccountComponent>,
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.addServiceAccountForm = new FormGroup({
@@ -35,7 +36,7 @@ export class AddServiceAccountComponent implements OnInit {
 
     this._apiService.createServiceAccount(this.project.id, createServiceAccount).pipe(first()).subscribe(() => {
       this._matDialogRef.close(true);
-      NotificationActions.success(
+      this._notificationService.success(
           `Service Account ${createServiceAccount.name} is added successfully to project ${this.project.name}`);
     });
   }

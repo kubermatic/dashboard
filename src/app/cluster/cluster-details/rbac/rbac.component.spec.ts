@@ -1,11 +1,11 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {MatDialog} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {of} from 'rxjs';
 
-import {RBACService} from '../../../core/services';
+import {NotificationService, RBACService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
@@ -44,6 +44,7 @@ describe('RBACComponent', () => {
             {provide: Router, useClass: RouterStub},
             MatDialog,
             GoogleAnalyticsService,
+            NotificationService,
           ],
         })
         .compileComponents();

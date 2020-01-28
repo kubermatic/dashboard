@@ -1,1 +1,25 @@
-<simple-notifications [options]="options"></simple-notifications>
+<div fxFlex
+     class="km-notification-container">
+  <div fxFlex
+       fxLayout="row"
+       class="km-notification-type"
+       [ngClass]="typeIconBackground">
+    <i fxFlexAlign="center"
+       [ngClass]="typeIconClassName"></i>
+  </div>
+
+  <div fxFlex="100"
+       fxFlexAlign="center"
+       class="km-notification-content km-notification-copy-action"
+       (click)="copyToClipboard()"
+       matTooltip="Click to copy">
+    <ng-container *ngIf="message?.length <= 128; else truncated">{{ message }}</ng-container>
+    <ng-template #truncated>{{ message | slice:0:128 }}...</ng-template>
+  </div>
+
+  <div fxFlexAlign="center"
+       class="km-notification-close-container">
+    <button class="km-icon-close km-notification-close-action"
+            (click)="dismiss()"></button>
+  </div>
+</div>

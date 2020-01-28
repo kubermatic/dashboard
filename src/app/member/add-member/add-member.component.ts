@@ -1,8 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material/dialog';
+import {NotificationService} from '../../core/services';
+
 import {ApiService} from '../../core/services';
-import {NotificationActions} from '../../redux/actions/notification.actions';
 import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 
@@ -15,7 +16,8 @@ export class AddMemberComponent implements OnInit {
   addMemberForm: FormGroup;
 
   constructor(
-      private readonly _apiService: ApiService, private readonly _matDialogRef: MatDialogRef<AddMemberComponent>) {}
+      private readonly _apiService: ApiService, private readonly _matDialogRef: MatDialogRef<AddMemberComponent>,
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.addMemberForm = new FormGroup({
@@ -35,7 +37,7 @@ export class AddMemberComponent implements OnInit {
 
     this._apiService.createMembers(this.project.id, createMember).subscribe((member: MemberEntity) => {
       this._matDialogRef.close(member);
-      NotificationActions.success(`Member ${member.email} is added successfully to project ${this.project.name}`);
+      this._notificationService.success(`Member ${member.email} is added successfully to project ${this.project.name}`);
     });
   }
 }

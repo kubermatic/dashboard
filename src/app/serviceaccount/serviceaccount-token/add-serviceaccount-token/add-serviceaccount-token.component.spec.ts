@@ -1,16 +1,16 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {MatDialog, MatDialogRef} from '@angular/material';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import {ApiService, ProjectService} from '../../../core/services';
+import {CoreModule} from '../../../core/core.module';
+import {ApiService, NotificationService, ProjectService} from '../../../core/services';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {fakeServiceAccount, fakeServiceAccountTokens} from '../../../testing/fake-data/serviceaccount.fake';
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
-import {TokenDialogComponent} from '../token-dialog/token-dialog.component';
 
 import {AddServiceAccountTokenComponent} from './add-serviceaccount-token.component';
 
@@ -18,6 +18,7 @@ const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SharedModule,
+  CoreModule,
 ];
 
 describe('AddServiceAccountTokenComponent', () => {
@@ -33,15 +34,12 @@ describe('AddServiceAccountTokenComponent', () => {
           imports: [
             ...modules,
           ],
-          declarations: [
-            AddServiceAccountTokenComponent,
-            TokenDialogComponent,
-          ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},
             {provide: ApiService, useValue: apiMock},
             {provide: ProjectService, useClass: ProjectMockService},
             MatDialog,
+            NotificationService,
           ],
         })
         .compileComponents();

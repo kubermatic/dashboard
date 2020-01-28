@@ -1,5 +1,5 @@
 import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
-import {MatDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -9,6 +9,7 @@ import {SharedModule} from '../../shared/shared.module';
 import {fakeProject} from '../../testing/fake-data/project.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
+import {ProjectModule} from '../project.module';
 
 import {EditProjectComponent} from './edit-project.component';
 
@@ -17,6 +18,7 @@ const modules: any[] = [
   BrowserAnimationsModule,
   SharedModule,
   CoreModule,
+  ProjectModule,
 ];
 
 describe('EditProjectComponent', () => {
@@ -32,9 +34,6 @@ describe('EditProjectComponent', () => {
         .configureTestingModule({
           imports: [
             ...modules,
-          ],
-          declarations: [
-            EditProjectComponent,
           ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},

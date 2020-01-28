@@ -1,13 +1,12 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material/dialog';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {ClusterService} from '../../../core/services';
+import {ClusterService, NotificationService} from '../../../core/services';
 import {ProviderSettingsPatch} from '../../../core/services/cluster/cluster.service';
-import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
@@ -35,7 +34,8 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
   constructor(
       private readonly _clusterService: ClusterService,
-      private readonly _matDialogRef: MatDialogRef<EditClusterComponent>) {}
+      private readonly _matDialogRef: MatDialogRef<EditClusterComponent>,
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.labels = _.cloneDeep(this.cluster.labels);
@@ -74,7 +74,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         .subscribe((cluster) => {
           this._matDialogRef.close(cluster);
           this._clusterService.onClusterUpdate.next();
-          NotificationActions.success(`Cluster ${this.cluster.name} has been successfully edited`);
+          this._notificationService.success(`Cluster ${this.cluster.name} has been successfully edited`);
         });
   }
 
