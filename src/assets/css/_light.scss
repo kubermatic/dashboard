@@ -1,59 +1,51 @@
 @import "~@angular/material/theming";
 @import "theme";
 
-$km-primary-light: (
-  50: #a5aeb8, // Footer color.
-  100: #00a3d9, // Sidenav divider top.
-  200: #31586f, // Sidenav divider bottom.
-  300: #b9ccdf, // Sidenav text.
-  400: #03223b, // Sidenav custom links background.
-  500: #dcf3fa, // Sidenav text light.
-  600: #31586f, // Sidenav background active.
-  700: #234d66, // Sidenav background hover.
-  800: #203f58,
-  900: #01579b,
-  A100: #80d8ff,
-  A200: #40c4ff,
-  A400: #00b0ff,
-  A700: #0091ea,
-  contrast: (
-    50: $dark-primary-text,
-    100: $dark-primary-text,
-    200: $dark-primary-text,
-    300: $dark-primary-text,
-    400: $dark-primary-text,
-    500: $light-primary-text,
-    600: $light-primary-text,
-    700: $light-primary-text,
-    800: $light-primary-text,
-    900: $light-primary-text,
-    A100: $dark-primary-text,
-    A200: $dark-primary-text,
-    A400: $dark-primary-text,
-    A700: $light-primary-text,
-  )
+$colors-light: (
+  primary: #0081ae,
+  primary-hover: #00a3d9,
+  primary-dark: #1b658f,
+  secondary: #3bc6ad,
+  secondary-hover: #21dfa9,
+  secondary-dark: #1c8282,
+  indicator-green: #1dc67f,
+  indicator-orange: #f7b500,
+  indicator-red: #eb5757,
+  footer-text: #a5aeb8,
+  sidenav-text: #b9ccdf,
+  sidenav-text-hover: #dcf3fa,
+  sidenav-background: #203f58,
+  sidenav-background-hover: #234d66,
+  sidenav-background-active: #31586f,
+  sidenav-background-custom: #03223b,
+  sidenav-divider: #31586f,
+  sidenav-divider-top: #00a3d9,
+  tooltip-background: #31586f,
+  option-background: #fff,
+  option-background-hover: #f5f5f5,
+  wizard-step-background: #b6ebfc,
+  wizard-step-background-active: #b9ccdf,
+  scrollbar: #e0e3e5,
+  scrollbar-background: #fff,
+  shadow: 0 4px 4px rgba(#000, .08),
 );
 
-$primary: mat-palette($km-primary-light, 700, 500, 800);
-$lighter: mat-palette($mat-light-blue, 100, 200, 300);
-$accent:  mat-palette($mat-pink, 500, 600, 700);
-
-$light-theme: mat-light-theme($primary, $lighter, $accent);
+$theme-light: mat-light-theme(mat-palette($mat-blue), mat-palette($mat-light-blue), mat-palette($mat-pink));
 
 // sass-lint:disable function-name-format
-$background: map-get($light-theme, background);
+$background: map-get($theme-light, background);
 $background: map_merge($background, (background: #edeff0));
 $background: map_merge($background, (app-bar: #fff));
-$light-theme: map_merge($light-theme, (background: $background));
+$theme-light: map_merge($theme-light, (background: $background));
 
-$foreground: map-get($light-theme, foreground);
+$foreground: map-get($theme-light, foreground);
 $foreground: map_merge($foreground, (text: #4d555c));
 $foreground: map_merge($foreground, (secondary-text: #7e868f));
 $foreground: map_merge($foreground, (divider: #e0e3e5));
-$light-theme: map_merge($light-theme, (foreground: $foreground));
+$theme-light: map_merge($theme-light, (foreground: $foreground));
 // sass-lint:enable function-name-format
 
 .light {
-  @include angular-material-theme($light-theme);
-  @include km-theme($light-theme);
+  @include angular-material-theme($theme-light);
+  @include km-theme($theme-light, $colors-light);
 }
