@@ -1,12 +1,14 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {ClusterService} from '../../../core/services';
+import {ClusterService, NotificationService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
@@ -49,7 +51,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
       private readonly _matDialog: MatDialog, private readonly _clusterService: ClusterService,
       private readonly _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _settingsService: SettingsService) {}
+      private readonly _notificationService: NotificationService, private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.nodes;
@@ -96,7 +98,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
       if (isConfirmed) {
         this._clusterService.deleteNode(this.projectID, this.cluster.id, this.datacenter.metadata.name, node.id)
             .subscribe(() => {
-              NotificationActions.success(`Node removed successfully from ${this.cluster.name}`);
+              this._notificationService.success(`Node removed successfully from ${this.cluster.name}`);
               this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeleted');
               this.deleteNode.emit(node);
             });

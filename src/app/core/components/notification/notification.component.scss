@@ -1,69 +1,26 @@
 @import "../../../../assets/css/variables";
 
-.simple-notification-wrapper {
-  bottom: $toolbar-height !important;
-  right: $content-padding !important;
+.km-notification-type {
+  border-radius: $border-radius 0 0 $border-radius;
+  padding-left: 1.5 * $baseline-grid;
 }
 
-.km-notification {
-  border-radius: $border-radius;
-  box-shadow: $notification-border-box-shadow;
-  min-height: unset !important;
-  padding: unset !important;
-  z-index: 2000 !important;
-
-  .icon,
-  .sn-content {
-    display: none;
-  }
-
-  .sn-title {
-    display: flex;
-    font-size: $font-size-subhead !important;
-    line-height: unset !important;
-    padding: 0 !important;
-
-    div {
-      margin: auto;
-    }
-
-    .km-notification-type {
-      align-items: center;
-      border-radius: $border-radius 0 0 $border-radius;
-      display: flex;
-      height: inherit;
-      justify-content: center;
-      margin: 0 auto;
-      width: $notification-side-padding !important;
-
-      i {
-        background-size: 2 * $baseline-grid;
-        margin: 0 auto;
-      }
-    }
-
-    .km-notification-content {
-      flex: 100;
-      padding: $notification-content-padding;
-      word-break: break-word;
-
-      &.small {
-        font-size: $font-size-body !important;
-      }
-    }
-
-    .km-notification-close-button {
-      padding: 1.5 * $baseline-grid;
-
-      button.km-icon-close {
-        border: unset;
-        cursor: pointer;
-        outline: unset;
-      }
-    }
-  }
+.km-notification-content {
+  font-size: $font-size-subhead;
+  max-height: 100%;
+  padding: $baseline-grid (2.5 * $baseline-grid);
+  word-break: break-word;
 }
 
-.copy-action {
+.km-notification-copy-action,
+.km-notification-close-action {
   cursor: pointer;
+}
+
+.km-notification-close-container {
+  padding: 0 (2 * $baseline-grid);
+}
+
+:host {
+  flex: 1 1 auto;
 }

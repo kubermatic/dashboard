@@ -1,9 +1,10 @@
 import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
-import {MatDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import {ApiService} from '../../core/services';
+import {CoreModule} from '../../core/core.module';
+import {ApiService, NotificationService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeProject} from '../../testing/fake-data/project.fake';
 import {fakeServiceAccount} from '../../testing/fake-data/serviceaccount.fake';
@@ -16,6 +17,7 @@ const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SharedModule,
+  CoreModule,
 ];
 
 describe('EditServiceAccountComponent', () => {
@@ -32,12 +34,10 @@ describe('EditServiceAccountComponent', () => {
           imports: [
             ...modules,
           ],
-          declarations: [
-            EditServiceAccountComponent,
-          ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},
             {provide: ApiService, useValue: apiMock},
+            NotificationService,
           ],
         })
         .compileComponents();

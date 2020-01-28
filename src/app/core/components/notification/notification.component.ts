@@ -1,93 +1,50 @@
-import {select} from '@angular-redux/store';
-import {Component, ViewEncapsulation} from '@angular/core';
-import {Notification, NotificationsService} from 'angular2-notifications';
-import {Observable} from 'rxjs';
-import {NotificationToast, NotificationToastType} from '../../../shared/interfaces/notification-toast.interface';
+import {Component} from '@angular/core';
+import {MatSnackBarRef} from '@angular/material/snack-bar';
+
+export enum NotificationType {
+  success,
+  error
+}
 
 @Component({
   selector: 'kubermatic-notification',
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss'],
-  providers: [NotificationsService],
-  encapsulation: ViewEncapsulation.None,
 })
 export class NotificationComponent {
-  private static readonly closeButtonClass = 'close-action';
-  private static readonly copyButtonClass = 'copy-action';
+  private _snackBarRef: MatSnackBarRef<NotificationComponent>;
+  private _type: NotificationType;
 
-  options = {
-    timeOut: 10000,
-    theClass: 'km-notification',
-    lastOnBottom: true,
-    clickToClose: false,
-    showProgressBar: false,
-    pauseOnHover: true,
-    preventDuplicates: false,
-    preventLastDuplicates: 'visible',
-    position: ['right', 'bottom'],
-  };
-
-  @select(['notification', 'toast']) notification$: Observable<NotificationToast>;
-
-  constructor(private _service: NotificationsService) {
-    this.notification$.subscribe((toast) => {
-      if (toast) {
-        this.createToast(toast);
-      }
-    });
+  set snackBarRef(ref: MatSnackBarRef<NotificationComponent>) {
+    this._snackBarRef = ref;
   }
 
-  createToast(toast: NotificationToast): void {
-    let notification: Notification;
-    const htmlMessage = this.createHtmlMessage(toast);
-    switch (toast.type) {
-      case NotificationToastType.success:
-        notification = this._service.success(htmlMessage);
-        break;
-      case NotificationToastType.error:
-        notification = this._service.error(htmlMessage);
-        break;
-    }
-
-    this.registerClickHandler(notification, toast.content);
+  set type(type: NotificationType) {
+    this._type = type;
+    this._init();
   }
 
-  createHtmlMessage(toast: NotificationToast): string {
-    let typeClass = '';
-    let typeIcon = '';
-    switch (toast.type) {
-      case NotificationToastType.success:
-        typeClass = 'success';
-        typeIcon = 'km-icon-tick';
+  message: string;
+  typeIconBackground: string;
+  typeIconClassName: string;
+
+  private _init(): void {
+    switch (this._type) {
+      case NotificationType.success:
+        this.typeIconBackground = 'success';
+        this.typeIconClassName = 'km-icon-tick';
         break;
-      case NotificationToastType.error:
-        typeClass = 'error';
-        typeIcon = 'km-icon-warning';
-        break;
+      case NotificationType.error:
+        this.typeIconBackground = 'error';
+        this.typeIconClassName = 'km-icon-warning';
     }
-
-    const contentClass = toast.content.length > 64 ? 'small' : '';
-
-    return `<div class="km-notification-type ${typeClass}"><i class="${typeIcon}"></i></div>
-      <div class="km-notification-content ${contentClass} ${NotificationComponent.copyButtonClass}">
-        ${toast.content}
-      </div>
-      <div class="km-notification-close-button">
-        <button class="km-icon-close ${NotificationComponent.closeButtonClass}"></button>
-      </div>`;
   }
 
-  registerClickHandler(notification: Notification, plainMessage: string): void {
-    if (notification) {
-      notification.click.subscribe((e: MouseEvent) => {
-        const targetId = (e.target as HTMLElement).className;
-        if (targetId.indexOf(NotificationComponent.closeButtonClass) > -1) {
-          this._service.remove(notification.id);
-        }
-        if (targetId.indexOf(NotificationComponent.copyButtonClass) > -1) {
-          navigator.clipboard.writeText(plainMessage);
-        }
-      });
-    }
+  dismiss(): void {
+    this._snackBarRef.dismiss();
+  }
+
+  copyToClipboard(): void {
+    navigator.clipboard.writeText(this.message);
   }
 }

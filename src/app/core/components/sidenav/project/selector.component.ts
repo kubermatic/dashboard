@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {MatSelect, MatSelectChange} from '@angular/material';
+import {MatSelect, MatSelectChange} from '@angular/material/select';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {ProjectEntity} from '../../../../shared/entity/ProjectEntity';

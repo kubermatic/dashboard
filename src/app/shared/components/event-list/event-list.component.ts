@@ -1,5 +1,7 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 

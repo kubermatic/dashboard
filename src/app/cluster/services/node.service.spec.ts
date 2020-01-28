@@ -1,8 +1,11 @@
 import {fakeAsync, inject, TestBed, tick} from '@angular/core/testing';
-import {MatDialog} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {of} from 'rxjs';
 
-import {ApiService} from '../../core/services';
+import {CoreModule} from '../../core/core.module';
+import {ApiService, NotificationService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../testing/fake-data/datacenter.fake';
@@ -21,11 +24,17 @@ class MatDialogMock {
 describe('NodeService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [
+        BrowserAnimationsModule,
+        MatSnackBarModule,
+        CoreModule,
+      ],
       providers: [
         NodeService,
         GoogleAnalyticsService,
         {provide: ApiService, useClass: ApiMockService},
         {provide: MatDialog, useClass: MatDialogMock},
+        NotificationService,
       ],
     });
   });

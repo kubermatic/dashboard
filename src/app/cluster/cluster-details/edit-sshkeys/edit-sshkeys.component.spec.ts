@@ -1,9 +1,9 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {MatDialog} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '../../../app-config.service';
-import {ClusterService, UserService} from '../../../core/services';
+import {ClusterService, NotificationService, UserService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
@@ -36,6 +36,7 @@ describe('EditSSHKeysComponent', () => {
             {provide: AppConfigService, useClass: AppConfigMockService},
             MatDialog,
             GoogleAnalyticsService,
+            NotificationService,
           ],
         })
         .compileComponents();

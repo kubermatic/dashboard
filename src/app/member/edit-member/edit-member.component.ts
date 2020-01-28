@@ -1,8 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material/dialog';
+import {NotificationService} from '../../core/services';
+
 import {ApiService} from '../../core/services';
-import {NotificationActions} from '../../redux/actions/notification.actions';
 import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {MemberUtils} from '../../shared/utils/member-utils/member-utils';
@@ -17,7 +18,8 @@ export class EditMemberComponent implements OnInit {
   editMemberForm: FormGroup;
 
   constructor(
-      private readonly _apiService: ApiService, private readonly _matDialogRef: MatDialogRef<EditMemberComponent>) {}
+      private readonly _apiService: ApiService, private readonly _matDialogRef: MatDialogRef<EditMemberComponent>,
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.editMemberForm = new FormGroup({
@@ -42,7 +44,7 @@ export class EditMemberComponent implements OnInit {
 
     this._apiService.editMembers(this.project.id, editMember).subscribe(() => {
       this._matDialogRef.close(true);
-      NotificationActions.success(`Member ${this.member.name} is edited successfully`);
+      this._notificationService.success(`Member ${this.member.name} is edited successfully`);
     });
   }
 }

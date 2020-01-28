@@ -1,27 +1,26 @@
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
-import {MatDialog, MatTabsModule} from '@angular/material';
+import {async, ComponentFixture, fakeAsync, flush, TestBed, tick} from '@angular/core/testing';
+import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../app-config.service';
-import {ApiService, ProjectService, UserService} from '../core/services';
+import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {SharedModule} from '../shared/shared.module';
 import {HealthStatusColor} from '../shared/utils/health-status/health-status';
 import {DialogTestModule, NoopConfirmDialogComponent} from '../testing/components/noop-confirmation-dialog.component';
 import {fakeServiceAccounts, fakeServiceAccountTokens} from '../testing/fake-data/serviceaccount.fake';
-import {RouterStub, RouterTestingModule} from '../testing/router-stubs';
+import {RouterStub} from '../testing/router-stubs';
 import {asyncData} from '../testing/services/api-mock.service';
 import {AppConfigMockService} from '../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../testing/services/project-mock.service';
 import {SettingsMockService} from '../testing/services/settings-mock.service';
 import {UserMockService} from '../testing/services/user-mock.service';
-
-import {ServiceAccountTokenComponent} from './serviceaccount-token/serviceaccount-token.component';
 import {ServiceAccountComponent} from './serviceaccount.component';
+import {ServiceAccountModule} from './serviceaccount.module';
 
 describe('ServiceAccountComponent', () => {
   let fixture: ComponentFixture<ServiceAccountComponent>;
@@ -44,14 +43,9 @@ describe('ServiceAccountComponent', () => {
           imports: [
             BrowserModule,
             BrowserAnimationsModule,
-            RouterTestingModule,
             SharedModule,
-            MatTabsModule,
+            ServiceAccountModule,
             DialogTestModule,
-          ],
-          declarations: [
-            ServiceAccountComponent,
-            ServiceAccountTokenComponent,
           ],
           providers: [
             {provide: Router, useClass: RouterStub},
@@ -62,6 +56,7 @@ describe('ServiceAccountComponent', () => {
             {provide: SettingsService, useClass: SettingsMockService},
             MatDialog,
             GoogleAnalyticsService,
+            NotificationService,
           ],
         })
         .compileComponents();
@@ -107,5 +102,7 @@ describe('ServiceAccountComponent', () => {
        tick(15000);
 
        expect(deleteServiceAccountSpy).toHaveBeenCalled();
+       fixture.destroy();
+       flush();
      }));
 });

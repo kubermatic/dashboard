@@ -1,7 +1,6 @@
-import {NgReduxTestingModule} from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
@@ -19,7 +18,6 @@ const modules: any[] = [
   HttpClientModule,
   BrowserAnimationsModule,
   RouterTestingModule,
-  NgReduxTestingModule,
   SharedModule,
 ];
 
@@ -33,7 +31,6 @@ describe('TokenDialogComponent', () => {
           imports: [
             ...modules,
           ],
-          declarations: [TokenDialogComponent],
           providers: [
             {provide: MAT_DIALOG_DATA, useValue: {serviceaccountToken: fakeServiceAccountToken()}},
             {provide: MatDialogRef, useValue: {}},

@@ -61,7 +61,7 @@ describe('OpenstackNodeDataComponent', () => {
   });
 
   it('should disable floating ip checkbox when required by datacenter', () => {
-    const datacenterService = TestBed.get(DatacenterService);
+    const datacenterService = TestBed.inject(DatacenterService);
     const dc = fakeOpenstackDatacenter();
     dc.spec.openstack.enforce_floating_ip = true;
     jest.spyOn(datacenterService, 'getDataCenter').mockReturnValue(of(dc));

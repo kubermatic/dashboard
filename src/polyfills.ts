@@ -1,3 +1,6 @@
+// Load `$localize` onto the global scope - used if i18n tags appear in Angular templates.
+import '@angular/localize/init';
+
 import 'core-js/es/array';
 import 'core-js/es/date';
 import 'core-js/es/function';
@@ -15,10 +18,11 @@ import 'core-js/es/symbol';
 
 import 'zone.js/dist/zone';
 
-import 'hammerjs';
-
 // @ts-ignore
 window.Buffer = window.Buffer || require('buffer').Buffer;
 
 // Add global to window, assigning the value of window itself.
 (window as any).global = window;
+
+// Add global to process. Required by the 'swagger-ui'.
+(window as any).process = {browser: true};

@@ -1,11 +1,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatButtonToggleChange, MatDialogRef} from '@angular/material';
+import {MatButtonToggleChange} from '@angular/material/button-toggle';
+import {MatDialogRef} from '@angular/material/dialog';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
-import {RBACService} from '../../../../core/services';
-import {NotificationActions} from '../../../../redux/actions/notification.actions';
+import {NotificationService, RBACService} from '../../../../core/services';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
 import {ClusterRoleName, CreateBinding, RoleName} from '../../../../shared/entity/RBACEntity';
@@ -27,7 +27,8 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(
-      private readonly _rbacService: RBACService, private readonly _matDialogRef: MatDialogRef<AddBindingComponent>) {}
+      private readonly _rbacService: RBACService, private readonly _matDialogRef: MatDialogRef<AddBindingComponent>,
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -161,7 +162,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((binding) => {
           this._matDialogRef.close(binding);
-          NotificationActions.success(`${clusterBinding.userEmail} has been added successfully`);
+          this._notificationService.success(`${clusterBinding.userEmail} has been added successfully`);
         });
   }
 
@@ -177,7 +178,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((binding) => {
           this._matDialogRef.close(binding);
-          NotificationActions.success(`${namespaceBinding.userEmail} has been added successfully`);
+          this._notificationService.success(`${namespaceBinding.userEmail} has been added successfully`);
         });
   }
 }

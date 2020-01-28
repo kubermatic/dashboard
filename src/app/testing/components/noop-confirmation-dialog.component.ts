@@ -1,5 +1,5 @@
 import {Component, NgModule} from '@angular/core';
-import {MatDialogModule} from '@angular/material';
+import {MatDialogModule} from '@angular/material/dialog';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';

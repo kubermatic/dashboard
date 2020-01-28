@@ -1,10 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material/dialog';
 import * as _ from 'lodash';
 
+import {NotificationService} from '../../core/services';
 import {ApiService} from '../../core/services';
-import {NotificationActions} from '../../redux/actions/notification.actions';
 import {ResourceType} from '../../shared/entity/LabelsEntity';
 import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {AsyncValidators} from '../../shared/validators/async-label-form.validator';
@@ -19,7 +19,9 @@ export class EditProjectComponent implements OnInit {
   form: FormGroup;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Project)];
 
-  constructor(private api: ApiService, private dialogRef: MatDialogRef<EditProjectComponent>) {}
+  constructor(
+      private api: ApiService, private dialogRef: MatDialogRef<EditProjectComponent>,
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.labels = _.cloneDeep(this.project.labels);
@@ -48,7 +50,7 @@ export class EditProjectComponent implements OnInit {
 
     this.api.editProject(this.project.id, project).subscribe((project) => {
       this.dialogRef.close(project);
-      NotificationActions.success(`Project ${this.project.name} has been edited successfully`);
+      this._notificationService.success(`Project ${this.project.name} has been edited successfully`);
     });
   }
 }

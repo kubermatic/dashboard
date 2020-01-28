@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
-import {MatDialogRef} from '@angular/material';
-import {ApiService} from '../../../../core/services';
-import {NotificationActions} from '../../../../redux/actions/notification.actions';
+import {MatDialogRef} from '@angular/material/dialog';
+
+import {ApiService, NotificationService} from '../../../../core/services';
 import {ClusterEntity, Token} from '../../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
 
@@ -16,13 +16,15 @@ export class RevokeViewerTokenComponent {
   @Input() projectID: string;
   viewerToken: Token = {token: ''};
 
-  constructor(private api: ApiService, private dialogRef: MatDialogRef<RevokeViewerTokenComponent>) {}
+  constructor(
+      private readonly _api: ApiService, private readonly _dialogRef: MatDialogRef<RevokeViewerTokenComponent>,
+      private readonly _notificationService: NotificationService) {}
 
   revokeViewerToken(): void {
-    this.api.editViewerToken(this.cluster, this.datacenter.metadata.name, this.projectID, this.viewerToken)
+    this._api.editViewerToken(this.cluster, this.datacenter.metadata.name, this.projectID, this.viewerToken)
         .subscribe((res) => {
-          NotificationActions.success(`Successfully revoked Viewer Token for cluster ${this.cluster.name}`);
-          this.dialogRef.close(res);
+          this._notificationService.success(`Successfully revoked Viewer Token for cluster ${this.cluster.name}`);
+          this._dialogRef.close(res);
         });
   }
 }

@@ -1,4 +1,3 @@
-import {NgReduxTestingModule} from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {FormArray} from '@angular/forms';
@@ -15,7 +14,6 @@ const modules: any[] = [
   HttpClientModule,
   BrowserAnimationsModule,
   RouterTestingModule,
-  NgReduxTestingModule,
   SharedModule,
 ];
 

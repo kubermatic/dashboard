@@ -1,5 +1,5 @@
 import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
-import {MatDialog} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
@@ -89,11 +89,5 @@ describe('ProjectComponent', () => {
 
        expect(dialogTitle.textContent).toBe('Delete Project');
        expect(document.querySelector('#km-confirmation-dialog-input').getAttribute('value')).toBe(project.name);
-
-       deleteButton.click();
-
-       noop.detectChanges();
-       fixture.detectChanges();
-       tick(15000);
      }));
 });

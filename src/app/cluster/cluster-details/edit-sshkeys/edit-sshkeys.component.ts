@@ -1,16 +1,19 @@
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
+
 import {AppConfigService} from '../../../app-config.service';
-import {ClusterService, UserService} from '../../../core/services';
+import {ClusterService, NotificationService, UserService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
+
 import {AddClusterSSHKeysComponent} from './add-cluster-sshkeys/add-cluster-sshkeys.component';
 
 @Component({
@@ -26,7 +29,6 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
 
   loading = true;
   sshKeys: SSHKeyEntity[] = [];
-  sortedSshKeys: SSHKeyEntity[] = [];
   userGroup: string;
   userGroupConfig: UserGroupConfig;
   displayedColumns: string[] = ['name', 'actions'];
@@ -41,6 +43,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
       private readonly _dialog: MatDialog,
       private readonly _clusterService: ClusterService,
       private readonly _googleAnalyticsService: GoogleAnalyticsService,
+      private readonly _notificationService: NotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -113,7 +116,8 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
       if (isConfirmed) {
         this._clusterService.deleteSSHKey(this.projectID, this.cluster.id, this.datacenter.metadata.name, sshKey.id)
             .subscribe(() => {
-              NotificationActions.success(`SSH key ${sshKey.name} has been removed from cluster ${this.cluster.name}`);
+              this._notificationService.success(
+                  `SSH key ${sshKey.name} has been removed from cluster ${this.cluster.name}`);
               this._googleAnalyticsService.emitEvent('clusterOverview', 'SshKeyDeleted');
             });
       }
