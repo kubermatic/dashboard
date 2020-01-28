@@ -1,10 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material/dialog';
 import {first} from 'rxjs/operators';
 
+import {NotificationService} from '../../core/services';
 import {ApiService} from '../../core/services';
-import {NotificationActions} from '../../redux/actions/notification.actions';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {ServiceAccountEntity} from '../../shared/entity/ServiceAccountEntity';
 
@@ -20,7 +20,8 @@ export class EditServiceAccountComponent implements OnInit {
 
   constructor(
       private readonly _apiService: ApiService,
-      private readonly _matDialogRef: MatDialogRef<EditServiceAccountComponent>) {}
+      private readonly _matDialogRef: MatDialogRef<EditServiceAccountComponent>,
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.editServiceAccountForm = new FormGroup({
@@ -41,7 +42,7 @@ export class EditServiceAccountComponent implements OnInit {
 
     this._apiService.editServiceAccount(this.project.id, editServiceAccount).pipe(first()).subscribe(() => {
       this._matDialogRef.close(true);
-      NotificationActions.success(`Service Account ${this.serviceaccount.name} is edited successfully`);
+      this._notificationService.success(`Service Account ${this.serviceaccount.name} is edited successfully`);
     });
   }
 }

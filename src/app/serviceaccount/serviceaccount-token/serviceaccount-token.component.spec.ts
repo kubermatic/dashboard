@@ -1,23 +1,25 @@
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
-import {MatDialog} from '@angular/material';
+import {async, ComponentFixture, fakeAsync, flush, TestBed, tick} from '@angular/core/testing';
+import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, ProjectService, UserService} from '../../core/services';
+import {CoreModule} from '../../core/core.module';
+import {ApiService, NotificationService, ProjectService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {DialogTestModule, NoopConfirmDialogComponent} from '../../testing/components/noop-confirmation-dialog.component';
 import {NoopTokenDialogComponent, TokenDialogTestModule} from '../../testing/components/noop-token-dialog.component';
 import {fakeServiceAccount, fakeServiceAccountTokens} from '../../testing/fake-data/serviceaccount.fake';
-import {RouterStub, RouterTestingModule} from '../../testing/router-stubs';
+import {RouterStub} from '../../testing/router-stubs';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../../testing/services/project-mock.service';
 import {UserMockService} from '../../testing/services/user-mock.service';
+import {ServiceAccountModule} from '../serviceaccount.module';
+
 import {ServiceAccountTokenComponent} from './serviceaccount-token.component';
-import {TokenDialogComponent} from './token-dialog/token-dialog.component';
 
 describe('ServiceAccountTokenComponent', () => {
   let fixture: ComponentFixture<ServiceAccountTokenComponent>;
@@ -35,14 +37,11 @@ describe('ServiceAccountTokenComponent', () => {
           imports: [
             BrowserModule,
             BrowserAnimationsModule,
-            RouterTestingModule,
             SharedModule,
+            CoreModule,
+            ServiceAccountModule,
             DialogTestModule,
             TokenDialogTestModule,
-          ],
-          declarations: [
-            ServiceAccountTokenComponent,
-            TokenDialogComponent,
           ],
           providers: [
             {provide: Router, useClass: RouterStub},
@@ -52,6 +51,7 @@ describe('ServiceAccountTokenComponent', () => {
             {provide: UserService, useClass: UserMockService},
             MatDialog,
             GoogleAnalyticsService,
+            NotificationService,
           ],
         })
         .compileComponents();
@@ -92,5 +92,7 @@ describe('ServiceAccountTokenComponent', () => {
        tick(15000);
 
        expect(deleteServiceAccountTokenSpy).toHaveBeenCalled();
+       fixture.destroy();
+       flush();
      }));
 });

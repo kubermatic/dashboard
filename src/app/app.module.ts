@@ -1,9 +1,7 @@
-import {NgReduxFormModule} from '@angular-redux/form';
-import {NgReduxModule} from '@angular-redux/store';
 import {APP_INITIALIZER, NgModule} from '@angular/core';
-import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MAT_TOOLTIP_DEFAULT_OPTIONS, MatFormFieldDefaultOptions} from '@angular/material';
-import {GestureConfig} from '@angular/material/core';
-import {BrowserModule, HAMMER_GESTURE_CONFIG} from '@angular/platform-browser';
+import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions} from '@angular/material/form-field';
+import {MAT_TOOLTIP_DEFAULT_OPTIONS} from '@angular/material/tooltip';
+import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 import {CookieService} from 'ngx-cookie-service';
@@ -49,8 +47,6 @@ const appearance: MatFormFieldDefaultOptions = {
     BrowserModule,
     environment.animations ? BrowserAnimationsModule : NoopAnimationsModule,
     AppRoutingModule,
-    NgReduxFormModule,
-    NgReduxModule,
     RouterModule,
   ],
   declarations: [
@@ -76,7 +72,6 @@ const appearance: MatFormFieldDefaultOptions = {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: appearance,
     },
-    {provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig},
     CookieService,
     ProjectService,
     UserService,

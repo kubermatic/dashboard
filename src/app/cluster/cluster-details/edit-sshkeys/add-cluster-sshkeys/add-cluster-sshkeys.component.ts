@@ -1,10 +1,10 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialog, MatDialogRef} from '@angular/material';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Subscription} from 'rxjs';
+
 import {AppConfigService} from '../../../../app-config.service';
-import {ApiService, ClusterService, UserService} from '../../../../core/services';
-import {NotificationActions} from '../../../../redux/actions/notification.actions';
+import {ApiService, ClusterService, NotificationService, UserService} from '../../../../core/services';
 import {AddSshKeyDialogComponent} from '../../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
@@ -33,7 +33,8 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
   constructor(
       private readonly _clusterService: ClusterService, private readonly _dialog: MatDialog,
       private readonly _appConfigService: AppConfigService, private readonly _userService: UserService,
-      private readonly _dialogRef: MatDialogRef<AddClusterSSHKeysComponent>, private readonly _api: ApiService) {}
+      private readonly _dialogRef: MatDialogRef<AddClusterSSHKeysComponent>, private readonly _api: ApiService,
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this._appConfigService.getUserGroupConfig();
@@ -68,7 +69,7 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
     this._clusterService
         .createSSHKey(this.projectID, this.cluster.id, this.datacenter.metadata.name, this.keysForm.controls.keys.value)
         .subscribe((res) => {
-          NotificationActions.success(
+          this._notificationService.success(
               `SSH key ${this.keysForm.controls.keys.value} was successfully added to cluster ${this.cluster.name}`);
           this._dialogRef.close(res);
         });

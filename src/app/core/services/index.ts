@@ -4,6 +4,7 @@ import {Auth} from './auth/auth.service';
 import {ClusterService} from './cluster/cluster.service';
 import {DatacenterService} from './datacenter/datacenter.service';
 import {LabelService} from './label/label.service';
+import {NotificationService} from './notification/notification.service';
 import {ParamsService} from './params/params.service';
 import {ProjectService} from './project/project.service';
 import {RBACService} from './rbac/rbac.service';
@@ -18,6 +19,7 @@ export {
   ClusterService,
   DatacenterService,
   LabelService,
+  NotificationService,
   ParamsService,
   ProjectService,
   RBACService,

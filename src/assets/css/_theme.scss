@@ -769,7 +769,17 @@
 
   .km-notification {
     background: $background-card !important;
+    border-radius: $border-radius;
+    box-shadow: $notification-border-box-shadow;
     color: $text !important;
+    display: flex;
+    flex: 1 1 auto;
+    margin: $notification-margin;
+    min-height: $notification-min-height;
+    max-height: $notification-height;
+    max-width: $notification-width;
+    min-width: $notification-width;
+    padding: 0;
   }
 
   .km-notification-type {

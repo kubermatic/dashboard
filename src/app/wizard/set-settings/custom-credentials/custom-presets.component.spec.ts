@@ -34,8 +34,8 @@ describe('CustomPresetsSettingsComponent', () => {
         .compileComponents();
 
     fixture = TestBed.createComponent(CustomPresetsSettingsComponent);
-    httpTestingController = TestBed.get(HttpTestingController);
-    wizardService = TestBed.get(WizardService);
+    httpTestingController = TestBed.inject(HttpTestingController);
+    wizardService = TestBed.inject(WizardService);
     component = fixture.componentInstance;
   }));
 

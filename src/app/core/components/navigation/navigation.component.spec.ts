@@ -1,6 +1,6 @@
 import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, inject, TestBed} from '@angular/core/testing';
-import {MatDialog} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';

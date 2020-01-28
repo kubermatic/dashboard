@@ -1,5 +1,5 @@
 import {Component, NgModule} from '@angular/core';
-import {MatDialogModule} from '@angular/material';
+import {MatDialogModule} from '@angular/material/dialog';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 import {TokenDialogComponent} from '../../serviceaccount/serviceaccount-token/token-dialog/token-dialog.component';

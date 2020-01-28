@@ -1,19 +1,23 @@
 import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
-import {MatDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ApiService} from '../../core/services';
+
+import {CoreModule} from '../../core/core.module';
+import {ApiService, NotificationService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeMember} from '../../testing/fake-data/member.fake';
 import {fakeProject} from '../../testing/fake-data/project.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
+
 import {EditMemberComponent} from './edit-member.component';
 
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SharedModule,
+  CoreModule,
 ];
 
 describe('EditMemberComponent', () => {
@@ -30,12 +34,10 @@ describe('EditMemberComponent', () => {
           imports: [
             ...modules,
           ],
-          declarations: [
-            EditMemberComponent,
-          ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},
             {provide: ApiService, useValue: apiMock},
+            NotificationService,
           ],
         })
         .compileComponents();

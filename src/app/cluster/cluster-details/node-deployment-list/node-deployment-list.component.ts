@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {MatPaginator, MatTableDataSource} from '@angular/material';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';

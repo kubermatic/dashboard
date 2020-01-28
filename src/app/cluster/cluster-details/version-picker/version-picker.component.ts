@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {MatDialog} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
 import {first} from 'rxjs/operators';
 import {gt, lt} from 'semver';
 
@@ -60,10 +60,6 @@ export class VersionPickerComponent implements OnInit, OnChanges {
     });
 
     this._changeDetectorRef.detectChanges();
-  }
-
-  getType(type: string): string {
-    return ClusterUtils.getType(type);
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {

@@ -1,13 +1,15 @@
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {first, switchMap, switchMapTo, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
-import {ApiService, ProjectService, UserService} from '../core/services';
+import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
-import {NotificationActions} from '../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
 import {ServiceAccountEntity} from '../shared/entity/ServiceAccountEntity';
@@ -44,7 +46,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _googleAnalyticsService: GoogleAnalyticsService,
       private readonly _matDialog: MatDialog, private readonly _appConfig: AppConfigService,
-      private readonly _settingsService: SettingsService) {}
+      private readonly _notificationService: NotificationService, private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.serviceAccounts;
@@ -163,7 +165,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
         this._apiService.deleteServiceAccount(this._selectedProject.id, serviceAccount).pipe(first()).subscribe(() => {
           delete this.tokenList[serviceAccount.id];
           this._serviceAccountUpdate.next();
-          NotificationActions.success(
+          this._notificationService.success(
               `Service Account ${serviceAccount.name} has been removed from project ${this._selectedProject.name}`);
           this._googleAnalyticsService.emitEvent('serviceAccountOverview', 'ServiceAccountDeleted');
         });

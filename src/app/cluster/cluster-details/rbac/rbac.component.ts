@@ -1,10 +1,10 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {MatDialog, MatDialogConfig, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatTableDataSource} from '@angular/material/table';
 import {Subject} from 'rxjs';
 import {first} from 'rxjs/operators';
 
-import {RBACService} from '../../../core/services';
-import {NotificationActions} from '../../../redux/actions/notification.actions';
+import {NotificationService, RBACService} from '../../../core/services';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
@@ -33,7 +33,9 @@ export class RBACComponent implements OnInit, OnDestroy {
   displayedColumnsNamespace: string[] = ['name', 'clusterRole', 'namespace', 'actions'];
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _rbacService: RBACService, private readonly _matDialog: MatDialog) {}
+  constructor(
+      private readonly _rbacService: RBACService, private readonly _matDialog: MatDialog,
+      private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.dataSourceCluster.data = this.clusterBindings;
@@ -90,7 +92,7 @@ export class RBACComponent implements OnInit, OnDestroy {
                 this.cluster.id, this.datacenter.metadata.name, this.projectID, element.role, element.name)
             .pipe(first())
             .subscribe(() => {
-              NotificationActions.success(`${element.name} has been removed from binding`);
+              this._notificationService.success(`${element.name} has been removed from binding`);
             });
       }
     });
@@ -120,7 +122,7 @@ export class RBACComponent implements OnInit, OnDestroy {
                 element.name)
             .pipe(first())
             .subscribe(() => {
-              NotificationActions.success(`${element.name} has been removed from binding`);
+              this._notificationService.success(`${element.name} has been removed from binding`);
             });
       }
     });

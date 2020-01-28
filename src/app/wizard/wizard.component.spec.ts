@@ -1,6 +1,8 @@
 import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {MatButtonToggleModule, MatDialog, MatTabsModule} from '@angular/material';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatDialog} from '@angular/material/dialog';
+import {MatTabsModule} from '@angular/material/tabs';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';

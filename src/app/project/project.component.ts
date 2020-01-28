@@ -1,16 +1,18 @@
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig, MatPaginator, MatSort, MatSortHeader, MatTableDataSource, SortDirection} from '@angular/material';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, MatSortHeader, SortDirection} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
-import {Auth, ClusterService, ProjectService, UserService} from '../core/services';
+import {Auth, ClusterService, NotificationService, ProjectService, UserService} from '../core/services';
 import {PreviousRouteService} from '../core/services/previous-route/previous-route.service';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
-import {NotificationActions} from '../redux/actions/notification.actions';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {UserSettings} from '../shared/entity/MemberEntity';
@@ -52,7 +54,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   sort: MatSort;
-  @ViewChild(MatSort, {static: false})
+  @ViewChild(MatSort)
   set matSort(ms: MatSort) {
     const isViewInit = !this.sort && !!ms;  // If true, view is being initialized.
 
@@ -79,6 +81,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       private readonly _userService: UserService, private readonly _matDialog: MatDialog,
       private readonly _googleAnalyticsService: GoogleAnalyticsService, private readonly _router: Router,
       private readonly _cookieService: CookieService, private readonly _settingsService: SettingsService,
+      private readonly _notificationService: NotificationService,
       private readonly _previousRouteService: PreviousRouteService) {}
 
   ngOnInit(): void {
@@ -308,7 +311,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
         this._projectService.delete(project.id).subscribe(() => {
-          NotificationActions.success(`Project ${project.name} is being deleted`);
+          this._notificationService.success(`Project ${project.name} is being deleted`);
           this._googleAnalyticsService.emitEvent('projectOverview', 'ProjectDeleted');
           this._projectService.onProjectsUpdate.next();
         });
