@@ -592,7 +592,7 @@
   .mat-menu-item {
     padding: 0 (1.25 * $baseline-grid) !important;
     line-height: 4.2 * $line-height !important;
-    height: 42px !important;
+    height: 42px;
 
     .mat-icon {
       margin-right: 0 !important;
@@ -645,11 +645,11 @@
   }
 
   .km-text {
-    color: $text;
+    color: $text !important;
   }
 
   .km-text-muted {
-    color: $text-secondary;
+    color: $text-secondary !important;
   }
 
   .km-info {
@@ -682,6 +682,11 @@
 
   .km-icon-mask {
     background-color: $text;
+  }
+
+  .km-menu-header {
+    color: $text !important;
+    height: 6 * $baseline-grid;
   }
 
   .km-hidden {

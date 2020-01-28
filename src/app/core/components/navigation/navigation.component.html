@@ -14,13 +14,13 @@
         <mat-menu #menu="matMenu"
                   class="km-user-menu">
           <button mat-menu-item
+                  class="km-menu-header"
                   *ngIf="currentUser && !!currentUser.name"
                   (click)="$event.stopPropagation()"
                   [disabled]="true">
-            {{currentUser.name}}
+            <span>{{currentUser.name}}</span>
+            <i class="km-icon-arrow-up"></i>
           </button>
-
-          <mat-divider></mat-divider>
 
           <button mat-menu-item
                   (click)="goToAccount()">
