@@ -1,10 +1,11 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {first, switchMap, switchMapTo, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
+import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -13,6 +14,7 @@ import {ServiceAccountEntity} from '../shared/entity/ServiceAccountEntity';
 import {GroupConfig} from '../shared/model/Config';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
+
 import {AddServiceAccountComponent} from './add-serviceaccount/add-serviceaccount.component';
 import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceaccount.component';
 
@@ -22,7 +24,7 @@ import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceacc
   styleUrls: ['./serviceaccount.component.scss'],
 })
 
-export class ServiceAccountComponent implements OnInit, OnDestroy {
+export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   isInitializing = true;
   serviceAccounts: ServiceAccountEntity[] = [];
   isShowToken = [];
@@ -32,7 +34,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   toggledColumns: string[] = ['token'];
   dataSource = new MatTableDataSource<ServiceAccountEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  shouldToggleToken = (index, item) => this.isShowToken[item.id];
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private _unsubscribe: Subject<any> = new Subject();
   private _serviceAccountUpdate: Subject<any> = new Subject();
   private _selectedProject = {} as ProjectEntity;
@@ -41,12 +43,20 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _matDialog: MatDialog, private readonly _appConfig: AppConfigService) {}
+      private readonly _matDialog: MatDialog, private readonly _appConfig: AppConfigService,
+      private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
+    this.dataSource.data = this.serviceAccounts;
     this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
+
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = this.paginator;  // Force refresh.
+    });
 
     merge(this._serviceAccountUpdate, this._projectService.selectedProject.pipe(first()))
         .pipe(switchMapTo(this._projectService.selectedProject))
@@ -61,19 +71,18 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(serviceaccounts => {
           this.serviceAccounts = serviceaccounts;
+          this.dataSource.data = this.serviceAccounts;
           this.isInitializing = false;
         });
   }
 
+  ngOnChanges(): void {
+    this.dataSource.data = this.serviceAccounts;
+  }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-  }
-
-  getDataSource(): MatTableDataSource<ServiceAccountEntity> {
-    this.dataSource.data = this.serviceAccounts;
-    return this.dataSource;
   }
 
   getStateIconClass(status: string): string {
@@ -160,5 +169,13 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  hasItems(): boolean {
+    return this.serviceAccounts && this.serviceAccounts.length > 0;
+  }
+
+  isPaginatorVisible(): boolean {
+    return this.hasItems() && this.paginator && this.serviceAccounts.length > this.paginator.pageSize;
   }
 }

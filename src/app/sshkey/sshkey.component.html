@@ -17,7 +17,7 @@
            mat-table
            multiTemplateDataRows
            matSort
-           [dataSource]="getDataSource()">
+           [dataSource]="dataSource">
 
       <ng-container matColumnDef="stateArrow">
         <th mat-header-cell
@@ -114,7 +114,8 @@
           class="km-mat-row km-clickable"
           (click)="togglePublicKey(row)"></tr>
       <tr mat-row
-          *matRowDef="let row; let i=index; columns: toggledColumns; when: shouldTogglePublicKey"
+          *matRowDef="let row; let i=index; columns: toggledColumns;"
+          [ngClass]="isShowPublicKey[row.id] ? '' : 'km-table-collapse'"
           class="km-mat-row"></tr>
     </table>
 
@@ -131,5 +132,9 @@
       </div>
     </ng-container>
 
+    <div [hidden]="!isPaginatorVisible()">
+      <mat-paginator showFirstLastButtons
+                     class="km-paginator"></mat-paginator>
+    </div>
   </mat-card-content>
 </mat-card>

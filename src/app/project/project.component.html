@@ -29,7 +29,7 @@
       <table class="km-table"
              mat-table
              matSort
-             [dataSource]="getDataSource()">
+             [dataSource]="dataSource">
         <ng-container matColumnDef="status">
           <th mat-header-cell
               *matHeaderCellDef
@@ -163,6 +163,10 @@
         </div>
       </ng-container>
 
+      <div [hidden]="!isPaginatorVisible || showCards">
+        <mat-paginator showFirstLastButtons
+                       class="km-paginator"></mat-paginator>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

@@ -9,7 +9,7 @@
            mat-table
            multiTemplateDataRows
            matSort
-           [dataSource]="getDataSource()">
+           [dataSource]="dataSource">
 
       <ng-container matColumnDef="stateArrow">
         <th mat-header-cell
@@ -338,13 +338,19 @@
           class="km-mat-row km-clickable"
           (click)="toggleNodeItem(row)"></tr>
       <tr mat-row
-          *matRowDef="let row; let i=index; columns: toggledColumns; when: shouldToggleNodeItem"
+          *matRowDef="let row; let i=index; columns: toggledColumns;"
+          [ngClass]="isShowNodeItem[row.id] ? '' : 'km-table-collapse'"
           class="km-mat-row"></tr>
     </table>
 
     <div class="km-row km-no-item"
          *ngIf="!nodes || nodes.length === 0">
       No nodes available.
+    </div>
+
+    <div [hidden]="!isPaginatorVisible()">
+      <mat-paginator showFirstLastButtons
+                     class="km-paginator"></mat-paginator>
     </div>
 
     <mat-card [fxShow]="!!cluster.spec.cloud.bringyourown"
