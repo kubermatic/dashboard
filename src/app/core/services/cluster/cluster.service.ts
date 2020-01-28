@@ -13,6 +13,7 @@ import {ClusterEntity, Finalizer, MasterVersion} from '../../../shared/entity/Cl
 import {CloudSpecPatch, ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
 import {EventEntity} from '../../../shared/entity/EventEntity';
 import {HealthEntity} from '../../../shared/entity/HealthEntity';
+import {ClusterMetrics} from '../../../shared/entity/Metrics';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
@@ -95,6 +96,11 @@ export class ClusterService {
     return this._http.get<MasterVersion[]>(url).pipe(catchError(() => {
       return of<MasterVersion[]>([]).pipe(catchError(() => of<MasterVersion[]>()));
     }));
+  }
+
+  metrics(projectID: string, clusterID: string, datacenter: string): Observable<ClusterMetrics> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/metrics`;
+    return this._http.get<ClusterMetrics>(url).pipe(catchError(() => of<ClusterMetrics>()));
   }
 
   events(projectID: string, clusterID: string, datacenter: string): Observable<EventEntity[]> {

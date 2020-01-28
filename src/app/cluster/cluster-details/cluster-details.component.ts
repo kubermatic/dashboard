@@ -13,6 +13,7 @@ import {ClusterEntity, getClusterProvider, MasterVersion} from '../../shared/ent
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {EventEntity} from '../../shared/entity/EventEntity';
 import {HealthEntity, HealthState} from '../../shared/entity/HealthEntity';
+import {ClusterMetrics} from '../../shared/entity/Metrics';
 import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '../../shared/entity/RBACEntity';
@@ -49,6 +50,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   health: HealthEntity;
   config: Config = {share_kubeconfig: false};
   projectID: string;
+  metrics: ClusterMetrics;
   events: EventEntity[] = [];
   addons: AddonEntity[] = [];
   upgrades: MasterVersion[] = [];
@@ -90,15 +92,17 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           return combineLatest([
             this._clusterService.sshKeys(this.projectID, this.cluster.id, this.datacenter.metadata.name),
             this._clusterService.health(this.projectID, this.cluster.id, this.datacenter.metadata.name),
+            this._clusterService.metrics(this.projectID, this.cluster.id, this.datacenter.metadata.name),
             this._clusterService.events(this.projectID, this.cluster.id, this.datacenter.metadata.name),
           ]);
         }))
-        .pipe(switchMap(([keys, health, events]) => {
+        .pipe(switchMap(([keys, health, metrics, events]) => {
           this.sshKeys = keys.sort((a, b) => {
             return a.name.localeCompare(b.name);
           });
 
           this.health = health;
+          this.metrics = metrics;
           this.events = events;
           this.isClusterAPIRunning = ClusterHealthStatus.isClusterAPIRunning(this.cluster, health);
           this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
