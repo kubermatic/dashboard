@@ -109,7 +109,7 @@
     "start-server-and-test": "1.10.6",
     "stylelint": "13.0.0",
     "stylelint-config-standard": "19.0.0",
-    "ts-node": "8.6.1",
+    "ts-node": "8.6.2",
     "tslint": "5.20.1",
     "typescript": "3.6.4"
   },
