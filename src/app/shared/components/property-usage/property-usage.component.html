@@ -3,14 +3,15 @@
        fxLayout="row"
        fxLayoutAlign="space-between center">
     <span>{{title}}</span>
-    <span *ngIf="total">{{used}}/{{total}} {{unit}}</span>
+    <span *ngIf="total && used">{{used}}/{{total}} {{unit}}</span>
   </div>
   <div class="value km-text">
-    <div *ngIf="!total">{{used}} {{unit}}</div>
-    <mat-progress-bar *ngIf="total"
+    <mat-progress-bar *ngIf="total && used"
                       class="km-property-usage-bar"
                       mode="determinate"
                       [value]="getPercentage()"
                       [matTooltip]="getTooltip()"></mat-progress-bar>
+    <div *ngIf="!total && used">{{used}} {{unit}}</div>
+    <div *ngIf="!used">-</div>
   </div>
 </div>
