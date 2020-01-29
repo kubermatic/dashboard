@@ -1,18 +1,27 @@
 <header>
   <div fxLayout
-       class="km-navbar">
+       class="km-navbar"
+       fxLayoutAlign=" center">
+
     <a class="km-header-logo"
        routerLink="projects"></a>
+
+    <div fxFlex></div>
+
+    <button mat-icon-button
+            class="km-notification-panel"
+            fxLayoutAlign="center center">
+      <i class="km-icon-mask km-icon-bell"></i>
+    </button>
+
     <div *ngIf="isAuthenticated()"
-         class="km-auth"
-         fxFlex>
+         class="km-user-panel">
       <button mat-icon-button
               [matMenuTriggerFor]="menu"
-              class="km-user-menu"
+              fxLayoutAlign="center center"
               id="km-navbar-user-menu">
         <i class="km-icon-mask km-user"></i>
-        <mat-menu #menu="matMenu"
-                  class="km-user-menu">
+        <mat-menu #menu="matMenu">
           <button mat-menu-item
                   class="km-menu-header"
                   *ngIf="currentUser && !!currentUser.name"
@@ -21,18 +30,15 @@
             <span>{{currentUser.name}}</span>
             <i class="km-icon-arrow-up"></i>
           </button>
-
           <button mat-menu-item
                   (click)="goToAccount()">
             <span>Account</span>
           </button>
-
           <button mat-menu-item
                   *ngIf="isAdminPanelVisible()"
                   (click)="goToAdminPanel()">
             <span>Admin Panel</span>
           </button>
-
           <button mat-menu-item
                   id="km-navbar-logout-btn"
                   *ngIf="isAuthenticated()"
@@ -42,5 +48,6 @@
         </mat-menu>
       </button>
     </div>
+
   </div>
 </header>

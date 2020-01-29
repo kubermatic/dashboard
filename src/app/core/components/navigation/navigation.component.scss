@@ -27,17 +27,19 @@ header {
     background-position: $logo-margin-left $logo-margin-top;
   }
 
-  .km-auth {
+  .km-notification-panel {
+    font-size: $font-size-subhead;
+    text-align: right;
+    position: fixed;
+    right: 11 * $baseline-grid;
+  }
+
+  .km-user-panel {
     font-size: $font-size-subhead;
     font-weight: 400;
     text-align: right;
     position: fixed;
-    right: 20px;
-
-    .km-user-menu {
-      margin: (1.25 * $baseline-grid) (1.875 * $baseline-grid) (1.25 * $baseline-grid) 0;
-      font-weight: 500;
-    }
+    right: 5 * $baseline-grid;
   }
 }
 

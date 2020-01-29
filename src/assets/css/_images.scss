@@ -47,6 +47,12 @@
   mask-image: url("/assets/images/icons/user.svg");
 }
 
+.km-icon-bell {
+  @include km-image-mask(3 * $baseline-grid);
+
+  mask-image: url("/assets/images/icons/bell.svg");
+}
+
 .km-icon-delete {
   @include km-image-mask(2.25 * $baseline-grid);
 
