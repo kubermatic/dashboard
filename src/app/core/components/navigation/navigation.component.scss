@@ -27,13 +27,6 @@ header {
     background-position: $logo-margin-left $logo-margin-top;
   }
 
-  .km-notification-panel {
-    font-size: $font-size-subhead;
-    text-align: right;
-    position: fixed;
-    right: 11 * $baseline-grid;
-  }
-
   .km-user-panel {
     font-size: $font-size-subhead;
     font-weight: 400;

@@ -5,13 +5,16 @@ import {delay, filter, map, take, tap} from 'rxjs/operators';
 
 import {NotificationComponent, NotificationType} from '../../components/notification/notification.component';
 
-interface SnackBarItem {
+export interface Notification {
   message: string;
   type: NotificationType;
+  timestamp: string;
   beingDispatched: boolean;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class NotificationService {
   private readonly _config: MatSnackBarConfig = {
     duration: 5000,
@@ -21,7 +24,8 @@ export class NotificationService {
   };
 
   private readonly _notificationPopDelay = 250;  // in ms
-  private readonly snackBarQueue = new BehaviorSubject<SnackBarItem[]>([]);
+  private readonly snackBarQueue = new BehaviorSubject<Notification[]>([]);
+  private _notificationHistory: Notification[] = [];  // TODO: Add max items limit. Add to local storage/cookie?
 
   constructor(private readonly _snackBar: MatSnackBar) {
     /* Dispatches all queued snack bars one by one */
@@ -57,9 +61,15 @@ export class NotificationService {
   }
 
   private _pushNotification(message: string, type: NotificationType): void {
-    this.snackBarQueue.next(
-        this.snackBarQueue.value.concat([{message, type, beingDispatched: false}]),
-    );
+    const notification: Notification = {
+      message,
+      type,
+      timestamp: new Date().toUTCString(),
+      beingDispatched: false,
+    };
+
+    this._notificationHistory.push(notification);
+    this.snackBarQueue.next(this.snackBarQueue.value.concat([notification]));
   }
 
   success(message: string): void {
@@ -68,5 +78,13 @@ export class NotificationService {
 
   error(message: string): void {
     this._pushNotification(message, NotificationType.error);
+  }
+
+  getNotificationHistory(): Notification[] {
+    return this._notificationHistory;
+  }
+
+  clearNotificationHistory(): void {
+    this._notificationHistory = [];
   }
 }

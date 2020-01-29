@@ -767,11 +767,6 @@
     color: $text;
   }
 
-  simple-notifications * {
-    cursor: auto;
-    z-index: 2000;
-  }
-
   .km-notification {
     background: $background-card !important;
     border-radius: $border-radius;
@@ -795,6 +790,11 @@
     &.error {
       background: map-get($colors, indicator-red);
     }
+  }
+
+  .km-notification-panel .panel {
+    background-color: $background-app-bar;
+    box-shadow: map-get($colors, shadow-dark);
   }
 
   .km-project-selector {

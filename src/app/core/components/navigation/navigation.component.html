@@ -2,18 +2,10 @@
   <div fxLayout
        class="km-navbar"
        fxLayoutAlign=" center">
-
     <a class="km-header-logo"
        routerLink="projects"></a>
-
     <div fxFlex></div>
-
-    <button mat-icon-button
-            class="km-notification-panel"
-            fxLayoutAlign="center center">
-      <i class="km-icon-mask km-icon-bell"></i>
-    </button>
-
+    <km-notification-panel *ngIf="isAuthenticated()"></km-notification-panel>
     <div *ngIf="isAuthenticated()"
          class="km-user-panel">
       <button mat-icon-button
@@ -48,6 +40,5 @@
         </mat-menu>
       </button>
     </div>
-
   </div>
 </header>

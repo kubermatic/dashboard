@@ -1,0 +1,56 @@
+@import "../../../../assets/css/variables";
+
+.root-button {
+  font-size: $font-size-subhead;
+  text-align: right;
+  position: fixed;
+  top: 1.25 * $baseline-grid;
+  right: 12 * $baseline-grid;
+}
+
+.panel {
+  border-radius: $border-radius;
+  height: $notification-panel-height;
+  overflow: hidden;
+  position: fixed;
+  right: 12 * $baseline-grid;
+  top: 6.25 * $baseline-grid;
+  width: $notification-panel-width;
+  z-index: 3;
+
+  .header {
+    font-size: $font-size-subhead;
+    padding: (2.5 * $baseline-grid) (2.5 * $baseline-grid) $baseline-grid;
+
+    .mat-icon-button {
+      margin-top: -1.33 * $baseline-grid;
+
+      i {
+        height: 2 * $baseline-grid;
+        width: 2 * $baseline-grid;
+      }
+    }
+  }
+
+  .notification-list {
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    .notification-message {
+      font-size: $font-size-subhead;
+      line-height: 1.6 * $line-height;
+      padding: $baseline-grid (2.5 * $baseline-grid);
+      width: $baseline-grid * 40;
+    }
+
+    .notification-timestamp {
+      font-size: $font-size-caption;
+      line-height: 1.4 * $line-height;
+      padding: 0 (2.5 * $baseline-grid) $baseline-grid;
+    }
+  }
+
+  .zero-state {
+    font-size: $font-size-subhead;
+  }
+}
