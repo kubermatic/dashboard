@@ -15,7 +15,7 @@
               fxLayoutAlign="center center"
               (click)="clear()"
               [disabled]="!notifications.length"
-              matTooltip="Clear notification history">
+              matTooltip="Clear notifications">
         <i class="km-icon-mask km-icon-clear"></i>
       </button>
       <button mat-icon-button
@@ -29,7 +29,7 @@
       <button mat-icon-button
               fxLayoutAlign="center center"
               (click)="close()"
-              matTooltip="Close notification panel">
+              matTooltip="Close panel">
         <i class="km-icon-mask km-icon-arrow-up"></i>
       </button>
     </div>
@@ -50,9 +50,12 @@
               <i class="km-icon-mask km-icon-copy"
                  ngxClipboard
                  [cbContent]="notification.message"
-                 matTooltip="Click to copy"></i>
+                 matTooltip="Copy to clipboard"></i>
               <span class="notification-timestamp km-text-muted"
-                    fxLayoutAlign="center center">{{notification.timestamp | kmRelativeTime}}</span>
+                    fxLayoutAlign="center center"
+                    [matTooltip]="notification.timestamp">
+                {{notification.timestamp | kmRelativeTime}}
+              </span>
             </div>
           </div>
         </div>

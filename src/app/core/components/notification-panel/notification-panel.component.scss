@@ -65,6 +65,7 @@
     }
 
     .notification-timestamp {
+      cursor: pointer;
       font-size: $font-size-caption;
       line-height: 1.4 * $line-height;
     }
