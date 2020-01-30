@@ -45,7 +45,15 @@
           <div fxLayout="column"
                fxFlex>
             <span class="notification-message km-text">{{notification.message}}</span>
-            <span class="notification-timestamp km-text-muted">{{notification.timestamp | kmRelativeTime}}</span>
+            <div class="notification-info"
+                 fxLayoutAlign=" center">
+              <i class="km-icon-mask km-icon-copy"
+                 ngxClipboard
+                 [cbContent]="notification.message"
+                 matTooltip="Click to copy"></i>
+              <span class="notification-timestamp km-text-muted"
+                    fxLayoutAlign="center center">{{notification.timestamp | kmRelativeTime}}</span>
+            </div>
           </div>
         </div>
       </div>

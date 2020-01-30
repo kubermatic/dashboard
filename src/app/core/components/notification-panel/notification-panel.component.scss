@@ -53,10 +53,20 @@
       width: $baseline-grid * 40;
     }
 
+    .notification-info {
+      padding: 0 (2.5 * $baseline-grid) $baseline-grid;
+
+      .km-icon-copy {
+        cursor: pointer;
+        height: 1.75 * $baseline-grid;
+        width: 1.75 * $baseline-grid;
+        margin-right: $baseline-grid;
+      }
+    }
+
     .notification-timestamp {
       font-size: $font-size-caption;
       line-height: 1.4 * $line-height;
-      padding: 0 (2.5 * $baseline-grid) $baseline-grid;
     }
   }
 

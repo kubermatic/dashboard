@@ -43,7 +43,8 @@ export class NotificationPanelComponent implements OnInit {
 
   open_(): void {
     this.load_();
-    this._notificationService.success('opened');
+    this._notificationService.success(
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.');
     this._isOpen = true;
   }
 

@@ -807,6 +807,10 @@
   .km-notification-panel .panel {
     background-color: $background-app-bar;
     box-shadow: map-get($colors, shadow-dark);
+
+    .notification-info .km-icon-mask {
+      background-color: $text-secondary !important;
+    }
   }
 
   .km-project-selector {
