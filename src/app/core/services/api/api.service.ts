@@ -19,7 +19,7 @@ import {EditProjectEntity, ProjectEntity} from '../../../shared/entity/ProjectEn
 import {AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws/AWS';
 import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
-import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPZone} from '../../../shared/entity/provider/gcp/GCP';
+import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '../../../shared/entity/provider/gcp/GCP';
 import {HetznerTypes} from '../../../shared/entity/provider/hetzner/TypeEntity';
 import {OpenstackFlavor} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {CreateServiceAccountEntity, CreateTokenEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../../shared/entity/ServiceAccountEntity';
@@ -176,6 +176,12 @@ export class ApiService {
   getGCPNetworks(projectId: string, dc: string, clusterId: string): Observable<GCPNetwork[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/gcp/networks`;
     return this._http.get<GCPNetwork[]>(url);
+  }
+
+  getGCPSubnetworks(projectId: string, dc: string, clusterId: string, network: string): Observable<GCPSubnetwork[]> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/gcp/subnetworks`;
+    const headers = new HttpHeaders().set('Network', network);
+    return this._http.get<GCPSubnetwork[]>(url, {headers});
   }
 
   getOpenStackFlavors(projectId: string, dc: string, cluster: string): Observable<OpenstackFlavor[]> {
