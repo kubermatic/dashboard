@@ -133,8 +133,8 @@ export function getEmptyNodeProviderSpec(provider: string): object {
       } as OpenstackNodeSpec;
     case NodeProvider.VSPHERE:
       return {
-        cpus: 1,
-        memory: 2000,
+        cpus: 2,
+        memory: 4096,
         template: '',
       } as VSphereNodeSpec;
     case NodeProvider.HETZNER:
