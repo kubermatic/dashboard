@@ -20,6 +20,14 @@
       </button>
       <button mat-icon-button
               fxLayoutAlign="center center"
+              (click)="switchFiltering()"
+              matTooltip="Switch filtering">
+        <i class="km-icon-mask km-icon-filter"></i>
+        <div class="filter-indicator"
+             [ngClass]="getFilteringClass()"></div>
+      </button>
+      <button mat-icon-button
+              fxLayoutAlign="center center"
               (click)="close()"
               matTooltip="Close notification panel">
         <i class="km-icon-mask km-icon-arrow-up"></i>
@@ -27,7 +35,7 @@
     </div>
     <div class="notification-list"
          fxFlex>
-      <div *ngFor="let notification of notifications; let last = last; let index = index"
+      <div *ngFor="let notification of notifications"
            @slideOut
            (@slideOut.start)="startAnimation()"
            (@slideOut.done)="finishAnimation()"

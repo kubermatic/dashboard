@@ -660,12 +660,24 @@
     color: map-get($colors, indicator-green);
   }
 
+  .km-success-bg {
+    background-color: map-get($colors, indicator-green);
+  }
+
   .km-warning {
     color: map-get($colors, indicator-orange);
   }
 
+  .km-warning-bg {
+    background-color: map-get($colors, indicator-orange);
+  }
+
   .km-error {
     color: map-get($colors, indicator-red);
+  }
+
+  .km-error-bg {
+    background-color: map-get($colors, indicator-red);
   }
 
   .km-border {

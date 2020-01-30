@@ -24,10 +24,20 @@
 
     .mat-icon-button {
       margin-top: -1.33 * $baseline-grid;
+      position: relative;
 
       i {
         height: 2 * $baseline-grid;
         width: 2 * $baseline-grid;
+      }
+
+      .filter-indicator {
+        border-radius: 50%;
+        bottom: $baseline-grid;
+        height: $baseline-grid;
+        position: absolute;
+        right: 1.5 * $baseline-grid;
+        width: $baseline-grid;
       }
     }
   }

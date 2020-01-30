@@ -4,6 +4,7 @@ import {NavigationStart, Router} from '@angular/router';
 import {slideOut} from '../../../shared/animations/slide';
 import {NotificationService} from '../../services';
 import {Notification} from '../../services/notification/notification.service';
+import {NotificationType} from '../notification/notification.component';
 
 @Component({
   selector: 'km-notification-panel',
@@ -14,6 +15,7 @@ import {Notification} from '../../services/notification/notification.service';
 export class NotificationPanelComponent implements OnInit {
   notifications: Notification[] = [];
   private _isOpen = false;
+  private _filter: NotificationType = undefined;
   private _isAnimating = false;
 
   constructor(
@@ -55,6 +57,30 @@ export class NotificationPanelComponent implements OnInit {
 
   toggle(): void {
     this.isOpen() ? this.close() : this.open_();
+  }
+
+  switchFiltering(): void {
+    switch (this._filter) {
+      case NotificationType.error:
+        this._filter = NotificationType.success;
+        break;
+      case NotificationType.success:
+        this._filter = undefined;
+        break;
+      case undefined:
+        this._filter = NotificationType.error;
+    }
+  }
+
+  getFilteringClass(): string {
+    switch (this._filter) {
+      case NotificationType.error:
+        return 'km-error-bg';
+      case NotificationType.success:
+        return 'km-success-bg';
+      case undefined:
+        return 'km-hidden';
+    }
   }
 
   clear(): void {
