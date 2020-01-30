@@ -86,7 +86,7 @@
     "zone.js": "0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.900.0-rc.8",
+    "@angular-devkit/build-angular": "0.900.0-rc.11",
     "@angular/cli": "9.0.0-rc.8",
     "@angular/compiler-cli": "9.0.0-rc.8",
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
