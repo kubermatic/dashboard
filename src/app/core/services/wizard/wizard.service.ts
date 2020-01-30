@@ -128,8 +128,8 @@ export class WizardService {
     }
   }
 
-  presets(provider: NodeProvider): Observable<PresetListEntity> {
-    const url = `${environment.restRoot}/providers/${provider}/presets/credentials`;
+  presets(provider: NodeProvider, datacenter: string): Observable<PresetListEntity> {
+    const url = `${environment.restRoot}/providers/${provider}/presets/credentials?datacenter=${datacenter}`;
     return this._http.get<PresetListEntity>(url);
   }
 }
