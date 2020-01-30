@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 
-import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPZone} from '../../../../shared/entity/provider/gcp/GCP';
+import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '../../../../shared/entity/provider/gcp/GCP';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
@@ -23,6 +23,13 @@ export class GCP extends Provider {
   zone(zone: string): GCP {
     if (zone) {
       this._headers = this._headers.set(GCP.Header.Zone, zone);
+    }
+    return this;
+  }
+
+  network(network: string): GCP {
+    if (network) {
+      this._headers = this._headers.set(GCP.Header.Network, network);
     }
     return this;
   }
@@ -62,11 +69,21 @@ export class GCP extends Provider {
     const url = `${this._restRoot}/providers/${this._provider}/networks`;
     return this._http.get<GCPNetwork[]>(url, {headers: this._headers});
   }
+
+  subnetworks(dc: string): Observable<GCPSubnetwork[]> {
+    this._setRequiredHeaders(GCP.Header.ServiceAccount, GCP.Header.Network);
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+    const url = `${this._restRoot}/providers/${this._provider}/${dc}/subnetworks`;
+    return this._http.get<GCPSubnetwork[]>(url, {headers: this._headers});
+  }
 }
 
 export namespace GCP {
   export enum Header {
     ServiceAccount = 'ServiceAccount',
     Zone = 'Zone',
+    Network = 'Network',
   }
 }
