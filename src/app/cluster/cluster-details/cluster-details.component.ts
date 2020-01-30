@@ -91,17 +91,15 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           return combineLatest([
             this._clusterService.sshKeys(this.projectID, this.cluster.id, this.datacenter.metadata.name),
             this._clusterService.health(this.projectID, this.cluster.id, this.datacenter.metadata.name),
-            this._clusterService.metrics(this.projectID, this.cluster.id, this.datacenter.metadata.name),
             this._clusterService.events(this.projectID, this.cluster.id, this.datacenter.metadata.name),
           ]);
         }))
-        .pipe(switchMap(([keys, health, metrics, events]) => {
+        .pipe(switchMap(([keys, health, events]) => {
           this.sshKeys = keys.sort((a, b) => {
             return a.name.localeCompare(b.name);
           });
 
           this.health = health;
-          this.metrics = metrics;
           this.events = events;
           this.isClusterAPIRunning = ClusterHealthStatus.isClusterAPIRunning(this.cluster, health);
           this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
@@ -129,10 +127,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                           [
                             this._clusterService.addons(this.projectID, this.cluster.id, this.datacenter.metadata.name),
                             this._clusterService.nodes(this.projectID, this.cluster.id, this.datacenter.metadata.name),
-                            this._api.getNodeDeployments(this.cluster.id, this.datacenter.metadata.name, this.projectID)
-
+                            this._api.getNodeDeployments(
+                                this.cluster.id, this.datacenter.metadata.name, this.projectID),
+                            this._clusterService.metrics(this.projectID, this.cluster.id, this.datacenter.metadata.name)
                           ] :
-                          [of([]), of([]), of([])],
+                          [of([]), of([]), of([]), of([])],
                   );
 
           return combineLatest(reload$);
@@ -146,10 +145,16 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               addons,
               nodes,
               nodeDeployments,
-            ]: [MasterVersion[], ClusterBinding[], Binding[], AddonEntity[], NodeEntity[], NodeDeploymentEntity[]]) => {
+              metrics,
+            ]:
+                 [
+                   MasterVersion[], ClusterBinding[], Binding[], AddonEntity[], NodeEntity[], NodeDeploymentEntity[],
+                   ClusterMetrics
+                 ]) => {
               this.addons = addons;
               this.nodes = nodes;
               this.nodeDeployments = nodeDeployments;
+              this.metrics = metrics;
               this.isNodeDeploymentLoadFinished = true;
               this.upgrades = upgrades;
               this.clusterBindings = this.createSimpleClusterBinding(clusterBindings);
