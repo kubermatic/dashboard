@@ -65,6 +65,11 @@ export class NotificationPanelComponent implements OnInit {
     return this._filter === undefined || notification.type === this._filter;
   }
 
+  getNotificationCount(): number {
+    return this._filter === undefined ? this.notifications.length :
+                                        this.notifications.filter(n => this._filter === n.type).length;
+  }
+
   getNotificationIconClass(type: NotificationType): string {
     switch (type) {
       case NotificationType.success:

@@ -10,7 +10,7 @@
        *ngIf="isOpen()">
     <div class="header"
          fxLayout="row">
-      <span fxFlex>Notifications ({{notifications.length}})</span>
+      <span fxFlex>Notifications ({{getNotificationCount()}})</span>
       <button mat-icon-button
               fxLayoutAlign="center center"
               (click)="clear()"
