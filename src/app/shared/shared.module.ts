@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatBadgeModule} from '@angular/material/badge';
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatCardModule} from '@angular/material/card';
@@ -34,7 +35,6 @@ import {ClipboardModule} from 'ngx-clipboard';
 import {CustomFormsModule} from 'ngx-custom-validators';
 
 import {NotificationComponent} from '../core/components/notification/notification.component';
-import {NotificationService} from '../core/services';
 import {TokenDialogComponent} from '../serviceaccount/serviceaccount-token/token-dialog/token-dialog.component';
 
 import {AddProjectDialogComponent} from './components/add-project-dialog/add-project-dialog.component';
@@ -68,6 +68,7 @@ const modules: any[] = [
   MatDialogModule,       MatSliderModule,   MatSlideToggleModule, MatProgressBarModule, MatExpansionModule,
   MatSortModule,         MatTableModule,    MatDividerModule,     ClipboardModule,      MatButtonToggleModule,
   MatTabsModule,         MatOptionModule,   MatFormFieldModule,   MatPaginatorModule,   MatSnackBarModule,
+  MatBadgeModule,
 ];
 
 const components: any[] = [
@@ -115,7 +116,6 @@ const entryComponents: any[] = [
     ...components,
     ...entryComponents,
   ],
-  providers: [NotificationService],
   entryComponents: [...entryComponents],
 })
 

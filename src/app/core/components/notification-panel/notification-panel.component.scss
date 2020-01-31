@@ -1,0 +1,82 @@
+@import "../../../../assets/css/variables";
+
+.root-button {
+  font-size: $font-size-subhead;
+  text-align: right;
+  position: fixed;
+  top: 1.25 * $baseline-grid;
+  right: 12 * $baseline-grid;
+}
+
+.panel {
+  border-radius: $border-radius;
+  height: $notification-panel-height;
+  overflow: hidden;
+  position: fixed;
+  right: 12 * $baseline-grid;
+  top: 6.25 * $baseline-grid;
+  width: $notification-panel-width;
+  z-index: 3;
+
+  .header {
+    font-size: $font-size-subhead;
+    padding: (2.5 * $baseline-grid) (2.5 * $baseline-grid) $baseline-grid;
+
+    .mat-icon-button {
+      margin-top: -1.33 * $baseline-grid;
+      position: relative;
+
+      i {
+        height: 2 * $baseline-grid;
+        width: 2 * $baseline-grid;
+      }
+
+      .filter-indicator {
+        border-radius: 50%;
+        bottom: $baseline-grid;
+        height: $baseline-grid;
+        position: absolute;
+        right: 1.5 * $baseline-grid;
+        width: $baseline-grid;
+      }
+    }
+  }
+
+  .notification-list {
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    .notification-icon {
+      margin: 2 * $baseline-grid;
+      min-height: 2.25 * $baseline-grid;
+      min-width: 2.25 * $baseline-grid;
+    }
+
+    .notification-message {
+      font-size: $font-size-body;
+      line-height: 1.6 * $line-height;
+      padding: $baseline-grid (2.5 * $baseline-grid) $baseline-grid 0;
+    }
+
+    .notification-info {
+      padding: 0 (2.5 * $baseline-grid) $baseline-grid 0;
+
+      .km-icon-copy {
+        cursor: pointer;
+        height: 1.75 * $baseline-grid;
+        width: 1.75 * $baseline-grid;
+        margin-right: $baseline-grid;
+      }
+    }
+
+    .notification-timestamp {
+      cursor: pointer;
+      font-size: $font-size-caption;
+      line-height: 1.4 * $line-height;
+    }
+  }
+
+  .zero-state {
+    font-size: $font-size-subhead;
+  }
+}
