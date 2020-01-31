@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {EMPTY, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../core/services';
+import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {PresetListEntity} from '../../../shared/entity/provider/credentials/PresetListEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 
@@ -18,6 +19,7 @@ export enum PresetsState {
   styleUrls: ['./custom-presets.component.scss'],
 })
 export class CustomPresetsSettingsComponent implements OnInit {
+  @Input() cluster: ClusterEntity;
   presetList = new PresetListEntity();
   presetsLoaded = false;
 
@@ -50,7 +52,7 @@ export class CustomPresetsSettingsComponent implements OnInit {
         .pipe(switchMap(
             providerForm => providerForm.provider === NodeProvider.BRINGYOUROWN || !providerForm.provider ?
                 EMPTY :
-                this._wizard.presets(providerForm.provider)))
+                this._wizard.presets(providerForm.provider, this.cluster.spec.cloud.dc)))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(presetList => {
           this.presetsLoaded = presetList.names ? presetList.names.length > 0 : false;
