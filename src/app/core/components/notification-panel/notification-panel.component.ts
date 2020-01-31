@@ -44,7 +44,8 @@ export class NotificationPanelComponent implements OnInit {
   open_(): void {
     this.load_();
     this._notificationService.success(
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.');
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
+    this._notificationService.error('errrr');
     this._isOpen = true;
   }
 
@@ -58,6 +59,21 @@ export class NotificationPanelComponent implements OnInit {
 
   toggle(): void {
     this.isOpen() ? this.close() : this.open_();
+  }
+
+  isVisible(notification: Notification): boolean {
+    return this._filter === undefined || notification.type === this._filter;
+  }
+
+  getNotificationIconClass(type: NotificationType): string {
+    switch (type) {
+      case NotificationType.success:
+        return 'km-icon-tick';
+      case NotificationType.error:
+        return 'km-icon-warning';
+      default:
+        return '';
+    }
   }
 
   switchFiltering(): void {
