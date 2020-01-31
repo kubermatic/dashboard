@@ -1,5 +1,7 @@
-import {Component, ElementRef, HostListener, OnInit} from '@angular/core';
+import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 import {slideOut} from '../../../shared/animations/slide';
 import {NotificationService} from '../../services';
@@ -12,11 +14,12 @@ import {NotificationType} from '../notification/notification.component';
   styleUrls: ['./notification-panel.component.scss'],
   animations: [slideOut],
 })
-export class NotificationPanelComponent implements OnInit {
+export class NotificationPanelComponent implements OnInit, OnDestroy {
   notifications: Notification[] = [];
   private _isOpen = false;
   private _filter: NotificationType = undefined;
   private _isAnimating = false;
+  private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
       private readonly _notificationService: NotificationService, private readonly _elementRef: ElementRef,
@@ -28,6 +31,15 @@ export class NotificationPanelComponent implements OnInit {
         this.close();
       }
     });
+
+    this._notificationService.getNotificationHistory().pipe(takeUntil(this._unsubscribe)).subscribe(notifications => {
+      this.notifications = notifications;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   @HostListener('document:click', ['$event'])
@@ -37,28 +49,16 @@ export class NotificationPanelComponent implements OnInit {
     }
   }
 
-  load_(): void {
-    this.notifications = this._notificationService.getNotificationHistory();
-  }
-
-  open_(): void {
-    this.load_();
-    this._notificationService.success(
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
-    this._notificationService.error('errrr');
-    this._isOpen = true;
+  isOpen(): boolean {
+    return this._isOpen;
   }
 
   close(): void {
     this._isOpen = false;
   }
 
-  isOpen(): boolean {
-    return this._isOpen;
-  }
-
   toggle(): void {
-    this.isOpen() ? this.close() : this.open_();
+    this._isOpen = !this._isOpen;
   }
 
   isVisible(notification: Notification): boolean {
@@ -107,7 +107,6 @@ export class NotificationPanelComponent implements OnInit {
 
   clear(): void {
     this._notificationService.clearNotificationHistory();
-    this.notifications = this._notificationService.getNotificationHistory();
   }
 
   isEmpty(): boolean {

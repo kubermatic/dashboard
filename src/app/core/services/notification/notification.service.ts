@@ -25,7 +25,7 @@ export class NotificationService {
 
   private readonly _notificationPopDelay = 250;  // in ms
   private readonly snackBarQueue = new BehaviorSubject<Notification[]>([]);
-  private _notificationHistory: Notification[] = [];  // TODO: Add max items limit. Add to local storage/cookie?
+  private _notificationHistory = new BehaviorSubject<Notification[]>([]);
 
   constructor(private readonly _snackBar: MatSnackBar) {
     /* Dispatches all queued snack bars one by one */
@@ -68,7 +68,7 @@ export class NotificationService {
       beingDispatched: false,
     };
 
-    this._notificationHistory.push(notification);
+    this._notificationHistory.next(this._notificationHistory.value.concat([notification]));
     this.snackBarQueue.next(this.snackBarQueue.value.concat([notification]));
   }
 
@@ -80,11 +80,11 @@ export class NotificationService {
     this._pushNotification(message, NotificationType.error);
   }
 
-  getNotificationHistory(): Notification[] {
-    return this._notificationHistory;
+  getNotificationHistory(): Observable<Notification[]> {
+    return this._notificationHistory.asObservable();
   }
 
   clearNotificationHistory(): void {
-    this._notificationHistory = [];
+    this._notificationHistory.next([]);
   }
 }

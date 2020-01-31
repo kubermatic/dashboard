@@ -20,22 +20,23 @@
                   (click)="$event.stopPropagation()"
                   [disabled]="true">
             <span>{{currentUser.name}}</span>
-            <i class="km-icon-arrow-up"></i>
+            <i class="km-icon-mask km-icon-arrow-up"
+               matTooltip="Close panel"></i>
           </button>
           <button mat-menu-item
                   (click)="goToAccount()">
-            <span>Account</span>
+            Account
           </button>
           <button mat-menu-item
                   *ngIf="isAdminPanelVisible()"
                   (click)="goToAdminPanel()">
-            <span>Admin Panel</span>
+            Admin Panel
           </button>
           <button mat-menu-item
                   id="km-navbar-logout-btn"
                   *ngIf="isAuthenticated()"
                   (click)="logout()">
-            <span>Sign out</span>
+            Sign out
           </button>
         </mat-menu>
       </button>

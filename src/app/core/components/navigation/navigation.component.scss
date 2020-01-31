@@ -36,7 +36,16 @@ header {
   }
 }
 
+.mat-menu-item {
+  font-family: $font-primary !important;
+  font-size: $font-size-subhead !important;
+  font-weight: 400 !important;
+  line-height: 2.4 * $line-height;
+}
+
 .km-icon-arrow-up {
+  height: 1.75 * $baseline-grid;
   margin-left: 3 * $baseline-grid;
   margin-right: $baseline-grid;
+  width: 1.75 * $baseline-grid;
 }
