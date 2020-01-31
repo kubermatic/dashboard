@@ -1,0 +1,74 @@
+<div class="km-notification-panel">
+  <button mat-icon-button
+          class="root-button"
+          fxLayoutAlign="center center"
+          (click)="toggle()">
+    <i class="km-icon-mask km-icon-bell"></i>
+  </button>
+  <div class="panel"
+       fxLayout="column"
+       *ngIf="isOpen()">
+    <div class="header"
+         fxLayout="row">
+      <span fxFlex>Notifications ({{getNotificationCount()}})</span>
+      <button mat-icon-button
+              fxLayoutAlign="center center"
+              (click)="clear()"
+              [disabled]="!notifications.length"
+              matTooltip="Clear notifications">
+        <i class="km-icon-mask km-icon-clear"></i>
+      </button>
+      <button mat-icon-button
+              fxLayoutAlign="center center"
+              (click)="switchFiltering()"
+              matTooltip="Switch filtering">
+        <i class="km-icon-mask km-icon-filter"></i>
+        <div class="filter-indicator"
+             [ngClass]="getFilteringClass()"></div>
+      </button>
+      <button mat-icon-button
+              fxLayoutAlign="center center"
+              (click)="close()"
+              matTooltip="Close panel">
+        <i class="km-icon-mask km-icon-arrow-up"></i>
+      </button>
+    </div>
+    <div class="notification-list"
+         fxFlex>
+      <div *ngFor="let notification of notifications"
+           @slideOut
+           (@slideOut.start)="startAnimation()"
+           (@slideOut.done)="finishAnimation()"
+           fxLayout="column">
+        <div fxLayout="row"
+             fxLayoutAlign=" center"
+             *ngIf="isVisible(notification)">
+          <i class="notification-icon km-icon"
+             [ngClass]="getNotificationIconClass(notification.type)"></i>
+          <div fxLayout="column"
+               fxFlex>
+            <span class="notification-message km-text">{{notification.message}}</span>
+            <div class="notification-info"
+                 fxLayoutAlign=" center">
+              <i class="km-icon-mask km-icon-copy"
+                 ngxClipboard
+                 [cbContent]="notification.message"
+                 matTooltip="Copy to clipboard"></i>
+              <span class="notification-timestamp km-text-muted"
+                    fxLayoutAlign="center center"
+                    [matTooltip]="notification.timestamp">
+                {{notification.timestamp | kmRelativeTime}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="isEmpty()"
+           class="zero-state km-text-muted"
+           fxLayoutAlign="center center"
+           fxFlex>
+        There are no notifications
+      </div>
+    </div>
+  </div>
+</div>
