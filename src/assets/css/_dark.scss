@@ -103,4 +103,9 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
     background-image: url("/assets/images/icons/info-dark.svg") !important;
     cursor: pointer;
   }
+
+  // Make checkbox marks white.
+  .mat-checkbox-checkmark-path {
+    stroke: #fff !important;
+  }
 }
