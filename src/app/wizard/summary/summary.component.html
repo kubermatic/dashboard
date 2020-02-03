@@ -33,6 +33,12 @@
         </span>
         <span>Pod Security Policy</span>
       </div>
+      <div class="km-summary-row">
+        <span class="km-summary-left km-text">
+          <i [ngClass]="{'km-icon-disabled': !cluster.spec.usePodNodeSelectorAdmissionPlugin, 'km-icon-running': cluster.spec.usePodNodeSelectorAdmissionPlugin}"></i>
+        </span>
+        <span>Pod Node Selector</span>
+      </div>
       <div *ngIf="cluster.labels && displayTags(cluster.labels)"
            class="km-summary-tags">
         <div class="km-summary-row">Cluster Labels</div>

@@ -14,6 +14,7 @@ export class ClusterSpecPatch {
   cloud?: CloudSpecPatch;
   version?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
+  usePodNodeSelectorAdmissionPlugin?: boolean;
   auditLogging?: AuditLoggingSettings;
   openshift?: OpenShiftPatch;
 }

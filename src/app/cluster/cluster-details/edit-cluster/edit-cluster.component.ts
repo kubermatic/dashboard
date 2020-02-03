@@ -50,6 +50,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
           ]),
       auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
       usePodSecurityPolicyAdmissionPlugin: new FormControl(this.cluster.spec.usePodSecurityPolicyAdmissionPlugin),
+      usePodNodeSelectorAdmissionPlugin: new FormControl(this.cluster.spec.usePodNodeSelectorAdmissionPlugin),
       labels: new FormControl(''),
     });
 
@@ -67,6 +68,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
           enabled: this.form.controls.auditLogging.value,
         },
         usePodSecurityPolicyAdmissionPlugin: this.form.controls.usePodSecurityPolicyAdmissionPlugin.value,
+        usePodNodeSelectorAdmissionPlugin: this.form.controls.usePodNodeSelectorAdmissionPlugin.value,
       },
     };
 
