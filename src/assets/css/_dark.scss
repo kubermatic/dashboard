@@ -65,6 +65,7 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
   // Make icons and logos white.
   .km-provider-logo,
   .km-addon-logo,
+  .km-icon-randomize,
   footer i,
   *[class*="km-os-image-"] {
     filter: invert(.25) brightness(100) contrast(100);
