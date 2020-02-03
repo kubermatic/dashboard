@@ -58,6 +58,7 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
   .km-provider-logo,
   .km-addon-logo,
   .km-icon-randomize,
+  .km-cluster-spec-type mat-button-toggle .km-icon-openshift,
   footer i,
   *[class*="km-os-image-"] {
     filter: invert(.25) brightness(100) contrast(100);
