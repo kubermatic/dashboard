@@ -31,8 +31,6 @@ import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
-import {CustomFormsModule} from 'ng2-validation';
 import {ClipboardModule} from 'ngx-clipboard';
 import {CustomFormsModule} from 'ngx-custom-validators';
 

@@ -1,5 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, Validators} from '@angular/forms';
+import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {AbstractControl, ControlValueAccessor, FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
 
@@ -20,8 +20,12 @@ enum Controls {
   selector: 'kubermatic-wizard-cluster-step',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  providers: [
+    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ClusterStepComponent), multi: true},
+    {provide: NG_VALIDATORS, useExisting: forwardRef(() => ClusterStepComponent), multi: true}
+  ]
 })
-export class ClusterStepComponent extends StepBase implements OnInit, OnDestroy {
+export class ClusterStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   masterVersions: MasterVersion[] = [];
 
   private _unsubscribe: Subject<void> = new Subject<void>();
@@ -34,7 +38,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, OnDestroy 
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Name]: new FormControl('', [Validators.required, Validators.minLength(5)]),
+      [Controls.Name]: new FormControl(
+          '',
+          [
+            Validators.required,
+            Validators.minLength(5),
+            Validators.pattern('[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'),
+          ]),
       [Controls.Version]: new FormControl('', [Validators.required]),
       [Controls.Type]: new FormControl(''),
     });
@@ -58,17 +68,33 @@ export class ClusterStepComponent extends StepBase implements OnInit, OnDestroy 
         .subscribe(this._setDefaultVersion.bind(this));
   }
 
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
-  }
-
   generateName(): void {
     this.control(Controls.Name).setValue(this._nameGenerator.generateName());
   }
 
   hasMultipleTypes(): boolean {
     return Object.values(ClusterType).every(type => !this._appConfig.getConfig()[`hide_${type}`]);
+  }
+
+  registerOnChange(fn: any): void {
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(fn);
+  }
+
+  registerOnTouched(_: any): void {}
+
+  writeValue(obj: any): void {
+    if (obj) {
+      this.form.setValue(obj, {emitEvent: false});
+    }
+  }
+
+  validate(control: AbstractControl): ValidationErrors|null {
+    return this.form.valid ? null : {invalidForm: {valid: false, message: 'Cluster step form fields are invalid'}};
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   private _setDefaultVersion(versions: MasterVersion[]): void {

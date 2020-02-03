@@ -1,4 +1,3 @@
-@import "../../assets/css/colors";
 @import "../../assets/css/variables";
 
 .mat-card {
@@ -17,8 +16,7 @@
     h4 {
       font-weight: 400;
       margin: (1.25 * $baseline-grid) 0;
-      font-size: $subhead-font-size-base-lg;
-      color: $text-color;
+      font-size: $font-size-subhead-lg;
     }
   }
 
@@ -28,7 +26,6 @@
     }
 
     p {
-      color: $text-color;
       margin: 0 $baseline-grid (0.625 * $baseline-grid);
     }
   }
@@ -41,8 +38,7 @@
 }
 
 .km-project-status-info {
-  color: $indicator-red;
-  font-size: $small-font-size-base;
+  font-size: $font-size-small;
   margin-left: 1.875 * $baseline-grid;
 }
 

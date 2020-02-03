@@ -1,8 +1,6 @@
 import {CommonModule} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {Injector, NgModule, Optional, SkipSelf} from '@angular/core';
-import {NgModule, Optional, SkipSelf} from '@angular/core';
-import {BrowserXhr} from '@angular/http';
 import {RouterModule} from '@angular/router';
 
 import {AddMemberComponent} from '../member/add-member/add-member.component';

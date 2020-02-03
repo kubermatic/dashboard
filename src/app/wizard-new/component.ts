@@ -1,15 +1,14 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, ComponentFactoryResolver, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ViewContainerRef} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
-import {MatStep, MatStepper} from '@angular/material/stepper';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {MatStepper} from '@angular/material/stepper';
 import {Subject} from 'rxjs';
-import {switchMap, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 
 import {NewWizardService, ProjectService} from '../core/services';
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
 
 import {steps} from './config';
-import {StepBase} from './step/base';
-import {WizardStep} from './step/step';
+import {StepRegistry, WizardStep} from './step/step';
 
 @Component({
   selector: 'kubermatic-wizard',
@@ -17,97 +16,46 @@ import {WizardStep} from './step/step';
   styleUrls: ['./style.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WizardComponent implements OnInit, OnDestroy, AfterViewInit {
+export class WizardComponent implements OnInit, OnDestroy {
   form: FormGroup;
   project = {} as ProjectEntity;
+  readonly stepRegistry = StepRegistry;
 
-  @ViewChildren('dynamic', {read: ViewContainerRef}) private _stepComponentRefList: QueryList<ViewContainerRef>;
-  @ViewChildren('matStep') private readonly _stepList: QueryList<MatStep>;
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
 
-  private _steps: FormArray;
   private _unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
-      private _formBuilder: FormBuilder, private _resolver: ComponentFactoryResolver,
-      private readonly _projectService: ProjectService, private readonly _wizard: NewWizardService) {}
+      private _formBuilder: FormBuilder, private readonly _projectService: ProjectService,
+      private readonly _wizard: NewWizardService) {}
 
   get steps(): WizardStep[] {
-    return this._steps.controls.map(formGroup => formGroup.value.config);
+    return this._wizard.steps.filter(step => step.required);
+  }
+
+  get active(): WizardStep {
+    return this._wizard.steps[this._stepper.selectedIndex];
+  }
+
+  isActive(step: WizardStep): boolean {
+    return this.active.name === step.name && step.required;
   }
 
   ngOnInit(): void {
-    // Init steps for wizard
+    const controls = {};
+    steps.forEach(step => controls[step.name] = this._formBuilder.control(''));
+    this.form = this._formBuilder.group(controls);
+
+    // // Init steps for wizard
     this._wizard.steps = steps;
-    this._updateSteps();
+    this._wizard.stepper = this._stepper;
 
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
         .subscribe(project => this.project = project);
-
-    this._wizard.stepConfigChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._updateSteps();
-    });
-
-    this._wizard.stepper = this._stepper;
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-  }
-
-  ngAfterViewInit(): void {
-    this._initializeSteps();
-
-    this._stepComponentRefList.changes.pipe(switchMap(_ => this._wizard.stepConfigChanges))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(step => {
-          if (!step) {
-            return;
-          }
-
-          const idx = this.steps.indexOf(step);
-          const stepComponentRef = this._stepComponentRefList.toArray()[idx];
-
-          stepComponentRef.clear();
-          const factory = this._resolver.resolveComponentFactory(step.component);
-          const componentRef = stepComponentRef.createComponent<StepBase>(factory);
-
-          if (!(componentRef.instance instanceof StepBase)) {
-            componentRef.destroy();
-            throw new Error('Wizard step has to extend StepBase');
-          }
-
-          // Initialize StepBase
-          componentRef.instance.form = this._steps.controls[idx] as FormGroup;
-
-          // Set stepControl form programmatically to sync form state with step control
-          this._stepList.toArray()[idx].stepControl = componentRef.instance.form as any;
-        });
-  }
-
-  private _updateSteps(): void {
-    this._steps = this._formBuilder.array(
-        this._wizard.steps.filter(step => step.required).map(step => this._formBuilder.group(step.config)));
-    this.form = this._formBuilder.group({steps: this._steps});
-  }
-
-  private _initializeSteps(): void {
-    this._stepComponentRefList.forEach((stepComponentRef, i) => {
-      stepComponentRef.clear();
-      const factory = this._resolver.resolveComponentFactory(this._wizard.steps[i].component);
-      const componentRef = stepComponentRef.createComponent<StepBase>(factory);
-
-      if (!(componentRef.instance instanceof StepBase)) {
-        componentRef.destroy();
-        throw new Error('Wizard step has to extend StepBase');
-      }
-
-      // Initialize StepBase
-      componentRef.instance.form = this._steps.controls[i] as FormGroup;
-
-      // Set stepControl form programmatically to sync form state with step control
-      this._stepList.toArray()[i].stepControl = componentRef.instance.form as any;
-    });
   }
 }

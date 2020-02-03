@@ -5,30 +5,14 @@ import {NewWizardService} from '../../core/services';
 
 export class StepBase {
   readonly controls: {[key: string]: string};
+  form: FormGroup;
 
   protected readonly _wizard: NewWizardService;
   protected readonly _debounceTime = 250;
 
-  private _form: FormGroup;
-
   constructor(controls: {[key: number]: string} = {}) {
     this._wizard = CoreModule.injector.get(NewWizardService);
     this.controls = controls;
-  }
-
-  set form(form: FormGroup) {
-    if (!this._form) {
-      this._form = form;
-      return;
-    }
-
-    Object.keys(form.controls).forEach(key => {
-      this._form.addControl(key, form.controls[key]);
-    });
-  }
-
-  get form(): FormGroup {
-    return this._form;
   }
 
   control(name: string): AbstractControl {
@@ -43,14 +27,12 @@ export class StepBase {
     this._wizard.stepper.next();
   }
 
-  reset(controls: string[]): void {
-    Object.keys(this._form.controls).filter(key => !controls.includes(key)).forEach(key => {
-      this._form.removeControl(key);
-    });
-  }
-
-  isEnabled(name: string): boolean {
-    return this.form.controls[name].enabled;
+  reset(controls: string[] = []): void {
+    if (this.form.invalid) {
+      Object.keys(this.form.controls).filter(key => !controls.includes(key)).forEach(key => {
+        this.form.removeControl(key);
+      });
+    }
   }
 
   enable(enable: boolean, name: string): void {

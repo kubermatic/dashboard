@@ -1,5 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, Validators} from '@angular/forms';
+import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {AbstractControl, ControlValueAccessor, FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
@@ -15,8 +15,12 @@ enum Controls {
   selector: 'kubermatic-wizard-datacenter-step',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  providers: [
+    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DatacenterStepComponent), multi: true},
+    {provide: NG_VALIDATORS, useExisting: forwardRef(() => DatacenterStepComponent), multi: true}
+  ]
 })
-export class DatacenterStepComponent extends StepBase implements OnInit, OnDestroy {
+export class DatacenterStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   datacenters: DataCenterEntity[] = [];
 
   private _unsubscribe: Subject<void> = new Subject<void>();
@@ -79,7 +83,24 @@ export class DatacenterStepComponent extends StepBase implements OnInit, OnDestr
     return location === datacenter.spec.location ? '' : location.trim();
   }
 
+  registerOnChange(fn: any): void {
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(fn);
+  }
+
+  registerOnTouched(_: any): void {}
+
+  writeValue(obj: any): void {
+    if (obj) {
+      this.form.setValue(obj, {emitEvent: false});
+    }
+  }
+
+  validate(control: AbstractControl): ValidationErrors|null {
+    return this.form.valid ? null : {invalidForm: {valid: false, message: 'Datacenter step form fields are invalid'}};
+  }
+
   ngOnDestroy(): void {
+    this.reset();
     this._unsubscribe.next();
     this._unsubscribe.complete();
   }

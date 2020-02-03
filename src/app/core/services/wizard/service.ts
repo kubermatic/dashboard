@@ -9,7 +9,7 @@ import {StepRegistry, WizardStep} from '../../../wizard-new/step/step';
 
 @Injectable()
 export class NewWizardService {
-  readonly providerChanges = new EventEmitter<NodeProvider>();
+  readonly providerChanges = new ReplaySubject<NodeProvider>();
   readonly datacenterChanges = new ReplaySubject<string>();
   // True - enabled, false - disabled
   readonly presetStatusChanges = new EventEmitter<boolean>();
@@ -40,7 +40,7 @@ export class NewWizardService {
 
     this._clusterEntity.spec.cloud = {} as CloudSpec;
     this._clusterEntity.spec.cloud[provider] = {};
-    this.providerChanges.emit(provider);
+    this.providerChanges.next(provider);
   }
 
   get provider(): NodeProvider {
@@ -102,7 +102,6 @@ export class NewWizardService {
     this.steps.forEach((item, idx) => {
       if (item.name === step) {
         this.steps[idx].required = false;
-        this.stepConfigChanges.next();
       }
     });
   }

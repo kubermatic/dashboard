@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
@@ -19,12 +19,11 @@ export enum PresetsState {
   styleUrls: ['./style.scss'],
 })
 export class PresetsComponent extends StepBase implements OnInit, OnDestroy {
-  @Input('baseForm') private readonly _baseForm: FormGroup;
-
-  readonly Controls = Presets.Controls;
-
+  form: FormGroup;
   presetList = new PresetListEntity();
   presetsLoaded = false;
+
+  readonly Controls = Presets.Controls;
 
   private _unsubscribe = new Subject<void>();
   private _state = PresetsState.Loading;
@@ -47,7 +46,6 @@ export class PresetsComponent extends StepBase implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.form = this._baseForm;
     this.form = this._builder.group({[Presets.Controls.Preset]: new FormControl('', Validators.required)});
 
     this._wizard.providerChanges.pipe(switchMap(provider => this._presets.presets(provider)))

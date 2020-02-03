@@ -24,7 +24,6 @@ export {
   HistoryService,
   LabelService,
   NewWizardService,
-  NewWizardService,
   NotificationService,
   ParamsService,
   PresetsService,
