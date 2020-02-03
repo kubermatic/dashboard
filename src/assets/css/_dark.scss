@@ -54,16 +54,6 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
   @include angular-material-theme($theme-dark);
   @include km-theme($theme-dark, $colors-dark);
 
-  // Swap header logo.
-  .km-header-logo {
-    background-image: url("/assets/images/branding/logo-dark.svg") !important;
-  }
-
-  // Swap error page background.
-  .km-error-background {
-    background-image: url("/assets/images/branding/404-illustration-dark.svg") !important;
-  }
-
   // Make icons and logos white.
   .km-provider-logo,
   .km-addon-logo,
@@ -73,7 +63,15 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
     filter: invert(.25) brightness(100) contrast(100);
   }
 
-  // Swap some of the provider logos.
+  // Swap some of the images.
+  .km-header-logo {
+    background-image: url("/assets/images/branding/logo-dark.svg") !important;
+  }
+
+  .km-error-background {
+    background-image: url("/assets/images/branding/404-illustration-dark.svg") !important;
+  }
+
   .km-provider-logo-bringyourown {
     @include km-image(3.75 * $baseline-grid);
 
@@ -96,5 +94,12 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
     background-image: url("/assets/images/clouds/vsphere-dark.svg") !important;
     filter: none;
     min-height: 3.75 * $baseline-grid;
+  }
+
+  .km-icon-info {
+    @include km-image(2 * $baseline-grid);
+
+    background-image: url("/assets/images/icons/info-dark.svg") !important;
+    cursor: pointer;
   }
 }
