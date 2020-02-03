@@ -348,13 +348,6 @@
   min-height: 3.75 * $baseline-grid;
 }
 
-.km-provider-logo-loodsecluster {
-  @include km-image(3.75 * $baseline-grid);
-
-  background-image: url("/assets/images/clouds/loodsecluster.png");
-  min-height: 3.75 * $baseline-grid;
-}
-
 .km-provider-logo-openstack {
   @include km-image(3.75 * $baseline-grid);
 
