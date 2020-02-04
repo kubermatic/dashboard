@@ -23,10 +23,13 @@
     padding: (2.5 * $baseline-grid) (2.5 * $baseline-grid) $baseline-grid;
 
     .mat-icon-button {
-      margin-top: -1.33 * $baseline-grid;
+      margin: (-$baseline-grid) (.5 * $baseline-grid) 0 0;
+      width: 4.33 * $baseline-grid !important;
+      height: 4.33 * $baseline-grid !important;
       position: relative;
 
       i {
+        margin-top: - $baseline-grid;
         height: 2 * $baseline-grid;
         width: 2 * $baseline-grid;
       }
@@ -52,10 +55,10 @@
     overflow-x: hidden;
 
     .notification {
-      margin-bottom: 2.5 * $baseline-grid;
+      margin: $baseline-grid (2.5 * $baseline-grid) (2.5 * $baseline-grid) $baseline-grid;
 
       .notification-icon {
-        margin: 2 * $baseline-grid;
+        margin: 0 (2 * $baseline-grid) 0 $baseline-grid;
         min-height: 2.25 * $baseline-grid;
         min-width: 2.25 * $baseline-grid;
       }
@@ -63,7 +66,7 @@
       .notification-message {
         font-size: $font-size-body;
         line-height: 1.6 * $line-height;
-        padding: $baseline-grid (2.5 * $baseline-grid) $baseline-grid 0;
+        margin-bottom: $baseline-grid;
       }
 
       .notification-info {
