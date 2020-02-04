@@ -40,7 +40,8 @@
            (@slideOut.start)="startAnimation()"
            (@slideOut.done)="finishAnimation()"
            fxLayout="column">
-        <div fxLayout="row"
+        <div class="notification"
+             fxLayout="row"
              fxLayoutAlign=" center"
              *ngIf="isVisible(notification)">
           <i class="notification-icon km-icon"

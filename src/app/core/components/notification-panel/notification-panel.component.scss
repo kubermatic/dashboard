@@ -51,33 +51,37 @@
     overflow-y: auto;
     overflow-x: hidden;
 
-    .notification-icon {
-      margin: 2 * $baseline-grid;
-      min-height: 2.25 * $baseline-grid;
-      min-width: 2.25 * $baseline-grid;
-    }
+    .notification {
+      margin-bottom: 2.5 * $baseline-grid;
 
-    .notification-message {
-      font-size: $font-size-body;
-      line-height: 1.6 * $line-height;
-      padding: $baseline-grid (2.5 * $baseline-grid) $baseline-grid 0;
-    }
-
-    .notification-info {
-      padding: 0 (2.5 * $baseline-grid) $baseline-grid 0;
-
-      .km-icon-copy-small {
-        cursor: pointer;
-        height: 1.75 * $baseline-grid;
-        width: 1.75 * $baseline-grid;
-        margin-right: $baseline-grid;
+      .notification-icon {
+        margin: 2 * $baseline-grid;
+        min-height: 2.25 * $baseline-grid;
+        min-width: 2.25 * $baseline-grid;
       }
-    }
 
-    .notification-timestamp {
-      cursor: pointer;
-      font-size: $font-size-caption;
-      line-height: 1.4 * $line-height;
+      .notification-message {
+        font-size: $font-size-body;
+        line-height: 1.6 * $line-height;
+        padding: $baseline-grid (2.5 * $baseline-grid) $baseline-grid 0;
+      }
+
+      .notification-info {
+        padding: 0 (2.5 * $baseline-grid) $baseline-grid 0;
+
+        .km-icon-copy-small {
+          cursor: pointer;
+          height: 1.75 * $baseline-grid;
+          width: 1.75 * $baseline-grid;
+          margin-right: $baseline-grid;
+        }
+      }
+
+      .notification-timestamp {
+        cursor: pointer;
+        font-size: $font-size-caption;
+        line-height: 1.4 * $line-height;
+      }
     }
   }
 
