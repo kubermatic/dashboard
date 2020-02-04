@@ -129,6 +129,13 @@
   background-color: #fff;
 }
 
+.km-icon-copy-small {
+  @include km-image-mask(1.75 * $baseline-grid);
+
+  mask-image: url("/assets/images/icons/copy-small.svg");
+  background-color: #fff;
+}
+
 .km-icon-cluster {
   @include km-image-mask(2.75 * $baseline-grid);
 
