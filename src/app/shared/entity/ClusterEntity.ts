@@ -136,6 +136,7 @@ export class ClusterSpec {
   auditLogging?: AuditLoggingSettings;
   version?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
+  usePodNodeSelectorAdmissionPlugin?: boolean;
   openshift?: OpenShift;
 }
 
