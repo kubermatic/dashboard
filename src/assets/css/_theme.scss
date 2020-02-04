@@ -1113,11 +1113,11 @@
     max-width: $type-toggle-width * 2 + $baseline-grid;
 
     mat-button-toggle {
-      min-height: 7 * $baseline-grid;
-      max-height: 7 * $baseline-grid;
+      min-height: $type-toggle-height;
+      max-height: $type-toggle-height;
       min-width: $type-toggle-width;
       max-width: $type-toggle-width;
-      margin: (.66 * $baseline-grid) 0 0 0;
+      margin: (.5 * $baseline-grid) 0 0 0;
       border-width: 0.25 * $baseline-grid !important;
       background-color: $background-hover;
 
