@@ -44,6 +44,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       type: new FormControl(this.cluster.type),
       imagePullSecret: new FormControl(),
       usePodSecurityPolicyAdmissionPlugin: new FormControl(this.cluster.spec.usePodSecurityPolicyAdmissionPlugin),
+      usePodNodeSelectorAdmissionPlugin: new FormControl(this.cluster.spec.usePodNodeSelectorAdmissionPlugin),
       auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
       labels: new FormControl(''),
     });
@@ -121,6 +122,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       version: this.clusterSpecForm.controls.version.value,
       imagePullSecret: this.clusterSpecForm.controls.imagePullSecret.value,
       usePodSecurityPolicyAdmissionPlugin: this.clusterSpecForm.controls.usePodSecurityPolicyAdmissionPlugin.value,
+      usePodNodeSelectorAdmissionPlugin: this.clusterSpecForm.controls.usePodNodeSelectorAdmissionPlugin.value,
       auditLogging: {
         enabled: this.clusterSpecForm.controls.auditLogging.value,
       },

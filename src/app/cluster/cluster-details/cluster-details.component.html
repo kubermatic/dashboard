@@ -129,6 +129,11 @@
                              *ngIf="!!cluster.spec.usePodSecurityPolicyAdmissionPlugin">
         </km-property-boolean>
 
+        <km-property-boolean label="Pod Node Selector"
+                             [value]="cluster.spec.usePodNodeSelectorAdmissionPlugin"
+                             *ngIf="!!cluster.spec.usePodNodeSelectorAdmissionPlugin">
+        </km-property-boolean>
+
         <km-property>
           <div value>
             <km-ssh-key-list [sshKeys]="sshKeys"></km-ssh-key-list>
