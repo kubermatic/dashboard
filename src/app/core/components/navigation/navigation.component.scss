@@ -27,16 +27,25 @@ header {
     background-position: $logo-margin-left $logo-margin-top;
   }
 
-  .km-auth {
+  .km-user-panel {
     font-size: $font-size-subhead;
     font-weight: 400;
     text-align: right;
     position: fixed;
-    right: 20px;
-
-    .km-user-menu {
-      margin: (1.25 * $baseline-grid) (1.875 * $baseline-grid) (1.25 * $baseline-grid) 0;
-      font-weight: 500;
-    }
+    right: 5 * $baseline-grid;
   }
+}
+
+.mat-menu-item {
+  font-family: $font-primary !important;
+  font-size: $font-size-subhead !important;
+  font-weight: 400 !important;
+  line-height: 2.4 * $line-height;
+}
+
+.km-icon-arrow-up {
+  height: 1.75 * $baseline-grid;
+  margin-left: 3 * $baseline-grid;
+  margin-right: $baseline-grid;
+  width: 1.75 * $baseline-grid;
 }

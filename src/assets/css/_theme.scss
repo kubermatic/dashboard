@@ -592,7 +592,7 @@
   .mat-menu-item {
     padding: 0 (1.25 * $baseline-grid) !important;
     line-height: 4.2 * $line-height !important;
-    height: 42px !important;
+    height: 42px;
 
     .mat-icon {
       margin-right: 0 !important;
@@ -645,11 +645,11 @@
   }
 
   .km-text {
-    color: $text;
+    color: $text !important;
   }
 
   .km-text-muted {
-    color: $text-secondary;
+    color: $text-secondary !important;
   }
 
   .km-info {
@@ -660,12 +660,24 @@
     color: map-get($colors, indicator-green);
   }
 
+  .km-success-bg {
+    background-color: map-get($colors, indicator-green);
+  }
+
   .km-warning {
     color: map-get($colors, indicator-orange);
   }
 
+  .km-warning-bg {
+    background-color: map-get($colors, indicator-orange);
+  }
+
   .km-error {
     color: map-get($colors, indicator-red);
+  }
+
+  .km-error-bg {
+    background-color: map-get($colors, indicator-red);
   }
 
   .km-border {
@@ -682,6 +694,11 @@
 
   .km-icon-mask {
     background-color: $text;
+  }
+
+  .km-menu-header {
+    color: $text !important;
+    height: 6 * $baseline-grid;
   }
 
   .km-hidden {
@@ -762,11 +779,6 @@
     color: $text;
   }
 
-  simple-notifications * {
-    cursor: auto;
-    z-index: 2000;
-  }
-
   .km-notification {
     background: $background-card !important;
     border-radius: $border-radius;
@@ -789,6 +801,15 @@
 
     &.error {
       background: map-get($colors, indicator-red);
+    }
+  }
+
+  .km-notification-panel .panel {
+    background-color: $background-app-bar;
+    box-shadow: map-get($colors, shadow-dark);
+
+    .notification-info .km-icon-mask {
+      background-color: $text-secondary !important;
     }
   }
 

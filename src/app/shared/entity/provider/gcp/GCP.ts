@@ -21,3 +21,15 @@ export class GCPNetwork {
   subnetworks: string[];
   kind: string;
 }
+
+export class GCPSubnetwork {
+  id: string;
+  name: string;
+  network: string;
+  ipCidrRange: string;
+  gatewayAddress: string;
+  region: string;
+  selfLink: string;
+  privateIpGoogleAccess: boolean;
+  kind: string;
+}

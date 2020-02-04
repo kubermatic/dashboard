@@ -8,8 +8,8 @@
            formControlName="network"
            name="network"
            [placeholder]="getNetworkFormState()"
-           [matAutocomplete]="auto">
-    <mat-autocomplete #auto="matAutocomplete">
+           [matAutocomplete]="autoNetwork">
+    <mat-autocomplete #autoNetwork="matAutocomplete">
       <mat-option *ngFor="let network of networks"
                   [value]="network.name">
         {{network.name}}
@@ -19,14 +19,18 @@
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>Subnetwork</mat-label>
-    <input id="km-gcp-subnetwork-input"
-           matInput
+    <mat-label>{{getSubnetworkFormState()}}</mat-label>
+    <input matInput
            formControlName="subnetwork"
-           type="password"
-           autocomplete="off">
-    <mat-error *ngIf="form.controls.subnetwork.hasError('required')">
-      Subnetwork is <strong>required</strong>.
-    </mat-error>
+           name="subnetwork"
+           [placeholder]="getSubnetworkFormState()"
+           [matAutocomplete]="autoSubnetwork">
+    <mat-autocomplete #autoSubnetwork="matAutocomplete">
+      <mat-option *ngFor="let subnetwork of subnetworks"
+                  [value]="subnetwork.name">
+        {{subnetwork.name}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-hint>{{getSubnetworkHint()}}</mat-hint>
   </mat-form-field>
 </form>

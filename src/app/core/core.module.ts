@@ -1,6 +1,7 @@
 import {CommonModule} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {Injector, NgModule, Optional, SkipSelf} from '@angular/core';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 
 import {AddMemberComponent} from '../member/add-member/add-member.component';
@@ -13,6 +14,7 @@ import {SharedModule} from '../shared/shared.module';
 
 import {FooterComponent} from './components/footer/footer.component';
 import {NavigationComponent} from './components/navigation/navigation.component';
+import {NotificationPanelComponent} from './components/notification-panel/notification-panel.component';
 import {ProjectSelectorComponent} from './components/sidenav/project/selector.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
@@ -30,6 +32,7 @@ const modules: any[] = [
   RouterModule,
   SharedModule,
   GlobalModule,
+  BrowserAnimationsModule,
 ];
 
 const components: any[] = [
@@ -43,6 +46,7 @@ const components: any[] = [
   AddServiceAccountTokenComponent,
   EditServiceAccountTokenComponent,
   FooterComponent,
+  NotificationPanelComponent,
 ];
 
 const services: any[] = [

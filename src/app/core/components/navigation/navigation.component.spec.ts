@@ -11,6 +11,7 @@ import {AuthMockService} from '../../../testing/services/auth-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
 import {Auth, ProjectService, UserService} from '../../services/index';
+import {NotificationPanelComponent} from '../notification-panel/notification-panel.component';
 
 import {NavigationComponent} from './navigation.component';
 
@@ -35,6 +36,7 @@ describe('NavigationComponent', () => {
           ],
           declarations: [
             NavigationComponent,
+            NotificationPanelComponent,
           ],
           providers: [
             MatDialog,
