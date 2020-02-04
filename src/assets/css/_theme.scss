@@ -397,8 +397,6 @@
       height: 100%;
 
       .km-provider-logo {
-        min-height: 28px;
-        max-height: 28px !important;
         max-width: 90px !important;
       }
     }
@@ -756,7 +754,8 @@
     display: block;
     height: 100% !important;
     width: 100% !important;
-    max-height: 30px !important;
+    min-height: 3 * $baseline-grid;
+    max-height: 3 * $baseline-grid !important;
     max-width: 70px !important;
   }
 
