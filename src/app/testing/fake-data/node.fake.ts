@@ -497,3 +497,67 @@ export function nodeDataContainerLinuxFake(): NodeData {
     valid: true,
   };
 }
+
+export function nodeDataSLESFake(): NodeData {
+  return {
+    spec: {
+      cloud: {
+        digitalocean: {
+          size: 's-1vcpu-1gb',
+          backups: false,
+          ipv6: false,
+          monitoring: false,
+          tags: [],
+        },
+        aws: {
+          instanceType: 't3.small',
+          diskSize: 25,
+          volumeType: 'standard',
+          ami: '',
+          tags: {},
+          subnetID: 'subnet-f3427db9',
+          availabilityZone: 'eu-central-1c',
+        },
+        openstack: {
+          flavor: 'm1.small',
+          image: '',
+          useFloatingIP: false,
+          tags: {},
+        },
+        hetzner: {
+          type: 'cx31',
+        },
+        vsphere: {
+          cpus: 1,
+          memory: 512,
+          template: '',
+          diskSizeGB: 256,
+        },
+        azure: {
+          size: 'cx31',
+          assignPublicIP: false,
+          tags: {},
+        },
+        gcp: {
+          diskSize: 25,
+          diskType: 'pd-ssd',
+          machineType: '',
+          zone: '',
+          preemptible: false,
+          tags: [],
+          labels: {},
+        },
+      },
+      operatingSystem: {
+        sles: {
+          distUpgradeOnBoot: false,
+        },
+      },
+      versions: {
+        kubelet: null,
+      },
+    },
+    count: 3,
+    valid: true,
+  };
+}

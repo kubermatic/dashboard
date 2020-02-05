@@ -79,6 +79,13 @@
         </span>
         <span>Disable auto-update</span>
       </div>
+      <div class="km-summary-row"
+           *ngIf="nodeData.spec.operatingSystem.sles">
+        <span class="km-summary-left km-text">
+          <i [ngClass]="nodeData.spec.operatingSystem.sles.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></i>
+        </span>
+        <span>Upgrade system on first boot</span>
+      </div>
     </mat-card-content>
 
     <ng-container *ngIf="clusterSSHKeys.length && !cluster.spec.cloud.bringyourown">

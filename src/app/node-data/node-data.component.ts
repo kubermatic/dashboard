@@ -76,10 +76,13 @@ export class NodeDataComponent implements OnInit, OnDestroy {
         !!this.nodeData.spec.operatingSystem.centos && this.nodeData.spec.operatingSystem.centos.distUpgradeOnBoot;
     const disableAutoUpdate = !!this.nodeData.spec.operatingSystem.containerLinux &&
         this.nodeData.spec.operatingSystem.containerLinux.disableAutoUpdate;
+    const distUpgradeOnBootSLES =
+        !!this.nodeData.spec.operatingSystem.sles && this.nodeData.spec.operatingSystem.sles.distUpgradeOnBoot;
 
     this.operatingSystemForm = new FormGroup({
       distUpgradeOnBootUbuntu: new FormControl(distUpgradeOnBootUbuntu),
       distUpgradeOnBootCentos: new FormControl(distUpgradeOnBootCentos),
+      distUpgradeOnBootSLES: new FormControl(distUpgradeOnBootSLES),
       disableAutoUpdate: new FormControl(disableAutoUpdate),
     });
 
@@ -164,6 +167,12 @@ export class NodeDataComponent implements OnInit, OnDestroy {
         return {
           containerLinux: {
             disableAutoUpdate: this.operatingSystemForm.controls.disableAutoUpdate.value,
+          },
+        };
+      case 'sles':
+        return {
+          sles: {
+            distUpgradeOnBoot: this.operatingSystemForm.controls.distUpgradeOnBootSLES.value,
           },
         };
       default:
