@@ -56,9 +56,8 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       count: new FormControl(
           this.nodeData.count,
           [Validators.required, Validators.min(0), NoIpsLeftValidator(this.cluster, this.existingNodesCount)]),
-      operatingSystem: new FormControl(
-          this.isClusterOpenshift() ? 'centos' : Object.keys(this.nodeData.spec.operatingSystem)[0],
-          Validators.required),
+      operatingSystem:
+          new FormControl(this.isClusterOpenshift() ? 'centos' : this.selectDefaultOS(), Validators.required),
       name: new FormControl(
           {value: this.nodeData.name, disabled: this.isNameDisabled},
           [Validators.pattern('[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*')]),
@@ -117,6 +116,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
     });
 
     this._dc.getDataCenter(this.cluster.spec.cloud.dc).pipe(takeUntil(this._unsubscribe)).subscribe((dc) => {
+      this.seedDc = dc;
       this.seedDCName = dc.spec.seed;
 
       if (!this.isInWizard) {
@@ -144,6 +144,22 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  selectDefaultOS(): string {
+    if (!!this.cluster.spec.cloud.vsphere) {
+      if (this.isAvailable('ubuntu')) {
+        return 'ubuntu';
+      } else if (this.isAvailable('centos')) {
+        return 'centos';
+      } else if (this.isAvailable('coreos')) {
+        return 'containerLinux';
+      } else {
+        return 'ubuntu';
+      }
+    } else {
+      return 'ubuntu';
+    }
   }
 
   getOSSpec(): OperatingSystemSpec {
@@ -185,6 +201,14 @@ export class NodeDataComponent implements OnInit, OnDestroy {
 
   isClusterOpenshift(): boolean {
     return ClusterUtils.isOpenshiftType(this.cluster);
+  }
+
+  isAvailable(os: string): boolean {
+    if (!!this.cluster.spec.cloud.vsphere) {
+      return !!this.seedDc && !!this.seedDc.spec.vsphere.templates[os] && this.seedDc.spec.vsphere.templates[os] !== '';
+    } else {
+      return true;
+    }
   }
 
   getAddNodeData(): NodeData {
