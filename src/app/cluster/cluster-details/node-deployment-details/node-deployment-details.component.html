@@ -128,6 +128,7 @@
 
   <kubermatic-node-list [cluster]="cluster"
                         [nodes]="nodes"
+                        [nodesMetrics]="metrics"
                         (deleteNode)="loadNodes()"
                         [datacenter]="seedDatacenter"
                         [projectID]="getProjectID()"

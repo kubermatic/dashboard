@@ -18,6 +18,7 @@ import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeHealthStatus} from '../../../shared/utils/health-status/node-health-status';
 import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
+import {NodeMetrics} from "../../../shared/entity/Metrics";
 
 @Component({
   selector: 'kubermatic-node-list',
@@ -29,6 +30,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodes: NodeEntity[] = [];
+  @Input() nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   @Input() projectID: string;
   @Output() deleteNode = new EventEmitter<NodeEntity>();
   @Input() clusterHealthStatus: ClusterHealthStatus;
@@ -183,5 +185,9 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
 
   isPaginatorVisible(): boolean {
     return this.hasItems() && this.paginator && this.nodes.length > this.paginator.pageSize;
+  }
+
+  getMetrics(nodeName: string): NodeMetrics|undefined {
+    return this.nodesMetrics.get(nodeName);
   }
 }
