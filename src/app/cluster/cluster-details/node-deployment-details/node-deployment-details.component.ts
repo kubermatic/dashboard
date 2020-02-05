@@ -15,6 +15,7 @@ import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
 import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 import {NodeService} from '../../services/node.service';
+import {NodeMetrics} from "../../../shared/entity/Metrics";
 
 @Component({
   selector: 'km-node-deployment-details',
@@ -26,6 +27,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   nodeDeploymentHealthStatus: NodeDeploymentHealthStatus;
   nodes: NodeEntity[] = [];
   events: EventEntity[] = [];
+  metrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   cluster: ClusterEntity;
   clusterProvider: string;
   datacenter: DataCenterEntity;
@@ -65,6 +67,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
       this.loadNodeDeployment();
       this.loadNodes();
       this.loadNodesEvents();
+      this.loadNodesMetrics();
     });
 
     this.loadSeedDatacenter();
@@ -100,6 +103,21 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
           this.events = e;
           this._areNodesEventsLoaded = true;
         });
+  }
+
+  loadNodesMetrics(): void {
+    this._apiService
+      .getNodeDeploymentNodesMetrics(this._nodeDeploymentID, this._clusterName, this.dcName, this.projectID)
+      .pipe(first())
+      .subscribe((metrics) => {
+        this.storeNodeMetrics(metrics);
+      });
+  }
+
+  private storeNodeMetrics(metrics: NodeMetrics[]): void {
+    const map = new Map<string, NodeMetrics>();
+    metrics.forEach(m => map.set(m.name, m));
+    this.metrics = map;
   }
 
   loadCluster(): void {
