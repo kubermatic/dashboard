@@ -46,6 +46,8 @@ $theme-dark: map_merge($theme-dark, (background: $background));
 $foreground: map-get($theme-dark, foreground);
 $foreground: map_merge($foreground, (text: #fff));
 $foreground: map_merge($foreground, (secondary-text: #b8b8b8));
+$foreground: map_merge($foreground, (disabled-text: #636363));
+$foreground: map_merge($foreground, (disabled: #313132));
 $foreground: map_merge($foreground, (divider: #464647));
 $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 // sass-lint:enable function-name-format
