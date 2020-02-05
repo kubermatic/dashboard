@@ -6,9 +6,8 @@
 
 .km-button-navigation {
   margin-top: 5 * $baseline-grid;
-  text-align: left;
 }
 
-::ng-deep .mat-card-header .mat-card-title {
-  padding: (2 * $baseline-grid) 0 0 0;
+.km-spinner {
+  margin: (-2 * $baseline-grid) $baseline-grid 0 0;
 }
