@@ -73,7 +73,7 @@
     "lodash": "4.17.15",
     "moment": "2.24.0",
     "ngx-clipboard": "12.3.0",
-    "ngx-cookie-service": "2.2.0",
+    "ngx-cookie-service": "2.3.0",
     "ngx-custom-validators": "8.0.0",
     "ngx-window-token": "2.0.1",
     "openstack-lib": "0.0.2",
