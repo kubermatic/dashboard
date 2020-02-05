@@ -7,5 +7,5 @@ export enum StepRegistry {
 }
 
 export class WizardStep {
-  constructor(readonly name: string, public required = true) {}
+  constructor(readonly name: string, public enabled = true) {}
 }

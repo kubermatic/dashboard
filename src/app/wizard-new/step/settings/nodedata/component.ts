@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, ComponentFactoryResolver, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NewWizardService} from '../../../../core/services';
 
 import {ClusterNameGenerator} from '../../../../core/util/name-generator.service';
 import {NodeDataProviderBase} from '../../../../node-data-new/provider/base';
@@ -7,7 +8,6 @@ import {NodeDataProviderConfig} from '../../../../node-data-new/provider/config'
 import {Taint} from '../../../../shared/entity/NodeEntity';
 import {NodeProvider, OperatingSystem} from '../../../../shared/model/NodeProviderConstants';
 import {ClusterType} from '../../../../shared/utils/cluster-utils/cluster-utils';
-import {StepBase} from '../../base';
 
 enum Controls {
   Name = 'name',
@@ -22,8 +22,9 @@ enum Controls {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class NodeDataComponent extends StepBase implements OnInit, OnDestroy, AfterViewInit {
+export class NodeDataComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('dynamicNodeDataProvider', {read: ViewContainerRef, static: true}) providerContainerRef: ViewContainerRef;
+  form: FormGroup;
 
   readonly NodeProvider = NodeProvider;
   readonly OperatingSystem = OperatingSystem;
@@ -40,9 +41,7 @@ export class NodeDataComponent extends StepBase implements OnInit, OnDestroy, Af
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _nameGenerator: ClusterNameGenerator,
-      private readonly _resolver: ComponentFactoryResolver) {
-    super();
-  }
+      private readonly _resolver: ComponentFactoryResolver, private readonly _wizard: NewWizardService) {}
 
   ngOnInit(): void {
     this.form = this._builder.group({
@@ -75,11 +74,15 @@ export class NodeDataComponent extends StepBase implements OnInit, OnDestroy, Af
   }
 
   generateName(): void {
-    this.control(Controls.Name).setValue(this._nameGenerator.generateName());
+    this.form.get(Controls.Name).setValue(this._nameGenerator.generateName());
   }
 
   isOsSelected(osName: OperatingSystem): boolean {
-    return this.controlValue(Controls.OperatingSystem) === osName;
+    return this.form.get(Controls.OperatingSystem).value === osName;
+  }
+
+  hasError(control: string, errorName: string): boolean {
+    return this.form.get(control).hasError(errorName);
   }
 
   private _getDefaultOS(): OperatingSystem {

@@ -30,15 +30,11 @@ export class WizardComponent implements OnInit, OnDestroy {
       private readonly _wizard: NewWizardService) {}
 
   get steps(): WizardStep[] {
-    return this._wizard.steps.filter(step => step.required);
+    return this._wizard.steps.filter(step => step.enabled);
   }
 
   get active(): WizardStep {
     return this._wizard.steps[this._stepper.selectedIndex];
-  }
-
-  isActive(step: WizardStep): boolean {
-    return this.active.name === step.name && step.required;
   }
 
   ngOnInit(): void {
@@ -50,8 +46,23 @@ export class WizardComponent implements OnInit, OnDestroy {
     this._wizard.steps = steps;
     this._wizard.stepper = this._stepper;
 
+    this._stepper.selectionChange.pipe(takeUntil(this._unsubscribe)).subscribe(stepperEvent => {
+      if (stepperEvent.previouslySelectedIndex > stepperEvent.selectedIndex) {
+        stepperEvent.previouslySelectedStep.reset();
+      }
+    });
+
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
         .subscribe(project => this.project = project);
+  }
+
+  isActive(step: WizardStep): boolean {
+    return this.active.name === step.name && step.enabled;
+  }
+
+  showNext(step: WizardStep): boolean {
+    const restrictedList = [StepRegistry.Datacenter, StepRegistry.Provider, StepRegistry.Summary];
+    return !restrictedList.includes(step.name as StepRegistry);
   }
 
   ngOnDestroy(): void {

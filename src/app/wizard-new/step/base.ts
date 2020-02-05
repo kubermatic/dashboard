@@ -1,18 +1,18 @@
-import {AbstractControl, FormGroup} from '@angular/forms';
+import {AbstractControl, FormGroup, ValidationErrors} from '@angular/forms';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 import {CoreModule} from '../../core/core.module';
 import {NewWizardService} from '../../core/services';
 
 export class StepBase {
-  readonly controls: {[key: string]: string};
   form: FormGroup;
 
   protected readonly _wizard: NewWizardService;
-  protected readonly _debounceTime = 250;
+  protected readonly _unsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(controls: {[key: number]: string} = {}) {
+  constructor() {
     this._wizard = CoreModule.injector.get(NewWizardService);
-    this.controls = controls;
   }
 
   control(name: string): AbstractControl {
@@ -30,7 +30,7 @@ export class StepBase {
   reset(controls: string[] = []): void {
     if (this.form.invalid) {
       Object.keys(this.form.controls).filter(key => !controls.includes(key)).forEach(key => {
-        this.form.removeControl(key);
+        this.form.reset(key);
       });
     }
   }
@@ -45,11 +45,32 @@ export class StepBase {
     }
   }
 
-  areControlsEmpty(): boolean {
-    return Object.values(this.controls).every(control => !this.controlValue(control));
-  }
-
   hasError(control: string, errorName: string): boolean {
     return this.control(control).hasError(errorName);
+  }
+
+  // OnDestroy interface implementation
+  ngOnDestroy(): void {
+    this.reset();
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
+  // Validator interface implementation
+  validate(_: AbstractControl): ValidationErrors|null {
+    return this.form.valid ? null : {invalidForm: {valid: false, message: 'Step form fields are invalid'}};
+  }
+
+  // ControlValueAccessor interface implementation
+  registerOnChange(fn: any): void {
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(fn);
+  }
+
+  registerOnTouched(_: any): void {}
+
+  writeValue(obj: any): void {
+    if (obj) {
+      this.form.setValue(obj, {emitEvent: false});
+    }
   }
 }

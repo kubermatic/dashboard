@@ -1,7 +1,6 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, ControlValueAccessor, FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators} from '@angular/forms';
-import {Subject} from 'rxjs';
-import {switchMap, takeUntil} from 'rxjs/operators';
+import {ControlValueAccessor, FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator, Validators} from '@angular/forms';
+import {takeUntil} from 'rxjs/operators';
 
 import {DatacenterService} from '../../../core/services';
 import {DataCenterEntity, getDatacenterProvider} from '../../../shared/entity/DatacenterEntity';
@@ -23,8 +22,6 @@ enum Controls {
 export class DatacenterStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   datacenters: DataCenterEntity[] = [];
 
-  private _unsubscribe: Subject<void> = new Subject<void>();
-
   constructor(private readonly _builder: FormBuilder, private readonly _dcService: DatacenterService) {
     super();
   }
@@ -34,28 +31,30 @@ export class DatacenterStepComponent extends StepBase implements OnInit, Control
       [Controls.Datacenter]: new FormControl('', [Validators.required]),
     });
 
-    this._wizard.providerChanges.pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(_ => this._dcService.getDataCenters()))
-        .subscribe(datacenters => {
-          const providerDatacenters: DataCenterEntity[] = [];
-          for (const datacenter of datacenters) {
-            if (datacenter.seed) {
-              continue;
-            }
+    this._dcService.getDataCenters().pipe(takeUntil(this._unsubscribe)).subscribe(datacenters => {
+      const providerDatacenters: DataCenterEntity[] = [];
+      for (const datacenter of datacenters) {
+        if (datacenter.seed) {
+          continue;
+        }
 
-            const provider = getDatacenterProvider(datacenter);
-            const clusterProvider = this._wizard.provider;
-            if (provider === clusterProvider) {
-              providerDatacenters.push(datacenter);
-            }
-          }
+        const provider = getDatacenterProvider(datacenter);
+        const clusterProvider = this._wizard.provider;
+        if (provider === clusterProvider) {
+          providerDatacenters.push(datacenter);
+        }
+      }
 
-          this.datacenters = providerDatacenters;
-        });
+      this.datacenters = providerDatacenters;
+    });
 
     this.control(Controls.Datacenter)
         .valueChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(datacenter => this._wizard.datacenter = datacenter);
+
+    this._wizard.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      this.control(Controls.Datacenter).setValue('');
+    });
   }
 
   getLocation(datacenter: DataCenterEntity): string {
@@ -81,27 +80,5 @@ export class DatacenterStepComponent extends StepBase implements OnInit, Control
     location = idx > -1 ? location.substring(idx + 1) : location;
 
     return location === datacenter.spec.location ? '' : location.trim();
-  }
-
-  registerOnChange(fn: any): void {
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(fn);
-  }
-
-  registerOnTouched(_: any): void {}
-
-  writeValue(obj: any): void {
-    if (obj) {
-      this.form.setValue(obj, {emitEvent: false});
-    }
-  }
-
-  validate(control: AbstractControl): ValidationErrors|null {
-    return this.form.valid ? null : {invalidForm: {valid: false, message: 'Datacenter step form fields are invalid'}};
-  }
-
-  ngOnDestroy(): void {
-    this.reset();
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
   }
 }

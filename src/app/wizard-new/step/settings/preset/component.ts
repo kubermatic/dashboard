@@ -3,9 +3,8 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
-import {PresetsService} from '../../../../core/services';
+import {NewWizardService, PresetsService} from '../../../../core/services';
 import {PresetListEntity} from '../../../../shared/entity/provider/credentials/PresetListEntity';
-import {StepBase} from '../../base';
 
 export enum PresetsState {
   Ready = 'Preset',
@@ -18,7 +17,7 @@ export enum PresetsState {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class PresetsComponent extends StepBase implements OnInit, OnDestroy {
+export class PresetsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   presetList = new PresetListEntity();
   presetsLoaded = false;
@@ -37,13 +36,13 @@ export class PresetsComponent extends StepBase implements OnInit, OnDestroy {
   }
 
   set selectedPreset(preset: string) {
-    this.control(Presets.Controls.Preset).setValue(preset);
+    this.form.get(Presets.Controls.Preset).setValue(preset);
     this._wizard.preset = preset;
   }
 
-  constructor(private readonly _presets: PresetsService, private readonly _builder: FormBuilder) {
-    super(Presets.Controls);
-  }
+  constructor(
+      private readonly _presets: PresetsService, private readonly _builder: FormBuilder,
+      private readonly _wizard: NewWizardService) {}
 
   ngOnInit(): void {
     this.form = this._builder.group({[Presets.Controls.Preset]: new FormControl('', Validators.required)});
@@ -60,12 +59,16 @@ export class PresetsComponent extends StepBase implements OnInit, OnDestroy {
 
     this._wizard.datacenterChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._reset());
 
-    this.control(Presets.Controls.Preset).valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
+    this.form.get(Presets.Controls.Preset).valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
       this._wizard.preset = preset;
     });
 
     this._wizard.presetStatusChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(enable => this.enable(enable, Presets.Controls.Preset));
+        .subscribe(enable => this._enable(enable, Presets.Controls.Preset));
+  }
+
+  hasError(control: string, errorName: string): boolean {
+    return this.form.get(control).hasError(errorName);
   }
 
   ngOnDestroy(): void {
@@ -75,6 +78,16 @@ export class PresetsComponent extends StepBase implements OnInit, OnDestroy {
 
   private _reset(): void {
     this.selectedPreset = undefined;
+  }
+
+  private _enable(enable: boolean, name: string): void {
+    if (enable && this.form.get(name).disabled) {
+      this.form.get(name).enable();
+    }
+
+    if (!enable && this.form.get(name).enabled) {
+      this.form.get(name).disable();
+    }
   }
 }
 

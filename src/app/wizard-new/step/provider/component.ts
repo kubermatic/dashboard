@@ -1,6 +1,5 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, ControlValueAccessor, FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators} from '@angular/forms';
-import {Subject} from 'rxjs';
+import {ControlValueAccessor, FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator, Validators} from '@angular/forms';
 import {takeUntil} from 'rxjs/operators';
 
 import {DatacenterService} from '../../../core/services';
@@ -23,8 +22,6 @@ enum Controls {
 })
 export class ProviderStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   providers: NodeProvider[] = [];
-
-  private _unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(private readonly _builder: FormBuilder, private readonly _dcService: DatacenterService) {
     super();
@@ -53,27 +50,5 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
     this.control(Controls.Provider)
         .valueChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe((provider: NodeProvider) => this._wizard.provider = provider);
-  }
-
-  registerOnChange(fn: any): void {
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(fn);
-  }
-
-  registerOnTouched(_: any): void {}
-
-  writeValue(obj: any): void {
-    if (obj) {
-      this.form.setValue(obj, {emitEvent: false});
-    }
-  }
-
-  validate(control: AbstractControl): ValidationErrors|null {
-    return this.form.valid ? null : {invalidForm: {valid: false, message: 'Provider step form fields are invalid'}};
-  }
-
-  ngOnDestroy(): void {
-    this.reset();
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
   }
 }

@@ -1,5 +1,6 @@
 <form [formGroup]="form">
   <mat-horizontal-stepper linear
+                          disableRipple
                           #stepper>
     <ng-template matStepperIcon="edit">
       <mat-icon>done</mat-icon>
@@ -40,8 +41,11 @@
         </button>
         <button mat-flat-button
                 matStepperNext
-                [disabled]="form.invalid"
-                *ngIf="!last">Next
+                [disabled]="form.get(step.name).invalid"
+                *ngIf="showNext(step)">Next
+        </button>
+        <button mat-flat-button
+                *ngIf="last">Create
         </button>
       </div>
     </mat-step>

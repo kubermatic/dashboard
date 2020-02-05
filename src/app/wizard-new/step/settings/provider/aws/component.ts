@@ -1,12 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {EMPTY, merge, Observable, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, debounceTime, map, switchMap, takeUntil} from 'rxjs/operators';
 
-import {PresetsService} from '../../../../../core/services';
+import {NewWizardService, PresetsService} from '../../../../../core/services';
 import {AWSVPC} from '../../../../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
-import {StepBase} from '../../../base';
 
 enum Controls {
   AccessKeyID = 'accessKeyId',
@@ -23,15 +22,19 @@ enum Controls {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class AWSProviderComponent extends StepBase implements OnInit, OnDestroy {
+export class AWSProviderComponent implements OnInit, OnDestroy {
+  form: FormGroup;
   hideOptional = false;
   vpcIds: AWSVPC[] = [];
 
-  private readonly _unsubscribe = new Subject<void>();
+  readonly controls = Controls;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _presets: PresetsService) {
-    super(Controls);
-  }
+  private readonly _unsubscribe = new Subject<void>();
+  protected readonly _debounceTime = 250;
+
+  constructor(
+      private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
+      private readonly _wizard: NewWizardService) {}
 
   ngOnInit(): void {
     this.form = this._builder.group({
@@ -45,12 +48,13 @@ export class AWSProviderComponent extends StepBase implements OnInit, OnDestroy 
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._wizard.enablePresets(this.areControlsEmpty()));
+        .subscribe(
+            _ => this._wizard.enablePresets(Object.values(Controls).every(control => !this.form.get(control).value)));
 
     this._wizard.presetChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(preset => Object.values(Controls).forEach(control => this.enable(!preset, control)));
+        .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
-    merge(this.control(Controls.AccessKeyID).valueChanges, this.control(Controls.SecretAccessKey).valueChanges)
+    merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.SecretAccessKey).valueChanges)
         .pipe(debounceTime(this._debounceTime))
         .pipe(switchMap(value => {
           this._clearVPC();
@@ -60,13 +64,27 @@ export class AWSProviderComponent extends StepBase implements OnInit, OnDestroy 
         .subscribe((vpcs: AWSVPC[]) => {
           this.vpcIds = vpcs;
           const defaultVPC = vpcs.find(vpc => vpc.isDefault);
-          this.control(Controls.VPCID).setValue(defaultVPC ? defaultVPC.vpcId : undefined);
+          this.form.get(Controls.VPCID).setValue(defaultVPC ? defaultVPC.vpcId : undefined);
         });
+  }
+
+  hasError(control: string, errorName: string): boolean {
+    return this.form.get(control).hasError(errorName);
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  private _enable(enable: boolean, name: string): void {
+    if (enable && this.form.get(name).disabled) {
+      this.form.get(name).enable();
+    }
+
+    if (!enable && this.form.get(name).enabled) {
+      this.form.get(name).disable();
+    }
   }
 
   private _vpcListObservable(): Observable<AWSVPC[]> {
@@ -80,6 +98,6 @@ export class AWSProviderComponent extends StepBase implements OnInit, OnDestroy 
 
   private _clearVPC(): void {
     this.vpcIds = [];
-    this.control(Controls.VPCID).setValue(undefined);
+    this.form.get(Controls.VPCID).setValue(undefined);
   }
 }

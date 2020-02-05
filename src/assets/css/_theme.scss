@@ -1504,4 +1504,8 @@
       background-color: transparent;
     }
   }
+
+  .mat-step-header {
+    pointer-events: none !important;
+  }
 }

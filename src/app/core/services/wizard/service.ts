@@ -101,7 +101,7 @@ export class NewWizardService {
   hideStep(step: StepRegistry): void {
     this.steps.forEach((item, idx) => {
       if (item.name === step) {
-        this.steps[idx].required = false;
+        this.steps[idx].enabled = false;
       }
     });
   }
@@ -109,7 +109,7 @@ export class NewWizardService {
   showStep(step: StepRegistry): void {
     this.steps.forEach((item, idx) => {
       if (item.name === step) {
-        this.steps[idx].required = true;
+        this.steps[idx].enabled = true;
         this.stepConfigChanges.next(this.steps[idx]);
       }
     });
