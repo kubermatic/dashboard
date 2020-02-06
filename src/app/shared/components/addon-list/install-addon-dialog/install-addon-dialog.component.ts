@@ -28,7 +28,7 @@ export class InstallAddonDialogComponent implements OnInit {
 
   ngOnInit(): void {
     const group = {};
-    if (this.addonConfig.spec.formSpec) {
+    if (this.hasForm()) {
       this.addonConfig.spec.formSpec.forEach(control => {
         group[control.internalName] = new FormControl(
             InstallAddonDialogComponent.getFormState(control),
@@ -38,6 +38,10 @@ export class InstallAddonDialogComponent implements OnInit {
     }
 
     this.form = new FormGroup(group);
+  }
+
+  hasForm(): boolean {
+    return !!this.addonConfig && !!this.addonConfig.spec && !!this.addonConfig.spec.formSpec;
   }
 
   hasLogo(): boolean {
