@@ -2,12 +2,13 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subject, timer} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
-import {AppConfigService} from '../../../app-config.service';
 
+import {AppConfigService} from '../../../app-config.service';
 import {ApiService, ClusterService, DatacenterService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {EventEntity} from '../../../shared/entity/EventEntity';
+import {NodeMetrics} from '../../../shared/entity/Metrics';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {GroupConfig} from '../../../shared/model/Config';
@@ -15,7 +16,6 @@ import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
 import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 import {NodeService} from '../../services/node.service';
-import {NodeMetrics} from "../../../shared/entity/Metrics";
 
 @Component({
   selector: 'km-node-deployment-details',
@@ -107,11 +107,11 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodesMetrics(): void {
     this._apiService
-      .getNodeDeploymentNodesMetrics(this._nodeDeploymentID, this._clusterName, this.dcName, this.projectID)
-      .pipe(first())
-      .subscribe((metrics) => {
-        this.storeNodeMetrics(metrics);
-      });
+        .getNodeDeploymentNodesMetrics(this._nodeDeploymentID, this._clusterName, this.dcName, this.projectID)
+        .pipe(first())
+        .subscribe((metrics) => {
+          this.storeNodeMetrics(metrics);
+        });
   }
 
   private storeNodeMetrics(metrics: NodeMetrics[]): void {

@@ -12,13 +12,13 @@ import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {NodeMetrics} from '../../../shared/entity/Metrics';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
 import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeHealthStatus} from '../../../shared/utils/health-status/node-health-status';
 import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
-import {NodeMetrics} from "../../../shared/entity/Metrics";
 
 @Component({
   selector: 'kubermatic-node-list',
