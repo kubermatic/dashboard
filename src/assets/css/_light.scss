@@ -2,10 +2,10 @@
 @import "theme";
 
 $colors-light: (
-  primary: #0081ae,
+  primary: #00a3d9,
   primary-hover: #00a3d9,
   primary-dark: #1b658f,
-  secondary: #3bc6ad,
+  secondary: #00cca7,
   secondary-hover: #21dfa9,
   secondary-dark: #1c8282,
   indicator-green: #1dc67f,
@@ -42,6 +42,8 @@ $theme-light: map_merge($theme-light, (background: $background));
 $foreground: map-get($theme-light, foreground);
 $foreground: map_merge($foreground, (text: #4d555c));
 $foreground: map_merge($foreground, (secondary-text: #7e868f));
+$foreground: map_merge($foreground, (disabled-text: #d2d7db));
+$foreground: map_merge($foreground, (disabled: #eff1f2));
 $foreground: map_merge($foreground, (divider: #e0e3e5));
 $theme-light: map_merge($theme-light, (foreground: $foreground));
 // sass-lint:enable function-name-format

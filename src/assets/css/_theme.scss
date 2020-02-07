@@ -18,6 +18,7 @@
   $background-app-bar: mat-color($palette-background, app-bar);
 
   $divider: mat-color($palette-foreground, divider);
+  $divider-disabled: mat-color($palette-foreground, disabled);
 
   $chip-accent: mat-color($palette-background, card);
   $chip-background: $divider;
@@ -264,6 +265,10 @@
     color: map-get($colors, primary-dark);
   }
 
+  .mat-form-field-disabled .mat-form-field-outline {
+    color: $divider-disabled !important;
+  }
+
   mat-hint a {
     color: map-get($colors, primary);
     text-decoration: none;
@@ -397,8 +402,6 @@
       height: 100%;
 
       .km-provider-logo {
-        min-height: 28px;
-        max-height: 28px !important;
         max-width: 90px !important;
       }
     }
@@ -434,6 +437,7 @@
 
     .mat-button-toggle-button {
       height: 100%;
+      width: 150px;
       text-align: left;
       padding: 0 (1.25 * $baseline-grid);
     }
@@ -756,7 +760,8 @@
     display: block;
     height: 100% !important;
     width: 100% !important;
-    max-height: 30px !important;
+    min-height: 3 * $baseline-grid;
+    max-height: 3 * $baseline-grid !important;
     max-width: 70px !important;
   }
 
@@ -1114,11 +1119,11 @@
     max-width: $type-toggle-width * 2 + $baseline-grid;
 
     mat-button-toggle {
-      min-height: 6.25 * $baseline-grid;
-      max-height: 6.25 * $baseline-grid;
+      min-height: $type-toggle-height;
+      max-height: $type-toggle-height;
       min-width: $type-toggle-width;
       max-width: $type-toggle-width;
-      margin: (0.25 * $baseline-grid) 0 0 0;
+      margin: (.5 * $baseline-grid) 0 0 0;
       border-width: 0.25 * $baseline-grid !important;
       background-color: $background-hover;
 
