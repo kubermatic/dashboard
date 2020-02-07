@@ -129,6 +129,13 @@
   background-color: #fff;
 }
 
+.km-icon-copy-small {
+  @include km-image-mask(1.75 * $baseline-grid);
+
+  mask-image: url("/assets/images/icons/copy-small.svg");
+  background-color: #fff;
+}
+
 .km-icon-cluster {
   @include km-image-mask(2.75 * $baseline-grid);
 
@@ -345,13 +352,6 @@
   @include km-image(3.75 * $baseline-grid);
 
   background-image: url("/assets/images/clouds/hetzner.png");
-  min-height: 3.75 * $baseline-grid;
-}
-
-.km-provider-logo-loodsecluster {
-  @include km-image(3.75 * $baseline-grid);
-
-  background-image: url("/assets/images/clouds/loodsecluster.png");
   min-height: 3.75 * $baseline-grid;
 }
 

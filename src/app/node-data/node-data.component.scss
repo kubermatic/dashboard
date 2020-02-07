@@ -61,12 +61,12 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
   position: absolute;
   right: -0.625 * $baseline-grid;
   top: -0.25 * $baseline-grid;
-}
 
-::ng-deep .mat-button-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  ::ng-deep .mat-button-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .mat-icon-button i {
