@@ -12,6 +12,7 @@ import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {NodeMetrics} from '../../../shared/entity/Metrics';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
 import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
@@ -29,6 +30,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodes: NodeEntity[] = [];
+  @Input() nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   @Input() projectID: string;
   @Output() deleteNode = new EventEmitter<NodeEntity>();
   @Input() clusterHealthStatus: ClusterHealthStatus;
@@ -183,5 +185,9 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
 
   isPaginatorVisible(): boolean {
     return this.hasItems() && this.paginator && this.nodes.length > this.paginator.pageSize;
+  }
+
+  getMetrics(nodeName: string): NodeMetrics|undefined {
+    return this.nodesMetrics.get(nodeName);
   }
 }

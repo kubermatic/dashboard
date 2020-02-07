@@ -2,12 +2,13 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subject, timer} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
-import {AppConfigService} from '../../../app-config.service';
 
+import {AppConfigService} from '../../../app-config.service';
 import {ApiService, ClusterService, DatacenterService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {EventEntity} from '../../../shared/entity/EventEntity';
+import {NodeMetrics} from '../../../shared/entity/Metrics';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {GroupConfig} from '../../../shared/model/Config';
@@ -26,6 +27,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   nodeDeploymentHealthStatus: NodeDeploymentHealthStatus;
   nodes: NodeEntity[] = [];
   events: EventEntity[] = [];
+  metrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   cluster: ClusterEntity;
   clusterProvider: string;
   datacenter: DataCenterEntity;
@@ -65,6 +67,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
       this.loadNodeDeployment();
       this.loadNodes();
       this.loadNodesEvents();
+      this.loadNodesMetrics();
     });
 
     this.loadSeedDatacenter();
@@ -100,6 +103,21 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
           this.events = e;
           this._areNodesEventsLoaded = true;
         });
+  }
+
+  loadNodesMetrics(): void {
+    this._apiService
+        .getNodeDeploymentNodesMetrics(this._nodeDeploymentID, this._clusterName, this.dcName, this.projectID)
+        .pipe(first())
+        .subscribe((metrics) => {
+          this.storeNodeMetrics(metrics);
+        });
+  }
+
+  private storeNodeMetrics(metrics: NodeMetrics[]): void {
+    const map = new Map<string, NodeMetrics>();
+    metrics.forEach(m => map.set(m.name, m));
+    this.metrics = map;
   }
 
   loadCluster(): void {
