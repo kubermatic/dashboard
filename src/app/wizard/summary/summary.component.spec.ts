@@ -4,7 +4,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ApiService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeClusterWithMachineNetwork} from '../../testing/fake-data/clusterWithMachineNetworks.fake';
-import {nodeDataCentOsFake, nodeDataContainerLinuxFake, nodeDataFake} from '../../testing/fake-data/node.fake';
+import {nodeDataCentOsFake, nodeDataContainerLinuxFake, nodeDataFake, nodeDataSLESFake} from '../../testing/fake-data/node.fake';
 import {ApiMockService} from '../../testing/services/api-mock.service';
 import {SummaryComponent} from './summary.component';
 
@@ -52,6 +52,9 @@ describe('SummaryComponent', () => {
 
     component.nodeData = nodeDataContainerLinuxFake();
     expect(component.getOperatingSystem()).toBe('Container Linux');
+
+    component.nodeData = nodeDataSLESFake();
+    expect(component.getOperatingSystem()).toBe('SLES');
   });
 
   it('should validate if tags should be displayed', () => {

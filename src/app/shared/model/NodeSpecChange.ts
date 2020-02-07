@@ -1,4 +1,4 @@
-import {CentosSpec, ContainerLinuxSpec, NodeCloudSpec, NodeSpec, UbuntuSpec} from '../entity/NodeEntity';
+import {CentosSpec, ContainerLinuxSpec, NodeCloudSpec, NodeSpec, SLESSpec, UbuntuSpec} from '../entity/NodeEntity';
 
 export class NodeData {
   name?: string;
@@ -17,4 +17,5 @@ export class NodeOperatingSystemData {
   ubuntu?: UbuntuSpec;
   centos?: CentosSpec;
   containerLinux?: ContainerLinuxSpec;
+  sles?: SLESSpec;
 }

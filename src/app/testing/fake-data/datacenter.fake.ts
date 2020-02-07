@@ -68,6 +68,7 @@ export function fakeOpenstackDatacenter(): DataCenterEntity {
           coreos: '',
           centos: '',
           ubuntu: 'Ubuntu 16.04 LTS 2018.03.26',
+          sles: '',
         },
         enforce_floating_ip: false,
       },
