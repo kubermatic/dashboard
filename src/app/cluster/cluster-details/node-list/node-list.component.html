@@ -308,6 +308,10 @@
                                  label="Disable auto-update"
                                  [value]="element.spec.operatingSystem.containerLinux.disableAutoUpdate">
             </km-property-boolean>
+            <km-property-boolean *ngIf="!!element.spec.operatingSystem.sles"
+                                 label="Upgrade system on first boot"
+                                 [value]="element.spec.operatingSystem.sles.distUpgradeOnBoot">
+            </km-property-boolean>
             <km-property-boolean *ngIf="element.spec.cloud.digitalocean"
                                  label="Backups"
                                  [value]="element.spec.cloud.digitalocean.backups">

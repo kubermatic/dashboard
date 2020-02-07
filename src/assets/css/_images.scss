@@ -400,3 +400,9 @@
 
   background-image: url("/assets/images/os/ubuntu.svg");
 }
+
+.km-os-image-sles {
+  @include km-image(3 * $baseline-grid);
+
+  background-image: url("/assets/images/os/sles.svg");
+}

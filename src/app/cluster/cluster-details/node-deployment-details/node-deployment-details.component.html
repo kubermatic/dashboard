@@ -119,6 +119,10 @@
             <span [ngClass]="nodeDeployment.spec.template.operatingSystem.containerLinux.disableAutoUpdate ? 'km-icon-running' : 'km-icon-disabled'"></span>
             <span>Disable auto-update</span>
           </div>
+          <div *ngIf="nodeDeployment.spec.template.operatingSystem.sles">
+            <span [ngClass]="nodeDeployment.spec.template.operatingSystem.sles.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></span>
+            <span>Upgrade system on the first boot</span>
+          </div>
         </div>
       </div>
 
