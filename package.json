@@ -104,7 +104,7 @@
     "lint-staged": "10.0.7",
     "ng2-mock-component": "0.2.0",
     "node-gyp": "6.1.0",
-    "request": "2.88.0",
+    "request": "2.88.2",
     "serialize-javascript": "2.1.2",
     "start-server-and-test": "1.10.8",
     "stylelint": "13.1.0",
