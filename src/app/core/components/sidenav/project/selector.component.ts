@@ -1,7 +1,8 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatSelect, MatSelectChange} from '@angular/material/select';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+
 import {ProjectEntity} from '../../../../shared/entity/ProjectEntity';
 import {ProjectService} from '../../../services';
 
@@ -12,6 +13,7 @@ import {ProjectService} from '../../../services';
 })
 
 export class ProjectSelectorComponent implements OnInit, OnDestroy {
+  @Input() showSidenav: boolean;
   projects: ProjectEntity[];
   selectedProject: ProjectEntity;
 

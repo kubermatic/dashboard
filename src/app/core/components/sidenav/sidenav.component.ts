@@ -6,6 +6,7 @@ import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
+import {UserSettings} from '../../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {GroupConfig} from '../../../shared/model/Config';
 import {CustomLink, CustomLinkLocation, filterCustomLinks} from '../../../shared/utils/custom-link-utils/custom-link';
@@ -20,6 +21,8 @@ import {SettingsService} from '../../services/settings/settings.service';
 export class SidenavComponent implements OnInit, OnDestroy {
   environment: any = environment;
   customLinks: CustomLink[] = [];
+  settings: UserSettings;
+  showSidenav = true;
   private _selectedProject = {} as ProjectEntity;
   private _currentGroupConfig: GroupConfig;
   private _unsubscribe = new Subject<void>();
@@ -34,6 +37,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
       if (!_.isEqual(this.customLinks, filtered)) {
         this.customLinks = filtered;
       }
+    });
+
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.showSidenav = !settings.collapseSidenav;
+      this.settings = settings;
     });
 
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
@@ -66,7 +74,28 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   getTooltip(viewName: string): string {
-    let tooltip: string;
+    let tooltip = '';
+
+    if (!this.showSidenav) {
+      switch (viewName) {
+        case 'clusters':
+          tooltip += 'Clusters';
+          break;
+        case 'sshKeys':
+          tooltip += 'SSH Keys';
+          break;
+        case 'members':
+          tooltip += 'Members';
+          break;
+        case 'serviceaccounts':
+          tooltip += 'Service Accounts';
+          break;
+        case 'projects':
+          tooltip += 'Projects';
+          break;
+      }
+    }
+
     if (!this._hasViewPermissions(viewName)) {
       tooltip = 'Cannot enter this view.';
       if (this._selectedProject.status !== 'Active') {
