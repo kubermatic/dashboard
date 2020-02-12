@@ -4,6 +4,7 @@
        fxLayoutAlign=" center">
     <button mat-icon-button
             fxLayoutAlign="center center"
+            *ngIf="showCollapseIcon"
             (click)="collapseSidenav()">
       <i class="km-icon-mask km-icon-collapse-menu"></i>
     </button>

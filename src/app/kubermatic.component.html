@@ -17,7 +17,7 @@
            fxFlex
            fxLayout="column">
         <div fxFlex>
-          <kubermatic-navigation></kubermatic-navigation>
+          <kubermatic-navigation [showCollapseIcon]="showCollapseIcon"></kubermatic-navigation>
           <router-outlet></router-outlet>
         </div>
         <kubermatic-footer *ngIf="!!settings"

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
@@ -13,6 +13,7 @@ import {SettingsService} from '../../services/settings/settings.service';
   styleUrls: ['./navigation.component.scss'],
 })
 export class NavigationComponent implements OnInit {
+  @Input() showCollapseIcon: boolean;
   currentUser: MemberEntity;
   showSidenav = true;
   private _settingsChange = new Subject<void>();
