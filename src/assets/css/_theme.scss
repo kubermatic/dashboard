@@ -130,7 +130,7 @@
   }
 
   .mat-drawer-container {
-    background-color: transparent;
+    background-color: map-get($colors, background);
   }
 
   .mat-drawer-side {
