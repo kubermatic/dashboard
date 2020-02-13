@@ -34,6 +34,7 @@ export class KubermaticComponent implements OnInit, OnDestroy {
   config: Config = {};
   settings: AdminSettings;
   version: VersionInfo;
+  showCollapseIcon = false;
   private _theme = Theme.Light;
   private _unsubscribe = new Subject<void>();
 
@@ -105,8 +106,10 @@ export class KubermaticComponent implements OnInit, OnDestroy {
     if (this.sidenav) {
       if (PAGES_WIITHOUT_MENU.includes(url)) {
         this.sidenav.close();
+        this.showCollapseIcon = false;
       } else {
         this.sidenav.open();
+        this.showCollapseIcon = true;
       }
     }
   }
