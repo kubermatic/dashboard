@@ -9,6 +9,7 @@ header {
 }
 
 .km-navbar {
+  padding-left: 3 * $baseline-grid;
   height: $toolbar-height;
   position: fixed;
   width: 100%;

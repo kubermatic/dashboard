@@ -9,8 +9,10 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {SharedModule} from '../../../shared/shared.module';
 import {AuthMockService} from '../../../testing/services/auth-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
+import {SettingsMockService} from '../../../testing/services/settings-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
 import {Auth, ProjectService, UserService} from '../../services/index';
+import {SettingsService} from '../../services/settings/settings.service';
 import {NotificationPanelComponent} from '../notification-panel/notification-panel.component';
 
 import {NavigationComponent} from './navigation.component';
@@ -43,6 +45,7 @@ describe('NavigationComponent', () => {
             {provide: UserService, useClass: UserMockService},
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: Auth, useClass: AuthMockService},
+            {provide: SettingsService, useClass: SettingsMockService},
           ],
         })
         .compileComponents();

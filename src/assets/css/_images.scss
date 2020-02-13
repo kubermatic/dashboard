@@ -65,6 +65,12 @@
   mask-image: url("/assets/images/icons/clear.svg");
 }
 
+.km-icon-collapse-menu {
+  @include km-image(3 * $baseline-grid);
+
+  mask-image: url("/assets/images/icons/collapse-menu.svg");
+}
+
 .km-icon-delete {
   @include km-image-mask(2.25 * $baseline-grid);
 
