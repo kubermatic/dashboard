@@ -11,6 +11,7 @@ import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {GroupConfig} from '../../../shared/model/Config';
 import {CustomLink, CustomLinkLocation, filterCustomLinks} from '../../../shared/utils/custom-link-utils/custom-link';
 import {ProjectService, UserService} from '../../services';
+import {View} from '../../services/auth/auth.guard';
 import {SettingsService} from '../../services/settings/settings.service';
 
 @Component({
@@ -78,19 +79,19 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
     if (!this.showSidenav) {
       switch (viewName) {
-        case 'clusters':
+        case View.Clusters:
           tooltip += 'Clusters';
           break;
-        case 'sshKeys':
+        case View.SSHKeys:
           tooltip += 'SSH Keys';
           break;
-        case 'members':
+        case View.Members:
           tooltip += 'Members';
           break;
-        case 'serviceaccounts':
+        case View.ServiceAccounts:
           tooltip += 'Service Accounts';
           break;
-        case 'projects':
+        case View.Projects:
           tooltip += 'Projects';
           break;
       }
