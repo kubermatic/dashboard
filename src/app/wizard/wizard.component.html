@@ -50,14 +50,12 @@
     </button>
     <button id="km-create-cluster-next-btn"
             *ngIf="currentStepIndex < steps.length - 1"
-            type="button"
             [disabled]="!currentStep.valid()"
             mat-flat-button
             (click)="stepForward()">
       Next
     </button>
     <button *ngIf="currentStep.name === 'set-machine-networks' && !!cluster.spec.machineNetworks && cluster.spec.machineNetworks.length === 0"
-            type="button"
             mat-flat-button
             (click)="stepForward()">
       Skip
@@ -65,7 +63,6 @@
     <button id="km-create-cluster-create-btn"
             *ngIf="currentStepIndex == steps.length - 1"
             [disabled]="creating || project.status !== 'Active'"
-            type="button"
             mat-flat-button
             (click)="createCluster()">
       Create

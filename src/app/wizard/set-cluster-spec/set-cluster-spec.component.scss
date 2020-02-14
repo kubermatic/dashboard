@@ -10,7 +10,7 @@
   top: -0.25 * $baseline-grid;
 }
 
-::ng-deep .mat-button-wrapper {
+.km-randomize-btn ::ng-deep .mat-button-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;

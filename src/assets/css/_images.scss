@@ -65,6 +65,12 @@
   mask-image: url("/assets/images/icons/clear.svg");
 }
 
+.km-icon-collapse-menu {
+  @include km-image(3 * $baseline-grid);
+
+  mask-image: url("/assets/images/icons/collapse-menu.svg");
+}
+
 .km-icon-delete {
   @include km-image-mask(2.25 * $baseline-grid);
 
@@ -126,6 +132,13 @@
   @include km-image-mask(2.5 * $baseline-grid);
 
   mask-image: url("/assets/images/icons/copy.svg");
+  background-color: #fff;
+}
+
+.km-icon-copy-small {
+  @include km-image-mask(1.75 * $baseline-grid);
+
+  mask-image: url("/assets/images/icons/copy-small.svg");
   background-color: #fff;
 }
 
@@ -348,13 +361,6 @@
   min-height: 3.75 * $baseline-grid;
 }
 
-.km-provider-logo-loodsecluster {
-  @include km-image(3.75 * $baseline-grid);
-
-  background-image: url("/assets/images/clouds/loodsecluster.png");
-  min-height: 3.75 * $baseline-grid;
-}
-
 .km-provider-logo-openstack {
   @include km-image(3.75 * $baseline-grid);
 
@@ -399,4 +405,10 @@
   @include km-image(3 * $baseline-grid);
 
   background-image: url("/assets/images/os/ubuntu.svg");
+}
+
+.km-os-image-sles {
+  @include km-image(3 * $baseline-grid);
+
+  background-image: url("/assets/images/os/sles.svg");
 }

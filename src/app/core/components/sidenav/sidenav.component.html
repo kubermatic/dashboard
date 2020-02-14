@@ -1,8 +1,9 @@
 <div class="km-sidenav"
-     fxLayout="column">
+     fxLayout="column"
+     [ngClass]="!showSidenav ? 'km-collapse-sidenav' : ''">
   <mat-nav-list>
     <div class="km-sidenav-top">
-      <km-project-selector></km-project-selector>
+      <km-project-selector [showSidenav]="showSidenav"></km-project-selector>
 
       <div [matTooltip]="getTooltip('clusters')">
         <mat-list-item [ngClass]="getMenuItemClass('clusters')">
@@ -11,7 +12,9 @@
              fxLayoutAlign=" center"
              [routerLink]="getRouterLink('clusters')"
              [ngClass]="getLinkClass('clusters')">
-            <i class="km-icon-cluster"></i> Clusters</a>
+            <i class="km-icon-cluster"></i>
+            <span *ngIf="showSidenav"> Clusters</span>
+          </a>
         </mat-list-item>
       </div>
 
@@ -22,7 +25,9 @@
              fxLayoutAlign=" center"
              [routerLink]="getRouterLink('sshkeys')"
              [ngClass]="getLinkClass('sshkeys')">
-            <i class="km-icon-key"></i> SSH Keys</a>
+            <i class="km-icon-key"></i>
+            <span *ngIf="showSidenav"> SSH Keys</span>
+          </a>
         </mat-list-item>
       </div>
 
@@ -33,7 +38,9 @@
              fxLayoutAlign=" center"
              [routerLink]="getRouterLink('members')"
              [ngClass]="getLinkClass('members')">
-            <i class="km-icon-member"></i> Members</a>
+            <i class="km-icon-member"></i>
+            <span *ngIf="showSidenav"> Members</span>
+          </a>
         </mat-list-item>
       </div>
 
@@ -44,7 +51,8 @@
              fxLayoutAlign=" center"
              [routerLink]="getRouterLink('serviceaccounts')"
              [ngClass]="getLinkClass('serviceaccounts')">
-            <i class="km-icon-serviceaccount"></i> Service Accounts</a>
+            <i class="km-icon-serviceaccount"></i>
+            <span *ngIf="showSidenav"> Service Accounts</span></a>
         </mat-list-item>
       </div>
 
@@ -61,7 +69,7 @@
          target="_blank"
          rel="noopener">
         <i [ngStyle]="getCustomLinkIconStyle(link)"></i>
-        <span>{{link.label}}</span>
+        <span *ngIf="showSidenav">{{link.label}}</span>
       </a>
     </mat-list-item>
   </mat-nav-list>
@@ -71,13 +79,13 @@
 
   <div class="km-sidenav-bottom">
     <mat-nav-list>
-      <mat-list-item>
+      <mat-list-item [matTooltip]="getTooltip('projects')">
         <a id="km-nav-item-projects"
            mat-line
            fxLayoutAlign="center center"
            routerLink="/projects">
           <i class="km-icon-arrow-left"></i>
-          <span>back to projects</span>
+          <span *ngIf="showSidenav">back to projects</span>
         </a>
       </mat-list-item>
     </mat-nav-list>

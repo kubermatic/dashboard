@@ -45,6 +45,7 @@ export class NodeService {
     patch.spec.template.operatingSystem.ubuntu = patch.spec.template.operatingSystem.ubuntu || null;
     patch.spec.template.operatingSystem.centos = patch.spec.template.operatingSystem.centos || null;
     patch.spec.template.operatingSystem.containerLinux = patch.spec.template.operatingSystem.containerLinux || null;
+    patch.spec.template.operatingSystem.sles = patch.spec.template.operatingSystem.sles || null;
 
     return patch;
   }

@@ -308,6 +308,10 @@
                                  label="Disable auto-update"
                                  [value]="element.spec.operatingSystem.containerLinux.disableAutoUpdate">
             </km-property-boolean>
+            <km-property-boolean *ngIf="!!element.spec.operatingSystem.sles"
+                                 label="Upgrade system on first boot"
+                                 [value]="element.spec.operatingSystem.sles.distUpgradeOnBoot">
+            </km-property-boolean>
             <km-property-boolean *ngIf="element.spec.cloud.digitalocean"
                                  label="Backups"
                                  [value]="element.spec.cloud.digitalocean.backups">
@@ -325,6 +329,19 @@
                                  [value]="element.spec.cloud.azure.assignPublicIP">
             </km-property-boolean>
             <!-- End of boolean properties. -->
+
+            <div *ngIf="getMetrics(element.name)"
+                 fxLayout="row">
+              <km-property-usage title="Nodes CPU Usage"
+                                 unit="millicores"
+                                 [used]="getMetrics(element.name)?.cpuTotalMillicores"
+                                 [total]="getMetrics(element.name)?.cpuAvailableMillicores"></km-property-usage>
+
+              <km-property-usage title="Nodes Memory Usage"
+                                 unit="MiB"
+                                 [used]="getMetrics(element.name)?.memoryTotalBytes"
+                                 [total]="getMetrics(element.name).memoryAvailableBytes"></km-property-usage>
+            </div>
 
           </mat-card-content>
         </td>

@@ -8,6 +8,8 @@ export class NodeUtils {
       return 'CentOS';
     } else if (spec.operatingSystem.containerLinux) {
       return 'Container Linux';
+    } else if (spec.operatingSystem.sles) {
+      return 'SLES';
     } else {
       return '';
     }
@@ -20,6 +22,8 @@ export class NodeUtils {
       return 'centos';
     } else if (spec.operatingSystem.containerLinux) {
       return 'container-linux';
+    } else if (spec.operatingSystem.sles) {
+      return 'sles';
     } else {
       return '';
     }
