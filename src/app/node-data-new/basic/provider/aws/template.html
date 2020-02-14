@@ -1,0 +1,76 @@
+<form [formGroup]="form"
+      fxLayout="column">
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-label>Node Size*</mat-label>
+      <input matInput
+             [formControlName]="Controls.Size"
+             name="size"
+             placeholder="Node Size*"
+             [matAutocomplete]="autoSize">
+      <mat-autocomplete #autoSize="matAutocomplete">
+        <mat-option *ngFor="let size of sizes"
+                    [value]="size.name">
+          {{size.name}} ({{size.vcpus}} vCPU, {{size.memory}} GB RAM, {{size.price | number: '1.2-5'}} USD per hour)
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="hasError(Controls.Size, 'mustBeInList') && !hasError(Controls.Size, 'required')">Input doesn't match options. Please choose from given options.</mat-error>
+      <mat-error *ngIf="hasError(Controls.Size, 'required')">Size is <strong>required</strong>.</mat-error>
+      <!--      <mat-hint>{{getSizeHint()}}</mat-hint>-->
+    </mat-form-field>
+  </div>
+
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-label>Disk Type*</mat-label>
+      <mat-select [formControlName]="Controls.DiskType"
+                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
+                  disableOptionCentering>
+        <mat-option *ngFor="let type of diskTypes"
+                    [value]="type">
+          {{type}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field fxFlex>
+    <mat-label>Disk Size in GB (gp2)*</mat-label>
+    <input matInput
+           [formControlName]="Controls.DiskSize"
+           min="10"
+           max="16000"
+           type="number"
+           autocomplete="off">
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>{{getSubnetIDFormState()}}</mat-label>
+    <input matInput
+           [formControlName]="Controls.SubnetID"
+           name="subnetID"
+           [placeholder]="getSubnetIDFormState()"
+           [matAutocomplete]="autoSubnets">
+    <mat-autocomplete #autoSubnets="matAutocomplete">
+      <mat-optgroup *ngFor="let az of subnetAZ"
+                    [label]="az">
+        <mat-option *ngFor="let subnet of getSubnetToAZ(az)"
+                    [value]="subnet.id">
+          {{getSubnetOptionName(subnet)}}
+        </mat-option>
+      </mat-optgroup>
+    </mat-autocomplete>
+    <mat-error *ngIf="hasError(Controls.SubnetID, 'mustBeInList') && !hasError(Controls.SubnetID, 'required')">Input doesn't match options. Please choose from given options.</mat-error>
+    <mat-error *ngIf="hasError(Controls.SubnetID, 'required')">Subnet ID & Availability Zone is <strong>required</strong>.</mat-error>
+    <!--    <mat-hint>{{getSubnetIDHint()}}</mat-hint>-->
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>AMI ID</mat-label>
+    <input matInput
+           [formControlName]=""
+           autocomplete="off">
+  </mat-form-field>
+</form>

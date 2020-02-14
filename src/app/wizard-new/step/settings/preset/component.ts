@@ -1,10 +1,14 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subject} from 'rxjs';
+import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {NewWizardService, PresetsService} from '../../../../core/services';
 import {PresetListEntity} from '../../../../shared/entity/provider/credentials/PresetListEntity';
+import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
+
+export enum Controls {
+  Preset = 'preset',
+}
 
 export enum PresetsState {
   Ready = 'Preset',
@@ -16,15 +20,17 @@ export enum PresetsState {
   selector: 'kubermatic-wizard-presets',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  providers: [
+    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => PresetsComponent), multi: true},
+    {provide: NG_VALIDATORS, useExisting: forwardRef(() => PresetsComponent), multi: true}
+  ],
 })
-export class PresetsComponent implements OnInit, OnDestroy {
-  form: FormGroup;
+export class PresetsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   presetList = new PresetListEntity();
   presetsLoaded = false;
 
-  readonly Controls = Presets.Controls;
+  readonly Controls = Controls;
 
-  private _unsubscribe = new Subject<void>();
   private _state = PresetsState.Loading;
 
   get label(): string {
@@ -32,22 +38,24 @@ export class PresetsComponent implements OnInit, OnDestroy {
   }
 
   get selectedPreset(): string {
-    return this._wizard.preset;
+    return this._presets.preset;
   }
 
   set selectedPreset(preset: string) {
-    this.form.get(Presets.Controls.Preset).setValue(preset);
-    this._wizard.preset = preset;
+    this.form.get(Controls.Preset).setValue(preset);
+    this._presets.preset = preset;
   }
 
   constructor(
       private readonly _presets: PresetsService, private readonly _builder: FormBuilder,
-      private readonly _wizard: NewWizardService) {}
+      private readonly _wizard: NewWizardService) {
+    super();
+  }
 
   ngOnInit(): void {
-    this.form = this._builder.group({[Presets.Controls.Preset]: new FormControl('', Validators.required)});
+    this.form = this._builder.group({[Controls.Preset]: new FormControl('', Validators.required)});
 
-    this._wizard.providerChanges.pipe(switchMap(provider => this._presets.presets(provider)))
+    this._wizard.providerChanges.pipe(switchMap(provider => this._presets.presets(provider, this._wizard.datacenter)))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(presetList => {
           this._reset();
@@ -55,16 +63,21 @@ export class PresetsComponent implements OnInit, OnDestroy {
           this.presetsLoaded = presetList.names ? presetList.names.length > 0 : false;
           this._state = this.presetsLoaded ? PresetsState.Ready : PresetsState.Empty;
           this.presetList = presetList;
+
+          if (this._state === PresetsState.Empty) {
+            this._enable(false, Controls.Preset);
+          }
         });
 
-    this._wizard.datacenterChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._reset());
-
-    this.form.get(Presets.Controls.Preset).valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
-      this._wizard.preset = preset;
+    this.form.get(Controls.Preset).valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
+      this._presets.preset = preset;
     });
 
-    this._wizard.presetStatusChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(enable => this._enable(enable, Presets.Controls.Preset));
+    this._presets.presetStatusChanges.pipe(takeUntil(this._unsubscribe)).subscribe(enable => {
+      if (this._state !== PresetsState.Empty) {
+        this._enable(enable, Controls.Preset);
+      }
+    });
   }
 
   hasError(control: string, errorName: string): boolean {
@@ -88,11 +101,5 @@ export class PresetsComponent implements OnInit, OnDestroy {
     if (!enable && this.form.get(name).enabled) {
       this.form.get(name).disable();
     }
-  }
-}
-
-export namespace Presets {
-  export enum Controls {
-    Preset = 'preset',
   }
 }

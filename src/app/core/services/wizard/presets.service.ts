@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 
 import {environment} from '../../../../environments/environment';
@@ -18,7 +18,26 @@ import {VSphere} from './provider/vsphere';
 
 @Injectable()
 export class PresetsService {
+  // True - enabled, false - disabled
+  readonly presetStatusChanges = new EventEmitter<boolean>();
+  readonly presetChanges = new EventEmitter<string>();
+
+  private _preset: string;
+
   constructor(private readonly _http: HttpClient) {}
+
+  set preset(preset: string) {
+    this._preset = preset;
+    this.presetChanges.emit(preset);
+  }
+
+  get preset(): string {
+    return this._preset;
+  }
+
+  enablePresets(enable: boolean): void {
+    this.presetStatusChanges.emit(enable);
+  }
 
   provider(provider: NodeProvider.AWS): AWS;
   provider(provider: NodeProvider.AZURE): Azure;
@@ -51,8 +70,8 @@ export class PresetsService {
     }
   }
 
-  presets(provider: NodeProvider): Observable<PresetListEntity> {
-    const url = `${environment.restRoot}/providers/${provider}/presets/credentials`;
+  presets(provider: NodeProvider, datacenter: string): Observable<PresetListEntity> {
+    const url = `${environment.restRoot}/providers/${provider}/presets/credentials?datacenter=${datacenter}`;
     return this._http.get<PresetListEntity>(url);
   }
 }

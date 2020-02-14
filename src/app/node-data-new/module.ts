@@ -12,11 +12,21 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 
 import {SharedModule} from '../shared/shared.module';
 
+import {AWSBasicNodeDataComponent} from './basic/provider/aws/component';
 import {NodeDataComponent} from './component';
-import {AWSNodeDataComponent} from './provider/aws/component';
+import {ExtendedNodeDataComponent} from './extended/component';
+import {AWSExtendedNodeDataComponent} from './extended/provider/aws/component';
+import {NodeDataService} from './service/service';
 
-const dynamicComponents = [
-  AWSNodeDataComponent,
+const components = [
+  AWSBasicNodeDataComponent,
+  AWSExtendedNodeDataComponent,
+  NodeDataComponent,
+  ExtendedNodeDataComponent,
+];
+
+const services = [
+  NodeDataService,
 ];
 
 @NgModule({
@@ -33,12 +43,9 @@ const dynamicComponents = [
     MatAutocompleteModule,
     MatTooltipModule,
   ],
-  declarations: [
-    NodeDataComponent,
-    ...dynamicComponents,
-  ],
-  entryComponents: dynamicComponents,
-  exports: [],
+  declarations: [...components],
+  providers: [...services],
+  exports: [...components],
 })
 export class NodeDataModule {
 }

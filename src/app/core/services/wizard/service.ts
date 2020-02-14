@@ -1,5 +1,6 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {MatStepper} from '@angular/material/stepper';
+import * as _ from 'lodash';
 import {ReplaySubject} from 'rxjs';
 
 import {CloudSpec, ClusterEntity} from '../../../shared/entity/ClusterEntity';
@@ -11,20 +12,17 @@ import {StepRegistry, WizardStep} from '../../../wizard-new/step/step';
 export class NewWizardService {
   readonly providerChanges = new ReplaySubject<NodeProvider>();
   readonly datacenterChanges = new ReplaySubject<string>();
-  // True - enabled, false - disabled
-  readonly presetStatusChanges = new EventEmitter<boolean>();
-  readonly presetChanges = new EventEmitter<string>();
   readonly clusterTypeChanges = new EventEmitter<ClusterType>();
-  readonly stepConfigChanges = new ReplaySubject<WizardStep>();
+  readonly clusterChanges = new ReplaySubject<ClusterEntity>();
 
   private _clusterEntity: ClusterEntity = ClusterEntity.NewEmptyClusterEntity();
   private _stepper: MatStepper;
-  private _preset: string;
   private _clusterType: ClusterType;
   private _steps: WizardStep[];
 
   set cluster(cluster: ClusterEntity) {
-    this._clusterEntity = {...this._clusterEntity, ...cluster};
+    this._clusterEntity = _.merge(this._clusterEntity, cluster);
+    this.clusterChanges.next(this._clusterEntity);
   }
 
   get cluster(): ClusterEntity {
@@ -32,15 +30,17 @@ export class NewWizardService {
   }
 
   set provider(provider: NodeProvider) {
+    // TODO: export to some handler
     if (provider === NodeProvider.BRINGYOUROWN) {
-      this.hideStep(StepRegistry.Settings);
+      this._hideStep(StepRegistry.Settings);
     } else {
-      this.showStep(StepRegistry.Settings);
+      this._showStep(StepRegistry.Settings);
     }
 
     this._clusterEntity.spec.cloud = {} as CloudSpec;
     this._clusterEntity.spec.cloud[provider] = {};
     this.providerChanges.next(provider);
+    this.clusterChanges.next(this._clusterEntity);
   }
 
   get provider(): NodeProvider {
@@ -68,15 +68,6 @@ export class NewWizardService {
     return this._stepper;
   }
 
-  set preset(preset: string) {
-    this._preset = preset;
-    this.presetChanges.emit(preset);
-  }
-
-  get preset(): string {
-    return this._preset;
-  }
-
   set clusterType(type: ClusterType) {
     this._clusterType = type;
     this.clusterTypeChanges.emit(type);
@@ -94,11 +85,7 @@ export class NewWizardService {
     this._steps = steps;
   }
 
-  enablePresets(enable: boolean): void {
-    this.presetStatusChanges.emit(enable);
-  }
-
-  hideStep(step: StepRegistry): void {
+  private _hideStep(step: StepRegistry): void {
     this.steps.forEach((item, idx) => {
       if (item.name === step) {
         this.steps[idx].enabled = false;
@@ -106,11 +93,10 @@ export class NewWizardService {
     });
   }
 
-  showStep(step: StepRegistry): void {
+  private _showStep(step: StepRegistry): void {
     this.steps.forEach((item, idx) => {
       if (item.name === step) {
         this.steps[idx].enabled = true;
-        this.stepConfigChanges.next(this.steps[idx]);
       }
     });
   }

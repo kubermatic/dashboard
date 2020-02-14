@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 
 import {MachineNetworksModule} from '../machine-networks/machine-networks.module';
+import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../node-data-new/config';
 import {NodeDataModule} from '../node-data-new/module';
 import {SharedModule} from '../shared/shared.module';
 
@@ -11,23 +12,24 @@ import {DatacenterStepComponent} from './step/datacenter/component';
 import {MockStepComponent} from './step/mock/component';
 import {ProviderStepComponent} from './step/provider/component';
 import {SettingsStepComponent} from './step/settings/component';
-import {NodeDataComponent} from './step/settings/nodedata/component';
 import {PresetsComponent} from './step/settings/preset/component';
-import {AWSProviderComponent} from './step/settings/provider/aws/component';
+import {AWSProviderBasicComponent} from './step/settings/provider/basic/aws/component';
+import {ProviderBasicComponent} from './step/settings/provider/basic/component';
+import {AWSProviderExtendedComponent} from './step/settings/provider/extended/aws/component';
+import {ProviderExtendedComponent} from './step/settings/provider/extended/component';
 
 const components: any[] = [
   WizardComponent,
   PresetsComponent,
-];
-
-const entryComponents: any[] = [
   ClusterStepComponent,
   MockStepComponent,
   ProviderStepComponent,
   DatacenterStepComponent,
   SettingsStepComponent,
-  AWSProviderComponent,
-  NodeDataComponent,
+  ProviderBasicComponent,
+  AWSProviderBasicComponent,
+  ProviderExtendedComponent,
+  AWSProviderExtendedComponent,
 ];
 
 @NgModule({
@@ -39,13 +41,11 @@ const entryComponents: any[] = [
   ],
   declarations: [
     ...components,
-    ...entryComponents,
   ],
+  providers: [{provide: NODE_DATA_CONFIG, useValue: {mode: NodeDataMode.Wizard} as NodeDataConfig}],
   exports: [
     ...components,
-    ...entryComponents,
   ],
-  entryComponents: [...entryComponents],
 })
 export class WizardModule {
 }

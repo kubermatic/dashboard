@@ -2,44 +2,8 @@
       fxLayout="column">
   <mat-form-field fxFlex
                   class="km-with-hint">
-    <mat-label>Access Key ID</mat-label>
-    <input matInput
-           formControlName="accessKeyId"
-           name="accessKeyId"
-           type="password"
-           autocomplete="off">
-    <mat-hint>
-      We need a AWS Access Key with write access. You can create one&nbsp;<a target="_blank"
-         rel="noopener"
-         href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
-    </mat-hint>
-    <mat-error *ngIf="hasError(controls.AccessKeyID,'required')">
-      Access key ID is <strong>required</strong>.
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field fxFlex
-                  class="km-with-hint">
-    <mat-label>Secret Access Key</mat-label>
-    <input matInput
-           formControlName="secretAccessKey"
-           name="secretAccessKey"
-           type="password"
-           autocomplete="off">
-    <mat-hint>
-      We need a AWS Secret Access Key with write access. You can create one&nbsp;<a target="_blank"
-         rel="noopener"
-         href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
-    </mat-hint>
-    <mat-error *ngIf="hasError(controls.SecretAccessKey, 'required')">
-      Secret access key is <strong>required</strong>.
-    </mat-error>
-  </mat-form-field>
 
-  <mat-form-field fxFlex
-                  class="km-with-hint"
-                  *ngIf="!hideOptional">
-
-    <mat-label>VPC</mat-label>
+    <mat-label>{{ vpcLabel }}</mat-label>
     <input matInput
            formControlName="vpcId"
            name="vpcId"
@@ -57,8 +21,7 @@
   </mat-form-field>
 
   <mat-form-field fxFlex
-                  class="km-with-hint"
-                  *ngIf="!hideOptional">
+                  class="km-with-hint">
     <mat-label>Security Group ID</mat-label>
     <input matInput
            formControlName="securityGroup"
@@ -72,8 +35,7 @@
   </mat-form-field>
 
   <mat-form-field fxFlex
-                  class="km-with-hint"
-                  *ngIf="!hideOptional">
+                  class="km-with-hint">
     <mat-label>Route Table ID</mat-label>
     <input matInput
            formControlName="routeTableId"
@@ -86,8 +48,7 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex
-                  class="km-with-hint"
-                  *ngIf="!hideOptional">
+                  class="km-with-hint">
     <mat-label>Instance Profile Name</mat-label>
     <input matInput
            formControlName="instanceProfileName"
@@ -97,8 +58,7 @@
     <mat-hint>When specified, the worker nodes will use this instance profile. If not specified, a new instance profile will be created.</mat-hint>
   </mat-form-field>
   <mat-form-field fxFlex
-                  class="km-with-hint"
-                  *ngIf="!hideOptional">
+                  class="km-with-hint">
     <mat-label>Control plane role (ARN)</mat-label>
     <input matInput
            formControlName="roleARN"

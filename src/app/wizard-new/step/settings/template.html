@@ -1,25 +1,61 @@
-<div fxLayout="row"
-     fxLayout.md="column"
-     fxLayout.sm="column"
-     fxLayout.xs="column"
-     fxLayoutGap="30px">
-  <mat-card fxFlex>
-    <mat-card-header>
-      <mat-card-title class="km-color-primary">Provider Credentials</mat-card-title>
-    </mat-card-header>
+<div fxLayout="column"
+     [formGroup]="form">
+  <div fxLayout="row"
+       fxLayout.md="column"
+       fxLayout.sm="column"
+       fxLayout.xs="column"
+       fxLayoutGap="30px">
+    <div fxFlex>
+      <mat-card-header>
+        <mat-card-title class="km-color-primary">Provider Credentials</mat-card-title>
+      </mat-card-header>
 
-    <kubermatic-wizard-presets></kubermatic-wizard-presets>
+      <kubermatic-wizard-presets [formControlName]="Control.Preset"></kubermatic-wizard-presets>
+      <kubermatic-wizard-provider-basic [provider]="provider"
+                                        [formControlName]="Control.ProviderBasic"></kubermatic-wizard-provider-basic>
+    </div>
 
-    <ng-template #dynamicProvider>
-    </ng-template>
-  </mat-card>
+    <div fxFlex>
+      <mat-card-header>
+        <mat-card-title class="km-color-primary">Node Settings</mat-card-title>
+      </mat-card-header>
 
-  <mat-card fxFlex>
-    <mat-card-header>
-      <mat-card-title class="km-color-primary">Node Settings</mat-card-title>
-    </mat-card-header>
+      <kubermatic-node-data [formControlName]="Control.NodeDataBasic"
+                            [provider]="provider"
+                            [clusterType]="clusterType"></kubermatic-node-data>
+    </div>
+  </div>
 
-    <ng-template #dynamicNodeData>
-    </ng-template>
-  </mat-card>
+  <div fxFlex
+       class="km-wizard-settings-extended-wrapper">
+    <div class="km-wizard-settings-extended-divider"
+         fxFlex>
+    </div>
+
+    <div class="km-wizard-settings-extended-btn"
+         (click)="switch()">
+      <span *ngIf="!extended">Show extended options&nbsp;</span>
+      <span *ngIf="extended">Hide extended options&nbsp;</span>
+      <i [ngClass]="extended ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
+    </div>
+
+    <div class="km-wizard-settings-extended-divider"
+         fxFlex>
+    </div>
+  </div>
+
+  <div fxLayout="row"
+       fxLayout.md="column"
+       fxLayout.sm="column"
+       fxLayout.xs="column"
+       fxLayoutGap="30px">
+    <kubermatic-wizard-provider-extended [provider]="provider"
+                                         [visible]="extended"
+                                         [formControlName]="Control.ProviderExtended"
+                                         fxFlex></kubermatic-wizard-provider-extended>
+    <kubermatic-extended-node-data [provider]="provider"
+                                   [visible]="extended"
+                                   [formControlName]="Control.NodeDataExtended"
+                                   fxFlex></kubermatic-extended-node-data>
+  </div>
 </div>

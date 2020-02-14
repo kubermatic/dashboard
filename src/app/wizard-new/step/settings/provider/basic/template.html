@@ -1,0 +1,6 @@
+<div [formGroup]="form"
+     [ngSwitch]="provider">
+  <kubermatic-wizard-aws-provider-basic *ngSwitchCase="Providers.AWS"
+                                        [formControlName]="Controls.ProviderBasic">
+  </kubermatic-wizard-aws-provider-basic>
+</div>

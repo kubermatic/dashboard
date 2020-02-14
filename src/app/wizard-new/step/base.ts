@@ -1,17 +1,14 @@
-import {AbstractControl, FormGroup, ValidationErrors} from '@angular/forms';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {AbstractControl} from '@angular/forms';
 
 import {CoreModule} from '../../core/core.module';
 import {NewWizardService} from '../../core/services';
+import {BaseFormValidator} from '../../shared/validators/base-form.validator';
 
-export class StepBase {
-  form: FormGroup;
-
+export class StepBase extends BaseFormValidator {
   protected readonly _wizard: NewWizardService;
-  protected readonly _unsubscribe: Subject<void> = new Subject<void>();
 
   constructor() {
+    super();
     this._wizard = CoreModule.injector.get(NewWizardService);
   }
 
@@ -25,14 +22,6 @@ export class StepBase {
 
   next(): void {
     this._wizard.stepper.next();
-  }
-
-  reset(controls: string[] = []): void {
-    if (this.form.invalid) {
-      Object.keys(this.form.controls).filter(key => !controls.includes(key)).forEach(key => {
-        this.form.reset(key);
-      });
-    }
   }
 
   enable(enable: boolean, name: string): void {
@@ -51,26 +40,16 @@ export class StepBase {
 
   // OnDestroy interface implementation
   ngOnDestroy(): void {
-    this.reset();
+    this._reset();
     this._unsubscribe.next();
     this._unsubscribe.complete();
   }
 
-  // Validator interface implementation
-  validate(_: AbstractControl): ValidationErrors|null {
-    return this.form.valid ? null : {invalidForm: {valid: false, message: 'Step form fields are invalid'}};
-  }
-
-  // ControlValueAccessor interface implementation
-  registerOnChange(fn: any): void {
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(fn);
-  }
-
-  registerOnTouched(_: any): void {}
-
-  writeValue(obj: any): void {
-    if (obj) {
-      this.form.setValue(obj, {emitEvent: false});
+  private _reset(controls: string[] = []): void {
+    if (this.form.invalid) {
+      Object.keys(this.form.controls).filter(key => !controls.includes(key)).forEach(key => {
+        this.form.reset(key);
+      });
     }
   }
 }

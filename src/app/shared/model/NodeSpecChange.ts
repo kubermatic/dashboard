@@ -6,6 +6,24 @@ export class NodeData {
   count?: number;
   valid?: boolean;
   dynamicConfig?: boolean;
+
+  static NewEmptyNodeData(): NodeData {
+    return {
+      spec: {
+        cloud: {
+          aws: {},
+          azure: {},
+          digitalocean: {},
+          gcp: {},
+          hetzner: {},
+          kubevirt: {},
+          openstack: {},
+          packet: {},
+          vsphere: {},
+        } as NodeCloudSpec,
+      } as NodeSpec,
+    } as NodeData;
+  }
 }
 
 export class NodeProviderData {

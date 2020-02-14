@@ -1,6 +1,6 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator, Validators} from '@angular/forms';
-import {takeUntil} from 'rxjs/operators';
+import {filter, takeUntil} from 'rxjs/operators';
 
 import {DatacenterService} from '../../../core/services';
 import {DataCenterEntity, getDatacenterProvider} from '../../../shared/entity/DatacenterEntity';
@@ -49,7 +49,10 @@ export class DatacenterStepComponent extends StepBase implements OnInit, Control
     });
 
     this.control(Controls.Datacenter)
-        .valueChanges.pipe(takeUntil(this._unsubscribe))
+        .valueChanges
+        // Allow only non-empty values
+        .pipe(filter(value => value))
+        .pipe(takeUntil(this._unsubscribe))
         .subscribe(datacenter => this._wizard.datacenter = datacenter);
 
     this._wizard.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {

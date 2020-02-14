@@ -1,10 +1,17 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {ControlValueAccessor, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator} from '@angular/forms';
-import {merge} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
+import {ClusterType} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {StepBase} from '../base';
+
+enum Controls {
+  ProviderBasic = 'providerBasic',
+  ProviderExtended = 'providerExtended',
+  NodeDataBasic = 'nodeDataBasic',
+  NodeDataExtended = 'nodeDataExtended',
+  Preset = 'preset',
+}
 
 @Component({
   selector: 'kubermatic-wizard-settings-step',
@@ -15,46 +22,35 @@ import {StepBase} from '../base';
     {provide: NG_VALIDATORS, useExisting: forwardRef(() => SettingsStepComponent), multi: true}
   ]
 })
-export class SettingsStepComponent extends StepBase implements OnInit, OnDestroy, ControlValueAccessor, Validator {
-  provider: NodeProvider;
-  readonly providers = NodeProvider;
+export class SettingsStepComponent extends StepBase implements OnInit, OnDestroy {
+  readonly Provider = NodeProvider;
+  readonly Control = Controls;
 
-  // private readonly _defaultControls = [Presets.Controls.Preset];
+  extended = false;
 
-  constructor() {
+  get provider(): NodeProvider {
+    return this._wizard.provider;
+  }
+
+  get clusterType(): ClusterType {
+    return this._wizard.clusterType;
+  }
+
+  constructor(private readonly _builder: FormBuilder) {
     super();
   }
 
-  ngOnInit(): void {
-    this.form = new FormGroup({});
-
-    merge(this._wizard.providerChanges, this._wizard.datacenterChanges, this._wizard.clusterTypeChanges)
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(
-            _ => {
-                // Reset form to the default state before creating components.
-                // this.reset(this._defaultControls);
-            });
+  switch(): void {
+    this.extended = !this.extended;
   }
 
-  // private _initializeProvider(): void {
-  //   this.provider = this._wizard.provider;
-  //   this.providerContainerRef.clear();
-  //
-  //   const providerCmp = ProviderConfig.GetComponent(this.provider);
-  //   const factory = this._resolver.resolveComponentFactory(providerCmp);
-  //   const componentRef = this.providerContainerRef.createComponent<StepBase>(factory);
-  //
-  //   componentRef.instance.form = this.form;
-  // }
-  //
-  // private _initializeNodeData(): void {
-  //   this.provider = this._wizard.provider;
-  //   this.ndContainerRef.clear();
-  //
-  //   const factory = this._resolver.resolveComponentFactory(NodeDataComponent);
-  //   this.ndContainerRef.createComponent(factory);
-  //
-  //   componentRef.instance.form = this.form;
-  // }
+  ngOnInit(): void {
+    this.form = this._builder.group({
+      [Controls.Preset]: this._builder.control(''),
+      [Controls.ProviderBasic]: this._builder.control(''),
+      [Controls.ProviderExtended]: this._builder.control(''),
+      [Controls.NodeDataBasic]: this._builder.control(''),
+      [Controls.NodeDataExtended]: this._builder.control(''),
+    });
+  }
 }

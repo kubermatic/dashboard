@@ -1,0 +1,7 @@
+<form *ngIf="visible"
+      [formGroup]="form"
+      [ngSwitch]="provider">
+  <kubermatic-aws-extended-node-data *ngSwitchCase="Provider.AWS"
+                                     [formControlName]="Control.Provider">
+  </kubermatic-aws-extended-node-data>
+</form>

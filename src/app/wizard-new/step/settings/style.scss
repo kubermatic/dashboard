@@ -1,4 +1,16 @@
+@import '../../../../assets/css/variables';
 
-.km-wizard-settings-row {
-  padding: 8px;
+.km-wizard-settings-extended-wrapper {
+  margin: (4 * $baseline-grid) 0 (2.5 * $baseline-grid) 0;
+
+  .km-wizard-settings-extended-divider {
+    height: 1px;
+    margin: (2 * $baseline-grid) 0;
+  }
+
+  .km-wizard-settings-extended-btn {
+    cursor: pointer;
+    margin: $baseline-grid;
+    user-select: none;
+  }
 }

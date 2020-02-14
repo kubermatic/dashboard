@@ -1,1 +1,94 @@
-NODE DATA
+<form [formGroup]="form"
+      fxLayout="column">
+  <div fxLayout="row"
+       fxLayoutGap="16px">
+    <mat-form-field class="km-node-deployment-name">
+      <mat-label>Name</mat-label>
+      <input id="km-node-name-input"
+             matInput
+             [formControlName]="Controls.Name"
+             type="text"
+             autocomplete="off">
+      <button mat-icon-button
+              class="km-randomize-btn"
+              matTooltip="Generate name"
+              (click)="generateName()">
+        <i class="km-icon-randomize"></i>
+      </button>
+      <mat-hint>Leave it empty to use server-side generation.</mat-hint>
+      <mat-error *ngIf="hasError(Controls.Name, 'pattern')">
+        Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field fxFlex>
+    <mat-label>Replicas</mat-label>
+    <input id="km-node-count-input"
+           matInput
+           [formControlName]="Controls.Count"
+           type="number"
+           min="0"
+           autocomplete="off">
+    <mat-error *ngIf="hasError(Controls.Count, 'required')">Number of replicas is required.</mat-error>
+    <mat-error *ngIf="hasError(Controls.Count, 'ipsMissing')">Not enough IPs left. Reduce number of replicas or
+      add more machine networks.
+    </mat-error>
+  </mat-form-field>
+
+  <div [ngSwitch]="provider">
+    <kubermatic-aws-basic-node-data *ngSwitchCase="NodeProvider.AWS"
+                                    [formControlName]="Controls.ProviderBasic">
+    </kubermatic-aws-basic-node-data>
+  </div>
+
+  <mat-button-toggle-group group="operatingSystemGroup"
+                           [formControlName]="Controls.OperatingSystem">
+    <mat-button-toggle value="ubuntu"
+                       *ngIf="!isOpenshiftCluster()">
+      <i class="km-os-image-ubuntu"></i>
+      Ubuntu
+    </mat-button-toggle>
+    <mat-button-toggle value="centos">
+      <i class="km-os-image-centos"></i>
+      CentOS
+    </mat-button-toggle>
+    <mat-button-toggle value="containerLinux"
+                       *ngIf="!isProvider(NodeProvider.HETZNER) && !isOpenshiftCluster()">
+      <i class="km-os-image-container-linux"></i>
+      Container Linux
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <div fxFlex="100%">
+    <!-- Options for Ubuntu and CenOS -->
+    <div *ngIf="isOsSelected(OperatingSystem.Ubuntu) || isOsSelected(OperatingSystem.CentOS)"
+         class="km-os-options"
+         [ngClass]="(isProvider(NodeProvider.OPENSTACK) || isProvider(NodeProvider.VSPHERE)) ? 'km-with-margin' : ''">
+      <mat-checkbox id="upgradeOnBoot"
+                    [formControlName]="Controls.UpgradeOnBoot">Upgrade system on first boot
+      </mat-checkbox>
+    </div>
+
+    <!-- Options for Container Linux -->
+    <div *ngIf="isOsSelected(OperatingSystem.ContainerLinux)"
+         class="km-os-options"
+         [ngClass]="(isProvider(NodeProvider.OPENSTACK) || isProvider(NodeProvider.VSPHERE)) ? 'km-with-margin' : ''">
+      <mat-checkbox id="disableAutoUpdate"
+                    [formControlName]="Controls.DisableAutoUpdate">Disable auto-update
+      </mat-checkbox>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!isBasicViewOnly()">
+    <kubermatic-extended-node-data [provider]="provider"
+                                   [visible]="true"></kubermatic-extended-node-data>
+  </ng-container>
+
+  <km-label-form title="Node Labels"
+                 [(labels)]="labels"></km-label-form>
+
+  <km-taint-form title="Node Taints"
+                 [(taints)]="taints"></km-taint-form>
+
+</form>

@@ -1,14 +1,91 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {NewWizardService} from '../core/services';
+import {ClusterNameGenerator} from '../core/util/name-generator.service';
+import {Taint} from '../shared/entity/NodeEntity';
+import {NodeProvider, OperatingSystem} from '../shared/model/NodeProviderConstants';
+import {ClusterType} from '../shared/utils/cluster-utils/cluster-utils';
+import {BaseFormValidator} from '../shared/validators/base-form.validator';
+import {NodeDataMode} from './config';
+import {NodeDataService} from './service/service';
+
+enum Controls {
+  Name = 'name',
+  Count = 'count',
+  OperatingSystem = 'operatingSystem',
+  UpgradeOnBoot = 'upgradeOnBoot',
+  DisableAutoUpdate = 'disableAutoUpdate',
+  ProviderBasic = 'providerBasic',
+  ProviderExtended = 'providerExtended',
+}
 
 @Component({
   selector: 'kubermatic-node-data',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  providers: [
+    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => NodeDataComponent), multi: true},
+    {provide: NG_VALIDATORS, useExisting: forwardRef(() => NodeDataComponent), multi: true},
+  ]
 })
-export class NodeDataComponent implements OnInit, OnDestroy {
-  constructor() {}
+export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  @Input() replicas = 3;
+  @Input() provider: NodeProvider;
+  @Input() clusterType: ClusterType;
 
-  ngOnInit(): void {}
+  labels: object = {};
+  taints: Taint[] = [];
+
+  readonly NodeProvider = NodeProvider;
+  readonly OperatingSystem = OperatingSystem;
+  readonly Controls = Controls;
+
+  constructor(
+      private readonly _builder: FormBuilder, private readonly _nameGenerator: ClusterNameGenerator,
+      private readonly _wizard: NewWizardService, private readonly nodeDataService: NodeDataService) {
+    super();
+  }
+
+  ngOnInit(): void {
+    this.form = this._builder.group({
+      [Controls.Name]: this._builder.control('', [Validators.pattern('[a-zA-Z0-9-]*')]),
+      [Controls.Count]: this._builder.control(this.replicas, [Validators.required, Validators.min(0)]),
+      [Controls.OperatingSystem]: this._builder.control(this._getDefaultOS(), [Validators.required]),
+      [Controls.UpgradeOnBoot]: this._builder.control(''),
+      [Controls.DisableAutoUpdate]: this._builder.control(''),
+      [Controls.ProviderBasic]: this._builder.control(''),
+      [Controls.ProviderExtended]: this._builder.control(''),
+    });
+  }
 
   ngOnDestroy(): void {}
+
+  isProvider(provider: NodeProvider): boolean {
+    return this.provider === provider;
+  }
+
+  isOpenshiftCluster(): boolean {
+    return this._wizard.clusterType === ClusterType.OpenShift;
+  }
+
+  generateName(): void {
+    this.form.get(Controls.Name).setValue(this._nameGenerator.generateName());
+  }
+
+  isOsSelected(osName: OperatingSystem): boolean {
+    return this.form.get(Controls.OperatingSystem).value === osName;
+  }
+
+  hasError(control: string, errorName: string): boolean {
+    return this.form.get(control).hasError(errorName);
+  }
+
+  isBasicViewOnly(): boolean {
+    // In the wizard we split extended and basic options.
+    return this.nodeDataService.mode === NodeDataMode.Wizard;
+  }
+
+  private _getDefaultOS(): OperatingSystem {
+    return this.isOpenshiftCluster() ? OperatingSystem.CentOS : OperatingSystem.Ubuntu;
+  }
 }
