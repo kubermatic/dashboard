@@ -8,6 +8,7 @@ import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../../shared/entity/AdminSettings';
 import {Theme, UserSettings} from '../../../shared/entity/MemberEntity';
+import {webSocket, WebSocketSubject} from "rxjs/webSocket";
 
 const DEFAULT_USER_SETTINGS: UserSettings = {
   itemsPerPage: 10,
@@ -41,6 +42,9 @@ export class SettingsService {
   private _admins$: Observable<AdminEntity[]>;
   private _adminsRefresh$: Subject<any> = new Subject();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * 5);
+
+  myWebSocket: WebSocketSubject<any> = webSocket(`ws://localhost/${this.restRoot}/ws/admin/settings`);
+
 
   constructor(
       private readonly _httpClient: HttpClient, private readonly _appConfigService: AppConfigService,
@@ -103,9 +107,8 @@ export class SettingsService {
   }
 
   private _getAdminSettings(defaultOnError = false): Observable<AdminSettings> {
-    const url = `${this.restRoot}/admin/settings`;
-    const observable = this._httpClient.get<AdminSettings>(url);
-    return defaultOnError ? observable.pipe(catchError(() => of(DEFAULT_ADMIN_SETTINGS))) : observable;
+    const observable = this.myWebSocket.asObservable();
+    return observable;
   }
 
   private _defaultAdminSettings(settings: AdminSettings): AdminSettings {

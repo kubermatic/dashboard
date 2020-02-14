@@ -3,5 +3,13 @@
     "target": "https://dev.kubermatic.io",
     "secure": false,
     "changeOrigin": true
+  },
+  "/": {
+    "target": "https://dev.kubermatic.io",
+    "secure": false,
+    "changeOrigin": true,
+    "ws": true,
+    "wss": true,
+    "logLevel": "debug"
   }
 }
