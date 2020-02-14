@@ -10,6 +10,9 @@ export class NodeData {
   static NewEmptyNodeData(): NodeData {
     return {
       spec: {
+        operatingSystem: {
+          ubuntu: {},
+        },
         cloud: {
           aws: {},
           azure: {},

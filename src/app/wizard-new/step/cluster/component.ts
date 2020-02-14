@@ -5,14 +5,23 @@ import {first, switchMap, takeUntil} from 'rxjs/operators';
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService} from '../../../core/services';
 import {ClusterNameGenerator} from '../../../core/util/name-generator.service';
-import {MasterVersion} from '../../../shared/entity/ClusterEntity';
+import {ClusterEntity, ClusterSpec, MasterVersion} from '../../../shared/entity/ClusterEntity';
+import {ResourceType} from '../../../shared/entity/LabelsEntity';
 import {ClusterType} from '../../../shared/utils/cluster-utils/cluster-utils';
+import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
+import {ClusterService} from '../../service/cluster';
+import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
 
 enum Controls {
   Name = 'name',
   Version = 'version',
   Type = 'type',
+  ImagePullSecret = 'imagePullSecret',
+  PodSecurityPolicyAdmissionPlugin = 'usePodSecurityPolicyAdmissionPlugin',
+  AuditLogging = 'auditLogging',
+  PodNodeSelectorAdmissionPlugin = 'usePodNodeSelectorAdmissionPlugin',
+  Labels = 'labels',
 }
 
 @Component({
@@ -26,11 +35,16 @@ enum Controls {
 })
 export class ClusterStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   masterVersions: MasterVersion[] = [];
+  labels: object;
+  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
+
+  readonly Controls = Controls;
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _api: ApiService,
-      private readonly _appConfig: AppConfigService, private readonly _nameGenerator: ClusterNameGenerator) {
-    super();
+      private readonly _appConfig: AppConfigService, private readonly _nameGenerator: ClusterNameGenerator,
+      private readonly _clusterService: ClusterService, wizard: WizardService) {
+    super(wizard);
   }
 
   ngOnInit(): void {
@@ -44,10 +58,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           ]),
       [Controls.Version]: new FormControl('', [Validators.required]),
       [Controls.Type]: new FormControl(''),
+      [Controls.ImagePullSecret]: new FormControl(''),
+      [Controls.AuditLogging]: new FormControl(''),
+      [Controls.PodSecurityPolicyAdmissionPlugin]: new FormControl(''),
+      [Controls.PodNodeSelectorAdmissionPlugin]: new FormControl(''),
+      [Controls.Labels]: new FormControl(''),
     });
 
     this._setDefaultClusterType();
-    this._wizard.clusterType = this.control(Controls.Type).value as ClusterType;
+    this._clusterService.cluster = this._getClusterEntity();
 
     this._api.getMasterVersions(this.controlValue(Controls.Type))
         .pipe(first())
@@ -58,11 +77,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         .pipe(switchMap((type: ClusterType) => {
           this.masterVersions = [];
           this.control(Controls.Version).reset();
-          this._wizard.clusterType = type;
+          this._handleImagePullSecret(type);
 
           return this._api.getMasterVersions(this.controlValue(Controls.Type) as ClusterType);
         }))
         .subscribe(this._setDefaultVersion.bind(this));
+
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());
   }
 
   generateName(): void {
@@ -71,6 +93,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   hasMultipleTypes(): boolean {
     return Object.values(ClusterType).every(type => !this._appConfig.getConfig()[`hide_${type}`]);
+  }
+
+  isOpenshiftSelected(): boolean {
+    return this.controlValue(Controls.Type) === ClusterType.OpenShift;
+  }
+
+  private _handleImagePullSecret(type: ClusterType): void {
+    this.control(Controls.ImagePullSecret).setValidators(type === ClusterType.OpenShift ? [Validators.required] : []);
+    this.control(Controls.ImagePullSecret).updateValueAndValidity();
   }
 
   private _setDefaultVersion(versions: MasterVersion[]): void {
@@ -99,5 +130,24 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   private _isClusterTypeVisible(type: ClusterType): boolean {
     return !this._appConfig.getConfig()[`hide_${type}`];
+  }
+
+  private _getClusterEntity(): ClusterEntity {
+    return {
+      name: this.controlValue(Controls.Name),
+      type: this.controlValue(Controls.Type),
+      labels: this.controlValue(Controls.Labels),
+      spec: {
+        version: this.controlValue(Controls.Version),
+        openshift: {
+          imagePullSecret: this.controlValue(Controls.ImagePullSecret),
+        },
+        usePodNodeSelectorAdmissionPlugin: this.controlValue(Controls.PodNodeSelectorAdmissionPlugin),
+        usePodSecurityPolicyAdmissionPlugin: this.controlValue(Controls.PodSecurityPolicyAdmissionPlugin),
+        auditLogging: {
+          enabled: this.controlValue(Controls.AuditLogging),
+        },
+      } as ClusterSpec,
+    } as ClusterEntity;
   }
 }

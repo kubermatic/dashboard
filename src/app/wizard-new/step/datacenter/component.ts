@@ -4,6 +4,7 @@ import {filter, takeUntil} from 'rxjs/operators';
 
 import {DatacenterService} from '../../../core/services';
 import {DataCenterEntity, getDatacenterProvider} from '../../../shared/entity/DatacenterEntity';
+import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
 
 enum Controls {
@@ -22,8 +23,9 @@ enum Controls {
 export class DatacenterStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   datacenters: DataCenterEntity[] = [];
 
-  constructor(private readonly _builder: FormBuilder, private readonly _dcService: DatacenterService) {
-    super();
+  constructor(
+      private readonly _builder: FormBuilder, private readonly _dcService: DatacenterService, wizard: WizardService) {
+    super(wizard);
   }
 
   ngOnInit(): void {
@@ -54,10 +56,6 @@ export class DatacenterStepComponent extends StepBase implements OnInit, Control
         .pipe(filter(value => value))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(datacenter => this._wizard.datacenter = datacenter);
-
-    this._wizard.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this.control(Controls.Datacenter).setValue('');
-    });
   }
 
   getLocation(datacenter: DataCenterEntity): string {

@@ -1508,5 +1508,9 @@
 
   .mat-step-header {
     pointer-events: none !important;
+
+    &.cdk-program-focused {
+      background-color: unset !important;
+    }
   }
 }

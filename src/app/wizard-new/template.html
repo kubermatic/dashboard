@@ -1,53 +1,55 @@
 <form [formGroup]="form">
-  <mat-horizontal-stepper linear
-                          disableRipple
-                          #stepper>
-    <ng-template matStepperIcon="edit">
-      <mat-icon>done</mat-icon>
-    </ng-template>
+  <mat-card>
+    <mat-horizontal-stepper linear
+                            disableRipple
+                            #stepper>
+      <ng-template matStepperIcon="edit">
+        <mat-icon>done</mat-icon>
+      </ng-template>
 
-    <mat-step *ngFor="let step of steps; index as i; first as first; last as last">
-      <ng-template matStepLabel>{{step.name}}</ng-template>
+      <mat-step *ngFor="let step of steps; index as i; first as first; last as last">
+        <ng-template matStepLabel>{{step.name}}</ng-template>
 
-      <ng-container *ngIf="step.name === stepRegistry.Cluster && isActive(step)">
-        <kubermatic-wizard-cluster-step [formControlName]="step.name"></kubermatic-wizard-cluster-step>
-      </ng-container>
+        <ng-container *ngIf="step.name === stepRegistry.Cluster && isActive(step)">
+          <kubermatic-wizard-cluster-step [formControlName]="step.name"></kubermatic-wizard-cluster-step>
+        </ng-container>
 
-      <ng-container *ngIf="step.name === stepRegistry.Provider && isActive(step)">
-        <kubermatic-wizard-provider-step [formControlName]="step.name"></kubermatic-wizard-provider-step>
-      </ng-container>
+        <ng-container *ngIf="step.name === stepRegistry.Provider && isActive(step)">
+          <kubermatic-wizard-provider-step [formControlName]="step.name"></kubermatic-wizard-provider-step>
+        </ng-container>
 
-      <ng-container *ngIf="step.name === stepRegistry.Datacenter && isActive(step)">
-        <kubermatic-wizard-datacenter-step [formControlName]="step.name"></kubermatic-wizard-datacenter-step>
-      </ng-container>
+        <ng-container *ngIf="step.name === stepRegistry.Datacenter && isActive(step)">
+          <kubermatic-wizard-datacenter-step [formControlName]="step.name"></kubermatic-wizard-datacenter-step>
+        </ng-container>
 
-      <ng-container *ngIf="step.name === stepRegistry.Settings && isActive(step)">
-        <kubermatic-wizard-settings-step [formControlName]="step.name"></kubermatic-wizard-settings-step>
-      </ng-container>
+        <ng-container *ngIf="step.name === stepRegistry.Settings && isActive(step)">
+          <kubermatic-wizard-settings-step [formControlName]="step.name"></kubermatic-wizard-settings-step>
+        </ng-container>
 
-      <ng-container *ngIf="step.name === stepRegistry.Summary && isActive(step)">
-        <kubermatic-wizard-mock-step [formControlName]="step.name"></kubermatic-wizard-mock-step>
-      </ng-container>
+        <ng-container *ngIf="step.name === stepRegistry.Summary && isActive(step)">
+          <kubermatic-wizard-summary-step></kubermatic-wizard-summary-step>
+        </ng-container>
 
-      <div class="km-button-navigation">
-        <a mat-flat-button
-           color="tertiary"
-           routerLink="/projects/{{project?.id}}/clusters">Cancel</a>
-        <div fxFlex></div>
-        <button mat-flat-button
-                color="tertiary"
-                matStepperPrevious
-                *ngIf="!first">Back
-        </button>
-        <button mat-flat-button
-                matStepperNext
-                [disabled]="form.get(step.name).invalid"
-                *ngIf="showNext(step)">Next
-        </button>
-        <button mat-flat-button
-                *ngIf="last">Create
-        </button>
-      </div>
-    </mat-step>
-  </mat-horizontal-stepper>
+        <div class="km-button-navigation">
+          <a mat-flat-button
+             color="tertiary"
+             routerLink="/projects/{{project?.id}}/clusters">Cancel</a>
+          <div fxFlex></div>
+          <button mat-flat-button
+                  color="tertiary"
+                  matStepperPrevious
+                  *ngIf="!first">Back
+          </button>
+          <button mat-flat-button
+                  matStepperNext
+                  [disabled]="form.get(step.name).invalid"
+                  *ngIf="showNext(step)">Next
+          </button>
+          <button mat-flat-button
+                  *ngIf="last">Create
+          </button>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </mat-card>
 </form>

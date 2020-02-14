@@ -7,30 +7,31 @@
     <mat-card class="km-set-cluster-spec"
               fxFlex>
       <mat-card-header>
-        <mat-card-title class="km-color-primary">Cluster</mat-card-title>
+        <mat-card-title>Cluster</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <mat-form-field fxFlex>
-          <mat-label>Name*</mat-label>
+          <mat-label>Name</mat-label>
           <input id="km-create-cluster-name-input"
                  matInput
-                 formControlName="name"
+                 [formControlName]="Controls.Name"
                  type="text"
                  title="name"
-                 autocomplete="off">
+                 autocomplete="off"
+                 required>
           <button mat-icon-button
                   class="km-randomize-btn"
                   matTooltip="Generate name"
                   (click)="generateName()">
             <i class="km-icon-randomize"></i>
           </button>
-          <mat-error *ngIf="form.controls.name.hasError('required')">
+          <mat-error *ngIf="hasError(Controls.Name, 'required')">
             Name is <strong>required</strong>.
           </mat-error>
-          <mat-error *ngIf="form.controls.name.hasError('minlength')">
-            Name must be at least {{ form.controls.name.getError('minlength').requiredLength }} characters.
+          <mat-error *ngIf="hasError(Controls.Name, 'minlength')">
+            Name must be at least {{ control(Controls.Name).getError('minlength').requiredLength }} characters.
           </mat-error>
-          <mat-error *ngIf="form.controls.name.hasError('pattern')">
+          <mat-error *ngIf="hasError(Controls.Name, 'pattern')">
             Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
           </mat-error>
         </mat-form-field>
@@ -40,12 +41,12 @@
     <mat-card class="km-set-cluster-spec"
               fxFlex>
       <mat-card-header>
-        <mat-card-title class="km-color-primary">Specification</mat-card-title>
+        <mat-card-title>Specification</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <mat-button-toggle-group group="clusterSpecTypeGroup"
                                  class="km-cluster-spec-type"
-                                 formControlName="type"
+                                 [formControlName]="Controls.Type"
                                  *ngIf="hasMultipleTypes()">
           <mat-button-toggle value="kubernetes">
             <i class="km-icon-kubernetes"></i>
@@ -59,14 +60,65 @@
 
         <mat-form-field class="km-version-inline">
           <mat-label>Version</mat-label>
-          <mat-select formControlName="version"
-                      disableOptionCentering>
+          <mat-select [formControlName]="Controls.Version"
+                      disableOptionCentering
+                      required>
             <mat-option *ngFor="let version of masterVersions"
                         [value]="version.version">
               {{ version.version }}
             </mat-option>
           </mat-select>
         </mat-form-field>
+
+        <div fxLayout="column"
+             fxLayoutGap="16px">
+          <mat-form-field *ngIf="isOpenshiftSelected()">
+            <mat-label>Image Pull Secret</mat-label>
+            <textarea matInput
+                      rows=3
+                      [formControlName]="Controls.ImagePullSecret"
+                      type="text-area"
+                      title="imagePullSecret"
+                      required></textarea>
+            <mat-error *ngIf="hasError(Controls.ImagePullSecret, 'required')">
+              Image Pull Secret is <strong>required</strong>.
+            </mat-error>
+            <mat-hint>This is a JSON document containing your Docker registry credentials, see&nbsp;<a target="_blank"
+                 rel="noopener"
+                 href="https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/">here</a>&nbsp;for
+              more information
+            </mat-hint>
+          </mat-form-field>
+
+          <div fxLayout="column"
+               fxLayoutGap="16px"
+               fxFlex>
+            <div fxLayout="row"
+                 fxLayoutGap="16px">
+              <mat-checkbox [formControlName]="Controls.AuditLogging">Audit Logging</mat-checkbox>
+              <div fxLayout="row"
+                   fxLayoutGap="8px"
+                   fxLayoutAlign=" center">
+                <mat-checkbox [formControlName]="Controls.PodSecurityPolicyAdmissionPlugin">
+                  Pod Security Policy
+                </mat-checkbox>
+                <i class="km-icon-info"
+                   matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
+                <i *ngIf="controlValue(Controls.PodSecurityPolicyAdmissionPlugin)"
+                   class="km-icon-warning km-warning"
+                   matTooltip="Activating Pod Security Policy will mean that a lot of Pod specifications, Operators and Helm charts will not work out of the box. Make sure that you know the consequences of activating this feature.">
+                </i>
+              </div>
+              <mat-checkbox [formControlName]="Controls.PodNodeSelectorAdmissionPlugin">Pod Node Selector</mat-checkbox>
+            </div>
+
+            <km-label-form title="Labels"
+                           [(labels)]="labels"
+                           [asyncKeyValidators]="asyncLabelValidators"
+                           [formControlName]="Controls.Labels"
+                           fxFlex="100"></km-label-form>
+          </div>
+        </div>
       </mat-card-content>
     </mat-card>
   </div>

@@ -1,15 +1,10 @@
 import {AbstractControl} from '@angular/forms';
-
-import {CoreModule} from '../../core/core.module';
-import {NewWizardService} from '../../core/services';
 import {BaseFormValidator} from '../../shared/validators/base-form.validator';
+import {WizardService} from '../service/wizard';
 
 export class StepBase extends BaseFormValidator {
-  protected readonly _wizard: NewWizardService;
-
-  constructor() {
+  constructor(protected readonly _wizard: WizardService) {
     super();
-    this._wizard = CoreModule.injector.get(NewWizardService);
   }
 
   control(name: string): AbstractControl {

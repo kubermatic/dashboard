@@ -8,7 +8,8 @@ export class BaseFormValidator implements ControlValueAccessor, Validator {
 
   // Validator interface implementation
   validate(_: AbstractControl): ValidationErrors|null {
-    return this.form.valid ? null : {invalidForm: {valid: false, message: 'Form validation failed.'}};
+    return this.form.valid || this.form.disabled ? null :
+                                                   {invalidForm: {valid: false, message: 'Form validation failed.'}};
   }
 
   // ControlValueAccessor interface implementation

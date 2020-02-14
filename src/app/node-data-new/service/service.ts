@@ -1,31 +1,25 @@
 import {Inject, Injectable} from '@angular/core';
 import * as _ from 'lodash';
-import {ReplaySubject} from 'rxjs';
-
-import {ClusterEntity} from '../../shared/entity/ClusterEntity';
+import {Observable, ReplaySubject} from 'rxjs';
+import {switchMap} from 'rxjs/operators';
+import {DatacenterService, PresetsService} from '../../core/services';
+import {AWSSize, AWSSubnet} from '../../shared/entity/provider/aws/AWS';
+import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../shared/model/NodeSpecChange';
+import {ClusterService} from '../../wizard-new/service/cluster';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../config';
 
 @Injectable()
 export class NodeDataService {
   private readonly _config: NodeDataConfig;
-  private _clusterEntity: ClusterEntity;
   private _nodeData: NodeData = NodeData.NewEmptyNodeData();
 
-  readonly clusterEntityChanges = new ReplaySubject<ClusterEntity>();
   readonly nodeDataChanges = new ReplaySubject<NodeData>();
 
-  constructor(@Inject(NODE_DATA_CONFIG) config: NodeDataConfig) {
+  constructor(
+      @Inject(NODE_DATA_CONFIG) config: NodeDataConfig, private readonly _preset: PresetsService,
+      private readonly _datacenter: DatacenterService, private readonly _clusterService: ClusterService) {
     this._config = config;
-  }
-
-  set clusterEntity(entity: ClusterEntity) {
-    this._clusterEntity = _.merge(this._clusterEntity, entity);
-    this.clusterEntityChanges.next(this._clusterEntity);
-  }
-
-  get clusterEntity(): ClusterEntity {
-    return this._clusterEntity;
   }
 
   set nodeData(data: NodeData) {
@@ -40,4 +34,39 @@ export class NodeDataService {
   get mode(): NodeDataMode {
     return this._config.mode;
   }
+
+  readonly aws = new class {
+    constructor(private _parent: NodeDataService) {}
+
+    flavors(): Observable<AWSSize[]> {
+      switch (this._parent.mode) {
+        case NodeDataMode.Wizard:
+          return this._parent._datacenter.getDataCenter(this._parent._clusterService.datacenter)
+              .pipe(switchMap(
+                  dc => this._parent._preset.provider(NodeProvider.AWS).region(dc.spec.aws.region).flavors()));
+          // case NodeDataMode.Dialog:
+          //   return this._project.selectedProject.pipe(
+          //       switchMap(project => this._api.getAWSSizes(project.id, this.seedDatacenterName, this.clusterID)));
+      }
+    }
+
+    subnets(): Observable<AWSSubnet[]> {
+      switch (this._parent.mode) {
+        case NodeDataMode.Wizard:
+          return this._parent._clusterService.clusterChanges.pipe(switchMap(
+              cluster => this._parent._preset.provider(NodeProvider.AWS)
+                             .accessKeyID(cluster.spec.cloud.aws.accessKeyId)
+                             .secretAccessKey(cluster.spec.cloud.aws.secretAccessKey)
+                             .vpc(cluster.spec.cloud.aws.vpcId)
+                             .credential(this._parent._preset.preset)
+                             .subnets(cluster.spec.cloud.dc)));
+          //   case NodeDataMode.Dialog:
+          //     return this._project.selectedProject.pipe(
+          //         switchMap(project => this._api.getAWSSubnets(project.id, this.seedDatacenterName,
+          //         this.clusterID)));
+          // }
+      }
+    }
+  }
+  (this);
 }

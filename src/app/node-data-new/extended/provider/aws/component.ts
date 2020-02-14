@@ -1,6 +1,5 @@
 import {Component, EventEmitter, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
@@ -27,6 +26,7 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
 
   private _tags: object;
   private _tagsChanges = new EventEmitter<object>();
+
   get tags(): object {
     return this._tags;
   }
@@ -37,10 +37,10 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
   }
 
   get nodeData(): NodeData {
-    return this._service.nodeData;
+    return this._nodeDataService.nodeData;
   }
 
-  constructor(private readonly _builder: FormBuilder, private readonly _service: NodeDataService) {
+  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
     super();
   }
 
@@ -53,9 +53,8 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
       [Controls.Tags]: this._builder.control(''),
     });
 
-    merge(this.form.get(Controls.AssignPublicIP).valueChanges, this._tagsChanges)
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(() => this._service.nodeData = this._getNodeData());
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
   }
 
   private _getNodeData(): NodeData {

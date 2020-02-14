@@ -5,6 +5,7 @@ import {takeUntil} from 'rxjs/operators';
 import {DatacenterService} from '../../../core/services';
 import {getDatacenterProvider} from '../../../shared/entity/DatacenterEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
+import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
 
 enum Controls {
@@ -23,8 +24,9 @@ enum Controls {
 export class ProviderStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   providers: NodeProvider[] = [];
 
-  constructor(private readonly _builder: FormBuilder, private readonly _dcService: DatacenterService) {
-    super();
+  constructor(
+      private readonly _builder: FormBuilder, private readonly _dcService: DatacenterService, wizard: WizardService) {
+    super(wizard);
   }
 
   ngOnInit(): void {

@@ -1,11 +1,18 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {Observable, of} from 'rxjs';
-import {switchMap, takeUntil} from 'rxjs/operators';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {Observable} from 'rxjs';
+import {switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
+import {AWSCloudSpec} from '../../../../shared/entity/cloud/AWSCloudSpec';
+import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
 import {AWSSize, AWSSubnet} from '../../../../shared/entity/provider/aws/AWS';
+import {NodeData} from '../../../../shared/model/NodeSpecChange';
+import {AutocompleteFilterValidators} from '../../../../shared/validators/autocomplete-filter.validator';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
+import {ClusterService} from '../../../../wizard-new/service/cluster';
+import {NodeDataMode} from '../../../config';
+import {NodeDataService} from '../../../service/service';
 
 enum Controls {
   Size = 'size',
@@ -24,19 +31,27 @@ enum Controls {
   ]
 })
 export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  sizes: AWSSize[];
+  sizes: AWSSize[] = [];
   diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
   subnets: AWSSubnet[] = [];
   hideOptional = false;
 
   readonly Controls = Controls;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _presets: PresetsService) {
-    super();
+  get subnetAZ(): string[] {
+    return Object.keys(this._subnetMap);
   }
 
-  get subnetAZ(): string[] {
-    return [];
+  private _subnetMap: {[type: string]: AWSSubnet[]} = {};
+
+  private get _cloudSpec(): AWSCloudSpec {
+    return this._clusterService.cluster.spec.cloud.aws;
+  }
+
+  constructor(
+      private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
+      private readonly _nodeDataService: NodeDataService, private readonly _clusterService: ClusterService) {
+    super();
   }
 
   ngOnInit(): void {
@@ -48,17 +63,18 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
       [Controls.AMI]: this._builder.control(''),
     });
 
+    this._setDefaultSubnet(this.subnets);
 
     this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
     this._subnetIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSubnet.bind(this));
 
-    this._presets.presetChanges
-        .pipe(switchMap(_ => {
-          this._enable(true, Controls.SubnetID);
-          return this._subnetIdsObservable;
-        }))
+    this._presets.presetChanges.pipe(tap(_ => this._clearSubnet()))
+        .pipe(switchMap(_ => this._subnetIdsObservable))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(this._setDefaultSubnet.bind(this));
+
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
   }
 
   ngOnDestroy(): void {
@@ -66,24 +82,12 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     this._unsubscribe.complete();
   }
 
-  getSubnetIDFormState(): string {
-    return '';
-  }
-
   getSubnetToAZ(az: string): AWSSubnet[] {
-    return [];
+    return this._subnetMap[az];
   }
 
   getSubnetOptionName(subnet: AWSSubnet): string {
-    return '';
-  }
-
-  addTag(): void {}
-
-  deleteTag(formNr: number): void {}
-
-  getTagForm(form: FormGroup): any {
-    return undefined;
+    return subnet.name !== '' ? subnet.name + ' (' + subnet.id + ')' : subnet.id;
   }
 
   hasError(control: string, errorName: string): boolean {
@@ -91,7 +95,27 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   isInWizard(): boolean {
-    return true;
+    return this._nodeDataService.mode === NodeDataMode.Wizard;
+  }
+
+  getLabel(control: Controls): string {
+    switch (control) {
+      case Controls.SubnetID:
+        return 'Subnet ID & Availability Zone';
+    }
+
+    return '';
+  }
+
+  getHint(control: Controls): string {
+    switch (control) {
+      case Controls.SubnetID:
+        return !this._cloudSpec.secretAccessKey || !this._cloudSpec.accessKeyId ?
+            'Please enter your credentials first' :
+            '';
+    }
+
+    return '';
   }
 
   private _enable(enable: boolean, name: string): void {
@@ -105,48 +129,67 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   private get _sizesObservable(): Observable<AWSSize[]> {
-    return of([] as AWSSize[]);
-    // switch (this.mode) {
-    //   case NodeDataMode.Wizard:
-    //     return this._newWizard.datacenterChanges
-    //         .pipe(switchMap(datacenterName => this._datacenter.getDataCenter(datacenterName)))
-    //         .pipe(switchMap(dc => this._preset.provider(NodeProvider.AWS).region(dc.spec.aws.region).flavors()));
-    //   case NodeDataMode.Dialog:
-    //     return this._project.selectedProject.pipe(
-    //         switchMap(project => this._api.getAWSSizes(project.id, this.seedDatacenterName, this.clusterID)));
-    // }
+    return this._nodeDataService.aws.flavors();
   }
 
   private get _subnetIdsObservable(): Observable<AWSSubnet[]> {
-    return of([] as AWSSubnet[]);
-    // switch (this.mode) {
-    //   case NodeDataMode.Wizard:
-    //     return this._newWizard.clusterChanges.pipe(switchMap(
-    //         cluster => this._preset.provider(NodeProvider.AWS)
-    //                               .accessKeyID(cluster.spec.cloud.aws.accessKeyId)
-    //                               .secretAccessKey(cluster.spec.cloud.aws.secretAccessKey)
-    //                               .vpc(cluster.spec.cloud.aws.vpcId)
-    //                               .credential(this._newWizard.preset)
-    //                               .subnets(cluster.spec.cloud.dc)));
-    //   case NodeDataMode.Dialog:
-    //     return this._project.selectedProject.pipe(
-    //         switchMap(project => this._api.getAWSSubnets(project.id, this.seedDatacenterName, this.clusterID)));
-    // }
+    return this._nodeDataService.aws.subnets();
   }
 
   private _setDefaultSize(sizes: AWSSize[]): void {
-    this.sizes = sizes;
+    this.sizes = sizes.sort((a, b) => a.name.localeCompare(b.name));
+    this.form.get(Controls.Size).setValidators([
+      Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true)
+    ]);
 
-    if (sizes.length > 0) {
-      this.form.get(Controls.Size).setValue(sizes[0].name);
+    if (this.sizes.length > 0) {
+      const cheapestInstance = this.sizes.reduce((prev, curr) => prev.price < curr.price ? prev : curr);
+      this.form.get(Controls.Size).setValue(cheapestInstance.name);
     }
   }
 
-  private _setDefaultSubnet(subnets: AWSSubnet[]): void {
-    this.subnets = subnets;
+  _clearSubnet(): void {
+    this._enable(false, Controls.SubnetID);
+    this.form.get(Controls.SubnetID).setValue('');
+  }
 
+  private _setDefaultSubnet(subnets: AWSSubnet[]): void {
     if (subnets.length === 0) {
-      this._enable(false, Controls.SubnetID);
+      return;
     }
+
+    this.subnets = subnets;
+    this._subnetMap = {};
+    const defaultSubnet = this.subnets.find(s => s.isDefaultSubnet);
+    this.form.get(Controls.SubnetID).setValidators([
+      Validators.required, AutocompleteFilterValidators.mustBeInObjectList(this._subnetMap, 'id', true)
+    ]);
+    this.form.get(Controls.SubnetID).setValue(defaultSubnet ? defaultSubnet.id : this.subnets[0].id);
+    this._enable(true, Controls.SubnetID);
+    this._initSubnetMap();
+  }
+
+  private _initSubnetMap(): void {
+    this.subnets = this.subnets.sort((a, b) => a.name.localeCompare(b.name));
+    this.subnets.forEach(subnet => {
+      const found = this.subnetAZ.find(s => s === subnet.availability_zone);
+      if (!found) {
+        this._subnetMap[subnet.availability_zone] = [];
+      }
+
+      this._subnetMap[subnet.availability_zone].push(subnet);
+    });
+  }
+
+  private _getNodeData(): NodeData {
+    return {
+      spec: {
+        cloud: {
+          aws: {
+            subnetID: this.form.get(Controls.SubnetID).value,
+          },
+        } as NodeCloudSpec,
+      } as NodeSpec,
+    } as NodeData;
   }
 }

@@ -4,10 +4,11 @@ import {MatStepper} from '@angular/material/stepper';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {NewWizardService, ProjectService} from '../core/services';
+import {ProjectService} from '../core/services';
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
 
 import {steps} from './config';
+import {WizardService} from './service/wizard';
 import {StepRegistry, WizardStep} from './step/step';
 
 @Component({
@@ -27,14 +28,14 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   constructor(
       private _formBuilder: FormBuilder, private readonly _projectService: ProjectService,
-      private readonly _wizard: NewWizardService) {}
+      private readonly _wizard: WizardService) {}
 
   get steps(): WizardStep[] {
     return this._wizard.steps.filter(step => step.enabled);
   }
 
   get active(): WizardStep {
-    return this._wizard.steps[this._stepper.selectedIndex];
+    return this.steps[this._stepper.selectedIndex];
   }
 
   ngOnInit(): void {

@@ -1,14 +1,25 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {takeUntil} from 'rxjs/operators';
-import {NewWizardService, PresetsService} from '../../../../../../core/services';
+import {EMPTY, iif, Observable, onErrorResumeNext} from 'rxjs';
+import {catchError, debounceTime, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {PresetsService} from '../../../../../../core/services';
 import {AWSCloudSpec} from '../../../../../../shared/entity/cloud/AWSCloudSpec';
 import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
+import {AWSVPC} from '../../../../../../shared/entity/provider/aws/AWS';
+import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
+import {ClusterService} from '../../../../../service/cluster';
+import {WizardService} from '../../../../../service/wizard';
 
 export enum Controls {
   AccessKeyID = 'accessKeyId',
   SecretAccessKey = 'secretAccessKey',
+  VPCID = 'vpcId',
+}
+
+enum VPCState {
+  Loading = 'Loading...',
+  Ready = 'VPC',
 }
 
 @Component({
@@ -20,11 +31,21 @@ export enum Controls {
   ]
 })
 export class AWSProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  vpcIds: AWSVPC[] = [];
+
   readonly controls = Controls;
+
+  protected readonly _debounceTime = 250;
+
+  private _vpcState = VPCState.Ready;
+
+  get vpcLabel(): string {
+    return this._vpcState;
+  }
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
-      private readonly _wizard: NewWizardService) {
+      private readonly _wizard: WizardService, private readonly _clusterService: ClusterService) {
     super();
   }
 
@@ -32,13 +53,26 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
     this.form = this._builder.group({
       [Controls.AccessKeyID]: new FormControl('', Validators.required),
       [Controls.SecretAccessKey]: new FormControl('', Validators.required),
+      [Controls.VPCID]: new FormControl('', [Validators.required, Validators.pattern('vpc-(\\w{8}|\\w{17})')]),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._presets.enablePresets(
-          Object.values(Controls).every(control => !this._wizard.cluster.spec.cloud.aws[control]));
-      this._wizard.cluster = this._getClusterEntity();
+      this._presets.enablePresets(Object.values(Controls).every(control => !this._controlValue(control)));
+      this._clusterService.cluster = this._getClusterEntity();
     });
+
+    this.form.valueChanges.pipe(debounceTime(this._debounceTime))
+        .pipe(switchMap(_ => iif(() => !this._controlValue(Controls.VPCID), this._vpcListObservable(), EMPTY)))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((vpcs: AWSVPC[]) => {
+          this.vpcIds = vpcs;
+          const defaultVPC = this.vpcIds.find(vpc => vpc.isDefault);
+          this.form.get(Controls.VPCID).setValue(defaultVPC ? defaultVPC.vpcId : undefined, {emitEvent: false});
+          this.form.updateValueAndValidity();
+          this._vpcState = VPCState.Ready;
+
+          this._clusterService.cluster = this._getClusterEntity();
+        });
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
@@ -63,6 +97,24 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
     }
   }
 
+  private _vpcListObservable(): Observable<AWSVPC[]> {
+    return this._presets.provider(NodeProvider.AWS)
+        .accessKeyID(this._controlValue(Controls.AccessKeyID))
+        .secretAccessKey(this._controlValue(Controls.SecretAccessKey))
+        .vpcs(this._wizard.datacenter)
+        .pipe(map(vpcs => vpcs.sort((a, b) => a.name.localeCompare(b.name))))
+        .pipe(tap(_ => this._vpcState = VPCState.Loading))
+        .pipe(catchError(() => {
+          this._vpcState = VPCState.Ready;
+          this.form.get(Controls.VPCID).setValue(undefined, {emitEvent: false});
+          return onErrorResumeNext(EMPTY);
+        }));
+  }
+
+  private _controlValue(control: Controls): string {
+    return this.form.get(control).value;
+  }
+
   private _getClusterEntity(): ClusterEntity {
     return {
       spec: {
@@ -70,6 +122,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
           aws: {
             accessKeyId: this.form.get(Controls.AccessKeyID).value,
             secretAccessKey: this.form.get(Controls.SecretAccessKey).value,
+            vpcId: this.form.get(Controls.VPCID).value,
           } as AWSCloudSpec
         } as CloudSpec
       } as ClusterSpec

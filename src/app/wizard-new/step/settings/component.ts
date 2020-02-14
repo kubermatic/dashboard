@@ -3,6 +3,8 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterType} from '../../../shared/utils/cluster-utils/cluster-utils';
+import {ClusterService} from '../../service/cluster';
+import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
 
 enum Controls {
@@ -33,11 +35,12 @@ export class SettingsStepComponent extends StepBase implements OnInit, OnDestroy
   }
 
   get clusterType(): ClusterType {
-    return this._wizard.clusterType;
+    return this._clusterService.cluster.type;
   }
 
-  constructor(private readonly _builder: FormBuilder) {
-    super();
+  constructor(
+      private readonly _builder: FormBuilder, private readonly _clusterService: ClusterService, wizard: WizardService) {
+    super(wizard);
   }
 
   switch(): void {
@@ -52,5 +55,7 @@ export class SettingsStepComponent extends StepBase implements OnInit, OnDestroy
       [Controls.NodeDataBasic]: this._builder.control(''),
       [Controls.NodeDataExtended]: this._builder.control(''),
     });
+
+    // this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => console.log(this.form));
   }
 }

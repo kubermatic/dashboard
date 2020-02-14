@@ -48,7 +48,7 @@ export class AWS extends Provider {
   }
 
   vpcs(dc: string): Observable<AWSVPC[]> {
-    if (!this._hasRequiredHeaders() || !dc) {
+    if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
     const url = `${this._restRoot}/providers/${this._provider}/${dc}/vpcs`;
@@ -59,7 +59,7 @@ export class AWS extends Provider {
   subnets(dc: string): Observable<AWSSubnet[]> {
     this._setRequiredHeaders(AWS.Header.AccessKeyID, AWS.Header.SecretAccessKey, AWS.Header.VPC);
 
-    if (!this._hasRequiredHeaders() || !dc) {
+    if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
     const url = `${this._restRoot}/providers/${this._provider}/${dc}/subnets`;

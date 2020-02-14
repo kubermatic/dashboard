@@ -1,6 +1,6 @@
 import {CommonModule} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {Injector, NgModule, Optional, SkipSelf} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 
@@ -18,7 +18,7 @@ import {NotificationPanelComponent} from './components/notification-panel/notifi
 import {ProjectSelectorComponent} from './components/sidenav/project/selector.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
-import {ApiService, Auth, AuthGuard, AuthzGuard, ClusterService, DatacenterService, HistoryService, LabelService, NewWizardService, ParamsService, PresetsService, RBACService, WizardService,} from './services';
+import {ApiService, Auth, AuthGuard, AuthzGuard, ClusterService, DatacenterService, HistoryService, LabelService, ParamsService, PresetsService, RBACService, WizardService,} from './services';
 import {GlobalModule} from './services/global/global.module';
 import {NodeDataService} from './services/node-data/node-data.service';
 import {PreviousRouteService} from './services/previous-route/previous-route.service';
@@ -56,7 +56,6 @@ const services: any[] = [
   DatacenterService,
   NodeDataService,
   WizardService,
-  NewWizardService,
   StepsService,
   ClusterNameGenerator,
   ApiService,
@@ -109,12 +108,4 @@ const interceptors: any[] = [
   ],
 })
 export class CoreModule {
-  static injector: Injector;
-  constructor(@Optional() @SkipSelf() parentModule: CoreModule, injector: Injector) {
-    if (parentModule) {
-      throw new Error('CoreModule is already loaded. Import it in the AppModule only');
-    }
-
-    CoreModule.injector = injector;
-  }
 }

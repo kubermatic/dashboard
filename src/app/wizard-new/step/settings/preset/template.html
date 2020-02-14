@@ -1,8 +1,9 @@
 <form [formGroup]="form">
   <mat-form-field fxFlex>
     <mat-label>{{ label }}</mat-label>
-    <mat-select formControlName="preset"
-                panelClass="km-preset-dropdown">
+    <mat-select [formControlName]="Controls.Preset"
+                panelClass="km-preset-dropdown"
+                required>
       <mat-option *ngFor="let presetName of presetList.names"
                   [value]="presetName">{{presetName}}</mat-option>
       <mat-select-trigger fxFlex
@@ -15,7 +16,7 @@
         <div fxFlex
              fxLayoutAlign="end">
           <button *ngIf="selectedPreset"
-                  (click)="selectedPreset=undefined; $event.stopPropagation()"
+                  (click)="reset(); $event.stopPropagation()"
                   mat-icon-button
                   aria-label="Clear">
             <mat-icon inline="true">close</mat-icon>

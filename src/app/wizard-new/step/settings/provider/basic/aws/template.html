@@ -17,6 +17,7 @@
       Access key ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
+
   <mat-form-field fxFlex
                   class="km-with-hint">
     <mat-label>Secret Access Key</mat-label>
@@ -32,6 +33,29 @@
     </mat-hint>
     <mat-error *ngIf="hasError(controls.SecretAccessKey, 'required')">
       Secret access key is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex
+                  class="km-with-hint">
+
+    <mat-label>{{ vpcLabel }}</mat-label>
+    <input matInput
+           formControlName="vpcId"
+           name="vpcId"
+           [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let vpc of vpcIds"
+                  [value]="vpc.vpcId">
+        {{vpc.displayName}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-hint>When specified, all worker nodes will be attached to this VPC. If not specified, the default VPC will be used.</mat-hint>
+    <mat-error *ngIf="hasError(controls.VPCID, 'pattern')">
+      The VPC ID needs to look similar to 'vpc-3a2f9851'.
+    </mat-error>
+    <mat-error *ngIf="hasError(controls.VPCID,'required')">
+      The VPC ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 </form>

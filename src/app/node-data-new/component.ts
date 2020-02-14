@@ -1,11 +1,11 @@
 import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {NewWizardService} from '../core/services';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {Taint} from '../shared/entity/NodeEntity';
 import {NodeProvider, OperatingSystem} from '../shared/model/NodeProviderConstants';
 import {ClusterType} from '../shared/utils/cluster-utils/cluster-utils';
 import {BaseFormValidator} from '../shared/validators/base-form.validator';
+import {ClusterService} from '../wizard-new/service/cluster';
 import {NodeDataMode} from './config';
 import {NodeDataService} from './service/service';
 
@@ -42,7 +42,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _nameGenerator: ClusterNameGenerator,
-      private readonly _wizard: NewWizardService, private readonly nodeDataService: NodeDataService) {
+      private readonly _clusterService: ClusterService, private readonly _nodeDataService: NodeDataService) {
     super();
   }
 
@@ -65,7 +65,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   isOpenshiftCluster(): boolean {
-    return this._wizard.clusterType === ClusterType.OpenShift;
+    return this._clusterService.cluster.type === ClusterType.OpenShift;
   }
 
   generateName(): void {
@@ -82,7 +82,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
   isBasicViewOnly(): boolean {
     // In the wizard we split extended and basic options.
-    return this.nodeDataService.mode === NodeDataMode.Wizard;
+    return this._nodeDataService.mode === NodeDataMode.Wizard;
   }
 
   private _getDefaultOS(): OperatingSystem {

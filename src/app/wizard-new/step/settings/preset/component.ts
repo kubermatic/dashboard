@@ -1,13 +1,14 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {switchMap, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 
-import {NewWizardService, PresetsService} from '../../../../core/services';
+import {PresetsService} from '../../../../core/services';
 import {PresetListEntity} from '../../../../shared/entity/provider/credentials/PresetListEntity';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
+import {WizardService} from '../../../service/wizard';
 
 export enum Controls {
-  Preset = 'preset',
+  Preset = 'name',
 }
 
 export enum PresetsState {
@@ -48,17 +49,17 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
 
   constructor(
       private readonly _presets: PresetsService, private readonly _builder: FormBuilder,
-      private readonly _wizard: NewWizardService) {
+      private readonly _wizard: WizardService) {
     super();
   }
 
   ngOnInit(): void {
     this.form = this._builder.group({[Controls.Preset]: new FormControl('', Validators.required)});
 
-    this._wizard.providerChanges.pipe(switchMap(provider => this._presets.presets(provider, this._wizard.datacenter)))
+    this._presets.presets(this._wizard.provider, this._wizard.datacenter)
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(presetList => {
-          this._reset();
+          this.reset();
 
           this.presetsLoaded = presetList.names ? presetList.names.length > 0 : false;
           this._state = this.presetsLoaded ? PresetsState.Ready : PresetsState.Empty;
@@ -84,13 +85,13 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
     return this.form.get(control).hasError(errorName);
   }
 
+  reset(): void {
+    this.selectedPreset = '';
+  }
+
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-  }
-
-  private _reset(): void {
-    this.selectedPreset = undefined;
   }
 
   private _enable(enable: boolean, name: string): void {

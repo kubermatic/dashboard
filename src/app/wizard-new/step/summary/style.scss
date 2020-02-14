@@ -1,0 +1,52 @@
+@import "../../../../assets/css/variables";
+
+.km-summary-row {
+  display: flex;
+  align-items: center;
+  line-height: 2.4 * $line-height;
+  font-size: $font-size-subhead;
+
+  &.km-summary-sshkeys {
+    align-items: flex-start;
+  }
+}
+
+.km-summary-row-with-margin {
+  margin-bottom: 2 * $baseline-grid;
+}
+
+.km-provider-logo {
+  max-width: 100px !important;
+  margin: (1.25 * $baseline-grid) 0;
+}
+
+.km-os-image {
+  display: inline-block;
+  height: 28px;
+  width: 28px;
+}
+
+.km-summary-left {
+  display: flex;
+  align-items: center;
+  width: 4.25 * $baseline-grid;
+  font-size: $font-size-subhead;
+}
+
+.km-icon-key {
+  cursor: default;
+  margin-right: 2 * $baseline-grid;
+  user-select: none;
+}
+
+.km-summary-tags {
+  margin: (2 * $baseline-grid) 0;
+}
+
+::ng-deep .km-property-container {
+  margin: 0 0 (0.6 * $baseline-grid) !important;
+}
+
+.km-icon-disabled {
+  margin-left: -2px;
+}

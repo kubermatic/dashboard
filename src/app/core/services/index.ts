@@ -11,7 +11,6 @@ import {ProjectService} from './project/project.service';
 import {RBACService} from './rbac/rbac.service';
 import {UserService} from './user/user.service';
 import {PresetsService} from './wizard/presets.service';
-import {NewWizardService} from './wizard/service';
 import {WizardService} from './wizard/wizard.service';
 
 export {
@@ -23,7 +22,6 @@ export {
   DatacenterService,
   HistoryService,
   LabelService,
-  NewWizardService,
   NotificationService,
   ParamsService,
   PresetsService,

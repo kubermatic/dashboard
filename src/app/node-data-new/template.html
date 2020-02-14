@@ -29,7 +29,8 @@
            [formControlName]="Controls.Count"
            type="number"
            min="0"
-           autocomplete="off">
+           autocomplete="off"
+           required>
     <mat-error *ngIf="hasError(Controls.Count, 'required')">Number of replicas is required.</mat-error>
     <mat-error *ngIf="hasError(Controls.Count, 'ipsMissing')">Not enough IPs left. Reduce number of replicas or
       add more machine networks.

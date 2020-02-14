@@ -26,7 +26,8 @@ import {ClusterType} from '../shared/utils/cluster-utils/cluster-utils';
 })
 export class WizardComponent implements OnInit, OnDestroy {
   private _machineNetworksFormData: MachineNetworkForm[] = [{valid: false, cidr: '', dnsServers: [''], gateway: ''}];
-  private _clusterSpecFormData: ClusterSpecForm = {valid: false, name: '', type: '', version: '', labels: {}};
+  private _clusterSpecFormData:
+      ClusterSpecForm = {valid: false, name: '', type: ClusterType.Empty, version: '', labels: {}};
   private _clusterProviderSettingsFormData: ClusterProviderSettingsForm = {valid: false};
   private _setMachineNetworksFormData: SetMachineNetworksForm = {
     valid: false,
@@ -53,7 +54,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       private readonly _projectService: ProjectService, private readonly _clusterService: ClusterService,
       private readonly _googleAnalyticsService: GoogleAnalyticsService,
       private readonly _settingsService: SettingsService, private readonly _notificationService: NotificationService) {
-    this.cluster = {name: '', spec: {version: '', cloud: {dc: ''}, machineNetworks: []}, type: ''};
+    this.cluster = {name: '', spec: {version: '', cloud: {dc: ''}, machineNetworks: []}, type: ClusterType.Empty};
     this.addNodeData = {spec: {cloud: {}, operatingSystem: {}, versions: {}}, count: 3, dynamicConfig: false};
   }
 

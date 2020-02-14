@@ -1,4 +1,5 @@
 import {NodeProvider} from '../model/NodeProviderConstants';
+import {ClusterType} from '../utils/cluster-utils/cluster-utils';
 
 import {AWSCloudSpec} from './cloud/AWSCloudSpec';
 import {AzureCloudSpec} from './cloud/AzureCloudSpec';
@@ -33,7 +34,7 @@ export class ClusterEntity {
   name: string;
   spec: ClusterSpec;
   status?: Status;
-  type: string;
+  type: ClusterType;
   labels?: object;
   inheritedLabels?: object;
   credential?: string;

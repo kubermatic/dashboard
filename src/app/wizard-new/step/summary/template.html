@@ -15,11 +15,11 @@
         <i class="km-icon-{{cluster.type}}"></i>
       </span>
       <div class="km-summary-row">v{{cluster.spec.version}}</div>
-      <div class="km-summary-row">{{datacenterFormData.datacenter.spec.location}}
-        ({{datacenterFormData.datacenter.spec.country}})
+      <div class="km-summary-row">{{location}}
+        ({{country}})
       </div>
       <div class="km-summary-row">
-        <span class="km-provider-logo km-provider-logo-{{providerFormData.provider}}"></span>
+        <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
       </div>
       <div class="km-summary-row">
         <span class="km-summary-left km-text">
@@ -309,7 +309,8 @@
         </ng-container>
 
         <!-- Packet Nodes -->
-        <ng-container *ngIf="cluster.spec.cloud.packet km-summary-row-with-margin">
+        <ng-container *ngIf="cluster.spec.cloud.packet"
+                      class="km-summary-row-with-margin">
           <div class="km-summary-row km-summary-row-with-margin">{{nodeData.spec.cloud.packet.instanceType}}</div>
         </ng-container>
 
@@ -449,7 +450,7 @@
         </ng-container>
 
         <!-- DO Tags -->
-        <ng-container *ngIf="nodeData.spec.cloud.digitalocean && nodeData.spec.cloud.digitalocean.tags.length > 0">
+        <ng-container *ngIf="nodeData.spec.cloud.digitalocean && nodeData.spec.cloud.digitalocean.tags?.length > 0">
           <div class="km-summary-tags">
             <div class="km-summary-row">Provider Tags</div>
             <km-labels [labels]="nodeData.spec.cloud.digitalocean.tags"></km-labels>
@@ -457,7 +458,7 @@
         </ng-container>
 
         <!-- GCP Tags -->
-        <ng-container *ngIf="nodeData.spec.cloud.gcp && nodeData.spec.cloud.gcp.tags.length > 0">
+        <ng-container *ngIf="nodeData.spec.cloud.gcp && nodeData.spec.cloud.gcp.tags?.length > 0">
           <div class="km-summary-tags">
             <div class="km-summary-row">Provider Tags</div>
             <km-labels [labels]="nodeData.spec.cloud.gcp.tags"></km-labels>
@@ -465,7 +466,7 @@
         </ng-container>
 
         <!-- Packet Tags -->
-        <ng-container *ngIf="nodeData.spec.cloud.packet && nodeData.spec.cloud.packet.tags.length > 0">
+        <ng-container *ngIf="nodeData.spec.cloud.packet && nodeData.spec.cloud.packet.tags?.length > 0">
           <div class="km-summary-tags">
             <div class="km-summary-row">Provider Tags</div>
             <km-labels [labels]="nodeData.spec.cloud.packet.tags"></km-labels>
@@ -538,12 +539,12 @@
         </div>
 
         <!-- Node Taints -->
-        <div *ngIf="nodeData.spec.taints && nodeData.spec.taints.length > 0"
+        <div *ngIf="nodeData.spec.taints && nodeData.spec.taints?.length > 0"
              class="km-summary-tags">
           <div class="km-summary-row">Node Taints</div>
           <km-taints [taints]="nodeData.spec.taints"></km-taints>
         </div>
-        <div *ngIf="!nodeData.spec.taints || nodeData.spec.taints.length === 0">
+        <div *ngIf="!nodeData.spec.taints || nodeData.spec.taints?.length === 0">
           <div class="km-summary-row">
             <span class="km-summary-left km-text">
               <i class="km-icon-disabled"></i>
@@ -555,7 +556,7 @@
       </mat-card-content>
     </ng-container>
 
-    <ng-container *ngIf="cluster.spec.cloud.vsphere && cluster.spec.machineNetworks && cluster.spec.machineNetworks.length > 0">
+    <ng-container *ngIf="cluster.spec.cloud.vsphere && cluster.spec.machineNetworks && cluster.spec.machineNetworks?.length > 0">
       <mat-card-header>
         <mat-card-title>Machine Networks</mat-card-title>
       </mat-card-header>

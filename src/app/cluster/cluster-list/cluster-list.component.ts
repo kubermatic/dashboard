@@ -124,10 +124,6 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     return ClusterUtils.getProvider(cloud);
   }
 
-  getType(type: string): string {
-    return ClusterUtils.getType(type);
-  }
-
   deleteClusterDialog(cluster: ClusterEntity, event: Event): void {
     event.stopPropagation();
     const modal = this._matDialog.open(ClusterDeleteConfirmationComponent);

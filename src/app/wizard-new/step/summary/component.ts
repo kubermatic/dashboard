@@ -1,29 +1,70 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {LabelFormComponent} from '../../shared/components/label-form/label-form.component';
-import {ClusterEntity} from '../../shared/entity/ClusterEntity';
-import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
-import {getIpCount} from '../../shared/functions/get-ip-count';
-import {ClusterDatacenterForm, ClusterProviderForm} from '../../shared/model/ClusterForm';
-import {NodeData} from '../../shared/model/NodeSpecChange';
-import {NodeUtils} from '../../shared/utils/node-utils/node-utils';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {DatacenterService} from '../../../core/services';
+import {NodeDataService} from '../../../node-data-new/service/service';
+import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
+import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
+import {getIpCount} from '../../../shared/functions/get-ip-count';
+import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
+import {NodeData} from '../../../shared/model/NodeSpecChange';
+import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
+import {ClusterService} from '../../service/cluster';
+import {WizardService} from '../../service/wizard';
 
 @Component({
-  selector: 'kubermatic-summary',
-  templateUrl: './summary.component.html',
-  styleUrls: ['./summary.component.scss'],
+  selector: 'kubermatic-wizard-summary-step',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
-export class SummaryComponent implements OnInit {
-  @Input() clusterSSHKeys: SSHKeyEntity[];
-  @Input() nodeData: NodeData;
-  @Input() cluster: ClusterEntity;
-  @Input() providerFormData: ClusterProviderForm;
-  @Input() datacenterFormData: ClusterDatacenterForm;
+export class SummaryStepComponent implements OnInit, OnDestroy {
+  clusterSSHKeys: SSHKeyEntity[] = [];
+  nodeData: NodeData;
+  cluster: ClusterEntity;
   noMoreIpsLeft = false;
 
+  private _location: string;
+  private _country: string;
+  private _unsubscribe = new Subject<void>();
+
+  constructor(
+      private readonly _wizardService: WizardService, private readonly _clusterService: ClusterService,
+      private readonly _nodeDataService: NodeDataService, private readonly _datacenterService: DatacenterService) {}
+
+  get country(): string {
+    return this._country;
+  }
+
+  get location(): string {
+    return this._location;
+  }
+
+  get datacenter(): string {
+    return this.cluster.spec.cloud.dc;
+  }
+
+  get provider(): NodeProvider {
+    return this._wizardService.provider;
+  }
+
   ngOnInit(): void {
+    this.nodeData = this._nodeDataService.nodeData;
+    this.cluster = this._clusterService.cluster;
+
+    this._datacenterService.getDataCenter(this.datacenter).pipe(takeUntil(this._unsubscribe)).subscribe(dc => {
+      this._location = dc.spec.location;
+      this._country = dc.spec.country;
+    });
+
     if (!!this.cluster.spec.machineNetworks) {
       this.noMoreIpsLeft = this.noIpsLeft(this.cluster, this.nodeData.count);
     }
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getOperatingSystem(): string {

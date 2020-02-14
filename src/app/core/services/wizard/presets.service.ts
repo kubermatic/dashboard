@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
-import {EventEmitter, Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Observable, ReplaySubject} from 'rxjs';
 
 import {environment} from '../../../../environments/environment';
 import {PresetListEntity} from '../../../shared/entity/provider/credentials/PresetListEntity';
@@ -19,8 +19,8 @@ import {VSphere} from './provider/vsphere';
 @Injectable()
 export class PresetsService {
   // True - enabled, false - disabled
-  readonly presetStatusChanges = new EventEmitter<boolean>();
-  readonly presetChanges = new EventEmitter<string>();
+  readonly presetStatusChanges = new ReplaySubject<boolean>();
+  readonly presetChanges = new ReplaySubject<string>();
 
   private _preset: string;
 
@@ -28,7 +28,7 @@ export class PresetsService {
 
   set preset(preset: string) {
     this._preset = preset;
-    this.presetChanges.emit(preset);
+    this.presetChanges.next(preset);
   }
 
   get preset(): string {
@@ -36,7 +36,7 @@ export class PresetsService {
   }
 
   enablePresets(enable: boolean): void {
-    this.presetStatusChanges.emit(enable);
+    this.presetStatusChanges.next(enable);
   }
 
   provider(provider: NodeProvider.AWS): AWS;
