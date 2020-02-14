@@ -55,13 +55,9 @@ export class NodeDataComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       count: new FormControl(
           this.nodeData.count,
-          [
-            Validators.required, Validators.min(0),
-            NoIpsLeftValidator(this.cluster.spec.machineNetworks, this.existingNodesCount)
-          ]),
-      operatingSystem: new FormControl(
-          this.isClusterOpenshift() ? 'centos' : Object.keys(this.nodeData.spec.operatingSystem)[0],
-          Validators.required),
+          [Validators.required, Validators.min(0), NoIpsLeftValidator(this.cluster, this.existingNodesCount)]),
+      operatingSystem:
+          new FormControl(this.isClusterOpenshift() ? 'centos' : this.selectDefaultOS(), Validators.required),
       name: new FormControl(
           {value: this.nodeData.name, disabled: this.isNameDisabled},
           [Validators.pattern('[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*')]),
@@ -79,10 +75,13 @@ export class NodeDataComponent implements OnInit, OnDestroy {
         !!this.nodeData.spec.operatingSystem.centos && this.nodeData.spec.operatingSystem.centos.distUpgradeOnBoot;
     const disableAutoUpdate = !!this.nodeData.spec.operatingSystem.containerLinux &&
         this.nodeData.spec.operatingSystem.containerLinux.disableAutoUpdate;
+    const distUpgradeOnBootSLES =
+        !!this.nodeData.spec.operatingSystem.sles && this.nodeData.spec.operatingSystem.sles.distUpgradeOnBoot;
 
     this.operatingSystemForm = new FormGroup({
       distUpgradeOnBootUbuntu: new FormControl(distUpgradeOnBootUbuntu),
       distUpgradeOnBootCentos: new FormControl(distUpgradeOnBootCentos),
+      distUpgradeOnBootSLES: new FormControl(distUpgradeOnBootSLES),
       disableAutoUpdate: new FormControl(disableAutoUpdate),
     });
 
@@ -120,6 +119,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
     });
 
     this._dc.getDataCenter(this.cluster.spec.cloud.dc).pipe(takeUntil(this._unsubscribe)).subscribe((dc) => {
+      this.seedDc = dc;
       this.seedDCName = dc.spec.seed;
 
       if (!this.isInWizard) {
@@ -149,6 +149,22 @@ export class NodeDataComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  selectDefaultOS(): string {
+    if (!!this.cluster.spec.cloud.vsphere) {
+      if (this.isAvailable('ubuntu')) {
+        return 'ubuntu';
+      } else if (this.isAvailable('centos')) {
+        return 'centos';
+      } else if (this.isAvailable('coreos')) {
+        return 'containerLinux';
+      } else {
+        return 'ubuntu';
+      }
+    } else {
+      return 'ubuntu';
+    }
+  }
+
   getOSSpec(): OperatingSystemSpec {
     switch (this.form.controls.operatingSystem.value) {
       case 'ubuntu':
@@ -167,6 +183,12 @@ export class NodeDataComponent implements OnInit, OnDestroy {
         return {
           containerLinux: {
             disableAutoUpdate: this.operatingSystemForm.controls.disableAutoUpdate.value,
+          },
+        };
+      case 'sles':
+        return {
+          sles: {
+            distUpgradeOnBoot: this.operatingSystemForm.controls.distUpgradeOnBootSLES.value,
           },
         };
       default:
@@ -188,6 +210,14 @@ export class NodeDataComponent implements OnInit, OnDestroy {
 
   isClusterOpenshift(): boolean {
     return ClusterUtils.isOpenshiftType(this.cluster);
+  }
+
+  isAvailable(os: string): boolean {
+    if (!!this.cluster.spec.cloud.vsphere) {
+      return !!this.seedDc && !!this.seedDc.spec.vsphere.templates[os] && this.seedDc.spec.vsphere.templates[os] !== '';
+    } else {
+      return true;
+    }
   }
 
   getAddNodeData(): NodeData {

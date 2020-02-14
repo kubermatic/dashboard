@@ -58,6 +58,7 @@ export class OperatingSystemSpec {
   ubuntu?: UbuntuSpec;
   centos?: CentosSpec;
   containerLinux?: ContainerLinuxSpec;
+  sles?: SLESSpec;
 }
 
 export class UbuntuSpec {
@@ -70,6 +71,10 @@ export class CentosSpec {
 
 export class ContainerLinuxSpec {
   disableAutoUpdate: boolean;
+}
+
+export class SLESSpec {
+  distUpgradeOnBoot: boolean;
 }
 
 export class NodeVersionInfo {

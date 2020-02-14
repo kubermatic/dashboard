@@ -43,4 +43,23 @@ a {
     font-size: $font-size-caption;
     line-height: $font-size-caption;
   }
+
+  &.km-collapse-sidenav {
+    padding: 0 !important;
+    height: 100%;
+
+    mat-select {
+      height: 100%;
+    }
+
+    i {
+      height: 100%;
+      top: 0;
+    }
+
+    .mat-select-placeholder,
+    .mat-select-value-text {
+      display: none;
+    }
+  }
 }

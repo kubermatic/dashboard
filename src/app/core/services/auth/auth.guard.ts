@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
   }
 }
 
-enum View {
+export enum View {
   Clusters = 'clusters',
   Projects = 'projects',
   Members = 'members',

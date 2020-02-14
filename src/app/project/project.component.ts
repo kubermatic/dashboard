@@ -68,7 +68,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
         // therefor set initial sorting direction the opposite direciton
         this.sort.direction = 'desc' as SortDirection;
         const sortHeader = this.sort.sortables.get('name') as MatSortHeader;
-        if (sortHeader) {
+
+        if (!!sortHeader) {
           sortHeader._handleClick();
         }
       }, 100);

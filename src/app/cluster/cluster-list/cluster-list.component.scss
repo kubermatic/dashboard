@@ -24,10 +24,9 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 }
 
 .km-provider-logo {
+  background-position: left !important;
   max-width: 18.75 * $baseline-grid !important;
   min-width: 8.75 * $baseline-grid !important;
-  min-height: 3.125 * $baseline-grid !important;
-  max-height: 3.125 * $baseline-grid !important;
   margin-right: $baseline-grid;
 }
 

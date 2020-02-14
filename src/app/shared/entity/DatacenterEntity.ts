@@ -40,6 +40,7 @@ export class DatacenterOperatingSystemOptions {
   coreos: string;
   centos: string;
   ubuntu: string;
+  sles?: string;
 }
 
 export function getDatacenterProvider(datacenter: DataCenterEntity): NodeProvider {
