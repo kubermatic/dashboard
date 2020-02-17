@@ -91,8 +91,7 @@ export class SettingsService {
   get adminSettings(): Observable<AdminSettings> {
     if (!this._adminSettings$) {
       this._adminSettings$ = iif(() => this._auth.authenticated(), this._getAdminSettings(true), of(DEFAULT_ADMIN_SETTINGS))
-        .pipe(map(settings => this._defaultAdminSettings(settings)))
-        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+        .pipe(map(settings => this._defaultAdminSettings(settings)));
     }
     return this._adminSettings$;
   }
