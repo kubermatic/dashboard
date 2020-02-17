@@ -38,17 +38,16 @@ export class SettingsService {
   private _userSettings$: Observable<UserSettings>;
   private _userSettingsRefresh$: Subject<any> = new Subject();
   private _adminSettings$: Observable<AdminSettings>;
-  private _adminSettingsRefresh$: Subject<any> = new Subject();
+  private _adminSettingsWebSocket: WebSocketSubject<any> = webSocket(`ws://localhost/${this.restRoot}/ws/admin/settings`);
   private _admins$: Observable<AdminEntity[]>;
   private _adminsRefresh$: Subject<any> = new Subject();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * 5);
 
-  myWebSocket: WebSocketSubject<any> = webSocket(`ws://localhost/${this.restRoot}/ws/admin/settings`);
-
 
   constructor(
-      private readonly _httpClient: HttpClient, private readonly _appConfigService: AppConfigService,
-      private readonly _auth: Auth) {}
+    private readonly _httpClient: HttpClient, private readonly _appConfigService: AppConfigService,
+    private readonly _auth: Auth) {
+  }
 
   get userSettings(): Observable<UserSettings> {
     if (!this._userSettings$) {
@@ -91,13 +90,9 @@ export class SettingsService {
 
   get adminSettings(): Observable<AdminSettings> {
     if (!this._adminSettings$) {
-      this._adminSettings$ =
-          merge(this._refreshTimer$, this._adminSettingsRefresh$)
-              .pipe(switchMap(
-                  () =>
-                      iif(() => this._auth.authenticated(), this._getAdminSettings(true), of(DEFAULT_ADMIN_SETTINGS))))
-              .pipe(map(settings => this._defaultAdminSettings(settings)))
-              .pipe(shareReplay({refCount: true, bufferSize: 1}));
+      this._adminSettings$ = iif(() => this._auth.authenticated(), this._getAdminSettings(true), of(DEFAULT_ADMIN_SETTINGS))
+        .pipe(map(settings => this._defaultAdminSettings(settings)))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this._adminSettings$;
   }
@@ -107,8 +102,8 @@ export class SettingsService {
   }
 
   private _getAdminSettings(defaultOnError = false): Observable<AdminSettings> {
-    const observable = this.myWebSocket.asObservable();
-    return observable;
+    const observable = this._adminSettingsWebSocket.asObservable();
+    return defaultOnError ? observable.pipe(catchError(() => of(DEFAULT_ADMIN_SETTINGS))) : observable;
   }
 
   private _defaultAdminSettings(settings: AdminSettings): AdminSettings {
@@ -123,10 +118,6 @@ export class SettingsService {
     return settings;
   }
 
-  refreshAdminSettings(): void {
-    this._adminSettingsRefresh$.next();
-  }
-
   patchAdminSettings(patch: any): Observable<AdminSettings> {
     const url = `${this.restRoot}/admin/settings`;
     return this._httpClient.patch<AdminSettings>(url, patch);
@@ -135,8 +126,8 @@ export class SettingsService {
   get admins(): Observable<AdminEntity[]> {
     if (!this._admins$) {
       this._admins$ = merge(this._refreshTimer$, this._adminsRefresh$)
-                          .pipe(switchMap(() => this._getAdmins()))
-                          .pipe(shareReplay({refCount: true, bufferSize: 1}));
+        .pipe(switchMap(() => this._getAdmins()))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this._admins$;
   }
