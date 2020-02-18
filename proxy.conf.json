@@ -1,8 +1,0 @@
-{
-  "/": {
-    "target": "https://dev.kubermatic.io",
-    "secure": false,
-    "changeOrigin": true,
-    "ws": true
-  }
-}
