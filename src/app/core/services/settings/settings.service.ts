@@ -2,13 +2,13 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {iif, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, map, shareReplay, switchMap} from 'rxjs/operators';
+import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
 
 import {Auth} from '..';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../../shared/entity/AdminSettings';
 import {Theme, UserSettings} from '../../../shared/entity/MemberEntity';
-import {webSocket, WebSocketSubject} from "rxjs/webSocket";
 
 const DEFAULT_USER_SETTINGS: UserSettings = {
   itemsPerPage: 10,
@@ -35,7 +35,8 @@ const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
 @Injectable()
 export class SettingsService {
   private readonly restRoot = environment.restRoot;
-  private readonly wsRoot = `ws://${window.location.host}/${this.restRoot}/ws`;
+  private readonly wsProtocol = window.location.protocol.replace('http', 'ws');
+  private readonly wsRoot = `${this.wsProtocol}//${window.location.host}/${this.restRoot}/ws`;
   private _userSettings$: Observable<UserSettings>;
   private _userSettingsRefresh$: Subject<any> = new Subject();
   private _adminSettings$: Observable<AdminSettings>;
@@ -45,9 +46,8 @@ export class SettingsService {
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * 5);
 
   constructor(
-    private readonly _httpClient: HttpClient, private readonly _appConfigService: AppConfigService,
-    private readonly _auth: Auth) {
-  }
+      private readonly _httpClient: HttpClient, private readonly _appConfigService: AppConfigService,
+      private readonly _auth: Auth) {}
 
   get userSettings(): Observable<UserSettings> {
     if (!this._userSettings$) {
@@ -90,8 +90,9 @@ export class SettingsService {
 
   get adminSettings(): Observable<AdminSettings> {
     if (!this._adminSettings$) {
-      this._adminSettings$ = iif(() => this._auth.authenticated(), this._getAdminSettings(true), of(DEFAULT_ADMIN_SETTINGS))
-        .pipe(map(settings => this._defaultAdminSettings(settings)));
+      this._adminSettings$ =
+          iif(() => this._auth.authenticated(), this._getAdminSettings(true), of(DEFAULT_ADMIN_SETTINGS))
+              .pipe(map(settings => this._defaultAdminSettings(settings)));
     }
     return this._adminSettings$;
   }
@@ -125,8 +126,8 @@ export class SettingsService {
   get admins(): Observable<AdminEntity[]> {
     if (!this._admins$) {
       this._admins$ = merge(this._refreshTimer$, this._adminsRefresh$)
-        .pipe(switchMap(() => this._getAdmins()))
-        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+                          .pipe(switchMap(() => this._getAdmins()))
+                          .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this._admins$;
   }
