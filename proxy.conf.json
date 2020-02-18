@@ -2,6 +2,11 @@
   "/": {
     "target": "https://dev.kubermatic.io",
     "secure": false,
+    "changeOrigin": true
+  },
+  "ws://*": {
+    "target": "ws://dev.kubermatic.io",
+    "secure": false,
     "changeOrigin": true,
     "ws": true
   }
