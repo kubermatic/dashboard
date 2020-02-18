@@ -102,7 +102,8 @@ export class SettingsService {
   }
 
   private _getAdminSettings(defaultOnError = false): Observable<AdminSettings> {
-    const observable = this._adminSettingsWebSocket.asObservable().pipe(retryWhen(errors => errors.pipe(tap(err => this._notificationService.error(err)), delay(1000))));
+    const observable = this._adminSettingsWebSocket.asObservable().pipe(
+        retryWhen(errors => errors.pipe(tap(err => this._notificationService.error(err)), delay(1000))));
     return defaultOnError ? observable.pipe(catchError(() => of(DEFAULT_ADMIN_SETTINGS))) : observable;
   }
 
