@@ -34,15 +34,15 @@ const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
 
 @Injectable()
 export class SettingsService {
-  private readonly restRoot: string = environment.restRoot;
+  private readonly restRoot = environment.restRoot;
+  private readonly wsRoot = `ws://${window.location.host}/${this.restRoot}/ws`;
   private _userSettings$: Observable<UserSettings>;
   private _userSettingsRefresh$: Subject<any> = new Subject();
   private _adminSettings$: Observable<AdminSettings>;
-  private _adminSettingsWebSocket: WebSocketSubject<any> = webSocket(`ws://localhost/${this.restRoot}/ws/admin/settings`);
+  private _adminSettingsWebSocket: WebSocketSubject<AdminSettings> = webSocket(`${this.wsRoot}/admin/settings`);
   private _admins$: Observable<AdminEntity[]>;
   private _adminsRefresh$: Subject<any> = new Subject();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * 5);
-
 
   constructor(
     private readonly _httpClient: HttpClient, private readonly _appConfigService: AppConfigService,
