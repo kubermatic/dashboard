@@ -63,6 +63,8 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
         }
         this._applySettings(settings);
       }
+    }, error => {
+      this._notificationService.error(error);
     });
 
     this._settingsChange.pipe(debounceTime(500))
