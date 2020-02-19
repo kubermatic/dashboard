@@ -7,7 +7,7 @@
 const PROXY_CONFIG = [
   {
     context: [
-      "/api/**",
+      "/api/v1/**",
     ],
     target: "http://localhost:8080",
     changeOrigin: true,
@@ -15,12 +15,13 @@ const PROXY_CONFIG = [
   },
   {
     context: [
-      "ws://*"
+      "api/v1/ws/**"
     ],
-    target: "ws://localhost:8080",
+    target: "http://localhost:8080",
     changeOrigin: true,
     secure: false,
     ws: true,
+    logLevel: 'debug',
   }
 ];
 
