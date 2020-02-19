@@ -103,10 +103,13 @@ export class SettingsService {
 
   private _getAdminSettings(defaultOnError = false): Observable<AdminSettings> {
     return this._adminSettingsWebSocket.asObservable().pipe(
-      retryWhen(errors => errors.pipe(tap(err => console.error(err), delay(1000))))
+      tap(() => retryWhen(errors => errors.pipe(delay(2000)))),
+      catchError(() => of(DEFAULT_ADMIN_SETTINGS))
     );
-    //   shareReplay(1),
-    // return defaultOnError ? observable.pipe(catchError(() => of(DEFAULT_ADMIN_SETTINGS))) : observable;
+    // TODO shareReplay(1),
+    // TODO retryWhen doesnt work with catchError?
+    // TODO add my own defaulting, i.e. additional subject that will keep settings
+    // TODO fix proxy in local setup
   }
 
   private _defaultAdminSettings(settings: AdminSettings): AdminSettings {

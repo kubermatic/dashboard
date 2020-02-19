@@ -13,16 +13,6 @@ const PROXY_CONFIG = [
     changeOrigin: true,
     secure: false,
   },
-  {
-    context: [
-      "api/v1/ws/**"
-    ],
-    target: "http://localhost:8080",
-    changeOrigin: true,
-    secure: false,
-    ws: true,
-    logLevel: 'debug',
-  }
 ];
 
 module.exports = PROXY_CONFIG;
