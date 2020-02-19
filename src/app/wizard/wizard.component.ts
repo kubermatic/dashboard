@@ -61,8 +61,14 @@ export class WizardComponent implements OnInit, OnDestroy {
     this._settingsService.adminSettings.pipe(first()).subscribe(
         settings => this.addNodeData.count = settings.defaultNodeCount);
 
+    console.log("Asd")
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.settings = settings;
+      console.log("123")
+
+    }, error => {
+      console.log("ddd")
+      console.log(error)
     });
 
     this.updateSteps();

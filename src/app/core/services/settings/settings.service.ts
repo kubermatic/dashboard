@@ -4,7 +4,7 @@ import {iif, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, delay, map, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
 import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
 
-import {Auth, NotificationService} from '..';
+import {Auth} from '..';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../../shared/entity/AdminSettings';
@@ -47,7 +47,7 @@ export class SettingsService {
 
   constructor(
       private readonly _httpClient: HttpClient, private readonly _appConfigService: AppConfigService,
-      private readonly _auth: Auth, private readonly _notificationService: NotificationService) {}
+      private readonly _auth: Auth) {}
 
   get userSettings(): Observable<UserSettings> {
     if (!this._userSettings$) {
@@ -102,9 +102,11 @@ export class SettingsService {
   }
 
   private _getAdminSettings(defaultOnError = false): Observable<AdminSettings> {
-    const observable = this._adminSettingsWebSocket.asObservable().pipe(
-        retryWhen(errors => errors.pipe(tap(err => this._notificationService.error(err)), delay(1000))));
-    return defaultOnError ? observable.pipe(catchError(() => of(DEFAULT_ADMIN_SETTINGS))) : observable;
+    return this._adminSettingsWebSocket.asObservable().pipe(
+      retryWhen(errors => errors.pipe(tap(err => console.error(err), delay(1000))))
+    );
+    //   shareReplay(1),
+    // return defaultOnError ? observable.pipe(catchError(() => of(DEFAULT_ADMIN_SETTINGS))) : observable;
   }
 
   private _defaultAdminSettings(settings: AdminSettings): AdminSettings {
