@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {iif, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, delay, map, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
+import {catchError, map, shareReplay, switchMap} from 'rxjs/operators';
 import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
 
 import {Auth} from '..';
@@ -103,12 +103,16 @@ export class SettingsService {
 
   private _getAdminSettings(defaultOnError = false): Observable<AdminSettings> {
     return this._adminSettingsWebSocket.asObservable().pipe(
-      tap(() => retryWhen(errors => errors.pipe(delay(2000)))),
-      catchError(() => of(DEFAULT_ADMIN_SETTINGS))
+      //tap(() => retryWhen(errors => errors.pipe(delay(2000)))),
+      catchError(() => of(DEFAULT_ADMIN_SETTINGS)),
+      shareReplay()
     );
-    // TODO shareReplay(1),
-    // TODO retryWhen doesnt work with catchError?
     // TODO add my own defaulting, i.e. additional subject that will keep settings
+    //  - subject with settings, initialized with defaults
+    //  - while it is subscribed for the first time watch is initialized in the bg (retries all time)
+    //  - watch is sending the data to the settings subject
+    // user will have defaults from the begininng, all the errors will be hidden by the first watch
+    // we might add some notification that ws connection is not done/done
     // TODO fix proxy in local setup
   }
 
