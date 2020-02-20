@@ -56,16 +56,14 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
       this.dataSource.data = this.admins;
     });
 
-    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe))
-        .subscribe(
-            settings => {
-              if (!_.isEqual(settings, this.apiSettings)) {
-                if (this.apiSettings) {
-                  this._notificationService.success('Successfully applied external settings update');
-                }
-                this._applySettings(settings);
-              }
-            });
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      if (!_.isEqual(settings, this.apiSettings)) {
+        if (this.apiSettings) {
+          this._notificationService.success('Successfully applied external settings update');
+        }
+        this._applySettings(settings);
+      }
+    });
 
     this._settingsChange.pipe(debounceTime(500))
         .pipe(takeUntil(this._unsubscribe))

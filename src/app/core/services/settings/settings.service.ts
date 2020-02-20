@@ -2,13 +2,13 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, iif, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, delay, map, retryWhen, shareReplay, switchMap} from 'rxjs/operators';
+import {webSocket} from 'rxjs/webSocket';
 
 import {Auth} from '..';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../../shared/entity/AdminSettings';
 import {Theme, UserSettings} from '../../../shared/entity/MemberEntity';
-import {webSocket, WebSocketSubject} from "rxjs/webSocket";
 
 const DEFAULT_USER_SETTINGS: UserSettings = {
   itemsPerPage: 10,
@@ -41,9 +41,8 @@ export class SettingsService {
   private readonly wsRoot = `${this.wsProtocol}//${window.location.host}/${this.restRoot}/ws`;
   private _userSettings$: Observable<UserSettings>;
   private _userSettingsRefresh$ = new Subject();
-  private readonly _adminSettings = new BehaviorSubject(DEFAULT_ADMIN_SETTINGS);
-  private readonly _adminSettingsWS: WebSocketSubject<AdminSettings> = webSocket(`${this.wsRoot}/admin/settings`);
-  private _adminSettingsWatch: Observable<AdminSettings>;
+  private readonly _adminSettings$ = new BehaviorSubject(DEFAULT_ADMIN_SETTINGS);
+  private _adminSettingsWatch$: Observable<AdminSettings>;
   private _admins$: Observable<AdminEntity[]>;
   private _adminsRefresh$ = new Subject();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * 5);
@@ -96,15 +95,15 @@ export class SettingsService {
     // exposed in this method. Thanks to that it is possible to have default value and retry mechanism that
     // will run in the background if connection will fail. Subscription to the API should happen only once.
     // Behavior subject is used internally to always emit last value when subscription happens.
-    if (!this._adminSettingsWatch) {
-      this._adminSettingsWatch =
-        iif(() => this._auth.authenticated(), this._adminSettingsWS.asObservable().pipe(
-          retryWhen(errors => errors.pipe(delay(3000)))), of(DEFAULT_ADMIN_SETTINGS));
-      this._adminSettingsWatch.subscribe(adminSettings => this._adminSettings.next(
-        this._defaultAdminSettings(adminSettings)));
+    if (!this._adminSettingsWatch$) {
+      const webSocket$ = webSocket<AdminSettings>(`${this.wsRoot}/admin/settings`)
+                             .asObservable()
+                             .pipe(retryWhen(errors => errors.pipe(delay(1500))));
+      this._adminSettingsWatch$ = iif(() => this._auth.authenticated(), webSocket$, of(DEFAULT_ADMIN_SETTINGS));
+      this._adminSettingsWatch$.subscribe(settings => this._adminSettings$.next(this._defaultAdminSettings(settings)));
     }
 
-    return this._adminSettings;
+    return this._adminSettings$;
   }
 
   get defaultAdminSettings(): AdminSettings {
