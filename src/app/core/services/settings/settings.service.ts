@@ -91,7 +91,7 @@ export class SettingsService {
   }
 
   get adminSettings(): Observable<AdminSettings> {
-    // Subscribe to websocket and proxy all the settings updated coming from the API to the subject that is
+    // Subscribe to websocket and proxy all the settings updates coming from the API to the subject that is
     // exposed in this method. Thanks to that it is possible to have default value and retry mechanism that
     // will run in the background if connection will fail. Subscription to the API should happen only once.
     // Behavior subject is used internally to always emit last value when subscription happens.
