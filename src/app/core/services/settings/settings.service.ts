@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, iif, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, delay, map, retryWhen, shareReplay, switchMap} from 'rxjs/operators';
+import {catchError, delay, map, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
 import {webSocket} from 'rxjs/webSocket';
 
 import {Auth} from '..';
@@ -96,9 +96,13 @@ export class SettingsService {
     // will run in the background if connection will fail. Subscription to the API should happen only once.
     // Behavior subject is used internally to always emit last value when subscription happens.
     if (!this._adminSettingsWatch$) {
-      const webSocket$ = webSocket<AdminSettings>(`${this.wsRoot}/admin/settings`)
-                             .asObservable()
-                             .pipe(retryWhen(errors => errors.pipe(delay(1500))));
+      const webSocket$ =
+          webSocket<AdminSettings>(`${this.wsRoot}/admin/settings`)
+              .asObservable()
+              .pipe(retryWhen(
+                  // Display error in the console for debugging purposes, otherwise it would be ignored.
+                  // tslint:disable-next-line:no-console
+                  errors => errors.pipe(tap(console.error), delay(this._appConfigService.getRefreshTimeBase() * 3))));
       this._adminSettingsWatch$ = iif(() => this._auth.authenticated(), webSocket$, of(DEFAULT_ADMIN_SETTINGS));
       this._adminSettingsWatch$.subscribe(settings => this._adminSettings$.next(this._defaultAdminSettings(settings)));
     }
