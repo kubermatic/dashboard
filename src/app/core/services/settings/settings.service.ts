@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, iif, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, delay, map, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
+import {catchError, delay, map, retryWhen, shareReplay, switchMap} from 'rxjs/operators';
 
 import {Auth} from '..';
 import {environment} from '../../../../environments/environment';
