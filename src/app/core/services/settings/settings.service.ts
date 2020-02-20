@@ -1,14 +1,14 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {iif, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, map, shareReplay, switchMap} from 'rxjs/operators';
-import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
+import {BehaviorSubject, iif, merge, Observable, of, Subject, timer} from 'rxjs';
+import {catchError, delay, map, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
 
 import {Auth} from '..';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../../shared/entity/AdminSettings';
 import {Theme, UserSettings} from '../../../shared/entity/MemberEntity';
+import {webSocket, WebSocketSubject} from "rxjs/webSocket";
 
 const DEFAULT_USER_SETTINGS: UserSettings = {
   itemsPerPage: 10,
@@ -32,17 +32,20 @@ const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   enableOIDCKubeconfig: false,
 };
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SettingsService {
   private readonly restRoot = environment.restRoot;
   private readonly wsProtocol = window.location.protocol.replace('http', 'ws');
   private readonly wsRoot = `${this.wsProtocol}//${window.location.host}/${this.restRoot}/ws`;
   private _userSettings$: Observable<UserSettings>;
-  private _userSettingsRefresh$: Subject<any> = new Subject();
-  private _adminSettings$: Observable<AdminSettings>;
-  private _adminSettingsWebSocket: WebSocketSubject<AdminSettings> = webSocket(`${this.wsRoot}/admin/settings`);
+  private _userSettingsRefresh$ = new Subject();
+  private readonly _adminSettings = new BehaviorSubject(DEFAULT_ADMIN_SETTINGS);
+  private readonly _adminSettingsWS: WebSocketSubject<AdminSettings> = webSocket(`${this.wsRoot}/admin/settings`);
+  private _adminSettingsWatch: Observable<AdminSettings>;
   private _admins$: Observable<AdminEntity[]>;
-  private _adminsRefresh$: Subject<any> = new Subject();
+  private _adminsRefresh$ = new Subject();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * 5);
 
   constructor(
@@ -89,31 +92,23 @@ export class SettingsService {
   }
 
   get adminSettings(): Observable<AdminSettings> {
-    if (!this._adminSettings$) {
-      this._adminSettings$ =
-          iif(() => this._auth.authenticated(), this._getAdminSettings(true), of(DEFAULT_ADMIN_SETTINGS))
-              .pipe(map(settings => this._defaultAdminSettings(settings)));
+    // Subscribe to websocket and proxy all the settings updated coming from the API to the subject that is
+    // exposed in this method. Thanks to that it is possible to have default value and retry mechanism that
+    // will run in the background if connection will fail. Subscription to the API should happen only once.
+    // Behavior subject is used internally to always emit last value when subscription happens.
+    if (!this._adminSettingsWatch) {
+      this._adminSettingsWatch =
+        iif(() => this._auth.authenticated(), this._adminSettingsWS.asObservable().pipe(
+          retryWhen(errors => errors.pipe(delay(3000)))), of(DEFAULT_ADMIN_SETTINGS));
+      this._adminSettingsWatch.subscribe(adminSettings => this._adminSettings.next(
+        this._defaultAdminSettings(adminSettings)));
     }
-    return this._adminSettings$;
+
+    return this._adminSettings;
   }
 
   get defaultAdminSettings(): AdminSettings {
     return DEFAULT_ADMIN_SETTINGS;
-  }
-
-  private _getAdminSettings(defaultOnError = false): Observable<AdminSettings> {
-    return this._adminSettingsWebSocket.asObservable().pipe(
-      //tap(() => retryWhen(errors => errors.pipe(delay(2000)))),
-      catchError(() => of(DEFAULT_ADMIN_SETTINGS)),
-      shareReplay()
-    );
-    // TODO add my own defaulting, i.e. additional subject that will keep settings
-    //  - subject with settings, initialized with defaults
-    //  - while it is subscribed for the first time watch is initialized in the bg (retries all time)
-    //  - watch is sending the data to the settings subject
-    // user will have defaults from the begininng, all the errors will be hidden by the first watch
-    // we might add some notification that ws connection is not done/done
-    // TODO fix proxy in local setup
   }
 
   private _defaultAdminSettings(settings: AdminSettings): AdminSettings {
