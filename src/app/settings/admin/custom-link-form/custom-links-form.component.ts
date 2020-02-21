@@ -26,7 +26,7 @@ export class CustomLinksFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes.customLinks.currentValue !== changes.customLinks.previousValue) {
+    if (changes.customLinks.currentValue !== changes.customLinks.previousValue) {
       this._buildForm();
     }
   }
@@ -34,7 +34,7 @@ export class CustomLinksFormComponent implements OnInit, OnChanges {
   private _buildForm(): void {
     this.form = this._formBuilder.group({customLinks: this._formBuilder.array([])});
     this.customLinks.forEach(
-      customLink => this._addCustomLink(customLink.label, customLink.url, customLink.icon, customLink.location));
+        customLink => this._addCustomLink(customLink.label, customLink.url, customLink.icon, customLink.location));
     this._addCustomLink();
   }
 
