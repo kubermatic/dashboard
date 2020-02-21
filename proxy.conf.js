@@ -6,18 +6,7 @@ const PROXY_CONFIG = [
     target: "https://dev.kubermatic.io",
     changeOrigin: true,
     secure: false,
-  },
-  {
-    context: [
-      "ws://**",
-      "wss://**",
-    ],
-    target: "https://dev.kubermatic.io",
-    prependPath: false,
-    changeOrigin: true,
-    secure: false,
     ws: true,
-    logLevel: "debug",
   }
 ];
 
