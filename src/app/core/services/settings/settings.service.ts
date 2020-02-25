@@ -102,7 +102,7 @@ export class SettingsService {
               .pipe(retryWhen(
                   // Display error in the console for debugging purposes, otherwise it would be ignored.
                   // tslint:disable-next-line:no-console
-                  errors => errors.pipe(tap(console.error), delay(this._appConfigService.getRefreshTimeBase() * 3))));
+                  errors => errors.pipe(tap(console.debug), delay(this._appConfigService.getRefreshTimeBase() * 3))));
       this._adminSettingsWatch$ = iif(() => this._auth.authenticated(), webSocket$, of(DEFAULT_ADMIN_SETTINGS));
       this._adminSettingsWatch$.subscribe(settings => this._adminSettings$.next(this._defaultAdminSettings(settings)));
     }
