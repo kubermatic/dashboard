@@ -5,6 +5,9 @@ const PROXY_CONFIG = [
     ],
     target: "https://dev.kubermatic.io",
     changeOrigin: true,
+    headers: {
+      'Origin': 'https://dev.kubermatic.io',
+    },
     secure: false,
     ws: true,
   }
