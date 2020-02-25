@@ -58,7 +58,7 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(settings, this.apiSettings)) {
-        if (this.apiSettings) {
+        if (this._shouldDisplayUpdateNotification()) {
           this._notificationService.success('Successfully applied external settings update');
         }
         this._applySettings(settings);
@@ -85,6 +85,10 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  private _shouldDisplayUpdateNotification(): boolean {
+    return this.apiSettings && this.apiSettings !== this._settingsService.defaultAdminSettings;
   }
 
   private _applySettings(settings: AdminSettings): void {
