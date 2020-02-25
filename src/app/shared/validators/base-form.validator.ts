@@ -6,10 +6,16 @@ export class BaseFormValidator implements ControlValueAccessor, Validator {
   form: FormGroup;
   protected _unsubscribe = new Subject<void>();
 
+  constructor(private _formName = 'Form') {}
+
   // Validator interface implementation
-  validate(_: AbstractControl): ValidationErrors|null {
-    return this.form.valid || this.form.disabled ? null :
-                                                   {invalidForm: {valid: false, message: 'Form validation failed.'}};
+  validate(control: AbstractControl): ValidationErrors|null {
+    // console.log(this._formName);
+    // console.log(this.form);
+    // console.log(`---------------------`);
+    return this.form.valid || this.form.disabled ?
+        null :
+        {invalidForm: {valid: false, message: `${this._formName} validation failed.`}};
   }
 
   // ControlValueAccessor interface implementation
@@ -25,5 +31,9 @@ export class BaseFormValidator implements ControlValueAccessor, Validator {
     if (obj) {
       this.form.setValue(obj, {emitEvent: false});
     }
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    isDisabled ? this.form.disable() : this.form.enable();
   }
 }

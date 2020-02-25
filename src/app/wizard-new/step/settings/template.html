@@ -1,5 +1,6 @@
 <div fxLayout="column"
      [formGroup]="form">
+  (Settings) Valid: {{form.valid}} | Disabled: {{form.disabled}} | Invalid: {{form.invalid}}
   <div fxLayout="row"
        fxLayout.md="column"
        fxLayout.sm="column"
@@ -10,9 +11,8 @@
         <mat-card-title class="km-color-primary">Provider Credentials</mat-card-title>
       </mat-card-header>
 
-      <kubermatic-wizard-presets [formControlName]="Control.Preset"></kubermatic-wizard-presets>
-      <kubermatic-wizard-provider-basic [provider]="provider"
-                                        [formControlName]="Control.ProviderBasic"></kubermatic-wizard-provider-basic>
+      <kubermatic-wizard-presets [formControl]="form.get(Control.Preset)"></kubermatic-wizard-presets>
+      <kubermatic-wizard-provider-basic [formControl]="form.get(Control.ProviderBasic)"></kubermatic-wizard-provider-basic>
     </div>
 
     <div fxFlex>
@@ -20,7 +20,7 @@
         <mat-card-title class="km-color-primary">Node Settings</mat-card-title>
       </mat-card-header>
 
-      <kubermatic-node-data [formControlName]="Control.NodeDataBasic"
+      <kubermatic-node-data [formControl]="form.get(Control.NodeDataBasic)"
                             [provider]="provider"
                             [clusterType]="clusterType"></kubermatic-node-data>
     </div>
@@ -51,11 +51,11 @@
        fxLayoutGap="30px">
     <kubermatic-wizard-provider-extended [provider]="provider"
                                          [visible]="extended"
-                                         [formControlName]="Control.ProviderExtended"
+                                         [formControl]="form.get(Control.ProviderExtended)"
                                          fxFlex></kubermatic-wizard-provider-extended>
     <kubermatic-extended-node-data [provider]="provider"
                                    [visible]="extended"
-                                   [formControlName]="Control.NodeDataExtended"
+                                   [formControl]="form.get(Control.NodeDataExtended)"
                                    fxFlex></kubermatic-extended-node-data>
   </div>
 </div>

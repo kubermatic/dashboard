@@ -110,22 +110,12 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   getHint(control: Controls): string {
     switch (control) {
       case Controls.SubnetID:
-        return !this._cloudSpec.secretAccessKey || !this._cloudSpec.accessKeyId ?
+        return (!this._cloudSpec.secretAccessKey || !this._cloudSpec.accessKeyId) && !this._presets.preset ?
             'Please enter your credentials first' :
             '';
     }
 
     return '';
-  }
-
-  private _enable(enable: boolean, name: string): void {
-    if (enable && this.form.get(name).disabled) {
-      this.form.get(name).enable();
-    }
-
-    if (!enable && this.form.get(name).enabled) {
-      this.form.get(name).disable();
-    }
   }
 
   private get _sizesObservable(): Observable<AWSSize[]> {
@@ -149,7 +139,8 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   _clearSubnet(): void {
-    this._enable(false, Controls.SubnetID);
+    this.subnets = [];
+    this.form.setValidators(Validators.required);
     this.form.get(Controls.SubnetID).setValue('');
   }
 
@@ -165,7 +156,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
       Validators.required, AutocompleteFilterValidators.mustBeInObjectList(this._subnetMap, 'id', true)
     ]);
     this.form.get(Controls.SubnetID).setValue(defaultSubnet ? defaultSubnet.id : this.subnets[0].id);
-    this._enable(true, Controls.SubnetID);
     this._initSubnetMap();
   }
 

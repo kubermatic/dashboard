@@ -3,8 +3,8 @@ import {BaseFormValidator} from '../../shared/validators/base-form.validator';
 import {WizardService} from '../service/wizard';
 
 export class StepBase extends BaseFormValidator {
-  constructor(protected readonly _wizard: WizardService) {
-    super();
+  constructor(protected readonly _wizard: WizardService, formName = 'Form') {
+    super(formName);
   }
 
   control(name: string): AbstractControl {
@@ -35,9 +35,9 @@ export class StepBase extends BaseFormValidator {
 
   // OnDestroy interface implementation
   ngOnDestroy(): void {
-    this._reset();
     this._unsubscribe.next();
     this._unsubscribe.complete();
+    this._reset();
   }
 
   private _reset(controls: string[] = []): void {

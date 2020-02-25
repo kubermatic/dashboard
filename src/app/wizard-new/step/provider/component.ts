@@ -1,6 +1,6 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator, Validators} from '@angular/forms';
-import {takeUntil} from 'rxjs/operators';
+import {map, takeUntil} from 'rxjs/operators';
 
 import {DatacenterService} from '../../../core/services';
 import {getDatacenterProvider} from '../../../shared/entity/DatacenterEntity';
@@ -34,20 +34,26 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
       [Controls.Provider]: new FormControl('', [Validators.required]),
     });
 
-    this._dcService.getDataCenters().pipe(takeUntil(this._unsubscribe)).subscribe((datacenters) => {
-      const providers: NodeProvider[] = [];
-      for (const datacenter of datacenters) {
-        if (datacenter.seed) {
-          continue;
-        }
+    // TODO(floreks): Remove once all providers are implemented
+    const dcWhitelist = [NodeProvider.AWS, NodeProvider.BRINGYOUROWN, NodeProvider.DIGITALOCEAN];
+    this._dcService.getDataCenters()
+        .pipe(map(dcs => dcs.filter(dc => dcWhitelist.includes(dc.spec.provider as NodeProvider))))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((datacenters) => {
+          const providers: NodeProvider[] = [];
+          for (const datacenter of datacenters) {
+            if (datacenter.seed) {
+              continue;
+            }
 
-        const provider = getDatacenterProvider(datacenter);
-        if (!providers.includes(provider)) {
-          providers.push(provider);
-        }
-      }
-      this.providers = providers;
-    });
+            const provider = getDatacenterProvider(datacenter);
+            if (!providers.includes(provider)) {
+              providers.push(provider);
+            }
+          }
+
+          this.providers = providers;
+        });
 
     this.control(Controls.Provider)
         .valueChanges.pipe(takeUntil(this._unsubscribe))

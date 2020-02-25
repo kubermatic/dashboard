@@ -1,7 +1,7 @@
 import {Inject, Injectable} from '@angular/core';
 import * as _ from 'lodash';
 import {Observable, ReplaySubject} from 'rxjs';
-import {switchMap} from 'rxjs/operators';
+import {filter, switchMap} from 'rxjs/operators';
 import {DatacenterService, PresetsService} from '../../core/services';
 import {AWSSize, AWSSubnet} from '../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
@@ -41,7 +41,8 @@ export class NodeDataService {
     flavors(): Observable<AWSSize[]> {
       switch (this._parent.mode) {
         case NodeDataMode.Wizard:
-          return this._parent._datacenter.getDataCenter(this._parent._clusterService.datacenter)
+          return this._parent._clusterService.datacenterChanges
+              .pipe(switchMap(dc => this._parent._datacenter.getDataCenter(dc)))
               .pipe(switchMap(
                   dc => this._parent._preset.provider(NodeProvider.AWS).region(dc.spec.aws.region).flavors()));
           // case NodeDataMode.Dialog:
@@ -53,13 +54,15 @@ export class NodeDataService {
     subnets(): Observable<AWSSubnet[]> {
       switch (this._parent.mode) {
         case NodeDataMode.Wizard:
-          return this._parent._clusterService.clusterChanges.pipe(switchMap(
-              cluster => this._parent._preset.provider(NodeProvider.AWS)
-                             .accessKeyID(cluster.spec.cloud.aws.accessKeyId)
-                             .secretAccessKey(cluster.spec.cloud.aws.secretAccessKey)
-                             .vpc(cluster.spec.cloud.aws.vpcId)
-                             .credential(this._parent._preset.preset)
-                             .subnets(cluster.spec.cloud.dc)));
+          return this._parent._clusterService.clusterChanges
+              .pipe(filter(_ => this._parent._clusterService.provider === NodeProvider.AWS))
+              .pipe(switchMap(
+                  cluster => this._parent._preset.provider(NodeProvider.AWS)
+                                 .accessKeyID(cluster.spec.cloud.aws.accessKeyId)
+                                 .secretAccessKey(cluster.spec.cloud.aws.secretAccessKey)
+                                 .vpc(cluster.spec.cloud.aws.vpcId)
+                                 .credential(this._parent._preset.preset)
+                                 .subnets(cluster.spec.cloud.dc)));
           //   case NodeDataMode.Dialog:
           //     return this._project.selectedProject.pipe(
           //         switchMap(project => this._api.getAWSSubnets(project.id, this.seedDatacenterName,

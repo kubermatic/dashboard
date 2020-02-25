@@ -1,7 +1,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {EMPTY, iif, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, debounceTime, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
+import {catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {PresetsService} from '../../../../../../core/services';
 import {AWSCloudSpec} from '../../../../../../shared/entity/cloud/AWSCloudSpec';
 import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
@@ -46,7 +46,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
       private readonly _wizard: WizardService, private readonly _clusterService: ClusterService) {
-    super();
+    super('AWS Provider Basic');
   }
 
   ngOnInit(): void {
@@ -56,19 +56,19 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
       [Controls.VPCID]: new FormControl('', [Validators.required, Validators.pattern('vpc-(\\w{8}|\\w{17})')]),
     });
 
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._presets.enablePresets(Object.values(Controls).every(control => !this._controlValue(control)));
-      this._clusterService.cluster = this._getClusterEntity();
-    });
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(
+            _ => this._presets.enablePresets(Object.values(Controls).every(control => !this._controlValue(control))));
 
-    this.form.valueChanges.pipe(debounceTime(this._debounceTime))
-        .pipe(switchMap(_ => iif(() => !this._controlValue(Controls.VPCID), this._vpcListObservable(), EMPTY)))
+    merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.SecretAccessKey).valueChanges)
+        .pipe(debounceTime(this._debounceTime))
+        .pipe(distinctUntilChanged())
+        .pipe(switchMap(_ => this._vpcListObservable()))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((vpcs: AWSVPC[]) => {
           this.vpcIds = vpcs;
           const defaultVPC = this.vpcIds.find(vpc => vpc.isDefault);
-          this.form.get(Controls.VPCID).setValue(defaultVPC ? defaultVPC.vpcId : undefined, {emitEvent: false});
-          this.form.updateValueAndValidity();
+          this.form.get(Controls.VPCID).setValue(defaultVPC ? defaultVPC.vpcId : undefined, {emitEvent: true});
           this._vpcState = VPCState.Ready;
 
           this._clusterService.cluster = this._getClusterEntity();
@@ -76,6 +76,10 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
+
+    merge(this._wizard.providerChanges, this._wizard.datacenterChanges)
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this.form.reset());
   }
 
   hasError(control: string, errorName: string): boolean {

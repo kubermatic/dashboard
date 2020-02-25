@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {switchMap, takeUntil} from 'rxjs/operators';
 import {DatacenterService} from '../../../core/services';
 import {NodeDataService} from '../../../node-data-new/service/service';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
@@ -52,10 +52,12 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
     this.nodeData = this._nodeDataService.nodeData;
     this.cluster = this._clusterService.cluster;
 
-    this._datacenterService.getDataCenter(this.datacenter).pipe(takeUntil(this._unsubscribe)).subscribe(dc => {
-      this._location = dc.spec.location;
-      this._country = dc.spec.country;
-    });
+    this._wizardService.datacenterChanges.pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(dc => {
+          this._location = dc.spec.location;
+          this._country = dc.spec.country;
+        });
 
     if (!!this.cluster.spec.machineNetworks) {
       this.noMoreIpsLeft = this.noIpsLeft(this.cluster, this.nodeData.count);

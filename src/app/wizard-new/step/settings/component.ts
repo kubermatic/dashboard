@@ -1,5 +1,6 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {takeUntil} from 'rxjs/operators';
 
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterType} from '../../../shared/utils/cluster-utils/cluster-utils';
@@ -29,10 +30,7 @@ export class SettingsStepComponent extends StepBase implements OnInit, OnDestroy
   readonly Control = Controls;
 
   extended = false;
-
-  get provider(): NodeProvider {
-    return this._wizard.provider;
-  }
+  provider: NodeProvider;
 
   get clusterType(): ClusterType {
     return this._clusterService.cluster.type;
@@ -40,7 +38,7 @@ export class SettingsStepComponent extends StepBase implements OnInit, OnDestroy
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _clusterService: ClusterService, wizard: WizardService) {
-    super(wizard);
+    super(wizard, 'Settings');
   }
 
   switch(): void {
@@ -56,6 +54,7 @@ export class SettingsStepComponent extends StepBase implements OnInit, OnDestroy
       [Controls.NodeDataExtended]: this._builder.control(''),
     });
 
-    // this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => console.log(this.form));
+    this.provider = this._wizard.provider;
+    this._wizard.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(provider => this.provider = provider);
   }
 }

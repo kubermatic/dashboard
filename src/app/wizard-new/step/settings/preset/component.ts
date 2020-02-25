@@ -1,6 +1,6 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {takeUntil} from 'rxjs/operators';
+import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
 import {PresetListEntity} from '../../../../shared/entity/provider/credentials/PresetListEntity';
@@ -50,24 +50,20 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
   constructor(
       private readonly _presets: PresetsService, private readonly _builder: FormBuilder,
       private readonly _wizard: WizardService) {
-    super();
+    super('Preset');
   }
 
   ngOnInit(): void {
     this.form = this._builder.group({[Controls.Preset]: new FormControl('', Validators.required)});
 
-    this._presets.presets(this._wizard.provider, this._wizard.datacenter)
+    this._wizard.datacenterChanges.pipe(switchMap(dc => this._presets.presets(this._wizard.provider, dc)))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(presetList => {
           this.reset();
-
           this.presetsLoaded = presetList.names ? presetList.names.length > 0 : false;
           this._state = this.presetsLoaded ? PresetsState.Ready : PresetsState.Empty;
           this.presetList = presetList;
-
-          if (this._state === PresetsState.Empty) {
-            this._enable(false, Controls.Preset);
-          }
+          this._enable(this._state !== PresetsState.Empty, Controls.Preset);
         });
 
     this.form.get(Controls.Preset).valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {

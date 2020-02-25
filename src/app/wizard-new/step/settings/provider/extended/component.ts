@@ -25,7 +25,7 @@ export class ProviderExtendedComponent extends BaseFormValidator implements OnIn
   form: FormGroup;
 
   constructor(private readonly _builder: FormBuilder) {
-    super();
+    super('Provider Extended');
   }
 
   ngOnInit(): void {

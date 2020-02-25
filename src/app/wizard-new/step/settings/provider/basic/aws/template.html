@@ -1,5 +1,6 @@
 <form [formGroup]="form"
       fxLayout="column">
+  (AWS) Valid: {{form.valid}} | Disabled: {{form.disabled}} | Invalid: {{form.invalid}}
   <mat-form-field fxFlex
                   class="km-with-hint">
     <mat-label>Access Key ID</mat-label>
@@ -7,7 +8,8 @@
            formControlName="accessKeyId"
            name="accessKeyId"
            type="password"
-           autocomplete="off">
+           autocomplete="off"
+           required>
     <mat-hint>
       We need a AWS Access Key with write access. You can create one&nbsp;<a target="_blank"
          rel="noopener"
@@ -25,7 +27,8 @@
            formControlName="secretAccessKey"
            name="secretAccessKey"
            type="password"
-           autocomplete="off">
+           autocomplete="off"
+           required>
     <mat-hint>
       We need a AWS Secret Access Key with write access. You can create one&nbsp;<a target="_blank"
          rel="noopener"
@@ -43,7 +46,8 @@
     <input matInput
            formControlName="vpcId"
            name="vpcId"
-           [matAutocomplete]="auto">
+           [matAutocomplete]="auto"
+           required>
     <mat-autocomplete #auto="matAutocomplete">
       <mat-option *ngFor="let vpc of vpcIds"
                   [value]="vpc.vpcId">

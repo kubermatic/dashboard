@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {Observable, ReplaySubject} from 'rxjs';
+import {EventEmitter, Injectable} from '@angular/core';
+import {EMPTY, Observable} from 'rxjs';
 
 import {environment} from '../../../../environments/environment';
 import {PresetListEntity} from '../../../shared/entity/provider/credentials/PresetListEntity';
@@ -19,8 +19,8 @@ import {VSphere} from './provider/vsphere';
 @Injectable()
 export class PresetsService {
   // True - enabled, false - disabled
-  readonly presetStatusChanges = new ReplaySubject<boolean>();
-  readonly presetChanges = new ReplaySubject<string>();
+  readonly presetStatusChanges = new EventEmitter<boolean>();
+  readonly presetChanges = new EventEmitter<string>();
 
   private _preset: string;
 
@@ -71,6 +71,10 @@ export class PresetsService {
   }
 
   presets(provider: NodeProvider, datacenter: string): Observable<PresetListEntity> {
+    if (!provider || !datacenter) {
+      return EMPTY;
+    }
+
     const url = `${environment.restRoot}/providers/${provider}/presets/credentials?datacenter=${datacenter}`;
     return this._http.get<PresetListEntity>(url);
   }

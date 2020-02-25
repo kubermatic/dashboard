@@ -1,22 +1,29 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import * as _ from 'lodash';
-import {ReplaySubject} from 'rxjs';
+import {Observable} from 'rxjs';
+import {distinctUntilChanged} from 'rxjs/operators';
 import {CloudSpec, ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 
 @Injectable()
 export class ClusterService {
-  readonly clusterChanges = new ReplaySubject<ClusterEntity>();
+  readonly providerChanges = new EventEmitter<NodeProvider>();
+  readonly datacenterChanges = new EventEmitter<string>();
 
+  private readonly _clusterChanges = new EventEmitter<ClusterEntity>();
   private _clusterEntity: ClusterEntity = ClusterEntity.NewEmptyClusterEntity();
 
   set cluster(cluster: ClusterEntity) {
     this._clusterEntity = _.merge(this._clusterEntity, cluster);
-    this.clusterChanges.next(this._clusterEntity);
+    this._clusterChanges.next(this._clusterEntity);
   }
 
   get cluster(): ClusterEntity {
     return this._clusterEntity;
+  }
+
+  get clusterChanges(): Observable<ClusterEntity> {
+    return this._clusterChanges.pipe(distinctUntilChanged(this._areClustersEqual));
   }
 
   set provider(provider: NodeProvider) {
@@ -28,6 +35,10 @@ export class ClusterService {
         } as any,
       },
     } as ClusterEntity;
+
+    if (provider) {
+      this.providerChanges.emit(provider);
+    }
   }
 
   get provider(): NodeProvider {
@@ -46,9 +57,21 @@ export class ClusterService {
         } as CloudSpec,
       },
     } as ClusterEntity;
+
+    if (datacenter) {
+      this.datacenterChanges.emit(datacenter);
+    }
   }
 
   get datacenter(): string {
     return this._clusterEntity.spec.cloud.dc;
+  }
+
+  reset(): void {
+    this._clusterEntity = ClusterEntity.NewEmptyClusterEntity();
+  }
+
+  private _areClustersEqual(x: ClusterEntity, y: ClusterEntity): boolean {
+    return _.eq(x, y);
   }
 }

@@ -29,7 +29,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
       private readonly _clusterService: ClusterService) {
-    super();
+    super('AWS Provider Extended');
   }
 
   ngOnInit(): void {

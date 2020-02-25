@@ -7,27 +7,28 @@
         <mat-icon>done</mat-icon>
       </ng-template>
 
-      <mat-step *ngFor="let step of steps; index as i; first as first; last as last">
+      <mat-step *ngFor="let step of steps">
         <ng-template matStepLabel>{{step.name}}</ng-template>
+        <ng-container [ngSwitch]="step.name">
+          <ng-container *ngSwitchCase="stepRegistry.Cluster">
+            <kubermatic-wizard-cluster-step [formControl]="form.get(stepRegistry.Cluster)"></kubermatic-wizard-cluster-step>
+          </ng-container>
 
-        <ng-container *ngIf="step.name === stepRegistry.Cluster && isActive(step)">
-          <kubermatic-wizard-cluster-step [formControlName]="step.name"></kubermatic-wizard-cluster-step>
-        </ng-container>
+          <ng-container *ngSwitchCase="stepRegistry.Provider">
+            <kubermatic-wizard-provider-step [formControl]="form.get(stepRegistry.Provider)"></kubermatic-wizard-provider-step>
+          </ng-container>
 
-        <ng-container *ngIf="step.name === stepRegistry.Provider && isActive(step)">
-          <kubermatic-wizard-provider-step [formControlName]="step.name"></kubermatic-wizard-provider-step>
-        </ng-container>
+          <ng-container *ngSwitchCase="stepRegistry.Datacenter">
+            <kubermatic-wizard-datacenter-step [formControl]="form.get(stepRegistry.Datacenter)"></kubermatic-wizard-datacenter-step>
+          </ng-container>
 
-        <ng-container *ngIf="step.name === stepRegistry.Datacenter && isActive(step)">
-          <kubermatic-wizard-datacenter-step [formControlName]="step.name"></kubermatic-wizard-datacenter-step>
-        </ng-container>
+          <ng-container *ngSwitchCase="stepRegistry.Settings">
+            <kubermatic-wizard-settings-step [formControl]="form.get(stepRegistry.Settings)"></kubermatic-wizard-settings-step>
+          </ng-container>
 
-        <ng-container *ngIf="step.name === stepRegistry.Settings && isActive(step)">
-          <kubermatic-wizard-settings-step [formControlName]="step.name"></kubermatic-wizard-settings-step>
-        </ng-container>
-
-        <ng-container *ngIf="step.name === stepRegistry.Summary && isActive(step)">
-          <kubermatic-wizard-summary-step></kubermatic-wizard-summary-step>
+          <ng-container *ngSwitchCase="stepRegistry.Summary">
+            <kubermatic-wizard-summary-step></kubermatic-wizard-summary-step>
+          </ng-container>
         </ng-container>
 
         <div class="km-button-navigation">
@@ -35,6 +36,7 @@
              color="tertiary"
              routerLink="/projects/{{project?.id}}/clusters">Cancel</a>
           <div fxFlex></div>
+          Valid: {{form.get(active.name).valid}} | Disabled: {{form.get(active.name).disabled}} | Invalid: {{form.get(active.name).invalid}}
           <button mat-flat-button
                   color="tertiary"
                   matStepperPrevious
@@ -42,8 +44,8 @@
           </button>
           <button mat-flat-button
                   matStepperNext
-                  [disabled]="form.get(step.name).invalid"
-                  *ngIf="showNext(step)">Next
+                  [disabled]="invalid"
+                  *ngIf="showNext(active)">Next
           </button>
           <button mat-flat-button
                   *ngIf="last">Create

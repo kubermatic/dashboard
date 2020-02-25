@@ -38,14 +38,25 @@ export class WizardComponent implements OnInit, OnDestroy {
     return this.steps[this._stepper.selectedIndex];
   }
 
-  ngOnInit(): void {
-    const controls = {};
-    steps.forEach(step => controls[step.name] = this._formBuilder.control(''));
-    this.form = this._formBuilder.group(controls);
+  get first(): boolean {
+    return this._stepper.selectedIndex === 0;
+  }
 
+  get last(): boolean {
+    return this._stepper.selectedIndex === (this.steps.length - 1);
+  }
+
+  get invalid(): boolean {
+    return this.form.get(this.active.name).invalid;
+  }
+
+  ngOnInit(): void {
     // // Init steps for wizard
     this._wizard.steps = steps;
     this._wizard.stepper = this._stepper;
+
+    this._initForm(this.steps);
+    this._wizard.stepsChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._initForm(this.steps));
 
     this._stepper.selectionChange.pipe(takeUntil(this._unsubscribe)).subscribe(stepperEvent => {
       if (stepperEvent.previouslySelectedIndex > stepperEvent.selectedIndex) {
@@ -57,10 +68,6 @@ export class WizardComponent implements OnInit, OnDestroy {
         .subscribe(project => this.project = project);
   }
 
-  isActive(step: WizardStep): boolean {
-    return this.active.name === step.name && step.enabled;
-  }
-
   showNext(step: WizardStep): boolean {
     const restrictedList = [StepRegistry.Datacenter, StepRegistry.Provider, StepRegistry.Summary];
     return !restrictedList.includes(step.name as StepRegistry);
@@ -69,5 +76,12 @@ export class WizardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+    this._wizard.reset();
+  }
+
+  private _initForm(steps: WizardStep[]): void {
+    const controls = {};
+    steps.forEach(step => controls[step.name] = this._formBuilder.control(''));
+    this.form = this._formBuilder.group(controls);
   }
 }

@@ -51,8 +51,8 @@
   <mat-form-field fxFlex>
     <mat-label>{{getLabel(Controls.SubnetID)}}</mat-label>
     <input matInput
-           [formControlName]="Controls.SubnetID"
            name="subnetID"
+           [formControlName]="Controls.SubnetID"
            [placeholder]="getLabel(Controls.SubnetID)"
            [matAutocomplete]="autoSubnets"
            required>
