@@ -75,7 +75,7 @@
     "ngx-clipboard": "12.3.1",
     "ngx-cookie-service": "2.3.0",
     "ngx-custom-validators": "8.0.0",
-    "ngx-window-token": "2.0.1",
+    "ngx-window-token": "3.0.0",
     "openstack-lib": "0.0.2",
     "rxjs": "6.5.4",
     "rxjs-compat": "6.5.4",
