@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as _ from 'lodash';
 
@@ -9,7 +9,7 @@ import {CustomLink, CustomLinkLocation} from '../../../shared/utils/custom-link-
   templateUrl: './custom-links-form.component.html',
   styleUrls: ['./custom-links-form.component.scss'],
 })
-export class CustomLinksFormComponent implements OnInit {
+export class CustomLinksFormComponent implements OnInit, OnChanges {
   @Input() customLinks: CustomLink[] = [];
   @Output() customLinksChange = new EventEmitter<CustomLink[]>();
   @Input() apiCustomLinks: CustomLink[] = [];
@@ -22,6 +22,16 @@ export class CustomLinksFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this._buildForm();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.customLinks.currentValue !== changes.customLinks.previousValue) {
+      this._buildForm();
+    }
+  }
+
+  private _buildForm(): void {
     this.form = this._formBuilder.group({customLinks: this._formBuilder.array([])});
     this.customLinks.forEach(
         customLink => this._addCustomLink(customLink.label, customLink.url, customLink.icon, customLink.location));
