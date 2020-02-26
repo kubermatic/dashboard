@@ -1341,51 +1341,40 @@
   }
 
   .km-cluster-panel-container {
-    background: rgba($text, .1);
-    border-bottom: 1px solid rgba($text, .1);
     color: $text;
     height: $toolbar-height + $sidenav-border-width;
-    margin: (-$content-padding) (-$content-padding) $content-padding (-$content-padding);
-    padding: 0 $content-padding 0 0;
+    margin-bottom: 1.5 * $baseline-grid;
 
-    .km-cluster-panel-container-positioning {
-      margin-top: $baseline-grid;
+    .km-cluster-panel-icon {
+      cursor: pointer;
+      height: 6.25 * $baseline-grid;
+      width: 7 * $baseline-grid;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: -.5 * $baseline-grid;
 
-      .km-cluster-panel-icon {
-        cursor: pointer;
-        height: 6.25 * $baseline-grid;
-        width: 11.875 * $baseline-grid;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: -$baseline-grid;
+      .mat-icon-button {
+        width: 5.5 * $baseline-grid;
+        height: 5.5 * $baseline-grid;
 
-        .mat-icon-button {
-          width: 5.25 * $baseline-grid;
-          height: 5.25 * $baseline-grid;
-
-          &:hover:not([disabled]) {
-            background-color: rgba($text, .1);
-          }
+        &:hover:not([disabled]) {
+          background-color: rgba($text, .1);
         }
       }
+    }
 
-      .km-icon-arrow-left {
-        background-color: $text;
-      }
+    .km-icon-arrow-left {
+      background-color: $text;
+      height: 2 * $baseline-grid;
+      width: 2 * $baseline-grid;
+    }
 
-      .mat-divider {
-        border-color: rgba($text, .1);
-        height: 5 * $baseline-grid !important;
-        margin: (-$baseline-grid) (4 * $baseline-grid) 0 0 !important;
-      }
-
-      .km-cluster-type i {
-        filter: grayscale(100%);
-        height: 4 * $baseline-grid;
-        margin-right: 3 * $baseline-grid;
-        width: 4 * $baseline-grid;
-      }
+    .km-cluster-type i {
+      filter: grayscale(100%);
+      height: 3.5 * $baseline-grid;
+      margin-right: 3 * $baseline-grid;
+      width: 3.5 * $baseline-grid;
     }
   }
 
