@@ -29,7 +29,7 @@
       position: relative;
 
       i {
-        margin-top: - $baseline-grid;
+        margin-top: -.875 * $baseline-grid;
         height: 2 * $baseline-grid;
         width: 2 * $baseline-grid;
       }
@@ -41,7 +41,7 @@
 
       .filter-indicator {
         border-radius: 50%;
-        bottom: $baseline-grid;
+        bottom: 1.25 * $baseline-grid;
         height: $baseline-grid;
         position: absolute;
         right: $baseline-grid;

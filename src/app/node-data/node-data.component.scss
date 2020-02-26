@@ -60,7 +60,7 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
 .km-randomize-btn {
   position: absolute;
   right: -0.625 * $baseline-grid;
-  top: -0.25 * $baseline-grid;
+  top: 0;
 
   ::ng-deep .mat-button-wrapper {
     display: flex;
