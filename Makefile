@@ -71,4 +71,4 @@ docker-run-custom: copy-config build dist restore-config
 	./dashboard-v2
 
 deploy:
-	kubectl -n kubermatic set image deployment/kubermatic-ui-v2 webserver=$(REPO):$(IMAGE_TAG)
+	kubectl -n kubermatic patch kubermaticconfiguration kubermatic --patch '{"spec":{"ui":{"dockerTag":"$(IMAGE_TAG)"}}}' --type=merge
