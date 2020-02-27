@@ -37,9 +37,7 @@ const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
 })
 export class SettingsService {
   private readonly restRoot = environment.restRoot;
-  private readonly wsProtocol = window.location.protocol.replace('http', 'ws');
-  private readonly wsHost = window.location.host.replace(/\/+$/, '');
-  private readonly wsRoot = `${this.wsProtocol}//${this.wsHost}/${this.restRoot}/ws`;
+  private readonly wsRoot = environment.wsRoot;
   private _userSettings$: Observable<UserSettings>;
   private _userSettingsRefresh$ = new Subject();
   private readonly _adminSettings$ = new BehaviorSubject(DEFAULT_ADMIN_SETTINGS);
