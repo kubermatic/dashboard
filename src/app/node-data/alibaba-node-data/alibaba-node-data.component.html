@@ -1,0 +1,65 @@
+<form [formGroup]="form"
+      fxLayout="column">
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-label>Instance Type*</mat-label>
+      <input matInput
+             formControlName="instanceType"
+             name="instanceType"
+             placeholder="Instance Type*">
+      <mat-error *ngIf="form.controls.instanceType.hasError('required')">Instance Type is <strong>required</strong>.</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-label>Disk Type*</mat-label>
+      <mat-select formControlName="diskType"
+                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
+                  disableOptionCentering>
+        <mat-option *ngFor="let type of diskTypes"
+                    [value]="type">
+          {{type}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.controls.diskType.hasError('required')">Disk Type is <strong>required</strong>.</mat-error>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field fxFlex>
+    <mat-label>Disk Size in GB*</mat-label>
+    <input matInput
+           formControlName="diskSize"
+           min="10"
+           max="16000"
+           type="number"
+           autocomplete="off">
+    <mat-error *ngIf="form.controls.diskSize.hasError('required')">Disk Size is <strong>required</strong>.</mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>vSwitch ID*</mat-label>
+    <input matInput
+           formControlName="vSwitchID"
+           autocomplete="off">
+    <mat-error *ngIf="form.controls.vSwitchID.hasError('required')">vSwitch ID is <strong>required</strong>.</mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Internet Max Bandwidth Out*</mat-label>
+    <input matInput
+           formControlName="internetMaxBandwidthOut"
+           autocomplete="off">
+    <mat-error *ngIf="form.controls.internetMaxBandwidthOut.hasError('required')">Internet Max Bandwidth Out is <strong>required</strong>.</mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Zone ID*</mat-label>
+    <input matInput
+           formControlName="zoneID"
+           autocomplete="off">
+    <mat-error *ngIf="form.controls.zoneID.hasError('required')">Zone ID is <strong>required</strong>.</mat-error>
+  </mat-form-field>
+</form>

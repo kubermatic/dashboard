@@ -21,6 +21,8 @@ import {DatacenterMockService} from '../testing/services/datacenter-mock.service
 import {ClusterNameGeneratorMock} from '../testing/services/name-generator-mock.service';
 import {ProjectMockService} from '../testing/services/project-mock.service';
 
+import {AlibabaNodeDataComponent} from './alibaba-node-data/alibaba-node-data.component';
+import {AlibabaNodeOptionsComponent} from './alibaba-node-data/alibaba-node-options/alibaba-node-options.component';
 import {AWSNodeDataComponent} from './aws-node-data/aws-node-data.component';
 import {AWSNodeOptionsComponent} from './aws-node-data/aws-node-options/aws-node-options.component';
 import {AzureNodeDataComponent} from './azure-node-data/azure-node-data.component';
@@ -88,6 +90,8 @@ describe('NodeDataComponent', () => {
             GCPNodeDataComponent,
             GCPNodeOptionsComponent,
             KubeVirtNodeDataComponent,
+            AlibabaNodeDataComponent,
+            AlibabaNodeOptionsComponent,
           ],
           providers: [
             NodeDataService,

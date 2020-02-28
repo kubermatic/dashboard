@@ -2,6 +2,7 @@
   <mat-card-title>Provider Credentials</mat-card-title>
 </mat-card-header>
 
+<kubermatic-alibaba-provider-settings *ngIf="!!cluster.spec.cloud.alibaba"></kubermatic-alibaba-provider-settings>
 <kubermatic-aws-provider-settings *ngIf="!!cluster.spec.cloud.aws"></kubermatic-aws-provider-settings>
 <kubermatic-digitalocean-provider-settings *ngIf="!!cluster.spec.cloud.digitalocean"></kubermatic-digitalocean-provider-settings>
 <kubermatic-hetzner-provider-settings *ngIf="!!cluster.spec.cloud.hetzner"></kubermatic-hetzner-provider-settings>

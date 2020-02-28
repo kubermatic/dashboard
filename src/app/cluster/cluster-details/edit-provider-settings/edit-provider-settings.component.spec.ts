@@ -9,6 +9,7 @@ import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {RouterStub} from '../../../testing/router-stubs';
 import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
 
+import {AlibabaProviderSettingsComponent} from './alibaba-provider-settings/alibaba-provider-settings.component';
 import {AWSProviderSettingsComponent} from './aws-provider-settings/aws-provider-settings.component';
 import {AzureProviderSettingsComponent} from './azure-provider-settings/azure-provider-settings.component';
 import {DigitaloceanProviderSettingsComponent} from './digitalocean-provider-settings/digitalocean-provider-settings.component';
@@ -47,6 +48,7 @@ describe('EditProviderSettingsComponent', () => {
             PacketProviderSettingsComponent,
             GCPProviderSettingsComponent,
             KubevirtProviderSettingsComponent,
+            AlibabaProviderSettingsComponent,
           ],
           providers: [
             {provide: Router, useClass: RouterStub},

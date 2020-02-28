@@ -34,6 +34,9 @@
                                       *ngIf="cluster.spec.cloud.kubevirt">
 </kubermatic-kubevirt-cluster-settings>
 
+<kubermatic-alibaba-cluster-settings *ngIf="cluster.spec.cloud.alibaba"
+                                     [cluster]="cluster"></kubermatic-alibaba-cluster-settings>
+
 <!-- Extended Options -->
 <ng-container *ngIf="!isInWizard">
   <kubermatic-cluster-provider-options [cluster]="cluster"></kubermatic-cluster-provider-options>

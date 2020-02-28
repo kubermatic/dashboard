@@ -11,6 +11,7 @@ import {SetMachineNetworksComponent} from './set-machine-networks/set-machine-ne
 import {SetProviderComponent} from './set-provider/set-provider.component';
 import {CustomPresetsSettingsComponent} from './set-settings/custom-credentials/custom-presets.component';
 import {ExtendedOptionsComponent} from './set-settings/extended-options/extended-options.component';
+import {AlibabaClusterSettingsComponent} from './set-settings/provider-settings/alibaba/alibaba.component';
 import {AWSProviderOptionsComponent} from './set-settings/provider-settings/aws/aws-provider-options/aws-provider-options.component';
 import {AWSClusterSettingsComponent} from './set-settings/provider-settings/aws/aws.component';
 import {AzureProviderOptionsComponent} from './set-settings/provider-settings/azure/azure-provider-options/azure-provider-options.component';
@@ -50,6 +51,7 @@ const components: any[] = [
   OpenstackProviderOptionsComponent,
   DigitaloceanClusterSettingsComponent,
   PacketClusterSettingsComponent,
+  AlibabaClusterSettingsComponent,
   AWSClusterSettingsComponent,
   AWSProviderOptionsComponent,
   BringyourownClusterSettingsComponent,
