@@ -12,7 +12,7 @@ describe('ClusterUtils', () => {
     expect(ClusterUtils.getProvider(fakeVSphereCluster().spec.cloud)).toBe('vsphere');
     expect(ClusterUtils.getProvider(fakeAzureCluster().spec.cloud)).toBe('azure');
     expect(ClusterUtils.getProvider(fakePacketCluster().spec.cloud)).toBe('packet');
-    expect(ClusterUtils.getProvider(fakePacketCluster().spec.cloud)).toBe('alibaba');
+    expect(ClusterUtils.getProvider(fakeAlibabaCluster().spec.cloud)).toBe('alibaba');
   });
 
   it('should get correct type', () => {

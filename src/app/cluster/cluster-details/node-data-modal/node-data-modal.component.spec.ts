@@ -11,7 +11,7 @@ import {ApiService, ClusterService, DatacenterService, ProjectService, WizardSer
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {ClusterNameGenerator} from '../../../core/util/name-generator.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {AlibabaNodeDataComponent} from '../../../node-data/alibaba-add-node/alibaba-node-data.component';
+import {AlibabaNodeDataComponent} from '../../../node-data/alibaba-node-data/alibaba-node-data.component';
 import {AlibabaNodeOptionsComponent} from '../../../node-data/alibaba-node-data/alibaba-node-options/alibaba-node-options.component';
 import {AWSNodeDataComponent} from '../../../node-data/aws-node-data/aws-node-data.component';
 import {AWSNodeOptionsComponent} from '../../../node-data/aws-node-data/aws-node-options/aws-node-options.component';
