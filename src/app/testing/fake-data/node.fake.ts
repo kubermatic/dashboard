@@ -355,7 +355,7 @@ export function nodeDataFake(): NodeData {
           labels: {},
         },
         alibaba: {
-          instanceType: 'ecs.c6.xsmall',
+          instanceType: 'ecs.c6.large',
           diskSize: '40',
           diskType: 'cloud_efficiency',
           vSwitchID: 'vsw-gw8g8mn4ohmj483hsylmn',
