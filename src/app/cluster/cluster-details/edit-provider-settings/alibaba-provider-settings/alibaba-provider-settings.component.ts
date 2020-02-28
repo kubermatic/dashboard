@@ -54,7 +54,7 @@ export class AlibabaProviderSettingsComponent implements OnInit, OnDestroy {
     this.accessKeySecret.updateValueAndValidity();
   }
 
-  isRequiredField(): string {
+  addRequiredIndicator(): string {
     return !this.accessKeyID.value && !this.accessKeySecret.value ? '' : '*';
   }
 

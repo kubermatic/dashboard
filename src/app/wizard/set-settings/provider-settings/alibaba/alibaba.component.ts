@@ -35,8 +35,7 @@ export class AlibabaClusterSettingsComponent implements OnInit, OnDestroy {
     );
 
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this._formHelper.areControlsValid() ? this._wizard.onCustomPresetsDisable.emit(false) :
-                                            this._wizard.onCustomPresetsDisable.emit(true);
+      this._wizard.onCustomPresetsDisable.emit(!this._formHelper.areControlsValid());
 
       this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
     });
