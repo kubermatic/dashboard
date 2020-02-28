@@ -32,9 +32,6 @@ test-headless: install
 	./hack/upload-coverage.sh
 
 run-e2e-ci: install
-	./hack/e2e/run_ci_e2e_test.sh
-
-run-e2e-ci-v2: install
 	./hack/e2e/ci-e2e.sh
 
 dist: install
@@ -74,4 +71,4 @@ docker-run-custom: copy-config build dist restore-config
 	./dashboard-v2
 
 deploy:
-	kubectl -n kubermatic set image deployment/kubermatic-ui-v2 webserver=$(REPO):$(IMAGE_TAG)
+	kubectl -n kubermatic patch kubermaticconfiguration kubermatic --patch '{"spec":{"ui":{"dockerTag":"$(IMAGE_TAG)"}}}' --type=merge

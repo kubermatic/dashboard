@@ -52,25 +52,24 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
     this._userService.loggedInUser.pipe(first()).subscribe(user => this.user = user);
 
     this._settingsService.admins.pipe(takeUntil(this._unsubscribe)).subscribe(admins => {
-      this.admins = admins;
+      this.admins = admins.sort((a, b) => a.name.localeCompare(b.name));
       this.dataSource.data = this.admins;
     });
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(settings, this.apiSettings)) {
-        if (this.apiSettings) {
+        if (this._shouldDisplayUpdateNotification()) {
           this._notificationService.success('Successfully applied external settings update');
         }
         this._applySettings(settings);
       }
     });
 
-    this._settingsChange.pipe(debounceTime(1000))
+    this._settingsChange.pipe(debounceTime(500))
         .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(() => this._settingsService.patchAdminSettings(this._getPatch())))
         .subscribe(settings => {
           this._applySettings(settings);
-          this._settingsService.refreshAdminSettings();
         });
 
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
@@ -86,6 +85,10 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  private _shouldDisplayUpdateNotification(): boolean {
+    return this.apiSettings && this.apiSettings !== this._settingsService.defaultAdminSettings;
   }
 
   private _applySettings(settings: AdminSettings): void {

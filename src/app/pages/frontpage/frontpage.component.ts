@@ -28,11 +28,11 @@ export class FrontpageComponent implements OnInit {
     const nonceRegExp = /[\?&#]nonce=([^&]+)/;
     const nonceStr = nonceRegExp.exec(this._auth.getOIDCProviderURL());
     if (!!nonceStr && nonceStr.length >= 2 && !!nonceStr[1]) {
-      this._cookieService.set(Auth.Cookie.Nonce, nonceStr[1], null, '/', null, true);
+      this._cookieService.set(Auth.Cookie.Nonce, nonceStr[1], null, '/', null, true, 'Strict');
       // localhost is only served via http, though secure cookie is not possible
       // following line will only work when domain is localhost
-      this._cookieService.set(Auth.Cookie.Nonce, nonceStr[1], null, '/', 'localhost');
-      this._cookieService.set(Auth.Cookie.Nonce, nonceStr[1], null, '/', '127.0.0.1');
+      this._cookieService.set(Auth.Cookie.Nonce, nonceStr[1], null, '/', 'localhost', false, 'Strict');
+      this._cookieService.set(Auth.Cookie.Nonce, nonceStr[1], null, '/', '127.0.0.1', false, 'Strict');
     }
   }
 

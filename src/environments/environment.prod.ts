@@ -1,3 +1,7 @@
+const host = window.location.host.replace(/\/+$/, '');
+const protocol = window.location.protocol;
+const wsProtocol = protocol.replace('http', 'ws');
+
 export const environment = {
   name: 'prod',
   production: true,
@@ -6,9 +10,8 @@ export const environment = {
   customCSS: '../assets/custom/style.css',
   refreshTimeBase: 1000,  // Unit: ms
   restRoot: '/api/v1',
-  restRootV3: '/api/v3',
-  digitalOceanRestRoot: 'https://api.digitalocean.com/v2',
-  oidcProviderUrl: window.location.protocol + '//' + window.location.host + '/dex/auth',
+  wsRoot: `${wsProtocol}//${host}/api/v1/ws`,
+  oidcProviderUrl: `${protocol}//${host}/dex/auth`,
   oidcConnectorId: null,
   animations: true,
 };

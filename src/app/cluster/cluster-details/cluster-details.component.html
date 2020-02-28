@@ -42,7 +42,7 @@
          target="_blank"
          mat-flat-button
          [disabled]="!isClusterRunning || (!isEditEnabled() && isOpenshiftCluster())"
-         *ngIf="(settings.adminSettings | async).enableDashboard">
+         *ngIf="(settings.adminSettings | async)?.enableDashboard">
         {{getConnectName()}}
       </a>
     </div>
