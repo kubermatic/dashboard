@@ -2,6 +2,7 @@
   <mat-card>
     <mat-horizontal-stepper linear
                             disableRipple
+                            [@.disabled]="true"
                             #stepper>
       <ng-template matStepperIcon="edit">
         <mat-icon>done</mat-icon>

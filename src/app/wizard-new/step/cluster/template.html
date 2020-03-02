@@ -113,9 +113,10 @@
             </div>
 
             <km-label-form title="Labels"
-                           [(labels)]="labels"
+                           [labels]="labels"
                            [asyncKeyValidators]="asyncLabelValidators"
                            [formControlName]="Controls.Labels"
+                           (labelsChange)="onLabelsChange($event)"
                            fxFlex="100"></km-label-form>
           </div>
         </div>

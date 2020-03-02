@@ -99,6 +99,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return this.controlValue(Controls.Type) === ClusterType.OpenShift;
   }
 
+  onLabelsChange(labels: object): void {
+    this.labels = labels;
+    this._clusterService.cluster = this._getClusterEntity();
+  }
+
   private _handleImagePullSecret(type: ClusterType): void {
     this.control(Controls.ImagePullSecret).setValidators(type === ClusterType.OpenShift ? [Validators.required] : []);
     this.control(Controls.ImagePullSecret).updateValueAndValidity();
@@ -136,7 +141,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return {
       name: this.controlValue(Controls.Name),
       type: this.controlValue(Controls.Type),
-      labels: this.controlValue(Controls.Labels),
+      labels: this.labels,
       spec: {
         version: this.controlValue(Controls.Version),
         openshift: {

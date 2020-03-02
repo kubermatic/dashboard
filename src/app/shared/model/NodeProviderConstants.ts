@@ -16,5 +16,6 @@ export enum NodeProvider {
 export enum OperatingSystem {
   Ubuntu = 'ubuntu',
   CentOS = 'centos',
-  ContainerLinux = 'containerLinux'
+  ContainerLinux = 'containerLinux',
+  SLES = 'sles',
 }

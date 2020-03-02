@@ -1,8 +1,10 @@
 import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {takeUntil} from 'rxjs/operators';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
-import {Taint} from '../shared/entity/NodeEntity';
+import {NodeSpec, OperatingSystemSpec, Taint} from '../shared/entity/NodeEntity';
 import {NodeProvider, OperatingSystem} from '../shared/model/NodeProviderConstants';
+import {NodeData} from '../shared/model/NodeSpecChange';
 import {ClusterType} from '../shared/utils/cluster-utils/cluster-utils';
 import {BaseFormValidator} from '../shared/validators/base-form.validator';
 import {ClusterService} from '../wizard-new/service/cluster';
@@ -56,6 +58,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.ProviderBasic]: this._builder.control(''),
       [Controls.ProviderExtended]: this._builder.control(''),
     });
+
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
   }
 
   ngOnDestroy(): void {}
@@ -85,7 +90,34 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     return this._nodeDataService.mode === NodeDataMode.Wizard;
   }
 
+  private _getOperatingSystemSpec(): OperatingSystemSpec {
+    switch (this.form.get(Controls.OperatingSystem).value) {
+      case OperatingSystem.Ubuntu:
+      case OperatingSystem.CentOS:
+      case OperatingSystem.SLES:
+        return {
+          [this.form.get(Controls.OperatingSystem).value]: {
+            distUpgradeOnBoot: this.form.get(Controls.UpgradeOnBoot).value,
+          }
+        };
+      case OperatingSystem.ContainerLinux:
+        return {containerLinux: {disableAutoUpdate: this.form.get(Controls.DisableAutoUpdate).value}};
+      default:
+        return {ubuntu: {distUpgradeOnBoot: false}};
+    }
+  }
+
   private _getDefaultOS(): OperatingSystem {
     return this.isOpenshiftCluster() ? OperatingSystem.CentOS : OperatingSystem.Ubuntu;
+  }
+
+  private _getNodeData(): NodeData {
+    return {
+      count: this.form.get(Controls.Count).value,
+      name: this.form.get(Controls.Name).value,
+      spec: {
+        operatingSystem: this._getOperatingSystemSpec(),
+      } as NodeSpec,
+    } as NodeData;
   }
 }

@@ -39,19 +39,19 @@
         </span>
         <span>Pod Node Selector</span>
       </div>
-      <div *ngIf="cluster.labels && displayTags(cluster.labels)"
+      <div *ngIf="cluster.labels && displayTags(cluster.labels); else noLabels"
            class="km-summary-tags">
         <div class="km-summary-row">Cluster Labels</div>
         <km-labels [labels]="cluster.labels"></km-labels>
       </div>
-      <div *ngIf="!cluster.labels || !displayTags(cluster.labels)">
+      <ng-template #noLabels>
         <div class="km-summary-row">
           <span class="km-summary-left km-text">
             <i class="km-icon-disabled"></i>
           </span>
           <span>Cluster Labels</span>
         </div>
-      </div>
+      </ng-template>
     </mat-card-content>
 
     <mat-card-header>

@@ -14,6 +14,8 @@ export class ClusterService {
   private _clusterEntity: ClusterEntity = ClusterEntity.NewEmptyClusterEntity();
 
   set cluster(cluster: ClusterEntity) {
+    delete this._clusterEntity.labels;
+
     this._clusterEntity = _.merge(this._clusterEntity, cluster);
     this._clusterChanges.next(this._clusterEntity);
   }

@@ -33,7 +33,6 @@ enum Controls {
 export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   sizes: AWSSize[] = [];
   diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
-  subnets: AWSSubnet[] = [];
   hideOptional = false;
 
   readonly Controls = Controls;
@@ -42,6 +41,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     return Object.keys(this._subnetMap);
   }
 
+  private _subnets: AWSSubnet[] = [];
   private _subnetMap: {[type: string]: AWSSubnet[]} = {};
 
   private get _cloudSpec(): AWSCloudSpec {
@@ -63,7 +63,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
       [Controls.AMI]: this._builder.control(''),
     });
 
-    this._setDefaultSubnet(this.subnets);
+    this._setDefaultSubnet(this._subnets);
 
     this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
     this._subnetIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSubnet.bind(this));
@@ -139,7 +139,8 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   _clearSubnet(): void {
-    this.subnets = [];
+    this._subnets = [];
+    this._subnetMap = {};
     this.form.setValidators(Validators.required);
     this.form.get(Controls.SubnetID).setValue('');
   }
@@ -149,19 +150,19 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
       return;
     }
 
-    this.subnets = subnets;
+    this._subnets = subnets;
     this._subnetMap = {};
-    const defaultSubnet = this.subnets.find(s => s.isDefaultSubnet);
+    const defaultSubnet = this._subnets.find(s => s.isDefaultSubnet);
     this.form.get(Controls.SubnetID).setValidators([
       Validators.required, AutocompleteFilterValidators.mustBeInObjectList(this._subnetMap, 'id', true)
     ]);
-    this.form.get(Controls.SubnetID).setValue(defaultSubnet ? defaultSubnet.id : this.subnets[0].id);
+    this.form.get(Controls.SubnetID).setValue(defaultSubnet ? defaultSubnet.id : this._subnets[0].id);
     this._initSubnetMap();
   }
 
   private _initSubnetMap(): void {
-    this.subnets = this.subnets.sort((a, b) => a.name.localeCompare(b.name));
-    this.subnets.forEach(subnet => {
+    this._subnets = this._subnets.sort((a, b) => a.name.localeCompare(b.name));
+    this._subnets.forEach(subnet => {
       const found = this.subnetAZ.find(s => s === subnet.availability_zone);
       if (!found) {
         this._subnetMap[subnet.availability_zone] = [];
@@ -171,12 +172,22 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     });
   }
 
+  private _getAZFromSubnet(subnetID: string): string {
+    const findSubnet = this._subnets.find(x => x.id === subnetID);
+    return findSubnet ? findSubnet.availability_zone : '';
+  }
+
   private _getNodeData(): NodeData {
     return {
       spec: {
         cloud: {
           aws: {
             subnetID: this.form.get(Controls.SubnetID).value,
+            diskSize: this.form.get(Controls.DiskSize).value,
+            ami: this.form.get(Controls.AMI).value,
+            instanceType: this.form.get(Controls.Size).value,
+            volumeType: this.form.get(Controls.DiskType).value,
+            availabilityZone: this._getAZFromSubnet(this.form.get(Controls.SubnetID).value),
           },
         } as NodeCloudSpec,
       } as NodeSpec,
