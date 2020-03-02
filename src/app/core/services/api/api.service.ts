@@ -25,6 +25,7 @@ import {CreateServiceAccountEntity, CreateTokenEntity, ServiceAccountEntity, Ser
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
 import {Auth} from '../auth/auth.service';
+import {AddonConfigEntity} from "../../../shared/entity/AddonEntity";
 
 @Injectable()
 export class ApiService {
@@ -39,7 +40,7 @@ export class ApiService {
     this._token = this._auth.getBearerToken();
   }
 
-  get addonConfigs(): Observable<any> {
+  get addonConfigs(): Observable<AddonConfigEntity[]> {
     if (!this._addonConfigs$) {
       this._addonConfigs$ = this._refreshTimer$.pipe(switchMap(() => this._http.get(`${this._restRoot}/addonconfigs`)))
                                 .pipe(shareReplay({refCount: true, bufferSize: 1}));
