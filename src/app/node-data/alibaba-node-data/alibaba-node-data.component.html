@@ -7,8 +7,17 @@
       <input matInput
              formControlName="instanceType"
              name="instanceType"
-             placeholder="Instance Type*">
+             placeholder="Instance Type*"
+             [matAutocomplete]="autoSize">
+      <mat-autocomplete #autoSize="matAutocomplete">
+        <mat-option *ngFor="let instanceType of filteredInstanceTypes"
+                    [value]="instanceType.id">
+          {{instanceType.id}}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="form.controls.instanceType.hasError('mustBeInList') && !form.controls.instanceType.hasError('required')">Input doesn't match options. Please choose from given options.</mat-error>
       <mat-error *ngIf="form.controls.instanceType.hasError('required')">Instance Type is <strong>required</strong>.</mat-error>
+      <mat-hint>{{getInstanceTypeHint()}}</mat-hint>
     </mat-form-field>
   </div>
 
