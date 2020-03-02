@@ -24,11 +24,11 @@ export class Auth {
       if (this.compareNonceWithToken(token, nonce)) {
         // remove URL fragment with token, so that users can't accidentally copy&paste it and send it to others
         this.removeFragment();
-        this._cookieService.set(Auth.Cookie.Token, token, 1, '/', null, true, 'Strict');
+        this._cookieService.set(Auth.Cookie.Token, token, 1, '/', null, true, 'Lax');
         // localhost is only served via http, though secure cookie is not possible
         // following line will only work when domain is localhost
-        this._cookieService.set(Auth.Cookie.Token, token, 1, '/', 'localhost', false, 'Strict');
-        this._cookieService.set(Auth.Cookie.Token, token, 1, '/', '127.0.0.1', false, 'Strict');
+        this._cookieService.set(Auth.Cookie.Token, token, 1, '/', 'localhost', false, 'Lax');
+        this._cookieService.set(Auth.Cookie.Token, token, 1, '/', '127.0.0.1', false, 'Lax');
       }
       this._previousRouteService.loadRouting();
     }
