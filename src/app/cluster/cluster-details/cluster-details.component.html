@@ -150,21 +150,21 @@
 
       <div class="km-content-wrap"
            *ngIf="metrics">
-        <km-property-usage title="Nodes CPU Usage"
+        <km-property-usage name="Nodes CPU Usage"
                            unit="millicores"
                            [used]="metrics?.nodes?.cpuTotalMillicores"
                            [total]="metrics?.nodes?.cpuAvailableMillicores"></km-property-usage>
 
-        <km-property-usage title="Nodes Memory Usage"
+        <km-property-usage name="Nodes Memory Usage"
                            unit="MiB"
                            [used]="metrics?.nodes?.memoryTotalBytes"
                            [total]="metrics?.nodes?.memoryAvailableBytes"></km-property-usage>
 
-        <km-property-usage title="Control Plane CPU Usage"
+        <km-property-usage name="Control Plane CPU Usage"
                            unit="millicores"
                            [used]="metrics?.controlPlane?.cpuTotalMillicores"></km-property-usage>
 
-        <km-property-usage title="Control Plane Memory Usage"
+        <km-property-usage name="Control Plane Memory Usage"
                            unit="MiB"
                            [used]="metrics?.controlPlane?.memoryTotalBytes"></km-property-usage>
       </div>
