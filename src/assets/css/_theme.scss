@@ -554,9 +554,10 @@
 
   .mat-select-arrow {
     background-color: $text;
+    color: transparent !important;
     display: inline-block;
-    width: 6px !important;
-    height: 6px !important;
+    width: 8px !important;
+    height: 8px !important;
     mask: url("/assets/images/icons/arrow-down.svg");
     mask-repeat: no-repeat;
     mask-size: contain;
@@ -572,6 +573,7 @@
   }
 
   span.mat-select-value-text {
+    font-size: $font-size-subhead;
     color: $text;
   }
 
