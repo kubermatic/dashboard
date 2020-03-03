@@ -30,9 +30,9 @@ export class SelectAddonDialogComponent {
         `data:image/${addonConfig.spec.logoFormat};base64,${addonConfig.spec.logo}`);
   }
 
-  getAddonDescription(name: string): string {
+  getAddonShortDescription(name: string): string {
     const addonConfig = this.addonConfigs.get(name);
-    return addonConfig && addonConfig.spec && addonConfig.spec.description ? addonConfig.spec.description : '';
+    return addonConfig && addonConfig.spec ? addonConfig.spec.shortDescription : '';
   }
 
   select(name: string): void {
