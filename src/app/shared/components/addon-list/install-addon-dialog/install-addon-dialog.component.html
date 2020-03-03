@@ -6,8 +6,8 @@
          [alt]="addonName">
     <div *ngIf="!hasLogo()">{{addonName}}</div>
     <div *ngIf="!!addonConfig?.spec?.description"
+         [innerHTML]="addonConfig.spec.description"
          class="km-install-addon-dialog-option-desc">
-      {{addonConfig.spec.description}}
     </div>
   </div>
   <form [formGroup]="form">

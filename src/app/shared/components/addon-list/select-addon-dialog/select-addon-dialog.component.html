@@ -10,9 +10,9 @@
       <div *ngIf="!hasLogo(installableAddon)">
         {{installableAddon}}
       </div>
-      <div *ngIf="!!getAddonDescription(installableAddon)"
+      <div *ngIf="!!getAddonShortDescription(installableAddon)"
+           [innerHTML]="getAddonShortDescription(installableAddon)"
            class="km-select-addon-dialog-option-desc">
-        {{getAddonDescription(installableAddon)}}
       </div>
     </div>
   </div>
