@@ -7,6 +7,7 @@ import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
 import {TaintFormComponent} from '../../../shared/components/taint-form/taint-form.component';
+import {AddonConfigEntity} from '../../../shared/entity/AddonEntity';
 import {ClusterEntity, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
 import {EventEntity} from '../../../shared/entity/EventEntity';
 import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
@@ -26,7 +27,6 @@ import {CreateServiceAccountEntity, CreateTokenEntity, ServiceAccountEntity, Ser
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
 import {Auth} from '../auth/auth.service';
-import {AddonConfigEntity} from "../../../shared/entity/AddonEntity";
 
 @Injectable()
 export class ApiService {
