@@ -1,12 +1,11 @@
 <div fxLayout="column"
      [formGroup]="form">
-  (Settings) Valid: {{form.valid}} | Disabled: {{form.disabled}} | Invalid: {{form.invalid}}
   <div fxLayout="row"
        fxLayout.md="column"
        fxLayout.sm="column"
        fxLayout.xs="column"
        fxLayoutGap="30px">
-    <div fxFlex>
+    <div fxFlex="50">
       <mat-card-header>
         <mat-card-title class="km-color-primary">Provider Credentials</mat-card-title>
       </mat-card-header>
@@ -15,7 +14,7 @@
       <kubermatic-wizard-provider-basic [formControl]="form.get(Control.ProviderBasic)"></kubermatic-wizard-provider-basic>
     </div>
 
-    <div fxFlex>
+    <div fxFlex="50">
       <mat-card-header>
         <mat-card-title class="km-color-primary">Node Settings</mat-card-title>
       </mat-card-header>
@@ -52,10 +51,10 @@
     <kubermatic-wizard-provider-extended [provider]="provider"
                                          [visible]="extended"
                                          [formControl]="form.get(Control.ProviderExtended)"
-                                         fxFlex></kubermatic-wizard-provider-extended>
+                                         fxFlex="50"></kubermatic-wizard-provider-extended>
     <kubermatic-extended-node-data [provider]="provider"
                                    [visible]="extended"
                                    [formControl]="form.get(Control.NodeDataExtended)"
-                                   fxFlex></kubermatic-extended-node-data>
+                                   fxFlex="50"></kubermatic-extended-node-data>
   </div>
 </div>

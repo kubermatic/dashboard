@@ -1,7 +1,6 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import * as _ from 'lodash';
 import {Observable} from 'rxjs';
-import {distinctUntilChanged} from 'rxjs/operators';
 import {CloudSpec, ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 
@@ -17,7 +16,7 @@ export class ClusterService {
     delete this._clusterEntity.labels;
 
     this._clusterEntity = _.merge(this._clusterEntity, cluster);
-    this._clusterChanges.next(this._clusterEntity);
+    this._clusterChanges.emit(this._clusterEntity);
   }
 
   get cluster(): ClusterEntity {
@@ -25,7 +24,7 @@ export class ClusterService {
   }
 
   get clusterChanges(): Observable<ClusterEntity> {
-    return this._clusterChanges.pipe(distinctUntilChanged(this._areClustersEqual));
+    return this._clusterChanges;
   }
 
   set provider(provider: NodeProvider) {
@@ -71,9 +70,5 @@ export class ClusterService {
 
   reset(): void {
     this._clusterEntity = ClusterEntity.NewEmptyClusterEntity();
-  }
-
-  private _areClustersEqual(x: ClusterEntity, y: ClusterEntity): boolean {
-    return _.eq(x, y);
   }
 }

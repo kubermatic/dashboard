@@ -1,6 +1,5 @@
 <div [formGroup]="form"
      [ngSwitch]="provider">
-  (Basic) Valid: {{form.valid}} | Disabled: {{form.disabled}} | Invalid: {{form.invalid}}
   <kubermatic-wizard-aws-provider-basic *ngSwitchCase="Providers.AWS"
                                         [formControl]="form.get(Controls.ProviderBasic)">
   </kubermatic-wizard-aws-provider-basic>

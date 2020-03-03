@@ -1,5 +1,6 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator, Validators} from '@angular/forms';
+import {merge} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../../app-config.service';
@@ -83,7 +84,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         }))
         .subscribe(this._setDefaultVersion.bind(this));
 
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
+    merge(
+        this.form.get(Controls.Name).valueChanges,
+        this.form.get(Controls.Version).valueChanges,
+        this.form.get(Controls.ImagePullSecret).valueChanges,
+        this.form.get(Controls.AuditLogging).valueChanges,
+        this.form.get(Controls.PodSecurityPolicyAdmissionPlugin).valueChanges,
+        this.form.get(Controls.PodNodeSelectorAdmissionPlugin).valueChanges,
+        )
+        .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());
   }
 

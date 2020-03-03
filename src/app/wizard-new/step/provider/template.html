@@ -2,10 +2,10 @@
   <mat-card-title class="km-color-primary">Provider</mat-card-title>
 </mat-card-header>
 <form [formGroup]="form"
-      fxLayoutAlign="left"
-      fxLayout="row wrap">
+      fxLayoutAlign="left">
   <mat-button-toggle-group group="providerGroup"
-                           formControlName="provider">
+                           formControlName="provider"
+                           fxLayout="row wrap">
     <mat-button-toggle *ngFor="let provider of providers;"
                        value="{{provider}}"
                        (click)="next()">

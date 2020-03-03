@@ -378,7 +378,7 @@
     box-shadow: none !important;
 
     mat-button-toggle {
-      margin-right: 1.25 * $baseline-grid;
+      margin: 0 (1.25 * $baseline-grid) (1.25 * $baseline-grid) 0;
       display: flex;
       align-items: center;
       border: 1px solid $divider;
@@ -1506,8 +1506,36 @@
     }
   }
 
+  // Wizard styling
   .mat-step-header {
     pointer-events: none !important;
+
+    .mat-step-icon {
+      background: $divider;
+      color: $text-secondary;
+      margin-right: 1.75 * $baseline-grid;
+
+      &.mat-step-icon-selected,
+      &.mat-step-icon-state-edit {
+        background: map-get($colors, wizard-step-background) !important;
+        color: map-get($colors, primary) !important;
+      }
+    }
+
+    .mat-step-icon-content {
+      font-size: $font-size-body;
+    }
+
+    .mat-step-label {
+      color: $text !important;
+      font-size: $font-size-subhead;
+      font-weight: 400 !important;
+
+      &.mat-step-label-active {
+        color: map-get($colors, primary) !important;
+        font-weight: 500 !important;
+      }
+    }
 
     &.cdk-program-focused {
       background-color: unset !important;

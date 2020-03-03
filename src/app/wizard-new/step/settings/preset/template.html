@@ -1,6 +1,5 @@
 <form [formGroup]="form">
   <div fxLayout="column">
-    <div>(Preset) Valid: {{form.valid}} | Disabled: {{form.disabled}} | Invalid: {{form.invalid}}</div>
     <mat-form-field fxFlex>
       <mat-label>{{ label }}</mat-label>
       <mat-select [formControlName]="Controls.Preset"

@@ -148,25 +148,25 @@
 
           <!-- AWS -->
           <ng-container *ngIf="cluster.spec.cloud.aws">
-            <km-property *ngIf="cluster.spec.cloud.aws.securityGroupID">
+            <km-property *ngIf="cluster.spec.cloud?.aws?.securityGroupID">
               <div key>Security Group ID</div>
-              <div value>{{cluster.spec.cloud.aws.securityGroupID}}</div>
+              <div value>{{cluster.spec.cloud?.aws?.securityGroupID}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.aws.vpcId">
+            <km-property *ngIf="cluster.spec.cloud?.aws?.vpcId">
               <div key>VPC ID</div>
-              <div value>{{cluster.spec.cloud.aws.vpcId}}</div>
+              <div value>{{cluster.spec.cloud?.aws?.vpcId}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.aws.routeTableId">
+            <km-property *ngIf="cluster.spec.cloud?.aws?.routeTableId">
               <div key>Route table ID</div>
-              <div value>{{cluster.spec.cloud.aws.routeTableId}}</div>
+              <div value>{{cluster.spec.cloud?.aws?.routeTableId}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.aws.instanceProfileName">
+            <km-property *ngIf="cluster.spec.cloud?.aws?.instanceProfileName">
               <div key>Instance Profile Name</div>
-              <div value>{{cluster.spec.cloud.aws.instanceProfileName}}</div>
+              <div value>{{cluster.spec.cloud?.aws?.instanceProfileName}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.aws.roleARN">
+            <km-property *ngIf="cluster.spec.cloud?.aws?.roleARN">
               <div key>Control plane role (ARN)</div>
-              <div value>{{cluster.spec.cloud.aws.roleARN}}</div>
+              <div value>{{cluster.spec.cloud?.aws?.roleARN}}</div>
             </km-property>
           </ng-container>
 
@@ -316,20 +316,20 @@
 
         <!-- AWS Nodes -->
         <ng-container *ngIf="cluster.spec.cloud.aws">
-          <div class="km-summary-row">{{nodeData.spec.cloud.aws.instanceType}}</div>
-          <div class="km-summary-row km-summary-row-with-margin">Disk {{nodeData.spec.cloud.aws.diskSize}}
-            GB, {{nodeData.spec.cloud.aws.volumeType}}</div>
-          <km-property *ngIf="nodeData.spec.cloud.aws.subnetID">
+          <div class="km-summary-row">{{nodeData.spec.cloud?.aws?.instanceType}}</div>
+          <div class="km-summary-row km-summary-row-with-margin">Disk {{nodeData.spec.cloud?.aws?.diskSize}}
+            GB, {{nodeData.spec.cloud?.aws?.volumeType}}</div>
+          <km-property *ngIf="nodeData.spec.cloud?.aws?.subnetID">
             <div key>Subnet ID</div>
-            <div value>{{nodeData.spec.cloud.aws.subnetID}}</div>
+            <div value>{{nodeData.spec.cloud?.aws?.subnetID}}</div>
           </km-property>
-          <km-property *ngIf="nodeData.spec.cloud.aws.availabilityZone">
+          <km-property *ngIf="nodeData.spec.cloud?.aws?.availabilityZone">
             <div key>Availability Zone</div>
-            <div value>{{nodeData.spec.cloud.aws.availabilityZone}}</div>
+            <div value>{{nodeData.spec.cloud?.aws?.availabilityZone}}</div>
           </km-property>
-          <km-property *ngIf="nodeData.spec.cloud.aws.ami">
+          <km-property *ngIf="nodeData.spec.cloud?.aws?.ami">
             <div key>AMI ID</div>
-            <div value>{{nodeData.spec.cloud.aws.ami}}</div>
+            <div value>{{nodeData.spec.cloud?.aws?.ami}}</div>
           </km-property>
         </ng-container>
 
@@ -387,10 +387,10 @@
 
         <!-- AWS Node Options -->
         <ng-container *ngIf="cluster.spec.cloud.aws">
-          <div *ngIf="nodeData.spec.cloud.aws.assignPublicIP !== undefined">
+          <div *ngIf="nodeData.spec.cloud?.aws?.assignPublicIP !== undefined">
             <div class="km-summary-row">
               <span class="km-summary-left km-text">
-                <i [ngClass]="{'km-icon-disabled': !nodeData.spec.cloud.aws.assignPublicIP, 'km-icon-running': nodeData.spec.cloud.aws.assignPublicIP}"></i>
+                <i [ngClass]="{'km-icon-disabled': !nodeData.spec.cloud?.aws?.assignPublicIP, 'km-icon-running': nodeData.spec.cloud?.aws?.assignPublicIP}"></i>
               </span>
               <span>Assign Public IP</span>
             </div>
@@ -474,10 +474,10 @@
         </ng-container>
 
         <!-- AWS Tags -->
-        <ng-container *ngIf="nodeData.spec.cloud.aws && displayTags(nodeData.spec.cloud.aws.tags)">
+        <ng-container *ngIf="nodeData.spec.cloud.aws && displayTags(nodeData.spec.cloud?.aws?.tags)">
           <div class="km-summary-tags">
             <div class="km-summary-row">Provider Tags</div>
-            <km-labels [labels]="nodeData.spec.cloud.aws.tags"></km-labels>
+            <km-labels [labels]="nodeData.spec.cloud?.aws?.tags"></km-labels>
           </div>
         </ng-container>
 

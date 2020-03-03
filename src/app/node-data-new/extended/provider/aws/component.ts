@@ -1,4 +1,4 @@
-import {Component, EventEmitter, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {takeUntil} from 'rxjs/operators';
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
@@ -21,20 +21,9 @@ enum Controls {
 })
 export class AWSExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   form: FormGroup;
+  tags: object;
 
   readonly Control = Controls;
-
-  private _tags: object;
-  private _tagsChanges = new EventEmitter<object>();
-
-  get tags(): object {
-    return this._tags;
-  }
-
-  set tags(tags: object) {
-    this._tags = tags;
-    this._tagsChanges.emit(this._tags);
-  }
 
   get nodeData(): NodeData {
     return this._nodeDataService.nodeData;
@@ -53,8 +42,18 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
       [Controls.Tags]: this._builder.control(''),
     });
 
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
+    this.form.get(Controls.AssignPublicIP)
+        .valueChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
+
+    this.form.get(Controls.Tags)
+        .valueChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this._nodeDataService.aws.tags = this.tags);
+  }
+
+  onTagsChange(tags: object): void {
+    this.tags = tags;
+    this._nodeDataService.nodeData = this._getNodeData();
   }
 
   private _getNodeData(): NodeData {
@@ -63,7 +62,6 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
         cloud: {
           aws: {
             assignPublicIP: this.form.get(Controls.AssignPublicIP).value,
-            tags: this.tags,
           },
         } as NodeCloudSpec,
       } as NodeSpec,

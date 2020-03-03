@@ -3,10 +3,10 @@
 </mat-card-header>
 <mat-card-content>
   <form [formGroup]="form"
-        fxLayoutAlign="left"
-        fxLayout="row wrap">
+        fxLayoutAlign="left">
     <mat-button-toggle-group group="datacenterGroup"
-                             formControlName="datacenter">
+                             formControlName="datacenter"
+                             fxLayout="row wrap">
       <mat-button-toggle *ngFor="let datacenter of datacenters;"
                          value="{{datacenter.metadata.name}}"
                          (click)="next()">

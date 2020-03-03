@@ -1,8 +1,9 @@
 import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
-import {NodeSpec, OperatingSystemSpec, Taint} from '../shared/entity/NodeEntity';
+import {OperatingSystemSpec, Taint} from '../shared/entity/NodeEntity';
 import {NodeProvider, OperatingSystem} from '../shared/model/NodeProviderConstants';
 import {NodeData} from '../shared/model/NodeSpecChange';
 import {ClusterType} from '../shared/utils/cluster-utils/cluster-utils';
@@ -59,11 +60,23 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.ProviderExtended]: this._builder.control(''),
     });
 
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
+    this._nodeDataService.nodeData = this._getNodeData();
+
+    merge(this.form.get(Controls.Name).valueChanges, this.form.get(Controls.Count).valueChanges)
+        .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
+
+    merge(
+        this.form.get(Controls.OperatingSystem).valueChanges, this.form.get(Controls.UpgradeOnBoot).valueChanges,
+        this.form.get(Controls.DisableAutoUpdate).valueChanges)
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this._nodeDataService.operatingSystem = this._getOperatingSystemSpec());
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
 
   isProvider(provider: NodeProvider): boolean {
     return this.provider === provider;
@@ -115,9 +128,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     return {
       count: this.form.get(Controls.Count).value,
       name: this.form.get(Controls.Name).value,
-      spec: {
-        operatingSystem: this._getOperatingSystemSpec(),
-      } as NodeSpec,
     } as NodeData;
   }
 }

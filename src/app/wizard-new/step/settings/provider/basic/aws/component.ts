@@ -60,6 +60,9 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
         .subscribe(
             _ => this._presets.enablePresets(Object.values(Controls).every(control => !this._controlValue(control))));
 
+    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
+
     merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.SecretAccessKey).valueChanges)
         .pipe(debounceTime(this._debounceTime))
         .pipe(distinctUntilChanged())
@@ -68,14 +71,16 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
         .subscribe((vpcs: AWSVPC[]) => {
           this.vpcIds = vpcs;
           const defaultVPC = this.vpcIds.find(vpc => vpc.isDefault);
-          this.form.get(Controls.VPCID).setValue(defaultVPC ? defaultVPC.vpcId : undefined, {emitEvent: true});
+          this.form.get(Controls.VPCID).setValue(defaultVPC ? defaultVPC.vpcId : undefined);
           this._vpcState = VPCState.Ready;
 
           this._clusterService.cluster = this._getClusterEntity();
         });
 
-    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
+    this.form.get(Controls.VPCID)
+        .valueChanges.pipe(takeUntil(this._unsubscribe))
+        .pipe(distinctUntilChanged())
+        .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());
 
     merge(this._wizard.providerChanges, this._wizard.datacenterChanges)
         .pipe(takeUntil(this._unsubscribe))
@@ -110,7 +115,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
         .pipe(tap(_ => this._vpcState = VPCState.Loading))
         .pipe(catchError(() => {
           this._vpcState = VPCState.Ready;
-          this.form.get(Controls.VPCID).setValue(undefined, {emitEvent: false});
+          this.form.get(Controls.VPCID).setValue(undefined);
           return onErrorResumeNext(EMPTY);
         }));
   }

@@ -63,6 +63,8 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
       [Controls.AMI]: this._builder.control(''),
     });
 
+    this._nodeDataService.nodeData = this._getNodeData();
+
     this._setDefaultSubnet(this._subnets);
 
     this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));

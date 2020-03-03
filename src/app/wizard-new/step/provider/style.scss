@@ -1,13 +1,5 @@
 @import '../../../../assets/css/variables';
 
-mat-button-toggle-group[group='providerGroup'] {
-  flex-wrap: wrap;
-
-  mat-button-toggle {
-    margin-top: 1.25 * $baseline-grid;
-  }
-}
-
 .km-provider-logo {
   background-position: center;
 }

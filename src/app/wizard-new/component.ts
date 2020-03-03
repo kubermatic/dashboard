@@ -58,12 +58,6 @@ export class WizardComponent implements OnInit, OnDestroy {
     this._initForm(this.steps);
     this._wizard.stepsChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._initForm(this.steps));
 
-    this._stepper.selectionChange.pipe(takeUntil(this._unsubscribe)).subscribe(stepperEvent => {
-      if (stepperEvent.previouslySelectedIndex > stepperEvent.selectedIndex) {
-        stepperEvent.previouslySelectedStep.reset();
-      }
-    });
-
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
         .subscribe(project => this.project = project);
   }

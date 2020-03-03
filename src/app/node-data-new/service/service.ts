@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import {Observable, ReplaySubject} from 'rxjs';
 import {filter, switchMap} from 'rxjs/operators';
 import {DatacenterService, PresetsService} from '../../core/services';
+import {OperatingSystemSpec} from '../../shared/entity/NodeEntity';
 import {AWSSize, AWSSubnet} from '../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../shared/model/NodeSpecChange';
@@ -35,8 +36,18 @@ export class NodeDataService {
     return this._config.mode;
   }
 
+  set operatingSystem(spec: OperatingSystemSpec) {
+    delete this._nodeData.spec.operatingSystem;
+    this._nodeData.spec.operatingSystem = spec;
+  }
+
   readonly aws = new class {
     constructor(private _parent: NodeDataService) {}
+
+    set tags(tags: object) {
+      delete this._parent._nodeData.spec.cloud.aws.tags;
+      this._parent._nodeData.spec.cloud.aws.tags = tags;
+    }
 
     flavors(): Observable<AWSSize[]> {
       switch (this._parent.mode) {

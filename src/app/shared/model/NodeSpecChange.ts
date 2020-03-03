@@ -13,17 +13,7 @@ export class NodeData {
         operatingSystem: {
           ubuntu: {},
         },
-        cloud: {
-          aws: {},
-          azure: {},
-          digitalocean: {},
-          gcp: {},
-          hetzner: {},
-          kubevirt: {},
-          openstack: {},
-          packet: {},
-          vsphere: {},
-        } as NodeCloudSpec,
+        cloud: {} as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
   }
