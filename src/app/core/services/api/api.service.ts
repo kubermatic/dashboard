@@ -7,6 +7,7 @@ import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
 import {TaintFormComponent} from '../../../shared/components/taint-form/taint-form.component';
+import {AddonConfigEntity} from '../../../shared/entity/AddonEntity';
 import {ClusterEntity, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
 import {EventEntity} from '../../../shared/entity/EventEntity';
 import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
@@ -40,7 +41,7 @@ export class ApiService {
     this._token = this._auth.getBearerToken();
   }
 
-  get addonConfigs(): Observable<any> {
+  get addonConfigs(): Observable<AddonConfigEntity[]> {
     if (!this._addonConfigs$) {
       this._addonConfigs$ = this._refreshTimer$.pipe(switchMap(() => this._http.get(`${this._restRoot}/addonconfigs`)))
                                 .pipe(shareReplay({refCount: true, bufferSize: 1}));
