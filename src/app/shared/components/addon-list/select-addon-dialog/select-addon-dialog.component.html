@@ -12,8 +12,8 @@
         {{installableAddon}}
       </div>
       <div *ngIf="!!getAddonShortDescription(installableAddon)"
+           [innerHTML]="getAddonShortDescription(installableAddon)"
            class="km-select-addon-dialog-option-desc">
-        {{getAddonShortDescription(installableAddon)}}
       </div>
     </div>
   </div>
