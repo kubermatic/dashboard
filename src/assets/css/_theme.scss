@@ -20,7 +20,6 @@
   $divider: mat-color($palette-foreground, divider);
   $divider-disabled: mat-color($palette-foreground, disabled);
 
-  $chip-accent: mat-color($palette-background, card);
   $chip-background: $divider;
 
   $project-switch: rgba(mat-color($palette-foreground, secondary-text), .7);
@@ -506,7 +505,7 @@
   }
 
   .mat-chip.mat-standard-chip {
-    background: $divider;
+    background: transparent;
     border: 1px solid $divider;
     color: $text;
     border-radius: $border-radius;
@@ -521,16 +520,17 @@
       padding: 0;
     }
 
-    div.km-chip-accent {
-      background: $chip-accent;
-    }
-
     div {
       align-items: center;
+      background: $divider;
       display: flex;
       height: 100%;
       justify-content: center;
       padding: (0.375 * $baseline-grid) (1.25 * $baseline-grid);
+    }
+
+    div.km-chip-accent {
+      background: transparent !important;
     }
   }
 
