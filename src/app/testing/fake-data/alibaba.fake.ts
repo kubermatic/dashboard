@@ -2,16 +2,10 @@ import {AlibabaInstanceType} from '../../shared/entity/provider/alibaba/Alibaba'
 
 export function fakeAlibabaInstanceTypes(): AlibabaInstanceType[] {
   return [
-    {'id': 'ecs.c4.2xlarge'},
-    {'id': 'ecs.c4.3xlarge'},
-    {'id': 'ecs.c4.xlarge'},
-    {'id': 'ecs.c5.2xlarge'},
-    {'id': 'ecs.c5.3xlarge'},
-    {'id': 'ecs.c5.large'},
-    {'id': 'ecs.c5.xlarge'},
-    {'id': 'ecs.c6.2xlarge'},
-    {'id': 'ecs.c6.3xlarge'},
-    {'id': 'ecs.c6.large'},
-    {'id': 'ecs.c6.xlarge'},
+    {'id': 'ecs.c5.large', 'cpuCoreCount': 2, 'memorySize': 4},
+    {'id': 'ecs.c5.xlarge', 'cpuCoreCount': 4, 'memorySize': 8},
+    {'id': 'ecs.c5.2xlarge', 'cpuCoreCount': 8, 'memorySize': 16},
+    {'id': 'ecs.c5.4xlarge', 'cpuCoreCount': 16, 'memorySize': 32},
+    {'id': 'ecs.c5.6xlarge', 'cpuCoreCount': 24, 'memorySize': 48},
   ];
 }
