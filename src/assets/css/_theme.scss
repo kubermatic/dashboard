@@ -1270,12 +1270,21 @@
         height: 51px;
         margin-top: -1px;
         padding: $baseline-grid;
+        position: relative;
         width: 50px;
 
         i {
           height: 30px;
           width: 30px;
           margin: 0 !important;
+        }
+
+        .km-icon-update-available {
+          height: 2 * $baseline-grid;
+          position: absolute;
+          right: .5 * $baseline-grid;
+          top: .75 * $baseline-grid;
+          width: 2 * $baseline-grid;
         }
       }
 
@@ -1322,6 +1331,11 @@
         margin-left: -1px;
         transition: all .5s ease;
         width: 51px;
+      }
+
+      .km-icon-update-available {
+        top: .75 * $baseline-grid - 1px;
+        transition: all .5s ease;
       }
 
       .mat-form-field-outline-thick {
