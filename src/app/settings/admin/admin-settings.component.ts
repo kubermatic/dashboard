@@ -52,7 +52,7 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
     this._userService.loggedInUser.pipe(first()).subscribe(user => this.user = user);
 
     this._settingsService.admins.pipe(takeUntil(this._unsubscribe)).subscribe(admins => {
-      this.admins = admins.sort((a, b) => a.name.localeCompare(b.name));
+      this.admins = admins.sort((a, b) => a.email.localeCompare(b.email));
       this.dataSource.data = this.admins;
     });
 
