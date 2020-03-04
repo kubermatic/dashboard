@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import {Observable, ReplaySubject} from 'rxjs';
 import {filter, switchMap} from 'rxjs/operators';
 import {DatacenterService, PresetsService} from '../../core/services';
-import {OperatingSystemSpec} from '../../shared/entity/NodeEntity';
+import {OperatingSystemSpec, Taint} from '../../shared/entity/NodeEntity';
 import {AWSSize, AWSSubnet} from '../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../shared/model/NodeSpecChange';
@@ -39,6 +39,16 @@ export class NodeDataService {
   set operatingSystem(spec: OperatingSystemSpec) {
     delete this._nodeData.spec.operatingSystem;
     this._nodeData.spec.operatingSystem = spec;
+  }
+
+  set labels(labels: object) {
+    delete this._nodeData.spec.labels;
+    this._nodeData.spec.labels = labels;
+  }
+
+  set taints(taints: Taint[]) {
+    delete this._nodeData.spec.taints;
+    this._nodeData.spec.taints = taints;
   }
 
   readonly aws = new class {

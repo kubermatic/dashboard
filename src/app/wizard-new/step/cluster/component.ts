@@ -110,7 +110,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   onLabelsChange(labels: object): void {
     this.labels = labels;
-    this._clusterService.cluster = this._getClusterEntity();
+    this._clusterService.labels = this.labels;
   }
 
   private _handleImagePullSecret(type: ClusterType): void {
@@ -150,7 +150,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return {
       name: this.controlValue(Controls.Name),
       type: this.controlValue(Controls.Type),
-      labels: this.labels,
       spec: {
         version: this.controlValue(Controls.Version),
         openshift: {

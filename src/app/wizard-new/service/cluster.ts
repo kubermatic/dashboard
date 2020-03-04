@@ -13,8 +13,6 @@ export class ClusterService {
   private _clusterEntity: ClusterEntity = ClusterEntity.NewEmptyClusterEntity();
 
   set cluster(cluster: ClusterEntity) {
-    delete this._clusterEntity.labels;
-
     this._clusterEntity = _.merge(this._clusterEntity, cluster);
     this._clusterChanges.emit(this._clusterEntity);
   }
@@ -66,6 +64,11 @@ export class ClusterService {
 
   get datacenter(): string {
     return this._clusterEntity.spec.cloud.dc;
+  }
+
+  set labels(labels: object) {
+    delete this._clusterEntity.labels;
+    this._clusterEntity.labels = labels;
   }
 
   reset(): void {

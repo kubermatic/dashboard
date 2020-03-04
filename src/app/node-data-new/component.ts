@@ -103,6 +103,16 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     return this._nodeDataService.mode === NodeDataMode.Wizard;
   }
 
+  onLabelsChange(labels: object): void {
+    this.labels = labels;
+    this._nodeDataService.labels = this.labels;
+  }
+
+  onTaintsChange(taints: Taint[]): void {
+    this.taints = taints;
+    this._nodeDataService.taints = this.taints;
+  }
+
   private _getOperatingSystemSpec(): OperatingSystemSpec {
     switch (this.form.get(Controls.OperatingSystem).value) {
       case OperatingSystem.Ubuntu:

@@ -55,6 +55,7 @@
            [formControlName]="Controls.SubnetID"
            [placeholder]="getLabel(Controls.SubnetID)"
            [matAutocomplete]="autoSubnets"
+           kmReadonly
            required>
     <mat-autocomplete #autoSubnets="matAutocomplete">
       <mat-optgroup *ngFor="let az of subnetAZ"
@@ -73,7 +74,7 @@
   <mat-form-field fxFlex>
     <mat-label>AMI ID</mat-label>
     <input matInput
-           [formControlName]=""
+           [formControlName]="Controls.AMI"
            autocomplete="off">
   </mat-form-field>
 </form>

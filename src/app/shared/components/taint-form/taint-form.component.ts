@@ -24,7 +24,7 @@ import {TaintFormValidators} from '../../validators/taint-form.validators';
 export class TaintFormComponent implements OnInit {
   @Input() title = 'Taints';
   @Input() taints: Taint[];
-  @Output() taintsChange = new EventEmitter<object>();
+  @Output() taintsChange = new EventEmitter<Taint[]>();
   form: FormGroup;
   availableEffects = Taint.getAvailableEffects();
 
