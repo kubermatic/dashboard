@@ -8,14 +8,14 @@ import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {PacketSize} from '../../shared/entity/packet/PacketSizeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
-import {AlibabaInstanceType} from '../../shared/entity/provider/alibaba/Alibaba';
+import {AlibabaInstanceType, AlibabaZone} from '../../shared/entity/provider/alibaba/Alibaba';
 import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '../../shared/entity/provider/gcp/GCP';
 import {VSphereNetwork} from '../../shared/entity/provider/vsphere/VSphereEntity';
 import {CreateServiceAccountEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {fakeDigitaloceanSizes, fakePacketSizes} from '../fake-data/addNodeModal.fake';
-import {fakeAlibabaInstanceTypes} from '../fake-data/alibaba.fake';
+import {fakeAlibabaInstanceTypes, fakeAlibabaZones} from '../fake-data/alibaba.fake';
 import {masterVersionsFake} from '../fake-data/cluster-spec.fake';
 import {fakeToken} from '../fake-data/cluster.fake';
 import {fakeMember, fakeMembers} from '../fake-data/member.fake';
@@ -208,6 +208,10 @@ export class ApiMockService {
 
   getAlibabaInstanceTypes(): Observable<AlibabaInstanceType[]> {
     return of(fakeAlibabaInstanceTypes());
+  }
+
+  getAlibabaZones(): Observable<AlibabaZone[]> {
+    return of(fakeAlibabaZones());
   }
 
   getDashboardProxyURL(): string {

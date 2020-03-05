@@ -7,7 +7,7 @@ import {debounceTime, startWith, switchMap, takeUntil} from 'rxjs/operators';
 import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {AlibabaInstanceType} from '../../shared/entity/provider/alibaba/Alibaba';
+import {AlibabaInstanceType, AlibabaZone} from '../../shared/entity/provider/alibaba/Alibaba';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 import {filterArrayOptions} from '../../shared/utils/common-utils';
@@ -26,11 +26,13 @@ export class AlibabaNodeDataComponent implements OnInit, OnDestroy {
   @Input() seedDCName: string;
 
   instanceTypes: AlibabaInstanceType[] = [];
+  zones: AlibabaZone[] = [];
   diskTypes: string[] = ['cloud', 'cloud_efficiency', 'cloud_ssd', 'cloud_essd', 'san_ssd', 'san_efficiency'];
   form: FormGroup;
   filteredInstanceTypes: AlibabaInstanceType[] = [];
 
   private _loadingInstanceTypes = false;
+  private _loadingZones = false;
   private _unsubscribe = new Subject<void>();
   private _selectedPreset: string;
 
@@ -79,13 +81,16 @@ export class AlibabaNodeDataComponent implements OnInit, OnDestroy {
       this.cloudSpec = data.cloudSpec;
       if (!!this._hasCredentials()) {
         this._loadInstanceTypes();
+        this._loadZones();
       } else {
         this._clearInstanceTypes();
+        this._clearZones();
       }
     });
 
     this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
     this._loadInstanceTypes();
+    this._loadZones();
   }
 
   isInWizard(): boolean {
@@ -186,5 +191,74 @@ export class AlibabaNodeDataComponent implements OnInit, OnDestroy {
     this.instanceTypes = [];
     this.form.controls.instanceType.setValue('');
     this._checkInstanceTypeState();
+  }
+
+  getZoneHint(): string {
+    if (this.zones.length > 0) {
+      return '';
+    }
+
+    if (this.isInWizard() && !this._loadingZones && !(this._hasCredentials() || this._selectedPreset)) {
+      return 'Please enter valid credentials first.';
+    } else if (this._loadingZones) {
+      return `Loading Zones...`;
+    } else {
+      return '';
+    }
+  }
+
+  private _loadZones(): void {
+    this._loadingZones = true;
+
+    iif(() => !!this.cloudSpec.dc, this._dcService.getDataCenter(this.cloudSpec.dc), EMPTY)
+        .pipe(switchMap(dc => {
+          return iif(
+              () => this.isInWizard(),
+              this._wizardService.provider(NodeProvider.ALIBABA)
+                  .accessKeyID(this.cloudSpec.alibaba.accessKeyID)
+                  .accessKeySecret(this.cloudSpec.alibaba.accessKeySecret)
+                  .region(dc.spec.alibaba.region)
+                  .credential(this._selectedPreset)
+                  .zones(),
+              this._apiService.getAlibabaZones(
+                  this.projectId, this.seedDCName, this.clusterId, dc.spec.alibaba.region));
+        }))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(
+            (zones) => {
+              this.zones = zones.sort((a, b) => a.id.localeCompare(b.id));
+
+              if (this.zones.length === 0) {
+                this.form.controls.zoneID.setValue('');
+              } else {
+                if (this.nodeData.spec.cloud.alibaba.zoneID === '') {
+                  this.form.controls.zoneID.setValue(zones[0].id);
+                }
+              }
+
+              this._loadingZones = false;
+              this._checkZoneState();
+            },
+            () => {
+              this._clearZones();
+              this._loadingZones = false;
+            },
+            () => {
+              this._loadingZones = false;
+            });
+  }
+
+  private _checkZoneState(): void {
+    if (this.zones.length === 0 && this.form.controls.zoneID.enabled) {
+      this.form.controls.zoneID.disable();
+    } else if (this.zones.length > 0 && this.form.controls.zoneID.disabled) {
+      this.form.controls.zoneID.enable();
+    }
+  }
+
+  private _clearZones(): void {
+    this.zones = [];
+    this.form.controls.zoneID.setValue('');
+    this._checkZoneState();
   }
 }

@@ -1,4 +1,4 @@
-import {AlibabaInstanceType} from '../../shared/entity/provider/alibaba/Alibaba';
+import {AlibabaInstanceType, AlibabaZone} from '../../shared/entity/provider/alibaba/Alibaba';
 
 export function fakeAlibabaInstanceTypes(): AlibabaInstanceType[] {
   return [
@@ -7,5 +7,12 @@ export function fakeAlibabaInstanceTypes(): AlibabaInstanceType[] {
     {'id': 'ecs.c5.2xlarge', 'cpuCoreCount': 8, 'memorySize': 16},
     {'id': 'ecs.c5.4xlarge', 'cpuCoreCount': 16, 'memorySize': 32},
     {'id': 'ecs.c5.6xlarge', 'cpuCoreCount': 24, 'memorySize': 48},
+  ];
+}
+
+export function fakeAlibabaZones(): AlibabaZone[] {
+  return [
+    {'id': 'eu-central-1a'},
+    {'id': 'eu-central-1b'},
   ];
 }
