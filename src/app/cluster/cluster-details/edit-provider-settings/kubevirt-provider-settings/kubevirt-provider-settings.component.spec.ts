@@ -7,6 +7,7 @@ import {ClusterService} from '../../../../core/services';
 import {SharedModule} from '../../../../shared/shared.module';
 import {ClusterMockService} from '../../../../testing/services/cluster-mock-service';
 import {MatDialogRefMock} from '../../../../testing/services/mat-dialog-ref-mock';
+import {AlibabaProviderSettingsComponent} from '../alibaba-provider-settings/alibaba-provider-settings.component';
 import {AWSProviderSettingsComponent} from '../aws-provider-settings/aws-provider-settings.component';
 import {AzureProviderSettingsComponent} from '../azure-provider-settings/azure-provider-settings.component';
 import {DigitaloceanProviderSettingsComponent} from '../digitalocean-provider-settings/digitalocean-provider-settings.component';
@@ -45,6 +46,7 @@ describe('KubevirtProviderSettingsComponent', () => {
             PacketProviderSettingsComponent,
             GCPProviderSettingsComponent,
             KubevirtProviderSettingsComponent,
+            AlibabaProviderSettingsComponent,
           ],
           providers: [
             {provide: ClusterService, useClass: ClusterMockService},

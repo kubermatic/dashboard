@@ -20,6 +20,7 @@ export class AddonConfigEntity {
 }
 
 export class AddonConfigSpec {
+  shortDescription: string;
   description: string;
   logo: string;
   logoFormat: string;

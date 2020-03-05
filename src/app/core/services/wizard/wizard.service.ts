@@ -10,6 +10,7 @@ import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {ClusterDatacenterForm, ClusterProviderForm, ClusterProviderSettingsForm, ClusterSettingsFormView, ClusterSpecForm, MachineNetworkForm, SetMachineNetworksForm} from '../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 
+import {Alibaba} from './provider/alibaba';
 import {AWS} from './provider/aws';
 import {Azure} from './provider/azure';
 import {Digitalocean} from './provider/digitalocean';
@@ -97,6 +98,7 @@ export class WizardService {
     this.onCustomPresetSelect.next(!!presetName ? presetName : '');
   }
 
+  provider(provider: NodeProvider.ALIBABA): Alibaba;
   provider(provider: NodeProvider.AWS): AWS;
   provider(provider: NodeProvider.AZURE): Azure;
   provider(provider: NodeProvider.DIGITALOCEAN): Digitalocean;
@@ -107,6 +109,8 @@ export class WizardService {
   provider(provider: NodeProvider.VSPHERE): VSphere;
   provider(provider: NodeProvider): Provider {
     switch (provider) {
+      case NodeProvider.ALIBABA:
+        return new Alibaba(this._http, NodeProvider.ALIBABA);
       case NodeProvider.AWS:
         return new AWS(this._http, NodeProvider.AWS);
       case NodeProvider.AZURE:

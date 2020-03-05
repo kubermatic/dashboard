@@ -7,6 +7,7 @@ import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
 import {TaintFormComponent} from '../../../shared/components/taint-form/taint-form.component';
+import {AddonConfigEntity} from '../../../shared/entity/AddonEntity';
 import {ClusterEntity, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
 import {EventEntity} from '../../../shared/entity/EventEntity';
 import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
@@ -16,6 +17,7 @@ import {NodeDeploymentPatch} from '../../../shared/entity/NodeDeploymentPatch';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {PacketSize} from '../../../shared/entity/packet/PacketSizeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import {AlibabaInstanceType} from '../../../shared/entity/provider/alibaba/Alibaba';
 import {AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws/AWS';
 import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
@@ -40,7 +42,7 @@ export class ApiService {
     this._token = this._auth.getBearerToken();
   }
 
-  get addonConfigs(): Observable<any> {
+  get addonConfigs(): Observable<AddonConfigEntity[]> {
     if (!this._addonConfigs$) {
       this._addonConfigs$ = this._refreshTimer$.pipe(switchMap(() => this._http.get(`${this._restRoot}/addonconfigs`)))
                                 .pipe(shareReplay({refCount: true, bufferSize: 1}));
@@ -135,6 +137,14 @@ export class ApiService {
   getPacketSizes(projectId: string, dc: string, clusterId: string): Observable<PacketSize[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/packet/sizes`;
     return this._http.get<PacketSize[]>(url);
+  }
+
+  getAlibabaInstanceTypes(projectId: string, dc: string, clusterId: string, region: string):
+      Observable<AlibabaInstanceType[]> {
+    const url =
+        `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/alibaba/instancetypes`;
+    const headers = new HttpHeaders().set('Region', region);
+    return this._http.get<AlibabaInstanceType[]>(url, {headers});
   }
 
   editToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
