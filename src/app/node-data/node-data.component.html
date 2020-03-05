@@ -48,6 +48,13 @@
     </mat-select>
   </mat-form-field>
 
+  <kubermatic-alibaba-node-data *ngIf="cluster.spec.cloud.alibaba"
+                                [cloudSpec]="cluster.spec.cloud"
+                                [clusterId]="cluster.id"
+                                [projectId]="projectId"
+                                [seedDCName]="seedDCName"
+                                [nodeData]="nodeData"></kubermatic-alibaba-node-data>
+
   <kubermatic-aws-node-data *ngIf="cluster.spec.cloud.aws"
                             [cloudSpec]="cluster.spec.cloud"
                             [clusterId]="cluster.id"
@@ -121,7 +128,7 @@
       CentOS
     </mat-button-toggle>
     <mat-button-toggle value="containerLinux"
-                       *ngIf="!cluster.spec.cloud.hetzner && !isClusterOpenshift() && isAvailable('coreos')">
+                       *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.alibaba && !isClusterOpenshift() && isAvailable('coreos')">
       <i class="km-os-image-container-linux"></i>
       Container Linux
     </mat-button-toggle>

@@ -14,6 +14,7 @@ import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
+import {AlibabaProviderSettingsComponent} from '../edit-provider-settings/alibaba-provider-settings/alibaba-provider-settings.component';
 import {AWSProviderSettingsComponent} from '../edit-provider-settings/aws-provider-settings/aws-provider-settings.component';
 import {AzureProviderSettingsComponent} from '../edit-provider-settings/azure-provider-settings/azure-provider-settings.component';
 import {DigitaloceanProviderSettingsComponent} from '../edit-provider-settings/digitalocean-provider-settings/digitalocean-provider-settings.component';
@@ -65,6 +66,7 @@ describe('EditClusterComponent', () => {
             PacketProviderSettingsComponent,
             GCPProviderSettingsComponent,
             KubevirtProviderSettingsComponent,
+            AlibabaProviderSettingsComponent,
           ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},

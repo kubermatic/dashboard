@@ -1,5 +1,6 @@
 import {NodeProvider} from '../model/NodeProviderConstants';
 
+import {AlibabaDatacenterSpec} from './datacenter/AlibabaDatacenterSpec';
 import {AWSDatacenterSpec} from './datacenter/AWSDatacenterSpec';
 import {AzureDatacenterSpec} from './datacenter/AzureDatacenterSpec';
 import {BringYourOwnDatacenterSpec} from './datacenter/BringYourOwnDatacenterSpec';
@@ -34,6 +35,7 @@ export class DatacenterSpec {
   azure?: AzureDatacenterSpec;
   gcp?: GCPDatacenterSpec;
   kubevirt?: KubeVirtDatacenterSpec;
+  alibaba?: AlibabaDatacenterSpec;
 }
 
 export class DatacenterOperatingSystemOptions {
