@@ -354,6 +354,15 @@ export function nodeDataFake(): NodeData {
           tags: [],
           labels: {},
         },
+        alibaba: {
+          instanceType: 'ecs.c6.large',
+          diskSize: '40',
+          diskType: 'cloud_efficiency',
+          vSwitchID: 'vsw-gw8g8mn4ohmj483hsylmn',
+          internetMaxBandwidthOut: '10',
+          zoneID: 'eu-central-1a',
+          labels: {},
+        },
       },
       operatingSystem: {
         ubuntu: {
