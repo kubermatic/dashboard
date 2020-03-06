@@ -13,9 +13,10 @@ export KUBERMATIC_VERSION=latest
 
 apt install -y gettext bash-completion
 
-export CACHE_VERSION="$(git -C ../kubermatic rev-parse HEAD)"
-source ${GOPATH}/src/github.com/kubermatic/kubermatic/api/hack/ci/ci-setup-kubermatic-in-kind.sh
-
+pwd
+ls
+cd $(go env GOPATH)/src/github.com/kubermatic/dashboard-v2
+source ./hack/e2e/ci-setup-kubermatic-in-kind.sh
 
 echodate "Creating UI Azure preset..."
 cat <<EOF > preset-azure.yaml
