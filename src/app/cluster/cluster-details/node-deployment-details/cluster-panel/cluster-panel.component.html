@@ -1,9 +1,7 @@
-<div class="km-cluster-panel-container">
-  <div class="km-cluster-panel-container-positioning"
-       fxFlex
-       fxLayout="row"
-       fxLayoutAlign=" center">
-
+<div class="km-cluster-panel-container"
+     fxFlex
+     fxLayout="row"
+     fxLayoutAlign=" center">
     <div class="km-cluster-panel-icon"
          (click)="navigate()"
          matTooltip="Go back to the cluster">
@@ -11,8 +9,6 @@
         <i class="km-icon-arrow-left"></i>
       </button>
     </div>
-
-    <mat-divider vertical="true"></mat-divider>
 
     <span class="km-cluster-type">
       <i class="km-icon-{{cluster.type}}"></i>
@@ -38,6 +34,4 @@
       <div key>Region</div>
       <div value>{{datacenter?.spec?.country}} ({{datacenter?.spec?.location}})</div>
     </km-property>
-
-  </div>
 </div>

@@ -336,12 +336,12 @@
 
             <div *ngIf="getMetrics(element.name)"
                  fxLayout="row">
-              <km-property-usage title="Nodes CPU Usage"
+              <km-property-usage name="Nodes CPU Usage"
                                  unit="millicores"
                                  [used]="getMetrics(element.name)?.cpuTotalMillicores"
                                  [total]="getMetrics(element.name)?.cpuAvailableMillicores"></km-property-usage>
 
-              <km-property-usage title="Nodes Memory Usage"
+              <km-property-usage name="Nodes Memory Usage"
                                  unit="MiB"
                                  [used]="getMetrics(element.name)?.memoryTotalBytes"
                                  [total]="getMetrics(element.name).memoryAvailableBytes"></km-property-usage>

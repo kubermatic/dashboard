@@ -24,8 +24,8 @@ h2 {
   margin-bottom: 0;
 }
 
-tr:first-child th:first-child,
-tr:first-child td:first-child {
+tr th:first-child,
+tr td:first-child {
   padding-left: 7 * $baseline-grid !important;
 }
 
