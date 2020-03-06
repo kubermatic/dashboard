@@ -45,25 +45,30 @@
 
   <mat-button-toggle-group group="operatingSystemGroup"
                            [formControlName]="Controls.OperatingSystem">
-    <mat-button-toggle value="ubuntu"
+    <mat-button-toggle [value]="OperatingSystem.Ubuntu"
                        *ngIf="!isOpenshiftCluster()">
       <i class="km-os-image-ubuntu"></i>
       Ubuntu
     </mat-button-toggle>
-    <mat-button-toggle value="centos">
+    <mat-button-toggle [value]="OperatingSystem.CentOS">
       <i class="km-os-image-centos"></i>
       CentOS
     </mat-button-toggle>
-    <mat-button-toggle value="containerLinux"
+    <mat-button-toggle [value]="OperatingSystem.ContainerLinux"
                        *ngIf="!isProvider(NodeProvider.HETZNER) && !isOpenshiftCluster()">
       <i class="km-os-image-container-linux"></i>
       Container Linux
+    </mat-button-toggle>
+    <mat-button-toggle [value]="OperatingSystem.SLES"
+                       *ngIf="isProvider(NodeProvider.AWS) && !isOpenshiftCluster()">
+      <i class="km-os-image-sles"></i>
+      SLES
     </mat-button-toggle>
   </mat-button-toggle-group>
 
   <div fxFlex="100%">
     <!-- Options for Ubuntu and CenOS -->
-    <div *ngIf="isOsSelected(OperatingSystem.Ubuntu) || isOsSelected(OperatingSystem.CentOS)"
+    <div *ngIf="isOsSelected(OperatingSystem.Ubuntu) || isOsSelected(OperatingSystem.CentOS) || isOsSelected(OperatingSystem.SLES)"
          class="km-os-options"
          [ngClass]="(isProvider(NodeProvider.OPENSTACK) || isProvider(NodeProvider.VSPHERE)) ? 'km-with-margin' : ''">
       <mat-checkbox id="upgradeOnBoot"
@@ -79,6 +84,11 @@
                     [formControlName]="Controls.DisableAutoUpdate">Disable auto-update
       </mat-checkbox>
     </div>
+  </div>
+
+  <div class="km-os-options">
+    <mat-checkbox id="dynamicConfig"
+                  [formControlName]="Controls.DynamicConfig">Dynamic kubelet config</mat-checkbox>
   </div>
 
   <ng-container *ngIf="!isBasicViewOnly()">

@@ -15,6 +15,7 @@ import {NodeDataService} from './service/service';
 enum Controls {
   Name = 'name',
   Count = 'count',
+  DynamicConfig = 'dynamicConfig',
   OperatingSystem = 'operatingSystem',
   UpgradeOnBoot = 'upgradeOnBoot',
   DisableAutoUpdate = 'disableAutoUpdate',
@@ -53,6 +54,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', [Validators.pattern('[a-zA-Z0-9-]*')]),
       [Controls.Count]: this._builder.control(this.replicas, [Validators.required, Validators.min(0)]),
+      [Controls.DynamicConfig]: this._builder.control(false),
       [Controls.OperatingSystem]: this._builder.control(this._getDefaultOS(), [Validators.required]),
       [Controls.UpgradeOnBoot]: this._builder.control(''),
       [Controls.DisableAutoUpdate]: this._builder.control(''),
@@ -62,13 +64,19 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-    merge(this.form.get(Controls.Name).valueChanges, this.form.get(Controls.Count).valueChanges)
+    merge(
+        this.form.get(Controls.Name).valueChanges,
+        this.form.get(Controls.Count).valueChanges,
+        this.form.get(Controls.DynamicConfig).valueChanges,
+        )
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
 
     merge(
-        this.form.get(Controls.OperatingSystem).valueChanges, this.form.get(Controls.UpgradeOnBoot).valueChanges,
-        this.form.get(Controls.DisableAutoUpdate).valueChanges)
+        this.form.get(Controls.OperatingSystem).valueChanges,
+        this.form.get(Controls.UpgradeOnBoot).valueChanges,
+        this.form.get(Controls.DisableAutoUpdate).valueChanges,
+        )
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._nodeDataService.operatingSystem = this._getOperatingSystemSpec());
   }
@@ -138,6 +146,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     return {
       count: this.form.get(Controls.Count).value,
       name: this.form.get(Controls.Name).value,
+      dynamicConfig: this.form.get(Controls.DynamicConfig).value,
     } as NodeData;
   }
 }
