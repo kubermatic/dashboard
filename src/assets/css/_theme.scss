@@ -1359,7 +1359,7 @@
   .km-cluster-panel-container {
     color: $text;
     height: $toolbar-height + $sidenav-border-width;
-    margin-bottom: 1.5 * $baseline-grid;
+    margin-bottom: 2.5 * $baseline-grid;
 
     .km-cluster-panel-icon {
       cursor: pointer;
@@ -1368,7 +1368,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: -.5 * $baseline-grid;
+      margin-top: -1.125 * $baseline-grid;
 
       .mat-icon-button {
         width: 5.5 * $baseline-grid;
@@ -1386,10 +1386,11 @@
       width: 2 * $baseline-grid;
     }
 
-    .km-cluster-type i {
+    .km-cluster-type {
       filter: grayscale(100%);
       height: 3.5 * $baseline-grid;
       margin-right: 3 * $baseline-grid;
+      margin-top: -1.625 * $baseline-grid;
       width: 3.5 * $baseline-grid;
     }
   }
