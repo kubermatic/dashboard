@@ -6,7 +6,7 @@ import {Component, Input} from '@angular/core';
   styleUrls: ['./property-usage.component.scss'],
 })
 export class PropertyUsageComponent {
-  @Input() title: string;
+  @Input() name: string;
   @Input() used: number;
   @Input() total: number;
   @Input() unit: string;

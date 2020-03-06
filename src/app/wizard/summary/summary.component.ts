@@ -36,7 +36,8 @@ export class SummaryComponent implements OnInit {
 
   displayProvider(): boolean {
     return !!this.cluster.spec.cloud.digitalocean || !!this.cluster.spec.cloud.hetzner ||
-        !!this.cluster.spec.cloud.bringyourown || (!!this.cluster.spec.cloud.aws && !this.hasAWSProviderOptions()) ||
+        !!this.cluster.spec.cloud.bringyourown || !!this.cluster.spec.cloud.alibaba ||
+        (!!this.cluster.spec.cloud.aws && !this.hasAWSProviderOptions()) ||
         (!!this.cluster.spec.cloud.gcp && !this.hasGCPProviderOptions()) ||
         (!!this.cluster.spec.cloud.azure && !this.hasAzureProviderOptions());
   }

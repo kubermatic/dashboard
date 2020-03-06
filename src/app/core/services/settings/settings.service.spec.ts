@@ -12,7 +12,6 @@ import {AuthMockService} from '../../../testing/services/auth-mock.service';
 
 import {SettingsService} from './settings.service';
 
-
 describe('SettingsService', () => {
   let settingsService: SettingsService;
 

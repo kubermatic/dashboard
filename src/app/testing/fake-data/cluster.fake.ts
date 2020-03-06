@@ -251,6 +251,29 @@ export function fakeBringyourownCluster(): ClusterEntity {
   };
 }
 
+export function fakeAlibabaCluster(): ClusterEntity {
+  return {
+    creationTimestamp: new Date(),
+    id: 'vr4m6wpqv6',
+    name: 'nifty-haibt',
+    spec: {
+      cloud: {
+        dc: 'alibaba-eu-central-1a:',
+        alibaba: {
+          accessKeyID: 'ali-access-key-id',
+          accessKeySecret: 'ali-access-key-secret',
+        },
+      },
+      version: '1.9.6',
+    },
+    status: {
+      url: 'https://vr4m6wpqv6.europe-west3-c.dev.kubermatic.io:30003',
+      version: '1.9.6',
+    },
+    type: 'kubernetes',
+  };
+}
+
 export function fakeToken(): Token {
   return {
     token: 'test-token',
@@ -260,6 +283,6 @@ export function fakeToken(): Token {
 export function fakeClusters(): ClusterEntity[] {
   return [
     fakeDigitaloceanCluster(), fakeAWSCluster(), fakeOpenstackCluster(), fakeHetznerCluster(), fakeAzureCluster(),
-    fakeBringyourownCluster()
+    fakeBringyourownCluster(), fakeAlibabaCluster()
   ];
 }

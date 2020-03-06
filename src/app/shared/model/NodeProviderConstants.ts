@@ -1,4 +1,5 @@
 export enum NodeProvider {
+  ALIBABA = 'alibaba',
   AWS = 'aws',
   AZURE = 'azure',
   DIGITALOCEAN = 'digitalocean',

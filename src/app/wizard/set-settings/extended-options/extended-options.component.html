@@ -6,7 +6,7 @@
   <div fxFlex="50%"
        class="km-ext-opt">
     <div class="km-header"
-         *ngIf="isExtended && !cluster.spec.cloud.digitalocean && !cluster.spec.cloud.packet">
+         *ngIf="isExtended && !cluster.spec.cloud.digitalocean && !cluster.spec.cloud.packet && !cluster.spec.cloud.alibaba">
       Extended Provider Settings
     </div>
     <kubermatic-cluster-provider-options [cluster]="cluster"></kubermatic-cluster-provider-options>

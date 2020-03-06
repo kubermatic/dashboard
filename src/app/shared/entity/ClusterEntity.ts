@@ -1,6 +1,7 @@
 import {NodeProvider} from '../model/NodeProviderConstants';
 import {ClusterType} from '../utils/cluster-utils/cluster-utils';
 
+import {AlibabaCloudSpec} from './cloud/AlibabaCloudSpec';
 import {AWSCloudSpec} from './cloud/AWSCloudSpec';
 import {AzureCloudSpec} from './cloud/AzureCloudSpec';
 import {BareMetalCloudSpec} from './cloud/BareMetalCloudSpec';
@@ -119,6 +120,11 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
         serviceAccount: '',
         subnetwork: '',
       } as GCPCloudSpec;
+    case NodeProvider.ALIBABA:
+      return {
+        accessKeyID: '',
+        accessKeySecret: '',
+      } as AlibabaCloudSpec;
   }
   return {};
 }
@@ -137,6 +143,7 @@ export class CloudSpec {
   fake?: FakeCloudSpec;
   gcp?: GCPCloudSpec;
   kubevirt?: KubeVirtCloudSpec;
+  alibaba?: AlibabaCloudSpec;
 }
 
 export class ClusterSpec {

@@ -1,5 +1,6 @@
 import {NodeProvider} from '../model/NodeProviderConstants';
 
+import {AlibabaNodeSpec} from './node/AlibabaNodeSpec';
 import {AWSNodeSpec} from './node/AWSNodeSpec';
 import {AzureNodeSpec} from './node/AzureNodeSpec';
 import {DigitaloceanNodeSpec} from './node/DigitaloceanNodeSpec';
@@ -52,6 +53,7 @@ export class NodeCloudSpec {
   azure?: AzureNodeSpec;
   gcp?: GCPNodeSpec;
   kubevirt?: KubeVirtNodeSpec;
+  alibaba?: AlibabaNodeSpec;
 }
 
 export class OperatingSystemSpec {
@@ -167,6 +169,16 @@ export function getEmptyNodeProviderSpec(provider: string): object {
         tags: [],
         labels: {},
       } as GCPNodeSpec;
+    case NodeProvider.ALIBABA:
+      return {
+        instanceType: '',
+        diskSize: '40',
+        diskType: '',
+        vSwitchID: '',
+        internetMaxBandwidthOut: '10',
+        labels: {},
+        zoneID: '',
+      } as AlibabaNodeSpec;
   }
   return {};
 }

@@ -10,6 +10,7 @@ import {ClusterDeleteConfirmationComponent} from './cluster-details/cluster-dele
 import {ClusterDetailsComponent} from './cluster-details/cluster-details.component';
 import {ClusterSecretsComponent} from './cluster-details/cluster-secrets/cluster-secrets.component';
 import {EditClusterComponent} from './cluster-details/edit-cluster/edit-cluster.component';
+import {AlibabaProviderSettingsComponent} from './cluster-details/edit-provider-settings/alibaba-provider-settings/alibaba-provider-settings.component';
 import {AWSProviderSettingsComponent} from './cluster-details/edit-provider-settings/aws-provider-settings/aws-provider-settings.component';
 import {AzureProviderSettingsComponent} from './cluster-details/edit-provider-settings/azure-provider-settings/azure-provider-settings.component';
 import {DigitaloceanProviderSettingsComponent} from './cluster-details/edit-provider-settings/digitalocean-provider-settings/digitalocean-provider-settings.component';
@@ -69,6 +70,7 @@ const entryComponents: any[] = [
   AzureProviderSettingsComponent,
   PacketProviderSettingsComponent,
   KubevirtProviderSettingsComponent,
+  AlibabaProviderSettingsComponent,
   EditSSHKeysComponent,
   AddClusterSSHKeysComponent,
   ShareKubeconfigComponent,

@@ -142,6 +142,12 @@
   background-color: #fff;
 }
 
+.km-icon-update-available {
+  @include km-image(2 * $baseline-grid);
+
+  background: url("/assets/images/icons/update-available.svg");
+}
+
 .km-icon-cluster {
   @include km-image-mask(2.75 * $baseline-grid);
 
@@ -303,6 +309,13 @@
 
   background-image: url("/assets/images/icons/openshift.svg");
   margin-right: 1.25 * $baseline-grid;
+}
+
+.km-provider-logo-alibaba {
+  @include km-image(3.75 * $baseline-grid);
+
+  background-image: url("/assets/images/clouds/alibaba.svg");
+  min-height: 3.75 * $baseline-grid;
 }
 
 .km-provider-logo-aws {

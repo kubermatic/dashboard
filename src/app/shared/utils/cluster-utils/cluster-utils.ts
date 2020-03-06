@@ -28,6 +28,8 @@ export class ClusterUtils {
       return 'gcp';
     } else if (cloud.kubevirt) {
       return 'kubevirt';
+    } else if (cloud.alibaba) {
+      return 'alibaba';
     }
   }
 
