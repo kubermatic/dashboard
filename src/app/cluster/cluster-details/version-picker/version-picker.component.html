@@ -12,6 +12,9 @@
     <div class="km-version-picker-type"
          fxLayoutAlign="center center">
       <i class="km-icon-{{cluster.type}}"></i>
+      <i *ngIf="updatesAvailable"
+         matTooltip="Updates available."
+         class="km-icon-update-available"></i>
     </div>
 
     <mat-form-field>

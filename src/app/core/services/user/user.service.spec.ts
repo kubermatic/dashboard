@@ -13,7 +13,6 @@ import {Auth} from '../auth/auth.service';
 
 import {UserService} from './user.service';
 
-
 describe('Service: UserService', () => {
   let userService: UserService;
 

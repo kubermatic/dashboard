@@ -20,7 +20,6 @@
   $divider: mat-color($palette-foreground, divider);
   $divider-disabled: mat-color($palette-foreground, disabled);
 
-  $chip-accent: mat-color($palette-background, card);
   $chip-background: $divider;
 
   $project-switch: rgba(mat-color($palette-foreground, secondary-text), .7);
@@ -506,7 +505,7 @@
   }
 
   .mat-chip.mat-standard-chip {
-    background: $divider;
+    background: transparent;
     border: 1px solid $divider;
     color: $text;
     border-radius: $border-radius;
@@ -521,16 +520,17 @@
       padding: 0;
     }
 
-    div.km-chip-accent {
-      background: $chip-accent;
-    }
-
     div {
       align-items: center;
+      background: $divider;
       display: flex;
       height: 100%;
       justify-content: center;
       padding: (0.375 * $baseline-grid) (1.25 * $baseline-grid);
+    }
+
+    div.km-chip-accent {
+      background: transparent !important;
     }
   }
 
@@ -554,9 +554,10 @@
 
   .mat-select-arrow {
     background-color: $text;
+    color: transparent !important;
     display: inline-block;
-    width: 6px !important;
-    height: 6px !important;
+    width: 8px !important;
+    height: 8px !important;
     mask: url("/assets/images/icons/arrow-down.svg");
     mask-repeat: no-repeat;
     mask-size: contain;
@@ -572,6 +573,7 @@
   }
 
   span.mat-select-value-text {
+    font-size: $font-size-subhead;
     color: $text;
   }
 
@@ -1268,12 +1270,21 @@
         height: 51px;
         margin-top: -1px;
         padding: $baseline-grid;
+        position: relative;
         width: 50px;
 
         i {
           height: 30px;
           width: 30px;
           margin: 0 !important;
+        }
+
+        .km-icon-update-available {
+          height: 2 * $baseline-grid;
+          position: absolute;
+          right: .5 * $baseline-grid;
+          top: .75 * $baseline-grid;
+          width: 2 * $baseline-grid;
         }
       }
 
@@ -1322,6 +1333,11 @@
         width: 51px;
       }
 
+      .km-icon-update-available {
+        top: .75 * $baseline-grid - 1px;
+        transition: all .5s ease;
+      }
+
       .mat-form-field-outline-thick {
         color: map-get($colors, secondary) !important;
         opacity: 1 !important;
@@ -1341,51 +1357,41 @@
   }
 
   .km-cluster-panel-container {
-    background: rgba($text, .1);
-    border-bottom: 1px solid rgba($text, .1);
     color: $text;
     height: $toolbar-height + $sidenav-border-width;
-    margin: (-$content-padding) (-$content-padding) $content-padding (-$content-padding);
-    padding: 0 $content-padding 0 0;
+    margin-bottom: 2.5 * $baseline-grid;
 
-    .km-cluster-panel-container-positioning {
-      margin-top: $baseline-grid;
+    .km-cluster-panel-icon {
+      cursor: pointer;
+      height: 6.25 * $baseline-grid;
+      width: 7 * $baseline-grid;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: -1.125 * $baseline-grid;
 
-      .km-cluster-panel-icon {
-        cursor: pointer;
-        height: 6.25 * $baseline-grid;
-        width: 11.875 * $baseline-grid;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: -$baseline-grid;
+      .mat-icon-button {
+        width: 5.5 * $baseline-grid;
+        height: 5.5 * $baseline-grid;
 
-        .mat-icon-button {
-          width: 5.25 * $baseline-grid;
-          height: 5.25 * $baseline-grid;
-
-          &:hover:not([disabled]) {
-            background-color: rgba($text, .1);
-          }
+        &:hover:not([disabled]) {
+          background-color: rgba($text, .1);
         }
       }
+    }
 
-      .km-icon-arrow-left {
-        background-color: $text;
-      }
+    .km-icon-arrow-left {
+      background-color: $text;
+      height: 2 * $baseline-grid;
+      width: 2 * $baseline-grid;
+    }
 
-      .mat-divider {
-        border-color: rgba($text, .1);
-        height: 5 * $baseline-grid !important;
-        margin: (-$baseline-grid) (4 * $baseline-grid) 0 0 !important;
-      }
-
-      .km-cluster-type i {
-        filter: grayscale(100%);
-        height: 4 * $baseline-grid;
-        margin-right: 3 * $baseline-grid;
-        width: 4 * $baseline-grid;
-      }
+    .km-cluster-type {
+      filter: grayscale(100%);
+      height: 3.5 * $baseline-grid;
+      margin-right: 3 * $baseline-grid;
+      margin-top: -1.625 * $baseline-grid;
+      width: 3.5 * $baseline-grid;
     }
   }
 
