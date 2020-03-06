@@ -9,6 +9,7 @@ import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 export class ClusterService {
   readonly providerChanges = new EventEmitter<NodeProvider>();
   readonly datacenterChanges = new EventEmitter<string>();
+  readonly sshKeyChanges = new EventEmitter<SSHKeyEntity[]>();
 
   private readonly _clusterChanges = new EventEmitter<ClusterEntity>();
   private _clusterEntity: ClusterEntity = ClusterEntity.NewEmptyClusterEntity();
@@ -75,6 +76,7 @@ export class ClusterService {
 
   set sshKeys(keys: SSHKeyEntity[]) {
     this._sshKeysEntity = keys;
+    this.sshKeyChanges.emit(this._sshKeysEntity);
   }
 
   get sshKeys(): SSHKeyEntity[] {
