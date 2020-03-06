@@ -34,6 +34,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {ClipboardModule} from 'ngx-clipboard';
 import {CustomFormsModule} from 'ngx-custom-validators';
+import {FilterPipeModule} from 'ngx-filter-pipe';
 
 import {NotificationComponent} from '../core/components/notification/notification.component';
 import {TokenDialogComponent} from '../serviceaccount/serviceaccount-token/token-dialog/token-dialog.component';
@@ -70,7 +71,7 @@ const modules: any[] = [
   MatDialogModule,       MatSliderModule,   MatSlideToggleModule, MatProgressBarModule, MatExpansionModule,
   MatSortModule,         MatTableModule,    MatDividerModule,     ClipboardModule,      MatButtonToggleModule,
   MatTabsModule,         MatOptionModule,   MatFormFieldModule,   MatPaginatorModule,   MatSnackBarModule,
-  MatBadgeModule,        MatStepperModule,
+  MatBadgeModule,        MatStepperModule,  FilterPipeModule,
 ];
 
 const components: any[] = [

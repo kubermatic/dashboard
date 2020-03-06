@@ -14,6 +14,7 @@ enum Controls {
   NodeDataBasic = 'nodeDataBasic',
   NodeDataExtended = 'nodeDataExtended',
   Preset = 'preset',
+  SSHKeys = 'sshKeys',
 }
 
 @Component({
@@ -52,6 +53,7 @@ export class SettingsStepComponent extends StepBase implements OnInit, OnDestroy
       [Controls.ProviderExtended]: this._builder.control(''),
       [Controls.NodeDataBasic]: this._builder.control(''),
       [Controls.NodeDataExtended]: this._builder.control(''),
+      [Controls.SSHKeys]: this._builder.control(''),
     });
 
     this.provider = this._wizard.provider;

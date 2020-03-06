@@ -1541,4 +1541,11 @@
       background-color: unset !important;
     }
   }
+
+  .km-select-input {
+    border-bottom: 1px solid $divider !important;
+    height: 3 * $baseline-grid;
+    outline: none;
+    padding: (2 * $baseline-grid) 0 (2 * $baseline-grid) (2 * $baseline-grid);
+  }
 }

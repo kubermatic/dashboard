@@ -1,4 +1,4 @@
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
@@ -34,6 +34,9 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   sizes: AWSSize[] = [];
   diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
   hideOptional = false;
+  filterByInput = {name: ''};
+
+  @ViewChild('sizeInput', {static: true}) private readonly sizeInputEl_: ElementRef;
 
   readonly Controls = Controls;
 
@@ -118,6 +121,19 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     }
 
     return '';
+  }
+
+  onSizeOpen(opened: boolean): void {
+    if (opened) {
+      this.focusInput_(this.sizeInputEl_);
+    }
+  }
+
+  private focusInput_(element: ElementRef): void {
+    // Wrap in a timeout to make sure that element is rendered before looking for it.
+    setTimeout(() => {
+      element.nativeElement.focus();
+    }, 150);
   }
 
   private get _sizesObservable(): Observable<AWSSize[]> {

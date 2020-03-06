@@ -1,0 +1,26 @@
+<form [formGroup]="form">
+  <div class="km-header">SSH Keys</div>
+  <mat-form-field *ngIf="hasKeys()">
+    <mat-label>SSH Keys</mat-label>
+    <mat-select [formControlName]="Controls.Keys"
+                multiple
+                disableOptionCentering
+                panelClass="km-sshkey-dropdown"
+                [compareWith]="compareValues">
+      <mat-option *ngFor="let key of keys"
+                  [value]="key">{{key.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button *ngIf="hasKeys()"
+          (click)="addSshKeyDialog()"
+          mat-flat-button
+          [disabled]="!canAddSSHKey()">Add SSH key
+  </button>
+  <div *ngIf="!hasKeys()">
+    <p>You have no SSH keys</p>
+    <button (click)="addSshKeyDialog()"
+            mat-flat-button
+            [disabled]="!canAddSSHKey()">Add SSH key
+    </button>
+  </div>
+</form>

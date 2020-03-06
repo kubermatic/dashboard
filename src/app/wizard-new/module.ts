@@ -18,6 +18,7 @@ import {AWSProviderBasicComponent} from './step/settings/provider/basic/aws/comp
 import {ProviderBasicComponent} from './step/settings/provider/basic/component';
 import {AWSProviderExtendedComponent} from './step/settings/provider/extended/aws/component';
 import {ProviderExtendedComponent} from './step/settings/provider/extended/component';
+import {ClusterSSHKeysComponent} from './step/settings/ssh-keys/cluster-ssh-keys.component';
 import {SummaryStepComponent} from './step/summary/component';
 
 const components: any[] = [
@@ -32,6 +33,7 @@ const components: any[] = [
   AWSProviderBasicComponent,
   ProviderExtendedComponent,
   AWSProviderExtendedComponent,
+  ClusterSSHKeysComponent,
 ];
 
 @NgModule({

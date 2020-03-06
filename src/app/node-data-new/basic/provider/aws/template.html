@@ -4,19 +4,22 @@
        class="mat-select-container">
     <mat-form-field>
       <mat-label>Node Size</mat-label>
-      <input matInput
-             [formControlName]="Controls.Size"
-             name="size"
-             placeholder="Node Size*"
-             [matAutocomplete]="autoSize"
-             required>
-      <mat-autocomplete #autoSize="matAutocomplete">
-        <mat-option *ngFor="let size of sizes"
+      <mat-select [formControlName]="Controls.Size"
+                  (openedChange)="onSizeOpen($event)"
+                  required>
+        <input #sizeInput
+               name="filterBy"
+               matInput
+               type="text"
+               class="km-select-input"
+               (input)="filterByInput.name = $event.target.value"
+               autocomplete="off"
+               placeholder="Select size...">
+        <mat-option *ngFor="let size of sizes | filterBy: filterByInput"
                     [value]="size.name">
           {{size.name}} ({{size.vcpus}} vCPU, {{size.memory}} GB RAM, {{size.price | number: '1.2-5'}} USD per hour)
         </mat-option>
-      </mat-autocomplete>
-      <mat-error *ngIf="hasError(Controls.Size, 'mustBeInList') && !hasError(Controls.Size, 'required')">Input doesn't match options. Please choose from given options.</mat-error>
+      </mat-select>
       <mat-error *ngIf="hasError(Controls.Size, 'required')">Size is <strong>required</strong>.</mat-error>
     </mat-form-field>
   </div>
@@ -66,8 +69,12 @@
         </mat-option>
       </mat-optgroup>
     </mat-autocomplete>
-    <mat-error *ngIf="hasError(Controls.SubnetID, 'mustBeInList') && !hasError(Controls.SubnetID, 'required')">Input doesn't match options. Please choose from given options.</mat-error>
-    <mat-error *ngIf="hasError(Controls.SubnetID, 'required')">Subnet ID & Availability Zone is <strong>required</strong>.</mat-error>
+    <mat-error *ngIf="hasError(Controls.SubnetID, 'mustBeInList') && !hasError(Controls.SubnetID, 'required')">Input
+      doesn't match options. Please choose from given options.
+    </mat-error>
+    <mat-error *ngIf="hasError(Controls.SubnetID, 'required')">Subnet ID & Availability Zone is
+      <strong>required</strong>.
+    </mat-error>
     <mat-hint>{{getHint(Controls.SubnetID)}}</mat-hint>
   </mat-form-field>
 

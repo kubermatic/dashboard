@@ -2,6 +2,7 @@ import {EventEmitter, Injectable} from '@angular/core';
 import * as _ from 'lodash';
 import {Observable} from 'rxjs';
 import {CloudSpec, ClusterEntity} from '../../shared/entity/ClusterEntity';
+import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 
 @Injectable()
@@ -11,6 +12,7 @@ export class ClusterService {
 
   private readonly _clusterChanges = new EventEmitter<ClusterEntity>();
   private _clusterEntity: ClusterEntity = ClusterEntity.NewEmptyClusterEntity();
+  private _sshKeysEntity: SSHKeyEntity[] = [];
 
   set cluster(cluster: ClusterEntity) {
     this._clusterEntity = _.merge(this._clusterEntity, cluster);
@@ -69,6 +71,14 @@ export class ClusterService {
   set labels(labels: object) {
     delete this._clusterEntity.labels;
     this._clusterEntity.labels = labels;
+  }
+
+  set sshKeys(keys: SSHKeyEntity[]) {
+    this._sshKeysEntity = keys;
+  }
+
+  get sshKeys(): SSHKeyEntity[] {
+    return this._sshKeysEntity;
   }
 
   reset(): void {
