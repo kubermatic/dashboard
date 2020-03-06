@@ -42,7 +42,7 @@ if [[ -z ${PROW_JOB_ID} ]]; then
 fi
 
 cd "${GOPATH}/src/github.com/kubermatic/kubermatic"
-source ../lib.sh
+source ./api/hack/lib.sh
 
 TEST_NAME="Get Vault token"
 echodate "Getting secrets from Vault"
