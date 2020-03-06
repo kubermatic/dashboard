@@ -4,7 +4,7 @@ import {first, tap} from 'rxjs/operators';
 
 import {environment} from '../environments/environment';
 
-import {NotificationService} from './core/services';
+import {NotificationService} from './core/services/notification/notification.service';
 import {VersionInfo} from './shared/entity/VersionInfo';
 import {Config, UserGroupConfig} from './shared/model/Config';
 
