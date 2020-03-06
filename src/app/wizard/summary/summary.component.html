@@ -364,6 +364,25 @@
           <div class="km-summary-row km-summary-row-with-margin">{{nodeData.spec.cloud.azure.size}}</div>
         </ng-container>
 
+        <!-- Alibaba Nodes -->
+        <ng-container *ngIf="cluster.spec.cloud.alibaba">
+          <div class="km-summary-row">{{nodeData.spec.cloud.alibaba.instanceType}}</div>
+          <div class="km-summary-row km-summary-row-with-margin">Disk {{nodeData.spec.cloud.alibaba.diskSize}}
+            GB, {{nodeData.spec.cloud.alibaba.diskType}}</div>
+          <km-property *ngIf="nodeData.spec.cloud.alibaba.vSwitchID">
+            <div key>vSwitch ID</div>
+            <div value>{{nodeData.spec.cloud.alibaba.vSwitchID}}</div>
+          </km-property>
+          <km-property *ngIf="nodeData.spec.cloud.alibaba.internetMaxBandwidthOut">
+            <div key>Internet Max Bandwidth Out</div>
+            <div value>{{nodeData.spec.cloud.alibaba.internetMaxBandwidthOut}}</div>
+          </km-property>
+          <km-property *ngIf="nodeData.spec.cloud.alibaba.zoneID">
+            <div key>Zone ID</div>
+            <div value>{{nodeData.spec.cloud.alibaba.zoneID}}</div>
+          </km-property>
+        </ng-container>
+
         <!-- Initial Node Replicas -->
         <div [ngClass]="noMoreIpsLeft ? 'km-summary-row km-warning km-error' : 'km-summary-row' ">
           <span class="km-summary-left km-text">{{nodeData.count}}</span>
@@ -514,6 +533,22 @@
           </div>
         </ng-container>
         <ng-container *ngIf="nodeData.spec.cloud.gcp && !displayTags(nodeData.spec.cloud.gcp.labels)">
+          <div class="km-summary-row">
+            <span class="km-summary-left km-text">
+              <i class="km-icon-disabled"></i>
+            </span>
+            <span>Provider Labels</span>
+          </div>
+        </ng-container>
+
+        <!-- Alibaba Labels -->
+        <ng-container *ngIf="nodeData.spec.cloud.alibaba && displayTags(nodeData.spec.cloud.alibaba.labels)">
+          <div class="km-summary-tags">
+            <div class="km-summary-row">Provider Labels</div>
+            <km-labels [labels]="nodeData.spec.cloud.alibaba.labels"></km-labels>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="nodeData.spec.cloud.alibaba && !displayTags(nodeData.spec.cloud.alibaba.labels)">
           <div class="km-summary-row">
             <span class="km-summary-left km-text">
               <i class="km-icon-disabled"></i>

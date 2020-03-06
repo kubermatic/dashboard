@@ -33,6 +33,7 @@ export class CloudSpecPatch {
   azure?: AzureCloudSpecPatch;
   gcp?: GCPCloudSpecPatch;
   kubevirt?: KubevirtCloudSpecPatch;
+  alibaba?: AlibabaCloudSpecPatch;
 }
 
 export class DigitaloceanCloudSpecPatch {
@@ -83,4 +84,9 @@ export class VSphereInfraManagementUser {
 
 export class KubevirtCloudSpecPatch {
   kubeconfig?: string;
+}
+
+export class AlibabaCloudSpecPatch {
+  accessKeyID?: string;
+  accessKeySecret?: string;
 }

@@ -15,6 +15,8 @@ import {StepsService} from '../core/services/wizard/steps.service';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {MachineNetworksModule} from '../machine-networks/machine-networks.module';
+import {AlibabaNodeDataComponent} from '../node-data/alibaba-node-data/alibaba-node-data.component';
+import {AlibabaNodeOptionsComponent} from '../node-data/alibaba-node-data/alibaba-node-options/alibaba-node-options.component';
 import {AWSNodeDataComponent} from '../node-data/aws-node-data/aws-node-data.component';
 import {AWSNodeOptionsComponent} from '../node-data/aws-node-data/aws-node-options/aws-node-options.component';
 import {AzureNodeDataComponent} from '../node-data/azure-node-data/azure-node-data.component';
@@ -50,6 +52,7 @@ import {SetMachineNetworksComponent} from './set-machine-networks/set-machine-ne
 import {SetProviderComponent} from './set-provider/set-provider.component';
 import {CustomPresetsSettingsComponent} from './set-settings/custom-credentials/custom-presets.component';
 import {ExtendedOptionsComponent} from './set-settings/extended-options/extended-options.component';
+import {AlibabaClusterSettingsComponent} from './set-settings/provider-settings/alibaba/alibaba.component';
 import {AWSProviderOptionsComponent} from './set-settings/provider-settings/aws/aws-provider-options/aws-provider-options.component';
 import {AWSClusterSettingsComponent} from './set-settings/provider-settings/aws/aws.component';
 import {AzureProviderOptionsComponent} from './set-settings/provider-settings/azure/azure-provider-options/azure-provider-options.component';
@@ -105,6 +108,7 @@ describe('WizardComponent', () => {
             ClusterProviderSettingsComponent,
             ClusterProviderOptionsComponent,
             DigitaloceanClusterSettingsComponent,
+            AlibabaClusterSettingsComponent,
             AWSClusterSettingsComponent,
             AWSProviderOptionsComponent,
             OpenstackClusterSettingsComponent,
@@ -124,6 +128,8 @@ describe('WizardComponent', () => {
             NodeDataOptionsComponent,
             OpenstackNodeDataComponent,
             OpenstackNodeOptionsComponent,
+            AlibabaNodeDataComponent,
+            AlibabaNodeOptionsComponent,
             AWSNodeDataComponent,
             AWSNodeOptionsComponent,
             DigitaloceanNodeDataComponent,
