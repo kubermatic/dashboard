@@ -14,9 +14,6 @@ export KUBERMATIC_SCHEME="http"
 export KUBERMATIC_HOST="localhost:8080"
 # If set to `true`, the script will just use `latest`. Used e.G. in the UI tests.
 export KUBERMATIC_SKIP_BUILDING="${KUBERMATIC_SKIP_BUILDING:-false}"
-# If set to `true`, the script will use the Kubermatic Operator instead of the
-# Helm chart for setting up Kubermatic.
-export KUBERMATIC_USE_OPERATOR="${KUBERMATIC_USE_OPERATOR:-false}"
 # Number of UI replicas, zero by default as we do not test the UI
 export KUBERMATIC_UI_REPLICAS="${KUBERMATIC_UI_REPLICAS:-0}"
 # Defaults to `latest` so we do not test by default if the latest dashboard version
@@ -333,107 +330,49 @@ TEST_NAME="Deploy cert-manager CRDs"
 echodate "Deploying cert-manager CRDs"
 retry 5 kubectl apply -f config/cert-manager/templates/crd.yaml
 
-if [[ "${KUBERMATIC_USE_OPERATOR}" = "false" ]]; then
-  TEST_NAME="Deploy Kubermatic"
-  echodate "Deploying Kubermatic using Helm..."
+TEST_NAME="Deploy Kubermatic"
+echodate "Deploying Kubermatic using Helm..."
 
-  OLD_HEAD="$(git rev-parse HEAD)"
-  if [[ -n ${CHARTS_VERSION:-} ]]; then
-    git checkout "$CHARTS_VERSION"
-  fi
+OLD_HEAD="$(git rev-parse HEAD)"
+if [[ -n ${CHARTS_VERSION:-} ]]; then
+  git checkout "$CHARTS_VERSION"
+fi
 
-  # --force is needed in case the first attempt at installing didn't succeed
-  # see https://github.com/helm/helm/pull/3597
-  retry 3 helm upgrade --install --force --wait --timeout 300 \
-    --set=kubermatic.isMaster=true \
-    --set=kubermatic.imagePullSecretData=$IMAGE_PULL_SECRET_DATA \
-    --set-string=kubermatic.controller.addons.kubernetes.image.tag="$KUBERMATIC_VERSION" \
-    --set-string=kubermatic.controller.image.tag="$KUBERMATIC_VERSION" \
-    --set-string=kubermatic.controller.addons.openshift.image.tag="$KUBERMATIC_VERSION" \
-    --set-string=kubermatic.api.image.tag="$KUBERMATIC_VERSION" \
-    --set=kubermatic.controller.datacenterName=${SEED_NAME} \
-    --set=kubermatic.api.replicas=1 \
-    --set-string=kubermatic.masterController.image.tag="$KUBERMATIC_VERSION" \
-    --set-string=kubermatic.ui.image.tag=${UIDOCKERTAG} \
-    --set=kubermatic.ui.replicas="${KUBERMATIC_UI_REPLICAS}" \
-    --set=kubermatic.ingressClass=non-existent \
-    --set=kubermatic.checks.crd.disable=true \
-    --set=kubermatic.datacenters='' \
-    --set=kubermatic.dynamicDatacenters=true \
-    --set=kubermatic.dynamicPresets=true \
-    --set=kubermatic.kubeconfig="$(cat $KUBECONFIG|sed 's/127.0.0.1.*/kubernetes.default.svc.cluster.local./'|base64 -w0)" \
-    --set=kubermatic.auth.tokenIssuer=http://dex.oauth:5556/dex \
-    --set=kubermatic.auth.clientID=kubermatic \
-    --set=kubermatic.auth.serviceAccountKey=$SERVICE_ACCOUNT_KEY \
-    --set=kubermatic.apiserverDefaultReplicas=1 \
-    --set=kubermatic.deployVPA=false \
-    --namespace=kubermatic \
-    ${ADDITIONAL_HELM_ARGS} \
-    ${OPENSHIFT_HELM_ARGS:-} \
-    --values ${VALUES_FILE} \
-    kubermatic \
-    ./config/kubermatic/
+# --force is needed in case the first attempt at installing didn't succeed
+# see https://github.com/helm/helm/pull/3597
+retry 3 helm upgrade --install --force --wait --timeout 300 \
+  --set=kubermatic.isMaster=true \
+  --set=kubermatic.imagePullSecretData=$IMAGE_PULL_SECRET_DATA \
+  --set-string=kubermatic.controller.addons.kubernetes.image.tag="$KUBERMATIC_VERSION" \
+  --set-string=kubermatic.controller.image.tag="$KUBERMATIC_VERSION" \
+  --set-string=kubermatic.controller.addons.openshift.image.tag="$KUBERMATIC_VERSION" \
+  --set-string=kubermatic.api.image.tag="$KUBERMATIC_VERSION" \
+  --set=kubermatic.controller.datacenterName=${SEED_NAME} \
+  --set=kubermatic.api.replicas=1 \
+  --set-string=kubermatic.masterController.image.tag="$KUBERMATIC_VERSION" \
+  --set-string=kubermatic.ui.image.tag=${UIDOCKERTAG} \
+  --set=kubermatic.ui.replicas="${KUBERMATIC_UI_REPLICAS}" \
+  --set=kubermatic.ingressClass=non-existent \
+  --set=kubermatic.checks.crd.disable=true \
+  --set=kubermatic.datacenters='' \
+  --set=kubermatic.dynamicDatacenters=true \
+  --set=kubermatic.dynamicPresets=true \
+  --set=kubermatic.kubeconfig="$(cat $KUBECONFIG|sed 's/127.0.0.1.*/kubernetes.default.svc.cluster.local./'|base64 -w0)" \
+  --set=kubermatic.auth.tokenIssuer=http://dex.oauth:5556/dex \
+  --set=kubermatic.auth.clientID=kubermatic \
+  --set=kubermatic.auth.serviceAccountKey=$SERVICE_ACCOUNT_KEY \
+  --set=kubermatic.apiserverDefaultReplicas=1 \
+  --set=kubermatic.deployVPA=false \
+  --namespace=kubermatic \
+  ${ADDITIONAL_HELM_ARGS} \
+  ${OPENSHIFT_HELM_ARGS:-} \
+  --values ${VALUES_FILE} \
+  kubermatic \
+  ./config/kubermatic/
 
-  # Return repo to previous state if we checked out older charts before.
-  if [[ "${KUBERMATIC_SKIP_BUILDING}" = "false" ]]; then
-    git checkout ${KUBERMATIC_VERSION}
-  fi
-else
-  TEST_NAME="Deploy Kubermatic"
-  echodate "Installing Kubermatic using operator..."
-
-  # --force is needed in case the first attempt at installing didn't succeed
-  # see https://github.com/helm/helm/pull/3597
-  retry 3 helm upgrade --install --force --wait --timeout 300 \
-    --set-file "kubermaticOperator.imagePullSecret=/config.json" \
-    --set-string "kubermaticOperator.image.tag=$KUBERMATIC_VERSION" \
-    --namespace kubermatic \
-    --values ${VALUES_FILE} \
-    kubermatic-operator \
-    ./config/kubermatic-operator/
-
-  echodate "Kubermatic Operator is ready."
-
-  KUBERMATIC_CONFIG="$(mktemp)"
-  cat <<EOF >$KUBERMATIC_CONFIG
-apiVersion: operator.kubermatic.io/v1alpha1
-kind: KubermaticConfiguration
-metadata:
-  name: e2e
-  namespace: kubermatic
-spec:
-  ingress:
-    domain: ci.kubermatic.io
-    disable: true
-  imagePullSecret: |
-$(echo "$IMAGE_PULL_SECRET_DATA" | base64 -d | sed 's/^/    /')
-  userCluster:
-    apiserverReplicas: 1
-  api:
-    debugLog: true
-  featureGates:
-    # VPA won't do anything useful due to missing Prometheus, but we can
-    # at least ensure we deploy a working set of Deployments.
-    VerticalPodAutoscaler: {}
-  ui:
-    replicas: $KUBERMATIC_UI_REPLICAS
-  # Dex integration
-  auth:
-    tokenIssuer: "http://dex.oauth:5556/dex"
-    clientID: "kubermatic"
-    issuerRedirectURL: "http://localhost:8000"
-    serviceAccountKey: "$SERVICE_ACCOUNT_KEY"
-EOF
-  echodate "Creating Kubermatic Master..."
-  retry 3 kubectl apply -f $KUBERMATIC_CONFIG
-
-  echodate "Waiting for Kubermatic Operator to deploy master components..."
-  # sleep a bit to prevent us from checking the Deployments too early, before
-  # the operator had time to reconcile
-  sleep 5
-  retry 10 check_all_deployments_ready kubermatic
-
-  echodate "Kubermatic Master is ready."
+# Return repo to previous state if we checked out older charts before.
+if [[ "${KUBERMATIC_SKIP_BUILDING}" = "false" ]]; then
+  git checkout ${KUBERMATIC_VERSION}
 fi
 
 echodate "Finished installing Kubermatic"
@@ -563,18 +502,6 @@ spec:
 EOF
 retry 8 kubectl apply -f $SEED_MANIFEST
 echodate "Finished installing Seed"
-
-# wait until the operator has reconciled
-if [[ "${KUBERMATIC_USE_OPERATOR}" = "true" ]]; then
-  sleep 5
-  echodate "Waiting for Kubermatic Operator to deploy seed components..."
-  retry 8 check_all_deployments_ready kubermatic
-  echodate "Kubermatic Seed is ready."
-
-  echodate "Waiting for VPA to be ready..."
-  retry 5 check_all_deployments_ready kube-system
-  echodate "VPA is ready."
-fi
 
 function kill_port_forwardings() {
   echodate "Stopping any previous port-forwardings to port $1..."
