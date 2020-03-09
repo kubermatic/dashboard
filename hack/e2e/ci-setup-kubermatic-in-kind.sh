@@ -1,31 +1,5 @@
-#############################################################
-## CI Setup Kubermatic in kind                              #
-## A simple script to get a Kubermatic setup using kind     #
-#############################################################
-#
-# This script should be sourced, not called, so callers get the variables it sets
-# Note: This script is used in upgrade test, hence it must be idempotent
-
-# The kubemaric version to build. The script will checkout the configured
-# revision before building the binaries and go back to the initial HEAD after
-# building finished. Defaults to current HEAD.
-export KUBERMATIC_VERSION="${KUBERMATIC_VERSION:-$(git rev-parse HEAD)}"
-export KUBERMATIC_SCHEME="http"
-export KUBERMATIC_HOST="localhost:8080"
-# If set to `true`, the script will just use `latest`. Used e.G. in the UI tests.
-export KUBERMATIC_SKIP_BUILDING="${KUBERMATIC_SKIP_BUILDING:-false}"
-# Number of UI replicas, zero by default as we do not test the UI
-export KUBERMATIC_UI_REPLICAS="${KUBERMATIC_UI_REPLICAS:-0}"
-# Defaults to `latest` so we do not test by default if the latest dashboard version
-# got successfully built and published, as that may race with the dashboard postsubmit.
-export UIDOCKERTAG="${UIDOCKERTAG:-latest}"
-# ADDITIONAL_HELM_ARGS allows to configure extra args for helm. Used e.G. in UI and API tests.
-export ADDITIONAL_HELM_ARGS="${ADDITIONAL_HELM_ARGS:-}"
-
-# Consider self-installed go installations
+export KUBERMATIC_VERSION=latest
 export PATH=$PATH:/usr/local/go/bin
-
-# This is just used as a const
 export SEED_NAME=prow-build-cluster
 
 if [[ -z ${JOB_NAME} ]]; then
@@ -241,66 +215,6 @@ echodate "Deploying Kubermatic CRDs"
 
 retry 5 kubectl apply -f config/kubermatic/crd
 
-if [[ "${KUBERMATIC_SKIP_BUILDING}" = "false" ]]; then
-  # Build kubermatic binaries and push the image
-  OLD_HEAD="$(git rev-parse HEAD)"
-  git checkout ${KUBERMATIC_VERSION}
-  echodate "Building containers with tag $KUBERMATIC_VERSION"
-  echodate "Building binaries"
-  TEST_NAME="Build Kubermatic binaries"
-  time retry 1 make -C api build
-
-  (
-    echodate "Building docker image"
-    TEST_NAME="Build Kubermatic Docker image"
-    cd api
-    IMAGE_NAME="quay.io/kubermatic/api:$KUBERMATIC_VERSION"
-    time retry 5 docker build -t "$IMAGE_NAME" .
-    time retry 5 kind load docker-image "$IMAGE_NAME" --name ${SEED_NAME}
-  )
-  (
-    echodate "Building addons image"
-    TEST_NAME="Build addons Docker image"
-    cd addons
-    IMAGE_NAME="quay.io/kubermatic/addons:$KUBERMATIC_VERSION"
-    time retry 5 docker build -t "${IMAGE_NAME}" .
-    time retry 5 kind load docker-image "$IMAGE_NAME" --name ${SEED_NAME}
-  )
-  (
-    echodate "Building openshift addons image"
-    TEST_NAME="Build openshift Docker image"
-    cd openshift_addons
-    IMAGE_NAME="quay.io/kubermatic/openshift-addons:$KUBERMATIC_VERSION"
-    time retry 5 docker build -t "${IMAGE_NAME}" .
-    time retry 5 kind load docker-image "$IMAGE_NAME" --name ${SEED_NAME}
-  )
-  (
-    echodate "Building dnatcontroller image"
-    TEST_NAME="Build dnatcontroller Docker image"
-    cd api/cmd/kubeletdnat-controller
-    make build
-    IMAGE_NAME="quay.io/kubermatic/kubeletdnat-controller:$KUBERMATIC_VERSION"
-    time retry 5 docker build -t "${IMAGE_NAME}" .
-    time retry 5 kind load docker-image "$IMAGE_NAME" --name ${SEED_NAME}
-  )
-  (
-    # This may not exist during upgrade tests.
-    # TODO @kdomanski after 2.13 release: remove this condition
-    if [[ -e api/cmd/user-ssh-keys-agent ]]; then
-      echodate "Building user-ssh-keys-agent image"
-      TEST_NAME="Build user-ssh-keys-agent Docker image"
-      cd api/cmd/user-ssh-keys-agent
-      make build
-      retry 5 docker login -u "$QUAY_IO_USERNAME" -p "$QUAY_IO_PASSWORD" quay.io
-      IMAGE_NAME=quay.io/kubermatic/user-ssh-keys-agent:$KUBERMATIC_VERSION
-      time retry 5 docker build -t "${IMAGE_NAME}" .
-      time retry 5 docker push "quay.io/kubermatic/user-ssh-keys-agent:$KUBERMATIC_VERSION"
-    fi
-  )
-  git checkout ${OLD_HEAD}
-  echodate "Successfully built and loaded all images"
-fi
-
 function check_all_deployments_ready() {
   local namespace="$1"
 
@@ -350,8 +264,8 @@ retry 3 helm upgrade --install --force --wait --timeout 300 \
   --set=kubermatic.controller.datacenterName=${SEED_NAME} \
   --set=kubermatic.api.replicas=1 \
   --set-string=kubermatic.masterController.image.tag="$KUBERMATIC_VERSION" \
-  --set-string=kubermatic.ui.image.tag=${UIDOCKERTAG} \
-  --set=kubermatic.ui.replicas="${KUBERMATIC_UI_REPLICAS}" \
+  --set-string=kubermatic.ui.image.tag=latest \
+  --set=kubermatic.ui.replicas=0 \
   --set=kubermatic.ingressClass=non-existent \
   --set=kubermatic.checks.crd.disable=true \
   --set=kubermatic.datacenters='' \
@@ -364,16 +278,9 @@ retry 3 helm upgrade --install --force --wait --timeout 300 \
   --set=kubermatic.apiserverDefaultReplicas=1 \
   --set=kubermatic.deployVPA=false \
   --namespace=kubermatic \
-  ${ADDITIONAL_HELM_ARGS} \
-  ${OPENSHIFT_HELM_ARGS:-} \
   --values ${VALUES_FILE} \
   kubermatic \
   ./config/kubermatic/
-
-# Return repo to previous state if we checked out older charts before.
-if [[ "${KUBERMATIC_SKIP_BUILDING}" = "false" ]]; then
-  git checkout ${KUBERMATIC_VERSION}
-fi
 
 echodate "Finished installing Kubermatic"
 
@@ -543,3 +450,64 @@ retry 5 curl -sSf  http://127.0.0.1:8080/api/v1/healthz
 echodate "API became ready"
 
 cd -
+
+echodate "Creating UI Azure preset..."
+cat <<EOF > preset-azure.yaml
+apiVersion: kubermatic.k8s.io/v1
+kind: Preset
+metadata:
+  name: e2e-azure
+  namespace: kubermatic
+spec:
+  azure:
+    tenantId: ${AZURE_E2E_TESTS_TENANT_ID}
+    subscriptionId: ${AZURE_E2E_TESTS_SUBSCRIPTION_ID}
+    clientId: ${AZURE_E2E_TESTS_CLIENT_ID}
+    clientSecret: ${AZURE_E2E_TESTS_CLIENT_SECRET}
+EOF
+retry 2 kubectl apply -f preset-azure.yaml
+
+echodate "Creating UI DigitalOcean preset..."
+cat <<EOF > preset-digitalocean.yaml
+apiVersion: kubermatic.k8s.io/v1
+kind: Preset
+metadata:
+  name: e2e-digitalocean
+  namespace: kubermatic
+spec:
+  digitalocean:
+    token: ${DO_E2E_TESTS_TOKEN}
+EOF
+retry 2 kubectl apply -f preset-digitalocean.yaml
+
+echodate "Creating UI GCP preset..."
+cat <<EOF > preset-gcp.yaml
+apiVersion: kubermatic.k8s.io/v1
+kind: Preset
+metadata:
+  name: e2e-gcp
+  namespace: kubermatic
+spec:
+  gcp:
+    serviceAccount: ${GOOGLE_SERVICE_ACCOUNT}
+EOF
+retry 2 kubectl apply -f preset-gcp.yaml
+
+echodate "Creating UI OpenStack preset..."
+cat <<EOF > preset-openstack.yaml
+apiVersion: kubermatic.k8s.io/v1
+kind: Preset
+metadata:
+  name: e2e-openstack
+  namespace: kubermatic
+spec:
+  openstack:
+    username: ${OS_USERNAME}
+    password: ${OS_PASSWORD}
+    tenant: ${OS_TENANT_NAME}
+    domain: ${OS_DOMAIN}
+EOF
+retry 2 kubectl apply -f preset-openstack.yaml
+
+echodate "Applying user..."
+retry 2 kubectl apply -f $(dirname $0)/fixtures/user.yaml

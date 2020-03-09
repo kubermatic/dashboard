@@ -29,11 +29,11 @@ presubmits:
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
   extra_refs:
-    # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
-    - org: kubermatic
-      repo: kubermatic
-      base_ref: master
-      clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
+  # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
+  - org: kubermatic
+    repo: kubermatic
+    base_ref: master
+    clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
   labels:
     preset-digitalocean: "true"
     preset-openstack: "true"
