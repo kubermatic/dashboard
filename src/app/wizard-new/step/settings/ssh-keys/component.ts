@@ -16,8 +16,8 @@ enum Controls {
 
 @Component({
   selector: 'kubermatic-wizard-cluster-ssh-keys',
-  templateUrl: './cluster-ssh-keys.component.html',
-  styleUrls: ['cluster-ssh-keys.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['style.scss'],
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ClusterSSHKeysComponent), multi: true},
     {provide: NG_VALIDATORS, useExisting: forwardRef(() => ClusterSSHKeysComponent), multi: true}
@@ -68,7 +68,7 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
     this._unsubscribe.complete();
   }
 
-  addSshKeyDialog(): void {
+  addSSHKeyDialog(): void {
     const dialogRef = this._dialog.open(AddSshKeyDialogComponent);
     dialogRef.componentInstance.projectID = this._project.id;
 

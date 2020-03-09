@@ -14,11 +14,11 @@ import {asyncData} from '../../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../../../../testing/services/project-mock.service';
 import {UserMockService} from '../../../../testing/services/user-mock.service';
-import {ClusterSSHKeysComponent} from './cluster-ssh-keys.component';
+import {Component} from './cluster-ssh-keys.component';
 
 describe('ClusterSSHKeys', () => {
-  let fixture: ComponentFixture<ClusterSSHKeysComponent>;
-  let component: ClusterSSHKeysComponent;
+  let fixture: ComponentFixture<Component>;
+  let component: Component;
 
   beforeEach(async(() => {
     const apiMock = {'getSSHKeys': jest.fn()};
@@ -34,7 +34,7 @@ describe('ClusterSSHKeys', () => {
             HttpClientModule,
           ],
           declarations: [
-            ClusterSSHKeysComponent,
+            Component,
           ],
           providers: [
             WizardService,
@@ -50,7 +50,7 @@ describe('ClusterSSHKeys', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ClusterSSHKeysComponent);
+    fixture = TestBed.createComponent(Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

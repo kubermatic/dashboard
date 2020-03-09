@@ -39,6 +39,10 @@
              color="tertiary"
              routerLink="/projects/{{project?.id}}/clusters">Cancel</a>
           <div fxFlex></div>
+          <mat-spinner fxFlexAlign="center"
+                       [diameter]="30"
+                       color="accent"
+                       *ngIf="creating"></mat-spinner>
           <button mat-flat-button
                   color="tertiary"
                   matStepperPrevious
@@ -50,7 +54,9 @@
                   *ngIf="showNext(active)">Next
           </button>
           <button mat-flat-button
-                  *ngIf="last">Create
+                  [disabled]="creating"
+                  *ngIf="last"
+                  (click)="create()">Create
           </button>
         </div>
       </mat-step>

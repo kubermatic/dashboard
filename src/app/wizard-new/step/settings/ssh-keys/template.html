@@ -12,13 +12,13 @@
     </mat-select>
   </mat-form-field>
   <button *ngIf="hasKeys()"
-          (click)="addSshKeyDialog()"
+          (click)="addSSHKeyDialog()"
           mat-flat-button
           [disabled]="!canAddSSHKey()">Add SSH key
   </button>
   <div *ngIf="!hasKeys()">
     <p>You have no SSH keys</p>
-    <button (click)="addSshKeyDialog()"
+    <button (click)="addSSHKeyDialog()"
             mat-flat-button
             [disabled]="!canAddSSHKey()">Add SSH key
     </button>

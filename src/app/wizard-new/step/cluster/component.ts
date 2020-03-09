@@ -60,9 +60,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.Version]: new FormControl('', [Validators.required]),
       [Controls.Type]: new FormControl(''),
       [Controls.ImagePullSecret]: new FormControl(''),
-      [Controls.AuditLogging]: new FormControl(''),
-      [Controls.PodSecurityPolicyAdmissionPlugin]: new FormControl(''),
-      [Controls.PodNodeSelectorAdmissionPlugin]: new FormControl(''),
+      [Controls.AuditLogging]: new FormControl(false),
+      [Controls.PodSecurityPolicyAdmissionPlugin]: new FormControl(false),
+      [Controls.PodNodeSelectorAdmissionPlugin]: new FormControl(false),
       [Controls.Labels]: new FormControl(''),
     });
 
