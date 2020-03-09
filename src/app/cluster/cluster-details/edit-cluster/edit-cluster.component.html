@@ -25,7 +25,15 @@
         </mat-form-field>
         <div fxLayout="row"
              fxLayoutGap="16px">
-          <mat-checkbox formControlName="auditLogging">Audit Logging</mat-checkbox>
+          <div fxLayout="row"
+               fxLayoutGap="8px"
+               fxLayoutAlign=" center">
+            <mat-checkbox formControlName="auditLogging">Audit Logging</mat-checkbox>
+            <i *ngIf="!!datacenter.spec.enforceAuditLogging"
+               class="km-icon-warning km-warning"
+               matTooltip="Audit Logging is enforced in the chosen datacenter.">
+            </i>
+          </div>
           <div fxLayout="row"
                fxLayoutGap="8px"
                fxLayoutAlign=" center">

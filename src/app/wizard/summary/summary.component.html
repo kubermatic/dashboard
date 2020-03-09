@@ -26,6 +26,10 @@
           <i [ngClass]="{'km-icon-disabled': !cluster.spec.auditLogging?.enabled, 'km-icon-running': cluster.spec.auditLogging?.enabled}"></i>
         </span>
         <span>Audit Logging</span>
+        <i *ngIf="!!datacenterFormData.datacenter.spec.enforceAuditLogging"
+           class="km-icon-warning km-warning"
+           matTooltip="Audit Logging is enforced in the chosen datacenter.">
+        </i>
       </div>
       <div class="km-summary-row">
         <span class="km-summary-left km-text">
