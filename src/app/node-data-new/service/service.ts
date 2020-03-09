@@ -60,19 +60,18 @@ export class NodeDataService {
     }
 
     flavors(): Observable<AWSSize[]> {
+      // TODO: support dialog mode
       switch (this._parent.mode) {
         case NodeDataMode.Wizard:
           return this._parent._clusterService.datacenterChanges
               .pipe(switchMap(dc => this._parent._datacenter.getDataCenter(dc)))
               .pipe(switchMap(
                   dc => this._parent._preset.provider(NodeProvider.AWS).region(dc.spec.aws.region).flavors()));
-          // case NodeDataMode.Dialog:
-          //   return this._project.selectedProject.pipe(
-          //       switchMap(project => this._api.getAWSSizes(project.id, this.seedDatacenterName, this.clusterID)));
       }
     }
 
     subnets(): Observable<AWSSubnet[]> {
+      // TODO: support dialog mode
       switch (this._parent.mode) {
         case NodeDataMode.Wizard:
           return this._parent._clusterService.clusterChanges
@@ -84,11 +83,6 @@ export class NodeDataService {
                                  .vpc(cluster.spec.cloud.aws.vpcId)
                                  .credential(this._parent._preset.preset)
                                  .subnets(cluster.spec.cloud.dc)));
-          //   case NodeDataMode.Dialog:
-          //     return this._project.selectedProject.pipe(
-          //         switchMap(project => this._api.getAWSSubnets(project.id, this.seedDatacenterName,
-          //         this.clusterID)));
-          // }
       }
     }
   }

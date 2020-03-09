@@ -60,7 +60,6 @@ import {SSHKeyListComponent} from './components/ssh-key-list/ssh-key-list.compon
 import {TagListComponent} from './components/tag-list/tag-list.component';
 import {TaintFormComponent} from './components/taint-form/taint-form.component';
 import {TaintsComponent} from './components/taints/taints.component';
-import {ReadonlyDirective} from './directives/readonly/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
 
 const modules: any[] = [
@@ -95,10 +94,6 @@ const components: any[] = [
   PropertyUsageComponent,
 ];
 
-const directives: any[] = [
-  ReadonlyDirective,
-];
-
 const entryComponents: any[] = [
   AddProjectDialogComponent,
   AddSshKeyDialogComponent,
@@ -117,13 +112,11 @@ const entryComponents: any[] = [
   declarations: [
     ...components,
     ...entryComponents,
-    ...directives,
   ],
   exports: [
     ...modules,
     ...components,
     ...entryComponents,
-    ...directives,
   ],
   entryComponents: [...entryComponents],
 })

@@ -2,7 +2,7 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {MatStepper} from '@angular/material/stepper';
 import {Observable} from 'rxjs';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
-import {StepRegistry, WizardStep} from '../step/step';
+import {StepRegistry, WizardStep} from '../config';
 import {ClusterService} from './cluster';
 
 @Injectable()

@@ -67,7 +67,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     });
 
     this._nodeDataService.nodeData = this._getNodeData();
-
     this._setDefaultSubnet(this._subnets);
 
     this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
@@ -101,15 +100,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   isInWizard(): boolean {
     return this._nodeDataService.mode === NodeDataMode.Wizard;
-  }
-
-  getLabel(control: Controls): string {
-    switch (control) {
-      case Controls.SubnetID:
-        return 'Subnet ID & Availability Zone';
-    }
-
-    return '';
   }
 
   getHint(control: Controls): string {

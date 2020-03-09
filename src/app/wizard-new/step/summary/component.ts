@@ -62,7 +62,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
         });
 
     if (!!this.cluster.spec.machineNetworks) {
-      this.noMoreIpsLeft = this.noIpsLeft(this.cluster, this.nodeData.count);
+      this.noMoreIpsLeft = this._noIpsLeft(this.cluster, this.nodeData.count);
     }
   }
 
@@ -80,26 +80,9 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   displayProvider(): boolean {
-    return !!this.cluster.spec.cloud.digitalocean || !!this.cluster.spec.cloud.hetzner ||
-        !!this.cluster.spec.cloud.bringyourown || (!!this.cluster.spec.cloud.aws && !this.hasAWSProviderOptions()) ||
-        (!!this.cluster.spec.cloud.gcp && !this.hasGCPProviderOptions()) ||
-        (!!this.cluster.spec.cloud.azure && !this.hasAzureProviderOptions());
-  }
-
-  hasAWSProviderOptions(): boolean {
-    return this.cluster.spec.cloud.aws.securityGroupID !== '' || this.cluster.spec.cloud.aws.vpcId !== '' ||
-        this.cluster.spec.cloud.aws.vpcId !== '' || this.cluster.spec.cloud.aws.routeTableId !== '' ||
-        this.cluster.spec.cloud.aws.instanceProfileName !== '' || this.cluster.spec.cloud.aws.roleARN !== '';
-  }
-
-  hasGCPProviderOptions(): boolean {
-    return this.cluster.spec.cloud.gcp.network !== '' || this.cluster.spec.cloud.gcp.subnetwork !== '';
-  }
-
-  hasAzureProviderOptions(): boolean {
-    return this.cluster.spec.cloud.azure.resourceGroup !== '' || this.cluster.spec.cloud.azure.routeTable !== '' ||
-        this.cluster.spec.cloud.azure.securityGroup !== '' || this.cluster.spec.cloud.azure.subnet !== '' ||
-        this.cluster.spec.cloud.azure.vnet !== '';
+    return this._hasProviderOptions(NodeProvider.AWS) || this._hasProviderOptions(NodeProvider.GCP) ||
+        this._hasProviderOptions(NodeProvider.AZURE) || this._hasProviderOptions(NodeProvider.DIGITALOCEAN) ||
+        this._hasProviderOptions(NodeProvider.HETZNER) || this._hasProviderOptions(NodeProvider.BRINGYOUROWN);
   }
 
   displayTags(tags: object): boolean {
@@ -107,21 +90,19 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   displayNoProviderTags(): boolean {
-    if (this.nodeData.spec.cloud.aws) {
-      return !this.displayTags(this.nodeData.spec.cloud.aws.tags);
-    } else if (this.nodeData.spec.cloud.digitalocean) {
-      return this.nodeData.spec.cloud.digitalocean.tags.length === 0;
-    } else if (this.nodeData.spec.cloud.gcp) {
-      return this.nodeData.spec.cloud.gcp.tags.length === 0;
-    } else if (this.nodeData.spec.cloud.packet) {
-      return this.nodeData.spec.cloud.packet.tags.length === 0;
-    } else if (this.nodeData.spec.cloud.openstack) {
-      return !this.displayTags(this.nodeData.spec.cloud.openstack.tags);
-    } else if (this.nodeData.spec.cloud.azure) {
-      return !this.displayTags(this.nodeData.spec.cloud.azure.tags);
-    } else {
-      return false;
+    const provider = this._clusterService.provider;
+    switch (provider) {
+      case NodeProvider.AWS:
+      case NodeProvider.OPENSTACK:
+      case NodeProvider.AZURE:
+        return !this.displayTags(this.nodeData.spec.cloud[provider].tags);
+      case NodeProvider.DIGITALOCEAN:
+      case NodeProvider.GCP:
+      case NodeProvider.PACKET:
+        return this.nodeData.spec.cloud[provider].tags.length === 0;
     }
+
+    return false;
   }
 
   getDnsServers(dnsServers: string[]): string {
@@ -132,7 +113,12 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
     return this.clusterSSHKeys.map(key => key.name).join(', ');
   }
 
-  noIpsLeft(cluster: ClusterEntity, nodeCount: number): boolean {
+  private _hasProviderOptions(provider: NodeProvider): boolean {
+    return this._clusterService.provider === provider &&
+        Object.values(this.cluster.spec.cloud[provider]).some(val => val);
+  }
+
+  private _noIpsLeft(cluster: ClusterEntity, nodeCount: number): boolean {
     const ipCount = getIpCount(cluster.spec.machineNetworks);
 
     if (!!ipCount && ipCount > 0) {

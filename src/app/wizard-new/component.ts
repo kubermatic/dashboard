@@ -15,10 +15,9 @@ import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
 import {CreateClusterModel} from '../shared/model/CreateClusterModel';
 import {NodeData} from '../shared/model/NodeSpecChange';
 
-import {steps} from './config';
+import {StepRegistry, steps, WizardStep} from './config';
 import {ClusterService as ClusterModelService} from './service/cluster';
 import {WizardService} from './service/wizard';
-import {StepRegistry, WizardStep} from './step/step';
 
 @Component({
   selector: 'kubermatic-wizard',

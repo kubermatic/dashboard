@@ -8,13 +8,13 @@
                   (openedChange)="onSizeOpen($event)"
                   required>
         <input #sizeInput
+               (input)="filterByInput.name = $event.target.value"
                name="filterBy"
-               matInput
+               placeholder="Select size..."
                type="text"
                class="km-select-input"
-               (input)="filterByInput.name = $event.target.value"
                autocomplete="off"
-               placeholder="Select size...">
+               matInput>
         <mat-option *ngFor="let size of sizes | filterBy: filterByInput"
                     [value]="size.name">
           {{size.name}} ({{size.vcpus}} vCPU, {{size.memory}} GB RAM, {{size.price | number: '1.2-5'}} USD per hour)
@@ -42,23 +42,22 @@
 
   <mat-form-field fxFlex>
     <mat-label>Disk Size in GB (gp2)</mat-label>
-    <input matInput
-           [formControlName]="Controls.DiskSize"
+    <input [formControlName]="Controls.DiskSize"
            min="10"
            max="16000"
            type="number"
            autocomplete="off"
+           matInput
            required>
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>{{getLabel(Controls.SubnetID)}}</mat-label>
-    <input matInput
-           name="subnetID"
-           [formControlName]="Controls.SubnetID"
-           [placeholder]="getLabel(Controls.SubnetID)"
+    <mat-label>Subnet ID & Availability Zone</mat-label>
+    <input [formControlName]="Controls.SubnetID"
            [matAutocomplete]="autoSubnets"
-           kmReadonly
+           name="subnetID"
+           placeholder="Subnet ID & Availability Zone"
+           matInput
            required>
     <mat-autocomplete #autoSubnets="matAutocomplete">
       <mat-optgroup *ngFor="let az of subnetAZ"
