@@ -148,6 +148,12 @@
   background: url("/assets/images/icons/update-available.svg");
 }
 
+.km-icon-update-available-arrow {
+  @include km-image-mask(2 * $baseline-grid);
+
+  mask-image: url("/assets/images/icons/update-available-arrow.svg");
+}
+
 .km-icon-cluster {
   @include km-image-mask(2.75 * $baseline-grid);
 
