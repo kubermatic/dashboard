@@ -113,6 +113,17 @@
                       (change)="onSettingsChange()"></mat-checkbox>
         <km-settings-status [isSaved]="isEqual(settings.enableDashboard, apiSettings.enableDashboard)"></km-settings-status>
       </div>
+
+      <div fxLayout="row">
+        <div class="km-admin-settings-label">
+          <span>Enable OIDC Kubeconfig</span>
+          <div class="km-icon-info"
+               matTooltip="Use OIDC provider as a proxy for kubeconfig download."></div>
+        </div>
+        <mat-checkbox [(ngModel)]="settings.enableOIDCKubeconfig"
+                      (change)="onSettingsChange()"></mat-checkbox>
+        <km-settings-status [isSaved]="isEqual(settings.enableOIDCKubeconfig, apiSettings.enableOIDCKubeconfig)"></km-settings-status>
+      </div>
     </div>
   </mat-card-content>
 </mat-card>
