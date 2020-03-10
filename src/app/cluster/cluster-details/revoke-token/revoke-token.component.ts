@@ -1,9 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {MatDialogRef} from '@angular/material/dialog';
+
 import {ApiService, NotificationService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {GroupConfig} from '../../../shared/model/Config';
-import {MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'kubermatic-revoke-token',
@@ -20,10 +21,10 @@ export class RevokeTokenComponent implements OnInit {
   private _currentGroupConfig: GroupConfig;
   private _currentUserGroup: string;
 
-  constructor(private readonly _matDialogRef: MatDialogRef<RevokeTokenComponent>,
-              private readonly _notificationService: NotificationService,
-              private readonly _userService: UserService,
-              private readonly _apiService: ApiService) {}
+  constructor(
+      private readonly _matDialogRef: MatDialogRef<RevokeTokenComponent>,
+      private readonly _notificationService: NotificationService, private readonly _userService: UserService,
+      private readonly _apiService: ApiService) {}
 
   ngOnInit(): void {
     this._userService.currentUserGroup(this.projectID).subscribe(userGroup => {
@@ -41,20 +42,20 @@ export class RevokeTokenComponent implements OnInit {
   }
 
   revokeToken(): void {
-    if(this.revokeAdminToken) {
+    if (this.revokeAdminToken) {
       this._apiService.editToken(this.cluster, this.datacenter.metadata.name, this.projectID, {token: ''})
-        .subscribe((res) => {
-          this._notificationService.success(`Successfully revoked Admin Token for cluster ${this.cluster.name}`);
-          this._matDialogRef.close(res);
-        });
+          .subscribe((res) => {
+            this._notificationService.success(`Successfully revoked Admin Token for cluster ${this.cluster.name}`);
+            this._matDialogRef.close(res);
+          });
     }
 
-    if(this.revokeViewerToken) {
+    if (this.revokeViewerToken) {
       this._apiService.editViewerToken(this.cluster, this.datacenter.metadata.name, this.projectID, {token: ''})
-        .subscribe((res) => {
-          this._notificationService.success(`Successfully revoked Viewer Token for cluster ${this.cluster.name}`);
-          this._matDialogRef.close(res);
-        });
+          .subscribe((res) => {
+            this._notificationService.success(`Successfully revoked Viewer Token for cluster ${this.cluster.name}`);
+            this._matDialogRef.close(res);
+          });
     }
   }
 }
