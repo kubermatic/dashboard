@@ -1,5 +1,5 @@
 <div *ngIf="data.nodeData">
-  <km-dialog-title [title]="getDialogLabel()"></km-dialog-title>
+  <km-dialog-title>{{getDialogLabel()}}</km-dialog-title>
   <mat-dialog-content class="km-add-node-outer">
     <kubermatic-node-data [cluster]="data.cluster"
                           [nodeData]="data.nodeData"

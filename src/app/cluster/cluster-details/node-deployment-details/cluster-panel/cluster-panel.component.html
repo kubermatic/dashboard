@@ -2,36 +2,36 @@
      fxFlex
      fxLayout="row"
      fxLayoutAlign=" center">
-    <div class="km-cluster-panel-icon"
-         (click)="navigate()"
-         matTooltip="Go back to the cluster">
-      <button mat-icon-button>
-        <i class="km-icon-arrow-left"></i>
-      </button>
-    </div>
+  <div class="km-cluster-panel-icon"
+       (click)="navigate()"
+       matTooltip="Go back to the cluster">
+    <button mat-icon-button>
+      <i class="km-icon-arrow-left"></i>
+    </button>
+  </div>
 
-    <span class="km-cluster-type">
-      <i class="km-icon-{{cluster.type}}"></i>
-    </span>
+  <span class="km-cluster-type">
+    <i class="km-icon-{{cluster.type}}"></i>
+  </span>
 
-    <km-property>
-      <div key>Cluster</div>
-      <div value
-           class="km-node-deployment-cluster-name">{{cluster.name}}</div>
-    </km-property>
+  <km-property>
+    <div key>Cluster</div>
+    <div value
+         class="km-node-deployment-cluster-name">{{cluster.name}}</div>
+  </km-property>
 
-    <km-property>
-      <div key>{{getVersionHeadline(cluster.type, false)}}</div>
-      <div value>{{cluster.spec.version}}</div>
-    </km-property>
+  <km-property>
+    <div key>{{getVersionHeadline(cluster.type, false)}}</div>
+    <div value>{{cluster.spec.version}}</div>
+  </km-property>
 
-    <km-property>
-      <div key>Cluster ID</div>
-      <div value>{{cluster.id}}</div>
-    </km-property>
+  <km-property>
+    <div key>Cluster ID</div>
+    <div value>{{cluster.id}}</div>
+  </km-property>
 
-    <km-property *ngIf="datacenter?.spec?.provider !== 'bringyourown'">
-      <div key>Region</div>
-      <div value>{{datacenter?.spec?.country}} ({{datacenter?.spec?.location}})</div>
-    </km-property>
+  <km-property *ngIf="datacenter?.spec?.provider !== 'bringyourown'">
+    <div key>Region</div>
+    <div value>{{datacenter?.spec?.country}} ({{datacenter?.spec?.location}})</div>
+  </km-property>
 </div>
