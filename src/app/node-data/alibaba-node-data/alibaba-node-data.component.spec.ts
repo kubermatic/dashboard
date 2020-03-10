@@ -7,7 +7,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../shared/shared.module';
-import {fakeAlibabaInstanceTypes} from '../../testing/fake-data/alibaba.fake';
+import {fakeAlibabaInstanceTypes, fakeAlibabaZones} from '../../testing/fake-data/alibaba.fake';
 import {fakeAlibabaCluster} from '../../testing/fake-data/cluster.fake';
 import {fakeAlibabaDatacenter} from '../../testing/fake-data/datacenter.fake';
 import {nodeDataFake} from '../../testing/fake-data/node.fake';
@@ -30,8 +30,9 @@ describe('AlibabaNodeDataComponent', () => {
   let apiMock;
 
   beforeEach(async(() => {
-    apiMock = {'getAlibabaInstanceTypes': jest.fn()};
+    apiMock = {'getAlibabaInstanceTypes': jest.fn(), 'getAlibabaZones': jest.fn()};
     apiMock.getAlibabaInstanceTypes.mockReturnValue(asyncData(fakeAlibabaInstanceTypes()));
+    apiMock.getAlibabaZones.mockReturnValue(asyncData(fakeAlibabaZones()));
     datacenterMock = {'getDataCenter': jest.fn()};
     datacenterMock.getDataCenter.mockReturnValue(asyncData(fakeAlibabaDatacenter()));
 
