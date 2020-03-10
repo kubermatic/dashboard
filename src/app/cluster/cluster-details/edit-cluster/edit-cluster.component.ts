@@ -56,6 +56,15 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
     this._clusterService.providerSettingsPatchChanges$.pipe(takeUntil(this._unsubscribe))
         .subscribe(async patch => this.providerSettingsPatch = await patch);
+
+    this.checkAuditLoggingState();
+  }
+
+  checkAuditLoggingState(): void {
+    if (!!this.datacenter.spec.enforceAuditLogging) {
+      this.form.controls.auditLogging.setValue(true);
+      this.form.controls.auditLogging.disable();
+    }
   }
 
   editCluster(): void {
