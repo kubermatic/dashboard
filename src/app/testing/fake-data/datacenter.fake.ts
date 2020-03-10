@@ -19,6 +19,7 @@ export function fakeDigitaloceanDatacenter(): DataCenterEntity {
       },
       location: 'Frankfurt',
       provider: 'digitalocean',
+      enforceAuditLogging: false,
     },
   };
 }
@@ -42,6 +43,7 @@ export function fakeAWSDatacenter(): DataCenterEntity {
       },
       location: 'Frankfurt',
       provider: 'aws',
+      enforceAuditLogging: false,
     },
   };
 }
@@ -74,6 +76,7 @@ export function fakeOpenstackDatacenter(): DataCenterEntity {
       },
       location: 'Frankfurt',
       provider: 'openstack',
+      enforceAuditLogging: false,
     },
   };
 }
@@ -95,6 +98,7 @@ export function fakeBringyourownSeedDatacenter(): DataCenterEntity {
       bringyourown: {},
       location: 'Frankfurt',
       provider: 'bringyourown',
+      enforceAuditLogging: false,
     },
   };
 }
@@ -118,6 +122,7 @@ export function fakeAzureDatacenter(): DataCenterEntity {
       location: 'Azure West europe',
       provider: 'azure',
       seed: 'europe-west3-c',
+      enforceAuditLogging: false,
     },
   };
 }
@@ -143,6 +148,7 @@ export function fakeGCPDatacenter(): DataCenterEntity {
       location: 'Europe West (Germany)',
       provider: 'google',
       seed: 'europe-west3-c',
+      enforceAuditLogging: false,
     },
   };
 }
@@ -158,6 +164,7 @@ export function fakeVSphereDatacenter(): DataCenterEntity {
       country: 'DE',
       location: 'Hetzner',
       provider: 'vsphere',
+      enforceAuditLogging: false,
       vsphere: {
         cluster: 'loodse-cluster',
         endpoint: 'https://loodse.com',
@@ -192,6 +199,7 @@ export function fakeAlibabaDatacenter(): DataCenterEntity {
       },
       location: 'Frankfurt',
       provider: 'alibaba',
+      enforceAuditLogging: false,
     },
   };
 }
