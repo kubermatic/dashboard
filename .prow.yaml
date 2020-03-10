@@ -1,4 +1,149 @@
 presubmits:
+- name: pull-kubermatic-dashboard-validate-prow-yaml
+  always_run: true
+  decorate: true
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
+  extra_refs:
+    - org: kubermatic
+      repo: infra
+      base_ref: master
+      clone_uri: git@github.com:kubermatic/infra.git
+  spec:
+    containers:
+      - image: gcr.io/k8s-prow/checkconfig:v20200203-711d3732b
+        command:
+          - /app/prow/cmd/checkconfig/app.binary
+        args:
+          - --plugin-config=/home/prow/go/src/github.com/kubermatic/infra/prow/plugins.yaml
+          - --config-path=/home/prow/go/src/github.com/kubermatic/infra/prow/config.yaml
+          - --job-config-path=/home/prow/go/src/github.com/kubermatic/infra/prow/jobs
+          - --prow-yaml-repo-name=$(REPO_OWNER)/$(REPO_NAME)
+
+- name: pull-dashboard-godep-check
+  always_run: true
+  decorate: true
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
+  spec:
+    containers:
+      - image: quay.io/kubermatic/dep:0.5.4-2
+        command:
+          - make
+        args:
+          - godep-check
+        resources:
+          requests:
+            cpu: 100m
+
+- name: pull-dashboard-dependencies
+  always_run: true
+  decorate: true
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
+  spec:
+    containers:
+      - image: node:12
+        command:
+          - make
+        args:
+          - install
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+          limits:
+            cpu: 1
+            memory: 1Gi
+
+- name: pull-dashboard-node-dist
+  always_run: true
+  decorate: true
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
+  spec:
+    containers:
+      - image: node:12
+        command:
+          - make
+        args:
+          - dist
+        resources:
+          requests:
+            cpu: 1
+            memory: 3Gi
+          limits:
+            cpu: 2
+            memory: 5Gi
+
+- name: pull-dashboard-build
+  always_run: true
+  decorate: true
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
+  spec:
+    containers:
+      - image: golang:1.13.3
+        command:
+          - make
+        args:
+          - build
+        env:
+          - name: GO111MODULE
+            value: 'off'
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            cpu: 250m
+            memory: 512Mi
+
+- name: pre-build-dashboard-image
+  always_run: true
+  decorate: true
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
+  labels:
+    preset-docker-push: "true"
+  spec:
+    containers:
+      - image: quay.io/kubermatic/go-docker-node:v1.1.4
+        command:
+          - /bin/bash
+          - -c
+          - >-
+            set -euo pipefail &&
+            /usr/local/bin/entrypoint.sh &&
+            docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD &&
+            docker login -u $QUAY_IO_USERNAME -p $QUAY_IO_PASSWORD quay.io &&
+            make docker-build
+        # docker-in-docker needs privileged mode
+        securityContext:
+          privileged: true
+        resources:
+          requests:
+            cpu: 250m
+            memory: 2.5Gi
+          limits:
+            cpu: 1
+            memory: 3Gi
+    imagePullSecrets:
+      - name: quay
+
+- name: pull-dashboard-static-check
+  always_run: true
+  decorate: true
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
+  spec:
+    containers:
+      - image: node:12
+        command:
+          - make
+        args:
+          - check
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+          limits:
+            cpu: 1
+            memory: 1Gi
+
 - name: pull-dashboard-test-headless
   always_run: true
   decorate: true
