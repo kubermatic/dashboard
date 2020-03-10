@@ -1,25 +1,21 @@
-<div id="km-revoke-token-dialog">
-  <km-dialog-title>Revoke Token</km-dialog-title>
-  <mat-dialog-content>
-    <div class="mat-dialog-content">
-      <button id="km-revoke-token-dialog-revoke-admin-btn"
-              mat-flat-button
-              color="alternative"
-              (click)="revokeAdminToken()"
-              [disabled]="!isRevokeAdminTokenEnabled">Revoke Admin Token</button>
-
-      <button id="km-revoke-token-dialog-revoke-viewer-btn"
-              mat-flat-button
-              color="alternative"
-              (click)="revokeViewerToken()"
-              [disabled]="!isRevokeViewerTokenEnabled">Revoke Viewer Token</button>
+<km-dialog-title>Revoke Token</km-dialog-title>
+<mat-dialog-content>
+  <div class="mat-dialog-content">
+    <p>Choose the token you wish to revoke for "<b>{{cluster.name}}</b>":</p>
+    <div class="options"
+         fxLayoutGap="16px">
+      <mat-checkbox [disabled]="!isRevokeAdminTokenEnabled"
+                    [(ngModel)]="revokeAdminToken">Revoke Admin Token</mat-checkbox>
+      <mat-checkbox [disabled]="!isRevokeViewerTokenEnabled"
+                    [(ngModel)]="revokeViewerToken">Revoke Viewer Token</mat-checkbox>
     </div>
-  </mat-dialog-content>
-  <mat-dialog-actions>
-    <button id="km-revoke-token-close-btn"
-            mat-flat-button
-            mat-dialog-close>
-      Close
-    </button>
-  </mat-dialog-actions>
-</div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button
+          (click)="revokeToken()"
+          [disabled]="!revokeAdminToken && !revokeViewerToken">
+    Revoke Token
+  </button>
+</mat-dialog-actions>
+
