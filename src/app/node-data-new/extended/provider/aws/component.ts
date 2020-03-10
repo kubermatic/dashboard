@@ -34,13 +34,15 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
   }
 
   ngOnInit(): void {
-    const isInEdit = !!this.nodeData.name;  // Existing node deployment will always have assigned name.
-    const assignPublicIP = isInEdit ? this.nodeData.spec.cloud.aws.assignPublicIP : true;  // Default to true.
+    const assignPublicIP =
+        this._nodeDataService.isInDialogEditMode() ? this.nodeData.spec.cloud.aws.assignPublicIP : true;
 
     this.form = this._builder.group({
       [Controls.AssignPublicIP]: this._builder.control(assignPublicIP),
       [Controls.Tags]: this._builder.control(''),
     });
+
+    this._nodeDataService.nodeData = this._getNodeData();
 
     this.form.get(Controls.AssignPublicIP)
         .valueChanges.pipe(takeUntil(this._unsubscribe))
@@ -53,7 +55,6 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
 
   onTagsChange(tags: object): void {
     this.tags = tags;
-    this._nodeDataService.nodeData = this._getNodeData();
   }
 
   private _getNodeData(): NodeData {

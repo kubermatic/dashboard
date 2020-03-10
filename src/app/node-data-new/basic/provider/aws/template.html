@@ -9,7 +9,7 @@
                   required>
         <input #sizeInput
                (input)="filterByInput.name = $event.target.value"
-               name="filterBy"
+               name="filterBySize"
                placeholder="Select size..."
                type="text"
                class="km-select-input"
@@ -53,13 +53,14 @@
 
   <mat-form-field fxFlex>
     <mat-label>Subnet ID & Availability Zone</mat-label>
-    <input [formControlName]="Controls.SubnetID"
-           [matAutocomplete]="autoSubnets"
-           name="subnetID"
-           placeholder="Subnet ID & Availability Zone"
-           matInput
-           required>
-    <mat-autocomplete #autoSubnets="matAutocomplete">
+    <mat-select [formControlName]="Controls.SubnetID">
+      <input name="filterBySubnet"
+             placeholder="Select subnet..."
+             type="text"
+             class="km-select-input"
+             autocomplete="off"
+             matInput
+             required>
       <mat-optgroup *ngFor="let az of subnetAZ"
                     [label]="az">
         <mat-option *ngFor="let subnet of getSubnetToAZ(az)"
@@ -67,14 +68,13 @@
           {{getSubnetOptionName(subnet)}}
         </mat-option>
       </mat-optgroup>
-    </mat-autocomplete>
+    </mat-select>
     <mat-error *ngIf="hasError(Controls.SubnetID, 'mustBeInList') && !hasError(Controls.SubnetID, 'required')">Input
       doesn't match options. Please choose from given options.
     </mat-error>
     <mat-error *ngIf="hasError(Controls.SubnetID, 'required')">Subnet ID & Availability Zone is
       <strong>required</strong>.
     </mat-error>
-    <mat-hint>{{getHint(Controls.SubnetID)}}</mat-hint>
   </mat-form-field>
 
   <mat-form-field fxFlex>

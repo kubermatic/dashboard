@@ -82,7 +82,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   displayProvider(): boolean {
     return this._hasProviderOptions(NodeProvider.AWS) || this._hasProviderOptions(NodeProvider.GCP) ||
         this._hasProviderOptions(NodeProvider.AZURE) || this._hasProviderOptions(NodeProvider.DIGITALOCEAN) ||
-        this._hasProviderOptions(NodeProvider.HETZNER) || this._hasProviderOptions(NodeProvider.BRINGYOUROWN);
+        this._hasProviderOptions(NodeProvider.HETZNER) || this._clusterService.provider === NodeProvider.BRINGYOUROWN;
   }
 
   displayTags(tags: object): boolean {

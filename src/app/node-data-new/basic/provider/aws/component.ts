@@ -1,17 +1,14 @@
 import {Component, ElementRef, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {Observable} from 'rxjs';
-import {switchMap, takeUntil, tap} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {catchError, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
-import {AWSCloudSpec} from '../../../../shared/entity/cloud/AWSCloudSpec';
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
 import {AWSSize, AWSSubnet} from '../../../../shared/entity/provider/aws/AWS';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {AutocompleteFilterValidators} from '../../../../shared/validators/autocomplete-filter.validator';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../../wizard-new/service/cluster';
-import {NodeDataMode} from '../../../config';
 import {NodeDataService} from '../../../service/service';
 
 enum Controls {
@@ -47,13 +44,9 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   private _subnets: AWSSubnet[] = [];
   private _subnetMap: {[type: string]: AWSSubnet[]} = {};
 
-  private get _cloudSpec(): AWSCloudSpec {
-    return this._clusterService.cluster.spec.cloud.aws;
-  }
-
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
-      private readonly _nodeDataService: NodeDataService, private readonly _clusterService: ClusterService) {
+      private readonly _nodeDataService: NodeDataService) {
     super();
   }
 
@@ -67,6 +60,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     });
 
     this._nodeDataService.nodeData = this._getNodeData();
+    this._setDefaultValues();
     this._setDefaultSubnet(this._subnets);
 
     this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
@@ -99,23 +93,15 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   isInWizard(): boolean {
-    return this._nodeDataService.mode === NodeDataMode.Wizard;
-  }
-
-  getHint(control: Controls): string {
-    switch (control) {
-      case Controls.SubnetID:
-        return (!this._cloudSpec.secretAccessKey || !this._cloudSpec.accessKeyId) && !this._presets.preset ?
-            'Please enter your credentials first' :
-            '';
-    }
-
-    return '';
+    return this._nodeDataService.isInWizardMode();
   }
 
   onSizeOpen(opened: boolean): void {
     if (opened) {
       this.focusInput_(this.sizeInputEl_);
+    } else {
+      this.sizeInputEl_.nativeElement.value = '';
+      this.filterByInput.name = '';
     }
   }
 
@@ -127,11 +113,11 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   private get _sizesObservable(): Observable<AWSSize[]> {
-    return this._nodeDataService.aws.flavors();
+    return this._nodeDataService.aws.flavors().pipe(catchError(() => of<AWSSize[]>()));
   }
 
   private get _subnetIdsObservable(): Observable<AWSSubnet[]> {
-    return this._nodeDataService.aws.subnets();
+    return this._nodeDataService.aws.subnets().pipe(catchError(() => of<AWSSubnet[]>()));
   }
 
   private _setDefaultSize(sizes: AWSSize[]): void {
@@ -183,6 +169,12 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   private _getAZFromSubnet(subnetID: string): string {
     const findSubnet = this._subnets.find(x => x.id === subnetID);
     return findSubnet ? findSubnet.availability_zone : '';
+  }
+
+  _setDefaultValues(): void {
+    if (this._nodeDataService.isInWizardMode()) {
+      this._nodeDataService.nodeData.spec.cloud.aws.assignPublicIP = true;
+    }
   }
 
   private _getNodeData(): NodeData {

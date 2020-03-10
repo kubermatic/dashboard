@@ -9,7 +9,6 @@ import {NodeData} from '../shared/model/NodeSpecChange';
 import {ClusterType} from '../shared/utils/cluster-utils/cluster-utils';
 import {BaseFormValidator} from '../shared/validators/base-form.validator';
 import {ClusterService} from '../wizard-new/service/cluster';
-import {NodeDataMode} from './config';
 import {NodeDataService} from './service/service';
 
 enum Controls {
@@ -108,7 +107,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
   isBasicViewOnly(): boolean {
     // In the wizard we split extended and basic options.
-    return this._nodeDataService.mode === NodeDataMode.Wizard;
+    return this._nodeDataService.isInWizardMode();
   }
 
   onLabelsChange(labels: object): void {
