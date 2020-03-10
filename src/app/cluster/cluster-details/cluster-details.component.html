@@ -15,7 +15,7 @@
               class="km-share-kubeconfig-btn"
               (click)="shareConfigDialog()"
               [disabled]="!isClusterRunning"
-              *ngIf="!!config.share_kubeconfig"
+              *ngIf="isShareConfigEnabled() | async"
               matTooltip="Share">
         <i class="km-icon-mask km-icon-share"></i>
       </button>
@@ -23,7 +23,7 @@
               mat-icon-button
               [disabled]="!isClusterRunning"
               matTooltip="Download config">
-        <a href="{{getDownloadURL()}}"
+        <a href="{{getDownloadURL() | async}}"
            target="_blank"
            rel="noopener">
           <i class="km-icon-mask km-icon-download"></i>
