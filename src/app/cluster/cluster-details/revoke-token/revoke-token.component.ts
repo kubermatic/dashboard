@@ -1,26 +1,30 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {UserService} from '../../../core/services';
+import {MatDialogRef} from '@angular/material/dialog';
+
+import {ApiService, NotificationService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {GroupConfig} from '../../../shared/model/Config';
-import {RevokeAdminTokenComponent} from './revoke-admin-token/revoke-admin-token.component';
-import {RevokeViewerTokenComponent} from './revoke-viewer-token/revoke-viewer-token.component';
 
 @Component({
   selector: 'kubermatic-revoke-token',
   templateUrl: './revoke-token.component.html',
+  styleUrls: ['./revoke-token.component.scss'],
 })
 
 export class RevokeTokenComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
-
+  revokeAdminToken = false;
+  revokeViewerToken = false;
   private _currentGroupConfig: GroupConfig;
   private _currentUserGroup: string;
 
-  constructor(private readonly _matDialog: MatDialog, private readonly _userService: UserService) {}
+  constructor(
+      private readonly _matDialogRef: MatDialogRef<RevokeTokenComponent>,
+      private readonly _notificationService: NotificationService, private readonly _userService: UserService,
+      private readonly _apiService: ApiService) {}
 
   ngOnInit(): void {
     this._userService.currentUserGroup(this.projectID).subscribe(userGroup => {
@@ -33,21 +37,25 @@ export class RevokeTokenComponent implements OnInit {
     return !this._currentGroupConfig || this._currentGroupConfig.clusters.edit;
   }
 
-  revokeAdminToken(): void {
-    const dialogRef = this._matDialog.open(RevokeAdminTokenComponent);
-    dialogRef.componentInstance.cluster = this.cluster;
-    dialogRef.componentInstance.datacenter = this.datacenter;
-    dialogRef.componentInstance.projectID = this.projectID;
-  }
-
   isRevokeViewerTokenEnabled(): boolean {
     return !this._currentUserGroup || this._currentUserGroup === 'owners' || this._currentUserGroup === 'editors';
   }
 
-  revokeViewerToken(): void {
-    const dialogRef = this._matDialog.open(RevokeViewerTokenComponent);
-    dialogRef.componentInstance.cluster = this.cluster;
-    dialogRef.componentInstance.datacenter = this.datacenter;
-    dialogRef.componentInstance.projectID = this.projectID;
+  revokeToken(): void {
+    if (this.revokeAdminToken) {
+      this._apiService.editToken(this.cluster, this.datacenter.metadata.name, this.projectID, {token: ''})
+          .subscribe((res) => {
+            this._notificationService.success(`Successfully revoked Admin Token for cluster ${this.cluster.name}`);
+            this._matDialogRef.close(res);
+          });
+    }
+
+    if (this.revokeViewerToken) {
+      this._apiService.editViewerToken(this.cluster, this.datacenter.metadata.name, this.projectID, {token: ''})
+          .subscribe((res) => {
+            this._notificationService.success(`Successfully revoked Viewer Token for cluster ${this.cluster.name}`);
+            this._matDialogRef.close(res);
+          });
+    }
   }
 }

@@ -786,6 +786,22 @@
     color: $text;
   }
 
+  .km-update-available-badge {
+    border: 1px solid map-get($colors, secondary);
+    cursor: default;
+    border-radius: $border-radius;
+    font-size: $font-size-body;
+    line-height: 1.8 * $line-height;
+    margin-left: 1.5 * $baseline-grid;
+    padding: 0 (.5 * $baseline-grid);
+    user-select: none;
+
+    .km-icon-update-available-arrow {
+      margin: 0 (.75 * $baseline-grid) (-.25 * $baseline-grid) (.25 * $baseline-grid);
+      background-color: map-get($colors, secondary);
+    }
+  }
+
   .km-notification {
     background: $background-card !important;
     border-radius: $border-radius;
