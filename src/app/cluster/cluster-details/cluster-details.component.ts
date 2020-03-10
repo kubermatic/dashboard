@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
-import {combineLatest, of, Subject} from 'rxjs';
-import {first, switchMap, takeUntil} from 'rxjs/operators';
+import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
+import {first, map, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, ClusterService, DatacenterService, NotificationService, RBACService, UserService} from '../../core/services';
@@ -12,6 +12,7 @@ import {ClusterEntity, getClusterProvider, MasterVersion} from '../../shared/ent
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {EventEntity} from '../../shared/entity/EventEntity';
 import {HealthEntity, HealthState} from '../../shared/entity/HealthEntity';
+import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {ClusterMetrics} from '../../shared/entity/Metrics';
 import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
@@ -245,10 +246,18 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.projectID = this.projectID;
   }
 
-  getDownloadURL(): string {
-    return this.isClusterAPIRunning ?
-        this._api.getKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id) :
-        '';
+  getDownloadURL(): Observable<string> {
+    if (!this.isClusterAPIRunning) {
+      return of('');
+    }
+
+    return this.settings.adminSettings.pipe(switchMap(
+        settings =>
+            iif(() => settings.enableOIDCKubeconfig,
+                this._userService.loggedInUser.pipe(
+                    map((user: MemberEntity) => this._api.getShareKubeconfigURL(
+                            this.projectID, this.datacenter.metadata.name, this.cluster.id, user.id))),
+                of(this._api.getKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id)))));
   }
 
   getProxyURL(): string {
@@ -356,5 +365,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  isShareConfigEnabled(): Observable<boolean> {
+    return this.settings.adminSettings.pipe(
+        map(settings => !!this.config.share_kubeconfig && !settings.enableOIDCKubeconfig));
   }
 }
