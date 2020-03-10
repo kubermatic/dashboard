@@ -18,7 +18,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
   datacenters: DataCenterEntity[] = [];
   private _unsubscribe: Subject<any> = new Subject();
 
-  constructor(private dcService: DatacenterService, private wizardService: WizardService) {}
+  constructor(private readonly _dcService: DatacenterService, private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.setDatacenterForm = new FormGroup({
@@ -26,7 +26,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
     });
 
     // Get all datacenters for the cluster cloud provider
-    this.dcService.getDataCenters().pipe(takeUntil(this._unsubscribe)).subscribe((datacenters) => {
+    this._dcService.getDataCenters().pipe(takeUntil(this._unsubscribe)).subscribe((datacenters) => {
       const providerDatacenters: DataCenterEntity[] = [];
       for (const datacenter of datacenters) {
         if (datacenter.seed) {
@@ -51,9 +51,12 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
     for (const datacenter of this.datacenters) {
       if (this.setDatacenterForm.controls.datacenter.value === datacenter.metadata.name) {
         dc = datacenter;
+        if (!!dc.spec.enforceAuditLogging) {
+          this.enforceAuditLogging();
+        }
       }
     }
-    this.wizardService.changeClusterDatacenter({
+    this._wizardService.changeClusterDatacenter({
       datacenter: dc,
       valid: this.setDatacenterForm.valid,
     });
@@ -76,5 +79,21 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  enforceAuditLogging(): void {
+    this._wizardService.changeClusterSpec({
+      name: this.cluster.name,
+      type: this.cluster.type,
+      labels: this.cluster.labels,
+      version: this.cluster.spec.version,
+      imagePullSecret: this.cluster.spec.openshift ? this.cluster.spec.openshift.imagePullSecret : '',
+      usePodSecurityPolicyAdmissionPlugin: this.cluster.spec.usePodSecurityPolicyAdmissionPlugin,
+      usePodNodeSelectorAdmissionPlugin: this.cluster.spec.usePodNodeSelectorAdmissionPlugin,
+      auditLogging: {
+        enabled: true,
+      },
+      valid: true,
+    });
   }
 }

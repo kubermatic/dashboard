@@ -24,6 +24,7 @@ export class DatacenterSpec {
   country: string;
   location: string;
   provider: string;
+  enforceAuditLogging: boolean;
 
   digitalocean?: DigitaloceanDatacenterSpec;
   bringyourown?: BringYourOwnDatacenterSpec;
