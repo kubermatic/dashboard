@@ -4,6 +4,6 @@ export class AlibabaInstanceType {
   memorySize: number;
 }
 
-export class ZoneID {
+export class AlibabaZone {
   id: string;
 }

@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 
-import {AlibabaInstanceType} from '../../../../shared/entity/provider/alibaba/Alibaba';
+import {AlibabaInstanceType, AlibabaZone} from '../../../../shared/entity/provider/alibaba/Alibaba';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
@@ -48,6 +48,17 @@ export class Alibaba extends Provider {
 
     const url = `${this._restRoot}/providers/${this._provider}/instancetypes`;
     return this._http.get<AlibabaInstanceType[]>(url, {headers: this._headers});
+  }
+
+  zones(): Observable<AlibabaZone[]> {
+    this._setRequiredHeaders(Alibaba.Header.AccessKeyID, Alibaba.Header.AccessKeySecret, Alibaba.Header.Region);
+
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    const url = `${this._restRoot}/providers/${this._provider}/zones`;
+    return this._http.get<AlibabaZone[]>(url, {headers: this._headers});
   }
 }
 

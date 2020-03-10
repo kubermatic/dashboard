@@ -66,9 +66,15 @@
 
   <mat-form-field fxFlex>
     <mat-label>Zone ID*</mat-label>
-    <input matInput
-           formControlName="zoneID"
-           autocomplete="off">
+    <mat-select formControlName="zoneID"
+                [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
+                disableOptionCentering>
+      <mat-option *ngFor="let zone of zones"
+                  [value]="zone.id">
+        {{zone.id}}
+      </mat-option>
+    </mat-select>
     <mat-error *ngIf="form.controls.zoneID.hasError('required')">Zone ID is <strong>required</strong>.</mat-error>
+    <mat-hint>{{getZoneHint()}}</mat-hint>
   </mat-form-field>
 </form>
