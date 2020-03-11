@@ -1,6 +1,6 @@
 import {CommonModule} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {NgModule} from '@angular/core';
+import {Injector, NgModule, Optional, SkipSelf} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 
@@ -108,4 +108,12 @@ const interceptors: any[] = [
   ],
 })
 export class CoreModule {
+  static injector: Injector;
+  constructor(@Optional() @SkipSelf() parentModule: CoreModule, injector: Injector) {
+    if (parentModule) {
+      throw new Error('CoreModule is already loaded. Import it in the AppModule only');
+    }
+
+    CoreModule.injector = injector;
+  }
 }

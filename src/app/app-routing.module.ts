@@ -58,6 +58,7 @@ function createRouting(): Routes {
   ];
 
   // Add new wizard routing only to dev builds
+  // TODO: Remove once it replaces the old wizard
   if (!environment.production) {
     routes[0].children = [
       {
