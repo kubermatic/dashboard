@@ -58,8 +58,8 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(settings, this.apiSettings)) {
-        if (this._shouldDisplayUpdateNotification()) {
-          this._notificationService.success('Successfully applied external settings update');
+        if (this.apiSettings && !_.isEqual(this.apiSettings, this._settingsService.defaultAdminSettings)) {
+          this._notificationService.success('Successfully applied settings update');
         }
         this._applySettings(settings);
       }
@@ -68,9 +68,7 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
     this._settingsChange.pipe(debounceTime(500))
         .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(() => this._settingsService.patchAdminSettings(this._getPatch())))
-        .subscribe(settings => {
-          this._applySettings(settings);
-        });
+        .subscribe(_ => {});
 
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
@@ -85,10 +83,6 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-  }
-
-  private _shouldDisplayUpdateNotification(): boolean {
-    return this.apiSettings && this.apiSettings !== this._settingsService.defaultAdminSettings;
   }
 
   private _applySettings(settings: AdminSettings): void {
