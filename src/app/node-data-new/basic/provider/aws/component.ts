@@ -99,28 +99,17 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   onSizeOpen(opened: boolean): void {
-    if (opened) {
-      this.focusInput_(this.sizeInputEl_);
-    } else {
+    if (!opened) {
       this.sizeInputEl_.nativeElement.value = '';
       this.filterBySizeInput.name = '';
     }
   }
 
   onSubnetOpen(opened: boolean): void {
-    if (opened) {
-      this.focusInput_(this.subnetInputEl_);
-    } else {
+    if (!opened) {
       this.subnetInputEl_.nativeElement.value = '';
       this.filterBySubnetInput.id = '';
     }
-  }
-
-  private focusInput_(element: ElementRef): void {
-    // Wrap in a timeout to make sure that element is rendered before looking for it.
-    setTimeout(() => {
-      element.nativeElement.focus();
-    }, 150);
   }
 
   private get _sizesObservable(): Observable<AWSSize[]> {

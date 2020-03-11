@@ -60,6 +60,7 @@ import {SSHKeyListComponent} from './components/ssh-key-list/ssh-key-list.compon
 import {TagListComponent} from './components/tag-list/tag-list.component';
 import {TaintFormComponent} from './components/taint-form/taint-form.component';
 import {TaintsComponent} from './components/taints/taints.component';
+import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
 
 const modules: any[] = [
@@ -105,6 +106,10 @@ const entryComponents: any[] = [
   NotificationComponent,
 ];
 
+const directives: any[] = [
+  AutofocusDirective,
+];
+
 @NgModule({
   imports: [
     ...modules,
@@ -112,11 +117,13 @@ const entryComponents: any[] = [
   declarations: [
     ...components,
     ...entryComponents,
+    ...directives,
   ],
   exports: [
     ...modules,
     ...components,
     ...entryComponents,
+    ...directives,
   ],
   entryComponents: [...entryComponents],
 })
