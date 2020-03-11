@@ -8,14 +8,14 @@
                   (openedChange)="onSizeOpen($event)"
                   required>
         <input #sizeInput
-               (input)="filterByInput.name = $event.target.value"
+               (input)="filterBySizeInput.name = $event.target.value"
                name="filterBySize"
                placeholder="Select size..."
                type="text"
                class="km-select-input"
                autocomplete="off"
                matInput>
-        <mat-option *ngFor="let size of sizes | filterBy: filterByInput"
+        <mat-option *ngFor="let size of sizes | filterBy: filterBySizeInput"
                     [value]="size.name">
           {{size.name}} ({{size.vcpus}} vCPU, {{size.memory}} GB RAM, {{size.price | number: '1.2-5'}} USD per hour)
         </mat-option>
@@ -53,17 +53,20 @@
 
   <mat-form-field fxFlex>
     <mat-label>Subnet ID & Availability Zone</mat-label>
-    <mat-select [formControlName]="Controls.SubnetID">
-      <input name="filterBySubnet"
+    <mat-select [formControlName]="Controls.SubnetID"
+                (openedChange)="onSubnetOpen($event)"
+                required>
+      <input #subnetInput
+             (input)="filterBySubnetInput.id = $event.target.value"
+             name="filterBySubnet"
              placeholder="Select subnet..."
              type="text"
              class="km-select-input"
              autocomplete="off"
-             matInput
-             required>
+             matInput>
       <mat-optgroup *ngFor="let az of subnetAZ"
                     [label]="az">
-        <mat-option *ngFor="let subnet of getSubnetToAZ(az)"
+        <mat-option *ngFor="let subnet of getSubnetToAZ(az) | filterBy: filterBySubnetInput"
                     [value]="subnet.id">
           {{getSubnetOptionName(subnet)}}
         </mat-option>

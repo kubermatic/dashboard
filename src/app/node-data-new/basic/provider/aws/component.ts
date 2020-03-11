@@ -31,9 +31,11 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   sizes: AWSSize[] = [];
   diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
   hideOptional = false;
-  filterByInput = {name: ''};
+  filterBySizeInput = {name: ''};
+  filterBySubnetInput = {id: ''};
 
   @ViewChild('sizeInput', {static: true}) private readonly sizeInputEl_: ElementRef;
+  @ViewChild('subnetInput', {static: true}) private readonly subnetInputEl_: ElementRef;
 
   readonly Controls = Controls;
 
@@ -101,7 +103,16 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
       this.focusInput_(this.sizeInputEl_);
     } else {
       this.sizeInputEl_.nativeElement.value = '';
-      this.filterByInput.name = '';
+      this.filterBySizeInput.name = '';
+    }
+  }
+
+  onSubnetOpen(opened: boolean): void {
+    if (opened) {
+      this.focusInput_(this.subnetInputEl_);
+    } else {
+      this.subnetInputEl_.nativeElement.value = '';
+      this.filterBySubnetInput.id = '';
     }
   }
 
