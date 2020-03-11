@@ -14,11 +14,12 @@ import {asyncData} from '../../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../../../../testing/services/project-mock.service';
 import {UserMockService} from '../../../../testing/services/user-mock.service';
-import {Component} from './cluster-ssh-keys.component';
+import {ClusterService} from '../../../service/cluster';
+import {ClusterSSHKeysComponent} from './component';
 
 describe('ClusterSSHKeys', () => {
-  let fixture: ComponentFixture<Component>;
-  let component: Component;
+  let fixture: ComponentFixture<ClusterSSHKeysComponent>;
+  let component: ClusterSSHKeysComponent;
 
   beforeEach(async(() => {
     const apiMock = {'getSSHKeys': jest.fn()};
@@ -34,10 +35,11 @@ describe('ClusterSSHKeys', () => {
             HttpClientModule,
           ],
           declarations: [
-            Component,
+            ClusterSSHKeysComponent,
           ],
           providers: [
             WizardService,
+            ClusterService,
             {provide: ActivatedRoute, useClass: ActivatedRouteMock},
             {provide: ApiService, useValue: apiMock},
             {provide: ProjectService, useClass: ProjectMockService},
@@ -50,7 +52,7 @@ describe('ClusterSSHKeys', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(Component);
+    fixture = TestBed.createComponent(ClusterSSHKeysComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

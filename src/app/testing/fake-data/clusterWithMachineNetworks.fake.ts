@@ -1,4 +1,5 @@
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
+import {ClusterType} from '../../shared/utils/cluster-utils/cluster-utils';
 
 // fakeClusterWithMachineNetwork could contain 6 IPs
 export function fakeClusterWithMachineNetwork(): ClusterEntity {
@@ -33,7 +34,7 @@ export function fakeClusterWithMachineNetwork(): ClusterEntity {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
     },
-    type: 'kubernetes',
+    type: ClusterType.Kubernetes,
   };
 }
 
@@ -70,7 +71,7 @@ export function fakeGatewayInCidr(): ClusterEntity {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
     },
-    type: 'kubernetes',
+    type: ClusterType.Kubernetes,
   };
 }
 
@@ -107,6 +108,6 @@ export function fakeGatewayNotInCidr(): ClusterEntity {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
     },
-    type: 'kubernetes',
+    type: ClusterType.Kubernetes,
   };
 }
