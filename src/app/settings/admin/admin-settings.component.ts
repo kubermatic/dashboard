@@ -65,9 +65,12 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
 
-    this._settingsChange.pipe(debounceTime(500))
-        .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(() => this._settingsService.patchAdminSettings(this._getPatch())))
+    this._settingsChange
+        .pipe(
+            debounceTime(500),
+            switchMap(() => this._settingsService.patchAdminSettings(this._getPatch())),
+            takeUntil(this._unsubscribe),
+            )
         .subscribe(_ => {});
 
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
