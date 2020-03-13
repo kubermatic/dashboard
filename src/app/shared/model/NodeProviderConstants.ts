@@ -13,3 +13,10 @@ export enum NodeProvider {
   VSPHERE = 'vsphere',
   NONE = '',
 }
+
+export enum OperatingSystem {
+  Ubuntu = 'ubuntu',
+  CentOS = 'centos',
+  ContainerLinux = 'containerLinux',
+  SLES = 'sles',
+}

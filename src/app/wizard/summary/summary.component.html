@@ -11,7 +11,7 @@
     <mat-card-content>
       <div class="km-summary-row"><strong>{{cluster.name}}</strong></div>
       <span class="km-cluster-type"
-            [matTooltip]="getType(cluster.type)">
+            [matTooltip]="cluster.type">
         <i class="km-icon-{{cluster.type}}"></i>
       </span>
       <div class="km-summary-row">v{{cluster.spec.version}}</div>

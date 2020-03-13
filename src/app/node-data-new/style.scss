@@ -1,0 +1,75 @@
+@import '../../assets/css/variables';
+
+mat-form-field.km-node-deployment-name {
+  margin-bottom: 2.5 * $baseline-grid;
+
+  &.none {
+    margin-bottom: auto;
+  }
+}
+
+div.km-os-options {
+  width: 100%;
+  line-height: 3 * $line-height;
+  font-size: $font-size-body;
+  display: flex;
+  margin: 0 0 (1.25 * $baseline-grid);
+
+  mat-checkbox,
+  label {
+    flex: 1 1 100%;
+  }
+
+  &.km-with-margin {
+    margin: (0.625 * $baseline-grid) 0 (1.25 * $baseline-grid);
+  }
+}
+
+mat-button-toggle-group[group='operatingSystemGroup'] {
+  flex-wrap: wrap;
+  margin-bottom: 0.625 * $baseline-grid;
+
+  .mat-button-toggle {
+    border-radius: $border-radius;
+    max-width: 170px;
+    min-width: 120px;
+    min-height: 60px;
+    max-height: 60px;
+    outline: none;
+    margin-bottom: 1.25 * $baseline-grid;
+
+    i {
+      margin-right: 1.25 * $baseline-grid;
+      min-width: 28px;
+      min-height: 28px;
+      filter: grayscale(100%);
+    }
+
+    &.mat-button-toggle-checked {
+      i {
+        filter: none;
+      }
+    }
+  }
+
+  ::ng-deep .mat-button-toggle-label-content {
+    font-size: $font-size-subhead;
+    font-weight: normal;
+  }
+}
+
+.km-randomize-btn {
+  position: absolute;
+  right: -0.625 * $baseline-grid;
+  top: -0.25 * $baseline-grid;
+}
+
+::ng-deep .mat-button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-icon-button i {
+  background-color: transparent;
+}

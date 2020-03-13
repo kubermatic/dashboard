@@ -27,6 +27,7 @@ import {OpenstackFlavor} from '../../../shared/entity/provider/openstack/Opensta
 import {CreateServiceAccountEntity, CreateTokenEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
+import {ClusterType} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {Auth} from '../auth/auth.service';
 
 @Injectable()
@@ -223,7 +224,7 @@ export class ApiService {
         clusterID}&user_id=${userID}`;
   }
 
-  getMasterVersions(type: 'kubernetes'|'openshift'): Observable<MasterVersion[]> {
+  getMasterVersions(type: ClusterType): Observable<MasterVersion[]> {
     const url = `${this._restRoot}/upgrades/cluster?type=${type}`;
     return this._http.get<MasterVersion[]>(url);
   }

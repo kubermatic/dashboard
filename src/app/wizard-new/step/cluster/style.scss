@@ -1,0 +1,31 @@
+@import "../../../../assets/css/variables";
+
+.km-icon-warning {
+  margin: (.5 * $baseline-grid) 0;
+  cursor: pointer;
+}
+
+.km-randomize-btn {
+  position: absolute;
+  right: -0.625 * $baseline-grid;
+  top: -0.25 * $baseline-grid;
+}
+
+.km-randomize-btn ::ng-deep .mat-button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-icon-button i {
+  background-color: transparent;
+}
+
+.km-version-inline {
+  width: auto;
+  max-width: 16.25 * $baseline-grid;
+}
+
+km-label-form {
+  margin-top: 3.75 * $baseline-grid;
+}

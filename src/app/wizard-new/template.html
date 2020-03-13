@@ -1,0 +1,65 @@
+<form [formGroup]="form">
+  <mat-card>
+    <mat-horizontal-stepper linear
+                            disableRipple
+                            [@.disabled]="true"
+                            #stepper
+                            class="km-wizard-stepper">
+      <ng-template matStepperIcon="edit">
+        <mat-icon>done</mat-icon>
+      </ng-template>
+
+      <mat-step *ngFor="let step of steps"
+                [stepControl]="form.get(step.name)">
+        <ng-template matStepLabel>{{step.name}}</ng-template>
+        <ng-container [ngSwitch]="step.name">
+          <ng-container *ngSwitchCase="stepRegistry.Cluster">
+            <kubermatic-wizard-cluster-step [formControl]="form.get(stepRegistry.Cluster)"></kubermatic-wizard-cluster-step>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="stepRegistry.Provider">
+            <kubermatic-wizard-provider-step [formControl]="form.get(stepRegistry.Provider)"></kubermatic-wizard-provider-step>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="stepRegistry.Datacenter">
+            <kubermatic-wizard-datacenter-step [formControl]="form.get(stepRegistry.Datacenter)"></kubermatic-wizard-datacenter-step>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="stepRegistry.Settings">
+            <kubermatic-wizard-settings-step [formControl]="form.get(stepRegistry.Settings)"></kubermatic-wizard-settings-step>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="stepRegistry.Summary">
+            <kubermatic-wizard-summary-step></kubermatic-wizard-summary-step>
+          </ng-container>
+        </ng-container>
+
+        <div class="km-button-navigation">
+          <a mat-flat-button
+             color="tertiary"
+             routerLink="/projects/{{project?.id}}/clusters">Cancel</a>
+          <div fxFlex></div>
+          <mat-spinner fxFlexAlign="center"
+                       [diameter]="30"
+                       color="accent"
+                       *ngIf="creating"></mat-spinner>
+          <button mat-flat-button
+                  color="tertiary"
+                  matStepperPrevious
+                  *ngIf="!first">Back
+          </button>
+          <button mat-flat-button
+                  matStepperNext
+                  [disabled]="invalid"
+                  *ngIf="showNext(active)">Next
+          </button>
+          <button mat-flat-button
+                  [disabled]="creating"
+                  *ngIf="last"
+                  (click)="create()">Create
+          </button>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </mat-card>
+</form>
