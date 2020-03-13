@@ -1,14 +1,12 @@
 import {Inject, Injectable} from '@angular/core';
 import * as _ from 'lodash';
-import {Observable, ReplaySubject} from 'rxjs';
-import {filter, switchMap} from 'rxjs/operators';
+import {ReplaySubject} from 'rxjs';
 import {DatacenterService, PresetsService} from '../../core/services';
 import {OperatingSystemSpec, Taint} from '../../shared/entity/NodeEntity';
-import {AWSSize, AWSSubnet} from '../../shared/entity/provider/aws/AWS';
-import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {ClusterService} from '../../wizard-new/service/cluster';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../config';
+import {NodeDataAWSProvider} from './provider/aws';
 
 @Injectable()
 export class NodeDataService {
@@ -18,8 +16,8 @@ export class NodeDataService {
   readonly nodeDataChanges = new ReplaySubject<NodeData>();
 
   constructor(
-      @Inject(NODE_DATA_CONFIG) config: NodeDataConfig, private readonly _preset: PresetsService,
-      private readonly _datacenter: DatacenterService, private readonly _clusterService: ClusterService) {
+      @Inject(NODE_DATA_CONFIG) config: NodeDataConfig, private readonly _presetService: PresetsService,
+      private readonly _datacenterService: DatacenterService, private readonly _clusterService: ClusterService) {
     this._config = config;
   }
 
@@ -60,40 +58,5 @@ export class NodeDataService {
     return this.mode === NodeDataMode.Wizard;
   }
 
-  readonly aws = new class {
-    constructor(private _parent: NodeDataService) {}
-
-    set tags(tags: object) {
-      delete this._parent._nodeData.spec.cloud.aws.tags;
-      this._parent._nodeData.spec.cloud.aws.tags = tags;
-    }
-
-    flavors(): Observable<AWSSize[]> {
-      // TODO: support dialog mode
-      switch (this._parent.mode) {
-        case NodeDataMode.Wizard:
-          return this._parent._clusterService.datacenterChanges
-              .pipe(switchMap(dc => this._parent._datacenter.getDataCenter(dc)))
-              .pipe(switchMap(
-                  dc => this._parent._preset.provider(NodeProvider.AWS).region(dc.spec.aws.region).flavors()));
-      }
-    }
-
-    subnets(): Observable<AWSSubnet[]> {
-      // TODO: support dialog mode
-      switch (this._parent.mode) {
-        case NodeDataMode.Wizard:
-          return this._parent._clusterService.clusterChanges
-              .pipe(filter(_ => this._parent._clusterService.provider === NodeProvider.AWS))
-              .pipe(switchMap(
-                  cluster => this._parent._preset.provider(NodeProvider.AWS)
-                                 .accessKeyID(cluster.spec.cloud.aws.accessKeyId)
-                                 .secretAccessKey(cluster.spec.cloud.aws.secretAccessKey)
-                                 .vpc(cluster.spec.cloud.aws.vpcId)
-                                 .credential(this._parent._preset.preset)
-                                 .subnets(cluster.spec.cloud.dc)));
-      }
-    }
-  }
-  (this);
+  readonly aws = new NodeDataAWSProvider(this, this._clusterService, this._presetService, this._datacenterService);
 }

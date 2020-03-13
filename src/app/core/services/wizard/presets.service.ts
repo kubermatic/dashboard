@@ -5,6 +5,7 @@ import {EMPTY, Observable} from 'rxjs';
 import {environment} from '../../../../environments/environment';
 import {PresetListEntity} from '../../../shared/entity/provider/credentials/PresetListEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
+import {Alibaba} from './provider/alibaba';
 
 import {AWS} from './provider/aws';
 import {Azure} from './provider/azure';
@@ -47,6 +48,7 @@ export class PresetsService {
   provider(provider: NodeProvider.OPENSTACK): Openstack;
   provider(provider: NodeProvider.PACKET): Packet;
   provider(provider: NodeProvider.VSPHERE): VSphere;
+  provider(provider: NodeProvider.ALIBABA): Alibaba;
   provider(provider: NodeProvider): Provider {
     switch (provider) {
       case NodeProvider.AWS:
@@ -65,6 +67,8 @@ export class PresetsService {
         return new Packet(this._http, NodeProvider.PACKET);
       case NodeProvider.VSPHERE:
         return new VSphere(this._http, NodeProvider.VSPHERE);
+      case NodeProvider.ALIBABA:
+        return new Alibaba(this._http, NodeProvider.ALIBABA);
       default:
         throw new Error(`Provider ${provider} not supported.`);
     }
