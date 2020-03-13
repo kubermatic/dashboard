@@ -1,10 +1,11 @@
 import {AuditLoggingSettings, CloudSpec} from '../entity/ClusterEntity';
 import {DataCenterEntity} from '../entity/DatacenterEntity';
+import {ClusterType} from '../utils/cluster-utils/cluster-utils';
 import {NodeProvider} from './NodeProviderConstants';
 
 export class ClusterSpecForm {
   name: string;
-  type: string;
+  type: ClusterType;
   labels: object;
   version: string;
   imagePullSecret?: string;

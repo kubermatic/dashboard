@@ -1,0 +1,95 @@
+<form [formGroup]="form"
+      fxLayout="column">
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-label>Node Size</mat-label>
+      <mat-select #sizeSelect
+                  [formControlName]="Controls.Size"
+                  (openedChange)="onSizeOpen($event)"
+                  required>
+        <input #sizeInput
+               (input)="filterBySizeInput.name = $event.target.value"
+               name="filterBySize"
+               placeholder="Select size..."
+               type="text"
+               class="km-select-input"
+               autocomplete="off"
+               matInput
+               kmAutofocus
+               [opened]="sizeSelect.openedChange">
+        <mat-option *ngFor="let size of sizes | filterBy: filterBySizeInput"
+                    [value]="size.name">
+          {{size.name}} ({{size.vcpus}} vCPU, {{size.memory}} GB RAM, {{size.price | number: '1.2-5'}} USD per hour)
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="hasError(Controls.Size, 'required')">Size is <strong>required</strong>.</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-label>Disk Type</mat-label>
+      <mat-select [formControlName]="Controls.DiskType"
+                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
+                  disableOptionCentering
+                  required>
+        <mat-option *ngFor="let type of diskTypes"
+                    [value]="type">
+          {{type}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field fxFlex>
+    <mat-label>Disk Size in GB (gp2)</mat-label>
+    <input [formControlName]="Controls.DiskSize"
+           min="10"
+           max="16000"
+           type="number"
+           autocomplete="off"
+           matInput
+           required>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Subnet ID & Availability Zone</mat-label>
+    <mat-select #subnetSelect
+                [formControlName]="Controls.SubnetID"
+                (openedChange)="onSubnetOpen($event)"
+                required>
+      <input #subnetInput
+             (input)="filterBySubnetInput.id = $event.target.value"
+             name="filterBySubnet"
+             placeholder="Select subnet..."
+             type="text"
+             class="km-select-input"
+             autocomplete="off"
+             matInput
+             kmAutofocus
+             [opened]="subnetSelect.openedChange">
+      <mat-optgroup *ngFor="let az of subnetAZ"
+                    [label]="az">
+        <mat-option *ngFor="let subnet of getSubnetToAZ(az) | filterBy: filterBySubnetInput"
+                    [value]="subnet.id">
+          {{getSubnetOptionName(subnet)}}
+        </mat-option>
+      </mat-optgroup>
+    </mat-select>
+    <mat-error *ngIf="hasError(Controls.SubnetID, 'mustBeInList') && !hasError(Controls.SubnetID, 'required')">Input
+      doesn't match options. Please choose from given options.
+    </mat-error>
+    <mat-error *ngIf="hasError(Controls.SubnetID, 'required')">Subnet ID & Availability Zone is
+      <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>AMI ID</mat-label>
+    <input matInput
+           [formControlName]="Controls.AMI"
+           autocomplete="off">
+  </mat-form-field>
+</form>

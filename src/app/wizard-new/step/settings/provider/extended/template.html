@@ -1,0 +1,7 @@
+<div *ngIf="visible"
+     [formGroup]="form"
+     [ngSwitch]="provider">
+  <kubermatic-wizard-aws-provider-extended *ngSwitchCase="Providers.AWS"
+                                           [formControlName]="Controls.ProviderExtended">
+  </kubermatic-wizard-aws-provider-extended>
+</div>

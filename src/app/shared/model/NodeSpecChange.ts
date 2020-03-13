@@ -6,6 +6,17 @@ export class NodeData {
   count?: number;
   valid?: boolean;
   dynamicConfig?: boolean;
+
+  static NewEmptyNodeData(): NodeData {
+    return {
+      spec: {
+        operatingSystem: {
+          ubuntu: {},
+        },
+        cloud: {} as NodeCloudSpec,
+      } as NodeSpec,
+    } as NodeData;
+  }
 }
 
 export class NodeProviderData {

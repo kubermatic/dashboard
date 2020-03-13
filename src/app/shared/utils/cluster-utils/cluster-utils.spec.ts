@@ -1,6 +1,6 @@
 import {fakeAlibabaCluster, fakeAWSCluster, fakeAzureCluster, fakeBringyourownCluster, fakeDigitaloceanCluster, fakeHetznerCluster, fakeOpenstackCluster, fakePacketCluster, fakeVSphereCluster} from '../../../testing/fake-data/cluster.fake';
 
-import {ClusterType, ClusterUtils} from './cluster-utils';
+import {ClusterUtils} from './cluster-utils';
 
 describe('ClusterUtils', () => {
   it('should get correct provider', () => {
@@ -13,11 +13,6 @@ describe('ClusterUtils', () => {
     expect(ClusterUtils.getProvider(fakeAzureCluster().spec.cloud)).toBe('azure');
     expect(ClusterUtils.getProvider(fakePacketCluster().spec.cloud)).toBe('packet');
     expect(ClusterUtils.getProvider(fakeAlibabaCluster().spec.cloud)).toBe('alibaba');
-  });
-
-  it('should get correct type', () => {
-    expect(ClusterUtils.getType('kubernetes')).toBe(ClusterType.Kubernetes);
-    expect(ClusterUtils.getType('openshift')).toBe(ClusterType.OpenShift);
   });
 
   it('should get correct version headline', () => {

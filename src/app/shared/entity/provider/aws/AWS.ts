@@ -29,6 +29,10 @@ export class AWSVPC {
   ownerId: string;
   state: string;
   tags: AWSTags[];
+
+  get displayName(): string {
+    return this.name !== '' ? `${this.name} (${this.vpcId})` : this.vpcId;
+  }
 }
 
 export class AWSCidrBlockSet {

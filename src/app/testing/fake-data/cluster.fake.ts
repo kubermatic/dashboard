@@ -1,5 +1,6 @@
 import {ClusterEntity, Token} from '../../shared/entity/ClusterEntity';
 import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
+import {ClusterType} from '../../shared/utils/cluster-utils/cluster-utils';
 
 export function clusterModelFake(): CreateClusterModel {
   return {
@@ -14,7 +15,7 @@ export function clusterModelFake(): CreateClusterModel {
         },
         version: '',
       },
-      type: 'kubernetes',
+      type: ClusterType.Kubernetes,
       sshKeys: [
         'key-ssh1',
       ],
@@ -40,7 +41,7 @@ export function fakeDigitaloceanCluster(): ClusterEntity {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
     },
-    type: 'kubernetes',
+    type: ClusterType.Kubernetes,
   };
 }
 
@@ -64,7 +65,7 @@ export function fakePacketCluster(): ClusterEntity {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
     },
-    type: 'kubernetes',
+    type: ClusterType.Kubernetes,
   };
 }
 
@@ -88,7 +89,7 @@ export function fakeGCPCluster(): ClusterEntity {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
     },
-    type: 'kubernetes',
+    type: ClusterType.Kubernetes,
   };
 }
 
@@ -110,7 +111,7 @@ export function fakeHetznerCluster(): ClusterEntity {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
     },
-    type: 'kubernetes',
+    type: ClusterType.Kubernetes,
   };
 }
 
@@ -139,7 +140,7 @@ export function fakeVSphereCluster(): ClusterEntity {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
     },
-    type: 'kubernetes',
+    type: ClusterType.Kubernetes,
   };
 }
 
@@ -167,7 +168,7 @@ export function fakeAWSCluster(): ClusterEntity {
       url: 'https://vr4m6wpqv6.europe-west3-c.dev.kubermatic.io:30003',
       version: '1.9.6',
     },
-    type: 'kubernetes',
+    type: ClusterType.Kubernetes,
   };
 }
 
@@ -197,7 +198,7 @@ export function fakeOpenstackCluster(): ClusterEntity {
       url: 'https://vr4m6wpqv6.europe-west3-c.dev.kubermatic.io:30003',
       version: '1.9.6',
     },
-    type: 'kubernetes',
+    type: ClusterType.Kubernetes,
   };
 }
 
@@ -227,7 +228,7 @@ export function fakeAzureCluster(): ClusterEntity {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
     },
-    type: 'kubernetes',
+    type: ClusterType.Kubernetes,
   };
 }
 
@@ -247,7 +248,7 @@ export function fakeBringyourownCluster(): ClusterEntity {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
     },
-    type: 'kubernetes',
+    type: ClusterType.Kubernetes,
   };
 }
 
@@ -270,7 +271,7 @@ export function fakeAlibabaCluster(): ClusterEntity {
       url: 'https://vr4m6wpqv6.europe-west3-c.dev.kubermatic.io:30003',
       version: '1.9.6',
     },
-    type: 'kubernetes',
+    type: ClusterType.Kubernetes,
   };
 }
 

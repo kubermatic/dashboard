@@ -1,5 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 import {AWSSize, AWSSubnet, AWSVPC} from '../../../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
@@ -47,17 +48,18 @@ export class AWS extends Provider {
   }
 
   vpcs(dc: string): Observable<AWSVPC[]> {
-    if (!this._hasRequiredHeaders()) {
+    if (!this._hasRequiredHeaders() || !dc) {
       return EMPTY;
     }
     const url = `${this._restRoot}/providers/${this._provider}/${dc}/vpcs`;
-    return this._http.get<AWSVPC[]>(url, {headers: this._headers});
+    return this._http.get<AWSVPC[]>(url, {headers: this._headers})
+        .pipe(map(vpcs => vpcs.map(vpc => Object.assign(new AWSVPC(), vpc))));
   }
 
   subnets(dc: string): Observable<AWSSubnet[]> {
     this._setRequiredHeaders(AWS.Header.AccessKeyID, AWS.Header.SecretAccessKey, AWS.Header.VPC);
 
-    if (!this._hasRequiredHeaders()) {
+    if (!this._hasRequiredHeaders() || !dc) {
       return EMPTY;
     }
     const url = `${this._restRoot}/providers/${this._provider}/${dc}/subnets`;

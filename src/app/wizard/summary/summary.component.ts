@@ -5,7 +5,6 @@ import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {getIpCount} from '../../shared/functions/get-ip-count';
 import {ClusterDatacenterForm, ClusterProviderForm} from '../../shared/model/ClusterForm';
 import {NodeData} from '../../shared/model/NodeSpecChange';
-import {ClusterUtils} from '../../shared/utils/cluster-utils/cluster-utils';
 import {NodeUtils} from '../../shared/utils/node-utils/node-utils';
 
 @Component({
@@ -33,10 +32,6 @@ export class SummaryComponent implements OnInit {
 
   getOperatingSystemLogoClass(): string {
     return NodeUtils.getOperatingSystemLogoClass(this.nodeData.spec);
-  }
-
-  getType(type: string): string {
-    return ClusterUtils.getType(type);
   }
 
   displayProvider(): boolean {
@@ -94,7 +89,7 @@ export class SummaryComponent implements OnInit {
   }
 
   noIpsLeft(cluster: ClusterEntity, nodeCount: number): boolean {
-    const ipCount = getIpCount(cluster);
+    const ipCount = getIpCount(cluster.spec.machineNetworks);
 
     if (!!ipCount && ipCount > 0) {
       return !((ipCount - nodeCount) >= 0);

@@ -1,4 +1,5 @@
 import {NodeProvider} from '../model/NodeProviderConstants';
+import {ClusterType} from '../utils/cluster-utils/cluster-utils';
 
 import {AlibabaCloudSpec} from './cloud/AlibabaCloudSpec';
 import {AWSCloudSpec} from './cloud/AWSCloudSpec';
@@ -34,10 +35,18 @@ export class ClusterEntity {
   name: string;
   spec: ClusterSpec;
   status?: Status;
-  type: string;
+  type: ClusterType;
   labels?: object;
   inheritedLabels?: object;
   credential?: string;
+
+  static NewEmptyClusterEntity(): ClusterEntity {
+    return {
+      spec: {
+        cloud: {} as CloudSpec,
+      } as ClusterSpec,
+    } as ClusterEntity;
+  }
 }
 
 export function getEmptyCloudProviderSpec(provider: NodeProvider): object {

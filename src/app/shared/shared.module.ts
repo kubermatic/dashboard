@@ -27,12 +27,14 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSortModule} from '@angular/material/sort';
+import {MatStepperModule} from '@angular/material/stepper';
 import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {ClipboardModule} from 'ngx-clipboard';
 import {CustomFormsModule} from 'ngx-custom-validators';
+import {FilterPipeModule} from 'ngx-filter-pipe';
 
 import {NotificationComponent} from '../core/components/notification/notification.component';
 import {TokenDialogComponent} from '../serviceaccount/serviceaccount-token/token-dialog/token-dialog.component';
@@ -58,6 +60,7 @@ import {SSHKeyListComponent} from './components/ssh-key-list/ssh-key-list.compon
 import {TagListComponent} from './components/tag-list/tag-list.component';
 import {TaintFormComponent} from './components/taint-form/taint-form.component';
 import {TaintsComponent} from './components/taints/taints.component';
+import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
 
 const modules: any[] = [
@@ -68,7 +71,7 @@ const modules: any[] = [
   MatDialogModule,       MatSliderModule,   MatSlideToggleModule, MatProgressBarModule, MatExpansionModule,
   MatSortModule,         MatTableModule,    MatDividerModule,     ClipboardModule,      MatButtonToggleModule,
   MatTabsModule,         MatOptionModule,   MatFormFieldModule,   MatPaginatorModule,   MatSnackBarModule,
-  MatBadgeModule,
+  MatBadgeModule,        MatStepperModule,  FilterPipeModule,
 ];
 
 const components: any[] = [
@@ -103,6 +106,10 @@ const entryComponents: any[] = [
   NotificationComponent,
 ];
 
+const directives: any[] = [
+  AutofocusDirective,
+];
+
 @NgModule({
   imports: [
     ...modules,
@@ -110,11 +117,13 @@ const entryComponents: any[] = [
   declarations: [
     ...components,
     ...entryComponents,
+    ...directives,
   ],
   exports: [
     ...modules,
     ...components,
     ...entryComponents,
+    ...directives,
   ],
   entryComponents: [...entryComponents],
 })
