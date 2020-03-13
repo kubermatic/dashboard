@@ -1,4 +1,4 @@
-FROM quay.io/kubermatic/go-node:1.12.9-11
+FROM quay.io/kubermatic/go-node:1.12.9-12
 
 LABEL maintainer="sebastian@loodse.com"
 
