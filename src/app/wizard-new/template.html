@@ -13,8 +13,8 @@
                 [stepControl]="form.get(step.name)">
         <ng-template matStepLabel>{{step.name}}</ng-template>
         <ng-container [ngSwitch]="step.name">
-          <ng-container *ngSwitchCase="stepRegistry.ProviderNDatacenter">
-            <kubermatic-wizard-provider-step [formControl]="form.get(stepRegistry.ProviderNDatacenter)"></kubermatic-wizard-provider-step>
+          <ng-container *ngSwitchCase="stepRegistry.Provider">
+            <kubermatic-wizard-provider-step [formControl]="form.get(stepRegistry.Provider)"></kubermatic-wizard-provider-step>
           </ng-container>
 
           <ng-container *ngSwitchCase="stepRegistry.Cluster">
