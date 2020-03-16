@@ -65,14 +65,16 @@ export class WizardService {
     handleProviderStep(provider: NodeProvider): void {
       switch (provider) {
         case NodeProvider.BRINGYOUROWN:
-          this._hideStep(StepRegistry.Settings);
+          this._hideStep(StepRegistry.ProviderSettings);
+          this._hideStep(StepRegistry.NodeSettings);
           break;
         case NodeProvider.VSPHERE:
           // Change to show the additional network step
           this._showStep(StepRegistry.Summary);
           break;
         default:
-          this._showStep(StepRegistry.Settings);
+          this._showStep(StepRegistry.ProviderSettings);
+          this._showStep(StepRegistry.NodeSettings);
       }
     }
 

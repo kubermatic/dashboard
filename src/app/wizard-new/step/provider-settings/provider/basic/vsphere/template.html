@@ -1,0 +1,27 @@
+<form [formGroup]="form"
+      fxLayout="column">
+  <mat-form-field fxFlex>
+    <mat-label>Username</mat-label>
+    <input matInput
+           [formControlName]="controls.InfraManagementUsername"
+           [name]="controls.InfraManagementUsername"
+           type="text"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.controls.infraManagementUsername.hasError('required')">
+      Username is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field fxFlex>
+    <mat-label>Password*</mat-label>
+    <input matInput
+           [formControlName]="controls.InfraManagementPassword"
+           [name]="controls.InfraManagementUsername"
+           type="password"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.controls.infraManagementPassword.hasError('required')">
+      Password is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+</form>

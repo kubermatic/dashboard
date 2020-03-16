@@ -10,15 +10,16 @@ import {Routing} from './routing';
 import {ClusterService} from './service/cluster';
 import {WizardService} from './service/wizard';
 import {ClusterStepComponent} from './step/cluster/component';
-import {DatacenterStepComponent} from './step/datacenter/component';
-import {ProviderStepComponent} from './step/provider/component';
-import {SettingsStepComponent} from './step/settings/component';
-import {PresetsComponent} from './step/settings/preset/component';
-import {AWSProviderBasicComponent} from './step/settings/provider/basic/aws/component';
-import {ProviderBasicComponent} from './step/settings/provider/basic/component';
-import {AWSProviderExtendedComponent} from './step/settings/provider/extended/aws/component';
-import {ProviderExtendedComponent} from './step/settings/provider/extended/component';
-import {ClusterSSHKeysComponent} from './step/settings/ssh-keys/component';
+import {NodeSettingsStepComponent} from './step/node-settings/component';
+import {ProviderStepComponent} from './step/provider-datacenter/component';
+import {ProviderSettingsStepComponent} from './step/provider-settings/component';
+import {PresetsComponent} from './step/provider-settings/preset/component';
+import {AWSProviderBasicComponent} from './step/provider-settings/provider/basic/aws/component';
+import {ProviderBasicComponent} from './step/provider-settings/provider/basic/component';
+import {VSphereProviderBasicComponent} from './step/provider-settings/provider/basic/vsphere/component';
+import {AWSProviderExtendedComponent} from './step/provider-settings/provider/extended/aws/component';
+import {ProviderExtendedComponent} from './step/provider-settings/provider/extended/component';
+import {ClusterSSHKeysComponent} from './step/provider-settings/ssh-keys/component';
 import {SummaryStepComponent} from './step/summary/component';
 
 const components: any[] = [
@@ -27,12 +28,13 @@ const components: any[] = [
   ClusterStepComponent,
   SummaryStepComponent,
   ProviderStepComponent,
-  DatacenterStepComponent,
-  SettingsStepComponent,
+  ProviderSettingsStepComponent,
   ProviderBasicComponent,
   AWSProviderBasicComponent,
+  VSphereProviderBasicComponent,
   ProviderExtendedComponent,
   AWSProviderExtendedComponent,
+  NodeSettingsStepComponent,
   ClusterSSHKeysComponent,
 ];
 

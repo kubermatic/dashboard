@@ -210,7 +210,7 @@
           <ng-container *ngIf="cluster.spec.cloud.vsphere">
             <km-property>
               <div key>Username</div>
-              <div value>{{cluster.spec.cloud.vsphere.infraManagementUser.username}}</div>
+              <div value>{{cluster.spec.cloud.vsphere?.infraManagementUser?.username}}</div>
             </km-property>
             <km-property>
               <div key>VSphere Cloud Provider Username</div>
@@ -349,14 +349,14 @@
 
         <!-- VSphere Nodes -->
         <ng-container *ngIf="cluster.spec.cloud.vsphere">
-          <div class="km-summary-row km-summary-row-with-margin">{{nodeData.spec.cloud.vsphere.cpus}}
-            CPUs, {{nodeData.spec.cloud.vsphere.memory}} MB Memory
-            <span *ngIf="nodeData.spec.cloud.vsphere.diskSizeGB">, {{nodeData.spec.cloud.vsphere.diskSizeGB}}
+          <div class="km-summary-row km-summary-row-with-margin">{{nodeData.spec.cloud.vsphere?.cpus}}
+            CPUs, {{nodeData.spec.cloud.vsphere?.memory}} MB Memory
+            <span *ngIf="nodeData.spec.cloud.vsphere?.diskSizeGB">, {{nodeData.spec.cloud.vsphere?.diskSizeGB}}
               GB Disk</span>
           </div>
-          <km-property *ngIf="nodeData.spec.cloud.vsphere.template">
+          <km-property *ngIf="nodeData.spec.cloud.vsphere?.template">
             <div key>Template</div>
-            <div value>{{nodeData.spec.cloud.vsphere.template}}</div>
+            <div value>{{nodeData.spec.cloud.vsphere?.template}}</div>
           </km-property>
         </ng-container>
 
