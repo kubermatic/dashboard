@@ -4,8 +4,8 @@
                   class="km-with-hint">
     <mat-label>Access Key ID</mat-label>
     <input matInput
-           formControlName="accessKeyId"
-           name="accessKeyId"
+           [formControlName]="controls.AccessKeyID"
+           [name]="controls.AccessKeyID"
            type="password"
            autocomplete="off"
            required>
@@ -23,8 +23,8 @@
                   class="km-with-hint">
     <mat-label>Secret Access Key</mat-label>
     <input matInput
-           formControlName="secretAccessKey"
-           name="secretAccessKey"
+           [formControlName]="controls.SecretAccessKey"
+           [name]="controls.SecretAccessKey"
            type="password"
            autocomplete="off"
            required>
@@ -43,8 +43,8 @@
 
     <mat-label>{{ vpcLabel }}</mat-label>
     <input matInput
-           formControlName="vpcId"
-           name="vpcId"
+           [formControlName]="controls.VPCID"
+           [name]="controls.VPCID"
            [matAutocomplete]="auto"
            required>
     <mat-autocomplete #auto="matAutocomplete">
