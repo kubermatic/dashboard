@@ -78,10 +78,11 @@
         </mat-option>
       </mat-optgroup>
     </mat-select>
-    <mat-error *ngIf="hasError(Controls.SubnetID, 'mustBeInList') && !hasError(Controls.SubnetID, 'required')">Input
-      doesn't match options. Please choose from given options.
+    <mat-error *ngIf="hasError(Controls.SubnetID, 'mustBeInList') && !hasError(Controls.SubnetID, 'required')">
+      Input doesn't match options. Please choose from given options.
     </mat-error>
-    <mat-error *ngIf="hasError(Controls.SubnetID, 'required')">Subnet ID & Availability Zone is
+    <mat-error *ngIf="hasError(Controls.SubnetID, 'required')">
+      Subnet ID & Availability Zone is
       <strong>required</strong>.
     </mat-error>
   </mat-form-field>
