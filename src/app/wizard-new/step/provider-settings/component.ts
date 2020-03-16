@@ -3,47 +3,32 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {takeUntil} from 'rxjs/operators';
 
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterType} from '../../../shared/utils/cluster-utils/cluster-utils';
-import {ClusterService} from '../../service/cluster';
 import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
 
 enum Controls {
   ProviderBasic = 'providerBasic',
   ProviderExtended = 'providerExtended',
-  NodeDataBasic = 'nodeDataBasic',
-  NodeDataExtended = 'nodeDataExtended',
   Preset = 'preset',
   SSHKeys = 'sshKeys',
 }
 
 @Component({
-  selector: 'kubermatic-wizard-settings-step',
+  selector: 'kubermatic-wizard-provider-settings-step',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SettingsStepComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => SettingsStepComponent), multi: true}
+    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ProviderSettingsStepComponent), multi: true},
+    {provide: NG_VALIDATORS, useExisting: forwardRef(() => ProviderSettingsStepComponent), multi: true}
   ]
 })
-export class SettingsStepComponent extends StepBase implements OnInit, OnDestroy {
+export class ProviderSettingsStepComponent extends StepBase implements OnInit, OnDestroy {
   readonly Provider = NodeProvider;
   readonly Control = Controls;
 
-  extended = false;
   provider: NodeProvider;
 
-  get clusterType(): ClusterType {
-    return this._clusterService.cluster.type;
-  }
-
-  constructor(
-      private readonly _builder: FormBuilder, private readonly _clusterService: ClusterService, wizard: WizardService) {
-    super(wizard, 'Settings');
-  }
-
-  switch(): void {
-    this.extended = !this.extended;
+  constructor(private readonly _builder: FormBuilder, wizard: WizardService) {
+    super(wizard, 'Provider settings');
   }
 
   ngOnInit(): void {
@@ -51,8 +36,6 @@ export class SettingsStepComponent extends StepBase implements OnInit, OnDestroy
       [Controls.Preset]: this._builder.control(''),
       [Controls.ProviderBasic]: this._builder.control(''),
       [Controls.ProviderExtended]: this._builder.control(''),
-      [Controls.NodeDataBasic]: this._builder.control(''),
-      [Controls.NodeDataExtended]: this._builder.control(''),
       [Controls.SSHKeys]: this._builder.control(''),
     });
 
