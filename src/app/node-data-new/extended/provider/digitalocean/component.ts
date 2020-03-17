@@ -5,6 +5,7 @@ import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
+import {merge} from "rxjs";
 
 enum Controls {
   Backups = 'backups',
@@ -49,8 +50,12 @@ export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator imp
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
+    merge(
+      this.form.get(Controls.Backups).valueChanges,
+      this.form.get(Controls.IPv6).valueChanges,
+      this.form.get(Controls.Monitoring).valueChanges,
+    ).pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
   }
 
   onTagsChange(tags: string[]): void {
