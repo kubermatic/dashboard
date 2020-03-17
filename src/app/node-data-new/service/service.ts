@@ -7,7 +7,7 @@ import {NodeData} from '../../shared/model/NodeSpecChange';
 import {ClusterService} from '../../wizard-new/service/cluster';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../config';
 import {NodeDataAWSProvider} from './provider/aws';
-import {NodeDataDigitalOceanProvider} from "./provider/digitalocean";
+import {NodeDataDigitalOceanProvider} from './provider/digitalocean';
 
 @Injectable()
 export class NodeDataService {

@@ -2,12 +2,13 @@ import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge} from 'rxjs';
 import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+
 import {PresetsService} from '../../../../../../core/services';
- import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
+import {DigitaloceanCloudSpec} from '../../../../../../shared/entity/cloud/DigitaloceanCloudSpec';
+import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
 import {WizardService} from '../../../../../service/wizard';
-import {DigitaloceanCloudSpec} from "../../../../../../shared/entity/cloud/DigitaloceanCloudSpec";
 
 export enum Controls {
   Token = 'token',
@@ -44,8 +45,8 @@ export class DigitalOceanProviderBasicComponent extends BaseFormValidator implem
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
-    this.form.get(Controls.Token).valueChanges
-        .pipe(debounceTime(this._debounceTime))
+    this.form.get(Controls.Token)
+        .valueChanges.pipe(debounceTime(this._debounceTime))
         .pipe(distinctUntilChanged())
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());

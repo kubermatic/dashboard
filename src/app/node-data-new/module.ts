@@ -13,12 +13,12 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {SharedModule} from '../shared/shared.module';
 
 import {AWSBasicNodeDataComponent} from './basic/provider/aws/component';
+import {DigitalOceanBasicNodeDataComponent} from './basic/provider/digitalocean/component';
 import {NodeDataComponent} from './component';
 import {ExtendedNodeDataComponent} from './extended/component';
 import {AWSExtendedNodeDataComponent} from './extended/provider/aws/component';
+import {DigitalOceanExtendedNodeDataComponent} from './extended/provider/digitalocean/component';
 import {NodeDataService} from './service/service';
-import {DigitalOceanBasicNodeDataComponent} from "./basic/provider/digitalocean/component";
-import {DigitalOceanExtendedNodeDataComponent} from "./extended/provider/digitalocean/component";
 
 const components = [
   AWSBasicNodeDataComponent,

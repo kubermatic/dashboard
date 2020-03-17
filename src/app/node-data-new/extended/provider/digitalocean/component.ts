@@ -36,12 +36,10 @@ export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator imp
   }
 
   ngOnInit(): void {
-    const backups =
-        this._nodeDataService.isInDialogEditMode() ? this.nodeData.spec.cloud.digitalocean.backups : false;
-    const ipv6 =
-      this._nodeDataService.isInDialogEditMode() ? this.nodeData.spec.cloud.digitalocean.ipv6 : false;
+    const backups = this._nodeDataService.isInDialogEditMode() ? this.nodeData.spec.cloud.digitalocean.backups : false;
+    const ipv6 = this._nodeDataService.isInDialogEditMode() ? this.nodeData.spec.cloud.digitalocean.ipv6 : false;
     const monitoring =
-      this._nodeDataService.isInDialogEditMode() ? this.nodeData.spec.cloud.digitalocean.monitoring : false;
+        this._nodeDataService.isInDialogEditMode() ? this.nodeData.spec.cloud.digitalocean.monitoring : false;
 
     this.form = this._builder.group({
       [Controls.Backups]: this._builder.control(backups),
