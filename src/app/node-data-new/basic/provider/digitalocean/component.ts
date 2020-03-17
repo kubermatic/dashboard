@@ -42,6 +42,7 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
     });
 
     this._nodeDataService.nodeData = this._getNodeData();
+    this._setDefaultValues();
 
     this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
 
@@ -82,6 +83,15 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
     this.sizes = sizes;
     if (this.sizes && this.sizes.standard && this.sizes.standard.length > 0) {
       this.form.get(Controls.Size).setValue(this.sizes.standard[0].slug);
+    }
+  }
+
+  _setDefaultValues(): void {
+    if (this._nodeDataService.isInWizardMode()) {
+      this._nodeDataService.nodeData.spec.cloud.digitalocean.backups = false;
+      this._nodeDataService.nodeData.spec.cloud.digitalocean.ipv6 = false;
+      this._nodeDataService.nodeData.spec.cloud.digitalocean.monitoring = false;
+      this._nodeDataService.nodeData.spec.cloud.digitalocean.tags = [];
     }
   }
 

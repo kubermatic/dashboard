@@ -4,4 +4,7 @@
   <kubermatic-aws-extended-node-data *ngSwitchCase="Provider.AWS"
                                      [formControlName]="Control.Provider">
   </kubermatic-aws-extended-node-data>
+  <kubermatic-digitalocean-extended-node-data *ngSwitchCase="Provider.DIGITALOCEAN"
+                                              [formControlName]="Control.Provider">
+  </kubermatic-digitalocean-extended-node-data>
 </form>

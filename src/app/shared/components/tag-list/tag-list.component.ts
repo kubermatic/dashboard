@@ -10,7 +10,7 @@ import {MatChipInputEvent} from '@angular/material/chips';
 export class TagListComponent {
   @Input() title = 'Tags';
   @Input() tags: string[] = [];
-  @Output() tagsChange = new EventEmitter<object>();
+  @Output() tagsChange = new EventEmitter<string[]>();
   addOnBlur = true;
   selectable = false;
   removable = true;

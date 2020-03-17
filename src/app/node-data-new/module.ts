@@ -18,11 +18,13 @@ import {ExtendedNodeDataComponent} from './extended/component';
 import {AWSExtendedNodeDataComponent} from './extended/provider/aws/component';
 import {NodeDataService} from './service/service';
 import {DigitalOceanBasicNodeDataComponent} from "./basic/provider/digitalocean/component";
+import {DigitalOceanExtendedNodeDataComponent} from "./extended/provider/digitalocean/component";
 
 const components = [
   AWSBasicNodeDataComponent,
   AWSExtendedNodeDataComponent,
   DigitalOceanBasicNodeDataComponent,
+  DigitalOceanExtendedNodeDataComponent,
   NodeDataComponent,
   ExtendedNodeDataComponent,
 ];
