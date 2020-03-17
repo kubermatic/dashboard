@@ -30,6 +30,8 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
 
   readonly Controls = Controls;
 
+  private readonly _debounceTime = 250;
+
   constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
     super();
   }
@@ -43,7 +45,7 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
 
     this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
 
-    this.form.controls.size.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+    this.form.controls.size.valueChanges.pipe(debounceTime(this._debounceTime), takeUntil(this._unsubscribe), startWith(''))
         .subscribe(value => {
           if (value !== '' && !this.form.controls.size.pristine) {
             this.filteredSizes = filterObjectOptions(value, 'slug', this.sizes);
