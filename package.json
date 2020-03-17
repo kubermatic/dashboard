@@ -107,7 +107,7 @@
     "node-gyp": "6.1.0",
     "request": "2.88.2",
     "serialize-javascript": "3.0.0",
-    "start-server-and-test": "1.10.10",
+    "start-server-and-test": "1.10.11",
     "stylelint": "13.2.1",
     "stylelint-config-standard": "19.0.0",
     "ts-jest": "25.2.1",
