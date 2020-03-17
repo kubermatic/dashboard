@@ -8,7 +8,7 @@
            type="password"
            autocomplete="off"
            required>
-    <mat-error *ngIf="form.controls.token.hasError('required')">
+    <mat-error *ngIf="form.get(controls.Token).hasError('required')">
       Token is <strong>required</strong>.
     </mat-error>
   </mat-form-field>

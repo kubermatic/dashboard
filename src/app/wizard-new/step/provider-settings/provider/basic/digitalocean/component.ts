@@ -25,7 +25,7 @@ export enum Controls {
 export class DigitalOceanProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly controls = Controls;
 
-  protected readonly _debounceTime = 250;
+  private readonly _debounceTime = 250;
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,

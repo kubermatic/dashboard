@@ -26,8 +26,8 @@
           </mat-option>
         </mat-optgroup>
       </mat-autocomplete>
-      <mat-error *ngIf="form.controls.size.hasError('mustBeInList') && !form.controls.size.hasError('required')">Input doesn't match options. Please choose from given options.</mat-error>
-      <mat-error *ngIf="form.controls.size.hasError('required')">Size is <strong>required</strong>.</mat-error>
+      <mat-error *ngIf="form.get(Controls.Size).hasError('mustBeInList') && !form.controls.size.hasError('required')">Input doesn't match options. Please choose from given options.</mat-error>
+      <mat-error *ngIf="form.get(Controls.Size).hasError('required')">Size is <strong>required</strong>.</mat-error>
     </mat-form-field>
   </div>
 </form>
