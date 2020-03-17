@@ -62,7 +62,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     });
 
     this._nodeDataService.nodeData = this._getNodeData();
-    this._setDefaultValues();
     this._setDefaultSubnet(this._subnets);
 
     this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
@@ -169,12 +168,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   private _getAZFromSubnet(subnetID: string): string {
     const findSubnet = this._subnets.find(x => x.id === subnetID);
     return findSubnet ? findSubnet.availability_zone : '';
-  }
-
-  _setDefaultValues(): void {
-    if (this._nodeDataService.isInWizardMode()) {
-      this._nodeDataService.nodeData.spec.cloud.aws.assignPublicIP = true;
-    }
   }
 
   private _getNodeData(): NodeData {
