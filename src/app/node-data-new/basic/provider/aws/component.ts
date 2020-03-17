@@ -1,4 +1,4 @@
-import {Component, ElementRef, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Observable, of} from 'rxjs';
 import {catchError, switchMap, takeUntil, tap} from 'rxjs/operators';
@@ -7,7 +7,6 @@ import {PresetsService} from '../../../../core/services';
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
 import {AWSSize, AWSSubnet} from '../../../../shared/entity/provider/aws/AWS';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
-import {AutocompleteFilterValidators} from '../../../../shared/validators/autocomplete-filter.validator';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
 
@@ -31,11 +30,8 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   sizes: AWSSize[] = [];
   diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
   hideOptional = false;
-  filterBySizeInput = {name: ''};
-  filterBySubnetInput = {id: ''};
-
-  @ViewChild('sizeInput', {static: true}) private readonly sizeInputEl_: ElementRef;
-  @ViewChild('subnetInput', {static: true}) private readonly subnetInputEl_: ElementRef;
+  defaultSubnet = '';
+  defaultSize = '';
 
   readonly Controls = Controls;
 
@@ -54,10 +50,10 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Size]: this._builder.control('', Validators.required),
+      [Controls.Size]: this._builder.control(''),
       [Controls.DiskSize]: this._builder.control(25, Validators.required),
       [Controls.DiskType]: this._builder.control(this.diskTypes[0], Validators.required),
-      [Controls.SubnetID]: this._builder.control('', Validators.required),
+      [Controls.SubnetID]: this._builder.control(''),
       [Controls.AMI]: this._builder.control(''),
     });
 
@@ -97,18 +93,12 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     return this._nodeDataService.isInWizardMode();
   }
 
-  onSizeOpen(opened: boolean): void {
-    if (!opened) {
-      this.sizeInputEl_.nativeElement.value = '';
-      this.filterBySizeInput.name = '';
-    }
+  onSizeChange(size: string): void {
+    this._nodeDataService.nodeData.spec.cloud.aws.instanceType = size;
   }
 
-  onSubnetOpen(opened: boolean): void {
-    if (!opened) {
-      this.subnetInputEl_.nativeElement.value = '';
-      this.filterBySubnetInput.id = '';
-    }
+  onSubnetChange(subnet: string): void {
+    this._nodeDataService.nodeData.spec.cloud.aws.subnetID = subnet;
   }
 
   private get _sizesObservable(): Observable<AWSSize[]> {
@@ -121,21 +111,15 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   private _setDefaultSize(sizes: AWSSize[]): void {
     this.sizes = sizes.sort((a, b) => a.name.localeCompare(b.name));
-    this.form.get(Controls.Size).setValidators([
-      Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true)
-    ]);
-
     if (this.sizes.length > 0) {
       const cheapestInstance = this.sizes.reduce((prev, curr) => prev.price < curr.price ? prev : curr);
-      this.form.get(Controls.Size).setValue(cheapestInstance.name);
+      this.defaultSize = cheapestInstance.name;
     }
   }
 
-  _clearSubnet(): void {
+  private _clearSubnet(): void {
     this._subnets = [];
     this._subnetMap = {};
-    this.form.setValidators(Validators.required);
-    this.form.get(Controls.SubnetID).setValue('');
   }
 
   private _setDefaultSubnet(subnets: AWSSubnet[]): void {
@@ -146,10 +130,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     this._subnets = subnets;
     this._subnetMap = {};
     const defaultSubnet = this._subnets.find(s => s.isDefaultSubnet);
-    this.form.get(Controls.SubnetID).setValidators([
-      Validators.required, AutocompleteFilterValidators.mustBeInObjectList(this._subnetMap, 'id', true)
-    ]);
-    this.form.get(Controls.SubnetID).setValue(defaultSubnet ? defaultSubnet.id : this._subnets[0].id);
+    this.defaultSubnet = defaultSubnet ? defaultSubnet.id : this._subnets[0].id;
     this._initSubnetMap();
   }
 
@@ -175,10 +156,8 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
       spec: {
         cloud: {
           aws: {
-            subnetID: this.form.get(Controls.SubnetID).value,
             diskSize: this.form.get(Controls.DiskSize).value,
             ami: this.form.get(Controls.AMI).value,
-            instanceType: this.form.get(Controls.Size).value,
             volumeType: this.form.get(Controls.DiskType).value,
             availabilityZone: this._getAZFromSubnet(this.form.get(Controls.SubnetID).value),
           },

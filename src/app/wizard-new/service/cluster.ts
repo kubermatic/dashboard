@@ -1,35 +1,42 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import * as _ from 'lodash';
-import {Observable} from 'rxjs';
 import {CloudSpec, ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
+import {ClusterType} from '../../shared/utils/cluster-utils/cluster-utils';
 
 @Injectable()
 export class ClusterService {
   readonly providerChanges = new EventEmitter<NodeProvider>();
   readonly datacenterChanges = new EventEmitter<string>();
   readonly sshKeyChanges = new EventEmitter<SSHKeyEntity[]>();
+  readonly clusterChanges = new EventEmitter<ClusterEntity>();
+  readonly clusterTypeChanges = new EventEmitter<ClusterType>();
 
-  private readonly _clusterChanges = new EventEmitter<ClusterEntity>();
   private _clusterEntity: ClusterEntity = ClusterEntity.NewEmptyClusterEntity();
   private _sshKeysEntity: SSHKeyEntity[] = [];
 
   set cluster(cluster: ClusterEntity) {
-    this._clusterEntity = _.merge(this._clusterEntity, cluster);
-    this._clusterChanges.emit(this._clusterEntity);
+    if (this._getProvider(this._clusterEntity) !== NodeProvider.NONE &&
+        this._getProvider(cluster) !== NodeProvider.NONE &&
+        this._getProvider(this._clusterEntity) !== this._getProvider(cluster)) {
+      return;
+    }
+
+    this._clusterEntity = _.mergeWith(this._clusterEntity, cluster, (value) => {
+      if (_.isArray(value)) {
+        return value;
+      }
+    });
+    this.clusterChanges.emit(this._clusterEntity);
   }
 
   get cluster(): ClusterEntity {
     return this._clusterEntity;
   }
 
-  get clusterChanges(): Observable<ClusterEntity> {
-    return this._clusterChanges;
-  }
-
   set provider(provider: NodeProvider) {
-    delete this._clusterEntity.spec.cloud;
+    this._clusterEntity.spec.cloud = {} as CloudSpec;
     this.cluster = {
       spec: {
         cloud: {
@@ -83,7 +90,28 @@ export class ClusterService {
     return this._sshKeysEntity;
   }
 
+  set clusterType(type: ClusterType) {
+    this._clusterEntity.type = type;
+    this.clusterTypeChanges.emit(type);
+  }
+
+  get clusterType(): ClusterType {
+    return this._clusterEntity.type;
+  }
+
   reset(): void {
     this._clusterEntity = ClusterEntity.NewEmptyClusterEntity();
+  }
+
+  private _getProvider(cluster: ClusterEntity): NodeProvider {
+    if (!cluster || !cluster.spec || !cluster.spec.cloud) {
+      return NodeProvider.NONE;
+    }
+
+    const clusterProviders = Object.values(NodeProvider)
+                                 .map(provider => cluster.spec.cloud[provider] ? provider : undefined)
+                                 .filter(p => p !== undefined);
+
+    return clusterProviders.length > 0 ? clusterProviders[0] : NodeProvider.NONE;
   }
 }

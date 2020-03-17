@@ -93,7 +93,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     const createCluster =
         this._getCreateClusterModel(this._clusterModelService.cluster, this._nodeDataService.nodeData);
 
-    this._datacenterService.getDataCenter(this._wizard.datacenter)
+    this._datacenterService.getDataCenter(this._clusterModelService.datacenter)
         .pipe(tap(dc => datacenter = dc))
         .pipe(switchMap(_ => this._clusterService.create(this.project.id, datacenter.spec.seed, createCluster)))
         .pipe(tap(cluster => {

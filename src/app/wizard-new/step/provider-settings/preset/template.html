@@ -1,33 +1,31 @@
 <form [formGroup]="form">
-  <div fxLayout="column">
-    <mat-form-field fxFlex>
-      <mat-label>{{ label }}</mat-label>
-      <mat-select [formControlName]="Controls.Preset"
-                  panelClass="km-preset-dropdown"
-                  required>
-        <mat-option *ngFor="let presetName of presetList.names"
-                    [value]="presetName">{{presetName}}</mat-option>
-        <mat-select-trigger fxFlex
-                            fxLayout="row">
-          <div fxFlex
-               fxLayoutAlign="start">
-            {{selectedPreset}}
-          </div>
+  <mat-form-field fxFlex>
+    <mat-label>{{ label }}</mat-label>
+    <mat-select [formControlName]="Controls.Preset"
+                panelClass="km-preset-dropdown"
+                required>
+      <mat-option *ngFor="let presetName of presetList.names"
+                  [value]="presetName">{{presetName}}</mat-option>
+      <mat-select-trigger fxFlex
+                          fxLayout="row">
+        <div fxFlex
+             fxLayoutAlign="start">
+          {{selectedPreset}}
+        </div>
 
-          <div fxFlex
-               fxLayoutAlign="end">
-            <button *ngIf="selectedPreset"
-                    (click)="reset(); $event.stopPropagation()"
-                    mat-icon-button
-                    aria-label="Clear">
-              <mat-icon inline="true">close</mat-icon>
-            </button>
-          </div>
-        </mat-select-trigger>
-      </mat-select>
-      <mat-error *ngIf="hasError(Controls.Preset,'required')">
-        Preset is <strong>required</strong>.
-      </mat-error>
-    </mat-form-field>
-  </div>
+        <div fxFlex
+             fxLayoutAlign="end">
+          <button *ngIf="selectedPreset"
+                  (click)="reset(); $event.stopPropagation()"
+                  mat-icon-button
+                  aria-label="Clear">
+            <mat-icon inline="true">close</mat-icon>
+          </button>
+        </div>
+      </mat-select-trigger>
+    </mat-select>
+    <mat-error *ngIf="hasError(Controls.Preset,'required')">
+      Preset is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
 </form>

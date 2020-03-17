@@ -23,6 +23,7 @@ import {PacketProviderBasicComponent} from './step/provider-settings/provider/ba
 import {VSphereProviderBasicComponent} from './step/provider-settings/provider/basic/vsphere/component';
 import {AWSProviderExtendedComponent} from './step/provider-settings/provider/extended/aws/component';
 import {ProviderExtendedComponent} from './step/provider-settings/provider/extended/component';
+import {VSphereProviderExtendedComponent} from './step/provider-settings/provider/extended/vsphere/component';
 import {ClusterSSHKeysComponent} from './step/provider-settings/ssh-keys/component';
 import {SummaryStepComponent} from './step/summary/component';
 
@@ -42,6 +43,7 @@ const components: any[] = [
   VSphereProviderBasicComponent,
   ProviderExtendedComponent,
   AWSProviderExtendedComponent,
+  VSphereProviderExtendedComponent,
   NodeSettingsStepComponent,
   ClusterSSHKeysComponent,
 ];

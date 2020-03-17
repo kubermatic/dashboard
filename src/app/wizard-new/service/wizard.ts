@@ -1,6 +1,5 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {MatStepper} from '@angular/material/stepper';
-import {Observable} from 'rxjs';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {StepRegistry, WizardStep} from '../config';
 import {ClusterService} from './cluster';
@@ -19,18 +18,6 @@ export class WizardService {
     this._clusterService.provider = provider;
   }
 
-  get provider(): NodeProvider {
-    return this._clusterService.provider;
-  }
-
-  set datacenter(datacenter: string) {
-    this._clusterService.datacenter = datacenter;
-  }
-
-  get datacenter(): string {
-    return this._clusterService.datacenter;
-  }
-
   set stepper(stepper: MatStepper) {
     this._stepper = stepper;
   }
@@ -45,14 +32,6 @@ export class WizardService {
 
   set steps(steps: WizardStep[]) {
     this._steps = steps;
-  }
-
-  get datacenterChanges(): Observable<string> {
-    return this._clusterService.datacenterChanges;
-  }
-
-  get providerChanges(): Observable<NodeProvider> {
-    return this._clusterService.providerChanges;
   }
 
   reset(): void {
@@ -71,6 +50,8 @@ export class WizardService {
         case NodeProvider.VSPHERE:
           // Change to show the additional network step
           this._showStep(StepRegistry.Summary);
+          this._showStep(StepRegistry.ProviderSettings);
+          this._showStep(StepRegistry.NodeSettings);
           break;
         default:
           this._showStep(StepRegistry.ProviderSettings);

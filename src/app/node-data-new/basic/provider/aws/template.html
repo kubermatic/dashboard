@@ -1,30 +1,21 @@
 <form [formGroup]="form"
-      fxLayout="column">
+      fxLayout="column"
+      fxLayoutGap="30px">
   <div fxFlex
        class="mat-select-container">
-    <mat-form-field>
-      <mat-label>Node Size</mat-label>
-      <mat-select #sizeSelect
-                  [formControlName]="Controls.Size"
-                  (openedChange)="onSizeOpen($event)"
-                  required>
-        <input #sizeInput
-               (input)="filterBySizeInput.name = $event.target.value"
-               name="filterBySize"
-               placeholder="Select size..."
-               type="text"
-               class="km-select-input"
-               autocomplete="off"
-               matInput
-               kmAutofocus
-               [opened]="sizeSelect.openedChange">
-        <mat-option *ngFor="let size of sizes | filterBy: filterBySizeInput"
-                    [value]="size.name">
-          {{size.name}} ({{size.vcpus}} vCPU, {{size.memory}} GB RAM, {{size.price | number: '1.2-5'}} USD per hour)
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="hasError(Controls.Size, 'required')">Size is <strong>required</strong>.</mat-error>
-    </mat-form-field>
+    <km-combobox [required]="true"
+                 [grouped]="false"
+                 [selected]="defaultSize"
+                 [options]="sizes"
+                 [formControlName]="Controls.Size"
+                 (changed)="onSizeChange($event)"
+                 label="Node Size"
+                 inputLabel="Select size..."
+                 filterBy="name">
+      <div *option="let size">
+        {{size.name}} ({{size.vcpus}} vCPU, {{size.memory}} GB RAM, {{size.price | number: '1.2-5'}} USD per hour)
+      </div>
+    </km-combobox>
   </div>
 
   <div fxFlex
@@ -54,38 +45,18 @@
            required>
   </mat-form-field>
 
-  <mat-form-field fxFlex>
-    <mat-label>Subnet ID & Availability Zone</mat-label>
-    <mat-select #subnetSelect
-                [formControlName]="Controls.SubnetID"
-                (openedChange)="onSubnetOpen($event)"
-                required>
-      <input #subnetInput
-             (input)="filterBySubnetInput.id = $event.target.value"
-             name="filterBySubnet"
-             placeholder="Select subnet..."
-             type="text"
-             class="km-select-input"
-             autocomplete="off"
-             matInput
-             kmAutofocus
-             [opened]="subnetSelect.openedChange">
-      <mat-optgroup *ngFor="let az of subnetAZ"
-                    [label]="az">
-        <mat-option *ngFor="let subnet of getSubnetToAZ(az) | filterBy: filterBySubnetInput"
-                    [value]="subnet.id">
-          {{getSubnetOptionName(subnet)}}
-        </mat-option>
-      </mat-optgroup>
-    </mat-select>
-    <mat-error *ngIf="hasError(Controls.SubnetID, 'mustBeInList') && !hasError(Controls.SubnetID, 'required')">
-      Input doesn't match options. Please choose from given options.
-    </mat-error>
-    <mat-error *ngIf="hasError(Controls.SubnetID, 'required')">
-      Subnet ID & Availability Zone is
-      <strong>required</strong>.
-    </mat-error>
-  </mat-form-field>
+  <km-combobox [required]="true"
+               [grouped]="true"
+               [groups]="subnetAZ"
+               [selected]="defaultSubnet"
+               [optionsGetter]="getSubnetToAZ.bind(this)"
+               [formControlName]="Controls.SubnetID"
+               (changed)="onSubnetChange($event)"
+               label="Subnet ID & Availability Zone"
+               inputLabel="Select subnet..."
+               filterBy="id">
+    <div *option="let network">{{getSubnetOptionName(network)}}</div>
+  </km-combobox>
 
   <mat-form-field fxFlex>
     <mat-label>AMI ID</mat-label>

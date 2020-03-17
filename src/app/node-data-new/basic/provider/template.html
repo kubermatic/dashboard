@@ -1,0 +1,12 @@
+<form [formGroup]="form"
+      [ngSwitch]="provider">
+  <kubermatic-aws-basic-node-data *ngSwitchCase="Provider.AWS"
+                                  [formControl]="form.get(Control.ProviderBasic)">
+  </kubermatic-aws-basic-node-data>
+  <kubermatic-digitalocean-basic-node-data *ngSwitchCase="Provider.DIGITALOCEAN"
+                                           [formControl]="form.get(Control.ProviderBasic)">
+  </kubermatic-digitalocean-basic-node-data>
+  <kubermatic-vsphere-basic-node-data *ngSwitchCase="Provider.VSPHERE"
+                                      [formControl]="form.get(Control.ProviderBasic)">
+  </kubermatic-vsphere-basic-node-data>
+</form>

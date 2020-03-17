@@ -9,7 +9,6 @@ import {AWSVPC} from '../../../../../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
-import {WizardService} from '../../../../../service/wizard';
 
 export enum Controls {
   AccessKeyID = 'accessKeyId',
@@ -45,7 +44,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
-      private readonly _wizard: WizardService, private readonly _clusterService: ClusterService) {
+      private readonly _clusterService: ClusterService) {
     super('AWS Provider Basic');
   }
 
@@ -82,7 +81,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
         .pipe(distinctUntilChanged())
         .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());
 
-    merge(this._wizard.providerChanges, this._wizard.datacenterChanges)
+    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this.form.reset());
   }
@@ -110,7 +109,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
     return this._presets.provider(NodeProvider.AWS)
         .accessKeyID(this._controlValue(Controls.AccessKeyID))
         .secretAccessKey(this._controlValue(Controls.SecretAccessKey))
-        .vpcs(this._wizard.datacenter)
+        .vpcs(this._clusterService.datacenter)
         .pipe(map(vpcs => vpcs.sort((a, b) => a.name.localeCompare(b.name))))
         .pipe(tap(_ => this._vpcState = VPCState.Loading))
         .pipe(catchError(() => {

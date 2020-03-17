@@ -1,0 +1,32 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      fxLayoutGap="30px">
+  <km-combobox [required]="false"
+               [grouped]="true"
+               [groups]="networkTypes"
+               [optionsGetter]="getNetworks.bind(this)"
+               [formControlName]="controls.VMNetName"
+               [hint]="getHint(controls.VMNetName)"
+               (changed)="onNetworkChange($event)"
+               label="Network"
+               inputLabel="Select network..."
+               filterBy="absolutePath">
+    <div *option="let network">
+      {{network.relativePath}}
+    </div>
+  </km-combobox>
+
+  <km-combobox [required]="false"
+               [grouped]="false"
+               [options]="folders"
+               [formControlName]="controls.Folder"
+               [hint]="getHint(controls.VMNetName)"
+               (changed)="onFolderChange($event)"
+               label="Folder"
+               inputLabel="Select folder..."
+               filterBy="path">
+    <div *option="let folder">
+      {{folder.path}}
+    </div>
+  </km-combobox>
+</form>

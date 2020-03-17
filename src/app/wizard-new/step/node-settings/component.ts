@@ -42,7 +42,8 @@ export class NodeSettingsStepComponent extends StepBase implements OnInit, OnDes
       [Controls.NodeDataExtended]: this._builder.control(''),
     });
 
-    this.provider = this._wizard.provider;
-    this._wizard.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(provider => this.provider = provider);
+    this.provider = this._clusterService.provider;
+    this._clusterService.providerChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(provider => this.provider = provider);
   }
 }

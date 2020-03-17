@@ -45,6 +45,8 @@ import {AddonsListComponent} from './components/addon-list/addon-list.component'
 import {EditAddonDialogComponent} from './components/addon-list/edit-addon-dialog/edit-addon-dialog.component';
 import {InstallAddonDialogComponent} from './components/addon-list/install-addon-dialog/install-addon-dialog.component';
 import {SelectAddonDialogComponent} from './components/addon-list/select-addon-dialog/select-addon-dialog.component';
+import {FilteredComboboxComponent} from './components/combobox/component';
+import {OptionDirective} from './components/combobox/directive';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 import {DialogTitleComponent} from './components/dialog-title/dialog-title.component';
 import {EventListComponent} from './components/event-list/event-list.component';
@@ -75,24 +77,16 @@ const modules: any[] = [
 ];
 
 const components: any[] = [
-  PropertyBooleanComponent,
-  DialogTitleComponent,
-  PropertyComponent,
-  EventListComponent,
-  LabelFormComponent,
-  LabelsComponent,
-  TaintFormComponent,
-  TaintsComponent,
-  RelativeTimePipe,
-  RelativeTimeComponent,
-  SSHKeyListComponent,
-  AddonsListComponent,
-  SettingsStatusComponent,
-  ShortNameInCircleComponent,
-  TagListComponent,
-  TokenDialogComponent,
-  NotificationComponent,
-  PropertyUsageComponent,
+  PropertyBooleanComponent,  DialogTitleComponent,
+  PropertyComponent,         EventListComponent,
+  LabelFormComponent,        LabelsComponent,
+  TaintFormComponent,        TaintsComponent,
+  RelativeTimePipe,          RelativeTimeComponent,
+  SSHKeyListComponent,       AddonsListComponent,
+  SettingsStatusComponent,   ShortNameInCircleComponent,
+  TagListComponent,          TokenDialogComponent,
+  NotificationComponent,     PropertyUsageComponent,
+  FilteredComboboxComponent,
 ];
 
 const entryComponents: any[] = [
@@ -108,6 +102,7 @@ const entryComponents: any[] = [
 
 const directives: any[] = [
   AutofocusDirective,
+  OptionDirective,
 ];
 
 @NgModule({
