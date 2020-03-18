@@ -1,0 +1,33 @@
+<form [formGroup]="form"
+      fxLayout="column">
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field class="km-with-hint">
+      <mat-label>Node Size</mat-label>
+      <input matInput
+             required
+             formControlName="size"
+             name="size"
+             placeholder="Select size..."
+             [matAutocomplete]="autoSizes">
+      <mat-autocomplete #autoSizes="matAutocomplete">
+        <mat-optgroup *ngIf="sizes.standard.length > 0"
+                      label="Standard Droplets">
+          <mat-option *ngFor="let size of filteredSizes.standard"
+                      [value]="size.slug">
+            {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
+          </mat-option>
+        </mat-optgroup>
+        <mat-optgroup *ngIf="sizes.optimized.length > 0"
+                      label="Optimized Droplets">
+          <mat-option *ngFor="let size of filteredSizes.optimized"
+                      [value]="size.slug">
+            {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
+          </mat-option>
+        </mat-optgroup>
+      </mat-autocomplete>
+      <mat-error *ngIf="form.get(Controls.Size).hasError('mustBeInList') && !form.controls.size.hasError('required')">Input doesn't match options. Please choose from given options.</mat-error>
+      <mat-error *ngIf="form.get(Controls.Size).hasError('required')">Size is <strong>required</strong>.</mat-error>
+    </mat-form-field>
+  </div>
+</form>

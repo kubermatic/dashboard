@@ -11,8 +11,8 @@ export class WizardStep {
 }
 
 export enum StepRegistry {
+  Provider = 'Provider',
   Cluster = 'Cluster',
-  ProviderNDatacenter = 'Provider & Datacenter',
   ProviderSettings = 'Provider settings',
   NodeSettings = 'Node settings',
   Summary = 'Summary',
@@ -22,7 +22,7 @@ export enum StepRegistry {
  * Define all possible steps here.
  */
 export let steps: WizardStep[] = [
-  WizardStep.newWizardStep(StepRegistry.ProviderNDatacenter),
+  WizardStep.newWizardStep(StepRegistry.Provider),
   WizardStep.newWizardStep(StepRegistry.Cluster),
   WizardStep.newWizardStep(StepRegistry.ProviderSettings),
   WizardStep.newWizardStep(StepRegistry.NodeSettings),

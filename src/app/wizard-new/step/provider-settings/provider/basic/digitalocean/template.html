@@ -1,0 +1,15 @@
+<form [formGroup]="form"
+      fxLayout="column">
+  <mat-form-field fxFlex>
+    <mat-label>Token</mat-label>
+    <input matInput
+           [formControlName]="controls.Token"
+           [name]="controls.Token"
+           type="password"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(controls.Token).hasError('required')">
+      Token is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+</form>

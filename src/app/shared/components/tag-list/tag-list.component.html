@@ -1,20 +1,23 @@
 <mat-card-header>
   <mat-card-title>{{title}}</mat-card-title>
 </mat-card-header>
-<mat-form-field class="km-node-tags">
-  <mat-chip-list #chipList
-                 class="km-chip-list-with-input">
-    <mat-chip *ngFor="let tag of tags"
-              [selectable]="selectable"
-              [removable]="removable"
-              (removed)="removeTag(tag)">
-      {{tag}}
-      <mat-icon matChipRemove>cancel</mat-icon>
-    </mat-chip>
-    <input placeholder="Add tag..."
-           [matChipInputFor]="chipList"
-           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-           [matChipInputAddOnBlur]="addOnBlur"
-           (matChipInputTokenEnd)="addTag($event)">
-  </mat-chip-list>
-</mat-form-field>
+<form [formGroup]="form">
+  <mat-form-field class="km-node-tags">
+    <mat-chip-list #chipList
+                   class="km-chip-list-with-input">
+      <mat-chip *ngFor="let tag of tags"
+                [selectable]="selectable"
+                [removable]="removable"
+                (removed)="removeTag(tag)">
+        {{tag}}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input placeholder="Add tag..."
+             formControlName="tags"
+             [matChipInputFor]="chipList"
+             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+             [matChipInputAddOnBlur]="addOnBlur"
+             (matChipInputTokenEnd)="addTag($event)">
+    </mat-chip-list>
+  </mat-form-field>
+</form>

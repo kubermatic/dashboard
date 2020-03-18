@@ -99,7 +99,8 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
       case NodeProvider.DIGITALOCEAN:
       case NodeProvider.GCP:
       case NodeProvider.PACKET:
-        return this.nodeData.spec.cloud[provider].tags.length === 0;
+        return this.nodeData.spec.cloud[provider] && this.nodeData.spec.cloud[provider].tags &&
+            this.nodeData.spec.cloud[provider].tags.length === 0;
     }
 
     return false;

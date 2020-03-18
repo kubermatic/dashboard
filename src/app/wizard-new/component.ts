@@ -76,7 +76,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   showNext(step: WizardStep): boolean {
-    const restrictedList = [StepRegistry.ProviderNDatacenter, StepRegistry.Summary];
+    const restrictedList = [StepRegistry.Provider, StepRegistry.Summary];
     return !restrictedList.includes(step.name as StepRegistry);
   }
 

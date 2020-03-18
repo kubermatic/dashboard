@@ -3,6 +3,8 @@
   <kubermatic-wizard-aws-provider-basic *ngSwitchCase="Providers.AWS"
                                         [formControl]="form.get(Controls.ProviderBasic)">
   </kubermatic-wizard-aws-provider-basic>
+  <kubermatic-wizard-digitalocean-provider-basic *ngSwitchCase="Providers.DIGITALOCEAN"
+                                                 [formControl]="form.get(Controls.ProviderBasic)"></kubermatic-wizard-digitalocean-provider-basic>
   <kubermatic-wizard-vsphere-provider-basic *ngSwitchCase="Providers.VSPHERE"
                                             [formControl]="form.get(Controls.ProviderBasic)">
   </kubermatic-wizard-vsphere-provider-basic>

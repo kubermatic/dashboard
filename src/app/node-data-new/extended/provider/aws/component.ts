@@ -1,5 +1,5 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {takeUntil} from 'rxjs/operators';
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
@@ -20,7 +20,6 @@ enum Controls {
   ]
 })
 export class AWSExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  form: FormGroup;
   tags: object;
 
   readonly Control = Controls;
