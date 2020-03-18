@@ -47,6 +47,7 @@ export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator imp
       [Controls.Backups]: this._builder.control(backups),
       [Controls.IPv6]: this._builder.control(ipv6),
       [Controls.Monitoring]: this._builder.control(monitoring),
+      [Controls.Tags]: this._builder.control(''),
     });
 
     this._nodeDataService.nodeData = this._getNodeData();
@@ -58,11 +59,14 @@ export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator imp
         )
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
+
+    this.form.get(Controls.Tags)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this._nodeDataService.nodeData.spec.cloud.digitalocean.tags = this.tags);
   }
 
   onTagsChange(tags: string[]): void {
     this.tags = tags;
-    this._nodeDataService.nodeData = this._getNodeData();
   }
 
   private _getNodeData(): NodeData {
@@ -73,7 +77,6 @@ export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator imp
             backups: this.form.get(Controls.Backups).value,
             ipv6: this.form.get(Controls.IPv6).value,
             monitoring: this.form.get(Controls.Monitoring).value,
-            tags: this.tags,
           },
         } as NodeCloudSpec,
       } as NodeSpec,

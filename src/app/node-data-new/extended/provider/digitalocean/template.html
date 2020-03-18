@@ -8,5 +8,6 @@
                 [formControlName]="Control.IPv6">IPv6</mat-checkbox>
   <km-tag-list title="Provider Tags"
                [tags]="tags"
-               (tagsChange)="onTagsChange($event)"></km-tag-list>
+               (tagsChange)="onTagsChange($event)"
+               [formControlName]="Control.Tags"></km-tag-list>
 </form>
