@@ -1,9 +1,9 @@
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {Component, EventEmitter, forwardRef, Input, OnDestroy, Output} from '@angular/core';
+import {ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MatChipInputEvent} from '@angular/material/chips';
-import {ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR} from "@angular/forms";
-import {takeUntil} from "rxjs/operators";
-import {Subject} from "rxjs";
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-tag-list',

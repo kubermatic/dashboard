@@ -61,8 +61,8 @@ export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator imp
         .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
 
     this.form.get(Controls.Tags)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._nodeDataService.nodeData.spec.cloud.digitalocean.tags = this.tags);
+        .valueChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this._nodeDataService.nodeData.spec.cloud.digitalocean.tags = this.tags);
   }
 
   onTagsChange(tags: string[]): void {
