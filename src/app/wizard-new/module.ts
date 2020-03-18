@@ -16,6 +16,7 @@ import {ProviderSettingsStepComponent} from './step/provider-settings/component'
 import {PresetsComponent} from './step/provider-settings/preset/component';
 import {AWSProviderBasicComponent} from './step/provider-settings/provider/basic/aws/component';
 import {ProviderBasicComponent} from './step/provider-settings/provider/basic/component';
+import {DigitalOceanProviderBasicComponent} from './step/provider-settings/provider/basic/digitalocean/component';
 import {VSphereProviderBasicComponent} from './step/provider-settings/provider/basic/vsphere/component';
 import {AWSProviderExtendedComponent} from './step/provider-settings/provider/extended/aws/component';
 import {ProviderExtendedComponent} from './step/provider-settings/provider/extended/component';
@@ -31,6 +32,7 @@ const components: any[] = [
   ProviderSettingsStepComponent,
   ProviderBasicComponent,
   AWSProviderBasicComponent,
+  DigitalOceanProviderBasicComponent,
   VSphereProviderBasicComponent,
   ProviderExtendedComponent,
   AWSProviderExtendedComponent,

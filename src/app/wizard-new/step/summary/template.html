@@ -267,7 +267,7 @@
 
         <!-- DO Nodes -->
         <ng-container *ngIf="cluster.spec.cloud.digitalocean">
-          <div class="km-summary-row km-summary-row-with-margin">{{nodeData.spec.cloud.digitalocean.size}}</div>
+          <div class="km-summary-row km-summary-row-with-margin">{{nodeData.spec.cloud.digitalocean?.size}}</div>
         </ng-container>
 
         <!-- GCP Nodes -->
@@ -401,19 +401,19 @@
         <ng-container *ngIf="cluster.spec.cloud.digitalocean">
           <div class="km-summary-row">
             <span class="km-summary-left km-text">
-              <i [ngClass]="nodeData.spec.cloud.digitalocean.backups ? 'km-icon-running' : 'km-icon-disabled'"></i>
+              <i [ngClass]="nodeData.spec.cloud.digitalocean?.backups ? 'km-icon-running' : 'km-icon-disabled'"></i>
             </span>
             <span>Backups</span>
           </div>
           <div class="km-summary-row">
             <span class="km-summary-left km-text">
-              <i [ngClass]="nodeData.spec.cloud.digitalocean.ipv6 ? 'km-icon-running' : 'km-icon-disabled'"></i>
+              <i [ngClass]="nodeData.spec.cloud.digitalocean?.ipv6 ? 'km-icon-running' : 'km-icon-disabled'"></i>
             </span>
             <span>IPv6</span>
           </div>
           <div class="km-summary-row">
             <span class="km-summary-left km-text">
-              <i [ngClass]="nodeData.spec.cloud.digitalocean.monitoring ? 'km-icon-running' : 'km-icon-disabled'"></i>
+              <i [ngClass]="nodeData.spec.cloud.digitalocean?.monitoring ? 'km-icon-running' : 'km-icon-disabled'"></i>
             </span>
             <span>Monitoring</span>
           </div>
