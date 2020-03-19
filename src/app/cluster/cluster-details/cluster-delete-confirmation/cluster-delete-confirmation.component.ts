@@ -40,8 +40,12 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.settings = settings;
-      this.deleteForm.controls.clusterLBCleanupCheckbox.setValue(this.settings.cleanupOptions.Enabled);
-      this.deleteForm.controls.clusterVolumeCleanupCheckbox.setValue(this.settings.cleanupOptions.Enabled);
+      if (this.deleteForm.controls.clusterLBCleanupCheckbox.pristine) {
+        this.deleteForm.controls.clusterLBCleanupCheckbox.setValue(this.settings.cleanupOptions.Enabled);
+      }
+      if (this.deleteForm.controls.clusterVolumeCleanupCheckbox.pristine) {
+        this.deleteForm.controls.clusterVolumeCleanupCheckbox.setValue(this.settings.cleanupOptions.Enabled);
+      }
       if (this.settings.cleanupOptions.Enforced) {
         this.deleteForm.controls.clusterLBCleanupCheckbox.disable();
         this.deleteForm.controls.clusterVolumeCleanupCheckbox.disable();
