@@ -4,28 +4,28 @@ import {Observable, of} from 'rxjs';
 import {catchError, debounceTime, startWith, takeUntil} from 'rxjs/operators';
 
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
-import {DigitaloceanSizes} from '../../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {filterObjectOptions} from '../../../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../../../shared/validators/autocomplete-filter.validator';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
+import {HetznerTypes} from "../../../../shared/entity/provider/hetzner/TypeEntity";
 
 enum Controls {
-  Size = 'size',
+  Type = 'type',
 }
 
 @Component({
-  selector: 'kubermatic-digitalocean-basic-node-data',
+  selector: 'kubermatic-hetzner-basic-node-data',
   templateUrl: './template.html',
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DigitalOceanBasicNodeDataComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => DigitalOceanBasicNodeDataComponent), multi: true}
+    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => HetznerBasicNodeDataComponent), multi: true},
+    {provide: NG_VALIDATORS, useExisting: forwardRef(() => HetznerBasicNodeDataComponent), multi: true}
   ]
 })
-export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  sizes: DigitaloceanSizes = {optimized: [], standard: []};
-  filteredSizes: DigitaloceanSizes = {optimized: [], standard: []};
+export class HetznerBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  types: HetznerTypes = {dedicated: [], standard: []};
+  filteredTypes: HetznerTypes = {dedicated: [], standard: []};
   hideOptional = false;
 
   readonly Controls = Controls;
@@ -38,24 +38,24 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Size]: this._builder.control('', Validators.required),
+      [Controls.Type]: this._builder.control('', Validators.required),
     });
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
+    this._typesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultType.bind(this));
 
-    this.form.get(Controls.Size).valueChanges
+    this.form.get(Controls.Type).valueChanges
         .pipe(debounceTime(this._debounceTime), takeUntil(this._unsubscribe), startWith(''))
         .subscribe(value => {
-          if (value !== '' && !this.form.controls.size.pristine) {
-            this.filteredSizes = filterObjectOptions(value, 'slug', this.sizes);
+          if (value !== '' && !this.form.controls.type.pristine) {
+            this.filteredTypes = filterObjectOptions(value, 'name', this.types);
           } else {
-            this.filteredSizes = this.sizes;
+            this.filteredTypes = this.types;
           }
-          this.form.controls.size.setValidators(
-              [Validators.required, AutocompleteFilterValidators.mustBeInObjectList(this.sizes, 'slug', true)]);
-          this.form.controls.size.updateValueAndValidity();
+          this.form.controls.type.setValidators(
+            [AutocompleteFilterValidators.mustBeInObjectList(this.types, 'name', true)]);
+          this.form.controls.type.updateValueAndValidity();
         });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
@@ -75,14 +75,14 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
     return this._nodeDataService.isInWizardMode();
   }
 
-  private get _sizesObservable(): Observable<DigitaloceanSizes> {
-    return this._nodeDataService.digitalOcean.flavors().pipe(catchError(() => of<DigitaloceanSizes>()));
+  private get _typesObservable(): Observable<HetznerTypes> {
+    return this._nodeDataService.hetzner.flavors().pipe(catchError(() => of<HetznerTypes>()));
   }
 
-  private _setDefaultSize(sizes: DigitaloceanSizes): void {
-    this.sizes = sizes;
-    if (this.sizes && this.sizes.standard && this.sizes.standard.length > 0) {
-      this.form.get(Controls.Size).setValue(this.sizes.standard[0].slug);
+  private _setDefaultType(types: HetznerTypes): void {
+    this.types = types;
+    if (this.types && this.types.standard && this.types.standard.length > 0) {
+      this.form.get(Controls.Type).setValue(this.types.standard[0].name);
     }
   }
 
@@ -90,8 +90,8 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
     return {
       spec: {
         cloud: {
-          digitalocean: {
-            size: this.form.get(Controls.Size).value,
+          hetzner: {
+            type: this.form.get(Controls.Type).value,
           },
         } as NodeCloudSpec,
       } as NodeSpec,
