@@ -26,6 +26,7 @@ const components = [
   AWSExtendedNodeDataComponent,
   DigitalOceanBasicNodeDataComponent,
   DigitalOceanExtendedNodeDataComponent,
+  HetznerBasicNodeDataComponent,
   NodeDataComponent,
   ExtendedNodeDataComponent,
 ];
@@ -48,7 +49,7 @@ const services = [
     MatAutocompleteModule,
     MatTooltipModule,
   ],
-  declarations: [...components, HetznerBasicNodeDataComponent],
+  declarations: [...components],
   providers: [...services],
   exports: [...components],
 })
