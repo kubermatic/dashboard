@@ -14,12 +14,12 @@ import {SharedModule} from '../shared/shared.module';
 
 import {AWSBasicNodeDataComponent} from './basic/provider/aws/component';
 import {DigitalOceanBasicNodeDataComponent} from './basic/provider/digitalocean/component';
+import {HetznerBasicNodeDataComponent} from './basic/provider/hetzner/component';
 import {NodeDataComponent} from './component';
 import {ExtendedNodeDataComponent} from './extended/component';
 import {AWSExtendedNodeDataComponent} from './extended/provider/aws/component';
 import {DigitalOceanExtendedNodeDataComponent} from './extended/provider/digitalocean/component';
 import {NodeDataService} from './service/service';
-import {HetznerBasicNodeDataComponent} from "./basic/provider/hetzner/component";
 
 const components = [
   AWSBasicNodeDataComponent,
@@ -48,7 +48,7 @@ const services = [
     MatAutocompleteModule,
     MatTooltipModule,
   ],
-    declarations: [...components, HetznerBasicNodeDataComponent],
+  declarations: [...components, HetznerBasicNodeDataComponent],
   providers: [...services],
   exports: [...components],
 })
