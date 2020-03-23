@@ -4,11 +4,11 @@ import {merge} from 'rxjs';
 import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
+import {KubeVirtCloudSpec} from '../../../../../../shared/entity/cloud/KubeVirtCloudSpec';
 import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
 import {WizardService} from '../../../../../service/wizard';
-import {KubeVirtCloudSpec} from "../../../../../../shared/entity/cloud/KubeVirtCloudSpec";
 
 export enum Controls {
   Kubeconfig = 'kubeconfig',

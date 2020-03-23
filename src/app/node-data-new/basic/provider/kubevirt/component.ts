@@ -38,21 +38,27 @@ export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.CPUs]: this._builder.control('1', [
-        Validators.required,
-        Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/),
-      ]),
-      [Controls.Memory]: this._builder.control('2Gi', [
-        Validators.required,
-        Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/),
-      ]),
+      [Controls.CPUs]: this._builder.control(
+          '1',
+          [
+            Validators.required,
+            Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/),
+          ]),
+      [Controls.Memory]: this._builder.control(
+          '2Gi',
+          [
+            Validators.required,
+            Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/),
+          ]),
       [Controls.Namespace]: this._builder.control('', Validators.required),
       [Controls.SourceURL]: this._builder.control('', Validators.required),
       [Controls.StorageClassName]: this._builder.control('', Validators.required),
-      [Controls.PVCSize]: this._builder.control('10Gi', [
-        Validators.required,
-        Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/),
-      ]),
+      [Controls.PVCSize]: this._builder.control(
+          '10Gi',
+          [
+            Validators.required,
+            Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/),
+          ]),
     });
 
     this._nodeDataService.nodeData = this._getNodeData();
