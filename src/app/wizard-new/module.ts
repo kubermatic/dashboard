@@ -22,6 +22,7 @@ import {AWSProviderExtendedComponent} from './step/provider-settings/provider/ex
 import {ProviderExtendedComponent} from './step/provider-settings/provider/extended/component';
 import {ClusterSSHKeysComponent} from './step/provider-settings/ssh-keys/component';
 import {SummaryStepComponent} from './step/summary/component';
+import {KubeVirtProviderBasicComponent} from "./step/provider-settings/provider/basic/kubevirt/component";
 
 const components: any[] = [
   WizardComponent,
@@ -33,6 +34,7 @@ const components: any[] = [
   ProviderBasicComponent,
   AWSProviderBasicComponent,
   DigitalOceanProviderBasicComponent,
+  KubeVirtProviderBasicComponent,
   VSphereProviderBasicComponent,
   ProviderExtendedComponent,
   AWSProviderExtendedComponent,
