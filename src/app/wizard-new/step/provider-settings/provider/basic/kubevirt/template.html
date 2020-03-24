@@ -4,10 +4,10 @@
     <mat-label>Kubeconfig</mat-label>
     <input matInput
            required
-           formControlName="kubeconfig"
+           [formControlName]="controls.Kubeconfig"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="form.get(controls.Kubeconfig).hasError('required')">
+    <mat-error *ngIf="hasError(controls.Kubeconfig, 'required')">
       Kubeconfig is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
