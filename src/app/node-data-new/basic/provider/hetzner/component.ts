@@ -26,7 +26,6 @@ enum Controls {
 export class HetznerBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   types: HetznerTypes = {dedicated: [], standard: []};
   filteredTypes: HetznerTypes = {dedicated: [], standard: []};
-  hideOptional = false;
 
   readonly Controls = Controls;
 
