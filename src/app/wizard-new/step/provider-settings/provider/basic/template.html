@@ -5,6 +5,8 @@
   </kubermatic-wizard-aws-provider-basic>
   <kubermatic-wizard-digitalocean-provider-basic *ngSwitchCase="Providers.DIGITALOCEAN"
                                                  [formControl]="form.get(Controls.ProviderBasic)"></kubermatic-wizard-digitalocean-provider-basic>
+  <kubermatic-wizard-hetzner-provider-basic *ngSwitchCase="Providers.HETZNER"
+                                            [formControl]="form.get(Controls.ProviderBasic)"></kubermatic-wizard-hetzner-provider-basic>
   <km-wizard-kubevirt-provider-basic *ngSwitchCase="Providers.KUBEVIRT"
                                      [formControl]="form.get(Controls.ProviderBasic)"></km-wizard-kubevirt-provider-basic>
   <kubermatic-wizard-vsphere-provider-basic *ngSwitchCase="Providers.VSPHERE"

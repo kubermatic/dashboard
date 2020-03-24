@@ -17,6 +17,7 @@ import {PresetsComponent} from './step/provider-settings/preset/component';
 import {AWSProviderBasicComponent} from './step/provider-settings/provider/basic/aws/component';
 import {ProviderBasicComponent} from './step/provider-settings/provider/basic/component';
 import {DigitalOceanProviderBasicComponent} from './step/provider-settings/provider/basic/digitalocean/component';
+import {HetznerProviderBasicComponent} from './step/provider-settings/provider/basic/hetzner/component';
 import {KubeVirtProviderBasicComponent} from './step/provider-settings/provider/basic/kubevirt/component';
 import {VSphereProviderBasicComponent} from './step/provider-settings/provider/basic/vsphere/component';
 import {AWSProviderExtendedComponent} from './step/provider-settings/provider/extended/aws/component';
@@ -34,6 +35,7 @@ const components: any[] = [
   ProviderBasicComponent,
   AWSProviderBasicComponent,
   DigitalOceanProviderBasicComponent,
+  HetznerProviderBasicComponent,
   KubeVirtProviderBasicComponent,
   VSphereProviderBasicComponent,
   ProviderExtendedComponent,

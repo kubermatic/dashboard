@@ -344,7 +344,7 @@
 
         <!-- Hetzner Nodes -->
         <ng-container *ngIf="cluster.spec.cloud.hetzner">
-          <div class="km-summary-row km-summary-row-with-margin">{{nodeData.spec.cloud.hetzner.type}}</div>
+          <div class="km-summary-row km-summary-row-with-margin">{{nodeData.spec.cloud.hetzner?.type}}</div>
         </ng-container>
 
         <!-- VSphere Nodes -->
