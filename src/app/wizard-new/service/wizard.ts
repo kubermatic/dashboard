@@ -1,6 +1,7 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {MatStepper} from '@angular/material/stepper';
-import {NodeProvider} from '../../shared/model/NodeProviderConstants';
+import {NodeDataService} from '../../node-data-new/service/service';
+import {NodeProvider, OperatingSystem} from '../../shared/model/NodeProviderConstants';
 import {StepRegistry, WizardStep} from '../config';
 import {ClusterService} from './cluster';
 
@@ -11,10 +12,12 @@ export class WizardService {
   private _stepper: MatStepper;
   private _steps: WizardStep[];
 
-  constructor(private readonly _clusterService: ClusterService) {}
+  constructor(private readonly _clusterService: ClusterService, private readonly _nodeDataService: NodeDataService) {
+    this._nodeDataService.operatingSystemChanges.subscribe(os => this._stepHandler.handleOSChange(os));
+  }
 
   set provider(provider: NodeProvider) {
-    this._stepHandler.handleProviderStep(provider);
+    this._stepHandler.handleProviderChange(provider);
     this._clusterService.provider = provider;
   }
 
@@ -41,11 +44,12 @@ export class WizardService {
   private _stepHandler = new class {
     constructor(private _parent: WizardService) {}
 
-    handleProviderStep(provider: NodeProvider): void {
+    handleProviderChange(provider: NodeProvider): void {
       switch (provider) {
         case NodeProvider.BRINGYOUROWN:
           this._hideStep(StepRegistry.ProviderSettings);
           this._hideStep(StepRegistry.NodeSettings);
+          this._hideStep(StepRegistry.MachineNetwork);
           break;
         case NodeProvider.VSPHERE:
           // Change to show the additional network step
@@ -56,7 +60,22 @@ export class WizardService {
         default:
           this._showStep(StepRegistry.ProviderSettings);
           this._showStep(StepRegistry.NodeSettings);
+          this._hideStep(StepRegistry.MachineNetwork);
       }
+    }
+
+    handleOSChange(os: OperatingSystem): void {
+      if (this._parent._clusterService.provider !== NodeProvider.VSPHERE) {
+        this._hideStep(StepRegistry.MachineNetwork);
+        return;
+      }
+
+      if (os !== OperatingSystem.ContainerLinux) {
+        this._hideStep(StepRegistry.MachineNetwork);
+        return;
+      }
+
+      this._showStep(StepRegistry.MachineNetwork);
     }
 
     private _hideStep(step: StepRegistry): void {

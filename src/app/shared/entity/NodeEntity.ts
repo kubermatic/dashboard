@@ -1,4 +1,4 @@
-import {NodeProvider} from '../model/NodeProviderConstants';
+import {NodeProvider, OperatingSystem} from '../model/NodeProviderConstants';
 
 import {AlibabaNodeSpec} from './node/AlibabaNodeSpec';
 import {AWSNodeSpec} from './node/AWSNodeSpec';
@@ -61,6 +61,10 @@ export class OperatingSystemSpec {
   centos?: CentosSpec;
   containerLinux?: ContainerLinuxSpec;
   sles?: SLESSpec;
+
+  static getOperatingSystem(spec: OperatingSystemSpec): OperatingSystem {
+    return Object.keys(spec).find(key => spec[key] !== undefined) as OperatingSystem;
+  }
 }
 
 export class UbuntuSpec {

@@ -67,7 +67,10 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
 
     this.control(Controls.Provider)
         .valueChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe((provider: NodeProvider) => this._wizard.provider = provider);
+        .subscribe((provider: NodeProvider) => {
+          this.form.get(Controls.Datacenter).setValue('');
+          this._wizard.provider = provider;
+        });
 
     this._clusterService.providerChanges.pipe(switchMap(_ => this._dcService.getDataCenters()))
         .pipe(takeUntil(this._unsubscribe))

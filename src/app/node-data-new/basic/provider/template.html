@@ -9,4 +9,12 @@
   <kubermatic-vsphere-basic-node-data *ngSwitchCase="Provider.VSPHERE"
                                       [formControl]="form.get(Control.ProviderBasic)">
   </kubermatic-vsphere-basic-node-data>
+  <km-kubevirt-basic-node-data *ngSwitchCase="Provider.KUBEVIRT"
+                               [formControl]="form.get(Control.ProviderBasic)">
+  </km-kubevirt-basic-node-data>
+  <kubermatic-hetzner-basic-node-data *ngSwitchCase="Provider.HETZNER"
+                                      [formControl]="form.get(Control.ProviderBasic)">
+  </kubermatic-hetzner-basic-node-data>
+  <km-packet-basic-node-data *ngSwitchCase="Provider.PACKET"
+                             [formControl]="form.get(Control.ProviderBasic)"></km-packet-basic-node-data>
 </form>

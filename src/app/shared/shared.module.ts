@@ -52,6 +52,7 @@ import {DialogTitleComponent} from './components/dialog-title/dialog-title.compo
 import {EventListComponent} from './components/event-list/event-list.component';
 import {LabelFormComponent} from './components/label-form/label-form.component';
 import {LabelsComponent} from './components/labels/labels.component';
+import {MachineNetworkComponent} from './components/machine-networks-new/component';
 import {PropertyBooleanComponent} from './components/property-boolean/property-boolean.component';
 import {PropertyUsageComponent} from './components/property-usage/property-usage.component';
 import {PropertyComponent} from './components/property/property.component';
@@ -86,7 +87,7 @@ const components: any[] = [
   SettingsStatusComponent,   ShortNameInCircleComponent,
   TagListComponent,          TokenDialogComponent,
   NotificationComponent,     PropertyUsageComponent,
-  FilteredComboboxComponent,
+  FilteredComboboxComponent, MachineNetworkComponent,
 ];
 
 const entryComponents: any[] = [

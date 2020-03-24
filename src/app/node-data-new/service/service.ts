@@ -39,10 +39,18 @@ export class NodeDataService {
     return this._config.mode;
   }
 
-  set operatingSystem(spec: OperatingSystemSpec) {
+  set operatingSystemSpec(spec: OperatingSystemSpec) {
     delete this._nodeData.spec.operatingSystem;
     this._nodeData.spec.operatingSystem = spec;
-    this.operatingSystemChanges.next(Object.keys(spec).find(key => spec[key] !== undefined) as OperatingSystem);
+    this.operatingSystemChanges.next(OperatingSystemSpec.getOperatingSystem(spec));
+  }
+
+  get operatingSystemSpec(): OperatingSystemSpec {
+    return this._nodeData.spec.operatingSystem;
+  }
+
+  get operatingSystem(): OperatingSystem {
+    return OperatingSystemSpec.getOperatingSystem(this._nodeData.spec.operatingSystem);
   }
 
   set labels(labels: object) {

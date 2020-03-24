@@ -70,14 +70,14 @@ export class WizardComponent implements OnInit, OnDestroy {
 
     this._initForm(this.steps);
     this._wizard.stepsChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._initForm(this.steps));
+    this._stepper.selectionChange.pipe(takeUntil(this._unsubscribe)).subscribe(selection => {
+      if (selection.previouslySelectedIndex > selection.selectedIndex) {
+        selection.previouslySelectedStep.reset();
+      }
+    });
 
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
         .subscribe(project => this.project = project);
-  }
-
-  showNext(step: WizardStep): boolean {
-    const restrictedList = [StepRegistry.Provider, StepRegistry.Summary];
-    return !restrictedList.includes(step.name as StepRegistry);
   }
 
   ngOnDestroy(): void {

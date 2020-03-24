@@ -13,8 +13,9 @@ export class WizardStep {
 export enum StepRegistry {
   Provider = 'Provider',
   Cluster = 'Cluster',
-  ProviderSettings = 'Provider settings',
-  NodeSettings = 'Node settings',
+  ProviderSettings = 'Settings',
+  NodeSettings = 'Initial nodes',
+  MachineNetwork = 'Machine network',
   Summary = 'Summary',
 }
 
@@ -26,5 +27,6 @@ export let steps: WizardStep[] = [
   WizardStep.newWizardStep(StepRegistry.Cluster),
   WizardStep.newWizardStep(StepRegistry.ProviderSettings),
   WizardStep.newWizardStep(StepRegistry.NodeSettings),
+  WizardStep.newWizardStep(StepRegistry.MachineNetwork, false),
   WizardStep.newWizardStep(StepRegistry.Summary),
 ];

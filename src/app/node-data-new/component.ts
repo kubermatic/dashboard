@@ -80,7 +80,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         this.form.get(Controls.DisableAutoUpdate).valueChanges,
         )
         .pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._nodeDataService.operatingSystem = this._getOperatingSystemSpec());
+        .subscribe(_ => this._nodeDataService.operatingSystemSpec = this._getOperatingSystemSpec());
   }
 
   ngOnDestroy(): void {

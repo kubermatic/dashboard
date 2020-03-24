@@ -8,7 +8,6 @@ import {AVAILABLE_PACKET_BILLING_CYCLES, PacketCloudSpec} from '../../../../../.
 import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
-import {WizardService} from '../../../../../service/wizard';
 
 export enum Controls {
   APIKey = 'apiKey',
@@ -31,7 +30,7 @@ export class PacketProviderBasicComponent extends BaseFormValidator implements O
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
-      private readonly _wizard: WizardService, private readonly _clusterService: ClusterService) {
+      private readonly _clusterService: ClusterService) {
     super('Packet Provider Basic');
   }
 
@@ -74,7 +73,7 @@ export class PacketProviderBasicComponent extends BaseFormValidator implements O
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());
 
-    merge(this._wizard.providerChanges, this._wizard.datacenterChanges)
+    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this.form.reset());
   }
