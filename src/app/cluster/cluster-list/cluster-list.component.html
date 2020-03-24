@@ -115,7 +115,7 @@
                         [attr.id]="'km-delete-cluster-' + element.name"
                         matTooltip="Delete Cluster"
                         (click)="deleteClusterDialog(element, $event)"
-                        [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.delete">
+                        [disabled]="!!_currentGroupConfig && !_currentGroupConfig.clusters.delete">
                   <i class="km-icon-delete"></i>
                 </button>
               </ng-container>
