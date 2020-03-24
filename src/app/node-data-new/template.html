@@ -44,6 +44,8 @@
     <kubermatic-digitalocean-basic-node-data *ngSwitchCase="NodeProvider.DIGITALOCEAN"
                                              [formControlName]="Controls.ProviderBasic">
     </kubermatic-digitalocean-basic-node-data>
+    <kubermatic-hetzner-basic-node-data *ngSwitchCase="NodeProvider.HETZNER"
+                                        [formControlName]="Controls.ProviderBasic"></kubermatic-hetzner-basic-node-data>
     <km-kubevirt-basic-node-data *ngSwitchCase="NodeProvider.KUBEVIRT"
                                  [formControlName]="Controls.ProviderBasic"></km-kubevirt-basic-node-data>
   </div>
