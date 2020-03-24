@@ -1,0 +1,26 @@
+<form [formGroup]="form"
+      fxLayout="column">
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-label>Plan</mat-label>
+      <input matInput
+             [formControlName]="Controls.InstanceType"
+             name="instanceType"
+             placeholder="Select plan..."
+             [matAutocomplete]="autoSizes">
+      <mat-autocomplete #autoSizes="matAutocomplete">
+        <mat-option *ngFor="let size of filteredSizes"
+                    [value]="size.name">
+          {{size.name}} {{getPlanDetails(size)}}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="hasError(Controls.InstanceType, 'mustBeInList') && !hasError(Controls.InstanceType, 'required')">
+        Input doesn't match options. Please choose from given options.
+      </mat-error>
+      <mat-error *ngIf="hasError(Controls.InstanceType, 'required')">
+        Size is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+  </div>
+</form>

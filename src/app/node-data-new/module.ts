@@ -21,6 +21,7 @@ import {ExtendedNodeDataComponent} from './extended/component';
 import {AWSExtendedNodeDataComponent} from './extended/provider/aws/component';
 import {DigitalOceanExtendedNodeDataComponent} from './extended/provider/digitalocean/component';
 import {NodeDataService} from './service/service';
+import {PacketBasicNodeDataComponent} from "./basic/provider/packet/component";
 
 const components = [
   AWSBasicNodeDataComponent,
@@ -29,6 +30,7 @@ const components = [
   DigitalOceanExtendedNodeDataComponent,
   KubeVirtBasicNodeDataComponent,
   HetznerBasicNodeDataComponent,
+  PacketBasicNodeDataComponent,
   NodeDataComponent,
   ExtendedNodeDataComponent,
 ];
