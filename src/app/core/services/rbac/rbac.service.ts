@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 
 import {environment} from '../../../../environments/environment';
-import {Binding, ClusterBinding, ClusterRole, ClusterRoleName, CreateBinding, Namespace, Role, RoleName} from '../../../shared/entity/RBACEntity';
+import {Binding, ClusterBinding, ClusterRole, ClusterRoleName, CreateBinding, KIND_GROUP, KIND_USER, Namespace, Role, RoleName} from '../../../shared/entity/RBACEntity';
 
 @Injectable()
 export class RBACService {
@@ -50,13 +50,18 @@ export class RBACService {
     return this._http.post<ClusterBinding>(url, createClusterRole);
   }
 
-  deleteClusterBinding(clusterID: string, dc: string, projectID: string, roleID: string, name: string):
+  deleteClusterBinding(clusterID: string, dc: string, projectID: string, roleID: string, kind: string, name: string):
       Observable<any> {
+    const body: any = {};
+    if (kind === KIND_GROUP) {
+      body.group = name;
+    } else if (kind === KIND_USER) {
+      body.userEmail = name;
+    }
+
     const options = {
       headers: new HttpHeaders(),
-      body: {
-        userEmail: name,
-      },
+      body,
     };
     const url =
         `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/clusterroles/${roleID}/clusterbindings`;
@@ -111,13 +116,19 @@ export class RBACService {
     return this._http.post<Binding>(url, createRole);
   }
 
-  deleteBinding(clusterID: string, dc: string, projectID: string, roleID: string, namespace: string, name: string):
-      Observable<any> {
+  deleteBinding(
+      clusterID: string, dc: string, projectID: string, roleID: string, namespace: string, kind: string,
+      name: string): Observable<any> {
+    const body: any = {};
+    if (kind === KIND_GROUP) {
+      body.group = name;
+    } else if (kind === KIND_USER) {
+      body.userEmail = name;
+    }
+
     const options = {
       headers: new HttpHeaders(),
-      body: {
-        userEmail: name,
-      },
+      body,
     };
     const url =
         `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/roles/${namespace}/${roleID}/bindings`;

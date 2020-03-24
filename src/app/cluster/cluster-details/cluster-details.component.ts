@@ -194,7 +194,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     bindings.forEach((binding) => {
       if (!!binding.subjects) {
         binding.subjects.map((subject) => {
-          clusterBindingArray.push({name: subject.name, role: binding.roleRefName});
+          clusterBindingArray.push({name: subject.name, role: binding.roleRefName, kind: subject.kind});
         });
       }
     });
@@ -206,7 +206,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     bindings.forEach((binding) => {
       if (!!binding.subjects) {
         binding.subjects.map((subject) => {
-          bindingArray.push({name: subject.name, role: binding.roleRefName, namespace: binding.namespace});
+          bindingArray.push(
+              {name: subject.name, role: binding.roleRefName, namespace: binding.namespace, kind: subject.kind});
         });
       }
     });

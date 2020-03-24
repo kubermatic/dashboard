@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {MatDialogRef} from '@angular/material/dialog';
 import {Subject} from 'rxjs';
@@ -22,6 +22,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   @Input() projectID: string;
   form: FormGroup;
   bindingType = 'cluster';
+  subjectType = 'user';
   clusterRoles: ClusterRoleName[];
   roles: RoleName[];
   private _unsubscribe = new Subject<void>();
@@ -31,11 +32,26 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      email: new FormControl('', [Validators.required]),
-      role: new FormControl('', [Validators.required]),
-      namespace: new FormControl(''),
-    });
+    this.form = new FormGroup(
+        {
+          email: new FormControl(''),
+          group: new FormControl(''),
+          role: new FormControl('', [Validators.required]),
+          namespace: new FormControl(''),
+        },
+        (formGroup: FormGroup): ValidationErrors|null => {
+          if (!formGroup.controls.email.value && !formGroup.controls.group.value) {
+            return {
+              required: true,
+            };
+          }
+          if (formGroup.controls.email.value && formGroup.controls.group.value) {
+            return {
+              required: true,
+            };
+          }
+          return null;
+        });
 
     this._rbacService.getClusterRoleNames(this.cluster.id, this.datacenter.metadata.name, this.projectID)
         .pipe(takeUntil(this._unsubscribe))
@@ -82,6 +98,12 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     this.bindingType = event.value;
     this.setValidators();
     this.checkNamespaceState();
+  }
+
+  changeSubjectType(event: MatButtonToggleChange): void {
+    this.form.controls.email.setValue('');
+    this.form.controls.group.setValue('');
+    this.subjectType = event.value;
   }
 
   get role(): AbstractControl {
@@ -151,9 +173,16 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   }
 
   addClusterBinding(): void {
-    const clusterBinding: CreateBinding = {
-      userEmail: this.form.controls.email.value,
-    };
+    const clusterBinding: CreateBinding = {};
+    let bindingName;
+    if (this.form.controls.email.value) {
+      clusterBinding.userEmail = this.form.controls.email.value;
+      bindingName = clusterBinding.userEmail;
+    }
+    if (this.form.controls.group.value) {
+      clusterBinding.group = this.form.controls.group.value;
+      bindingName = clusterBinding.group;
+    }
 
     this._rbacService
         .createClusterBinding(
@@ -162,14 +191,21 @@ export class AddBindingComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((binding) => {
           this._matDialogRef.close(binding);
-          this._notificationService.success(`${clusterBinding.userEmail} has been added successfully`);
+          this._notificationService.success(`${bindingName} has been added successfully`);
         });
   }
 
   addNamespaceBinding(): void {
-    const namespaceBinding: CreateBinding = {
-      userEmail: this.form.controls.email.value,
-    };
+    const namespaceBinding: CreateBinding = {};
+    let bindingName;
+    if (this.form.controls.email.value) {
+      namespaceBinding.userEmail = this.form.controls.email.value;
+      bindingName = namespaceBinding.userEmail;
+    }
+    if (this.form.controls.group.value) {
+      namespaceBinding.group = this.form.controls.group.value;
+      bindingName = namespaceBinding.group;
+    }
 
     this._rbacService
         .createBinding(
@@ -178,7 +214,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((binding) => {
           this._matDialogRef.close(binding);
-          this._notificationService.success(`${namespaceBinding.userEmail} has been added successfully`);
+          this._notificationService.success(`${bindingName} has been added successfully`);
         });
   }
 }

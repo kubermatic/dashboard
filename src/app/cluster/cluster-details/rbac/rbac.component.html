@@ -27,7 +27,7 @@
             class="km-header-cell"
             mat-sort-header>Name</th>
         <td mat-cell
-            *matCellDef="let element">{{element.name}}</td>
+            *matCellDef="let element"><i class="kind {{getIconForSubject(element)}}"></i> {{element.name}}</td>
       </ng-container>
 
       <ng-container matColumnDef="clusterRole">
@@ -100,7 +100,7 @@
             class="km-header-cell"
             mat-sort-header>Name</th>
         <td mat-cell
-            *matCellDef="let element">{{element.name}}</td>
+            *matCellDef="let element"><i class="kind {{getIconForSubject(element)}}"></i> {{element.name}}</td>
       </ng-container>
 
       <ng-container matColumnDef="clusterRole">

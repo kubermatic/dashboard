@@ -16,18 +16,44 @@
         </mat-button-toggle>
       </mat-button-toggle-group>
 
+      <mat-button-toggle-group group="subjectType"
+                               class="km-toggle-subject-type"
+                               (change)="changeSubjectType($event)">
+        <mat-button-toggle value="user"
+                           [checked]="subjectType === 'user'">
+          User
+        </mat-button-toggle>
+        <mat-button-toggle value="group"
+                           [checked]="subjectType === 'group'">
+          Group
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+
       <form [formGroup]="form"
             fxLayout="column">
         <ng-container *ngIf="bindingType === 'cluster'">
-          <mat-form-field fxFlex>
+          <mat-form-field fxFlex
+                          *ngIf="subjectType === 'user'">
             <mat-label>User Email*</mat-label>
             <input id="km-add-binding-dialog-email-input"
                    matInput
                    formControlName="email"
                    type="email"
                    autocomplete="off">
-            <mat-error *ngIf="form.controls.email.hasError('required')">
+            <mat-error *ngIf="form.errors?.required">
               User Email is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field fxFlex
+                          *ngIf="subjectType === 'group'">
+            <mat-label>Group*</mat-label>
+            <input id="km-add-binding-dialog-group-input"
+                   matInput
+                   formControlName="group"
+                   autocomplete="off">
+            <mat-error *ngIf="form.errors?.required">
+              Group is <strong>required</strong>.
             </mat-error>
           </mat-form-field>
 
@@ -49,15 +75,28 @@
         </ng-container>
 
         <ng-container *ngIf="bindingType === 'namespace'">
-          <mat-form-field fxFlex>
+          <mat-form-field fxFlex
+                          *ngIf="subjectType === 'user'">
             <mat-label>User Email*</mat-label>
             <input id="km-add-binding-dialog-email-input"
                    matInput
                    formControlName="email"
                    type="email"
                    autocomplete="off">
-            <mat-error *ngIf="form.controls.email.hasError('required')">
+            <mat-error *ngIf="form.errors?.required">
               User Email is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field fxFlex
+                          *ngIf="subjectType === 'group'">
+            <mat-label>Group*</mat-label>
+            <input id="km-add-binding-dialog-group-input"
+                   matInput
+                   formControlName="group"
+                   autocomplete="off">
+            <mat-error *ngIf="form.errors?.required">
+              Group is <strong>required</strong>.
             </mat-error>
           </mat-form-field>
 

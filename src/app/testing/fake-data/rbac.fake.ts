@@ -44,14 +44,17 @@ export function fakeSimpleClusterBindings(): SimpleClusterBinding[] {
     {
       'name': 'test-1@example.com',
       'role': 'role-1',
+      'kind': 'User',
     },
     {
       'name': 'test-2@example.com',
       'role': 'role-1',
+      'kind': 'User',
     },
     {
       'name': 'test-3@example.com',
       'role': 'role-2',
+      'kind': 'User',
     },
   ];
 }
@@ -110,16 +113,19 @@ export function fakeSimpleBindings(): SimpleBinding[] {
       'name': 'test-1@example.com',
       'role': 'role-1',
       'namespace': 'default',
+      'kind': 'User',
     },
     {
       'name': 'test-2@example.com',
       'role': 'role-2',
       'namespace': 'default',
+      'kind': 'User',
     },
     {
       'name': 'test-10@example.com',
       'role': 'role-10',
       'namespace': 'test',
+      'kind': 'User',
     },
   ];
 }
