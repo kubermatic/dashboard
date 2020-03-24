@@ -15,6 +15,7 @@ import {SharedModule} from '../shared/shared.module';
 import {AWSBasicNodeDataComponent} from './basic/provider/aws/component';
 import {DigitalOceanBasicNodeDataComponent} from './basic/provider/digitalocean/component';
 import {HetznerBasicNodeDataComponent} from './basic/provider/hetzner/component';
+import {KubeVirtBasicNodeDataComponent} from './basic/provider/kubevirt/component';
 import {NodeDataComponent} from './component';
 import {ExtendedNodeDataComponent} from './extended/component';
 import {AWSExtendedNodeDataComponent} from './extended/provider/aws/component';
@@ -26,6 +27,7 @@ const components = [
   AWSExtendedNodeDataComponent,
   DigitalOceanBasicNodeDataComponent,
   DigitalOceanExtendedNodeDataComponent,
+  KubeVirtBasicNodeDataComponent,
   HetznerBasicNodeDataComponent,
   NodeDataComponent,
   ExtendedNodeDataComponent,
