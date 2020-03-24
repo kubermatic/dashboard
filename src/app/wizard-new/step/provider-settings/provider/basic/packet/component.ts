@@ -4,11 +4,11 @@ import {merge} from 'rxjs';
 import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
+import {AVAILABLE_PACKET_BILLING_CYCLES, PacketCloudSpec} from '../../../../../../shared/entity/cloud/PacketCloudSpec';
 import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
 import {WizardService} from '../../../../../service/wizard';
-import {AVAILABLE_PACKET_BILLING_CYCLES, PacketCloudSpec} from "../../../../../../shared/entity/cloud/PacketCloudSpec";
 
 export enum Controls {
   APIKey = 'apiKey',
@@ -37,18 +37,24 @@ export class PacketProviderBasicComponent extends BaseFormValidator implements O
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.APIKey]: this._builder.control('',[
-        Validators.required,
-        Validators.maxLength(256),
-      ]),
-      [Controls.ProjectID]: this._builder.control('', [
-        Validators.required,
-        Validators.maxLength(256),
-      ]),
-      [Controls.BillingCycle]: this._builder.control(this.getAvailableBillingCycles()[0], [
-        Validators.required,
-        Validators.maxLength(64)
-      ]),
+      [Controls.APIKey]: this._builder.control(
+          '',
+          [
+            Validators.required,
+            Validators.maxLength(256),
+          ]),
+      [Controls.ProjectID]: this._builder.control(
+          '',
+          [
+            Validators.required,
+            Validators.maxLength(256),
+          ]),
+      [Controls.BillingCycle]: this._builder.control(
+          this.getAvailableBillingCycles()[0],
+          [
+            Validators.required,
+            Validators.maxLength(64),
+          ]),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
@@ -59,13 +65,14 @@ export class PacketProviderBasicComponent extends BaseFormValidator implements O
         .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
     merge(
-      this.form.get(Controls.APIKey).valueChanges,
-      this.form.get(Controls.ProjectID).valueChanges,
-      this.form.get(Controls.BillingCycle).valueChanges,
-    ).pipe(debounceTime(this._debounceTime))
-      .pipe(distinctUntilChanged())
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());
+        this.form.get(Controls.APIKey).valueChanges,
+        this.form.get(Controls.ProjectID).valueChanges,
+        this.form.get(Controls.BillingCycle).valueChanges,
+        )
+        .pipe(debounceTime(this._debounceTime))
+        .pipe(distinctUntilChanged())
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());
 
     merge(this._wizard.providerChanges, this._wizard.datacenterChanges)
         .pipe(takeUntil(this._unsubscribe))
@@ -109,5 +116,3 @@ export class PacketProviderBasicComponent extends BaseFormValidator implements O
     } as ClusterEntity;
   }
 }
-
-

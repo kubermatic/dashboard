@@ -19,12 +19,12 @@ import {ProviderBasicComponent} from './step/provider-settings/provider/basic/co
 import {DigitalOceanProviderBasicComponent} from './step/provider-settings/provider/basic/digitalocean/component';
 import {HetznerProviderBasicComponent} from './step/provider-settings/provider/basic/hetzner/component';
 import {KubeVirtProviderBasicComponent} from './step/provider-settings/provider/basic/kubevirt/component';
+import {PacketProviderBasicComponent} from './step/provider-settings/provider/basic/packet/component';
 import {VSphereProviderBasicComponent} from './step/provider-settings/provider/basic/vsphere/component';
 import {AWSProviderExtendedComponent} from './step/provider-settings/provider/extended/aws/component';
 import {ProviderExtendedComponent} from './step/provider-settings/provider/extended/component';
 import {ClusterSSHKeysComponent} from './step/provider-settings/ssh-keys/component';
 import {SummaryStepComponent} from './step/summary/component';
-import {PacketProviderBasicComponent} from "./step/provider-settings/provider/basic/packet/component";
 
 const components: any[] = [
   WizardComponent,
