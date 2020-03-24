@@ -1,0 +1,14 @@
+<form [formGroup]="form"
+      fxLayout="column">
+  <mat-form-field fxFlex>
+    <mat-label>Kubeconfig</mat-label>
+    <input matInput
+           required
+           [formControlName]="controls.Kubeconfig"
+           type="password"
+           autocomplete="off">
+    <mat-error *ngIf="hasError(controls.Kubeconfig, 'required')">
+      Kubeconfig is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+</form>
