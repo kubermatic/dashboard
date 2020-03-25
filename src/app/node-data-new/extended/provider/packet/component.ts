@@ -2,6 +2,7 @@ import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {takeUntil} from 'rxjs/operators';
 
+import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
@@ -36,6 +37,8 @@ export class PacketExtendedNodeDataComponent extends BaseFormValidator implement
       [Controls.Tags]: this._builder.control(''),
     });
 
+    this._nodeDataService.nodeData = this._getNodeData();
+
     this.form.get(Controls.Tags)
         .valueChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._nodeDataService.nodeData.spec.cloud.packet.tags = this.tags);
@@ -43,6 +46,16 @@ export class PacketExtendedNodeDataComponent extends BaseFormValidator implement
 
   onTagsChange(tags: string[]): void {
     this.tags = tags;
+  }
+
+  private _getNodeData(): NodeData {
+    return {
+      spec: {
+        cloud: {
+          packet: {},
+        } as NodeCloudSpec,
+      } as NodeSpec,
+    } as NodeData;
   }
 
   ngOnDestroy(): void {
