@@ -9,7 +9,7 @@
         <mat-icon>done</mat-icon>
       </ng-template>
 
-      <mat-step *ngFor="let step of steps"
+      <mat-step *ngFor="let step of steps; index as i;"
                 [stepControl]="form.get(step.name)">
         <ng-template matStepLabel>{{step.name}}</ng-template>
         <ng-container [ngSwitch]="step.name">
@@ -27,6 +27,10 @@
 
           <ng-container *ngSwitchCase="stepRegistry.NodeSettings">
             <kubermatic-wizard-node-settings-step [formControl]="form.get(stepRegistry.NodeSettings)"></kubermatic-wizard-node-settings-step>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="stepRegistry.MachineNetwork">
+            <kubermatic-wizard-machine-network-step [formControl]="form.get(stepRegistry.MachineNetwork)"></kubermatic-wizard-machine-network-step>
           </ng-container>
 
           <ng-container *ngSwitchCase="stepRegistry.Summary">
@@ -51,7 +55,7 @@
           <button mat-flat-button
                   matStepperNext
                   [disabled]="invalid"
-                  *ngIf="showNext(active)">Next
+                  *ngIf="!last">Next
           </button>
           <button mat-flat-button
                   [disabled]="creating"

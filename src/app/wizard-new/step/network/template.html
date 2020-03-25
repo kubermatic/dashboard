@@ -1,0 +1,10 @@
+<form [formGroup]="form"
+      fxLayout="column">
+  <h4 class="km-error"
+      fxFlex
+      fxLayoutAlign=" center">
+    <i class="km-icon-warning"></i>
+    <span>Adding a machine network will disable DHCP usage.</span>
+  </h4>
+  <km-machine-networks [formControlName]="controls.MachineNetwork"></km-machine-networks>
+</form>

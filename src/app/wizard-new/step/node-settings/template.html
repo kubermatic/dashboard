@@ -1,21 +1,7 @@
-<div fxLayout="column"
-     [formGroup]="form">
-  <div fxLayout="row"
-       fxLayout.md="column"
-       fxLayout.sm="column"
-       fxLayout.xs="column"
-       fxLayoutGap="30px">
-    <div fxFlex="50">
-      <kubermatic-node-data [formControl]="form.get(Control.NodeDataBasic)"
-                            [provider]="provider"
-                            [clusterType]="clusterType"></kubermatic-node-data>
-    </div>
-
-    <div fxFlex="50">
-      <kubermatic-extended-node-data [provider]="provider"
-                                     [visible]="true"
-                                     [formControl]="form.get(Control.NodeDataExtended)"
-                                     fxFlex="50"></kubermatic-extended-node-data>
-    </div>
-  </div>
-</div>
+<form [formGroup]="form"
+      fxLayout="column"
+      fxLayoutGap="30px">
+  <kubermatic-node-data [formControl]="form.get(Control.NodeDataBasic)"
+                        [provider]="provider"
+                        [clusterType]="clusterType"></kubermatic-node-data>
+</form>

@@ -1,0 +1,20 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      fxLayoutGap="30px">
+  <mat-form-field fxFlex>
+    <mat-label>Disk Size in GB</mat-label>
+    <input matInput
+           [formControlName]="Control.DiskSizeGB"
+           type="number"
+           autocomplete="off">
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>VM Template</mat-label>
+    <input matInput
+           [formControlName]="Control.Template"
+           type="text"
+           autocomplete="off">
+    <mat-hint>Optional. If not set, a template called {{template}} will be used.</mat-hint>
+  </mat-form-field>
+</form>

@@ -13,3 +13,7 @@
 ::ng-deep .km-preset-dropdown {
   margin-top: 5.25 * $baseline-grid !important;
 }
+
+:host {
+  margin-bottom: $baseline-grid * 3.75;
+}

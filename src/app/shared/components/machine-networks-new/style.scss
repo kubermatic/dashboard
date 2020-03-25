@@ -1,0 +1,31 @@
+@import 'src/assets/css/variables';
+
+.km-machine-network:nth-child(odd) {
+  margin-right: 2 * $baseline-grid;
+}
+
+.km-add-machine-network {
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: 400;
+
+  &.dialog {
+    height: 6.25 * $baseline-grid;
+  }
+
+  &.wizard {
+    height: 28.75 * $baseline-grid;
+    margin-top: 2.75 * $baseline-grid;
+  }
+}
+
+.km-single-machine-network {
+  margin-bottom: 0.625 * $baseline-grid;
+}
+
+.km-icon-close {
+  cursor: pointer;
+  width: 2 * $baseline-grid;
+  height: 2 * $baseline-grid;
+  float: right;
+}

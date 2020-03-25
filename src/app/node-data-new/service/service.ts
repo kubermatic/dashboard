@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import {ReplaySubject} from 'rxjs';
 import {DatacenterService, PresetsService} from '../../core/services';
 import {OperatingSystemSpec, Taint} from '../../shared/entity/NodeEntity';
+import {OperatingSystem} from '../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {ClusterService} from '../../wizard-new/service/cluster';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../config';
@@ -17,6 +18,7 @@ export class NodeDataService {
   private _nodeData: NodeData = NodeData.NewEmptyNodeData();
 
   readonly nodeDataChanges = new ReplaySubject<NodeData>();
+  readonly operatingSystemChanges = new ReplaySubject<OperatingSystem>();
 
   constructor(
       @Inject(NODE_DATA_CONFIG) config: NodeDataConfig, private readonly _presetService: PresetsService,
@@ -37,9 +39,18 @@ export class NodeDataService {
     return this._config.mode;
   }
 
-  set operatingSystem(spec: OperatingSystemSpec) {
+  set operatingSystemSpec(spec: OperatingSystemSpec) {
     delete this._nodeData.spec.operatingSystem;
     this._nodeData.spec.operatingSystem = spec;
+    this.operatingSystemChanges.next(OperatingSystemSpec.getOperatingSystem(spec));
+  }
+
+  get operatingSystemSpec(): OperatingSystemSpec {
+    return this._nodeData.spec.operatingSystem;
+  }
+
+  get operatingSystem(): OperatingSystem {
+    return OperatingSystemSpec.getOperatingSystem(this._nodeData.spec.operatingSystem);
   }
 
   set labels(labels: object) {

@@ -1,0 +1,118 @@
+import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {merge} from 'rxjs';
+import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {DatacenterService} from '../../../../core/services';
+import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/DatacenterEntity';
+import {VSphereNodeSpec} from '../../../../shared/entity/node/VSphereNodeSpec';
+import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
+import {OperatingSystem} from '../../../../shared/model/NodeProviderConstants';
+import {NodeData} from '../../../../shared/model/NodeSpecChange';
+import {ClusterType} from '../../../../shared/utils/cluster-utils/cluster-utils';
+import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
+import {ClusterService} from '../../../../wizard-new/service/cluster';
+import {NodeDataService} from '../../../service/service';
+
+enum Controls {
+  DiskSizeGB = 'diskSizeGB',
+  Template = 'template',
+}
+
+@Component({
+  selector: 'kubermatic-vsphere-extended-node-data',
+  templateUrl: './template.html',
+  providers: [
+    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => VSphereExtendedNodeDataComponent), multi: true},
+    {provide: NG_VALIDATORS, useExisting: forwardRef(() => VSphereExtendedNodeDataComponent), multi: true}
+  ]
+})
+export class VSphereExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  private _defaultTemplate = '';
+  private _templates: DatacenterOperatingSystemOptions;
+
+  readonly Control = Controls;
+
+  get template(): string {
+    return this.form.get(Controls.Template).value ? this.form.get(Controls.Template).value : this._defaultTemplate;
+  }
+
+  constructor(
+      private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService,
+      private readonly _datacenterService: DatacenterService, private readonly _clusterService: ClusterService) {
+    super();
+  }
+
+  ngOnInit(): void {
+    this.form = this._builder.group({
+      [Controls.DiskSizeGB]: this._builder.control(''),
+      [Controls.Template]: this._builder.control(''),
+    });
+
+    this._nodeDataService.nodeData = this._getNodeData();
+
+    this._clusterService.datacenterChanges.pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
+        .pipe(tap(dc => this._templates = dc.spec.vsphere.templates))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this._setDefaultTemplate(OperatingSystem.Ubuntu));
+
+    this._clusterService.clusterTypeChanges.pipe(filter(_ => !!this._templates))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(
+            _ => this._isOpenshiftCluster() ? this._setDefaultTemplate(OperatingSystem.CentOS) :
+                                              this._setDefaultTemplate(OperatingSystem.Ubuntu));
+
+    this._nodeDataService.operatingSystemChanges.pipe(filter(_ => !!this._templates))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(this._setDefaultTemplate.bind(this));
+
+    merge(
+        this.form.get(Controls.DiskSizeGB).valueChanges,
+        this.form.get(Controls.Template).valueChanges,
+        )
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
+  private _isOpenshiftCluster(): boolean {
+    return this._clusterService.clusterType === ClusterType.OpenShift;
+  }
+
+  private _setDefaultTemplate(os: OperatingSystem): void {
+    switch (os) {
+      case OperatingSystem.CentOS:
+        this._defaultTemplate = this._templates.centos;
+        break;
+      case OperatingSystem.Ubuntu:
+        this._defaultTemplate = this._templates.ubuntu;
+        break;
+      case OperatingSystem.SLES:
+        this._defaultTemplate = this._templates.sles;
+        break;
+      case OperatingSystem.ContainerLinux:
+        this._defaultTemplate = this._templates.coreos;
+        break;
+      default:
+        this._defaultTemplate = this._templates.ubuntu;
+    }
+
+    this.form.get(Controls.Template).setValue(this._defaultTemplate);
+  }
+
+  private _getNodeData(): NodeData {
+    return {
+      spec: {
+        cloud: {
+          vsphere: {
+            template: this.template,
+            diskSizeGB: this.form.get(Controls.DiskSizeGB).value,
+          } as VSphereNodeSpec,
+        } as NodeCloudSpec,
+      } as NodeSpec,
+    } as NodeData;
+  }
+}

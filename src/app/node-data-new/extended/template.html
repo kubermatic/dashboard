@@ -2,12 +2,15 @@
       [formGroup]="form"
       [ngSwitch]="provider">
   <kubermatic-aws-extended-node-data *ngSwitchCase="Provider.AWS"
-                                     [formControlName]="Control.Provider">
+                                     [formControl]="form.get(Control.ProviderExtended)">
   </kubermatic-aws-extended-node-data>
   <kubermatic-digitalocean-extended-node-data *ngSwitchCase="Provider.DIGITALOCEAN"
-                                              [formControlName]="Control.Provider">
+                                              [formControl]="form.get(Control.ProviderExtended)">
   </kubermatic-digitalocean-extended-node-data>
+  <kubermatic-vsphere-extended-node-data *ngSwitchCase="Provider.VSPHERE"
+                                         [formControl]="form.get(Control.ProviderExtended)">
+  </kubermatic-vsphere-extended-node-data>
   <km-packet-extended-node-data *ngSwitchCase="Provider.PACKET"
-                                [formControlName]="Control.Provider">
+                                [formControl]="form.get(Control.ProviderExtended)">
   </km-packet-extended-node-data>
 </form>

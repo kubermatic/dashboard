@@ -63,6 +63,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     this._nodeDataService.nodeData = this._getNodeData();
 
+    this._clusterService.clusterTypeChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
+
     merge(
         this.form.get(Controls.Name).valueChanges,
         this.form.get(Controls.Count).valueChanges,
@@ -77,7 +80,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         this.form.get(Controls.DisableAutoUpdate).valueChanges,
         )
         .pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._nodeDataService.operatingSystem = this._getOperatingSystemSpec());
+        .subscribe(_ => this._nodeDataService.operatingSystemSpec = this._getOperatingSystemSpec());
   }
 
   ngOnDestroy(): void {
@@ -90,7 +93,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   isOpenshiftCluster(): boolean {
-    return this._clusterService.cluster.type === ClusterType.OpenShift;
+    return this._clusterService.clusterType === ClusterType.OpenShift;
   }
 
   generateName(): void {
@@ -106,8 +109,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   isBasicViewOnly(): boolean {
-    // In the wizard we split extended and basic options.
-    return this._nodeDataService.isInWizardMode();
+    // In the wizard we do not split extended and basic options.
+    return !this._nodeDataService.isInWizardMode();
   }
 
   onLabelsChange(labels: object): void {

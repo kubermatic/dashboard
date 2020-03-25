@@ -1,0 +1,42 @@
+<form [formGroup]="form">
+  <mat-form-field fxFlex>
+    <mat-label>{{label}}</mat-label>
+    <mat-select #select
+                [formControlName]="controls.Select"
+                (openedChange)="onOpen($event)"
+                [required]="required"
+                [(value)]="selected">
+      <input #input
+             (input)="filterByInput[filterBy] = $event.target.value"
+             name="filterBySubnet"
+             [placeholder]="inputLabel"
+             type="text"
+             class="km-select-input"
+             autocomplete="off"
+             matInput
+             kmAutofocus
+             [opened]="select.openedChange">
+      <ng-container *ngIf="grouped; else ungrouped">
+        <mat-optgroup *ngFor="let group of groups"
+                      [label]="group">
+          <mat-option *ngFor="let option of getOptions(group) | filterBy: filterByInput"
+                      [value]="option[filterBy]">
+            <ng-container *ngTemplateOutlet="optionTemplate; context: {$implicit: option}"></ng-container>
+          </mat-option>
+        </mat-optgroup>
+      </ng-container>
+
+      <ng-template #ungrouped>
+        <mat-option *ngFor="let option of options | filterBy: filterByInput"
+                    [value]="option[filterBy]">
+          <ng-container *ngTemplateOutlet="optionTemplate; context: {$implicit: option}"></ng-container>
+        </mat-option>
+      </ng-template>
+    </mat-select>
+    <mat-error *ngIf="required && form.get(controls.Select).hasError('required')">
+      {{label}} is
+      <strong>required</strong>.
+    </mat-error>
+    <mat-hint *ngIf="hint">{{hint}}</mat-hint>
+  </mat-form-field>
+</form>

@@ -11,7 +11,6 @@ import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../shared/model/NodeSpecChange';
 import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 import {ClusterService} from '../../service/cluster';
-import {WizardService} from '../../service/wizard';
 
 @Component({
   selector: 'kubermatic-wizard-summary-step',
@@ -29,8 +28,8 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(
-      private readonly _wizardService: WizardService, private readonly _clusterService: ClusterService,
-      private readonly _nodeDataService: NodeDataService, private readonly _datacenterService: DatacenterService) {}
+      private readonly _clusterService: ClusterService, private readonly _nodeDataService: NodeDataService,
+      private readonly _datacenterService: DatacenterService) {}
 
   get country(): string {
     return this._country;
@@ -45,7 +44,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   get provider(): NodeProvider {
-    return this._wizardService.provider;
+    return this._clusterService.provider;
   }
 
   ngOnInit(): void {
@@ -54,7 +53,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
 
     this._clusterService.sshKeyChanges.pipe(takeUntil(this._unsubscribe)).subscribe(keys => this.clusterSSHKeys = keys);
 
-    this._wizardService.datacenterChanges.pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
+    this._clusterService.datacenterChanges.pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(dc => {
           this._location = dc.spec.location;
