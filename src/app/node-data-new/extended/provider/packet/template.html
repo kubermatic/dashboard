@@ -1,0 +1,6 @@
+<form [formGroup]="form">
+  <km-tag-list title="Provider Tags"
+               [tags]="tags"
+               (tagsChange)="onTagsChange($event)"
+               [formControlName]="Control.Tags"></km-tag-list>
+</form>
