@@ -2,6 +2,9 @@
      [formGroup]="form"
      [ngSwitch]="provider">
   <kubermatic-wizard-aws-provider-extended *ngSwitchCase="Providers.AWS"
-                                           [formControlName]="Controls.ProviderExtended">
+                                           [formControl]="form.get(Controls.ProviderExtended)">
   </kubermatic-wizard-aws-provider-extended>
+  <kubermatic-wizard-vsphere-provider-extended *ngSwitchCase="Providers.VSPHERE"
+                                               [formControl]="form.get(Controls.ProviderExtended)">
+  </kubermatic-wizard-vsphere-provider-extended>
 </div>

@@ -1,7 +1,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator, Validators} from '@angular/forms';
 import {merge} from 'rxjs';
-import {first, switchMap, takeUntil} from 'rxjs/operators';
+import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService} from '../../../core/services';
@@ -66,19 +66,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.Labels]: new FormControl(''),
     });
 
-    this._setDefaultClusterType();
-    this._clusterService.cluster = this._getClusterEntity();
-
-    this._api.getMasterVersions(this.controlValue(Controls.Type))
-        .pipe(first())
-        .subscribe(this._setDefaultVersion.bind(this));
-
     this.control(Controls.Type)
         .valueChanges.pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap((type: ClusterType) => {
           this.masterVersions = [];
           this.control(Controls.Version).reset();
           this._handleImagePullSecret(type);
+          this._clusterService.clusterType = type;
 
           return this._api.getMasterVersions(this.controlValue(Controls.Type) as ClusterType);
         }))
@@ -94,6 +88,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         )
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());
+
+    this._setDefaultClusterType();
   }
 
   generateName(): void {

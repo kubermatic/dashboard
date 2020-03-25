@@ -1,6 +1,4 @@
 import {NgModule} from '@angular/core';
-
-import {MachineNetworksModule} from '../machine-networks/machine-networks.module';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../node-data-new/config';
 import {NodeDataModule} from '../node-data-new/module';
 import {SharedModule} from '../shared/shared.module';
@@ -10,6 +8,7 @@ import {Routing} from './routing';
 import {ClusterService} from './service/cluster';
 import {WizardService} from './service/wizard';
 import {ClusterStepComponent} from './step/cluster/component';
+import {MachineNetworkStepComponent} from './step/network/component';
 import {NodeSettingsStepComponent} from './step/node-settings/component';
 import {ProviderStepComponent} from './step/provider-datacenter/component';
 import {ProviderSettingsStepComponent} from './step/provider-settings/component';
@@ -23,6 +22,7 @@ import {PacketProviderBasicComponent} from './step/provider-settings/provider/ba
 import {VSphereProviderBasicComponent} from './step/provider-settings/provider/basic/vsphere/component';
 import {AWSProviderExtendedComponent} from './step/provider-settings/provider/extended/aws/component';
 import {ProviderExtendedComponent} from './step/provider-settings/provider/extended/component';
+import {VSphereProviderExtendedComponent} from './step/provider-settings/provider/extended/vsphere/component';
 import {ClusterSSHKeysComponent} from './step/provider-settings/ssh-keys/component';
 import {SummaryStepComponent} from './step/summary/component';
 
@@ -32,6 +32,7 @@ const components: any[] = [
   ClusterStepComponent,
   SummaryStepComponent,
   ProviderStepComponent,
+  MachineNetworkStepComponent,
   ProviderSettingsStepComponent,
   ProviderBasicComponent,
   AWSProviderBasicComponent,
@@ -42,6 +43,7 @@ const components: any[] = [
   VSphereProviderBasicComponent,
   ProviderExtendedComponent,
   AWSProviderExtendedComponent,
+  VSphereProviderExtendedComponent,
   NodeSettingsStepComponent,
   ClusterSSHKeysComponent,
 ];
@@ -51,7 +53,6 @@ const components: any[] = [
     SharedModule,
     Routing,
     NodeDataModule,
-    MachineNetworksModule,
   ],
   declarations: [
     ...components,

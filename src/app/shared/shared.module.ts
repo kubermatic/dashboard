@@ -45,11 +45,14 @@ import {AddonsListComponent} from './components/addon-list/addon-list.component'
 import {EditAddonDialogComponent} from './components/addon-list/edit-addon-dialog/edit-addon-dialog.component';
 import {InstallAddonDialogComponent} from './components/addon-list/install-addon-dialog/install-addon-dialog.component';
 import {SelectAddonDialogComponent} from './components/addon-list/select-addon-dialog/select-addon-dialog.component';
+import {FilteredComboboxComponent} from './components/combobox/component';
+import {OptionDirective} from './components/combobox/directive';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 import {DialogTitleComponent} from './components/dialog-title/dialog-title.component';
 import {EventListComponent} from './components/event-list/event-list.component';
 import {LabelFormComponent} from './components/label-form/label-form.component';
 import {LabelsComponent} from './components/labels/labels.component';
+import {MachineNetworkComponent} from './components/machine-networks-new/component';
 import {PropertyBooleanComponent} from './components/property-boolean/property-boolean.component';
 import {PropertyUsageComponent} from './components/property-usage/property-usage.component';
 import {PropertyComponent} from './components/property/property.component';
@@ -75,24 +78,16 @@ const modules: any[] = [
 ];
 
 const components: any[] = [
-  PropertyBooleanComponent,
-  DialogTitleComponent,
-  PropertyComponent,
-  EventListComponent,
-  LabelFormComponent,
-  LabelsComponent,
-  TaintFormComponent,
-  TaintsComponent,
-  RelativeTimePipe,
-  RelativeTimeComponent,
-  SSHKeyListComponent,
-  AddonsListComponent,
-  SettingsStatusComponent,
-  ShortNameInCircleComponent,
-  TagListComponent,
-  TokenDialogComponent,
-  NotificationComponent,
-  PropertyUsageComponent,
+  PropertyBooleanComponent,  DialogTitleComponent,
+  PropertyComponent,         EventListComponent,
+  LabelFormComponent,        LabelsComponent,
+  TaintFormComponent,        TaintsComponent,
+  RelativeTimePipe,          RelativeTimeComponent,
+  SSHKeyListComponent,       AddonsListComponent,
+  SettingsStatusComponent,   ShortNameInCircleComponent,
+  TagListComponent,          TokenDialogComponent,
+  NotificationComponent,     PropertyUsageComponent,
+  FilteredComboboxComponent, MachineNetworkComponent,
 ];
 
 const entryComponents: any[] = [
@@ -108,6 +103,7 @@ const entryComponents: any[] = [
 
 const directives: any[] = [
   AutofocusDirective,
+  OptionDirective,
 ];
 
 @NgModule({

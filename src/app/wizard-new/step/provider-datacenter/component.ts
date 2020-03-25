@@ -5,6 +5,7 @@ import {filter, map, switchMap, takeUntil} from 'rxjs/operators';
 import {DatacenterService} from '../../../core/services';
 import {DataCenterEntity, getDatacenterProvider} from '../../../shared/entity/DatacenterEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
+import {ClusterService} from '../../service/cluster';
 import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
 
@@ -29,7 +30,8 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
   readonly controls = Controls;
 
   constructor(
-      private readonly _builder: FormBuilder, private readonly _dcService: DatacenterService, wizard: WizardService) {
+      private readonly _builder: FormBuilder, private readonly _dcService: DatacenterService,
+      private readonly _clusterService: ClusterService, wizard: WizardService) {
     super(wizard);
   }
 
@@ -65,9 +67,12 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
 
     this.control(Controls.Provider)
         .valueChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe((provider: NodeProvider) => this._wizard.provider = provider);
+        .subscribe((provider: NodeProvider) => {
+          this.form.get(Controls.Datacenter).setValue('');
+          this._wizard.provider = provider;
+        });
 
-    this._wizard.providerChanges.pipe(switchMap(_ => this._dcService.getDataCenters()))
+    this._clusterService.providerChanges.pipe(switchMap(_ => this._dcService.getDataCenters()))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(datacenters => {
           const providerDatacenters: DataCenterEntity[] = [];
@@ -77,7 +82,7 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
             }
 
             const provider = getDatacenterProvider(datacenter);
-            const clusterProvider = this._wizard.provider;
+            const clusterProvider = this._clusterService.provider;
             if (provider === clusterProvider) {
               providerDatacenters.push(datacenter);
             }
@@ -91,7 +96,7 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
         // Allow only non-empty values
         .pipe(filter(value => value))
         .pipe(takeUntil(this._unsubscribe))
-        .subscribe(datacenter => this._wizard.datacenter = datacenter);
+        .subscribe(datacenter => this._clusterService.datacenter = datacenter);
   }
 
   getLocation(datacenter: DataCenterEntity): string {

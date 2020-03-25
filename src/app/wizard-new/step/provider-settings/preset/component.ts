@@ -7,7 +7,6 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 import {PresetListEntity} from '../../../../shared/entity/provider/credentials/PresetListEntity';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../service/cluster';
-import {WizardService} from '../../../service/wizard';
 
 export enum Controls {
   Preset = 'name',
@@ -52,14 +51,15 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
 
   constructor(
       private readonly _presets: PresetsService, private readonly _builder: FormBuilder,
-      private readonly _wizard: WizardService, private readonly _clusterService: ClusterService) {
+      private readonly _clusterService: ClusterService) {
     super('Preset');
   }
 
   ngOnInit(): void {
     this.form = this._builder.group({[Controls.Preset]: new FormControl('', Validators.required)});
 
-    this._wizard.datacenterChanges.pipe(switchMap(dc => this._presets.presets(this._wizard.provider, dc)))
+    this._clusterService.datacenterChanges
+        .pipe(switchMap(dc => this._presets.presets(this._clusterService.provider, dc)))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(presetList => {
           this.reset();
@@ -68,8 +68,6 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
           this.presetList = presetList;
           this._enable(this._state !== PresetsState.Empty, Controls.Preset);
         });
-
-    this._wizard.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.reset());
 
     this.form.get(Controls.Preset).valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
       this._presets.preset = preset;

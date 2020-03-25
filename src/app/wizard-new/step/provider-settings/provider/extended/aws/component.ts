@@ -1,5 +1,6 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
@@ -45,8 +46,16 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._presets.enablePresets(Object.values(Controls).every(control => !this.form.get(control).value));
-      this._clusterService.cluster = this._getClusterEntity();
     });
+
+    merge(
+        this.form.get(Controls.SecurityGroup).valueChanges,
+        this.form.get(Controls.RouteTableID).valueChanges,
+        this.form.get(Controls.InstanceProfileName).valueChanges,
+        this.form.get(Controls.RoleARN).valueChanges,
+        )
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());
   }
 
   hasError(control: string, errorName: string): boolean {

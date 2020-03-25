@@ -1,5 +1,6 @@
 <form [formGroup]="form"
-      fxLayout="column">
+      fxLayout="column"
+      fxLayoutGap="30px">
   <mat-form-field fxFlex>
     <mat-label>Username</mat-label>
     <input matInput
@@ -8,20 +9,56 @@
            type="text"
            autocomplete="off"
            required>
-    <mat-error *ngIf="form.controls.infraManagementUsername.hasError('required')">
+    <mat-error *ngIf="form.get(controls.InfraManagementUsername).hasError('required')">
       Username is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
-  <mat-form-field fxFlex>
-    <mat-label>Password*</mat-label>
-    <input matInput
-           [formControlName]="controls.InfraManagementPassword"
-           [name]="controls.InfraManagementUsername"
-           type="password"
-           autocomplete="off"
-           required>
-    <mat-error *ngIf="form.controls.infraManagementPassword.hasError('required')">
-      Password is <strong>required</strong>.
-    </mat-error>
-  </mat-form-field>
+
+  <div fxLayout="column">
+    <mat-form-field fxFlex>
+      <mat-label>Password</mat-label>
+      <input matInput
+             [formControlName]="controls.InfraManagementPassword"
+             [name]="controls.InfraManagementUsername"
+             type="password"
+             autocomplete="off"
+             required>
+      <mat-error *ngIf="form.get(controls.InfraManagementPassword).hasError('required')">
+        Password is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+    <mat-checkbox [formControlName]="controls.UseCustomCloudCredentials"
+                  [name]="controls.UseCustomCloudCredentials"
+                  matTooltip="If not selected, above credentials will be used for VSphere Cloud Provider.">
+      Use custom VSphere Cloud credentials
+    </mat-checkbox>
+  </div>
+
+  <ng-container *ngIf="useCustomCloudCredentials">
+    <mat-form-field fxFlex>
+      <mat-label>VSphere Cloud Provider Username</mat-label>
+      <input matInput
+             [formControlName]="controls.Username"
+             [name]="controls.Username"
+             type="text"
+             autocomplete="off"
+             required>
+      <mat-error *ngIf="form.get(controls.Username).hasError('required')">
+        VSphere Cloud Provider username is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field fxFlex>
+      <mat-label>VSphere Cloud Provider Password</mat-label>
+      <input matInput
+             [formControlName]="controls.Password"
+             [name]="controls.Password"
+             type="password"
+             autocomplete="off"
+             required>
+      <mat-error *ngIf="form.get(controls.Password).hasError('required')">
+        VSphere Cloud Provider password is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
+
 </form>

@@ -7,11 +7,13 @@ import {VSphereCloudSpec} from '../../../../../../shared/entity/cloud/VSphereClo
 import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
-import {WizardService} from '../../../../../service/wizard';
 
 export enum Controls {
   InfraManagementUsername = 'infraManagementUsername',
   InfraManagementPassword = 'infraManagementPassword',
+  Username = 'username',
+  Password = 'password',
+  UseCustomCloudCredentials = 'useCustomCloudCredentials',
 }
 
 @Component({
@@ -29,14 +31,31 @@ export class VSphereProviderBasicComponent extends BaseFormValidator implements 
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
-      private readonly _wizard: WizardService, private readonly _clusterService: ClusterService) {
+      private readonly _clusterService: ClusterService) {
     super('VMWare Provider Basic');
+  }
+
+  get useCustomCloudCredentials(): boolean {
+    return this.form.get(Controls.UseCustomCloudCredentials).value;
+  }
+
+  private get _cloudUsername(): string {
+    return this.form.get(Controls.Username).value ? this.form.get(Controls.Username).value :
+                                                    this.form.get(Controls.InfraManagementUsername).value;
+  }
+
+  private get _cloudPassword(): string {
+    return this.form.get(Controls.Password).value ? this.form.get(Controls.Password).value :
+                                                    this.form.get(Controls.InfraManagementPassword).value;
   }
 
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.InfraManagementUsername]: this._builder.control('', Validators.required),
       [Controls.InfraManagementPassword]: this._builder.control('', Validators.required),
+      [Controls.Username]: this._builder.control(''),
+      [Controls.Password]: this._builder.control(''),
+      [Controls.UseCustomCloudCredentials]: this._builder.control(false),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
@@ -46,16 +65,23 @@ export class VSphereProviderBasicComponent extends BaseFormValidator implements 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
+    this.form.get(Controls.UseCustomCloudCredentials)
+        .valueChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(this._handleCloudCredentials.bind(this));
+
     merge(
         this.form.get(Controls.InfraManagementUsername).valueChanges,
         this.form.get(Controls.InfraManagementPassword).valueChanges,
+        this.form.get(Controls.Username).valueChanges,
+        this.form.get(Controls.Password).valueChanges,
+        this.form.get(Controls.UseCustomCloudCredentials).valueChanges,
         )
         .pipe(debounceTime(this._debounceTime))
         .pipe(distinctUntilChanged())
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());
 
-    merge(this._wizard.providerChanges, this._wizard.datacenterChanges)
+    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this.form.reset());
   }
@@ -67,6 +93,19 @@ export class VSphereProviderBasicComponent extends BaseFormValidator implements 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  private _handleCloudCredentials(selected: boolean): void {
+    if (!selected) {
+      this.form.get(Controls.Username).clearValidators();
+      this.form.get(Controls.Password).clearValidators();
+    } else {
+      this.form.get(Controls.Username).setValidators(Validators.required);
+      this.form.get(Controls.Password).setValidators(Validators.required);
+    }
+
+    this.form.get(Controls.Username).setValue('');
+    this.form.get(Controls.Password).setValue('');
   }
 
   private _enable(enable: boolean, name: string): void {
@@ -84,6 +123,8 @@ export class VSphereProviderBasicComponent extends BaseFormValidator implements 
       spec: {
         cloud: {
           vsphere: {
+            username: this._cloudUsername,
+            password: this._cloudPassword,
             infraManagementUser: {
               username: this.form.get(Controls.InfraManagementUsername).value,
               password: this.form.get(Controls.InfraManagementPassword).value,

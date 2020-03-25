@@ -3,6 +3,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {takeUntil} from 'rxjs/operators';
 
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
+import {ClusterService} from '../../service/cluster';
 import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
 
@@ -27,19 +28,23 @@ export class ProviderSettingsStepComponent extends StepBase implements OnInit, O
 
   provider: NodeProvider;
 
-  constructor(private readonly _builder: FormBuilder, wizard: WizardService) {
+  constructor(
+      private readonly _builder: FormBuilder, private readonly _clusterService: ClusterService, wizard: WizardService) {
     super(wizard, 'Provider settings');
   }
 
   ngOnInit(): void {
+    this._init();
+    this._clusterService.providerChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(provider => this.provider = provider);
+  }
+
+  _init(): void {
     this.form = this._builder.group({
       [Controls.Preset]: this._builder.control(''),
       [Controls.ProviderBasic]: this._builder.control(''),
       [Controls.ProviderExtended]: this._builder.control(''),
       [Controls.SSHKeys]: this._builder.control(''),
     });
-
-    this.provider = this._wizard.provider;
-    this._wizard.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(provider => this.provider = provider);
   }
 }
