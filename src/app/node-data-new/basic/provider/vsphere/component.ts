@@ -49,7 +49,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
     this._unsubscribe.complete();
   }
 
-  hasError(control: string, errorName: string): boolean {
+  hasError(control: Controls, errorName: string): boolean {
     return this.form.get(control).hasError(errorName);
   }
 

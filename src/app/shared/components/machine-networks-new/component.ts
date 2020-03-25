@@ -34,7 +34,7 @@ class MachineNetworkSpec {
 }
 
 @Component({
-  selector: 'kubermatic-machine-networks',
+  selector: 'km-machine-networks',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
   providers: [

@@ -19,7 +19,7 @@ enum Controls {
 export class FilteredComboboxComponent extends BaseFormValidator implements OnInit, OnDestroy, OnChanges {
   @Input() label: string;
   @Input() inputLabel: string;
-  @Input() required: boolean;
+  @Input() required = false;
   @Input() grouped = false;
   @Input() groups: string[] = [];
   @Input() options: object[] = [];

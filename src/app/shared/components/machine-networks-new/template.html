@@ -13,10 +13,11 @@
       </span>
 
       <mat-form-field>
-        <mat-label>CIDR Range*</mat-label>
+        <mat-label>CIDR Range</mat-label>
         <input matInput
                [formControlName]="controls.CIDR"
-               autocomplete="off">
+               autocomplete="off"
+               required>
         <mat-hint>Example: 196.44.198.32/29</mat-hint>
         <mat-error *ngIf="network.get(controls.CIDR).hasError('required')">
           CIDR is <strong>required</strong>.
@@ -27,10 +28,11 @@
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label>DNS Servers*</mat-label>
+        <mat-label>DNS Servers</mat-label>
         <input matInput
                [formControlName]="controls.DNSServers"
-               autocomplete="off">
+               autocomplete="off"
+               required>
         <mat-hint>DNS Servers separated with commas, example: 8.8.8.8, 8.8.8.4</mat-hint>
         <mat-error *ngIf="network.get(controls.DNSServers).hasError('required')">
           DNS Server is <strong>required</strong>.
@@ -41,10 +43,11 @@
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label>Gateway*</mat-label>
+        <mat-label>Gateway</mat-label>
         <input matInput
                [formControlName]="controls.Gateway"
-               autocomplete="off">
+               autocomplete="off"
+               required>
         <mat-hint>Example: 10.0.0.1</mat-hint>
         <mat-error *ngIf="network.get(controls.Gateway).hasError('required')">
           Gateway is <strong>required</strong>.

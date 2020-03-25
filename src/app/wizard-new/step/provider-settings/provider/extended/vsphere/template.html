@@ -1,8 +1,7 @@
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="30px">
-  <km-combobox [required]="false"
-               [grouped]="true"
+  <km-combobox [grouped]="true"
                [groups]="networkTypes"
                [optionsGetter]="getNetworks.bind(this)"
                [formControlName]="controls.VMNetName"
@@ -16,8 +15,7 @@
     </div>
   </km-combobox>
 
-  <km-combobox [required]="false"
-               [grouped]="false"
+  <km-combobox [grouped]="false"
                [options]="folders"
                [formControlName]="controls.Folder"
                [hint]="getHint(controls.VMNetName)"

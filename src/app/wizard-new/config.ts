@@ -14,8 +14,8 @@ export enum StepRegistry {
   Provider = 'Provider',
   Cluster = 'Cluster',
   ProviderSettings = 'Settings',
-  NodeSettings = 'Initial nodes',
-  MachineNetwork = 'Machine network',
+  NodeSettings = 'Initial Nodes',
+  MachineNetwork = 'Machine Network',
   Summary = 'Summary',
 }
 
