@@ -4,13 +4,12 @@ import {Observable, of} from 'rxjs';
 import {catchError, debounceTime, startWith, takeUntil} from 'rxjs/operators';
 
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
-import {HetznerTypes} from '../../../../shared/entity/provider/hetzner/TypeEntity';
+import {PacketSize} from '../../../../shared/entity/packet/PacketSizeEntity';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
-import {filterObjectOptions} from '../../../../shared/utils/common-utils';
+import {filterArrayOptions} from '../../../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../../../shared/validators/autocomplete-filter.validator';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
-import {PacketSize} from "../../../../shared/entity/packet/PacketSizeEntity";
 
 enum Controls {
   InstanceType = 'instanceType',
@@ -48,14 +47,15 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
     this.form.get(Controls.InstanceType)
         .valueChanges.pipe(debounceTime(this._debounceTime), takeUntil(this._unsubscribe), startWith(''))
         .subscribe(value => {
-          if (value !== '' && !this.form.controls.type.pristine) {
-            this.filteredTypes = filterObjectOptions(value, 'name', this.types);
+          if (value !== '' && !this.form.get(Controls.InstanceType).pristine) {
+            this.filteredSizes = filterArrayOptions(value, 'name', this.sizes);
           } else {
-            this.filteredTypes = this.types;
+            this.filteredSizes = this.sizes;
           }
-          this.form.controls.type.setValidators(
-              [AutocompleteFilterValidators.mustBeInObjectList(this.types, 'name', true)]);
-          this.form.controls.type.updateValueAndValidity();
+          this.form.get(Controls.InstanceType).setValidators([
+            Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true)
+          ]);
+          this.form.get(Controls.InstanceType).updateValueAndValidity();
         });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
@@ -95,14 +95,18 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
     return description ? `(${description})` : '';
   }
 
-  private get _typesObservable(): Observable<HetznerTypes> {
-    return this._nodeDataService.hetzner.flavors().pipe(catchError(() => of<HetznerTypes>()));
+  private get _typesObservable(): Observable<PacketSize[]> {
+    return this._nodeDataService.packet.flavors().pipe(catchError(() => of<PacketSize[]>()));
   }
 
-  private _setDefaultType(types: HetznerTypes): void {
-    this.types = types;
-    if (this.types && this.types.standard && this.types.standard.length > 0) {
-      this.form.get(Controls.Type).setValue(this.types.standard[0].name);
+  private _setDefaultType(sizes: PacketSize[]): void {
+    sizes.forEach(size => {
+      if (size.memory !== 'N/A') {
+        this.sizes.push(size);
+      }
+    });
+    if (this.sizes && this.sizes.length > 0) {
+      this.form.get(Controls.InstanceType).setValue(this.sizes[0].name);
     }
   }
 
