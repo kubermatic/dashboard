@@ -3,25 +3,25 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {WizardService} from '../../core/services';
-import {MachineNetworksModule} from '../../machine-networks/machine-networks.module';
-import {SharedModule} from '../../shared/shared.module';
-import {ClusterType} from '../../shared/utils/cluster-utils/cluster-utils';
-import {nodeDataFake} from '../../testing/fake-data/node.fake';
-import {Component} from './set-machine-networks.component';
+import {DatacenterService, PresetsService} from '../../../core/services';
+import {NODE_DATA_CONFIG, NodeDataMode} from '../../../node-data-new/config';
+import {NodeDataService} from '../../../node-data-new/service/service';
+import {SharedModule} from '../../../shared/shared.module';
+import {ClusterService} from '../../service/cluster';
+import {WizardService} from '../../service/wizard';
+import {MachineNetworkStepComponent} from './component';
 
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   ReactiveFormsModule,
   SharedModule,
-  MachineNetworksModule,
   HttpClientModule,
 ];
 
-describe('SetMachineNetworksComponent', () => {
-  let fixture: ComponentFixture<Component>;
-  let component: Component;
+describe('MachineNetworkStepComponent', () => {
+  let fixture: ComponentFixture<MachineNetworkStepComponent>;
+  let component: MachineNetworkStepComponent;
 
   beforeEach(async(() => {
     TestBed
@@ -30,38 +30,28 @@ describe('SetMachineNetworksComponent', () => {
             ...modules,
           ],
           declarations: [
-            Component,
+            MachineNetworkStepComponent,
           ],
           providers: [
             WizardService,
+            ClusterService,
+            NodeDataService,
+            ClusterService,
+            {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
+            PresetsService,
+            DatacenterService,
           ],
         })
         .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(Component);
+    fixture = TestBed.createComponent(MachineNetworkStepComponent);
     component = fixture.componentInstance;
-    component.cluster = {
-      name: '',
-      spec: {
-        version: '',
-        cloud: {
-          dc: '',
-        },
-        machineNetworks: [{
-          cidr: '',
-          dnsServers: [],
-          gateway: '',
-        }],
-      },
-      type: ClusterType.Empty,
-    };
-    component.nodeData = nodeDataFake();
     fixture.detectChanges();
   });
 
-  it('should create the Set Machine Networks cmp', () => {
+  it('should create the Machine Network Step cmp', () => {
     expect(component).toBeTruthy();
   });
 });
