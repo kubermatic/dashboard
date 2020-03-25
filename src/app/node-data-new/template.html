@@ -48,6 +48,8 @@
                                         [formControlName]="Controls.ProviderBasic"></kubermatic-hetzner-basic-node-data>
     <km-kubevirt-basic-node-data *ngSwitchCase="NodeProvider.KUBEVIRT"
                                  [formControlName]="Controls.ProviderBasic"></km-kubevirt-basic-node-data>
+    <km-packet-basic-node-data *ngSwitchCase="NodeProvider.PACKET"
+                               [formControlName]="Controls.ProviderBasic"></km-packet-basic-node-data>
   </div>
 
   <mat-button-toggle-group group="operatingSystemGroup"
