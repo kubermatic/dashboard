@@ -9,6 +9,7 @@ import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../config';
 import {NodeDataAWSProvider} from './provider/aws';
 import {NodeDataDigitalOceanProvider} from './provider/digitalocean';
 import {NodeDataHetznerProvider} from './provider/hetzner';
+import {NodeDataPacketProvider} from './provider/packet';
 
 @Injectable()
 export class NodeDataService {
@@ -63,4 +64,5 @@ export class NodeDataService {
   readonly aws = new NodeDataAWSProvider(this, this._clusterService, this._presetService, this._datacenterService);
   readonly digitalOcean = new NodeDataDigitalOceanProvider(this, this._clusterService, this._presetService);
   readonly hetzner = new NodeDataHetznerProvider(this, this._clusterService, this._presetService);
+  readonly packet = new NodeDataPacketProvider(this, this._clusterService, this._presetService);
 }
