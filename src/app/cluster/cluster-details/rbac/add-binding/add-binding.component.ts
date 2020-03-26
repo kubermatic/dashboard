@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {MatDialogRef} from '@angular/material/dialog';
 import {Subject} from 'rxjs';
@@ -32,26 +32,12 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup(
-        {
-          email: new FormControl(''),
-          group: new FormControl(''),
-          role: new FormControl('', [Validators.required]),
-          namespace: new FormControl(''),
-        },
-        (formGroup: FormGroup): ValidationErrors|null => {
-          if (!formGroup.controls.email.value && !formGroup.controls.group.value) {
-            return {
-              required: true,
-            };
-          }
-          if (formGroup.controls.email.value && formGroup.controls.group.value) {
-            return {
-              required: true,
-            };
-          }
-          return null;
-        });
+    this.form = new FormGroup({
+      email: new FormControl('', [Validators.required]),
+      group: new FormControl(''),
+      role: new FormControl('', [Validators.required]),
+      namespace: new FormControl(''),
+    });
 
     this._rbacService.getClusterRoleNames(this.cluster.id, this.datacenter.metadata.name, this.projectID)
         .pipe(takeUntil(this._unsubscribe))
@@ -101,9 +87,18 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   }
 
   changeSubjectType(event: MatButtonToggleChange): void {
-    this.form.controls.email.setValue('');
-    this.form.controls.group.setValue('');
+    this.form.get('email').setValue('');
+    this.form.get('group').setValue('');
     this.subjectType = event.value;
+    this.user.clearValidators();
+    this.group.clearValidators();
+    if (this.subjectType === 'user') {
+      this.user.setValidators([Validators.required]);
+    } else {
+      this.group.setValidators([Validators.required]);
+    }
+    this.user.updateValueAndValidity();
+    this.group.updateValueAndValidity();
   }
 
   get role(): AbstractControl {
@@ -112,6 +107,14 @@ export class AddBindingComponent implements OnInit, OnDestroy {
 
   get namespace(): AbstractControl {
     return this.form.controls.namespace;
+  }
+
+  get user(): AbstractControl {
+    return this.form.controls.user;
+  }
+
+  get group(): AbstractControl {
+    return this.form.controls.group;
   }
 
   setValidators(): void {

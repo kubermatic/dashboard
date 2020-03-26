@@ -33,12 +33,3 @@ tr:last-child th:last-child,
 .km-table-actions {
   float: right;
 }
-
-.km-table i.kind {
-  margin-right: 0.626 * $baseline-grid;
-  width: 3.125 * $baseline-grid;
-  height: 3.125 * $baseline-grid;
-  display: inline-block;
-  vertical-align: middle;
-  background-color: #203f58;
-}

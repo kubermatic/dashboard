@@ -52,16 +52,9 @@ export class RBACService {
 
   deleteClusterBinding(clusterID: string, dc: string, projectID: string, roleID: string, kind: string, name: string):
       Observable<any> {
-    const body: any = {};
-    if (kind === KIND_GROUP) {
-      body.group = name;
-    } else if (kind === KIND_USER) {
-      body.userEmail = name;
-    }
-
     const options = {
       headers: new HttpHeaders(),
-      body,
+      body: this._getDeleteBindingBody(kind, name),
     };
     const url =
         `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/clusterroles/${roleID}/clusterbindings`;
@@ -119,19 +112,22 @@ export class RBACService {
   deleteBinding(
       clusterID: string, dc: string, projectID: string, roleID: string, namespace: string, kind: string,
       name: string): Observable<any> {
+    const options = {
+      headers: new HttpHeaders(),
+      body: this._getDeleteBindingBody(kind, name),
+    };
+    const url =
+        `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/roles/${namespace}/${roleID}/bindings`;
+    return this._http.delete(url, options);
+  }
+
+  private _getDeleteBindingBody(kind: string, name: string): any {
     const body: any = {};
     if (kind === KIND_GROUP) {
       body.group = name;
     } else if (kind === KIND_USER) {
       body.userEmail = name;
     }
-
-    const options = {
-      headers: new HttpHeaders(),
-      body,
-    };
-    const url =
-        `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/roles/${namespace}/${roleID}/bindings`;
-    return this._http.delete(url, options);
+    return body;
   }
 }

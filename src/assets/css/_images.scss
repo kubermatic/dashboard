@@ -175,13 +175,6 @@
   cursor: pointer;
 }
 
-.km-icon-single-member {
-  @include km-image-mask(2.75 * $baseline-grid);
-
-  mask-image: url("/assets/images/icons/member.svg");
-  cursor: pointer;
-}
-
 .km-icon-serviceaccount {
   @include km-image-mask(2.75 * $baseline-grid);
 

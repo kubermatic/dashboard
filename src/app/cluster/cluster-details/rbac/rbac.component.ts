@@ -8,7 +8,7 @@ import {NotificationService, RBACService} from '../../../core/services';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {KIND_GROUP, SimpleBinding, SimpleClusterBinding} from '../../../shared/entity/RBACEntity';
+import {SimpleBinding, SimpleClusterBinding} from '../../../shared/entity/RBACEntity';
 
 import {AddBindingComponent} from './add-binding/add-binding.component';
 
@@ -28,9 +28,9 @@ export class RBACComponent implements OnInit, OnDestroy {
 
   isShowRBAC = false;
   dataSourceCluster = new MatTableDataSource<SimpleClusterBinding>();
-  displayedColumnsCluster: string[] = ['name', 'clusterRole', 'actions'];
+  displayedColumnsCluster: string[] = ['kind', 'name', 'clusterRole', 'actions'];
   dataSourceNamespace = new MatTableDataSource<SimpleBinding>();
-  displayedColumnsNamespace: string[] = ['name', 'clusterRole', 'namespace', 'actions'];
+  displayedColumnsNamespace: string[] = ['kind', 'name', 'clusterRole', 'namespace', 'actions'];
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -127,12 +127,5 @@ export class RBACComponent implements OnInit, OnDestroy {
             });
       }
     });
-  }
-
-  getIconForSubject(element: SimpleBinding|SimpleClusterBinding): string {
-    if (element.kind === KIND_GROUP) {
-      return 'km-icon-member';
-    }
-    return 'km-icon-single-member';
   }
 }
