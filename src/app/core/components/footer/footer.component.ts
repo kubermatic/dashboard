@@ -12,7 +12,7 @@ import {CustomLink, CustomLinkLocation, filterCustomLinks} from '../../../shared
 export class FooterComponent {
   @Input() version: VersionInfo;
   @Input() settings: AdminSettings;
-  @Input() customLinks: CustomLink[];
+  @Input() customLinks: CustomLink[] = [];
   @Input() authenticated: boolean;
 
   getCustomLinks(): CustomLink[] {
