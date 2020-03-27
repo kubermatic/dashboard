@@ -2,15 +2,17 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {CookieService} from 'ngx-cookie-service';
 import {Auth} from '../../core/services';
+import {SettingsService} from '../../core/services/settings/settings.service';
 
 @Component({
-  selector: 'kubermatic-frontpage',
+  selector: 'km-frontpage',
   templateUrl: './frontpage.component.html',
   styleUrls: ['./frontpage.component.scss'],
 })
 export class FrontpageComponent implements OnInit {
   constructor(
-      private readonly _auth: Auth, private readonly _router: Router, private readonly _cookieService: CookieService) {}
+      private readonly _auth: Auth, private readonly _router: Router, private readonly _cookieService: CookieService,
+      private readonly _settingsService: SettingsService) {}
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent): void {
@@ -23,6 +25,8 @@ export class FrontpageComponent implements OnInit {
   ngOnInit(): void {
     if (this._auth.authenticated()) {
       this._router.navigate(['/projects']);
+    } else {
+      this._settingsService.refreshCustomLinks();
     }
 
     const nonceRegExp = /[\?&#]nonce=([^&]+)/;
