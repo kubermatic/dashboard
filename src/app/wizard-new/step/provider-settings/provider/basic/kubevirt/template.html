@@ -7,7 +7,7 @@
            [formControlName]="controls.Kubeconfig"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="hasError(controls.Kubeconfig, 'required')">
+    <mat-error *ngIf="form.get(controls.Kubeconfig).hasError('required')">
       Kubeconfig is <strong>required</strong>.
     </mat-error>
   </mat-form-field>

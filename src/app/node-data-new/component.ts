@@ -104,10 +104,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     return this.form.get(Controls.OperatingSystem).value === osName;
   }
 
-  hasError(control: string, errorName: string): boolean {
-    return this.form.get(control).hasError(errorName);
-  }
-
   isBasicViewOnly(): boolean {
     // In the wizard we do not split extended and basic options.
     return !this._nodeDataService.isInWizardMode();

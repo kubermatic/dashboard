@@ -67,10 +67,6 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
     this._unsubscribe.complete();
   }
 
-  hasError(control: string, errorName: string): boolean {
-    return this.form.get(control).hasError(errorName);
-  }
-
   isInWizard(): boolean {
     return this._nodeDataService.isInWizardMode();
   }

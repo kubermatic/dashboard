@@ -58,10 +58,6 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
         .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());
   }
 
-  hasError(control: string, errorName: string): boolean {
-    return this.form.get(control).hasError(errorName);
-  }
-
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
