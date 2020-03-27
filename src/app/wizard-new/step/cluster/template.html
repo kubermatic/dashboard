@@ -22,13 +22,13 @@
                   (click)="generateName()">
             <i class="km-icon-randomize"></i>
           </button>
-          <mat-error *ngIf="hasError(Controls.Name, 'required')">
+          <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
             Name is <strong>required</strong>.
           </mat-error>
-          <mat-error *ngIf="hasError(Controls.Name, 'minlength')">
+          <mat-error *ngIf="form.get(Controls.Name).hasError('minlength')">
             Name must be at least {{ control(Controls.Name).getError('minlength').requiredLength }} characters.
           </mat-error>
-          <mat-error *ngIf="hasError(Controls.Name, 'pattern')">
+          <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
             Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
           </mat-error>
         </mat-form-field>
@@ -74,7 +74,7 @@
                       type="text-area"
                       title="imagePullSecret"
                       required></textarea>
-            <mat-error *ngIf="hasError(Controls.ImagePullSecret, 'required')">
+            <mat-error *ngIf="form.get(Controls.ImagePullSecret).hasError('required')">
               Image Pull Secret is <strong>required</strong>.
             </mat-error>
             <mat-hint>This is a JSON document containing your Docker registry credentials, see&nbsp;<a target="_blank"
