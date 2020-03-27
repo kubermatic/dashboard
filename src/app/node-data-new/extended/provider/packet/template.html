@@ -1,4 +1,6 @@
-<form [formGroup]="form">
+<form [formGroup]="form"
+      fxLayout="column"
+      fxLayoutGap="16px">
   <km-tag-list title="Provider Tags"
                [tags]="tags"
                (tagsChange)="onTagsChange($event)"

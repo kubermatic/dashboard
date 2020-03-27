@@ -1,7 +1,22 @@
 <form [formGroup]="form"
-      fxLayout="column">
+      fxLayout="column"
+      fxLayoutGap="16px">
   <div fxFlex
        class="mat-select-container">
+
+    <km-combobox [required]="true"
+                 [grouped]="true"
+                 [groups]=""
+                 [selected]=""
+                 [optionsGetter]="getSubnetToAZ.bind(this)"
+                 [formControlName]="Controls.SubnetID"
+                 (changed)="onSubnetChange($event)"
+                 label="Subnet ID & Availability Zone"
+                 inputLabel="Select subnet..."
+                 filterBy="id">
+      <div *option="let network">{{getSubnetOptionName(network)}}</div>
+    </km-combobox>
+
     <mat-form-field class="km-with-hint">
       <mat-label>Node Type</mat-label>
       <input matInput

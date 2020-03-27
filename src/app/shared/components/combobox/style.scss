@@ -1,0 +1,11 @@
+@import '../../../../assets/css/variables';
+
+.mat-icon-button {
+  line-height: 2 * $line-height;
+  margin-right: 0.625 * $baseline-grid !important;
+  right: 3 * $baseline-grid;
+  top: -0.5 * $baseline-grid;
+  max-height: 2.5 * $baseline-grid;
+  max-width: 2.5 * $baseline-grid;
+  position: absolute;
+}
