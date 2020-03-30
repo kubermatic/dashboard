@@ -11,6 +11,7 @@ enum Controls {
 @Component({
   selector: 'km-combobox',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => FilteredComboboxComponent), multi: true},
     {provide: NG_VALIDATORS, useExisting: forwardRef(() => FilteredComboboxComponent), multi: true}
@@ -56,6 +57,11 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
       this._inputEl.nativeElement.value = '';
       this.filterByInput[this.filterBy] = '';
     }
+  }
+
+  reset(): void {
+    this.selected = '';
+    this.form.get(Controls.Select).setValue(this.selected);
   }
 
   ngOnChanges(): void {

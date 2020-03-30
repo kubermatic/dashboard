@@ -44,7 +44,7 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator implemen
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.DiskSizeGB]: this._builder.control(''),
+      [Controls.DiskSizeGB]: this._builder.control(1),
       [Controls.Template]: this._builder.control(''),
     });
 

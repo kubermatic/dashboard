@@ -1,6 +1,6 @@
 <form [formGroup]="form"
       fxLayout="row"
-      fxLayoutGap="16px"
+      fxLayoutGap="30px"
       fxLayout.md="column"
       fxLayoutGap.md="30px"
       fxLayout.sm="column"
@@ -9,7 +9,8 @@
       fxLayoutGap.xs="30px">
   <div fxFlex="50%"
        fxLayout="column"
-       fxLayoutGap="30px">
+       fxLayoutGap="16px">
+    <mat-card-title>Basic</mat-card-title>
     <mat-form-field>
       <mat-label>Name</mat-label>
       <input [formControlName]="Controls.Name"
@@ -105,7 +106,8 @@
 
   <div fxFlex="50%"
        fxLayout="column"
-       fxLayoutGap="30px">
+       fxLayoutGap="16px">
+    <mat-card-title>{{ providerDisplayName }}</mat-card-title>
     <kubermatic-basic-node-data [provider]="provider"
                                 [formControlName]="Controls.ProviderBasic">
     </kubermatic-basic-node-data>

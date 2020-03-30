@@ -4,7 +4,7 @@ import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {OperatingSystemSpec, Taint} from '../shared/entity/NodeEntity';
-import {NodeProvider, OperatingSystem} from '../shared/model/NodeProviderConstants';
+import {NodeProvider, NodeProviderConstants, OperatingSystem} from '../shared/model/NodeProviderConstants';
 import {NodeData} from '../shared/model/NodeSpecChange';
 import {ClusterType} from '../shared/utils/cluster-utils/cluster-utils';
 import {BaseFormValidator} from '../shared/validators/base-form.validator';
@@ -43,6 +43,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   readonly OperatingSystem = OperatingSystem;
   readonly Controls = Controls;
 
+  get providerDisplayName(): string {
+    return NodeProviderConstants.displayName(this.provider);
+  }
+
   constructor(
       private readonly _builder: FormBuilder, private readonly _nameGenerator: ClusterNameGenerator,
       private readonly _clusterService: ClusterService, private readonly _nodeDataService: NodeDataService) {
@@ -55,8 +59,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.Count]: this._builder.control(this.replicas, [Validators.required, Validators.min(0)]),
       [Controls.DynamicConfig]: this._builder.control(false),
       [Controls.OperatingSystem]: this._builder.control(this._getDefaultOS(), [Validators.required]),
-      [Controls.UpgradeOnBoot]: this._builder.control(''),
-      [Controls.DisableAutoUpdate]: this._builder.control(''),
+      [Controls.UpgradeOnBoot]: this._builder.control(false),
+      [Controls.DisableAutoUpdate]: this._builder.control(false),
       [Controls.ProviderBasic]: this._builder.control(''),
       [Controls.ProviderExtended]: this._builder.control(''),
     });

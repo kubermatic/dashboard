@@ -1553,7 +1553,7 @@
       font-size: $font-size-subhead;
       font-weight: 400 !important;
 
-      &.mat-step-label-active {
+      &.mat-step-label-selected {
         color: map-get($colors, primary) !important;
         font-weight: 500 !important;
       }
@@ -1569,5 +1569,11 @@
     height: 3 * $baseline-grid;
     outline: none;
     padding: (2 * $baseline-grid) 0 (2 * $baseline-grid) (2 * $baseline-grid);
+  }
+
+  .km-add-machine-network {
+    &:hover {
+      background-color: $background-hover;
+    }
   }
 }

@@ -1,16 +1,16 @@
 <form [formGroup]="form">
-  <mat-card>
+  <mat-card fxFlex="100%">
     <mat-horizontal-stepper linear
                             disableRipple
                             [@.disabled]="true"
-                            #stepper
-                            class="km-wizard-stepper">
+                            #stepper>
       <ng-template matStepperIcon="edit">
         <mat-icon>done</mat-icon>
       </ng-template>
 
       <mat-step *ngFor="let step of steps; index as i;"
-                [stepControl]="form.get(step.name)">
+                [stepControl]="form.get(step.name)"
+                fxFlex="100%">
         <ng-template matStepLabel>{{step.name}}</ng-template>
         <ng-container [ngSwitch]="step.name">
           <ng-container *ngSwitchCase="stepRegistry.Provider">

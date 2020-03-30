@@ -1,6 +1,9 @@
 <div *ngIf="visible"
      [formGroup]="form"
-     [ngSwitch]="provider">
+     [ngSwitch]="provider"
+     fxLayout="column"
+     fxLayoutGap="16px">
+  <mat-card-title *ngIf="hasExtendedSection(provider)">Advanced</mat-card-title>
   <kubermatic-wizard-aws-provider-extended *ngSwitchCase="Providers.AWS"
                                            [formControl]="form.get(Controls.ProviderExtended)">
   </kubermatic-wizard-aws-provider-extended>
