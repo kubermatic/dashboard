@@ -4,7 +4,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {Auth} from '../../core/services';
 
 @Component({
-  selector: 'kubermatic-frontpage',
+  selector: 'km-frontpage',
   templateUrl: './frontpage.component.html',
   styleUrls: ['./frontpage.component.scss'],
 })

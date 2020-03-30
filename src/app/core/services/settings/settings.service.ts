@@ -9,6 +9,7 @@ import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../../shared/entity/AdminSettings';
 import {Theme, UserSettings} from '../../../shared/entity/MemberEntity';
+import {CustomLink} from '../../../shared/utils/custom-link-utils/custom-link';
 
 const DEFAULT_USER_SETTINGS: UserSettings = {
   itemsPerPage: 10,
@@ -44,6 +45,8 @@ export class SettingsService {
   private _adminSettingsWatch$: Observable<AdminSettings>;
   private _admins$: Observable<AdminEntity[]>;
   private _adminsRefresh$ = new Subject();
+  private _customLinks$: Observable<CustomLink[]>;
+  private _customLinksRefresh$ = new Subject();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * 5);
 
   constructor(
@@ -128,6 +131,24 @@ export class SettingsService {
   patchAdminSettings(patch: any): Observable<AdminSettings> {
     const url = `${this.restRoot}/admin/settings`;
     return this._httpClient.patch<AdminSettings>(url, patch);
+  }
+
+  get customLinks(): Observable<CustomLink[]> {
+    if (!this._customLinks$) {
+      this._customLinks$ = merge(this._refreshTimer$, this._customLinksRefresh$)
+                               .pipe(switchMap(() => this.getCustomLinks_()))
+                               .pipe(shareReplay({refCount: true, bufferSize: 1}));
+    }
+    return this._customLinks$;
+  }
+
+  private getCustomLinks_(): Observable<CustomLink[]> {
+    const url = `${this.restRoot}/admin/settings/customlinks`;
+    return this._httpClient.get<CustomLink[]>(url).pipe(catchError(() => of([])));
+  }
+
+  refreshCustomLinks(): void {
+    this._customLinksRefresh$.next();
   }
 
   get admins(): Observable<AdminEntity[]> {
