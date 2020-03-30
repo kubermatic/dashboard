@@ -7,10 +7,10 @@
            [formControlName]="Controls.CPUs"
            type="text"
            autocomplete="off">
-    <mat-error *ngIf="hasError(Controls.CPUs, 'required')">
+    <mat-error *ngIf="form.get(Controls.CPUs).hasError('required')">
       Number of CPUs is <strong>required</strong>.
     </mat-error>
-    <mat-error *ngIf="hasError(Controls.CPUs, 'pattern')">
+    <mat-error *ngIf="form.get(Controls.CPUs).hasError('pattern')">
       Wrong quantity format, use values like 2, 3Gi and 2M.
     </mat-error>
   </mat-form-field>
@@ -22,10 +22,10 @@
            [formControlName]="Controls.Memory"
            type="text"
            autocomplete="off">
-    <mat-error *ngIf="hasError(Controls.Memory, 'required')">
+    <mat-error *ngIf="form.get(Controls.Memory).hasError('required')">
       Memory is <strong>required</strong>.
     </mat-error>
-    <mat-error *ngIf="hasError(Controls.Memory, 'pattern')">
+    <mat-error *ngIf="form.get(Controls.Memory).hasError('pattern')">
       Wrong quantity format, use values like 2, 3Gi and 2M.
     </mat-error>
   </mat-form-field>
@@ -38,7 +38,7 @@
            type="text"
            autocomplete="off">
     <mat-hint>Namespace where node will be provisioned.</mat-hint>
-    <mat-error *ngIf="hasError(Controls.Namespace, 'required')">
+    <mat-error *ngIf="form.get(Controls.Namespace).hasError('required')">
       Namespace is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -50,10 +50,10 @@
            [formControlName]="Controls.PVCSize"
            type="text"
            autocomplete="off">
-    <mat-error *ngIf="hasError(Controls.PVCSize, 'required')">
+    <mat-error *ngIf="form.get(Controls.PVCSize).hasError('required')">
       PVC Size is <strong>required</strong>.
     </mat-error>
-    <mat-error *ngIf="hasError(Controls.PVCSize, 'pattern')">
+    <mat-error *ngIf="form.get(Controls.PVCSize).hasError('pattern')">
       Wrong quantity format, use values like 2, 3Gi and 2M.
     </mat-error>
   </mat-form-field>
@@ -66,7 +66,7 @@
            type="text"
            autocomplete="off">
     <mat-hint>URL from which the imported image will be downloaded.</mat-hint>
-    <mat-error *ngIf="hasError(Controls.SourceURL, 'required')">
+    <mat-error *ngIf="form.get(Controls.SourceURL).hasError('required')">
       Source URL is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -78,7 +78,7 @@
            [formControlName]="Controls.StorageClassName"
            type="text"
            autocomplete="off">
-    <mat-error *ngIf="hasError(Controls.StorageClassName, 'required')">
+    <mat-error *ngIf="form.get(Controls.StorageClassName).hasError('required')">
       Storage Class Name is <strong>required</strong>.
     </mat-error>
   </mat-form-field>

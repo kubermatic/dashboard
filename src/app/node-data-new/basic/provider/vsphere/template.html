@@ -9,10 +9,10 @@
            type="number"
            autocomplete="off"
            required>
-    <mat-error *ngIf="hasError(Controls.CPU, 'required')">
+    <mat-error *ngIf="form.get(Controls.CPU).hasError('required')">
       Number of CPUs is <strong>required</strong>.
     </mat-error>
-    <mat-error *ngIf="hasError(Controls.CPU, 'min')">
+    <mat-error *ngIf="form.get(Controls.CPU).hasError('min')">
       Number of CPUs have to be at least 1.
     </mat-error>
   </mat-form-field>
@@ -25,10 +25,10 @@
            type="number"
            autocomplete="off"
            required>
-    <mat-error *ngIf="hasError(Controls.Memory, 'required')">
+    <mat-error *ngIf="form.get(Controls.Memory).hasError('required')">
       Memory is <strong>required</strong>.
     </mat-error>
-    <mat-error *ngIf="hasError(Controls.Memory, 'min')">
+    <mat-error *ngIf="form.get(Controls.Memory).hasError('min')">
       Memory have to be at least 512.
     </mat-error>
   </mat-form-field>

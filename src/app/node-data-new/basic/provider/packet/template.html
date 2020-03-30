@@ -15,10 +15,10 @@
           {{size.name}} {{getPlanDetails(size)}}
         </mat-option>
       </mat-autocomplete>
-      <mat-error *ngIf="hasError(Controls.InstanceType, 'mustBeInList') && !hasError(Controls.InstanceType, 'required')">
+      <mat-error *ngIf="form.get(Controls.InstanceType).hasError('mustBeInList') && !form.get(Controls.InstanceType).hasError('required')">
         Input doesn't match options. Please choose from given options.
       </mat-error>
-      <mat-error *ngIf="hasError(Controls.InstanceType, 'required')">
+      <mat-error *ngIf="form.get(Controls.InstanceType).hasError('required')">
         Size is <strong>required</strong>.
       </mat-error>
     </mat-form-field>

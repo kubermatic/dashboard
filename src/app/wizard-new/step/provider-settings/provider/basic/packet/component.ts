@@ -78,10 +78,6 @@ export class PacketProviderBasicComponent extends BaseFormValidator implements O
         .subscribe(_ => this.form.reset());
   }
 
-  hasError(control: string, errorName: string): boolean {
-    return this.form.get(control).hasError(errorName);
-  }
-
   getAvailableBillingCycles(): string[] {
     return AVAILABLE_PACKET_BILLING_CYCLES;
   }

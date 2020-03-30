@@ -8,10 +8,10 @@
            type="password"
            autocomplete="off"
            required>
-    <mat-error *ngIf="hasError(controls.Token, 'required')">
+    <mat-error *ngIf="form.get(controls.Token).hasError('required')">
       Token is <strong>required</strong>.
     </mat-error>
-    <mat-error *ngIf="hasError(controls.Token, 'minlength') || hasError(controls.Token, 'maxlength')">
+    <mat-error *ngIf="form.get(controls.Token).hasError('minlength') || form.get(controls.Token).hasError('maxlength')">
       Tokens must be exactly <strong>64</strong> characters long.
     </mat-error>
   </mat-form-field>

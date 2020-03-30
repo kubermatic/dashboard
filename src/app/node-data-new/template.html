@@ -24,7 +24,7 @@
         <i class="km-icon-randomize"></i>
       </button>
       <mat-hint>Leave it empty to use server-side generation.</mat-hint>
-      <mat-error *ngIf="hasError(Controls.Name, 'pattern')">
+      <mat-error *ngIf="form.get(Controls.Name).hasError( 'pattern')">
         Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
       </mat-error>
     </mat-form-field>
@@ -38,8 +38,8 @@
              min="0"
              autocomplete="off"
              required>
-      <mat-error *ngIf="hasError(Controls.Count, 'required')">Number of replicas is required.</mat-error>
-      <mat-error *ngIf="hasError(Controls.Count, 'ipsMissing')">Not enough IPs left. Reduce number of replicas or
+      <mat-error *ngIf="form.get(Controls.Count).hasError('required')">Number of replicas is required.</mat-error>
+      <mat-error *ngIf="form.get(Controls.Count).hasError('ipsMissing')">Not enough IPs left. Reduce number of replicas or
         add more machine networks.
       </mat-error>
     </mat-form-field>
