@@ -24,7 +24,7 @@
         </div>
       </mat-select-trigger>
     </mat-select>
-    <mat-error *ngIf="hasError(Controls.Preset,'required')">
+    <mat-error *ngIf="form.get(Controls.Preset).hasError('required')">
       Preset is <strong>required</strong>.
     </mat-error>
   </mat-form-field>

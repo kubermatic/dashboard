@@ -25,10 +25,10 @@
           </mat-option>
         </mat-optgroup>
       </mat-autocomplete>
-      <mat-error *ngIf="hasError(Controls.Type, 'mustBeInList') && !hasError(Controls.Type, 'required')">
+      <mat-error *ngIf="form.get(Controls.Type).hasError('mustBeInList') && !form.get(Controls.Type).hasError('required')">
         Input doesn't match options. Please choose from given options.
       </mat-error>
-      <mat-error *ngIf="hasError(Controls.Type, 'required')">
+      <mat-error *ngIf="form.get(Controls.Type).hasError('required')">
         Node Type is <strong>required</strong>.
       </mat-error>
     </mat-form-field>

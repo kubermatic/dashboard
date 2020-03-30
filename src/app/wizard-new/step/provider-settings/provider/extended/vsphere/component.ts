@@ -65,10 +65,6 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
         .subscribe(folders => this.folders = folders);
   }
 
-  hasError(control: string, errorName: string): boolean {
-    return this.form.get(control).hasError(errorName);
-  }
-
   getNetworks(type: string): VSphereNetwork[] {
     return this._networkMap[type];
   }

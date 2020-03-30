@@ -81,10 +81,6 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
     });
   }
 
-  hasError(control: string, errorName: string): boolean {
-    return this.form.get(control).hasError(errorName);
-  }
-
   reset(): void {
     this.selectedPreset = '';
   }

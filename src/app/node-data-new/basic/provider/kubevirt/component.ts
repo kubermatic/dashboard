@@ -72,10 +72,6 @@ export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements
     this._unsubscribe.complete();
   }
 
-  hasError(control: string, errorName: string): boolean {
-    return this.form.get(control).hasError(errorName);
-  }
-
   isInWizard(): boolean {
     return this._nodeDataService.isInWizardMode();
   }

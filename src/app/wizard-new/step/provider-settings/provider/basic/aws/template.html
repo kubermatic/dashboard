@@ -15,7 +15,7 @@
          rel="noopener"
          href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
     </mat-hint>
-    <mat-error *ngIf="hasError(controls.AccessKeyID,'required')">
+    <mat-error *ngIf="form.get(controls.AccessKeyID).hasError('required')">
       Access key ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -34,7 +34,7 @@
          rel="noopener"
          href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
     </mat-hint>
-    <mat-error *ngIf="hasError(controls.SecretAccessKey, 'required')">
+    <mat-error *ngIf="form.get(controls.SecretAccessKey).hasError('required')">
       Secret access key is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -55,10 +55,10 @@
       </mat-option>
     </mat-autocomplete>
     <mat-hint>When specified, all worker nodes will be attached to this VPC. If not specified, the default VPC will be used.</mat-hint>
-    <mat-error *ngIf="hasError(controls.VPCID, 'pattern')">
+    <mat-error *ngIf="form.get(controls.VPCID).hasError('pattern')">
       The VPC ID needs to look similar to 'vpc-3a2f9851'.
     </mat-error>
-    <mat-error *ngIf="hasError(controls.VPCID,'required')">
+    <mat-error *ngIf="form.get(controls.VPCID).hasError('required')">
       The VPC ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>

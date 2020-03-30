@@ -10,7 +10,7 @@
            type="text"
            autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this security group. If not specified, a security group will be created.</mat-hint>
-    <mat-error *ngIf="hasError(controls.SecurityGroup, 'pattern')">
+    <mat-error *ngIf="form.get(controls.SecurityGroup).hasError( 'pattern')">
       The security group ID need to look similar to 'sg-a2c195ca'.
     </mat-error>
   </mat-form-field>
@@ -24,7 +24,7 @@
            type="text"
            autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this Route table. If not specified, the default Route Table will be used.</mat-hint>
-    <mat-error *ngIf="hasError(controls.RouteTableID, 'pattern')">
+    <mat-error *ngIf="form.get(controls.RouteTableID).hasError( 'pattern')">
       The route table ID needs to look similar to 'rtb-0bd18f60'.
     </mat-error>
   </mat-form-field>

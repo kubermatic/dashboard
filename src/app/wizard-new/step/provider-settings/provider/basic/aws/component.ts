@@ -86,10 +86,6 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
         .subscribe(_ => this.form.reset());
   }
 
-  hasError(control: string, errorName: string): boolean {
-    return this.form.get(control).hasError(errorName);
-  }
-
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();

@@ -85,10 +85,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     return subnet.name !== '' ? subnet.name + ' (' + subnet.id + ')' : subnet.id;
   }
 
-  hasError(control: string, errorName: string): boolean {
-    return this.form.get(control).hasError(errorName);
-  }
-
   isInWizard(): boolean {
     return this._nodeDataService.isInWizardMode();
   }

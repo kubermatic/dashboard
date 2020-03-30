@@ -29,10 +29,6 @@ export class StepBase extends BaseFormValidator {
     }
   }
 
-  hasError(control: string, errorName: string): boolean {
-    return this.control(control).hasError(errorName);
-  }
-
   // OnDestroy interface implementation
   ngOnDestroy(): void {
     this._unsubscribe.next();
