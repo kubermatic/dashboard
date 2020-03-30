@@ -3,49 +3,17 @@
       fxLayoutGap="16px">
   <div fxFlex
        class="mat-select-container">
-
     <km-combobox [required]="true"
                  [grouped]="true"
-                 [groups]=""
-                 [selected]=""
-                 [optionsGetter]="getSubnetToAZ.bind(this)"
-                 [formControlName]="Controls.SubnetID"
-                 (changed)="onSubnetChange($event)"
-                 label="Subnet ID & Availability Zone"
-                 inputLabel="Select subnet..."
-                 filterBy="id">
-      <div *option="let network">{{getSubnetOptionName(network)}}</div>
+                 [selected]="selectedType"
+                 [groups]="groups"
+                 [optionsGetter]="getTypes.bind(this)"
+                 [formControlName]="Controls.Type"
+                 (changed)="onTypeChange($event)"
+                 label="Node Type"
+                 inputLabel="Select type..."
+                 filterBy="name">
+      <div *option="let type">{{type.name}} ({{ type.cores }} vCPU, {{type.memory}} GB RAM)</div>
     </km-combobox>
-
-    <mat-form-field class="km-with-hint">
-      <mat-label>Node Type</mat-label>
-      <input matInput
-             [formControlName]="Controls.Type"
-             name="type"
-             placeholder="Select type..."
-             [matAutocomplete]="autoTypes">
-      <mat-autocomplete #autoTypes="matAutocomplete">
-        <mat-optgroup *ngIf="types.standard.length > 0"
-                      label="Standard Droplets">
-          <mat-option *ngFor="let type of filteredTypes.standard"
-                      [value]="type.name">
-            {{type.name}} ({{ type.cores }} vCPU, {{type.memory}} GB RAM)
-          </mat-option>
-        </mat-optgroup>
-        <mat-optgroup *ngIf="types.dedicated.length > 0"
-                      label="Dedicated vCPU Instances">
-          <mat-option *ngFor="let type of filteredTypes.dedicated"
-                      [value]="type.name">
-            {{type.name}} ({{ type.cores }} vCPU, {{type.memory}} GB RAM)
-          </mat-option>
-        </mat-optgroup>
-      </mat-autocomplete>
-      <mat-error *ngIf="form.get(Controls.Type).hasError('mustBeInList') && !form.get(Controls.Type).hasError('required')">
-        Input doesn't match options. Please choose from given options.
-      </mat-error>
-      <mat-error *ngIf="form.get(Controls.Type).hasError('required')">
-        Node Type is <strong>required</strong>.
-      </mat-error>
-    </mat-form-field>
   </div>
 </form>

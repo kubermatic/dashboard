@@ -3,25 +3,18 @@
       fxLayoutGap="16px">
   <div fxFlex
        class="mat-select-container">
-    <mat-form-field>
-      <mat-label>Plan</mat-label>
-      <input matInput
-             [formControlName]="Controls.InstanceType"
-             name="instanceType"
-             placeholder="Select plan..."
-             [matAutocomplete]="autoSizes">
-      <mat-autocomplete #autoSizes="matAutocomplete">
-        <mat-option *ngFor="let size of filteredSizes"
-                    [value]="size.name">
-          {{size.name}} {{getPlanDetails(size)}}
-        </mat-option>
-      </mat-autocomplete>
-      <mat-error *ngIf="form.get(Controls.InstanceType).hasError('mustBeInList') && !form.get(Controls.InstanceType).hasError('required')">
-        Input doesn't match options. Please choose from given options.
-      </mat-error>
-      <mat-error *ngIf="form.get(Controls.InstanceType).hasError('required')">
-        Size is <strong>required</strong>.
-      </mat-error>
-    </mat-form-field>
+    <km-combobox [required]="true"
+                 [grouped]="false"
+                 [selected]="selectedSize"
+                 [options]="sizes"
+                 [formControlName]="Controls.InstanceType"
+                 (changed)="onSizeChange($event)"
+                 label="Plan"
+                 inputLabel="Select plan..."
+                 filterBy="name">
+      <div *option="let size">
+        {{size.name}} {{getPlanDetails(size)}}
+      </div>
+    </km-combobox>
   </div>
 </form>
