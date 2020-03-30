@@ -1,7 +1,6 @@
 <mat-list-item class="km-project-selector"
                (click)="openDropdown(select)">
-  <div [ngClass]="showSidenav ? 'km-projects-container' : 'km-projects-container km-collapse-sidenav'">
-    <mat-label *ngIf="showSidenav">Project</mat-label>
+  <div class="km-projects-container">
     <mat-select #select
                 placeholder="None"
                 class="km-projects-select"

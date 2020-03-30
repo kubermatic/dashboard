@@ -3,8 +3,6 @@
      [ngClass]="!showSidenav ? 'km-collapse-sidenav' : ''">
   <mat-nav-list>
     <div class="km-sidenav-top">
-      <km-project-selector [showSidenav]="showSidenav"></km-project-selector>
-
       <div [matTooltip]="getTooltip('clusters')">
         <mat-list-item [ngClass]="getMenuItemClass('clusters')">
           <a id="km-nav-item-clusters"

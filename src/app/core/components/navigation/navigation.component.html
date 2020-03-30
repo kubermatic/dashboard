@@ -10,6 +10,7 @@
     </button>
     <a class="km-header-logo"
        routerLink="projects"></a>
+    <km-project-selector [showSidenav]="showSidenav"></km-project-selector>
     <div fxFlex></div>
     <km-notification-panel *ngIf="isAuthenticated()"></km-notification-panel>
     <div *ngIf="isAuthenticated()"
