@@ -6,11 +6,9 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {CookieService} from 'ngx-cookie-service';
 
 import {Auth} from '../../core/services';
-import {SettingsService} from '../../core/services/settings/settings.service';
 import {SharedModule} from '../../shared/shared.module';
 import {RouterStub} from '../../testing/router-stubs';
 import {AuthMockService} from '../../testing/services/auth-mock.service';
-import {SettingsMockService} from '../../testing/services/settings-mock.service';
 
 import {FrontpageComponent} from './frontpage.component';
 
@@ -39,7 +37,6 @@ describe('FrontpageComponent', () => {
           providers: [
             {provide: Router, useClass: RouterStub},
             {provide: Auth, useClass: AuthMockService},
-            {provide: SettingsService, useClass: SettingsMockService},
             CookieService,
           ],
         })

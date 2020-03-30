@@ -46,6 +46,7 @@ export class NavigationComponent implements OnInit {
 
   logout(): void {
     this._auth.logout();
+    this._settingsService.refreshCustomLinks();
     this._router.navigate(['']);
     delete this.currentUser;
   }
