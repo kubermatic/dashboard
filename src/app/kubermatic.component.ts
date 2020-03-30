@@ -14,6 +14,7 @@ import {AdminSettings} from './shared/entity/AdminSettings';
 import {Theme} from './shared/entity/MemberEntity';
 import {VersionInfo} from './shared/entity/VersionInfo';
 import {Config} from './shared/model/Config';
+import {CustomLink} from './shared/utils/custom-link-utils/custom-link';
 
 const PAGES_WIITHOUT_MENU = [
   '/projects',
@@ -33,6 +34,7 @@ export class KubermaticComponent implements OnInit, OnDestroy {
   @ViewChild('sidenav') sidenav: MatSidenav;
   config: Config = {};
   settings: AdminSettings;
+  customLinks: CustomLink[] = [];
   version: VersionInfo;
   showCollapseIcon = false;
   private _theme = Theme.Light;
@@ -58,6 +60,9 @@ export class KubermaticComponent implements OnInit, OnDestroy {
 
     this._applyTheme(this._theme);
     this._registerCustomCSS();
+
+    this._settingsService.customLinks.pipe(takeUntil(this._unsubscribe))
+        .subscribe(customLinks => this.customLinks = customLinks);
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(this.settings, settings)) {

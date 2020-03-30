@@ -20,10 +20,11 @@
           <kubermatic-navigation [showCollapseIcon]="showCollapseIcon"></kubermatic-navigation>
           <router-outlet></router-outlet>
         </div>
-        <kubermatic-footer *ngIf="!!settings"
-                           [version]="version"
-                           [settings]="settings"
-                           [authenticated]="auth.authenticated()"></kubermatic-footer>
+        <km-footer *ngIf="!!settings"
+                   [version]="version"
+                   [settings]="settings"
+                   [customLinks]="customLinks"
+                   [authenticated]="auth.authenticated()"></km-footer>
       </div>
     </mat-sidenav-container>
   </div>
