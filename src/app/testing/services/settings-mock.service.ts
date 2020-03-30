@@ -42,4 +42,6 @@ export class SettingsMockService {
   get defaultAdminSettings(): AdminSettings {
     return DEFAULT_ADMIN_SETTINGS_MOCK;
   }
+
+  refreshCustomLinks(): void {}
 }
