@@ -40,7 +40,7 @@
                    formControlName="email"
                    type="email"
                    autocomplete="off">
-            <mat-error *ngIf="form.controls.email.hasError('required')">
+            <mat-error *ngIf="form.get(controls.Email).hasError('required')">
               User Email is <strong>required</strong>.
             </mat-error>
           </mat-form-field>
@@ -52,7 +52,7 @@
                    matInput
                    formControlName="group"
                    autocomplete="off">
-            <mat-error *ngIf="form.controls.group.hasError('required')">
+            <mat-error *ngIf="form.get(controls.Group).hasError('required')">
               Group is <strong>required</strong>.
             </mat-error>
           </mat-form-field>
@@ -68,7 +68,7 @@
                 {{role.name}}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="form.controls.role.hasError('required')">
+            <mat-error *ngIf="form.get(controls.Role).hasError('required')">
               Role is <strong>required</strong>.
             </mat-error>
           </mat-form-field>
@@ -83,7 +83,7 @@
                    formControlName="email"
                    type="email"
                    autocomplete="off">
-            <mat-error *ngIf="form.controls.email.hasError('required')">
+            <mat-error *ngIf="form.get(controls.Email).hasError('required')">
               User Email is <strong>required</strong>.
             </mat-error>
           </mat-form-field>
@@ -95,7 +95,7 @@
                    matInput
                    formControlName="group"
                    autocomplete="off">
-            <mat-error *ngIf="form.controls.group.hasError('required')">
+            <mat-error *ngIf="form.get(controls.Group).hasError('required')">
               Group is <strong>required</strong>.
             </mat-error>
           </mat-form-field>
@@ -111,7 +111,7 @@
                 {{role.name}}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="form.controls.role.hasError('required')">
+            <mat-error *ngIf="form.get(controls.Role).hasError('required')">
               Role is <strong>required</strong>.
             </mat-error>
           </mat-form-field>
@@ -127,7 +127,7 @@
                 {{namespace}}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="form.controls.namespace.hasError('required')">
+            <mat-error *ngIf="form.get(controls.Namespace).hasError('required')">
               Namespace is <strong>required</strong>.
             </mat-error>
           </mat-form-field>
