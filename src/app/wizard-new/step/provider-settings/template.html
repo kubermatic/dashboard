@@ -4,9 +4,11 @@
        fxLayout.md="column"
        fxLayout.sm="column"
        fxLayout.xs="column"
-       fxLayoutGap="16px">
+       fxLayoutGap="30px">
     <div fxFlex="50"
-         fxLayout="column">
+         fxLayout="column"
+         fxLayoutGap="16px">
+      <mat-card-title>Basic</mat-card-title>
       <kubermatic-wizard-presets [formControl]="form.get(Control.Preset)"></kubermatic-wizard-presets>
       <kubermatic-wizard-provider-basic [provider]="provider"
                                         [formControl]="form.get(Control.ProviderBasic)"></kubermatic-wizard-provider-basic>

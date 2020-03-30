@@ -3,7 +3,6 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {takeUntil} from 'rxjs/operators';
 
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
-import {DigitaloceanSizes} from '../../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
@@ -26,10 +25,6 @@ enum Controls {
   ]
 })
 export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  sizes: DigitaloceanSizes = {optimized: [], standard: []};
-  filteredSizes: DigitaloceanSizes = {optimized: [], standard: []};
-  hideOptional = false;
-
   readonly Controls = Controls;
 
   constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {

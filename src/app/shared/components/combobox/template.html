@@ -32,6 +32,24 @@
           <ng-container *ngTemplateOutlet="optionTemplate; context: {$implicit: option}"></ng-container>
         </mat-option>
       </ng-template>
+
+      <mat-select-trigger fxFlex
+                          fxLayout="row">
+        <div fxFlex
+             fxLayoutAlign="start">
+          {{ selected }}
+        </div>
+
+        <div fxFlex
+             fxLayoutAlign="end">
+          <button *ngIf="selected"
+                  (click)="reset(); $event.stopPropagation()"
+                  mat-icon-button
+                  aria-label="Clear">
+            <mat-icon inline="true">close</mat-icon>
+          </button>
+        </div>
+      </mat-select-trigger>
     </mat-select>
     <mat-error *ngIf="required && form.get(controls.Select).hasError('required')">
       {{label}} is
