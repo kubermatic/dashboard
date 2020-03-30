@@ -1,3 +1,6 @@
+export const KIND_GROUP = 'Group';
+export const KIND_USER = 'User';
+
 export class ClusterRoleName {
   name: string;
 }
@@ -40,7 +43,8 @@ export class Binding {
 }
 
 export class CreateBinding {
-  userEmail: string;
+  userEmail?: string;
+  group?: string;
 }
 
 export class Rules {
@@ -60,10 +64,12 @@ export class Subjects {
 export class SimpleClusterBinding {
   name: string;
   role: string;
+  kind: string;
 }
 
 export class SimpleBinding {
   name: string;
   role: string;
   namespace: string;
+  kind: string;
 }

@@ -3,4 +3,8 @@
 mat-button-toggle-group {
   border-radius: $border-radius;
   margin-bottom: 3.75 * $baseline-grid;
+
+  &.km-toggle-subject-type {
+    margin-left: 3.75 * $baseline-grid;
+  }
 }
