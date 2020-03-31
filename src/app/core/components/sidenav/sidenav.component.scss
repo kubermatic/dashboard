@@ -1,86 +1,46 @@
 @import "../../../../assets/css/variables";
 
 .km-sidenav {
-  width: $sidenav-width;
   height: 100%;
+  padding-top: $content-padding;
+  width: $sidenav-width;
 
-  .mat-nav-list {
-    padding: 0 !important;
-
-    .mat-list-item,
-    a {
-      height: $toolbar-height;
-    }
+  .menu-item {
+    height: $sidenav-item-height !important;
+    margin: 0 0 (1.5 * $sidenav-item-margin) $sidenav-item-margin;
 
     a {
-      font-size: $font-size-subhead-lg;
-      padding: (1.25 * $baseline-grid) (3.75 * $baseline-grid) !important;
+      border-radius: $border-radius;
+      font-size: $font-size-subhead;
+      height: $sidenav-item-height;
+      padding: $sidenav-item-margin !important;
       display: flex;
-      align-items: center;
+      text-decoration: none;
 
       i {
         width: 3 * $baseline-grid;
         height: 3 * $baseline-grid;
-        margin-right: 2 * $baseline-grid;
-      }
-    }
-
-    .km-disabled {
-      cursor: default;
-      opacity: 0.4;
-      pointer-events: none;
-    }
-  }
-
-  .km-nav-custom-container {
-    .mat-list-item a {
-      font-size: $font-size-subhead;
-
-      i {
-        background-color: transparent;
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        background-repeat: no-repeat;
-        background-size: contain;
-        cursor: pointer;
-      }
-
-      &:hover i {
-        -webkit-filter: brightness(115%);
-      }
-    }
-
-    .km-custom-list-item {
-      height: 6.25 * $baseline-grid;
-      font-size: $font-size-subhead;
-
-      a {
-        height: 6.25 * $baseline-grid;
+        margin-right: 20px;
       }
     }
   }
 
-  .km-sidenav-bottom {
-    font-size: $font-size-subhead;
-
-    .mat-list-item a i {
-      width: 2 * $baseline-grid;
-      height: 2 * $baseline-grid;
-    }
+  .mat-divider {
+    margin: $sidenav-item-margin 0 $sidenav-item-margin $sidenav-item-margin;
   }
 
-  &.km-collapse-sidenav {
-    width: .3 * $sidenav-width;
-    overflow-x: hidden;
+  .km-disabled {
+    cursor: default;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+}
 
-    .mat-nav-list a {
-      place-content: center !important;
-      padding: 0 !important;
+.km-collapse-sidenav {
+  width: $sidenav-width-collapsed;
+  overflow-x: hidden;
 
-      i {
-        margin-right: 0;
-      }
-    }
+  .menu-item a i {
+    margin-right: 0;
   }
 }

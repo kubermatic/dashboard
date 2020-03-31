@@ -836,45 +836,34 @@
     }
   }
 
-  .km-sidenav-bottom {
-    border-top: map-get($colors, sidenav-divider) solid $sidenav-border-width;
-  }
-
   .km-sidenav {
-    background-color: map-get($colors, sidenav-background);
+    background-color: $background;
 
     * {
-      color: map-get($colors, sidenav-text);
+      color: $text;
     }
 
-    i {
-      background-color: map-get($colors, sidenav-text);
+    .mat-divider {
+      border-top-color: map-get($colors, sidenav-divider);
     }
 
-    .mat-list-item a {
+    .menu-item a {
       &:hover {
-        color: map-get($colors, sidenav-text-hover);
         background-color: map-get($colors, sidenav-background-hover);
-
-        i {
-          background-color: map-get($colors, sidenav-text-hover);
-        }
       }
 
       &.active {
-        color: map-get($colors, sidenav-text-hover);
         background-color: map-get($colors, sidenav-background-active);
 
         i {
-          background-color: map-get($colors, sidenav-text-hover);
+          background-color: map-get($colors, primary-hover);
+        }
+
+        span {
+          color: map-get($colors, primary-hover);
         }
       }
     }
-  }
-
-  .km-nav-custom-container {
-    background-color: map-get($colors, sidenav-background-custom);
-    border-top: map-get($colors, sidenav-divider) solid $sidenav-border-width;
   }
 
   .km-card-expansion-panel {
@@ -1374,7 +1363,7 @@
 
   .km-cluster-panel-container {
     color: $text;
-    height: $toolbar-height + $sidenav-border-width;
+    height: $toolbar-height;
     margin-bottom: 2.5 * $baseline-grid;
 
     .km-cluster-panel-icon {

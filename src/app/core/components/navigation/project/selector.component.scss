@@ -1,12 +1,7 @@
 @import '../../../../../assets/css/variables';
 
-.mat-list-item,
-a {
-  height: $toolbar-height;
-
-  &.km-project-selector {
-    height: $toolbar-height - $baseline-grid / 4;
-  }
+.km-project-selector {
+  height: $toolbar-height - $baseline-grid / 4;
 }
 
 ::ng-deep.km-projects-container {
