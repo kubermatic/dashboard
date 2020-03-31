@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 import {from, Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
+import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {Viewable} from '../../../shared/model/Config';
 import {UserService} from '../user/user.service';
 import {Auth} from './auth.service';
@@ -35,10 +36,16 @@ export class AuthzGuard implements CanActivate {
   canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     const projectID = this._getProjectID(state.url);
     const view = this._getView(state.url);
+    let currentUser: MemberEntity;
+    this._userService.loggedInUser.subscribe(user => currentUser = user);
 
     return this._userService.currentUserGroup(projectID)
         .pipe(map(userGroup => this._userService.userGroupConfig(userGroup)))
         .pipe(map(groupConfig => {
+          if (!!currentUser && !!currentUser.isAdmin) {
+            return true;
+          }
+
           if (!this._hasViewPermissions(groupConfig[view])) {
             this._router.navigate([View.Projects]);
             return false;

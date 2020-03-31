@@ -13,22 +13,24 @@ import {ParamsService, PathParam} from '../params/params.service';
 export class ProjectService {
   onProjectChange = new EventEmitter<ProjectEntity>();
   onProjectsUpdate = new Subject<void>();
-
+  onProjectDisplayChange = new Subject<void>();
   private readonly _restRoot: string = environment.restRoot;
+  private _displayAll = false;
   private _projects$: Observable<ProjectEntity[]>;
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
+  private _prevDisplayAll = false;
 
   constructor(
       private _router: Router, private readonly _params: ParamsService, private readonly _appConfig: AppConfigService,
       private readonly _http: HttpClient) {}
 
   get projects(): Observable<ProjectEntity[]> {
-    if (!this._projects$) {
+    if (!this._projects$ || this._prevDisplayAll !== this.displayAll) {
+      this._prevDisplayAll = this.displayAll;
       this._projects$ = merge(this.onProjectsUpdate, this._refreshTimer$)
-                            .pipe(switchMapTo(this._getProjects()))
+                            .pipe(switchMapTo(this._getProjects(this.displayAll)))
                             .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
-
     return this._projects$;
   }
 
@@ -58,12 +60,21 @@ export class ProjectService {
     return this._router.navigate(['/projects']);
   }
 
+  setDisplayAll(displayAll: boolean): void {
+    this._displayAll = displayAll;
+    this.onProjectDisplayChange.next();
+  }
+
+  get displayAll(): boolean {
+    return this._displayAll;
+  }
+
   private get _selectedProjectID(): string {
     return this._params.get(PathParam.ProjectID);
   }
 
-  private _getProjects(): Observable<ProjectEntity[]> {
-    const url = `${this._restRoot}/projects`;
+  private _getProjects(displayAll: boolean): Observable<ProjectEntity[]> {
+    const url = `${this._restRoot}/projects?displayAll=${displayAll}`;
     return this._http.get<ProjectEntity[]>(url).pipe(catchError(() => of<ProjectEntity[]>()));
   }
 }

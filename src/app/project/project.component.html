@@ -1,6 +1,10 @@
 <div fxLayout>
   <div fxFlex
        class="km-project-top-bar">
+    <mat-slide-toggle labelPosition="before"
+                      (change)="projectSliderChanged($event)"
+                      [checked]="isProjectSliderChecked()"
+                      *ngIf="isAdmin()">Show all projects</mat-slide-toggle>
     <mat-button-toggle-group class="km-project-view-switch"
                              group="projectsView"
                              (change)="changeView()">
@@ -78,7 +82,13 @@
               *matHeaderCellDef
               class="km-header-cell">Role</th>
           <td mat-cell
-              *matCellDef="let element">{{role[element.id]}}</td>
+              *matCellDef="let element">
+            <span *ngIf="!!role[element.id]">{{role[element.id]}}</span>
+            <span *ngIf="!role[element.id]"
+                  class="km-projects-external">
+              <p>External Project</p>
+            </span>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="clusters">
@@ -86,7 +96,7 @@
               *matHeaderCellDef
               class="km-header-cell">Clusters</th>
           <td mat-cell
-              *matCellDef="let element">{{clusterCount[element.id]}}</td>
+              *matCellDef="let element">{{element.clustersNumber ? element.clustersNumber : 0}}</td>
         </ng-container>
 
         <ng-container matColumnDef="owners">
@@ -212,7 +222,7 @@
       <mat-divider></mat-divider>
       <mat-card-content>
         <div class="km-project-cards-content-row">
-          <span><i class="km-icon-mask km-icon-cluster"></i> {{clusterCount[project.id]}}</span>
+          <span><i class="km-icon-mask km-icon-cluster"></i> {{project.clustersNumber ? project.clustersNumber : 0}}</span>
           <span [matTooltip]="getLabelsTooltip(project)">
             <i class="km-icon-mask km-icon-labels"></i>
             {{getLabelsLength(project)}}
@@ -220,7 +230,7 @@
         </div>
 
         <div class="km-project-cards-content-row">
-          <span>
+          <span class="km-projects-less-space">
             <i class="km-icon-mask km-icon-owner"></i>
             <span *ngIf="project.owners.length === 1"
                   [matTooltip]="getOwners(project.owners)">{{getName(project.owners[0].name)}}</span>
@@ -228,7 +238,14 @@
                                      [owners]="project.owners"
                                      [limit]="2"></km-short-name-in-circle>
           </span>
-          <span><i class="km-icon-mask km-icon-role"></i>{{role[project.id]}}</span>
+          <span *ngIf="!!role[project.id]">
+            <i class="km-icon-mask km-icon-role"></i>
+            {{role[project.id]}}
+          </span>
+          <span *ngIf="!role[project.id]"
+                class="km-projects-external km-projects-external-right">
+            <p>External Project</p>
+          </span>
         </div>
       </mat-card-content>
     </mat-card>

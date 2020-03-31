@@ -6,7 +6,7 @@ import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
-import {UserSettings} from '../../../shared/entity/MemberEntity';
+import {MemberEntity, UserSettings} from '../../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {GroupConfig} from '../../../shared/model/Config';
 import {CustomLink, CustomLinkLocation, filterCustomLinks} from '../../../shared/utils/custom-link-utils/custom-link';
@@ -23,6 +23,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   environment: any = environment;
   customLinks: CustomLink[] = [];
   settings: UserSettings;
+  currentUser: MemberEntity;
   showSidenav = true;
   private _selectedProject = {} as ProjectEntity;
   private _currentGroupConfig: GroupConfig;
@@ -33,6 +34,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
       private readonly _userService: UserService, private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
+    this._userService.loggedInUser.subscribe(user => this.currentUser = user);
+
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       const filtered = filterCustomLinks(settings.customLinks, CustomLinkLocation.Default);
       if (!_.isEqual(this.customLinks, filtered)) {
@@ -46,6 +49,13 @@ export class SidenavComponent implements OnInit, OnDestroy {
     });
 
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
+        .pipe(switchMap(project => {
+          this._selectedProject = project;
+          return this._userService.currentUserGroup(project.id);
+        }))
+        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
+
+    this._projectService.onProjectChange.pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(project => {
           this._selectedProject = project;
           return this._userService.currentUserGroup(project.id);
@@ -123,6 +133,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   private _hasViewPermissions(viewName): boolean {
-    return !this._currentGroupConfig || this._currentGroupConfig[viewName].view;
+    return (!this._currentGroupConfig || this._currentGroupConfig[viewName].view) &&
+        (!!this.currentUser && !!this.currentUser.isAdmin);
   }
 }
