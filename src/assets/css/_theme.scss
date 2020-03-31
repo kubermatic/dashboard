@@ -778,8 +778,14 @@
     box-shadow: map-get($colors, shadow);
   }
 
-  .km-footer * {
-    color: map-get($colors, footer-text);
+  .km-footer {
+    * {
+      color: map-get($colors, footer-text);
+    }
+
+    i {
+      filter: grayscale(1) brightness(0) invert(.75);
+    }
   }
 
   .km-terms * {
@@ -839,7 +845,7 @@
   .km-sidenav {
     background-color: $background;
 
-    * {
+    span {
       color: $text;
     }
 

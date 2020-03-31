@@ -21,6 +21,11 @@
         width: 3 * $baseline-grid;
         height: 3 * $baseline-grid;
         margin-right: 20px;
+
+        &.km-icon-arrow-left {
+          width: 2 * $baseline-grid;
+          height: 2 * $baseline-grid;
+        }
       }
     }
   }

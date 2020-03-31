@@ -13,7 +13,7 @@ $colors-dark: (
   indicator-orange: #f7b500,
   indicator-red: #eb5757,
   footer-text: #fff,
-  sidenav-background-hover: #3c3d3e,
+  sidenav-background-hover: #202021,
   sidenav-background-active: rgba(#4dc3ea, 0.18),
   sidenav-divider: #373738,
   project-selector-hover: #313132,
@@ -57,6 +57,7 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
   .km-addon-logo,
   .km-icon-randomize,
   .km-cluster-spec-type mat-button-toggle .km-icon-openshift,
+  .km-sidenav a:not(.active) i,
   footer i,
   *[class*="km-os-image-"] {
     filter: invert(.25) brightness(100) contrast(100);

@@ -48,12 +48,13 @@
       <span *ngIf="showSidenav">Service Accounts</span></a>
   </div>
 
-  <mat-divider></mat-divider>
+  <mat-divider *ngIf="isCustomLinkPanelVisible()"></mat-divider>
 
   <div *ngIf="isCustomLinkPanelVisible()">
     <div *ngFor="let link of customLinks"
          class="menu-item">
       <a [href]="link.url"
+         fxLayoutAlign=" center"
          target="_blank"
          rel="noopener">
         <i [ngStyle]="getCustomLinkIconStyle(link)"></i>
@@ -67,7 +68,7 @@
   <div [matTooltip]="getTooltip('projects')"
        class="menu-item">
     <a id="km-nav-item-projects"
-       fxLayoutAlign="center center"
+       fxLayoutAlign=" center"
        routerLink="/projects">
       <i class="km-icon-arrow-left"></i>
       <span *ngIf="showSidenav">back to projects</span>
