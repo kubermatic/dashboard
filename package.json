@@ -102,7 +102,7 @@
     "jest-preset-angular": "8.1.2",
     "js-beautify": "1.10.3",
     "license-checker": "25.0.1",
-    "lint-staged": "10.1.0",
+    "lint-staged": "10.1.1",
     "ng2-mock-component": "0.2.0",
     "node-gyp": "6.1.0",
     "request": "2.88.2",
