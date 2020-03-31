@@ -836,10 +836,6 @@
     }
   }
 
-  .km-project-selector {
-    border-bottom: map-get($colors, sidenav-divider-top) solid $sidenav-border-width;
-  }
-
   .km-sidenav-bottom {
     border-top: map-get($colors, sidenav-divider) solid $sidenav-border-width;
   }

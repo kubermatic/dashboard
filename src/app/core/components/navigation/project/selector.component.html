@@ -3,7 +3,6 @@
   <div class="km-projects-container">
     <mat-select #select
                 placeholder="None"
-                class="km-projects-select"
                 (selectionChange)="onSelectionChange($event)"
                 [ngModel]="selectedProject"
                 [compareWith]="areProjectsEqual"
