@@ -1127,6 +1127,10 @@
     }
   }
 
+  .km-projects-container:hover {
+    background-color: map-get($colors, project-selector-hover);
+  }
+
   .km-cluster-spec-type {
     margin-right: 2.5 * $baseline-grid;
     min-width: $type-toggle-width * 2 + $baseline-grid;

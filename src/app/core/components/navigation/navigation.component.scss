@@ -2,7 +2,6 @@
 
 $logo-width: 160px;
 $logo-margin-top: 13px;
-$logo-margin-left: $logo-margin-top * 2;
 
 header {
   height: $toolbar-height;
@@ -22,10 +21,10 @@ header {
 
   .km-header-logo {
     display: block;
-    width: $logo-width + $logo-margin-left;
+    width: $logo-width + $logo-margin-top;
     height: $toolbar-height;
     background-size: $logo-width;
-    background-position: $logo-margin-left $logo-margin-top;
+    background-position: $logo-margin-top $logo-margin-top;
   }
 
   .km-user-panel {

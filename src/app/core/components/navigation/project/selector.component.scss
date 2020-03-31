@@ -11,8 +11,10 @@ a {
 
 ::ng-deep.km-projects-container {
   position: relative;
-  padding: 0 (3.75 * $baseline-grid);
+  margin: 0 20px;
+  padding: 10px 15px;
   width: fit-content !important;
+  border-radius: $border-radius;
 
   .mat-select-value {
     width: fit-content;
@@ -26,8 +28,8 @@ a {
 
   .km-projects-icon {
     position: absolute;
-    right: 4 * $baseline-grid;
-    top: 5px;
+    right: 16px;
+    top: 14px;
     pointer-events: none;
   }
 
