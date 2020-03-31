@@ -16,8 +16,8 @@ import {AppConfigMockService} from '../../../../testing/services/app-config-mock
 import {ProjectMockService} from '../../../../testing/services/project-mock.service';
 import {UserMockService} from '../../../../testing/services/user-mock.service';
 import {ApiService, ProjectService, UserService} from '../../../services';
+import {NavigationComponent} from '../navigation.component';
 
-import {SidenavComponent} from '../sidenav.component';
 import {ProjectSelectorComponent} from './selector.component';
 
 const modules: any[] = [
@@ -39,7 +39,7 @@ describe('SidenavComponent', () => {
             ...modules,
           ],
           declarations: [
-            SidenavComponent,
+            NavigationComponent,
             ProjectSelectorComponent,
             MockComponent({
               selector: 'a',
