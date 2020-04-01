@@ -1,93 +1,77 @@
 <div class="km-sidenav"
      fxLayout="column"
      [ngClass]="!showSidenav ? 'km-collapse-sidenav' : ''">
-  <mat-nav-list>
-    <div class="km-sidenav-top">
-      <km-project-selector [showSidenav]="showSidenav"></km-project-selector>
+  <div [matTooltip]="getTooltip('clusters')"
+       [ngClass]="getMenuItemClass('clusters')"
+       class="menu-item">
+    <a id="km-nav-item-clusters"
+       fxLayoutAlign=" center"
+       [routerLink]="getRouterLink('clusters')"
+       [ngClass]="getLinkClass('clusters')">
+      <i class="km-icon-cluster"></i>
+      <span *ngIf="showSidenav">Clusters</span>
+    </a>
+  </div>
 
-      <div [matTooltip]="getTooltip('clusters')">
-        <mat-list-item [ngClass]="getMenuItemClass('clusters')">
-          <a id="km-nav-item-clusters"
-             mat-line
-             fxLayoutAlign=" center"
-             [routerLink]="getRouterLink('clusters')"
-             [ngClass]="getLinkClass('clusters')">
-            <i class="km-icon-cluster"></i>
-            <span *ngIf="showSidenav"> Clusters</span>
-          </a>
-        </mat-list-item>
-      </div>
+  <div [matTooltip]="getTooltip('sshKeys')"
+       [ngClass]="getMenuItemClass('sshKeys')"
+       class="menu-item">
+    <a id="km-nav-item-sshkeys"
+       fxLayoutAlign=" center"
+       [routerLink]="getRouterLink('sshkeys')"
+       [ngClass]="getLinkClass('sshkeys')">
+      <i class="km-icon-key"></i>
+      <span *ngIf="showSidenav">SSH Keys</span>
+    </a>
+  </div>
 
-      <div [matTooltip]="getTooltip('sshKeys')">
-        <mat-list-item [ngClass]="getMenuItemClass('sshKeys')">
-          <a id="km-nav-item-sshkeys"
-             mat-line
-             fxLayoutAlign=" center"
-             [routerLink]="getRouterLink('sshkeys')"
-             [ngClass]="getLinkClass('sshkeys')">
-            <i class="km-icon-key"></i>
-            <span *ngIf="showSidenav"> SSH Keys</span>
-          </a>
-        </mat-list-item>
-      </div>
+  <div [matTooltip]="getTooltip('members')"
+       [ngClass]="getMenuItemClass('members')"
+       class="menu-item">
+    <a id="km-nav-item-members"
+       fxLayoutAlign=" center"
+       [routerLink]="getRouterLink('members')"
+       [ngClass]="getLinkClass('members')">
+      <i class="km-icon-member"></i>
+      <span *ngIf="showSidenav">Members</span>
+    </a>
+  </div>
 
-      <div [matTooltip]="getTooltip('members')">
-        <mat-list-item [ngClass]="getMenuItemClass('members')">
-          <a id="km-nav-item-members"
-             mat-line
-             fxLayoutAlign=" center"
-             [routerLink]="getRouterLink('members')"
-             [ngClass]="getLinkClass('members')">
-            <i class="km-icon-member"></i>
-            <span *ngIf="showSidenav"> Members</span>
-          </a>
-        </mat-list-item>
-      </div>
+  <div [matTooltip]="getTooltip('serviceaccounts')"
+       [ngClass]="getMenuItemClass('serviceaccounts')"
+       class="menu-item">
+    <a id="km-nav-item-service-accounts"
+       fxLayoutAlign=" center"
+       [routerLink]="getRouterLink('serviceaccounts')"
+       [ngClass]="getLinkClass('serviceaccounts')">
+      <i class="km-icon-serviceaccount"></i>
+      <span *ngIf="showSidenav">Service Accounts</span></a>
+  </div>
 
-      <div [matTooltip]="getTooltip('serviceaccounts')">
-        <mat-list-item [ngClass]="getMenuItemClass('serviceaccounts')">
-          <a id="km-nav-item-service-accounts"
-             mat-line
-             fxLayoutAlign=" center"
-             [routerLink]="getRouterLink('serviceaccounts')"
-             [ngClass]="getLinkClass('serviceaccounts')">
-            <i class="km-icon-serviceaccount"></i>
-            <span *ngIf="showSidenav"> Service Accounts</span></a>
-        </mat-list-item>
-      </div>
+  <mat-divider *ngIf="isCustomLinkPanelVisible()"></mat-divider>
 
-    </div>
-  </mat-nav-list>
-
-  <mat-nav-list *ngIf="isCustomLinkPanelVisible()"
-                class="km-nav-custom-container"
-                fxFlex>
-    <mat-list-item *ngFor="let link of customLinks"
-                   class="km-custom-list-item">
+  <div *ngIf="isCustomLinkPanelVisible()">
+    <div *ngFor="let link of customLinks"
+         class="menu-item">
       <a [href]="link.url"
-         mat-line
+         fxLayoutAlign=" center"
          target="_blank"
          rel="noopener">
         <i [ngStyle]="getCustomLinkIconStyle(link)"></i>
         <span *ngIf="showSidenav">{{link.label}}</span>
       </a>
-    </mat-list-item>
-  </mat-nav-list>
+    </div>
+  </div>
 
-  <div *ngIf="!isCustomLinkPanelVisible()"
-       fxFlex></div>
+  <div fxFlex></div>
 
-  <div class="km-sidenav-bottom">
-    <mat-nav-list>
-      <mat-list-item [matTooltip]="getTooltip('projects')">
-        <a id="km-nav-item-projects"
-           mat-line
-           fxLayoutAlign="center center"
-           routerLink="/projects">
-          <i class="km-icon-arrow-left"></i>
-          <span *ngIf="showSidenav">back to projects</span>
-        </a>
-      </mat-list-item>
-    </mat-nav-list>
+  <div [matTooltip]="getTooltip('projects')"
+       class="menu-item">
+    <a id="km-nav-item-projects"
+       fxLayoutAlign=" center"
+       routerLink="/projects">
+      <i class="km-icon-arrow-left"></i>
+      <span *ngIf="showSidenav">back to projects</span>
+    </a>
   </div>
 </div>

@@ -1,10 +1,17 @@
 @import "../assets/css/variables";
 
-kubermatic-root,
-mat-sidenav-container {
+kubermatic-root {
   margin: 0;
   width: 100%;
   top: 0;
+  bottom: 0;
+  position: absolute;
+}
+
+mat-sidenav-container {
+  top: $toolbar-height;
+  margin: 0;
+  width: 100%;
   bottom: 0;
   position: absolute;
 }

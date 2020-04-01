@@ -4,13 +4,16 @@
        fxLayoutAlign=" center">
     <button mat-icon-button
             fxLayoutAlign="center center"
-            *ngIf="showCollapseIcon"
+            *ngIf="showMenuSwitchAndProjectSelector"
             (click)="collapseSidenav()">
       <i class="km-icon-mask km-icon-collapse-menu"></i>
     </button>
     <a class="km-header-logo"
        routerLink="projects"></a>
-    <div fxFlex></div>
+    <km-project-selector *ngIf="isAuthenticated() && showMenuSwitchAndProjectSelector"
+                         [showSidenav]="showSidenav"
+                         fxFlex></km-project-selector>
+
     <km-notification-panel *ngIf="isAuthenticated()"></km-notification-panel>
     <div *ngIf="isAuthenticated()"
          class="km-user-panel">

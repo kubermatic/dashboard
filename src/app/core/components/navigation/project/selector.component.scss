@@ -1,0 +1,41 @@
+@import '../../../../../assets/css/variables';
+
+.km-project-selector {
+  height: $toolbar-height - $baseline-grid / 4;
+}
+
+::ng-deep.km-projects-container {
+  position: relative;
+  margin: 0 20px;
+  padding: 10px 15px;
+  width: fit-content !important;
+  border-radius: $border-radius;
+
+  .mat-select-value {
+    width: fit-content;
+    min-width: 2ch;
+    max-width: 25ch;
+  }
+
+  .mat-select-arrow {
+    visibility: hidden;
+  }
+
+  .km-projects-icon {
+    position: absolute;
+    right: 16px;
+    top: 14px;
+    pointer-events: none;
+  }
+
+  .mat-select-value-text {
+    font-size: $font-size-subhead !important;
+    line-height: $font-size-subhead + $baseline-grid / 2 !important;
+  }
+
+  .mat-select-placeholder {
+    opacity: 0.7;
+    font-size: $font-size-subhead !important;
+    line-height: $font-size-subhead + $baseline-grid / 2 !important;
+  }
+}

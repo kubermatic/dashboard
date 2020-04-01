@@ -16,7 +16,7 @@ import {VersionInfo} from './shared/entity/VersionInfo';
 import {Config} from './shared/model/Config';
 import {CustomLink} from './shared/utils/custom-link-utils/custom-link';
 
-const PAGES_WIITHOUT_MENU = [
+const PAGES_WITHOUT_MENU = [
   '/projects',
   '/account',
   '/settings',
@@ -36,7 +36,7 @@ export class KubermaticComponent implements OnInit, OnDestroy {
   settings: AdminSettings;
   customLinks: CustomLink[] = [];
   version: VersionInfo;
-  showCollapseIcon = false;
+  showMenuSwitchAndProjectSelector = false;
   private _theme = Theme.Light;
   private _unsubscribe = new Subject<void>();
 
@@ -109,12 +109,12 @@ export class KubermaticComponent implements OnInit, OnDestroy {
 
   private _handleSidenav(url: string): void {
     if (this.sidenav) {
-      if (PAGES_WIITHOUT_MENU.includes(url)) {
+      if (PAGES_WITHOUT_MENU.includes(url)) {
         this.sidenav.close();
-        this.showCollapseIcon = false;
+        this.showMenuSwitchAndProjectSelector = false;
       } else {
         this.sidenav.open();
-        this.showCollapseIcon = true;
+        this.showMenuSwitchAndProjectSelector = true;
       }
     }
   }
