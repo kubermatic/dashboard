@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {MatDialogRef} from '@angular/material/dialog';
 import {Subject} from 'rxjs';
@@ -9,6 +9,13 @@ import {NotificationService, RBACService} from '../../../../core/services';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
 import {ClusterRoleName, CreateBinding, RoleName} from '../../../../shared/entity/RBACEntity';
+
+export enum Controls {
+  Email = 'email',
+  Group = 'group',
+  Role = 'role',
+  Namespace = 'namespace',
+}
 
 @Component({
   selector: 'kubermatic-add-binding',
@@ -20,21 +27,25 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
+  readonly controls = Controls;
   form: FormGroup;
   bindingType = 'cluster';
+  subjectType = 'user';
   clusterRoles: ClusterRoleName[];
   roles: RoleName[];
   private _unsubscribe = new Subject<void>();
 
   constructor(
-      private readonly _rbacService: RBACService, private readonly _matDialogRef: MatDialogRef<AddBindingComponent>,
+      private readonly _builder: FormBuilder, private readonly _rbacService: RBACService,
+      private readonly _matDialogRef: MatDialogRef<AddBindingComponent>,
       private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      email: new FormControl('', [Validators.required]),
-      role: new FormControl('', [Validators.required]),
-      namespace: new FormControl(''),
+    this.form = this._builder.group({
+      [Controls.Email]: new FormControl('', [Validators.required]),
+      [Controls.Group]: new FormControl(''),
+      [Controls.Role]: new FormControl('', [Validators.required]),
+      [Controls.Namespace]: new FormControl(''),
     });
 
     this._rbacService.getClusterRoleNames(this.cluster.id, this.datacenter.metadata.name, this.projectID)
@@ -84,21 +95,28 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     this.checkNamespaceState();
   }
 
-  get role(): AbstractControl {
-    return this.form.controls.role;
-  }
-
-  get namespace(): AbstractControl {
-    return this.form.controls.namespace;
+  changeSubjectType(event: MatButtonToggleChange): void {
+    this.form.get(Controls.Email).setValue('');
+    this.form.get(Controls.Group).setValue('');
+    this.subjectType = event.value;
+    this.form.get(Controls.Email).clearValidators();
+    this.form.get(Controls.Group).clearValidators();
+    if (this.subjectType === 'user') {
+      this.form.get(Controls.Email).setValidators([Validators.required]);
+    } else {
+      this.form.get(Controls.Group).setValidators([Validators.required]);
+    }
+    this.form.get(Controls.Email).updateValueAndValidity();
+    this.form.get(Controls.Group).updateValueAndValidity();
   }
 
   setValidators(): void {
     if (this.bindingType === 'cluster') {
-      this.namespace.clearValidators();
+      this.form.get(Controls.Namespace).clearValidators();
     } else {
-      this.namespace.setValidators([Validators.required]);
+      this.form.get(Controls.Namespace).setValidators([Validators.required]);
     }
-    this.namespace.updateValueAndValidity();
+    this.form.get(Controls.Namespace).updateValueAndValidity();
   }
 
   getRoleFormState(): string {
@@ -119,9 +137,9 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   getNamespaceFormState(): string {
     const roleLength = !!this.roles ? this.roles.length : 0;
 
-    if (this.role.value !== '') {
+    if (this.form.get(Controls.Role).value !== '') {
       return 'Namespace*';
-    } else if (this.role.value === '' && !!roleLength) {
+    } else if (this.form.get(Controls.Role).value === '' && !!roleLength) {
       return 'Please select a Role first';
     } else if (!roleLength) {
       return 'No Namespaces available';
@@ -131,16 +149,16 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   }
 
   checkNamespaceState(): void {
-    if (this.role.value === '' && this.namespace.enabled) {
-      this.namespace.disable();
-    } else if (this.role.value !== '' && this.namespace.disabled) {
-      this.namespace.enable();
+    if (this.form.get(Controls.Role).value === '' && this.form.get(Controls.Namespace).enabled) {
+      this.form.get(Controls.Namespace).disable();
+    } else if (this.form.get(Controls.Role).value !== '' && this.form.get(Controls.Namespace).disabled) {
+      this.form.get(Controls.Namespace).enable();
     }
   }
 
   getNamespaces(): string[] {
     for (const i in this.roles) {
-      if (this.roles[i].name === this.role.value) {
+      if (this.roles[i].name === this.form.get(Controls.Role).value) {
         return this.roles[i].namespace;
       }
     }
@@ -151,9 +169,16 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   }
 
   addClusterBinding(): void {
-    const clusterBinding: CreateBinding = {
-      userEmail: this.form.controls.email.value,
-    };
+    const clusterBinding: CreateBinding = {};
+    let bindingName;
+    if (this.form.controls.email.value) {
+      clusterBinding.userEmail = this.form.controls.email.value;
+      bindingName = clusterBinding.userEmail;
+    }
+    if (this.form.controls.group.value) {
+      clusterBinding.group = this.form.controls.group.value;
+      bindingName = clusterBinding.group;
+    }
 
     this._rbacService
         .createClusterBinding(
@@ -162,14 +187,21 @@ export class AddBindingComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((binding) => {
           this._matDialogRef.close(binding);
-          this._notificationService.success(`${clusterBinding.userEmail} has been added successfully`);
+          this._notificationService.success(`${bindingName} has been added successfully`);
         });
   }
 
   addNamespaceBinding(): void {
-    const namespaceBinding: CreateBinding = {
-      userEmail: this.form.controls.email.value,
-    };
+    const namespaceBinding: CreateBinding = {};
+    let bindingName;
+    if (this.form.controls.email.value) {
+      namespaceBinding.userEmail = this.form.controls.email.value;
+      bindingName = namespaceBinding.userEmail;
+    }
+    if (this.form.controls.group.value) {
+      namespaceBinding.group = this.form.controls.group.value;
+      bindingName = namespaceBinding.group;
+    }
 
     this._rbacService
         .createBinding(
@@ -178,7 +210,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((binding) => {
           this._matDialogRef.close(binding);
-          this._notificationService.success(`${namespaceBinding.userEmail} has been added successfully`);
+          this._notificationService.success(`${bindingName} has been added successfully`);
         });
   }
 }

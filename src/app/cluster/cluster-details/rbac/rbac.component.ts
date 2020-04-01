@@ -28,9 +28,9 @@ export class RBACComponent implements OnInit, OnDestroy {
 
   isShowRBAC = false;
   dataSourceCluster = new MatTableDataSource<SimpleClusterBinding>();
-  displayedColumnsCluster: string[] = ['name', 'clusterRole', 'actions'];
+  displayedColumnsCluster: string[] = ['kind', 'name', 'clusterRole', 'actions'];
   dataSourceNamespace = new MatTableDataSource<SimpleBinding>();
-  displayedColumnsNamespace: string[] = ['name', 'clusterRole', 'namespace', 'actions'];
+  displayedColumnsNamespace: string[] = ['kind', 'name', 'clusterRole', 'namespace', 'actions'];
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -77,8 +77,8 @@ export class RBACComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Binding',
-        message: `Are you sure you want to permanently delete "<strong>${element.name}</strong>"
-          from binding?`,
+        message: `Are you sure you want to permanently delete the ${element.kind.toLowerCase()} "<strong>${
+            element.name}</strong>" from binding?`,
         confirmLabel: 'Delete',
       },
     };
@@ -89,10 +89,11 @@ export class RBACComponent implements OnInit, OnDestroy {
       if (isConfirmed) {
         this._rbacService
             .deleteClusterBinding(
-                this.cluster.id, this.datacenter.metadata.name, this.projectID, element.role, element.name)
+                this.cluster.id, this.datacenter.metadata.name, this.projectID, element.role, element.kind,
+                element.name)
             .pipe(first())
             .subscribe(() => {
-              this._notificationService.success(`${element.name} has been removed from binding`);
+              this._notificationService.success(`${element.kind} ${element.name} has been removed from binding`);
             });
       }
     });
@@ -106,8 +107,8 @@ export class RBACComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Binding',
-        message: `Are you sure you want to permanently delete "<strong>${element.name}</strong>"
-          from binding?`,
+        message: `Are you sure you want to permanently delete the ${element.kind.toLowerCase()} "<strong>${
+            element.name}</strong>" from binding?`,
         confirmLabel: 'Delete',
       },
     };
@@ -119,10 +120,10 @@ export class RBACComponent implements OnInit, OnDestroy {
         this._rbacService
             .deleteBinding(
                 this.cluster.id, this.datacenter.metadata.name, this.projectID, element.role, element.namespace,
-                element.name)
+                element.kind, element.name)
             .pipe(first())
             .subscribe(() => {
-              this._notificationService.success(`${element.name} has been removed from binding`);
+              this._notificationService.success(`${element.kind} ${element.name} has been removed from binding`);
             });
       }
     });
