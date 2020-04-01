@@ -778,8 +778,14 @@
     box-shadow: map-get($colors, shadow);
   }
 
-  .km-footer * {
-    color: map-get($colors, footer-text);
+  .km-footer {
+    * {
+      color: map-get($colors, footer-text);
+    }
+
+    i {
+      filter: grayscale(1) brightness(0) invert(.75);
+    }
   }
 
   .km-terms * {
@@ -836,49 +842,34 @@
     }
   }
 
-  .km-project-selector {
-    border-bottom: map-get($colors, sidenav-divider-top) solid $sidenav-border-width;
-  }
-
-  .km-sidenav-bottom {
-    border-top: map-get($colors, sidenav-divider) solid $sidenav-border-width;
-  }
-
   .km-sidenav {
-    background-color: map-get($colors, sidenav-background);
+    background-color: $background;
 
-    * {
-      color: map-get($colors, sidenav-text);
+    span {
+      color: $text;
     }
 
-    i {
-      background-color: map-get($colors, sidenav-text);
+    .mat-divider {
+      border-top-color: map-get($colors, sidenav-divider);
     }
 
-    .mat-list-item a {
+    .menu-item a {
       &:hover {
-        color: map-get($colors, sidenav-text-hover);
         background-color: map-get($colors, sidenav-background-hover);
-
-        i {
-          background-color: map-get($colors, sidenav-text-hover);
-        }
       }
 
       &.active {
-        color: map-get($colors, sidenav-text-hover);
         background-color: map-get($colors, sidenav-background-active);
 
         i {
-          background-color: map-get($colors, sidenav-text-hover);
+          background-color: map-get($colors, primary-hover);
+        }
+
+        span {
+          color: map-get($colors, primary-hover);
         }
       }
     }
-  }
-
-  .km-nav-custom-container {
-    background-color: map-get($colors, sidenav-background-custom);
-    border-top: map-get($colors, sidenav-divider) solid $sidenav-border-width;
   }
 
   .km-card-expansion-panel {
@@ -1131,6 +1122,10 @@
     }
   }
 
+  .km-projects-container:hover {
+    background-color: map-get($colors, project-selector-hover);
+  }
+
   .km-cluster-spec-type {
     margin-right: 2.5 * $baseline-grid;
     min-width: $type-toggle-width * 2 + $baseline-grid;
@@ -1374,7 +1369,7 @@
 
   .km-cluster-panel-container {
     color: $text;
-    height: $toolbar-height + $sidenav-border-width;
+    height: $toolbar-height;
     margin-bottom: 2.5 * $baseline-grid;
 
     .km-cluster-panel-icon {

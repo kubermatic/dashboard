@@ -13,7 +13,7 @@ import {SettingsService} from '../../services/settings/settings.service';
   styleUrls: ['./navigation.component.scss'],
 })
 export class NavigationComponent implements OnInit {
-  @Input() showCollapseIcon: boolean;
+  @Input() showMenuSwitchAndProjectSelector: boolean;
   currentUser: MemberEntity;
   showSidenav = true;
   private _settingsChange = new Subject<void>();

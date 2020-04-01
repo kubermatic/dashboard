@@ -16,6 +16,7 @@ import {SettingsService} from '../../services/settings/settings.service';
 import {NotificationPanelComponent} from '../notification-panel/notification-panel.component';
 
 import {NavigationComponent} from './navigation.component';
+import {ProjectSelectorComponent} from './project/selector.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -39,6 +40,7 @@ describe('NavigationComponent', () => {
           declarations: [
             NavigationComponent,
             NotificationPanelComponent,
+            ProjectSelectorComponent,
           ],
           providers: [
             MatDialog,

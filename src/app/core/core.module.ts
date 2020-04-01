@@ -14,8 +14,8 @@ import {SharedModule} from '../shared/shared.module';
 
 import {FooterComponent} from './components/footer/footer.component';
 import {NavigationComponent} from './components/navigation/navigation.component';
+import {ProjectSelectorComponent} from './components/navigation/project/selector.component';
 import {NotificationPanelComponent} from './components/notification-panel/notification-panel.component';
-import {ProjectSelectorComponent} from './components/sidenav/project/selector.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
 import {ApiService, Auth, AuthGuard, AuthzGuard, ClusterService, DatacenterService, HistoryService, LabelService, ParamsService, PresetsService, RBACService, WizardService,} from './services';

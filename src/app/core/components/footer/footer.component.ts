@@ -21,6 +21,12 @@ export class FooterComponent {
   }
 
   getCustomLinkIconStyle(link: CustomLink): any {
-    return {'background-image': `url('${CustomLink.getIcon(link)}')`};
+    const style = {'background-image': `url('${CustomLink.getIcon(link)}')`};
+
+    if (!this.authenticated) {
+      style['filter'] = 'invert(.25) brightness(100) contrast(100)';
+    }
+
+    return style;
   }
 }
