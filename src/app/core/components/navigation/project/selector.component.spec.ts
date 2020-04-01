@@ -16,6 +16,7 @@ import {AppConfigMockService} from '../../../../testing/services/app-config-mock
 import {ProjectMockService} from '../../../../testing/services/project-mock.service';
 import {UserMockService} from '../../../../testing/services/user-mock.service';
 import {ApiService, ProjectService, UserService} from '../../../services';
+import {NotificationPanelComponent} from '../../notification-panel/notification-panel.component';
 import {NavigationComponent} from '../navigation.component';
 
 import {ProjectSelectorComponent} from './selector.component';
@@ -40,6 +41,7 @@ describe('SidenavComponent', () => {
           ],
           declarations: [
             NavigationComponent,
+            NotificationPanelComponent,
             ProjectSelectorComponent,
             MockComponent({
               selector: 'a',
