@@ -78,7 +78,7 @@
     "ngx-filter-pipe": "2.1.2",
     "ngx-window-token": "3.0.0",
     "openstack-lib": "0.0.2",
-    "rxjs": "6.5.4",
+    "rxjs": "6.5.5",
     "rxjs-compat": "6.5.4",
     "semver": "7.1.3",
     "swagger-ui": "3.25.0",
