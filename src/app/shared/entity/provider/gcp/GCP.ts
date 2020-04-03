@@ -20,6 +20,7 @@ export class GCPNetwork {
   autoCreateSubnetworks: boolean;
   subnetworks: string[];
   kind: string;
+  path: string;
 }
 
 export class GCPSubnetwork {

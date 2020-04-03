@@ -11,7 +11,7 @@
            [matAutocomplete]="autoNetwork">
     <mat-autocomplete #autoNetwork="matAutocomplete">
       <mat-option *ngFor="let network of networks"
-                  [value]="network.name">
+                  [value]="network.path">
         {{network.name}}
       </mat-option>
     </mat-autocomplete>
