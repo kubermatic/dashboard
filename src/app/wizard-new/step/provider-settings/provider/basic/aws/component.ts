@@ -1,5 +1,5 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {PresetsService} from '../../../../../../core/services';
@@ -50,9 +50,9 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.AccessKeyID]: new FormControl('', Validators.required),
-      [Controls.SecretAccessKey]: new FormControl('', Validators.required),
-      [Controls.VPCID]: new FormControl('', [Validators.required, Validators.pattern('vpc-(\\w{8}|\\w{17})')]),
+      [Controls.AccessKeyID]: this._builder.control('', Validators.required),
+      [Controls.SecretAccessKey]: this._builder.control('', Validators.required),
+      [Controls.VPCID]: this._builder.control('', [Validators.required, Validators.pattern('vpc-(\\w{8}|\\w{17})')]),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe))

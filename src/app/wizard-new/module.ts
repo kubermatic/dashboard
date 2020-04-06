@@ -14,6 +14,7 @@ import {ProviderStepComponent} from './step/provider-datacenter/component';
 import {ProviderSettingsStepComponent} from './step/provider-settings/component';
 import {PresetsComponent} from './step/provider-settings/preset/component';
 import {AWSProviderBasicComponent} from './step/provider-settings/provider/basic/aws/component';
+import {AzureProviderBasicComponent} from './step/provider-settings/provider/basic/azure/component';
 import {ProviderBasicComponent} from './step/provider-settings/provider/basic/component';
 import {DigitalOceanProviderBasicComponent} from './step/provider-settings/provider/basic/digitalocean/component';
 import {HetznerProviderBasicComponent} from './step/provider-settings/provider/basic/hetzner/component';
@@ -21,6 +22,7 @@ import {KubeVirtProviderBasicComponent} from './step/provider-settings/provider/
 import {PacketProviderBasicComponent} from './step/provider-settings/provider/basic/packet/component';
 import {VSphereProviderBasicComponent} from './step/provider-settings/provider/basic/vsphere/component';
 import {AWSProviderExtendedComponent} from './step/provider-settings/provider/extended/aws/component';
+import {AzureProviderExtendedComponent} from './step/provider-settings/provider/extended/azure/component';
 import {ProviderExtendedComponent} from './step/provider-settings/provider/extended/component';
 import {VSphereProviderExtendedComponent} from './step/provider-settings/provider/extended/vsphere/component';
 import {ClusterSSHKeysComponent} from './step/provider-settings/ssh-keys/component';
@@ -44,6 +46,8 @@ const components: any[] = [
   ProviderExtendedComponent,
   AWSProviderExtendedComponent,
   VSphereProviderExtendedComponent,
+  AzureProviderBasicComponent,
+  AzureProviderExtendedComponent,
   NodeSettingsStepComponent,
   ClusterSSHKeysComponent,
 ];

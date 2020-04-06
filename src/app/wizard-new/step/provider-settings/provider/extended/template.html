@@ -10,4 +10,7 @@
   <kubermatic-wizard-vsphere-provider-extended *ngSwitchCase="Providers.VSPHERE"
                                                [formControl]="form.get(Controls.ProviderExtended)">
   </kubermatic-wizard-vsphere-provider-extended>
+  <km-wizard-azure-provider-extended *ngSwitchCase="Providers.AZURE"
+                                     [formControl]="form.get(Controls.ProviderExtended)">
+  </km-wizard-azure-provider-extended>
 </div>

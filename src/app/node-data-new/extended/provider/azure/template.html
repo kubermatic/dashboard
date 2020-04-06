@@ -1,0 +1,11 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      fxLayoutGap="16px">
+  <km-label-form title="Provider Tags"
+                 [labels]="tags"
+                 (labelsChange)="onTagsChange($event)"
+                 [formControlName]="Control.Tags"></km-label-form>
+
+  <mat-checkbox [id]="Control.AssignPublicIP"
+                [formControlName]="Control.AssignPublicIP">Assign Public IP</mat-checkbox>
+</form>
