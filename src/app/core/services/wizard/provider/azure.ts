@@ -56,10 +56,15 @@ export class Azure extends Provider {
     return this;
   }
 
-  flavors(): Observable<AzureSizes[]> {
+  flavors(onLoadingCb: () => void = null): Observable<AzureSizes[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
     return this._http.get<AzureSizes[]>(this._url, {headers: this._headers});
   }
 }

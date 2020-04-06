@@ -44,7 +44,7 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
     // TODO(floreks): Remove once all providers are implemented
     const dcWhitelist = [
       NodeProvider.AWS, NodeProvider.BRINGYOUROWN, NodeProvider.DIGITALOCEAN, NodeProvider.HETZNER,
-      NodeProvider.KUBEVIRT, NodeProvider.PACKET, NodeProvider.VSPHERE
+      NodeProvider.KUBEVIRT, NodeProvider.PACKET, NodeProvider.VSPHERE, NodeProvider.AZURE
     ];
     this._dcService.getDataCenters()
         .pipe(map(dcs => dcs.filter(dc => dcWhitelist.includes(dc.spec.provider as NodeProvider))))
