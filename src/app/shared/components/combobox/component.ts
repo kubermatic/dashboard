@@ -65,13 +65,12 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   }
 
   ngOnChanges(): void {
-    if (this.selected && !this.form.get(Controls.Select).value) {
-      this.form.get(Controls.Select).setValue(this.selected);
+    if (!this.form) {
+      return;
     }
 
-    if (this.form) {
-      this.form.updateValueAndValidity({onlySelf: true, emitEvent: false});
-    }
+    this.form.get(Controls.Select).setValue(this.selected);
+    this.form.updateValueAndValidity();
   }
 
   ngOnDestroy(): void {

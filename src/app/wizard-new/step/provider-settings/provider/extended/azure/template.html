@@ -1,0 +1,48 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      fxLayoutGap="16px">
+  <mat-form-field fxFlex>
+    <mat-label>Resource Group</mat-label>
+    <input matInput
+           [formControlName]="controls.ResourceGroup"
+           [name]="controls.ResourceGroup"
+           type="text"
+           autocomplete="off">
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Route Table</mat-label>
+    <input matInput
+           [formControlName]="controls.RouteTable"
+           [name]="controls.RouteTable"
+           type="text"
+           autocomplete="off">
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Security Group</mat-label>
+    <input matInput
+           [formControlName]="controls.SecurityGroup"
+           [name]="controls.SecurityGroup"
+           type="text"
+           autocomplete="off">
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Subnet</mat-label>
+    <input matInput
+           [formControlName]="controls.Subnet"
+           [name]="controls.Subnet"
+           type="text"
+           autocomplete="off">
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>VNet</mat-label>
+    <input matInput
+           [formControlName]="controls.VNet"
+           [name]="controls.VNet"
+           type="text"
+           autocomplete="off">
+  </mat-form-field>
+</form>
