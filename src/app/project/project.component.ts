@@ -19,7 +19,7 @@ import {AddProjectDialogComponent} from '../shared/components/add-project-dialog
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {MemberEntity, UserSettings} from '../shared/entity/MemberEntity';
 import {ProjectEntity, ProjectOwners} from '../shared/entity/ProjectEntity';
-import {MemberUtils} from '../shared/utils/member-utils/member-utils';
+import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 
 import {EditProjectComponent} from './edit-project/edit-project.component';
@@ -269,8 +269,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isEditEnabled(project: ProjectEntity): boolean {
-    return !this._userService.userGroupConfig(this.rawRole[project.id]) ||
-        this._userService.userGroupConfig(this.rawRole[project.id]).projects.edit;
+    return MemberUtils.hasPermission(
+        this.currentUser, this._userService.userGroupConfig(this.rawRole[project.id]), `projects`, Permission.Edit);
   }
 
   editProject(project: ProjectEntity, event: Event): void {
@@ -285,8 +285,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isDeleteEnabled(project: ProjectEntity): boolean {
-    return !this._userService.userGroupConfig(this.rawRole[project.id]) ||
-        this._userService.userGroupConfig(this.rawRole[project.id]).projects.delete;
+    return MemberUtils.hasPermission(
+        this.currentUser, this._userService.userGroupConfig(this.rawRole[project.id]), `projects`, Permission.Delete);
   }
 
   deleteProject(project: ProjectEntity, event: Event): void {

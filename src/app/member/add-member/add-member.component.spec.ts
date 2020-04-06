@@ -2,13 +2,16 @@ import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/t
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
 import {ApiService, NotificationService, ProjectService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
+import {Group} from '../../shared/utils/member-utils/member-utils';
 import {fakeMember} from '../../testing/fake-data/member.fake';
 import {fakeProject} from '../../testing/fake-data/project.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '../../testing/services/project-mock.service';
+
 import {AddMemberComponent} from './add-member.component';
 
 const modules: any[] = [
@@ -67,7 +70,7 @@ describe('AddProjectComponent', () => {
 
     component.addMemberForm.controls.email.patchValue('john@doe.com');
     expect(component.addMemberForm.controls.email.hasError('required')).toBeFalsy();
-    component.addMemberForm.controls.group.patchValue('editors');
+    component.addMemberForm.controls.group.patchValue(Group.Editor);
     expect(component.addMemberForm.controls.group.hasError('required')).toBeFalsy();
   });
 

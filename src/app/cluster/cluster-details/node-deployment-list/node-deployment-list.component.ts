@@ -9,11 +9,13 @@ import {ProjectService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {GroupConfig} from '../../../shared/model/Config';
 import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
+import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 import {NodeService} from '../../services/node.service';
 
@@ -36,6 +38,7 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
   displayedColumns: string[] = ['status', 'name', 'labels', 'replicas', 'ver', 'os', 'created', 'actions'];
 
   private _unsubscribe: Subject<any> = new Subject();
+  private _user: MemberEntity;
   private _currentGroupConfig: GroupConfig;
 
   constructor(
@@ -46,6 +49,8 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
   ngOnInit(): void {
     this.dataSource.data = this.nodeDeployments ? this.nodeDeployments : [];
     this.dataSource.paginator = this.paginator;
+
+    this._userService.loggedInUser.subscribe(user => this._user = user);
 
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
@@ -94,7 +99,7 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
   }
 
   isEditEnabled(): boolean {
-    return !this._currentGroupConfig || this._currentGroupConfig.nodeDeployments.edit;
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, `nodeDeployments`, Permission.Edit);
   }
 
   showEditDialog(nd: NodeDeploymentEntity, event: Event): void {
@@ -105,7 +110,7 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
   }
 
   isDeleteEnabled(): boolean {
-    return !this._currentGroupConfig || this._currentGroupConfig.nodeDeployments.delete;
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, `nodeDeployments`, Permission.Delete);
   }
 
   showDeleteDialog(nd: NodeDeploymentEntity, event: Event): void {

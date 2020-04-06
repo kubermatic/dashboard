@@ -2,9 +2,11 @@ import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 import {from, Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
+
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
-import {Viewable} from '../../../shared/model/Config';
+import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {UserService} from '../user/user.service';
+
 import {Auth} from './auth.service';
 
 @Injectable()
@@ -42,11 +44,7 @@ export class AuthzGuard implements CanActivate {
     return this._userService.currentUserGroup(projectID)
         .pipe(map(userGroup => this._userService.userGroupConfig(userGroup)))
         .pipe(map(groupConfig => {
-          if (!!currentUser && !!currentUser.isAdmin) {
-            return true;
-          }
-
-          if (!this._hasViewPermissions(groupConfig[view])) {
+          if (!MemberUtils.hasPermission(currentUser, groupConfig, view, Permission.View)) {
             this._router.navigate([View.Projects]);
             return false;
           }
@@ -70,10 +68,6 @@ export class AuthzGuard implements CanActivate {
     const projectsIdx = url.indexOf(View.Projects);
     return projectsIdx > -1 ? (parts = url.substring(projectsIdx).split('/')).length > 1 ? parts[1] : undefined :
                               undefined;
-  }
-
-  private _hasViewPermissions(permission: Viewable): boolean {
-    return permission.view;
   }
 
   private _navigateToProjects(): Observable<boolean> {

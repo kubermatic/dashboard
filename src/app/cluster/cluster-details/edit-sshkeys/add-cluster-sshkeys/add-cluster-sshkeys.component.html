@@ -25,7 +25,7 @@
   <button mat-flat-button
           color="alternative"
           (click)="addProjectSSHKeys()"
-          [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.create">
+          [disabled]="!canAdd()">
     Add SSH key to project
   </button>
 

@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
-import {Subject} from 'rxjs';
+import {merge, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
@@ -10,6 +10,7 @@ import {MemberEntity, UserSettings} from '../../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {GroupConfig} from '../../../shared/model/Config';
 import {CustomLink, CustomLinkLocation, filterCustomLinks} from '../../../shared/utils/custom-link-utils/custom-link';
+import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {ProjectService, UserService} from '../../services';
 import {View} from '../../services/auth/auth.guard';
 import {SettingsService} from '../../services/settings/settings.service';
@@ -48,15 +49,12 @@ export class SidenavComponent implements OnInit, OnDestroy {
       this.settings = settings;
     });
 
-    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(project => {
-          this._selectedProject = project;
-          return this._userService.currentUserGroup(project.id);
-        }))
-        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
-
-    this._projectService.onProjectChange.pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(project => {
+    merge(
+        this._projectService.selectedProject,
+        this._projectService.onProjectChange,
+        )
+        .pipe(takeUntil(this._unsubscribe))
+        .pipe(switchMap((project: ProjectEntity) => {
           this._selectedProject = project;
           return this._userService.currentUserGroup(project.id);
         }))
@@ -107,7 +105,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (!this._hasViewPermissions(viewName)) {
+    if (!MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, viewName, Permission.View)) {
       tooltip = 'Cannot enter this view.';
       if (this._selectedProject.status !== 'Active') {
         tooltip += ' Selected project is not active.';
@@ -129,11 +127,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   getMenuItemClass(viewName: string): string {
-    return this._hasViewPermissions(viewName) ? '' : 'km-disabled';
-  }
-
-  private _hasViewPermissions(viewName): boolean {
-    return (!this._currentGroupConfig || this._currentGroupConfig[viewName].view) &&
-        (!!this.currentUser && !!this.currentUser.isAdmin);
+    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, viewName, Permission.View) ?
+        '' :
+        'km-disabled';
   }
 }

@@ -16,11 +16,11 @@
   <button *ngIf="keys.length > 0"
           (click)="addSshKeyDialog()"
           mat-flat-button
-          [disabled]="!!groupConfig && !groupConfig.sshKeys.create">Add SSH key</button>
+          [disabled]="!canAdd()">Add SSH key</button>
   <div *ngIf="keys.length === 0">
     <p>You have no SSH keys</p>
     <button (click)="addSshKeyDialog()"
             mat-flat-button
-            [disabled]="!!groupConfig && !groupConfig.sshKeys.create">Add SSH key</button>
+            [disabled]="!canAdd()">Add SSH key</button>
   </div>
 </form>
