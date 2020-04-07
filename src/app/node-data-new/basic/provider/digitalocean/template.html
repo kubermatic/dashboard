@@ -1,19 +1,19 @@
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="16px">
-  <div fxFlex
-       class="mat-select-container">
-    <km-combobox [required]="true"
-                 [grouped]="true"
-                 [selected]="selectedSize"
-                 [groups]="sizeTypes"
-                 [optionsGetter]="getTypes.bind(this)"
-                 [formControlName]="Controls.Size"
-                 (changed)="onTypeChange($event)"
-                 label="Node Size"
-                 inputLabel="Select size..."
-                 filterBy="slug">
-      <div *option="let size">{{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month</div>
-    </km-combobox>
-  </div>
+  <km-combobox [required]="true"
+               [grouped]="true"
+               [selected]="selectedSize"
+               [valueFormatter]="sizeDisplayName.bind(this)"
+               [groups]="sizeTypes"
+               [optionsGetter]="getTypes.bind(this)"
+               [formControlName]="Controls.Size"
+               (changed)="onTypeChange($event)"
+               label="Node Size"
+               inputLabel="Select size..."
+               filterBy="slug">
+    <div *option="let size">
+      {{size.slug}} ({{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus != 1) ? 's' : '' }}, ${{ size.price_monthly }} per month)
+    </div>
+  </km-combobox>
 </form>
