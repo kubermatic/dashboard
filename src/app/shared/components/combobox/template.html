@@ -37,7 +37,7 @@
                           fxLayout="row">
         <div fxFlex
              fxLayoutAlign="start">
-          {{ selected }}
+          {{ valueFormatter ? valueFormatter(selected) : selected }}
         </div>
 
         <div fxFlex

@@ -2,8 +2,7 @@ import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Observable, of} from 'rxjs';
 import {catchError, takeUntil} from 'rxjs/operators';
-import {DigitaloceanSizes} from '../../../../shared/entity/provider/digitalocean/DropletSizeEntity';
-import {Type} from '../../../../shared/entity/provider/hetzner/TypeEntity';
+import {DigitaloceanSizes, Optimized, Standard} from '../../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
 
@@ -51,13 +50,20 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
     this._unsubscribe.complete();
   }
 
-  getTypes(group: SizeTypes): Type[] {
+  getTypes(group: SizeTypes): Optimized[]|Standard[] {
     const key = Object.keys(SizeTypes).find(key => SizeTypes[key] === group);
     return this.sizes[key.toLowerCase()];
   }
 
   onTypeChange(size: string): void {
     this._nodeDataService.nodeData.spec.cloud.digitalocean.size = size;
+  }
+
+  sizeDisplayName(slug: string): string {
+    const size = [...this.sizes.optimized, ...this.sizes.standard].find(size => size.slug === slug);
+    return size ? `${size.slug} (${size.memory / 1024} GB RAM, ${size.vcpus} CPU${(size.vcpus !== 1) ? 's' : ''}, $${
+                      size.price_monthly} per month)` :
+                  '';
   }
 
   private get _sizesObservable(): Observable<DigitaloceanSizes> {
