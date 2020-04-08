@@ -2,6 +2,7 @@ import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import * as _ from 'lodash';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
 
@@ -81,7 +82,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   isTableVisible(): boolean {
-    return !!this.sshKeys && this.sshKeys.length > 0;
+    return !_.isEmpty(this.sshKeys);
   }
 
   canAdd(): boolean {

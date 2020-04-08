@@ -117,7 +117,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   isCustomLinkPanelVisible(): boolean {
-    return this.customLinks && this.customLinks.length > 0;
+    return !_.isEmpty(this.customLinks);
   }
 
   getCustomLinkIconStyle(link: CustomLink): any {

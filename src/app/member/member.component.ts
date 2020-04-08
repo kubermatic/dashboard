@@ -3,6 +3,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import * as _ from 'lodash';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
 
@@ -154,7 +155,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   hasItems(): boolean {
-    return this.members && this.members.length > 0;
+    return !_.isEmpty(this.members);
   }
 
   isPaginatorVisible(): boolean {
