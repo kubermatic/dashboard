@@ -105,8 +105,6 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
           if (this._hasRequiredCredentials()) {
             this._loadFloatingIPPools();
           }
-
-          this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
         });
 
     this.form.controls.tenantID.valueChanges.pipe(distinctUntilChanged())
@@ -117,8 +115,6 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
           if (this._hasRequiredCredentials()) {
             this._loadFloatingIPPools();
           }
-
-          this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
         });
 
     merge(this.form.controls.tenant.valueChanges, this.form.controls.tenantID.valueChanges)
@@ -131,16 +127,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
           if (this._hasRequiredCredentials()) {
             this._loadFloatingIPPools();
           }
-
-          this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
         });
-
-    this.form.controls.floatingIpPool.valueChanges.pipe(distinctUntilChanged())
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(() => {
-          this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
-        });
-
 
     this.form.valueChanges
         .pipe(distinctUntilChanged(
@@ -148,9 +135,12 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
                 Object.keys(y).every(key => (!(key in x) && y[key] === '') || x[key] === y[key])))
         .pipe(debounceTime(this._debounceTime))
         .pipe(takeUntil(this._unsubscribe))
-        .subscribe(
-            () => this._formHelper.areControlsValid() ? this._wizard.onCustomPresetsDisable.emit(false) :
-                                                        this._wizard.onCustomPresetsDisable.emit(true));
+        .subscribe(() => {
+          this._formHelper.areControlsValid() ? this._wizard.onCustomPresetsDisable.emit(false) :
+                                                this._wizard.onCustomPresetsDisable.emit(true);
+
+          this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
+        });
 
     this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe))
         .subscribe((data: ClusterProviderSettingsForm) => {
@@ -160,7 +150,6 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
       if (newCredentials) {
         this.form.disable();
-        this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
         return;
       }
 
