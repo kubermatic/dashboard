@@ -4,12 +4,12 @@
      fxLayout="column"
      fxLayoutGap="16px">
   <mat-card-title *ngIf="hasExtendedSection(provider)">Advanced</mat-card-title>
-  <kubermatic-wizard-aws-provider-extended *ngSwitchCase="Providers.AWS"
-                                           [formControl]="form.get(Controls.ProviderExtended)">
-  </kubermatic-wizard-aws-provider-extended>
-  <kubermatic-wizard-vsphere-provider-extended *ngSwitchCase="Providers.VSPHERE"
-                                               [formControl]="form.get(Controls.ProviderExtended)">
-  </kubermatic-wizard-vsphere-provider-extended>
+  <km-wizard-aws-provider-extended *ngSwitchCase="Providers.AWS"
+                                   [formControl]="form.get(Controls.ProviderExtended)">
+  </km-wizard-aws-provider-extended>
+  <km-wizard-vsphere-provider-extended *ngSwitchCase="Providers.VSPHERE"
+                                       [formControl]="form.get(Controls.ProviderExtended)">
+  </km-wizard-vsphere-provider-extended>
   <km-wizard-azure-provider-extended *ngSwitchCase="Providers.AZURE"
                                      [formControl]="form.get(Controls.ProviderExtended)">
   </km-wizard-azure-provider-extended>

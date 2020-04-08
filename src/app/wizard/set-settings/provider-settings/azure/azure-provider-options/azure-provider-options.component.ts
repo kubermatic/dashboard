@@ -8,7 +8,7 @@ import {ClusterEntity} from '../../../../../shared/entity/ClusterEntity';
 import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
 
 @Component({
-  selector: 'kubermatic-azure-provider-options',
+  selector: 'km-azure-provider-options',
   templateUrl: './azure-provider-options.component.html',
 })
 export class AzureProviderOptionsComponent implements OnInit, OnDestroy {

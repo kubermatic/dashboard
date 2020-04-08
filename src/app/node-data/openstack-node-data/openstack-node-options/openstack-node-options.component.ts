@@ -7,7 +7,7 @@ import {NodeDataService} from '../../../core/services/node-data/node-data.servic
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
-  selector: 'kubermatic-openstack-node-options',
+  selector: 'km-openstack-node-options',
   templateUrl: './openstack-node-options.component.html',
   styleUrls: ['./openstack-node-options.component.scss'],
 })

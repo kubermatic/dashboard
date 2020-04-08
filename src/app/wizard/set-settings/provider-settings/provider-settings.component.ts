@@ -3,7 +3,7 @@ import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 
 @Component({
-  selector: 'kubermatic-cluster-provider-settings',
+  selector: 'km-cluster-provider-settings',
   templateUrl: './provider-settings.component.html',
 })
 export class ClusterProviderSettingsComponent {

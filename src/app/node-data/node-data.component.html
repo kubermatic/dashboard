@@ -48,72 +48,72 @@
     </mat-select>
   </mat-form-field>
 
-  <kubermatic-alibaba-node-data *ngIf="cluster.spec.cloud.alibaba"
-                                [cloudSpec]="cluster.spec.cloud"
-                                [clusterId]="cluster.id"
-                                [projectId]="projectId"
-                                [seedDCName]="seedDCName"
-                                [nodeData]="nodeData"></kubermatic-alibaba-node-data>
+  <km-alibaba-node-data *ngIf="cluster.spec.cloud.alibaba"
+                        [cloudSpec]="cluster.spec.cloud"
+                        [clusterId]="cluster.id"
+                        [projectId]="projectId"
+                        [seedDCName]="seedDCName"
+                        [nodeData]="nodeData"></km-alibaba-node-data>
 
-  <kubermatic-aws-node-data *ngIf="cluster.spec.cloud.aws"
-                            [cloudSpec]="cluster.spec.cloud"
-                            [clusterId]="cluster.id"
-                            [projectId]="projectId"
-                            [seedDCName]="seedDCName"
-                            [nodeData]="nodeData"></kubermatic-aws-node-data>
+  <km-aws-node-data *ngIf="cluster.spec.cloud.aws"
+                    [cloudSpec]="cluster.spec.cloud"
+                    [clusterId]="cluster.id"
+                    [projectId]="projectId"
+                    [seedDCName]="seedDCName"
+                    [nodeData]="nodeData"></km-aws-node-data>
 
 
-  <kubermatic-digitalocean-node-data *ngIf="cluster.spec.cloud.digitalocean"
-                                     [cloudSpec]="cluster.spec.cloud"
-                                     [nodeData]="nodeData"
-                                     [projectId]="projectId"
-                                     [clusterId]="cluster.id"
-                                     [seedDCName]="seedDCName"></kubermatic-digitalocean-node-data>
+  <km-digitalocean-node-data *ngIf="cluster.spec.cloud.digitalocean"
+                             [cloudSpec]="cluster.spec.cloud"
+                             [nodeData]="nodeData"
+                             [projectId]="projectId"
+                             [clusterId]="cluster.id"
+                             [seedDCName]="seedDCName"></km-digitalocean-node-data>
 
-  <kubermatic-openstack-node-data *ngIf="cluster.spec.cloud.openstack"
-                                  [cloudSpec]="cluster.spec.cloud"
-                                  [nodeData]="nodeData"
-                                  [projectId]="projectId"
-                                  [clusterId]="cluster.id"
-                                  [seedDCName]="seedDCName"></kubermatic-openstack-node-data>
+  <km-openstack-node-data *ngIf="cluster.spec.cloud.openstack"
+                          [cloudSpec]="cluster.spec.cloud"
+                          [nodeData]="nodeData"
+                          [projectId]="projectId"
+                          [clusterId]="cluster.id"
+                          [seedDCName]="seedDCName"></km-openstack-node-data>
 
-  <kubermatic-packet-node-data *ngIf="cluster.spec.cloud.packet"
-                               [cloudSpec]="cluster.spec.cloud"
-                               [projectId]="projectId"
-                               [clusterId]="cluster.id"
-                               [nodeData]="nodeData"
-                               [seedDCName]="seedDCName"></kubermatic-packet-node-data>
+  <km-packet-node-data *ngIf="cluster.spec.cloud.packet"
+                       [cloudSpec]="cluster.spec.cloud"
+                       [projectId]="projectId"
+                       [clusterId]="cluster.id"
+                       [nodeData]="nodeData"
+                       [seedDCName]="seedDCName"></km-packet-node-data>
 
-  <kubermatic-hetzner-node-data *ngIf="cluster.spec.cloud.hetzner"
-                                [cloudSpec]="cluster.spec.cloud"
-                                [nodeData]="nodeData"
-                                [projectId]="projectId"
-                                [clusterId]="cluster.id"
-                                [seedDCName]="seedDCName"></kubermatic-hetzner-node-data>
+  <km-hetzner-node-data *ngIf="cluster.spec.cloud.hetzner"
+                        [cloudSpec]="cluster.spec.cloud"
+                        [nodeData]="nodeData"
+                        [projectId]="projectId"
+                        [clusterId]="cluster.id"
+                        [seedDCName]="seedDCName"></km-hetzner-node-data>
 
-  <kubermatic-vsphere-node-data *ngIf="cluster.spec.cloud.vsphere"
-                                [cloudSpec]="cluster.spec.cloud"
-                                [clusterId]="cluster.id"
-                                [nodeData]="nodeData"></kubermatic-vsphere-node-data>
+  <km-vsphere-node-data *ngIf="cluster.spec.cloud.vsphere"
+                        [cloudSpec]="cluster.spec.cloud"
+                        [clusterId]="cluster.id"
+                        [nodeData]="nodeData"></km-vsphere-node-data>
 
-  <kubermatic-kubevirt-node-data *ngIf="cluster.spec.cloud.kubevirt"
-                                 [cloudSpec]="cluster.spec.cloud"
-                                 [clusterId]="cluster.id"
-                                 [nodeData]="nodeData"></kubermatic-kubevirt-node-data>
+  <km-kubevirt-node-data *ngIf="cluster.spec.cloud.kubevirt"
+                         [cloudSpec]="cluster.spec.cloud"
+                         [clusterId]="cluster.id"
+                         [nodeData]="nodeData"></km-kubevirt-node-data>
 
-  <kubermatic-azure-node-data *ngIf="cluster.spec.cloud.azure"
-                              [cloudSpec]="cluster.spec.cloud"
-                              [nodeData]="nodeData"
-                              [projectId]="projectId"
-                              [clusterId]="cluster.id"
-                              [seedDCName]="seedDCName"></kubermatic-azure-node-data>
+  <km-azure-node-data *ngIf="cluster.spec.cloud.azure"
+                      [cloudSpec]="cluster.spec.cloud"
+                      [nodeData]="nodeData"
+                      [projectId]="projectId"
+                      [clusterId]="cluster.id"
+                      [seedDCName]="seedDCName"></km-azure-node-data>
 
-  <kubermatic-gcp-node-data *ngIf="cluster.spec.cloud.gcp"
-                            [cloudSpec]="cluster.spec.cloud"
-                            [clusterId]="cluster.id"
-                            [projectId]="projectId"
-                            [seedDCName]="seedDCName"
-                            [nodeData]="nodeData"></kubermatic-gcp-node-data>
+  <km-gcp-node-data *ngIf="cluster.spec.cloud.gcp"
+                    [cloudSpec]="cluster.spec.cloud"
+                    [clusterId]="cluster.id"
+                    [projectId]="projectId"
+                    [seedDCName]="seedDCName"
+                    [nodeData]="nodeData"></km-gcp-node-data>
 
   <mat-button-toggle-group group="operatingSystemGroup"
                            formControlName="operatingSystem">
@@ -186,9 +186,9 @@
 
 <!-- Extended Node Options -->
 <ng-container *ngIf="!isInWizard">
-  <kubermatic-node-data-options [nodeData]="nodeData"
-                                [cloudSpec]="cluster.spec.cloud"
-                                [isInWizard]="isInWizard"></kubermatic-node-data-options>
+  <km-node-data-options [nodeData]="nodeData"
+                        [cloudSpec]="cluster.spec.cloud"
+                        [isInWizard]="isInWizard"></km-node-data-options>
 </ng-container>
 
 <!-- Node Labels & Taints -->

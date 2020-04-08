@@ -13,7 +13,7 @@ import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 import {ClusterService} from '../../service/cluster';
 
 @Component({
-  selector: 'kubermatic-wizard-summary-step',
+  selector: 'km-wizard-summary-step',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })

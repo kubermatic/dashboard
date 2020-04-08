@@ -26,7 +26,7 @@ enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-wizard-cluster-step',
+  selector: 'km-wizard-cluster-step',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   providers: [

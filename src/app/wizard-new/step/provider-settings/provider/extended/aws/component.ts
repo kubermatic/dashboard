@@ -17,7 +17,7 @@ enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-wizard-aws-provider-extended',
+  selector: 'km-wizard-aws-provider-extended',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AWSProviderExtendedComponent), multi: true},

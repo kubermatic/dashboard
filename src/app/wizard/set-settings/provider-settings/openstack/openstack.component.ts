@@ -12,7 +12,7 @@ import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
 @Component({
-  selector: 'kubermatic-openstack-cluster-settings',
+  selector: 'km-openstack-cluster-settings',
   templateUrl: './openstack.component.html',
   styleUrls: ['./openstack.component.scss'],
 })

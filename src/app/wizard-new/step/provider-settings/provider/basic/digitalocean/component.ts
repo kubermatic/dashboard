@@ -14,7 +14,7 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-wizard-digitalocean-provider-basic',
+  selector: 'km-wizard-digitalocean-provider-basic',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DigitalOceanProviderBasicComponent), multi: true},

@@ -7,7 +7,7 @@ import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
-  selector: 'kubermatic-kubevirt-node-data',
+  selector: 'km-kubevirt-node-data',
   templateUrl: './kubevirt-node-data.component.html',
 })
 

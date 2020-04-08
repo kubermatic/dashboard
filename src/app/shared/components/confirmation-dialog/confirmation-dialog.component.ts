@@ -14,7 +14,7 @@ export interface ConfirmationDialogConfig {
 }
 
 @Component({
-  selector: 'kubermatic-confirmation-dialog',
+  selector: 'km-confirmation-dialog',
   templateUrl: './confirmation-dialog.component.html',
 })
 export class ConfirmationDialogComponent {

@@ -9,7 +9,7 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {MachineNetworkForm} from '../../../shared/model/ClusterForm';
 
 @Component({
-  selector: 'kubermatic-add-machine-network',
+  selector: 'km-add-machine-network',
   templateUrl: './add-machine-network.component.html',
 })
 

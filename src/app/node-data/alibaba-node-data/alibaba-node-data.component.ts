@@ -14,7 +14,7 @@ import {filterArrayOptions} from '../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 
 @Component({
-  selector: 'kubermatic-alibaba-node-data',
+  selector: 'km-alibaba-node-data',
   templateUrl: './alibaba-node-data.component.html',
 })
 

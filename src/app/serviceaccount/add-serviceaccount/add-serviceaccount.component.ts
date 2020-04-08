@@ -9,7 +9,7 @@ import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {CreateServiceAccountEntity} from '../../shared/entity/ServiceAccountEntity';
 
 @Component({
-  selector: 'kubermatic-add-serviceaccount',
+  selector: 'km-add-serviceaccount',
   templateUrl: './add-serviceaccount.component.html',
 })
 export class AddServiceAccountComponent implements OnInit {

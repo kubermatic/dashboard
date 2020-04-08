@@ -9,7 +9,7 @@ import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {ServiceAccountEntity} from '../../shared/entity/ServiceAccountEntity';
 
 @Component({
-  selector: 'kubermatic-edit-serviceaccount',
+  selector: 'km-edit-serviceaccount',
   templateUrl: './edit-serviceaccount.component.html',
 })
 

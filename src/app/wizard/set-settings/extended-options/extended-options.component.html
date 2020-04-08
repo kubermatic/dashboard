@@ -9,15 +9,15 @@
          *ngIf="isExtended && !cluster.spec.cloud.digitalocean && !cluster.spec.cloud.packet && !cluster.spec.cloud.alibaba">
       Extended Provider Settings
     </div>
-    <kubermatic-cluster-provider-options [cluster]="cluster"></kubermatic-cluster-provider-options>
+    <km-cluster-provider-options [cluster]="cluster"></km-cluster-provider-options>
   </div>
   <div fxFlex="50%"
        class="km-ext-opt">
     <div class="km-header"
          *ngIf="isExtended">Extended Node Settings
     </div>
-    <kubermatic-node-data-options [nodeData]="nodeData"
-                                  [cloudSpec]="cluster.spec.cloud"
-                                  [isInWizard]="isInWizard()"></kubermatic-node-data-options>
+    <km-node-data-options [nodeData]="nodeData"
+                          [cloudSpec]="cluster.spec.cloud"
+                          [isInWizard]="isInWizard()"></km-node-data-options>
   </div>
 </div>

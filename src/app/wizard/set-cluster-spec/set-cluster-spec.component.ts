@@ -12,7 +12,7 @@ import {ClusterType, ClusterUtils} from '../../shared/utils/cluster-utils/cluste
 import {AsyncValidators} from '../../shared/validators/async-label-form.validator';
 
 @Component({
-  selector: 'kubermatic-set-cluster-spec',
+  selector: 'km-set-cluster-spec',
   templateUrl: 'set-cluster-spec.component.html',
   styleUrls: ['set-cluster-spec.component.scss'],
 })

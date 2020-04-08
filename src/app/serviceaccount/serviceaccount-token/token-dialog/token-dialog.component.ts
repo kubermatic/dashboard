@@ -4,7 +4,7 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {ServiceAccountTokenEntity} from '../../../shared/entity/ServiceAccountEntity';
 
 @Component({
-  selector: 'kubermatic-token-dialog',
+  selector: 'km-token-dialog',
   templateUrl: './token-dialog.component.html',
   styleUrls: ['./token-dialog.component.scss'],
 })

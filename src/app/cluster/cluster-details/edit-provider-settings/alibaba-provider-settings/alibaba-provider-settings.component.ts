@@ -7,7 +7,7 @@ import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
 
 @Component({
-  selector: 'kubermatic-alibaba-provider-settings',
+  selector: 'km-alibaba-provider-settings',
   templateUrl: './alibaba-provider-settings.component.html',
 })
 

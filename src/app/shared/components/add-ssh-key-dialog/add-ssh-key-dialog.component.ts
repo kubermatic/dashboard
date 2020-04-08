@@ -8,7 +8,7 @@ import {SSHKeyEntity} from '../../entity/SSHKeyEntity';
 import {SSHKeyFormValidator} from '../../validators/ssh-key-form.validator';
 
 @Component({
-  selector: 'kubermatic-add-ssh-key-dialog',
+  selector: 'km-add-ssh-key-dialog',
   templateUrl: './add-ssh-key-dialog.component.html',
   styleUrls: ['./add-ssh-key-dialog.component.scss'],
 })

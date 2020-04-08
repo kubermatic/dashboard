@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 import {Auth} from '../../core/services';
 
 @Component({
-  selector: 'kubermatic-page-not-found',
+  selector: 'km-page-not-found',
   templateUrl: './page-not-found.component.html',
   styleUrls: ['./page-not-found.component.scss'],
 })

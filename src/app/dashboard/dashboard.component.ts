@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 
 @Component({
-  selector: 'kubermatic-dashboard',
+  selector: 'km-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['dashboard.component.scss'],
 })

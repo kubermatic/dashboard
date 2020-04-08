@@ -4,7 +4,7 @@ import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 
 @Component({
-  selector: 'kubermatic-node-data-options',
+  selector: 'km-node-data-options',
   templateUrl: './node-data-options.component.html',
 })
 

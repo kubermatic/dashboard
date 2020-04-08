@@ -17,7 +17,7 @@ import {EditServiceAccountTokenComponent} from './edit-serviceaccount-token/edit
 import {TokenDialogComponent} from './token-dialog/token-dialog.component';
 
 @Component({
-  selector: 'kubermatic-serviceaccount-token',
+  selector: 'km-serviceaccount-token',
   templateUrl: './serviceaccount-token.component.html',
   styleUrls: ['./serviceaccount-token.component.scss'],
 })

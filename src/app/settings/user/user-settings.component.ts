@@ -13,7 +13,7 @@ import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
 
 @Component({
-  selector: 'kubermatic-user-settings',
+  selector: 'km-user-settings',
   templateUrl: 'user-settings.component.html',
   styleUrls: ['user-settings.component.scss'],
 })

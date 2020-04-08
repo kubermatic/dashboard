@@ -27,7 +27,7 @@ export interface NodeDataModalData {
 }
 
 @Component({
-  selector: 'kubermatic-node-data-modal',
+  selector: 'km-node-data-modal',
   templateUrl: './node-data-modal.component.html',
   styleUrls: ['./node-data-modal.component.scss'],
 })

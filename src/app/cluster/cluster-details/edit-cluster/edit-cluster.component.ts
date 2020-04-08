@@ -14,7 +14,7 @@ import {ResourceType} from '../../../shared/entity/LabelsEntity';
 import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
 
 @Component({
-  selector: 'kubermatic-edit-cluster',
+  selector: 'km-edit-cluster',
   templateUrl: './edit-cluster.component.html',
   styleUrls: ['./edit-cluster.component.scss'],
 })
