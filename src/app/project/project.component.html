@@ -163,7 +163,7 @@
         </div>
       </ng-container>
 
-      <div [hidden]="!isPaginatorVisible || showCards">
+      <div [hidden]="!isPaginatorVisible() || showCards">
         <mat-paginator showFirstLastButtons
                        class="km-paginator"></mat-paginator>
       </div>
