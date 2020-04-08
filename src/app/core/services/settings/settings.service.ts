@@ -4,18 +4,19 @@ import {BehaviorSubject, iif, merge, Observable, of, Subject, timer} from 'rxjs'
 import {catchError, delay, map, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
 import {webSocket} from 'rxjs/webSocket';
 
-import {Auth} from '..';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../../shared/entity/AdminSettings';
 import {Theme, UserSettings} from '../../../shared/entity/MemberEntity';
 import {CustomLink} from '../../../shared/utils/custom-link-utils/custom-link';
+import {Auth} from '../auth/auth.service';
 
 const DEFAULT_USER_SETTINGS: UserSettings = {
   itemsPerPage: 10,
   selectProjectTableView: false,
   selectedTheme: Theme.Light,
   collapseSidenav: false,
+  displayAllProjectsForAdmin: false,
 };
 
 const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
@@ -52,6 +53,10 @@ export class SettingsService {
   constructor(
       private readonly _httpClient: HttpClient, private readonly _appConfigService: AppConfigService,
       private readonly _auth: Auth) {}
+
+  get defaultUserSettings(): UserSettings {
+    return DEFAULT_USER_SETTINGS;
+  }
 
   get userSettings(): Observable<UserSettings> {
     if (!this._userSettings$) {

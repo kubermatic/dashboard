@@ -1614,4 +1614,10 @@
   .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container {
     transform: translate3d(26px, 0, 0);
   }
+
+  .km-user-settings-form-field {
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+  }
 }

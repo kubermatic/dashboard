@@ -4,8 +4,7 @@ import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../app-config.service';
-import {NotificationService} from '../../core/services';
-import {ProjectService, UserService} from '../../core/services';
+import {NotificationService, ProjectService, UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {MemberEntity, Theme, UserSettings} from '../../shared/entity/MemberEntity';
@@ -81,5 +80,9 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
 
   hasDefaultProject(): string {
     return !!this.settings.selectedProjectId ? '' : '-- None --';
+  }
+
+  isAdmin(): boolean {
+    return !!this.user && this.user.isAdmin;
   }
 }

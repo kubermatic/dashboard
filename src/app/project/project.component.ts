@@ -1,13 +1,11 @@
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
-import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
-import {merge, Subject, timer} from 'rxjs';
+import {Subject, timer} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
@@ -34,7 +32,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   projects: ProjectEntity[] = [];
   currentUser: MemberEntity;
   isInitializing = true;
-  clusterCount = [];
   role = [];
   rawRole = [];
   displayedColumns: string[] = ['status', 'name', 'labels', 'id', 'role', 'clusters', 'owners', 'actions'];
@@ -43,6 +40,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   isPaginatorVisible = false;
 
   paginator: MatPaginator;
+
   @ViewChild(MatPaginator, {static: false})
   set matPaginator(mp: MatPaginator) {
     const isViewInit = !this.paginator && !!mp;  // If true, view is being initialized.
@@ -57,14 +55,15 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   sort: MatSort;
+
   @ViewChild(MatSort)
   set matSort(ms: MatSort) {
     this.sort = ms;
     this.setDataSourceAttributes();
   }
+
   settings: UserSettings;
   private _settingsChange = new Subject<void>();
-  private _displayAllProjectsChange = new Subject<void>();
   private _unsubscribe: Subject<any> = new Subject();
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
 
@@ -91,14 +90,14 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
     this._settingsChange.pipe(debounceTime(1000))
         .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(() => this._settingsService.patchUserSettings({'selectProjectTableView': !this.showCards})))
+        .pipe(switchMap(
+            () => this._settingsService.patchUserSettings({selectProjectTableView: !this.showCards} as UserSettings)))
         .subscribe(settings => {
           this.settings = settings;
           this.showCards = !settings.selectProjectTableView;
         });
 
-    merge(this._displayAllProjectsChange, this._refreshTimer$)
-        .pipe(takeUntil(this._unsubscribe))
+    this._refreshTimer$.pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(() => this._projectService.projects))
         .subscribe(projects => {
           this.projects = this._loadCurrentUserRolesAndSortProjects(projects);
@@ -121,10 +120,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(): void {
     this.dataSource.data = this.projects;
-  }
-
-  isAdmin(): boolean {
-    return !!this.currentUser && this.currentUser.isAdmin;
   }
 
   setDataSourceAttributes(): void {
@@ -334,14 +329,5 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   isPaginatorVisibleFn(): boolean {
     return this.hasItems() && this.paginator && this.projects.length > this.paginator.pageSize;
-  }
-
-  projectSliderChanged(event: MatSlideToggleChange): void {
-    this._projectService.setDisplayAll(event.checked);
-    this._displayAllProjectsChange.next();
-  }
-
-  isProjectSliderChecked(): boolean {
-    return this._projectService.displayAll;
   }
 }

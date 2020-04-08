@@ -1,10 +1,6 @@
 <div fxLayout>
   <div fxFlex
        class="km-project-top-bar">
-    <mat-slide-toggle labelPosition="before"
-                      (change)="projectSliderChanged($event)"
-                      [checked]="isProjectSliderChecked()"
-                      *ngIf="isAdmin()">Show all projects</mat-slide-toggle>
     <mat-button-toggle-group class="km-project-view-switch"
                              group="projectsView"
                              (change)="changeView()">
