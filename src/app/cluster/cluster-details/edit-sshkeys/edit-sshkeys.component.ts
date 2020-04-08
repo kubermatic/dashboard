@@ -11,8 +11,10 @@ import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
-import {UserGroupConfig} from '../../../shared/model/Config';
+import {GroupConfig} from '../../../shared/model/Config';
+import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 
 import {AddClusterSSHKeysComponent} from './add-cluster-sshkeys/add-cluster-sshkeys.component';
 
@@ -29,11 +31,11 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
 
   loading = true;
   sshKeys: SSHKeyEntity[] = [];
-  userGroup: string;
-  userGroupConfig: UserGroupConfig;
   displayedColumns: string[] = ['name', 'actions'];
   dataSource = new MatTableDataSource<SSHKeyEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  private _user: MemberEntity;
+  private _currentGroupConfig: GroupConfig;
   private _unsubscribe: Subject<any> = new Subject();
   private _sshKeysUpdate: Subject<any> = new Subject();
 
@@ -47,10 +49,10 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.userGroupConfig = this._appConfig.getUserGroupConfig();
-    this._userService.currentUserGroup(this.projectID).pipe(takeUntil(this._unsubscribe)).subscribe((group) => {
-      this.userGroup = group;
-    });
+    this._userService.loggedInUser.pipe(first()).subscribe(user => this._user = user);
+
+    this._userService.currentUserGroup(this.projectID)
+        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
 
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
@@ -82,6 +84,10 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     return !!this.sshKeys && this.sshKeys.length > 0;
   }
 
+  canAdd(): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshKeys', Permission.Create);
+  }
+
   addSshKey(): void {
     const dialogRef = this._dialog.open(AddClusterSSHKeysComponent);
     dialogRef.componentInstance.projectID = this.projectID;
@@ -95,6 +101,10 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
         this._sshKeysUpdate.next();
       }
     });
+  }
+
+  canDelete(): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshKeys', Permission.Delete);
   }
 
   deleteSshKey(sshKey: SSHKeyEntity): void {

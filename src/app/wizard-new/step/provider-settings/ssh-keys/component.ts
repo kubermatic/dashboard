@@ -2,11 +2,14 @@ import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angu
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
+
 import {ApiService, ProjectService, UserService} from '../../../../core/services';
 import {AddSshKeyDialogComponent} from '../../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
+import {MemberEntity} from '../../../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../../../shared/entity/ProjectEntity';
 import {SSHKeyEntity} from '../../../../shared/entity/SSHKeyEntity';
 import {GroupConfig} from '../../../../shared/model/Config';
+import {MemberUtils, Permission} from '../../../../shared/utils/member-utils/member-utils';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../service/cluster';
 
@@ -28,6 +31,7 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
 
   private _keys: SSHKeyEntity[] = [];
   private _project = {} as ProjectEntity;
+  private _user: MemberEntity;
   private _groupConfig: GroupConfig;
 
   constructor(
@@ -50,6 +54,8 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
     this.form = this._builder.group({
       [Controls.Keys]: this._builder.control([]),
     });
+
+    this._userService.loggedInUser.pipe(first()).subscribe(user => this._user = user);
 
     this._projectService.selectedProject.pipe(tap(project => this._project = project))
         .pipe(switchMap(_ => this._userService.currentUserGroup(this._project.id)))
@@ -87,8 +93,8 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
     return a && b ? a.id === b.id : a === b;
   }
 
-  canAddSSHKey(): boolean {
-    return !!this._groupConfig && this._groupConfig.sshKeys.create;
+  canAdd(): boolean {
+    return MemberUtils.hasPermission(this._user, this._groupConfig, `sshKeys`, Permission.Create);
   }
 
   hasKeys(): boolean {

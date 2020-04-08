@@ -4,7 +4,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Subject, timer} from 'rxjs';
-import {retry, switchMap, takeUntil} from 'rxjs/operators';
+import {first, retry, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
 import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
@@ -12,8 +12,10 @@ import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddSshKeyDialogComponent} from '../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {MemberEntity} from '../shared/entity/MemberEntity';
 import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
-import {UserGroupConfig} from '../shared/model/Config';
+import {GroupConfig} from '../shared/model/Config';
+import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
 
 @Component({
   selector: 'kubermatic-sshkey',
@@ -25,7 +27,6 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   loading = true;
   sshKeys: SSHKeyEntity[] = [];
   userGroup: string;
-  userGroupConfig: UserGroupConfig;
   projectID: string;
   isShowPublicKey = [];
   displayedColumns: string[] = ['stateArrow', 'name', 'fingerprint', 'creationTimestamp', 'actions'];
@@ -33,6 +34,8 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   dataSource = new MatTableDataSource<SSHKeyEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  private _user: MemberEntity;
+  private _currentGroupConfig: GroupConfig;
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
@@ -43,11 +46,16 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
       private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
-    this.userGroupConfig = this._appConfigService.getUserGroupConfig();
     this.dataSource.data = this.sshKeys;
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
+
+    this._userService.loggedInUser.pipe(first()).subscribe(user => this._user = user);
+
+    this._userService.currentUserGroup(this.projectID)
+        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
+
 
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
@@ -92,6 +100,10 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  canAdd(): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, `sshKeys`, Permission.Create);
+  }
+
   addSshKey(): void {
     const dialogRef = this.dialog.open(AddSshKeyDialogComponent);
     dialogRef.componentInstance.projectID = this.projectID;
@@ -99,6 +111,10 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
     dialogRef.afterClosed().subscribe((result) => {
       result && this.refreshSSHKeys();  // tslint:disable-line
     });
+  }
+
+  canDelete(): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, `sshKeys`, Permission.Delete);
   }
 
   deleteSshKey(sshKey: SSHKeyEntity, event: Event): void {

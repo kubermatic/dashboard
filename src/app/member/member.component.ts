@@ -14,7 +14,7 @@ import {ConfirmationDialogComponent} from '../shared/components/confirmation-dia
 import {MemberEntity} from '../shared/entity/MemberEntity';
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
 import {GroupConfig} from '../shared/model/Config';
-import {MemberUtils} from '../shared/utils/member-utils/member-utils';
+import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
 
 import {AddMemberComponent} from './add-member/add-member.component';
 import {EditMemberComponent} from './edit-member/edit-member.component';
@@ -92,7 +92,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isAddEnabled(): boolean {
-    return !this._currentGroupConfig || this._currentGroupConfig.members.invite;
+    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, 'members', Permission.Create);
   }
 
   addMember(): void {
@@ -107,7 +107,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isEditEnabled(member: MemberEntity): boolean {
-    return !this._currentGroupConfig || this._currentGroupConfig.members.edit ||
+    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, 'members', Permission.Edit) ||
         (this.currentUser && member && this.currentUser.email !== member.email);
   }
 
@@ -123,7 +123,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isDeleteEnabled(member: MemberEntity): boolean {
-    return !this._currentGroupConfig || this._currentGroupConfig.members.remove ||
+    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, 'members', Permission.Delete) ||
         (this.currentUser && member && this.currentUser.email !== member.email);
   }
 

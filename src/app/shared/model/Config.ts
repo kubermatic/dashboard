@@ -42,8 +42,8 @@ export class Projects implements Viewable {
 export class Members implements Viewable {
   view?: boolean;
   edit?: boolean;
-  remove?: boolean;
-  invite?: boolean;
+  delete?: boolean;
+  create?: boolean;
 }
 
 export class SSHKeys implements Viewable {

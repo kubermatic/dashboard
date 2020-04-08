@@ -35,14 +35,22 @@ export class MemberUtils {
 
   static hasPermission(member: MemberEntity, groupConfig: GroupConfig, viewName: string, permission: Permission):
       boolean {
+    // Deny access if the user is invalid.
     if (!member) {
       return false;
     }
 
+    // Allow access if the user has administrator privileges.
     if (member.isAdmin) {
       return true;
     }
 
-    return !!groupConfig && groupConfig[viewName] && groupConfig[viewName][permission];
+    // Allow access if the access configuration is missing.
+    if (!groupConfig || groupConfig[viewName]) {
+      return true;
+    }
+
+    // Check the access permission in the access configuration.
+    return groupConfig[viewName][permission];
   }
 }

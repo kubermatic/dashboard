@@ -39,7 +39,7 @@
                 <button mat-icon-button
                         matTooltip="Delete SSH key"
                         (click)="deleteSshKey(element, $event)"
-                        [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.delete">
+                        [disabled]="!canDelete()">
                   <i class="km-icon-delete"></i>
                 </button>
               </ng-container>
@@ -62,7 +62,7 @@
         <button id="km-add-sshkey-to-cluster"
                 class="km-text-muted"
                 (click)="addSshKey()"
-                [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.create">+ Add SSH key</button>
+                [disabled]="!canAdd()">+ Add SSH key</button>
       </div>
     </ng-container>
 

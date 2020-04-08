@@ -14,13 +14,13 @@
   <button *ngIf="hasKeys()"
           (click)="addSSHKeyDialog()"
           mat-flat-button
-          [disabled]="!canAddSSHKey()">Add SSH key
+          [disabled]="!canAdd()">Add SSH key
   </button>
   <div *ngIf="!hasKeys()">
     <p>You have no SSH keys</p>
     <button (click)="addSSHKeyDialog()"
             mat-flat-button
-            [disabled]="!canAddSSHKey()">Add SSH key
+            [disabled]="!canAdd()">Add SSH key
     </button>
   </div>
 </form>
