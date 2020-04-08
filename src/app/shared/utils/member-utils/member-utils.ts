@@ -46,7 +46,7 @@ export class MemberUtils {
     }
 
     // Allow access if the access configuration is missing.
-    if (!groupConfig || groupConfig[viewName]) {
+    if (!groupConfig || !groupConfig[viewName]) {
       return true;
     }
 
