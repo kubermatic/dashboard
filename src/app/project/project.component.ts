@@ -37,7 +37,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   displayedColumns: string[] = ['status', 'name', 'labels', 'id', 'role', 'clusters', 'owners', 'actions'];
   dataSource = new MatTableDataSource<ProjectEntity>();
   showCards = true;
-  isPaginatorVisible = false;
 
   paginator: MatPaginator;
   @ViewChild(MatPaginator, {static: false})
@@ -48,8 +47,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     if (isViewInit) {
       setTimeout(() => {
         this.paginator.pageSize = this.settings.itemsPerPage;
-        this.isPaginatorVisible = this.isPaginatorVisibleFn();
-      }, 100);
+      });
     }
   }
 
@@ -108,7 +106,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
         });
 
     this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe(projects => {
-      this.projects = projects;
+      this.projects = projects.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
       this.dataSource.data = this.projects;
       this._sortProjectOwners();
       this._loadClusterCounts();
@@ -332,11 +330,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     this._router.navigate([`/projects/${this.projects[0].id}/clusters`]);
   }
 
-  hasItems(): boolean {
-    return this.projects && this.projects.length > 0;
-  }
-
-  isPaginatorVisibleFn(): boolean {
-    return this.hasItems() && this.paginator && this.projects.length > this.paginator.pageSize;
+  isPaginatorVisible(): boolean {
+    return !_.isEmpty(this.projects) && this.paginator && this.projects.length > this.paginator.pageSize;
   }
 }
