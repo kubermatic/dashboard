@@ -107,6 +107,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
       this._selectedPreset = preset;
       if (!preset) {
+        this.form.controls.flavor.setValue('');
         this.flavors = [];
         this.checkFlavorState();
       }
@@ -220,6 +221,10 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   }
 
   private _loadFlavors(): void {
+    if (!this._hasCredentials() && !this._selectedPreset) {
+      return;
+    }
+
     this.loadingFlavors = !this.isInWizard() || this._hasCredentials() || !!this._selectedPreset;
 
     iif(() => this.isInWizard(),
