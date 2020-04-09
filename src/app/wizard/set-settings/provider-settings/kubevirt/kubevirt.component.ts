@@ -8,7 +8,7 @@ import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm'
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
 @Component({
-  selector: 'kubermatic-kubevirt-cluster-settings',
+  selector: 'km-kubevirt-cluster-settings',
   templateUrl: './kubevirt.component.html',
 })
 export class KubeVirtClusterSettingsComponent implements OnInit, OnDestroy {

@@ -1,20 +1,20 @@
 <form [formGroup]="form"
       [ngSwitch]="provider">
-  <kubermatic-aws-basic-node-data *ngSwitchCase="Provider.AWS"
-                                  [formControl]="form.get(Control.ProviderBasic)">
-  </kubermatic-aws-basic-node-data>
-  <kubermatic-digitalocean-basic-node-data *ngSwitchCase="Provider.DIGITALOCEAN"
-                                           [formControl]="form.get(Control.ProviderBasic)">
-  </kubermatic-digitalocean-basic-node-data>
-  <kubermatic-vsphere-basic-node-data *ngSwitchCase="Provider.VSPHERE"
-                                      [formControl]="form.get(Control.ProviderBasic)">
-  </kubermatic-vsphere-basic-node-data>
+  <km-aws-basic-node-data *ngSwitchCase="Provider.AWS"
+                          [formControl]="form.get(Control.ProviderBasic)">
+  </km-aws-basic-node-data>
+  <km-digitalocean-basic-node-data *ngSwitchCase="Provider.DIGITALOCEAN"
+                                   [formControl]="form.get(Control.ProviderBasic)">
+  </km-digitalocean-basic-node-data>
+  <km-vsphere-basic-node-data *ngSwitchCase="Provider.VSPHERE"
+                              [formControl]="form.get(Control.ProviderBasic)">
+  </km-vsphere-basic-node-data>
   <km-kubevirt-basic-node-data *ngSwitchCase="Provider.KUBEVIRT"
                                [formControl]="form.get(Control.ProviderBasic)">
   </km-kubevirt-basic-node-data>
-  <kubermatic-hetzner-basic-node-data *ngSwitchCase="Provider.HETZNER"
-                                      [formControl]="form.get(Control.ProviderBasic)">
-  </kubermatic-hetzner-basic-node-data>
+  <km-hetzner-basic-node-data *ngSwitchCase="Provider.HETZNER"
+                              [formControl]="form.get(Control.ProviderBasic)">
+  </km-hetzner-basic-node-data>
   <km-packet-basic-node-data *ngSwitchCase="Provider.PACKET"
                              [formControl]="form.get(Control.ProviderBasic)"></km-packet-basic-node-data>
   <km-azure-basic-node-data *ngSwitchCase="Provider.AZURE"

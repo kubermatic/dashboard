@@ -12,7 +12,7 @@ import {ClusterEntity, Finalizer} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 
 @Component({
-  selector: 'kubermatic-cluster-delete-confirmation',
+  selector: 'km-cluster-delete-confirmation',
   templateUrl: './cluster-delete-confirmation.component.html',
   styleUrls: ['cluster-delete-confirmation.component.scss'],
 })

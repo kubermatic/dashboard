@@ -34,7 +34,7 @@ class MachineNetworkSpec {
 }
 
 @Component({
-  selector: 'km-machine-networks',
+  selector: 'km-machine-networks-new',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
   providers: [

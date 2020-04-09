@@ -123,20 +123,20 @@ describe('NodeDataComponent', () => {
     fixture.detectChanges();
     const addNodeElement: HTMLElement = fixture.nativeElement;
 
-    expect(addNodeElement.querySelector('kubermatic-aws-node-data')).not.toBeNull();
-    expect(addNodeElement.querySelector('kubermatic-openstack-node-data')).toBeNull();
-    expect(addNodeElement.querySelector('kubermatic-digitalocean-node-data')).toBeNull();
+    expect(addNodeElement.querySelector('km-aws-node-data')).not.toBeNull();
+    expect(addNodeElement.querySelector('km-openstack-node-data')).toBeNull();
+    expect(addNodeElement.querySelector('km-digitalocean-node-data')).toBeNull();
 
     component.cluster = fakeDigitaloceanCluster();
     fixture.detectChanges();
-    expect(addNodeElement.querySelector('kubermatic-digitalocean-node-data')).not.toBeNull();
-    expect(addNodeElement.querySelector('kubermatic-aws-node-data')).toBeNull();
-    expect(addNodeElement.querySelector('kubermatic-openstack-node-data')).toBeNull();
+    expect(addNodeElement.querySelector('km-digitalocean-node-data')).not.toBeNull();
+    expect(addNodeElement.querySelector('km-aws-node-data')).toBeNull();
+    expect(addNodeElement.querySelector('km-openstack-node-data')).toBeNull();
 
     component.cluster = fakeOpenstackCluster();
     fixture.detectChanges();
-    expect(addNodeElement.querySelector('kubermatic-openstack-node-data')).not.toBeNull();
-    expect(addNodeElement.querySelector('kubermatic-digitalocean-node-data')).toBeNull();
-    expect(addNodeElement.querySelector('kubermatic-aws-node-data')).toBeNull();
+    expect(addNodeElement.querySelector('km-openstack-node-data')).not.toBeNull();
+    expect(addNodeElement.querySelector('km-digitalocean-node-data')).toBeNull();
+    expect(addNodeElement.querySelector('km-aws-node-data')).toBeNull();
   });
 });

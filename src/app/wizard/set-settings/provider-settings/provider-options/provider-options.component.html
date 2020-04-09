@@ -1,14 +1,14 @@
-<kubermatic-aws-provider-options *ngIf="cluster.spec.cloud.aws"
-                                 [cluster]="cluster"></kubermatic-aws-provider-options>
+<km-aws-provider-options *ngIf="cluster.spec.cloud.aws"
+                         [cluster]="cluster"></km-aws-provider-options>
 
-<kubermatic-azure-provider-options *ngIf="cluster.spec.cloud.azure"
-                                   [cluster]="cluster"></kubermatic-azure-provider-options>
+<km-azure-provider-options *ngIf="cluster.spec.cloud.azure"
+                           [cluster]="cluster"></km-azure-provider-options>
 
-<kubermatic-gcp-provider-options *ngIf="cluster.spec.cloud.gcp"
-                                 [cluster]="cluster"></kubermatic-gcp-provider-options>
+<km-gcp-provider-options *ngIf="cluster.spec.cloud.gcp"
+                         [cluster]="cluster"></km-gcp-provider-options>
 
-<kubermatic-openstack-provider-options *ngIf="cluster.spec.cloud.openstack"
-                                       [cluster]="cluster"></kubermatic-openstack-provider-options>
+<km-openstack-provider-options *ngIf="cluster.spec.cloud.openstack"
+                               [cluster]="cluster"></km-openstack-provider-options>
 
-<kubermatic-vsphere-provider-options *ngIf="cluster.spec.cloud.vsphere"
-                                     [cluster]="cluster"></kubermatic-vsphere-provider-options>
+<km-vsphere-provider-options *ngIf="cluster.spec.cloud.vsphere"
+                             [cluster]="cluster"></km-vsphere-provider-options>

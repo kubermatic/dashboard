@@ -6,7 +6,7 @@ import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
 
 @Component({
-  selector: 'kubermatic-vsphere-provider-settings',
+  selector: 'km-vsphere-provider-settings',
   templateUrl: './vsphere-provider-settings.component.html',
 })
 

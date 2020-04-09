@@ -7,7 +7,7 @@ import {NodeDataService} from '../../../core/services/node-data/node-data.servic
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
-  selector: 'kubermatic-packet-node-options',
+  selector: 'km-packet-node-options',
   templateUrl: './packet-node-options.component.html',
 })
 

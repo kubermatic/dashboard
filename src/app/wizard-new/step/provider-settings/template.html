@@ -9,18 +9,18 @@
          fxLayout="column"
          fxLayoutGap="16px">
       <mat-card-title>Basic</mat-card-title>
-      <kubermatic-wizard-presets [formControl]="form.get(Control.Preset)"></kubermatic-wizard-presets>
-      <kubermatic-wizard-provider-basic [provider]="provider"
-                                        [formControl]="form.get(Control.ProviderBasic)"></kubermatic-wizard-provider-basic>
-      <kubermatic-wizard-cluster-ssh-keys [formControl]="form.get(Control.SSHKeys)"></kubermatic-wizard-cluster-ssh-keys>
+      <km-wizard-presets [formControl]="form.get(Control.Preset)"></km-wizard-presets>
+      <km-wizard-provider-basic [provider]="provider"
+                                [formControl]="form.get(Control.ProviderBasic)"></km-wizard-provider-basic>
+      <km-wizard-cluster-ssh-keys [formControl]="form.get(Control.SSHKeys)"></km-wizard-cluster-ssh-keys>
     </div>
 
     <div fxFlex="50"
          fxLayout="column">
-      <kubermatic-wizard-provider-extended [provider]="provider"
-                                           [visible]="true"
-                                           [formControl]="form.get(Control.ProviderExtended)">
-      </kubermatic-wizard-provider-extended>
+      <km-wizard-provider-extended [provider]="provider"
+                                   [visible]="true"
+                                   [formControl]="form.get(Control.ProviderExtended)">
+      </km-wizard-provider-extended>
     </div>
   </div>
 </div>

@@ -16,7 +16,7 @@ enum GroupTypes {
 }
 
 @Component({
-  selector: 'kubermatic-hetzner-basic-node-data',
+  selector: 'km-hetzner-basic-node-data',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => HetznerBasicNodeDataComponent), multi: true},

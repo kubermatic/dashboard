@@ -20,7 +20,7 @@ import {ClusterService as ClusterModelService} from './service/cluster';
 import {WizardService} from './service/wizard';
 
 @Component({
-  selector: 'kubermatic-wizard',
+  selector: 'km-wizard',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

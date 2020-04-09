@@ -14,7 +14,7 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-wizard-hetzner-provider-basic',
+  selector: 'km-wizard-hetzner-provider-basic',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => HetznerProviderBasicComponent), multi: true},

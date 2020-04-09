@@ -9,7 +9,7 @@ import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {MemberUtils} from '../../shared/utils/member-utils/member-utils';
 
 @Component({
-  selector: 'kubermatic-edit-member',
+  selector: 'km-edit-member',
   templateUrl: './edit-member.component.html',
 })
 export class EditMemberComponent implements OnInit {

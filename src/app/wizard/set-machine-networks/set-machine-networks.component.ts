@@ -9,7 +9,7 @@ import {NodeData} from '../../shared/model/NodeSpecChange';
 import {NodeUtils} from '../../shared/utils/node-utils/node-utils';
 
 @Component({
-  selector: 'kubermatic-set-machine-networks',
+  selector: 'km-set-machine-networks',
   templateUrl: 'set-machine-networks.component.html',
   styleUrls: ['set-machine-networks.component.scss'],
 })

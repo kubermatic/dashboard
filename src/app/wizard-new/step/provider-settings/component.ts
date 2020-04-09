@@ -15,7 +15,7 @@ enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-wizard-provider-settings-step',
+  selector: 'km-wizard-provider-settings-step',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ProviderSettingsStepComponent), multi: true},

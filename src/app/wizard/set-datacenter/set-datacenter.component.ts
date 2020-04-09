@@ -8,7 +8,7 @@ import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEnti
 import {DataCenterEntity, getDatacenterProvider} from '../../shared/entity/DatacenterEntity';
 
 @Component({
-  selector: 'kubermatic-set-datacenter',
+  selector: 'km-set-datacenter',
   templateUrl: 'set-datacenter.component.html',
   styleUrls: ['set-datacenter.component.scss'],
 })

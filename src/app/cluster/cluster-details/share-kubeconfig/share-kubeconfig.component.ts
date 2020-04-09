@@ -5,7 +5,7 @@ import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 
 @Component({
-  selector: 'kubermatic-share-kubeconfig',
+  selector: 'km-share-kubeconfig',
   templateUrl: './share-kubeconfig.component.html',
   styleUrls: ['./share-kubeconfig.component.scss'],
 })

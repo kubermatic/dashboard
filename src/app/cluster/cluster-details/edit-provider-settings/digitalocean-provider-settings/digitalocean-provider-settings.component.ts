@@ -7,7 +7,7 @@ import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
 
 @Component({
-  selector: 'kubermatic-digitalocean-provider-settings',
+  selector: 'km-digitalocean-provider-settings',
   templateUrl: './digitalocean-provider-settings.component.html',
 })
 

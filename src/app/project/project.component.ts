@@ -23,7 +23,7 @@ import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 import {EditProjectComponent} from './edit-project/edit-project.component';
 
 @Component({
-  selector: 'kubermatic-project',
+  selector: 'km-project',
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.scss'],
 })

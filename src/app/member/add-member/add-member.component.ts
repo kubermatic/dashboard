@@ -8,7 +8,7 @@ import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 
 @Component({
-  selector: 'kubermatic-add-member',
+  selector: 'km-add-member',
   templateUrl: './add-member.component.html',
 })
 export class AddMemberComponent implements OnInit {

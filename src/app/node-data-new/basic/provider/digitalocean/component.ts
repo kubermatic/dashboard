@@ -16,7 +16,7 @@ enum SizeTypes {
 }
 
 @Component({
-  selector: 'kubermatic-digitalocean-basic-node-data',
+  selector: 'km-digitalocean-basic-node-data',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DigitalOceanBasicNodeDataComponent), multi: true},

@@ -12,7 +12,7 @@ import {filterObjectOptions} from '../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 
 @Component({
-  selector: 'kubermatic-hetzner-node-data',
+  selector: 'km-hetzner-node-data',
   templateUrl: './hetzner-node-data.component.html',
 })
 

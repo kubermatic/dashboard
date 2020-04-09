@@ -16,7 +16,7 @@ import {AsyncValidators} from '../shared/validators/async-label-form.validator';
 import {NoIpsLeftValidator} from '../shared/validators/no-ips-left.validator';
 
 @Component({
-  selector: 'kubermatic-node-data',
+  selector: 'km-node-data',
   templateUrl: './node-data.component.html',
   styleUrls: ['./node-data.component.scss'],
 })

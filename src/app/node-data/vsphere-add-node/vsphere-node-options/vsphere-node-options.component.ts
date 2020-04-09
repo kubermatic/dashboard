@@ -10,7 +10,7 @@ import {OperatingSystemSpec} from '../../../shared/entity/NodeEntity';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
-  selector: 'kubermatic-vsphere-node-options',
+  selector: 'km-vsphere-node-options',
   templateUrl: './vsphere-node-options.component.html',
 })
 

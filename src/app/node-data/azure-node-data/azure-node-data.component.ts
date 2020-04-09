@@ -14,7 +14,7 @@ import {filterArrayOptions} from '../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 
 @Component({
-  selector: 'kubermatic-azure-node-data',
+  selector: 'km-azure-node-data',
   templateUrl: './azure-node-data.component.html',
   styleUrls: ['./azure-node-data.component.scss'],
 })

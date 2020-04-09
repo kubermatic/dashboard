@@ -7,7 +7,7 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {GroupConfig} from '../../../shared/model/Config';
 
 @Component({
-  selector: 'kubermatic-revoke-token',
+  selector: 'km-revoke-token',
   templateUrl: './revoke-token.component.html',
   styleUrls: ['./revoke-token.component.scss'],
 })

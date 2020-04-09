@@ -1,9 +1,9 @@
   <km-dialog-title>Add Machine Networks</km-dialog-title>
 
   <mat-dialog-content>
-    <kubermatic-machine-networks [cluster]="cluster"
-                                 [width]="100"
-                                 [isWizard]="false"></kubermatic-machine-networks>
+    <km-machine-networks [cluster]="cluster"
+                         [width]="100"
+                         [isWizard]="false"></km-machine-networks>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button (click)="addMachineNetworks()"

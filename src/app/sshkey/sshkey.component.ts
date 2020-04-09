@@ -16,7 +16,7 @@ import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
 import {UserGroupConfig} from '../shared/model/Config';
 
 @Component({
-  selector: 'kubermatic-sshkey',
+  selector: 'km-sshkey',
   templateUrl: './sshkey.component.html',
   styleUrls: ['./sshkey.component.scss'],
 })

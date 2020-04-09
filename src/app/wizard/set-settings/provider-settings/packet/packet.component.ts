@@ -10,7 +10,7 @@ import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm'
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
 @Component({
-  selector: 'kubermatic-packet-cluster-settings',
+  selector: 'km-packet-cluster-settings',
   templateUrl: './packet.component.html',
 })
 export class PacketClusterSettingsComponent implements OnInit, OnDestroy {

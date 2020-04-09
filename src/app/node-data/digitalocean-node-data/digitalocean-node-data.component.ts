@@ -12,7 +12,7 @@ import {filterObjectOptions} from '../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 
 @Component({
-  selector: 'kubermatic-digitalocean-node-data',
+  selector: 'km-digitalocean-node-data',
   templateUrl: './digitalocean-node-data.component.html',
 })
 

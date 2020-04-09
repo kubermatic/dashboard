@@ -13,7 +13,7 @@ import {filterArrayOptions} from '../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 
 @Component({
-  selector: 'kubermatic-openstack-node-data',
+  selector: 'km-openstack-node-data',
   styleUrls: ['./openstack-node-data.component.scss'],
   templateUrl: './openstack-node-data.component.html',
 })

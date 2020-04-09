@@ -8,7 +8,7 @@ import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm'
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
 @Component({
-  selector: 'kubermatic-gcp-cluster-settings',
+  selector: 'km-gcp-cluster-settings',
   templateUrl: './gcp.component.html',
 })
 export class GCPClusterSettingsComponent implements OnInit, OnDestroy {

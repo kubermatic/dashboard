@@ -22,7 +22,7 @@ enum VPCState {
 }
 
 @Component({
-  selector: 'kubermatic-wizard-aws-provider-basic',
+  selector: 'km-wizard-aws-provider-basic',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AWSProviderBasicComponent), multi: true},
