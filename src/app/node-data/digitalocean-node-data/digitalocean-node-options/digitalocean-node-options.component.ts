@@ -8,7 +8,7 @@ import {NodeDataService} from '../../../core/services/node-data/node-data.servic
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
-  selector: 'kubermatic-digitalocean-node-options',
+  selector: 'km-digitalocean-node-options',
   templateUrl: './digitalocean-node-options.component.html',
   styleUrls: ['./digitalocean-node-options.component.scss'],
 })

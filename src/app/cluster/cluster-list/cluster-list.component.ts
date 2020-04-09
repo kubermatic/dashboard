@@ -20,7 +20,7 @@ import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-del
 
 
 @Component({
-  selector: 'kubermatic-cluster-list',
+  selector: 'km-cluster-list',
   templateUrl: './cluster-list.component.html',
   styleUrls: ['./cluster-list.component.scss'],
 })

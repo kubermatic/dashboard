@@ -21,7 +21,7 @@ import {AddServiceAccountComponent} from './add-serviceaccount/add-serviceaccoun
 import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceaccount.component';
 
 @Component({
-  selector: 'kubermatic-serviceaccount',
+  selector: 'km-serviceaccount',
   templateUrl: './serviceaccount.component.html',
   styleUrls: ['./serviceaccount.component.scss'],
 })

@@ -14,7 +14,7 @@ export enum PresetsState {
 }
 
 @Component({
-  selector: 'kubermatic-custom-presets-settings',
+  selector: 'km-custom-presets-settings',
   templateUrl: './custom-presets.component.html',
   styleUrls: ['./custom-presets.component.scss'],
 })

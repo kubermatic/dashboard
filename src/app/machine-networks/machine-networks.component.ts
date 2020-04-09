@@ -6,7 +6,7 @@ import {WizardService} from '../core/services';
 import {ClusterEntity} from '../shared/entity/ClusterEntity';
 
 @Component({
-  selector: 'kubermatic-machine-networks',
+  selector: 'km-machine-networks',
   templateUrl: 'machine-networks.component.html',
   styleUrls: ['machine-networks.component.scss'],
 })

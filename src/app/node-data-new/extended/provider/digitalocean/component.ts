@@ -16,7 +16,7 @@ enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-digitalocean-extended-node-data',
+  selector: 'km-digitalocean-extended-node-data',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DigitalOceanExtendedNodeDataComponent), multi: true},

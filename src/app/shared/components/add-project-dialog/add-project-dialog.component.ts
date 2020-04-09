@@ -8,7 +8,7 @@ import {CreateProjectModel} from '../../model/CreateProjectModel';
 import {AsyncValidators} from '../../validators/async-label-form.validator';
 
 @Component({
-  selector: 'kubermatic-add-project-dialog',
+  selector: 'km-add-project-dialog',
   templateUrl: './add-project-dialog.component.html',
   styleUrls: ['./add-project-dialog.component.scss'],
 })

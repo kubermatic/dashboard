@@ -9,7 +9,7 @@ import {AVAILABLE_PACKET_BILLING_CYCLES} from '../../../../shared/entity/cloud/P
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 
 @Component({
-  selector: 'kubermatic-packet-provider-settings',
+  selector: 'km-packet-provider-settings',
   templateUrl: './packet-provider-settings.component.html',
 })
 

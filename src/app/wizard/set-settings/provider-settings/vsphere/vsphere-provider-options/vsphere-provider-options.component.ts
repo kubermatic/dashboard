@@ -12,7 +12,7 @@ import {filterArrayOptions, filterObjectOptions} from '../../../../../shared/uti
 import {AutocompleteFilterValidators} from '../../../../../shared/validators/autocomplete-filter.validator';
 
 @Component({
-  selector: 'kubermatic-vsphere-provider-options',
+  selector: 'km-vsphere-provider-options',
   templateUrl: './vsphere-provider-options.component.html',
 })
 

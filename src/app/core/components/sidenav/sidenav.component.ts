@@ -15,7 +15,7 @@ import {View} from '../../services/auth/auth.guard';
 import {SettingsService} from '../../services/settings/settings.service';
 
 @Component({
-  selector: 'kubermatic-sidenav',
+  selector: 'km-sidenav',
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.scss'],
 })

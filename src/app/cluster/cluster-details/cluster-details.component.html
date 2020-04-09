@@ -179,30 +179,30 @@
                                [datacenter]="datacenter"
                                [projectID]="projectID"></km-machine-networks-display>
 
-  <kubermatic-node-deployment-list [cluster]="cluster"
-                                   [nodeDeployments]="nodeDeployments"
-                                   [datacenter]="datacenter"
-                                   [projectID]="projectID"
-                                   [clusterHealthStatus]="clusterHealthStatus"
-                                   [isClusterRunning]="isClusterAPIRunning"
-                                   [isNodeDeploymentLoadFinished]="isNodeDeploymentLoadFinished"></kubermatic-node-deployment-list>
+  <km-node-deployment-list [cluster]="cluster"
+                           [nodeDeployments]="nodeDeployments"
+                           [datacenter]="datacenter"
+                           [projectID]="projectID"
+                           [clusterHealthStatus]="clusterHealthStatus"
+                           [isClusterRunning]="isClusterAPIRunning"
+                           [isNodeDeploymentLoadFinished]="isNodeDeploymentLoadFinished"></km-node-deployment-list>
 
   <div *ngIf="nodes.length > 0">
-    <kubermatic-node-list [cluster]="cluster"
-                          [nodes]="nodes"
-                          [datacenter]="datacenter"
-                          [projectID]="projectID"
-                          [clusterHealthStatus]="clusterHealthStatus"
-                          [isClusterRunning]="isClusterAPIRunning"></kubermatic-node-list>
+    <km-node-list [cluster]="cluster"
+                  [nodes]="nodes"
+                  [datacenter]="datacenter"
+                  [projectID]="projectID"
+                  [clusterHealthStatus]="clusterHealthStatus"
+                  [isClusterRunning]="isClusterAPIRunning"></km-node-list>
   </div>
 
-  <kubermatic-rbac *ngIf="isRBACEnabled()"
-                   [cluster]="cluster"
-                   [datacenter]="datacenter"
-                   [projectID]="projectID"
-                   [isClusterRunning]="isClusterRunning"
-                   [clusterBindings]="clusterBindings"
-                   [bindings]="bindings"></kubermatic-rbac>
+  <km-rbac *ngIf="isRBACEnabled()"
+           [cluster]="cluster"
+           [datacenter]="datacenter"
+           [projectID]="projectID"
+           [isClusterRunning]="isClusterRunning"
+           [clusterBindings]="clusterBindings"
+           [bindings]="bindings"></km-rbac>
 
   <mat-card class="km-with-table-header">
     <mat-card-header>

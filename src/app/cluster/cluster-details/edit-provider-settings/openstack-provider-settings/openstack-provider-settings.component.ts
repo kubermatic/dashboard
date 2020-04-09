@@ -7,7 +7,7 @@ import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
 
 @Component({
-  selector: 'kubermatic-openstack-provider-settings',
+  selector: 'km-openstack-provider-settings',
   templateUrl: './openstack-provider-settings.component.html',
 })
 

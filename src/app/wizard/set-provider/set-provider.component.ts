@@ -9,7 +9,7 @@ import {getDatacenterProvider} from '../../shared/entity/DatacenterEntity';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 
 @Component({
-  selector: 'kubermatic-set-provider',
+  selector: 'km-set-provider',
   templateUrl: 'set-provider.component.html',
   styleUrls: ['set-provider.component.scss'],
 })

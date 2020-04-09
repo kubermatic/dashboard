@@ -8,7 +8,7 @@ import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../../shared/entity/ServiceAccountEntity';
 
 @Component({
-  selector: 'kubermatic-edit-serviceaccount-token',
+  selector: 'km-edit-serviceaccount-token',
   templateUrl: './edit-serviceaccount-token.component.html',
 })
 

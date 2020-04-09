@@ -6,7 +6,7 @@ import * as SwaggerUI from 'swagger-ui';
 import {ApiService, Auth} from '../../core/services';
 
 @Component({
-  selector: 'kubermatic-api-docs',
+  selector: 'km-api-docs',
   templateUrl: './api-docs.component.html',
   styleUrls: ['./api-docs.component.scss'],
 })

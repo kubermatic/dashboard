@@ -19,7 +19,7 @@ export enum PresetsState {
 }
 
 @Component({
-  selector: 'kubermatic-wizard-presets',
+  selector: 'km-wizard-presets',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   providers: [

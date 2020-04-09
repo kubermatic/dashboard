@@ -12,7 +12,7 @@ import {SSHKeyEntity} from '../../../../shared/entity/SSHKeyEntity';
 import {UserGroupConfig} from '../../../../shared/model/Config';
 
 @Component({
-  selector: 'kubermatic-add-cluster-sshkeys',
+  selector: 'km-add-cluster-sshkeys',
   templateUrl: './add-cluster-sshkeys.component.html',
   styleUrls: ['./add-cluster-sshkeys.component.scss'],
 })

@@ -19,7 +19,7 @@ enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-aws-basic-node-data',
+  selector: 'km-aws-basic-node-data',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AWSBasicNodeDataComponent), multi: true},

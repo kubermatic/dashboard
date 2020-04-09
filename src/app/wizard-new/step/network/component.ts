@@ -10,7 +10,7 @@ enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-wizard-machine-network-step',
+  selector: 'km-wizard-machine-network-step',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
   providers: [

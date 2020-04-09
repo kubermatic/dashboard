@@ -8,7 +8,7 @@ import {NodeDataService} from '../../../core/services/node-data/node-data.servic
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
-  selector: 'kubermatic-aws-node-options',
+  selector: 'km-aws-node-options',
   templateUrl: './aws-node-options.component.html',
 })
 

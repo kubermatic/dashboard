@@ -20,7 +20,7 @@ import {AddMemberComponent} from './add-member/add-member.component';
 import {EditMemberComponent} from './edit-member/edit-member.component';
 
 @Component({
-  selector: 'kubermatic-member',
+  selector: 'km-member',
   templateUrl: './member.component.html',
   styleUrls: ['./member.component.scss'],
 })

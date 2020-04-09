@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {Auth} from '../../core/services';
 
 @Component({
-  selector: 'kubermatic-terms-of-service',
+  selector: 'km-terms-of-service',
   templateUrl: './terms-of-service.component.html',
   styleUrls: ['./terms-of-service.component.scss'],
 })

@@ -9,7 +9,7 @@ import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterFo
 import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
 
 @Component({
-  selector: 'kubermatic-gcp-provider-options',
+  selector: 'km-gcp-provider-options',
   templateUrl: './gcp-provider-options.component.html',
 })
 export class GCPProviderOptionsComponent implements OnInit, OnDestroy {

@@ -23,7 +23,7 @@ enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-node-data',
+  selector: 'km-node-data',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   providers: [

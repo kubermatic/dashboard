@@ -108,14 +108,14 @@
        fxLayout="column"
        fxLayoutGap="16px">
     <mat-card-title>{{ providerDisplayName }}</mat-card-title>
-    <kubermatic-basic-node-data [provider]="provider"
-                                [formControlName]="Controls.ProviderBasic">
-    </kubermatic-basic-node-data>
+    <km-basic-node-data [provider]="provider"
+                        [formControlName]="Controls.ProviderBasic">
+    </km-basic-node-data>
 
     <ng-container *ngIf="!isBasicViewOnly()">
-      <kubermatic-extended-node-data [provider]="provider"
-                                     [visible]="true"
-                                     [formControlName]="Controls.ProviderExtended"></kubermatic-extended-node-data>
+      <km-extended-node-data [provider]="provider"
+                             [visible]="true"
+                             [formControlName]="Controls.ProviderExtended"></km-extended-node-data>
     </ng-container>
   </div>
 </form>

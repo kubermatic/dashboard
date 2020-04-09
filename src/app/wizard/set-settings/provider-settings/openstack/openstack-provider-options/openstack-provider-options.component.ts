@@ -9,7 +9,7 @@ import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterFo
 import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
 
 @Component({
-  selector: 'kubermatic-openstack-provider-options',
+  selector: 'km-openstack-provider-options',
   templateUrl: './openstack-provider-options.component.html',
 })
 export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {

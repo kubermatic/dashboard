@@ -15,7 +15,7 @@ enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-wizard-cluster-ssh-keys',
+  selector: 'km-wizard-cluster-ssh-keys',
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
   providers: [

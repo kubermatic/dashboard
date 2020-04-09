@@ -15,7 +15,7 @@ enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-wizard-provider-step',
+  selector: 'km-wizard-provider-step',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   providers: [

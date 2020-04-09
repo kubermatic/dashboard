@@ -7,7 +7,7 @@ import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
 
 @Component({
-  selector: 'kubermatic-hetzner-provider-settings',
+  selector: 'km-hetzner-provider-settings',
   templateUrl: './hetzner-provider-settings.component.html',
 })
 

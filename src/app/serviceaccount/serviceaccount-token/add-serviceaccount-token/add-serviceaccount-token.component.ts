@@ -9,7 +9,7 @@ import {CreateTokenEntity, ServiceAccountEntity, ServiceAccountTokenEntity} from
 import {TokenDialogComponent} from '../token-dialog/token-dialog.component';
 
 @Component({
-  selector: 'kubermatic-add-serviceaccount-token',
+  selector: 'km-add-serviceaccount-token',
   templateUrl: './add-serviceaccount-token.component.html',
 })
 export class AddServiceAccountTokenComponent implements OnInit {

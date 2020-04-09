@@ -8,7 +8,7 @@ import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm'
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
 @Component({
-  selector: 'kubermatic-digitalocean-cluster-settings',
+  selector: 'km-digitalocean-cluster-settings',
   templateUrl: './digitalocean.component.html',
 })
 export class DigitaloceanClusterSettingsComponent implements OnInit, OnDestroy {

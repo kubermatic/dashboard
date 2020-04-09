@@ -10,7 +10,7 @@ import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
 
 @Component({
-  selector: 'kubermatic-alibaba-cluster-settings',
+  selector: 'km-alibaba-cluster-settings',
   templateUrl: './alibaba.component.html',
 })
 export class AlibabaClusterSettingsComponent implements OnInit, OnDestroy {

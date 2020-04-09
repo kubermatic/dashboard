@@ -13,7 +13,7 @@ import {SimpleBinding, SimpleClusterBinding} from '../../../shared/entity/RBACEn
 import {AddBindingComponent} from './add-binding/add-binding.component';
 
 @Component({
-  selector: 'kubermatic-rbac',
+  selector: 'km-rbac',
   templateUrl: './rbac.component.html',
   styleUrls: ['./rbac.component.scss'],
 })

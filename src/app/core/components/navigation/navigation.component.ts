@@ -8,7 +8,7 @@ import {Auth, UserService} from '../../services';
 import {SettingsService} from '../../services/settings/settings.service';
 
 @Component({
-  selector: 'kubermatic-navigation',
+  selector: 'km-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss'],
 })

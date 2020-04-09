@@ -8,7 +8,7 @@ import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm'
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
 @Component({
-  selector: 'kubermatic-hetzner-cluster-settings',
+  selector: 'km-hetzner-cluster-settings',
   templateUrl: './hetzner.component.html',
 })
 export class HetznerClusterSettingsComponent implements OnInit, OnDestroy {

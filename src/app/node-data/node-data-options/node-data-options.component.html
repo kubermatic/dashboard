@@ -1,25 +1,25 @@
-<kubermatic-alibaba-node-options *ngIf="cloudSpec.alibaba"
-                                 [nodeData]="nodeData"></kubermatic-alibaba-node-options>
+<km-alibaba-node-options *ngIf="cloudSpec.alibaba"
+                         [nodeData]="nodeData"></km-alibaba-node-options>
 
-<kubermatic-aws-node-options *ngIf="cloudSpec.aws"
-                             [nodeData]="nodeData"></kubermatic-aws-node-options>
+<km-aws-node-options *ngIf="cloudSpec.aws"
+                     [nodeData]="nodeData"></km-aws-node-options>
 
-<kubermatic-azure-node-options *ngIf="cloudSpec.azure"
-                               [nodeData]="nodeData"></kubermatic-azure-node-options>
+<km-azure-node-options *ngIf="cloudSpec.azure"
+                       [nodeData]="nodeData"></km-azure-node-options>
 
-<kubermatic-digitalocean-node-options *ngIf="cloudSpec.digitalocean"
-                                      [nodeData]="nodeData"
-                                      [isInWizard]="isInWizard"></kubermatic-digitalocean-node-options>
+<km-digitalocean-node-options *ngIf="cloudSpec.digitalocean"
+                              [nodeData]="nodeData"
+                              [isInWizard]="isInWizard"></km-digitalocean-node-options>
 
-<kubermatic-gcp-node-options *ngIf="cloudSpec.gcp"
-                             [nodeData]="nodeData"></kubermatic-gcp-node-options>
+<km-gcp-node-options *ngIf="cloudSpec.gcp"
+                     [nodeData]="nodeData"></km-gcp-node-options>
 
-<kubermatic-openstack-node-options *ngIf="cloudSpec.openstack"
-                                   [nodeData]="nodeData"></kubermatic-openstack-node-options>
+<km-openstack-node-options *ngIf="cloudSpec.openstack"
+                           [nodeData]="nodeData"></km-openstack-node-options>
 
-<kubermatic-packet-node-options *ngIf="cloudSpec.packet"
-                                [nodeData]="nodeData"></kubermatic-packet-node-options>
+<km-packet-node-options *ngIf="cloudSpec.packet"
+                        [nodeData]="nodeData"></km-packet-node-options>
 
-<kubermatic-vsphere-node-options *ngIf="cloudSpec.vsphere"
-                                 [nodeData]="nodeData"
-                                 [cloudSpec]="cloudSpec"></kubermatic-vsphere-node-options>
+<km-vsphere-node-options *ngIf="cloudSpec.vsphere"
+                         [nodeData]="nodeData"
+                         [cloudSpec]="cloudSpec"></km-vsphere-node-options>

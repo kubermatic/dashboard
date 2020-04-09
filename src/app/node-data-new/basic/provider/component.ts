@@ -11,7 +11,7 @@ enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-basic-node-data',
+  selector: 'km-basic-node-data',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => BasicNodeDataComponent), multi: true},

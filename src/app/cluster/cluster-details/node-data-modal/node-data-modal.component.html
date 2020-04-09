@@ -1,11 +1,11 @@
 <div *ngIf="data.nodeData">
   <km-dialog-title>{{getDialogLabel()}}</km-dialog-title>
   <mat-dialog-content class="km-add-node-outer">
-    <kubermatic-node-data [cluster]="data.cluster"
-                          [nodeData]="data.nodeData"
-                          [existingNodesCount]="data.existingNodesCount"
-                          (valid)="nodeDataValid = $event"
-                          [seedDc]="seedDC"></kubermatic-node-data>
+    <km-node-data [cluster]="data.cluster"
+                  [nodeData]="data.nodeData"
+                  [existingNodesCount]="data.existingNodesCount"
+                  (valid)="nodeDataValid = $event"
+                  [seedDc]="seedDC"></km-node-data>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-flat-button

@@ -14,7 +14,7 @@ import {filterArrayOptions, filterObjectOptions} from '../../shared/utils/common
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 
 @Component({
-  selector: 'kubermatic-aws-node-data',
+  selector: 'km-aws-node-data',
   templateUrl: './aws-node-data.component.html',
 })
 
