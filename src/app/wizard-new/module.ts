@@ -13,6 +13,7 @@ import {NodeSettingsStepComponent} from './step/node-settings/component';
 import {ProviderStepComponent} from './step/provider-datacenter/component';
 import {ProviderSettingsStepComponent} from './step/provider-settings/component';
 import {PresetsComponent} from './step/provider-settings/preset/component';
+import {AlibabaProviderBasicComponent} from './step/provider-settings/provider/basic/alibaba/component';
 import {AWSProviderBasicComponent} from './step/provider-settings/provider/basic/aws/component';
 import {AzureProviderBasicComponent} from './step/provider-settings/provider/basic/azure/component';
 import {ProviderBasicComponent} from './step/provider-settings/provider/basic/component';
@@ -37,6 +38,7 @@ const components: any[] = [
   MachineNetworkStepComponent,
   ProviderSettingsStepComponent,
   ProviderBasicComponent,
+  AlibabaProviderBasicComponent,
   AWSProviderBasicComponent,
   DigitalOceanProviderBasicComponent,
   HetznerProviderBasicComponent,

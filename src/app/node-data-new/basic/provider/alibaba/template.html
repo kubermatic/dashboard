@@ -1,0 +1,77 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      fxLayoutGap="16px">
+  <div fxFlex
+       class="mat-select-container">
+    <km-combobox [required]="true"
+                 [grouped]="false"
+                 [selected]="defaultInstanceType"
+                 [options]="instanceTypes"
+                 [formControlName]="Controls.InstanceType"
+                 (changed)="onInstanceTypeChange($event)"
+                 label="Instance Type"
+                 inputLabel="Select instance type..."
+                 filterBy="id">
+      <div *option="let instanceType">
+        {{instanceType.id}} ({{instanceType.cpuCoreCount}} CPU, {{instanceType.memorySize}} GB RAM)
+      </div>
+    </km-combobox>
+  </div>
+
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-label>Disk Type</mat-label>
+      <mat-select [formControlName]="Controls.DiskType"
+                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
+                  disableOptionCentering
+                  required>
+        <mat-option *ngFor="let type of diskTypes"
+                    [value]="type">
+          {{type}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field fxFlex>
+    <mat-label>Disk Size in GB</mat-label>
+    <input [formControlName]="Controls.DiskSize"
+           min="10"
+           max="16000"
+           type="number"
+           autocomplete="off"
+           matInput
+           required>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>vSwitch ID</mat-label>
+    <input [formControlName]="Controls.VSwitchID"
+           autocomplete="off"
+           matInput
+           required>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Internet Max Bandwidth Out</mat-label>
+    <input [formControlName]="Controls.InternetMaxBandwidthOut"
+           type="number"
+           autocomplete="off"
+           matInput
+           required>
+  </mat-form-field>
+
+  <km-combobox [required]="true"
+               [grouped]="false"
+               [selected]="defaultZone"
+               [options]="zones"
+               [formControlName]="Controls.ZoneID"
+               (changed)="onZoneChange($event)"
+               label="Zone ID"
+               inputLabel="Select zones..."
+               filterBy="id">
+    <div *option="let zone">{{zone.id}}</div>
+  </km-combobox>
+
+</form>
