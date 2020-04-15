@@ -24,9 +24,7 @@ export enum Controls {
   ]
 })
 export class AzureProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  readonly controls = Controls;
-
-  protected readonly _debounceTime = 250;
+  readonly Controls = Controls;
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,

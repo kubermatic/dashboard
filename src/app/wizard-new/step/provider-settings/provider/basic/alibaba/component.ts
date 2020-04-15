@@ -22,7 +22,7 @@ export enum Controls {
   ]
 })
 export class AlibabaProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  readonly controls = Controls;
+  readonly Controls = Controls;
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
@@ -43,14 +43,14 @@ export class AlibabaProviderBasicComponent extends BaseFormValidator implements 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
+    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this.form.reset());
+
     merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.AccessKeySecret).valueChanges)
         .pipe(distinctUntilChanged())
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());
-
-    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this.form.reset());
   }
 
   ngOnDestroy(): void {

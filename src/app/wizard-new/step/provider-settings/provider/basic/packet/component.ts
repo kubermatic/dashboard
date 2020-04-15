@@ -1,7 +1,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge} from 'rxjs';
-import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
 import {AVAILABLE_PACKET_BILLING_CYCLES, PacketCloudSpec} from '../../../../../../shared/entity/cloud/PacketCloudSpec';
@@ -24,9 +24,7 @@ export enum Controls {
   ]
 })
 export class PacketProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  readonly controls = Controls;
-
-  private readonly _debounceTime = 250;
+  readonly Controls = Controls;
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
@@ -68,7 +66,6 @@ export class PacketProviderBasicComponent extends BaseFormValidator implements O
         this.form.get(Controls.ProjectID).valueChanges,
         this.form.get(Controls.BillingCycle).valueChanges,
         )
-        .pipe(debounceTime(this._debounceTime))
         .pipe(distinctUntilChanged())
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());

@@ -30,7 +30,7 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator implemen
   private _defaultTemplate = '';
   private _templates: DatacenterOperatingSystemOptions;
 
-  readonly Control = Controls;
+  readonly Controls = Controls;
 
   get template(): string {
     return this.form.get(Controls.Template).value ? this.form.get(Controls.Template).value : this._defaultTemplate;
