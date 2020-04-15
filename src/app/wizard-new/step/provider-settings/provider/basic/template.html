@@ -1,5 +1,8 @@
 <div [formGroup]="form"
      [ngSwitch]="provider">
+  <km-wizard-alibaba-provider-basic *ngSwitchCase="Providers.ALIBABA"
+                                    [formControl]="form.get(Controls.ProviderBasic)">
+  </km-wizard-alibaba-provider-basic>
   <km-wizard-aws-provider-basic *ngSwitchCase="Providers.AWS"
                                 [formControl]="form.get(Controls.ProviderBasic)">
   </km-wizard-aws-provider-basic>

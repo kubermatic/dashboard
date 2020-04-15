@@ -12,6 +12,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 
 import {SharedModule} from '../shared/shared.module';
 
+import {AlibabaBasicNodeDataComponent} from './basic/provider/alibaba/component';
 import {AWSBasicNodeDataComponent} from './basic/provider/aws/component';
 import {AzureBasicNodeDataComponent} from './basic/provider/azure/component';
 import {BasicNodeDataComponent} from './basic/provider/component';
@@ -22,6 +23,7 @@ import {PacketBasicNodeDataComponent} from './basic/provider/packet/component';
 import {VSphereBasicNodeDataComponent} from './basic/provider/vsphere/component';
 import {NodeDataComponent} from './component';
 import {ExtendedNodeDataComponent} from './extended/component';
+import {AlibabaExtendedNodeDataComponent} from './extended/provider/alibaba/component';
 import {AWSExtendedNodeDataComponent} from './extended/provider/aws/component';
 import {AzureExtendedNodeDataComponent} from './extended/provider/azure/component';
 import {DigitalOceanExtendedNodeDataComponent} from './extended/provider/digitalocean/component';
@@ -30,6 +32,8 @@ import {VSphereExtendedNodeDataComponent} from './extended/provider/vsphere/comp
 import {NodeDataService} from './service/service';
 
 const components = [
+  AlibabaBasicNodeDataComponent,
+  AlibabaExtendedNodeDataComponent,
   AWSBasicNodeDataComponent,
   AWSExtendedNodeDataComponent,
   DigitalOceanBasicNodeDataComponent,
