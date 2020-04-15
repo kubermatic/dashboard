@@ -76,10 +76,6 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     this._unsubscribe.complete();
   }
 
-  isInWizard(): boolean {
-    return this._nodeDataService.isInWizardMode();
-  }
-
   onInstanceTypeChange(instanceType: string): void {
     this._nodeDataService.nodeData.spec.cloud.alibaba.instanceType = instanceType;
   }
