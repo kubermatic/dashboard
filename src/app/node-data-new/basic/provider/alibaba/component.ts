@@ -30,10 +30,12 @@ enum Controls {
 export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   instanceTypes: AlibabaInstanceType[] = [];
   zones: AlibabaZone[] = [];
-  diskTypes: string[] = ['cloud', 'cloud_efficiency', 'cloud_ssd', 'cloud_essd', 'san_ssd', 'san_efficiency'];
   hideOptional = false;
   defaultInstanceType = '';
   defaultZone = '';
+  defaultDiskType = '';
+  private _diskTypes: string[] = ['cloud', 'cloud_efficiency', 'cloud_ssd', 'cloud_essd', 'san_ssd', 'san_efficiency'];
+  diskTypes = this._diskTypes.map(type => ({name: type}));
 
   readonly Controls = Controls;
 
@@ -47,7 +49,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     this.form = this._builder.group({
       [Controls.InstanceType]: this._builder.control('', Validators.required),
       [Controls.DiskSize]: this._builder.control(25, Validators.required),
-      [Controls.DiskType]: this._builder.control(this.diskTypes[0], Validators.required),
+      [Controls.DiskType]: this._builder.control('', Validators.required),
       [Controls.InternetMaxBandwidthOut]: this._builder.control('', Validators.required),
       [Controls.VSwitchID]: this._builder.control('', Validators.required),
       [Controls.ZoneID]: this._builder.control('', Validators.required),
@@ -58,9 +60,11 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     this._instanceTypesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultInstanceType.bind(this));
     this._zoneIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultZone.bind(this));
 
+    this._setDefaultDiskType();
+
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this._clearInstanceType.bind(this);
-      this._clearZone.bind(this);
+      this._clearInstanceType();
+      this._clearZone();
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
@@ -82,6 +86,10 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
 
   onZoneChange(zone: string): void {
     this._nodeDataService.nodeData.spec.cloud.alibaba.zoneID = zone;
+  }
+
+  onDiskTypeChange(diskType: string): void {
+    this._nodeDataService.nodeData.spec.cloud.alibaba.diskType = diskType;
   }
 
   private get _instanceTypesObservable(): Observable<AlibabaInstanceType[]> {
@@ -114,13 +122,18 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     }
   }
 
+  private _setDefaultDiskType(): void {
+    if (this.diskTypes.length > 0) {
+      this.defaultDiskType = this.diskTypes[0].name;
+    }
+  }
+
   private _getNodeData(): NodeData {
     return {
       spec: {
         cloud: {
           alibaba: {
             diskSize: this.form.get(Controls.DiskSize).value,
-            diskType: this.form.get(Controls.DiskType).value,
             internetMaxBandwidthOut: this.form.get(Controls.InternetMaxBandwidthOut).value,
             vSwitchID: this.form.get(Controls.VSwitchID).value,
           },

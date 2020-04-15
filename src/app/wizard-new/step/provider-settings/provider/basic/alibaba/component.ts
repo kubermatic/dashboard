@@ -1,7 +1,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge} from 'rxjs';
-import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import {PresetsService} from '../../../../../../core/services';
 import {AlibabaCloudSpec} from '../../../../../../shared/entity/cloud/AlibabaCloudSpec';
 import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
@@ -24,8 +24,6 @@ export enum Controls {
 export class AlibabaProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly controls = Controls;
 
-  protected readonly _debounceTime = 250;
-
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
       private readonly _clusterService: ClusterService) {
@@ -46,7 +44,6 @@ export class AlibabaProviderBasicComponent extends BaseFormValidator implements 
         .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
     merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.AccessKeySecret).valueChanges)
-        .pipe(debounceTime(this._debounceTime))
         .pipe(distinctUntilChanged())
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());

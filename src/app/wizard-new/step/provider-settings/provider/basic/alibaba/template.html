@@ -1,8 +1,7 @@
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="16px">
-  <mat-form-field fxFlex
-                  class="km-with-hint">
+  <mat-form-field fxFlex>
     <mat-label>Access Key ID</mat-label>
     <input matInput
            [formControlName]="controls.AccessKeyID"
@@ -15,8 +14,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field fxFlex
-                  class="km-with-hint">
+  <mat-form-field fxFlex>
     <mat-label>Access Key Secret</mat-label>
     <input matInput
            [formControlName]="controls.AccessKeySecret"
