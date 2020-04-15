@@ -49,10 +49,6 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
     this._unsubscribe.complete();
   }
 
-  isInWizard(): boolean {
-    return this._nodeDataService.isInWizardMode();
-  }
-
   private _getNodeData(): NodeData {
     return {
       spec: {

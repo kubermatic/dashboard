@@ -1,19 +1,16 @@
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="16px">
-  <div fxFlex
-       class="mat-select-container">
-    <km-combobox [required]="true"
-                 [grouped]="true"
-                 [selected]="selectedType"
-                 [groups]="groups"
-                 [optionsGetter]="getTypes.bind(this)"
-                 [formControlName]="Controls.Type"
-                 (changed)="onTypeChange($event)"
-                 label="Node Type"
-                 inputLabel="Select type..."
-                 filterBy="name">
-      <div *option="let type">{{type.name}} ({{ type.cores }} vCPU, {{type.memory}} GB RAM)</div>
-    </km-combobox>
-  </div>
+  <km-combobox [required]="true"
+               [grouped]="true"
+               [selected]="selectedType"
+               [groups]="groups"
+               [optionsGetter]="getTypes.bind(this)"
+               [formControlName]="Controls.Type"
+               (changed)="onTypeChange($event)"
+               label="Node Type"
+               inputLabel="Select type..."
+               filterBy="name">
+    <div *option="let type">{{type.name}} ({{ type.cores }} vCPU, {{type.memory}} GB RAM)</div>
+  </km-combobox>
 </form>

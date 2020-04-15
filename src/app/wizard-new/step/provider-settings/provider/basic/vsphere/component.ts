@@ -1,7 +1,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge} from 'rxjs';
-import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import {PresetsService} from '../../../../../../core/services';
 import {VSphereCloudSpec} from '../../../../../../shared/entity/cloud/VSphereCloudSpec';
 import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
@@ -25,9 +25,7 @@ export enum Controls {
   ]
 })
 export class VSphereProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  readonly controls = Controls;
-
-  protected readonly _debounceTime = 250;
+  readonly Controls = Controls;
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
@@ -76,7 +74,6 @@ export class VSphereProviderBasicComponent extends BaseFormValidator implements 
         this.form.get(Controls.Password).valueChanges,
         this.form.get(Controls.UseCustomCloudCredentials).valueChanges,
         )
-        .pipe(debounceTime(this._debounceTime))
         .pipe(distinctUntilChanged())
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());

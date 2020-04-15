@@ -24,10 +24,11 @@ enum SizeTypes {
   ]
 })
 export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  sizes: DigitaloceanSizes = {optimized: [], standard: []};
-  selectedSize = '';
+  private _sizes: DigitaloceanSizes = {optimized: [], standard: []};
 
   readonly Controls = Controls;
+
+  selectedSize = '';
 
   get sizeTypes(): string[] {
     return Object.values(SizeTypes);
@@ -52,7 +53,7 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
 
   getTypes(group: SizeTypes): Optimized[]|Standard[] {
     const key = Object.keys(SizeTypes).find(key => SizeTypes[key] === group);
-    return this.sizes[key.toLowerCase()];
+    return this._sizes[key.toLowerCase()];
   }
 
   onTypeChange(size: string): void {
@@ -60,7 +61,7 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
   }
 
   sizeDisplayName(slug: string): string {
-    const size = [...this.sizes.optimized, ...this.sizes.standard].find(size => size.slug === slug);
+    const size = [...this._sizes.optimized, ...this._sizes.standard].find(size => size.slug === slug);
     return size ? `${size.slug} (${size.memory / 1024} GB RAM, ${size.vcpus} CPU${(size.vcpus !== 1) ? 's' : ''}, $${
                       size.price_monthly} per month)` :
                   '';
@@ -71,9 +72,9 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
   }
 
   private _setDefaultSize(sizes: DigitaloceanSizes): void {
-    this.sizes = sizes;
-    if (this.sizes && this.sizes.standard && this.sizes.standard.length > 0) {
-      this.selectedSize = this.sizes.standard[0].slug;
+    this._sizes = sizes;
+    if (this._sizes && this._sizes.standard && this._sizes.standard.length > 0) {
+      this.selectedSize = this._sizes.standard[0].slug;
     }
   }
 }

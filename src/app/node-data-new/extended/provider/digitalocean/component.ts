@@ -26,7 +26,7 @@ enum Controls {
 export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: string[] = [];
 
-  readonly Control = Controls;
+  readonly Controls = Controls;
 
   get nodeData(): NodeData {
     return this._nodeDataService.nodeData;
@@ -58,14 +58,10 @@ export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator imp
         )
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
-
-    this.form.get(Controls.Tags)
-        .valueChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._nodeDataService.nodeData.spec.cloud.digitalocean.tags = this.tags);
   }
 
   onTagsChange(tags: string[]): void {
-    this.tags = tags;
+    this._nodeDataService.digitalOcean.tags = tags;
   }
 
   private _getNodeData(): NodeData {

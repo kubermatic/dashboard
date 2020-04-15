@@ -23,11 +23,11 @@ enum Controls {
   ]
 })
 export class VSphereProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  folders: VSphereFolder[] = [];
-
-  readonly controls = Controls;
-
   private _networkMap: {[type: string]: VSphereNetwork[]} = {};
+
+  readonly Controls = Controls;
+
+  folders: VSphereFolder[] = [];
 
   get networkTypes(): string[] {
     return Object.keys(this._networkMap);

@@ -1,20 +1,17 @@
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="16px">
-  <div fxFlex
-       class="mat-select-container">
-    <km-combobox [required]="true"
-                 [grouped]="false"
-                 [selected]="selectedSize"
-                 [options]="sizes"
-                 [formControlName]="Controls.InstanceType"
-                 (changed)="onSizeChange($event)"
-                 label="Plan"
-                 inputLabel="Select plan..."
-                 filterBy="name">
-      <div *option="let size">
-        {{size.name}} {{getPlanDetails(size)}}
-      </div>
-    </km-combobox>
-  </div>
+  <km-combobox [required]="true"
+               [grouped]="false"
+               [selected]="selectedSize"
+               [options]="sizes"
+               [formControlName]="Controls.InstanceType"
+               (changed)="onSizeChange($event)"
+               label="Plan"
+               inputLabel="Select plan..."
+               filterBy="name">
+    <div *option="let size">
+      {{size.name}} {{getPlanDetails(size)}}
+    </div>
+  </km-combobox>
 </form>

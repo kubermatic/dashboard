@@ -1,6 +1,6 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {Observable, of} from 'rxjs';
+import {merge, Observable, of} from 'rxjs';
 import {catchError, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
@@ -28,16 +28,16 @@ enum Controls {
   ]
 })
 export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  private _diskTypes: string[] = ['cloud', 'cloud_efficiency', 'cloud_ssd', 'cloud_essd', 'san_ssd', 'san_efficiency'];
+
+  readonly Controls = Controls;
+
   instanceTypes: AlibabaInstanceType[] = [];
   zones: AlibabaZone[] = [];
-  hideOptional = false;
+  diskTypes = this._diskTypes.map(type => ({name: type}));
   defaultInstanceType = '';
   defaultZone = '';
   defaultDiskType = '';
-  private _diskTypes: string[] = ['cloud', 'cloud_efficiency', 'cloud_ssd', 'cloud_essd', 'san_ssd', 'san_efficiency'];
-  diskTypes = this._diskTypes.map(type => ({name: type}));
-
-  readonly Controls = Controls;
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
@@ -59,7 +59,6 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
 
     this._instanceTypesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultInstanceType.bind(this));
     this._zoneIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultZone.bind(this));
-
     this._setDefaultDiskType();
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -67,7 +66,12 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
       this._clearZone();
     });
 
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
+    merge(
+        this.form.get(Controls.DiskSize).valueChanges,
+        this.form.get(Controls.InternetMaxBandwidthOut).valueChanges,
+        this.form.get(Controls.VSwitchID).valueChanges,
+        )
+        .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
   }
 
