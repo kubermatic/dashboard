@@ -1,5 +1,8 @@
 <form [formGroup]="form"
       [ngSwitch]="provider">
+  <km-alibaba-basic-node-data *ngSwitchCase="Provider.ALIBABA"
+                              [formControl]="form.get(Control.ProviderBasic)">
+  </km-alibaba-basic-node-data>
   <km-aws-basic-node-data *ngSwitchCase="Provider.AWS"
                           [formControl]="form.get(Control.ProviderBasic)">
   </km-aws-basic-node-data>

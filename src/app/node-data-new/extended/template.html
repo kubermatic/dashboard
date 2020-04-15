@@ -1,6 +1,9 @@
 <form *ngIf="visible"
       [formGroup]="form"
       [ngSwitch]="provider">
+  <km-alibaba-extended-node-data *ngSwitchCase="Provider.ALIBABA"
+                                 [formControl]="form.get(Control.ProviderExtended)">
+  </km-alibaba-extended-node-data>
   <km-aws-extended-node-data *ngSwitchCase="Provider.AWS"
                              [formControl]="form.get(Control.ProviderExtended)">
   </km-aws-extended-node-data>

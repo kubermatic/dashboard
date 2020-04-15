@@ -58,7 +58,7 @@
           CentOS
         </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.ContainerLinux"
-                           *ngIf="!isProvider(NodeProvider.HETZNER) && !isOpenshiftCluster()">
+                           *ngIf="!isProvider(NodeProvider.HETZNER) && !isProvider(NodeProvider.ALIBABA) && !isOpenshiftCluster()">
           <i class="km-os-image-container-linux"></i>
           Container Linux
         </mat-button-toggle>
