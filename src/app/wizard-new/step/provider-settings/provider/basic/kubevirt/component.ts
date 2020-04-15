@@ -1,7 +1,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge} from 'rxjs';
-import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
 import {KubeVirtCloudSpec} from '../../../../../../shared/entity/cloud/KubeVirtCloudSpec';
@@ -22,9 +22,7 @@ export enum Controls {
   ]
 })
 export class KubeVirtProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  readonly controls = Controls;
-
-  private readonly _debounceTime = 250;
+  readonly Controls = Controls;
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
@@ -45,8 +43,7 @@ export class KubeVirtProviderBasicComponent extends BaseFormValidator implements
         .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
     this.form.get(Controls.Kubeconfig)
-        .valueChanges.pipe(debounceTime(this._debounceTime))
-        .pipe(distinctUntilChanged())
+        .valueChanges.pipe(distinctUntilChanged())
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());
 

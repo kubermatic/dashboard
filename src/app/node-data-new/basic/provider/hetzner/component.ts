@@ -24,10 +24,11 @@ enum GroupTypes {
   ]
 })
 export class HetznerBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  types: HetznerTypes = {dedicated: [], standard: []};
-  selectedType = '';
+  private _types: HetznerTypes = {dedicated: [], standard: []};
 
   readonly Controls = Controls;
+
+  selectedType = '';
 
   get groups(): string[] {
     return Object.values(GroupTypes);
@@ -52,7 +53,7 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
 
   getTypes(group: GroupTypes): Type[] {
     const key = Object.keys(GroupTypes).find(key => GroupTypes[key] === group);
-    return this.types[key.toLowerCase()];
+    return this._types[key.toLowerCase()];
   }
 
   onTypeChange(type: string): void {
@@ -64,9 +65,9 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   private _setDefaultType(types: HetznerTypes): void {
-    this.types = types;
-    if (this.types && this.types.standard && this.types.standard.length > 0) {
-      this.selectedType = this.types.standard[0].name;
+    this._types = types;
+    if (this._types && this._types.standard && this._types.standard.length > 0) {
+      this.selectedType = this._types.standard[0].name;
     }
   }
 }

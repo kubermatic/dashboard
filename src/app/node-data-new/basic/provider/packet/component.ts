@@ -19,10 +19,10 @@ enum Controls {
   ]
 })
 export class PacketBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  readonly Controls = Controls;
+
   sizes: PacketSize[] = [];
   selectedSize = '';
-
-  readonly Controls = Controls;
 
   constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
     super();

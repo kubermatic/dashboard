@@ -5,8 +5,8 @@
                   class="km-with-hint">
     <mat-label>Access Key ID</mat-label>
     <input matInput
-           [formControlName]="controls.AccessKeyID"
-           [name]="controls.AccessKeyID"
+           [formControlName]="Controls.AccessKeyID"
+           [name]="Controls.AccessKeyID"
            type="password"
            autocomplete="off"
            required>
@@ -15,7 +15,7 @@
          rel="noopener"
          href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
     </mat-hint>
-    <mat-error *ngIf="form.get(controls.AccessKeyID).hasError('required')">
+    <mat-error *ngIf="form.get(Controls.AccessKeyID).hasError('required')">
       Access key ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -24,8 +24,8 @@
                   class="km-with-hint">
     <mat-label>Secret Access Key</mat-label>
     <input matInput
-           [formControlName]="controls.SecretAccessKey"
-           [name]="controls.SecretAccessKey"
+           [formControlName]="Controls.AccessKeySecret"
+           [name]="Controls.AccessKeySecret"
            type="password"
            autocomplete="off"
            required>
@@ -34,7 +34,7 @@
          rel="noopener"
          href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
     </mat-hint>
-    <mat-error *ngIf="form.get(controls.SecretAccessKey).hasError('required')">
+    <mat-error *ngIf="form.get(Controls.AccessKeySecret).hasError('required')">
       Secret access key is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -44,8 +44,8 @@
 
     <mat-label>{{ vpcLabel }}</mat-label>
     <input matInput
-           [formControlName]="controls.VPCID"
-           [name]="controls.VPCID"
+           [formControlName]="Controls.VPCID"
+           [name]="Controls.VPCID"
            [matAutocomplete]="auto"
            required>
     <mat-autocomplete #auto="matAutocomplete">
@@ -55,10 +55,10 @@
       </mat-option>
     </mat-autocomplete>
     <mat-hint>When specified, all worker nodes will be attached to this VPC. If not specified, the default VPC will be used.</mat-hint>
-    <mat-error *ngIf="form.get(controls.VPCID).hasError('pattern')">
+    <mat-error *ngIf="form.get(Controls.VPCID).hasError('pattern')">
       The VPC ID needs to look similar to 'vpc-3a2f9851'.
     </mat-error>
-    <mat-error *ngIf="form.get(controls.VPCID).hasError('required')">
+    <mat-error *ngIf="form.get(Controls.VPCID).hasError('required')">
       The VPC ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>

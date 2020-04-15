@@ -1,6 +1,5 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {takeUntil} from 'rxjs/operators';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
 
@@ -19,7 +18,7 @@ enum Controls {
 export class AlibabaExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   labels: object;
 
-  readonly Control = Controls;
+  readonly Controls = Controls;
 
   constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
     super();
@@ -29,14 +28,10 @@ export class AlibabaExtendedNodeDataComponent extends BaseFormValidator implemen
     this.form = this._builder.group({
       [Controls.Labels]: this._builder.control(''),
     });
-
-    this.form.get(Controls.Labels)
-        .valueChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._nodeDataService.alibaba.labels = this.labels);
   }
 
   onLabelsChange(labels: object): void {
-    this.labels = labels;
+    this._nodeDataService.alibaba.labels = labels;
   }
 
   ngOnDestroy(): void {

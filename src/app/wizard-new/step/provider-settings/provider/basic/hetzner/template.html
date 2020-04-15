@@ -4,15 +4,15 @@
   <mat-form-field fxFlex>
     <mat-label>Token</mat-label>
     <input matInput
-           [formControlName]="controls.Token"
-           [name]="controls.Token"
+           [formControlName]="Controls.Token"
+           [name]="Controls.Token"
            type="password"
            autocomplete="off"
            required>
-    <mat-error *ngIf="form.get(controls.Token).hasError('required')">
+    <mat-error *ngIf="form.get(Controls.Token).hasError('required')">
       Token is <strong>required</strong>.
     </mat-error>
-    <mat-error *ngIf="form.get(controls.Token).hasError('minlength') || form.get(controls.Token).hasError('maxlength')">
+    <mat-error *ngIf="form.get(Controls.Token).hasError('minlength') || form.get(Controls.Token).hasError('maxlength')">
       Tokens must be exactly <strong>64</strong> characters long.
     </mat-error>
   </mat-form-field>
