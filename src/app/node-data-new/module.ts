@@ -17,6 +17,7 @@ import {AWSBasicNodeDataComponent} from './basic/provider/aws/component';
 import {AzureBasicNodeDataComponent} from './basic/provider/azure/component';
 import {BasicNodeDataComponent} from './basic/provider/component';
 import {DigitalOceanBasicNodeDataComponent} from './basic/provider/digitalocean/component';
+import {GCPBasicNodeDataComponent} from './basic/provider/gcp/component';
 import {HetznerBasicNodeDataComponent} from './basic/provider/hetzner/component';
 import {KubeVirtBasicNodeDataComponent} from './basic/provider/kubevirt/component';
 import {PacketBasicNodeDataComponent} from './basic/provider/packet/component';
@@ -27,6 +28,7 @@ import {AlibabaExtendedNodeDataComponent} from './extended/provider/alibaba/comp
 import {AWSExtendedNodeDataComponent} from './extended/provider/aws/component';
 import {AzureExtendedNodeDataComponent} from './extended/provider/azure/component';
 import {DigitalOceanExtendedNodeDataComponent} from './extended/provider/digitalocean/component';
+import {GCPExtendedNodeDataComponent} from './extended/provider/gcp/component';
 import {PacketExtendedNodeDataComponent} from './extended/provider/packet/component';
 import {VSphereExtendedNodeDataComponent} from './extended/provider/vsphere/component';
 import {NodeDataService} from './service/service';
@@ -46,6 +48,8 @@ const components = [
   PacketExtendedNodeDataComponent,
   AzureBasicNodeDataComponent,
   AzureExtendedNodeDataComponent,
+  GCPBasicNodeDataComponent,
+  GCPExtendedNodeDataComponent,
   NodeDataComponent,
   BasicNodeDataComponent,
   ExtendedNodeDataComponent,

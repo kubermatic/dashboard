@@ -90,7 +90,7 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
     this._unsubscribe.complete();
   }
 
-  private _enable(enable: boolean, name: string): void {
+  private _enable(enable: boolean, name: Controls): void {
     if (enable && this.form.get(name).disabled) {
       this.form.get(name).enable();
     }
