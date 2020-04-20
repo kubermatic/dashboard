@@ -124,13 +124,13 @@
         <ng-container *ngIf="!cluster.credential">
           <!-- GCP -->
           <ng-container *ngIf="cluster.spec.cloud.gcp">
-            <km-property *ngIf="cluster.spec.cloud.gcp.network">
+            <km-property *ngIf="cluster.spec.cloud.gcp?.network">
               <div key>Network</div>
-              <div value>{{cluster.spec.cloud.gcp.network}}</div>
+              <div value>{{cluster.spec.cloud.gcp?.network}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.gcp.subnetwork">
+            <km-property *ngIf="cluster.spec.cloud.gcp?.subnetwork">
               <div key>Subnetwork</div>
-              <div value>{{cluster.spec.cloud.gcp.subnetwork}}</div>
+              <div value>{{cluster.spec.cloud.gcp?.subnetwork}}</div>
             </km-property>
           </ng-container>
 
@@ -292,15 +292,15 @@
         <!-- GCP Nodes -->
         <ng-container *ngIf="cluster.spec.cloud.gcp">
           <div class="km-summary-row km-summary-row-with-margin">
-            Disk {{nodeData.spec.cloud.gcp.diskSize}} GB, {{nodeData.spec.cloud.gcp.diskType}}
+            Disk {{nodeData.spec.cloud.gcp?.diskSize}} GB, {{nodeData.spec.cloud.gcp?.diskType}}
           </div>
           <km-property>
             <div key>Machine Type</div>
-            <div value>{{nodeData.spec.cloud.gcp.machineType}}</div>
+            <div value>{{nodeData.spec.cloud.gcp?.machineType}}</div>
           </km-property>
           <km-property>
             <div key>Zone</div>
-            <div value>{{nodeData.spec.cloud.gcp.zone}}</div>
+            <div value>{{nodeData.spec.cloud.gcp?.zone}}</div>
           </km-property>
         </ng-container>
 
@@ -442,7 +442,7 @@
         <ng-container *ngIf="cluster.spec.cloud.gcp">
           <div class="km-summary-row">
             <span class="km-summary-left km-text">
-              <i [ngClass]="nodeData.spec.cloud.gcp.preemptible ? 'km-icon-running' : 'km-icon-disabled'"></i>
+              <i [ngClass]="nodeData.spec.cloud.gcp?.preemptible ? 'km-icon-running' : 'km-icon-disabled'"></i>
             </span>
             <span>Preemptible</span>
           </div>
@@ -477,10 +477,10 @@
         </ng-container>
 
         <!-- GCP Tags -->
-        <ng-container *ngIf="nodeData.spec.cloud.gcp && nodeData.spec.cloud.gcp.tags?.length > 0">
+        <ng-container *ngIf="nodeData.spec.cloud.gcp && nodeData.spec.cloud.gcp?.tags?.length > 0">
           <div class="km-summary-tags">
             <div class="km-summary-row">Provider Tags</div>
-            <km-labels [labels]="nodeData.spec.cloud.gcp.tags"></km-labels>
+            <km-labels [labels]="nodeData.spec.cloud.gcp?.tags"></km-labels>
           </div>
         </ng-container>
 
@@ -543,13 +543,13 @@
         </ng-container>
 
         <!-- GCP Labels -->
-        <ng-container *ngIf="nodeData.spec.cloud.gcp && displayTags(nodeData.spec.cloud.gcp.labels)">
+        <ng-container *ngIf="nodeData.spec.cloud.gcp && displayTags(nodeData.spec.cloud.gcp?.labels)">
           <div class="km-summary-tags">
             <div class="km-summary-row">Provider Labels</div>
-            <km-labels [labels]="nodeData.spec.cloud.gcp.labels"></km-labels>
+            <km-labels [labels]="nodeData.spec.cloud.gcp?.labels"></km-labels>
           </div>
         </ng-container>
-        <ng-container *ngIf="nodeData.spec.cloud.gcp && !displayTags(nodeData.spec.cloud.gcp.labels)">
+        <ng-container *ngIf="nodeData.spec.cloud.gcp && !displayTags(nodeData.spec.cloud.gcp?.labels)">
           <div class="km-summary-row">
             <span class="km-summary-left km-text">
               <i class="km-icon-disabled"></i>
