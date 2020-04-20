@@ -1,0 +1,33 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      fxLayoutGap="16px">
+  <km-combobox [required]="false"
+               [grouped]="false"
+               [selected]="selectedNetwork"
+               [options]="networks"
+               [hint]="getHint(Controls.Network)"
+               [formControlName]="Controls.Network"
+               (changed)="onNetworkChange($event)"
+               label="Network"
+               inputLabel="Select network..."
+               filterBy="name">
+    <div *option="let network">
+      {{network.name}}
+    </div>
+  </km-combobox>
+
+  <km-combobox [required]="false"
+               [grouped]="false"
+               [selected]="selectedSubNetwork"
+               [options]="subNetworks"
+               [hint]="getHint(Controls.SubNetwork)"
+               [formControlName]="Controls.SubNetwork"
+               (changed)="onSubNetworkChange($event)"
+               label="Subnetwork"
+               inputLabel="Select subnetwork..."
+               filterBy="name">
+    <div *option="let subnet">
+      {{subnet.name}}
+    </div>
+  </km-combobox>
+</form>

@@ -20,4 +20,7 @@
   <km-wizard-azure-provider-basic *ngSwitchCase="Providers.AZURE"
                                   [formControl]="form.get(Controls.ProviderBasic)">
   </km-wizard-azure-provider-basic>
+  <km-wizard-gcp-provider-basic *ngSwitchCase="Providers.GCP"
+                                [formControl]="form.get(Controls.ProviderBasic)">
+  </km-wizard-gcp-provider-basic>
 </div>

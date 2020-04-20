@@ -68,8 +68,16 @@ export class NotificationService {
       beingDispatched: false,
     };
 
-    this._notificationHistory.next(this._notificationHistory.value.concat([notification]));
-    this.snackBarQueue.next(this.snackBarQueue.value.concat([notification]));
+    if (this._isUnique(message)) {
+      // Update timestamp of repeating notification.
+      this._notificationHistory.next(
+          this._notificationHistory.value.filter(n => n.message !== message).concat(notification));
+      this.snackBarQueue.next(this.snackBarQueue.value.concat([notification]));
+    }
+  }
+
+  private _isUnique(message: string): boolean {
+    return !this.snackBarQueue.value.find(n => n.message === message);
   }
 
   success(message: string): void {

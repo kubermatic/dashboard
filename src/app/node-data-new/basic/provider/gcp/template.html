@@ -1,0 +1,57 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      fxLayoutGap="16px">
+  <mat-form-field fxFlex>
+    <mat-label>Disk Size</mat-label>
+    <input [formControlName]="Controls.DiskSize"
+           matInput
+           type="number"
+           autocomplete="off"
+           required>
+  </mat-form-field>
+
+  <km-combobox [required]="true"
+               [grouped]="false"
+               [selected]="selectedZone"
+               [options]="zones"
+               [formControlName]="Controls.Zone"
+               (changed)="onZoneChange($event)"
+               label="Zone"
+               inputLabel="Select zone..."
+               filterBy="name">
+    <div *option="let zone">
+      {{zone.name}}
+    </div>
+  </km-combobox>
+
+  <km-combobox [required]="true"
+               [grouped]="false"
+               [selected]="selectedDiskType"
+               [options]="diskTypes"
+               [formControlName]="Controls.DiskType"
+               (changed)="onDiskTypeChange($event)"
+               label="Disk Type"
+               inputLabel="Select disk type..."
+               filterBy="name">
+    <div *option="let diskType">
+      {{diskType.name}} ({{diskType.description}})
+    </div>
+  </km-combobox>
+
+  <km-combobox [required]="true"
+               [grouped]="false"
+               [selected]="selectedMachineSize"
+               [options]="machineSizes"
+               [formControlName]="Controls.MachineSize"
+               (changed)="onMachineSizeChange($event)"
+               label="Machine Size"
+               inputLabel="Select machine size..."
+               filterBy="name">
+    <div *option="let machineSize">
+      {{machineSize.name}} ({{machineSize.description}})
+    </div>
+  </km-combobox>
+
+  <mat-checkbox [formControlName]="Controls.Preemptible"
+                fxFlex>Preemptible</mat-checkbox>
+</form>

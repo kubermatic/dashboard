@@ -43,6 +43,6 @@ export class ProviderExtendedComponent extends BaseFormValidator implements OnIn
   }
 
   hasExtendedSection(provider: NodeProvider): boolean {
-    return [NodeProvider.VSPHERE, NodeProvider.AWS, NodeProvider.AZURE].includes(provider);
+    return [NodeProvider.VSPHERE, NodeProvider.AWS, NodeProvider.AZURE, NodeProvider.GCP].includes(provider);
   }
 }
