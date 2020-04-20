@@ -12,9 +12,11 @@
     padding: 3.75 * $baseline-grid;
 
     .km-user {
-      height: 3 * $baseline-grid;
+      align-items: center;
+      display: flex;
+      min-height: 3 * $baseline-grid;
       margin-right: 3.75 * $baseline-grid;
-      width: 3 * $baseline-grid;
+      min-width: 3 * $baseline-grid;
     }
 
     .km-account-info-name {
@@ -28,6 +30,7 @@
   }
 
   .km-account-settings {
+    min-width: 390px;
     font-size: $font-size-subhead;
     padding: 3.75 * $baseline-grid;
 
