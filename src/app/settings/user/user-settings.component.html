@@ -34,7 +34,7 @@
       <div class="km-account-settings-header">User Settings</div>
       <div>
         <div class="km-account-settings-entry-label">Items per page</div>
-        <mat-form-field fxFlex="35">
+        <mat-form-field fxFlex="25">
           <mat-select disableOptionCentering
                       [(ngModel)]="settings.itemsPerPage"
                       (selectionChange)="onSettingsChange()">
@@ -52,7 +52,8 @@
         <div class="km-account-settings-entry-label">Theme</div>
         <mat-button-toggle-group [(value)]="settings.selectedTheme"
                                  (change)="onSettingsChange()"
-                                 class="km-account-settings-toggle">
+                                 class="km-account-settings-toggle"
+                                 fxLayout="row wrap">
           <mat-button-toggle [value]="Theme.Light">
             <i class="km-icon-mask km-icon-sun"></i>
             Light
