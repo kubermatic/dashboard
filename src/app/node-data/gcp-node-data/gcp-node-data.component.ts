@@ -49,6 +49,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
           {value: this.nodeData.spec.cloud.gcp.machineType, disabled: true},
           [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.machineTypes, 'name', true)]),
       zone: new FormControl({value: this.nodeData.spec.cloud.gcp.zone, disabled: true}, Validators.required),
+      customImage: new FormControl(this.nodeData.spec.cloud.gcp.customImage),
       preemptible: new FormControl(this.nodeData.spec.cloud.gcp.preemptible),
     });
 
@@ -311,6 +312,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
           zone: this.form.controls.zone.value,
           labels: this.nodeData.spec.cloud.gcp.labels,
           tags: this.nodeData.spec.cloud.gcp.tags,
+          customImage: this.form.controls.customImage.value,
         },
       },
       valid: this.form.valid,
