@@ -40,21 +40,17 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   showCards = true;
 
   paginator: MatPaginator;
-
-  @ViewChild(MatPaginator, {static: false})
+  @ViewChild(MatPaginator)
   set matPaginator(mp: MatPaginator) {
-    const isViewInit = !this.paginator && !!mp;  // If true, view is being initialized.
     this.paginator = mp;
-    this.dataSource.paginator = this.paginator;
-    if (isViewInit) {
-      setTimeout(() => {
-        this.paginator.pageSize = this.settings.itemsPerPage;
-      });
+    if (this.paginator && this.settings) {
+      this.paginator.pageSize = this.settings.itemsPerPage;
     }
+
+    this.dataSource.paginator = this.paginator;
   }
 
   sort: MatSort;
-
   @ViewChild(MatSort)
   set matSort(ms: MatSort) {
     this.sort = ms;
