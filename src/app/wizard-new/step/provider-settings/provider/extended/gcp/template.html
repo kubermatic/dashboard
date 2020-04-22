@@ -1,14 +1,14 @@
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="16px">
-  <km-combobox [required]="false"
+  <km-combobox #networkCombobox
+               [required]="false"
                [grouped]="false"
-               [selected]="selectedNetwork"
                [options]="networks"
                [hint]="getHint(Controls.Network)"
                [formControlName]="Controls.Network"
                (changed)="onNetworkChange($event)"
-               label="Network"
+               [label]="networkLabel"
                inputLabel="Select network..."
                filterBy="name">
     <div *option="let network">
@@ -16,14 +16,14 @@
     </div>
   </km-combobox>
 
-  <km-combobox [required]="false"
+  <km-combobox #subNetworkCombobox
+               [required]="false"
                [grouped]="false"
-               [selected]="selectedSubNetwork"
                [options]="subNetworks"
                [hint]="getHint(Controls.SubNetwork)"
                [formControlName]="Controls.SubNetwork"
                (changed)="onSubNetworkChange($event)"
-               label="Subnetwork"
+               [label]="subNetworkLabel"
                inputLabel="Select subnetwork..."
                filterBy="name">
     <div *option="let subnet">

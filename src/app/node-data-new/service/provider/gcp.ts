@@ -1,5 +1,5 @@
 import {merge, Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, switchMap, tap} from 'rxjs/operators';
+import {catchError, delay, filter, switchMap, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
@@ -24,7 +24,7 @@ export class NodeDataGCPProvider {
     this._nodeDataService.nodeData.spec.cloud.gcp.tags = tags;
   }
 
-  zones(onError: () => void = undefined): Observable<GCPZone[]> {
+  zones(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<GCPZone[]> {
     let cluster: ClusterEntity;
 
     // TODO: support dialog mode
@@ -36,7 +36,7 @@ export class NodeDataGCPProvider {
                 _ => this._presetService.provider(NodeProvider.GCP)
                          .serviceAccount(cluster.spec.cloud.gcp.serviceAccount)
                          .credential(this._presetService.preset)
-                         .zones(this._clusterService.datacenter)
+                         .zones(this._clusterService.datacenter, onLoadingCb)
                          .pipe(catchError(_ => {
                            if (onError) {
                              onError();
@@ -47,7 +47,7 @@ export class NodeDataGCPProvider {
     }
   }
 
-  diskTypes(onError: () => void = undefined): Observable<GCPDiskType[]> {
+  diskTypes(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<GCPDiskType[]> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
@@ -58,7 +58,7 @@ export class NodeDataGCPProvider {
                          .serviceAccount(this._clusterService.cluster.spec.cloud.gcp.serviceAccount)
                          .zone(this._nodeDataService.nodeData.spec.cloud.gcp.zone)
                          .credential(this._presetService.preset)
-                         .diskTypes()
+                         .diskTypes(onLoadingCb)
                          .pipe(catchError(_ => {
                            if (onError) {
                              onError();
@@ -69,7 +69,7 @@ export class NodeDataGCPProvider {
     }
   }
 
-  machineSize(onError: () => void = undefined): Observable<GCPMachineSize[]> {
+  machineSize(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<GCPMachineSize[]> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
@@ -80,7 +80,8 @@ export class NodeDataGCPProvider {
                          .serviceAccount(this._clusterService.cluster.spec.cloud.gcp.serviceAccount)
                          .zone(this._nodeDataService.nodeData.spec.cloud.gcp.zone)
                          .credential(this._presetService.preset)
-                         .machineTypes()
+                         .machineTypes(onLoadingCb)
+                         .pipe(delay(5000))
                          .pipe(catchError(_ => {
                            if (onError) {
                              onError();
