@@ -96,6 +96,13 @@
         </span>
         <span>Upgrade system on first boot</span>
       </div>
+      <div class="km-summary-row"
+           *ngIf="nodeData.spec.operatingSystem.rhel">
+        <span class="km-summary-left km-text">
+          <i [ngClass]="nodeData.spec.operatingSystem.rhel.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></i>
+        </span>
+        <span>Upgrade system on first boot</span>
+      </div>
     </mat-card-content>
 
     <ng-container *ngIf="clusterSSHKeys.length && !cluster.spec.cloud.bringyourown">

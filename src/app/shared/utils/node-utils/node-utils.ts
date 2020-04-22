@@ -10,6 +10,8 @@ export class NodeUtils {
       return 'Container Linux';
     } else if (spec.operatingSystem.sles) {
       return 'SLES';
+    } else if (spec.operatingSystem.rhel) {
+      return 'RHEL';
     } else {
       return '';
     }
@@ -24,6 +26,8 @@ export class NodeUtils {
       return 'container-linux';
     } else if (spec.operatingSystem.sles) {
       return 'sles';
+    } else if (spec.operatingSystem.rhel) {
+      return 'rhel';
     } else {
       return '';
     }

@@ -61,6 +61,7 @@ export class OperatingSystemSpec {
   centos?: CentosSpec;
   containerLinux?: ContainerLinuxSpec;
   sles?: SLESSpec;
+  rhel?: RHELSpec;
 
   static getOperatingSystem(spec: OperatingSystemSpec): OperatingSystem {
     return Object.keys(spec).find(key => spec[key] !== undefined) as OperatingSystem;
@@ -81,6 +82,13 @@ export class ContainerLinuxSpec {
 
 export class SLESSpec {
   distUpgradeOnBoot: boolean;
+}
+
+export class RHELSpec {
+  distUpgradeOnBoot: boolean;
+  rhelSubscriptionManagerUser?: string;
+  rhelSubscriptionManagerPassword?: string;
+  rhsmOfflineToken?: string;
 }
 
 export class NodeVersionInfo {

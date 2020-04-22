@@ -570,3 +570,43 @@ export function nodeDataSLESFake(): NodeData {
     valid: true,
   };
 }
+
+export function nodeDataRHELFake(): NodeData {
+  return {
+    spec: {
+      cloud: {
+        aws: {
+          instanceType: 't3.small',
+          diskSize: 25,
+          volumeType: 'standard',
+          ami: '',
+          tags: {},
+          subnetID: 'subnet-f3427db9',
+          availabilityZone: 'eu-central-1c',
+        },
+        gcp: {
+          diskSize: 25,
+          diskType: 'pd-ssd',
+          machineType: '',
+          zone: '',
+          preemptible: false,
+          tags: [],
+          labels: {},
+        },
+      },
+      operatingSystem: {
+        rhel: {
+          distUpgradeOnBoot: false,
+          rhelSubscriptionManagerUser: 'user',
+          rhelSubscriptionManagerPassword: 'password',
+          rhsmOfflineToken: 'dasdsaeiq3jjrojiq3wnjrfoqw3r',
+        },
+      },
+      versions: {
+        kubelet: null,
+      },
+    },
+    count: 3,
+    valid: true,
+  };
+}

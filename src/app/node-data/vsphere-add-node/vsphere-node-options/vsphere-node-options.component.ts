@@ -65,12 +65,15 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
       let coreosTemplate = '';
       let centosTemplate = '';
       let ubuntuTemplate = '';
+      let rhelTemplate = '';
 
       for (const i in res.spec.vsphere.templates) {
         if (i === 'coreos') {
           coreosTemplate = res.spec.vsphere.templates[i];
         } else if (i === 'centos') {
           centosTemplate = res.spec.vsphere.templates[i];
+        } else if (i === 'rhel') {
+          rhelTemplate = res.spec.vsphere.templates[i];
         } else if (i === 'ubuntu') {
           ubuntuTemplate = res.spec.vsphere.templates[i];
         }
@@ -85,6 +88,9 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
       } else if (operatingSystem.containerLinux) {
         this.defaultTemplate = coreosTemplate;
         return this.form.controls.template.setValue(coreosTemplate);
+      } else if (operatingSystem.rhel) {
+        this.defaultTemplate = rhelTemplate;
+        return this.form.controls.template.setValue(rhelTemplate);
       }
     });
   }

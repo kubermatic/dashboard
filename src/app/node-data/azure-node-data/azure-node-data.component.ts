@@ -44,6 +44,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
       size: new FormControl(
           this.nodeData.spec.cloud.azure.size,
           [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true)]),
+      imageID: new FormControl(this.nodeData.spec.cloud.azure.imageID),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -181,6 +182,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
           size: this.form.controls.size.value,
           assignPublicIP: this.nodeData.spec.cloud.azure.assignPublicIP,
           tags: this.nodeData.spec.cloud.azure.tags,
+          imageID: this.form.controls.imageID.value,
         },
       },
       valid: this.sizes.length > 0 && this.form.valid,
