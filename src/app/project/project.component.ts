@@ -37,15 +37,20 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   rawRole = [];
   displayedColumns: string[] = ['status', 'name', 'labels', 'id', 'role', 'clusters', 'owners', 'actions'];
   dataSource = new MatTableDataSource<ProjectEntity>();
+  isPaginatorVisible = false;
   showCards = true;
 
   paginator: MatPaginator;
   @ViewChild(MatPaginator)
   set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
-    if (this.paginator && this.settings) {
-      this.paginator.pageSize = this.settings.itemsPerPage;
-    }
+
+    setTimeout(_ => {
+      if (this.paginator && this.settings) {
+        this.paginator.pageSize = this.settings.itemsPerPage;
+        this.isPaginatorVisible = this._isPaginatorVisible();
+      }
+    });
 
     this.dataSource.paginator = this.paginator;
   }
@@ -317,7 +322,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     this._router.navigate([`/projects/${this.projects[0].id}/clusters`]);
   }
 
-  isPaginatorVisible(): boolean {
+  private _isPaginatorVisible(): boolean {
     return !_.isEmpty(this.projects) && this.paginator && this.projects.length > this.paginator.pageSize;
   }
 }
