@@ -4,6 +4,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
+import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
 import {Subject, timer} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
@@ -101,7 +102,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
           this.projects = this._loadCurrentUserRolesAndSortProjects(projects);
           this.dataSource.data = this.projects;
           this._sortProjectOwners();
-          this.isPaginatorVisible = this.isPaginatorVisibleFn();
 
           if (this._shouldRedirectToCluster()) {
             this._redirectToCluster();

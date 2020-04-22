@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {EMPTY, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, filter, first, map, shareReplay, switchMap, switchMapTo} from 'rxjs/operators';
+import {catchError, first, map, shareReplay, switchMap, switchMapTo} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
