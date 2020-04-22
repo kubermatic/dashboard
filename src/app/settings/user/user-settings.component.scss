@@ -43,7 +43,7 @@
     .km-account-settings-entry-label {
       align-items: center;
       display: flex;
-      min-width: 20 * $baseline-grid;
+      min-width: 23 * $baseline-grid;
       line-height: 8 * $baseline-grid;
 
       span {
@@ -58,7 +58,6 @@
         min-width: 140px;
         max-width: 140px;
         border-radius: $border-radius;
-        margin-bottom: 0;
 
         ::ng-deep.mat-button-toggle-label-content {
           font-weight: normal;

@@ -34,9 +34,9 @@
       <div class="km-account-settings-header">User Settings</div>
 
       <div>
-        <div fxFlex="20"
+        <div class="km-account-settings-entry-label"
              fxLayoutAlign=" center">Items per page</div>
-        <mat-form-field fxFlex="40"
+        <mat-form-field fxFlex="23"
                         class="km-user-settings-form-field">
           <mat-select disableOptionCentering
                       [(ngModel)]="settings.itemsPerPage"
@@ -53,7 +53,7 @@
 
       <div *ngIf="enableThemes"
            fxLayout="row">
-        <div fxFlex="20"
+        <div class="km-account-settings-entry-label"
              fxLayoutAlign=" center">Theme</div>
         <mat-button-toggle-group [(value)]="settings.selectedTheme"
                                  (change)="onSettingsChange()"
@@ -73,7 +73,8 @@
       </div>
 
       <div>
-        <div fxLayoutAlign=" center">
+        <div class="km-account-settings-entry-label"
+             fxLayoutAlign=" center">
           <span>Default Project</span>
           <div class="km-icon-info"
                matTooltip="Selecting a default project will automatically redirected you to it after login."></div>
@@ -98,7 +99,7 @@
       <div *ngIf="isAdmin()"
            fxLayout="row"
            fxLayoutAlign=" center">
-        <div fxFlex="20"
+        <div class="km-account-settings-entry-label"
              fxLayoutAlign=" center">
           <span>Show all projects</span>
           <div class="km-icon-info"
