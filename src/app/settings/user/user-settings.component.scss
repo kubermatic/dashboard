@@ -12,9 +12,11 @@
     padding: 3.75 * $baseline-grid;
 
     .km-user {
-      height: 3 * $baseline-grid;
+      align-items: center;
+      display: flex;
+      min-height: 3 * $baseline-grid;
       margin-right: 3.75 * $baseline-grid;
-      width: 3 * $baseline-grid;
+      min-width: 3 * $baseline-grid;
     }
 
     .km-account-info-name {
@@ -28,20 +30,33 @@
   }
 
   .km-account-settings {
+    min-width: 390px;
     font-size: $font-size-subhead;
     padding: 3.75 * $baseline-grid;
 
     .km-account-settings-header {
       font-size: $font-size-subhead-lg;
       line-height: initial;
+      margin-bottom: 3 * $baseline-grid;
+    }
+
+    .km-account-settings-entry-label {
+      align-items: center;
+      display: flex;
+      min-width: 20 * $baseline-grid;
+      line-height: 8 * $baseline-grid;
+
+      span {
+        margin-right: .625 * $baseline-grid;
+      }
     }
 
     .km-account-settings-toggle {
       mat-button-toggle {
         min-height: 50px;
         max-height: 50px;
-        min-width: 150px;
-        max-width: 150px;
+        min-width: 140px;
+        max-width: 140px;
         border-radius: $border-radius;
         margin-bottom: 0;
 

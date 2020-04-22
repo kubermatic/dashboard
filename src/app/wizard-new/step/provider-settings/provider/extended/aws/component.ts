@@ -1,5 +1,5 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -17,7 +17,7 @@ enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-wizard-aws-provider-extended',
+  selector: 'km-wizard-aws-provider-extended',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AWSProviderExtendedComponent), multi: true},
@@ -25,7 +25,7 @@ enum Controls {
   ]
 })
 export class AWSProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  readonly controls = Controls;
+  readonly Controls = Controls;
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
@@ -35,10 +35,10 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.SecurityGroup]: new FormControl('', Validators.pattern('sg-(\\w{8}|\\w{17})')),
-      [Controls.RouteTableID]: new FormControl('', Validators.pattern('rtb-(\\w{8}|\\w{17})')),
-      [Controls.InstanceProfileName]: new FormControl(''),
-      [Controls.RoleARN]: new FormControl(''),
+      [Controls.SecurityGroup]: this._builder.control('', Validators.pattern('sg-(\\w{8}|\\w{17})')),
+      [Controls.RouteTableID]: this._builder.control('', Validators.pattern('rtb-(\\w{8}|\\w{17})')),
+      [Controls.InstanceProfileName]: this._builder.control(''),
+      [Controls.RoleARN]: this._builder.control(''),
     });
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe))

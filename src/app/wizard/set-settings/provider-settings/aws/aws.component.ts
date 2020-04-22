@@ -10,7 +10,7 @@ import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
 
 @Component({
-  selector: 'kubermatic-aws-cluster-settings',
+  selector: 'km-aws-cluster-settings',
   templateUrl: './aws.component.html',
 })
 export class AWSClusterSettingsComponent implements OnInit, OnDestroy {

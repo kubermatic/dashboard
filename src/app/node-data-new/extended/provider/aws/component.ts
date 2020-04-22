@@ -12,7 +12,7 @@ enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-aws-extended-node-data',
+  selector: 'km-aws-extended-node-data',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AWSExtendedNodeDataComponent), multi: true},
@@ -22,7 +22,7 @@ enum Controls {
 export class AWSExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: object;
 
-  readonly Control = Controls;
+  readonly Controls = Controls;
 
   get nodeData(): NodeData {
     return this._nodeDataService.nodeData;
@@ -46,14 +46,10 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
     this.form.get(Controls.AssignPublicIP)
         .valueChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
-
-    this.form.get(Controls.Tags)
-        .valueChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._nodeDataService.aws.tags = this.tags);
   }
 
   onTagsChange(tags: object): void {
-    this.tags = tags;
+    this._nodeDataService.aws.tags = tags;
   }
 
   private _getNodeData(): NodeData {

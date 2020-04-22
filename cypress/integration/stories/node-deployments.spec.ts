@@ -60,7 +60,7 @@ describe('Node Deployments Story', () => {
 
   it('should wait for initial node deployment to be created', () => {
     wait('**/nodedeployments', 'GET', 'getNodeDeployments', 900000);
-    cy.get('kubermatic-node-deployment-list', {timeout: 900000}).should(Condition.Contain, initialNodeDeploymentName);
+    cy.get('km-node-deployment-list', {timeout: 900000}).should(Condition.Contain, initialNodeDeploymentName);
   });
 
   it('should go to node deployment details', () => {
@@ -79,7 +79,7 @@ describe('Node Deployments Story', () => {
     NodeDeploymentDetailsPage.getBackToClusterBtn().click();
     cy.url().should(Condition.Contain, '/clusters');
     cy.get('mat-card-title').should(Condition.Contain, clusterName);
-    cy.get('kubermatic-node-deployment-list').should(Condition.Contain, initialNodeDeploymentName);
+    cy.get('km-node-deployment-list').should(Condition.Contain, initialNodeDeploymentName);
 
     ClustersPage.getNodeDeploymentRemoveBtn(initialNodeDeploymentName).click();
     ClustersPage.getDeleteNodeDeploymentDialogBtn().click();

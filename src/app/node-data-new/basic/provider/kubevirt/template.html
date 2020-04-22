@@ -1,12 +1,13 @@
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="16px">
-  <mat-form-field>
+  <mat-form-field fxFlex>
     <mat-label>Number of CPUs</mat-label>
     <input matInput
            required
            [formControlName]="Controls.CPUs"
-           type="text"
+           type="number"
+           min="1"
            autocomplete="off">
     <mat-error *ngIf="form.get(Controls.CPUs).hasError('required')">
       Number of CPUs is <strong>required</strong>.
@@ -16,7 +17,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field fxFlex>
     <mat-label>Memory</mat-label>
     <input matInput
            required
@@ -31,7 +32,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field fxFlex>
     <mat-label>Namespace</mat-label>
     <input matInput
            required
@@ -44,7 +45,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field fxFlex>
     <mat-label>PVC Size</mat-label>
     <input matInput
            required
@@ -59,7 +60,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field fxFlex>
     <mat-label>Source URL</mat-label>
     <input matInput
            required
@@ -72,7 +73,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field fxFlex>
     <mat-label>Storage Class Name</mat-label>
     <input matInput
            required

@@ -1,6 +1,6 @@
 import {Component, ContentChild, ElementRef, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import {BaseFormValidator} from '../../validators/base-form.validator';
 import {OptionDirective} from './directive';
 
@@ -28,6 +28,7 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   @Input('optionsGetter') getOptions: (group: string) => object[];
   @Input() selected: string;
   @Input() hint: string;
+  @Input() valueFormatter: (selected: string) => string;
 
   @Output() changed = new EventEmitter<string>();
 
@@ -48,7 +49,8 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
     });
 
     this.form.get(Controls.Select)
-        .valueChanges.pipe(takeUntil(this._unsubscribe))
+        .valueChanges.pipe(distinctUntilChanged())
+        .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this.changed.emit(this.form.get(Controls.Select).value));
   }
 
@@ -65,13 +67,12 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   }
 
   ngOnChanges(): void {
-    if (this.selected && !this.form.get(Controls.Select).value) {
-      this.form.get(Controls.Select).setValue(this.selected);
+    if (!this.form) {
+      return;
     }
 
-    if (this.form) {
-      this.form.updateValueAndValidity({onlySelf: true, emitEvent: false});
-    }
+    this.form.get(Controls.Select).setValue(this.selected);
+    this.form.updateValueAndValidity();
   }
 
   ngOnDestroy(): void {

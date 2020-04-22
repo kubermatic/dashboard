@@ -32,7 +32,7 @@ import {RevokeTokenComponent} from './revoke-token/revoke-token.component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/share-kubeconfig.component';
 
 @Component({
-  selector: 'kubermatic-cluster-details',
+  selector: 'km-cluster-details',
   templateUrl: './cluster-details.component.html',
   styleUrls: ['./cluster-details.component.scss'],
 })

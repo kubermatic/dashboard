@@ -10,7 +10,7 @@ import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 
 @Component({
-  selector: 'kubermatic-revoke-token',
+  selector: 'km-revoke-token',
   templateUrl: './revoke-token.component.html',
   styleUrls: ['./revoke-token.component.scss'],
 })

@@ -1,7 +1,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge} from 'rxjs';
-import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
 import {DigitaloceanCloudSpec} from '../../../../../../shared/entity/cloud/DigitaloceanCloudSpec';
@@ -14,7 +14,7 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-wizard-digitalocean-provider-basic',
+  selector: 'km-wizard-digitalocean-provider-basic',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DigitalOceanProviderBasicComponent), multi: true},
@@ -22,9 +22,7 @@ export enum Controls {
   ]
 })
 export class DigitalOceanProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  readonly controls = Controls;
-
-  private readonly _debounceTime = 250;
+  readonly Controls = Controls;
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
@@ -45,8 +43,7 @@ export class DigitalOceanProviderBasicComponent extends BaseFormValidator implem
         .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
     this.form.get(Controls.Token)
-        .valueChanges.pipe(debounceTime(this._debounceTime))
-        .pipe(distinctUntilChanged())
+        .valueChanges.pipe(distinctUntilChanged())
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());
 

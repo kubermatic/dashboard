@@ -7,7 +7,7 @@ import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
-  selector: 'kubermatic-vsphere-node-data',
+  selector: 'km-vsphere-node-data',
   templateUrl: './vsphere-node-data.component.html',
 })
 

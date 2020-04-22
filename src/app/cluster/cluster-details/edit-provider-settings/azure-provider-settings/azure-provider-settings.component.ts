@@ -7,7 +7,7 @@ import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
 
 @Component({
-  selector: 'kubermatic-azure-provider-settings',
+  selector: 'km-azure-provider-settings',
   templateUrl: './azure-provider-settings.component.html',
 })
 

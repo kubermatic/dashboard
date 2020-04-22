@@ -14,7 +14,7 @@ enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-vsphere-basic-node-data',
+  selector: 'km-vsphere-basic-node-data',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => VSphereBasicNodeDataComponent), multi: true},
@@ -47,10 +47,6 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-  }
-
-  isInWizard(): boolean {
-    return this._nodeDataService.isInWizardMode();
   }
 
   private _getNodeData(): NodeData {

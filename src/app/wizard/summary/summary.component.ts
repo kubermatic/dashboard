@@ -8,7 +8,7 @@ import {NodeData} from '../../shared/model/NodeSpecChange';
 import {NodeUtils} from '../../shared/utils/node-utils/node-utils';
 
 @Component({
-  selector: 'kubermatic-summary',
+  selector: 'km-summary',
   templateUrl: './summary.component.html',
   styleUrls: ['./summary.component.scss'],
 })

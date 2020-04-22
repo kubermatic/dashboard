@@ -8,7 +8,7 @@ import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm'
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
 @Component({
-  selector: 'kubermatic-vsphere-cluster-settings',
+  selector: 'km-vsphere-cluster-settings',
   templateUrl: './vsphere.component.html',
 })
 export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {

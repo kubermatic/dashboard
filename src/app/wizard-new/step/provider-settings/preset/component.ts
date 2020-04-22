@@ -19,7 +19,7 @@ export enum PresetsState {
 }
 
 @Component({
-  selector: 'kubermatic-wizard-presets',
+  selector: 'km-wizard-presets',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   providers: [
@@ -90,7 +90,7 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
     this._unsubscribe.complete();
   }
 
-  private _enable(enable: boolean, name: string): void {
+  private _enable(enable: boolean, name: Controls): void {
     if (enable && this.form.get(name).disabled) {
       this.form.get(name).enable();
     }

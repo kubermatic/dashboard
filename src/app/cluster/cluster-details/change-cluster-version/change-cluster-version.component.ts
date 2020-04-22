@@ -11,7 +11,7 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 
 @Component({
-  selector: 'kubermatic-change-cluster-version',
+  selector: 'km-change-cluster-version',
   templateUrl: './change-cluster-version.component.html',
 })
 export class ChangeClusterVersionComponent implements OnInit, OnDestroy {

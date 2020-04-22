@@ -14,14 +14,14 @@
                       label="Standard Droplets">
           <mat-option *ngFor="let size of filteredSizes.standard"
                       [value]="size.slug">
-            {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
+            {{size.slug}} ({{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month)
           </mat-option>
         </mat-optgroup>
         <mat-optgroup *ngIf="sizes.optimized.length > 0"
                       label="Optimized Droplets">
           <mat-option *ngFor="let size of filteredSizes.optimized"
                       [value]="size.slug">
-            {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
+            {{size.slug}} ({{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month)
           </mat-option>
         </mat-optgroup>
       </mat-autocomplete>

@@ -20,7 +20,7 @@ import {objectDiff} from '../../shared/utils/common-utils';
 import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.component';
 
 @Component({
-  selector: 'kubermatic-admin-settings',
+  selector: 'km-admin-settings',
   templateUrl: 'admin-settings.component.html',
   styleUrls: ['admin-settings.component.scss'],
 })

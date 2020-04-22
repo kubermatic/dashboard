@@ -13,7 +13,7 @@ import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 import {ClusterService} from '../../service/cluster';
 
 @Component({
-  selector: 'kubermatic-wizard-summary-step',
+  selector: 'km-wizard-summary-step',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
@@ -79,9 +79,10 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   displayProvider(): boolean {
-    return this._hasProviderOptions(NodeProvider.AWS) || this._hasProviderOptions(NodeProvider.GCP) ||
-        this._hasProviderOptions(NodeProvider.AZURE) || this._hasProviderOptions(NodeProvider.DIGITALOCEAN) ||
-        this._hasProviderOptions(NodeProvider.HETZNER) || this._clusterService.provider === NodeProvider.BRINGYOUROWN;
+    return this._hasProviderOptions(NodeProvider.ALIBABA) || this._hasProviderOptions(NodeProvider.AWS) ||
+        this._hasProviderOptions(NodeProvider.GCP) || this._hasProviderOptions(NodeProvider.AZURE) ||
+        this._hasProviderOptions(NodeProvider.DIGITALOCEAN) || this._hasProviderOptions(NodeProvider.HETZNER) ||
+        this._clusterService.provider === NodeProvider.BRINGYOUROWN;
   }
 
   displayTags(tags: object): boolean {
@@ -95,6 +96,8 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
       case NodeProvider.OPENSTACK:
       case NodeProvider.AZURE:
         return !this.displayTags(this.nodeData.spec.cloud[provider].tags);
+      case NodeProvider.ALIBABA:
+        return !this.displayTags(this.nodeData.spec.cloud[provider].labels);
       case NodeProvider.DIGITALOCEAN:
       case NodeProvider.GCP:
       case NodeProvider.PACKET:

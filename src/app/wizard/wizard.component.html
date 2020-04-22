@@ -3,31 +3,31 @@
                       [currentStepIndex]="currentStepIndex"
                       [currentStep]="currentStep"></km-wizard-progress>
 
-  <kubermatic-set-cluster-spec [cluster]="cluster"
-                               [settings]="settings"
-                               *ngIf="settings && currentStep.name === 'set-cluster-spec'"></kubermatic-set-cluster-spec>
+  <km-set-cluster-spec [cluster]="cluster"
+                       [settings]="settings"
+                       *ngIf="settings && currentStep.name === 'set-cluster-spec'"></km-set-cluster-spec>
 
-  <kubermatic-set-provider [cluster]="cluster"
-                           *ngIf="currentStep.name === 'set-provider'"></kubermatic-set-provider>
+  <km-set-provider [cluster]="cluster"
+                   *ngIf="currentStep.name === 'set-provider'"></km-set-provider>
 
-  <kubermatic-set-datacenter [cluster]="cluster"
-                             *ngIf="currentStep.name === 'set-datacenter'"></kubermatic-set-datacenter>
+  <km-set-datacenter [cluster]="cluster"
+                     *ngIf="currentStep.name === 'set-datacenter'"></km-set-datacenter>
 
-  <kubermatic-set-settings [cluster]="cluster"
-                           [clusterSSHKeys]="clusterSSHKeys"
+  <km-set-settings [cluster]="cluster"
+                   [clusterSSHKeys]="clusterSSHKeys"
+                   [nodeData]="addNodeData"
+                   *ngIf="currentStep.name === 'set-provider-settings'"></km-set-settings>
+
+  <km-set-machine-networks [cluster]="cluster"
                            [nodeData]="addNodeData"
-                           *ngIf="currentStep.name === 'set-provider-settings'"></kubermatic-set-settings>
+                           *ngIf="currentStep.name === 'set-machine-networks'"></km-set-machine-networks>
 
-  <kubermatic-set-machine-networks [cluster]="cluster"
-                                   [nodeData]="addNodeData"
-                                   *ngIf="currentStep.name === 'set-machine-networks'"></kubermatic-set-machine-networks>
-
-  <kubermatic-summary *ngIf="currentStep.name === 'summary'"
-                      [nodeData]="addNodeData"
-                      [cluster]="cluster"
-                      [providerFormData]="clusterProviderFormData"
-                      [datacenterFormData]="clusterDatacenterFormData"
-                      [clusterSSHKeys]="clusterSSHKeys"></kubermatic-summary>
+  <km-summary *ngIf="currentStep.name === 'summary'"
+              [nodeData]="addNodeData"
+              [cluster]="cluster"
+              [providerFormData]="clusterProviderFormData"
+              [datacenterFormData]="clusterDatacenterFormData"
+              [clusterSSHKeys]="clusterSSHKeys"></km-summary>
 
   <div class="km-button-navigation">
     <a mat-flat-button

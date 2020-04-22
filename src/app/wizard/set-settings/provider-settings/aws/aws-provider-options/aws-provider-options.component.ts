@@ -10,7 +10,7 @@ import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterFo
 import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
 
 @Component({
-  selector: 'kubermatic-aws-provider-options',
+  selector: 'km-aws-provider-options',
   templateUrl: './aws-provider-options.component.html',
 })
 export class AWSProviderOptionsComponent implements OnInit, OnDestroy {

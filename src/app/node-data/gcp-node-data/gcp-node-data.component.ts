@@ -13,7 +13,7 @@ import {filterArrayOptions} from '../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 
 @Component({
-  selector: 'kubermatic-gcp-node-data',
+  selector: 'km-gcp-node-data',
   templateUrl: './gcp-node-data.component.html',
   styleUrls: ['./gcp-node-data.component.scss'],
 })

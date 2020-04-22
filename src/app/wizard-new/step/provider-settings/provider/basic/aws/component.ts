@@ -1,5 +1,5 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {PresetsService} from '../../../../../../core/services';
@@ -11,8 +11,8 @@ import {BaseFormValidator} from '../../../../../../shared/validators/base-form.v
 import {ClusterService} from '../../../../../service/cluster';
 
 export enum Controls {
-  AccessKeyID = 'accessKeyId',
-  SecretAccessKey = 'secretAccessKey',
+  AccessKeyID = 'accessKeyID',
+  AccessKeySecret = 'accessKeySecret',
   VPCID = 'vpcId',
 }
 
@@ -22,7 +22,7 @@ enum VPCState {
 }
 
 @Component({
-  selector: 'kubermatic-wizard-aws-provider-basic',
+  selector: 'km-wizard-aws-provider-basic',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AWSProviderBasicComponent), multi: true},
@@ -32,7 +32,7 @@ enum VPCState {
 export class AWSProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   vpcIds: AWSVPC[] = [];
 
-  readonly controls = Controls;
+  readonly Controls = Controls;
 
   protected readonly _debounceTime = 250;
 
@@ -50,19 +50,19 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.AccessKeyID]: new FormControl('', Validators.required),
-      [Controls.SecretAccessKey]: new FormControl('', Validators.required),
-      [Controls.VPCID]: new FormControl('', [Validators.required, Validators.pattern('vpc-(\\w{8}|\\w{17})')]),
+      [Controls.AccessKeyID]: this._builder.control('', Validators.required),
+      [Controls.AccessKeySecret]: this._builder.control('', Validators.required),
+      [Controls.VPCID]: this._builder.control('', [Validators.required, Validators.pattern('vpc-(\\w{8}|\\w{17})')]),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(
-            _ => this._presets.enablePresets(Object.values(Controls).every(control => !this._controlValue(control))));
+            _ => this._presets.enablePresets(Object.values(Controls).every(control => !this.form.get(control).value)));
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
-    merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.SecretAccessKey).valueChanges)
+    merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.AccessKeySecret).valueChanges)
         .pipe(debounceTime(this._debounceTime))
         .pipe(distinctUntilChanged())
         .pipe(switchMap(_ => this._vpcListObservable()))
@@ -103,8 +103,8 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
 
   private _vpcListObservable(): Observable<AWSVPC[]> {
     return this._presets.provider(NodeProvider.AWS)
-        .accessKeyID(this._controlValue(Controls.AccessKeyID))
-        .secretAccessKey(this._controlValue(Controls.SecretAccessKey))
+        .accessKeyID(this.form.get(Controls.AccessKeyID).value)
+        .secretAccessKey(this.form.get(Controls.AccessKeySecret).value)
         .vpcs(this._clusterService.datacenter)
         .pipe(map(vpcs => vpcs.sort((a, b) => a.name.localeCompare(b.name))))
         .pipe(tap(_ => this._vpcState = VPCState.Loading))
@@ -115,17 +115,13 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
         }));
   }
 
-  private _controlValue(control: Controls): string {
-    return this.form.get(control).value;
-  }
-
   private _getClusterEntity(): ClusterEntity {
     return {
       spec: {
         cloud: {
           aws: {
             accessKeyId: this.form.get(Controls.AccessKeyID).value,
-            secretAccessKey: this.form.get(Controls.SecretAccessKey).value,
+            secretAccessKey: this.form.get(Controls.AccessKeySecret).value,
             vpcId: this.form.get(Controls.VPCID).value,
           } as AWSCloudSpec
         } as CloudSpec

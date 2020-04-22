@@ -7,7 +7,7 @@ import {NodeDataService} from '../../../core/services/node-data/node-data.servic
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
-  selector: 'kubermatic-alibaba-node-options',
+  selector: 'km-alibaba-node-options',
   templateUrl: './alibaba-node-options.component.html',
 })
 

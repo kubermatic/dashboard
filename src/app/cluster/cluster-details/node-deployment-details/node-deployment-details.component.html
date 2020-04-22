@@ -131,14 +131,14 @@
     </mat-card-content>
   </mat-card>
 
-  <kubermatic-node-list [cluster]="cluster"
-                        [nodes]="nodes"
-                        [nodesMetrics]="metrics"
-                        (deleteNode)="loadNodes()"
-                        [datacenter]="seedDatacenter"
-                        [projectID]="getProjectID()"
-                        [isClusterRunning]="true"
-                        [clusterHealthStatus]="{css: 'km-status-running'}"></kubermatic-node-list>
+  <km-node-list [cluster]="cluster"
+                [nodes]="nodes"
+                [nodesMetrics]="metrics"
+                (deleteNode)="loadNodes()"
+                [datacenter]="seedDatacenter"
+                [projectID]="getProjectID()"
+                [isClusterRunning]="true"
+                [clusterHealthStatus]="{css: 'km-status-running'}"></km-node-list>
 
   <km-event-list [events]="events"></km-event-list>
 

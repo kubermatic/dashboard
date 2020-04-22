@@ -10,7 +10,7 @@ import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntit
 import {AsyncValidators} from '../../shared/validators/async-label-form.validator';
 
 @Component({
-  selector: 'kubermatic-edit-project',
+  selector: 'km-edit-project',
   templateUrl: './edit-project.component.html',
 })
 export class EditProjectComponent implements OnInit {

@@ -23,7 +23,7 @@ import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 import {EditProjectComponent} from './edit-project/edit-project.component';
 
 @Component({
-  selector: 'kubermatic-project',
+  selector: 'km-project',
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.scss'],
 })
@@ -37,7 +37,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   displayedColumns: string[] = ['status', 'name', 'labels', 'id', 'role', 'clusters', 'owners', 'actions'];
   dataSource = new MatTableDataSource<ProjectEntity>();
   showCards = true;
-  isPaginatorVisible = false;
 
   paginator: MatPaginator;
 
@@ -49,8 +48,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     if (isViewInit) {
       setTimeout(() => {
         this.paginator.pageSize = this.settings.itemsPerPage;
-        this.isPaginatorVisible = this.isPaginatorVisibleFn();
-      }, 100);
+      });
     }
   }
 
@@ -323,11 +321,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     this._router.navigate([`/projects/${this.projects[0].id}/clusters`]);
   }
 
-  hasItems(): boolean {
-    return this.projects && this.projects.length > 0;
-  }
-
-  isPaginatorVisibleFn(): boolean {
-    return this.hasItems() && this.paginator && this.projects.length > this.paginator.pageSize;
+  isPaginatorVisible(): boolean {
+    return !_.isEmpty(this.projects) && this.paginator && this.projects.length > this.paginator.pageSize;
   }
 }

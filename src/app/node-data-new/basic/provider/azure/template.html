@@ -1,0 +1,17 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      fxLayoutGap="16px">
+  <km-combobox [required]="true"
+               [grouped]="false"
+               [selected]="selectedSize"
+               [options]="sizes"
+               [formControlName]="Controls.Size"
+               (changed)="onSizeChange($event)"
+               [label]="sizeLabel"
+               inputLabel="Select size..."
+               filterBy="name">
+    <div *option="let size">
+      {{size.name}} ({{size.numberOfCores}} vCPU, {{size.memoryInMB}} MB RAM)
+    </div>
+  </km-combobox>
+</form>

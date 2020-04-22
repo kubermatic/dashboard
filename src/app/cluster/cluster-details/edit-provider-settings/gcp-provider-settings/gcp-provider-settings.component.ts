@@ -6,7 +6,7 @@ import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
 
 @Component({
-  selector: 'kubermatic-gcp-provider-settings',
+  selector: 'km-gcp-provider-settings',
   templateUrl: './gcp-provider-settings.component.html',
 })
 

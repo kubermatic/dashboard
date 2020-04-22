@@ -13,7 +13,7 @@ import {filterArrayOptions} from '../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 
 @Component({
-  selector: 'kubermatic-packet-node-data',
+  selector: 'km-packet-node-data',
   templateUrl: './packet-node-data.component.html',
 })
 

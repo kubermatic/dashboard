@@ -18,7 +18,7 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-add-binding',
+  selector: 'km-add-binding',
   templateUrl: './add-binding.component.html',
   styleUrls: ['./add-binding.component.scss'],
 })

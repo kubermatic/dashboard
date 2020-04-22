@@ -15,7 +15,7 @@ enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-wizard-vsphere-provider-extended',
+  selector: 'km-wizard-vsphere-provider-extended',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => VSphereProviderExtendedComponent), multi: true},
@@ -23,11 +23,11 @@ enum Controls {
   ]
 })
 export class VSphereProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  folders: VSphereFolder[] = [];
-
-  readonly controls = Controls;
-
   private _networkMap: {[type: string]: VSphereNetwork[]} = {};
+
+  readonly Controls = Controls;
+
+  folders: VSphereFolder[] = [];
 
   get networkTypes(): string[] {
     return Object.keys(this._networkMap);

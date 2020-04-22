@@ -1,16 +1,25 @@
 <form *ngIf="visible"
       [formGroup]="form"
       [ngSwitch]="provider">
-  <kubermatic-aws-extended-node-data *ngSwitchCase="Provider.AWS"
-                                     [formControl]="form.get(Control.ProviderExtended)">
-  </kubermatic-aws-extended-node-data>
-  <kubermatic-digitalocean-extended-node-data *ngSwitchCase="Provider.DIGITALOCEAN"
-                                              [formControl]="form.get(Control.ProviderExtended)">
-  </kubermatic-digitalocean-extended-node-data>
-  <kubermatic-vsphere-extended-node-data *ngSwitchCase="Provider.VSPHERE"
-                                         [formControl]="form.get(Control.ProviderExtended)">
-  </kubermatic-vsphere-extended-node-data>
+  <km-alibaba-extended-node-data *ngSwitchCase="Provider.ALIBABA"
+                                 [formControl]="form.get(Control.ProviderExtended)">
+  </km-alibaba-extended-node-data>
+  <km-aws-extended-node-data *ngSwitchCase="Provider.AWS"
+                             [formControl]="form.get(Control.ProviderExtended)">
+  </km-aws-extended-node-data>
+  <km-digitalocean-extended-node-data *ngSwitchCase="Provider.DIGITALOCEAN"
+                                      [formControl]="form.get(Control.ProviderExtended)">
+  </km-digitalocean-extended-node-data>
+  <km-vsphere-extended-node-data *ngSwitchCase="Provider.VSPHERE"
+                                 [formControl]="form.get(Control.ProviderExtended)">
+  </km-vsphere-extended-node-data>
   <km-packet-extended-node-data *ngSwitchCase="Provider.PACKET"
                                 [formControl]="form.get(Control.ProviderExtended)">
   </km-packet-extended-node-data>
+  <km-azure-extended-node-data *ngSwitchCase="Provider.AZURE"
+                               [formControl]="form.get(Control.ProviderExtended)">
+  </km-azure-extended-node-data>
+  <km-gcp-extended-node-data *ngSwitchCase="Provider.GCP"
+                             [formControl]="form.get(Control.ProviderExtended)">
+  </km-gcp-extended-node-data>
 </form>

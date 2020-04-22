@@ -1,38 +1,33 @@
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="16px">
-  <div fxFlex
-       class="mat-select-container">
-    <km-combobox [required]="true"
-                 [grouped]="false"
-                 [selected]="defaultSize"
-                 [options]="sizes"
-                 [formControlName]="Controls.Size"
-                 (changed)="onSizeChange($event)"
-                 label="Node Size"
-                 inputLabel="Select size..."
-                 filterBy="name">
-      <div *option="let size">
-        {{size.name}} ({{size.vcpus}} vCPU, {{size.memory}} GB RAM, {{size.price | number: '1.2-5'}} USD per hour)
-      </div>
-    </km-combobox>
-  </div>
+  <km-combobox [required]="true"
+               [grouped]="false"
+               [selected]="defaultSize"
+               [options]="sizes"
+               [formControlName]="Controls.Size"
+               (changed)="onSizeChange($event)"
+               label="Node Size"
+               inputLabel="Select size..."
+               filterBy="name">
+    <div *option="let size">
+      {{size.name}} ({{size.vcpus}} vCPU, {{size.memory}} GB RAM, {{size.price | number: '1.2-5'}} USD per hour)
+    </div>
+  </km-combobox>
 
-  <div fxFlex
-       class="mat-select-container">
-    <mat-form-field>
-      <mat-label>Disk Type</mat-label>
-      <mat-select [formControlName]="Controls.DiskType"
-                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
-                  disableOptionCentering
-                  required>
-        <mat-option *ngFor="let type of diskTypes"
-                    [value]="type">
-          {{type}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+  <km-combobox [required]="true"
+               [grouped]="false"
+               [selected]="defaultDiskType"
+               [options]="diskTypes"
+               [formControlName]="Controls.DiskType"
+               (changed)="onDiskTypeChange($event)"
+               label="Disk Type"
+               inputLabel="Select disk type..."
+               filterBy="name">
+    <div *option="let diskType">
+      {{diskType.name}}
+    </div>
+  </km-combobox>
 
   <mat-form-field fxFlex>
     <mat-label>Disk Size in GB (gp2)</mat-label>

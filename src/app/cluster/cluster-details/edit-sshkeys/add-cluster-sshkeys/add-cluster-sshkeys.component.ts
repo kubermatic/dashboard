@@ -14,7 +14,7 @@ import {GroupConfig} from '../../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../../shared/utils/member-utils/member-utils';
 
 @Component({
-  selector: 'kubermatic-add-cluster-sshkeys',
+  selector: 'km-add-cluster-sshkeys',
   templateUrl: './add-cluster-sshkeys.component.html',
   styleUrls: ['./add-cluster-sshkeys.component.scss'],
 })

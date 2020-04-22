@@ -11,7 +11,7 @@ enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-wizard-provider-extended',
+  selector: 'km-wizard-provider-extended',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ProviderExtendedComponent), multi: true},
@@ -43,6 +43,6 @@ export class ProviderExtendedComponent extends BaseFormValidator implements OnIn
   }
 
   hasExtendedSection(provider: NodeProvider): boolean {
-    return [NodeProvider.VSPHERE, NodeProvider.AWS].includes(provider);
+    return [NodeProvider.VSPHERE, NodeProvider.AWS, NodeProvider.AZURE, NodeProvider.GCP].includes(provider);
   }
 }

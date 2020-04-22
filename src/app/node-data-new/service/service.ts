@@ -7,8 +7,11 @@ import {OperatingSystem} from '../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {ClusterService} from '../../wizard-new/service/cluster';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../config';
+import {NodeDataAlibabaProvider} from './provider/alibaba';
 import {NodeDataAWSProvider} from './provider/aws';
+import {NodeDataAzureProvider} from './provider/azure';
 import {NodeDataDigitalOceanProvider} from './provider/digitalocean';
+import {NodeDataGCPProvider} from './provider/gcp';
 import {NodeDataHetznerProvider} from './provider/hetzner';
 import {NodeDataPacketProvider} from './provider/packet';
 
@@ -72,8 +75,12 @@ export class NodeDataService {
     return this.mode === NodeDataMode.Wizard;
   }
 
+  readonly alibaba =
+      new NodeDataAlibabaProvider(this, this._clusterService, this._presetService, this._datacenterService);
   readonly aws = new NodeDataAWSProvider(this, this._clusterService, this._presetService, this._datacenterService);
+  readonly azure = new NodeDataAzureProvider(this, this._clusterService, this._presetService, this._datacenterService);
   readonly digitalOcean = new NodeDataDigitalOceanProvider(this, this._clusterService, this._presetService);
   readonly hetzner = new NodeDataHetznerProvider(this, this._clusterService, this._presetService);
   readonly packet = new NodeDataPacketProvider(this, this._clusterService, this._presetService);
+  readonly gcp = new NodeDataGCPProvider(this, this._clusterService, this._presetService);
 }

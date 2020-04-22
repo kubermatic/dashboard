@@ -9,7 +9,7 @@ import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm'
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
 @Component({
-  selector: 'kubermatic-azure-cluster-settings',
+  selector: 'km-azure-cluster-settings',
   templateUrl: './azure.component.html',
 })
 export class AzureClusterSettingsComponent implements OnInit, OnDestroy {

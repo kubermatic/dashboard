@@ -8,7 +8,7 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
-  selector: 'kubermatic-azure-node-options',
+  selector: 'km-azure-node-options',
   templateUrl: './azure-node-options.component.html',
 })
 

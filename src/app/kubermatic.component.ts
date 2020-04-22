@@ -26,7 +26,7 @@ const PAGES_WITHOUT_MENU = [
 ];
 
 @Component({
-  selector: 'kubermatic-root',
+  selector: 'km-root',
   templateUrl: './kubermatic.component.html',
   styleUrls: ['./kubermatic.component.scss'],
 })

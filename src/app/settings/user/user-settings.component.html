@@ -14,17 +14,14 @@
     <mat-card-title>Account</mat-card-title>
   </mat-card-header>
   <mat-divider></mat-divider>
-  <mat-card-content>
+  <mat-card-content fxLayout="row wrap">
     <div *ngIf="!!user"
          class="km-account-info"
          fxLayout="row"
          fxFlex="50">
       <div class="km-icon-mask km-user"></div>
       <div>
-        <div class="km-account-info-name">
-          <span>{{user.name}}</span>
-          <span *ngIf="user.isAdmin">&nbsp;(Administrator)</span>
-        </div>
+        <div class="km-account-info-name">{{user.name}}</div>
         <div class="km-account-info-email">{{user.email}}</div>
       </div>
     </div>
@@ -60,7 +57,8 @@
              fxLayoutAlign=" center">Theme</div>
         <mat-button-toggle-group [(value)]="settings.selectedTheme"
                                  (change)="onSettingsChange()"
-                                 class="km-account-settings-toggle">
+                                 class="km-account-settings-toggle"
+                                 fxLayout="row wrap">
           <mat-button-toggle [value]="Theme.Light">
             <i class="km-icon-mask km-icon-sun"></i>
             Light
@@ -75,8 +73,7 @@
       </div>
 
       <div>
-        <div fxFlex="20"
-             fxLayoutAlign=" center">
+        <div fxLayoutAlign=" center">
           <span>Default Project</span>
           <div class="km-icon-info"
                matTooltip="Selecting a default project will automatically redirected you to it after login."></div>

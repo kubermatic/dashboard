@@ -5,7 +5,7 @@ import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 
 @Component({
-  selector: 'kubermatic-set-settings',
+  selector: 'km-set-settings',
   templateUrl: './set-settings.component.html',
   styleUrls: ['./set-settings.component.scss'],
 })

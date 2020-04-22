@@ -7,7 +7,7 @@ export enum NotificationType {
 }
 
 @Component({
-  selector: 'kubermatic-notification',
+  selector: 'km-notification',
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss'],
 })

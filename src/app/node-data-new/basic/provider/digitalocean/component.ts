@@ -2,8 +2,7 @@ import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Observable, of} from 'rxjs';
 import {catchError, takeUntil} from 'rxjs/operators';
-import {DigitaloceanSizes} from '../../../../shared/entity/provider/digitalocean/DropletSizeEntity';
-import {Type} from '../../../../shared/entity/provider/hetzner/TypeEntity';
+import {DigitaloceanSizes, Optimized, Standard} from '../../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
 
@@ -17,7 +16,7 @@ enum SizeTypes {
 }
 
 @Component({
-  selector: 'kubermatic-digitalocean-basic-node-data',
+  selector: 'km-digitalocean-basic-node-data',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DigitalOceanBasicNodeDataComponent), multi: true},
@@ -25,10 +24,11 @@ enum SizeTypes {
   ]
 })
 export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  sizes: DigitaloceanSizes = {optimized: [], standard: []};
-  selectedSize = '';
+  private _sizes: DigitaloceanSizes = {optimized: [], standard: []};
 
   readonly Controls = Controls;
+
+  selectedSize = '';
 
   get sizeTypes(): string[] {
     return Object.values(SizeTypes);
@@ -51,13 +51,20 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
     this._unsubscribe.complete();
   }
 
-  getTypes(group: SizeTypes): Type[] {
+  getTypes(group: SizeTypes): Optimized[]|Standard[] {
     const key = Object.keys(SizeTypes).find(key => SizeTypes[key] === group);
-    return this.sizes[key.toLowerCase()];
+    return this._sizes[key.toLowerCase()];
   }
 
   onTypeChange(size: string): void {
     this._nodeDataService.nodeData.spec.cloud.digitalocean.size = size;
+  }
+
+  sizeDisplayName(slug: string): string {
+    const size = [...this._sizes.optimized, ...this._sizes.standard].find(size => size.slug === slug);
+    return size ? `${size.slug} (${size.memory / 1024} GB RAM, ${size.vcpus} CPU${(size.vcpus !== 1) ? 's' : ''}, $${
+                      size.price_monthly} per month)` :
+                  '';
   }
 
   private get _sizesObservable(): Observable<DigitaloceanSizes> {
@@ -65,9 +72,9 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
   }
 
   private _setDefaultSize(sizes: DigitaloceanSizes): void {
-    this.sizes = sizes;
-    if (this.sizes && this.sizes.standard && this.sizes.standard.length > 0) {
-      this.selectedSize = this.sizes.standard[0].slug;
+    this._sizes = sizes;
+    if (this._sizes && this._sizes.standard && this._sizes.standard.length > 0) {
+      this.selectedSize = this._sizes.standard[0].slug;
     }
   }
 }

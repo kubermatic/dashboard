@@ -13,7 +13,7 @@ import {filterArrayOptions} from '../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 
 @Component({
-  selector: 'kubermatic-openstack-node-data',
+  selector: 'km-openstack-node-data',
   styleUrls: ['./openstack-node-data.component.scss'],
   templateUrl: './openstack-node-data.component.html',
 })
@@ -63,9 +63,9 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
               [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.flavors, 'slug', true)]);
         });
 
-    this._addNodeService.changeNodeProviderData(this._getNodeProviderData());
     this._loadFlavors();
     this.checkFlavorState();
+    this._addNodeService.changeNodeProviderData(this._getNodeProviderData());
 
     if (this.nodeData.spec.cloud.openstack.image === '') {
       this.setImage(this.nodeData.spec.operatingSystem);
@@ -94,30 +94,23 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     });
 
     this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      let credentialsChanged = false;
-      if (this._hasCredentialsChanged(this.cloudSpec, data.cloudSpec)) {
-        this.form.controls.flavor.setValue('');
-        this.flavors = [];
-        this.checkFlavorState();
-        credentialsChanged = true;
-      }
-
       this.cloudSpec = data.cloudSpec;
+      this.form.controls.flavor.setValue('');
+      this.flavors = [];
+      this.checkFlavorState();
 
-      if (this._hasCredentials() && credentialsChanged) {
+      if (this._hasCredentials() || this._selectedPreset) {
         this._loadFlavors();
       }
     });
 
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
       this._selectedPreset = preset;
-      if (preset) {
-        this._loadFlavors();
-        return;
+      if (!preset) {
+        this.form.controls.flavor.setValue('');
+        this.flavors = [];
+        this.checkFlavorState();
       }
-
-      this.flavors = [];
-      this.checkFlavorState();
     });
   }
 
@@ -155,6 +148,9 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       this.form.controls.flavor.enable();
       this.form.controls.customDiskSize.enable();
     }
+
+    this.form.controls.flavor.updateValueAndValidity();
+    this.form.controls.customDiskSize.updateValueAndValidity();
   }
 
   showFlavorHint(): boolean {
@@ -210,12 +206,6 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
         !!this.cloudSpec.openstack.domain && this.cloudSpec.openstack.domain.length > 0 &&
         ((!!this.cloudSpec.openstack.tenant && this.cloudSpec.openstack.tenant.length > 0) ||
          (!!this.cloudSpec.openstack.tenantID && this.cloudSpec.openstack.tenantID.length > 0));
-  }
-
-  private _hasCredentialsChanged(prev: CloudSpec, curr: CloudSpec): boolean {
-    return prev.openstack.username !== curr.openstack.username || prev.openstack.password !== curr.openstack.password ||
-        prev.openstack.domain !== curr.openstack.domain || prev.openstack.tenant !== curr.openstack.tenant ||
-        prev.openstack.tenantID !== curr.openstack.tenantID;
   }
 
   private _handleFlavours(flavors: OpenstackFlavor[]): void {

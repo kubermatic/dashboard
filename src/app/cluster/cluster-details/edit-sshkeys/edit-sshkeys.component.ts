@@ -20,7 +20,7 @@ import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member
 import {AddClusterSSHKeysComponent} from './add-cluster-sshkeys/add-cluster-sshkeys.component';
 
 @Component({
-  selector: 'kubermatic-edit-sshkeys',
+  selector: 'km-edit-sshkeys',
   templateUrl: './edit-sshkeys.component.html',
   styleUrls: ['./edit-sshkeys.component.scss'],
 })

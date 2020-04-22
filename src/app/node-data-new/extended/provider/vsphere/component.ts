@@ -19,7 +19,7 @@ enum Controls {
 }
 
 @Component({
-  selector: 'kubermatic-vsphere-extended-node-data',
+  selector: 'km-vsphere-extended-node-data',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => VSphereExtendedNodeDataComponent), multi: true},
@@ -30,7 +30,7 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator implemen
   private _defaultTemplate = '';
   private _templates: DatacenterOperatingSystemOptions;
 
-  readonly Control = Controls;
+  readonly Controls = Controls;
 
   get template(): string {
     return this.form.get(Controls.Template).value ? this.form.get(Controls.Template).value : this._defaultTemplate;

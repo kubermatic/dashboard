@@ -1,0 +1,54 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      fxLayoutGap="16px">
+  <mat-form-field fxFlex>
+    <mat-label>Client ID</mat-label>
+    <input matInput
+           [formControlName]="Controls.ClientID"
+           [name]="Controls.ClientID"
+           type="password"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Controls.ClientID).hasError('required')">
+      Client ID is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Client Secret</mat-label>
+    <input matInput
+           [formControlName]="Controls.ClientSecret"
+           [name]="Controls.ClientSecret"
+           type="password"
+           autocomplete="off">
+    <mat-error *ngIf="form.get(Controls.ClientSecret).hasError('required')">
+      Client Secret is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Tenant ID</mat-label>
+    <input matInput
+           [formControlName]="Controls.TenantID"
+           [name]="Controls.TenantID"
+           type="password"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Controls.TenantID).hasError('required')">
+      Tenant ID is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Subscription ID*</mat-label>
+    <input matInput
+           [formControlName]="Controls.SubscriptionID"
+           [name]="Controls.SubscriptionID"
+           type="password"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Controls.SubscriptionID).hasError('required')">
+      Subscription ID is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+</form>

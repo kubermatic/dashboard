@@ -20,7 +20,7 @@ import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 import {NodeService} from '../../services/node.service';
 
 @Component({
-  selector: 'kubermatic-node-deployment-list',
+  selector: 'km-node-deployment-list',
   templateUrl: 'node-deployment-list.component.html',
   styleUrls: ['node-deployment-list.component.scss'],
 })

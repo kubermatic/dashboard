@@ -23,7 +23,7 @@ import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member
 import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 
 @Component({
-  selector: 'kubermatic-node-list',
+  selector: 'km-node-list',
   templateUrl: 'node-list.component.html',
   styleUrls: ['node-list.component.scss'],
 })

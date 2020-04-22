@@ -1,47 +1,47 @@
 <!-- Custom Presets -->
-<kubermatic-custom-presets-settings [cluster]="cluster">
-</kubermatic-custom-presets-settings>
+<km-custom-presets-settings [cluster]="cluster">
+</km-custom-presets-settings>
 
 <!-- Cluster Provider Settings -->
-<kubermatic-digitalocean-cluster-settings *ngIf="cluster.spec.cloud.digitalocean"
-                                          [cluster]="cluster"></kubermatic-digitalocean-cluster-settings>
+<km-digitalocean-cluster-settings *ngIf="cluster.spec.cloud.digitalocean"
+                                  [cluster]="cluster"></km-digitalocean-cluster-settings>
 
-<kubermatic-aws-cluster-settings *ngIf="cluster.spec.cloud.aws"
-                                 [cluster]="cluster"></kubermatic-aws-cluster-settings>
+<km-aws-cluster-settings *ngIf="cluster.spec.cloud.aws"
+                         [cluster]="cluster"></km-aws-cluster-settings>
 
-<kubermatic-openstack-cluster-settings *ngIf="cluster.spec.cloud.openstack"
-                                       [cluster]="cluster"></kubermatic-openstack-cluster-settings>
+<km-openstack-cluster-settings *ngIf="cluster.spec.cloud.openstack"
+                               [cluster]="cluster"></km-openstack-cluster-settings>
 
-<kubermatic-bringyourown-cluster-settings *ngIf="cluster.spec.cloud.bringyourown"
-                                          [cluster]="cluster"></kubermatic-bringyourown-cluster-settings>
+<km-bringyourown-cluster-settings *ngIf="cluster.spec.cloud.bringyourown"
+                                  [cluster]="cluster"></km-bringyourown-cluster-settings>
 
-<kubermatic-hetzner-cluster-settings *ngIf="cluster.spec.cloud.hetzner"
-                                     [cluster]="cluster"></kubermatic-hetzner-cluster-settings>
+<km-hetzner-cluster-settings *ngIf="cluster.spec.cloud.hetzner"
+                             [cluster]="cluster"></km-hetzner-cluster-settings>
 
-<kubermatic-vsphere-cluster-settings *ngIf="cluster.spec.cloud.vsphere"
-                                     [cluster]="cluster"></kubermatic-vsphere-cluster-settings>
+<km-vsphere-cluster-settings *ngIf="cluster.spec.cloud.vsphere"
+                             [cluster]="cluster"></km-vsphere-cluster-settings>
 
-<kubermatic-azure-cluster-settings *ngIf="cluster.spec.cloud.azure"
-                                   [cluster]="cluster"></kubermatic-azure-cluster-settings>
+<km-azure-cluster-settings *ngIf="cluster.spec.cloud.azure"
+                           [cluster]="cluster"></km-azure-cluster-settings>
 
-<kubermatic-packet-cluster-settings *ngIf="cluster.spec.cloud.packet"
-                                    [cluster]="cluster"></kubermatic-packet-cluster-settings>
+<km-packet-cluster-settings *ngIf="cluster.spec.cloud.packet"
+                            [cluster]="cluster"></km-packet-cluster-settings>
 
-<kubermatic-gcp-cluster-settings *ngIf="cluster.spec.cloud.gcp"
-                                 [cluster]="cluster"></kubermatic-gcp-cluster-settings>
+<km-gcp-cluster-settings *ngIf="cluster.spec.cloud.gcp"
+                         [cluster]="cluster"></km-gcp-cluster-settings>
 
-<kubermatic-kubevirt-cluster-settings [cluster]="cluster"
-                                      *ngIf="cluster.spec.cloud.kubevirt">
-</kubermatic-kubevirt-cluster-settings>
+<km-kubevirt-cluster-settings [cluster]="cluster"
+                              *ngIf="cluster.spec.cloud.kubevirt">
+</km-kubevirt-cluster-settings>
 
-<kubermatic-alibaba-cluster-settings *ngIf="cluster.spec.cloud.alibaba"
-                                     [cluster]="cluster"></kubermatic-alibaba-cluster-settings>
+<km-alibaba-cluster-settings *ngIf="cluster.spec.cloud.alibaba"
+                             [cluster]="cluster"></km-alibaba-cluster-settings>
 
 <!-- Extended Options -->
 <ng-container *ngIf="!isInWizard">
-  <kubermatic-cluster-provider-options [cluster]="cluster"></kubermatic-cluster-provider-options>
+  <km-cluster-provider-options [cluster]="cluster"></km-cluster-provider-options>
 </ng-container>
 
 <!-- SSH Keys -->
-<kubermatic-cluster-ssh-keys [cluster]="cluster"
-                             [selectedKeys]="clusterSSHKeys"></kubermatic-cluster-ssh-keys>
+<km-cluster-ssh-keys [cluster]="cluster"
+                     [selectedKeys]="clusterSSHKeys"></km-cluster-ssh-keys>

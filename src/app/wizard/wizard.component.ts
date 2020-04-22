@@ -20,7 +20,7 @@ import {NodeData} from '../shared/model/NodeSpecChange';
 import {ClusterType} from '../shared/utils/cluster-utils/cluster-utils';
 
 @Component({
-  selector: 'kubermatic-wizard',
+  selector: 'km-wizard',
   templateUrl: './wizard.component.html',
   styleUrls: ['./wizard.component.scss'],
 })

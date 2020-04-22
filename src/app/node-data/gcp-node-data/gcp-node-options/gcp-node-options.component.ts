@@ -7,7 +7,7 @@ import {NodeDataService} from '../../../core/services/node-data/node-data.servic
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
-  selector: 'kubermatic-gcp-node-options',
+  selector: 'km-gcp-node-options',
   templateUrl: './gcp-node-options.component.html',
 })
 

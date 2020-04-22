@@ -4,8 +4,8 @@
   <km-label-form title="Provider Tags"
                  [labels]="tags"
                  (labelsChange)="onTagsChange($event)"
-                 [formControlName]="Control.Tags"></km-label-form>
+                 [formControlName]="Controls.Tags"></km-label-form>
 
-  <mat-checkbox [id]="Control.AssignPublicIP"
-                [formControlName]="Control.AssignPublicIP">Assign Public IP</mat-checkbox>
+  <mat-checkbox [id]="Controls.AssignPublicIP"
+                [formControlName]="Controls.AssignPublicIP">Assign Public IP</mat-checkbox>
 </form>

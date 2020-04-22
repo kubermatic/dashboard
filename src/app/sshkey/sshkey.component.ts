@@ -18,7 +18,7 @@ import {GroupConfig} from '../shared/model/Config';
 import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
 
 @Component({
-  selector: 'kubermatic-sshkey',
+  selector: 'km-sshkey',
   templateUrl: './sshkey.component.html',
   styleUrls: ['./sshkey.component.scss'],
 })

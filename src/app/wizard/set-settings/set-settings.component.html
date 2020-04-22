@@ -9,18 +9,18 @@
          fxFlex.sm="100%"
          fxFlex.xs="100%">
       <div class="km-header">Provider Credentials</div>
-      <kubermatic-cluster-provider-settings [cluster]="cluster"
-                                            [clusterSSHKeys]="clusterSSHKeys"></kubermatic-cluster-provider-settings>
+      <km-cluster-provider-settings [cluster]="cluster"
+                                    [clusterSSHKeys]="clusterSSHKeys"></km-cluster-provider-settings>
     </div>
     <div fxFlex="50%"
          fxFlex.md="100%"
          fxFlex.sm="100%"
          fxFlex.xs="100%">
       <div class="km-header">Node Settings</div>
-      <kubermatic-node-data [cluster]="cluster"
-                            [nodeData]="nodeData"
-                            [existingNodesCount]="0"
-                            isInWizard="true"></kubermatic-node-data>
+      <km-node-data [cluster]="cluster"
+                    [nodeData]="nodeData"
+                    [existingNodesCount]="0"
+                    isInWizard="true"></km-node-data>
     </div>
   </div>
 
@@ -41,8 +41,8 @@
     </div>
   </div>
 
-  <kubermatic-extended-options [cluster]="cluster"
-                               [nodeData]="nodeData"
-                               [isExtended]="isExtended"></kubermatic-extended-options>
+  <km-extended-options [cluster]="cluster"
+                       [nodeData]="nodeData"
+                       [isExtended]="isExtended"></km-extended-options>
 
 </div>
