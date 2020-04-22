@@ -6,4 +6,5 @@ export class GCPNodeSpec {
   preemptible: boolean;
   tags: string[];
   zone: string;
+  customImage?: string;
 }

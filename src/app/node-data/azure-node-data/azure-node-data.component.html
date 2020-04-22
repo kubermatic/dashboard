@@ -19,5 +19,13 @@
       <mat-error *ngIf="form.controls.size.hasError('required')">Size is <strong>required</strong>.</mat-error>
       <mat-hint *ngIf="showSizeHint()">Please enter valid credentials first.</mat-hint>
     </mat-form-field>
+    <mat-form-field>
+      <mat-label>Image ID</mat-label>
+      <input matInput
+             formControlName="imageID"
+             type="text"
+             autocomplete="off">
+      <mat-hint>Please note that snapshots are not supported.</mat-hint>
+    </mat-form-field>
   </div>
 </form>

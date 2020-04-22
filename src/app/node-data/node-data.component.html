@@ -137,6 +137,11 @@
       <i class="km-os-image-sles"></i>
       SLES
     </mat-button-toggle>
+    <mat-button-toggle value="rhel"
+                       *ngIf="isRHELAvailable() && !isClusterOpenshift()">
+      <i class="km-os-image-rhel"></i>
+      RHEL
+    </mat-button-toggle>
   </mat-button-toggle-group>
 
 </form>
@@ -173,6 +178,43 @@
          class="km-os-options">
       <mat-checkbox id="distUpgradeOnBootSLES"
                     formControlName="distUpgradeOnBootSLES">Upgrade system on first boot</mat-checkbox>
+    </div>
+
+    <!-- Options for RHEL -->
+    <div *ngIf="form.controls.operatingSystem.value === 'rhel'"
+         fxLayout="column"
+         class="km-os-options">
+      <mat-form-field fxFlex>
+        <mat-label>RHEL Subscription Manager User</mat-label>
+        <input matInput
+               required
+               formControlName="rhelSubscriptionManagerUser"
+               type="text"
+               autocomplete="off">
+        <mat-error *ngIf="operatingSystemForm.controls.rhelSubscriptionManagerUser.hasError('required')">RHEL Subscription Manager user is required.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field fxFlex>
+        <mat-label>RHEL Subscription Manager Password</mat-label>
+        <input matInput
+               required
+               formControlName="rhelSubscriptionManagerPassword"
+               type="password"
+               autocomplete="off">
+        <mat-error *ngIf="operatingSystemForm.controls.rhelSubscriptionManagerPassword.hasError('required')">RHEL Subscription Manager password is required.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field fxFlex>
+        <mat-label>RHEL Subscription Manager Offline Token</mat-label>
+        <input matInput
+               formControlName="rhsmOfflineToken"
+               type="password"
+               autocomplete="off">
+        <mat-hint>Offline token is required to remove subscriptions. </mat-hint>
+      </mat-form-field>
+
+      <mat-checkbox id="distUpgradeOnBootRHEL"
+                    formControlName="distUpgradeOnBootRHEL">Upgrade system on first boot</mat-checkbox>
     </div>
   </div>
 </form>

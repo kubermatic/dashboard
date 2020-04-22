@@ -124,6 +124,10 @@
             <span [ngClass]="nodeDeployment.spec.template.operatingSystem.sles.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></span>
             <span>Upgrade system on the first boot</span>
           </div>
+          <div *ngIf="nodeDeployment.spec.template.operatingSystem.rhel">
+            <span [ngClass]="nodeDeployment.spec.template.operatingSystem.rhel.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></span>
+            <span>Upgrade system on the first boot</span>
+          </div>
         </div>
       </div>
 

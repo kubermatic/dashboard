@@ -10,6 +10,7 @@ import {ClusterEntity, MasterVersion} from '../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../shared/entity/DatacenterEntity';
 import {ResourceType} from '../shared/entity/LabelsEntity';
 import {OperatingSystemSpec} from '../shared/entity/NodeEntity';
+import {OperatingSystem} from '../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../shared/model/NodeSpecChange';
 import {ClusterUtils} from '../shared/utils/cluster-utils/cluster-utils';
 import {AsyncValidators} from '../shared/validators/async-label-form.validator';
@@ -59,8 +60,8 @@ export class NodeDataComponent implements OnInit, OnDestroy {
             Validators.required, Validators.min(0),
             NoIpsLeftValidator(this.cluster.spec.machineNetworks, this.existingNodesCount)
           ]),
-      operatingSystem:
-          new FormControl(this.isClusterOpenshift() ? 'centos' : this.selectDefaultOS(), Validators.required),
+      operatingSystem: new FormControl(
+          this.isClusterOpenshift() ? OperatingSystem.CentOS : this.selectDefaultOS(), Validators.required),
       name: new FormControl(
           {value: this.nodeData.name, disabled: this.isNameDisabled},
           [Validators.pattern('[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*')]),
@@ -72,20 +73,28 @@ export class NodeDataComponent implements OnInit, OnDestroy {
 
     this.form.controls.count.markAsTouched();
 
-    const distUpgradeOnBootUbuntu =
-        !!this.nodeData.spec.operatingSystem.ubuntu && this.nodeData.spec.operatingSystem.ubuntu.distUpgradeOnBoot;
-    const distUpgradeOnBootCentos =
-        !!this.nodeData.spec.operatingSystem.centos && this.nodeData.spec.operatingSystem.centos.distUpgradeOnBoot;
-    const disableAutoUpdate = !!this.nodeData.spec.operatingSystem.containerLinux &&
-        this.nodeData.spec.operatingSystem.containerLinux.disableAutoUpdate;
-    const distUpgradeOnBootSLES =
-        !!this.nodeData.spec.operatingSystem.sles && this.nodeData.spec.operatingSystem.sles.distUpgradeOnBoot;
-
     this.operatingSystemForm = new FormGroup({
-      distUpgradeOnBootUbuntu: new FormControl(distUpgradeOnBootUbuntu),
-      distUpgradeOnBootCentos: new FormControl(distUpgradeOnBootCentos),
-      distUpgradeOnBootSLES: new FormControl(distUpgradeOnBootSLES),
-      disableAutoUpdate: new FormControl(disableAutoUpdate),
+      distUpgradeOnBootUbuntu: new FormControl(
+          !!this.nodeData.spec.operatingSystem.ubuntu && this.nodeData.spec.operatingSystem.ubuntu.distUpgradeOnBoot),
+      distUpgradeOnBootCentos: new FormControl(
+          !!this.nodeData.spec.operatingSystem.centos && this.nodeData.spec.operatingSystem.centos.distUpgradeOnBoot),
+      distUpgradeOnBootSLES: new FormControl(
+          !!this.nodeData.spec.operatingSystem.sles && this.nodeData.spec.operatingSystem.sles.distUpgradeOnBoot),
+      distUpgradeOnBootRHEL: new FormControl(
+          !!this.nodeData.spec.operatingSystem.rhel && this.nodeData.spec.operatingSystem.rhel.distUpgradeOnBoot),
+      rhelSubscriptionManagerUser: new FormControl(
+          this.nodeData.spec.operatingSystem.rhel ?
+              this.nodeData.spec.operatingSystem.rhel.rhelSubscriptionManagerUser :
+              ''),
+      rhelSubscriptionManagerPassword: new FormControl(
+          this.nodeData.spec.operatingSystem.rhel ?
+              this.nodeData.spec.operatingSystem.rhel.rhelSubscriptionManagerPassword :
+              ''),
+      rhsmOfflineToken: new FormControl(
+          this.nodeData.spec.operatingSystem.rhel ? this.nodeData.spec.operatingSystem.rhel.rhsmOfflineToken : ''),
+      disableAutoUpdate: new FormControl(
+          !!this.nodeData.spec.operatingSystem.containerLinux &&
+          this.nodeData.spec.operatingSystem.containerLinux.disableAutoUpdate),
     });
 
     this.nodeDataForm = new FormGroup({
@@ -154,44 +163,53 @@ export class NodeDataComponent implements OnInit, OnDestroy {
 
   selectDefaultOS(): string {
     if (!!this.cluster.spec.cloud.vsphere) {
-      if (this.isAvailable('ubuntu')) {
-        return 'ubuntu';
-      } else if (this.isAvailable('centos')) {
-        return 'centos';
+      if (this.isAvailable(OperatingSystem.Ubuntu)) {
+        return OperatingSystem.Ubuntu;
+      } else if (this.isAvailable(OperatingSystem.CentOS)) {
+        return OperatingSystem.CentOS;
       } else if (this.isAvailable('coreos')) {
-        return 'containerLinux';
+        return OperatingSystem.ContainerLinux;
       } else {
-        return 'ubuntu';
+        return OperatingSystem.Ubuntu;
       }
     } else {
-      return 'ubuntu';
+      return OperatingSystem.Ubuntu;
     }
   }
 
   getOSSpec(): OperatingSystemSpec {
     switch (this.form.controls.operatingSystem.value) {
-      case 'ubuntu':
+      case OperatingSystem.Ubuntu:
         return {
           ubuntu: {
             distUpgradeOnBoot: this.operatingSystemForm.controls.distUpgradeOnBootUbuntu.value,
           },
         };
-      case 'centos':
+      case OperatingSystem.CentOS:
         return {
           centos: {
             distUpgradeOnBoot: this.operatingSystemForm.controls.distUpgradeOnBootCentos.value,
           },
         };
-      case 'containerLinux':
+      case OperatingSystem.ContainerLinux:
         return {
           containerLinux: {
             disableAutoUpdate: this.operatingSystemForm.controls.disableAutoUpdate.value,
           },
         };
-      case 'sles':
+      case OperatingSystem.SLES:
         return {
           sles: {
             distUpgradeOnBoot: this.operatingSystemForm.controls.distUpgradeOnBootSLES.value,
+          },
+        };
+      case OperatingSystem.RHEL:
+        return {
+          rhel: {
+            distUpgradeOnBoot: this.operatingSystemForm.controls.distUpgradeOnBootRHEL.value,
+            rhelSubscriptionManagerUser: this.operatingSystemForm.controls.rhelSubscriptionManagerUser.value,
+            rhelSubscriptionManagerPassword: this.operatingSystemForm.controls.rhelSubscriptionManagerPassword.value,
+            rhsmOfflineToken: this.operatingSystemForm.controls.rhsmOfflineToken.value,
           },
         };
       default:
@@ -213,6 +231,11 @@ export class NodeDataComponent implements OnInit, OnDestroy {
 
   isClusterOpenshift(): boolean {
     return ClusterUtils.isOpenshiftType(this.cluster);
+  }
+
+  isRHELAvailable(): boolean {
+    return !!this.cluster.spec.cloud.aws || !!this.cluster.spec.cloud.azure || !!this.cluster.spec.cloud.gcp ||
+        !!this.cluster.spec.cloud.kubevirt || !!this.cluster.spec.cloud.openstack || !!this.cluster.spec.cloud.vsphere;
   }
 
   isAvailable(os: string): boolean {

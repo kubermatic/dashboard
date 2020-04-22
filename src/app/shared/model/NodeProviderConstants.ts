@@ -52,4 +52,5 @@ export enum OperatingSystem {
   CentOS = 'centos',
   ContainerLinux = 'containerLinux',
   SLES = 'sles',
+  RHEL = 'rhel',
 }

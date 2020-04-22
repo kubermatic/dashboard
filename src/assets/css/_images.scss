@@ -431,3 +431,9 @@
 
   background-image: url("/assets/images/os/sles.svg");
 }
+
+.km-os-image-rhel {
+  @include km-image(3 * $baseline-grid);
+
+  background-image: url("/assets/images/os/rhel.svg");
+}
