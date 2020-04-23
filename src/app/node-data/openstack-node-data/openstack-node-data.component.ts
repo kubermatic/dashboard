@@ -231,7 +231,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   }
 
   private _loadFlavors(): void {
-    if (!this._hasCredentials() && !this._selectedPreset) {
+    if (this.isInWizard() && !this._hasCredentials() && !this._selectedPreset) {
       return;
     }
 
