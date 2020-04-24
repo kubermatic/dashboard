@@ -1,9 +1,10 @@
-import {AfterViewChecked, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {merge, Observable, of} from 'rxjs';
-import {catchError, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {merge, Observable} from 'rxjs';
+import {map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
+import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
 import {AWSSize, AWSSubnet} from '../../../../shared/entity/provider/aws/AWS';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
@@ -18,7 +19,7 @@ enum Controls {
   AMI = 'ami',
 }
 
-enum NodeSizeState {
+enum SizeState {
   Ready = 'Node Size',
   Loading = 'Loading...',
   Empty = 'No Node Sizes Available',
@@ -36,7 +37,8 @@ enum SubnetState {
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AWSBasicNodeDataComponent), multi: true},
     {provide: NG_VALIDATORS, useExisting: forwardRef(() => AWSBasicNodeDataComponent), multi: true}
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewChecked, OnDestroy {
   private _diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
@@ -47,11 +49,14 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   sizes: AWSSize[] = [];
   selectedSize = '';
-  sizeLabel = NodeSizeState.Empty;
+  sizeLabel = SizeState.Empty;
   selectedSubnet = '';
   subnetLabel = SubnetState.Empty;
   diskTypes = this._diskTypes.map(type => ({name: type}));
   selectedDiskType = '';
+
+  @ViewChild('sizeCombobox') private readonly _sizeCombobox: FilteredComboboxComponent;
+  @ViewChild('subnetCombobox') private readonly _subnetCombobox: FilteredComboboxComponent;
 
   get subnetAZ(): string[] {
     return Object.keys(this._subnetMap);
@@ -59,7 +64,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
-      private readonly _nodeDataService: NodeDataService) {
+      private readonly _nodeDataService: NodeDataService, private readonly _cdr: ChangeDetectorRef) {
     super();
   }
 
@@ -91,7 +96,8 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   ngAfterViewChecked(): void {
-    this.selectedDiskType = this._diskTypes[0];
+    // If disk types will be loaded from the backend, this can be moved to ngOnInit
+    this._setDefaultDiskType();
   }
 
   ngOnDestroy(): void {
@@ -125,24 +131,27 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   private get _sizesObservable(): Observable<AWSSize[]> {
-    return this._nodeDataService.aws.flavors().pipe(catchError(() => of<AWSSize[]>()));
+    return this._nodeDataService.aws.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this))
+        .pipe(map(sizes => sizes.sort((a, b) => a.name.localeCompare(b.name))));
   }
 
   private get _subnetIdsObservable(): Observable<AWSSubnet[]> {
-    return this._nodeDataService.aws.subnets().pipe(catchError(() => of<AWSSubnet[]>()));
+    return this._nodeDataService.aws.subnets(this._clearSubnet.bind(this), this._onSubnetLoading.bind(this));
+  }
+
+  private _setDefaultDiskType(): void {
+    this.selectedDiskType = this._diskTypes[0];
+    this._cdr.detectChanges();
   }
 
   private _setDefaultSize(sizes: AWSSize[]): void {
-    this.sizes = sizes.sort((a, b) => a.name.localeCompare(b.name));
+    this.sizes = sizes;
     if (this.sizes.length > 0) {
       const cheapestInstance = this.sizes.reduce((prev, curr) => prev.price < curr.price ? prev : curr);
       this.selectedSize = cheapestInstance.name;
+      this.sizeLabel = SizeState.Ready;
+      this._cdr.detectChanges();
     }
-  }
-
-  private _clearSubnet(): void {
-    this._subnets = [];
-    this._subnetMap = {};
   }
 
   private _setDefaultSubnet(subnets: AWSSubnet[]): void {
@@ -154,7 +163,36 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     this._subnetMap = {};
     const defaultSubnet = this._subnets.find(s => s.isDefaultSubnet);
     this.selectedSubnet = defaultSubnet ? defaultSubnet.id : this._subnets[0].id;
+    this.subnetLabel = this._subnets.length ? SubnetState.Ready : SubnetState.Empty;
+    this._cdr.detectChanges();
     this._initSubnetMap();
+  }
+
+  private _clearSize(): void {
+    this.sizes = [];
+    this.selectedSize = '';
+    this.sizeLabel = SizeState.Empty;
+    this._sizeCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _clearSubnet(): void {
+    this._subnets = [];
+    this._subnetMap = {};
+    this.subnetLabel = SubnetState.Empty;
+    this.selectedSubnet = '';
+    this._subnetCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _onSizeLoading(): void {
+    this._clearSize();
+    this.sizeLabel = SizeState.Loading;
+  }
+
+  private _onSubnetLoading(): void {
+    this._clearSubnet();
+    this.subnetLabel = SubnetState.Loading;
   }
 
   private _initSubnetMap(): void {

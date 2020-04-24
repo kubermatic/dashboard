@@ -61,21 +61,30 @@ export class AWS extends Provider {
         .pipe(map(vpcs => vpcs.map(vpc => Object.assign(new AWSVPC(), vpc))));
   }
 
-  subnets(dc: string): Observable<AWSSubnet[]> {
+  subnets(dc: string, onLoadingCb: () => void = null): Observable<AWSSubnet[]> {
     this._setRequiredHeaders(AWS.Header.AccessKeyID, AWS.Header.SecretAccessKey, AWS.Header.VPC);
-
     if (!this._hasRequiredHeaders() || !dc) {
       return EMPTY;
     }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
     const url = `${this._restRoot}/providers/${this._provider}/${dc}/subnets`;
     return this._http.get<AWSSubnet[]>(url, {headers: this._headers});
   }
 
-  flavors(): Observable<AWSSize[]> {
+  flavors(onLoadingCb: () => void = null): Observable<AWSSize[]> {
     this._setRequiredHeaders(AWS.Header.Region);
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
     return this._http.get<AWSSize[]>(this._url, {headers: this._headers});
   }
 }
