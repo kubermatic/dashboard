@@ -1,5 +1,5 @@
 import {merge, Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, delay, filter, switchMap, tap} from 'rxjs/operators';
+import {catchError, filter, switchMap, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
@@ -81,7 +81,6 @@ export class NodeDataGCPProvider {
                          .zone(this._nodeDataService.nodeData.spec.cloud.gcp.zone)
                          .credential(this._presetService.preset)
                          .machineTypes(onLoadingCb)
-                         .pipe(delay(5000))
                          .pipe(catchError(_ => {
                            if (onError) {
                              onError();

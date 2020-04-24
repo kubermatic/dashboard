@@ -1,5 +1,5 @@
-import {Observable} from 'rxjs';
-import {filter, switchMap, tap} from 'rxjs/operators';
+import {Observable, of, onErrorResumeNext} from 'rxjs';
+import {catchError, filter, switchMap, tap} from 'rxjs/operators';
 
 import {DatacenterService, PresetsService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
@@ -19,7 +19,7 @@ export class NodeDataAlibabaProvider {
     this._nodeDataService.nodeData.spec.cloud.alibaba.labels = labels;
   }
 
-  instanceTypes(): Observable<AlibabaInstanceType[]> {
+  instanceTypes(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AlibabaInstanceType[]> {
     let cluster: ClusterEntity;
     let region = '';
 
@@ -37,11 +37,18 @@ export class NodeDataAlibabaProvider {
                          .accessKeySecret(cluster.spec.cloud.alibaba.accessKeySecret)
                          .region(region)
                          .credential(this._presetService.preset)
-                         .instanceTypes()));
+                         .instanceTypes()
+                         .pipe(catchError(_ => {
+                           if (onError) {
+                             onError();
+                           }
+
+                           return onErrorResumeNext(of([]));
+                         }))));
     }
   }
 
-  zones(): Observable<AlibabaZone[]> {
+  zones(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AlibabaZone[]> {
     let cluster: ClusterEntity;
     let region = '';
 
@@ -59,7 +66,14 @@ export class NodeDataAlibabaProvider {
                          .accessKeySecret(cluster.spec.cloud.alibaba.accessKeySecret)
                          .region(region)
                          .credential(this._presetService.preset)
-                         .zones()));
+                         .zones()
+                         .pipe(catchError(_ => {
+                           if (onError) {
+                             onError();
+                           }
+
+                           return onErrorResumeNext(of([]));
+                         }))));
     }
   }
 }
