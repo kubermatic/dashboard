@@ -45,7 +45,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
         .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._presets.enablePresets(Object.values(Controls).every(control => !this.form.get(control).value));
+      this._presets.enablePresets(Object.values(this._clusterService.cluster.spec.cloud.aws).every(value => !value));
     });
 
     merge(

@@ -1,4 +1,4 @@
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewChecked, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge, Observable, of} from 'rxjs';
 import {catchError, switchMap, takeUntil, tap} from 'rxjs/operators';
@@ -18,6 +18,18 @@ enum Controls {
   AMI = 'ami',
 }
 
+enum NodeSizeState {
+  Ready = 'Node Size',
+  Loading = 'Loading...',
+  Empty = 'No Node Sizes Available',
+}
+
+enum SubnetState {
+  Ready = 'Subnet ID & Availability Zone',
+  Loading = 'Loading...',
+  Empty = 'No Subnet IDs & Availability Zones Available',
+}
+
 @Component({
   selector: 'km-aws-basic-node-data',
   templateUrl: './template.html',
@@ -26,7 +38,7 @@ enum Controls {
     {provide: NG_VALIDATORS, useExisting: forwardRef(() => AWSBasicNodeDataComponent), multi: true}
   ]
 })
-export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewChecked, OnDestroy {
   private _diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
   private _subnets: AWSSubnet[] = [];
   private _subnetMap: {[type: string]: AWSSubnet[]} = {};
@@ -34,10 +46,12 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   readonly Controls = Controls;
 
   sizes: AWSSize[] = [];
+  selectedSize = '';
+  sizeLabel = NodeSizeState.Empty;
+  selectedSubnet = '';
+  subnetLabel = SubnetState.Empty;
   diskTypes = this._diskTypes.map(type => ({name: type}));
-  defaultSubnet = '';
-  defaultSize = '';
-  defaultDiskType = this._diskTypes[0];
+  selectedDiskType = '';
 
   get subnetAZ(): string[] {
     return Object.keys(this._subnetMap);
@@ -74,6 +88,10 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
         )
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
+  }
+
+  ngAfterViewChecked(): void {
+    this.selectedDiskType = this._diskTypes[0];
   }
 
   ngOnDestroy(): void {
@@ -118,7 +136,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     this.sizes = sizes.sort((a, b) => a.name.localeCompare(b.name));
     if (this.sizes.length > 0) {
       const cheapestInstance = this.sizes.reduce((prev, curr) => prev.price < curr.price ? prev : curr);
-      this.defaultSize = cheapestInstance.name;
+      this.selectedSize = cheapestInstance.name;
     }
   }
 
@@ -135,7 +153,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     this._subnets = subnets;
     this._subnetMap = {};
     const defaultSubnet = this._subnets.find(s => s.isDefaultSubnet);
-    this.defaultSubnet = defaultSubnet ? defaultSubnet.id : this._subnets[0].id;
+    this.selectedSubnet = defaultSubnet ? defaultSubnet.id : this._subnets[0].id;
     this._initSubnetMap();
   }
 

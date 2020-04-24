@@ -1,5 +1,6 @@
 import {Component, ContentChild, ElementRef, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {MatSelect} from '@angular/material/select';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import {BaseFormValidator} from '../../validators/base-form.validator';
 import {OptionDirective} from './directive';
@@ -33,6 +34,7 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   @Output() changed = new EventEmitter<string>();
 
   @ViewChild('input', {static: true}) private readonly _inputEl: ElementRef;
+  @ViewChild('select', {static: true}) private readonly _matSelect: MatSelect;
   @ContentChild(OptionDirective, {read: TemplateRef}) optionTemplate;
 
   filterByInput: object = {};
@@ -64,6 +66,10 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   reset(): void {
     this.selected = '';
     this.form.get(Controls.Select).setValue(this.selected);
+  }
+
+  hasOptions(): boolean {
+    return this._matSelect && this._matSelect.options && this._matSelect.options.length > 0;
   }
 
   ngOnChanges(): void {

@@ -43,6 +43,7 @@ export class GCP extends Provider {
     if (!this._hasRequiredHeaders() && this._headers.has(GCP.Header.Zone)) {
       return EMPTY;
     }
+
     if (onLoadingCb) {
       onLoadingCb();
     }
@@ -67,6 +68,7 @@ export class GCP extends Provider {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
+
     if (onLoadingCb) {
       onLoadingCb();
     }

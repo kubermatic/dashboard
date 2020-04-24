@@ -51,9 +51,8 @@
         </div>
       </mat-select-trigger>
     </mat-select>
-    <mat-error *ngIf="required && form.get(controls.Select).hasError('required')">
-      {{label}} is
-      <strong>required</strong>.
+    <mat-error *ngIf="required && hasOptions() && form.get(controls.Select).hasError('required')">
+      {{label}} is <strong>required</strong>.
     </mat-error>
     <mat-hint *ngIf="hint">{{hint}}</mat-hint>
   </mat-form-field>

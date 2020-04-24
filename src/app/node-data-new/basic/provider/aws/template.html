@@ -3,11 +3,11 @@
       fxLayoutGap="16px">
   <km-combobox [required]="true"
                [grouped]="false"
-               [selected]="defaultSize"
+               [selected]="selectedSize"
                [options]="sizes"
                [formControlName]="Controls.Size"
                (changed)="onSizeChange($event)"
-               label="Node Size"
+               [label]="sizeLabel"
                inputLabel="Select size..."
                filterBy="name">
     <div *option="let size">
@@ -17,7 +17,7 @@
 
   <km-combobox [required]="true"
                [grouped]="false"
-               [selected]="defaultDiskType"
+               [selected]="selectedDiskType"
                [options]="diskTypes"
                [formControlName]="Controls.DiskType"
                (changed)="onDiskTypeChange($event)"
@@ -43,11 +43,11 @@
   <km-combobox [required]="true"
                [grouped]="true"
                [groups]="subnetAZ"
-               [selected]="defaultSubnet"
+               [selected]="selectedSubnet"
                [optionsGetter]="getSubnetToAZ.bind(this)"
                [formControlName]="Controls.SubnetID"
                (changed)="onSubnetChange($event)"
-               label="Subnet ID & Availability Zone"
+               [label]="subnetLabel"
                inputLabel="Select subnet..."
                filterBy="id">
     <div *option="let network">{{getSubnetOptionName(network)}}</div>
