@@ -1,5 +1,5 @@
-import {Observable} from 'rxjs';
-import {filter, switchMap} from 'rxjs/operators';
+import {Observable, of, onErrorResumeNext} from 'rxjs';
+import {catchError, filter, switchMap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../core/services';
 import {HetznerTypes} from '../../../shared/entity/provider/hetzner/TypeEntity';
@@ -13,7 +13,7 @@ export class NodeDataHetznerProvider {
       private readonly _nodeDataService: NodeDataService, private readonly _clusterService: ClusterService,
       private readonly _presetService: PresetsService) {}
 
-  flavors(): Observable<HetznerTypes> {
+  flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<HetznerTypes> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
@@ -23,7 +23,14 @@ export class NodeDataHetznerProvider {
                 cluster => this._presetService.provider(NodeProvider.HETZNER)
                                .token(cluster.spec.cloud.hetzner.token)
                                .credential(this._presetService.preset)
-                               .flavors()));
+                               .flavors(onLoadingCb)
+                               .pipe(catchError(_ => {
+                                 if (onError) {
+                                   onError();
+                                 }
+
+                                 return onErrorResumeNext(of(HetznerTypes.newHetznerTypes()));
+                               }))));
     }
   }
 }

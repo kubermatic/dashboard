@@ -18,7 +18,7 @@ enum SizeTypes {
 enum SizeState {
   Ready = 'Node Size',
   Loading = 'Loading...',
-  Empty = 'No Sizes Available',
+  Empty = 'No Node Sizes Available',
 }
 
 @Component({

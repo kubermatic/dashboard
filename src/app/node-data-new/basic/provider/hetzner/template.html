@@ -5,12 +5,13 @@
                [grouped]="true"
                [selected]="selectedType"
                [groups]="groups"
+               [valueFormatter]="typeDisplayName.bind(this)"
                [optionsGetter]="getTypes.bind(this)"
                [formControlName]="Controls.Type"
                (changed)="onTypeChange($event)"
-               label="Node Type"
+               [label]="typeLabel"
                inputLabel="Select type..."
                filterBy="name">
-    <div *option="let type">{{type.name}} ({{ type.cores }} vCPU, {{type.memory}} GB RAM)</div>
+    <div *option="let type">{{type.name}} ({{type.cores}} vCPU, {{type.memory}} GB RAM)</div>
   </km-combobox>
 </form>
