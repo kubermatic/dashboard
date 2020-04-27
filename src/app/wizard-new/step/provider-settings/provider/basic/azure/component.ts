@@ -41,7 +41,7 @@ export class AzureProviderBasicComponent extends BaseFormValidator implements On
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._presets.enablePresets(Object.values(Controls).every(control => !this.form.get(control).value));
+      this._presets.enablePresets(Object.values(this._clusterService.cluster.spec.cloud.azure).every(value => !value));
     });
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe))
