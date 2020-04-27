@@ -23,10 +23,15 @@ export class Digitalocean extends Provider {
     return this;
   }
 
-  flavors(): Observable<DigitaloceanSizes> {
+  flavors(onLoadingCb: () => void = null): Observable<DigitaloceanSizes> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
     return this._http.get<DigitaloceanSizes>(this._url, {headers: this._headers});
   }
 }

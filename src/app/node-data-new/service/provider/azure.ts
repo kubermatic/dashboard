@@ -18,7 +18,7 @@ export class NodeDataAzureProvider {
     this._nodeDataService.nodeData.spec.cloud.azure.tags = tags;
   }
 
-  flavors(onLoadingCb: () => void = null): Observable<AzureSizes[]> {
+  flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AzureSizes[]> {
     let cluster: ClusterEntity;
     let location = '';
 
@@ -39,7 +39,13 @@ export class NodeDataAzureProvider {
                          .location(location)
                          .credential(this._presetService.preset)
                          .flavors(onLoadingCb)
-                         .pipe(catchError(_ => onErrorResumeNext(of([]))))));
+                         .pipe(catchError(_ => {
+                           if (onError) {
+                             onError();
+                           }
+
+                           return onErrorResumeNext(of([]));
+                         }))));
     }
   }
 }
