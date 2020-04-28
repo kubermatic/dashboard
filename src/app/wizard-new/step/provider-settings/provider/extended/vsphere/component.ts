@@ -6,6 +6,7 @@ import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators
 import {PresetsService} from '../../../../../../core/services';
 import {VSphereFolder, VSphereNetwork} from '../../../../../../shared/entity/provider/vsphere/VSphereEntity';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
+import {isObjectEmpty} from '../../../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
 
@@ -45,12 +46,11 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       [Controls.Folder]: this._builder.control({value: '', disabled: true}),
     });
 
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterService.cluster.spec.cloud.vsphere)));
+
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
-
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._presets.enablePresets(Object.values(Controls).every(control => !this.form.get(control).value));
-    });
 
     this._clusterService.clusterChanges.pipe(tap(_ => !this._hasRequiredCredentials() ? this._networkMap = {} : null))
         .pipe(filter(_ => this._hasRequiredCredentials() && this.networkTypes.length === 0))

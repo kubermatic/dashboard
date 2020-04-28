@@ -7,7 +7,7 @@
                [options]="sizes"
                [formControlName]="Controls.InstanceType"
                (changed)="onSizeChange($event)"
-               label="Plan"
+               [label]="sizeLabel"
                inputLabel="Select plan..."
                filterBy="name">
     <div *option="let size">

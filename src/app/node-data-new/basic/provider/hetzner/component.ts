@@ -91,7 +91,6 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
     this._cdr.detectChanges();
   }
 
-
   private _setDefaultType(types: HetznerTypes): void {
     this._types = types;
     if (this._types && this._types.standard && this._types.standard.length > 0) {

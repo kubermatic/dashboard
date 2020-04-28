@@ -1,5 +1,5 @@
-import {Observable} from 'rxjs';
-import {filter, switchMap} from 'rxjs/operators';
+import {Observable, of, onErrorResumeNext} from 'rxjs';
+import {catchError, filter, switchMap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../core/services';
 import {PacketSize} from '../../../shared/entity/packet/PacketSizeEntity';
@@ -18,7 +18,7 @@ export class NodeDataPacketProvider {
     this._nodeDataService.nodeData.spec.cloud.packet.tags = tags;
   }
 
-  flavors(): Observable<PacketSize[]> {
+  flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<PacketSize[]> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
@@ -29,7 +29,14 @@ export class NodeDataPacketProvider {
                                .apiKey(cluster.spec.cloud.packet.apiKey)
                                .projectID(cluster.spec.cloud.packet.projectID)
                                .credential(this._presetService.preset)
-                               .flavors()));
+                               .flavors(onLoadingCb)
+                               .pipe(catchError(_ => {
+                                 if (onError) {
+                                   onError();
+                                 }
+
+                                 return onErrorResumeNext(of([]));
+                               }))));
     }
   }
 }
