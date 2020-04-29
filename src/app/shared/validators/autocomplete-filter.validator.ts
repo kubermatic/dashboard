@@ -7,7 +7,7 @@ export class AutocompleteFilterValidators {
           let isInside = false;
           const valueToCompare: string|boolean = typeof control['value'] === 'object' ?
               control['value'][key].toLowerCase() :
-              typeof control['value'] === 'string' ? control['value'] : false;
+              typeof control['value'] === 'string' ? control['value'].toLowerCase() : false;
 
           if (!isRequired && valueToCompare === '') {
             isInside = true;
