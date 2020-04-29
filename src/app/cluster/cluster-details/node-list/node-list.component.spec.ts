@@ -3,7 +3,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {of} from 'rxjs';
-import {ClusterService} from '../../../core/services';
+
+import {ClusterService, NotificationService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
@@ -13,6 +14,7 @@ import {nodeAWSFake, nodeFake} from '../../../testing/fake-data/node.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
 import {SettingsMockService} from '../../../testing/services/settings-mock.service';
+import {UserMockService} from '../../../testing/services/user-mock.service';
 
 import {NodeListComponent} from './node-list.component';
 
@@ -46,7 +48,9 @@ describe('NodeComponent', () => {
             {provide: ClusterService, useClass: ClusterMockService},
             {provide: MatDialog, useClass: MatDialogMock},
             {provide: SettingsService, useClass: SettingsMockService},
+            {provide: UserService, useClass: UserMockService},
             GoogleAnalyticsService,
+            NotificationService,
           ],
         })
         .compileComponents();
