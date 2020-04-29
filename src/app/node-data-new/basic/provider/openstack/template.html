@@ -1,0 +1,60 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      fxLayoutGap="16px">
+
+  <div fxLayout="row"
+       fxLayoutGap="10px">
+    <km-combobox fxFlex
+                 [required]="true"
+                 [grouped]="false"
+                 [selected]="selectedFlavor"
+                 [valueFormatter]="flavorDisplayName.bind(this)"
+                 [options]="flavors"
+                 [formControlName]="Controls.Flavor"
+                 (changed)="onFlavorChange($event)"
+                 label="Flavor"
+                 inputLabel="Select flavor..."
+                 filterBy="slug">
+      <div *option="let flavor">
+        {{flavor.slug}} - {{ flavor.memory / 1024 }} GB RAM, {{ flavor.vcpus }} CPU{{ (flavor.vcpus!=1) ? 's' : '' }}, {{ flavor.disk }} GB Disk
+      </div>
+    </km-combobox>
+
+    <mat-checkbox [formControlName]="Controls.CustomDiskSize"
+                  class="km-custom-disk-size">
+      Custom Disk
+      <i class="km-icon-info km-custom-disk-size-info-icon"
+         matTooltip="If you enable custom disk, an additional network storage volume will be created and used as the disk for the VM."></i>
+    </mat-checkbox>
+  </div>
+
+  <mat-form-field fxFlex
+                  *ngIf="!!form.get(Controls.CustomDiskSize).value"
+                  class="km-with-hint">
+    <mat-label>Disk Size in GB</mat-label>
+    <input [formControlName]="Controls.DiskSize"
+           matInput
+           min="10"
+           max="16000"
+           type="number"
+           autocomplete="off">
+    <mat-hint>An additional network storage volume will be created and used as the disk for the VM.</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Image</mat-label>
+    <input [formControlName]="Controls.Image"
+           matInput
+           type="text"
+           autocomplete="off"
+           required>
+  </mat-form-field>
+
+  <mat-checkbox [formControlName]="Controls.UseFloatingIP"
+                fxFlex>
+    Allocate Floating IP
+    <i *ngIf="isFloatingIPEnforced()"
+       class="km-icon-info"
+       matTooltip="Floating IP usage is enforced by selected datacenter"></i>
+  </mat-checkbox>
+</form>

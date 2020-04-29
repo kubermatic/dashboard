@@ -45,7 +45,7 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
     const dcWhitelist = [
       NodeProvider.ALIBABA, NodeProvider.AWS, NodeProvider.BRINGYOUROWN, NodeProvider.DIGITALOCEAN,
       NodeProvider.HETZNER, NodeProvider.KUBEVIRT, NodeProvider.PACKET, NodeProvider.VSPHERE, NodeProvider.AZURE,
-      NodeProvider.GCP
+      NodeProvider.GCP, NodeProvider.OPENSTACK
     ];
     this._dcService.getDataCenters()
         .pipe(map(dcs => dcs.filter(dc => dcWhitelist.includes(dc.spec.provider as NodeProvider))))

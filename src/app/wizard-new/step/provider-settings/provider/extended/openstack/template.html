@@ -1,0 +1,46 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      fxLayoutGap="16px">
+  <km-combobox [required]="false"
+               [grouped]="false"
+               [options]="securityGroups"
+               [hint]="getHint(Controls.SecurityGroup)"
+               [formControlName]="Controls.SecurityGroup"
+               (changed)="onSecurityGroupChange($event)"
+               label="Security Group"
+               inputLabel="Select security group..."
+               filterBy="name">
+    <div *option="let securityGroup">
+      {{securityGroup.name}}
+    </div>
+  </km-combobox>
+
+  <km-combobox [required]="false"
+               [grouped]="false"
+               [options]="networks"
+               [hint]="getHint(Controls.Network)"
+               [formControlName]="Controls.Network"
+               (changed)="onNetworkChange($event)"
+               label="Network"
+               inputLabel="Select network..."
+               filterBy="name">
+    <div *option="let network">
+      {{network.name}}
+    </div>
+  </km-combobox>
+
+  <km-combobox [required]="false"
+               [grouped]="false"
+               [valueFormatter]="subnetIDDisplayName.bind(this)"
+               [options]="subnetIDs"
+               [hint]="getHint(Controls.SubnetID)"
+               [formControlName]="Controls.SubnetID"
+               (changed)="onSubnetIDChange($event)"
+               label="Subnet ID"
+               inputLabel="Select subnet id..."
+               filterBy="id">
+    <div *option="let subnet">
+      {{subnet.name}} ({{subnet.id}})
+    </div>
+  </km-combobox>
+</form>
