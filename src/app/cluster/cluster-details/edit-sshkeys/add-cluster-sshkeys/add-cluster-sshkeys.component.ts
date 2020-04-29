@@ -2,14 +2,16 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Subscription} from 'rxjs';
+import {first} from 'rxjs/operators';
 
-import {AppConfigService} from '../../../../app-config.service';
 import {ApiService, ClusterService, NotificationService, UserService} from '../../../../core/services';
 import {AddSshKeyDialogComponent} from '../../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
+import {MemberEntity} from '../../../../shared/entity/MemberEntity';
 import {SSHKeyEntity} from '../../../../shared/entity/SSHKeyEntity';
-import {UserGroupConfig} from '../../../../shared/model/Config';
+import {GroupConfig} from '../../../../shared/model/Config';
+import {MemberUtils, Permission} from '../../../../shared/utils/member-utils/member-utils';
 
 @Component({
   selector: 'km-add-cluster-sshkeys',
@@ -27,20 +29,19 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
     keys: new FormControl('', [Validators.required]),
   });
   private keysSub: Subscription;
-  userGroup: string;
-  userGroupConfig: UserGroupConfig;
+  private _currentGroupConfig: GroupConfig;
+  private _user: MemberEntity;
 
   constructor(
       private readonly _clusterService: ClusterService, private readonly _dialog: MatDialog,
-      private readonly _appConfigService: AppConfigService, private readonly _userService: UserService,
-      private readonly _dialogRef: MatDialogRef<AddClusterSSHKeysComponent>, private readonly _api: ApiService,
-      private readonly _notificationService: NotificationService) {}
+      private readonly _userService: UserService, private readonly _dialogRef: MatDialogRef<AddClusterSSHKeysComponent>,
+      private readonly _api: ApiService, private readonly _notificationService: NotificationService) {}
 
   ngOnInit(): void {
-    this.userGroupConfig = this._appConfigService.getUserGroupConfig();
-    this._userService.currentUserGroup(this.projectID).subscribe((group) => {
-      this.userGroup = group;
-    });
+    this._userService.loggedInUser.pipe(first()).subscribe(user => this._user = user);
+    this._userService.currentUserGroup(this.projectID)
+        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
+
 
     this.reloadKeys();
   }
@@ -63,6 +64,10 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
         return a.name.localeCompare(b.name);
       });
     });
+  }
+
+  canAdd(): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, `sshKeys`, Permission.Create);
   }
 
   addClusterSSHKeys(): void {

@@ -2,10 +2,12 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {EMPTY, iif, Observable, of, timer} from 'rxjs';
 import {catchError, first, map, shareReplay, switchMap} from 'rxjs/operators';
+
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {GroupConfig} from '../../../shared/model/Config';
+import {MemberUtils} from '../../../shared/utils/member-utils/member-utils';
 import {Auth} from '../auth/auth.service';
 
 @Injectable()
@@ -27,15 +29,7 @@ export class UserService {
   }
 
   currentUserGroup(projectID: string): Observable<string> {
-    return this.loggedInUser.pipe(first()).pipe(map((member) => {
-      const projects = member.projects ? member.projects : [];
-      for (const project of projects) {
-        if (project.id === projectID) {
-          return project.group.split('-')[0];
-        }
-      }
-      return '';
-    }));
+    return this.loggedInUser.pipe(first()).pipe(map((member) => MemberUtils.getGroupInProject(member, projectID)));
   }
 
   userGroupConfig(userGroup: string): GroupConfig {

@@ -4,7 +4,7 @@
     <button id="km-add-cluster-top-btn"
             mat-flat-button
             type="button"
-            [disabled]="!isAddEnabled()"
+            [disabled]="!canAdd()"
             (click)="loadWizard()">
       Add Cluster
     </button>
@@ -115,7 +115,7 @@
                         [attr.id]="'km-delete-cluster-' + element.name"
                         matTooltip="Delete Cluster"
                         (click)="deleteClusterDialog(element, $event)"
-                        [disabled]="!!_currentGroupConfig && !_currentGroupConfig.clusters.delete">
+                        [disabled]="!canDelete()">
                   <i class="km-icon-delete"></i>
                 </button>
               </ng-container>

@@ -7,9 +7,11 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {MockComponent} from 'ng2-mock-component';
 
+import {AppConfigService} from '../../../app-config.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeProjects} from '../../../testing/fake-data/project.fake';
 import {RouterLinkStubDirective, RouterTestingModule} from '../../../testing/router-stubs';
+import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {SettingsMockService} from '../../../testing/services/settings-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
@@ -52,6 +54,7 @@ describe('SidenavComponent', () => {
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: UserService, useClass: UserMockService},
             {provide: SettingsService, useClass: SettingsMockService},
+            {provide: AppConfigService, useClass: AppConfigMockService},
             {
               provide: Router,
               useValue: {

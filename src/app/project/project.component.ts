@@ -1,23 +1,24 @@
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, MatSortHeader, SortDirection} from '@angular/material/sort';
+import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
-import {Subject} from 'rxjs';
+import {Subject, timer} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
-import {Auth, ClusterService, NotificationService, ProjectService, UserService} from '../core/services';
+import {AppConfigService} from '../app-config.service';
+import {Auth, NotificationService, ProjectService, UserService} from '../core/services';
 import {PreviousRouteService} from '../core/services/previous-route/previous-route.service';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {UserSettings} from '../shared/entity/MemberEntity';
+import {MemberEntity, UserSettings} from '../shared/entity/MemberEntity';
 import {ProjectEntity, ProjectOwners} from '../shared/entity/ProjectEntity';
-import {MemberUtils} from '../shared/utils/member-utils/member-utils';
+import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 
 import {EditProjectComponent} from './edit-project/edit-project.component';
@@ -30,63 +31,53 @@ import {EditProjectComponent} from './edit-project/edit-project.component';
 
 export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   projects: ProjectEntity[] = [];
+  currentUser: MemberEntity;
   isInitializing = true;
-  clusterCount = [];
   role = [];
   rawRole = [];
   displayedColumns: string[] = ['status', 'name', 'labels', 'id', 'role', 'clusters', 'owners', 'actions'];
   dataSource = new MatTableDataSource<ProjectEntity>();
+  isPaginatorVisible = false;
   showCards = true;
 
   paginator: MatPaginator;
-  @ViewChild(MatPaginator, {static: false})
+  @ViewChild(MatPaginator)
   set matPaginator(mp: MatPaginator) {
-    const isViewInit = !this.paginator && !!mp;  // If true, view is being initialized.
     this.paginator = mp;
-    this.dataSource.paginator = this.paginator;
-    if (isViewInit) {
-      setTimeout(() => {
+
+    setTimeout(_ => {
+      if (this.paginator && this.settings) {
         this.paginator.pageSize = this.settings.itemsPerPage;
-      });
-    }
+        this.isPaginatorVisible = this._isPaginatorVisible();
+      }
+    });
+
+    this.dataSource.paginator = this.paginator;
   }
 
   sort: MatSort;
   @ViewChild(MatSort)
   set matSort(ms: MatSort) {
-    const isViewInit = !this.sort && !!ms;  // If true, view is being initialized.
-
     this.sort = ms;
     this.setDataSourceAttributes();
-
-    if (isViewInit) {
-      setTimeout(() => {
-        // dirty hack to set sorting arrow:
-        // use _handleClick() will trigger column's click event
-        // therefor set initial sorting direction the opposite direciton
-        this.sort.direction = 'desc' as SortDirection;
-        const sortHeader = this.sort.sortables.get('name') as MatSortHeader;
-
-        if (!!sortHeader) {
-          sortHeader._handleClick();
-        }
-      }, 100);
-    }
   }
+
   settings: UserSettings;
   private _settingsChange = new Subject<void>();
   private _unsubscribe: Subject<any> = new Subject();
+  private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
 
   constructor(
-      private readonly _clusterService: ClusterService, private readonly _projectService: ProjectService,
-      private readonly _userService: UserService, private readonly _matDialog: MatDialog,
-      private readonly _googleAnalyticsService: GoogleAnalyticsService, private readonly _router: Router,
-      private readonly _cookieService: CookieService, private readonly _settingsService: SettingsService,
-      private readonly _notificationService: NotificationService,
-      private readonly _previousRouteService: PreviousRouteService) {}
+      private readonly _projectService: ProjectService, private readonly _userService: UserService,
+      private readonly _matDialog: MatDialog, private readonly _googleAnalyticsService: GoogleAnalyticsService,
+      private readonly _router: Router, private readonly _cookieService: CookieService,
+      private readonly _settingsService: SettingsService, private readonly _notificationService: NotificationService,
+      private readonly _previousRouteService: PreviousRouteService, private readonly _appConfig: AppConfigService) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.projects;
+
+    this._userService.loggedInUser.subscribe(user => this.currentUser = user);
 
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (this.settings) {
@@ -99,25 +90,26 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
     this._settingsChange.pipe(debounceTime(1000))
         .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(() => this._settingsService.patchUserSettings({'selectProjectTableView': !this.showCards})))
+        .pipe(switchMap(
+            () => this._settingsService.patchUserSettings({selectProjectTableView: !this.showCards} as UserSettings)))
         .subscribe(settings => {
           this.settings = settings;
           this.showCards = !settings.selectProjectTableView;
         });
 
-    this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe(projects => {
-      this.projects = projects.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
-      this.dataSource.data = this.projects;
-      this._sortProjectOwners();
-      this._loadClusterCounts();
-      this._loadCurrentUserRoles();
+    this._refreshTimer$.pipe(takeUntil(this._unsubscribe))
+        .pipe(switchMap(() => this._projectService.projects))
+        .subscribe(projects => {
+          this.projects = this._loadCurrentUserRolesAndSortProjects(projects);
+          this.dataSource.data = this.projects;
+          this._sortProjectOwners();
 
-      if (this._shouldRedirectToCluster()) {
-        this._redirectToCluster();
-      }
-      this.isInitializing = false;
-      this.selectDefaultProject();
-    });
+          if (this._shouldRedirectToCluster()) {
+            this._redirectToCluster();
+          }
+          this.isInitializing = false;
+          this.selectDefaultProject();
+        });
   }
 
   ngOnDestroy(): void {
@@ -139,23 +131,23 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  private _loadClusterCounts(): void {
-    this.projects.forEach(project => {
-      if (project.status === 'Active') {
-        this._clusterService.clusters(project.id).pipe(first()).subscribe((dcClusters) => {
-          this.clusterCount[project.id] = dcClusters.length;
-        });
-      }
-    });
-  }
-
-  private _loadCurrentUserRoles(): void {
-    this.projects.forEach(project => {
+  private _loadCurrentUserRolesAndSortProjects(projects): ProjectEntity[] {
+    const ownProjects: ProjectEntity[] = [];
+    const externalProjects: ProjectEntity[] = [];
+    projects.forEach(project => {
       this._userService.currentUserGroup(project.id).subscribe((group) => {
         this.role[project.id] = MemberUtils.getGroupDisplayName(group);
         this.rawRole[project.id] = group;
+        if (MemberUtils.getGroupDisplayName(group) !== '') {
+          ownProjects.push(project);
+        } else {
+          externalProjects.push(project);
+        }
       });
     });
+
+    return ownProjects.sort((a, b) => (a.name + a.id).localeCompare(b.name + b.id))
+        .concat(externalProjects.sort((a, b) => (a.name + a.id).localeCompare(b.name + b.id)));
   }
 
   changeView(): void {
@@ -247,11 +239,11 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getName(name: string): string {
-    return name.length > 19 ? `${name.substring(0, 15)}...` : `${name}`;
+    return name.length > 18 ? `${name.substring(0, 15)}...` : `${name}`;
   }
 
   getProjectTooltip(name: string): string {
-    return name.length > 19 ? name : '';
+    return name.length > 18 ? name : '';
   }
 
   isProjectActive(project: ProjectEntity): boolean {
@@ -271,8 +263,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isEditEnabled(project: ProjectEntity): boolean {
-    return !this._userService.userGroupConfig(this.rawRole[project.id]) ||
-        this._userService.userGroupConfig(this.rawRole[project.id]).projects.edit;
+    return MemberUtils.hasPermission(
+        this.currentUser, this._userService.userGroupConfig(this.rawRole[project.id]), `projects`, Permission.Edit);
   }
 
   editProject(project: ProjectEntity, event: Event): void {
@@ -287,8 +279,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isDeleteEnabled(project: ProjectEntity): boolean {
-    return !this._userService.userGroupConfig(this.rawRole[project.id]) ||
-        this._userService.userGroupConfig(this.rawRole[project.id]).projects.delete;
+    return MemberUtils.hasPermission(
+        this.currentUser, this._userService.userGroupConfig(this.rawRole[project.id]), `projects`, Permission.Delete);
   }
 
   deleteProject(project: ProjectEntity, event: Event): void {
@@ -330,7 +322,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     this._router.navigate([`/projects/${this.projects[0].id}/clusters`]);
   }
 
-  isPaginatorVisible(): boolean {
+  private _isPaginatorVisible(): boolean {
     return !_.isEmpty(this.projects) && this.paginator && this.projects.length > this.paginator.pageSize;
   }
 }

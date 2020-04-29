@@ -47,6 +47,10 @@
   }
 }
 
+mat-slide-toggle {
+  margin-right: 2.5 * $baseline-grid;
+}
+
 .km-project-cards-view {
   flex-wrap: wrap;
 
@@ -116,6 +120,7 @@
 
   .km-project-cards-content-row {
     display: flex;
+    width: 100%;
     align-items: center;
     line-height: 4 * $line-height;
 
@@ -129,6 +134,10 @@
 
       &:first-child {
         padding-right: 3.75 * $baseline-grid;
+      }
+
+      &.km-projects-less-space {
+        padding-right: 2 * $baseline-grid;
       }
     }
   }

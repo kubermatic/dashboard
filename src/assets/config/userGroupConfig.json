@@ -9,8 +9,8 @@
     "members": {
       "view": true,
       "edit": true,
-      "remove": true,
-      "invite": true
+      "delete": true,
+      "create": true
     },
     "sshKeys": {
       "view": true,
@@ -65,8 +65,8 @@
     "members": {
       "view": false,
       "edit": false,
-      "remove": false,
-      "invite": false
+      "delete": false,
+      "create": false
     },
     "sshKeys": {
       "view": true,
@@ -121,8 +121,8 @@
     "members": {
       "view": false,
       "edit": false,
-      "remove": false,
-      "invite": false
+      "delete": false,
+      "create": false
     },
     "sshKeys": {
       "view": true,

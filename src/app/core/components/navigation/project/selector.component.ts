@@ -1,10 +1,12 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatSelect, MatSelectChange} from '@angular/material/select';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {differenceBy} from 'lodash';
+import {merge, Subject} from 'rxjs';
+import {switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {ProjectEntity} from '../../../../shared/entity/ProjectEntity';
 import {ProjectService} from '../../../services';
+import {SettingsService} from '../../../services/settings/settings.service';
 
 @Component({
   selector: 'km-project-selector',
@@ -14,26 +16,34 @@ import {ProjectService} from '../../../services';
 
 export class ProjectSelectorComponent implements OnInit, OnDestroy {
   @Input() showSidenav: boolean;
-  projects: ProjectEntity[];
+  myProjects: ProjectEntity[] = [];
+  externalProjects: ProjectEntity[] = [];
   selectedProject: ProjectEntity;
 
   private _unsubscribe: Subject<any> = new Subject();
+  private _displayAllProjects: boolean;
+  private _projects: ProjectEntity[];
 
-  constructor(private readonly _projectService: ProjectService) {}
+  constructor(private readonly _projectService: ProjectService, private readonly _settingsService: SettingsService) {}
+
 
   ngOnInit(): void {
-    this._projectService.projects.pipe(takeUntil(this._unsubscribe))
-        .subscribe(projects => this.projects = projects.sort((a, b) => a.name.localeCompare(b.name)));
+    this._displayAllProjects = this._settingsService.defaultUserSettings.displayAllProjectsForAdmin;
 
-    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
-        .subscribe(project => this.selectedProject = project);
+    this._projectService.projects.pipe(tap(projects => this._projects = projects))
+        .pipe(switchMap(_ => this._projectService.myProjects))
+        .pipe(tap(projects => this.myProjects = this._sortProjects(projects)))
+        .pipe(tap(_ => this.externalProjects = differenceBy(this._projects, this.myProjects, 'id')))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this._appendProject(this.selectedProject));
 
-    this._projectService.onProjectChange.pipe(takeUntil(this._unsubscribe))
-        .subscribe(project => this.selectedProject = project);
+    merge(this._projectService.selectedProject, this._projectService.onProjectChange)
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((project: ProjectEntity) => this._appendProject(this.selectedProject = project));
   }
 
   onSelectionChange(event: MatSelectChange): void {
-    this.projects.forEach(project => {
+    [...this.myProjects, ...this.externalProjects].forEach(project => {
       if (this.areProjectsEqual(project, event.value)) {
         this._selectProject(project);
       }
@@ -53,8 +63,24 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  private _sortProjects(projects: ProjectEntity[]): ProjectEntity[] {
+    return projects.sort((a, b) => (a.name + a.id).localeCompare(b.name + b.id));
+  }
+
+  private _appendProject(project: ProjectEntity): void {
+    if (!project) {
+      return;
+    }
+
+    const found = this.myProjects.find(p => this.areProjectsEqual(p, project));
+    if (!found && this.externalProjects.length === 0 && !this._displayAllProjects) {
+      this.externalProjects = [project];
+    }
+  }
+
   private _selectProject(project: ProjectEntity): void {
     this._projectService.selectProject(project);
+    this._projectService.onProjectsUpdate.next();
     this.selectedProject = project;
   }
 }

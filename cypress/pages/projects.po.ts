@@ -42,7 +42,7 @@ export class ProjectsPage {
   // Utils.
 
   static waitForRefresh(): void {
-    wait('**/projects', 'GET', 'list projects');
+    wait('**/projects?displayAll=false', 'GET', 'list projects');
   }
 
   static verifyUrl(): void {

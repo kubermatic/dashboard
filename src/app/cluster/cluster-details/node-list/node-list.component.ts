@@ -4,20 +4,22 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {first, takeUntil} from 'rxjs/operators';
 
-import {ClusterService, NotificationService} from '../../../core/services';
+import {ClusterService, NotificationService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {NodeMetrics} from '../../../shared/entity/Metrics';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
-import {UserGroupConfig} from '../../../shared/model/Config';
+import {GroupConfig} from '../../../shared/model/Config';
 import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeHealthStatus} from '../../../shared/utils/health-status/node-health-status';
+import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 
 @Component({
@@ -35,8 +37,6 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   @Output() deleteNode = new EventEmitter<NodeEntity>();
   @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
-  userGroupConfig: UserGroupConfig;
-  userGroup: string;
   config: MatDialogConfig = {
     disableClose: false,
     hasBackdrop: true,
@@ -48,11 +48,13 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   dataSource = new MatTableDataSource<NodeEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  private _user: MemberEntity;
+  private _currentGroupConfig: GroupConfig;
   private _unsubscribe = new Subject<void>();
 
   constructor(
       private readonly _matDialog: MatDialog, private readonly _clusterService: ClusterService,
-      private readonly _googleAnalyticsService: GoogleAnalyticsService,
+      private readonly _userService: UserService, private readonly _googleAnalyticsService: GoogleAnalyticsService,
       private readonly _notificationService: NotificationService, private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
@@ -61,6 +63,11 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     this.dataSource.paginator = this.paginator;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
+
+    this._userService.loggedInUser.pipe(first()).subscribe(user => this._user = user);
+
+    this._userService.currentUserGroup(this.projectID)
+        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
 
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
@@ -79,6 +86,10 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
     return ClusterUtils.getVersionHeadline(type, isKubelet);
+  }
+
+  canDelete(): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'nodes', Permission.Delete);
   }
 
   deleteNodeDialog(node: NodeEntity, event: Event): void {

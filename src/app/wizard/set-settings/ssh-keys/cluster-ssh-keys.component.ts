@@ -4,13 +4,16 @@ import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
 import {Subject} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
+
 import {ApiService, ProjectService, UserService} from '../../../core/services';
 import {WizardService} from '../../../core/services';
 import {AddSshKeyDialogComponent} from '../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {GroupConfig} from '../../../shared/model/Config';
+import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 
 @Component({
   selector: 'km-cluster-ssh-keys',
@@ -26,6 +29,9 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   });
   project = {} as ProjectEntity;
   groupConfig: GroupConfig;
+
+  private _currentUser: MemberEntity;
+  private _currentGroupConfig: GroupConfig;
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -35,6 +41,11 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.project.id = this._activeRoute.snapshot.paramMap.get('projectID');
+
+    this._userService.loggedInUser.pipe(first()).subscribe(user => this._currentUser = user);
+
+    this._userService.currentUserGroup(this.project.id)
+        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
 
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(project => {
@@ -64,6 +75,10 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
       });
       this.setClusterSSHKeysSpec();
     });
+  }
+
+  canAdd(): boolean {
+    return MemberUtils.hasPermission(this._currentUser, this._currentGroupConfig, `sshKeys`, Permission.Create);
   }
 
   addSshKeyDialog(): void {

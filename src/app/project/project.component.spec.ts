@@ -7,7 +7,7 @@ import {CookieService} from 'ngx-cookie-service';
 
 import {AppConfigService} from '../app-config.service';
 import {CoreModule} from '../core/core.module';
-import {ClusterService, DatacenterService, ProjectService, UserService} from '../core/services';
+import {DatacenterService, ProjectService, UserService} from '../core/services';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {SharedModule} from '../shared/shared.module';
@@ -15,7 +15,6 @@ import {DialogTestModule, NoopConfirmDialogComponent} from '../testing/component
 import {fakeProject} from '../testing/fake-data/project.fake';
 import {RouterStub, RouterTestingModule} from '../testing/router-stubs';
 import {AppConfigMockService} from '../testing/services/app-config-mock.service';
-import {ClusterMockService} from '../testing/services/cluster-mock-service';
 import {DatacenterMockService} from '../testing/services/datacenter-mock.service';
 import {ProjectMockService} from '../testing/services/project-mock.service';
 import {SettingsMockService} from '../testing/services/settings-mock.service';
@@ -42,7 +41,6 @@ describe('ProjectComponent', () => {
           declarations: [ProjectComponent],
           providers: [
             {provide: Router, useClass: RouterStub},
-            {provide: ClusterService, useClass: ClusterMockService},
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},

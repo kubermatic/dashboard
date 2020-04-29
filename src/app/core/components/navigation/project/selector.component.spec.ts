@@ -13,9 +13,10 @@ import {fakeProjects} from '../../../../testing/fake-data/project.fake';
 import {RouterTestingModule} from '../../../../testing/router-stubs';
 import {ApiMockService} from '../../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../../testing/services/app-config-mock.service';
+import {AuthMockService} from '../../../../testing/services/auth-mock.service';
 import {ProjectMockService} from '../../../../testing/services/project-mock.service';
 import {UserMockService} from '../../../../testing/services/user-mock.service';
-import {ApiService, ProjectService, UserService} from '../../../services';
+import {ApiService, Auth, ProjectService, UserService} from '../../../services';
 import {NotificationPanelComponent} from '../../notification-panel/notification-panel.component';
 import {NavigationComponent} from '../navigation.component';
 
@@ -53,6 +54,7 @@ describe('SidenavComponent', () => {
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
+            {provide: Auth, useClass: AuthMockService},
             {
               provide: Router,
               useValue: {

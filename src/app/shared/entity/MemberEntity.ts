@@ -15,6 +15,7 @@ export class UserSettings {
   itemsPerPage?: number;
   selectProjectTableView?: boolean;
   collapseSidenav?: boolean;
+  displayAllProjectsForAdmin?: boolean;
 }
 
 export enum Theme {
