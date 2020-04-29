@@ -123,7 +123,7 @@
                         [attr.id]="'km-delete-node-' + element.name"
                         matTooltip="Delete Node"
                         (click)="deleteNodeDialog(element, $event)"
-                        [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete">
+                        [disabled]="!canDelete()">
                   <i class="km-icon-delete"></i>
                 </button>
               </ng-container>

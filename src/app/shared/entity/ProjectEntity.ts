@@ -6,6 +6,7 @@ export class ProjectEntity {
   status: string;
   labels?: object;
   owners: ProjectOwners[];
+  clustersNumber?: number;
 }
 
 export class ProjectOwners {

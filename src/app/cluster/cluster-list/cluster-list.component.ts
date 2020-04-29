@@ -5,17 +5,19 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EMPTY, forkJoin, onErrorResumeNext, Subject} from 'rxjs';
-import {catchError, distinctUntilChanged, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {catchError, distinctUntilChanged, first, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {ClusterService, DatacenterService, ProjectService, UserService} from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {CloudSpec, ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
+import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {GroupConfig} from '../../shared/model/Config';
 import {ClusterUtils} from '../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
+import {MemberUtils, Permission} from '../../shared/utils/member-utils/member-utils';
 import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
 
 
@@ -37,6 +39,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private _unsubscribe: Subject<any> = new Subject();
   private _selectedProject = {} as ProjectEntity;
+  private _user: MemberEntity;
   private _currentGroupConfig: GroupConfig;
 
   constructor(
@@ -52,6 +55,8 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     this.dataSource.paginator = this.paginator;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
+
+    this._userService.loggedInUser.pipe(first()).subscribe(user => this._user = user);
 
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
@@ -107,8 +112,12 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     return ClusterHealthStatus.getHealthStatus(cluster, this.health[cluster.id]);
   }
 
-  isAddEnabled(): boolean {
-    return !this._currentGroupConfig || this._currentGroupConfig.clusters.create;
+  canAdd(): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'clusters', Permission.Create);
+  }
+
+  canDelete(): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'clusters', Permission.Delete);
   }
 
   loadWizard(): void {

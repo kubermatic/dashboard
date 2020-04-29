@@ -36,14 +36,14 @@
 
     .km-account-settings-header {
       font-size: $font-size-subhead-lg;
-      line-height: 2.1 * $line-height;
+      line-height: initial;
       margin-bottom: 3 * $baseline-grid;
     }
 
     .km-account-settings-entry-label {
       align-items: center;
       display: flex;
-      min-width: 20 * $baseline-grid;
+      min-width: 23 * $baseline-grid;
       line-height: 8 * $baseline-grid;
 
       span {
@@ -72,6 +72,20 @@
 
     .km-settings-status-margin-sm {
       margin-top: .5 * $baseline-grid;
+
+      .km-settings-status-container {
+        line-height: initial;
+      }
     }
+  }
+}
+
+.km-icon-info {
+  margin-left: $baseline-grid;
+}
+
+::ng-deep.mat-slide-toggle-label {
+  .mat-slide-toggle-bar {
+    margin-left: 0 !important;
   }
 }

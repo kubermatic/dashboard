@@ -5,7 +5,7 @@
             mat-flat-button
             type="button"
             (click)="addSshKey()"
-            [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.create">
+            [disabled]="!canAdd()">
       Add SSH Key
     </button>
   </div>
@@ -79,7 +79,7 @@
                         [attr.id]="'km-delete-sshkey-' + element.name"
                         matTooltip="Delete SSH key"
                         (click)="deleteSshKey(element, $event)"
-                        [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.delete">
+                        [disabled]="!canDelete()">
                   <i class="km-icon-delete"></i>
                 </button>
               </ng-container>

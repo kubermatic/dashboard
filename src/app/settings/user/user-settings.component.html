@@ -25,13 +25,19 @@
         <div class="km-account-info-email">{{user.email}}</div>
       </div>
     </div>
+
     <div *ngIf="!!settings"
          class="km-account-settings"
-         fxFlex="50">
+         fxFlex="50"
+         fxLayoutGap="16px"
+         fxLayout="column">
       <div class="km-account-settings-header">User Settings</div>
+
       <div>
-        <div class="km-account-settings-entry-label">Items per page</div>
-        <mat-form-field fxFlex="25">
+        <div class="km-account-settings-entry-label"
+             fxLayoutAlign=" center">Items per page</div>
+        <mat-form-field fxFlex="23"
+                        class="km-user-settings-form-field">
           <mat-select disableOptionCentering
                       [(ngModel)]="settings.itemsPerPage"
                       (selectionChange)="onSettingsChange()">
@@ -44,9 +50,11 @@
         <km-settings-status [isSaved]="isEqual(settings.itemsPerPage, apiSettings.itemsPerPage)"
                             class="km-settings-status-margin"></km-settings-status>
       </div>
+
       <div *ngIf="enableThemes"
            fxLayout="row">
-        <div class="km-account-settings-entry-label">Theme</div>
+        <div class="km-account-settings-entry-label"
+             fxLayoutAlign=" center">Theme</div>
         <mat-button-toggle-group [(value)]="settings.selectedTheme"
                                  (change)="onSettingsChange()"
                                  class="km-account-settings-toggle"
@@ -65,12 +73,14 @@
       </div>
 
       <div>
-        <div class="km-account-settings-entry-label">
+        <div class="km-account-settings-entry-label"
+             fxLayoutAlign=" center">
           <span>Default Project</span>
           <div class="km-icon-info"
                matTooltip="Selecting a default project will automatically redirected you to it after login."></div>
         </div>
-        <mat-form-field fxFlex="35">
+        <mat-form-field fxFlex="35"
+                        class="km-user-settings-form-field">
           <mat-select disableOptionCentering
                       [(ngModel)]="settings.selectedProjectId"
                       (selectionChange)="onSettingsChange()"
@@ -82,7 +92,25 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <km-settings-status [isSaved]="isEqual(settings.selectedProjectId, apiSettings.selectedProjectId)"></km-settings-status>
+        <km-settings-status [isSaved]="isEqual(settings.selectedProjectId, apiSettings.selectedProjectId)"
+                            class="km-settings-status-margin"></km-settings-status>
+      </div>
+
+      <div *ngIf="isAdmin()"
+           fxLayout="row"
+           fxLayoutAlign=" center">
+        <div class="km-account-settings-entry-label"
+             fxLayoutAlign=" center">
+          <span>Show all projects</span>
+          <div class="km-icon-info"
+               matTooltip="Allow admin users to see all projects. This option is not available for non-admin users."></div>
+        </div>
+        <mat-slide-toggle labelPosition="before"
+                          [(ngModel)]="settings.displayAllProjectsForAdmin"
+                          (toggleChange)="onSettingsChange()"
+                          *ngIf="isAdmin()"></mat-slide-toggle>
+        <km-settings-status [isSaved]="isEqual(settings.displayAllProjectsForAdmin, apiSettings.displayAllProjectsForAdmin)"
+                            class="km-settings-status-margin-sm"></km-settings-status>
       </div>
 
     </div>

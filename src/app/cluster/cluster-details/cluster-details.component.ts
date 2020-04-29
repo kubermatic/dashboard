@@ -22,6 +22,7 @@ import {Config, GroupConfig} from '../../shared/model/Config';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {ClusterType, ClusterUtils} from '../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
+import {MemberUtils, Permission} from '../../shared/utils/member-utils/member-utils';
 import {NodeService} from '../services/node.service';
 
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/cluster-delete-confirmation.component';
@@ -57,6 +58,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   clusterBindings: SimpleClusterBinding[] = [];
   bindings: SimpleBinding[] = [];
   private _unsubscribe: Subject<any> = new Subject();
+  private _user: MemberEntity;
   private _currentGroupConfig: GroupConfig;
 
   constructor(
@@ -72,6 +74,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this.projectID = this._route.snapshot.paramMap.get('projectID');
     const clusterID = this._route.snapshot.paramMap.get('clusterName');
     const seedDCName = this._route.snapshot.paramMap.get('seedDc');
+
+    this._userService.loggedInUser.pipe(first()).subscribe(user => this._user = user);
 
     this._userService.currentUserGroup(this.projectID)
         .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
@@ -186,7 +190,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isAddNodeDeploymentsEnabled(): boolean {
-    return this.isClusterRunning && (!this._currentGroupConfig || this._currentGroupConfig.nodeDeployments.create);
+    return this.isClusterRunning &&
+        MemberUtils.hasPermission(this._user, this._currentGroupConfig, `nodeDeployments`, Permission.Create);
   }
 
   createSimpleClusterBinding(bindings: ClusterBinding[]): SimpleClusterBinding[] {
@@ -225,7 +230,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isDeleteEnabled(): boolean {
-    return !this._currentGroupConfig || this._currentGroupConfig.clusters.delete;
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, `clusters`, Permission.Delete);
   }
 
   deleteClusterDialog(): void {
@@ -272,7 +277,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isEditEnabled(): boolean {
-    return !this._currentGroupConfig || this._currentGroupConfig.clusters.edit;
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, `clusters`, Permission.Edit);
   }
 
   isOpenshiftCluster(): boolean {
@@ -287,7 +292,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isSSHKeysEditEnabled(): boolean {
-    return !this._currentGroupConfig || this._currentGroupConfig.sshKeys.edit;
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, `sshKeys`, Permission.Delete);
   }
 
   editSSHKeys(): void {
@@ -303,7 +308,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isRevokeTokenEnabled(): boolean {
-    return !this._currentGroupConfig || this._currentGroupConfig.clusters.edit;
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, `clusters`, Permission.Edit);
   }
 
   revokeToken(): void {
@@ -360,7 +365,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isRBACEnabled(): boolean {
-    return !!this._currentGroupConfig && !!this._currentGroupConfig.rbac.view;
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'rbac', Permission.View);
   }
 
   ngOnDestroy(): void {

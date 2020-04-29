@@ -2,14 +2,15 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
-import {Subject} from 'rxjs';
+import {merge, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
-import {UserSettings} from '../../../shared/entity/MemberEntity';
+import {MemberEntity, UserSettings} from '../../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {GroupConfig} from '../../../shared/model/Config';
 import {CustomLink, CustomLinkLocation, filterCustomLinks} from '../../../shared/utils/custom-link-utils/custom-link';
+import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {ProjectService, UserService} from '../../services';
 import {View} from '../../services/auth/auth.guard';
 import {SettingsService} from '../../services/settings/settings.service';
@@ -23,6 +24,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   environment: any = environment;
   customLinks: CustomLink[] = [];
   settings: UserSettings;
+  currentUser: MemberEntity;
   showSidenav = true;
   private _selectedProject = {} as ProjectEntity;
   private _currentGroupConfig: GroupConfig;
@@ -33,6 +35,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
       private readonly _userService: UserService, private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
+    this._userService.loggedInUser.subscribe(user => this.currentUser = user);
+
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       const filtered = filterCustomLinks(settings.customLinks, CustomLinkLocation.Default);
       if (!_.isEqual(this.customLinks, filtered)) {
@@ -45,8 +49,12 @@ export class SidenavComponent implements OnInit, OnDestroy {
       this.settings = settings;
     });
 
-    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(project => {
+    merge(
+        this._projectService.selectedProject,
+        this._projectService.onProjectChange,
+        )
+        .pipe(takeUntil(this._unsubscribe))
+        .pipe(switchMap((project: ProjectEntity) => {
           this._selectedProject = project;
           return this._userService.currentUserGroup(project.id);
         }))
@@ -97,7 +105,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (!this._hasViewPermissions(viewName)) {
+    if (!MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, viewName, Permission.View)) {
       tooltip = 'Cannot enter this view.';
       if (this._selectedProject.status !== 'Active') {
         tooltip += ' Selected project is not active.';
@@ -109,7 +117,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   isCustomLinkPanelVisible(): boolean {
-    return this.customLinks && this.customLinks.length > 0;
+    return !_.isEmpty(this.customLinks);
   }
 
   getCustomLinkIconStyle(link: CustomLink): any {
@@ -119,10 +127,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   getMenuItemClass(viewName: string): string {
-    return this._hasViewPermissions(viewName) ? '' : 'km-disabled';
-  }
-
-  private _hasViewPermissions(viewName): boolean {
-    return !this._currentGroupConfig || this._currentGroupConfig[viewName].view;
+    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, viewName, Permission.View) ?
+        '' :
+        'km-disabled';
   }
 }

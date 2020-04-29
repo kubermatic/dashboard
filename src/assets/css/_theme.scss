@@ -842,6 +842,20 @@
     }
   }
 
+  .km-projects-external-right {
+    margin-left: auto;
+  }
+
+  .km-projects-external p {
+    border: 1px solid map-get($colors, primary);
+    line-height: 1.6 * $line-height;
+    border-radius: $border-radius;
+    padding: 0.625 * $baseline-grid;
+    font-size: $font-size-body !important;
+    margin-bottom: 0;
+    max-width: 100px;
+  }
+
   .km-sidenav {
     background-color: $background;
 
@@ -1569,6 +1583,41 @@
   .km-add-machine-network {
     &:hover {
       background-color: $background-hover;
+    }
+  }
+
+  // slider
+  .mat-slide-toggle-bar {
+    width: 50px;
+    height: 24px;
+    border-radius: 50px;
+    background-color: $divider;
+  }
+
+  .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+    background-color: map-get($colors, primary);
+  }
+
+  .mat-slide-toggle-thumb-container {
+    top: 2px;
+    left: 2px;
+  }
+
+  .mat-slide-toggle-thumb {
+    box-shadow: none;
+  }
+
+  .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+    background-color: #fafafa;
+  }
+
+  .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container {
+    transform: translate3d(26px, 0, 0);
+  }
+
+  .km-user-settings-form-field {
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
     }
   }
 }

@@ -4,9 +4,9 @@
     <p>Choose the token you wish to revoke for "<b>{{cluster.name}}</b>":</p>
     <div class="options"
          fxLayoutGap="16px">
-      <mat-checkbox [disabled]="!isRevokeAdminTokenEnabled"
+      <mat-checkbox [disabled]="!isRevokeTokenEnabled"
                     [(ngModel)]="revokeAdminToken">Revoke Admin Token</mat-checkbox>
-      <mat-checkbox [disabled]="!isRevokeViewerTokenEnabled"
+      <mat-checkbox [disabled]="!isRevokeTokenEnabled"
                     [(ngModel)]="revokeViewerToken">Revoke Viewer Token</mat-checkbox>
     </div>
   </div>
