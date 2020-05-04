@@ -240,7 +240,8 @@ export class NodeDataComponent implements OnInit, OnDestroy {
 
   isAvailable(os: string): boolean {
     if (!!this.cluster.spec.cloud.vsphere) {
-      return !!this.seedDc && !!this.seedDc.spec.vsphere.templates[os] && this.seedDc.spec.vsphere.templates[os] !== '';
+      return !!this.seedDc && !!this.seedDc.spec && !!this.seedDc.spec.vsphere &&
+          !!this.seedDc.spec.vsphere.templates[os] && this.seedDc.spec.vsphere.templates[os] !== '';
     } else {
       return true;
     }
