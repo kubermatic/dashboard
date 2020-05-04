@@ -23,4 +23,7 @@
   <km-wizard-gcp-provider-basic *ngSwitchCase="Providers.GCP"
                                 [formControl]="form.get(Controls.ProviderBasic)">
   </km-wizard-gcp-provider-basic>
+  <km-wizard-openstack-provider-basic *ngSwitchCase="Providers.OPENSTACK"
+                                      [formControl]="form.get(Controls.ProviderBasic)">
+  </km-wizard-openstack-provider-basic>
 </div>

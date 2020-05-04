@@ -1,18 +1,21 @@
 import {Inject, Injectable} from '@angular/core';
 import * as _ from 'lodash';
 import {ReplaySubject} from 'rxjs';
+
 import {DatacenterService, PresetsService} from '../../core/services';
 import {OperatingSystemSpec, Taint} from '../../shared/entity/NodeEntity';
 import {OperatingSystem} from '../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {ClusterService} from '../../wizard-new/service/cluster';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../config';
+
 import {NodeDataAlibabaProvider} from './provider/alibaba';
 import {NodeDataAWSProvider} from './provider/aws';
 import {NodeDataAzureProvider} from './provider/azure';
 import {NodeDataDigitalOceanProvider} from './provider/digitalocean';
 import {NodeDataGCPProvider} from './provider/gcp';
 import {NodeDataHetznerProvider} from './provider/hetzner';
+import {NodeDataOpenstackProvider} from './provider/openstack';
 import {NodeDataPacketProvider} from './provider/packet';
 
 @Injectable()
@@ -83,4 +86,6 @@ export class NodeDataService {
   readonly hetzner = new NodeDataHetznerProvider(this, this._clusterService, this._presetService);
   readonly packet = new NodeDataPacketProvider(this, this._clusterService, this._presetService);
   readonly gcp = new NodeDataGCPProvider(this, this._clusterService, this._presetService);
+  readonly openstack =
+      new NodeDataOpenstackProvider(this, this._clusterService, this._presetService, this._datacenterService);
 }

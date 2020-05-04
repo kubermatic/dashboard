@@ -1,0 +1,91 @@
+<form [formGroup]="form"
+      fxLayout="column"
+      fxLayoutGap="16px">
+
+  <mat-form-field fxFlex>
+    <mat-label>Domain</mat-label>
+    <input matInput
+           [formControlName]="Controls.Domain"
+           [name]="Controls.Domain"
+           [matAutocomplete]="autoDomain"
+           required>
+    <mat-autocomplete #autoDomain="matAutocomplete">
+      <mat-option *ngFor="let domain of domains"
+                  [value]="domain.name">
+        {{domain.name}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-error *ngIf="form.get(Controls.Domain).hasError('required')">
+      The Domain is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Username</mat-label>
+    <input [formControlName]="Controls.Username"
+           [name]="Controls.Username"
+           matInput
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
+      Username is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Password</mat-label>
+    <input [formControlName]="Controls.Password"
+           [name]="Controls.Password"
+           matInput
+           type="password"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
+      Password is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Project</mat-label>
+    <input matInput
+           [formControlName]="Controls.Project"
+           [name]="Controls.Project"
+           [matAutocomplete]="autoProject"
+           [required]="isRequired()">
+    <mat-autocomplete #autoProject="matAutocomplete">
+      <mat-option *ngFor="let project of projects"
+                  [value]="project.name">
+        {{project.name}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-hint>{{getHint(Controls.Project)}}</mat-hint>
+    <mat-error *ngIf="form.get(Controls.Project).hasError('required')">
+      The Project is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Project ID</mat-label>
+    <input [formControlName]="Controls.ProjectID"
+           [name]="Controls.ProjectID"
+           matInput
+           autocomplete="off">
+    <mat-error *ngIf="form.get(Controls.ProjectID).hasError('required')">
+      Project ID is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <km-combobox [required]="true"
+               [grouped]="false"
+               [options]="floatingIPPools"
+               [hint]="getHint(Controls.FloatingIPPool)"
+               [formControlName]="Controls.FloatingIPPool"
+               (changed)="onFloatingIPPoolChange($event)"
+               label="Floating IP Pool"
+               inputLabel="Select floatingIPPool..."
+               filterBy="name">
+    <div *option="let floatingIPPool">
+      {{floatingIPPool.name}}
+    </div>
+  </km-combobox>
+</form>
