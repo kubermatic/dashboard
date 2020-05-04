@@ -24,4 +24,6 @@
                             [formControl]="form.get(Control.ProviderBasic)"></km-azure-basic-node-data>
   <km-gcp-basic-node-data *ngSwitchCase="Provider.GCP"
                           [formControl]="form.get(Control.ProviderBasic)"></km-gcp-basic-node-data>
+  <km-openstack-basic-node-data *ngSwitchCase="Provider.OPENSTACK"
+                                [formControl]="form.get(Control.ProviderBasic)"></km-openstack-basic-node-data>
 </form>

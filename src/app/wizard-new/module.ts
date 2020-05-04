@@ -21,12 +21,14 @@ import {DigitalOceanProviderBasicComponent} from './step/provider-settings/provi
 import {GCPProviderBasicComponent} from './step/provider-settings/provider/basic/gcp/component';
 import {HetznerProviderBasicComponent} from './step/provider-settings/provider/basic/hetzner/component';
 import {KubeVirtProviderBasicComponent} from './step/provider-settings/provider/basic/kubevirt/component';
+import {OpenstackProviderBasicComponent} from './step/provider-settings/provider/basic/openstack/component';
 import {PacketProviderBasicComponent} from './step/provider-settings/provider/basic/packet/component';
 import {VSphereProviderBasicComponent} from './step/provider-settings/provider/basic/vsphere/component';
 import {AWSProviderExtendedComponent} from './step/provider-settings/provider/extended/aws/component';
 import {AzureProviderExtendedComponent} from './step/provider-settings/provider/extended/azure/component';
 import {ProviderExtendedComponent} from './step/provider-settings/provider/extended/component';
 import {GCPProviderExtendedComponent} from './step/provider-settings/provider/extended/gcp/component';
+import {OpenstackProviderExtendedComponent} from './step/provider-settings/provider/extended/openstack/component';
 import {VSphereProviderExtendedComponent} from './step/provider-settings/provider/extended/vsphere/component';
 import {ClusterSSHKeysComponent} from './step/provider-settings/ssh-keys/component';
 import {SummaryStepComponent} from './step/summary/component';
@@ -45,6 +47,8 @@ const components: any[] = [
   DigitalOceanProviderBasicComponent,
   HetznerProviderBasicComponent,
   KubeVirtProviderBasicComponent,
+  OpenstackProviderBasicComponent,
+  OpenstackProviderExtendedComponent,
   PacketProviderBasicComponent,
   VSphereProviderBasicComponent,
   ProviderExtendedComponent,

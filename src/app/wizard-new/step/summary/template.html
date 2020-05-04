@@ -362,10 +362,20 @@
         <!-- Openstack Nodes -->
         <ng-container *ngIf="cluster.spec.cloud.openstack">
           <div class="km-summary-row km-summary-row-with-margin">{{nodeData.spec.cloud.openstack.flavor}}</div>
+          <km-property *ngIf="nodeData.spec.cloud?.openstack?.diskSize">
+            <div key>Custom Disk Size</div>
+            <div value>{{nodeData.spec.cloud.openstack.diskSize}}</div>
+          </km-property>
           <km-property>
             <div key>Image</div>
             <div value>{{nodeData.spec.cloud.openstack.image}}</div>
           </km-property>
+          <div class="km-summary-row">
+            <span class="km-summary-left km-text">
+              <i [ngClass]="nodeData.spec.cloud.openstack?.useFloatingIP ? 'km-icon-running' : 'km-icon-disabled'"></i>
+            </span>
+            <span>Allocate Floating IP</span>
+          </div>
         </ng-container>
 
         <!-- Hetzner Nodes -->
