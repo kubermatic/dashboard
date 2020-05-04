@@ -51,7 +51,7 @@
            [formControlName]="Controls.Project"
            [name]="Controls.Project"
            [matAutocomplete]="autoProject"
-           [required]="isRequired()">
+           [required]="isRequired(Controls.Project)">
     <mat-autocomplete #autoProject="matAutocomplete">
       <mat-option *ngFor="let project of projects"
                   [value]="project.name">
@@ -68,6 +68,7 @@
     <mat-label>Project ID</mat-label>
     <input [formControlName]="Controls.ProjectID"
            [name]="Controls.ProjectID"
+           [required]="isRequired(Controls.ProjectID)"
            matInput
            autocomplete="off">
     <mat-error *ngIf="form.get(Controls.ProjectID).hasError('required')">

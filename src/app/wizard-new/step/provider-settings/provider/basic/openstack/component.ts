@@ -111,18 +111,15 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
     }
   }
 
-  isRequired(): boolean {
-    if (this.form.get(Controls.ProjectID).value !== '') {
-      this.form.get(Controls.Project).clearValidators();
-      this.form.get(Controls.ProjectID).setValidators([Validators.required]);
-    } else {
-      this.form.get(Controls.Project).setValidators([Validators.required]);
-      this.form.get(Controls.ProjectID).clearValidators();
+  isRequired(control: Controls): boolean {
+    switch (control) {
+      case Controls.Project:
+        return !this.form.get(Controls.ProjectID).value;
+      case Controls.ProjectID:
+        return !this.form.get(Controls.Project).value;
+      default:
+        return true;
     }
-
-    this.form.get(Controls.Project).updateValueAndValidity();
-    this.form.get(Controls.ProjectID).updateValueAndValidity();
-    return !this.form.get(Controls.ProjectID).value;
   }
 
   private _enable(enable: boolean, name: string): void {

@@ -40,7 +40,6 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
   vpcIds: AWSVPC[] = [];
   selectedVPC = '';
   vpcLabel = VPCState.Empty;
-  vpcPattern = 'vpc-(\\w{8}|\\w{17})';
 
   @ViewChild('vpcCombobox') private readonly _vpcCombobox: FilteredComboboxComponent;
 

@@ -1,13 +1,14 @@
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="16px">
-  <km-combobox [grouped]="true"
+  <km-combobox #networkCombobox
+               [grouped]="true"
                [groups]="networkTypes"
                [optionsGetter]="getNetworks.bind(this)"
                [formControlName]="Controls.VMNetName"
                [hint]="getHint(Controls.VMNetName)"
                (changed)="onNetworkChange($event)"
-               label="Network"
+               [label]="networkLabel"
                inputLabel="Select network..."
                filterBy="absolutePath">
     <div *option="let network">
@@ -15,12 +16,13 @@
     </div>
   </km-combobox>
 
-  <km-combobox [grouped]="false"
+  <km-combobox #folderCombobox
+               [grouped]="false"
                [options]="folders"
                [formControlName]="Controls.Folder"
                [hint]="getHint(Controls.VMNetName)"
                (changed)="onFolderChange($event)"
-               label="Folder"
+               [label]="folderLabel"
                inputLabel="Select folder..."
                filterBy="path">
     <div *option="let folder">

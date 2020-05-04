@@ -78,9 +78,9 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   displayProvider(): boolean {
-    return this._hasProviderOptions(NodeProvider.ALIBABA) || this._hasProviderOptions(NodeProvider.AWS) ||
-        this._hasProviderOptions(NodeProvider.GCP) || this._hasProviderOptions(NodeProvider.AZURE) ||
-        this._hasProviderOptions(NodeProvider.DIGITALOCEAN) || this._hasProviderOptions(NodeProvider.HETZNER) ||
+    return Object.values(NodeProvider)
+               .filter(p => p !== NodeProvider.BAREMETAL && p !== NodeProvider.BRINGYOUROWN)
+               .some(p => this._hasProviderOptions(p)) ||
         this._clusterService.provider === NodeProvider.BRINGYOUROWN;
   }
 
@@ -116,7 +116,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   private _hasProviderOptions(provider: NodeProvider): boolean {
-    return this._clusterService.provider === provider &&
+    return this._clusterService.provider === provider && this.cluster.spec.cloud[provider] &&
         Object.values(this.cluster.spec.cloud[provider]).some(val => val);
   }
 
