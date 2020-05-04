@@ -4,11 +4,11 @@
 ## Development
 
 ### Preparation
-Before you can start the application locally you should install the dependencies using `npm i` command.
+Before you can start the application locally you should install the dependencies using `npm ci` command.
 
-### Starting the application
+### Starting the Application
 
-#### Using locally installed NodeJS
+#### Using Locally Installed NodeJS
 To start development server that will proxy API calls to the https://dev.kubermatic.io/ use 
 `npm start` command and navigate to http://localhost:8000/.
 
@@ -16,39 +16,39 @@ If you would like to connect with your local API then you should use `npm run se
 
 The application will automatically reload if you change any of the source files.
 
-#### Using a Docker container
+#### Using a Docker Container
 
 ##### With dev.kubermatic.io API
 ```bash
 ./hack/run-dashboard.sh
 ```
 
-##### With locally running API
+##### With Local API
 ```bash
 ./hack/run-local-dashboard.sh
 ```
 
-### Formatting the code
+### Formatting the Code
 We are using [Google TypeScript Style](https://github.com/google/ts-style) and [Stylelint](https://github.com/stylelint/stylelint) to ensure consistent code formatting and linting.
 
-To check if files are correctly formatted and linted use `npm run check` command.
+To check if files are formatted and linted use `npm run check` command.
 
 To automatically fix issues run `npm run fix` command.
 
-### Running the unit tests
-Run `npm test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Running the Unit Tests
+Run `npm test` to execute the unit tests via [Jest](https://jestjs.io/).
 
-### Running the end-to-end tests
-Currently e2e tests are being executed against `dev.kubermatic.io` server. Before running tests make sure that `CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME`, `CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME_2` and `CYPRESS_KUBERMATIC_DEX_DEV_E2E_PASSWORD` environment variables are set. To run end-to-end tests, simply execute `npm run e2e`.
+### Running the End-to-end Tests
+End-to-end tests execute against `dev.kubermatic.io` server. Before running tests set `CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME`, `CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME_2` and `CYPRESS_KUBERMATIC_DEX_DEV_E2E_PASSWORD` environment variables. To run tests, execute `npm run e2e`.
 
 **NOTE**: For the local tests `roxy@kubermatic.io` & `roxy2@kubermatic.io` users can be used. Password can be found in our vault inside `e2e-dex` secret.
 
-### Building the application
-Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+### Building the Application
+Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
 Please check `package.json` for more information regarding the available commands and the project setup.
 
-### Running commands within the Docker container
+### Running Commands Within the Docker Container
 
 This will run the below commands in a NodeJS Docker container with the source code mounted and set as working directory.
 ```bash
