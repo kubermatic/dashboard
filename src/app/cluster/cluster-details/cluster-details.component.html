@@ -140,6 +140,13 @@
           </div>
         </km-property>
 
+        <km-property>
+          <div key>Created</div>
+          <div value>
+            <km-relative-time [date]="cluster.creationTimestamp"></km-relative-time>
+          </div>
+        </km-property>
+
         <km-property *ngIf="cluster.labels">
           <div key>Labels</div>
           <div value>
