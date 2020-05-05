@@ -177,7 +177,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   }
 
   private _onNetworksLoading(): void {
-    this._networkCombobox.reset();
+    this._clearNetworks();
     this.networkLabel = NetworkState.Loading;
     this._cdr.detectChanges();
   }

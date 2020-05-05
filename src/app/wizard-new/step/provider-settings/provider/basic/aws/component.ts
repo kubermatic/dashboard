@@ -129,6 +129,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
   private _onVPCLoading(): void {
     this._clearVPC();
     this.vpcLabel = VPCState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _clearVPC(): void {

@@ -65,6 +65,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   private _onSizeLoading(): void {
     this._clearSize();
     this.sizeLabel = SizeState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _clearSize(): void {

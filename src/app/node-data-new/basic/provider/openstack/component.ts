@@ -1,8 +1,9 @@
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge, Observable} from 'rxjs';
-import {filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {delay, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../../../../core/services';
+import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
 
 import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/DatacenterEntity';
 import {OpenstackNodeSpec} from '../../../../shared/entity/node/OpenstackNodeSpec';
@@ -23,6 +24,12 @@ enum Controls {
   Image = 'image',
 }
 
+enum FlavorState {
+  Ready = 'Flavor',
+  Loading = 'Loading...',
+  Empty = 'No Flavors Available',
+}
+
 @Component({
   selector: 'km-openstack-basic-node-data',
   styleUrls: ['./style.scss'],
@@ -31,19 +38,24 @@ enum Controls {
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OpenstackBasicNodeDataComponent), multi: true},
     {provide: NG_VALIDATORS, useExisting: forwardRef(() => OpenstackBasicNodeDataComponent), multi: true}
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpenstackBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private _defaultImage = '';
   private _images: DatacenterOperatingSystemOptions;
 
+  @ViewChild('flavorCombobox') private readonly _flavorCombobox: FilteredComboboxComponent;
+
   readonly Controls = Controls;
 
   flavors: OpenstackFlavor[] = [];
   selectedFlavor = '';
+  flavorsLabel = FlavorState.Empty;
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService,
-      private readonly _clusterService: ClusterService, private readonly _datacenterService: DatacenterService) {
+      private readonly _clusterService: ClusterService, private readonly _datacenterService: DatacenterService,
+      private readonly _cdr: ChangeDetectorRef) {
     super();
   }
 
@@ -108,22 +120,34 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   }
 
   private get _flavorsObservable(): Observable<OpenstackFlavor[]> {
-    return this._nodeDataService.openstack.flavors(this._clearFlavor.bind(this))
-        .pipe(map((flavors: OpenstackFlavor[]) => flavors.sort((a, b) => {
-          return (a.memory < b.memory ? -1 : 1) * ('asc' ? 1 : -1);
-        })));
+    return this._nodeDataService.openstack.flavors(this._clearFlavor.bind(this), this._onFlavorLoading.bind(this))
+        .pipe(delay(3000))
+        .pipe(map(
+            (flavors: OpenstackFlavor[]) => flavors.sort((a, b) => (a.memory < b.memory ? -1 : 1) * ('asc' ? 1 : -1))));
   }
 
   private _clearFlavor(): void {
     this.flavors = [];
     this.selectedFlavor = '';
+    this.flavorsLabel = FlavorState.Empty;
+    this._flavorCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _onFlavorLoading(): void {
+    this._clearFlavor();
+    this.flavorsLabel = FlavorState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _setDefaultFlavor(flavors: OpenstackFlavor[]): void {
     this.flavors = flavors;
+    this.flavorsLabel = this.flavors.length > 0 ? FlavorState.Ready : FlavorState.Empty;
     if (this.flavors.length > 0) {
       this.selectedFlavor = this.flavors[0].slug;
     }
+
+    this._cdr.detectChanges();
   }
 
   private _setDefaultImage(os: OperatingSystem): void {

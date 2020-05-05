@@ -82,6 +82,7 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
   private _onTypeLoading(): void {
     this._clearType();
     this.typeLabel = TypeState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _clearType(): void {

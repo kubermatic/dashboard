@@ -188,11 +188,13 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   private _onSizeLoading(): void {
     this._clearSize();
     this.sizeLabel = SizeState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _onSubnetLoading(): void {
     this._clearSubnet();
     this.subnetLabel = SubnetState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _initSubnetMap(): void {

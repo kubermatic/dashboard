@@ -126,11 +126,13 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   private _onInstanceTypeLoading(): void {
     this._clearInstanceType();
     this.instanceTypeLabel = InstanceTypeState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _onZoneLoading(): void {
     this._clearZone();
     this.zoneLabel = ZoneState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _clearInstanceType(): void {

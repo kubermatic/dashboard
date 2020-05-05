@@ -124,6 +124,7 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
   private _onNetworkLoading(): void {
     this._clearNetwork();
     this.networkLabel = NetworkState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _networkListObservable(): Observable<GCPNetwork[]> {
@@ -167,6 +168,7 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
   private _onSubNetworkLoading(): void {
     this._clearSubNetwork();
     this.subNetworkLabel = SubNetworkState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _loadSubNetworks(subNetworks: GCPSubnetwork[]): void {

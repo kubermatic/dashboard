@@ -131,6 +131,7 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   private _onZoneLoading(): void {
     this._clearZone();
     this.zoneLabel = ZoneState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _setDefaultZone(zones: GCPZone[]): void {
@@ -158,6 +159,7 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   private _onDiskTypeLoading(): void {
     this._clearDiskTypes();
     this.diskTypeLabel = DiskTypeState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _setDefaultDiskType(diskTypes: GCPDiskType[]): void {
@@ -186,6 +188,7 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   private _onMachineSizeLoading(): void {
     this._clearMachineSize();
     this.machineSizeLabel = MachineSizeState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _setDefaultMachineSize(machineSizes: GCPMachineSize[]): void {

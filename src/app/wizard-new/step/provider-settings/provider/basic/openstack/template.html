@@ -46,7 +46,7 @@
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>Project</mat-label>
+    <mat-label>{{projectsLabel}}</mat-label>
     <input matInput
            [formControlName]="Controls.Project"
            [name]="Controls.Project"
@@ -76,14 +76,15 @@
     </mat-error>
   </mat-form-field>
 
-  <km-combobox [required]="true"
+  <km-combobox #floatingIPPoolCombobox
+               [required]="true"
                [grouped]="false"
                [options]="floatingIPPools"
                [hint]="getHint(Controls.FloatingIPPool)"
                [formControlName]="Controls.FloatingIPPool"
                (changed)="onFloatingIPPoolChange($event)"
-               label="Floating IP Pool"
-               inputLabel="Select floatingIPPool..."
+               [label]="floatingIPPoolsLabel"
+               inputLabel="Select Floating IP Pool..."
                filterBy="name">
     <div *option="let floatingIPPool">
       {{floatingIPPool.name}}
