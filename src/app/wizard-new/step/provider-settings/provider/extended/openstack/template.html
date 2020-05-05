@@ -41,7 +41,8 @@
                (changed)="onSubnetIDChange($event)"
                [label]="subnetIDsLabel"
                inputLabel="Select subnet id..."
-               filterBy="id">
+               filterBy="name"
+               selectBy="id">
     <div *option="let subnet">
       {{subnet.name}} ({{subnet.id}})
     </div>

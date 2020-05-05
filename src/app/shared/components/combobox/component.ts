@@ -26,6 +26,7 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   @Input() groups: string[] = [];
   @Input() options: object[] = [];
   @Input() filterBy: string;
+  @Input() selectBy: string;
   @Input('optionsGetter') getOptions: (group: string) => object[];
   @Input() selected: string;
   @Input() hint: string;
@@ -49,6 +50,10 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
     this.form = this._builder.group({
       [Controls.Select]: this._builder.control('', this.required ? Validators.required : []),
     });
+
+    if (!this.selectBy) {
+      this.selectBy = this.filterBy;
+    }
 
     this.form.get(Controls.Select)
         .valueChanges.pipe(distinctUntilChanged())
