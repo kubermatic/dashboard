@@ -514,13 +514,9 @@
     line-height: $font-size-subhead;
     max-height: 22px;
     min-height: 22px;
-    padding: (0.375 * $baseline-grid) (1.25 * $baseline-grid);
+    padding: 3px 0;
 
-    &.km-chip-container {
-      padding: 0;
-    }
-
-    div {
+    div:not(.mat-chip-ripple) {
       align-items: center;
       background: $divider;
       display: flex;
