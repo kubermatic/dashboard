@@ -68,7 +68,7 @@
     "core-js": "3.6.5",
     "flag-icon-css": "3.4.6",
     "git-describe": "4.0.4",
-    "jquery": "3.5.0",
+    "jquery": "3.5.1",
     "karma-spec-reporter": "0.0.32",
     "lodash": "4.17.15",
     "moment": "2.25.3",
