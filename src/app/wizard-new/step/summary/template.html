@@ -63,6 +63,11 @@
           <i class="km-os-image km-os-image-{{getOperatingSystemLogoClass()}}"></i>
         </span>
         <span>{{getOperatingSystem()}}</span>
+        <span class="km-eol-warning"
+              *ngIf="nodeData.spec.operatingSystem.containerLinux">
+          <i class="km-icon-warning with-margin"
+             matTooltip="Container Linux is going end-of-life on May 26, 2020."></i>
+        </span>
       </div>
       <div class="km-summary-row"
            *ngIf="nodeData.spec.operatingSystem.ubuntu">

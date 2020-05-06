@@ -69,6 +69,12 @@
         </mat-button-toggle>
       </mat-button-toggle-group>
 
+      <span *ngIf="isOsSelected(OperatingSystem.ContainerLinux)"
+            class="km-eol-warning with-margin">
+        <i class="km-icon-warning"></i>
+        Container Linux is going end-of-life on May 26, 2020
+      </span>
+
       <div fxLayout="row"
            fxLayoutGap="16px">
         <!-- Options for Ubuntu and CenOS -->

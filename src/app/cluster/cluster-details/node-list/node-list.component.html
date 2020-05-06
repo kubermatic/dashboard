@@ -191,6 +191,11 @@
                    fxLayoutGap="10px">
                 <div class="km-os-image-{{getSystemLogoClass(element)}}"></div>
                 <span>{{getSystem(element)}}</span>
+                <span class="km-eol-warning"
+                      *ngIf="getSystem(element) === 'Container Linux'">
+                  <i class="km-icon-warning"
+                     matTooltip="Container Linux is going end-of-life on May 26, 2020."></i>
+                </span>
               </div>
             </km-property>
 

@@ -29,7 +29,14 @@
             class="km-header-cell"
             mat-sort-header>Name</th>
         <td mat-cell
-            *matCellDef="let element">{{element.name}}</td>
+            *matCellDef="let element">
+          <span class="km-eol-warning with-margin">
+            {{element.name}}
+            <i *ngIf="getOperatingSystem(element) === 'Container Linux'"
+               class="km-icon-warning with-margin"
+               matTooltip="Container Linux is going end-of-life on May 26, 2020."></i>
+          </span>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="labels">
