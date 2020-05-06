@@ -71,7 +71,7 @@
     "jquery": "3.5.0",
     "karma-spec-reporter": "0.0.32",
     "lodash": "4.17.15",
-    "moment": "2.24.0",
+    "moment": "2.25.3",
     "ngx-clipboard": "13.0.0",
     "ngx-cookie-service": "2.4.0",
     "ngx-custom-validators": "8.0.0",
