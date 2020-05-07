@@ -20,7 +20,8 @@
            [formControlName]="Controls.ClientSecret"
            [name]="Controls.ClientSecret"
            type="password"
-           autocomplete="off">
+           autocomplete="off"
+           required>
     <mat-error *ngIf="form.get(Controls.ClientSecret).hasError('required')">
       Client Secret is <strong>required</strong>.
     </mat-error>
@@ -40,7 +41,7 @@
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>Subscription ID*</mat-label>
+    <mat-label>Subscription ID</mat-label>
     <input matInput
            [formControlName]="Controls.SubscriptionID"
            [name]="Controls.SubscriptionID"

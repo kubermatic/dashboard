@@ -1,9 +1,10 @@
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, distinctUntilChanged, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
+import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
 import {OpenstackCloudSpec} from '../../../../../../shared/entity/cloud/OpenstackCloudSpec';
 import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
 import {OpenstackFloatingIpPool, OpenstackTenant} from '../../../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
@@ -11,7 +12,7 @@ import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
 
-export enum Controls {
+enum Controls {
   Domain = 'domain',
   Username = 'username',
   Password = 'password',
@@ -20,26 +21,44 @@ export enum Controls {
   FloatingIPPool = 'floatingIPPool',
 }
 
+enum FloatingIPPoolState {
+  Ready = 'Floating IP Pool',
+  Loading = 'Loading...',
+  Empty = 'No Floating IP Pools Available',
+}
+
+enum ProjectState {
+  Ready = 'Project',
+  Loading = 'Loading...',
+  Empty = 'No Projects Available',
+}
+
 @Component({
   selector: 'km-wizard-openstack-provider-basic',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OpenstackProviderBasicComponent), multi: true},
     {provide: NG_VALIDATORS, useExisting: forwardRef(() => OpenstackProviderBasicComponent), multi: true}
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpenstackProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private _domains: string[] = ['Default'];
+  private readonly _debounceTime = 250;
+  private readonly _domains: string[] = ['Default'];
+
+  @ViewChild('floatingIPPoolCombobox') private readonly _floatingIPPoolCombobox: FilteredComboboxComponent;
 
   readonly Controls = Controls;
 
   domains = this._domains.map(type => ({name: type}));
   projects: OpenstackTenant[] = [];
+  projectsLabel = ProjectState.Empty;
   floatingIPPools: OpenstackFloatingIpPool[] = [];
+  floatingIPPoolsLabel = FloatingIPPoolState.Empty;
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
-      private readonly _clusterService: ClusterService) {
+      private readonly _clusterService: ClusterService, private readonly _cdr: ChangeDetectorRef) {
     super('Openstack Provider Basic');
   }
 
@@ -49,7 +68,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       [Controls.Username]: this._builder.control('', Validators.required),
       [Controls.Password]: this._builder.control('', Validators.required),
       [Controls.Project]: this._builder.control('', Validators.required),
-      [Controls.ProjectID]: this._builder.control(''),
+      [Controls.ProjectID]: this._builder.control('', Validators.required),
       [Controls.FloatingIPPool]: this._builder.control('', Validators.required),
     });
 
@@ -69,27 +88,50 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
         this.form.get(Controls.Domain).valueChanges, this.form.get(Controls.Username).valueChanges,
         this.form.get(Controls.Password).valueChanges, this.form.get(Controls.Project).valueChanges,
         this.form.get(Controls.ProjectID).valueChanges)
-        .pipe(distinctUntilChanged())
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());
 
     merge(
         this.form.get(Controls.Domain).valueChanges, this.form.get(Controls.Username).valueChanges,
         this.form.get(Controls.Password).valueChanges)
-        .pipe(distinctUntilChanged())
+        .pipe(debounceTime(this._debounceTime))
+        .pipe(tap(_ => this._clearProject()))
         .pipe(switchMap(_ => this._projectListObservable()))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((projects: OpenstackTenant[]) => {
           this.projects = projects;
+
+          if (this.projects.length > 0) {
+            this.projectsLabel = ProjectState.Ready;
+            this._cdr.detectChanges();
+          }
         });
 
     merge(this.form.get(Controls.Project).valueChanges, this.form.get(Controls.ProjectID).valueChanges)
-        .pipe(tap(_ => !this._hasRequiredCredentials() ? this.floatingIPPools = [] : null))
-        .pipe(distinctUntilChanged())
+        .pipe(tap(_ => this._clearFloatingIPPool()))
         .pipe(switchMap(_ => this._floatingIPPoolListObservable()))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((floatingIPPools: OpenstackFloatingIpPool[]) => {
           this.floatingIPPools = floatingIPPools;
+
+          if (this.floatingIPPools.length > 0) {
+            this.floatingIPPoolsLabel = FloatingIPPoolState.Ready;
+            this._cdr.detectChanges();
+          }
+        });
+
+    this.form.get(Controls.Project)
+        .valueChanges.pipe(distinctUntilChanged())
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(value => {
+          !!value ? this.form.get(Controls.ProjectID).disable() : this.form.get(Controls.ProjectID).enable();
+        });
+
+    this.form.get(Controls.ProjectID)
+        .valueChanges.pipe(distinctUntilChanged())
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(value => {
+          !!value ? this.form.get(Controls.Project).disable() : this.form.get(Controls.Project).enable();
         });
   }
 
@@ -107,22 +149,19 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       case Controls.Project:
         return this._hasRequiredBasicCredentials() ? '' : 'Please enter your credentials first.';
       case Controls.FloatingIPPool:
-        return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
+        return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first & project/project ID.';
     }
   }
 
-  isRequired(): boolean {
-    if (this.form.get(Controls.ProjectID).value !== '') {
-      this.form.get(Controls.Project).clearValidators();
-      this.form.get(Controls.ProjectID).setValidators([Validators.required]);
-    } else {
-      this.form.get(Controls.Project).setValidators([Validators.required]);
-      this.form.get(Controls.ProjectID).clearValidators();
+  isRequired(control: Controls): boolean {
+    switch (control) {
+      case Controls.Project:
+        return !this.form.get(Controls.ProjectID).value;
+      case Controls.ProjectID:
+        return !this.form.get(Controls.Project).value;
+      default:
+        return true;
     }
-
-    this.form.get(Controls.Project).updateValueAndValidity();
-    this.form.get(Controls.ProjectID).updateValueAndValidity();
-    return !this.form.get(Controls.ProjectID).value;
   }
 
   private _enable(enable: boolean, name: string): void {
@@ -143,7 +182,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
   }
 
   private _hasRequiredCredentials(): boolean {
-    return !!this._hasRequiredBasicCredentials && !!this._clusterService.cluster.spec.cloud.openstack &&
+    return !!this._hasRequiredBasicCredentials &&
         (!!this._clusterService.cluster.spec.cloud.openstack.tenant ||
          !!this._clusterService.cluster.spec.cloud.openstack.tenantID);
   }
@@ -154,12 +193,26 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
         .username(this.form.get(Controls.Username).value)
         .password(this.form.get(Controls.Password).value)
         .datacenter(this._clusterService.cluster.spec.cloud.dc)
-        .tenants()
+        .tenants(this._onProjectLoading.bind(this))
         .pipe(map(projects => projects.sort((a, b) => a.name.localeCompare(b.name))))
         .pipe(catchError(() => {
-          this.form.get(Controls.Project).setValue(undefined);
+          this._clearProject();
           return onErrorResumeNext(EMPTY);
         }));
+  }
+
+  private _clearProject(): void {
+    this.projects = [];
+    this.form.get(Controls.Project).setValue('');
+    this.form.get(Controls.ProjectID).setValue('');
+    this.projectsLabel = ProjectState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _onProjectLoading(): void {
+    this._clearProject();
+    this.projectsLabel = ProjectState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _floatingIPPoolListObservable(): Observable<OpenstackFloatingIpPool[]> {
@@ -170,14 +223,27 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
         .tenant(this.form.get(Controls.Project).value)
         .tenantID(this.form.get(Controls.ProjectID).value)
         .datacenter(this._clusterService.cluster.spec.cloud.dc)
-        .networks()
+        .networks(this._onFloatingIPPoolLoading.bind(this))
         .pipe(map(
             networks =>
                 networks.filter((network) => network.external === true).sort((a, b) => a.name.localeCompare(b.name))))
         .pipe(catchError(() => {
-          this.form.get(Controls.FloatingIPPool).setValue(undefined);
+          this._clearFloatingIPPool();
           return onErrorResumeNext(EMPTY);
         }));
+  }
+
+  private _clearFloatingIPPool(): void {
+    this.floatingIPPools = [];
+    this._floatingIPPoolCombobox.reset();
+    this.floatingIPPoolsLabel = FloatingIPPoolState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _onFloatingIPPoolLoading(): void {
+    this._clearFloatingIPPool();
+    this.floatingIPPoolsLabel = FloatingIPPoolState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _getClusterEntity(): ClusterEntity {

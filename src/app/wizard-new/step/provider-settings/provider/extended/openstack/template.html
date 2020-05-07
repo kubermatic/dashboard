@@ -1,13 +1,14 @@
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="16px">
-  <km-combobox [required]="false"
+  <km-combobox #securityGroupCombobox
+               [required]="false"
                [grouped]="false"
                [options]="securityGroups"
                [hint]="getHint(Controls.SecurityGroup)"
                [formControlName]="Controls.SecurityGroup"
                (changed)="onSecurityGroupChange($event)"
-               label="Security Group"
+               [label]="securityGroupsLabel"
                inputLabel="Select security group..."
                filterBy="name">
     <div *option="let securityGroup">
@@ -15,13 +16,14 @@
     </div>
   </km-combobox>
 
-  <km-combobox [required]="false"
+  <km-combobox #networkCombobox
+               [required]="false"
                [grouped]="false"
                [options]="networks"
                [hint]="getHint(Controls.Network)"
                [formControlName]="Controls.Network"
                (changed)="onNetworkChange($event)"
-               label="Network"
+               [label]="networksLabel"
                inputLabel="Select network..."
                filterBy="name">
     <div *option="let network">
@@ -29,16 +31,18 @@
     </div>
   </km-combobox>
 
-  <km-combobox [required]="false"
+  <km-combobox #subnetIDCombobox
+               [required]="false"
                [grouped]="false"
                [valueFormatter]="subnetIDDisplayName.bind(this)"
                [options]="subnetIDs"
                [hint]="getHint(Controls.SubnetID)"
                [formControlName]="Controls.SubnetID"
                (changed)="onSubnetIDChange($event)"
-               label="Subnet ID"
+               [label]="subnetIDsLabel"
                inputLabel="Select subnet id..."
-               filterBy="id">
+               filterBy="name"
+               selectBy="id">
     <div *option="let subnet">
       {{subnet.name}} ({{subnet.id}})
     </div>

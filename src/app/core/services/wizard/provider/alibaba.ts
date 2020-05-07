@@ -39,22 +39,28 @@ export class Alibaba extends Provider {
     return this;
   }
 
-  instanceTypes(): Observable<AlibabaInstanceType[]> {
+  instanceTypes(onLoadingCb: () => void = null): Observable<AlibabaInstanceType[]> {
     this._setRequiredHeaders(Alibaba.Header.AccessKeyID, Alibaba.Header.AccessKeySecret, Alibaba.Header.Region);
-
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
     }
 
     const url = `${this._restRoot}/providers/${this._provider}/instancetypes`;
     return this._http.get<AlibabaInstanceType[]>(url, {headers: this._headers});
   }
 
-  zones(): Observable<AlibabaZone[]> {
+  zones(onLoadingCb: () => void = null): Observable<AlibabaZone[]> {
     this._setRequiredHeaders(Alibaba.Header.AccessKeyID, Alibaba.Header.AccessKeySecret, Alibaba.Header.Region);
-
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
     }
 
     const url = `${this._restRoot}/providers/${this._provider}/zones`;

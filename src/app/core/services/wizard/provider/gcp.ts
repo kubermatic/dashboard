@@ -39,42 +39,67 @@ export class GCP extends Provider {
     return this;
   }
 
-  diskTypes(): Observable<GCPDiskType[]> {
+  diskTypes(onLoadingCb: () => void = null): Observable<GCPDiskType[]> {
     if (!this._hasRequiredHeaders() && this._headers.has(GCP.Header.Zone)) {
       return EMPTY;
     }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
     const url = `${this._restRoot}/providers/${this._provider}/disktypes`;
     return this._http.get<GCPDiskType[]>(url, {headers: this._headers});
   }
 
-  machineTypes(): Observable<GCPMachineSize[]> {
+  machineTypes(onLoadingCb: () => void = null): Observable<GCPMachineSize[]> {
     if (!this._hasRequiredHeaders() && this._headers.has(GCP.Header.Zone)) {
       return EMPTY;
     }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
     return this._http.get<GCPMachineSize[]>(this._url, {headers: this._headers});
   }
 
-  zones(dc: string): Observable<GCPZone[]> {
+  zones(dc: string, onLoadingCb: () => void = null): Observable<GCPZone[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
     const url = `${this._restRoot}/providers/${this._provider}/${dc}/zones`;
     return this._http.get<GCPZone[]>(url, {headers: this._headers});
   }
 
-  networks(): Observable<GCPNetwork[]> {
+  networks(onLoadingCb: () => void = null): Observable<GCPNetwork[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
     const url = `${this._restRoot}/providers/${this._provider}/networks`;
     return this._http.get<GCPNetwork[]>(url, {headers: this._headers});
   }
 
-  subnetworks(dc: string): Observable<GCPSubnetwork[]> {
+  subnetworks(dc: string, onLoadingCb: () => void = null): Observable<GCPSubnetwork[]> {
     this._setRequiredHeaders(GCP.Header.ServiceAccount, GCP.Header.Network);
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
     const url = `${this._restRoot}/providers/${this._provider}/${dc}/subnetworks`;
     return this._http.get<GCPSubnetwork[]>(url, {headers: this._headers});
   }

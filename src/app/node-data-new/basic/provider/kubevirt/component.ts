@@ -1,4 +1,4 @@
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewChecked, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -25,7 +25,7 @@ enum Controls {
     {provide: NG_VALIDATORS, useExisting: forwardRef(() => KubeVirtBasicNodeDataComponent), multi: true}
   ]
 })
-export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy, AfterViewChecked {
   private readonly _sizeSuffixPattern = /^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/;
 
   readonly Controls = Controls;
@@ -62,6 +62,11 @@ export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements
         )
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
+  }
+
+  ngAfterViewChecked(): void {
+    // Force initial form validation.
+    this.form.updateValueAndValidity();
   }
 
   ngOnDestroy(): void {

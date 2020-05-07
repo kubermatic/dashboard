@@ -32,9 +32,13 @@ export class Packet extends Provider {
     return this;
   }
 
-  flavors(): Observable<PacketSize[]> {
+  flavors(onLoadingCb: () => void = null): Observable<PacketSize[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
     }
 
     return this._http.get<PacketSize[]>(this._url, {headers: this._headers});

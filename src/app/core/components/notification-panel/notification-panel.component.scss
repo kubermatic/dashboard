@@ -64,6 +64,7 @@
       }
 
       .notification-message {
+        word-break: break-word;
         font-size: $font-size-body;
         line-height: 1.6 * $line-height;
         margin-bottom: $baseline-grid;

@@ -19,7 +19,7 @@ export class NodeDataOpenstackProvider {
     this._nodeDataService.nodeData.spec.cloud.openstack.tags = tags;
   }
 
-  flavors(onError: () => void = undefined): Observable<OpenstackFlavor[]> {
+  flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<OpenstackFlavor[]> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
@@ -34,7 +34,7 @@ export class NodeDataOpenstackProvider {
                          .tenantID(this._clusterService.cluster.spec.cloud.openstack.tenantID)
                          .datacenter(this._clusterService.cluster.spec.cloud.dc)
                          .credential(this._presetService.preset)
-                         .flavors()
+                         .flavors(onLoadingCb)
                          .pipe(catchError(_ => {
                            if (onError) {
                              onError();

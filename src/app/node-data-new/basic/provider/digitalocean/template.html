@@ -9,7 +9,7 @@
                [optionsGetter]="getTypes.bind(this)"
                [formControlName]="Controls.Size"
                (changed)="onTypeChange($event)"
-               label="Node Size"
+               [label]="sizeLabel"
                inputLabel="Select size..."
                filterBy="slug">
     <div *option="let size">

@@ -1,5 +1,5 @@
-import {Observable} from 'rxjs';
-import {filter, switchMap} from 'rxjs/operators';
+import {Observable, of, onErrorResumeNext} from 'rxjs';
+import {catchError, filter, switchMap} from 'rxjs/operators';
 import {DatacenterService, PresetsService} from '../../../core/services';
 import {AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
@@ -17,16 +17,26 @@ export class NodeDataAWSProvider {
     this._nodeDataService.nodeData.spec.cloud.aws.tags = tags;
   }
 
-  flavors(): Observable<AWSSize[]> {
+  flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AWSSize[]> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterService.datacenterChanges.pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
-            .pipe(switchMap(dc => this._presetService.provider(NodeProvider.AWS).region(dc.spec.aws.region).flavors()));
+            .pipe(switchMap(
+                dc => this._presetService.provider(NodeProvider.AWS)
+                          .region(dc.spec.aws.region)
+                          .flavors(onLoadingCb)
+                          .pipe(catchError(_ => {
+                            if (onError) {
+                              onError();
+                            }
+
+                            return onErrorResumeNext(of([]));
+                          }))));
     }
   }
 
-  subnets(): Observable<AWSSubnet[]> {
+  subnets(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AWSSubnet[]> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
@@ -37,7 +47,14 @@ export class NodeDataAWSProvider {
                                .secretAccessKey(cluster.spec.cloud.aws.secretAccessKey)
                                .vpc(cluster.spec.cloud.aws.vpcId)
                                .credential(this._presetService.preset)
-                               .subnets(cluster.spec.cloud.dc)));
+                               .subnets(cluster.spec.cloud.dc, onLoadingCb)
+                               .pipe(catchError(_ => {
+                                 if (onError) {
+                                   onError();
+                                 }
+
+                                 return onErrorResumeNext(of([]));
+                               }))));
     }
   }
 }

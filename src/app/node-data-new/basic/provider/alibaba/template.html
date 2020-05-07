@@ -1,13 +1,14 @@
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="16px">
-  <km-combobox [required]="true"
+  <km-combobox #instanceTypeCombobox
+               [required]="true"
                [grouped]="false"
-               [selected]="defaultInstanceType"
+               [selected]="selectedInstanceType"
                [options]="instanceTypes"
                [formControlName]="Controls.InstanceType"
                (changed)="onInstanceTypeChange($event)"
-               label="Instance Type"
+               [label]="instanceTypeLabel"
                inputLabel="Select instance type..."
                filterBy="id">
     <div *option="let instanceType">
@@ -17,7 +18,7 @@
 
   <km-combobox [required]="true"
                [grouped]="false"
-               [selected]="defaultDiskType"
+               [selected]="selectedDiskType"
                [options]="diskTypes"
                [formControlName]="Controls.DiskType"
                (changed)="onDiskTypeChange($event)"
@@ -57,13 +58,14 @@
            required>
   </mat-form-field>
 
-  <km-combobox [required]="true"
+  <km-combobox #zoneCombobox
+               [required]="true"
                [grouped]="false"
-               [selected]="defaultZone"
+               [selected]="selectedZone"
                [options]="zones"
                [formControlName]="Controls.ZoneID"
                (changed)="onZoneChange($event)"
-               label="Zone ID"
+               [label]="zoneLabel"
                inputLabel="Select zone..."
                filterBy="id">
     <div *option="let zone">{{zone.id}}</div>

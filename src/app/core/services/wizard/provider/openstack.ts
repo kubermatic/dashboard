@@ -65,40 +65,65 @@ export class Openstack extends Provider {
     return this;
   }
 
-  flavors(): Observable<OpenstackFlavor[]> {
+  flavors(onLoadingCb: () => void = null): Observable<OpenstackFlavor[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
     return this._http.get<OpenstackFlavor[]>(this._url, {headers: this._headers});
   }
 
-  tenants(): Observable<OpenstackTenant[]> {
+  tenants(onLoadingCb: () => void = null): Observable<OpenstackTenant[]> {
     this._setRequiredHeaders(
         Openstack.Header.Username, Openstack.Header.Password, Openstack.Header.Domain, Openstack.Header.Datacenter);
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
     return this._http.get<OpenstackTenant[]>(this._tenantsUrl, {headers: this._headers});
   }
 
-  securityGroups(): Observable<OpenstackSecurityGroup[]> {
+  securityGroups(onLoadingCb: () => void = null): Observable<OpenstackSecurityGroup[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
     return this._http.get<OpenstackSecurityGroup[]>(this._securityGroupsUrl, {headers: this._headers});
   }
 
-  networks(): Observable<OpenstackNetwork[]> {
+  networks(onLoadingCb: () => void = null): Observable<OpenstackNetwork[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
     return this._http.get<OpenstackNetwork[]>(this._networksUrl, {headers: this._headers});
   }
 
-  subnets(network: string): Observable<OpenstackSubnet[]> {
+  subnets(network: string, onLoadingCb: () => void = null): Observable<OpenstackSubnet[]> {
     if (!this._hasRequiredHeaders() || !network) {
       return EMPTY;
     }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
     const url = `${this._restRoot}/providers/openstack/subnets?network_id=${network}`;
     return this._http.get<OpenstackSubnet[]>(url, {headers: this._headers});
   }

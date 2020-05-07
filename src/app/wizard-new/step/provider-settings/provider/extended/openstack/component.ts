@@ -1,9 +1,10 @@
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {EMPTY, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
+import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
 import {OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet} from '../../../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
@@ -15,24 +16,50 @@ enum Controls {
   SubnetID = 'subnetID',
 }
 
+enum SecurityGroupState {
+  Ready = 'Security Group',
+  Loading = 'Loading...',
+  Empty = 'No Security Groups Available',
+}
+
+enum NetworkState {
+  Ready = 'Network',
+  Loading = 'Loading...',
+  Empty = 'No Networks Available',
+}
+
+enum SubnetIDState {
+  Ready = 'Subnet ID',
+  Loading = 'Loading...',
+  Empty = 'No Subnet IDs Available',
+}
+
 @Component({
   selector: 'km-wizard-openstack-provider-extended',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OpenstackProviderExtendedComponent), multi: true},
     {provide: NG_VALIDATORS, useExisting: forwardRef(() => OpenstackProviderExtendedComponent), multi: true}
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpenstackProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  @ViewChild('networkCombobox') private readonly _networkCombobox: FilteredComboboxComponent;
+  @ViewChild('securityGroupCombobox') private readonly _securityGroupCombobox: FilteredComboboxComponent;
+  @ViewChild('subnetIDCombobox') private readonly _subnetIDCombobox: FilteredComboboxComponent;
+
   readonly Controls = Controls;
 
   securityGroups: OpenstackSecurityGroup[] = [];
+  securityGroupsLabel = SecurityGroupState.Empty;
   networks: OpenstackNetwork[] = [];
+  networksLabel = NetworkState.Empty;
   subnetIDs: OpenstackSubnet[] = [];
+  subnetIDsLabel = SubnetIDState.Empty;
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
-      private readonly _clusterService: ClusterService) {
+      private readonly _clusterService: ClusterService, private readonly _cdr: ChangeDetectorRef) {
     super('Openstack Provider Extended');
   }
 
@@ -52,18 +79,19 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
                 Object.values(this._clusterService.cluster.spec.cloud.openstack).every(value => !value)));
 
     this._clusterService.clusterChanges
-        .pipe(tap(_ => !this._hasRequiredBasicCredentials() ? this.securityGroups = [] : null))
+        .pipe(tap(_ => !this._hasRequiredBasicCredentials() ? this._clearSecurityGroup() : null))
         .pipe(switchMap(_ => this._securityGroupListObservable()))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(this._loadSecurityGroups.bind(this));
 
-    this._clusterService.clusterChanges.pipe(tap(_ => !this._hasRequiredBasicCredentials() ? this.networks = [] : null))
+    this._clusterService.clusterChanges
+        .pipe(tap(_ => !this._hasRequiredBasicCredentials() ? this._clearNetwork() : null))
         .pipe(switchMap(_ => this._networkListObservable()))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(this._loadNetworks.bind(this));
 
     this.form.get(Controls.Network)
-        .valueChanges.pipe(tap(_ => !this._hasRequiredCredentials() ? this.subnetIDs = [] : null))
+        .valueChanges.pipe(tap(_ => !this._hasRequiredCredentials() ? this._clearSubnetID() : null))
         .pipe(switchMap(_ => this._subnetIDListObservable()))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(this._loadSubnetIDs.bind(this));
@@ -103,14 +131,20 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
 
   private _loadSecurityGroups(securityGroups: OpenstackSecurityGroup[]): void {
     this.securityGroups = securityGroups;
+    this.securityGroupsLabel = this.securityGroups.length > 0 ? SecurityGroupState.Ready : SecurityGroupState.Empty;
+    this._cdr.detectChanges();
   }
 
   private _loadNetworks(networks: OpenstackNetwork[]): void {
     this.networks = networks;
+    this.networksLabel = this.networks.length > 0 ? NetworkState.Ready : NetworkState.Empty;
+    this._cdr.detectChanges();
   }
 
   private _loadSubnetIDs(subnetIDs: OpenstackSubnet[]): void {
     this.subnetIDs = subnetIDs;
+    this.subnetIDsLabel = this.subnetIDs.length > 0 ? SubnetIDState.Ready : SubnetIDState.Empty;
+    this._cdr.detectChanges();
   }
 
   private _hasRequiredBasicCredentials(): boolean {
@@ -123,8 +157,7 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
   }
 
   private _hasRequiredCredentials(): boolean {
-    return !!this._hasRequiredBasicCredentials && !!this._clusterService.cluster.spec.cloud.openstack &&
-        !!this._clusterService.cluster.spec.cloud.openstack.network;
+    return !!this._hasRequiredBasicCredentials && !!this._clusterService.cluster.spec.cloud.openstack.network;
   }
 
   private _securityGroupListObservable(): Observable<OpenstackSecurityGroup[]> {
@@ -135,12 +168,25 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
         .tenant(this._clusterService.cluster.spec.cloud.openstack.tenant)
         .tenantID(this._clusterService.cluster.spec.cloud.openstack.tenantID)
         .datacenter(this._clusterService.cluster.spec.cloud.dc)
-        .securityGroups()
+        .securityGroups(this._onSecurityGroupLoading.bind(this))
         .pipe(map(securityGroups => securityGroups.sort((a, b) => a.name.localeCompare(b.name))))
         .pipe(catchError(() => {
-          this.form.get(Controls.SecurityGroup).setValue(undefined);
+          this._clearSecurityGroup();
           return onErrorResumeNext(EMPTY);
         }));
+  }
+
+  private _clearSecurityGroup(): void {
+    this.securityGroups = [];
+    this._securityGroupCombobox.reset();
+    this.securityGroupsLabel = SecurityGroupState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _onSecurityGroupLoading(): void {
+    this._clearSecurityGroup();
+    this.securityGroupsLabel = SecurityGroupState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _networkListObservable(): Observable<OpenstackNetwork[]> {
@@ -151,12 +197,25 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
         .tenant(this._clusterService.cluster.spec.cloud.openstack.tenant)
         .tenantID(this._clusterService.cluster.spec.cloud.openstack.tenantID)
         .datacenter(this._clusterService.cluster.spec.cloud.dc)
-        .networks()
+        .networks(this._onNetworkLoading.bind(this))
         .pipe(map(networks => networks.sort((a, b) => a.name.localeCompare(b.name))))
         .pipe(catchError(() => {
-          this.form.get(Controls.Network).setValue(undefined);
+          this._clearNetwork();
           return onErrorResumeNext(EMPTY);
         }));
+  }
+
+  private _clearNetwork(): void {
+    this.networks = [];
+    this._networkCombobox.reset();
+    this.networksLabel = NetworkState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _onNetworkLoading(): void {
+    this._clearNetwork();
+    this.networksLabel = NetworkState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _subnetIDListObservable(): Observable<OpenstackSubnet[]> {
@@ -167,12 +226,25 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
         .tenant(this._clusterService.cluster.spec.cloud.openstack.tenant)
         .tenantID(this._clusterService.cluster.spec.cloud.openstack.tenantID)
         .datacenter(this._clusterService.cluster.spec.cloud.dc)
-        .subnets(this._clusterService.cluster.spec.cloud.openstack.network)
+        .subnets(this._clusterService.cluster.spec.cloud.openstack.network, this._onSubnetIDLoading.bind(this))
         .pipe(map(subnetIDs => subnetIDs.sort((a, b) => a.name.localeCompare(b.name))))
         .pipe(catchError(() => {
-          this.form.get(Controls.SubnetID).setValue(undefined);
+          this._clearSubnetID();
           return onErrorResumeNext(EMPTY);
         }));
+  }
+
+  private _clearSubnetID(): void {
+    this.subnetIDs = [];
+    this._subnetIDCombobox.reset();
+    this.subnetIDsLabel = SubnetIDState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _onSubnetIDLoading(): void {
+    this._clearSubnetID();
+    this.subnetIDsLabel = SubnetIDState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _enable(enable: boolean, name: string): void {
