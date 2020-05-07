@@ -29,7 +29,8 @@
             class="km-header-cell"
             mat-sort-header>Name</th>
         <td mat-cell
-            *matCellDef="let element">
+            *matCellDef="let element"
+            [attr.id]="'km-node-deployment-' + element.name">
           <span class="km-eol-warning with-margin">
             {{element.name}}
             <i *ngIf="getOperatingSystem(element) === 'Container Linux'"
