@@ -32,7 +32,7 @@ export class ClustersPage {
   }
 
   static getTableRowNodeDeploymentNameColumn(nodeDeploymentName: string): Cypress.Chainable<any> {
-    return cy.get('td').contains(nodeDeploymentName);
+    return cy.get(`td#km-node-deployment-${nodeDeploymentName}`);
   }
 
   static getNodeDeploymentRemoveBtn(nodeDeploymentName: string): Cypress.Chainable<any> {

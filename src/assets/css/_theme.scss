@@ -1617,3 +1617,21 @@
     }
   }
 }
+
+.km-eol-warning {
+  display: flex;
+  align-items: center;
+  font-size: $font-size-body;
+
+  &.with-margin {
+    margin-bottom: 1.25 * $baseline-grid;
+  }
+
+  i {
+    margin: 0 $baseline-grid 0 0;
+
+    &.with-margin {
+      margin-left: $baseline-grid;
+    }
+  }
+}
