@@ -83,7 +83,7 @@
     "semver": "7.3.2",
     "swagger-ui": "3.25.1",
     "ts-helpers": "1.1.2",
-    "tslib": "1.11.1",
+    "tslib": "1.11.2",
     "zone.js": "0.10.3"
   },
   "devDependencies": {
