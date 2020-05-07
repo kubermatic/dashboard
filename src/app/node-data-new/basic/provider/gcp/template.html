@@ -10,13 +10,14 @@
            required>
   </mat-form-field>
 
-  <km-combobox [required]="true"
+  <km-combobox #zonesCombobox
+               [required]="true"
                [grouped]="false"
                [selected]="selectedZone"
                [options]="zones"
                [formControlName]="Controls.Zone"
                (changed)="onZoneChange($event)"
-               label="Zone"
+               [label]="zoneLabel"
                inputLabel="Select zone..."
                filterBy="name">
     <div *option="let zone">
@@ -24,13 +25,14 @@
     </div>
   </km-combobox>
 
-  <km-combobox [required]="true"
+  <km-combobox #diskTypesCombobox
+               [required]="true"
                [grouped]="false"
                [selected]="selectedDiskType"
                [options]="diskTypes"
                [formControlName]="Controls.DiskType"
                (changed)="onDiskTypeChange($event)"
-               label="Disk Type"
+               [label]="diskTypeLabel"
                inputLabel="Select disk type..."
                filterBy="name">
     <div *option="let diskType">
@@ -38,13 +40,14 @@
     </div>
   </km-combobox>
 
-  <km-combobox [required]="true"
+  <km-combobox #machineSizesCombobox
+               [required]="true"
                [grouped]="false"
                [selected]="selectedMachineSize"
                [options]="machineSizes"
                [formControlName]="Controls.MachineSize"
                (changed)="onMachineSizeChange($event)"
-               label="Machine Size"
+               [label]="machineSizeLabel"
                inputLabel="Select machine size..."
                filterBy="name">
     <div *option="let machineSize">

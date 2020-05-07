@@ -23,10 +23,15 @@ export class Hetzner extends Provider {
     return this;
   }
 
-  flavors(): Observable<HetznerTypes> {
+  flavors(onLoadingCb: () => void = null): Observable<HetznerTypes> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
     return this._http.get<HetznerTypes>(this._url, {headers: this._headers});
   }
 }

@@ -1,8 +1,7 @@
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="16px">
-  <mat-form-field fxFlex
-                  class="km-with-hint">
+  <mat-form-field fxFlex>
     <mat-label>Access Key ID</mat-label>
     <input matInput
            [formControlName]="Controls.AccessKeyID"
@@ -20,8 +19,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field fxFlex
-                  class="km-with-hint">
+  <mat-form-field fxFlex>
     <mat-label>Secret Access Key</mat-label>
     <input matInput
            [formControlName]="Controls.AccessKeySecret"
@@ -39,27 +37,19 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field fxFlex
-                  class="km-with-hint">
-
-    <mat-label>{{ vpcLabel }}</mat-label>
-    <input matInput
-           [formControlName]="Controls.VPCID"
-           [name]="Controls.VPCID"
-           [matAutocomplete]="auto"
-           required>
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let vpc of vpcIds"
-                  [value]="vpc.vpcId">
-        {{vpc.displayName}}
-      </mat-option>
-    </mat-autocomplete>
-    <mat-hint>When specified, all worker nodes will be attached to this VPC. If not specified, the default VPC will be used.</mat-hint>
-    <mat-error *ngIf="form.get(Controls.VPCID).hasError('pattern')">
-      The VPC ID needs to look similar to 'vpc-3a2f9851'.
-    </mat-error>
-    <mat-error *ngIf="form.get(Controls.VPCID).hasError('required')">
-      The VPC ID is <strong>required</strong>.
-    </mat-error>
-  </mat-form-field>
+  <km-combobox #vpcCombobox
+               [required]="true"
+               [grouped]="false"
+               [options]="vpcIds"
+               [selected]="selectedVPC"
+               [hint]="getHint(Controls.VPCID)"
+               [formControlName]="Controls.VPCID"
+               [label]="vpcLabel"
+               (changed)="onVPCChange($event)"
+               inputLabel="Select VPC..."
+               filterBy="vpcId">
+    <div *option="let vpc">
+      {{vpc.displayName}}
+    </div>
+  </km-combobox>
 </form>

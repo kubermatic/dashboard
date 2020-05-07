@@ -1,5 +1,6 @@
 import {Component, ContentChild, ElementRef, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {MatSelect} from '@angular/material/select';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import {BaseFormValidator} from '../../validators/base-form.validator';
 import {OptionDirective} from './directive';
@@ -25,6 +26,7 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   @Input() groups: string[] = [];
   @Input() options: object[] = [];
   @Input() filterBy: string;
+  @Input() selectBy: string;
   @Input('optionsGetter') getOptions: (group: string) => object[];
   @Input() selected: string;
   @Input() hint: string;
@@ -33,6 +35,7 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   @Output() changed = new EventEmitter<string>();
 
   @ViewChild('input', {static: true}) private readonly _inputEl: ElementRef;
+  @ViewChild('select', {static: true}) private readonly _matSelect: MatSelect;
   @ContentChild(OptionDirective, {read: TemplateRef}) optionTemplate;
 
   filterByInput: object = {};
@@ -47,6 +50,10 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
     this.form = this._builder.group({
       [Controls.Select]: this._builder.control('', this.required ? Validators.required : []),
     });
+
+    if (!this.selectBy) {
+      this.selectBy = this.filterBy;
+    }
 
     this.form.get(Controls.Select)
         .valueChanges.pipe(distinctUntilChanged())
@@ -64,6 +71,10 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   reset(): void {
     this.selected = '';
     this.form.get(Controls.Select).setValue(this.selected);
+  }
+
+  hasOptions(): boolean {
+    return this._matSelect && this._matSelect.options && this._matSelect.options.length > 0;
   }
 
   ngOnChanges(): void {

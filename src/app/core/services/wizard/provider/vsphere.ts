@@ -44,17 +44,27 @@ export class VSphere extends Provider {
     return this;
   }
 
-  networks(): Observable<VSphereNetwork[]> {
+  networks(onLoadingCb: () => void = null): Observable<VSphereNetwork[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
     return this._http.get<VSphereNetwork[]>(this._networksUrl, {headers: this._headers});
   }
 
-  folders(): Observable<VSphereFolder[]> {
+  folders(onLoadingCb: () => void = null): Observable<VSphereFolder[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
     return this._http.get<VSphereFolder[]>(this._foldersUrl, {headers: this._headers});
   }
 }

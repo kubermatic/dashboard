@@ -1,11 +1,14 @@
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {EMPTY, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {catchError, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
+import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
+import {ClusterEntity} from '../../../../../../shared/entity/ClusterEntity';
 import {VSphereFolder, VSphereNetwork} from '../../../../../../shared/entity/provider/vsphere/VSphereEntity';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
+import {isObjectEmpty} from '../../../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
 
@@ -14,20 +17,41 @@ enum Controls {
   Folder = 'folder',
 }
 
+enum NetworkState {
+  Empty = 'No Networks Available',
+  Loading = 'Loading...',
+  Ready = 'Network',
+}
+
+enum FolderState {
+  Empty = 'No Folders Available',
+  Loading = 'Loading...',
+  Ready = 'Folder',
+}
+
 @Component({
   selector: 'km-wizard-vsphere-provider-extended',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => VSphereProviderExtendedComponent), multi: true},
     {provide: NG_VALIDATORS, useExisting: forwardRef(() => VSphereProviderExtendedComponent), multi: true}
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VSphereProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private _networkMap: {[type: string]: VSphereNetwork[]} = {};
+  private _credentialsChanged = new EventEmitter<void>();
+  private _username = '';
+  private _password = '';
+
+  @ViewChild('folderCombobox') private readonly _folderCombobox: FilteredComboboxComponent;
+  @ViewChild('networkCombobox') private readonly _networkCombobox: FilteredComboboxComponent;
 
   readonly Controls = Controls;
 
   folders: VSphereFolder[] = [];
+  folderLabel = FolderState.Empty;
+  networkLabel = NetworkState.Empty;
 
   get networkTypes(): string[] {
     return Object.keys(this._networkMap);
@@ -35,7 +59,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
-      private readonly _clusterService: ClusterService) {
+      private readonly _clusterService: ClusterService, private readonly _cdr: ChangeDetectorRef) {
     super('VSphere Provider Extended');
   }
 
@@ -45,24 +69,24 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       [Controls.Folder]: this._builder.control({value: '', disabled: true}),
     });
 
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterService.cluster.spec.cloud.vsphere)));
+
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._presets.enablePresets(Object.values(Controls).every(control => !this.form.get(control).value));
-    });
+    this._clusterService.clusterChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(this._handleClusterChange.bind(this));
 
-    this._clusterService.clusterChanges.pipe(tap(_ => !this._hasRequiredCredentials() ? this._networkMap = {} : null))
-        .pipe(filter(_ => this._hasRequiredCredentials() && this.networkTypes.length === 0))
+    this._credentialsChanged.pipe(tap(_ => this._clearFolders()))
+        .pipe(switchMap(_ => this._folderListObservable()))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(this._loadFolders.bind(this));
+
+    this._credentialsChanged.pipe(tap(_ => this._clearNetworks()))
         .pipe(switchMap(_ => this._networkListObservable()))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(this._loadNetworks.bind(this));
-
-    this._clusterService.clusterChanges.pipe(tap(_ => !this._hasRequiredCredentials() ? this.folders = [] : null))
-        .pipe(filter(_ => this._hasRequiredCredentials() && this.folders.length === 0))
-        .pipe(switchMap(_ => this._folderListObservable()))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(folders => this.folders = folders);
   }
 
   getNetworks(type: string): VSphereNetwork[] {
@@ -90,6 +114,25 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     this._unsubscribe.complete();
   }
 
+  private _handleClusterChange(cluster: ClusterEntity): void {
+    let markAsChanged = false;
+    const username = cluster.spec.cloud.vsphere.username;
+    const password = cluster.spec.cloud.vsphere.password;
+    if (username !== this._username) {
+      this._username = username;
+      markAsChanged = true;
+    }
+
+    if (password !== this._password) {
+      this._password = password;
+      markAsChanged = true;
+    }
+
+    if (markAsChanged) {
+      this._credentialsChanged.emit();
+    }
+  }
+
   private _loadNetworks(networks: VSphereNetwork[]): void {
     networks.forEach(network => {
       const find = this.networkTypes.find(x => x === network.type);
@@ -98,6 +141,20 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       }
       this._networkMap[network.type].push(network);
     });
+
+    if (networks.length > 0) {
+      this.networkLabel = NetworkState.Ready;
+      this._cdr.detectChanges();
+    }
+  }
+
+  private _loadFolders(folders: VSphereFolder[]): void {
+    this.folders = folders;
+
+    if (this.folders.length > 0) {
+      this.folderLabel = FolderState.Ready;
+      this._cdr.detectChanges();
+    }
   }
 
   private _hasRequiredCredentials(): boolean {
@@ -111,12 +168,25 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
         .username(this._clusterService.cluster.spec.cloud.vsphere.username)
         .password(this._clusterService.cluster.spec.cloud.vsphere.password)
         .datacenter(this._clusterService.datacenter)
-        .networks()
+        .networks(this._onNetworksLoading.bind(this))
         .pipe(map(networks => networks.sort((a, b) => a.name.localeCompare(b.name))))
         .pipe(catchError(() => {
-          this.form.get(Controls.VMNetName).setValue(undefined);
+          this._clearNetworks();
           return onErrorResumeNext(EMPTY);
         }));
+  }
+
+  private _onNetworksLoading(): void {
+    this._clearNetworks();
+    this.networkLabel = NetworkState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _clearNetworks(): void {
+    this._networkMap = {};
+    this.networkLabel = NetworkState.Empty;
+    this._networkCombobox.reset();
+    this._cdr.detectChanges();
   }
 
   private _folderListObservable(): Observable<VSphereFolder[]> {
@@ -124,11 +194,24 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
         .username(this._clusterService.cluster.spec.cloud.vsphere.username)
         .password(this._clusterService.cluster.spec.cloud.vsphere.password)
         .datacenter(this._clusterService.datacenter)
-        .folders()
+        .folders(this._onFoldersLoading.bind(this))
         .pipe(catchError(() => {
-          this.form.get(Controls.Folder).setValue(undefined);
+          this._clearFolders();
           return onErrorResumeNext(EMPTY);
         }));
+  }
+
+  private _onFoldersLoading(): void {
+    this._clearNetworks();
+    this.folderLabel = FolderState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _clearFolders(): void {
+    this.folders = [];
+    this.folderLabel = FolderState.Empty;
+    this._folderCombobox.reset();
+    this._cdr.detectChanges();
   }
 
   private _enable(enable: boolean, name: string): void {

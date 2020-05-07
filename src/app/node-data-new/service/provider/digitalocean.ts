@@ -1,5 +1,5 @@
-import {Observable} from 'rxjs';
-import {filter, switchMap} from 'rxjs/operators';
+import {Observable, of, onErrorResumeNext} from 'rxjs';
+import {catchError, filter, switchMap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../core/services';
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
@@ -18,7 +18,7 @@ export class NodeDataDigitalOceanProvider {
     this._nodeDataService.nodeData.spec.cloud.digitalocean.tags = tags;
   }
 
-  flavors(): Observable<DigitaloceanSizes> {
+  flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<DigitaloceanSizes> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
@@ -28,7 +28,14 @@ export class NodeDataDigitalOceanProvider {
                 cluster => this._presetService.provider(NodeProvider.DIGITALOCEAN)
                                .token(cluster.spec.cloud.digitalocean.token)
                                .credential(this._presetService.preset)
-                               .flavors()));
+                               .flavors(onLoadingCb)
+                               .pipe(catchError(_ => {
+                                 if (onError) {
+                                   onError();
+                                 }
+
+                                 return onErrorResumeNext(of(DigitaloceanSizes.newDigitalOceanSizes()));
+                               }))));
     }
   }
 }

@@ -39,3 +39,11 @@ export function filterObjectOptions(value: string, field: string, options: any):
   });
   return result;
 }
+
+export function isObjectEmpty(obj: object): boolean {
+  if (!!obj && typeof obj === 'object') {
+    return Object.values(obj).every(value => isObjectEmpty(value));
+  }
+
+  return !obj;
+}

@@ -20,7 +20,7 @@
         <mat-optgroup *ngFor="let group of groups"
                       [label]="group">
           <mat-option *ngFor="let option of getOptions(group) | filterBy: filterByInput"
-                      [value]="option[filterBy]">
+                      [value]="option[selectBy]">
             <ng-container *ngTemplateOutlet="optionTemplate; context: {$implicit: option}"></ng-container>
           </mat-option>
         </mat-optgroup>
@@ -28,7 +28,7 @@
 
       <ng-template #ungrouped>
         <mat-option *ngFor="let option of options | filterBy: filterByInput"
-                    [value]="option[filterBy]">
+                    [value]="option[selectBy]">
           <ng-container *ngTemplateOutlet="optionTemplate; context: {$implicit: option}"></ng-container>
         </mat-option>
       </ng-template>
@@ -51,9 +51,8 @@
         </div>
       </mat-select-trigger>
     </mat-select>
-    <mat-error *ngIf="required && form.get(controls.Select).hasError('required')">
-      {{label}} is
-      <strong>required</strong>.
+    <mat-error *ngIf="required && hasOptions() && form.get(controls.Select).hasError('required')">
+      {{label}} is <strong>required</strong>.
     </mat-error>
     <mat-hint *ngIf="hint">{{hint}}</mat-hint>
   </mat-form-field>

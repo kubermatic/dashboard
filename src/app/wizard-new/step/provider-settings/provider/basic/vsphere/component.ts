@@ -5,6 +5,7 @@ import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import {PresetsService} from '../../../../../../core/services';
 import {VSphereCloudSpec} from '../../../../../../shared/entity/cloud/VSphereCloudSpec';
 import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
+import {isObjectEmpty} from '../../../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
 
@@ -57,8 +58,7 @@ export class VSphereProviderBasicComponent extends BaseFormValidator implements 
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(
-            _ => this._presets.enablePresets(Object.values(Controls).every(control => !this.form.get(control).value)));
+        .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterService.cluster.spec.cloud.vsphere)));
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {Observable, of} from 'rxjs';
-import {catchError, takeUntil} from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
 import {AzureSizes} from '../../../../shared/entity/provider/azure/AzureSizeEntity';
@@ -59,17 +59,19 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   }
 
   private get _sizesObservable(): Observable<AzureSizes[]> {
-    return this._nodeDataService.azure.flavors(this._onSizeLoading.bind(this)).pipe(catchError(() => of([])));
+    return this._nodeDataService.azure.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
   }
 
   private _onSizeLoading(): void {
-    this.sizeLabel = SizeState.Loading;
     this._clearSize();
+    this.sizeLabel = SizeState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _clearSize(): void {
     this.selectedSize = '';
     this.sizes = [];
+    this.sizeLabel = SizeState.Empty;
     this._cdr.detectChanges();
   }
 

@@ -1,13 +1,22 @@
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {Observable, of} from 'rxjs';
-import {catchError, takeUntil} from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {PacketNodeSpec} from '../../../../shared/entity/node/PacketNodeSpec';
+import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
 import {PacketSize} from '../../../../shared/entity/packet/PacketSizeEntity';
+import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
 
 enum Controls {
   InstanceType = 'instanceType',
+}
+
+enum SizeState {
+  Ready = 'Plan',
+  Loading = 'Loading...',
+  Empty = 'No Plans Available',
 }
 
 @Component({
@@ -16,15 +25,19 @@ enum Controls {
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => PacketBasicNodeDataComponent), multi: true},
     {provide: NG_VALIDATORS, useExisting: forwardRef(() => PacketBasicNodeDataComponent), multi: true}
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PacketBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
   sizes: PacketSize[] = [];
   selectedSize = '';
+  sizeLabel = SizeState.Empty;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
+  constructor(
+      private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService,
+      private readonly _cdr: ChangeDetectorRef) {
     super();
   }
 
@@ -33,7 +46,7 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
       [Controls.InstanceType]: this._builder.control('', Validators.required),
     });
 
-    this._typesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultType.bind(this));
+    this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
   }
 
   ngOnDestroy(): void {
@@ -42,7 +55,15 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
   }
 
   onSizeChange(size: string): void {
-    this._nodeDataService.nodeData.spec.cloud.packet.instanceType = size;
+    this._nodeDataService.nodeData = {
+      spec: {
+        cloud: {
+          packet: {
+            instanceType: size,
+          } as PacketNodeSpec
+        } as NodeCloudSpec
+      } as NodeSpec
+    } as NodeData;
   }
 
   getPlanDetails(size: PacketSize): string {
@@ -65,14 +86,29 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
     return description ? `(${description})` : '';
   }
 
-  private get _typesObservable(): Observable<PacketSize[]> {
-    return this._nodeDataService.packet.flavors().pipe(catchError(() => of<PacketSize[]>()));
+  private get _sizesObservable(): Observable<PacketSize[]> {
+    return this._nodeDataService.packet.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
   }
 
-  private _setDefaultType(sizes: PacketSize[]): void {
+  private _onSizeLoading(): void {
+    this._clearSize();
+    this.sizeLabel = SizeState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _clearSize(): void {
+    this.selectedSize = '';
+    this.sizes = [];
+    this.sizeLabel = SizeState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _setDefaultSize(sizes: PacketSize[]): void {
     this.sizes = sizes.filter(size => size.memory !== 'N/A');
     if (this.sizes && this.sizes.length > 0) {
       this.selectedSize = this.sizes[0].name;
+      this.sizeLabel = SizeState.Ready;
+      this._cdr.detectChanges();
     }
   }
 }

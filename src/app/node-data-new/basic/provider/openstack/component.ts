@@ -1,15 +1,19 @@
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge, Observable} from 'rxjs';
-import {map, takeUntil} from 'rxjs/operators';
+import {delay, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {DatacenterService} from '../../../../core/services';
+import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
 
-import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
+import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/DatacenterEntity';
 import {OpenstackNodeSpec} from '../../../../shared/entity/node/OpenstackNodeSpec';
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
 import {OpenstackFlavor} from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {OperatingSystem} from '../../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
+import {ClusterType} from '../../../../shared/utils/cluster-utils/cluster-utils';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
+import {ClusterService} from '../../../../wizard-new/service/cluster';
 import {NodeDataService} from '../../../service/service';
 
 enum Controls {
@@ -20,6 +24,12 @@ enum Controls {
   Image = 'image',
 }
 
+enum FlavorState {
+  Ready = 'Flavor',
+  Loading = 'Loading...',
+  Empty = 'No Flavors Available',
+}
+
 @Component({
   selector: 'km-openstack-basic-node-data',
   styleUrls: ['./style.scss'],
@@ -28,14 +38,24 @@ enum Controls {
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OpenstackBasicNodeDataComponent), multi: true},
     {provide: NG_VALIDATORS, useExisting: forwardRef(() => OpenstackBasicNodeDataComponent), multi: true}
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpenstackBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  private _defaultImage = '';
+  private _images: DatacenterOperatingSystemOptions;
+
+  @ViewChild('flavorCombobox') private readonly _flavorCombobox: FilteredComboboxComponent;
+
   readonly Controls = Controls;
 
   flavors: OpenstackFlavor[] = [];
   selectedFlavor = '';
+  flavorsLabel = FlavorState.Empty;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
+  constructor(
+      private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService,
+      private readonly _clusterService: ClusterService, private readonly _datacenterService: DatacenterService,
+      private readonly _cdr: ChangeDetectorRef) {
     super();
   }
 
@@ -50,7 +70,21 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
     this._nodeDataService.nodeData = this._getNodeData();
     this._flavorsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultFlavor.bind(this));
-    this._setDefaultImage();
+
+    this._clusterService.datacenterChanges.pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
+        .pipe(tap(dc => this._images = dc.spec.openstack.images))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this._setDefaultImage(OperatingSystem.Ubuntu));
+
+    this._clusterService.clusterTypeChanges.pipe(filter(_ => !!this._images))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(
+            _ => this._isOpenshiftCluster() ? this._setDefaultImage(OperatingSystem.CentOS) :
+                                              this._setDefaultImage(OperatingSystem.Ubuntu));
+
+    this._nodeDataService.operatingSystemChanges.pipe(filter(_ => !!this._images))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(this._setDefaultImage.bind(this));
 
     merge(
         this.form.get(Controls.DiskSize).valueChanges,
@@ -81,49 +115,60 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
                     '';
   }
 
+  private _isOpenshiftCluster(): boolean {
+    return this._clusterService.clusterType === ClusterType.OpenShift;
+  }
+
   private get _flavorsObservable(): Observable<OpenstackFlavor[]> {
-    return this._nodeDataService.openstack.flavors(this._clearFlavor.bind(this))
-        .pipe(map((flavors: OpenstackFlavor[]) => flavors.sort((a, b) => {
-          return (a.memory < b.memory ? -1 : 1) * ('asc' ? 1 : -1);
-        })));
+    return this._nodeDataService.openstack.flavors(this._clearFlavor.bind(this), this._onFlavorLoading.bind(this))
+        .pipe(delay(3000))
+        .pipe(map(
+            (flavors: OpenstackFlavor[]) => flavors.sort((a, b) => (a.memory < b.memory ? -1 : 1) * ('asc' ? 1 : -1))));
   }
 
   private _clearFlavor(): void {
     this.flavors = [];
     this.selectedFlavor = '';
+    this.flavorsLabel = FlavorState.Empty;
+    this._flavorCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _onFlavorLoading(): void {
+    this._clearFlavor();
+    this.flavorsLabel = FlavorState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _setDefaultFlavor(flavors: OpenstackFlavor[]): void {
     this.flavors = flavors;
+    this.flavorsLabel = this.flavors.length > 0 ? FlavorState.Ready : FlavorState.Empty;
     if (this.flavors.length > 0) {
       this.selectedFlavor = this.flavors[0].slug;
     }
+
+    this._cdr.detectChanges();
   }
 
-  private _setDefaultImage(): void {
-    this._nodeDataService.openstack.dc().pipe(takeUntil(this._unsubscribe)).subscribe((dc: DataCenterEntity) => {
-      let coreosImage = '';
-      let centosImage = '';
-      let ubuntuImage = '';
+  private _setDefaultImage(os: OperatingSystem): void {
+    switch (os) {
+      case OperatingSystem.CentOS:
+        this._defaultImage = this._images.centos;
+        break;
+      case OperatingSystem.Ubuntu:
+        this._defaultImage = this._images.ubuntu;
+        break;
+      case OperatingSystem.SLES:
+        this._defaultImage = this._images.sles;
+        break;
+      case OperatingSystem.ContainerLinux:
+        this._defaultImage = this._images.coreos;
+        break;
+      default:
+        this._defaultImage = this._images.ubuntu;
+    }
 
-      for (const i in dc.spec.openstack.images) {
-        if (i === 'coreos') {
-          coreosImage = dc.spec.openstack.images[i];
-        } else if (i === 'centos') {
-          centosImage = dc.spec.openstack.images[i];
-        } else if (i === 'ubuntu') {
-          ubuntuImage = dc.spec.openstack.images[i];
-        }
-      }
-
-      if (this._nodeDataService.operatingSystem === OperatingSystem.Ubuntu) {
-        return this.form.get(Controls.Image).setValue(ubuntuImage);
-      } else if (this._nodeDataService.operatingSystem === OperatingSystem.CentOS) {
-        return this.form.get(Controls.Image).setValue(centosImage);
-      } else if (this._nodeDataService.operatingSystem === OperatingSystem.ContainerLinux) {
-        return this.form.get(Controls.Image).setValue(coreosImage);
-      }
-    });
+    this.form.get(Controls.Image).setValue(this._defaultImage);
   }
 
   private _getCurrentFlavor(): OpenstackFlavor {

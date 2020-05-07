@@ -1,6 +1,13 @@
 export class DigitaloceanSizes {
   standard: Standard[];
   optimized: Optimized[];
+
+  static newDigitalOceanSizes(): DigitaloceanSizes {
+    return {
+      standard: [],
+      optimized: [],
+    };
+  }
 }
 
 export class Standard {

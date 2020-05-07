@@ -1,9 +1,10 @@
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {EMPTY, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
+import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
 import {GCPNetwork, GCPSubnetwork} from '../../../../../../shared/entity/provider/gcp/GCP';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
@@ -14,25 +15,43 @@ enum Controls {
   SubNetwork = 'subNetwork',
 }
 
+enum NetworkState {
+  Ready = 'Network',
+  Empty = 'No Networks Available',
+  Loading = 'Loading...'
+}
+
+enum SubNetworkState {
+  Ready = 'Subnetwork',
+  Empty = 'No Subnetworks Available',
+  Loading = 'Loading...'
+}
+
 @Component({
   selector: 'km-wizard-gcp-provider-extended',
   templateUrl: './template.html',
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => GCPProviderExtendedComponent), multi: true},
     {provide: NG_VALIDATORS, useExisting: forwardRef(() => GCPProviderExtendedComponent), multi: true}
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GCPProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  networks: GCPNetwork[] = [];
-  selectedNetwork = '';
-  subNetworks: GCPSubnetwork[] = [];
-  selectedSubNetwork = '';
+  private _onNetworkChange = new EventEmitter<void>();
 
   readonly Controls = Controls;
 
+  networks: GCPNetwork[] = [];
+  networkLabel = NetworkState.Empty;
+  subNetworks: GCPSubnetwork[] = [];
+  subNetworkLabel = SubNetworkState.Empty;
+
+  @ViewChild('networkCombobox') private readonly _networkCombobox: FilteredComboboxComponent;
+  @ViewChild('subNetworkCombobox') private readonly _subNetworkCombobox: FilteredComboboxComponent;
+
   constructor(
       private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
-      private readonly _clusterService: ClusterService) {
+      private readonly _clusterService: ClusterService, private readonly _cdr: ChangeDetectorRef) {
     super('GCP Provider Extended');
   }
 
@@ -50,21 +69,28 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
             _ => this._presets.enablePresets(
                 Object.values(this._clusterService.cluster.spec.cloud.gcp).every(value => !value)));
 
-    this._clusterService.clusterChanges.pipe(tap(_ => !this._hasRequiredCredentials() ? this.networks = [] : null))
-        .pipe(filter(_ => this._hasRequiredCredentials() && this.networks.length === 0))
+    this._clusterService.clusterChanges
+        .pipe(tap(_ => {
+          if (!this._hasRequiredCredentials()) {
+            this._clearNetwork();
+            this._clearSubNetwork();
+          }
+        }))
+        .pipe(filter(_ => this._hasRequiredCredentials()))
         .pipe(switchMap(_ => this._networkListObservable()))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(this._loadNetworks.bind(this));
 
-    this._clusterService.clusterChanges.pipe(tap(_ => !this._hasRequiredCredentials() ? this.subNetworks = [] : null))
-        .pipe(filter(_ => this._hasRequiredCredentials() && this.subNetworks.length === 0))
+    this._onNetworkChange.pipe(filter(_ => this._hasRequiredCredentials()))
         .pipe(switchMap(_ => this._subnetworkListObservable()))
         .pipe(takeUntil(this._unsubscribe))
-        .subscribe(subnetworks => this.subNetworks = subnetworks);
+        .subscribe(this._loadSubNetworks.bind(this));
   }
 
   onNetworkChange(network: string): void {
     this._clusterService.cluster.spec.cloud.gcp.network = network;
+    this._clearSubNetwork();
+    this._onNetworkChange.emit();
   }
 
   onSubNetworkChange(subNetwork: string): void {
@@ -84,36 +110,71 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
     this._unsubscribe.complete();
   }
 
-  private _loadNetworks(networks: GCPNetwork[]): void {
-    this.networks = networks;
-  }
-
   private _hasRequiredCredentials(): boolean {
     return !!this._clusterService.cluster.spec.cloud.gcp &&
         !!this._clusterService.cluster.spec.cloud.gcp.serviceAccount;
   }
 
+  private _loadNetworks(networks: GCPNetwork[]): void {
+    this.networkLabel = networks.length > 0 ? NetworkState.Ready : NetworkState.Empty;
+    this.networks = networks;
+    this._cdr.detectChanges();
+  }
+
+  private _onNetworkLoading(): void {
+    this._clearNetwork();
+    this.networkLabel = NetworkState.Loading;
+    this._cdr.detectChanges();
+  }
+
   private _networkListObservable(): Observable<GCPNetwork[]> {
     return this._presets.provider(NodeProvider.GCP)
         .serviceAccount(this._clusterService.cluster.spec.cloud.gcp.serviceAccount)
-        .networks()
+        .networks(this._onNetworkLoading.bind(this))
         .pipe(map(networks => networks.sort((a, b) => a.name.localeCompare(b.name))))
         .pipe(catchError(() => {
-          this.form.get(Controls.Network).setValue(undefined);
+          this._clearNetwork();
           return onErrorResumeNext(EMPTY);
         }));
+  }
+
+  private _clearNetwork(): void {
+    this.networks = [];
+    this.networkLabel = NetworkState.Empty;
+    this._networkCombobox.reset();
+    this._subNetworkCombobox.reset();
+    this._cdr.detectChanges();
   }
 
   private _subnetworkListObservable(): Observable<GCPSubnetwork[]> {
     return this._presets.provider(NodeProvider.GCP)
         .serviceAccount(this._clusterService.cluster.spec.cloud.gcp.serviceAccount)
-        .network(this.form.get(Controls.Network).value)
-        .subnetworks(this._clusterService.datacenter)
+        .network(this._clusterService.cluster.spec.cloud.gcp.network)
+        .subnetworks(this._clusterService.datacenter, this._onSubNetworkLoading.bind(this))
         .pipe(map(networks => networks.sort((a, b) => a.name.localeCompare(b.name))))
         .pipe(catchError(() => {
-          this.form.get(Controls.SubNetwork).setValue(undefined);
+          this._clearSubNetwork();
           return onErrorResumeNext(EMPTY);
         }));
+  }
+
+  private _clearSubNetwork(): void {
+    this.subNetworks = [];
+    this.subNetworkLabel = SubNetworkState.Empty;
+    this._subNetworkCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _onSubNetworkLoading(): void {
+    this._clearSubNetwork();
+    this.subNetworkLabel = SubNetworkState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _loadSubNetworks(subNetworks: GCPSubnetwork[]): void {
+    this.subNetworkLabel = subNetworks.length > 0 ? SubNetworkState.Ready : SubNetworkState.Empty;
+    this.subNetworks = subNetworks;
+    this._cdr.detectChanges();
   }
 
   private _enable(enable: boolean, name: string): void {
