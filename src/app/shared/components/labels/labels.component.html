@@ -3,8 +3,7 @@
      fxLayoutGap="8px">
   <mat-chip-list *ngIf="labelKeys.length > 0">
     <div *ngFor="let labelKey of labelKeys; let i = index">
-      <mat-chip class="km-chip-container"
-                *ngIf="!limit || i < limit">
+      <mat-chip *ngIf="!limit || i < limit">
         <div>{{labelKey}}</div>
         <div class="km-chip-accent"
              *ngIf="!!labels[labelKey]">{{labels[labelKey]}}</div>
