@@ -36,7 +36,14 @@
             mat-sort-header>Name</th>
         <td mat-cell
             *matCellDef="let element"
-            [attr.id]="'km-clusters-' + element.name">{{element.name}}</td>
+            [attr.id]="'km-clusters-' + element.name">
+          <span class="km-eol-warning">
+            {{element.name}}
+            <i *ngIf="showEOLWarning(element)"
+               class="km-icon-warning with-margin"
+               matTooltip="Container Linux is going end-of-life on May 26, 2020."></i>
+          </span>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="labels">
