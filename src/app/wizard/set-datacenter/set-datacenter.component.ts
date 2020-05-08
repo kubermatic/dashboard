@@ -5,6 +5,7 @@ import {takeUntil} from 'rxjs/operators';
 
 import {DatacenterService, WizardService} from '../../core/services';
 import {
+  AuditLoggingSettings,
   ClusterEntity,
   getClusterProvider,
 } from '../../shared/entity/ClusterEntity';
@@ -70,9 +71,18 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
         datacenter.metadata.name
       ) {
         dc = datacenter;
-        if (dc.spec.enforceAuditLogging) {
-          this.enforceAuditLogging();
-        }
+
+        const usePodSecurityPolicyAdmissionPlugin = dc.spec
+          .enforcePodSecurityPolicy
+          ? true
+          : this.cluster.spec.usePodSecurityPolicyAdmissionPlugin;
+        const auditLogging = dc.spec.enforceAuditLogging
+          ? {enabled: true}
+          : this.cluster.spec.auditLogging;
+        this.enforceClusterProperties(
+          auditLogging,
+          usePodSecurityPolicyAdmissionPlugin
+        );
       }
     }
     this._wizardService.changeClusterDatacenter({
@@ -112,7 +122,10 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  enforceAuditLogging(): void {
+  enforceClusterProperties(
+    auditLogging: AuditLoggingSettings,
+    usePodSecurityPolicyAdmissionPlugin: boolean
+  ): void {
     this._wizardService.changeClusterSpec({
       name: this.cluster.name,
       type: this.cluster.type,
@@ -121,13 +134,10 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
       imagePullSecret: this.cluster.spec.openshift
         ? this.cluster.spec.openshift.imagePullSecret
         : '',
-      usePodSecurityPolicyAdmissionPlugin: this.cluster.spec
-        .usePodSecurityPolicyAdmissionPlugin,
+      usePodSecurityPolicyAdmissionPlugin,
       usePodNodeSelectorAdmissionPlugin: this.cluster.spec
         .usePodNodeSelectorAdmissionPlugin,
-      auditLogging: {
-        enabled: true,
-      },
+      auditLogging,
       valid: true,
     });
   }

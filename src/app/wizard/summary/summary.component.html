@@ -36,6 +36,10 @@
           <i [ngClass]="{'km-icon-disabled': !cluster.spec.usePodSecurityPolicyAdmissionPlugin, 'km-icon-running': cluster.spec.usePodSecurityPolicyAdmissionPlugin}"></i>
         </span>
         <span>Pod Security Policy</span>
+        <i *ngIf="!!datacenterFormData.datacenter.spec.enforcePodSecurityPolicy"
+           class="km-icon-warning km-warning"
+           matTooltip="Pod Security Policy is enforced by your admin in the chosen datacenter.">
+        </i>
       </div>
       <div class="km-summary-row">
         <span class="km-summary-left km-text">
