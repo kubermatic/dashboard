@@ -35,12 +35,7 @@ export class RouterLinkStubDirective {
   selector: '[routerLinkActive]',
 })
 export class RouterLinkActiveStubDirective {
-  private classes: string[] = [];
-
-  @Input() set routerLinkActive(data: string[] | string) {
-    const classes = Array.isArray(data) ? data : data.split(' ');
-    this.classes = classes.filter(c => !!c);
-  }
+  @Input() set routerLinkActive(data: string[] | string) {}
 }
 
 @Component({
