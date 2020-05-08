@@ -1,11 +1,12 @@
 import {FormControl} from '@angular/forms';
 import {TaintFormValidators} from './taint-form.validators';
 
-const tooLongValue = 'L1txKHOWiSe5dSUakuYw82l2IepfxxBMbDA6JFCzp1TeFQbEvQmpJkcBDU4Npv50';
+const tooLongValue =
+  'L1txKHOWiSe5dSUakuYw82l2IepfxxBMbDA6JFCzp1TeFQbEvQmpJkcBDU4Npv50';
 
 describe('TaintFormValidators', () => {
   it('taintEffect should be valid', () => {
-    const control = {value: `NoSchedule`} as FormControl;
+    const control = {value: 'NoSchedule'} as FormControl;
     const result = TaintFormValidators.taintValidEffect(control);
     expect(result).toBe(null);
   });

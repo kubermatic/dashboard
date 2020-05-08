@@ -17,8 +17,26 @@ import {NavigationComponent} from './components/navigation/navigation.component'
 import {ProjectSelectorComponent} from './components/navigation/project/selector.component';
 import {NotificationPanelComponent} from './components/notification-panel/notification-panel.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
-import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
-import {ApiService, Auth, AuthGuard, AuthzGuard, ClusterService, DatacenterService, HistoryService, LabelService, ParamsService, PresetsService, RBACService, WizardService,} from './services';
+import {
+  AuthInterceptor,
+  CheckTokenInterceptor,
+  ErrorNotificationsInterceptor,
+  LoaderInterceptor,
+} from './interceptors';
+import {
+  ApiService,
+  Auth,
+  AuthGuard,
+  AuthzGuard,
+  ClusterService,
+  DatacenterService,
+  HistoryService,
+  LabelService,
+  ParamsService,
+  PresetsService,
+  RBACService,
+  WizardService,
+} from './services';
 import {GlobalModule} from './services/global/global.module';
 import {NodeDataService} from './services/node-data/node-data.service';
 import {PreviousRouteService} from './services/previous-route/previous-route.service';
@@ -89,29 +107,25 @@ const interceptors: any[] = [
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,
     multi: true,
-  }
+  },
 ];
 
 @NgModule({
-  imports: [
-    ...modules,
-  ],
-  declarations: [
-    ...components,
-  ],
-  providers: [
-    ...services,
-    ...interceptors,
-  ],
-  exports: [
-    ...components,
-  ],
+  imports: [...modules],
+  declarations: [...components],
+  providers: [...services, ...interceptors],
+  exports: [...components],
 })
 export class CoreModule {
   static injector: Injector;
-  constructor(@Optional() @SkipSelf() parentModule: CoreModule, injector: Injector) {
+  constructor(
+    @Optional() @SkipSelf() parentModule: CoreModule,
+    injector: Injector
+  ) {
     if (parentModule) {
-      throw new Error('CoreModule is already loaded. Import it in the AppModule only');
+      throw new Error(
+        'CoreModule is already loaded. Import it in the AppModule only'
+      );
     }
 
     CoreModule.injector = injector;

@@ -24,25 +24,19 @@ describe('MachineNetworkStepComponent', () => {
   let component: MachineNetworkStepComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            MachineNetworkStepComponent,
-          ],
-          providers: [
-            WizardService,
-            ClusterService,
-            NodeDataService,
-            ClusterService,
-            {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
-            PresetsService,
-            DatacenterService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [MachineNetworkStepComponent],
+      providers: [
+        WizardService,
+        ClusterService,
+        NodeDataService,
+        ClusterService,
+        {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
+        PresetsService,
+        DatacenterService,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -22,17 +22,11 @@ describe('MachineNetworksComponent', () => {
   let fixture: ComponentFixture<MachineNetworksComponent>;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [MachineNetworksComponent],
-          providers: [
-            WizardService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [MachineNetworksComponent],
+      providers: [WizardService],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -50,14 +44,26 @@ describe('MachineNetworksComponent', () => {
   });
 
   it('expecting form to be valid', () => {
-    const machineNetworks = component.machineNetworksForm.get('machineNetworks') as FormArray;
-    machineNetworks.controls[0].setValue({cidr: '192.182.0.0/29', dnsServers: ['8.8.8.8'], gateway: '192.180.0.2'});
+    const machineNetworks = component.machineNetworksForm.get(
+      'machineNetworks'
+    ) as FormArray;
+    machineNetworks.controls[0].setValue({
+      cidr: '192.182.0.0/29',
+      dnsServers: ['8.8.8.8'],
+      gateway: '192.180.0.2',
+    });
     expect(machineNetworks.controls[0].valid).toBeTruthy();
   });
 
   it('expecting form to be invalid', () => {
-    const machineNetworks = component.machineNetworksForm.get('machineNetworks') as FormArray;
-    machineNetworks.controls[0].setValue({cidr: '192.182.0.0', dnsServers: ['8.8.8.8'], gateway: '192.180.0.2'});
+    const machineNetworks = component.machineNetworksForm.get(
+      'machineNetworks'
+    ) as FormArray;
+    machineNetworks.controls[0].setValue({
+      cidr: '192.182.0.0',
+      dnsServers: ['8.8.8.8'],
+      gateway: '192.180.0.2',
+    });
     expect(machineNetworks.controls[0].valid).toBeFalsy();
   });
 });

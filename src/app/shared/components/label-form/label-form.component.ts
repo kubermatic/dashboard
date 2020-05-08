@@ -1,5 +1,26 @@
-import {Component, DoCheck, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {AbstractControl, AsyncValidator, AsyncValidatorFn, ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_ASYNC_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validators} from '@angular/forms';
+import {
+  Component,
+  DoCheck,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+import {
+  AbstractControl,
+  AsyncValidator,
+  AsyncValidatorFn,
+  ControlValueAccessor,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  NG_ASYNC_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import {Observable, of, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -19,10 +40,11 @@ import {LabelFormValidators} from '../../validators/label-form.validators';
       provide: NG_ASYNC_VALIDATORS,
       useExisting: forwardRef(() => LabelFormComponent),
       multi: true,
-    }
+    },
   ],
 })
-export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccessor, AsyncValidator, DoCheck {
+export class LabelFormComponent
+  implements OnInit, OnDestroy, ControlValueAccessor, AsyncValidator, DoCheck {
   @Input() title = 'Labels';
   @Input() labels: object;
   @Input() inheritedLabels: object = {};
@@ -70,7 +92,9 @@ export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccess
     this.initialLabels = this.labels;
 
     // Setup labels form with label data.
-    const filteredLabels = Object.keys(LabelFormComponent.filterNullifiedKeys(this.labels));
+    const filteredLabels = Object.keys(
+      LabelFormComponent.filterNullifiedKeys(this.labels)
+    );
     if (filteredLabels.length > 0) {
       filteredLabels.forEach(key => {
         this._addLabel(key, this.labels[key]);
@@ -110,12 +134,15 @@ export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccess
     isDisabled ? this.form.disable() : this.form.enable();
   }
 
-  validate(control: AbstractControl): Observable<ValidationErrors|null> {
+  validate(control: AbstractControl): Observable<ValidationErrors | null> {
     return of(this.form.valid ? null : {invalid: true});
   }
 
   isRemovable(index: number): boolean {
-    return index < this.labelArray.length - 1 && !this._isInherited(Object.keys(this.labels)[index]);
+    return (
+      index < this.labelArray.length - 1 &&
+      !this._isInherited(Object.keys(this.labels)[index])
+    );
   }
 
   deleteLabel(index: number): void {
@@ -141,23 +168,27 @@ export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccess
   }
 
   private _addLabel(key = '', value = ''): void {
-    this.labelArray.push(this._formBuilder.group({
-      key: [
-        {value: key, disabled: this._isInherited(key)}, Validators.compose([
-          LabelFormValidators.labelKeyNameLength,
-          LabelFormValidators.labelKeyPrefixLength,
-          LabelFormValidators.labelKeyNamePattern,
-          LabelFormValidators.labelKeyPrefixPattern,
-        ]),
-        Validators.composeAsync(this.asyncKeyValidators)
-      ],
-      value: [
-        {value, disabled: this._isInherited(key)}, Validators.compose([
-          LabelFormValidators.labelValueLength,
-          LabelFormValidators.labelValuePattern,
-        ])
-      ],
-    }));
+    this.labelArray.push(
+      this._formBuilder.group({
+        key: [
+          {value: key, disabled: this._isInherited(key)},
+          Validators.compose([
+            LabelFormValidators.labelKeyNameLength,
+            LabelFormValidators.labelKeyPrefixLength,
+            LabelFormValidators.labelKeyNamePattern,
+            LabelFormValidators.labelKeyPrefixPattern,
+          ]),
+          Validators.composeAsync(this.asyncKeyValidators),
+        ],
+        value: [
+          {value, disabled: this._isInherited(key)},
+          Validators.compose([
+            LabelFormValidators.labelValueLength,
+            LabelFormValidators.labelValuePattern,
+          ]),
+        ],
+      })
+    );
   }
 
   private _validateKey(index: number): void {

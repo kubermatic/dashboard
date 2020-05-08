@@ -8,7 +8,13 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {CoreModule} from '../core/core.module';
-import {ApiService, ClusterService, DatacenterService, ProjectService, WizardService} from '../core/services';
+import {
+  ApiService,
+  ClusterService,
+  DatacenterService,
+  ProjectService,
+  WizardService,
+} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {StepsService} from '../core/services/wizard/steps.service';
@@ -38,7 +44,11 @@ import {VSphereNodeOptionsComponent} from '../node-data/vsphere-add-node/vsphere
 import {SharedModule} from '../shared/shared.module';
 import {masterVersionsFake} from '../testing/fake-data/cluster-spec.fake';
 import {fakeDigitaloceanCluster} from '../testing/fake-data/cluster.fake';
-import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../testing/router-stubs';
+import {
+  ActivatedRouteStub,
+  RouterStub,
+  RouterTestingModule,
+} from '../testing/router-stubs';
 import {ApiMockService, asyncData} from '../testing/services/api-mock.service';
 import {ClusterMockService} from '../testing/services/cluster-mock-service';
 import {DatacenterMockService} from '../testing/services/datacenter-mock.service';
@@ -80,92 +90,94 @@ describe('WizardComponent', () => {
   let component: WizardComponent;
 
   beforeEach(async(() => {
-    const apiMock = {'createCluster': jest.fn(), 'getCluster': jest.fn(), 'getMasterVersions': jest.fn()};
+    const apiMock = {
+      createCluster: jest.fn(),
+      getCluster: jest.fn(),
+      getMasterVersions: jest.fn(),
+    };
     apiMock.createCluster.mockReturnValue(asyncData(fakeDigitaloceanCluster()));
     apiMock.getCluster.mockReturnValue(asyncData(fakeDigitaloceanCluster()));
     apiMock.getMasterVersions.mockReturnValue(asyncData(masterVersionsFake()));
 
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            BrowserAnimationsModule,
-            RouterTestingModule,
-            SharedModule,
-            MatButtonToggleModule,
-            MatTabsModule,
-            MachineNetworksModule,
-            HttpClientModule,
-            CoreModule,
-          ],
-          declarations: [
-            ExtendedOptionsComponent,
-            CustomPresetsSettingsComponent,
-            WizardComponent,
-            ProgressComponent,
-            SetSettingsComponent,
-            ClusterSSHKeysComponent,
-            ClusterProviderSettingsComponent,
-            ClusterProviderOptionsComponent,
-            DigitaloceanClusterSettingsComponent,
-            AlibabaClusterSettingsComponent,
-            AWSClusterSettingsComponent,
-            AWSProviderOptionsComponent,
-            OpenstackClusterSettingsComponent,
-            OpenstackProviderOptionsComponent,
-            BringyourownClusterSettingsComponent,
-            GCPClusterSettingsComponent,
-            GCPProviderOptionsComponent,
-            HetznerClusterSettingsComponent,
-            VSphereClusterSettingsComponent,
-            VSphereProviderOptionsComponent,
-            AzureClusterSettingsComponent,
-            AzureProviderOptionsComponent,
-            PacketClusterSettingsComponent,
-            PacketNodeDataComponent,
-            PacketNodeOptionsComponent,
-            NodeDataComponent,
-            NodeDataOptionsComponent,
-            OpenstackNodeDataComponent,
-            OpenstackNodeOptionsComponent,
-            AlibabaNodeDataComponent,
-            AlibabaNodeOptionsComponent,
-            AWSNodeDataComponent,
-            AWSNodeOptionsComponent,
-            DigitaloceanNodeDataComponent,
-            DigitaloceanNodeOptionsComponent,
-            GCPNodeDataComponent,
-            GCPNodeOptionsComponent,
-            HetznerNodeDataComponent,
-            VSphereNodeDataComponent,
-            VSphereNodeOptionsComponent,
-            AzureNodeDataComponent,
-            AzureNodeOptionsComponent,
-            SetClusterSpecComponent,
-            SetMachineNetworksComponent,
-            SetProviderComponent,
-            SetDatacenterComponent,
-            KubeVirtClusterSettingsComponent,
-            KubeVirtNodeDataComponent,
-            SummaryComponent,
-          ],
-          providers: [
-            {provide: Router, useClass: RouterStub},
-            {provide: ClusterService, useClass: ClusterMockService},
-            {provide: ApiService, useClass: ApiMockService},
-            {provide: DatacenterService, useClass: DatacenterMockService},
-            {provide: ActivatedRoute, useClass: ActivatedRouteStub},
-            {provide: ProjectService, useClass: ProjectMockService},
-            {provide: SettingsService, useClass: SettingsMockService},
-            MatDialog,
-            WizardService,
-            NodeDataService,
-            StepsService,
-            ClusterNameGenerator,
-            GoogleAnalyticsService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        RouterTestingModule,
+        SharedModule,
+        MatButtonToggleModule,
+        MatTabsModule,
+        MachineNetworksModule,
+        HttpClientModule,
+        CoreModule,
+      ],
+      declarations: [
+        ExtendedOptionsComponent,
+        CustomPresetsSettingsComponent,
+        WizardComponent,
+        ProgressComponent,
+        SetSettingsComponent,
+        ClusterSSHKeysComponent,
+        ClusterProviderSettingsComponent,
+        ClusterProviderOptionsComponent,
+        DigitaloceanClusterSettingsComponent,
+        AlibabaClusterSettingsComponent,
+        AWSClusterSettingsComponent,
+        AWSProviderOptionsComponent,
+        OpenstackClusterSettingsComponent,
+        OpenstackProviderOptionsComponent,
+        BringyourownClusterSettingsComponent,
+        GCPClusterSettingsComponent,
+        GCPProviderOptionsComponent,
+        HetznerClusterSettingsComponent,
+        VSphereClusterSettingsComponent,
+        VSphereProviderOptionsComponent,
+        AzureClusterSettingsComponent,
+        AzureProviderOptionsComponent,
+        PacketClusterSettingsComponent,
+        PacketNodeDataComponent,
+        PacketNodeOptionsComponent,
+        NodeDataComponent,
+        NodeDataOptionsComponent,
+        OpenstackNodeDataComponent,
+        OpenstackNodeOptionsComponent,
+        AlibabaNodeDataComponent,
+        AlibabaNodeOptionsComponent,
+        AWSNodeDataComponent,
+        AWSNodeOptionsComponent,
+        DigitaloceanNodeDataComponent,
+        DigitaloceanNodeOptionsComponent,
+        GCPNodeDataComponent,
+        GCPNodeOptionsComponent,
+        HetznerNodeDataComponent,
+        VSphereNodeDataComponent,
+        VSphereNodeOptionsComponent,
+        AzureNodeDataComponent,
+        AzureNodeOptionsComponent,
+        SetClusterSpecComponent,
+        SetMachineNetworksComponent,
+        SetProviderComponent,
+        SetDatacenterComponent,
+        KubeVirtClusterSettingsComponent,
+        KubeVirtNodeDataComponent,
+        SummaryComponent,
+      ],
+      providers: [
+        {provide: Router, useClass: RouterStub},
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: ApiService, useClass: ApiMockService},
+        {provide: DatacenterService, useClass: DatacenterMockService},
+        {provide: ActivatedRoute, useClass: ActivatedRouteStub},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: SettingsService, useClass: SettingsMockService},
+        MatDialog,
+        WizardService,
+        NodeDataService,
+        StepsService,
+        ClusterNameGenerator,
+        GoogleAnalyticsService,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

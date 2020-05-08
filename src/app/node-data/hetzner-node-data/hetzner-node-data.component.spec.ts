@@ -25,24 +25,18 @@ describe('HetznerNodeDataComponent', () => {
   let component: HetznerNodeDataComponent;
 
   beforeEach(async(() => {
-    const apiMock = {'getHetznerTypes': jest.fn()};
+    const apiMock = {getHetznerTypes: jest.fn()};
     apiMock.getHetznerTypes.mockReturnValue(asyncData(fakeHetznerTypes()));
 
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            HetznerNodeDataComponent,
-          ],
-          providers: [
-            WizardService,
-            NodeDataService,
-            {provide: ApiService, useValue: apiMock},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [HetznerNodeDataComponent],
+      providers: [
+        WizardService,
+        NodeDataService,
+        {provide: ApiService, useValue: apiMock},
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -8,26 +8,20 @@ import {SharedModule} from '../../shared.module';
 
 import {RelativeTimeComponent} from './relative-time.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 describe('RelativeTimeComponent', () => {
   let fixture: ComponentFixture<RelativeTimeComponent>;
   let component: RelativeTimeComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [...modules],
-          providers: [
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-            {provide: MAT_DIALOG_DATA, useValue: {}},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: MAT_DIALOG_DATA, useValue: {}},
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -36,6 +30,6 @@ describe('RelativeTimeComponent', () => {
   });
 
   it('should initialize', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 });

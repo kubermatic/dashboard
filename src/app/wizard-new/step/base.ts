@@ -8,11 +8,15 @@ export class StepBase extends BaseFormValidator {
   }
 
   control(name: string): AbstractControl {
-    return this.form.controls[name] ? this.form.controls[name] : {} as AbstractControl;
+    return this.form.controls[name]
+      ? this.form.controls[name]
+      : ({} as AbstractControl);
   }
 
   controlValue(name: string): any {
-    return this.form.controls[name] ? this.form.controls[name].value : undefined;
+    return this.form.controls[name]
+      ? this.form.controls[name].value
+      : undefined;
   }
 
   next(): void {
@@ -38,9 +42,11 @@ export class StepBase extends BaseFormValidator {
 
   private _reset(controls: string[] = []): void {
     if (this.form.invalid) {
-      Object.keys(this.form.controls).filter(key => !controls.includes(key)).forEach(key => {
-        this.form.reset(key);
-      });
+      Object.keys(this.form.controls)
+        .filter(key => !controls.includes(key))
+        .forEach(key => {
+          this.form.reset(key);
+        });
     }
   }
 }

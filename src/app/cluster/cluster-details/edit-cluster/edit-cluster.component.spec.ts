@@ -1,12 +1,21 @@
 import {EventEmitter} from '@angular/core';
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Subject} from 'rxjs';
 
 import {CoreModule} from '../../../core/core.module';
-import {ClusterService, ProviderSettingsPatch} from '../../../core/services/cluster/cluster.service';
+import {
+  ClusterService,
+  ProviderSettingsPatch,
+} from '../../../core/services/cluster/cluster.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {doPatchCloudSpecFake} from '../../../testing/fake-data/cloud-spec.fake';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
@@ -42,38 +51,36 @@ describe('EditClusterComponent', () => {
 
   beforeEach(async(() => {
     const clusterServiceMock = {
-      'patch': jest.fn(),
-      'changeProviderSettingsPatch': jest.fn(),
-      'providerSettingsPatchChanges$': new EventEmitter<ProviderSettingsPatch>(),
-      'onClusterUpdate': new Subject<void>(),
+      patch: jest.fn(),
+      changeProviderSettingsPatch: jest.fn(),
+      providerSettingsPatchChanges$: new EventEmitter<ProviderSettingsPatch>(),
+      onClusterUpdate: new Subject<void>(),
     };
-    editClusterSpy = clusterServiceMock.patch.mockReturnValue(asyncData(fakeDigitaloceanCluster()));
+    editClusterSpy = clusterServiceMock.patch.mockReturnValue(
+      asyncData(fakeDigitaloceanCluster())
+    );
 
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            EditClusterComponent,
-            EditProviderSettingsComponent,
-            AWSProviderSettingsComponent,
-            DigitaloceanProviderSettingsComponent,
-            HetznerProviderSettingsComponent,
-            OpenstackProviderSettingsComponent,
-            VSphereProviderSettingsComponent,
-            AzureProviderSettingsComponent,
-            PacketProviderSettingsComponent,
-            GCPProviderSettingsComponent,
-            KubevirtProviderSettingsComponent,
-            AlibabaProviderSettingsComponent,
-          ],
-          providers: [
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-            {provide: ClusterService, useValue: clusterServiceMock},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [
+        EditClusterComponent,
+        EditProviderSettingsComponent,
+        AWSProviderSettingsComponent,
+        DigitaloceanProviderSettingsComponent,
+        HetznerProviderSettingsComponent,
+        OpenstackProviderSettingsComponent,
+        VSphereProviderSettingsComponent,
+        AzureProviderSettingsComponent,
+        PacketProviderSettingsComponent,
+        GCPProviderSettingsComponent,
+        KubevirtProviderSettingsComponent,
+        AlibabaProviderSettingsComponent,
+      ],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: ClusterService, useValue: clusterServiceMock},
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(async(() => {
@@ -88,8 +95,8 @@ describe('EditClusterComponent', () => {
   }));
 
   it('should create the edit cluster component', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 
   it('should have valid form after creating', () => {
     expect(component.form.valid).toBeTruthy();
@@ -106,13 +113,13 @@ describe('EditClusterComponent', () => {
   });
 
   it('should call editCluster method', fakeAsync(() => {
-       component.providerSettingsPatch = doPatchCloudSpecFake();
-       fixture.detectChanges();
+    component.providerSettingsPatch = doPatchCloudSpecFake();
+    fixture.detectChanges();
 
-       component.form.controls.name.patchValue('new-cluster-name');
-       component.editCluster();
-       tick();
+    component.form.controls.name.patchValue('new-cluster-name');
+    component.editCluster();
+    tick();
 
-       expect(editClusterSpy).toHaveBeenCalled();
-     }));
+    expect(editClusterSpy).toHaveBeenCalled();
+  }));
 });

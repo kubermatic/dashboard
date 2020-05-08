@@ -1,17 +1,38 @@
 import {HttpClientModule} from '@angular/common/http';
-import {async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  discardPeriodicTasks,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, Auth, ClusterService, DatacenterService, ProjectService, UserService} from '../../core/services';
+import {
+  ApiService,
+  Auth,
+  ClusterService,
+  DatacenterService,
+  ProjectService,
+  UserService,
+} from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeAWSCluster} from '../../testing/fake-data/cluster.fake';
 import {fakeHealth} from '../../testing/fake-data/health.fake';
-import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../testing/router-stubs';
-import {ApiMockService, asyncData} from '../../testing/services/api-mock.service';
+import {
+  ActivatedRouteStub,
+  RouterStub,
+  RouterTestingModule,
+} from '../../testing/router-stubs';
+import {
+  ApiMockService,
+  asyncData,
+} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../testing/services/auth-mock.service';
 import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
@@ -21,7 +42,6 @@ import {UserMockService} from '../../testing/services/user-mock.service';
 
 import {ClusterListComponent} from './cluster-list.component';
 
-
 describe('ClusterListComponent', () => {
   let fixture: ComponentFixture<ClusterListComponent>;
   let component: ClusterListComponent;
@@ -29,36 +49,34 @@ describe('ClusterListComponent', () => {
   let activatedRoute: ActivatedRouteStub;
 
   beforeEach(async(() => {
-    const clusterServiceMock = {'clusters': jest.fn(), 'health': jest.fn()};
-    getClustersSpy = clusterServiceMock.clusters.mockReturnValue(asyncData([fakeAWSCluster()]));
+    const clusterServiceMock = {clusters: jest.fn(), health: jest.fn()};
+    getClustersSpy = clusterServiceMock.clusters.mockReturnValue(
+      asyncData([fakeAWSCluster()])
+    );
     clusterServiceMock.health.mockReturnValue(asyncData([fakeHealth()]));
 
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            HttpClientModule,
-            BrowserAnimationsModule,
-            RouterTestingModule,
-            SharedModule,
-          ],
-          declarations: [
-            ClusterListComponent,
-          ],
-          providers: [
-            {provide: ApiService, useValue: ApiMockService},
-            {provide: ClusterService, useValue: clusterServiceMock},
-            {provide: Auth, useClass: AuthMockService},
-            {provide: ActivatedRoute, useClass: ActivatedRouteStub},
-            {provide: UserService, useClass: UserMockService},
-            {provide: Router, useClass: RouterStub},
-            {provide: AppConfigService, useClass: AppConfigMockService},
-            {provide: DatacenterService, useClass: DatacenterMockService},
-            {provide: ProjectService, useClass: ProjectMockService},
-            {provide: SettingsService, useClass: SettingsMockService},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        RouterTestingModule,
+        SharedModule,
+      ],
+      declarations: [ClusterListComponent],
+      providers: [
+        {provide: ApiService, useValue: ApiMockService},
+        {provide: ClusterService, useValue: clusterServiceMock},
+        {provide: Auth, useClass: AuthMockService},
+        {provide: ActivatedRoute, useClass: ActivatedRouteStub},
+        {provide: UserService, useClass: UserMockService},
+        {provide: Router, useClass: RouterStub},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: DatacenterService, useClass: DatacenterMockService},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: SettingsService, useClass: SettingsMockService},
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -70,40 +88,39 @@ describe('ClusterListComponent', () => {
   });
 
   it('should create the cluster list cmp', fakeAsync(() => {
-       expect(component).toBeTruthy();
-       fixture.detectChanges();
-       discardPeriodicTasks();
-     }));
+    expect(component).toBeTruthy();
+    fixture.detectChanges();
+    discardPeriodicTasks();
+  }));
 
   it('should get cluster list', fakeAsync(() => {
-       fixture.detectChanges();
-       tick(1);
+    fixture.detectChanges();
+    tick(1);
 
-       const expectedCluster = fakeAWSCluster();
-       // @ts-ignore
-       expectedCluster.creationTimestamp = expect.any(Date);
+    const expectedCluster = fakeAWSCluster();
+    expectedCluster.creationTimestamp = expect.any(Date);
 
-       expect(getClustersSpy).toHaveBeenCalled();
-       expect(component.clusters).toEqual([expectedCluster]);
-       discardPeriodicTasks();
-     }));
+    expect(getClustersSpy).toHaveBeenCalled();
+    expect(component.clusters).toEqual([expectedCluster]);
+    discardPeriodicTasks();
+  }));
 
   it('should render cluster list', fakeAsync(() => {
-       component.isInitialized = true;
-       fixture.detectChanges();
+    component.isInitialized = true;
+    fixture.detectChanges();
 
-       const de = fixture.debugElement.query(By.css('.km-with-table-header'));
+    const de = fixture.debugElement.query(By.css('.km-with-table-header'));
 
-       expect(de).not.toBeNull();
-       discardPeriodicTasks();
-     }));
+    expect(de).not.toBeNull();
+    discardPeriodicTasks();
+  }));
 
   it('should not render cluster list', fakeAsync(() => {
-       fixture.detectChanges();
+    fixture.detectChanges();
 
-       const de = fixture.debugElement.query(By.css('.km-no-item'));
+    const de = fixture.debugElement.query(By.css('.km-no-item'));
 
-       expect(de).toBeNull();
-       discardPeriodicTasks();
-     }));
+    expect(de).toBeNull();
+    discardPeriodicTasks();
+  }));
 });

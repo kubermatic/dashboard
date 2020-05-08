@@ -1,5 +1,18 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {
+  FormBuilder,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  Validators,
+} from '@angular/forms';
 import {merge, Observable} from 'rxjs';
 import {delay, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../../../../core/services';
@@ -35,16 +48,26 @@ enum FlavorState {
   styleUrls: ['./style.scss'],
   templateUrl: './template.html',
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OpenstackBasicNodeDataComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => OpenstackBasicNodeDataComponent), multi: true}
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => OpenstackBasicNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => OpenstackBasicNodeDataComponent),
+      multi: true,
+    },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpenstackBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class OpenstackBasicNodeDataComponent extends BaseFormValidator
+  implements OnInit, OnDestroy {
   private _defaultImage = '';
   private _images: DatacenterOperatingSystemOptions;
 
-  @ViewChild('flavorCombobox') private readonly _flavorCombobox: FilteredComboboxComponent;
+  @ViewChild('flavorCombobox')
+  private readonly _flavorCombobox: FilteredComboboxComponent;
 
   readonly Controls = Controls;
 
@@ -53,9 +76,12 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   flavorsLabel = FlavorState.Empty;
 
   constructor(
-      private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService,
-      private readonly _clusterService: ClusterService, private readonly _datacenterService: DatacenterService,
-      private readonly _cdr: ChangeDetectorRef) {
+    private readonly _builder: FormBuilder,
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _clusterService: ClusterService,
+    private readonly _datacenterService: DatacenterService,
+    private readonly _cdr: ChangeDetectorRef
+  ) {
     super();
   }
 
@@ -69,30 +95,37 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     });
 
     this._nodeDataService.nodeData = this._getNodeData();
-    this._flavorsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultFlavor.bind(this));
+    this._flavorsObservable
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._setDefaultFlavor.bind(this));
 
-    this._clusterService.datacenterChanges.pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
-        .pipe(tap(dc => this._images = dc.spec.openstack.images))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._setDefaultImage(OperatingSystem.Ubuntu));
+    this._clusterService.datacenterChanges
+      .pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
+      .pipe(tap(dc => (this._images = dc.spec.openstack.images)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this._setDefaultImage(OperatingSystem.Ubuntu));
 
-    this._clusterService.clusterTypeChanges.pipe(filter(_ => !!this._images))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(
-            _ => this._isOpenshiftCluster() ? this._setDefaultImage(OperatingSystem.CentOS) :
-                                              this._setDefaultImage(OperatingSystem.Ubuntu));
+    this._clusterService.clusterTypeChanges
+      .pipe(filter(_ => !!this._images))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ =>
+        this._isOpenshiftCluster()
+          ? this._setDefaultImage(OperatingSystem.CentOS)
+          : this._setDefaultImage(OperatingSystem.Ubuntu)
+      );
 
-    this._nodeDataService.operatingSystemChanges.pipe(filter(_ => !!this._images))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(this._setDefaultImage.bind(this));
+    this._nodeDataService.operatingSystemChanges
+      .pipe(filter(_ => !!this._images))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._setDefaultImage.bind(this));
 
     merge(
-        this.form.get(Controls.DiskSize).valueChanges,
-        this.form.get(Controls.Image).valueChanges,
-        this.form.get(Controls.UseFloatingIP).valueChanges,
-        )
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
+      this.form.get(Controls.DiskSize).valueChanges,
+      this.form.get(Controls.Image).valueChanges,
+      this.form.get(Controls.UseFloatingIP).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
 
   ngOnDestroy(): void {
@@ -110,9 +143,11 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
   flavorDisplayName(slug: string): string {
     const flavor = this.flavors.find(flavor => flavor.slug === slug);
-    return flavor ? `${flavor.slug} - ${flavor.memory / 1024} GB RAM, ${flavor.vcpus} CPU${
-                        (flavor.vcpus !== 1) ? 's' : ''}, ${flavor.disk} GB Disk` :
-                    '';
+    return flavor
+      ? `${flavor.slug} - ${flavor.memory / 1024} GB RAM, ${flavor.vcpus} CPU${
+          flavor.vcpus !== 1 ? 's' : ''
+        }, ${flavor.disk} GB Disk`
+      : '';
   }
 
   private _isOpenshiftCluster(): boolean {
@@ -120,10 +155,14 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   }
 
   private get _flavorsObservable(): Observable<OpenstackFlavor[]> {
-    return this._nodeDataService.openstack.flavors(this._clearFlavor.bind(this), this._onFlavorLoading.bind(this))
-        .pipe(delay(3000))
-        .pipe(map(
-            (flavors: OpenstackFlavor[]) => flavors.sort((a, b) => (a.memory < b.memory ? -1 : 1) * ('asc' ? 1 : -1))));
+    return this._nodeDataService.openstack
+      .flavors(this._clearFlavor.bind(this), this._onFlavorLoading.bind(this))
+      .pipe(delay(3000))
+      .pipe(
+        map((flavors: OpenstackFlavor[]) =>
+          flavors.sort((a, b) => (a.memory < b.memory ? -1 : 1))
+        )
+      );
   }
 
   private _clearFlavor(): void {
@@ -142,7 +181,8 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
   private _setDefaultFlavor(flavors: OpenstackFlavor[]): void {
     this.flavors = flavors;
-    this.flavorsLabel = this.flavors.length > 0 ? FlavorState.Ready : FlavorState.Empty;
+    this.flavorsLabel =
+      this.flavors.length > 0 ? FlavorState.Ready : FlavorState.Empty;
     if (this.flavors.length > 0) {
       this.selectedFlavor = this.flavors[0].slug;
     }
@@ -173,17 +213,21 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
   private _getCurrentFlavor(): OpenstackFlavor {
     for (const flavor of this.flavors) {
-      if (flavor.slug === this._nodeDataService.nodeData.spec.cloud.openstack.flavor) {
+      if (
+        flavor.slug ===
+        this._nodeDataService.nodeData.spec.cloud.openstack.flavor
+      ) {
         return flavor;
       }
     }
   }
 
   private _setDiskSize(): number {
-    return this._getCurrentFlavor() && this.form.get(Controls.DiskSize).value > 0 &&
-            this.form.get(Controls.DiskSize).value !== this._getCurrentFlavor().disk ?
-        this.form.get(Controls.DiskSize).value :
-        null;
+    return this._getCurrentFlavor() &&
+      this.form.get(Controls.DiskSize).value > 0 &&
+      this.form.get(Controls.DiskSize).value !== this._getCurrentFlavor().disk
+      ? this.form.get(Controls.DiskSize).value
+      : null;
   }
 
   private _getNodeData(): NodeData {

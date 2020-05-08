@@ -1,16 +1,28 @@
 import {CommonModule} from '@angular/common';
-import {Component, Directive, HostListener, Injectable, Input, NgModule} from '@angular/core';
+import {
+  Component,
+  Directive,
+  HostListener,
+  Injectable,
+  Input,
+  NgModule,
+} from '@angular/core';
 import {convertToParamMap, NavigationExtras, ParamMap} from '@angular/router';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Subject} from 'rxjs/Subject';
 
-export {ActivatedRoute, Router, RouterLink, RouterOutlet} from '@angular/router';
+export {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterOutlet,
+} from '@angular/router';
 
 @Directive({
-  selector: '[routerLink]',  // tslint:disable-line
+  selector: '[routerLink]',
 })
 export class RouterLinkStubDirective {
-  @Input('routerLink') linkParams: any;  // tslint:disable-line
+  @Input('routerLink') linkParams: any;
   navigatedTo: any = null;
 
   @HostListener('click')
@@ -20,24 +32,22 @@ export class RouterLinkStubDirective {
 }
 
 @Directive({
-  selector: '[routerLinkActive]',  // tslint:disable-line
+  selector: '[routerLinkActive]',
 })
 export class RouterLinkActiveStubDirective {
-  // @ts-ignore
   private classes: string[] = [];
 
-  @Input() set routerLinkActive(data: string[]|string) {  // tslint:disable-line
+  @Input() set routerLinkActive(data: string[] | string) {
     const classes = Array.isArray(data) ? data : data.split(' ');
-    this.classes = classes.filter((c) => !!c);
+    this.classes = classes.filter(c => !!c);
   }
 }
 
 @Component({
-  selector: 'router-outlet',  // tslint:disable-line
+  selector: 'router-outlet',
   template: '',
 })
-export class RouterOutletStubComponent {
-}
+export class RouterOutletStubComponent {}
 
 @Injectable()
 export class RouterStub {
@@ -53,24 +63,22 @@ export class ActivatedRouteStub {
 
   private _testParamMap: ParamMap;
 
-  get testParamMap() {  // tslint:disable-line
+  get testParamMap() {
     return this._testParamMap;
-  }  // tslint:disable-line
+  }
 
-  set testParamMap(params: {}) {  // tslint:disable-line
+  set testParamMap(params: {}) {
     this._testParamMap = convertToParamMap(params);
     this.subject.next(this._testParamMap);
   }
 
-  get snapshot() {  // tslint:disable-line
+  get snapshot() {
     return {paramMap: this.testParamMap};
   }
 }
 
 @NgModule({
-  imports: [
-    CommonModule,
-  ],
+  imports: [CommonModule],
   declarations: [
     RouterOutletStubComponent,
     RouterLinkActiveStubDirective,
@@ -82,5 +90,4 @@ export class ActivatedRouteStub {
     RouterLinkStubDirective,
   ],
 })
-export class RouterTestingModule {
-}
+export class RouterTestingModule {}

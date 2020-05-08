@@ -4,34 +4,28 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ApiService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeClusterWithMachineNetwork} from '../../testing/fake-data/clusterWithMachineNetworks.fake';
-import {nodeDataCentOsFake, nodeDataContainerLinuxFake, nodeDataFake, nodeDataRHELFake, nodeDataSLESFake} from '../../testing/fake-data/node.fake';
+import {
+  nodeDataCentOsFake,
+  nodeDataContainerLinuxFake,
+  nodeDataFake,
+  nodeDataRHELFake,
+  nodeDataSLESFake,
+} from '../../testing/fake-data/node.fake';
 import {ApiMockService} from '../../testing/services/api-mock.service';
 import {SummaryComponent} from './summary.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 describe('SummaryComponent', () => {
   let fixture: ComponentFixture<SummaryComponent>;
   let component: SummaryComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            SummaryComponent,
-          ],
-          providers: [
-            {provide: ApiService, useClass: ApiMockService},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [SummaryComponent],
+      providers: [{provide: ApiService, useClass: ApiMockService}],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -69,12 +63,15 @@ describe('SummaryComponent', () => {
   });
 
   it('should concat DNS Servers', () => {
-    const dnsServers = fakeClusterWithMachineNetwork().spec.machineNetworks[0].dnsServers;
+    const dnsServers = fakeClusterWithMachineNetwork().spec.machineNetworks[0]
+      .dnsServers;
     expect(component.getDnsServers(dnsServers)).toBe('8.8.8.8, 8.8.1.1');
   });
 
   it('should return true if there are no IPs left', () => {
     expect(component.noIpsLeft(fakeClusterWithMachineNetwork(), 3)).toBeFalsy();
-    expect(component.noIpsLeft(fakeClusterWithMachineNetwork(), 10)).toBeTruthy();
+    expect(
+      component.noIpsLeft(fakeClusterWithMachineNetwork(), 10)
+    ).toBeTruthy();
   });
 });

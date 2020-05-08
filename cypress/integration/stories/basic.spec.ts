@@ -1,12 +1,12 @@
-import {ClustersPage} from "../../pages/clusters.po";
-import {MembersPage} from "../../pages/members.po";
-import {ProjectsPage} from "../../pages/projects.po";
-import {WizardPage} from "../../pages/wizard.po";
-import {login, logout} from "../../utils/auth";
-import {Condition} from "../../utils/condition";
-import {Group, reloadUsers} from "../../utils/member";
-import {Datacenter, Provider} from "../../utils/provider";
-import {prefixedString} from "../../utils/random";
+import {ClustersPage} from '../../pages/clusters.po';
+import {MembersPage} from '../../pages/members.po';
+import {ProjectsPage} from '../../pages/projects.po';
+import {WizardPage} from '../../pages/wizard.po';
+import {login, logout} from '../../utils/auth';
+import {Condition} from '../../utils/condition';
+import {Group, reloadUsers} from '../../utils/member';
+import {Datacenter, Provider} from '../../utils/provider';
+import {prefixedString} from '../../utils/random';
 
 describe('Basic Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
@@ -34,7 +34,9 @@ describe('Basic Story', () => {
   });
 
   it('should create a new cluster', () => {
-    WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
+    WizardPage.getClusterNameInput()
+      .type(clusterName)
+      .should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn().click();
     WizardPage.getProviderBtn(Provider.BringYourOwn).click();
     WizardPage.getDatacenterBtn(Datacenter.Frankfurt).click();
@@ -55,7 +57,10 @@ describe('Basic Story', () => {
     reloadUsers();
     MembersPage.editMember(newUserEmail, Group.Viewer);
     reloadUsers();
-    MembersPage.getTableRowGroupColumn(newUserEmail).should(Condition.Contain, Group.Viewer);
+    MembersPage.getTableRowGroupColumn(newUserEmail).should(
+      Condition.Contain,
+      Group.Viewer
+    );
   });
 
   it('should delete created member', () => {
@@ -84,7 +89,9 @@ describe('Basic Story', () => {
     ProjectsPage.getEditProjectBtn(projectName).click();
 
     projectName = `${projectName}-edited`;
-    ProjectsPage.getEditDialogInput().type('-edited').should(Condition.HaveValue, projectName);
+    ProjectsPage.getEditDialogInput()
+      .type('-edited')
+      .should(Condition.HaveValue, projectName);
     ProjectsPage.getEditDialogConfirmBtn().click();
 
     ProjectsPage.waitForRefresh();

@@ -13,7 +13,6 @@ import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
   selector: 'km-vsphere-node-options',
   templateUrl: './vsphere-node-options.component.html',
 })
-
 export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() cloudSpec: CloudSpec;
@@ -23,8 +22,10 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(
-      private addNodeService: NodeDataService, private dcService: DatacenterService,
-      private readonly _wizardService: WizardService) {}
+    private addNodeService: NodeDataService,
+    private dcService: DatacenterService,
+    private readonly _wizardService: WizardService
+  ) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -32,7 +33,7 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
       template: new FormControl(this.nodeData.spec.cloud.vsphere.template),
     });
 
-    this.dcService.getDataCenter(this.cloudSpec.dc).subscribe((res) => {
+    this.dcService.getDataCenter(this.cloudSpec.dc).subscribe(res => {
       this.defaultTemplate = res.spec.vsphere.templates.ubuntu;
     });
 
@@ -40,19 +41,25 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
       this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
     });
 
-    this.addNodeService.nodeOperatingSystemDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.setImage(data);
-      this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
-    });
+    this.addNodeService.nodeOperatingSystemDataChanges$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        this.setImage(data);
+        this.addNodeService.changeNodeProviderData(
+          this.getVSphereOptionsData()
+        );
+      });
 
     this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
     if (this.nodeData.spec.cloud.vsphere.template === '') {
       this.setImage(this.nodeData.spec.operatingSystem);
     }
 
-    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.hideOptional = data.hideOptional;
-    });
+    this._wizardService.clusterSettingsFormViewChanged$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        this.hideOptional = data.hideOptional;
+      });
   }
 
   ngOnDestroy(): void {
@@ -61,7 +68,7 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
   }
 
   setImage(operatingSystem: OperatingSystemSpec): void {
-    this.dcService.getDataCenter(this.cloudSpec.dc).subscribe((res) => {
+    this.dcService.getDataCenter(this.cloudSpec.dc).subscribe(res => {
       let coreosTemplate = '';
       let centosTemplate = '';
       let ubuntuTemplate = '';
@@ -96,7 +103,7 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
   }
 
   getVSphereOptionsData(): NodeProviderData {
-    const isValid = !!this.nodeData.valid ? this.nodeData.valid : this.form.valid;
+    const isValid = this.nodeData.valid ? this.nodeData.valid : this.form.valid;
     const providerData: NodeProviderData = {
       spec: {
         vsphere: {
@@ -108,7 +115,7 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
       valid: isValid,
     };
 
-    if (!!this.form.controls.diskSizeGB.value) {
+    if (this.form.controls.diskSizeGB.value) {
       providerData.spec.vsphere.diskSizeGB = this.form.controls.diskSizeGB.value;
     }
 

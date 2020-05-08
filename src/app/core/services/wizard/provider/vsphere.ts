@@ -1,6 +1,9 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
-import {VSphereFolder, VSphereNetwork} from '../../../../shared/entity/provider/vsphere/VSphereEntity';
+import {
+  VSphereFolder,
+  VSphereNetwork,
+} from '../../../../shared/entity/provider/vsphere/VSphereEntity';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {Provider} from './provider';
 
@@ -12,9 +15,9 @@ export class VSphere extends Provider {
     super(http, provider);
 
     this._setRequiredHeaders(
-        VSphere.Header.Username,
-        VSphere.Header.Password,
-        VSphere.Header.Datacenter,
+      VSphere.Header.Username,
+      VSphere.Header.Password,
+      VSphere.Header.Datacenter
     );
   }
 
@@ -53,7 +56,9 @@ export class VSphere extends Provider {
       onLoadingCb();
     }
 
-    return this._http.get<VSphereNetwork[]>(this._networksUrl, {headers: this._headers});
+    return this._http.get<VSphereNetwork[]>(this._networksUrl, {
+      headers: this._headers,
+    });
   }
 
   folders(onLoadingCb: () => void = null): Observable<VSphereFolder[]> {
@@ -65,7 +70,9 @@ export class VSphere extends Provider {
       onLoadingCb();
     }
 
-    return this._http.get<VSphereFolder[]>(this._foldersUrl, {headers: this._headers});
+    return this._http.get<VSphereFolder[]>(this._foldersUrl, {
+      headers: this._headers,
+    });
   }
 }
 

@@ -1,5 +1,11 @@
 import {HttpClientModule} from '@angular/common/http';
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -7,7 +13,11 @@ import {Router} from '@angular/router';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../../../app-config.service';
-import {ClusterService, DatacenterService, NotificationService} from '../../../core/services';
+import {
+  ClusterService,
+  DatacenterService,
+  NotificationService,
+} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
@@ -37,26 +47,20 @@ describe('ClusterDeleteConfirmationComponent', () => {
   let clusterService: ClusterService;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            ClusterDeleteConfirmationComponent,
-          ],
-          providers: [
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-            {provide: ClusterService, useClass: ClusterMockService},
-            {provide: DatacenterService, useClass: DatacenterMockService},
-            {provide: Router, useClass: RouterStub},
-            GoogleAnalyticsService,
-            {provide: AppConfigService, useClass: AppConfigMockService},
-            {provide: SettingsService, useClass: SettingsMockService},
-            NotificationService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [ClusterDeleteConfirmationComponent],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: DatacenterService, useClass: DatacenterMockService},
+        {provide: Router, useClass: RouterStub},
+        GoogleAnalyticsService,
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: SettingsService, useClass: SettingsMockService},
+        NotificationService,
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -68,8 +72,8 @@ describe('ClusterDeleteConfirmationComponent', () => {
   });
 
   it('should initialize', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 
   it('should able add button', () => {
     component.projectID = fakeProject().id;
@@ -78,7 +82,9 @@ describe('ClusterDeleteConfirmationComponent', () => {
 
     fixture.detectChanges();
 
-    const input = fixture.debugElement.query(By.css('#km-delete-cluster-dialog-input'));
+    const input = fixture.debugElement.query(
+      By.css('#km-delete-cluster-dialog-input')
+    );
     const inputElement = input.nativeElement;
     inputElement.value = fakeDigitaloceanCluster().name;
 
@@ -88,17 +94,19 @@ describe('ClusterDeleteConfirmationComponent', () => {
   });
 
   it('should call deleteCluster method', fakeAsync(() => {
-       component.cluster = fakeDigitaloceanCluster();
-       component.datacenter = fakeDigitaloceanDatacenter();
-       component.inputName = fakeDigitaloceanCluster().name;
-       component.projectID = fakeProject().id;
+    component.cluster = fakeDigitaloceanCluster();
+    component.datacenter = fakeDigitaloceanDatacenter();
+    component.inputName = fakeDigitaloceanCluster().name;
+    component.projectID = fakeProject().id;
 
-       fixture.detectChanges();
-       const spyDeleteCluster = jest.spyOn(clusterService, 'delete').mockReturnValue(of(null));
+    fixture.detectChanges();
+    const spyDeleteCluster = jest
+      .spyOn(clusterService, 'delete')
+      .mockReturnValue(of(null));
 
-       component.deleteCluster();
-       tick();
+    component.deleteCluster();
+    tick();
 
-       expect(spyDeleteCluster).toHaveBeenCalled();
-     }));
+    expect(spyDeleteCluster).toHaveBeenCalled();
+  }));
 });

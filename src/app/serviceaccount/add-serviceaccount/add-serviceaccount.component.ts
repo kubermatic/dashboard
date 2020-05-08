@@ -17,9 +17,10 @@ export class AddServiceAccountComponent implements OnInit {
   addServiceAccountForm: FormGroup;
 
   constructor(
-      private readonly _apiService: ApiService,
-      private readonly _matDialogRef: MatDialogRef<AddServiceAccountComponent>,
-      private readonly _notificationService: NotificationService) {}
+    private readonly _apiService: ApiService,
+    private readonly _matDialogRef: MatDialogRef<AddServiceAccountComponent>,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.addServiceAccountForm = new FormGroup({
@@ -34,10 +35,14 @@ export class AddServiceAccountComponent implements OnInit {
       group: this.addServiceAccountForm.controls.group.value,
     };
 
-    this._apiService.createServiceAccount(this.project.id, createServiceAccount).pipe(first()).subscribe(() => {
-      this._matDialogRef.close(true);
-      this._notificationService.success(
-          `Service Account ${createServiceAccount.name} is added successfully to project ${this.project.name}`);
-    });
+    this._apiService
+      .createServiceAccount(this.project.id, createServiceAccount)
+      .pipe(first())
+      .subscribe(() => {
+        this._matDialogRef.close(true);
+        this._notificationService.success(
+          `Service Account ${createServiceAccount.name} is added successfully to project ${this.project.name}`
+        );
+      });
   }
 }

@@ -1,6 +1,6 @@
-// https://github.com/thymikee/jest-preset-angular#brief-explanation-of-config
-
-const tsJestPreset = require('jest-preset-angular/jest-preset').globals['ts-jest'];
+const tsJestPreset = require('jest-preset-angular/jest-preset').globals[
+  'ts-jest'
+];
 
 module.exports = {
   preset: 'jest-preset-angular',
@@ -11,6 +11,6 @@ module.exports = {
     'ts-jest': {
       ...tsJestPreset,
       tsConfig: 'src/tsconfig.spec.json',
-    }
-  }
+    },
+  },
 };

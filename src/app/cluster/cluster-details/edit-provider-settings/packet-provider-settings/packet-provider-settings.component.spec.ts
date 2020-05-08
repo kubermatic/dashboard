@@ -22,43 +22,35 @@ import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/vsp
 
 import {PacketProviderSettingsComponent} from './packet-provider-settings.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 describe('PacketProviderSettingsComponent', () => {
   let fixture: ComponentFixture<PacketProviderSettingsComponent>;
   let component: PacketProviderSettingsComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            EditProviderSettingsComponent,
-            AWSProviderSettingsComponent,
-            PacketProviderSettingsComponent,
-            HetznerProviderSettingsComponent,
-            OpenstackProviderSettingsComponent,
-            VSphereProviderSettingsComponent,
-            AzureProviderSettingsComponent,
-            DigitaloceanProviderSettingsComponent,
-            PacketProviderSettingsComponent,
-            GCPProviderSettingsComponent,
-            KubevirtProviderSettingsComponent,
-            AlibabaProviderSettingsComponent,
-          ],
-          providers: [
-            {provide: ApiService, useClass: ApiMockService},
-            {provide: ClusterService, useClass: ClusterMockService},
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [
+        EditProviderSettingsComponent,
+        AWSProviderSettingsComponent,
+        PacketProviderSettingsComponent,
+        HetznerProviderSettingsComponent,
+        OpenstackProviderSettingsComponent,
+        VSphereProviderSettingsComponent,
+        AzureProviderSettingsComponent,
+        DigitaloceanProviderSettingsComponent,
+        PacketProviderSettingsComponent,
+        GCPProviderSettingsComponent,
+        KubevirtProviderSettingsComponent,
+        AlibabaProviderSettingsComponent,
+      ],
+      providers: [
+        {provide: ApiService, useClass: ApiMockService},
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

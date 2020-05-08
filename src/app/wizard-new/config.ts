@@ -22,7 +22,7 @@ export enum StepRegistry {
 /**
  * Define all possible steps here.
  */
-export let steps: WizardStep[] = [
+export const steps: WizardStep[] = [
   WizardStep.newWizardStep(StepRegistry.Provider),
   WizardStep.newWizardStep(StepRegistry.Cluster),
   WizardStep.newWizardStep(StepRegistry.ProviderSettings),

@@ -60,10 +60,12 @@ export function fakeHetznerTypes(): HetznerTypes {
 }
 
 export function fakePacketSizes(): PacketSize[] {
-  return [{
-    name: 'x1.small.x86',
-    memory: '32GB',
-    cpus: [],
-    drives: [],
-  }];
+  return [
+    {
+      name: 'x1.small.x86',
+      memory: '32GB',
+      cpus: [],
+      drives: [],
+    },
+  ];
 }

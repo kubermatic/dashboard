@@ -8,7 +8,11 @@ import {debounceTime, takeUntil} from 'rxjs/operators';
 import {NotificationService, RBACService} from '../../../../core/services';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
-import {ClusterRoleName, CreateBinding, RoleName} from '../../../../shared/entity/RBACEntity';
+import {
+  ClusterRoleName,
+  CreateBinding,
+  RoleName,
+} from '../../../../shared/entity/RBACEntity';
 
 export enum Controls {
   Email = 'email',
@@ -22,7 +26,6 @@ export enum Controls {
   templateUrl: './add-binding.component.html',
   styleUrls: ['./add-binding.component.scss'],
 })
-
 export class AddBindingComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
@@ -36,9 +39,11 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(
-      private readonly _builder: FormBuilder, private readonly _rbacService: RBACService,
-      private readonly _matDialogRef: MatDialogRef<AddBindingComponent>,
-      private readonly _notificationService: NotificationService) {}
+    private readonly _builder: FormBuilder,
+    private readonly _rbacService: RBACService,
+    private readonly _matDialogRef: MatDialogRef<AddBindingComponent>,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.form = this._builder.group({
@@ -48,37 +53,48 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       [Controls.Namespace]: new FormControl(''),
     });
 
-    this._rbacService.getClusterRoleNames(this.cluster.id, this.datacenter.metadata.name, this.projectID)
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe((clusterRoles: ClusterRoleName[]) => {
-          if (clusterRoles.length > 0) {
-            this.clusterRoles = clusterRoles.sort((a, b) => {
-              return a.name.localeCompare(b.name);
-            });
-          } else {
-            this.clusterRoles = [];
-          }
-        });
+    this._rbacService
+      .getClusterRoleNames(
+        this.cluster.id,
+        this.datacenter.metadata.name,
+        this.projectID
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((clusterRoles: ClusterRoleName[]) => {
+        if (clusterRoles.length > 0) {
+          this.clusterRoles = clusterRoles.sort((a, b) => {
+            return a.name.localeCompare(b.name);
+          });
+        } else {
+          this.clusterRoles = [];
+        }
+      });
 
-    this._rbacService.getRoleNames(this.cluster.id, this.datacenter.metadata.name, this.projectID)
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe((roles: RoleName[]) => {
-          if (roles.length > 0) {
-            this.roles = roles.sort((a, b) => {
-              return a.name.localeCompare(b.name);
-            });
-          } else {
-            this.roles = [];
-          }
-        });
+    this._rbacService
+      .getRoleNames(
+        this.cluster.id,
+        this.datacenter.metadata.name,
+        this.projectID
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((roles: RoleName[]) => {
+        if (roles.length > 0) {
+          this.roles = roles.sort((a, b) => {
+            return a.name.localeCompare(b.name);
+          });
+        } else {
+          this.roles = [];
+        }
+      });
 
-    this.form.controls.role.valueChanges.pipe(debounceTime(1000))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe((data) => {
-          if (this.bindingType === 'namespace') {
-            this.checkNamespaceState();
-          }
-        });
+    this.form.controls.role.valueChanges
+      .pipe(debounceTime(1000))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        if (this.bindingType === 'namespace') {
+          this.checkNamespaceState();
+        }
+      });
 
     this.setValidators();
     this.checkNamespaceState();
@@ -122,10 +138,13 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   getRoleFormState(): string {
     let roleLength = 0;
     if (!!this.clusterRoles || !!this.roles) {
-      roleLength = this.bindingType === 'cluster' ? this.clusterRoles.length : this.roles.length;
+      roleLength =
+        this.bindingType === 'cluster'
+          ? this.clusterRoles.length
+          : this.roles.length;
     }
 
-    if (!!roleLength) {
+    if (roleLength) {
       return 'Role*';
     } else if (!roleLength) {
       return 'No Roles available';
@@ -135,7 +154,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   }
 
   getNamespaceFormState(): string {
-    const roleLength = !!this.roles ? this.roles.length : 0;
+    const roleLength = this.roles ? this.roles.length : 0;
 
     if (this.form.get(Controls.Role).value !== '') {
       return 'Namespace*';
@@ -149,9 +168,15 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   }
 
   checkNamespaceState(): void {
-    if (this.form.get(Controls.Role).value === '' && this.form.get(Controls.Namespace).enabled) {
+    if (
+      this.form.get(Controls.Role).value === '' &&
+      this.form.get(Controls.Namespace).enabled
+    ) {
       this.form.get(Controls.Namespace).disable();
-    } else if (this.form.get(Controls.Role).value !== '' && this.form.get(Controls.Namespace).disabled) {
+    } else if (
+      this.form.get(Controls.Role).value !== '' &&
+      this.form.get(Controls.Namespace).disabled
+    ) {
       this.form.get(Controls.Namespace).enable();
     }
   }
@@ -165,7 +190,9 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   }
 
   addBinding(): void {
-    this.bindingType === 'cluster' ? this.addClusterBinding() : this.addNamespaceBinding();
+    this.bindingType === 'cluster'
+      ? this.addClusterBinding()
+      : this.addNamespaceBinding();
   }
 
   addClusterBinding(): void {
@@ -181,14 +208,20 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     }
 
     this._rbacService
-        .createClusterBinding(
-            this.cluster.id, this.datacenter.metadata.name, this.projectID, this.form.controls.role.value,
-            clusterBinding)
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe((binding) => {
-          this._matDialogRef.close(binding);
-          this._notificationService.success(`${bindingName} has been added successfully`);
-        });
+      .createClusterBinding(
+        this.cluster.id,
+        this.datacenter.metadata.name,
+        this.projectID,
+        this.form.controls.role.value,
+        clusterBinding
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(binding => {
+        this._matDialogRef.close(binding);
+        this._notificationService.success(
+          `${bindingName} has been added successfully`
+        );
+      });
   }
 
   addNamespaceBinding(): void {
@@ -204,13 +237,20 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     }
 
     this._rbacService
-        .createBinding(
-            this.cluster.id, this.datacenter.metadata.name, this.projectID, this.form.controls.role.value,
-            this.form.controls.namespace.value, namespaceBinding)
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe((binding) => {
-          this._matDialogRef.close(binding);
-          this._notificationService.success(`${bindingName} has been added successfully`);
-        });
+      .createBinding(
+        this.cluster.id,
+        this.datacenter.metadata.name,
+        this.projectID,
+        this.form.controls.role.value,
+        this.form.controls.namespace.value,
+        namespaceBinding
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(binding => {
+        this._matDialogRef.close(binding);
+        this._notificationService.success(
+          `${bindingName} has been added successfully`
+        );
+      });
   }
 }

@@ -25,23 +25,19 @@ describe('DigitaloceanNodeDataComponent', () => {
   let component: DigitaloceanNodeDataComponent;
 
   beforeEach(async(() => {
-    const apiMock = {'getDigitaloceanSizes': jest.fn()};
-    apiMock.getDigitaloceanSizes.mockReturnValue(asyncData(fakeDigitaloceanSizes()));
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            DigitaloceanNodeDataComponent,
-          ],
-          providers: [
-            NodeDataService,
-            WizardService,
-            {provide: ApiService, useValue: apiMock},
-          ],
-        })
-        .compileComponents();
+    const apiMock = {getDigitaloceanSizes: jest.fn()};
+    apiMock.getDigitaloceanSizes.mockReturnValue(
+      asyncData(fakeDigitaloceanSizes())
+    );
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [DigitaloceanNodeDataComponent],
+      providers: [
+        NodeDataService,
+        WizardService,
+        {provide: ApiService, useValue: apiMock},
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

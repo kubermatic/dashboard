@@ -1,15 +1,28 @@
-import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
 
-import {ApiService, ProjectService, UserService} from '../../../../core/services';
+import {
+  ApiService,
+  ProjectService,
+  UserService,
+} from '../../../../core/services';
 import {AddSshKeyDialogComponent} from '../../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {MemberEntity} from '../../../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../../../shared/entity/ProjectEntity';
 import {SSHKeyEntity} from '../../../../shared/entity/SSHKeyEntity';
 import {GroupConfig} from '../../../../shared/model/Config';
-import {MemberUtils, Permission} from '../../../../shared/utils/member-utils/member-utils';
+import {
+  MemberUtils,
+  Permission,
+} from '../../../../shared/utils/member-utils/member-utils';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../service/cluster';
 
@@ -22,11 +35,20 @@ enum Controls {
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ClusterSSHKeysComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => ClusterSSHKeysComponent), multi: true}
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ClusterSSHKeysComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => ClusterSSHKeysComponent),
+      multi: true,
+    },
   ],
 })
-export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class ClusterSSHKeysComponent extends BaseFormValidator
+  implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
   private _keys: SSHKeyEntity[] = [];
@@ -35,10 +57,14 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
   private _groupConfig: GroupConfig;
 
   constructor(
-      private readonly _projectService: ProjectService, private readonly _userService: UserService,
-      private readonly _apiService: ApiService, private readonly _clusterService: ClusterService,
-      private readonly _dialog: MatDialog, private readonly _builder: FormBuilder,
-      private readonly _changeDetectorRef: ChangeDetectorRef) {
+    private readonly _projectService: ProjectService,
+    private readonly _userService: UserService,
+    private readonly _apiService: ApiService,
+    private readonly _clusterService: ClusterService,
+    private readonly _dialog: MatDialog,
+    private readonly _builder: FormBuilder,
+    private readonly _changeDetectorRef: ChangeDetectorRef
+  ) {
     super();
   }
 
@@ -55,18 +81,31 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
       [Controls.Keys]: this._builder.control([]),
     });
 
-    this._userService.loggedInUser.pipe(first()).subscribe(user => this._user = user);
+    this._userService.loggedInUser
+      .pipe(first())
+      .subscribe(user => (this._user = user));
 
-    this._projectService.selectedProject.pipe(tap(project => this._project = project))
-        .pipe(switchMap(_ => this._userService.currentUserGroup(this._project.id)))
-        .pipe(tap(group => this._groupConfig = this._userService.userGroupConfig(group)))
-        .pipe(switchMap(_ => this._apiService.getSSHKeys(this._project.id)))
-        .pipe(first())
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(sshKeys => this.keys = sshKeys);
+    this._projectService.selectedProject
+      .pipe(tap(project => (this._project = project)))
+      .pipe(
+        switchMap(_ => this._userService.currentUserGroup(this._project.id))
+      )
+      .pipe(
+        tap(
+          group =>
+            (this._groupConfig = this._userService.userGroupConfig(group))
+        )
+      )
+      .pipe(switchMap(_ => this._apiService.getSSHKeys(this._project.id)))
+      .pipe(first())
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(sshKeys => (this.keys = sshKeys));
 
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(() => this._clusterService.sshKeys = this._getSelectedKeys());
+    this.form.valueChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        () => (this._clusterService.sshKeys = this._getSelectedKeys())
+      );
   }
 
   ngOnDestroy(): void {
@@ -78,15 +117,18 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
     const dialogRef = this._dialog.open(AddSshKeyDialogComponent);
     dialogRef.componentInstance.projectID = this._project.id;
 
-    dialogRef.afterClosed()
-        .pipe(filter(result => result))
-        .pipe(first())
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(result => {
-          this._keys.push(result);
-          this.form.get(Controls.Keys).setValue([...this.form.get(Controls.Keys).value, result]);
-          this._changeDetectorRef.detectChanges();
-        });
+    dialogRef
+      .afterClosed()
+      .pipe(filter(result => result))
+      .pipe(first())
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(result => {
+        this._keys.push(result);
+        this.form
+          .get(Controls.Keys)
+          .setValue([...this.form.get(Controls.Keys).value, result]);
+        this._changeDetectorRef.detectChanges();
+      });
   }
 
   compareValues(a: SSHKeyEntity, b: SSHKeyEntity): boolean {
@@ -94,7 +136,12 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
   }
 
   canAdd(): boolean {
-    return MemberUtils.hasPermission(this._user, this._groupConfig, `sshKeys`, Permission.Create);
+    return MemberUtils.hasPermission(
+      this._user,
+      this._groupConfig,
+      'sshKeys',
+      Permission.Create
+    );
   }
 
   hasKeys(): boolean {

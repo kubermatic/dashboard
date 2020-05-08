@@ -1,5 +1,11 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {ControlValueAccessor, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator} from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  Validator,
+} from '@angular/forms';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {ClusterService} from '../../service/cluster';
 import {WizardService} from '../../service/wizard';
@@ -14,18 +20,29 @@ enum Controls {
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => MachineNetworkStepComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => MachineNetworkStepComponent), multi: true}
-  ]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => MachineNetworkStepComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => MachineNetworkStepComponent),
+      multi: true,
+    },
+  ],
 })
-export class MachineNetworkStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator,
-                                                                     OnDestroy {
+export class MachineNetworkStepComponent extends StepBase
+  implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   cluster: ClusterEntity;
 
   readonly controls = Controls;
 
   constructor(
-      wizard: WizardService, private readonly _clusterService: ClusterService, private readonly _builder: FormBuilder) {
+    wizard: WizardService,
+    private readonly _clusterService: ClusterService,
+    private readonly _builder: FormBuilder
+  ) {
     super(wizard);
   }
 

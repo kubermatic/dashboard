@@ -21,11 +21,7 @@ import {NodeService} from '../../services/node.service';
 
 import {NodeDeploymentListComponent} from './node-deployment-list.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 class MatDialogMock {
   open(): any {
@@ -38,27 +34,21 @@ describe('NodeDeploymentListComponent', () => {
   let component: NodeDeploymentListComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            NodeDeploymentListComponent,
-          ],
-          providers: [
-            {provide: ApiService, useClass: ApiMockService},
-            {provide: NodeService, useClass: NodeMockService},
-            {provide: UserService, useClass: UserMockService},
-            {provide: AppConfigService, useClass: AppConfigMockService},
-            {provide: ProjectService, useClass: ProjectMockService},
-            {provide: MatDialog, useClass: MatDialogMock},
-            {provide: Router, useClass: RouterStub},
-            {provide: SettingsService, useClass: SettingsMockService},
-            GoogleAnalyticsService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [NodeDeploymentListComponent],
+      providers: [
+        {provide: ApiService, useClass: ApiMockService},
+        {provide: NodeService, useClass: NodeMockService},
+        {provide: UserService, useClass: UserMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: MatDialog, useClass: MatDialogMock},
+        {provide: Router, useClass: RouterStub},
+        {provide: SettingsService, useClass: SettingsMockService},
+        GoogleAnalyticsService,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -67,6 +57,6 @@ describe('NodeDeploymentListComponent', () => {
   });
 
   it('should create the cluster details cmp', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 });

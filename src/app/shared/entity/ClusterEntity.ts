@@ -17,8 +17,8 @@ import {VSphereCloudSpec} from './cloud/VSphereCloudSpec';
 
 export function getClusterProvider(cluster: ClusterEntity): NodeProvider {
   const clusterProviders = Object.values(NodeProvider)
-                               .map(provider => cluster.spec.cloud[provider] ? provider : undefined)
-                               .filter(p => p !== undefined);
+    .map(provider => (cluster.spec.cloud[provider] ? provider : undefined))
+    .filter(p => p !== undefined);
 
   return clusterProviders.length > 0 ? clusterProviders[0] : NodeProvider.NONE;
 }

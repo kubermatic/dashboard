@@ -9,13 +9,14 @@ export class PreviousRouteService {
   constructor(private router: Router) {}
 
   loadRouting(): void {
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd))
-        .subscribe((urlAfterRedirects: NavigationEnd) => {
-          this.history = [...this.history, urlAfterRedirects];
-          if (this.history.length > 10) {
-            this.history.splice(0, 1);
-          }
-        });
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((urlAfterRedirects: NavigationEnd) => {
+        this.history = [...this.history, urlAfterRedirects];
+        if (this.history.length > 10) {
+          this.history.splice(0, 1);
+        }
+      });
   }
 
   getHistory(): string[] {

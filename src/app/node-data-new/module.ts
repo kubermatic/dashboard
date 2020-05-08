@@ -59,9 +59,7 @@ const components = [
   ExtendedNodeDataComponent,
 ];
 
-const services = [
-  NodeDataService,
-];
+const services = [NodeDataService];
 
 @NgModule({
   imports: [
@@ -81,5 +79,4 @@ const services = [
   providers: [...services],
   exports: [...components],
 })
-export class NodeDataModule {
-}
+export class NodeDataModule {}

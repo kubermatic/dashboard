@@ -3,7 +3,11 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
 
-import {ClusterService, NotificationService, ProjectService} from '../../../core/services';
+import {
+  ClusterService,
+  NotificationService,
+  ProjectService,
+} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
@@ -24,19 +28,27 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(
-      private _clusterService: ClusterService, private _projectService: ProjectService,
-      private _dialogRef: MatDialogRef<ChangeClusterVersionComponent>,
-      public _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _notificationService: NotificationService) {}
+    private _clusterService: ClusterService,
+    private _projectService: ProjectService,
+    private _dialogRef: MatDialogRef<ChangeClusterVersionComponent>,
+    public _googleAnalyticsService: GoogleAnalyticsService,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     if (this.controlPlaneVersions.length > 0) {
-      this.selectedVersion = this.controlPlaneVersions[this.controlPlaneVersions.length - 1];
+      this.selectedVersion = this.controlPlaneVersions[
+        this.controlPlaneVersions.length - 1
+      ];
     }
 
-    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
-        .subscribe(project => this.project = project);
-    this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChangeDialogOpened');
+    this._projectService.selectedProject
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(project => (this.project = project));
+    this._googleAnalyticsService.emitEvent(
+      'clusterOverview',
+      'clusterVersionChangeDialogOpened'
+    );
   }
 
   changeVersion(): void {
@@ -46,27 +58,44 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
       },
     };
 
-    this._clusterService.patch(this.project.id, this.cluster.id, this.datacenter.metadata.name, patch).subscribe(() => {
-      this._notificationService.success(
-          `Cluster ${this.cluster.name} is being updated to version ${this.selectedVersion}`);
-      this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChanged');
+    this._clusterService
+      .patch(
+        this.project.id,
+        this.cluster.id,
+        this.datacenter.metadata.name,
+        patch
+      )
+      .subscribe(() => {
+        this._notificationService.success(
+          `Cluster ${this.cluster.name} is being updated to version ${this.selectedVersion}`
+        );
+        this._googleAnalyticsService.emitEvent(
+          'clusterOverview',
+          'clusterVersionChanged'
+        );
 
-      if (this.isNodeDeploymentUpgradeEnabled) {
-        this.upgradeNodeDeployments();
-      }
-    });
+        if (this.isNodeDeploymentUpgradeEnabled) {
+          this.upgradeNodeDeployments();
+        }
+      });
 
     this._dialogRef.close(true);
   }
 
   upgradeNodeDeployments(): void {
     this._clusterService
-        .upgradeNodeDeployments(this.project.id, this.cluster.id, this.datacenter.metadata.name, this.selectedVersion)
-        .pipe(first())
-        .subscribe(() => {
-          this._notificationService.success(`Node Deployments from cluster ${
-              this.cluster.name} are being updated to version ${this.selectedVersion}`);
-        });
+      .upgradeNodeDeployments(
+        this.project.id,
+        this.cluster.id,
+        this.datacenter.metadata.name,
+        this.selectedVersion
+      )
+      .pipe(first())
+      .subscribe(() => {
+        this._notificationService.success(
+          `Node Deployments from cluster ${this.cluster.name} are being updated to version ${this.selectedVersion}`
+        );
+      });
   }
 
   ngOnDestroy(): void {

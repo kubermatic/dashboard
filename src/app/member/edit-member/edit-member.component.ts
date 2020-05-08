@@ -18,12 +18,17 @@ export class EditMemberComponent implements OnInit {
   editMemberForm: FormGroup;
 
   constructor(
-      private readonly _apiService: ApiService, private readonly _matDialogRef: MatDialogRef<EditMemberComponent>,
-      private readonly _notificationService: NotificationService) {}
+    private readonly _apiService: ApiService,
+    private readonly _matDialogRef: MatDialogRef<EditMemberComponent>,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.editMemberForm = new FormGroup({
-      group: new FormControl(MemberUtils.getGroupInProject(this.member, this.project.id), [Validators.required]),
+      group: new FormControl(
+        MemberUtils.getGroupInProject(this.member, this.project.id),
+        [Validators.required]
+      ),
     });
   }
 
@@ -44,7 +49,9 @@ export class EditMemberComponent implements OnInit {
 
     this._apiService.editMembers(this.project.id, editMember).subscribe(() => {
       this._matDialogRef.close(true);
-      this._notificationService.success(`Member ${this.member.name} is edited successfully`);
+      this._notificationService.success(
+        `Member ${this.member.name} is edited successfully`
+      );
     });
   }
 }

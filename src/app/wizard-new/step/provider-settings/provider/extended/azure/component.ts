@@ -5,7 +5,11 @@ import {takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
 import {AzureCloudSpec} from '../../../../../../shared/entity/cloud/AzureCloudSpec';
-import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
+import {
+  CloudSpec,
+  ClusterEntity,
+  ClusterSpec,
+} from '../../../../../../shared/entity/ClusterEntity';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
 
@@ -21,16 +25,27 @@ enum Controls {
   selector: 'km-wizard-azure-provider-extended',
   templateUrl: './template.html',
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AzureProviderExtendedComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => AzureProviderExtendedComponent), multi: true}
-  ]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AzureProviderExtendedComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => AzureProviderExtendedComponent),
+      multi: true,
+    },
+  ],
 })
-export class AzureProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class AzureProviderExtendedComponent extends BaseFormValidator
+  implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
   constructor(
-      private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
-      private readonly _clusterService: ClusterService) {
+    private readonly _builder: FormBuilder,
+    private readonly _presets: PresetsService,
+    private readonly _clusterService: ClusterService
+  ) {
     super('Azure Provider Extended');
   }
 
@@ -44,25 +59,39 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._presets.enablePresets(Object.values(this._clusterService.cluster.spec.cloud.azure).every(value => !value));
+      this._presets.enablePresets(
+        Object.values(this._clusterService.cluster.spec.cloud.azure).every(
+          value => !value
+        )
+      );
     });
 
-    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
-
-    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this.form.reset());
+    this._presets.presetChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(preset =>
+        Object.values(Controls).forEach(control =>
+          this._enable(!preset, control)
+        )
+      );
 
     merge(
-        this.form.get(Controls.ResourceGroup).valueChanges,
-        this.form.get(Controls.RouteTable).valueChanges,
-        this.form.get(Controls.SecurityGroup).valueChanges,
-        this.form.get(Controls.Subnet).valueChanges,
-        this.form.get(Controls.VNet).valueChanges,
-        )
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());
+      this._clusterService.providerChanges,
+      this._clusterService.datacenterChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this.form.reset());
+
+    merge(
+      this.form.get(Controls.ResourceGroup).valueChanges,
+      this.form.get(Controls.RouteTable).valueChanges,
+      this.form.get(Controls.SecurityGroup).valueChanges,
+      this.form.get(Controls.Subnet).valueChanges,
+      this.form.get(Controls.VNet).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        _ => (this._clusterService.cluster = this._getClusterEntity())
+      );
   }
 
   ngOnDestroy(): void {
@@ -90,9 +119,9 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
             securityGroup: this.form.get(Controls.SecurityGroup).value,
             subnet: this.form.get(Controls.Subnet).value,
             vnet: this.form.get(Controls.VNet).value,
-          } as AzureCloudSpec
-        } as CloudSpec
-      } as ClusterSpec
+          } as AzureCloudSpec,
+        } as CloudSpec,
+      } as ClusterSpec,
     } as ClusterEntity;
   }
 }

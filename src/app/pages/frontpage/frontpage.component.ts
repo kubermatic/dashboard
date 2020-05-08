@@ -10,7 +10,10 @@ import {Auth} from '../../core/services';
 })
 export class FrontpageComponent implements OnInit {
   constructor(
-      private readonly _auth: Auth, private readonly _router: Router, private readonly _cookieService: CookieService) {}
+    private readonly _auth: Auth,
+    private readonly _router: Router,
+    private readonly _cookieService: CookieService
+  ) {}
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent): void {
@@ -25,14 +28,38 @@ export class FrontpageComponent implements OnInit {
       this._router.navigate(['/projects']);
     }
 
-    const nonceRegExp = /[\?&#]nonce=([^&]+)/;
+    const nonceRegExp = /[?&#]nonce=([^&]+)/;
     const nonceStr = nonceRegExp.exec(this._auth.getOIDCProviderURL());
     if (!!nonceStr && nonceStr.length >= 2 && !!nonceStr[1]) {
-      this._cookieService.set(Auth.Cookie.Nonce, nonceStr[1], null, '/', null, true, 'Lax');
+      this._cookieService.set(
+        Auth.Cookie.Nonce,
+        nonceStr[1],
+        null,
+        '/',
+        null,
+        true,
+        'Lax'
+      );
       // localhost is only served via http, though secure cookie is not possible
       // following line will only work when domain is localhost
-      this._cookieService.set(Auth.Cookie.Nonce, nonceStr[1], null, '/', 'localhost', false, 'Lax');
-      this._cookieService.set(Auth.Cookie.Nonce, nonceStr[1], null, '/', '127.0.0.1', false, 'Lax');
+      this._cookieService.set(
+        Auth.Cookie.Nonce,
+        nonceStr[1],
+        null,
+        '/',
+        'localhost',
+        false,
+        'Lax'
+      );
+      this._cookieService.set(
+        Auth.Cookie.Nonce,
+        nonceStr[1],
+        null,
+        '/',
+        '127.0.0.1',
+        false,
+        'Lax'
+      );
     }
   }
 

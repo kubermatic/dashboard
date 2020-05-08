@@ -1,9 +1,20 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {EMPTY, iif, Subject} from 'rxjs';
 import {debounceTime, startWith, switchMap, takeUntil} from 'rxjs/operators';
 
-import {ApiService, DatacenterService, WizardService} from '../../core/services';
+import {
+  ApiService,
+  DatacenterService,
+  WizardService,
+} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
@@ -18,7 +29,6 @@ import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete
   templateUrl: './azure-node-data.component.html',
   styleUrls: ['./azure-node-data.component.scss'],
 })
-
 export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
@@ -36,14 +46,22 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   private _selectedPreset: string;
 
   constructor(
-      private readonly _addNodeService: NodeDataService, private readonly _wizard: WizardService,
-      private readonly _api: ApiService, private readonly _dcService: DatacenterService) {}
+    private readonly _addNodeService: NodeDataService,
+    private readonly _wizard: WizardService,
+    private readonly _api: ApiService,
+    private readonly _dcService: DatacenterService
+  ) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      size: new FormControl(
-          this.nodeData.spec.cloud.azure.size,
-          [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true)]),
+      size: new FormControl(this.nodeData.spec.cloud.azure.size, [
+        Validators.required,
+        AutocompleteFilterValidators.mustBeInArrayList(
+          this.sizes,
+          'name',
+          true
+        ),
+      ]),
       imageID: new FormControl(this.nodeData.spec.cloud.azure.imageID),
     });
 
@@ -51,31 +69,47 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
     });
 
-    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.cloudSpec = data.cloudSpec;
-      this.form.controls.size.setValue('');
-      this.sizes = [];
-      this.checkSizeState();
-      if (data.cloudSpec.azure.clientID !== '' || data.cloudSpec.azure.clientSecret !== '' ||
-          data.cloudSpec.azure.tenantID !== '' || data.cloudSpec.azure.subscriptionID !== '' || this._selectedPreset) {
-        this.reloadAzureSizes();
-      }
-    });
+    this._wizard.clusterProviderSettingsFormChanges$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        this.cloudSpec = data.cloudSpec;
+        this.form.controls.size.setValue('');
+        this.sizes = [];
+        this.checkSizeState();
+        if (
+          data.cloudSpec.azure.clientID !== '' ||
+          data.cloudSpec.azure.clientSecret !== '' ||
+          data.cloudSpec.azure.tenantID !== '' ||
+          data.cloudSpec.azure.subscriptionID !== '' ||
+          this._selectedPreset
+        ) {
+          this.reloadAzureSizes();
+        }
+      });
 
-    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
-      this._selectedPreset = preset;
-    });
+    this._wizard.onCustomPresetSelect
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(preset => {
+        this._selectedPreset = preset;
+      });
 
-    this.form.controls.size.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
-        .subscribe(value => {
-          if (value !== '' && !this.form.controls.size.pristine) {
-            this.filteredSizes = filterArrayOptions(value, 'name', this.sizes);
-          } else {
-            this.filteredSizes = this.sizes;
-          }
-          this.form.controls.size.setValidators(
-              [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true)]);
-        });
+    this.form.controls.size.valueChanges
+      .pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+      .subscribe(value => {
+        if (value !== '' && !this.form.controls.size.pristine) {
+          this.filteredSizes = filterArrayOptions(value, 'name', this.sizes);
+        } else {
+          this.filteredSizes = this.sizes;
+        }
+        this.form.controls.size.setValidators([
+          Validators.required,
+          AutocompleteFilterValidators.mustBeInArrayList(
+            this.sizes,
+            'name',
+            true
+          ),
+        ]);
+      });
 
     this.loadDatacenter();
     this.checkSizeState();
@@ -85,9 +119,12 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
 
   loadDatacenter(): void {
     if (this.cloudSpec.dc) {
-      this._dcService.getDataCenter(this.cloudSpec.dc).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-        this.datacenter = data;
-      });
+      this._dcService
+        .getDataCenter(this.cloudSpec.dc)
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(data => {
+          this.datacenter = data;
+        });
     }
   }
 
@@ -96,14 +133,24 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   isMissingCredentials(): boolean {
-    return (!this.cloudSpec.azure.clientID || this.cloudSpec.azure.clientID === '') ||
-        (!this.cloudSpec.azure.clientSecret || this.cloudSpec.azure.clientSecret === '') ||
-        (!this.cloudSpec.azure.tenantID || this.cloudSpec.azure.tenantID === '') ||
-        (!this.cloudSpec.azure.subscriptionID || this.cloudSpec.azure.subscriptionID === '');
+    return (
+      !this.cloudSpec.azure.clientID ||
+      this.cloudSpec.azure.clientID === '' ||
+      !this.cloudSpec.azure.clientSecret ||
+      this.cloudSpec.azure.clientSecret === '' ||
+      !this.cloudSpec.azure.tenantID ||
+      this.cloudSpec.azure.tenantID === '' ||
+      !this.cloudSpec.azure.subscriptionID ||
+      this.cloudSpec.azure.subscriptionID === ''
+    );
   }
 
   getSizesFormState(): string {
-    if ((!this.loadingSizes && this.isMissingCredentials()) && this.isInWizard()) {
+    if (
+      !this.loadingSizes &&
+      this.isMissingCredentials() &&
+      this.isInWizard()
+    ) {
       return 'Node Size*';
     } else if (this.loadingSizes) {
       return 'Loading sizes...';
@@ -123,30 +170,51 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   showSizeHint(): boolean {
-    return (!this.loadingSizes && this.isMissingCredentials() && !this._selectedPreset) && this.isInWizard();
+    return (
+      !this.loadingSizes &&
+      this.isMissingCredentials() &&
+      !this._selectedPreset &&
+      this.isInWizard()
+    );
   }
 
   reloadAzureSizes(): void {
-    this.loadingSizes = !this.isMissingCredentials() || !this.isInWizard() || !!this._selectedPreset;
+    this.loadingSizes =
+      !this.isMissingCredentials() ||
+      !this.isInWizard() ||
+      !!this._selectedPreset;
 
-    iif(() => !!this.cloudSpec.dc, this._dcService.getDataCenter(this.cloudSpec.dc), EMPTY)
-        .pipe(switchMap(dc => {
+    iif(
+      () => !!this.cloudSpec.dc,
+      this._dcService.getDataCenter(this.cloudSpec.dc),
+      EMPTY
+    )
+      .pipe(
+        switchMap(dc => {
           this.datacenter = dc;
 
           return iif(
-              () => this.isInWizard(),
-              this._wizard.provider(NodeProvider.AZURE)
-                  .clientID(this.cloudSpec.azure.clientID)
-                  .clientSecret(this.cloudSpec.azure.clientSecret)
-                  .subscriptionID(this.cloudSpec.azure.subscriptionID)
-                  .tenantID(this.cloudSpec.azure.tenantID)
-                  .location(this.datacenter.spec.azure.location)
-                  .credential(this._selectedPreset)
-                  .flavors(),
-              this._api.getAzureSizes(this.projectId, this.seedDCName, this.clusterId));
-        }))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(data => {
+            () => this.isInWizard(),
+            this._wizard
+              .provider(NodeProvider.AZURE)
+              .clientID(this.cloudSpec.azure.clientID)
+              .clientSecret(this.cloudSpec.azure.clientSecret)
+              .subscriptionID(this.cloudSpec.azure.subscriptionID)
+              .tenantID(this.cloudSpec.azure.tenantID)
+              .location(this.datacenter.spec.azure.location)
+              .credential(this._selectedPreset)
+              .flavors(),
+            this._api.getAzureSizes(
+              this.projectId,
+              this.seedDCName,
+              this.clusterId
+            )
+          );
+        })
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        data => {
           this.sizes = data;
           if (this.nodeData.spec.cloud.azure.size === '') {
             this.form.controls.size.setValue(this.sizes[0].name);
@@ -154,17 +222,24 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
 
           this.loadingSizes = false;
           this.checkSizeState();
-        }, () => this.loadingSizes = false);
+        },
+        () => (this.loadingSizes = false)
+      );
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.cloudSpec && !changes.cloudSpec.firstChange) {
-      if (!!!changes.cloudSpec.previousValue ||
-          (changes.cloudSpec.currentValue.azure.clientID !== changes.cloudSpec.previousValue.azure.clientID) ||
-          (changes.cloudSpec.currentValue.azure.clientSecret !== changes.cloudSpec.previousValue.azure.clientSecret) ||
-          (changes.cloudSpec.currentValue.azure.subscriptionID !==
-           changes.cloudSpec.previousValue.azure.subscriptionID) ||
-          (changes.cloudSpec.currentValue.azure.tenantID !== changes.cloudSpec.previousValue.azure.tenantID)) {
+      if (
+        !changes.cloudSpec.previousValue ||
+        changes.cloudSpec.currentValue.azure.clientID !==
+          changes.cloudSpec.previousValue.azure.clientID ||
+        changes.cloudSpec.currentValue.azure.clientSecret !==
+          changes.cloudSpec.previousValue.azure.clientSecret ||
+        changes.cloudSpec.currentValue.azure.subscriptionID !==
+          changes.cloudSpec.previousValue.azure.subscriptionID ||
+        changes.cloudSpec.currentValue.azure.tenantID !==
+          changes.cloudSpec.previousValue.azure.tenantID
+      ) {
         this.reloadAzureSizes();
       }
     }

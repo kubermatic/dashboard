@@ -1,10 +1,10 @@
-import {MembersPage} from "../../pages/members.po";
-import {ProjectsPage} from "../../pages/projects.po";
-import {login, logout} from "../../utils/auth";
-import {Condition} from "../../utils/condition";
-import {Group, reloadUsers} from "../../utils/member";
-import {prefixedString} from "../../utils/random";
-import {ClustersPage} from "../../pages/clusters.po";
+import {MembersPage} from '../../pages/members.po';
+import {ProjectsPage} from '../../pages/projects.po';
+import {login, logout} from '../../utils/auth';
+import {Condition} from '../../utils/condition';
+import {Group, reloadUsers} from '../../utils/member';
+import {prefixedString} from '../../utils/random';
+import {ClustersPage} from '../../pages/clusters.po';
 
 describe('Multi owner Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');

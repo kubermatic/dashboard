@@ -16,7 +16,6 @@ import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete
   selector: 'km-packet-node-data',
   templateUrl: './packet-node-data.component.html',
 })
-
 export class PacketNodeDataComponent implements OnInit, OnDestroy {
   @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
@@ -33,44 +32,65 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
   private _selectedCredentials: string;
 
   constructor(
-      private readonly _addNodeService: NodeDataService, private readonly _wizard: WizardService,
-      private readonly _api: ApiService) {}
+    private readonly _addNodeService: NodeDataService,
+    private readonly _wizard: WizardService,
+    private readonly _api: ApiService
+  ) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      size: new FormControl(
-          this.nodeData.spec.cloud.packet.instanceType,
-          [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true)]),
+      size: new FormControl(this.nodeData.spec.cloud.packet.instanceType, [
+        Validators.required,
+        AutocompleteFilterValidators.mustBeInArrayList(
+          this.sizes,
+          'name',
+          true
+        ),
+      ]),
     });
 
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(() => this._addNodeService.changeNodeProviderData(this._getNodeProviderData()));
+    this.form.valueChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(() =>
+        this._addNodeService.changeNodeProviderData(this._getNodeProviderData())
+      );
 
-    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.cloudSpec = data.cloudSpec;
-      this.form.controls.size.setValue('');
-      this.sizes = [];
-      this._checkSizeState();
+    this._wizard.clusterProviderSettingsFormChanges$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        this.cloudSpec = data.cloudSpec;
+        this.form.controls.size.setValue('');
+        this.sizes = [];
+        this._checkSizeState();
 
-      if (this._canLoadSizes()) {
-        this._reloadPacketSizes();
-      }
-    });
+        if (this._canLoadSizes()) {
+          this._reloadPacketSizes();
+        }
+      });
 
-    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
-      this._selectedCredentials = credentials;
-    });
+    this._wizard.onCustomPresetSelect
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(credentials => {
+        this._selectedCredentials = credentials;
+      });
 
-    this.form.controls.size.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
-        .subscribe(value => {
-          if (value !== '' && !this.form.controls.size.pristine) {
-            this.filteredSizes = filterArrayOptions(value, 'name', this.sizes);
-          } else {
-            this.filteredSizes = this.sizes;
-          }
-          this.form.controls.size.setValidators(
-              [Validators.required, AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true)]);
-        });
+    this.form.controls.size.valueChanges
+      .pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+      .subscribe(value => {
+        if (value !== '' && !this.form.controls.size.pristine) {
+          this.filteredSizes = filterArrayOptions(value, 'name', this.sizes);
+        } else {
+          this.filteredSizes = this.sizes;
+        }
+        this.form.controls.size.setValidators([
+          Validators.required,
+          AutocompleteFilterValidators.mustBeInArrayList(
+            this.sizes,
+            'name',
+            true
+          ),
+        ]);
+      });
 
     this._checkSizeState();
     this._reloadPacketSizes();
@@ -82,8 +102,11 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
   }
 
   getSizesFormState(): string {
-    if (!this.loadingSizes && (!this.cloudSpec.packet.apiKey || !this.cloudSpec.packet.projectID) &&
-        this.isInWizard()) {
+    if (
+      !this.loadingSizes &&
+      (!this.cloudSpec.packet.apiKey || !this.cloudSpec.packet.projectID) &&
+      this.isInWizard()
+    ) {
       return 'Plan*';
     } else if (this.loadingSizes) {
       return 'Loading Plans...';
@@ -135,28 +158,37 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
       this.loadingSizes = true;
     }
 
-    iif(() => this.isInWizard(),
-        this._wizard.provider(NodeProvider.PACKET)
-            .apiKey(this.cloudSpec.packet.apiKey)
-            .projectID(this.cloudSpec.packet.projectID)
-            .credential(this._selectedCredentials)
-            .flavors(),
-        this._api.getPacketSizes(this.projectId, this.seedDCName, this.clusterId))
-        .pipe(first())
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe((sizes: PacketSize[]) => {
+    iif(
+      () => this.isInWizard(),
+      this._wizard
+        .provider(NodeProvider.PACKET)
+        .apiKey(this.cloudSpec.packet.apiKey)
+        .projectID(this.cloudSpec.packet.projectID)
+        .credential(this._selectedCredentials)
+        .flavors(),
+      this._api.getPacketSizes(this.projectId, this.seedDCName, this.clusterId)
+    )
+      .pipe(first())
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        (sizes: PacketSize[]) => {
           sizes.forEach(size => {
             if (size.memory !== 'N/A') {
               this.sizes.push(size);
             }
           });
-          if (this.nodeData.spec.cloud.packet.instanceType === '' && this.sizes.length) {
+          if (
+            this.nodeData.spec.cloud.packet.instanceType === '' &&
+            this.sizes.length
+          ) {
             this.form.controls.size.setValue(this.sizes[0].name);
           }
 
           this.loadingSizes = false;
           this._checkSizeState();
-        }, () => this.loadingSizes = false);
+        },
+        () => (this.loadingSizes = false)
+      );
   }
 
   private _checkSizeState(): void {
@@ -168,7 +200,10 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
   }
 
   private _canLoadSizes(): boolean {
-    return (!!this.cloudSpec.packet.apiKey && !!this.cloudSpec.packet.projectID) || !!this._selectedCredentials;
+    return (
+      (!!this.cloudSpec.packet.apiKey && !!this.cloudSpec.packet.projectID) ||
+      !!this._selectedCredentials
+    );
   }
 
   ngOnDestroy(): void {

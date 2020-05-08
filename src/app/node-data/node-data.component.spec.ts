@@ -5,14 +5,27 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 
 import {CoreModule} from '../core/core.module';
-import {ApiService, ClusterService, DatacenterService, ProjectService, WizardService} from '../core/services';
+import {
+  ApiService,
+  ClusterService,
+  DatacenterService,
+  ProjectService,
+  WizardService,
+} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {SharedModule} from '../shared/shared.module';
-import {fakeDigitaloceanSizes, fakeOpenstackFlavors} from '../testing/fake-data/addNodeModal.fake';
+import {
+  fakeDigitaloceanSizes,
+  fakeOpenstackFlavors,
+} from '../testing/fake-data/addNodeModal.fake';
 import {fakeAwsSubnets} from '../testing/fake-data/aws-subnets.fake';
 import {masterVersionsFake} from '../testing/fake-data/cluster-spec.fake';
-import {fakeAWSCluster, fakeDigitaloceanCluster, fakeOpenstackCluster} from '../testing/fake-data/cluster.fake';
+import {
+  fakeAWSCluster,
+  fakeDigitaloceanCluster,
+  fakeOpenstackCluster,
+} from '../testing/fake-data/cluster.fake';
 import {nodeDataFake} from '../testing/fake-data/node.fake';
 import {RouterStub} from '../testing/router-stubs';
 import {asyncData} from '../testing/services/api-mock.service';
@@ -48,63 +61,69 @@ describe('NodeDataComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = {
-      'getDigitaloceanSizes': jest.fn(),
-      'getDigitaloceanSizesForWizard': jest.fn(),
-      'getOpenStackFlavors': jest.fn(),
-      'getOpenStackFlavorsForWizard': jest.fn(),
-      'nodeUpgrades': jest.fn(),
-      'getAWSSubnets': jest.fn()
+      getDigitaloceanSizes: jest.fn(),
+      getDigitaloceanSizesForWizard: jest.fn(),
+      getOpenStackFlavors: jest.fn(),
+      getOpenStackFlavorsForWizard: jest.fn(),
+      nodeUpgrades: jest.fn(),
+      getAWSSubnets: jest.fn(),
     };
-    apiMock.getDigitaloceanSizes.mockReturnValue(asyncData(fakeDigitaloceanSizes()));
-    apiMock.getDigitaloceanSizesForWizard.mockReturnValue(asyncData(fakeDigitaloceanSizes()));
-    apiMock.getOpenStackFlavors.mockReturnValue(asyncData(fakeOpenstackFlavors()));
-    apiMock.getOpenStackFlavorsForWizard.mockReturnValue(asyncData(fakeOpenstackFlavors()));
+    apiMock.getDigitaloceanSizes.mockReturnValue(
+      asyncData(fakeDigitaloceanSizes())
+    );
+    apiMock.getDigitaloceanSizesForWizard.mockReturnValue(
+      asyncData(fakeDigitaloceanSizes())
+    );
+    apiMock.getOpenStackFlavors.mockReturnValue(
+      asyncData(fakeOpenstackFlavors())
+    );
+    apiMock.getOpenStackFlavorsForWizard.mockReturnValue(
+      asyncData(fakeOpenstackFlavors())
+    );
     apiMock.nodeUpgrades.mockReturnValue(asyncData(masterVersionsFake()));
     apiMock.getAWSSubnets.mockReturnValue(asyncData(fakeAwsSubnets()));
 
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            BrowserAnimationsModule,
-            SharedModule,
-            HttpClientModule,
-            CoreModule,
-          ],
-          declarations: [
-            NodeDataComponent,
-            NodeDataOptionsComponent,
-            OpenstackNodeDataComponent,
-            OpenstackNodeOptionsComponent,
-            AWSNodeDataComponent,
-            AWSNodeOptionsComponent,
-            DigitaloceanNodeDataComponent,
-            DigitaloceanNodeOptionsComponent,
-            HetznerNodeDataComponent,
-            VSphereNodeDataComponent,
-            VSphereNodeOptionsComponent,
-            AzureNodeDataComponent,
-            AzureNodeOptionsComponent,
-            PacketNodeDataComponent,
-            PacketNodeOptionsComponent,
-            GCPNodeDataComponent,
-            GCPNodeOptionsComponent,
-            KubeVirtNodeDataComponent,
-            AlibabaNodeDataComponent,
-            AlibabaNodeOptionsComponent,
-          ],
-          providers: [
-            NodeDataService,
-            WizardService,
-            {provide: ApiService, useValue: apiMock},
-            {provide: ClusterService, useClass: ClusterMockService},
-            {provide: DatacenterService, useClass: DatacenterMockService},
-            {provide: ProjectService, useClass: ProjectMockService},
-            {provide: Router, useClass: RouterStub},
-            {provide: ClusterNameGenerator, useClass: ClusterNameGeneratorMock},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        SharedModule,
+        HttpClientModule,
+        CoreModule,
+      ],
+      declarations: [
+        NodeDataComponent,
+        NodeDataOptionsComponent,
+        OpenstackNodeDataComponent,
+        OpenstackNodeOptionsComponent,
+        AWSNodeDataComponent,
+        AWSNodeOptionsComponent,
+        DigitaloceanNodeDataComponent,
+        DigitaloceanNodeOptionsComponent,
+        HetznerNodeDataComponent,
+        VSphereNodeDataComponent,
+        VSphereNodeOptionsComponent,
+        AzureNodeDataComponent,
+        AzureNodeOptionsComponent,
+        PacketNodeDataComponent,
+        PacketNodeOptionsComponent,
+        GCPNodeDataComponent,
+        GCPNodeOptionsComponent,
+        KubeVirtNodeDataComponent,
+        AlibabaNodeDataComponent,
+        AlibabaNodeOptionsComponent,
+      ],
+      providers: [
+        NodeDataService,
+        WizardService,
+        {provide: ApiService, useValue: apiMock},
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: DatacenterService, useClass: DatacenterMockService},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: Router, useClass: RouterStub},
+        {provide: ClusterNameGenerator, useClass: ClusterNameGeneratorMock},
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -125,18 +144,26 @@ describe('NodeDataComponent', () => {
 
     expect(addNodeElement.querySelector('km-aws-node-data')).not.toBeNull();
     expect(addNodeElement.querySelector('km-openstack-node-data')).toBeNull();
-    expect(addNodeElement.querySelector('km-digitalocean-node-data')).toBeNull();
+    expect(
+      addNodeElement.querySelector('km-digitalocean-node-data')
+    ).toBeNull();
 
     component.cluster = fakeDigitaloceanCluster();
     fixture.detectChanges();
-    expect(addNodeElement.querySelector('km-digitalocean-node-data')).not.toBeNull();
+    expect(
+      addNodeElement.querySelector('km-digitalocean-node-data')
+    ).not.toBeNull();
     expect(addNodeElement.querySelector('km-aws-node-data')).toBeNull();
     expect(addNodeElement.querySelector('km-openstack-node-data')).toBeNull();
 
     component.cluster = fakeOpenstackCluster();
     fixture.detectChanges();
-    expect(addNodeElement.querySelector('km-openstack-node-data')).not.toBeNull();
-    expect(addNodeElement.querySelector('km-digitalocean-node-data')).toBeNull();
+    expect(
+      addNodeElement.querySelector('km-openstack-node-data')
+    ).not.toBeNull();
+    expect(
+      addNodeElement.querySelector('km-digitalocean-node-data')
+    ).toBeNull();
     expect(addNodeElement.querySelector('km-aws-node-data')).toBeNull();
   });
 });

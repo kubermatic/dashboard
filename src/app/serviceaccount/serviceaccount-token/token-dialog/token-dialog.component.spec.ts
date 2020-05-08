@@ -26,19 +26,18 @@ describe('TokenDialogComponent', () => {
   let fixture: ComponentFixture<TokenDialogComponent>;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          providers: [
-            {provide: MAT_DIALOG_DATA, useValue: {serviceaccountToken: fakeServiceAccountToken()}},
-            {provide: MatDialogRef, useValue: {}},
-            {provide: Router, useClass: RouterStub},
-            {provide: ProjectService, useClass: ProjectMockService},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      providers: [
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {serviceaccountToken: fakeServiceAccountToken()},
+        },
+        {provide: MatDialogRef, useValue: {}},
+        {provide: Router, useClass: RouterStub},
+        {provide: ProjectService, useClass: ProjectMockService},
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

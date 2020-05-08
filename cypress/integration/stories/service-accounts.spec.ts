@@ -1,9 +1,9 @@
-import {ProjectsPage} from "../../pages/projects.po";
-import {login, logout} from "../../utils/auth";
-import {Condition} from "../../utils/condition";
-import {prefixedString} from "../../utils/random";
-import {ServiceAccountsPage} from "../../pages/service-accounts.po";
-import {Group} from "../../utils/member";
+import {ProjectsPage} from '../../pages/projects.po';
+import {login, logout} from '../../utils/auth';
+import {Condition} from '../../utils/condition';
+import {prefixedString} from '../../utils/random';
+import {ServiceAccountsPage} from '../../pages/service-accounts.po';
+import {Group} from '../../utils/member';
 
 describe('Service Accounts Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');

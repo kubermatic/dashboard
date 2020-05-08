@@ -14,20 +14,26 @@ export class HistoryService {
     if (!this._router) {
       this._router = this._injector.get(Router);
 
-      this._router.events.pipe(filter(e => e instanceof NavigationEnd))
-          .pipe(pairwise())
-          .subscribe((e: [NavigationEnd, NavigationEnd]) => {
-            this._previousStateUrl = e[0].url;
-            this._currentStateUrl = e[1].url;
-          });
+      this._router.events
+        .pipe(filter(e => e instanceof NavigationEnd))
+        .pipe(pairwise())
+        .subscribe((e: [NavigationEnd, NavigationEnd]) => {
+          this._previousStateUrl = e[0].url;
+          this._currentStateUrl = e[1].url;
+        });
     }
   }
 
   goBack(defaultState: string): Promise<boolean> {
-    if (this._previousStateUrl && this._previousStateUrl !== this._currentStateUrl) {
+    if (
+      this._previousStateUrl &&
+      this._previousStateUrl !== this._currentStateUrl
+    ) {
       return this._router.navigateByUrl(this._previousStateUrl);
     }
 
-    return this._router.navigate([defaultState], {queryParamsHandling: 'preserve'});
+    return this._router.navigate([defaultState], {
+      queryParamsHandling: 'preserve',
+    });
   }
 }

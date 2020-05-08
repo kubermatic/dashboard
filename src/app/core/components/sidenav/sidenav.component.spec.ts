@@ -10,7 +10,10 @@ import {MockComponent} from 'ng2-mock-component';
 import {AppConfigService} from '../../../app-config.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeProjects} from '../../../testing/fake-data/project.fake';
-import {RouterLinkStubDirective, RouterTestingModule} from '../../../testing/router-stubs';
+import {
+  RouterLinkStubDirective,
+  RouterTestingModule,
+} from '../../../testing/router-stubs';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {SettingsMockService} from '../../../testing/services/settings-mock.service';
@@ -37,56 +40,57 @@ describe('SidenavComponent', () => {
   let links: RouterLinkStubDirective[];
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            ProjectSelectorComponent,
-            SidenavComponent,
-            MockComponent({
-              selector: 'a',
-              inputs: ['routerLink', 'routerLinkActiveOptions'],
-            }),
-          ],
-          providers: [
-            {provide: ProjectService, useClass: ProjectMockService},
-            {provide: UserService, useClass: UserMockService},
-            {provide: SettingsService, useClass: SettingsMockService},
-            {provide: AppConfigService, useClass: AppConfigMockService},
-            {
-              provide: Router,
-              useValue: {
-                routerState: {
-                  snapshot: {url: ''},
-                },
-              },
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [
+        ProjectSelectorComponent,
+        SidenavComponent,
+        MockComponent({
+          selector: 'a',
+          inputs: ['routerLink', 'routerLinkActiveOptions'],
+        }),
+      ],
+      providers: [
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: UserService, useClass: UserMockService},
+        {provide: SettingsService, useClass: SettingsMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        {
+          provide: Router,
+          useValue: {
+            routerState: {
+              snapshot: {url: ''},
             },
-            MatDialog,
-          ],
-        })
-        .compileComponents();
+          },
+        },
+        MatDialog,
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SidenavComponent);
     component = fixture.componentInstance;
-    linkDes = fixture.debugElement.queryAll(By.directive(RouterLinkStubDirective));
+    linkDes = fixture.debugElement.queryAll(
+      By.directive(RouterLinkStubDirective)
+    );
 
-    links = linkDes.map((de) => de.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective);
+    links = linkDes.map(
+      de => de.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective
+    );
   });
 
   it('should initialize', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 
   it('should get RouterLinks from template', () => {
     fixture.detectChanges();
     expect(links.length).toBe(5);
-    expect(links[0].linkParams).toBe(`/projects/${fakeProjects()[0].id}/clusters`);
+    expect(links[0].linkParams).toBe(
+      `/projects/${fakeProjects()[0].id}/clusters`
+    );
   });
-
 
   it('can click clusters link in template', () => {
     fixture.detectChanges();
@@ -96,12 +100,18 @@ describe('SidenavComponent', () => {
 
     click(clustersLinkDe);
     fixture.detectChanges();
-    expect(clustersLink.navigatedTo).toBe(`/projects/${fakeProjects()[0].id}/clusters`);
+    expect(clustersLink.navigatedTo).toBe(
+      `/projects/${fakeProjects()[0].id}/clusters`
+    );
   });
 
   it('should correctly create router links', () => {
     fixture.detectChanges();
-    expect(component.getRouterLink('clusters')).toBe('/projects/' + fakeProjects()[0].id + '/clusters');
-    expect(component.getRouterLink('members')).toBe('/projects/' + fakeProjects()[0].id + '/members');
+    expect(component.getRouterLink('clusters')).toBe(
+      '/projects/' + fakeProjects()[0].id + '/clusters'
+    );
+    expect(component.getRouterLink('members')).toBe(
+      '/projects/' + fakeProjects()[0].id + '/members'
+    );
   });
 });

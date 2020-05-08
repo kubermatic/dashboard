@@ -12,7 +12,9 @@ enum ControlsValidationStrategy {
 export class FormHelper {
   private readonly _form: FormGroup;
   private _controls: AbstractControl[];
-  private _onControlsStrategyChange = new EventEmitter<ControlsValidationStrategy>();
+  private _onControlsStrategyChange = new EventEmitter<
+    ControlsValidationStrategy
+  >();
 
   private _validationStrategy: FormValidationStrategy;
   private _controlsValidationStrategy: FormValidationStrategy;
@@ -28,17 +30,23 @@ export class FormHelper {
     });
   }
 
-  private _setControlsValidationStrategy(strategy: ControlsValidationStrategy): void {
+  private _setControlsValidationStrategy(
+    strategy: ControlsValidationStrategy
+  ): void {
     switch (strategy) {
       case ControlsValidationStrategy.Default:
-        this._controlsValidationStrategy = new EmptyFormControlsValidationStrategy(this._controls);
+        this._controlsValidationStrategy = new EmptyFormControlsValidationStrategy(
+          this._controls
+        );
     }
   }
 
   setValidationStrategy(strategy: ValidationStrategy): void {
     switch (strategy) {
       case ValidationStrategy.Default:
-        this._validationStrategy = new DefaultFormValidationStrategy(this._form);
+        this._validationStrategy = new DefaultFormValidationStrategy(
+          this._form
+        );
     }
   }
 
@@ -77,11 +85,14 @@ export class DefaultFormValidationStrategy implements FormValidationStrategy {
   }
 
   isValid(): boolean {
-    return Object.values(this._form.controls).every(control => this._validStatuses.includes(control.status));
+    return Object.values(this._form.controls).every(control =>
+      this._validStatuses.includes(control.status)
+    );
   }
 }
 
-export class EmptyFormControlsValidationStrategy implements FormValidationStrategy {
+export class EmptyFormControlsValidationStrategy
+  implements FormValidationStrategy {
   private _controls = [];
 
   constructor(controls: AbstractControl[]) {

@@ -14,7 +14,10 @@ export class StepsService {
   constructor(public googleAnalyticsService: GoogleAnalyticsService) {}
 
   changeCurrentStep(index: number, step: Step): void {
-    this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationWizardStepChangedTo' + step.name);
+    this.googleAnalyticsService.emitEvent(
+      'clusterCreation',
+      'clusterCreationWizardStepChangedTo' + step.name
+    );
     this._currentStepIndex.next(index);
     this._currentStep.next(step);
   }

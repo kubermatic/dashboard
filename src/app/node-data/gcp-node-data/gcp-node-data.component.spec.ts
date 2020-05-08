@@ -26,21 +26,15 @@ describe('GCPNodeDataComponent', () => {
   let component: GCPNodeDataComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            GCPNodeDataComponent,
-          ],
-          providers: [
-            {provide: ApiService, useClass: ApiMockService},
-            NodeDataService,
-            WizardService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [GCPNodeDataComponent],
+      providers: [
+        {provide: ApiService, useClass: ApiMockService},
+        NodeDataService,
+        WizardService,
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

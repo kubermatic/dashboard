@@ -67,27 +67,67 @@ import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
 
 const modules: any[] = [
-  CommonModule,          FormsModule,       ReactiveFormsModule,  CustomFormsModule,    FlexLayoutModule,
-  MatButtonModule,       MatIconModule,     MatInputModule,       MatListModule,        MatProgressSpinnerModule,
-  MatSidenavModule,      MatSnackBarModule, MatToolbarModule,     MatTooltipModule,     MatSelectModule,
-  MatAutocompleteModule, MatCheckboxModule, MatMenuModule,        MatChipsModule,       MatCardModule,
-  MatDialogModule,       MatSliderModule,   MatSlideToggleModule, MatProgressBarModule, MatExpansionModule,
-  MatSortModule,         MatTableModule,    MatDividerModule,     ClipboardModule,      MatButtonToggleModule,
-  MatTabsModule,         MatOptionModule,   MatFormFieldModule,   MatPaginatorModule,   MatSnackBarModule,
-  MatBadgeModule,        MatStepperModule,  FilterPipeModule,
+  CommonModule,
+  FormsModule,
+  ReactiveFormsModule,
+  CustomFormsModule,
+  FlexLayoutModule,
+  MatButtonModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatProgressSpinnerModule,
+  MatSidenavModule,
+  MatSnackBarModule,
+  MatToolbarModule,
+  MatTooltipModule,
+  MatSelectModule,
+  MatAutocompleteModule,
+  MatCheckboxModule,
+  MatMenuModule,
+  MatChipsModule,
+  MatCardModule,
+  MatDialogModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatProgressBarModule,
+  MatExpansionModule,
+  MatSortModule,
+  MatTableModule,
+  MatDividerModule,
+  ClipboardModule,
+  MatButtonToggleModule,
+  MatTabsModule,
+  MatOptionModule,
+  MatFormFieldModule,
+  MatPaginatorModule,
+  MatSnackBarModule,
+  MatBadgeModule,
+  MatStepperModule,
+  FilterPipeModule,
 ];
 
 const components: any[] = [
-  PropertyBooleanComponent,  DialogTitleComponent,
-  PropertyComponent,         EventListComponent,
-  LabelFormComponent,        LabelsComponent,
-  TaintFormComponent,        TaintsComponent,
-  RelativeTimePipe,          RelativeTimeComponent,
-  SSHKeyListComponent,       AddonsListComponent,
-  SettingsStatusComponent,   ShortNameInCircleComponent,
-  TagListComponent,          TokenDialogComponent,
-  NotificationComponent,     PropertyUsageComponent,
-  FilteredComboboxComponent, MachineNetworkComponent,
+  PropertyBooleanComponent,
+  DialogTitleComponent,
+  PropertyComponent,
+  EventListComponent,
+  LabelFormComponent,
+  LabelsComponent,
+  TaintFormComponent,
+  TaintsComponent,
+  RelativeTimePipe,
+  RelativeTimeComponent,
+  SSHKeyListComponent,
+  AddonsListComponent,
+  SettingsStatusComponent,
+  ShortNameInCircleComponent,
+  TagListComponent,
+  TokenDialogComponent,
+  NotificationComponent,
+  PropertyUsageComponent,
+  FilteredComboboxComponent,
+  MachineNetworkComponent,
 ];
 
 const entryComponents: any[] = [
@@ -101,28 +141,12 @@ const entryComponents: any[] = [
   NotificationComponent,
 ];
 
-const directives: any[] = [
-  AutofocusDirective,
-  OptionDirective,
-];
+const directives: any[] = [AutofocusDirective, OptionDirective];
 
 @NgModule({
-  imports: [
-    ...modules,
-  ],
-  declarations: [
-    ...components,
-    ...entryComponents,
-    ...directives,
-  ],
-  exports: [
-    ...modules,
-    ...components,
-    ...entryComponents,
-    ...directives,
-  ],
+  imports: [...modules],
+  declarations: [...components, ...entryComponents, ...directives],
+  exports: [...modules, ...components, ...entryComponents, ...directives],
   entryComponents: [...entryComponents],
 })
-
-export class SharedModule {
-}
+export class SharedModule {}

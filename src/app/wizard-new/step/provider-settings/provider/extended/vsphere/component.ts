@@ -1,4 +1,13 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  forwardRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {EMPTY, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, map, switchMap, takeUntil, tap} from 'rxjs/operators';
@@ -6,7 +15,10 @@ import {catchError, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {PresetsService} from '../../../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
 import {ClusterEntity} from '../../../../../../shared/entity/ClusterEntity';
-import {VSphereFolder, VSphereNetwork} from '../../../../../../shared/entity/provider/vsphere/VSphereEntity';
+import {
+  VSphereFolder,
+  VSphereNetwork,
+} from '../../../../../../shared/entity/provider/vsphere/VSphereEntity';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {isObjectEmpty} from '../../../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
@@ -33,19 +45,30 @@ enum FolderState {
   selector: 'km-wizard-vsphere-provider-extended',
   templateUrl: './template.html',
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => VSphereProviderExtendedComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => VSphereProviderExtendedComponent), multi: true}
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => VSphereProviderExtendedComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => VSphereProviderExtendedComponent),
+      multi: true,
+    },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class VSphereProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class VSphereProviderExtendedComponent extends BaseFormValidator
+  implements OnInit, OnDestroy {
   private _networkMap: {[type: string]: VSphereNetwork[]} = {};
   private _credentialsChanged = new EventEmitter<void>();
   private _username = '';
   private _password = '';
 
-  @ViewChild('folderCombobox') private readonly _folderCombobox: FilteredComboboxComponent;
-  @ViewChild('networkCombobox') private readonly _networkCombobox: FilteredComboboxComponent;
+  @ViewChild('folderCombobox')
+  private readonly _folderCombobox: FilteredComboboxComponent;
+  @ViewChild('networkCombobox')
+  private readonly _networkCombobox: FilteredComboboxComponent;
 
   readonly Controls = Controls;
 
@@ -58,8 +81,11 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   }
 
   constructor(
-      private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
-      private readonly _clusterService: ClusterService, private readonly _cdr: ChangeDetectorRef) {
+    private readonly _builder: FormBuilder,
+    private readonly _presets: PresetsService,
+    private readonly _clusterService: ClusterService,
+    private readonly _cdr: ChangeDetectorRef
+  ) {
     super('VSphere Provider Extended');
   }
 
@@ -69,24 +95,37 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       [Controls.Folder]: this._builder.control({value: '', disabled: true}),
     });
 
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterService.cluster.spec.cloud.vsphere)));
+    this.form.valueChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ =>
+        this._presets.enablePresets(
+          isObjectEmpty(this._clusterService.cluster.spec.cloud.vsphere)
+        )
+      );
 
-    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
+    this._presets.presetChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(preset =>
+        Object.values(Controls).forEach(control =>
+          this._enable(!preset, control)
+        )
+      );
 
-    this._clusterService.clusterChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(this._handleClusterChange.bind(this));
+    this._clusterService.clusterChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._handleClusterChange.bind(this));
 
-    this._credentialsChanged.pipe(tap(_ => this._clearFolders()))
-        .pipe(switchMap(_ => this._folderListObservable()))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(this._loadFolders.bind(this));
+    this._credentialsChanged
+      .pipe(tap(_ => this._clearFolders()))
+      .pipe(switchMap(_ => this._folderListObservable()))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._loadFolders.bind(this));
 
-    this._credentialsChanged.pipe(tap(_ => this._clearNetworks()))
-        .pipe(switchMap(_ => this._networkListObservable()))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(this._loadNetworks.bind(this));
+    this._credentialsChanged
+      .pipe(tap(_ => this._clearNetworks()))
+      .pipe(switchMap(_ => this._networkListObservable()))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._loadNetworks.bind(this));
   }
 
   getNetworks(type: string): VSphereNetwork[] {
@@ -105,7 +144,9 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     switch (control) {
       case Controls.VMNetName:
       case Controls.Folder:
-        return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
+        return this._hasRequiredCredentials()
+          ? ''
+          : 'Please enter your credentials first.';
     }
   }
 
@@ -158,22 +199,29 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   }
 
   private _hasRequiredCredentials(): boolean {
-    return !!this._clusterService.cluster.spec.cloud.vsphere &&
-        !!this._clusterService.cluster.spec.cloud.vsphere.username &&
-        !!this._clusterService.cluster.spec.cloud.vsphere.password;
+    return (
+      !!this._clusterService.cluster.spec.cloud.vsphere &&
+      !!this._clusterService.cluster.spec.cloud.vsphere.username &&
+      !!this._clusterService.cluster.spec.cloud.vsphere.password
+    );
   }
 
   private _networkListObservable(): Observable<VSphereNetwork[]> {
-    return this._presets.provider(NodeProvider.VSPHERE)
-        .username(this._clusterService.cluster.spec.cloud.vsphere.username)
-        .password(this._clusterService.cluster.spec.cloud.vsphere.password)
-        .datacenter(this._clusterService.datacenter)
-        .networks(this._onNetworksLoading.bind(this))
-        .pipe(map(networks => networks.sort((a, b) => a.name.localeCompare(b.name))))
-        .pipe(catchError(() => {
+    return this._presets
+      .provider(NodeProvider.VSPHERE)
+      .username(this._clusterService.cluster.spec.cloud.vsphere.username)
+      .password(this._clusterService.cluster.spec.cloud.vsphere.password)
+      .datacenter(this._clusterService.datacenter)
+      .networks(this._onNetworksLoading.bind(this))
+      .pipe(
+        map(networks => networks.sort((a, b) => a.name.localeCompare(b.name)))
+      )
+      .pipe(
+        catchError(() => {
           this._clearNetworks();
           return onErrorResumeNext(EMPTY);
-        }));
+        })
+      );
   }
 
   private _onNetworksLoading(): void {
@@ -190,15 +238,18 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   }
 
   private _folderListObservable(): Observable<VSphereFolder[]> {
-    return this._presets.provider(NodeProvider.VSPHERE)
-        .username(this._clusterService.cluster.spec.cloud.vsphere.username)
-        .password(this._clusterService.cluster.spec.cloud.vsphere.password)
-        .datacenter(this._clusterService.datacenter)
-        .folders(this._onFoldersLoading.bind(this))
-        .pipe(catchError(() => {
+    return this._presets
+      .provider(NodeProvider.VSPHERE)
+      .username(this._clusterService.cluster.spec.cloud.vsphere.username)
+      .password(this._clusterService.cluster.spec.cloud.vsphere.password)
+      .datacenter(this._clusterService.datacenter)
+      .folders(this._onFoldersLoading.bind(this))
+      .pipe(
+        catchError(() => {
           this._clearFolders();
           return onErrorResumeNext(EMPTY);
-        }));
+        })
+      );
   }
 
   private _onFoldersLoading(): void {

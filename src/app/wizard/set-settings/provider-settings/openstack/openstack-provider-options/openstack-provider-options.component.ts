@@ -4,7 +4,11 @@ import {merge, Subject} from 'rxjs';
 import {distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../../../core/services';
 import {ClusterEntity} from '../../../../../shared/entity/ClusterEntity';
-import {OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet} from '../../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {
+  OpenstackNetwork,
+  OpenstackSecurityGroup,
+  OpenstackSubnet,
+} from '../../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
 
@@ -39,52 +43,64 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
       this._loadOptionalSettings();
     }
     this._wizardService.changeClusterProviderSettings(
-        this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
+      this._clusterProviderSettingsForm(this._hasRequiredCredentials())
+    );
 
     merge(
-        this.form.controls.network.valueChanges, this.form.controls.subnetId.valueChanges,
-        this.form.controls.securityGroup.valueChanges)
-        .pipe(distinctUntilChanged())
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(() => {
-          this._wizardService.changeClusterProviderSettings(
-              this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
-        });
-
-    this.form.controls.network.valueChanges.pipe(distinctUntilChanged())
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(() => {
-          if (this._isNetworkSelected()) {
-            this._loadSubnetIds();
-          } else {
-            this._resetControls(this.form.controls.subnetId);
-          }
-        });
-
-    this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
-      this._selectedPreset = newCredentials;
-      if (newCredentials) {
-        this.form.disable();
+      this.form.controls.network.valueChanges,
+      this.form.controls.subnetId.valueChanges,
+      this.form.controls.securityGroup.valueChanges
+    )
+      .pipe(distinctUntilChanged())
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(() => {
         this._wizardService.changeClusterProviderSettings(
-            this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
-        return;
-      }
+          this._clusterProviderSettingsForm(this._hasRequiredCredentials())
+        );
+      });
 
-      if (this._hasRequiredCredentials()) {
-        this.form.enable();
-      }
-    });
+    this.form.controls.network.valueChanges
+      .pipe(distinctUntilChanged())
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(() => {
+        if (this._isNetworkSelected()) {
+          this._loadSubnetIds();
+        } else {
+          this._resetControls(this.form.controls.subnetId);
+        }
+      });
 
-    this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.cluster.spec.cloud.openstack = data.cloudSpec.openstack;
-      if (this._hasRequiredCredentials()) {
-        this._loadOptionalSettings();
-      }
-    });
+    this._wizardService.onCustomPresetSelect
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(newCredentials => {
+        this._selectedPreset = newCredentials;
+        if (newCredentials) {
+          this.form.disable();
+          this._wizardService.changeClusterProviderSettings(
+            this._clusterProviderSettingsForm(this._hasRequiredCredentials())
+          );
+          return;
+        }
 
-    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.hideOptional = data.hideOptional;
-    });
+        if (this._hasRequiredCredentials()) {
+          this.form.enable();
+        }
+      });
+
+    this._wizardService.clusterProviderSettingsFormChanges$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        this.cluster.spec.cloud.openstack = data.cloudSpec.openstack;
+        if (this._hasRequiredCredentials()) {
+          this._loadOptionalSettings();
+        }
+      });
+
+    this._wizardService.clusterSettingsFormViewChanged$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        this.hideOptional = data.hideOptional;
+      });
   }
 
   disableForm(): void {
@@ -94,10 +110,16 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
   showHint(field: string): boolean {
     switch (field) {
       case 'subnetId':
-        return !this._loadingSubnetIds &&
-            (!this._hasRequiredCredentials() || this.form.controls.network.value === '') && !this._selectedPreset;
+        return (
+          !this._loadingSubnetIds &&
+          (!this._hasRequiredCredentials() ||
+            this.form.controls.network.value === '') &&
+          !this._selectedPreset
+        );
       case 'optionalSettings':
-        return !this._loadingOptionalSettings && !this._hasRequiredCredentials();
+        return (
+          !this._loadingOptionalSettings && !this._hasRequiredCredentials()
+        );
       default:
         return false;
     }
@@ -111,9 +133,13 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
     } else {
       switch (field) {
         case 'Security Group':
-          return this.securityGroups.length === 0 && !this._selectedPreset ? 'No Security Groups available' : field;
+          return this.securityGroups.length === 0 && !this._selectedPreset
+            ? 'No Security Groups available'
+            : field;
         case 'Network':
-          return this.networks.length === 0 && !this._selectedPreset ? 'No Networks available' : field;
+          return this.networks.length === 0 && !this._selectedPreset
+            ? 'No Networks available'
+            : field;
         default:
           return '';
       }
@@ -121,11 +147,19 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   getSubnetIDFormState(): string {
-    if (!this._loadingSubnetIds && (!this._hasRequiredCredentials() || this.form.controls.network.value === '')) {
+    if (
+      !this._loadingSubnetIds &&
+      (!this._hasRequiredCredentials() ||
+        this.form.controls.network.value === '')
+    ) {
       return 'Subnet ID';
     } else if (this._loadingSubnetIds && !this._selectedPreset) {
       return 'Loading Subnet IDs...';
-    } else if (this.form.controls.network.value !== '' && this.subnetIds.length === 0 && !this._selectedPreset) {
+    } else if (
+      this.form.controls.network.value !== '' &&
+      this.subnetIds.length === 0 &&
+      !this._selectedPreset
+    ) {
       return 'No Subnet IDs available';
     } else {
       return 'Subnet ID';
@@ -139,90 +173,94 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
 
   private _loadOptionalSettings(): void {
     this._loadingOptionalSettings = true;
-    this._wizardService.provider(NodeProvider.OPENSTACK)
-        .username(this.cluster.spec.cloud.openstack.username)
-        .password(this.cluster.spec.cloud.openstack.password)
-        .tenant(this.cluster.spec.cloud.openstack.tenant)
-        .tenantID(this.cluster.spec.cloud.openstack.tenantID)
-        .domain(this.cluster.spec.cloud.openstack.domain)
-        .datacenter(this.cluster.spec.cloud.dc)
-        .networks()
-        .pipe(take(1))
-        .subscribe(
-            (networks: OpenstackNetwork[]) => {
-              this.networks = networks.filter((network) => network.external !== true).sort((a, b) => {
-                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
-              });
+    this._wizardService
+      .provider(NodeProvider.OPENSTACK)
+      .username(this.cluster.spec.cloud.openstack.username)
+      .password(this.cluster.spec.cloud.openstack.password)
+      .tenant(this.cluster.spec.cloud.openstack.tenant)
+      .tenantID(this.cluster.spec.cloud.openstack.tenantID)
+      .domain(this.cluster.spec.cloud.openstack.domain)
+      .datacenter(this.cluster.spec.cloud.dc)
+      .networks()
+      .pipe(take(1))
+      .subscribe(
+        (networks: OpenstackNetwork[]) => {
+          this.networks = networks
+            .filter(network => network.external !== true)
+            .sort((a, b) => a.name.localeCompare(b.name));
 
-              this._enableNetwork(this.networks.length !== 0);
-              this._loadingOptionalSettings = false;
-            },
-            () => {
-              this._loadingOptionalSettings = false;
-              this._resetControls(this.form.controls.network);
-            },
-            () => {
-              this._loadingOptionalSettings = false;
-            });
+          this._enableNetwork(this.networks.length !== 0);
+          this._loadingOptionalSettings = false;
+        },
+        () => {
+          this._loadingOptionalSettings = false;
+          this._resetControls(this.form.controls.network);
+        },
+        () => {
+          this._loadingOptionalSettings = false;
+        }
+      );
 
-    this._wizardService.provider(NodeProvider.OPENSTACK)
-        .username(this.cluster.spec.cloud.openstack.username)
-        .password(this.cluster.spec.cloud.openstack.password)
-        .tenant(this.cluster.spec.cloud.openstack.tenant)
-        .tenantID(this.cluster.spec.cloud.openstack.tenantID)
-        .domain(this.cluster.spec.cloud.openstack.domain)
-        .datacenter(this.cluster.spec.cloud.dc)
-        .securityGroups()
-        .pipe(take(1))
-        .subscribe(
-            (securityGroups) => {
-              this.securityGroups = securityGroups.sort((a, b) => {
-                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
-              });
+    this._wizardService
+      .provider(NodeProvider.OPENSTACK)
+      .username(this.cluster.spec.cloud.openstack.username)
+      .password(this.cluster.spec.cloud.openstack.password)
+      .tenant(this.cluster.spec.cloud.openstack.tenant)
+      .tenantID(this.cluster.spec.cloud.openstack.tenantID)
+      .domain(this.cluster.spec.cloud.openstack.domain)
+      .datacenter(this.cluster.spec.cloud.dc)
+      .securityGroups()
+      .pipe(take(1))
+      .subscribe(
+        securityGroups => {
+          this.securityGroups = securityGroups.sort((a, b) =>
+            a.name.localeCompare(b.name)
+          );
 
-              this._enableSecurityGroup(this.securityGroups.length !== 0);
-              this._loadingOptionalSettings = false;
-            },
-            () => {
-              this._loadingOptionalSettings = false;
-              this._resetControls(this.form.controls.securityGroup);
-            },
-            () => {
-              this._loadingOptionalSettings = false;
-            });
+          this._enableSecurityGroup(this.securityGroups.length !== 0);
+          this._loadingOptionalSettings = false;
+        },
+        () => {
+          this._loadingOptionalSettings = false;
+          this._resetControls(this.form.controls.securityGroup);
+        },
+        () => {
+          this._loadingOptionalSettings = false;
+        }
+      );
   }
 
   private _loadSubnetIds(): void {
     this._loadingSubnetIds = true;
-    this._wizardService.provider(NodeProvider.OPENSTACK)
-        .username(this.cluster.spec.cloud.openstack.username)
-        .password(this.cluster.spec.cloud.openstack.password)
-        .tenant(this.cluster.spec.cloud.openstack.tenant)
-        .tenantID(this.cluster.spec.cloud.openstack.tenantID)
-        .domain(this.cluster.spec.cloud.openstack.domain)
-        .datacenter(this.cluster.spec.cloud.dc)
-        .subnets(this.form.controls.network.value)
-        .pipe(take(1))
-        .subscribe(
-            (subnets) => {
-              this.subnetIds = subnets.sort((a, b) => {
-                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
-              });
+    this._wizardService
+      .provider(NodeProvider.OPENSTACK)
+      .username(this.cluster.spec.cloud.openstack.username)
+      .password(this.cluster.spec.cloud.openstack.password)
+      .tenant(this.cluster.spec.cloud.openstack.tenant)
+      .tenantID(this.cluster.spec.cloud.openstack.tenantID)
+      .domain(this.cluster.spec.cloud.openstack.domain)
+      .datacenter(this.cluster.spec.cloud.dc)
+      .subnets(this.form.controls.network.value)
+      .pipe(take(1))
+      .subscribe(
+        subnets => {
+          this.subnetIds = subnets.sort((a, b) => a.name.localeCompare(b.name));
 
-              if (this.subnetIds.length === 0) {
-                this.form.controls.subnetId.setValue('');
-              }
+          if (this.subnetIds.length === 0) {
+            this.form.controls.subnetId.setValue('');
+          }
 
-              this._enableSubnetID(this.subnetIds.length !== 0);
-              this._loadingSubnetIds = false;
-            },
-            () => {
-              this._loadingSubnetIds = false;
-              this._resetControls(this.form.controls.subnetId);
-            },
-            () => {
-              this._loadingSubnetIds = false;
-            });
+          this._enableSubnetID(this.subnetIds.length !== 0);
+          this._loadingSubnetIds = false;
+        },
+        () => {
+          this._loadingSubnetIds = false;
+          this._resetControls(this.form.controls.subnetId);
+        },
+        () => {
+          this._loadingSubnetIds = false;
+        }
+      );
   }
 
   private _resetControls(...controls: AbstractControl[]): void {
@@ -255,17 +293,23 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   private _hasRequiredCredentials(): boolean {
-    return ((this.cluster.spec.cloud.openstack.username !== '' && this.cluster.spec.cloud.openstack.password !== '' &&
-             this.cluster.spec.cloud.openstack.domain !== '') &&
-            (this.cluster.spec.cloud.openstack.tenant !== '' || this.cluster.spec.cloud.openstack.tenantID !== '')) ||
-        !!this._selectedPreset;
+    return (
+      (this.cluster.spec.cloud.openstack.username !== '' &&
+        this.cluster.spec.cloud.openstack.password !== '' &&
+        this.cluster.spec.cloud.openstack.domain !== '' &&
+        (this.cluster.spec.cloud.openstack.tenant !== '' ||
+          this.cluster.spec.cloud.openstack.tenantID !== '')) ||
+      !!this._selectedPreset
+    );
   }
 
   private _isNetworkSelected(): boolean {
     return this.form.controls.network.value.toString().length > 0;
   }
 
-  private _clusterProviderSettingsForm(isValid: boolean): ClusterProviderSettingsForm {
+  private _clusterProviderSettingsForm(
+    isValid: boolean
+  ): ClusterProviderSettingsForm {
     return {
       cloudSpec: {
         openstack: {

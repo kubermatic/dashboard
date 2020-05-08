@@ -7,7 +7,6 @@ import {NodeData} from '../../shared/model/NodeSpecChange';
   selector: 'km-node-data-options',
   templateUrl: './node-data-options.component.html',
 })
-
 export class NodeDataOptionsComponent {
   @Input() nodeData: NodeData;
   @Input() cloudSpec: CloudSpec;
