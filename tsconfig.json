@@ -1,6 +1,5 @@
 {
   "extends": "./node_modules/gts/tsconfig-google.json",
-  "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "./dist/out-tsc",
