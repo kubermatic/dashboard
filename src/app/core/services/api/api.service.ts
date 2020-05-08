@@ -19,7 +19,7 @@ import {PacketSize} from '../../../shared/entity/packet/PacketSizeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {AlibabaInstanceType, AlibabaZone} from '../../../shared/entity/provider/alibaba/Alibaba';
 import {AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws/AWS';
-import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
+import {AzureSizes, AzureZones} from '../../../shared/entity/provider/azure/AzureSizeEntity';
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '../../../shared/entity/provider/gcp/GCP';
 import {HetznerTypes} from '../../../shared/entity/provider/hetzner/TypeEntity';
@@ -232,6 +232,13 @@ export class ApiService {
   getAzureSizes(projectId: string, dc: string, cluster: string): Observable<AzureSizes[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/azure/sizes`;
     return this._http.get<AzureSizes[]>(url);
+  }
+
+  getAzureAvailabilityZones(projectId: string, dc: string, cluster: string, size: string): Observable<AzureZones> {
+    const url =
+        `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/azure/availabilityzones`;
+    const headers = new HttpHeaders().set('SKUName', size);
+    return this._http.get<AzureZones>(url, {headers});
   }
 
   getMembers(projectID: string): Observable<MemberEntity[]> {

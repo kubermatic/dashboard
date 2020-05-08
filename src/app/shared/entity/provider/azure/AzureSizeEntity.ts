@@ -6,3 +6,7 @@ export class AzureSizes {
   memoryInMB: number;
   maxDataDiskCount: number;
 }
+
+export class AzureZones {
+  zones: string[];
+}
