@@ -5,7 +5,10 @@ export const ButtonClickEvents = {
   right: {button: 2},
 };
 
-export function click(el: DebugElement|HTMLElement, eventObj: any = ButtonClickEvents.left): void {
+export function click(
+  el: DebugElement | HTMLElement,
+  eventObj: any = ButtonClickEvents.left
+): void {
   if (el instanceof HTMLElement) {
     el.click();
   } else {

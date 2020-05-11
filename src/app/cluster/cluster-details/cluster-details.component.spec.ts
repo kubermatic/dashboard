@@ -1,5 +1,11 @@
 import {HttpClientModule} from '@angular/common/http';
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
@@ -8,15 +14,36 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, Auth, ClusterService, DatacenterService, NotificationService, ProjectService, RBACService, UserService} from '../../core/services';
+import {
+  ApiService,
+  Auth,
+  ClusterService,
+  DatacenterService,
+  NotificationService,
+  ProjectService,
+  RBACService,
+  UserService,
+} from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
 import {nodesFake} from '../../testing/fake-data/node.fake';
-import {fakeBindings, fakeClusterBindings, fakeSimpleBindings, fakeSimpleClusterBindings} from '../../testing/fake-data/rbac.fake';
-import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../testing/router-stubs';
-import {ApiMockService, asyncData} from '../../testing/services/api-mock.service';
+import {
+  fakeBindings,
+  fakeClusterBindings,
+  fakeSimpleBindings,
+  fakeSimpleClusterBindings,
+} from '../../testing/fake-data/rbac.fake';
+import {
+  ActivatedRouteStub,
+  RouterStub,
+  RouterTestingModule,
+} from '../../testing/router-stubs';
+import {
+  ApiMockService,
+  asyncData,
+} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../testing/services/auth-mock.service';
 import {ClusterMockService} from '../../testing/services/cluster-mock-service';
@@ -44,54 +71,54 @@ describe('ClusterDetailsComponent', () => {
 
   beforeEach(async(() => {
     const rbacMock = {
-      'getClusterBindings': jest.fn(),
-      'getBindings': jest.fn(),
-      'deleteClusterBinding': jest.fn(),
-      'deleteBinding': jest.fn()
+      getClusterBindings: jest.fn(),
+      getBindings: jest.fn(),
+      deleteClusterBinding: jest.fn(),
+      deleteBinding: jest.fn(),
     };
-    rbacMock.getClusterBindings.mockReturnValue(asyncData([fakeClusterBindings()]));
+    rbacMock.getClusterBindings.mockReturnValue(
+      asyncData([fakeClusterBindings()])
+    );
     rbacMock.getBindings.mockReturnValue(asyncData([fakeBindings()]));
     rbacMock.deleteClusterBinding.mockReturnValue(of(null));
     rbacMock.deleteBinding.mockReturnValue(of(null));
 
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            HttpClientModule,
-            BrowserAnimationsModule,
-            RouterTestingModule,
-            SharedModule,
-          ],
-          declarations: [
-            ClusterDetailsComponent,
-            ClusterSecretsComponent,
-            NodeListComponent,
-            NodeDeploymentListComponent,
-            MachineNetworksDisplayComponent,
-            VersionPickerComponent,
-            RBACComponent,
-          ],
-          providers: [
-            {provide: ApiService, useClass: ApiMockService},
-            {provide: ClusterService, useClass: ClusterMockService},
-            {provide: DatacenterService, useClass: DatacenterMockService},
-            {provide: Auth, useClass: AuthMockService},
-            {provide: Router, useClass: RouterStub},
-            {provide: ActivatedRoute, useClass: ActivatedRouteStub},
-            {provide: UserService, useClass: UserMockService},
-            {provide: AppConfigService, useClass: AppConfigMockService},
-            {provide: NodeService, useClass: NodeMockService},
-            {provide: ProjectService, useClass: ProjectMockService},
-            {provide: SettingsService, useClass: SettingsMockService},
-            {provide: RBACService, useValue: rbacMock},
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-            {provide: MatDialog, useClass: MatDialogMock},
-            GoogleAnalyticsService,
-            NotificationService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        RouterTestingModule,
+        SharedModule,
+      ],
+      declarations: [
+        ClusterDetailsComponent,
+        ClusterSecretsComponent,
+        NodeListComponent,
+        NodeDeploymentListComponent,
+        MachineNetworksDisplayComponent,
+        VersionPickerComponent,
+        RBACComponent,
+      ],
+      providers: [
+        {provide: ApiService, useClass: ApiMockService},
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: DatacenterService, useClass: DatacenterMockService},
+        {provide: Auth, useClass: AuthMockService},
+        {provide: Router, useClass: RouterStub},
+        {provide: ActivatedRoute, useClass: ActivatedRouteStub},
+        {provide: UserService, useClass: UserMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: NodeService, useClass: NodeMockService},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: SettingsService, useClass: SettingsMockService},
+        {provide: RBACService, useValue: rbacMock},
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: MatDialog, useClass: MatDialogMock},
+        GoogleAnalyticsService,
+        NotificationService,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -99,44 +126,49 @@ describe('ClusterDetailsComponent', () => {
     component = fixture.componentInstance;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
-    activatedRoute.testParamMap = {clusterName: '4k6txp5sq', seedDc: 'europe-west3-c'};
+    activatedRoute.testParamMap = {
+      clusterName: '4k6txp5sq',
+      seedDc: 'europe-west3-c',
+    };
 
     fixture.debugElement.query(By.css('.km-spinner'));
     fixture.debugElement.query(By.css('.km-cluster-detail-actions'));
   });
 
-  it('should initialize', (() => {
-       expect(component).toBeTruthy();
-     }));
+  it('should initialize', () => {
+    expect(component).toBeTruthy();
+  });
 
   it('should get cluster', fakeAsync(() => {
-       fixture.detectChanges();
+    fixture.detectChanges();
 
-       const expectedCluster = fakeDigitaloceanCluster();
-       expectedCluster.creationTimestamp = expect.any(Date);
+    const expectedCluster = fakeDigitaloceanCluster();
+    expectedCluster.creationTimestamp = expect.any(Date);
 
-       tick();
-       expect(component.cluster).toEqual(expectedCluster);
-     }));
+    tick();
+    expect(component.cluster).toEqual(expectedCluster);
+  }));
 
   it('should get nodes', fakeAsync(() => {
-       fixture.detectChanges();
+    fixture.detectChanges();
 
-       const expectedNodes = nodesFake();
-       expectedNodes[0].creationTimestamp = expect.any(Date);
-       expectedNodes[1].creationTimestamp = expect.any(Date);
+    const expectedNodes = nodesFake();
+    expectedNodes[0].creationTimestamp = expect.any(Date);
+    expectedNodes[1].creationTimestamp = expect.any(Date);
 
-       tick();
-       expect(component.nodes).toEqual(expectedNodes);
-     }));
+    tick();
+    expect(component.nodes).toEqual(expectedNodes);
+  }));
 
-  it('should create simple cluster binding for rbac', (() => {
-       const simpleClusterBindings = component.createSimpleClusterBinding(fakeClusterBindings());
-       expect(simpleClusterBindings).toEqual(fakeSimpleClusterBindings());
-     }));
+  it('should create simple cluster binding for rbac', () => {
+    const simpleClusterBindings = component.createSimpleClusterBinding(
+      fakeClusterBindings()
+    );
+    expect(simpleClusterBindings).toEqual(fakeSimpleClusterBindings());
+  });
 
-  it('should create simple binding for rbac', (() => {
-       const simpleBindings = component.createSimpleBinding(fakeBindings());
-       expect(simpleBindings).toEqual(fakeSimpleBindings());
-     }));
+  it('should create simple binding for rbac', () => {
+    const simpleBindings = component.createSimpleBinding(fakeBindings());
+    expect(simpleBindings).toEqual(fakeSimpleBindings());
+  });
 });

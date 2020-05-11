@@ -28,8 +28,10 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(
-      private readonly _clusterService: ClusterService, private readonly _nodeDataService: NodeDataService,
-      private readonly _datacenterService: DatacenterService) {}
+    private readonly _clusterService: ClusterService,
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _datacenterService: DatacenterService
+  ) {}
 
   get country(): string {
     return this._country;
@@ -50,16 +52,19 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.nodeData = this._nodeDataService.nodeData;
     this.cluster = this._clusterService.cluster;
-    this._clusterService.sshKeyChanges.pipe(takeUntil(this._unsubscribe)).subscribe(keys => this.clusterSSHKeys = keys);
+    this._clusterService.sshKeyChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(keys => (this.clusterSSHKeys = keys));
 
-    this._clusterService.datacenterChanges.pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(dc => {
-          this._location = dc.spec.location;
-          this._country = dc.spec.country;
-        });
+    this._clusterService.datacenterChanges
+      .pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(dc => {
+        this._location = dc.spec.location;
+        this._country = dc.spec.country;
+      });
 
-    if (!!this.cluster.spec.machineNetworks) {
+    if (this.cluster.spec.machineNetworks) {
       this.noMoreIpsLeft = this._noIpsLeft(this.cluster, this.nodeData.count);
     }
   }
@@ -78,14 +83,21 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   displayProvider(): boolean {
-    return Object.values(NodeProvider)
-               .filter(p => p !== NodeProvider.BAREMETAL && p !== NodeProvider.BRINGYOUROWN)
-               .some(p => this._hasProviderOptions(p)) ||
-        this._clusterService.provider === NodeProvider.BRINGYOUROWN;
+    return (
+      Object.values(NodeProvider)
+        .filter(
+          p => p !== NodeProvider.BAREMETAL && p !== NodeProvider.BRINGYOUROWN
+        )
+        .some(p => this._hasProviderOptions(p)) ||
+      this._clusterService.provider === NodeProvider.BRINGYOUROWN
+    );
   }
 
   displayTags(tags: object): boolean {
-    return !!tags && Object.keys(LabelFormComponent.filterNullifiedKeys(tags)).length > 0;
+    return (
+      !!tags &&
+      Object.keys(LabelFormComponent.filterNullifiedKeys(tags)).length > 0
+    );
   }
 
   displayNoProviderTags(): boolean {
@@ -100,8 +112,11 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
       case NodeProvider.DIGITALOCEAN:
       case NodeProvider.GCP:
       case NodeProvider.PACKET:
-        return this.nodeData.spec.cloud[provider] && this.nodeData.spec.cloud[provider].tags &&
-            this.nodeData.spec.cloud[provider].tags.length === 0;
+        return (
+          this.nodeData.spec.cloud[provider] &&
+          this.nodeData.spec.cloud[provider].tags &&
+          this.nodeData.spec.cloud[provider].tags.length === 0
+        );
     }
 
     return false;
@@ -116,15 +131,18 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   private _hasProviderOptions(provider: NodeProvider): boolean {
-    return this._clusterService.provider === provider && this.cluster.spec.cloud[provider] &&
-        Object.values(this.cluster.spec.cloud[provider]).some(val => val);
+    return (
+      this._clusterService.provider === provider &&
+      this.cluster.spec.cloud[provider] &&
+      Object.values(this.cluster.spec.cloud[provider]).some(val => val)
+    );
   }
 
   private _noIpsLeft(cluster: ClusterEntity, nodeCount: number): boolean {
     const ipCount = getIpCount(cluster.spec.machineNetworks);
 
     if (!!ipCount && ipCount > 0) {
-      return !((ipCount - nodeCount) >= 0);
+      return !(ipCount - nodeCount >= 0);
     } else {
       return false;
     }

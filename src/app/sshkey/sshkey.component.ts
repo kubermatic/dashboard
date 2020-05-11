@@ -1,4 +1,10 @@
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  Component,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -7,7 +13,12 @@ import {Subject, timer} from 'rxjs';
 import {first, retry, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
-import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
+import {
+  ApiService,
+  NotificationService,
+  ProjectService,
+  UserService,
+} from '../core/services';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddSshKeyDialogComponent} from '../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
@@ -15,21 +26,29 @@ import {ConfirmationDialogComponent} from '../shared/components/confirmation-dia
 import {MemberEntity} from '../shared/entity/MemberEntity';
 import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
 import {GroupConfig} from '../shared/model/Config';
-import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
+import {
+  MemberUtils,
+  Permission,
+} from '../shared/utils/member-utils/member-utils';
 
 @Component({
   selector: 'km-sshkey',
   templateUrl: './sshkey.component.html',
   styleUrls: ['./sshkey.component.scss'],
 })
-
 export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   loading = true;
   sshKeys: SSHKeyEntity[] = [];
   userGroup: string;
   projectID: string;
   isShowPublicKey = [];
-  displayedColumns: string[] = ['stateArrow', 'name', 'fingerprint', 'creationTimestamp', 'actions'];
+  displayedColumns: string[] = [
+    'stateArrow',
+    'name',
+    'fingerprint',
+    'creationTimestamp',
+    'actions',
+  ];
   toggledColumns: string[] = ['publickey'];
   dataSource = new MatTableDataSource<SSHKeyEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -39,11 +58,15 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
-      private readonly _api: ApiService, private readonly _userService: UserService,
-      private readonly _appConfigService: AppConfigService, public dialog: MatDialog,
-      private readonly _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _projectService: ProjectService, private readonly _notificationService: NotificationService,
-      private readonly _settingsService: SettingsService) {}
+    private readonly _api: ApiService,
+    private readonly _userService: UserService,
+    private readonly _appConfigService: AppConfigService,
+    public dialog: MatDialog,
+    private readonly _googleAnalyticsService: GoogleAnalyticsService,
+    private readonly _projectService: ProjectService,
+    private readonly _notificationService: NotificationService,
+    private readonly _settingsService: SettingsService
+  ) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.sshKeys;
@@ -51,28 +74,41 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._userService.loggedInUser.pipe(first()).subscribe(user => this._user = user);
+    this._userService.loggedInUser
+      .pipe(first())
+      .subscribe(user => (this._user = user));
 
-    this._userService.currentUserGroup(this.projectID)
-        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
+    this._userService
+      .currentUserGroup(this.projectID)
+      .subscribe(
+        userGroup =>
+          (this._currentGroupConfig = this._userService.userGroupConfig(
+            userGroup
+          ))
+      );
 
-
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      this.paginator.pageSize = settings.itemsPerPage;
-      this.dataSource.paginator = this.paginator;  // Force refresh.
-    });
+    this._settingsService.userSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => {
+        this.paginator.pageSize = settings.itemsPerPage;
+        this.dataSource.paginator = this.paginator; // Force refresh.
+      });
 
     this._projectService.selectedProject
-        .pipe(switchMap(project => {
+      .pipe(
+        switchMap(project => {
           this.projectID = project.id;
           return this._userService.currentUserGroup(this.projectID);
-        }))
-        .pipe(switchMap(group => {
+        })
+      )
+      .pipe(
+        switchMap(group => {
           this.userGroup = group;
           return timer(0, 10 * this._appConfigService.getRefreshTimeBase());
-        }))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(() => this.refreshSSHKeys());
+        })
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(() => this.refreshSSHKeys());
   }
 
   ngOnChanges(): void {
@@ -89,32 +125,49 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getPublicKey(sshKey: SSHKeyEntity): string {
-    return sshKey.spec.publicKey.slice(this.getPublicKeyName(sshKey).length + 1, -1);
+    return sshKey.spec.publicKey.slice(
+      this.getPublicKeyName(sshKey).length + 1,
+      -1
+    );
   }
 
   refreshSSHKeys(): void {
-    this._api.getSSHKeys(this.projectID).pipe(retry(3)).pipe(takeUntil(this._unsubscribe)).subscribe((res) => {
-      this.sshKeys = res;
-      this.dataSource.data = this.sshKeys;
-      this.loading = false;
-    });
+    this._api
+      .getSSHKeys(this.projectID)
+      .pipe(retry(3))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(res => {
+        this.sshKeys = res;
+        this.dataSource.data = this.sshKeys;
+        this.loading = false;
+      });
   }
 
   canAdd(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, `sshKeys`, Permission.Create);
+    return MemberUtils.hasPermission(
+      this._user,
+      this._currentGroupConfig,
+      'sshKeys',
+      Permission.Create
+    );
   }
 
   addSshKey(): void {
     const dialogRef = this.dialog.open(AddSshKeyDialogComponent);
     dialogRef.componentInstance.projectID = this.projectID;
 
-    dialogRef.afterClosed().subscribe((result) => {
-      result && this.refreshSSHKeys();  // tslint:disable-line
+    dialogRef.afterClosed().subscribe(result => {
+      result && this.refreshSSHKeys();
     });
   }
 
   canDelete(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, `sshKeys`, Permission.Delete);
+    return MemberUtils.hasPermission(
+      this._user,
+      this._currentGroupConfig,
+      'sshKeys',
+      Permission.Delete
+    );
   }
 
   deleteSshKey(sshKey: SSHKeyEntity, event: Event): void {
@@ -131,14 +184,25 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
       },
     };
 
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
-    this._googleAnalyticsService.emitEvent('sshKeyOverview', 'deleteSshKeyOpened');
+    const dialogRef = this.dialog.open(
+      ConfirmationDialogComponent,
+      dialogConfig
+    );
+    this._googleAnalyticsService.emitEvent(
+      'sshKeyOverview',
+      'deleteSshKeyOpened'
+    );
 
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
         this._api.deleteSSHKey(sshKey.id, this.projectID).subscribe(() => {
-          this._notificationService.success(`SSH key ${sshKey.name} has been removed from project ${this.projectID}`);
-          this._googleAnalyticsService.emitEvent('sshKeyOverview', 'SshKeyDeleted');
+          this._notificationService.success(
+            `SSH key ${sshKey.name} has been removed from project ${this.projectID}`
+          );
+          this._googleAnalyticsService.emitEvent(
+            'sshKeyOverview',
+            'SshKeyDeleted'
+          );
         });
       }
     });
@@ -153,6 +217,10 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isPaginatorVisible(): boolean {
-    return this.hasItems() && this.paginator && this.sshKeys.length > this.paginator.pageSize;
+    return (
+      this.hasItems() &&
+      this.paginator &&
+      this.sshKeys.length > this.paginator.pageSize
+    );
   }
 }

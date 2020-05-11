@@ -3,7 +3,10 @@ import {LabelFormComponent} from '../../shared/components/label-form/label-form.
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {getIpCount} from '../../shared/functions/get-ip-count';
-import {ClusterDatacenterForm, ClusterProviderForm} from '../../shared/model/ClusterForm';
+import {
+  ClusterDatacenterForm,
+  ClusterProviderForm,
+} from '../../shared/model/ClusterForm';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {NodeUtils} from '../../shared/utils/node-utils/node-utils';
 
@@ -21,7 +24,7 @@ export class SummaryComponent implements OnInit {
   noMoreIpsLeft = false;
 
   ngOnInit(): void {
-    if (!!this.cluster.spec.machineNetworks) {
+    if (this.cluster.spec.machineNetworks) {
       this.noMoreIpsLeft = this.noIpsLeft(this.cluster, this.nodeData.count);
     }
   }
@@ -35,31 +38,50 @@ export class SummaryComponent implements OnInit {
   }
 
   displayProvider(): boolean {
-    return !!this.cluster.spec.cloud.digitalocean || !!this.cluster.spec.cloud.hetzner ||
-        !!this.cluster.spec.cloud.bringyourown || !!this.cluster.spec.cloud.alibaba ||
-        (!!this.cluster.spec.cloud.aws && !this.hasAWSProviderOptions()) ||
-        (!!this.cluster.spec.cloud.gcp && !this.hasGCPProviderOptions()) ||
-        (!!this.cluster.spec.cloud.azure && !this.hasAzureProviderOptions());
+    return (
+      !!this.cluster.spec.cloud.digitalocean ||
+      !!this.cluster.spec.cloud.hetzner ||
+      !!this.cluster.spec.cloud.bringyourown ||
+      !!this.cluster.spec.cloud.alibaba ||
+      (!!this.cluster.spec.cloud.aws && !this.hasAWSProviderOptions()) ||
+      (!!this.cluster.spec.cloud.gcp && !this.hasGCPProviderOptions()) ||
+      (!!this.cluster.spec.cloud.azure && !this.hasAzureProviderOptions())
+    );
   }
 
   hasAWSProviderOptions(): boolean {
-    return this.cluster.spec.cloud.aws.securityGroupID !== '' || this.cluster.spec.cloud.aws.vpcId !== '' ||
-        this.cluster.spec.cloud.aws.vpcId !== '' || this.cluster.spec.cloud.aws.routeTableId !== '' ||
-        this.cluster.spec.cloud.aws.instanceProfileName !== '' || this.cluster.spec.cloud.aws.roleARN !== '';
+    return (
+      this.cluster.spec.cloud.aws.securityGroupID !== '' ||
+      this.cluster.spec.cloud.aws.vpcId !== '' ||
+      this.cluster.spec.cloud.aws.vpcId !== '' ||
+      this.cluster.spec.cloud.aws.routeTableId !== '' ||
+      this.cluster.spec.cloud.aws.instanceProfileName !== '' ||
+      this.cluster.spec.cloud.aws.roleARN !== ''
+    );
   }
 
   hasGCPProviderOptions(): boolean {
-    return this.cluster.spec.cloud.gcp.network !== '' || this.cluster.spec.cloud.gcp.subnetwork !== '';
+    return (
+      this.cluster.spec.cloud.gcp.network !== '' ||
+      this.cluster.spec.cloud.gcp.subnetwork !== ''
+    );
   }
 
   hasAzureProviderOptions(): boolean {
-    return this.cluster.spec.cloud.azure.resourceGroup !== '' || this.cluster.spec.cloud.azure.routeTable !== '' ||
-        this.cluster.spec.cloud.azure.securityGroup !== '' || this.cluster.spec.cloud.azure.subnet !== '' ||
-        this.cluster.spec.cloud.azure.vnet !== '';
+    return (
+      this.cluster.spec.cloud.azure.resourceGroup !== '' ||
+      this.cluster.spec.cloud.azure.routeTable !== '' ||
+      this.cluster.spec.cloud.azure.securityGroup !== '' ||
+      this.cluster.spec.cloud.azure.subnet !== '' ||
+      this.cluster.spec.cloud.azure.vnet !== ''
+    );
   }
 
   displayTags(tags: object): boolean {
-    return !!tags && Object.keys(LabelFormComponent.filterNullifiedKeys(tags)).length > 0;
+    return (
+      !!tags &&
+      Object.keys(LabelFormComponent.filterNullifiedKeys(tags)).length > 0
+    );
   }
 
   displayNoProviderTags(): boolean {
@@ -92,7 +114,7 @@ export class SummaryComponent implements OnInit {
     const ipCount = getIpCount(cluster.spec.machineNetworks);
 
     if (!!ipCount && ipCount > 0) {
-      return !((ipCount - nodeCount) >= 0);
+      return !(ipCount - nodeCount >= 0);
     } else {
       return false;
     }

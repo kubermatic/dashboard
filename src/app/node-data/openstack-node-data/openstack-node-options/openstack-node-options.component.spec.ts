@@ -22,20 +22,11 @@ describe('OpenstackNodeOptionsComponent', () => {
   let component: OpenstackNodeOptionsComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            OpenstackNodeOptionsComponent,
-          ],
-          providers: [
-            NodeDataService,
-            WizardService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [OpenstackNodeOptionsComponent],
+      providers: [NodeDataService, WizardService],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

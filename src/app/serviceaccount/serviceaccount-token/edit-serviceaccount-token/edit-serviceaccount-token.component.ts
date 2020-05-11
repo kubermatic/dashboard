@@ -5,13 +5,16 @@ import {first} from 'rxjs/operators';
 
 import {ApiService, NotificationService} from '../../../core/services';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
-import {ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../../shared/entity/ServiceAccountEntity';
+import {
+  ServiceAccountEntity,
+  ServiceAccountTokenEntity,
+  ServiceAccountTokenPatch,
+} from '../../../shared/entity/ServiceAccountEntity';
 
 @Component({
   selector: 'km-edit-serviceaccount-token',
   templateUrl: './edit-serviceaccount-token.component.html',
 })
-
 export class EditServiceAccountTokenComponent implements OnInit {
   @Input() project: ProjectEntity;
   @Input() serviceaccount: ServiceAccountEntity;
@@ -19,9 +22,12 @@ export class EditServiceAccountTokenComponent implements OnInit {
   editServiceAccountTokenForm: FormGroup;
 
   constructor(
-      private readonly _apiService: ApiService,
-      private readonly _matDialogRef: MatDialogRef<EditServiceAccountTokenComponent>,
-      private readonly _notificationService: NotificationService) {}
+    private readonly _apiService: ApiService,
+    private readonly _matDialogRef: MatDialogRef<
+      EditServiceAccountTokenComponent
+    >,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.editServiceAccountTokenForm = new FormGroup({
@@ -35,11 +41,18 @@ export class EditServiceAccountTokenComponent implements OnInit {
     };
 
     this._apiService
-        .patchServiceAccountToken(this.project.id, this.serviceaccount, this.token, patchServiceAccountToken)
-        .pipe(first())
-        .subscribe(() => {
-          this._matDialogRef.close(true);
-          this._notificationService.success(`Token ${this.token.name} is edited successfully`);
-        });
+      .patchServiceAccountToken(
+        this.project.id,
+        this.serviceaccount,
+        this.token,
+        patchServiceAccountToken
+      )
+      .pipe(first())
+      .subscribe(() => {
+        this._matDialogRef.close(true);
+        this._notificationService.success(
+          `Token ${this.token.name} is edited successfully`
+        );
+      });
   }
 }

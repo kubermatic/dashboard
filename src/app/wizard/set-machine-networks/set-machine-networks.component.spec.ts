@@ -24,19 +24,11 @@ describe('SetMachineNetworksComponent', () => {
   let component: SetMachineNetworksComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            SetMachineNetworksComponent,
-          ],
-          providers: [
-            WizardService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [SetMachineNetworksComponent],
+      providers: [WizardService],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -49,11 +41,13 @@ describe('SetMachineNetworksComponent', () => {
         cloud: {
           dc: '',
         },
-        machineNetworks: [{
-          cidr: '',
-          dnsServers: [],
-          gateway: '',
-        }],
+        machineNetworks: [
+          {
+            cidr: '',
+            dnsServers: [],
+            gateway: '',
+          },
+        ],
       },
       type: ClusterType.Empty,
     };

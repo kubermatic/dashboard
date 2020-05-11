@@ -4,10 +4,18 @@ import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../app-config.service';
-import {NotificationService, ProjectService, UserService} from '../../core/services';
+import {
+  NotificationService,
+  ProjectService,
+  UserService,
+} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
-import {MemberEntity, Theme, UserSettings} from '../../shared/entity/MemberEntity';
+import {
+  MemberEntity,
+  Theme,
+  UserSettings,
+} from '../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
 
@@ -22,43 +30,62 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   itemsPerPageOptions = [5, 10, 15, 20, 25];
   projects: ProjectEntity[] = [];
   user: MemberEntity;
-  settings: UserSettings;     // Local settings copy. User can edit it.
-  apiSettings: UserSettings;  // Original settings from the API. Cannot be edited by the user.
+  settings: UserSettings; // Local settings copy. User can edit it.
+  apiSettings: UserSettings; // Original settings from the API. Cannot be edited by the user.
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 
   constructor(
-      private readonly _userService: UserService, private readonly _settingsService: SettingsService,
-      private readonly _historyService: HistoryService, private readonly _appConfigService: AppConfigService,
-      private readonly _notificationService: NotificationService, private readonly _projectService: ProjectService) {}
+    private readonly _userService: UserService,
+    private readonly _settingsService: SettingsService,
+    private readonly _historyService: HistoryService,
+    private readonly _appConfigService: AppConfigService,
+    private readonly _notificationService: NotificationService,
+    private readonly _projectService: ProjectService
+  ) {}
 
   ngOnInit(): void {
     this.enableThemes = !this._appConfigService.getConfig().disable_themes;
 
-    this._userService.loggedInUser.pipe(first()).subscribe(user => this.user = user);
+    this._userService.loggedInUser
+      .pipe(first())
+      .subscribe(user => (this.user = user));
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      if (!_.isEqual(settings, this.apiSettings)) {
-        if (this.apiSettings) {
-          this._notificationService.success('Successfully applied external settings update');
-        }
-        this.apiSettings = settings;
-        this.settings = _.cloneDeep(this.apiSettings);
-      }
-    });
-
-    this._settingsChange.pipe(debounceTime(1000))
-        .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(() => this._settingsService.patchUserSettings(objectDiff(this.settings, this.apiSettings))))
-        .subscribe(settings => {
+    this._settingsService.userSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => {
+        if (!_.isEqual(settings, this.apiSettings)) {
+          if (this.apiSettings) {
+            this._notificationService.success(
+              'Successfully applied external settings update'
+            );
+          }
           this.apiSettings = settings;
           this.settings = _.cloneDeep(this.apiSettings);
-          this._settingsService.refreshUserSettings();
-        });
+        }
+      });
 
-    this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe(projects => {
-      this.projects = projects;
-    });
+    this._settingsChange
+      .pipe(debounceTime(1000))
+      .pipe(takeUntil(this._unsubscribe))
+      .pipe(
+        switchMap(() =>
+          this._settingsService.patchUserSettings(
+            objectDiff(this.settings, this.apiSettings)
+          )
+        )
+      )
+      .subscribe(settings => {
+        this.apiSettings = settings;
+        this.settings = _.cloneDeep(this.apiSettings);
+        this._settingsService.refreshUserSettings();
+      });
+
+    this._projectService.projects
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(projects => {
+        this.projects = projects;
+      });
   }
 
   ngOnDestroy(): void {
@@ -79,7 +106,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   }
 
   hasDefaultProject(): string {
-    return !!this.settings.selectedProjectId ? '' : '-- None --';
+    return this.settings.selectedProjectId ? '' : '-- None --';
   }
 
   isAdmin(): boolean {

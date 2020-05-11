@@ -14,24 +14,20 @@ describe('VSphereClusterSettingsComponent', () => {
   let component: VSphereClusterSettingsComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            BrowserAnimationsModule,
-            ReactiveFormsModule,
-            SharedModule,
-            HttpClientModule,
-          ],
-          declarations: [
-            VSphereClusterSettingsComponent,
-          ],
-          providers: [
-            {provide: ApiService, useClass: ApiMockService},
-            WizardService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        SharedModule,
+        HttpClientModule,
+      ],
+      declarations: [VSphereClusterSettingsComponent],
+      providers: [
+        {provide: ApiService, useClass: ApiMockService},
+        WizardService,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -56,13 +52,21 @@ describe('VSphereClusterSettingsComponent', () => {
   it('required fields', () => {
     expect(component.form.valid).toBeFalsy();
     expect(component.form.controls.infraManagementUsername.valid).toBeFalsy();
-    expect(component.form.controls.infraManagementUsername.hasError('required')).toBeTruthy();
+    expect(
+      component.form.controls.infraManagementUsername.hasError('required')
+    ).toBeTruthy();
     expect(component.form.controls.infraManagementPassword.valid).toBeFalsy();
-    expect(component.form.controls.infraManagementPassword.hasError('required')).toBeTruthy();
+    expect(
+      component.form.controls.infraManagementPassword.hasError('required')
+    ).toBeTruthy();
 
     component.form.controls.infraManagementUsername.patchValue('foo');
-    expect(component.form.controls.infraManagementUsername.hasError('required')).toBeFalsy();
+    expect(
+      component.form.controls.infraManagementUsername.hasError('required')
+    ).toBeFalsy();
     component.form.controls.infraManagementPassword.patchValue('foo');
-    expect(component.form.controls.infraManagementPassword.hasError('required')).toBeFalsy();
+    expect(
+      component.form.controls.infraManagementPassword.hasError('required')
+    ).toBeFalsy();
   });
 });

@@ -17,9 +17,12 @@ export class AddSshKeyDialogComponent implements OnInit {
   addSSHKeyForm: FormGroup;
 
   constructor(
-      private api: ApiService, private formBuilder: FormBuilder,
-      private dialogRef: MatDialogRef<AddSshKeyDialogComponent>, public googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _notificationService: NotificationService) {}
+    private api: ApiService,
+    private formBuilder: FormBuilder,
+    private dialogRef: MatDialogRef<AddSshKeyDialogComponent>,
+    public googleAnalyticsService: GoogleAnalyticsService,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.addSSHKeyForm = this.formBuilder.group({
@@ -33,11 +36,15 @@ export class AddSshKeyDialogComponent implements OnInit {
     const name = this.addSSHKeyForm.controls['name'].value;
     const key = this.addSSHKeyForm.controls['key'].value;
 
-    this.api.addSSHKey(new SSHKeyEntity(name, null, key), this.projectID).subscribe((result) => {
-      this._notificationService.success(`SSH key ${name} added successfully to project`);
-      this.googleAnalyticsService.emitEvent('addSshKey', 'sshKeyAdded');
-      this.dialogRef.close(result);
-    });
+    this.api
+      .addSSHKey(new SSHKeyEntity(name, null, key), this.projectID)
+      .subscribe(result => {
+        this._notificationService.success(
+          `SSH key ${name} added successfully to project`
+        );
+        this.googleAnalyticsService.emitEvent('addSshKey', 'sshKeyAdded');
+        this.dialogRef.close(result);
+      });
   }
 
   onNewKeyTextChanged(): void {

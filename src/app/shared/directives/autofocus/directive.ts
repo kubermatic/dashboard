@@ -1,4 +1,11 @@
-import {AfterViewInit, Directive, ElementRef, EventEmitter, Input, OnDestroy} from '@angular/core';
+import {
+  AfterViewInit,
+  Directive,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+} from '@angular/core';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 

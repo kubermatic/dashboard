@@ -6,31 +6,18 @@ import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {ProgressComponent} from './progress.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 describe('ProgressComponent', () => {
   let fixture: ComponentFixture<ProgressComponent>;
   let component: ProgressComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            ProgressComponent,
-          ],
-          providers: [
-            StepsService,
-            GoogleAnalyticsService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [ProgressComponent],
+      providers: [StepsService, GoogleAnalyticsService],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

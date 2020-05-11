@@ -24,11 +24,7 @@ class MatDialogMock {
 describe('NodeService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserAnimationsModule,
-        MatSnackBarModule,
-        CoreModule,
-      ],
+      imports: [BrowserAnimationsModule, MatSnackBarModule, CoreModule],
       providers: [
         NodeService,
         GoogleAnalyticsService,
@@ -40,21 +36,25 @@ describe('NodeService', () => {
   });
 
   it('should initialize', inject([NodeService], (service: NodeService) => {
-       expect(service).toBeTruthy();
-     }));
+    expect(service).toBeTruthy();
+  }));
 
-  it('should resolve with true value', fakeAsync(inject([NodeService], (service: NodeService) => {
-       const nd = nodeDeploymentsFake()[0];
-       const clusterID = fakeDigitaloceanCluster().id;
-       const projectID = fakeProject().id;
-       const dcName = fakeDigitaloceanDatacenter().metadata.name;
-       let isConfirmed = false;
+  it('should resolve with true value', fakeAsync(
+    inject([NodeService], (service: NodeService) => {
+      const nd = nodeDeploymentsFake()[0];
+      const clusterID = fakeDigitaloceanCluster().id;
+      const projectID = fakeProject().id;
+      const dcName = fakeDigitaloceanDatacenter().metadata.name;
+      let isConfirmed = false;
 
-       service.showNodeDeploymentDeleteDialog(nd, clusterID, projectID, dcName, null).subscribe(confirmed => {
-         isConfirmed = confirmed;
-       });
-       tick();
+      service
+        .showNodeDeploymentDeleteDialog(nd, clusterID, projectID, dcName, null)
+        .subscribe(confirmed => {
+          isConfirmed = confirmed;
+        });
+      tick();
 
-       expect(isConfirmed).toBeTruthy();
-     })));
+      expect(isConfirmed).toBeTruthy();
+    })
+  ));
 });

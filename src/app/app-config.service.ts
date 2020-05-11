@@ -23,15 +23,21 @@ export class AppConfigService {
   }
 
   loadAppConfig(): Promise<{}> {
-    return this._http.get(environment.configUrl)
-        .pipe(tap(
-            (resp) => {
-              this._appConfig = resp as Config;
-            },
-            () => {
-              this._notificationService.error(`Could not read configuration file`);
-            }))
-        .toPromise();
+    return this._http
+      .get(environment.configUrl)
+      .pipe(
+        tap(
+          resp => {
+            this._appConfig = resp as Config;
+          },
+          () => {
+            this._notificationService.error(
+              'Could not read configuration file'
+            );
+          }
+        )
+      )
+      .toPromise();
   }
 
   getConfig(): Config {
@@ -39,15 +45,21 @@ export class AppConfigService {
   }
 
   loadUserGroupConfig(): Promise<{}> {
-    return this._http.get('../assets/config/userGroupConfig.json')
-        .pipe(tap(
-            (resp) => {
-              this._userGroupConfig = resp as UserGroupConfig;
-            },
-            () => {
-              this._notificationService.error(`Could not read user group configuration file`);
-            }))
-        .toPromise();
+    return this._http
+      .get('../assets/config/userGroupConfig.json')
+      .pipe(
+        tap(
+          resp => {
+            this._userGroupConfig = resp as UserGroupConfig;
+          },
+          () => {
+            this._notificationService.error(
+              'Could not read user group configuration file'
+            );
+          }
+        )
+      )
+      .toPromise();
   }
 
   getUserGroupConfig(): UserGroupConfig {
@@ -55,15 +67,19 @@ export class AppConfigService {
   }
 
   loadGitVersion(): Promise<{}> {
-    return this._http.get(environment.gitVersionUrl)
-        .pipe(tap(
-            (resp) => {
-              this._gitVersion = resp as VersionInfo;
-            },
-            () => {
-              this._notificationService.error(`Could not read Git version file`);
-            }))
-        .toPromise();
+    return this._http
+      .get(environment.gitVersionUrl)
+      .pipe(
+        tap(
+          resp => {
+            this._gitVersion = resp as VersionInfo;
+          },
+          () => {
+            this._notificationService.error('Could not read Git version file');
+          }
+        )
+      )
+      .toPromise();
   }
 
   getGitVersion(): VersionInfo {
@@ -71,19 +87,21 @@ export class AppConfigService {
   }
 
   checkCustomCSS(): Promise<{}> {
-    return new Promise((resolve => {
-      this._http.head(environment.customCSS)
-          .pipe(first())
-          .subscribe(
-              () => {
-                this._hasCustomCSS = true;
-                resolve();
-              },
-              () => {
-                this._hasCustomCSS = false;
-                resolve();
-              });
-    }));
+    return new Promise(resolve => {
+      this._http
+        .head(environment.customCSS)
+        .pipe(first())
+        .subscribe(
+          () => {
+            this._hasCustomCSS = true;
+            resolve();
+          },
+          () => {
+            this._hasCustomCSS = false;
+            resolve();
+          }
+        );
+    });
   }
 
   hasCustomCSS(): boolean {

@@ -11,8 +11,11 @@ export class LabelFormValidators {
   static labelKeyNameLength(control: FormControl): {[key: string]: object} {
     const value = control.value;
     const slashPosition = value.indexOf('/');
-    const labelKeyName = slashPosition > -1 ? value.substring(slashPosition + 1) : value;
-    return labelKeyName.length <= 63 ? null : {validLabelKeyPrefixLength: {value: true}};
+    const labelKeyName =
+      slashPosition > -1 ? value.substring(slashPosition + 1) : value;
+    return labelKeyName.length <= 63
+      ? null
+      : {validLabelKeyPrefixLength: {value: true}};
   }
 
   /**
@@ -21,8 +24,11 @@ export class LabelFormValidators {
   static labelKeyPrefixLength(control: FormControl): {[key: string]: object} {
     const value = control.value;
     const slashPosition = value.indexOf('/');
-    const labelKeyPrefix = slashPosition > -1 ? value.substring(0, slashPosition) : '';
-    return labelKeyPrefix.length <= 253 ? null : {validLabelKeyPrefixLength: {value: true}};
+    const labelKeyPrefix =
+      slashPosition > -1 ? value.substring(0, slashPosition) : '';
+    return labelKeyPrefix.length <= 253
+      ? null
+      : {validLabelKeyPrefixLength: {value: true}};
   }
 
   /**
@@ -32,8 +38,11 @@ export class LabelFormValidators {
     const value = control.value;
     const labelKeyNamePattern = /^([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9]$/;
     const slashPosition = value.indexOf('/');
-    const labelKeyName = slashPosition > -1 ? value.substring(slashPosition + 1) : value;
-    return labelKeyNamePattern.test(labelKeyName) || value === '' ? null : {validLabelKeyNamePattern: {value: true}};
+    const labelKeyName =
+      slashPosition > -1 ? value.substring(slashPosition + 1) : value;
+    return labelKeyNamePattern.test(labelKeyName) || value === ''
+      ? null
+      : {validLabelKeyNamePattern: {value: true}};
   }
 
   /**
@@ -43,7 +52,10 @@ export class LabelFormValidators {
     const value = control.value;
     const labelKeyPrefixPattern = /^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/;
     const slashPosition = value.indexOf('/');
-    const isValid = slashPosition > -1 ? labelKeyPrefixPattern.test(value.substring(0, slashPosition)) : true;
+    const isValid =
+      slashPosition > -1
+        ? labelKeyPrefixPattern.test(value.substring(0, slashPosition))
+        : true;
     return isValid ? null : {validLabelKeyPrefixPattern: {value: true}};
   }
 
@@ -61,6 +73,8 @@ export class LabelFormValidators {
   static labelValuePattern(control: FormControl): {[key: string]: object} {
     const value = control.value;
     const labelValuePattern = /^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$/;
-    return labelValuePattern.test(value) ? null : {validLabelValuePattern: {value: true}};
+    return labelValuePattern.test(value)
+      ? null
+      : {validLabelValuePattern: {value: true}};
   }
 }

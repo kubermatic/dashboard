@@ -11,9 +11,11 @@ export class PropertyUsageComponent {
   @Input() total: number;
   @Input() unit: string;
 
-  getPercentage(): number|undefined {
-    return this.used && this.total ? Math.round((((this.used / this.total) * 100) + Number.EPSILON) * 100) / 100 :
-                                     undefined;
+  getPercentage(): number | undefined {
+    return this.used && this.total
+      ? Math.round(((this.used / this.total) * 100 + Number.EPSILON) * 100) /
+          100
+      : undefined;
   }
 
   getTooltip(): string {

@@ -1,12 +1,24 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {ControlValueAccessor, FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator, Validators} from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormControl,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  Validator,
+  Validators,
+} from '@angular/forms';
 import {merge} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService} from '../../../core/services';
 import {ClusterNameGenerator} from '../../../core/util/name-generator.service';
-import {ClusterEntity, ClusterSpec, MasterVersion} from '../../../shared/entity/ClusterEntity';
+import {
+  ClusterEntity,
+  ClusterSpec,
+  MasterVersion,
+} from '../../../shared/entity/ClusterEntity';
 import {ResourceType} from '../../../shared/entity/LabelsEntity';
 import {ClusterType} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
@@ -30,33 +42,48 @@ enum Controls {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ClusterStepComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => ClusterStepComponent), multi: true}
-  ]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ClusterStepComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => ClusterStepComponent),
+      multi: true,
+    },
+  ],
 })
-export class ClusterStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
+export class ClusterStepComponent extends StepBase
+  implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   masterVersions: MasterVersion[] = [];
   labels: object;
-  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
+  asyncLabelValidators = [
+    AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster),
+  ];
 
   readonly Controls = Controls;
 
   constructor(
-      private readonly _builder: FormBuilder, private readonly _api: ApiService,
-      private readonly _appConfig: AppConfigService, private readonly _nameGenerator: ClusterNameGenerator,
-      private readonly _clusterService: ClusterService, wizard: WizardService) {
+    private readonly _builder: FormBuilder,
+    private readonly _api: ApiService,
+    private readonly _appConfig: AppConfigService,
+    private readonly _nameGenerator: ClusterNameGenerator,
+    private readonly _clusterService: ClusterService,
+    wizard: WizardService
+  ) {
     super(wizard);
   }
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Name]: new FormControl(
-          '',
-          [
-            Validators.required,
-            Validators.minLength(5),
-            Validators.pattern('[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'),
-          ]),
+      [Controls.Name]: new FormControl('', [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.pattern(
+          '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
+        ),
+      ]),
       [Controls.Version]: new FormControl('', [Validators.required]),
       [Controls.Type]: new FormControl(''),
       [Controls.ImagePullSecret]: new FormControl(''),
@@ -67,27 +94,33 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     });
 
     this.control(Controls.Type)
-        .valueChanges.pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap((type: ClusterType) => {
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .pipe(
+        switchMap((type: ClusterType) => {
           this.masterVersions = [];
           this.control(Controls.Version).reset();
           this._handleImagePullSecret(type);
           this._clusterService.clusterType = type;
 
-          return this._api.getMasterVersions(this.controlValue(Controls.Type) as ClusterType);
-        }))
-        .subscribe(this._setDefaultVersion.bind(this));
+          return this._api.getMasterVersions(
+            this.controlValue(Controls.Type) as ClusterType
+          );
+        })
+      )
+      .subscribe(this._setDefaultVersion.bind(this));
 
     merge(
-        this.form.get(Controls.Name).valueChanges,
-        this.form.get(Controls.Version).valueChanges,
-        this.form.get(Controls.ImagePullSecret).valueChanges,
-        this.form.get(Controls.AuditLogging).valueChanges,
-        this.form.get(Controls.PodSecurityPolicyAdmissionPlugin).valueChanges,
-        this.form.get(Controls.PodNodeSelectorAdmissionPlugin).valueChanges,
-        )
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._clusterService.cluster = this._getClusterEntity());
+      this.form.get(Controls.Name).valueChanges,
+      this.form.get(Controls.Version).valueChanges,
+      this.form.get(Controls.ImagePullSecret).valueChanges,
+      this.form.get(Controls.AuditLogging).valueChanges,
+      this.form.get(Controls.PodSecurityPolicyAdmissionPlugin).valueChanges,
+      this.form.get(Controls.PodNodeSelectorAdmissionPlugin).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        _ => (this._clusterService.cluster = this._getClusterEntity())
+      );
 
     this._setDefaultClusterType();
   }
@@ -97,7 +130,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   hasMultipleTypes(): boolean {
-    return Object.values(ClusterType).every(type => !this._appConfig.getConfig()[`hide_${type}`]);
+    return Object.values(ClusterType).every(
+      type => !this._appConfig.getConfig()[`hide_${type}`]
+    );
   }
 
   isOpenshiftSelected(): boolean {
@@ -110,7 +145,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   private _handleImagePullSecret(type: ClusterType): void {
-    this.control(Controls.ImagePullSecret).setValidators(type === ClusterType.OpenShift ? [Validators.required] : []);
+    this.control(Controls.ImagePullSecret).setValidators(
+      type === ClusterType.OpenShift ? [Validators.required] : []
+    );
     this.control(Controls.ImagePullSecret).updateValueAndValidity();
   }
 
@@ -151,8 +188,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         openshift: {
           imagePullSecret: this.controlValue(Controls.ImagePullSecret),
         },
-        usePodNodeSelectorAdmissionPlugin: this.controlValue(Controls.PodNodeSelectorAdmissionPlugin),
-        usePodSecurityPolicyAdmissionPlugin: this.controlValue(Controls.PodSecurityPolicyAdmissionPlugin),
+        usePodNodeSelectorAdmissionPlugin: this.controlValue(
+          Controls.PodNodeSelectorAdmissionPlugin
+        ),
+        usePodSecurityPolicyAdmissionPlugin: this.controlValue(
+          Controls.PodSecurityPolicyAdmissionPlugin
+        ),
         auditLogging: {
           enabled: this.controlValue(Controls.AuditLogging),
         },

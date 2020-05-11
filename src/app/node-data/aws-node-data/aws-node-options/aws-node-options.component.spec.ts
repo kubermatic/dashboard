@@ -22,20 +22,11 @@ describe('AWSNodeOptionsComponent', () => {
   let component: AWSNodeOptionsComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            AWSNodeOptionsComponent,
-          ],
-          providers: [
-            NodeDataService,
-            WizardService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [AWSNodeOptionsComponent],
+      providers: [NodeDataService, WizardService],
+    }).compileComponents();
   });
 
   beforeEach(() => {

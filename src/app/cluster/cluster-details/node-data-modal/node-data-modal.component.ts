@@ -1,4 +1,11 @@
-import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -10,7 +17,12 @@ import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
-import {getEmptyNodeProviderSpec, getEmptyNodeVersionSpec, getEmptyOperatingSystemSpec, NodeSpec} from '../../../shared/entity/NodeEntity';
+import {
+  getEmptyNodeProviderSpec,
+  getEmptyNodeVersionSpec,
+  getEmptyOperatingSystemSpec,
+  NodeSpec,
+} from '../../../shared/entity/NodeEntity';
 import {NodeData} from '../../../shared/model/NodeSpecChange';
 import {objectDiff} from '../../../shared/utils/common-utils';
 
@@ -42,9 +54,12 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(
-      @Inject(MAT_DIALOG_DATA) public data: NodeDataModalData, private nodeDataService: NodeDataService,
-      private wizardService: WizardService, private dcService: DatacenterService,
-      public googleAnalyticsService: GoogleAnalyticsService) {}
+    @Inject(MAT_DIALOG_DATA) public data: NodeDataModalData,
+    private nodeDataService: NodeDataService,
+    private wizardService: WizardService,
+    private dcService: DatacenterService,
+    public googleAnalyticsService: GoogleAnalyticsService
+  ) {}
 
   ngOnInit(): void {
     this.seedDC = this.data.datacenter;
@@ -67,22 +82,30 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
       };
     }
 
-    this.dcService.getDataCenter(this.data.cluster.spec.cloud.dc)
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(result => this.nodeDC = result);
+    this.dcService
+      .getDataCenter(this.data.cluster.spec.cloud.dc)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(result => (this.nodeDC = result));
 
     if (this.data.editMode !== true) {
-      this.data.nodeData.spec.cloud[this.nodeDC.spec.provider] = getEmptyNodeProviderSpec(this.nodeDC.spec.provider);
+      this.data.nodeData.spec.cloud[
+        this.nodeDC.spec.provider
+      ] = getEmptyNodeProviderSpec(this.nodeDC.spec.provider);
       this.data.nodeData.spec.operatingSystem = getEmptyOperatingSystemSpec();
       this.data.nodeData.spec.versions = getEmptyNodeVersionSpec();
     }
 
-    this.nodeDataService.nodeDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(async data => {
-      this.data.nodeData = await data;
-      this.isRecreationWarningVisible = this._isRecreationWarningVisible();
-    });
+    this.nodeDataService.nodeDataChanges$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(async data => {
+        this.data.nodeData = await data;
+        this.isRecreationWarningVisible = this._isRecreationWarningVisible();
+      });
 
-    this.googleAnalyticsService.emitEvent('clusterOverview', 'addNodeDialogOpened');
+    this.googleAnalyticsService.emitEvent(
+      'clusterOverview',
+      'addNodeDialogOpened'
+    );
   }
 
   ngOnDestroy(): void {
@@ -96,7 +119,10 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
   }
 
   private _isRecreationWarningVisible(): boolean {
-    return this.data.editMode && !_.isEqual(objectDiff(this._initialNodeSpec, this.data.nodeData.spec), {});
+    return (
+      this.data.editMode &&
+      !_.isEqual(objectDiff(this._initialNodeSpec, this.data.nodeData.spec), {})
+    );
   }
 
   getDialogLabel(): string {

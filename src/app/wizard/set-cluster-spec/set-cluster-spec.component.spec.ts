@@ -34,24 +34,18 @@ describe('SetClusterSpecComponent', () => {
   let nameGenerator: ClusterNameGenerator;
 
   beforeEach(async(() => {
-    const apiMock = {'getMasterVersions': jest.fn()};
+    const apiMock = {getMasterVersions: jest.fn()};
     apiMock.getMasterVersions.mockReturnValue(asyncData(masterVersionsFake()));
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            SetClusterSpecComponent,
-          ],
-          providers: [
-            HttpClient,
-            WizardService,
-            {provide: ApiService, useValue: apiMock},
-            {provide: ClusterNameGenerator, useClass: ClusterNameGeneratorMock},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [SetClusterSpecComponent],
+      providers: [
+        HttpClient,
+        WizardService,
+        {provide: ApiService, useValue: apiMock},
+        {provide: ClusterNameGenerator, useClass: ClusterNameGeneratorMock},
+      ],
+    }).compileComponents();
   }));
 
   const createComponent = () => {
@@ -64,11 +58,13 @@ describe('SetClusterSpecComponent', () => {
         cloud: {
           dc: '',
         },
-        machineNetworks: [{
-          cidr: '',
-          dnsServers: [],
-          gateway: '',
-        }],
+        machineNetworks: [
+          {
+            cidr: '',
+            dnsServers: [],
+            gateway: '',
+          },
+        ],
       },
       type: ClusterType.Empty,
     };
@@ -101,16 +97,22 @@ describe('SetClusterSpecComponent', () => {
 
   it('should call generateName method', () => {
     const generatedName = 'generated-name';
-    const spyGenerateName = jest.spyOn(nameGenerator, 'generateName').mockReturnValue(generatedName);
+    const spyGenerateName = jest
+      .spyOn(nameGenerator, 'generateName')
+      .mockReturnValue(generatedName);
     fixture.detectChanges();
 
     component.generateName();
     fixture.detectChanges();
 
-    const nameElement = fixture.debugElement.query(By.css('#km-create-cluster-name-input')).nativeElement;
+    const nameElement = fixture.debugElement.query(
+      By.css('#km-create-cluster-name-input')
+    ).nativeElement;
 
     expect(spyGenerateName).toHaveBeenCalledTimes(1);
-    expect(component.clusterSpecForm.controls['name'].value).toBe(generatedName);
+    expect(component.clusterSpecForm.controls['name'].value).toBe(
+      generatedName
+    );
     expect(nameElement.value).toBe(generatedName);
   });
 

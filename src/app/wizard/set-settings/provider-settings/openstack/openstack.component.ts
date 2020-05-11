@@ -1,11 +1,25 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import {merge, Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  take,
+  takeUntil,
+} from 'rxjs/operators';
 import {AppConfigService} from '../../../../app-config.service';
 import {Auth, WizardService} from '../../../../core/services';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
-import {OpenstackFloatingIpPool, OpenstackNetwork, OpenstackTenant} from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {
+  OpenstackFloatingIpPool,
+  OpenstackNetwork,
+  OpenstackTenant,
+} from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm';
 import {Config} from '../../../../shared/model/Config';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
@@ -31,33 +45,48 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   private _debounceTime = 500;
 
   constructor(
-      private readonly _wizard: WizardService, private readonly _auth: Auth,
-      private readonly _appConfigService: AppConfigService) {}
+    private readonly _wizard: WizardService,
+    private readonly _auth: Auth,
+    private readonly _appConfigService: AppConfigService
+  ) {}
 
   ngOnInit(): void {
     this._config = this._appConfigService.getConfig();
 
-    if (this._config.openstack && this._config.openstack.wizard_use_default_user &&
-        !this.cluster.spec.cloud.openstack.username) {
+    if (
+      this._config.openstack &&
+      this._config.openstack.wizard_use_default_user &&
+      !this.cluster.spec.cloud.openstack.username
+    ) {
       this.cluster.spec.cloud.openstack.username = this._auth.getUsername();
     }
 
     this.form = new FormGroup({
-      domain: new FormControl(this.cluster.spec.cloud.openstack.domain, [Validators.required]),
-      username: new FormControl(this.cluster.spec.cloud.openstack.username, [Validators.required]),
-      password: new FormControl(this.cluster.spec.cloud.openstack.password, [Validators.required]),
-      tenant: new FormControl({value: '', disabled: true}, [Validators.required]),
-      tenantID: new FormControl({value: '', disabled: true}, [Validators.required]),
+      domain: new FormControl(this.cluster.spec.cloud.openstack.domain, [
+        Validators.required,
+      ]),
+      username: new FormControl(this.cluster.spec.cloud.openstack.username, [
+        Validators.required,
+      ]),
+      password: new FormControl(this.cluster.spec.cloud.openstack.password, [
+        Validators.required,
+      ]),
+      tenant: new FormControl({value: '', disabled: true}, [
+        Validators.required,
+      ]),
+      tenantID: new FormControl({value: '', disabled: true}, [
+        Validators.required,
+      ]),
       floatingIpPool: new FormControl({value: '', disabled: true}),
     });
 
     this._formHelper = new FormHelper(this.form);
     this._formHelper.registerFormControls(
-        this.form.controls.domain,
-        this.form.controls.tenant,
-        this.form.controls.tenantID,
-        this.form.controls.username,
-        this.form.controls.password,
+      this.form.controls.domain,
+      this.form.controls.tenant,
+      this.form.controls.tenantID,
+      this.form.controls.username,
+      this.form.controls.password
     );
 
     if (this.isFloatingIPEnforced()) {
@@ -65,100 +94,122 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     }
 
     merge(
-        this.form.controls.domain.valueChanges, this.form.controls.username.valueChanges,
-        this.form.controls.password.valueChanges)
-        .pipe(debounceTime(this._debounceTime))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(() => {
-          this._resetControls(...this._getFloatingIPPoolControls(), ...this._getTenantControls());
+      this.form.controls.domain.valueChanges,
+      this.form.controls.username.valueChanges,
+      this.form.controls.password.valueChanges
+    )
+      .pipe(debounceTime(this._debounceTime))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(() => {
+        this._resetControls(
+          ...this._getFloatingIPPoolControls(),
+          ...this._getTenantControls()
+        );
 
-          if (this._hasTenantCredentials()) {
-            this._enableTenant(true);
-            this._enableTenantID(true);
-            this._loadTenants();
-          }
+        if (this._hasTenantCredentials()) {
+          this._enableTenant(true);
+          this._enableTenantID(true);
+          this._loadTenants();
+        }
 
-          if (this._isTenantSelected()) {
-            this._enableTenantID(false);
-          }
+        if (this._isTenantSelected()) {
+          this._enableTenantID(false);
+        }
 
-          if (this._isTenantIDSelected()) {
-            this._enableTenant(false);
-          }
-        });
+        if (this._isTenantIDSelected()) {
+          this._enableTenant(false);
+        }
+      });
 
+    this.form.controls.tenant.statusChanges
+      .pipe(debounceTime(this._debounceTime))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((status: string) => {
+        if (!this._hasTenantCredentials()) {
+          this._resetControls(...this._getTenantControls());
+          this.tenants = [];
+        }
+      });
 
-    this.form.controls.tenant.statusChanges.pipe(debounceTime(this._debounceTime))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe((status: string) => {
-          if (!this._hasTenantCredentials()) {
-            this._resetControls(...this._getTenantControls());
-            this.tenants = [];
-          }
-        });
+    this.form.controls.tenant.valueChanges
+      .pipe(distinctUntilChanged())
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((value: string) => {
+        this._enableTenantID(value === '');
 
-    this.form.controls.tenant.valueChanges.pipe(distinctUntilChanged())
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe((value: string) => {
-          this._enableTenantID(value === '');
+        if (this._hasRequiredCredentials()) {
+          this._loadFloatingIPPools();
+        }
+      });
 
-          if (this._hasRequiredCredentials()) {
-            this._loadFloatingIPPools();
-          }
-        });
+    this.form.controls.tenantID.valueChanges
+      .pipe(distinctUntilChanged())
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((value: string) => {
+        this._enableTenant(value === '');
 
-    this.form.controls.tenantID.valueChanges.pipe(distinctUntilChanged())
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe((value: string) => {
-          this._enableTenant(value === '');
+        if (this._hasRequiredCredentials()) {
+          this._loadFloatingIPPools();
+        }
+      });
 
-          if (this._hasRequiredCredentials()) {
-            this._loadFloatingIPPools();
-          }
-        });
+    merge(
+      this.form.controls.tenant.valueChanges,
+      this.form.controls.tenantID.valueChanges
+    )
+      .pipe(debounceTime(this._debounceTime))
+      .pipe(distinctUntilChanged())
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(() => {
+        this._resetControls(...this._getFloatingIPPoolControls());
 
-    merge(this.form.controls.tenant.valueChanges, this.form.controls.tenantID.valueChanges)
-        .pipe(debounceTime(this._debounceTime))
-        .pipe(distinctUntilChanged())
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(() => {
-          this._resetControls(...this._getFloatingIPPoolControls());
-
-          if (this._hasRequiredCredentials()) {
-            this._loadFloatingIPPools();
-          }
-        });
+        if (this._hasRequiredCredentials()) {
+          this._loadFloatingIPPools();
+        }
+      });
 
     this.form.valueChanges
-        .pipe(distinctUntilChanged(
-            (x: {[key: string]: string}, y: {[key: string]: string}): boolean =>
-                Object.keys(y).every(key => (!(key in x) && y[key] === '') || x[key] === y[key])))
-        .pipe(debounceTime(this._debounceTime))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(() => {
-          this._formHelper.areControlsValid() ? this._wizard.onCustomPresetsDisable.emit(false) :
-                                                this._wizard.onCustomPresetsDisable.emit(true);
+      .pipe(
+        distinctUntilChanged(
+          (x: {[key: string]: string}, y: {[key: string]: string}): boolean =>
+            Object.keys(y).every(
+              key => (!(key in x) && y[key] === '') || x[key] === y[key]
+            )
+        )
+      )
+      .pipe(debounceTime(this._debounceTime))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(() => {
+        this._formHelper.areControlsValid()
+          ? this._wizard.onCustomPresetsDisable.emit(false)
+          : this._wizard.onCustomPresetsDisable.emit(true);
 
-          this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
-        });
+        this._wizard.changeClusterProviderSettings(
+          this._clusterProviderSettingsForm(this._formHelper.isFormValid())
+        );
+      });
 
-    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe))
-        .subscribe((data: ClusterProviderSettingsForm) => {
-          this.cluster.spec.cloud.openstack = data.cloudSpec.openstack;
-        });
+    this._wizard.clusterProviderSettingsFormChanges$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((data: ClusterProviderSettingsForm) => {
+        this.cluster.spec.cloud.openstack = data.cloudSpec.openstack;
+      });
 
-    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
-      if (newCredentials) {
-        this.form.disable();
-        return;
-      }
+    this._wizard.onCustomPresetSelect
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(newCredentials => {
+        if (newCredentials) {
+          this.form.disable();
+          return;
+        }
 
-      this.form.enable();
-    });
+        this.form.enable();
+      });
   }
 
   isFloatingIPEnforced(): boolean {
-    return this._wizard.getSelectedDatacenter().spec.openstack.enforce_floating_ip;
+    return this._wizard.getSelectedDatacenter().spec.openstack
+      .enforce_floating_ip;
   }
 
   showHint(field: string): boolean {
@@ -189,7 +240,10 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
       return 'Floating IP Pool';
     } else if (this._loadingFloatingIPPools) {
       return 'Loading Floating IP Pools...';
-    } else if (!this._loadingFloatingIPPools && this.floatingIpPools.length === 0) {
+    } else if (
+      !this._loadingFloatingIPPools &&
+      this.floatingIpPools.length === 0
+    ) {
       return 'No Floating IP Pools available';
     } else {
       return 'Floating IP Pool';
@@ -203,57 +257,59 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
   private _loadTenants(): void {
     this._loadingTenants = true;
-    this._wizard.provider(NodeProvider.OPENSTACK)
-        .username(this.form.controls.username.value)
-        .password(this.form.controls.password.value)
-        .domain(this.form.controls.domain.value)
-        .datacenter(this.cluster.spec.cloud.dc)
-        .tenants()
-        .pipe(take(1))
-        .subscribe(
-            (tenants) => {
-              this.tenants = tenants.sort((a, b) => {
-                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
-              });
+    this._wizard
+      .provider(NodeProvider.OPENSTACK)
+      .username(this.form.controls.username.value)
+      .password(this.form.controls.password.value)
+      .domain(this.form.controls.domain.value)
+      .datacenter(this.cluster.spec.cloud.dc)
+      .tenants()
+      .pipe(take(1))
+      .subscribe(
+        tenants => {
+          this.tenants = tenants.sort((a, b) => a.name.localeCompare(b.name));
 
-              if (this.tenants.length === 0) {
-                this.form.controls.tenant.setValue('');
-              }
+          if (this.tenants.length === 0) {
+            this.form.controls.tenant.setValue('');
+          }
 
-              this._loadingTenants = false;
-            },
-            () => {
-              this.tenants = [];
-              this._loadingTenants = false;
-            },
-            () => {
-              this._loadingTenants = false;
-            });
+          this._loadingTenants = false;
+        },
+        () => {
+          this.tenants = [];
+          this._loadingTenants = false;
+        },
+        () => {
+          this._loadingTenants = false;
+        }
+      );
   }
 
   private _loadFloatingIPPools(): void {
     this._loadingFloatingIPPools = true;
-    this._wizard.provider(NodeProvider.OPENSTACK)
-        .username(this.form.controls.username.value)
-        .password(this.form.controls.password.value)
-        .tenant(this.form.controls.tenant.value)
-        .tenantID(this.form.controls.tenantID.value)
-        .domain(this.form.controls.domain.value)
-        .datacenter(this.cluster.spec.cloud.dc)
-        .networks()
-        .pipe(take(1))
-        .subscribe(
-            (networks: OpenstackNetwork[]) => {
-              this.floatingIpPools = networks.filter((network) => network.external === true).sort((a, b) => {
-                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
-              });
+    this._wizard
+      .provider(NodeProvider.OPENSTACK)
+      .username(this.form.controls.username.value)
+      .password(this.form.controls.password.value)
+      .tenant(this.form.controls.tenant.value)
+      .tenantID(this.form.controls.tenantID.value)
+      .domain(this.form.controls.domain.value)
+      .datacenter(this.cluster.spec.cloud.dc)
+      .networks()
+      .pipe(take(1))
+      .subscribe(
+        (networks: OpenstackNetwork[]) => {
+          this.floatingIpPools = networks
+            .filter(network => network.external === true)
+            .sort((a, b) => a.name.localeCompare(b.name));
 
-              this._enableFloatingIP(this.floatingIpPools.length !== 0);
-              this._loadingFloatingIPPools = false;
-            },
-            () => {
-              this._loadingFloatingIPPools = false;
-            });
+          this._enableFloatingIP(this.floatingIpPools.length !== 0);
+          this._loadingFloatingIPPools = false;
+        },
+        () => {
+          this._loadingFloatingIPPools = false;
+        }
+      );
   }
 
   private _resetControls(...controls: AbstractControl[]): void {
@@ -286,26 +342,26 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   }
 
   private _getTenantControls(): AbstractControl[] {
-    return [
-      this.form.controls.tenant,
-      this.form.controls.tenantID,
-    ];
+    return [this.form.controls.tenant, this.form.controls.tenantID];
   }
 
   private _getFloatingIPPoolControls(): AbstractControl[] {
-    return [
-      this.form.controls.floatingIpPool,
-    ];
+    return [this.form.controls.floatingIpPool];
   }
 
   private _hasTenantCredentials(): boolean {
     return !(
-        this.form.controls.username.value === '' || this.form.controls.password.value === '' ||
-        this.form.controls.domain.value === '');
+      this.form.controls.username.value === '' ||
+      this.form.controls.password.value === '' ||
+      this.form.controls.domain.value === ''
+    );
   }
 
   private _hasRequiredCredentials(): boolean {
-    return this._hasTenantCredentials() && (this._isTenantSelected() || this._isTenantIDSelected());
+    return (
+      this._hasTenantCredentials() &&
+      (this._isTenantSelected() || this._isTenantIDSelected())
+    );
   }
 
   private _isTenantSelected(): boolean {
@@ -316,7 +372,9 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     return this.form.controls.tenantID.value.toString().length > 0;
   }
 
-  private _clusterProviderSettingsForm(valid: boolean): ClusterProviderSettingsForm {
+  private _clusterProviderSettingsForm(
+    valid: boolean
+  ): ClusterProviderSettingsForm {
     return {
       cloudSpec: {
         openstack: {

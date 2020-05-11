@@ -26,21 +26,15 @@ describe('FrontpageComponent', () => {
   let router: Router;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            FrontpageComponent,
-          ],
-          providers: [
-            {provide: Router, useClass: RouterStub},
-            {provide: Auth, useClass: AuthMockService},
-            CookieService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [FrontpageComponent],
+      providers: [
+        {provide: Router, useClass: RouterStub},
+        {provide: Auth, useClass: AuthMockService},
+        CookieService,
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -52,8 +46,8 @@ describe('FrontpageComponent', () => {
   });
 
   it('should create the cmp', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 
   it('should navigate to clusters list if authenticated', () => {
     const spyNavigate = jest.spyOn(router, 'navigate');

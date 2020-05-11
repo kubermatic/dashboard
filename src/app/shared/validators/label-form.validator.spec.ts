@@ -2,19 +2,22 @@ import {FormControl} from '@angular/forms';
 import {LabelFormValidators} from './label-form.validators';
 
 const validKey = 'env';
-const tooLongKey = 'F4td6JTLp2AftZ7YtSwdf0m2K4yrwd6l8ynEQWICfgFjAfDgRDw3wNpbqsNMuTQg' +
-    'OADHbknuQsE1rP643smxH4ZHRlZqu9zvB8odvkwQC90jlYnzuK20DIgK7K9FctcB6frA1Y2n2KGYvm9' +
-    '82SHI2C1p9XmmSinNtRAdOYYCiKZcYjRFw4i7F3UxAtLCUsLKxG3FJbiPf0EJDvAUDnv2Ktr7nIEhtC' +
-    'C9Q8hIumOMFzEc61YgQpXiRAeqpDmJSegE4';
+const tooLongKey =
+  'F4td6JTLp2AftZ7YtSwdf0m2K4yrwd6l8ynEQWICfgFjAfDgRDw3wNpbqsNMuTQg' +
+  'OADHbknuQsE1rP643smxH4ZHRlZqu9zvB8odvkwQC90jlYnzuK20DIgK7K9FctcB6frA1Y2n2KGYvm9' +
+  '82SHI2C1p9XmmSinNtRAdOYYCiKZcYjRFw4i7F3UxAtLCUsLKxG3FJbiPf0EJDvAUDnv2Ktr7nIEhtC' +
+  'C9Q8hIumOMFzEc61YgQpXiRAeqpDmJSegE4';
 const invalidKey = '!@#$%^&*';
 const validPrefix = 'beta.kubernetes.io';
-const tooLongPrefix = 'beta.JTLp2AftZ7YtSwdf0m2K4yrwd6l8ynEQWICfgFjAfDgRDw3wNpbqsNMu' +
-    'OADHbknuQsE1rP643smxH4ZHRlZqu9zvB8odvkwQC90jlYnzuK20DIgK7K9FctcB6frA1Y2n2KGYvth' +
-    '82SHI2C1p9XmmSinNtRAdOYYCiKZcYjRFw4i7F3UxAtLCUsLKxG3FJbiPf0EJDvAUDnv2Ktr7nIEpgD' +
-    'C9Q8hIumOMFzEc61YgQpXiRAeq9CmTQmJSe.io';
+const tooLongPrefix =
+  'beta.JTLp2AftZ7YtSwdf0m2K4yrwd6l8ynEQWICfgFjAfDgRDw3wNpbqsNMu' +
+  'OADHbknuQsE1rP643smxH4ZHRlZqu9zvB8odvkwQC90jlYnzuK20DIgK7K9FctcB6frA1Y2n2KGYvth' +
+  '82SHI2C1p9XmmSinNtRAdOYYCiKZcYjRFw4i7F3UxAtLCUsLKxG3FJbiPf0EJDvAUDnv2Ktr7nIEpgD' +
+  'C9Q8hIumOMFzEc61YgQpXiRAeq9CmTQmJSe.io';
 const invalidPrefix = '!@#$%^&*';
 const validValue = 'test';
-const tooLongValue = 'L1txKHOWiSe5dSUakuYw82l2IepfxxBMbDA6JFCzp1TeFQbEvQmpJkcBDU4Npv50';
+const tooLongValue =
+  'L1txKHOWiSe5dSUakuYw82l2IepfxxBMbDA6JFCzp1TeFQbEvQmpJkcBDU4Npv50';
 const invalidValue = '!@#$%^&*';
 
 describe('LabelFormValidators', () => {

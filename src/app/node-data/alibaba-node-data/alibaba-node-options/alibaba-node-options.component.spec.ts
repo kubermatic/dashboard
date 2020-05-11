@@ -25,21 +25,15 @@ describe('AlibabaNodeOptionsComponent', () => {
   let component: AlibabaNodeOptionsComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            AlibabaNodeOptionsComponent,
-          ],
-          providers: [
-            {provide: ApiService, useClass: ApiMockService},
-            NodeDataService,
-            WizardService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [AlibabaNodeOptionsComponent],
+      providers: [
+        {provide: ApiService, useClass: ApiMockService},
+        NodeDataService,
+        WizardService,
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

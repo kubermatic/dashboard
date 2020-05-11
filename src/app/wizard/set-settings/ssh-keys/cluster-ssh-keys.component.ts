@@ -13,7 +13,10 @@ import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {GroupConfig} from '../../../shared/model/Config';
-import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
+import {
+  MemberUtils,
+  Permission,
+} from '../../../shared/utils/member-utils/member-utils';
 
 @Component({
   selector: 'km-cluster-ssh-keys',
@@ -35,31 +38,50 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(
-      private readonly _api: ApiService, private readonly _wizardService: WizardService,
-      private readonly _dialog: MatDialog, private readonly _projectService: ProjectService,
-      private readonly _userService: UserService, private readonly _activeRoute: ActivatedRoute) {}
+    private readonly _api: ApiService,
+    private readonly _wizardService: WizardService,
+    private readonly _dialog: MatDialog,
+    private readonly _projectService: ProjectService,
+    private readonly _userService: UserService,
+    private readonly _activeRoute: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.project.id = this._activeRoute.snapshot.paramMap.get('projectID');
 
-    this._userService.loggedInUser.pipe(first()).subscribe(user => this._currentUser = user);
+    this._userService.loggedInUser
+      .pipe(first())
+      .subscribe(user => (this._currentUser = user));
 
-    this._userService.currentUserGroup(this.project.id)
-        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
+    this._userService
+      .currentUserGroup(this.project.id)
+      .subscribe(
+        userGroup =>
+          (this._currentGroupConfig = this._userService.userGroupConfig(
+            userGroup
+          ))
+      );
 
-    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(project => {
+    this._projectService.selectedProject
+      .pipe(takeUntil(this._unsubscribe))
+      .pipe(
+        switchMap(project => {
           this.project = project;
           return this._userService.currentUserGroup(this.project.id);
-        }))
-        .subscribe(group => this.groupConfig = this._userService.userGroupConfig(group));
+        })
+      )
+      .subscribe(
+        group => (this.groupConfig = this._userService.userGroupConfig(group))
+      );
 
-    this._projectService.onProjectChange.subscribe((project) => {
+    this._projectService.onProjectChange.subscribe(project => {
       this.project = project;
     });
 
     this.keysForm.controls.keys.patchValue(this.selectedKeys);
-    this.keysForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => this.setClusterSSHKeysSpec());
+    this.keysForm.valueChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(() => this.setClusterSSHKeysSpec());
     this.reloadKeys();
   }
 
@@ -69,23 +91,31 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   reloadKeys(): void {
-    this._api.getSSHKeys(this.project.id).pipe(first()).subscribe((sshKeys) => {
-      this.keys = sshKeys.sort((a, b) => {
-        return a.name.localeCompare(b.name);
+    this._api
+      .getSSHKeys(this.project.id)
+      .pipe(first())
+      .subscribe(sshKeys => {
+        this.keys = sshKeys.sort((a, b) => {
+          return a.name.localeCompare(b.name);
+        });
+        this.setClusterSSHKeysSpec();
       });
-      this.setClusterSSHKeysSpec();
-    });
   }
 
   canAdd(): boolean {
-    return MemberUtils.hasPermission(this._currentUser, this._currentGroupConfig, `sshKeys`, Permission.Create);
+    return MemberUtils.hasPermission(
+      this._currentUser,
+      this._currentGroupConfig,
+      'sshKeys',
+      Permission.Create
+    );
   }
 
   addSshKeyDialog(): void {
     const dialogRef = this._dialog.open(AddSshKeyDialogComponent);
     dialogRef.componentInstance.projectID = this.project.id;
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.reloadKeys();
         const newValue = this.keysForm.controls.keys.value;

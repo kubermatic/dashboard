@@ -12,17 +12,29 @@ enum Controls {
   selector: 'km-gcp-extended-node-data',
   templateUrl: './template.html',
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => GCPExtendedNodeDataComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => GCPExtendedNodeDataComponent), multi: true}
-  ]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => GCPExtendedNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => GCPExtendedNodeDataComponent),
+      multi: true,
+    },
+  ],
 })
-export class GCPExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class GCPExtendedNodeDataComponent extends BaseFormValidator
+  implements OnInit, OnDestroy {
   labels: object;
   tags: string[];
 
   readonly Controls = Controls;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _nodeDataService: NodeDataService
+  ) {
     super();
   }
 

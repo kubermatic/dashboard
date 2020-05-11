@@ -5,17 +5,22 @@ import {debounceTime, startWith, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../../../core/services';
 import {ClusterEntity} from '../../../../../shared/entity/ClusterEntity';
-import {VSphereFolder, VSphereNetwork} from '../../../../../shared/entity/provider/vsphere/VSphereEntity';
+import {
+  VSphereFolder,
+  VSphereNetwork,
+} from '../../../../../shared/entity/provider/vsphere/VSphereEntity';
 import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
-import {filterArrayOptions, filterObjectOptions} from '../../../../../shared/utils/common-utils';
+import {
+  filterArrayOptions,
+  filterObjectOptions,
+} from '../../../../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../../../../shared/validators/autocomplete-filter.validator';
 
 @Component({
   selector: 'km-vsphere-provider-options',
   templateUrl: './vsphere-provider-options.component.html',
 })
-
 export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
 
@@ -37,67 +42,99 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       username: new FormControl(this.cluster.spec.cloud.vsphere.username),
       password: new FormControl(this.cluster.spec.cloud.vsphere.password),
-      vmNetName: new FormControl(
-          this.cluster.spec.cloud.vsphere.vmNetName,
-          [AutocompleteFilterValidators.mustBeInObjectList(this._networkMap, 'absolutePath', false)]),
+      vmNetName: new FormControl(this.cluster.spec.cloud.vsphere.vmNetName, [
+        AutocompleteFilterValidators.mustBeInObjectList(
+          this._networkMap,
+          'absolutePath',
+          false
+        ),
+      ]),
       folder: new FormControl(this.cluster.spec.cloud.vsphere.folder),
     });
 
-    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this._wizardService.changeClusterProviderSettings(this.getVSphereOptionsData(this._hasRequiredCredentials()));
-    });
+    this.form.valueChanges
+      .pipe(debounceTime(1000))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(() => {
+        this._wizardService.changeClusterProviderSettings(
+          this.getVSphereOptionsData(this._hasRequiredCredentials())
+        );
+      });
 
     this.checkNetworkState();
     this.checkFolderState();
     this._setUsernamePassword();
-    this._wizardService.changeClusterProviderSettings(this.getVSphereOptionsData(this._hasRequiredCredentials()));
+    this._wizardService.changeClusterProviderSettings(
+      this.getVSphereOptionsData(this._hasRequiredCredentials())
+    );
 
-    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.hideOptional = data.hideOptional;
-    });
+    this._wizardService.clusterSettingsFormViewChanged$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        this.hideOptional = data.hideOptional;
+      });
 
-    this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.cluster.spec.cloud.vsphere = data.cloudSpec.vsphere;
-      this._setUsernamePassword();
-      if (this._hasRequiredCredentials()) {
-        this.loadNetworks();
-        this.checkNetworkState();
-        this.loadFolders();
-        this.checkFolderState();
-      } else {
-        this.clearNetworks();
-        this.clearFolders();
-      }
-    });
+    this._wizardService.clusterProviderSettingsFormChanges$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        this.cluster.spec.cloud.vsphere = data.cloudSpec.vsphere;
+        this._setUsernamePassword();
+        if (this._hasRequiredCredentials()) {
+          this.loadNetworks();
+          this.checkNetworkState();
+          this.loadFolders();
+          this.checkFolderState();
+        } else {
+          this.clearNetworks();
+          this.clearFolders();
+        }
+      });
 
-    this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
-      this._selectedPreset = newCredentials;
-      if (newCredentials) {
-        this.form.disable();
-        return;
-      }
-      this.form.enable();
-    });
+    this._wizardService.onCustomPresetSelect
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(newCredentials => {
+        this._selectedPreset = newCredentials;
+        if (newCredentials) {
+          this.form.disable();
+          return;
+        }
+        this.form.enable();
+      });
 
-    this.form.controls.folder.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
-        .subscribe(value => {
-          if (value !== '' && !this.form.controls.folder.pristine) {
-            this.filteredFolders = filterArrayOptions(value, 'path', this.folders);
-          } else {
-            this.filteredFolders = this.folders;
-          }
-        });
+    this.form.controls.folder.valueChanges
+      .pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+      .subscribe(value => {
+        if (value !== '' && !this.form.controls.folder.pristine) {
+          this.filteredFolders = filterArrayOptions(
+            value,
+            'path',
+            this.folders
+          );
+        } else {
+          this.filteredFolders = this.folders;
+        }
+      });
 
-    this.form.controls.vmNetName.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
-        .subscribe(value => {
-          if (value !== '' && !this.form.controls.vmNetName.pristine) {
-            this.filteredNetworks = filterObjectOptions(value, 'relativePath', this._networkMap);
-          } else {
-            this.filteredNetworks = this._networkMap;
-          }
-          this.form.controls.vmNetName.setValidators(
-              [AutocompleteFilterValidators.mustBeInObjectList(this._networkMap, 'absolutePath', false)]);
-        });
+    this.form.controls.vmNetName.valueChanges
+      .pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+      .subscribe(value => {
+        if (value !== '' && !this.form.controls.vmNetName.pristine) {
+          this.filteredNetworks = filterObjectOptions(
+            value,
+            'relativePath',
+            this._networkMap
+          );
+        } else {
+          this.filteredNetworks = this._networkMap;
+        }
+        this.form.controls.vmNetName.setValidators([
+          AutocompleteFilterValidators.mustBeInObjectList(
+            this._networkMap,
+            'absolutePath',
+            false
+          ),
+        ]);
+      });
   }
 
   ngOnDestroy(): void {
@@ -118,19 +155,30 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   private _hasRequiredCredentials(): boolean {
-    return (this.form.controls.username.value !== '' && this.form.controls.password.value !== '') ||
-        !!this._selectedPreset;
+    return (
+      (this.form.controls.username.value !== '' &&
+        this.form.controls.password.value !== '') ||
+      !!this._selectedPreset
+    );
   }
 
   private _setUsernamePassword(): void {
-    if (this.cluster.spec.cloud.vsphere.infraManagementUser.username !== '' &&
-        this.cluster.spec.cloud.vsphere.username === '') {
-      this.form.controls.username.setValue(this.cluster.spec.cloud.vsphere.infraManagementUser.username);
+    if (
+      this.cluster.spec.cloud.vsphere.infraManagementUser.username !== '' &&
+      this.cluster.spec.cloud.vsphere.username === ''
+    ) {
+      this.form.controls.username.setValue(
+        this.cluster.spec.cloud.vsphere.infraManagementUser.username
+      );
     }
 
-    if (this.cluster.spec.cloud.vsphere.infraManagementUser.password !== '' &&
-        this.cluster.spec.cloud.vsphere.password === '') {
-      this.form.controls.password.setValue(this.cluster.spec.cloud.vsphere.infraManagementUser.password);
+    if (
+      this.cluster.spec.cloud.vsphere.infraManagementUser.password !== '' &&
+      this.cluster.spec.cloud.vsphere.password === ''
+    ) {
+      this.form.controls.password.setValue(
+        this.cluster.spec.cloud.vsphere.infraManagementUser.password
+      );
     }
   }
 
@@ -149,46 +197,50 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
     }
 
     this.loadingNetworks = true;
-    this._wizardService.provider(NodeProvider.VSPHERE)
-        .username(this.form.controls.username.value)
-        .password(this.form.controls.password.value)
-        .datacenter(this.cluster.spec.cloud.dc)
-        .networks()
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(
-            (networks) => {
-              if (networks.length > 0) {
-                this._networkMap = {};
-                networks.forEach(network => {
-                  const find = this.networkTypes.find(x => x === network.type);
-                  if (!find) {
-                    this._networkMap[network.type] = [];
-                  }
-                  this._networkMap[network.type].push(network);
-                });
-
-                this.networkTypes.forEach(type => {
-                  this._networkMap[type] = this._networkMap[type].sort((a, b) => {
-                    return a.name.localeCompare(b.name);
-                  });
-                });
-
-                if (this.form.controls.vmNetName.value !== '0') {
-                  this.form.controls.vmNetName.setValue(this.cluster.spec.cloud.vsphere.vmNetName);
-                }
-              } else {
-                this._networkMap = {};
+    this._wizardService
+      .provider(NodeProvider.VSPHERE)
+      .username(this.form.controls.username.value)
+      .password(this.form.controls.password.value)
+      .datacenter(this.cluster.spec.cloud.dc)
+      .networks()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        networks => {
+          if (networks.length > 0) {
+            this._networkMap = {};
+            networks.forEach(network => {
+              const find = this.networkTypes.find(x => x === network.type);
+              if (!find) {
+                this._networkMap[network.type] = [];
               }
-              this.loadingNetworks = false;
-              this.checkNetworkState();
-            },
-            () => {
-              this.clearNetworks();
-              this.loadingNetworks = false;
-            },
-            () => {
-              this.loadingNetworks = false;
+              this._networkMap[network.type].push(network);
             });
+
+            this.networkTypes.forEach(type => {
+              this._networkMap[type] = this._networkMap[type].sort((a, b) => {
+                return a.name.localeCompare(b.name);
+              });
+            });
+
+            if (this.form.controls.vmNetName.value !== '0') {
+              this.form.controls.vmNetName.setValue(
+                this.cluster.spec.cloud.vsphere.vmNetName
+              );
+            }
+          } else {
+            this._networkMap = {};
+          }
+          this.loadingNetworks = false;
+          this.checkNetworkState();
+        },
+        () => {
+          this.clearNetworks();
+          this.loadingNetworks = false;
+        },
+        () => {
+          this.loadingNetworks = false;
+        }
+      );
   }
 
   get networkTypes(): string[] {
@@ -198,7 +250,9 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   getNetworks(type: string): VSphereNetwork[] {
-    return this.form.controls.vmNetName.value === '' ? this._networkMap[type] : this.filteredNetworks[type];
+    return this.form.controls.vmNetName.value === ''
+      ? this._networkMap[type]
+      : this.filteredNetworks[type];
   }
 
   getNetworkFormState(): string {
@@ -214,9 +268,15 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   checkNetworkState(): void {
-    if (this.networkTypes.length === 0 && this.form.controls.vmNetName.enabled) {
+    if (
+      this.networkTypes.length === 0 &&
+      this.form.controls.vmNetName.enabled
+    ) {
       this.form.controls.vmNetName.disable();
-    } else if (this.networkTypes.length > 0 && this.form.controls.vmNetName.disabled) {
+    } else if (
+      this.networkTypes.length > 0 &&
+      this.form.controls.vmNetName.disabled
+    ) {
       this.form.controls.vmNetName.enable();
     }
   }
@@ -240,35 +300,42 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
     }
 
     this.loadingFolders = true;
-    this._wizardService.provider(NodeProvider.VSPHERE)
-        .username(this.form.controls.username.value)
-        .password(this.form.controls.password.value)
-        .datacenter(this.cluster.spec.cloud.dc)
-        .folders()
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(
-            (folders) => {
-              if (folders.length > 0) {
-                const sortedFolders = folders.sort((a, b) => {
-                  return a.path.localeCompare(b.path);
-                });
-
-                this.folders = sortedFolders;
-                if (sortedFolders.length > 0 && this.form.controls.folder.value !== '0') {
-                  this.form.controls.folder.setValue(this.cluster.spec.cloud.vsphere.folder);
-                }
-              } else {
-                this.folders = [];
-              }
-              this.loadingFolders = false;
-            },
-            () => {
-              this.clearFolders();
-              this.loadingFolders = false;
-            },
-            () => {
-              this.loadingFolders = false;
+    this._wizardService
+      .provider(NodeProvider.VSPHERE)
+      .username(this.form.controls.username.value)
+      .password(this.form.controls.password.value)
+      .datacenter(this.cluster.spec.cloud.dc)
+      .folders()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        folders => {
+          if (folders.length > 0) {
+            const sortedFolders = folders.sort((a, b) => {
+              return a.path.localeCompare(b.path);
             });
+
+            this.folders = sortedFolders;
+            if (
+              sortedFolders.length > 0 &&
+              this.form.controls.folder.value !== '0'
+            ) {
+              this.form.controls.folder.setValue(
+                this.cluster.spec.cloud.vsphere.folder
+              );
+            }
+          } else {
+            this.folders = [];
+          }
+          this.loadingFolders = false;
+        },
+        () => {
+          this.clearFolders();
+          this.loadingFolders = false;
+        },
+        () => {
+          this.loadingFolders = false;
+        }
+      );
   }
 
   getFolderFormState(): string {
@@ -296,14 +363,22 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   networkIsValid(): boolean {
-    return (this.cluster.spec.cloud.vsphere.vmNetName !== '' || this.form.controls.vmNetName.valid);
+    return (
+      this.cluster.spec.cloud.vsphere.vmNetName !== '' ||
+      this.form.controls.vmNetName.valid
+    );
   }
 
   getVSphereOptionsData(isValid: boolean): ClusterProviderSettingsForm {
-    let cloudUser = this.cluster.spec.cloud.vsphere.infraManagementUser.username;
-    let cloudPassword = this.cluster.spec.cloud.vsphere.infraManagementUser.password;
+    let cloudUser = this.cluster.spec.cloud.vsphere.infraManagementUser
+      .username;
+    let cloudPassword = this.cluster.spec.cloud.vsphere.infraManagementUser
+      .password;
 
-    if (this.form.controls.username.value !== '' && this.form.controls.password.value !== '') {
+    if (
+      this.form.controls.username.value !== '' &&
+      this.form.controls.password.value !== ''
+    ) {
       cloudUser = this.form.controls.username.value;
       cloudPassword = this.form.controls.password.value;
     }
@@ -312,12 +387,16 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
       cloudSpec: {
         vsphere: {
           infraManagementUser: {
-            username: this.cluster.spec.cloud.vsphere.infraManagementUser.username,
-            password: this.cluster.spec.cloud.vsphere.infraManagementUser.password,
+            username: this.cluster.spec.cloud.vsphere.infraManagementUser
+              .username,
+            password: this.cluster.spec.cloud.vsphere.infraManagementUser
+              .password,
           },
           username: cloudUser,
           password: cloudPassword,
-          vmNetName: this.networkIsValid() ? this.form.controls.vmNetName.value : '',
+          vmNetName: this.networkIsValid()
+            ? this.form.controls.vmNetName.value
+            : '',
           folder: this.form.controls.folder.value,
         },
         dc: this.cluster.spec.cloud.dc,

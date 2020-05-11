@@ -46,5 +46,8 @@ export class Packet extends Provider {
 }
 
 export namespace Packet {
-  export enum Header {APIKey = 'apiKey', ProjectID = 'projectID'}
+  export enum Header {
+    APIKey = 'apiKey',
+    ProjectID = 'projectID',
+  }
 }

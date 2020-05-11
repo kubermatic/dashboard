@@ -12,15 +12,9 @@ describe('TaintFormComponent', () => {
   let component: TaintFormComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            BrowserAnimationsModule,
-            SharedModule,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -43,7 +37,9 @@ describe('TaintFormComponent', () => {
   it('should delete labels', () => {
     expect(component.taints).toBeUndefined();
 
-    component.taints = [{key: 'key', value: 'value', effect: Taint.NO_SCHEDULE}];
+    component.taints = [
+      {key: 'key', value: 'value', effect: Taint.NO_SCHEDULE},
+    ];
     component.ngOnInit();
     component.deleteTaint(0);
 

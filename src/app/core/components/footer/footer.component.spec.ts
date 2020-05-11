@@ -27,22 +27,16 @@ describe('FooterComponent', () => {
   let component: FooterComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            FooterComponent,
-          ],
-          providers: [
-            {provide: UserService, useClass: UserMockService},
-            {provide: ProjectService, useClass: ProjectMockService},
-            {provide: Router, useClass: RouterStub},
-            {provide: Auth, useClass: AuthMockService},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [FooterComponent],
+      providers: [
+        {provide: UserService, useClass: UserMockService},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: Router, useClass: RouterStub},
+        {provide: Auth, useClass: AuthMockService},
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -51,6 +45,6 @@ describe('FooterComponent', () => {
   });
 
   it('should initialize', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 });

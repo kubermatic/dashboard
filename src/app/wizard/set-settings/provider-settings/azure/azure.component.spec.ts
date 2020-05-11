@@ -13,23 +13,17 @@ describe('AzureClusterSettingsComponent', () => {
   let component: AzureClusterSettingsComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            BrowserAnimationsModule,
-            ReactiveFormsModule,
-            SharedModule,
-            HttpClientModule,
-          ],
-          declarations: [
-            AzureClusterSettingsComponent,
-          ],
-          providers: [
-            WizardService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        SharedModule,
+        HttpClientModule,
+      ],
+      declarations: [AzureClusterSettingsComponent],
+      providers: [WizardService],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -65,9 +59,13 @@ describe('AzureClusterSettingsComponent', () => {
 
     expect(component.form.valid).toBeFalsy();
     expect(component.form.controls.clientID.hasError('required')).toBeTruthy();
-    expect(component.form.controls.clientSecret.hasError('required')).toBeTruthy();
+    expect(
+      component.form.controls.clientSecret.hasError('required')
+    ).toBeTruthy();
     expect(component.form.controls.tenantID.hasError('required')).toBeTruthy();
-    expect(component.form.controls.subscriptionID.hasError('required')).toBeTruthy();
+    expect(
+      component.form.controls.subscriptionID.hasError('required')
+    ).toBeTruthy();
 
     component.form.controls.clientID.patchValue('foo');
     fixture.detectChanges();
@@ -76,7 +74,9 @@ describe('AzureClusterSettingsComponent', () => {
 
     component.form.controls.clientSecret.patchValue('bar');
     fixture.detectChanges();
-    expect(component.form.controls.clientSecret.hasError('required')).toBeFalsy();
+    expect(
+      component.form.controls.clientSecret.hasError('required')
+    ).toBeFalsy();
     expect(component.form.valid).toBeFalsy();
 
     component.form.controls.tenantID.patchValue('tenant');
@@ -86,7 +86,9 @@ describe('AzureClusterSettingsComponent', () => {
 
     component.form.controls.subscriptionID.patchValue('subscription');
     fixture.detectChanges();
-    expect(component.form.controls.subscriptionID.hasError('required')).toBeFalsy();
+    expect(
+      component.form.controls.subscriptionID.hasError('required')
+    ).toBeFalsy();
     expect(component.form.valid).toBeTruthy();
   });
 });

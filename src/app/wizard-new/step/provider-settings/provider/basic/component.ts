@@ -14,17 +14,29 @@ enum Controls {
   selector: 'km-wizard-provider-basic',
   templateUrl: './template.html',
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ProviderBasicComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => ProviderBasicComponent), multi: true}
-  ]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ProviderBasicComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => ProviderBasicComponent),
+      multi: true,
+    },
+  ],
 })
-export class ProviderBasicComponent extends BaseFormValidator implements OnInit {
+export class ProviderBasicComponent extends BaseFormValidator
+  implements OnInit {
   @Input() provider: NodeProvider;
 
   readonly Providers = NodeProvider;
   readonly Controls = Controls;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _clusterService: ClusterService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _clusterService: ClusterService
+  ) {
     super('Provider Basic');
   }
 
@@ -33,11 +45,14 @@ export class ProviderBasicComponent extends BaseFormValidator implements OnInit 
       [Controls.ProviderBasic]: this._builder.control(''),
     });
 
-    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => {
-          this.form.removeControl(Controls.ProviderBasic);
-          this.form.addControl(Controls.ProviderBasic, this._builder.control(''));
-        });
+    merge(
+      this._clusterService.providerChanges,
+      this._clusterService.datacenterChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this.form.removeControl(Controls.ProviderBasic);
+        this.form.addControl(Controls.ProviderBasic, this._builder.control(''));
+      });
   }
 }

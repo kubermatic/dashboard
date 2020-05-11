@@ -1,4 +1,3 @@
-
 export class SSHKeySpec {
   fingerprint: string;
   publicKey: string;

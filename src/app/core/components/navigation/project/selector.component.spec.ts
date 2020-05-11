@@ -35,38 +35,34 @@ describe('SidenavComponent', () => {
   let component: ProjectSelectorComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            NavigationComponent,
-            NotificationPanelComponent,
-            ProjectSelectorComponent,
-            MockComponent({
-              selector: 'a',
-              inputs: ['routerLink', 'routerLinkActiveOptions'],
-            }),
-          ],
-          providers: [
-            {provide: ApiService, useValue: ApiMockService},
-            {provide: ProjectService, useClass: ProjectMockService},
-            {provide: UserService, useClass: UserMockService},
-            {provide: AppConfigService, useClass: AppConfigMockService},
-            {provide: Auth, useClass: AuthMockService},
-            {
-              provide: Router,
-              useValue: {
-                routerState: {
-                  snapshot: {url: ''},
-                },
-              },
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [
+        NavigationComponent,
+        NotificationPanelComponent,
+        ProjectSelectorComponent,
+        MockComponent({
+          selector: 'a',
+          inputs: ['routerLink', 'routerLinkActiveOptions'],
+        }),
+      ],
+      providers: [
+        {provide: ApiService, useValue: ApiMockService},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: UserService, useClass: UserMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: Auth, useClass: AuthMockService},
+        {
+          provide: Router,
+          useValue: {
+            routerState: {
+              snapshot: {url: ''},
             },
-            MatDialog,
-          ],
-        })
-        .compileComponents();
+          },
+        },
+        MatDialog,
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -75,8 +71,8 @@ describe('SidenavComponent', () => {
   });
 
   it('should initialize', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 
   it('should correctly compare projects basing on their IDs', () => {
     const a: ProjectEntity = fakeProjects()[0];

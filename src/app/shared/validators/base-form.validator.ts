@@ -1,4 +1,10 @@
-import {AbstractControl, ControlValueAccessor, FormGroup, ValidationErrors, Validator} from '@angular/forms';
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  FormGroup,
+  ValidationErrors,
+  Validator,
+} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -9,10 +15,15 @@ export class BaseFormValidator implements ControlValueAccessor, Validator {
   constructor(private _formName = 'Form') {}
 
   // Validator interface implementation
-  validate(control: AbstractControl): ValidationErrors|null {
-    return this.form.valid || this.form.disabled ?
-        null :
-        {invalidForm: {valid: false, message: `${this._formName} validation failed.`}};
+  validate(control: AbstractControl): ValidationErrors | null {
+    return this.form.valid || this.form.disabled
+      ? null
+      : {
+          invalidForm: {
+            valid: false,
+            message: `${this._formName} validation failed.`,
+          },
+        };
   }
 
   // ControlValueAccessor interface implementation

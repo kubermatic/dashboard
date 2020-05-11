@@ -37,9 +37,11 @@
           <div fxLayout="row"
                fxLayoutGap="8px"
                fxLayoutAlign=" center">
-            <mat-checkbox formControlName="usePodSecurityPolicyAdmissionPlugin">
-              Pod Security Policy
-            </mat-checkbox>
+            <mat-checkbox formControlName="usePodSecurityPolicyAdmissionPlugin">Pod Security Policy</mat-checkbox>
+            <i *ngIf="!!datacenter.spec.enforcePodSecurityPolicy"
+               class="km-icon-warning km-warning"
+               matTooltip="Pod Security Policy is enforced by your admin in the chosen datacenter.">
+            </i>
             <i class="km-icon-info"
                matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
             <i *ngIf="form.controls.usePodSecurityPolicyAdmissionPlugin.value"

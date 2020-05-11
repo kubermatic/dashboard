@@ -1,10 +1,20 @@
-import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {first} from 'rxjs/operators';
 import {gt, lt} from 'semver';
 
 import {ClusterService} from '../../../core/services';
-import {ClusterEntity, MasterVersion} from '../../../shared/entity/ClusterEntity';
+import {
+  ClusterEntity,
+  MasterVersion,
+} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {ChangeClusterVersionComponent} from '../change-cluster-version/change-cluster-version.component';
@@ -13,7 +23,6 @@ import {ChangeClusterVersionComponent} from '../change-cluster-version/change-cl
   selector: 'km-version-picker',
   templateUrl: './version-picker.component.html',
 })
-
 export class VersionPickerComponent implements OnInit, OnChanges {
   @Input() datacenter: DataCenterEntity;
   @Input() cluster: ClusterEntity;
@@ -25,8 +34,10 @@ export class VersionPickerComponent implements OnInit, OnChanges {
   someUpgradesRestrictedByKubeletVersion = false;
 
   constructor(
-      private readonly _clusterService: ClusterService, private readonly _matDialog: MatDialog,
-      private _changeDetectorRef: ChangeDetectorRef) {}
+    private readonly _clusterService: ClusterService,
+    private readonly _matDialog: MatDialog,
+    private _changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.processData();
@@ -48,7 +59,7 @@ export class VersionPickerComponent implements OnInit, OnChanges {
 
       if (upgrade.restrictedByKubeletVersion === true) {
         this.someUpgradesRestrictedByKubeletVersion = isUpgrade;
-        return;  // Skip all restricted versions.
+        return; // Skip all restricted versions.
       }
 
       this.updatesAvailable = this.updatesAvailable ? true : isUpgrade;
@@ -67,7 +78,10 @@ export class VersionPickerComponent implements OnInit, OnChanges {
   }
 
   isEnabled(): boolean {
-    return this.isClusterRunning && (this.updatesAvailable || this.downgradesAvailable);
+    return (
+      this.isClusterRunning &&
+      (this.updatesAvailable || this.downgradesAvailable)
+    );
   }
 
   changeClusterVersionDialog(): void {
@@ -76,11 +90,14 @@ export class VersionPickerComponent implements OnInit, OnChanges {
       modal.componentInstance.cluster = this.cluster;
       modal.componentInstance.datacenter = this.datacenter;
       modal.componentInstance.controlPlaneVersions = this.versionsList;
-      modal.afterClosed().pipe(first()).subscribe(isChanged => {
-        if (isChanged) {
-          this._clusterService.onClusterUpdate.next();
-        }
-      });
+      modal
+        .afterClosed()
+        .pipe(first())
+        .subscribe(isChanged => {
+          if (isChanged) {
+            this._clusterService.onClusterUpdate.next();
+          }
+        });
     }
   }
 }

@@ -10,7 +10,6 @@ import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
   selector: 'km-kubevirt-node-data',
   templateUrl: './kubevirt-node-data.component.html',
 })
-
 export class KubeVirtNodeDataComponent implements OnInit, OnDestroy {
   @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
@@ -22,23 +21,41 @@ export class KubeVirtNodeDataComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.formGroup = new FormGroup({
-      cpus: new FormControl(
-          this.nodeData.spec.cloud.kubevirt.cpus || '1',
-          [Validators.required, Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/)]),
+      cpus: new FormControl(this.nodeData.spec.cloud.kubevirt.cpus || '1', [
+        Validators.required,
+        Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/),
+      ]),
       memory: new FormControl(
-          this.nodeData.spec.cloud.kubevirt.memory || '2Gi',
-          [Validators.required, Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/)]),
-      namespace: new FormControl(this.nodeData.spec.cloud.kubevirt.namespace, [Validators.required]),
-      sourceURL: new FormControl(this.nodeData.spec.cloud.kubevirt.sourceURL, [Validators.required]),
-      storageClassName: new FormControl(this.nodeData.spec.cloud.kubevirt.storageClassName, [Validators.required]),
+        this.nodeData.spec.cloud.kubevirt.memory || '2Gi',
+        [
+          Validators.required,
+          Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/),
+        ]
+      ),
+      namespace: new FormControl(this.nodeData.spec.cloud.kubevirt.namespace, [
+        Validators.required,
+      ]),
+      sourceURL: new FormControl(this.nodeData.spec.cloud.kubevirt.sourceURL, [
+        Validators.required,
+      ]),
+      storageClassName: new FormControl(
+        this.nodeData.spec.cloud.kubevirt.storageClassName,
+        [Validators.required]
+      ),
       pvcSize: new FormControl(
-          this.nodeData.spec.cloud.kubevirt.pvcSize || '10Gi',
-          [Validators.required, Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/)]),
+        this.nodeData.spec.cloud.kubevirt.pvcSize || '10Gi',
+        [
+          Validators.required,
+          Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/),
+        ]
+      ),
     });
 
-    this.formGroup.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
-    });
+    this.formGroup.valueChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(() => {
+        this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+      });
 
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
@@ -62,7 +79,6 @@ export class KubeVirtNodeDataComponent implements OnInit, OnDestroy {
           sourceURL: this.formGroup.controls.sourceURL.value,
           storageClassName: this.formGroup.controls.storageClassName.value,
           pvcSize: this.formGroup.controls.pvcSize.value,
-
         },
       },
       valid: this.formGroup.valid,

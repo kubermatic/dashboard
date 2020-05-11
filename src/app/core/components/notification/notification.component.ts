@@ -3,7 +3,7 @@ import {MatSnackBarRef} from '@angular/material/snack-bar';
 
 export enum NotificationType {
   success,
-  error
+  error,
 }
 
 @Component({

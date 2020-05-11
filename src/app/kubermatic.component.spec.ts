@@ -5,7 +5,14 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
 import {AppConfigService} from './app-config.service';
 import {CoreModule} from './core/core.module';
-import {ApiService, Auth, AuthGuard, DatacenterService, ProjectService, UserService} from './core/services';
+import {
+  ApiService,
+  Auth,
+  AuthGuard,
+  DatacenterService,
+  ProjectService,
+  UserService,
+} from './core/services';
 import {GoogleAnalyticsService} from './google-analytics.service';
 import {KubermaticComponent} from './kubermatic.component';
 import {SharedModule} from './shared/shared.module';
@@ -26,9 +33,7 @@ const modules: any[] = [
   CoreModule,
 ];
 
-const components: any[] = [
-  KubermaticComponent,
-];
+const components: any[] = [KubermaticComponent];
 
 describe('KubermaticComponent', () => {
   let fixture: ComponentFixture<KubermaticComponent>;
@@ -36,26 +41,20 @@ describe('KubermaticComponent', () => {
   let authService: AuthMockService;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            ...components,
-          ],
-          providers: [
-            {provide: Auth, useClass: AuthMockService},
-            {provide: ApiService, useClass: ApiMockService},
-            {provide: ProjectService, useClass: ProjectMockService},
-            {provide: DatacenterService, useClass: DatacenterMockService},
-            {provide: UserService, useClass: UserMockService},
-            {provide: AppConfigService, useClass: AppConfigMockService},
-            AuthGuard,
-            GoogleAnalyticsService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [...components],
+      providers: [
+        {provide: Auth, useClass: AuthMockService},
+        {provide: ApiService, useClass: ApiMockService},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: DatacenterService, useClass: DatacenterMockService},
+        {provide: UserService, useClass: UserMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        AuthGuard,
+        GoogleAnalyticsService,
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

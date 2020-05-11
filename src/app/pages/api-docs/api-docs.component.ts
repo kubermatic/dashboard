@@ -12,21 +12,24 @@ import {ApiService, Auth} from '../../core/services';
 })
 export class ApiDocsComponent implements OnInit {
   constructor(
-      private readonly _auth: Auth, private readonly _api: ApiService, private readonly _router: Router,
-      @Inject(DOCUMENT) private readonly _document: Document) {}
+    private readonly _auth: Auth,
+    private readonly _api: ApiService,
+    private readonly _router: Router,
+    @Inject(DOCUMENT) private readonly _document: Document
+  ) {}
 
   ngOnInit(): void {
-    this._api.getSwaggerJson().subscribe((swaggerSpec) => {
+    this._api.getSwaggerJson().subscribe(swaggerSpec => {
       swaggerSpec.host = this._document.location.host;
       swaggerSpec.schemes = [this._document.location.protocol.replace(':', '')];
       SwaggerUI({
         dom_id: '#km-swagger-container',
         spec: swaggerSpec,
-        requestInterceptor: (req) => {
+        requestInterceptor: req => {
           const token = this._auth.getBearerToken();
           req.headers.authorization = 'Bearer ' + token;
           return req;
-        }
+        },
       });
     });
   }

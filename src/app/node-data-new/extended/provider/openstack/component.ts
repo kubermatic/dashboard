@@ -11,16 +11,28 @@ enum Controls {
   selector: 'km-openstack-extended-node-data',
   templateUrl: './template.html',
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OpenstackExtendedNodeDataComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => OpenstackExtendedNodeDataComponent), multi: true}
-  ]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => OpenstackExtendedNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => OpenstackExtendedNodeDataComponent),
+      multi: true,
+    },
+  ],
 })
-export class OpenstackExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class OpenstackExtendedNodeDataComponent extends BaseFormValidator
+  implements OnInit, OnDestroy {
   tags: object;
 
   readonly Controls = Controls;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _nodeDataService: NodeDataService
+  ) {
     super();
   }
 

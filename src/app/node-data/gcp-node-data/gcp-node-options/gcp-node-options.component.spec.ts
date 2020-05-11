@@ -25,21 +25,15 @@ describe('GCPNodeOptionsComponent', () => {
   let component: GCPNodeOptionsComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            GCPNodeOptionsComponent,
-          ],
-          providers: [
-            {provide: ApiService, useClass: ApiMockService},
-            NodeDataService,
-            WizardService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [GCPNodeOptionsComponent],
+      providers: [
+        {provide: ApiService, useClass: ApiMockService},
+        NodeDataService,
+        WizardService,
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

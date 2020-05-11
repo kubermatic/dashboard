@@ -21,23 +21,17 @@ describe('DashboardComponent', () => {
   let component: DashboardComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            DashboardComponent,
-          ],
-          providers: [
-            {provide: Router, useClass: RouterStub},
-            {provide: Auth, useClass: AuthMockService},
-            {provide: ApiService, useClass: ApiMockService},
-            {provide: DatacenterService, useClass: DatacenterMockService},
-            {provide: ActivatedRoute, useClass: ActivatedRouteStub},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [DashboardComponent],
+      providers: [
+        {provide: Router, useClass: RouterStub},
+        {provide: Auth, useClass: AuthMockService},
+        {provide: ApiService, useClass: ApiMockService},
+        {provide: DatacenterService, useClass: DatacenterMockService},
+        {provide: ActivatedRoute, useClass: ActivatedRouteStub},
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -46,6 +40,6 @@ describe('DashboardComponent', () => {
   });
 
   it('should create the cmp', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 });

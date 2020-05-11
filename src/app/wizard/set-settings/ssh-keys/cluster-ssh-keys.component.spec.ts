@@ -5,7 +5,12 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '../../../app-config.service';
-import {ApiService, ProjectService, UserService, WizardService} from '../../../core/services';
+import {
+  ApiService,
+  ProjectService,
+  UserService,
+  WizardService,
+} from '../../../core/services';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeSSHKeys} from '../../../testing/fake-data/sshkey.fake';
@@ -22,32 +27,28 @@ describe('ClusterSSHKeys', () => {
   let component: ClusterSSHKeysComponent;
 
   beforeEach(async(() => {
-    const apiMock = {'getSSHKeys': jest.fn()};
+    const apiMock = {getSSHKeys: jest.fn()};
     apiMock.getSSHKeys.mockReturnValue(asyncData(fakeSSHKeys()));
 
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            BrowserAnimationsModule,
-            ReactiveFormsModule,
-            SharedModule,
-            HttpClientModule,
-          ],
-          declarations: [
-            ClusterSSHKeysComponent,
-          ],
-          providers: [
-            WizardService,
-            {provide: ActivatedRoute, useClass: ActivatedRouteMock},
-            {provide: ApiService, useValue: apiMock},
-            {provide: ProjectService, useClass: ProjectMockService},
-            {provide: UserService, useClass: UserMockService},
-            {provide: AppConfigService, useClass: AppConfigMockService},
-            {provide: Router, useClass: RouterStub},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        SharedModule,
+        HttpClientModule,
+      ],
+      declarations: [ClusterSSHKeysComponent],
+      providers: [
+        WizardService,
+        {provide: ActivatedRoute, useClass: ActivatedRouteMock},
+        {provide: ApiService, useValue: apiMock},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: UserService, useClass: UserMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: Router, useClass: RouterStub},
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -20,41 +20,33 @@ import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/vsp
 
 import {AzureProviderSettingsComponent} from './azure-provider-settings.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 describe('AzureProviderSettingsComponent', () => {
   let fixture: ComponentFixture<AzureProviderSettingsComponent>;
   let component: AzureProviderSettingsComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            EditProviderSettingsComponent,
-            AWSProviderSettingsComponent,
-            DigitaloceanProviderSettingsComponent,
-            HetznerProviderSettingsComponent,
-            OpenstackProviderSettingsComponent,
-            VSphereProviderSettingsComponent,
-            AzureProviderSettingsComponent,
-            PacketProviderSettingsComponent,
-            GCPProviderSettingsComponent,
-            KubevirtProviderSettingsComponent,
-            AlibabaProviderSettingsComponent,
-          ],
-          providers: [
-            {provide: ClusterService, useClass: ClusterMockService},
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [
+        EditProviderSettingsComponent,
+        AWSProviderSettingsComponent,
+        DigitaloceanProviderSettingsComponent,
+        HetznerProviderSettingsComponent,
+        OpenstackProviderSettingsComponent,
+        VSphereProviderSettingsComponent,
+        AzureProviderSettingsComponent,
+        PacketProviderSettingsComponent,
+        GCPProviderSettingsComponent,
+        KubevirtProviderSettingsComponent,
+        AlibabaProviderSettingsComponent,
+      ],
+      providers: [
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

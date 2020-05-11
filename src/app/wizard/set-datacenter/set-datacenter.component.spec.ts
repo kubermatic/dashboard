@@ -16,25 +16,21 @@ describe('SetDatacenterComponent', () => {
   let component: SetDatacenterComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            BrowserAnimationsModule,
-            ReactiveFormsModule,
-            SharedModule,
-            MatButtonToggleModule,
-            HttpClientModule,
-          ],
-          declarations: [
-            SetDatacenterComponent,
-          ],
-          providers: [
-            WizardService,
-            {provide: DatacenterService, useClass: DatacenterMockService},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        SharedModule,
+        MatButtonToggleModule,
+        HttpClientModule,
+      ],
+      declarations: [SetDatacenterComponent],
+      providers: [
+        WizardService,
+        {provide: DatacenterService, useClass: DatacenterMockService},
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

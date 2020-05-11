@@ -9,52 +9,75 @@ import {NodeDataService} from '../service';
 
 export class NodeDataAWSProvider {
   constructor(
-      private readonly _nodeDataService: NodeDataService, private readonly _clusterService: ClusterService,
-      private readonly _presetService: PresetsService, private readonly _datacenterService: DatacenterService) {}
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _clusterService: ClusterService,
+    private readonly _presetService: PresetsService,
+    private readonly _datacenterService: DatacenterService
+  ) {}
 
   set tags(tags: object) {
     delete this._nodeDataService.nodeData.spec.cloud.aws.tags;
     this._nodeDataService.nodeData.spec.cloud.aws.tags = tags;
   }
 
-  flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AWSSize[]> {
+  flavors(
+    onError: () => void = undefined,
+    onLoadingCb: () => void = null
+  ): Observable<AWSSize[]> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._clusterService.datacenterChanges.pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
-            .pipe(switchMap(
-                dc => this._presetService.provider(NodeProvider.AWS)
-                          .region(dc.spec.aws.region)
-                          .flavors(onLoadingCb)
-                          .pipe(catchError(_ => {
-                            if (onError) {
-                              onError();
-                            }
+        return this._clusterService.datacenterChanges
+          .pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
+          .pipe(
+            switchMap(dc =>
+              this._presetService
+                .provider(NodeProvider.AWS)
+                .region(dc.spec.aws.region)
+                .flavors(onLoadingCb)
+                .pipe(
+                  catchError(_ => {
+                    if (onError) {
+                      onError();
+                    }
 
-                            return onErrorResumeNext(of([]));
-                          }))));
+                    return onErrorResumeNext(of([]));
+                  })
+                )
+            )
+          );
     }
   }
 
-  subnets(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AWSSubnet[]> {
+  subnets(
+    onError: () => void = undefined,
+    onLoadingCb: () => void = null
+  ): Observable<AWSSubnet[]> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._clusterService.clusterChanges.pipe(filter(_ => this._clusterService.provider === NodeProvider.AWS))
-            .pipe(switchMap(
-                cluster => this._presetService.provider(NodeProvider.AWS)
-                               .accessKeyID(cluster.spec.cloud.aws.accessKeyId)
-                               .secretAccessKey(cluster.spec.cloud.aws.secretAccessKey)
-                               .vpc(cluster.spec.cloud.aws.vpcId)
-                               .credential(this._presetService.preset)
-                               .subnets(cluster.spec.cloud.dc, onLoadingCb)
-                               .pipe(catchError(_ => {
-                                 if (onError) {
-                                   onError();
-                                 }
+        return this._clusterService.clusterChanges
+          .pipe(filter(_ => this._clusterService.provider === NodeProvider.AWS))
+          .pipe(
+            switchMap(cluster =>
+              this._presetService
+                .provider(NodeProvider.AWS)
+                .accessKeyID(cluster.spec.cloud.aws.accessKeyId)
+                .secretAccessKey(cluster.spec.cloud.aws.secretAccessKey)
+                .vpc(cluster.spec.cloud.aws.vpcId)
+                .credential(this._presetService.preset)
+                .subnets(cluster.spec.cloud.dc, onLoadingCb)
+                .pipe(
+                  catchError(_ => {
+                    if (onError) {
+                      onError();
+                    }
 
-                                 return onErrorResumeNext(of([]));
-                               }))));
+                    return onErrorResumeNext(of([]));
+                  })
+                )
+            )
+          );
     }
   }
 }
