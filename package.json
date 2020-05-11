@@ -88,7 +88,7 @@
     "@types/lodash": "4.14.150",
     "@types/node": "13.13.5",
     "cypress": "4.4.1",
-    "gts": "2.0.1",
+    "gts": "2.0.2",
     "husky": "4.2.5",
     "jest": "25.5.4",
     "jest-preset-angular": "8.2.0",
