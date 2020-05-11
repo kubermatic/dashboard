@@ -11,7 +11,6 @@ import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
   selector: 'km-azure-node-options',
   templateUrl: './azure-node-options.component.html',
 })
-
 export class AzureNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
 
@@ -21,16 +20,23 @@ export class AzureNodeOptionsComponent implements OnInit, OnDestroy {
 
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _addNodeService: NodeDataService, private readonly _wizardService: WizardService) {}
+  constructor(
+    private readonly _addNodeService: NodeDataService,
+    private readonly _wizardService: WizardService
+  ) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      assignPublicIP: new FormControl(this.nodeData.spec.cloud.azure.assignPublicIP),
+      assignPublicIP: new FormControl(
+        this.nodeData.spec.cloud.azure.assignPublicIP
+      ),
     });
 
-    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.hideOptional = data.hideOptional;
-    });
+    this._wizardService.clusterSettingsFormViewChanged$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        this.hideOptional = data.hideOptional;
+      });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());

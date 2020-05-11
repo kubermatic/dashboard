@@ -1,6 +1,6 @@
-import {Group} from "../utils/member";
-import {wait} from "../utils/wait";
-import {Condition} from "../utils/condition";
+import {Group} from '../utils/member';
+import {wait} from '../utils/wait';
+import {Condition} from '../utils/condition';
 
 export class ServiceAccountsPage {
   static getAddServiceAccountBtn(): Cypress.Chainable<any> {
@@ -66,25 +66,35 @@ export class ServiceAccountsPage {
   }
 
   static visit(): void {
-    cy.get('#km-nav-item-service-accounts').click().then(() => {
-      this.waitForRefresh();
-      this.verifyUrl();
-    });
+    cy.get('#km-nav-item-service-accounts')
+      .click()
+      .then(() => {
+        this.waitForRefresh();
+        this.verifyUrl();
+      });
   }
 
   static addServiceAccount(name: string, group: Group): void {
     this.getAddServiceAccountBtn().should(Condition.NotBe, 'disabled').click();
-    this.getAddServiceAccountNameInput().type(name).should(Condition.HaveValue, name);
+    this.getAddServiceAccountNameInput()
+      .type(name)
+      .should(Condition.HaveValue, name);
     this.getAddServiceAccountGroupCombobox().click();
     this.getAddServiceAccountGroupOption(group).click();
-    this.getAddServiceAccountSaveBtn().should(Condition.NotBe, 'disabled').click();
+    this.getAddServiceAccountSaveBtn()
+      .should(Condition.NotBe, 'disabled')
+      .click();
     this.waitForRefresh();
     this.getTable().should(Condition.Contain, name);
   }
 
   static deleteServiceAccount(name: string): void {
-    this.getDeleteServiceAccountBtn(name).should(Condition.NotBe, 'disabled').click();
-    cy.get('#km-confirmation-dialog-confirm-btn').should(Condition.NotBe, 'disabled').click();
+    this.getDeleteServiceAccountBtn(name)
+      .should(Condition.NotBe, 'disabled')
+      .click();
+    cy.get('#km-confirmation-dialog-confirm-btn')
+      .should(Condition.NotBe, 'disabled')
+      .click();
     this.waitForRefresh();
     this.getTable().should(Condition.NotContain, name);
   }

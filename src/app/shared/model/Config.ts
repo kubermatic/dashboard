@@ -1,7 +1,7 @@
 export interface Config {
   disable_themes?: boolean;
   share_kubeconfig?: boolean;
-  openstack?: {wizard_use_default_user?: boolean;};
+  openstack?: {wizard_use_default_user?: boolean};
   google_analytics_code?: string;
   google_analytics_config?: object;
   oidc_provider_url?: string;

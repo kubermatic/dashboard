@@ -9,8 +9,15 @@ import {environment} from '../../../../environments/environment';
 import {MemberEntity, UserSettings} from '../../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {GroupConfig} from '../../../shared/model/Config';
-import {CustomLink, CustomLinkLocation, filterCustomLinks} from '../../../shared/utils/custom-link-utils/custom-link';
-import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
+import {
+  CustomLink,
+  CustomLinkLocation,
+  filterCustomLinks,
+} from '../../../shared/utils/custom-link-utils/custom-link';
+import {
+  MemberUtils,
+  Permission,
+} from '../../../shared/utils/member-utils/member-utils';
 import {ProjectService, UserService} from '../../services';
 import {View} from '../../services/auth/auth.guard';
 import {SettingsService} from '../../services/settings/settings.service';
@@ -31,34 +38,52 @@ export class SidenavComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(
-      public dialog: MatDialog, private _router: Router, private readonly _projectService: ProjectService,
-      private readonly _userService: UserService, private readonly _settingsService: SettingsService) {}
+    public dialog: MatDialog,
+    private _router: Router,
+    private readonly _projectService: ProjectService,
+    private readonly _userService: UserService,
+    private readonly _settingsService: SettingsService
+  ) {}
 
   ngOnInit(): void {
-    this._userService.loggedInUser.subscribe(user => this.currentUser = user);
+    this._userService.loggedInUser.subscribe(user => (this.currentUser = user));
 
-    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      const filtered = filterCustomLinks(settings.customLinks, CustomLinkLocation.Default);
-      if (!_.isEqual(this.customLinks, filtered)) {
-        this.customLinks = filtered;
-      }
-    });
+    this._settingsService.adminSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => {
+        const filtered = filterCustomLinks(
+          settings.customLinks,
+          CustomLinkLocation.Default
+        );
+        if (!_.isEqual(this.customLinks, filtered)) {
+          this.customLinks = filtered;
+        }
+      });
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      this.showSidenav = !settings.collapseSidenav;
-      this.settings = settings;
-    });
+    this._settingsService.userSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => {
+        this.showSidenav = !settings.collapseSidenav;
+        this.settings = settings;
+      });
 
     merge(
-        this._projectService.selectedProject,
-        this._projectService.onProjectChange,
-        )
-        .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap((project: ProjectEntity) => {
+      this._projectService.selectedProject,
+      this._projectService.onProjectChange
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .pipe(
+        switchMap((project: ProjectEntity) => {
           this._selectedProject = project;
           return this._userService.currentUserGroup(project.id);
-        }))
-        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
+        })
+      )
+      .subscribe(
+        userGroup =>
+          (this._currentGroupConfig = this._userService.userGroupConfig(
+            userGroup
+          ))
+      );
   }
 
   ngOnDestroy(): void {
@@ -73,8 +98,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
   checkUrl(url: string): boolean {
     const selectedProjectId = this._selectedProject.id;
     const urlArray = this._router.routerState.snapshot.url.split('/');
-    return !!urlArray.find((x) => x === selectedProjectId) &&
-        (!!urlArray.find((x) => x === url) || (url === 'clusters' && !!urlArray.find((x) => x === 'wizard')));
+    return (
+      !!urlArray.find(x => x === selectedProjectId) &&
+      (!!urlArray.find(x => x === url) ||
+        (url === 'clusters' && !!urlArray.find(x => x === 'wizard')))
+    );
   }
 
   getRouterLink(target: string): string {
@@ -105,7 +133,14 @@ export class SidenavComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (!MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, viewName, Permission.View)) {
+    if (
+      !MemberUtils.hasPermission(
+        this.currentUser,
+        this._currentGroupConfig,
+        viewName,
+        Permission.View
+      )
+    ) {
       tooltip = 'Cannot enter this view.';
       if (this._selectedProject.status !== 'Active') {
         tooltip += ' Selected project is not active.';
@@ -127,8 +162,13 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   getMenuItemClass(viewName: string): string {
-    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, viewName, Permission.View) ?
-        '' :
-        'km-disabled';
+    return MemberUtils.hasPermission(
+      this.currentUser,
+      this._currentGroupConfig,
+      viewName,
+      Permission.View
+    )
+      ? ''
+      : 'km-disabled';
   }
 }

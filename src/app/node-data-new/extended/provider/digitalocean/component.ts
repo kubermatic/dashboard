@@ -19,11 +19,20 @@ enum Controls {
   selector: 'km-digitalocean-extended-node-data',
   templateUrl: './template.html',
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DigitalOceanExtendedNodeDataComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => DigitalOceanExtendedNodeDataComponent), multi: true}
-  ]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => DigitalOceanExtendedNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => DigitalOceanExtendedNodeDataComponent),
+      multi: true,
+    },
+  ],
 })
-export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator
+  implements OnInit, OnDestroy {
   tags: string[] = [];
 
   readonly Controls = Controls;
@@ -32,15 +41,23 @@ export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator imp
     return this._nodeDataService.nodeData;
   }
 
-  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _nodeDataService: NodeDataService
+  ) {
     super();
   }
 
   ngOnInit(): void {
-    const backups = this._nodeDataService.isInDialogEditMode() ? this.nodeData.spec.cloud.digitalocean.backups : false;
-    const ipv6 = this._nodeDataService.isInDialogEditMode() ? this.nodeData.spec.cloud.digitalocean.ipv6 : false;
-    const monitoring =
-        this._nodeDataService.isInDialogEditMode() ? this.nodeData.spec.cloud.digitalocean.monitoring : false;
+    const backups = this._nodeDataService.isInDialogEditMode()
+      ? this.nodeData.spec.cloud.digitalocean.backups
+      : false;
+    const ipv6 = this._nodeDataService.isInDialogEditMode()
+      ? this.nodeData.spec.cloud.digitalocean.ipv6
+      : false;
+    const monitoring = this._nodeDataService.isInDialogEditMode()
+      ? this.nodeData.spec.cloud.digitalocean.monitoring
+      : false;
 
     this.form = this._builder.group({
       [Controls.Backups]: this._builder.control(backups),
@@ -52,12 +69,12 @@ export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator imp
     this._nodeDataService.nodeData = this._getNodeData();
 
     merge(
-        this.form.get(Controls.Backups).valueChanges,
-        this.form.get(Controls.IPv6).valueChanges,
-        this.form.get(Controls.Monitoring).valueChanges,
-        )
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
+      this.form.get(Controls.Backups).valueChanges,
+      this.form.get(Controls.IPv6).valueChanges,
+      this.form.get(Controls.Monitoring).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
 
   onTagsChange(tags: string[]): void {

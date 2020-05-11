@@ -1,7 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 
-import {AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
+import {
+  AdminSettings,
+  ClusterTypeOptions,
+} from '../../shared/entity/AdminSettings';
 import {UserSettings} from '../../shared/entity/MemberEntity';
 
 export const DEFAULT_USER_SETTINGS_MOCK: UserSettings = {

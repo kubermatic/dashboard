@@ -18,8 +18,9 @@ export class LabelService {
   get systemLabels(): Observable<ResourceLabelMap> {
     const url = `${this.restRoot}/labels/system`;
     if (!this.systemLabelsCache) {
-      this.systemLabelsCache = this._http.get<ResourceLabelMap>(url, {headers: this.headers})
-                                   .pipe(shareReplay({refCount: true, bufferSize: 1}));
+      this.systemLabelsCache = this._http
+        .get<ResourceLabelMap>(url, {headers: this.headers})
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this.systemLabelsCache;
   }

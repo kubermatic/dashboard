@@ -13,23 +13,17 @@ describe('AzureProviderOptionsComponent', () => {
   let component: AzureProviderOptionsComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            BrowserAnimationsModule,
-            ReactiveFormsModule,
-            SharedModule,
-            HttpClientModule,
-          ],
-          declarations: [
-            AzureProviderOptionsComponent,
-          ],
-          providers: [
-            WizardService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        SharedModule,
+        HttpClientModule,
+      ],
+      declarations: [AzureProviderOptionsComponent],
+      providers: [WizardService],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

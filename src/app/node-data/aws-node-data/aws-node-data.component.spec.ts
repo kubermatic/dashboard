@@ -4,7 +4,11 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import {ApiService, DatacenterService, WizardService} from '../../core/services';
+import {
+  ApiService,
+  DatacenterService,
+  WizardService,
+} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeAwsSubnets} from '../../testing/fake-data/aws-subnets.fake';
@@ -30,27 +34,23 @@ describe('AWSNodeDataComponent', () => {
   let apiMock;
 
   beforeEach(async(() => {
-    apiMock = {'getAWSSubnets': jest.fn()};
+    apiMock = {getAWSSubnets: jest.fn()};
     apiMock.getAWSSubnets.mockReturnValue(asyncData(fakeAwsSubnets()));
-    datacenterMock = {'getDataCenter': jest.fn()};
-    datacenterMock.getDataCenter.mockReturnValue(asyncData(fakeAWSDatacenter()));
+    datacenterMock = {getDataCenter: jest.fn()};
+    datacenterMock.getDataCenter.mockReturnValue(
+      asyncData(fakeAWSDatacenter())
+    );
 
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            AWSNodeDataComponent,
-          ],
-          providers: [
-            NodeDataService,
-            WizardService,
-            {provide: ApiService, useValue: apiMock},
-            {provide: DatacenterService, useValue: datacenterMock},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [AWSNodeDataComponent],
+      providers: [
+        NodeDataService,
+        WizardService,
+        {provide: ApiService, useValue: apiMock},
+        {provide: DatacenterService, useValue: datacenterMock},
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -83,7 +83,11 @@ describe('AWSNodeDataComponent', () => {
     component.fillSubnetMap(fakeAwsSubnets());
     component.form.controls.subnetID.setValue('');
     fixture.detectChanges();
-    expect(component.subnetAZ).toEqual(['eu-central-1a', 'eu-central-1c', 'eu-central-1b']);
+    expect(component.subnetAZ).toEqual([
+      'eu-central-1a',
+      'eu-central-1c',
+      'eu-central-1b',
+    ]);
     expect(component.getSubnetToAZ('eu-central-1a')).toEqual([
       {
         name: '',
@@ -93,12 +97,13 @@ describe('AWSNodeDataComponent', () => {
         ipv4cidr: '172.31.0.0/20',
         ipv6cidr: '',
         tags: [
-          {key: 'kubernetes.io/cluster/m4q97kxmsw', value: ''}, {key: 'kubernetes.io/cluster/wpkzz5l8zx', value: ''},
-          {key: 'kubernetes.io/cluster/6cjxnw7k8v', value: ''}
+          {key: 'kubernetes.io/cluster/m4q97kxmsw', value: ''},
+          {key: 'kubernetes.io/cluster/wpkzz5l8zx', value: ''},
+          {key: 'kubernetes.io/cluster/6cjxnw7k8v', value: ''},
         ],
         state: 'available',
         available_ip_address_count: 4084,
-        default: true
+        default: true,
       },
       {
         name: '',
@@ -110,23 +115,27 @@ describe('AWSNodeDataComponent', () => {
         tags: [{key: 'kubernetes.io/cluster/m4q97kxmsw', value: ''}],
         state: 'available',
         available_ip_address_count: 4084,
-        default: true
-      }
+        default: true,
+      },
     ]);
 
-    expect(component.getSubnetToAZ('eu-central-1b')).toEqual([{
-      name: '',
-      id: 'subnet-06d1167c',
-      availability_zone: 'eu-central-1b',
-      availability_zone_id: 'euc1-az3',
-      ipv4cidr: '172.31.16.0/20',
-      ipv6cidr: '',
-      tags:
-          [{key: 'kubernetes.io/cluster/6tq9t4f2rs', value: ''}, {key: 'kubernetes.io/cluster/rtx6mhq77x', value: ''}],
-      state: 'available',
-      available_ip_address_count: 4090,
-      default: true
-    }]);
+    expect(component.getSubnetToAZ('eu-central-1b')).toEqual([
+      {
+        name: '',
+        id: 'subnet-06d1167c',
+        availability_zone: 'eu-central-1b',
+        availability_zone_id: 'euc1-az3',
+        ipv4cidr: '172.31.16.0/20',
+        ipv6cidr: '',
+        tags: [
+          {key: 'kubernetes.io/cluster/6tq9t4f2rs', value: ''},
+          {key: 'kubernetes.io/cluster/rtx6mhq77x', value: ''},
+        ],
+        state: 'available',
+        available_ip_address_count: 4090,
+        default: true,
+      },
+    ]);
 
     expect(component.getSubnetToAZ('eu-central-1c')).toEqual([
       {
@@ -139,7 +148,7 @@ describe('AWSNodeDataComponent', () => {
         tags: [{key: 'kubernetes.io/cluster/9gx49bqcg5', value: ''}],
         state: 'available',
         available_ip_address_count: 4090,
-        default: true
+        default: true,
       },
     ]);
   });

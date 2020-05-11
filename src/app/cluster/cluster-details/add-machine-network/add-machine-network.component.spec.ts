@@ -3,7 +3,11 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ClusterService, NotificationService, WizardService} from '../../../core/services';
+import {
+  ClusterService,
+  NotificationService,
+  WizardService,
+} from '../../../core/services';
 import {MachineNetworksComponent} from '../../../machine-networks/machine-networks.component';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeClusterWithMachineNetwork} from '../../../testing/fake-data/clusterWithMachineNetworks.fake';
@@ -27,23 +31,16 @@ describe('AddMachineNetworkComponent', () => {
   let fixture: ComponentFixture<AddMachineNetworkComponent>;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            AddMachineNetworkComponent,
-            MachineNetworksComponent,
-          ],
-          providers: [
-            WizardService,
-            {provide: ClusterService, useClass: ClusterMockService},
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-            NotificationService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [AddMachineNetworkComponent, MachineNetworksComponent],
+      providers: [
+        WizardService,
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        NotificationService,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

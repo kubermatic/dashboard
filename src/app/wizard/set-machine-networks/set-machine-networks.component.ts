@@ -13,7 +13,6 @@ import {NodeUtils} from '../../shared/utils/node-utils/node-utils';
   templateUrl: 'set-machine-networks.component.html',
   styleUrls: ['set-machine-networks.component.scss'],
 })
-
 export class SetMachineNetworksComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() nodeData: NodeData;
@@ -28,7 +27,10 @@ export class SetMachineNetworksComponent implements OnInit, OnDestroy {
       checkMachineNetworks: new FormControl(false),
     });
 
-    if (!!this.cluster.spec.machineNetworks && this.cluster.spec.machineNetworks.length > 0) {
+    if (
+      !!this.cluster.spec.machineNetworks &&
+      this.cluster.spec.machineNetworks.length > 0
+    ) {
       this.setMachineNetworkForm.controls.checkMachineNetworks.setValue(true);
     }
 
@@ -36,17 +38,19 @@ export class SetMachineNetworksComponent implements OnInit, OnDestroy {
       this.setMachineNetworkForm.controls.checkMachineNetworks.disable();
     }
 
-    this.setMachineNetworkForm.valueChanges.pipe(debounceTime(1000))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(() => {
-          this.setMachineNetworks();
-        });
+    this.setMachineNetworkForm.valueChanges
+      .pipe(debounceTime(1000))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(() => {
+        this.setMachineNetworks();
+      });
 
-    this.wizardService.machineNetworksFormChanges$.pipe(takeUntil(this._unsubscribe))
-        .subscribe((res: MachineNetworkForm[]) => {
-          this.machineNetworkFormData = res;
-          this.setMachineNetworks();
-        });
+    this.wizardService.machineNetworksFormChanges$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((res: MachineNetworkForm[]) => {
+        this.machineNetworkFormData = res;
+        this.setMachineNetworks();
+      });
   }
 
   ngOnDestroy(): void {
@@ -60,7 +64,7 @@ export class SetMachineNetworksComponent implements OnInit, OnDestroy {
 
   setMachineNetworks(): void {
     let isValid = false;
-    if (!!this.setMachineNetworkForm.controls.checkMachineNetworks.value) {
+    if (this.setMachineNetworkForm.controls.checkMachineNetworks.value) {
       if (this.machineNetworkFormData.length > 0) {
         for (const i in this.machineNetworkFormData) {
           if (i === '0') {
@@ -75,7 +79,8 @@ export class SetMachineNetworksComponent implements OnInit, OnDestroy {
     }
 
     this.wizardService.changeSetMachineNetworks({
-      setMachineNetworks: this.setMachineNetworkForm.controls.checkMachineNetworks.value,
+      setMachineNetworks: this.setMachineNetworkForm.controls
+        .checkMachineNetworks.value,
       machineNetworks: this.machineNetworkFormData,
       valid: isValid,
     });

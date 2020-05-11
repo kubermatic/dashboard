@@ -14,18 +14,30 @@ enum Controls {
   selector: 'km-wizard-provider-extended',
   templateUrl: './template.html',
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ProviderExtendedComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => ProviderExtendedComponent), multi: true}
-  ]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ProviderExtendedComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => ProviderExtendedComponent),
+      multi: true,
+    },
+  ],
 })
-export class ProviderExtendedComponent extends BaseFormValidator implements OnInit {
+export class ProviderExtendedComponent extends BaseFormValidator
+  implements OnInit {
   @Input() provider: NodeProvider;
   @Input() visible = false;
 
   readonly Providers = NodeProvider;
   readonly Controls = Controls;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _clusterService: ClusterService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _clusterService: ClusterService
+  ) {
     super('Provider Extended');
   }
 
@@ -34,17 +46,27 @@ export class ProviderExtendedComponent extends BaseFormValidator implements OnIn
       [Controls.ProviderExtended]: this._builder.control(''),
     });
 
-    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => {
-          this.form.removeControl(Controls.ProviderExtended);
-          this.form.addControl(Controls.ProviderExtended, this._builder.control(''));
-        });
+    merge(
+      this._clusterService.providerChanges,
+      this._clusterService.datacenterChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this.form.removeControl(Controls.ProviderExtended);
+        this.form.addControl(
+          Controls.ProviderExtended,
+          this._builder.control('')
+        );
+      });
   }
 
   hasExtendedSection(provider: NodeProvider): boolean {
     return [
-      NodeProvider.VSPHERE, NodeProvider.AWS, NodeProvider.AZURE, NodeProvider.GCP, NodeProvider.OPENSTACK
+      NodeProvider.VSPHERE,
+      NodeProvider.AWS,
+      NodeProvider.AZURE,
+      NodeProvider.GCP,
+      NodeProvider.OPENSTACK,
     ].includes(provider);
   }
 }

@@ -29,57 +29,86 @@ export class AWSProviderOptionsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      securityGroupID:
-          new FormControl(this.cluster.spec.cloud.aws.securityGroupID, Validators.pattern('sg-(\\w{8}|\\w{17})')),
-      routeTableId:
-          new FormControl(this.cluster.spec.cloud.aws.routeTableId, Validators.pattern('rtb-(\\w{8}|\\w{17})')),
-      instanceProfileName: new FormControl(this.cluster.spec.cloud.aws.instanceProfileName),
+      securityGroupID: new FormControl(
+        this.cluster.spec.cloud.aws.securityGroupID,
+        Validators.pattern('sg-(\\w{8}|\\w{17})')
+      ),
+      routeTableId: new FormControl(
+        this.cluster.spec.cloud.aws.routeTableId,
+        Validators.pattern('rtb-(\\w{8}|\\w{17})')
+      ),
+      instanceProfileName: new FormControl(
+        this.cluster.spec.cloud.aws.instanceProfileName
+      ),
       roleARN: new FormControl(this.cluster.spec.cloud.aws.roleARN),
-      vpcId: new FormControl(this.cluster.spec.cloud.aws.vpcId, Validators.pattern('vpc-(\\w{8}|\\w{17})')),
+      vpcId: new FormControl(
+        this.cluster.spec.cloud.aws.vpcId,
+        Validators.pattern('vpc-(\\w{8}|\\w{17})')
+      ),
     });
 
-    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((_) => {
-      this._wizardService.changeClusterProviderSettings(
-          this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
-    });
+    this.form.valueChanges
+      .pipe(debounceTime(1000))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this._wizardService.changeClusterProviderSettings(
+          this._clusterProviderSettingsForm(this._hasRequiredCredentials())
+        );
+      });
 
-    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.hideOptional = data.hideOptional;
-    });
+    this._wizardService.clusterSettingsFormViewChanged$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        this.hideOptional = data.hideOptional;
+      });
 
-    this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      if (data.cloudSpec.aws.accessKeyId !== this.cluster.spec.cloud.aws.accessKeyId ||
-          data.cloudSpec.aws.secretAccessKey !== this.cluster.spec.cloud.aws.secretAccessKey ||
-          data.cloudSpec.aws.vpcId === '') {
-        this.cluster.spec.cloud.aws = data.cloudSpec.aws;
-        if (this._hasRequiredCredentials()) {
-          this._loadVPCs();
-          this.checkVPCState();
-        } else {
+    this._wizardService.clusterProviderSettingsFormChanges$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        if (
+          data.cloudSpec.aws.accessKeyId !==
+            this.cluster.spec.cloud.aws.accessKeyId ||
+          data.cloudSpec.aws.secretAccessKey !==
+            this.cluster.spec.cloud.aws.secretAccessKey ||
+          data.cloudSpec.aws.vpcId === ''
+        ) {
+          this.cluster.spec.cloud.aws = data.cloudSpec.aws;
+          if (this._hasRequiredCredentials()) {
+            this._loadVPCs();
+            this.checkVPCState();
+          } else {
+            this.clearVpcId();
+          }
+        } else if (
+          data.cloudSpec.aws.accessKeyId === '' ||
+          data.cloudSpec.aws.secretAccessKey === ''
+        ) {
           this.clearVpcId();
         }
-      } else if (data.cloudSpec.aws.accessKeyId === '' || data.cloudSpec.aws.secretAccessKey === '') {
-        this.clearVpcId();
-      }
-      this.cluster.spec.cloud.aws = data.cloudSpec.aws;
-    });
+        this.cluster.spec.cloud.aws = data.cloudSpec.aws;
+      });
 
-    this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
-      this._selectedPreset = newCredentials;
-      if (newCredentials) {
-        this.form.disable();
-        this._hasValidCredentials = true;
-        return;
-      }
+    this._wizardService.onCustomPresetSelect
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(newCredentials => {
+        this._selectedPreset = newCredentials;
+        if (newCredentials) {
+          this.form.disable();
+          this._hasValidCredentials = true;
+          return;
+        }
 
-      this._hasValidCredentials = false;
-      this.form.enable();
-    });
+        this._hasValidCredentials = false;
+        this.form.enable();
+      });
   }
 
   private _hasRequiredCredentials(): boolean {
-    return (this.cluster.spec.cloud.aws.accessKeyId !== '' && this.cluster.spec.cloud.aws.secretAccessKey !== '') ||
-        !!this._selectedPreset;
+    return (
+      (this.cluster.spec.cloud.aws.accessKeyId !== '' &&
+        this.cluster.spec.cloud.aws.secretAccessKey !== '') ||
+      !!this._selectedPreset
+    );
   }
 
   clearVpcId(): void {
@@ -106,34 +135,36 @@ export class AWSProviderOptionsComponent implements OnInit, OnDestroy {
     }
 
     this._loadingVPCs = true;
-    this._wizardService.provider(NodeProvider.AWS)
-        .accessKeyID(this.cluster.spec.cloud.aws.accessKeyId)
-        .secretAccessKey(this.cluster.spec.cloud.aws.secretAccessKey)
-        .vpcs(this.cluster.spec.cloud.dc)
-        .pipe(take(1))
-        .subscribe(
-            (vpcs) => {
-              this.vpcIds = vpcs.sort((a, b) => {
-                return a.name.localeCompare(b.name);
-              });
+    this._wizardService
+      .provider(NodeProvider.AWS)
+      .accessKeyID(this.cluster.spec.cloud.aws.accessKeyId)
+      .secretAccessKey(this.cluster.spec.cloud.aws.secretAccessKey)
+      .vpcs(this.cluster.spec.cloud.dc)
+      .pipe(take(1))
+      .subscribe(
+        vpcs => {
+          this.vpcIds = vpcs.sort((a, b) => {
+            return a.name.localeCompare(b.name);
+          });
 
-              if (this.vpcIds.length === 0) {
-                this.form.controls.vpcId.setValue('');
-              } else {
-                const defaultVpc = this.vpcIds.find(x => x.isDefault);
-                if (defaultVpc) {
-                  this.form.controls.vpcId.setValue(defaultVpc.vpcId);
-                }
-              }
+          if (this.vpcIds.length === 0) {
+            this.form.controls.vpcId.setValue('');
+          } else {
+            const defaultVpc = this.vpcIds.find(x => x.isDefault);
+            if (defaultVpc) {
+              this.form.controls.vpcId.setValue(defaultVpc.vpcId);
+            }
+          }
 
-              this._loadingVPCs = false;
-              this._hasValidCredentials = true;
-              this.checkVPCState();
-            },
-            () => {
-              this._loadingVPCs = false;
-              this._hasValidCredentials = false;
-            });
+          this._loadingVPCs = false;
+          this._hasValidCredentials = true;
+          this.checkVPCState();
+        },
+        () => {
+          this._loadingVPCs = false;
+          this._hasValidCredentials = false;
+        }
+      );
   }
 
   checkVPCState(): void {
@@ -145,14 +176,18 @@ export class AWSProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   getVPCIdHint(): string {
-    return (!this._loadingVPCs && !this._hasRequiredCredentials()) ? 'Please enter your credentials first.' : '';
+    return !this._loadingVPCs && !this._hasRequiredCredentials()
+      ? 'Please enter your credentials first.'
+      : '';
   }
 
   getVPCOptionName(vpc: AWSVPC): string {
     return vpc.name !== '' ? vpc.name + ' (' + vpc.vpcId + ')' : vpc.vpcId;
   }
 
-  private _clusterProviderSettingsForm(isValid: boolean): ClusterProviderSettingsForm {
+  private _clusterProviderSettingsForm(
+    isValid: boolean
+  ): ClusterProviderSettingsForm {
     return {
       cloudSpec: {
         aws: {

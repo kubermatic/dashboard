@@ -16,11 +16,20 @@ enum Controls {
   selector: 'km-azure-extended-node-data',
   templateUrl: './template.html',
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AzureExtendedNodeDataComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => AzureExtendedNodeDataComponent), multi: true}
-  ]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AzureExtendedNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => AzureExtendedNodeDataComponent),
+      multi: true,
+    },
+  ],
 })
-export class AzureExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class AzureExtendedNodeDataComponent extends BaseFormValidator
+  implements OnInit, OnDestroy {
   tags: object;
 
   readonly Controls = Controls;
@@ -29,13 +38,17 @@ export class AzureExtendedNodeDataComponent extends BaseFormValidator implements
     return this._nodeDataService.nodeData;
   }
 
-  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _nodeDataService: NodeDataService
+  ) {
     super();
   }
 
   ngOnInit(): void {
-    const assignPublicIP =
-        this._nodeDataService.isInDialogEditMode() ? this.nodeData.spec.cloud.aws.assignPublicIP : true;
+    const assignPublicIP = this._nodeDataService.isInDialogEditMode()
+      ? this.nodeData.spec.cloud.aws.assignPublicIP
+      : true;
 
     this.form = this._builder.group({
       [Controls.AssignPublicIP]: this._builder.control(assignPublicIP),
@@ -44,9 +57,10 @@ export class AzureExtendedNodeDataComponent extends BaseFormValidator implements
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this.form.get(Controls.AssignPublicIP)
-        .valueChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
+    this.form
+      .get(Controls.AssignPublicIP)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
 
   onTagsChange(tags: object): void {

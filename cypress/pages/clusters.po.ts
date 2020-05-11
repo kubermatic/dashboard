@@ -1,6 +1,6 @@
-import {wait} from "../utils/wait";
-import {Condition} from "../utils/condition";
-import {WizardPage} from "./wizard.po";
+import {wait} from '../utils/wait';
+import {Condition} from '../utils/condition';
+import {WizardPage} from './wizard.po';
 
 export class ClustersPage {
   static getAddClusterBtn(): Cypress.Chainable<any> {
@@ -28,14 +28,20 @@ export class ClustersPage {
   }
 
   static getTableRow(nodeDeploymentName: string): Cypress.Chainable<any> {
-    return this.getTableRowNodeDeploymentNameColumn(nodeDeploymentName).parent();
+    return this.getTableRowNodeDeploymentNameColumn(
+      nodeDeploymentName
+    ).parent();
   }
 
-  static getTableRowNodeDeploymentNameColumn(nodeDeploymentName: string): Cypress.Chainable<any> {
+  static getTableRowNodeDeploymentNameColumn(
+    nodeDeploymentName: string
+  ): Cypress.Chainable<any> {
     return cy.get(`td#km-node-deployment-${nodeDeploymentName}`);
   }
 
-  static getNodeDeploymentRemoveBtn(nodeDeploymentName: string): Cypress.Chainable<any> {
+  static getNodeDeploymentRemoveBtn(
+    nodeDeploymentName: string
+  ): Cypress.Chainable<any> {
     return this.getTableRow(nodeDeploymentName).find('button i.km-icon-delete');
   }
 
@@ -54,10 +60,12 @@ export class ClustersPage {
   }
 
   static visit(): void {
-    cy.get('#km-nav-item-clusters').click().then(() => {
-      this.waitForRefresh();
-      this.verifyUrl();
-    });
+    cy.get('#km-nav-item-clusters')
+      .click()
+      .then(() => {
+        this.waitForRefresh();
+        this.verifyUrl();
+      });
   }
 
   static openWizard(): void {

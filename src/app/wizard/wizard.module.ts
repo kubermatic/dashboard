@@ -74,13 +74,8 @@ const components: any[] = [
     NodeDataModule,
     MachineNetworksModule,
   ],
-  declarations: [
-    ...components,
-  ],
-  exports: [
-    ...components,
-  ],
+  declarations: [...components],
+  exports: [...components],
   entryComponents: [],
 })
-export class WizardModule {
-}
+export class WizardModule {}

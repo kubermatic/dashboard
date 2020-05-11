@@ -24,21 +24,17 @@ describe('MachineNetworksComponent', () => {
   let fixture: ComponentFixture<MachineNetworkComponent>;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          providers: [
-            WizardService,
-            NodeDataService,
-            ClusterService,
-            {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
-            PresetsService,
-            DatacenterService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      providers: [
+        WizardService,
+        NodeDataService,
+        ClusterService,
+        {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
+        PresetsService,
+        DatacenterService,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -59,7 +55,11 @@ describe('MachineNetworksComponent', () => {
   it('expecting form to be invalid', () => {
     component.add();
     const machineNetworks = component._networkArray;
-    machineNetworks.controls[0].setValue({cidr: '192.182.0.0', dnsServers: ['8.8.8.8'], gateway: '192.180.0.2'});
+    machineNetworks.controls[0].setValue({
+      cidr: '192.182.0.0',
+      dnsServers: ['8.8.8.8'],
+      gateway: '192.180.0.2',
+    });
     expect(machineNetworks.controls[0].valid).toBeFalsy();
   });
 });

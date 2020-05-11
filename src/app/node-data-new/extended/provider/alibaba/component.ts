@@ -11,16 +11,28 @@ enum Controls {
   selector: 'km-alibaba-extended-node-data',
   templateUrl: './template.html',
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AlibabaExtendedNodeDataComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => AlibabaExtendedNodeDataComponent), multi: true}
-  ]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AlibabaExtendedNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => AlibabaExtendedNodeDataComponent),
+      multi: true,
+    },
+  ],
 })
-export class AlibabaExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class AlibabaExtendedNodeDataComponent extends BaseFormValidator
+  implements OnInit, OnDestroy {
   labels: object;
 
   readonly Controls = Controls;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _nodeDataService: NodeDataService
+  ) {
     super();
   }
 

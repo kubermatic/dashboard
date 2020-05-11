@@ -10,15 +10,9 @@ describe('LabelFormComponent', () => {
   let component: LabelFormComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            BrowserAnimationsModule,
-            SharedModule,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -42,19 +36,19 @@ describe('LabelFormComponent', () => {
     expect(component.labels).toBeUndefined();
 
     component.labels = {
-      'env': 'test',
+      env: 'test',
     };
     component.ngOnInit();
     component.deleteLabel(0);
 
-    expect(component.labels).toEqual({'env': null});
+    expect(component.labels).toEqual({env: null});
   });
 
   it('should delete labels without nullify', () => {
     expect(component.labels).toBeUndefined();
 
     component.labels = {
-      'env': 'test',
+      env: 'test',
     };
     component.ngOnInit();
     component.initialLabels = {};

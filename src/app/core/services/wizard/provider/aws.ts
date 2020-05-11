@@ -2,7 +2,11 @@ import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
-import {AWSSize, AWSSubnet, AWSVPC} from '../../../../shared/entity/provider/aws/AWS';
+import {
+  AWSSize,
+  AWSSubnet,
+  AWSVPC,
+} from '../../../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
@@ -11,7 +15,10 @@ export class AWS extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
     super(http, provider);
 
-    this._setRequiredHeaders(AWS.Header.AccessKeyID, AWS.Header.SecretAccessKey);
+    this._setRequiredHeaders(
+      AWS.Header.AccessKeyID,
+      AWS.Header.SecretAccessKey
+    );
   }
 
   credential(credential: string): AWS {
@@ -28,7 +35,10 @@ export class AWS extends Provider {
 
   secretAccessKey(secretAccessKey: string): AWS {
     if (secretAccessKey) {
-      this._headers = this._headers.set(AWS.Header.SecretAccessKey, secretAccessKey);
+      this._headers = this._headers.set(
+        AWS.Header.SecretAccessKey,
+        secretAccessKey
+      );
     }
     return this;
   }
@@ -57,12 +67,17 @@ export class AWS extends Provider {
     }
 
     const url = `${this._restRoot}/providers/${this._provider}/${dc}/vpcs`;
-    return this._http.get<AWSVPC[]>(url, {headers: this._headers})
-        .pipe(map(vpcs => vpcs.map(vpc => Object.assign(new AWSVPC(), vpc))));
+    return this._http
+      .get<AWSVPC[]>(url, {headers: this._headers})
+      .pipe(map(vpcs => vpcs.map(vpc => Object.assign(new AWSVPC(), vpc))));
   }
 
   subnets(dc: string, onLoadingCb: () => void = null): Observable<AWSSubnet[]> {
-    this._setRequiredHeaders(AWS.Header.AccessKeyID, AWS.Header.SecretAccessKey, AWS.Header.VPC);
+    this._setRequiredHeaders(
+      AWS.Header.AccessKeyID,
+      AWS.Header.SecretAccessKey,
+      AWS.Header.VPC
+    );
     if (!this._hasRequiredHeaders() || !dc) {
       return EMPTY;
     }

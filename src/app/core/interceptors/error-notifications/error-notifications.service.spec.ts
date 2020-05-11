@@ -22,14 +22,15 @@ const modules: any[] = [
 describe('ErrorNotificationsInterceptorService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        ...modules,
-      ],
+      imports: [...modules],
       providers: [ErrorNotificationsInterceptor],
     });
   });
 
-  it('should be created', inject([ErrorNotificationsInterceptor], (service: ErrorNotificationsInterceptor) => {
-       expect(service).toBeTruthy();
-     }));
+  it('should be created', inject(
+    [ErrorNotificationsInterceptor],
+    (service: ErrorNotificationsInterceptor) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });

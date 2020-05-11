@@ -1,4 +1,10 @@
-import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -22,19 +28,24 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
-      private readonly _notificationService: NotificationService, private readonly _elementRef: ElementRef,
-      private readonly _router: Router) {}
+    private readonly _notificationService: NotificationService,
+    private readonly _elementRef: ElementRef,
+    private readonly _router: Router
+  ) {}
 
   ngOnInit(): void {
-    this._router.events.subscribe((event) => {
+    this._router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
         this.close();
       }
     });
 
-    this._notificationService.getNotificationHistory().pipe(takeUntil(this._unsubscribe)).subscribe(notifications => {
-      this.notifications = notifications;
-    });
+    this._notificationService
+      .getNotificationHistory()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(notifications => {
+        this.notifications = notifications;
+      });
   }
 
   ngOnDestroy(): void {
@@ -44,7 +55,10 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
 
   @HostListener('document:click', ['$event'])
   onOutsideClick(event: Event): void {
-    if (!this._elementRef.nativeElement.contains(event.target) && this.isOpen()) {
+    if (
+      !this._elementRef.nativeElement.contains(event.target) &&
+      this.isOpen()
+    ) {
       this.close();
     }
   }
@@ -66,8 +80,9 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
   }
 
   getNotificationCount(): number {
-    return this._filter === undefined ? this.notifications.length :
-                                        this.notifications.filter(n => this._filter === n.type).length;
+    return this._filter === undefined
+      ? this.notifications.length
+      : this.notifications.filter(n => this._filter === n.type).length;
   }
 
   getNotificationIconClass(type: NotificationType): string {

@@ -1,5 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
@@ -10,7 +15,6 @@ import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.s
   selector: 'km-kubevirt-provider-settings',
   templateUrl: './kubevirt-provider-settings.component.html',
 })
-
 export class KubevirtProviderSettingsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   private _formData = {kubeconfig: ''};
@@ -23,13 +27,18 @@ export class KubevirtProviderSettingsComponent implements OnInit, OnDestroy {
       kubeconfig: new FormControl(''),
     });
 
-    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      if (data.kubeconfig !== this._formData.kubeconfig) {
-        this._formData = data;
-        this.setValidators();
-        this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-      }
-    });
+    this.form.valueChanges
+      .pipe(debounceTime(1000))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        if (data.kubeconfig !== this._formData.kubeconfig) {
+          this._formData = data;
+          this.setValidators();
+          this.clusterService.changeProviderSettingsPatch(
+            this.getProviderSettingsPatch()
+          );
+        }
+      });
   }
 
   get kubeconfig(): AbstractControl {

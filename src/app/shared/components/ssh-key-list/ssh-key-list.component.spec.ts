@@ -8,26 +8,20 @@ import {SharedModule} from '../../shared.module';
 
 import {SSHKeyListComponent} from './ssh-key-list.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 describe('SSHKeyListComponent', () => {
   let fixture: ComponentFixture<SSHKeyListComponent>;
   let component: SSHKeyListComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [...modules],
-          providers: [
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-            {provide: MAT_DIALOG_DATA, useValue: {}},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: MAT_DIALOG_DATA, useValue: {}},
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -36,6 +30,6 @@ describe('SSHKeyListComponent', () => {
   });
 
   it('should initialize', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 });

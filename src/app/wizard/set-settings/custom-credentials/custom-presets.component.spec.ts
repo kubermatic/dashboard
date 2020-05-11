@@ -1,4 +1,7 @@
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
@@ -11,7 +14,10 @@ import {ClusterProviderForm} from '../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {CustomPresetsSettingsComponent, PresetsState} from './custom-presets.component';
+import {
+  CustomPresetsSettingsComponent,
+  PresetsState,
+} from './custom-presets.component';
 
 describe('CustomPresetsSettingsComponent', () => {
   let fixture: ComponentFixture<CustomPresetsSettingsComponent>;
@@ -19,27 +25,25 @@ describe('CustomPresetsSettingsComponent', () => {
   let httpTestingController: HttpTestingController;
   let wizardService: WizardService;
 
-  beforeEach((() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            BrowserAnimationsModule,
-            ReactiveFormsModule,
-            SharedModule,
-            HttpClientTestingModule,
-          ],
-          declarations: [CustomPresetsSettingsComponent],
-          providers: [WizardService],
-        })
-        .compileComponents();
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        SharedModule,
+        HttpClientTestingModule,
+      ],
+      declarations: [CustomPresetsSettingsComponent],
+      providers: [WizardService],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CustomPresetsSettingsComponent);
     httpTestingController = TestBed.inject(HttpTestingController);
     wizardService = TestBed.inject(WizardService);
     component = fixture.componentInstance;
     component.cluster = fakeDigitaloceanCluster();
-  }));
+  });
 
   afterEach(() => {
     httpTestingController.verify();
@@ -55,13 +59,19 @@ describe('CustomPresetsSettingsComponent', () => {
 
   it('should show no presets available label', () => {
     const provider = NodeProvider.DIGITALOCEAN;
-    jest.spyOn(wizardService, 'clusterProviderFormChanges$', 'get')
-        .mockReturnValue(of({provider} as ClusterProviderForm) as BehaviorSubject<ClusterProviderForm>);
+    jest
+      .spyOn(wizardService, 'clusterProviderFormChanges$', 'get')
+      .mockReturnValue(
+        of({provider} as ClusterProviderForm) as BehaviorSubject<
+          ClusterProviderForm
+        >
+      );
 
     fixture.detectChanges();
 
-    const req = httpTestingController.expectOne(`${environment.restRoot}/providers/${
-        provider}/presets/credentials?datacenter=${component.cluster.spec.cloud.dc}`);
+    const req = httpTestingController.expectOne(
+      `${environment.restRoot}/providers/${provider}/presets/credentials?datacenter=${component.cluster.spec.cloud.dc}`
+    );
     req.flush(new PresetListEntity());
 
     expect(req.request.method).toEqual('GET');
@@ -70,13 +80,19 @@ describe('CustomPresetsSettingsComponent', () => {
 
   it('should show custom preset label', () => {
     const provider = NodeProvider.DIGITALOCEAN;
-    jest.spyOn(wizardService, 'clusterProviderFormChanges$', 'get')
-        .mockReturnValue(of({provider} as ClusterProviderForm) as BehaviorSubject<ClusterProviderForm>);
+    jest
+      .spyOn(wizardService, 'clusterProviderFormChanges$', 'get')
+      .mockReturnValue(
+        of({provider} as ClusterProviderForm) as BehaviorSubject<
+          ClusterProviderForm
+        >
+      );
 
     fixture.detectChanges();
 
-    const req = httpTestingController.expectOne(`${environment.restRoot}/providers/${
-        provider}/presets/credentials?datacenter=${component.cluster.spec.cloud.dc}`);
+    const req = httpTestingController.expectOne(
+      `${environment.restRoot}/providers/${provider}/presets/credentials?datacenter=${component.cluster.spec.cloud.dc}`
+    );
     req.flush(new PresetListEntity('some-preset'));
 
     expect(req.request.method).toEqual('GET');

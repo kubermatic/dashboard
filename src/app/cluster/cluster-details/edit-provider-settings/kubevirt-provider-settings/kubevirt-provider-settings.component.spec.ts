@@ -19,41 +19,33 @@ import {OpenstackProviderSettingsComponent} from '../openstack-provider-settings
 import {PacketProviderSettingsComponent} from '../packet-provider-settings/packet-provider-settings.component';
 import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/vsphere-provider-settings.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 describe('KubevirtProviderSettingsComponent', () => {
   let fixture: ComponentFixture<KubevirtProviderSettingsComponent>;
   let component: KubevirtProviderSettingsComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            EditProviderSettingsComponent,
-            AWSProviderSettingsComponent,
-            DigitaloceanProviderSettingsComponent,
-            HetznerProviderSettingsComponent,
-            OpenstackProviderSettingsComponent,
-            VSphereProviderSettingsComponent,
-            AzureProviderSettingsComponent,
-            PacketProviderSettingsComponent,
-            GCPProviderSettingsComponent,
-            KubevirtProviderSettingsComponent,
-            AlibabaProviderSettingsComponent,
-          ],
-          providers: [
-            {provide: ClusterService, useClass: ClusterMockService},
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [
+        EditProviderSettingsComponent,
+        AWSProviderSettingsComponent,
+        DigitaloceanProviderSettingsComponent,
+        HetznerProviderSettingsComponent,
+        OpenstackProviderSettingsComponent,
+        VSphereProviderSettingsComponent,
+        AzureProviderSettingsComponent,
+        PacketProviderSettingsComponent,
+        GCPProviderSettingsComponent,
+        KubevirtProviderSettingsComponent,
+        AlibabaProviderSettingsComponent,
+      ],
+      providers: [
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

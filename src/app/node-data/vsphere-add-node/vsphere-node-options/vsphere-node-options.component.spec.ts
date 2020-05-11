@@ -25,17 +25,15 @@ describe('VSphereNodeOptionsComponent', () => {
   let component: VSphereNodeOptionsComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            VSphereNodeOptionsComponent,
-          ],
-          providers: [NodeDataService, WizardService, {provide: DatacenterService, useClass: DatacenterMockService}],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [VSphereNodeOptionsComponent],
+      providers: [
+        NodeDataService,
+        WizardService,
+        {provide: DatacenterService, useClass: DatacenterMockService},
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -58,7 +56,16 @@ describe('VSphereNodeOptionsComponent', () => {
     component.form.controls.template.patchValue('test-template');
     component.form.controls.diskSizeGB.patchValue(256);
     fixture.detectChanges();
-    expect(component.getVSphereOptionsData())
-        .toEqual({spec: {vsphere: {cpus: 1, memory: 512, template: 'test-template', diskSizeGB: 256}}, valid: true});
+    expect(component.getVSphereOptionsData()).toEqual({
+      spec: {
+        vsphere: {
+          cpus: 1,
+          memory: 512,
+          template: 'test-template',
+          diskSizeGB: 256,
+        },
+      },
+      valid: true,
+    });
   });
 });

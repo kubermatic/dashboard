@@ -6,8 +6,7 @@ import {ConfirmationDialogComponent} from '../../shared/components/confirmation-
 
 // NoopConfirmDialogComponent is only a workaround to trigger change detection
 @Component({template: ''})
-export class NoopConfirmDialogComponent {
-}
+export class NoopConfirmDialogComponent {}
 
 const TEST_DIRECTIVES = [NoopConfirmDialogComponent];
 
@@ -15,9 +14,6 @@ const TEST_DIRECTIVES = [NoopConfirmDialogComponent];
   imports: [MatDialogModule, NoopAnimationsModule],
   exports: TEST_DIRECTIVES,
   declarations: TEST_DIRECTIVES,
-  entryComponents: [
-    ConfirmationDialogComponent,
-  ],
+  entryComponents: [ConfirmationDialogComponent],
 })
-export class DialogTestModule {
-}
+export class DialogTestModule {}

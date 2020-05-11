@@ -7,7 +7,15 @@ import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {PresetListEntity} from '../../../shared/entity/provider/credentials/PresetListEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
-import {ClusterDatacenterForm, ClusterProviderForm, ClusterProviderSettingsForm, ClusterSettingsFormView, ClusterSpecForm, MachineNetworkForm, SetMachineNetworksForm} from '../../../shared/model/ClusterForm';
+import {
+  ClusterDatacenterForm,
+  ClusterProviderForm,
+  ClusterProviderSettingsForm,
+  ClusterSettingsFormView,
+  ClusterSpecForm,
+  MachineNetworkForm,
+  SetMachineNetworksForm,
+} from '../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 
 import {Alibaba} from './provider/alibaba';
@@ -32,12 +40,16 @@ export class WizardService {
   // Machine Networks - form data
   machineNetworksFormChanges$ = new EventEmitter<MachineNetworkForm[]>();
   // Cluster provider - form data
-  private _clusterProviderFormChanges$ = new BehaviorSubject<ClusterProviderForm>({} as ClusterProviderForm);
+  private _clusterProviderFormChanges$ = new BehaviorSubject<
+    ClusterProviderForm
+  >({} as ClusterProviderForm);
   // Cluster datacenter - form data
   private _selectedDatacenter: DataCenterEntity;
   clusterDatacenterFormChanges$ = new EventEmitter<ClusterDatacenterForm>();
   // Cluster provider settings - form data
-  clusterProviderSettingsFormChanges$ = new EventEmitter<ClusterProviderSettingsForm>();
+  clusterProviderSettingsFormChanges$ = new EventEmitter<
+    ClusterProviderSettingsForm
+  >();
   // Cluster ssh keys
   clusterSSHKeysChanges$ = new EventEmitter<SSHKeyEntity[]>();
   // Cluster settings form view (hide optional fields or not)
@@ -95,7 +107,7 @@ export class WizardService {
   }
 
   selectCustomPreset(presetName: string): void {
-    this.onCustomPresetSelect.next(!!presetName ? presetName : '');
+    this.onCustomPresetSelect.next(presetName ? presetName : '');
   }
 
   provider(provider: NodeProvider.ALIBABA): Alibaba;
@@ -132,7 +144,10 @@ export class WizardService {
     }
   }
 
-  presets(provider: NodeProvider, datacenter: string): Observable<PresetListEntity> {
+  presets(
+    provider: NodeProvider,
+    datacenter: string
+  ): Observable<PresetListEntity> {
     const url = `${environment.restRoot}/providers/${provider}/presets/credentials?datacenter=${datacenter}`;
     return this._http.get<PresetListEntity>(url);
   }

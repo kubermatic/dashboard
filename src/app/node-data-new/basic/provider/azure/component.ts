@@ -1,5 +1,17 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import {
+  FormBuilder,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  Validators,
+} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -22,12 +34,21 @@ enum SizeState {
   selector: 'km-azure-basic-node-data',
   templateUrl: './template.html',
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AzureBasicNodeDataComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => AzureBasicNodeDataComponent), multi: true}
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AzureBasicNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => AzureBasicNodeDataComponent),
+      multi: true,
+    },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AzureBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class AzureBasicNodeDataComponent extends BaseFormValidator
+  implements OnInit, OnDestroy {
   sizes: AzureSizes[] = [];
   sizeLabel = SizeState.Empty;
   selectedSize = '';
@@ -35,8 +56,11 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   readonly Controls = Controls;
 
   constructor(
-      private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
-      private readonly _nodeDataService: NodeDataService, private readonly _cdr: ChangeDetectorRef) {
+    private readonly _builder: FormBuilder,
+    private readonly _presets: PresetsService,
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _cdr: ChangeDetectorRef
+  ) {
     super();
   }
 
@@ -45,8 +69,12 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
       [Controls.Size]: this._builder.control('', Validators.required),
     });
 
-    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(this._clearSize.bind(this));
-    this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
+    this._presets.presetChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._clearSize.bind(this));
+    this._sizesObservable
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._setDefaultSize.bind(this));
   }
 
   ngOnDestroy(): void {
@@ -59,7 +87,10 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   }
 
   private get _sizesObservable(): Observable<AzureSizes[]> {
-    return this._nodeDataService.azure.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
+    return this._nodeDataService.azure.flavors(
+      this._clearSize.bind(this),
+      this._onSizeLoading.bind(this)
+    );
   }
 
   private _onSizeLoading(): void {

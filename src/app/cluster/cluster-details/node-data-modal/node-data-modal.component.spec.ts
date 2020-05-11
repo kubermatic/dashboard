@@ -7,7 +7,13 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {CoreModule} from '../../../core/core.module';
-import {ApiService, ClusterService, DatacenterService, ProjectService, WizardService} from '../../../core/services';
+import {
+  ApiService,
+  ClusterService,
+  DatacenterService,
+  ProjectService,
+  WizardService,
+} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {ClusterNameGenerator} from '../../../core/util/name-generator.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
@@ -34,8 +40,16 @@ import {VSphereNodeOptionsComponent} from '../../../node-data/vsphere-add-node/v
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
-import {fakeDigitaloceanCreateNode, nodeDataFake, nodeDeploymentsFake} from '../../../testing/fake-data/node.fake';
-import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
+import {
+  fakeDigitaloceanCreateNode,
+  nodeDataFake,
+  nodeDeploymentsFake,
+} from '../../../testing/fake-data/node.fake';
+import {
+  ActivatedRouteStub,
+  RouterStub,
+  RouterTestingModule,
+} from '../../../testing/router-stubs';
 import {ApiMockService} from '../../../testing/services/api-mock.service';
 import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
@@ -52,57 +66,58 @@ describe('NodeDataModalData', () => {
   let activatedRoute: ActivatedRouteStub;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            HttpClientModule,
-            BrowserAnimationsModule,
-            RouterTestingModule,
-            SharedModule,
-            MatTabsModule,
-            CoreModule,
-          ],
-          declarations: [
-            NodeDataModalComponent,
-            NodeDataComponent,
-            NodeDataOptionsComponent,
-            OpenstackNodeDataComponent,
-            OpenstackNodeOptionsComponent,
-            AWSNodeDataComponent,
-            AWSNodeOptionsComponent,
-            DigitaloceanNodeDataComponent,
-            DigitaloceanNodeOptionsComponent,
-            HetznerNodeDataComponent,
-            VSphereNodeDataComponent,
-            VSphereNodeOptionsComponent,
-            AzureNodeDataComponent,
-            AzureNodeOptionsComponent,
-            PacketNodeDataComponent,
-            PacketNodeOptionsComponent,
-            GCPNodeDataComponent,
-            GCPNodeOptionsComponent,
-            KubeVirtNodeDataComponent,
-            AlibabaNodeDataComponent,
-            AlibabaNodeOptionsComponent,
-          ],
-          providers: [
-            {provide: MAT_DIALOG_DATA, useValue: {cluster: fakeDigitaloceanCluster()}},
-            {provide: MatDialogRef, useValue: {}},
-            {provide: ApiService, useClass: ApiMockService},
-            {provide: ClusterService, useClass: ClusterMockService},
-            {provide: ActivatedRoute, useClass: ActivatedRouteStub},
-            {provide: DatacenterService, useClass: DatacenterMockService},
-            {provide: ProjectService, useClass: ProjectMockService},
-            {provide: NodeService, useClass: NodeMockService},
-            {provide: Router, useClass: RouterStub},
-            {provide: ClusterNameGenerator, useClass: ClusterNameGeneratorMock},
-            NodeDataService,
-            WizardService,
-            GoogleAnalyticsService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        RouterTestingModule,
+        SharedModule,
+        MatTabsModule,
+        CoreModule,
+      ],
+      declarations: [
+        NodeDataModalComponent,
+        NodeDataComponent,
+        NodeDataOptionsComponent,
+        OpenstackNodeDataComponent,
+        OpenstackNodeOptionsComponent,
+        AWSNodeDataComponent,
+        AWSNodeOptionsComponent,
+        DigitaloceanNodeDataComponent,
+        DigitaloceanNodeOptionsComponent,
+        HetznerNodeDataComponent,
+        VSphereNodeDataComponent,
+        VSphereNodeOptionsComponent,
+        AzureNodeDataComponent,
+        AzureNodeOptionsComponent,
+        PacketNodeDataComponent,
+        PacketNodeOptionsComponent,
+        GCPNodeDataComponent,
+        GCPNodeOptionsComponent,
+        KubeVirtNodeDataComponent,
+        AlibabaNodeDataComponent,
+        AlibabaNodeOptionsComponent,
+      ],
+      providers: [
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {cluster: fakeDigitaloceanCluster()},
+        },
+        {provide: MatDialogRef, useValue: {}},
+        {provide: ApiService, useClass: ApiMockService},
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: ActivatedRoute, useClass: ActivatedRouteStub},
+        {provide: DatacenterService, useClass: DatacenterMockService},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: NodeService, useClass: NodeMockService},
+        {provide: Router, useClass: RouterStub},
+        {provide: ClusterNameGenerator, useClass: ClusterNameGeneratorMock},
+        NodeDataService,
+        WizardService,
+        GoogleAnalyticsService,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

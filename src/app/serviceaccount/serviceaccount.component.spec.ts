@@ -1,4 +1,11 @@
-import {async, ComponentFixture, fakeAsync, flush, TestBed, tick} from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  flush,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -6,13 +13,24 @@ import {Router} from '@angular/router';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../app-config.service';
-import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
+import {
+  ApiService,
+  NotificationService,
+  ProjectService,
+  UserService,
+} from '../core/services';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {SharedModule} from '../shared/shared.module';
 import {HealthStatusColor} from '../shared/utils/health-status/health-status';
-import {DialogTestModule, NoopConfirmDialogComponent} from '../testing/components/noop-confirmation-dialog.component';
-import {fakeServiceAccounts, fakeServiceAccountTokens} from '../testing/fake-data/serviceaccount.fake';
+import {
+  DialogTestModule,
+  NoopConfirmDialogComponent,
+} from '../testing/components/noop-confirmation-dialog.component';
+import {
+  fakeServiceAccounts,
+  fakeServiceAccountTokens,
+} from '../testing/fake-data/serviceaccount.fake';
 import {RouterStub} from '../testing/router-stubs';
 import {asyncData} from '../testing/services/api-mock.service';
 import {AppConfigMockService} from '../testing/services/app-config-mock.service';
@@ -30,36 +48,40 @@ describe('ServiceAccountComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = {
-      'getServiceAccounts': jest.fn(),
-      'getServiceAccountTokens': jest.fn(),
-      'deleteServiceAccount': jest.fn()
+      getServiceAccounts: jest.fn(),
+      getServiceAccountTokens: jest.fn(),
+      deleteServiceAccount: jest.fn(),
     };
-    apiMock.getServiceAccounts.mockReturnValue(asyncData(fakeServiceAccounts()));
-    apiMock.getServiceAccountTokens.mockReturnValue(asyncData(fakeServiceAccountTokens()));
-    deleteServiceAccountSpy = apiMock.deleteServiceAccount.mockReturnValue(of(null));
+    apiMock.getServiceAccounts.mockReturnValue(
+      asyncData(fakeServiceAccounts())
+    );
+    apiMock.getServiceAccountTokens.mockReturnValue(
+      asyncData(fakeServiceAccountTokens())
+    );
+    deleteServiceAccountSpy = apiMock.deleteServiceAccount.mockReturnValue(
+      of(null)
+    );
 
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            BrowserAnimationsModule,
-            SharedModule,
-            ServiceAccountModule,
-            DialogTestModule,
-          ],
-          providers: [
-            {provide: Router, useClass: RouterStub},
-            {provide: ApiService, useValue: apiMock},
-            {provide: ProjectService, useClass: ProjectMockService},
-            {provide: UserService, useClass: UserMockService},
-            {provide: AppConfigService, useClass: AppConfigMockService},
-            {provide: SettingsService, useClass: SettingsMockService},
-            MatDialog,
-            GoogleAnalyticsService,
-            NotificationService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        SharedModule,
+        ServiceAccountModule,
+        DialogTestModule,
+      ],
+      providers: [
+        {provide: Router, useClass: RouterStub},
+        {provide: ApiService, useValue: apiMock},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: UserService, useClass: UserMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: SettingsService, useClass: SettingsMockService},
+        MatDialog,
+        GoogleAnalyticsService,
+        NotificationService,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -84,25 +106,27 @@ describe('ServiceAccountComponent', () => {
   });
 
   it('should open delete service account confirmation dialog & call deleteServiceAccount()', fakeAsync(() => {
-       const event = new MouseEvent('click');
-       component.deleteServiceAccount(fakeServiceAccounts()[0], event);
-       noop.detectChanges();
-       tick(15000);
+    const event = new MouseEvent('click');
+    component.deleteServiceAccount(fakeServiceAccounts()[0], event);
+    noop.detectChanges();
+    tick(15000);
 
-       const dialogTitle = document.body.querySelector('.mat-dialog-title');
-       const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
+    const dialogTitle = document.body.querySelector('.mat-dialog-title');
+    const deleteButton = document.body.querySelector(
+      '#km-confirmation-dialog-confirm-btn'
+    ) as HTMLInputElement;
 
-       expect(dialogTitle.textContent).toBe('Delete Service Account');
-       expect(deleteButton.textContent).toBe(' Delete ');
+    expect(dialogTitle.textContent).toBe('Delete Service Account');
+    expect(deleteButton.textContent).toBe(' Delete ');
 
-       deleteButton.click();
+    deleteButton.click();
 
-       noop.detectChanges();
-       fixture.detectChanges();
-       tick(15000);
+    noop.detectChanges();
+    fixture.detectChanges();
+    tick(15000);
 
-       expect(deleteServiceAccountSpy).toHaveBeenCalled();
-       fixture.destroy();
-       flush();
-     }));
+    expect(deleteServiceAccountSpy).toHaveBeenCalled();
+    fixture.destroy();
+    flush();
+  }));
 });

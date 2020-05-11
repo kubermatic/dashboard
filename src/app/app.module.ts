@@ -1,8 +1,14 @@
 import {APP_INITIALIZER, NgModule} from '@angular/core';
-import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions} from '@angular/material/form-field';
+import {
+  MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MatFormFieldDefaultOptions,
+} from '@angular/material/form-field';
 import {MAT_TOOLTIP_DEFAULT_OPTIONS} from '@angular/material/tooltip';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {
+  BrowserAnimationsModule,
+  NoopAnimationsModule,
+} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 import {CookieService} from 'ngx-cookie-service';
 
@@ -26,18 +32,22 @@ import {EditServiceAccountTokenComponent} from './serviceaccount/serviceaccount-
 import {TokenDialogComponent} from './serviceaccount/serviceaccount-token/token-dialog/token-dialog.component';
 import {SharedModule} from './shared/shared.module';
 
-const appInitializerFn = (appConfigService: AppConfigService, historyService: HistoryService): Function => {
+const appInitializerFn = (
+  appConfigService: AppConfigService,
+  historyService: HistoryService
+): Function => {
   return () => {
     historyService.init();
-    return appConfigService.loadAppConfig()
-        .then(() => appConfigService.loadUserGroupConfig())
-        .then(() => appConfigService.loadGitVersion())
-        .then(() => appConfigService.checkCustomCSS());
+    return appConfigService
+      .loadAppConfig()
+      .then(() => appConfigService.loadUserGroupConfig())
+      .then(() => appConfigService.loadGitVersion())
+      .then(() => appConfigService.checkCustomCSS());
   };
 };
 
 const appearance: MatFormFieldDefaultOptions = {
-  appearance: 'outline'
+  appearance: 'outline',
 };
 
 @NgModule({
@@ -49,20 +59,14 @@ const appearance: MatFormFieldDefaultOptions = {
     AppRoutingModule,
     RouterModule,
   ],
-  declarations: [
-    KubermaticComponent,
-    DashboardComponent,
-  ],
+  declarations: [KubermaticComponent, DashboardComponent],
   providers: [
     AppConfigService,
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializerFn,
       multi: true,
-      deps: [
-        AppConfigService,
-        HistoryService,
-      ],
+      deps: [AppConfigService, HistoryService],
     },
     {
       provide: MAT_TOOLTIP_DEFAULT_OPTIONS,
@@ -88,6 +92,4 @@ const appearance: MatFormFieldDefaultOptions = {
   ],
   bootstrap: [KubermaticComponent],
 })
-
-export class AppModule {
-}
+export class AppModule {}

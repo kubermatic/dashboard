@@ -9,5 +9,4 @@ import {UserSettingsRoutingModule} from './user-settings.routing.module';
   imports: [SharedModule, UserSettingsRoutingModule],
   declarations: [UserSettingsComponent],
 })
-export class UserSettingsModule {
-}
+export class UserSettingsModule {}

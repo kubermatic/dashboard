@@ -8,23 +8,48 @@ import {AppConfigService} from '../../../app-config.service';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
 import {TaintFormComponent} from '../../../shared/components/taint-form/taint-form.component';
 import {AddonConfigEntity} from '../../../shared/entity/AddonEntity';
-import {ClusterEntity, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
+import {
+  ClusterEntity,
+  MasterVersion,
+  Token,
+} from '../../../shared/entity/ClusterEntity';
 import {EventEntity} from '../../../shared/entity/EventEntity';
-import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
+import {
+  CreateMemberEntity,
+  MemberEntity,
+} from '../../../shared/entity/MemberEntity';
 import {NodeMetrics} from '../../../shared/entity/Metrics';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeDeploymentPatch} from '../../../shared/entity/NodeDeploymentPatch';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {PacketSize} from '../../../shared/entity/packet/PacketSizeEntity';
-import {EditProjectEntity, ProjectEntity} from '../../../shared/entity/ProjectEntity';
-import {AlibabaInstanceType, AlibabaZone} from '../../../shared/entity/provider/alibaba/Alibaba';
+import {
+  EditProjectEntity,
+  ProjectEntity,
+} from '../../../shared/entity/ProjectEntity';
+import {
+  AlibabaInstanceType,
+  AlibabaZone,
+} from '../../../shared/entity/provider/alibaba/Alibaba';
 import {AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws/AWS';
 import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
-import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '../../../shared/entity/provider/gcp/GCP';
+import {
+  GCPDiskType,
+  GCPMachineSize,
+  GCPNetwork,
+  GCPSubnetwork,
+  GCPZone,
+} from '../../../shared/entity/provider/gcp/GCP';
 import {HetznerTypes} from '../../../shared/entity/provider/hetzner/TypeEntity';
 import {OpenstackFlavor} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
-import {CreateServiceAccountEntity, CreateTokenEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../../shared/entity/ServiceAccountEntity';
+import {
+  CreateServiceAccountEntity,
+  CreateTokenEntity,
+  ServiceAccountEntity,
+  ServiceAccountTokenEntity,
+  ServiceAccountTokenPatch,
+} from '../../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
 import {ClusterType} from '../../../shared/utils/cluster-utils/cluster-utils';
@@ -32,80 +57,129 @@ import {Auth} from '../auth/auth.service';
 
 @Injectable()
 export class ApiService {
-  private _location: string = window.location.protocol + '//' + window.location.host;
+  private _location: string =
+    window.location.protocol + '//' + window.location.host;
   private _restRoot: string = environment.restRoot;
   private readonly _token: string;
   private _addonConfigs$: Observable<any>;
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 30);
 
   constructor(
-      private readonly _http: HttpClient, private readonly _auth: Auth, private readonly _appConfig: AppConfigService) {
+    private readonly _http: HttpClient,
+    private readonly _auth: Auth,
+    private readonly _appConfig: AppConfigService
+  ) {
     this._token = this._auth.getBearerToken();
   }
 
   get addonConfigs(): Observable<AddonConfigEntity[]> {
     if (!this._addonConfigs$) {
-      this._addonConfigs$ = this._refreshTimer$.pipe(switchMap(() => this._http.get(`${this._restRoot}/addonconfigs`)))
-                                .pipe(shareReplay({refCount: true, bufferSize: 1}));
+      this._addonConfigs$ = this._refreshTimer$
+        .pipe(switchMap(() => this._http.get(`${this._restRoot}/addonconfigs`)))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this._addonConfigs$;
   }
 
-  createNodeDeployment(cluster: ClusterEntity, nd: NodeDeploymentEntity, dc: string, projectID: string):
-      Observable<NodeDeploymentEntity> {
-    nd.spec.template.labels = LabelFormComponent.filterNullifiedKeys(nd.spec.template.labels);
-    nd.spec.template.taints = TaintFormComponent.filterNullifiedTaints(nd.spec.template.taints);
+  createNodeDeployment(
+    cluster: ClusterEntity,
+    nd: NodeDeploymentEntity,
+    dc: string,
+    projectID: string
+  ): Observable<NodeDeploymentEntity> {
+    nd.spec.template.labels = LabelFormComponent.filterNullifiedKeys(
+      nd.spec.template.labels
+    );
+    nd.spec.template.taints = TaintFormComponent.filterNullifiedTaints(
+      nd.spec.template.taints
+    );
 
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/nodedeployments`;
     return this._http.post<NodeDeploymentEntity>(url, nd);
   }
 
-  getNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeploymentEntity[]> {
+  getNodeDeployments(
+    cluster: string,
+    dc: string,
+    projectID: string
+  ): Observable<NodeDeploymentEntity[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments`;
-    return this._http.get<NodeDeploymentEntity[]>(url).pipe(catchError(() => of<NodeDeploymentEntity[]>()));
+    return this._http
+      .get<NodeDeploymentEntity[]>(url)
+      .pipe(catchError(() => of<NodeDeploymentEntity[]>()));
   }
 
-  getNodeDeployment(ndId: string, cluster: string, dc: string, projectID: string): Observable<NodeDeploymentEntity> {
+  getNodeDeployment(
+    ndId: string,
+    cluster: string,
+    dc: string,
+    projectID: string
+  ): Observable<NodeDeploymentEntity> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}`;
     return this._http.get<NodeDeploymentEntity>(url);
   }
 
-  getNodeDeploymentNodes(ndId: string, cluster: string, dc: string, projectID: string): Observable<NodeEntity[]> {
+  getNodeDeploymentNodes(
+    ndId: string,
+    cluster: string,
+    dc: string,
+    projectID: string
+  ): Observable<NodeEntity[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}/nodes`;
     return this._http.get<NodeEntity[]>(url);
   }
-  getNodeDeploymentNodesMetrics(ndId: string, cluster: string, dc: string, projectID: string):
-      Observable<NodeMetrics[]> {
-    const url =
-        `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}/nodes/metrics`;
+  getNodeDeploymentNodesMetrics(
+    ndId: string,
+    cluster: string,
+    dc: string,
+    projectID: string
+  ): Observable<NodeMetrics[]> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}/nodes/metrics`;
     return this._http.get<NodeMetrics[]>(url);
   }
 
-  getNodeDeploymentNodesEvents(ndId: string, cluster: string, dc: string, projectID: string):
-      Observable<EventEntity[]> {
-    const url =
-        `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}/nodes/events`;
+  getNodeDeploymentNodesEvents(
+    ndId: string,
+    cluster: string,
+    dc: string,
+    projectID: string
+  ): Observable<EventEntity[]> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}/nodes/events`;
     return this._http.get<EventEntity[]>(url);
   }
 
   patchNodeDeployment(
-      nd: NodeDeploymentEntity, patch: NodeDeploymentPatch, clusterId: string, dc: string,
-      projectID: string): Observable<NodeDeploymentEntity> {
+    nd: NodeDeploymentEntity,
+    patch: NodeDeploymentPatch,
+    clusterId: string,
+    dc: string,
+    projectID: string
+  ): Observable<NodeDeploymentEntity> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterId}/nodedeployments/${nd.id}`;
     return this._http.patch<NodeDeploymentEntity>(url, patch);
   }
 
-  deleteNodeDeployment(cluster: string, nd: NodeDeploymentEntity, dc: string, projectID: string): Observable<any> {
+  deleteNodeDeployment(
+    cluster: string,
+    nd: NodeDeploymentEntity,
+    dc: string,
+    projectID: string
+  ): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${nd.id}`;
     return this._http.delete(url);
   }
 
-  createProject(createProjectModel: CreateProjectModel): Observable<ProjectEntity> {
+  createProject(
+    createProjectModel: CreateProjectModel
+  ): Observable<ProjectEntity> {
     const url = `${this._restRoot}/projects`;
     return this._http.post<ProjectEntity>(url, createProjectModel);
   }
 
-  editProject(projectID: string, editProjectEntity: EditProjectEntity): Observable<any> {
+  editProject(
+    projectID: string,
+    editProjectEntity: EditProjectEntity
+  ): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}`;
     return this._http.put(url, editProjectEntity);
   }
@@ -125,84 +199,149 @@ export class ApiService {
     return this._http.post<SSHKeyEntity>(url, sshKey);
   }
 
-  getDigitaloceanSizes(projectId: string, dc: string, clusterId: string): Observable<DigitaloceanSizes> {
+  getDigitaloceanSizes(
+    projectId: string,
+    dc: string,
+    clusterId: string
+  ): Observable<DigitaloceanSizes> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/digitalocean/sizes`;
     return this._http.get<DigitaloceanSizes>(url);
   }
 
-  getHetznerTypes(projectId: string, dc: string, clusterId: string): Observable<HetznerTypes> {
+  getHetznerTypes(
+    projectId: string,
+    dc: string,
+    clusterId: string
+  ): Observable<HetznerTypes> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/hetzner/sizes`;
     return this._http.get<HetznerTypes>(url);
   }
 
-  getPacketSizes(projectId: string, dc: string, clusterId: string): Observable<PacketSize[]> {
+  getPacketSizes(
+    projectId: string,
+    dc: string,
+    clusterId: string
+  ): Observable<PacketSize[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/packet/sizes`;
     return this._http.get<PacketSize[]>(url);
   }
 
-  getAlibabaInstanceTypes(projectId: string, dc: string, clusterId: string, region: string):
-      Observable<AlibabaInstanceType[]> {
-    const url =
-        `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/alibaba/instancetypes`;
+  getAlibabaInstanceTypes(
+    projectId: string,
+    dc: string,
+    clusterId: string,
+    region: string
+  ): Observable<AlibabaInstanceType[]> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/alibaba/instancetypes`;
     const headers = new HttpHeaders().set('Region', region);
     return this._http.get<AlibabaInstanceType[]>(url, {headers});
   }
 
-  getAlibabaZones(projectId: string, dc: string, clusterId: string, region: string): Observable<AlibabaZone[]> {
+  getAlibabaZones(
+    projectId: string,
+    dc: string,
+    clusterId: string,
+    region: string
+  ): Observable<AlibabaZone[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/alibaba/zones`;
     const headers = new HttpHeaders().set('Region', region);
     return this._http.get<AlibabaZone[]>(url, {headers});
   }
 
-  editToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
+  editToken(
+    cluster: ClusterEntity,
+    dc: string,
+    projectID: string,
+    token: Token
+  ): Observable<Token> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/token`;
     return this._http.put<Token>(url, token);
   }
 
-  editViewerToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
+  editViewerToken(
+    cluster: ClusterEntity,
+    dc: string,
+    projectID: string,
+    token: Token
+  ): Observable<Token> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/viewertoken`;
     return this._http.put<Token>(url, token);
   }
 
-  getAWSSubnets(projectId: string, dc: string, clusterId: string): Observable<AWSSubnet[]> {
+  getAWSSubnets(
+    projectId: string,
+    dc: string,
+    clusterId: string
+  ): Observable<AWSSubnet[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/aws/subnets`;
     return this._http.get<AWSSubnet[]>(url);
   }
 
-  getAWSSizes(projectId: string, dc: string, clusterId: string): Observable<AWSSize[]> {
+  getAWSSizes(
+    projectId: string,
+    dc: string,
+    clusterId: string
+  ): Observable<AWSSize[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/aws/sizes`;
     return this._http.get<AWSSize[]>(url);
   }
 
-  getGCPZones(projectId: string, dc: string, clusterId: string): Observable<GCPZone[]> {
+  getGCPZones(
+    projectId: string,
+    dc: string,
+    clusterId: string
+  ): Observable<GCPZone[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/gcp/zones`;
     return this._http.get<GCPZone[]>(url);
   }
 
-  getGCPSizes(zone: string, projectId: string, dc: string, clusterId: string): Observable<GCPMachineSize[]> {
+  getGCPSizes(
+    zone: string,
+    projectId: string,
+    dc: string,
+    clusterId: string
+  ): Observable<GCPMachineSize[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/gcp/sizes`;
     const headers = new HttpHeaders().set('Zone', zone);
     return this._http.get<GCPMachineSize[]>(url, {headers});
   }
 
-  getGCPDiskTypes(zone: string, projectId: string, dc: string, clusterId: string): Observable<GCPDiskType[]> {
+  getGCPDiskTypes(
+    zone: string,
+    projectId: string,
+    dc: string,
+    clusterId: string
+  ): Observable<GCPDiskType[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/gcp/disktypes`;
     const headers = new HttpHeaders().set('Zone', zone);
     return this._http.get<GCPDiskType[]>(url, {headers});
   }
 
-  getGCPNetworks(projectId: string, dc: string, clusterId: string): Observable<GCPNetwork[]> {
+  getGCPNetworks(
+    projectId: string,
+    dc: string,
+    clusterId: string
+  ): Observable<GCPNetwork[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/gcp/networks`;
     return this._http.get<GCPNetwork[]>(url);
   }
 
-  getGCPSubnetworks(projectId: string, dc: string, clusterId: string, network: string): Observable<GCPSubnetwork[]> {
+  getGCPSubnetworks(
+    projectId: string,
+    dc: string,
+    clusterId: string,
+    network: string
+  ): Observable<GCPSubnetwork[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/gcp/subnetworks`;
     const headers = new HttpHeaders().set('Network', network);
     return this._http.get<GCPSubnetwork[]>(url, {headers});
   }
 
-  getOpenStackFlavors(projectId: string, dc: string, cluster: string): Observable<OpenstackFlavor[]> {
+  getOpenStackFlavors(
+    projectId: string,
+    dc: string,
+    cluster: string
+  ): Observable<OpenstackFlavor[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/openstack/sizes`;
     return this._http.get<OpenstackFlavor[]>(url);
   }
@@ -211,17 +350,29 @@ export class ApiService {
     return `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/kubeconfig?token=${this._token}`;
   }
 
-  getDashboardProxyURL(projectID: string, dc: string, clusterID: string): string {
+  getDashboardProxyURL(
+    projectID: string,
+    dc: string,
+    clusterID: string
+  ): string {
     return `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/dashboard/proxy`;
   }
 
-  getOpenshiftProxyURL(projectID: string, dc: string, clusterID: string): string {
+  getOpenshiftProxyURL(
+    projectID: string,
+    dc: string,
+    clusterID: string
+  ): string {
     return `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/openshift/console/login`;
   }
 
-  getShareKubeconfigURL(projectID: string, dc: string, clusterID: string, userID: string): string {
-    return `${this._location}/${this._restRoot}/kubeconfig?project_id=${projectID}&datacenter=${dc}&cluster_id=${
-        clusterID}&user_id=${userID}`;
+  getShareKubeconfigURL(
+    projectID: string,
+    dc: string,
+    clusterID: string,
+    userID: string
+  ): string {
+    return `${this._location}/${this._restRoot}/kubeconfig?project_id=${projectID}&datacenter=${dc}&cluster_id=${clusterID}&user_id=${userID}`;
   }
 
   getMasterVersions(type: ClusterType): Observable<MasterVersion[]> {
@@ -229,7 +380,11 @@ export class ApiService {
     return this._http.get<MasterVersion[]>(url);
   }
 
-  getAzureSizes(projectId: string, dc: string, cluster: string): Observable<AzureSizes[]> {
+  getAzureSizes(
+    projectId: string,
+    dc: string,
+    cluster: string
+  ): Observable<AzureSizes[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/azure/sizes`;
     return this._http.get<AzureSizes[]>(url);
   }
@@ -239,12 +394,18 @@ export class ApiService {
     return this._http.get<MemberEntity[]>(url);
   }
 
-  createMembers(projectID: string, member: CreateMemberEntity): Observable<MemberEntity> {
+  createMembers(
+    projectID: string,
+    member: CreateMemberEntity
+  ): Observable<MemberEntity> {
     const url = `${this._restRoot}/projects/${projectID}/users`;
     return this._http.post<MemberEntity>(url, member);
   }
 
-  editMembers(projectID: string, member: MemberEntity): Observable<MemberEntity> {
+  editMembers(
+    projectID: string,
+    member: MemberEntity
+  ): Observable<MemberEntity> {
     const url = `${this._restRoot}/projects/${projectID}/users/${member.id}`;
     return this._http.put<MemberEntity>(url, member);
   }
@@ -259,50 +420,71 @@ export class ApiService {
     return this._http.get<ServiceAccountEntity[]>(url);
   }
 
-  createServiceAccount(projectID: string, serviceaccount: CreateServiceAccountEntity):
-      Observable<ServiceAccountEntity> {
+  createServiceAccount(
+    projectID: string,
+    serviceaccount: CreateServiceAccountEntity
+  ): Observable<ServiceAccountEntity> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts`;
     return this._http.post<ServiceAccountEntity>(url, serviceaccount);
   }
 
-  editServiceAccount(projectID: string, serviceaccount: ServiceAccountEntity): Observable<ServiceAccountEntity> {
+  editServiceAccount(
+    projectID: string,
+    serviceaccount: ServiceAccountEntity
+  ): Observable<ServiceAccountEntity> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}`;
     return this._http.put<ServiceAccountEntity>(url, serviceaccount);
   }
 
-  deleteServiceAccount(projectID: string, serviceaccount: ServiceAccountEntity): Observable<any> {
+  deleteServiceAccount(
+    projectID: string,
+    serviceaccount: ServiceAccountEntity
+  ): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}`;
     return this._http.delete(url);
   }
 
-  getServiceAccountTokens(projectID: string, serviceaccount: ServiceAccountEntity):
-      Observable<ServiceAccountTokenEntity[]> {
+  getServiceAccountTokens(
+    projectID: string,
+    serviceaccount: ServiceAccountEntity
+  ): Observable<ServiceAccountTokenEntity[]> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens`;
     return this._http.get<ServiceAccountTokenEntity[]>(url);
   }
 
-  createServiceAccountToken(projectID: string, serviceaccount: ServiceAccountEntity, token: CreateTokenEntity):
-      Observable<ServiceAccountTokenEntity> {
+  createServiceAccountToken(
+    projectID: string,
+    serviceaccount: ServiceAccountEntity,
+    token: CreateTokenEntity
+  ): Observable<ServiceAccountTokenEntity> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens`;
     return this._http.post<ServiceAccountTokenEntity>(url, token);
   }
 
   regenerateServiceAccountToken(
-      projectID: string, serviceaccount: ServiceAccountEntity,
-      token: ServiceAccountTokenEntity): Observable<ServiceAccountTokenEntity> {
+    projectID: string,
+    serviceaccount: ServiceAccountEntity,
+    token: ServiceAccountTokenEntity
+  ): Observable<ServiceAccountTokenEntity> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
     return this._http.put<ServiceAccountTokenEntity>(url, token);
   }
 
   patchServiceAccountToken(
-      projectID: string, serviceaccount: ServiceAccountEntity, token: ServiceAccountTokenEntity,
-      patchToken: ServiceAccountTokenPatch): Observable<ServiceAccountTokenEntity> {
+    projectID: string,
+    serviceaccount: ServiceAccountEntity,
+    token: ServiceAccountTokenEntity,
+    patchToken: ServiceAccountTokenPatch
+  ): Observable<ServiceAccountTokenEntity> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
     return this._http.patch<ServiceAccountTokenEntity>(url, patchToken);
   }
 
-  deleteServiceAccountToken(projectID: string, serviceaccount: ServiceAccountEntity, token: ServiceAccountTokenEntity):
-      Observable<any> {
+  deleteServiceAccountToken(
+    projectID: string,
+    serviceaccount: ServiceAccountEntity,
+    token: ServiceAccountTokenEntity
+  ): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
     return this._http.delete(url);
   }

@@ -9,7 +9,6 @@ import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-h
   templateUrl: './cluster-secrets.component.html',
   styleUrls: ['./cluster-secrets.component.scss'],
 })
-
 export class ClusterSecretsComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() health: HealthEntity;
@@ -19,8 +18,14 @@ export class ClusterSecretsComponent implements OnInit {
   constructor(public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.isClusterRunning = ClusterHealthStatus.isClusterAPIRunning(this.cluster, this.health);
-    this.healthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, this.health);
+    this.isClusterRunning = ClusterHealthStatus.isClusterAPIRunning(
+      this.cluster,
+      this.health
+    );
+    this.healthStatus = ClusterHealthStatus.getHealthStatus(
+      this.cluster,
+      this.health
+    );
   }
 
   getIcon(name: string): string {

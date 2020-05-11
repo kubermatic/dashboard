@@ -11,10 +11,16 @@ export class SSHKeyListComponent {
   @Input() maxDisplayed = 3;
 
   getDisplayed(): string {
-    return this.sshKeys.slice(0, this.maxDisplayed).map(key => key.name).join(', ');
+    return this.sshKeys
+      .slice(0, this.maxDisplayed)
+      .map(key => key.name)
+      .join(', ');
   }
 
   getTruncatedSSHKeys(): string {
-    return this.sshKeys.slice(this.maxDisplayed).map(key => key.name).join(', ');
+    return this.sshKeys
+      .slice(this.maxDisplayed)
+      .map(key => key.name)
+      .join(', ');
   }
 }

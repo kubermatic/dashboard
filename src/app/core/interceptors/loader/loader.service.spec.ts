@@ -8,7 +8,10 @@ describe('LoaderInterceptorService', () => {
     });
   });
 
-  it('should be created', inject([LoaderInterceptor], (service: LoaderInterceptor) => {
-       expect(service).toBeTruthy();
-     }));
+  it('should be created', inject(
+    [LoaderInterceptor],
+    (service: LoaderInterceptor) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });

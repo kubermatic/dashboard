@@ -1,10 +1,19 @@
 import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {
+  FormBuilder,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  Validators,
+} from '@angular/forms';
 import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {OperatingSystemSpec, Taint} from '../shared/entity/NodeEntity';
-import {NodeProvider, NodeProviderConstants, OperatingSystem} from '../shared/model/NodeProviderConstants';
+import {
+  NodeProvider,
+  NodeProviderConstants,
+  OperatingSystem,
+} from '../shared/model/NodeProviderConstants';
 import {NodeData} from '../shared/model/NodeSpecChange';
 import {ClusterType} from '../shared/utils/cluster-utils/cluster-utils';
 import {BaseFormValidator} from '../shared/validators/base-form.validator';
@@ -27,11 +36,20 @@ enum Controls {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => NodeDataComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => NodeDataComponent), multi: true},
-  ]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => NodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => NodeDataComponent),
+      multi: true,
+    },
+  ],
 })
-export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class NodeDataComponent extends BaseFormValidator
+  implements OnInit, OnDestroy {
   @Input() replicas = 3;
   @Input() provider: NodeProvider;
   @Input() clusterType: ClusterType;
@@ -48,17 +66,27 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   constructor(
-      private readonly _builder: FormBuilder, private readonly _nameGenerator: ClusterNameGenerator,
-      private readonly _clusterService: ClusterService, private readonly _nodeDataService: NodeDataService) {
+    private readonly _builder: FormBuilder,
+    private readonly _nameGenerator: ClusterNameGenerator,
+    private readonly _clusterService: ClusterService,
+    private readonly _nodeDataService: NodeDataService
+  ) {
     super();
   }
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control('', [Validators.pattern('[a-zA-Z0-9-]*')]),
-      [Controls.Count]: this._builder.control(this.replicas, [Validators.required, Validators.min(0)]),
+      [Controls.Name]: this._builder.control('', [
+        Validators.pattern('[a-zA-Z0-9-]*'),
+      ]),
+      [Controls.Count]: this._builder.control(this.replicas, [
+        Validators.required,
+        Validators.min(0),
+      ]),
       [Controls.DynamicConfig]: this._builder.control(false),
-      [Controls.OperatingSystem]: this._builder.control(this._getDefaultOS(), [Validators.required]),
+      [Controls.OperatingSystem]: this._builder.control(this._getDefaultOS(), [
+        Validators.required,
+      ]),
       [Controls.UpgradeOnBoot]: this._builder.control(false),
       [Controls.DisableAutoUpdate]: this._builder.control(false),
       [Controls.ProviderBasic]: this._builder.control(''),
@@ -67,24 +95,30 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this._clusterService.clusterTypeChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
+    this._clusterService.clusterTypeChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ =>
+        this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS())
+      );
 
     merge(
-        this.form.get(Controls.Name).valueChanges,
-        this.form.get(Controls.Count).valueChanges,
-        this.form.get(Controls.DynamicConfig).valueChanges,
-        )
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
+      this.form.get(Controls.Name).valueChanges,
+      this.form.get(Controls.Count).valueChanges,
+      this.form.get(Controls.DynamicConfig).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
 
     merge(
-        this.form.get(Controls.OperatingSystem).valueChanges,
-        this.form.get(Controls.UpgradeOnBoot).valueChanges,
-        this.form.get(Controls.DisableAutoUpdate).valueChanges,
-        )
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._nodeDataService.operatingSystemSpec = this._getOperatingSystemSpec());
+      this.form.get(Controls.OperatingSystem).valueChanges,
+      this.form.get(Controls.UpgradeOnBoot).valueChanges,
+      this.form.get(Controls.DisableAutoUpdate).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        _ =>
+          (this._nodeDataService.operatingSystemSpec = this._getOperatingSystemSpec())
+      );
   }
 
   ngOnDestroy(): void {
@@ -131,17 +165,23 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         return {
           [this.form.get(Controls.OperatingSystem).value]: {
             distUpgradeOnBoot: this.form.get(Controls.UpgradeOnBoot).value,
-          }
+          },
         };
       case OperatingSystem.ContainerLinux:
-        return {containerLinux: {disableAutoUpdate: this.form.get(Controls.DisableAutoUpdate).value}};
+        return {
+          containerLinux: {
+            disableAutoUpdate: this.form.get(Controls.DisableAutoUpdate).value,
+          },
+        };
       default:
         return {ubuntu: {distUpgradeOnBoot: false}};
     }
   }
 
   private _getDefaultOS(): OperatingSystem {
-    return this.isOpenshiftCluster() ? OperatingSystem.CentOS : OperatingSystem.Ubuntu;
+    return this.isOpenshiftCluster()
+      ? OperatingSystem.CentOS
+      : OperatingSystem.Ubuntu;
   }
 
   private _getNodeData(): NodeData {

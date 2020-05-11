@@ -1,4 +1,10 @@
-import {async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed} from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  discardPeriodicTasks,
+  fakeAsync,
+  TestBed,
+} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -9,7 +15,12 @@ import {SharedModule} from '../../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../../testing/fake-data/datacenter.fake';
 import {fakeProject} from '../../../../testing/fake-data/project.fake';
-import {fakeBinding, fakeClusterBinding, fakeClusterRoleNames, fakeRoleNames} from '../../../../testing/fake-data/rbac.fake';
+import {
+  fakeBinding,
+  fakeClusterBinding,
+  fakeClusterRoleNames,
+  fakeRoleNames,
+} from '../../../../testing/fake-data/rbac.fake';
 import {asyncData} from '../../../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../../../testing/services/mat-dialog-ref-mock';
 
@@ -28,31 +39,29 @@ describe('AddBindingComponent', () => {
 
   beforeEach(async(() => {
     const rbacMock = {
-      'getClusterRoleNames': jest.fn(),
-      'getRoleNames': jest.fn(),
-      'createClusterBinding': jest.fn(),
-      'createBinding': jest.fn(),
+      getClusterRoleNames: jest.fn(),
+      getRoleNames: jest.fn(),
+      createClusterBinding: jest.fn(),
+      createBinding: jest.fn(),
     };
 
-    rbacMock.getClusterRoleNames.mockReturnValue(asyncData([fakeClusterRoleNames()]));
+    rbacMock.getClusterRoleNames.mockReturnValue(
+      asyncData([fakeClusterRoleNames()])
+    );
     rbacMock.getRoleNames.mockReturnValue(asyncData([fakeRoleNames()]));
-    rbacMock.createClusterBinding.mockReturnValue(asyncData([fakeClusterBinding()]));
+    rbacMock.createClusterBinding.mockReturnValue(
+      asyncData([fakeClusterBinding()])
+    );
     rbacMock.createBinding.mockReturnValue(asyncData([fakeBinding()]));
 
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            AddBindingComponent,
-          ],
-          providers: [
-            {provide: RBACService, useValue: rbacMock},
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [AddBindingComponent],
+      providers: [
+        {provide: RBACService, useValue: rbacMock},
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(async(() => {
@@ -65,43 +74,43 @@ describe('AddBindingComponent', () => {
   }));
 
   it('should create the rbac add binding cmp', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 
   it('cluster form should be validated correctly', fakeAsync(() => {
-       component.bindingType = 'cluster';
-       component.setValidators();
-       component.form.controls.email.setValue('');
-       component.form.controls.role.setValue('');
-       fixture.detectChanges();
-       expect(component.form.valid).toBeFalsy();
+    component.bindingType = 'cluster';
+    component.setValidators();
+    component.form.controls.email.setValue('');
+    component.form.controls.role.setValue('');
+    fixture.detectChanges();
+    expect(component.form.valid).toBeFalsy();
 
-       component.form.controls.email.setValue('test@example.de');
-       component.form.controls.role.setValue('role-1');
-       fixture.detectChanges();
-       expect(component.form.valid).toBeTruthy();
-       discardPeriodicTasks();
-     }));
+    component.form.controls.email.setValue('test@example.de');
+    component.form.controls.role.setValue('role-1');
+    fixture.detectChanges();
+    expect(component.form.valid).toBeTruthy();
+    discardPeriodicTasks();
+  }));
 
   it('namespace form should be validated correctly', fakeAsync(() => {
-       component.bindingType = 'namespace';
-       component.setValidators();
-       component.form.controls.email.setValue('');
-       component.form.controls.role.setValue('');
-       fixture.detectChanges();
-       expect(component.form.valid).toBeFalsy();
+    component.bindingType = 'namespace';
+    component.setValidators();
+    component.form.controls.email.setValue('');
+    component.form.controls.role.setValue('');
+    fixture.detectChanges();
+    expect(component.form.valid).toBeFalsy();
 
-       component.form.controls.email.setValue('test@example.de');
-       component.form.controls.role.setValue('role-1');
-       fixture.detectChanges();
-       component.checkNamespaceState();
-       expect(component.form.valid).toBeFalsy();
+    component.form.controls.email.setValue('test@example.de');
+    component.form.controls.role.setValue('role-1');
+    fixture.detectChanges();
+    component.checkNamespaceState();
+    expect(component.form.valid).toBeFalsy();
 
-       component.form.controls.namespace.setValue('default');
-       fixture.detectChanges();
-       expect(component.form.valid).toBeTruthy();
-       discardPeriodicTasks();
-     }));
+    component.form.controls.namespace.setValue('default');
+    fixture.detectChanges();
+    expect(component.form.valid).toBeTruthy();
+    discardPeriodicTasks();
+  }));
 
   it('should get namespaces', () => {
     component.roles = fakeRoleNames();

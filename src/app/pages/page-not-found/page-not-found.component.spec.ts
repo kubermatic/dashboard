@@ -24,20 +24,14 @@ describe('PageNotFoundComponent', () => {
   let router: Router;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            PageNotFoundComponent,
-          ],
-          providers: [
-            {provide: Router, useClass: RouterStub},
-            {provide: Auth, useClass: AuthMockService},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [PageNotFoundComponent],
+      providers: [
+        {provide: Router, useClass: RouterStub},
+        {provide: Auth, useClass: AuthMockService},
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -49,8 +43,8 @@ describe('PageNotFoundComponent', () => {
   });
 
   it('should create the cmp', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 
   it('should navigate to clusters list', () => {
     const spyNavigate = jest.spyOn(router, 'navigate');

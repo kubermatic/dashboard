@@ -1,6 +1,12 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
-import {OpenstackFlavor, OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet, OpenstackTenant} from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {
+  OpenstackFlavor,
+  OpenstackNetwork,
+  OpenstackSecurityGroup,
+  OpenstackSubnet,
+  OpenstackTenant,
+} from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {Provider} from './provider';
 
@@ -13,8 +19,12 @@ export class Openstack extends Provider {
     super(http, provider);
 
     this._setRequiredHeaders(
-        Openstack.Header.Username, Openstack.Header.Password, Openstack.Header.Domain, Openstack.Header.Datacenter,
-        Openstack.Header.Tenant);
+      Openstack.Header.Username,
+      Openstack.Header.Password,
+      Openstack.Header.Domain,
+      Openstack.Header.Datacenter,
+      Openstack.Header.Tenant
+    );
   }
 
   credential(credential: string): Openstack {
@@ -45,7 +55,10 @@ export class Openstack extends Provider {
 
   datacenter(datacenter: string): Openstack {
     if (datacenter) {
-      this._headers = this._headers.set(Openstack.Header.Datacenter, datacenter);
+      this._headers = this._headers.set(
+        Openstack.Header.Datacenter,
+        datacenter
+      );
     }
     return this;
   }
@@ -59,7 +72,10 @@ export class Openstack extends Provider {
 
   tenantID(tenantID: string): Openstack {
     if (tenantID) {
-      this._changeRequiredHeader(Openstack.Header.Tenant, Openstack.Header.TenantID);
+      this._changeRequiredHeader(
+        Openstack.Header.Tenant,
+        Openstack.Header.TenantID
+      );
       this._headers = this._headers.set(Openstack.Header.TenantID, tenantID);
     }
     return this;
@@ -74,12 +90,18 @@ export class Openstack extends Provider {
       onLoadingCb();
     }
 
-    return this._http.get<OpenstackFlavor[]>(this._url, {headers: this._headers});
+    return this._http.get<OpenstackFlavor[]>(this._url, {
+      headers: this._headers,
+    });
   }
 
   tenants(onLoadingCb: () => void = null): Observable<OpenstackTenant[]> {
     this._setRequiredHeaders(
-        Openstack.Header.Username, Openstack.Header.Password, Openstack.Header.Domain, Openstack.Header.Datacenter);
+      Openstack.Header.Username,
+      Openstack.Header.Password,
+      Openstack.Header.Domain,
+      Openstack.Header.Datacenter
+    );
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -88,10 +110,14 @@ export class Openstack extends Provider {
       onLoadingCb();
     }
 
-    return this._http.get<OpenstackTenant[]>(this._tenantsUrl, {headers: this._headers});
+    return this._http.get<OpenstackTenant[]>(this._tenantsUrl, {
+      headers: this._headers,
+    });
   }
 
-  securityGroups(onLoadingCb: () => void = null): Observable<OpenstackSecurityGroup[]> {
+  securityGroups(
+    onLoadingCb: () => void = null
+  ): Observable<OpenstackSecurityGroup[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -100,7 +126,9 @@ export class Openstack extends Provider {
       onLoadingCb();
     }
 
-    return this._http.get<OpenstackSecurityGroup[]>(this._securityGroupsUrl, {headers: this._headers});
+    return this._http.get<OpenstackSecurityGroup[]>(this._securityGroupsUrl, {
+      headers: this._headers,
+    });
   }
 
   networks(onLoadingCb: () => void = null): Observable<OpenstackNetwork[]> {
@@ -112,10 +140,15 @@ export class Openstack extends Provider {
       onLoadingCb();
     }
 
-    return this._http.get<OpenstackNetwork[]>(this._networksUrl, {headers: this._headers});
+    return this._http.get<OpenstackNetwork[]>(this._networksUrl, {
+      headers: this._headers,
+    });
   }
 
-  subnets(network: string, onLoadingCb: () => void = null): Observable<OpenstackSubnet[]> {
+  subnets(
+    network: string,
+    onLoadingCb: () => void = null
+  ): Observable<OpenstackSubnet[]> {
     if (!this._hasRequiredHeaders() || !network) {
       return EMPTY;
     }

@@ -32,10 +32,14 @@ export class Digitalocean extends Provider {
       onLoadingCb();
     }
 
-    return this._http.get<DigitaloceanSizes>(this._url, {headers: this._headers});
+    return this._http.get<DigitaloceanSizes>(this._url, {
+      headers: this._headers,
+    });
   }
 }
 
 export namespace Digitalocean {
-  export enum Header {Token = 'DoToken'}
+  export enum Header {
+    Token = 'DoToken',
+  }
 }

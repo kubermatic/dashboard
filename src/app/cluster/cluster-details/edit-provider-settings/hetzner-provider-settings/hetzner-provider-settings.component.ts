@@ -1,5 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
@@ -10,7 +15,6 @@ import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.s
   selector: 'km-hetzner-provider-settings',
   templateUrl: './hetzner-provider-settings.component.html',
 })
-
 export class HetznerProviderSettingsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   private _formData = {token: ''};
@@ -23,13 +27,18 @@ export class HetznerProviderSettingsComponent implements OnInit, OnDestroy {
       token: new FormControl(''),
     });
 
-    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      if (data.token !== this._formData.token) {
-        this._formData = data;
-        this.setValidators();
-        this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-      }
-    });
+    this.form.valueChanges
+      .pipe(debounceTime(1000))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        if (data.token !== this._formData.token) {
+          this._formData = data;
+          this.setValidators();
+          this.clusterService.changeProviderSettingsPatch(
+            this.getProviderSettingsPatch()
+          );
+        }
+      });
   }
 
   get token(): AbstractControl {
@@ -40,7 +49,11 @@ export class HetznerProviderSettingsComponent implements OnInit, OnDestroy {
     if (!this.token.value) {
       this.token.clearValidators();
     } else {
-      this.token.setValidators([Validators.required, Validators.minLength(64), Validators.maxLength(64)]);
+      this.token.setValidators([
+        Validators.required,
+        Validators.minLength(64),
+        Validators.maxLength(64),
+      ]);
     }
 
     this.token.updateValueAndValidity();

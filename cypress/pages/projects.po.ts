@@ -1,6 +1,6 @@
-import {Condition} from "../utils/condition";
-import {wait} from "../utils/wait";
-import {ClustersPage} from "./clusters.po";
+import {Condition} from '../utils/condition';
+import {wait} from '../utils/wait';
+import {ClustersPage} from './clusters.po';
 
 export class ProjectsPage {
   static getProjectItem(projectName: string): Cypress.Chainable<any> {
@@ -12,15 +12,15 @@ export class ProjectsPage {
   }
 
   static getAddProjectBtn(): Cypress.Chainable<any> {
-    return cy.get(`#km-add-project-top-btn`);
+    return cy.get('#km-add-project-top-btn');
   }
 
   static getAddProjectInput(): Cypress.Chainable<any> {
-    return cy.get(`#km-add-project-dialog-input`);
+    return cy.get('#km-add-project-dialog-input');
   }
 
   static getAddProjectConfirmBtn(): Cypress.Chainable<any> {
-    return cy.get(`#km-add-project-dialog-save`);
+    return cy.get('#km-add-project-dialog-save');
   }
 
   static getDeleteProjectBtn(projectName: string): Cypress.Chainable<any> {
@@ -50,32 +50,49 @@ export class ProjectsPage {
   }
 
   static visit(): void {
-    cy.get('#km-nav-item-projects').click().then(() => {
-      this.waitForRefresh();
-      this.verifyUrl();
-    });
+    cy.get('#km-nav-item-projects')
+      .click()
+      .then(() => {
+        this.waitForRefresh();
+        this.verifyUrl();
+      });
   }
 
   static selectProject(projectName: string): void {
     this.getProjectItem(projectName).should(Condition.HaveLength, 1);
-    this.getActiveProjects().should(Condition.HaveLength, 1).wait(500).click().then(() => {
-      ClustersPage.waitForRefresh();
-      ClustersPage.verifyUrl();
-    });
+    this.getActiveProjects()
+      .should(Condition.HaveLength, 1)
+      .wait(500)
+      .click()
+      .then(() => {
+        ClustersPage.waitForRefresh();
+        ClustersPage.verifyUrl();
+      });
   }
 
   static addProject(projectName: string): void {
     this.getAddProjectBtn().should(Condition.NotBe, 'disabled').click();
-    this.getAddProjectInput().type(projectName).should(Condition.HaveValue, projectName);
-    this.getAddProjectConfirmBtn().should(Condition.NotBe, 'disabled').click().then(() => {
-      this.waitForRefresh();
-      this.getProjectItem(projectName).should(Condition.HaveLength, 1);
-    });
+    this.getAddProjectInput()
+      .type(projectName)
+      .should(Condition.HaveValue, projectName);
+    this.getAddProjectConfirmBtn()
+      .should(Condition.NotBe, 'disabled')
+      .click()
+      .then(() => {
+        this.waitForRefresh();
+        this.getProjectItem(projectName).should(Condition.HaveLength, 1);
+      });
   }
 
   static deleteProject(projectName: string): void {
-    this.getDeleteProjectBtn(projectName).should(Condition.NotBe, 'disabled').click();
-    cy.get('#km-confirmation-dialog-input').type(projectName).should(Condition.HaveValue, projectName);
-    cy.get('#km-confirmation-dialog-confirm-btn').should(Condition.NotBe, 'disabled').click();
+    this.getDeleteProjectBtn(projectName)
+      .should(Condition.NotBe, 'disabled')
+      .click();
+    cy.get('#km-confirmation-dialog-input')
+      .type(projectName)
+      .should(Condition.HaveValue, projectName);
+    cy.get('#km-confirmation-dialog-confirm-btn')
+      .should(Condition.NotBe, 'disabled')
+      .click();
   }
 }

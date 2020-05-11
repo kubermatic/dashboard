@@ -22,23 +22,37 @@ enum Controls {
   selector: 'km-vsphere-extended-node-data',
   templateUrl: './template.html',
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => VSphereExtendedNodeDataComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => VSphereExtendedNodeDataComponent), multi: true}
-  ]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => VSphereExtendedNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => VSphereExtendedNodeDataComponent),
+      multi: true,
+    },
+  ],
 })
-export class VSphereExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class VSphereExtendedNodeDataComponent extends BaseFormValidator
+  implements OnInit, OnDestroy {
   private _defaultTemplate = '';
   private _templates: DatacenterOperatingSystemOptions;
 
   readonly Controls = Controls;
 
   get template(): string {
-    return this.form.get(Controls.Template).value ? this.form.get(Controls.Template).value : this._defaultTemplate;
+    return this.form.get(Controls.Template).value
+      ? this.form.get(Controls.Template).value
+      : this._defaultTemplate;
   }
 
   constructor(
-      private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService,
-      private readonly _datacenterService: DatacenterService, private readonly _clusterService: ClusterService) {
+    private readonly _builder: FormBuilder,
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _datacenterService: DatacenterService,
+    private readonly _clusterService: ClusterService
+  ) {
     super();
   }
 
@@ -50,27 +64,32 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator implemen
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this._clusterService.datacenterChanges.pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
-        .pipe(tap(dc => this._templates = dc.spec.vsphere.templates))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._setDefaultTemplate(OperatingSystem.Ubuntu));
+    this._clusterService.datacenterChanges
+      .pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
+      .pipe(tap(dc => (this._templates = dc.spec.vsphere.templates)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this._setDefaultTemplate(OperatingSystem.Ubuntu));
 
-    this._clusterService.clusterTypeChanges.pipe(filter(_ => !!this._templates))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(
-            _ => this._isOpenshiftCluster() ? this._setDefaultTemplate(OperatingSystem.CentOS) :
-                                              this._setDefaultTemplate(OperatingSystem.Ubuntu));
+    this._clusterService.clusterTypeChanges
+      .pipe(filter(_ => !!this._templates))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ =>
+        this._isOpenshiftCluster()
+          ? this._setDefaultTemplate(OperatingSystem.CentOS)
+          : this._setDefaultTemplate(OperatingSystem.Ubuntu)
+      );
 
-    this._nodeDataService.operatingSystemChanges.pipe(filter(_ => !!this._templates))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(this._setDefaultTemplate.bind(this));
+    this._nodeDataService.operatingSystemChanges
+      .pipe(filter(_ => !!this._templates))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._setDefaultTemplate.bind(this));
 
     merge(
-        this.form.get(Controls.DiskSizeGB).valueChanges,
-        this.form.get(Controls.Template).valueChanges,
-        )
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
+      this.form.get(Controls.DiskSizeGB).valueChanges,
+      this.form.get(Controls.Template).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
 
   ngOnDestroy(): void {

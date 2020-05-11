@@ -15,7 +15,6 @@ import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete
   selector: 'km-hetzner-node-data',
   templateUrl: './hetzner-node-data.component.html',
 })
-
 export class HetznerNodeDataComponent implements OnInit, OnDestroy {
   @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
@@ -32,46 +31,63 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
   private _selectedCredentials: string;
 
   constructor(
-      private readonly _apiService: ApiService, private readonly _addNodeService: NodeDataService,
-      private readonly _wizardService: WizardService) {}
+    private readonly _apiService: ApiService,
+    private readonly _addNodeService: NodeDataService,
+    private readonly _wizardService: WizardService
+  ) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      type: new FormControl(
-          this.nodeData.spec.cloud.hetzner.type,
-          [Validators.required, AutocompleteFilterValidators.mustBeInObjectList(this.types, 'name', true)]),
+      type: new FormControl(this.nodeData.spec.cloud.hetzner.type, [
+        Validators.required,
+        AutocompleteFilterValidators.mustBeInObjectList(
+          this.types,
+          'name',
+          true
+        ),
+      ]),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
     });
 
-    this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.cloudSpec = data.cloudSpec;
-      this.form.controls.type.setValue('');
-      this.types = {dedicated: [], standard: []};
-      this.checkTypeState();
+    this._wizardService.clusterProviderSettingsFormChanges$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        this.cloudSpec = data.cloudSpec;
+        this.form.controls.type.setValue('');
+        this.types = {dedicated: [], standard: []};
+        this.checkTypeState();
 
-      if (data.cloudSpec.hetzner.token !== '' || this._selectedCredentials) {
-        this.reloadHetznerTypes();
-      }
-    });
+        if (data.cloudSpec.hetzner.token !== '' || this._selectedCredentials) {
+          this.reloadHetznerTypes();
+        }
+      });
 
-    this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
-      this._selectedCredentials = credentials;
-    });
+    this._wizardService.onCustomPresetSelect
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(credentials => {
+        this._selectedCredentials = credentials;
+      });
 
-    this.form.controls.type.valueChanges.pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
-        .subscribe(value => {
-          if (value !== '' && !this.form.controls.type.pristine) {
-            this.filteredTypes = filterObjectOptions(value, 'name', this.types);
-          } else {
-            this.filteredTypes = this.types;
-          }
-          this.form.controls.type.setValidators(
-              [AutocompleteFilterValidators.mustBeInObjectList(this.types, 'name', true)]);
-          this.form.controls.type.updateValueAndValidity();
-        });
+    this.form.controls.type.valueChanges
+      .pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+      .subscribe(value => {
+        if (value !== '' && !this.form.controls.type.pristine) {
+          this.filteredTypes = filterObjectOptions(value, 'name', this.types);
+        } else {
+          this.filteredTypes = this.types;
+        }
+        this.form.controls.type.setValidators([
+          AutocompleteFilterValidators.mustBeInObjectList(
+            this.types,
+            'name',
+            true
+          ),
+        ]);
+        this.form.controls.type.updateValueAndValidity();
+      });
 
     this.checkTypeState();
     this.reloadHetznerTypes();
@@ -96,12 +112,20 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
   }
 
   getTypesFormState(): string {
-    if ((!this.loadingTypes && (!this.cloudSpec.hetzner.token || this.cloudSpec.hetzner.token.length === 0)) &&
-        this.isInWizard()) {
+    if (
+      !this.loadingTypes &&
+      (!this.cloudSpec.hetzner.token ||
+        this.cloudSpec.hetzner.token.length === 0) &&
+      this.isInWizard()
+    ) {
       return 'Node Type*';
     } else if (this.loadingTypes) {
       return 'Loading node types...';
-    } else if (!this.loadingTypes && this.types.standard.length === 0 && this.types.dedicated.length === 0) {
+    } else if (
+      !this.loadingTypes &&
+      this.types.standard.length === 0 &&
+      this.types.dedicated.length === 0
+    ) {
       return 'No Node Types available';
     } else {
       return 'Node Type*';
@@ -109,23 +133,40 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
   }
 
   showSizeHint(): boolean {
-    return (!this.loadingTypes && !this.cloudSpec.hetzner.token && !this._selectedCredentials) && this.isInWizard();
+    return (
+      !this.loadingTypes &&
+      !this.cloudSpec.hetzner.token &&
+      !this._selectedCredentials &&
+      this.isInWizard()
+    );
   }
 
   reloadHetznerTypes(): void {
-    if (this.cloudSpec.hetzner.token || this._selectedCredentials || !this.isInWizard()) {
+    if (
+      this.cloudSpec.hetzner.token ||
+      this._selectedCredentials ||
+      !this.isInWizard()
+    ) {
       this.loadingTypes = true;
     }
 
-    iif(() => this.isInWizard(),
-        this._wizardService.provider(NodeProvider.HETZNER)
-            .token(this.cloudSpec.hetzner.token)
-            .credential(this._selectedCredentials)
-            .flavors(),
-        this._apiService.getHetznerTypes(this.projectId, this.seedDCName, this.clusterId))
-        .pipe(first())
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe((data) => {
+    iif(
+      () => this.isInWizard(),
+      this._wizardService
+        .provider(NodeProvider.HETZNER)
+        .token(this.cloudSpec.hetzner.token)
+        .credential(this._selectedCredentials)
+        .flavors(),
+      this._apiService.getHetznerTypes(
+        this.projectId,
+        this.seedDCName,
+        this.clusterId
+      )
+    )
+      .pipe(first())
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        data => {
           this.types = data;
           if (this.nodeData.spec.cloud.hetzner.type === '') {
             this.form.controls.type.setValue(this.types.standard[0].name);
@@ -133,7 +174,9 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
 
           this.loadingTypes = false;
           this.checkTypeState();
-        }, () => this.loadingTypes = false);
+        },
+        () => (this.loadingTypes = false)
+      );
   }
 
   getNodeProviderData(): NodeProviderData {

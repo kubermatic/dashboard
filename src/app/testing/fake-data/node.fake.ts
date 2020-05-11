@@ -101,29 +101,39 @@ export function nodeAWSFake(): NodeEntity {
           },
           subnetID: 'subnet-f3427db9',
           availabilityZone: 'eu-central-1c',
-        }
+        },
       },
       operatingSystem: {ubuntu: {distUpgradeOnBoot: false}},
-      versions: {kubelet: '1.13.5'}
+      versions: {kubelet: '1.13.5'},
     },
     status: {
       machineName: 'worker-cht5l-684d57f97b-hkgrz',
       capacity: {cpu: '2', memory: '2002700Ki'},
       allocatable: {cpu: '1800m', memory: '1695500Ki'},
       addresses: [
-        {type: 'InternalIP', address: '172.31.1.240'}, {type: 'ExternalIP', address: '3.121.87.120'},
-        {type: 'InternalDNS', address: 'ip-172-31-1-240.eu-central-1.compute.internal'},
-        {type: 'Hostname', address: 'ip-172-31-1-240.eu-central-1.compute.internal'},
-        {type: 'ExternalDNS', address: 'ec2-3-121-87-120.eu-central-1.compute.amazonaws.com'}
+        {type: 'InternalIP', address: '172.31.1.240'},
+        {type: 'ExternalIP', address: '3.121.87.120'},
+        {
+          type: 'InternalDNS',
+          address: 'ip-172-31-1-240.eu-central-1.compute.internal',
+        },
+        {
+          type: 'Hostname',
+          address: 'ip-172-31-1-240.eu-central-1.compute.internal',
+        },
+        {
+          type: 'ExternalDNS',
+          address: 'ec2-3-121-87-120.eu-central-1.compute.amazonaws.com',
+        },
       ],
       nodeInfo: {
         kernelVersion: '4.15.0-1039-aws',
         containerRuntimeVersion: 'docker://18.9.2',
         kubeletVersion: 'v1.13.5',
         operatingSystem: 'linux',
-        architecture: 'amd64'
-      }
-    }
+        architecture: 'amd64',
+      },
+    },
   };
 }
 
@@ -153,11 +163,11 @@ export function nodeDeploymentsFake(): NodeDeploymentEntity[] {
           versions: {
             kubelet: null,
           },
-        }
+        },
       },
       status: {
         availableReplicas: 3,
-      }
+      },
     },
     {
       id: 'machine-deployment-r32234v23-333rg',
@@ -183,9 +193,9 @@ export function nodeDeploymentsFake(): NodeDeploymentEntity[] {
           versions: {
             kubelet: null,
           },
-        }
-      }
-    }
+        },
+      },
+    },
   ];
 }
 

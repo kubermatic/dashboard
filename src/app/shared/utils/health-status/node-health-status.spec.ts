@@ -7,10 +7,19 @@ describe('NodeHealthStatus', () => {
   it('should return correct status for nodes', () => {
     const ns = nodesFake();
 
-    expect(NodeHealthStatus.getHealthStatus(ns[0]))
-        .toEqual(new NodeHealthStatus(HealthStatusMessage.Running, HealthStatusColor.Green, HealthStatusCss.Running));
-    expect(NodeHealthStatus.getHealthStatus(ns[1]))
-        .toEqual(new NodeHealthStatus(
-            HealthStatusMessage.Provisioning, HealthStatusColor.Orange, HealthStatusCss.Provisioning));
+    expect(NodeHealthStatus.getHealthStatus(ns[0])).toEqual(
+      new NodeHealthStatus(
+        HealthStatusMessage.Running,
+        HealthStatusColor.Green,
+        HealthStatusCss.Running
+      )
+    );
+    expect(NodeHealthStatus.getHealthStatus(ns[1])).toEqual(
+      new NodeHealthStatus(
+        HealthStatusMessage.Provisioning,
+        HealthStatusColor.Orange,
+        HealthStatusCss.Provisioning
+      )
+    );
   });
 });
