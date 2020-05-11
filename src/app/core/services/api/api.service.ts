@@ -32,7 +32,10 @@ import {
   AlibabaZone,
 } from '../../../shared/entity/provider/alibaba/Alibaba';
 import {AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws/AWS';
-import {AzureSizes, AzureZones} from '../../../shared/entity/provider/azure/AzureSizeEntity';
+import {
+  AzureSizes,
+  AzureZones,
+} from '../../../shared/entity/provider/azure/AzureSizeEntity';
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {
   GCPDiskType,
@@ -389,9 +392,13 @@ export class ApiService {
     return this._http.get<AzureSizes[]>(url);
   }
 
-  getAzureAvailabilityZones(projectId: string, dc: string, cluster: string, size: string): Observable<AzureZones> {
-    const url =
-        `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/azure/availabilityzones`;
+  getAzureAvailabilityZones(
+    projectId: string,
+    dc: string,
+    cluster: string,
+    size: string
+  ): Observable<AzureZones> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/azure/availabilityzones`;
     const headers = new HttpHeaders().set('SKUName', size);
     return this._http.get<AzureZones>(url, {headers});
   }

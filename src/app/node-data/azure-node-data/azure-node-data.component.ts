@@ -18,7 +18,10 @@ import {
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
-import {AzureSizes, AzureZones} from '../../shared/entity/provider/azure/AzureSizeEntity';
+import {
+  AzureSizes,
+  AzureZones,
+} from '../../shared/entity/provider/azure/AzureSizeEntity';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 import {filterArrayOptions} from '../../shared/utils/common-utils';
@@ -74,7 +77,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
 
     this._wizard.clusterProviderSettingsFormChanges$
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe((data) => {
+      .subscribe(data => {
         this.cloudSpec = data.cloudSpec;
         this.form.controls.size.setValue('');
         this.form.controls.zone.setValue('');
@@ -82,11 +85,12 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
         this.zones = [];
         this.checkSizeState();
         this.checkZoneState();
-        if (data.cloudSpec.azure.clientID !== '' || 
-            data.cloudSpec.azure.clientSecret !== '' ||
-            data.cloudSpec.azure.tenantID !== '' || 
-            data.cloudSpec.azure.subscriptionID !== '' || 
-            this._selectedPreset
+        if (
+          data.cloudSpec.azure.clientID !== '' ||
+          data.cloudSpec.azure.clientSecret !== '' ||
+          data.cloudSpec.azure.tenantID !== '' ||
+          data.cloudSpec.azure.subscriptionID !== '' ||
+          this._selectedPreset
         ) {
           this.reloadAzureSizes();
 
@@ -94,7 +98,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
             this.reloadAzureZones();
           }
         }
-    });
+      });
 
     this._wizard.onCustomPresetSelect
       .pipe(takeUntil(this._unsubscribe))
@@ -104,23 +108,23 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
 
     this.form.controls.size.valueChanges
       .pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
-        .subscribe(value => {
-          this.reloadAzureZones();
+      .subscribe(value => {
+        this.reloadAzureZones();
 
-          if (value !== '' && !this.form.controls.size.pristine) {
-            this.filteredSizes = filterArrayOptions(value, 'name', this.sizes);
-          } else {
-            this.filteredSizes = this.sizes;
-          }
-          this.form.controls.size.setValidators([
-            Validators.required, 
-            AutocompleteFilterValidators.mustBeInArrayList(
-              this.sizes, 
-              'name',
-              true
-            )
-          ]);
-        });
+        if (value !== '' && !this.form.controls.size.pristine) {
+          this.filteredSizes = filterArrayOptions(value, 'name', this.sizes);
+        } else {
+          this.filteredSizes = this.sizes;
+        }
+        this.form.controls.size.setValidators([
+          Validators.required,
+          AutocompleteFilterValidators.mustBeInArrayList(
+            this.sizes,
+            'name',
+            true
+          ),
+        ]);
+      });
 
     this.loadDatacenter();
     this.checkSizeState();
@@ -241,12 +245,20 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getZonesFormState(): string {
-    if ((!this.loadingZones && this.isMissingCredentials() && this.form.controls.size.value === '') &&
-        this.isInWizard()) {
+    if (
+      !this.loadingZones &&
+      this.isMissingCredentials() &&
+      this.form.controls.size.value === '' &&
+      this.isInWizard()
+    ) {
       return 'Zone';
     } else if (this.loadingZones) {
       return 'Loading zones...';
-    } else if (this.form.controls.size.value !== '' && !this.loadingZones && this.zones.length === 0) {
+    } else if (
+      this.form.controls.size.value !== '' &&
+      !this.loadingZones &&
+      this.zones.length === 0
+    ) {
       return 'No Zones available';
     } else {
       return 'Zone';
@@ -262,9 +274,12 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   showZoneHint(): boolean {
-    return (!this.loadingZones && (this.isMissingCredentials() || this.form.controls.size.value === '') &&
-            !this._selectedPreset) &&
-        this.isInWizard();
+    return (
+      !this.loadingZones &&
+      (this.isMissingCredentials() || this.form.controls.size.value === '') &&
+      !this._selectedPreset &&
+      this.isInWizard()
+    );
   }
 
   reloadAzureZones(): void {
@@ -272,34 +287,51 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
       return;
     }
 
-    this.loadingZones = (!this.isMissingCredentials() && this.form.controls.size.value !== '') || !this.isInWizard() ||
-        !!this._selectedPreset;
+    this.loadingZones =
+      (!this.isMissingCredentials() && this.form.controls.size.value !== '') ||
+      !this.isInWizard() ||
+      !!this._selectedPreset;
 
-    iif(() => !!this.cloudSpec.dc, this._dcService.getDataCenter(this.cloudSpec.dc), EMPTY)
-        .pipe(switchMap(dc => {
+    iif(
+      () => !!this.cloudSpec.dc,
+      this._dcService.getDataCenter(this.cloudSpec.dc),
+      EMPTY
+    )
+      .pipe(
+        switchMap(dc => {
           this.datacenter = dc;
 
           return iif(
-              () => this.isInWizard(),
-              this._wizard.provider(NodeProvider.AZURE)
-                  .clientID(this.cloudSpec.azure.clientID)
-                  .clientSecret(this.cloudSpec.azure.clientSecret)
-                  .subscriptionID(this.cloudSpec.azure.subscriptionID)
-                  .tenantID(this.cloudSpec.azure.tenantID)
-                  .location(this.datacenter.spec.azure.location)
-                  .skuName(this.form.controls.size.value)
-                  .credential(this._selectedPreset)
-                  .availabilityZones(),
-              this._api.getAzureAvailabilityZones(
-                  this.projectId, this.seedDCName, this.clusterId, this.form.controls.size.value));
-        }))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe((data: AzureZones) => {
+            () => this.isInWizard(),
+            this._wizard
+              .provider(NodeProvider.AZURE)
+              .clientID(this.cloudSpec.azure.clientID)
+              .clientSecret(this.cloudSpec.azure.clientSecret)
+              .subscriptionID(this.cloudSpec.azure.subscriptionID)
+              .tenantID(this.cloudSpec.azure.tenantID)
+              .location(this.datacenter.spec.azure.location)
+              .skuName(this.form.controls.size.value)
+              .credential(this._selectedPreset)
+              .availabilityZones(),
+            this._api.getAzureAvailabilityZones(
+              this.projectId,
+              this.seedDCName,
+              this.clusterId,
+              this.form.controls.size.value
+            )
+          );
+        })
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        (data: AzureZones) => {
           this.zones = data.zones.sort((a, b) => a.localeCompare(b));
 
           this.loadingZones = false;
           this.checkZoneState();
-        }, () => this.loadingZones = false);
+        },
+        () => (this.loadingZones = false)
+      );
   }
 
   ngOnChanges(changes: SimpleChanges): void {

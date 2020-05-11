@@ -11,7 +11,6 @@ import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
   selector: 'km-azure-node-options',
   templateUrl: './azure-node-options.component.html',
 })
-
 export class AzureNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
 
@@ -35,9 +34,9 @@ export class AzureNodeOptionsComponent implements OnInit, OnDestroy {
 
     this._wizardService.clusterSettingsFormViewChanged$
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe((data) => {
+      .subscribe(data => {
         this.hideOptional = data.hideOptional;
-    });
+      });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());

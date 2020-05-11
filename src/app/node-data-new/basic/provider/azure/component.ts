@@ -17,7 +17,10 @@ import {Observable} from 'rxjs';
 import {filter, switchMap, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
-import {AzureSizes, AzureZones} from '../../../../shared/entity/provider/azure/AzureSizeEntity';
+import {
+  AzureSizes,
+  AzureZones,
+} from '../../../../shared/entity/provider/azure/AzureSizeEntity';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
 
@@ -55,8 +58,7 @@ enum ZoneState {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
-export class AzureBasicNodeDataComponent extends BaseFormValidator 
+export class AzureBasicNodeDataComponent extends BaseFormValidator
   implements OnInit, OnDestroy {
   private _sizeChanges = new EventEmitter<boolean>();
   readonly Controls = Controls;
@@ -84,15 +86,16 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator
     this._presets.presetChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._clearSize.bind(this));
-    
+
     this._sizesObservable
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultSize.bind(this));
 
-    this._sizeChanges.pipe(filter(hasValue => hasValue))
-        .pipe(switchMap(_ => this._zonesObservable))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(this._setZones.bind(this));
+    this._sizeChanges
+      .pipe(filter(hasValue => hasValue))
+      .pipe(switchMap(_ => this._zonesObservable))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._setZones.bind(this));
   }
 
   ngOnDestroy(): void {
@@ -112,7 +115,9 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator
   getHint(control: Controls): string {
     switch (control) {
       case Controls.Zone:
-        return this._nodeDataService.nodeData.spec.cloud.azure.size !== '' ? '' : 'Please enter your Node Size first.';
+        return this._nodeDataService.nodeData.spec.cloud.azure.size !== ''
+          ? ''
+          : 'Please enter your Node Size first.';
     }
   }
 
@@ -124,7 +129,10 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator
   }
 
   private get _zonesObservable(): Observable<AzureZones> {
-    return this._nodeDataService.azure.zones(this._clearZone.bind(this), this._onZoneLoading.bind(this));
+    return this._nodeDataService.azure.zones(
+      this._clearZone.bind(this),
+      this._onZoneLoading.bind(this)
+    );
   }
 
   private _onSizeLoading(): void {
@@ -152,7 +160,6 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator
     this._cdr.detectChanges();
   }
 
-
   private _setDefaultSize(sizes: AzureSizes[]): void {
     this.sizes = sizes;
     this.selectedSize = '';
@@ -167,7 +174,9 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator
   }
 
   private _setZones(zones: AzureZones): void {
-    this.zones = zones.zones.sort((a, b) => a.localeCompare(b)).map(zone => ({name: zone}));
+    this.zones = zones.zones
+      .sort((a, b) => a.localeCompare(b))
+      .map(zone => ({name: zone}));
     this.zoneLabel = this.zones.length > 0 ? ZoneState.Ready : ZoneState.Empty;
     this._cdr.detectChanges();
   }
