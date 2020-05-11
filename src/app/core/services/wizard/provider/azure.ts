@@ -79,6 +79,7 @@ export class Azure extends Provider {
     this._setRequiredHeaders(
         Azure.Header.ClientID, Azure.Header.ClientSecret, Azure.Header.SubscriptionID, Azure.Header.TenantID,
         Azure.Header.Location, Azure.Header.SKUName);
+
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
