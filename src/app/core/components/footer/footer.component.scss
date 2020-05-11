@@ -16,8 +16,22 @@ footer {
   color: #fff;
 }
 
-.km-separator {
-  padding: 0 $baseline-grid;
+.content {
+  line-height: $font-size-card-title;
+  overflow: hidden;
+  white-space: nowrap;
+
+  & > div {
+    display: inline-block;
+    margin-right: 20px;
+  }
+
+  & > div::before {
+    content: '–';
+    display: inline-block;
+    width: 15px;
+    margin-left: -15px;
+  }
 }
 
 i {
