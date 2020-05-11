@@ -1,5 +1,18 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  forwardRef,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import {
+  FormBuilder,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  Validators,
+} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {filter, switchMap, takeUntil} from 'rxjs/operators';
 
@@ -29,16 +42,24 @@ enum ZoneState {
   selector: 'km-azure-basic-node-data',
   templateUrl: './template.html',
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AzureBasicNodeDataComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => AzureBasicNodeDataComponent), multi: true}
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AzureBasicNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => AzureBasicNodeDataComponent),
+      multi: true,
+    },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class AzureBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class AzureBasicNodeDataComponent extends BaseFormValidator 
+  implements OnInit, OnDestroy {
   private _sizeChanges = new EventEmitter<boolean>();
   readonly Controls = Controls;
-
   sizes: AzureSizes[] = [];
   zones: Array<{name: string}> = [];
   sizeLabel = SizeState.Empty;
@@ -46,8 +67,11 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   selectedSize = '';
 
   constructor(
-      private readonly _builder: FormBuilder, private readonly _presets: PresetsService,
-      private readonly _nodeDataService: NodeDataService, private readonly _cdr: ChangeDetectorRef) {
+    private readonly _builder: FormBuilder,
+    private readonly _presets: PresetsService,
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _cdr: ChangeDetectorRef
+  ) {
     super();
   }
 
@@ -57,8 +81,13 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
       [Controls.Zone]: this._builder.control(''),
     });
 
-    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(this._clearSize.bind(this));
-    this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
+    this._presets.presetChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._clearSize.bind(this));
+    
+    this._sizesObservable
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._setDefaultSize.bind(this));
 
     this._sizeChanges.pipe(filter(hasValue => hasValue))
         .pipe(switchMap(_ => this._zonesObservable))
@@ -88,7 +117,10 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   }
 
   private get _sizesObservable(): Observable<AzureSizes[]> {
-    return this._nodeDataService.azure.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
+    return this._nodeDataService.azure.flavors(
+      this._clearSize.bind(this),
+      this._onSizeLoading.bind(this)
+    );
   }
 
   private get _zonesObservable(): Observable<AzureZones> {

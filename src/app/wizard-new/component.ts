@@ -1,11 +1,22 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatStepper} from '@angular/material/stepper';
 import {Router} from '@angular/router';
 import {forkJoin, of, Subject} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
 
-import {ClusterService, DatacenterService, NotificationService, ProjectService} from '../core/services';
+import {
+  ClusterService,
+  DatacenterService,
+  NotificationService,
+  ProjectService,
+} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NodeDataService} from '../node-data-new/service/service';
 import {ClusterEntity} from '../shared/entity/ClusterEntity';
@@ -36,12 +47,17 @@ export class WizardComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
-      private readonly _formBuilder: FormBuilder, private readonly _projectService: ProjectService,
-      private readonly _wizard: WizardService, private readonly _notificationService: NotificationService,
-      private readonly _clusterModelService: ClusterModelService, private readonly _clusterService: ClusterService,
-      private readonly _nodeDataService: NodeDataService, private readonly _router: Router,
-      private readonly _datacenterService: DatacenterService,
-      private readonly _googleAnalyticsService: GoogleAnalyticsService) {}
+    private readonly _formBuilder: FormBuilder,
+    private readonly _projectService: ProjectService,
+    private readonly _wizard: WizardService,
+    private readonly _notificationService: NotificationService,
+    private readonly _clusterModelService: ClusterModelService,
+    private readonly _clusterService: ClusterService,
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _router: Router,
+    private readonly _datacenterService: DatacenterService,
+    private readonly _googleAnalyticsService: GoogleAnalyticsService
+  ) {}
 
   get steps(): WizardStep[] {
     return this._wizard.steps.filter(step => step.enabled);
@@ -56,7 +72,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   get last(): boolean {
-    return this._stepper.selectedIndex === (this.steps.length - 1);
+    return this._stepper.selectedIndex === this.steps.length - 1;
   }
 
   get invalid(): boolean {
@@ -69,15 +85,20 @@ export class WizardComponent implements OnInit, OnDestroy {
     this._wizard.stepper = this._stepper;
 
     this._initForm(this.steps);
-    this._wizard.stepsChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._initForm(this.steps));
-    this._stepper.selectionChange.pipe(takeUntil(this._unsubscribe)).subscribe(selection => {
-      if (selection.previouslySelectedIndex > selection.selectedIndex) {
-        selection.previouslySelectedStep.reset();
-      }
-    });
+    this._wizard.stepsChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this._initForm(this.steps));
+    this._stepper.selectionChange
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(selection => {
+        if (selection.previouslySelectedIndex > selection.selectedIndex) {
+          selection.previouslySelectedStep.reset();
+        }
+      });
 
-    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
-        .subscribe(project => this.project = project);
+    this._projectService.selectedProject
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(project => (this.project = project));
   }
 
   ngOnDestroy(): void {
@@ -90,46 +111,93 @@ export class WizardComponent implements OnInit, OnDestroy {
     this.creating = true;
     let createdCluster: ClusterEntity;
     let datacenter: DataCenterEntity;
-    const createCluster =
-        this._getCreateClusterModel(this._clusterModelService.cluster, this._nodeDataService.nodeData);
+    const createCluster = this._getCreateClusterModel(
+      this._clusterModelService.cluster,
+      this._nodeDataService.nodeData
+    );
 
-    this._datacenterService.getDataCenter(this._clusterModelService.datacenter)
-        .pipe(tap(dc => datacenter = dc))
-        .pipe(switchMap(_ => this._clusterService.create(this.project.id, datacenter.spec.seed, createCluster)))
-        .pipe(tap(cluster => {
-          this._notificationService.success(`Cluster ${createCluster.cluster.name} successfully created`);
-          this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
+    this._datacenterService
+      .getDataCenter(this._clusterModelService.datacenter)
+      .pipe(tap(dc => (datacenter = dc)))
+      .pipe(
+        switchMap(_ =>
+          this._clusterService.create(
+            this.project.id,
+            datacenter.spec.seed,
+            createCluster
+          )
+        )
+      )
+      .pipe(
+        tap(cluster => {
+          this._notificationService.success(
+            `Cluster ${createCluster.cluster.name} successfully created`
+          );
+          this._googleAnalyticsService.emitEvent(
+            'clusterCreation',
+            'clusterCreated'
+          );
           createdCluster = cluster;
-        }))
-        .pipe(switchMap(_ => this._clusterService.cluster(this.project.id, createdCluster.id, datacenter.spec.seed)))
-        .pipe(switchMap(() => {
+        })
+      )
+      .pipe(
+        switchMap(_ =>
+          this._clusterService.cluster(
+            this.project.id,
+            createdCluster.id,
+            datacenter.spec.seed
+          )
+        )
+      )
+      .pipe(
+        switchMap(() => {
           this.creating = false;
 
           if (this._clusterModelService.sshKeys.length > 0) {
-            return forkJoin(this._clusterModelService.sshKeys.map(
-                key => this._clusterService.createSSHKey(
-                    this.project.id, createdCluster.id, datacenter.spec.seed, key.id)));
+            return forkJoin(
+              this._clusterModelService.sshKeys.map(key =>
+                this._clusterService.createSSHKey(
+                  this.project.id,
+                  createdCluster.id,
+                  datacenter.spec.seed,
+                  key.id
+                )
+              )
+            );
           }
 
           return of([]);
-        }))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(
-            (keys: SSHKeyEntity[]) => {
-              this._router.navigate(
-                  [`/projects/${this.project.id}/dc/${datacenter.spec.seed}/clusters/${createdCluster.id}`]);
-              keys.forEach(
-                  key => this._notificationService.success(
-                      `SSH key ${key.name} was added successfully to cluster ${createCluster.cluster.name}`));
-            },
-            () => {
-              this._notificationService.error(`Could not create cluster ${createCluster.cluster.name}`);
-              this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
-              this.creating = false;
-            });
+        })
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        (keys: SSHKeyEntity[]) => {
+          this._router.navigate([
+            `/projects/${this.project.id}/dc/${datacenter.spec.seed}/clusters/${createdCluster.id}`,
+          ]);
+          keys.forEach(key =>
+            this._notificationService.success(
+              `SSH key ${key.name} was added successfully to cluster ${createCluster.cluster.name}`
+            )
+          );
+        },
+        () => {
+          this._notificationService.error(
+            `Could not create cluster ${createCluster.cluster.name}`
+          );
+          this._googleAnalyticsService.emitEvent(
+            'clusterCreation',
+            'clusterCreationFailed'
+          );
+          this.creating = false;
+        }
+      );
   }
 
-  private _getCreateClusterModel(cluster: ClusterEntity, nodeData: NodeData): CreateClusterModel {
+  private _getCreateClusterModel(
+    cluster: ClusterEntity,
+    nodeData: NodeData
+  ): CreateClusterModel {
     const keyNames: string[] = [];
     for (const key of this._clusterModelService.sshKeys) {
       keyNames.push(key.name);
@@ -151,13 +219,15 @@ export class WizardComponent implements OnInit, OnDestroy {
           replicas: nodeData.count,
           dynamicConfig: nodeData.dynamicConfig,
         },
-      }
+      },
     };
   }
 
   private _initForm(steps: WizardStep[]): void {
     const controls = {};
-    steps.forEach(step => controls[step.name] = this._formBuilder.control(''));
+    steps.forEach(
+      step => (controls[step.name] = this._formBuilder.control(''))
+    );
     this.form = this._formBuilder.group(controls);
   }
 }

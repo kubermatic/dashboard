@@ -1,4 +1,10 @@
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  Component,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {MatButtonToggleGroup} from '@angular/material/button-toggle';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
@@ -13,7 +19,11 @@ import {UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
+import {
+  AdminEntity,
+  AdminSettings,
+  ClusterTypeOptions,
+} from '../../shared/entity/AdminSettings';
 import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
 
@@ -32,15 +42,18 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   selectedDistro = [];
-  settings: AdminSettings;     // Local settings copy. User can edit it.
-  apiSettings: AdminSettings;  // Original settings from the API. Cannot be edited by the user.
+  settings: AdminSettings; // Local settings copy. User can edit it.
+  apiSettings: AdminSettings; // Original settings from the API. Cannot be edited by the user.
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 
   constructor(
-      private readonly _userService: UserService, private readonly _settingsService: SettingsService,
-      private readonly _historyService: HistoryService, private readonly _matDialog: MatDialog,
-      private readonly _notificationService: NotificationService) {}
+    private readonly _userService: UserService,
+    private readonly _settingsService: SettingsService,
+    private readonly _historyService: HistoryService,
+    private readonly _matDialog: MatDialog,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.admins;
@@ -49,34 +62,52 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._userService.loggedInUser.pipe(first()).subscribe(user => this.user = user);
+    this._userService.loggedInUser
+      .pipe(first())
+      .subscribe(user => (this.user = user));
 
-    this._settingsService.admins.pipe(takeUntil(this._unsubscribe)).subscribe(admins => {
-      this.admins = admins.sort((a, b) => a.email.localeCompare(b.email));
-      this.dataSource.data = this.admins;
-    });
+    this._settingsService.admins
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(admins => {
+        this.admins = admins.sort((a, b) => a.email.localeCompare(b.email));
+        this.dataSource.data = this.admins;
+      });
 
-    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      if (!_.isEqual(settings, this.apiSettings)) {
-        if (this.apiSettings && !_.isEqual(this.apiSettings, this._settingsService.defaultAdminSettings)) {
-          this._notificationService.success('Successfully applied settings update');
+    this._settingsService.adminSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => {
+        if (!_.isEqual(settings, this.apiSettings)) {
+          if (
+            this.apiSettings &&
+            !_.isEqual(
+              this.apiSettings,
+              this._settingsService.defaultAdminSettings
+            )
+          ) {
+            this._notificationService.success(
+              'Successfully applied settings update'
+            );
+          }
+          this._applySettings(settings);
         }
-        this._applySettings(settings);
-      }
-    });
+      });
 
     this._settingsChange
-        .pipe(
-            debounceTime(500),
-            switchMap(() => this._settingsService.patchAdminSettings(this._getPatch())),
-            takeUntil(this._unsubscribe),
-            )
-        .subscribe(_ => {});
+      .pipe(
+        debounceTime(500),
+        switchMap(() =>
+          this._settingsService.patchAdminSettings(this._getPatch())
+        ),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(_ => {});
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      this.paginator.pageSize = settings.itemsPerPage;
-      this.dataSource.paginator = this.paginator;  // Force refresh.
-    });
+    this._settingsService.userSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => {
+        this.paginator.pageSize = settings.itemsPerPage;
+        this.dataSource.paginator = this.paginator; // Force refresh.
+      });
   }
 
   ngOnChanges(): void {
@@ -114,8 +145,10 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private _getDistro(group: MatButtonToggleGroup): ClusterTypeOptions {
-    const isKubernetesSelected = group.value && group.value.indexOf('kubernetes') > -1;
-    const isOpenshiftSelected = group.value && group.value.indexOf('openshift') > -1;
+    const isKubernetesSelected =
+      group.value && group.value.indexOf('kubernetes') > -1;
+    const isOpenshiftSelected =
+      group.value && group.value.indexOf('openshift') > -1;
 
     if (isKubernetesSelected && isOpenshiftSelected) {
       return ClusterTypeOptions.All;
@@ -141,7 +174,9 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isLastDistro(group: MatButtonToggleGroup, distro: string): boolean {
-    return group.value && group.value.length <= 1 && group.value.indexOf(distro) > -1;
+    return (
+      group.value && group.value.length <= 1 && group.value.indexOf(distro) > -1
+    );
   }
 
   resetDefaults(): void {
@@ -158,9 +193,20 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isDisplayLinksEqual(): boolean {
-    return this.isEqual(this.settings.displayAPIDocs, this.apiSettings.displayAPIDocs) &&
-        this.isEqual(this.settings.displayDemoInfo, this.apiSettings.displayDemoInfo) &&
-        this.isEqual(this.settings.displayTermsOfService, this.apiSettings.displayTermsOfService);
+    return (
+      this.isEqual(
+        this.settings.displayAPIDocs,
+        this.apiSettings.displayAPIDocs
+      ) &&
+      this.isEqual(
+        this.settings.displayDemoInfo,
+        this.apiSettings.displayDemoInfo
+      ) &&
+      this.isEqual(
+        this.settings.displayTermsOfService,
+        this.apiSettings.displayTermsOfService
+      )
+    );
   }
 
   isDeleteAdminEnabled(admin: AdminEntity): boolean {
@@ -178,26 +224,36 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
       },
     };
 
-    this._matDialog.open(ConfirmationDialogComponent, dialogConfig)
-        .afterClosed()
-        .pipe(first())
-        .subscribe((isConfirmed: boolean) => {
-          if (isConfirmed) {
-            admin.isAdmin = false;
-            this._settingsService.setAdmin(admin).pipe(first()).subscribe(() => {
-              this._notificationService.success(`${admin.name} was deleted from admin group`);
+    this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(first())
+      .subscribe((isConfirmed: boolean) => {
+        if (isConfirmed) {
+          admin.isAdmin = false;
+          this._settingsService
+            .setAdmin(admin)
+            .pipe(first())
+            .subscribe(() => {
+              this._notificationService.success(
+                `${admin.name} was deleted from admin group`
+              );
               this._settingsService.refreshAdmins();
             });
-          }
-        });
+        }
+      });
   }
 
   addAdmin(): void {
-    this._matDialog.open(AddAdminDialogComponent).afterClosed().pipe(first()).subscribe((admin) => {
-      if (admin) {
-        this._settingsService.refreshAdmins();
-      }
-    });
+    this._matDialog
+      .open(AddAdminDialogComponent)
+      .afterClosed()
+      .pipe(first())
+      .subscribe(admin => {
+        if (admin) {
+          this._settingsService.refreshAdmins();
+        }
+      });
   }
 
   hasItems(): boolean {
@@ -205,6 +261,10 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isPaginatorVisible(): boolean {
-    return this.hasItems() && this.paginator && this.admins.length > this.paginator.pageSize;
+    return (
+      this.hasItems() &&
+      this.paginator &&
+      this.admins.length > this.paginator.pageSize
+    );
   }
 }

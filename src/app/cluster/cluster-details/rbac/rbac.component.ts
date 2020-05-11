@@ -8,7 +8,10 @@ import {NotificationService, RBACService} from '../../../core/services';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {SimpleBinding, SimpleClusterBinding} from '../../../shared/entity/RBACEntity';
+import {
+  SimpleBinding,
+  SimpleClusterBinding,
+} from '../../../shared/entity/RBACEntity';
 
 import {AddBindingComponent} from './add-binding/add-binding.component';
 
@@ -17,7 +20,6 @@ import {AddBindingComponent} from './add-binding/add-binding.component';
   templateUrl: './rbac.component.html',
   styleUrls: ['./rbac.component.scss'],
 })
-
 export class RBACComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
@@ -28,14 +30,27 @@ export class RBACComponent implements OnInit, OnDestroy {
 
   isShowRBAC = false;
   dataSourceCluster = new MatTableDataSource<SimpleClusterBinding>();
-  displayedColumnsCluster: string[] = ['kind', 'name', 'clusterRole', 'actions'];
+  displayedColumnsCluster: string[] = [
+    'kind',
+    'name',
+    'clusterRole',
+    'actions',
+  ];
   dataSourceNamespace = new MatTableDataSource<SimpleBinding>();
-  displayedColumnsNamespace: string[] = ['kind', 'name', 'clusterRole', 'namespace', 'actions'];
+  displayedColumnsNamespace: string[] = [
+    'kind',
+    'name',
+    'clusterRole',
+    'namespace',
+    'actions',
+  ];
   private _unsubscribe = new Subject<void>();
 
   constructor(
-      private readonly _rbacService: RBACService, private readonly _matDialog: MatDialog,
-      private readonly _notificationService: NotificationService) {}
+    private readonly _rbacService: RBACService,
+    private readonly _matDialog: MatDialog,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.dataSourceCluster.data = this.clusterBindings;
@@ -78,25 +93,39 @@ export class RBACComponent implements OnInit, OnDestroy {
       data: {
         title: 'Delete Binding',
         message: `Are you sure you want to permanently delete the ${element.kind.toLowerCase()} "<strong>${
-            element.name}</strong>" from binding?`,
+          element.name
+        }</strong>" from binding?`,
         confirmLabel: 'Delete',
       },
     };
 
-    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
+    const dialogRef = this._matDialog.open(
+      ConfirmationDialogComponent,
+      dialogConfig
+    );
 
-    dialogRef.afterClosed().pipe(first()).subscribe(isConfirmed => {
-      if (isConfirmed) {
-        this._rbacService
+    dialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe(isConfirmed => {
+        if (isConfirmed) {
+          this._rbacService
             .deleteClusterBinding(
-                this.cluster.id, this.datacenter.metadata.name, this.projectID, element.role, element.kind,
-                element.name)
+              this.cluster.id,
+              this.datacenter.metadata.name,
+              this.projectID,
+              element.role,
+              element.kind,
+              element.name
+            )
             .pipe(first())
             .subscribe(() => {
-              this._notificationService.success(`${element.kind} ${element.name} has been removed from binding`);
+              this._notificationService.success(
+                `${element.kind} ${element.name} has been removed from binding`
+              );
             });
-      }
-    });
+        }
+      });
   }
 
   deleteBinding(element: SimpleBinding, event: Event): void {
@@ -108,24 +137,39 @@ export class RBACComponent implements OnInit, OnDestroy {
       data: {
         title: 'Delete Binding',
         message: `Are you sure you want to permanently delete the ${element.kind.toLowerCase()} "<strong>${
-            element.name}</strong>" from binding?`,
+          element.name
+        }</strong>" from binding?`,
         confirmLabel: 'Delete',
       },
     };
 
-    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
+    const dialogRef = this._matDialog.open(
+      ConfirmationDialogComponent,
+      dialogConfig
+    );
 
-    dialogRef.afterClosed().pipe(first()).subscribe(isConfirmed => {
-      if (isConfirmed) {
-        this._rbacService
+    dialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe(isConfirmed => {
+        if (isConfirmed) {
+          this._rbacService
             .deleteBinding(
-                this.cluster.id, this.datacenter.metadata.name, this.projectID, element.role, element.namespace,
-                element.kind, element.name)
+              this.cluster.id,
+              this.datacenter.metadata.name,
+              this.projectID,
+              element.role,
+              element.namespace,
+              element.kind,
+              element.name
+            )
             .pipe(first())
             .subscribe(() => {
-              this._notificationService.success(`${element.kind} ${element.name} has been removed from binding`);
+              this._notificationService.success(
+                `${element.kind} ${element.name} has been removed from binding`
+              );
             });
-      }
-    });
+        }
+      });
   }
 }

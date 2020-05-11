@@ -1,5 +1,11 @@
 import {OverlayContainer} from '@angular/cdk/overlay';
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
 import {NavigationEnd, Router} from '@angular/router';
 import * as _ from 'lodash';
@@ -41,9 +47,14 @@ export class KubermaticComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(
-      private readonly _overlayContainer: OverlayContainer, private readonly _elementRef: ElementRef, public auth: Auth,
-      private appConfigService: AppConfigService, private readonly _settingsService: SettingsService,
-      public router: Router, public googleAnalyticsService: GoogleAnalyticsService) {
+    private readonly _overlayContainer: OverlayContainer,
+    private readonly _elementRef: ElementRef,
+    public auth: Auth,
+    private appConfigService: AppConfigService,
+    private readonly _settingsService: SettingsService,
+    public router: Router,
+    public googleAnalyticsService: GoogleAnalyticsService
+  ) {
     this._registerRouterWatch();
   }
 
@@ -52,30 +63,35 @@ export class KubermaticComponent implements OnInit, OnDestroy {
     this.version = this.appConfigService.getGitVersion();
     if (this.config.google_analytics_code) {
       this.googleAnalyticsService.activate(
-          this.config.google_analytics_code,
-          this.config.google_analytics_config,
-          this.router.url,
+        this.config.google_analytics_code,
+        this.config.google_analytics_config,
+        this.router.url
       );
     }
 
     this._applyTheme(this._theme);
     this._registerCustomCSS();
 
-    this._settingsService.customLinks.pipe(takeUntil(this._unsubscribe))
-        .subscribe(customLinks => this.customLinks = customLinks);
+    this._settingsService.customLinks
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(customLinks => (this.customLinks = customLinks));
 
-    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      if (!_.isEqual(this.settings, settings)) {
-        this.settings = settings;
-      }
-    });
+    this._settingsService.adminSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => {
+        if (!_.isEqual(this.settings, settings)) {
+          this.settings = settings;
+        }
+      });
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      if (!_.isEqual(this._theme, settings.selectedTheme)) {
-        this._applyTheme(settings.selectedTheme, this._theme);
-        this._theme = settings.selectedTheme;
-      }
-    });
+    this._settingsService.userSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => {
+        if (!_.isEqual(this._theme, settings.selectedTheme)) {
+          this._applyTheme(settings.selectedTheme, this._theme);
+          this._theme = settings.selectedTheme;
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -99,7 +115,7 @@ export class KubermaticComponent implements OnInit, OnDestroy {
   }
 
   private _registerRouterWatch(): void {
-    this.router.events.subscribe((event) => {
+    this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this._handleSidenav(event.urlAfterRedirects);
         this.googleAnalyticsService.sendPageView(event.urlAfterRedirects);

@@ -1,7 +1,13 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 
-import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '../../../../shared/entity/provider/gcp/GCP';
+import {
+  GCPDiskType,
+  GCPMachineSize,
+  GCPNetwork,
+  GCPSubnetwork,
+  GCPZone,
+} from '../../../../shared/entity/provider/gcp/GCP';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
@@ -15,7 +21,10 @@ export class GCP extends Provider {
 
   serviceAccount(serviceAccount: string): GCP {
     if (serviceAccount) {
-      this._headers = this._headers.set(GCP.Header.ServiceAccount, serviceAccount);
+      this._headers = this._headers.set(
+        GCP.Header.ServiceAccount,
+        serviceAccount
+      );
     }
     return this;
   }
@@ -61,7 +70,9 @@ export class GCP extends Provider {
       onLoadingCb();
     }
 
-    return this._http.get<GCPMachineSize[]>(this._url, {headers: this._headers});
+    return this._http.get<GCPMachineSize[]>(this._url, {
+      headers: this._headers,
+    });
   }
 
   zones(dc: string, onLoadingCb: () => void = null): Observable<GCPZone[]> {
@@ -90,7 +101,10 @@ export class GCP extends Provider {
     return this._http.get<GCPNetwork[]>(url, {headers: this._headers});
   }
 
-  subnetworks(dc: string, onLoadingCb: () => void = null): Observable<GCPSubnetwork[]> {
+  subnetworks(
+    dc: string,
+    onLoadingCb: () => void = null
+  ): Observable<GCPSubnetwork[]> {
     this._setRequiredHeaders(GCP.Header.ServiceAccount, GCP.Header.Network);
     if (!this._hasRequiredHeaders()) {
       return EMPTY;

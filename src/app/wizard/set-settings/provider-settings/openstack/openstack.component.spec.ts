@@ -1,23 +1,37 @@
 import {HttpClientModule} from '@angular/common/http';
 import {EventEmitter} from '@angular/core';
-import {async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  discardPeriodicTasks,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {AppConfigService} from '../../../../app-config.service';
 import {Auth, WizardService} from '../../../../core/services';
-import {ClusterProviderSettingsForm, ClusterSettingsFormView} from '../../../../shared/model/ClusterForm';
+import {
+  ClusterProviderSettingsForm,
+  ClusterSettingsFormView,
+} from '../../../../shared/model/ClusterForm';
 import {Config} from '../../../../shared/model/Config';
 import {SharedModule} from '../../../../shared/shared.module';
 import {fakeOpenstackCluster} from '../../../../testing/fake-data/cluster.fake';
 import {fakeOpenstackDatacenter} from '../../../../testing/fake-data/datacenter.fake';
-import {openstackNetworksFake, openstackSecurityGroupsFake, openstackSubnetIdsFake, openstackTenantsFake} from '../../../../testing/fake-data/wizard.fake';
+import {
+  openstackNetworksFake,
+  openstackSecurityGroupsFake,
+  openstackSubnetIdsFake,
+  openstackTenantsFake,
+} from '../../../../testing/fake-data/wizard.fake';
 import {asyncData} from '../../../../testing/services/api-mock.service';
 import {AuthMockService} from '../../../../testing/services/auth-mock.service';
 
 import {OpenstackClusterSettingsComponent} from './openstack.component';
-
 
 describe('OpenstackClusterSettingsComponent', () => {
   let fixture: ComponentFixture<OpenstackClusterSettingsComponent>;
@@ -30,28 +44,32 @@ describe('OpenstackClusterSettingsComponent', () => {
 
   beforeEach(async(() => {
     wizardMock = {
-      'provider': jest.fn(),
-      'getSelectedDatacenter': jest.fn(),
-      'changeClusterProviderSettings': jest.fn()
+      provider: jest.fn(),
+      getSelectedDatacenter: jest.fn(),
+      changeClusterProviderSettings: jest.fn(),
     };
 
     providerMock = {
-      'tenants': jest.fn(),
-      'networks': jest.fn(),
-      'securityGroups': jest.fn(),
-      'subnets': jest.fn(),
-      'username': jest.fn(),
-      'password': jest.fn(),
-      'domain': jest.fn(),
-      'datacenter': jest.fn(),
-      'tenant': jest.fn(),
-      'tenantID': jest.fn()
+      tenants: jest.fn(),
+      networks: jest.fn(),
+      securityGroups: jest.fn(),
+      subnets: jest.fn(),
+      username: jest.fn(),
+      password: jest.fn(),
+      domain: jest.fn(),
+      datacenter: jest.fn(),
+      tenant: jest.fn(),
+      tenantID: jest.fn(),
     };
 
     wizardMock.onCustomPresetsDisable = new EventEmitter<boolean>();
     wizardMock.onCustomPresetSelect = new EventEmitter<string>();
-    wizardMock.clusterSettingsFormViewChanged$ = new EventEmitter<ClusterSettingsFormView>();
-    wizardMock.clusterProviderSettingsFormChanges$ = new EventEmitter<ClusterProviderSettingsForm>();
+    wizardMock.clusterSettingsFormViewChanged$ = new EventEmitter<
+      ClusterSettingsFormView
+    >();
+    wizardMock.clusterProviderSettingsFormChanges$ = new EventEmitter<
+      ClusterProviderSettingsForm
+    >();
 
     providerMock.username.mockReturnValue(providerMock);
     providerMock.password.mockReturnValue(providerMock);
@@ -69,34 +87,32 @@ describe('OpenstackClusterSettingsComponent', () => {
     providerMock.networks.mockReturnValue(asyncData(openstackNetworksFake()));
 
     wizardMock.provider.mockReturnValue(providerMock);
-    providerMock.securityGroups.mockReturnValue(asyncData(openstackSecurityGroupsFake()));
+    providerMock.securityGroups.mockReturnValue(
+      asyncData(openstackSecurityGroupsFake())
+    );
 
     wizardMock.provider.mockReturnValue(providerMock);
     providerMock.subnets.mockReturnValue(asyncData(openstackSubnetIdsFake()));
 
-    const appConfigServiceMock = {'getConfig': jest.fn()};
+    const appConfigServiceMock = {getConfig: jest.fn()};
     config = {} as Config;
     appConfigServiceMock.getConfig.mockReturnValue(config);
 
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            BrowserAnimationsModule,
-            ReactiveFormsModule,
-            SharedModule,
-            HttpClientModule,
-          ],
-          declarations: [
-            OpenstackClusterSettingsComponent,
-          ],
-          providers: [
-            {provide: WizardService, useValue: wizardMock},
-            {provide: Auth, useClass: AuthMockService},
-            {provide: AppConfigService, useValue: appConfigServiceMock},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        SharedModule,
+        HttpClientModule,
+      ],
+      declarations: [OpenstackClusterSettingsComponent],
+      providers: [
+        {provide: WizardService, useValue: wizardMock},
+        {provide: Auth, useClass: AuthMockService},
+        {provide: AppConfigService, useValue: appConfigServiceMock},
+      ],
+    }).compileComponents();
   }));
 
   describe('Default config', () => {
@@ -136,7 +152,9 @@ describe('OpenstackClusterSettingsComponent', () => {
       wizardMock.getSelectedDatacenter.mockReturnValue(dc);
 
       fixture.detectChanges();
-      const el = fixture.debugElement.query(By.css('#km-floating-ip-pool-field'));
+      const el = fixture.debugElement.query(
+        By.css('#km-floating-ip-pool-field')
+      );
       expect(el).not.toBeNull();
       expect(component.form.controls.floatingIpPool.hasError('required'));
     });
@@ -150,48 +168,48 @@ describe('OpenstackClusterSettingsComponent', () => {
     });
 
     it('should load tenants', fakeAsync(() => {
-         component.form.controls.username.setValue('username');
-         component.form.controls.password.setValue('password');
-         component.form.controls.domain.setValue('domain');
-         fixture.detectChanges();
-         tick(1001);
-         expect(tenantsMock).toHaveBeenCalled();
-         expect(component.tenants).toEqual([
-           {
-             id: 'id789',
-             name: 'another-loodse-poc',
-           },
-           {
-             id: 'id123',
-             name: 'loodse-poc',
-           },
-           {
-             id: 'id456',
-             name: 'loodse-poc2',
-           },
-         ]);
-         discardPeriodicTasks();
-       }));
+      component.form.controls.username.setValue('username');
+      component.form.controls.password.setValue('password');
+      component.form.controls.domain.setValue('domain');
+      fixture.detectChanges();
+      tick(1001);
+      expect(tenantsMock).toHaveBeenCalled();
+      expect(component.tenants).toEqual([
+        {
+          id: 'id789',
+          name: 'another-loodse-poc',
+        },
+        {
+          id: 'id123',
+          name: 'loodse-poc',
+        },
+        {
+          id: 'id456',
+          name: 'loodse-poc2',
+        },
+      ]);
+      discardPeriodicTasks();
+    }));
 
     it('should load optional settings', fakeAsync(() => {
-         component.form.controls.username.setValue('username');
-         component.form.controls.password.setValue('password');
-         component.form.controls.domain.setValue('domain');
-         component.form.controls.tenant.setValue('loodse-poc');
-         component.floatingIpPools = [];
-         fixture.detectChanges();
-         tick(1001);
+      component.form.controls.username.setValue('username');
+      component.form.controls.password.setValue('password');
+      component.form.controls.domain.setValue('domain');
+      component.form.controls.tenant.setValue('loodse-poc');
+      component.floatingIpPools = [];
+      fixture.detectChanges();
+      tick(1001);
 
-         expect(networksMock).toHaveBeenCalled();
-         expect(component.floatingIpPools).toEqual([
-           {
-             id: 'net789',
-             name: 'ext-net',
-             external: true,
-           },
-         ]);
-         discardPeriodicTasks();
-       }));
+      expect(networksMock).toHaveBeenCalled();
+      expect(component.floatingIpPools).toEqual([
+        {
+          id: 'net789',
+          name: 'ext-net',
+          external: true,
+        },
+      ]);
+      discardPeriodicTasks();
+    }));
 
     it('should set correct tenant placeholder', () => {
       component.form.controls.username.setValue('');
@@ -211,41 +229,41 @@ describe('OpenstackClusterSettingsComponent', () => {
     });
 
     it('should disable Project field when Project ID is provided', fakeAsync(() => {
-         fixture.detectChanges();
+      fixture.detectChanges();
 
-         expect(component.form.controls.tenant.disabled).toBeTruthy();
-         expect(component.form.controls.tenantID.disabled).toBeTruthy();
+      expect(component.form.controls.tenant.disabled).toBeTruthy();
+      expect(component.form.controls.tenantID.disabled).toBeTruthy();
 
-         component.form.controls.username.setValue('username');
-         component.form.controls.password.setValue('password');
-         component.form.controls.domain.setValue('domain');
-         component.form.controls.tenantID.setValue('tenantID');
-         fixture.detectChanges();
-         tick(2001);
+      component.form.controls.username.setValue('username');
+      component.form.controls.password.setValue('password');
+      component.form.controls.domain.setValue('domain');
+      component.form.controls.tenantID.setValue('tenantID');
+      fixture.detectChanges();
+      tick(2001);
 
-         expect(component.form.controls.tenant.disabled).toBeTruthy();
-         expect(component.form.controls.tenantID.enabled).toBeTruthy();
-         discardPeriodicTasks();
-       }));
+      expect(component.form.controls.tenant.disabled).toBeTruthy();
+      expect(component.form.controls.tenantID.enabled).toBeTruthy();
+      discardPeriodicTasks();
+    }));
 
     it('should disable Project ID field when Project is provided', fakeAsync(() => {
-         fixture.detectChanges();
+      fixture.detectChanges();
 
-         expect(component.form.controls.tenant.disabled).toBeTruthy();
-         expect(component.form.controls.tenantID.disabled).toBeTruthy();
+      expect(component.form.controls.tenant.disabled).toBeTruthy();
+      expect(component.form.controls.tenantID.disabled).toBeTruthy();
 
-         component.form.controls.username.setValue('username');
-         component.form.controls.password.setValue('password');
-         component.form.controls.domain.setValue('domain');
-         component.form.controls.tenant.setValue('test-project');
-         component.tenants = [{id: 'test-id', name: 'test-project'}];
-         fixture.detectChanges();
-         tick(1001);
+      component.form.controls.username.setValue('username');
+      component.form.controls.password.setValue('password');
+      component.form.controls.domain.setValue('domain');
+      component.form.controls.tenant.setValue('test-project');
+      component.tenants = [{id: 'test-id', name: 'test-project'}];
+      fixture.detectChanges();
+      tick(1001);
 
-         expect(component.form.controls.tenant.enabled).toBeTruthy();
-         expect(component.form.controls.tenantID.disabled).toBeTruthy();
-         discardPeriodicTasks();
-       }));
+      expect(component.form.controls.tenant.enabled).toBeTruthy();
+      expect(component.form.controls.tenantID.disabled).toBeTruthy();
+      discardPeriodicTasks();
+    }));
   });
 
   describe('Config with DefaultUserName', () => {

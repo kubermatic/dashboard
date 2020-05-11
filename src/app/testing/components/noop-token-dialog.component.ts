@@ -6,8 +6,7 @@ import {TokenDialogComponent} from '../../serviceaccount/serviceaccount-token/to
 
 // NoopTokenDialogComponent is only a workaround to trigger change detection
 @Component({template: ''})
-export class NoopTokenDialogComponent {
-}
+export class NoopTokenDialogComponent {}
 
 const TEST_DIRECTIVES = [NoopTokenDialogComponent];
 
@@ -15,9 +14,6 @@ const TEST_DIRECTIVES = [NoopTokenDialogComponent];
   imports: [MatDialogModule, NoopAnimationsModule],
   exports: TEST_DIRECTIVES,
   declarations: TEST_DIRECTIVES,
-  entryComponents: [
-    TokenDialogComponent,
-  ],
+  entryComponents: [TokenDialogComponent],
 })
-export class TokenDialogTestModule {
-}
+export class TokenDialogTestModule {}

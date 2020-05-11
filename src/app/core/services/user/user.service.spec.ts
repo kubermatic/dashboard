@@ -39,6 +39,8 @@ describe('Service: UserService', () => {
   });
 
   it('should get user user group', () => {
-    expect(userService.userGroupConfig('owners')).toEqual(fakeUserGroupConfig().owners);
+    expect(userService.userGroupConfig('owners')).toEqual(
+      fakeUserGroupConfig().owners
+    );
   });
 });

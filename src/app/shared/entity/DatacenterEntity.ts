@@ -25,6 +25,7 @@ export class DatacenterSpec {
   location: string;
   provider: string;
   enforceAuditLogging: boolean;
+  enforcePodSecurityPolicy: boolean;
 
   digitalocean?: DigitaloceanDatacenterSpec;
   bringyourown?: BringYourOwnDatacenterSpec;
@@ -47,6 +48,12 @@ export class DatacenterOperatingSystemOptions {
   rhel?: string;
 }
 
-export function getDatacenterProvider(datacenter: DataCenterEntity): NodeProvider {
-  return Object.values(NodeProvider).find(provider => provider === datacenter.spec.provider) || NodeProvider.NONE;
+export function getDatacenterProvider(
+  datacenter: DataCenterEntity
+): NodeProvider {
+  return (
+    Object.values(NodeProvider).find(
+      provider => provider === datacenter.spec.provider
+    ) || NodeProvider.NONE
+  );
 }

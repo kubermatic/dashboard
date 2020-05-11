@@ -9,7 +9,10 @@ import {ApiService, ProjectService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
-import {ServiceAccountEntity, ServiceAccountTokenEntity} from '../../shared/entity/ServiceAccountEntity';
+import {
+  ServiceAccountEntity,
+  ServiceAccountTokenEntity,
+} from '../../shared/entity/ServiceAccountEntity';
 import {GroupConfig} from '../../shared/model/Config';
 
 import {AddServiceAccountTokenComponent} from './add-serviceaccount-token/add-serviceaccount-token.component';
@@ -21,7 +24,6 @@ import {TokenDialogComponent} from './token-dialog/token-dialog.component';
   templateUrl: './serviceaccount-token.component.html',
   styleUrls: ['./serviceaccount-token.component.scss'],
 })
-
 export class ServiceAccountTokenComponent implements OnInit {
   @Input() serviceaccount: ServiceAccountEntity;
   @Input() serviceaccountTokens: ServiceAccountTokenEntity[];
@@ -33,9 +35,13 @@ export class ServiceAccountTokenComponent implements OnInit {
   private _currentGroupConfig: GroupConfig;
 
   constructor(
-      private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
-      private readonly _userService: UserService, private readonly _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _matDialog: MatDialog, private readonly _notificationService: NotificationService) {}
+    private readonly _apiService: ApiService,
+    private readonly _projectService: ProjectService,
+    private readonly _userService: UserService,
+    private readonly _googleAnalyticsService: GoogleAnalyticsService,
+    private readonly _matDialog: MatDialog,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.dataSource.sort = this.sort;
@@ -43,21 +49,33 @@ export class ServiceAccountTokenComponent implements OnInit {
     this.sort.direction = 'asc';
 
     this._projectService.selectedProject
-        .pipe(switchMap(project => {
+      .pipe(
+        switchMap(project => {
           this._selectedProject = project;
           return this._userService.currentUserGroup(project.id);
-        }))
-        .pipe(first())
-        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
+        })
+      )
+      .pipe(first())
+      .subscribe(
+        userGroup =>
+          (this._currentGroupConfig = this._userService.userGroupConfig(
+            userGroup
+          ))
+      );
   }
 
   getDataSource(): MatTableDataSource<ServiceAccountTokenEntity> {
-    this.dataSource.data = !!this.serviceaccountTokens ? this.serviceaccountTokens : [];
+    this.dataSource.data = this.serviceaccountTokens
+      ? this.serviceaccountTokens
+      : [];
     return this.dataSource;
   }
 
   isEnabled(action: string): boolean {
-    return !this._currentGroupConfig || this._currentGroupConfig.serviceaccountToken[action];
+    return (
+      !this._currentGroupConfig ||
+      this._currentGroupConfig.serviceaccountToken[action]
+    );
   }
 
   addServiceAccountToken(): void {
@@ -72,26 +90,44 @@ export class ServiceAccountTokenComponent implements OnInit {
       hasBackdrop: true,
       data: {
         title: 'Regenerate Token',
-        message: `Regenerate token "<strong>${token.name}</strong>" for service account "<strong>${
-            this.serviceaccount.name}</strong>"?`,
+        message: `Regenerate token "<strong>${token.name}</strong>" for service account "<strong>${this.serviceaccount.name}</strong>"?`,
         confirmLabel: 'Regenerate',
       },
     };
 
-    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
-    this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'regenerateServiceAccountTokenOpened');
+    const dialogRef = this._matDialog.open(
+      ConfirmationDialogComponent,
+      dialogConfig
+    );
+    this._googleAnalyticsService.emitEvent(
+      'serviceAccountTokenOverview',
+      'regenerateServiceAccountTokenOpened'
+    );
 
-    dialogRef.afterClosed().pipe(first()).subscribe((isConfirmed: boolean) => {
-      if (isConfirmed) {
-        this._apiService.regenerateServiceAccountToken(this._selectedProject.id, this.serviceaccount, token)
+    dialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe((isConfirmed: boolean) => {
+        if (isConfirmed) {
+          this._apiService
+            .regenerateServiceAccountToken(
+              this._selectedProject.id,
+              this.serviceaccount,
+              token
+            )
             .pipe(first())
-            .subscribe((token) => {
+            .subscribe(token => {
               this.openTokenDialog(token);
-              this._notificationService.success(`Token ${token.name} has been regenerated.`);
-              this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenRegenerated');
+              this._notificationService.success(
+                `Token ${token.name} has been regenerated.`
+              );
+              this._googleAnalyticsService.emitEvent(
+                'serviceAccountTokenOverview',
+                'ServiceAccountTokenRegenerated'
+              );
             });
-      }
-    });
+        }
+      });
   }
 
   editServiceAccountToken(token: ServiceAccountTokenEntity): void {
@@ -107,26 +143,43 @@ export class ServiceAccountTokenComponent implements OnInit {
       hasBackdrop: true,
       data: {
         title: 'Delete Token',
-        message: `Delete token "<strong>${token.name}</strong>" from service account "<strong>${
-            this.serviceaccount.name}</strong>" permanently?`,
+        message: `Delete token "<strong>${token.name}</strong>" from service account "<strong>${this.serviceaccount.name}</strong>" permanently?`,
         confirmLabel: 'Delete',
       },
     };
 
-    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
-    this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'deleteServiceAccountTokenOpened');
+    const dialogRef = this._matDialog.open(
+      ConfirmationDialogComponent,
+      dialogConfig
+    );
+    this._googleAnalyticsService.emitEvent(
+      'serviceAccountTokenOverview',
+      'deleteServiceAccountTokenOpened'
+    );
 
-    dialogRef.afterClosed().pipe(first()).subscribe((isConfirmed: boolean) => {
-      if (isConfirmed) {
-        this._apiService.deleteServiceAccountToken(this._selectedProject.id, this.serviceaccount, token)
+    dialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe((isConfirmed: boolean) => {
+        if (isConfirmed) {
+          this._apiService
+            .deleteServiceAccountToken(
+              this._selectedProject.id,
+              this.serviceaccount,
+              token
+            )
             .pipe(first())
             .subscribe(() => {
               this._notificationService.success(
-                  `Token ${token.name} has been removed from Service Account ${this.serviceaccount.name}`);
-              this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenDeleted');
+                `Token ${token.name} has been removed from Service Account ${this.serviceaccount.name}`
+              );
+              this._googleAnalyticsService.emitEvent(
+                'serviceAccountTokenOverview',
+                'ServiceAccountTokenDeleted'
+              );
             });
-      }
-    });
+        }
+      });
   }
 
   openTokenDialog(token: ServiceAccountTokenEntity): void {

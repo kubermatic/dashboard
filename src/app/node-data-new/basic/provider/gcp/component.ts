@@ -1,11 +1,29 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  forwardRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {
+  FormBuilder,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  Validators,
+} from '@angular/forms';
 import {merge, Observable} from 'rxjs';
 import {filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
 import {GCPNodeSpec} from '../../../../shared/entity/node/GCPNodeSpec';
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
-import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../../shared/entity/provider/gcp/GCP';
+import {
+  GCPDiskType,
+  GCPMachineSize,
+  GCPZone,
+} from '../../../../shared/entity/provider/gcp/GCP';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
@@ -21,7 +39,7 @@ enum Controls {
 enum ZoneState {
   Ready = 'Zone',
   Loading = 'Loading...',
-  Empty = 'No Zones Available'
+  Empty = 'No Zones Available',
 }
 
 enum DiskTypeState {
@@ -40,12 +58,21 @@ enum MachineSizeState {
   selector: 'km-gcp-basic-node-data',
   templateUrl: './template.html',
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => GCPBasicNodeDataComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => GCPBasicNodeDataComponent), multi: true}
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => GCPBasicNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => GCPBasicNodeDataComponent),
+      multi: true,
+    },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class GCPBasicNodeDataComponent extends BaseFormValidator
+  implements OnInit, OnDestroy {
   private _zoneChanges = new EventEmitter<boolean>();
 
   readonly Controls = Controls;
@@ -61,12 +88,16 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   diskTypeLabel = DiskTypeState.Empty;
 
   @ViewChild('zonesCombobox') private _zonesCombobox: FilteredComboboxComponent;
-  @ViewChild('diskTypesCombobox') private _diskTypesCombobox: FilteredComboboxComponent;
-  @ViewChild('machineSizesCombobox') private _machineSizesCombobox: FilteredComboboxComponent;
+  @ViewChild('diskTypesCombobox')
+  private _diskTypesCombobox: FilteredComboboxComponent;
+  @ViewChild('machineSizesCombobox')
+  private _machineSizesCombobox: FilteredComboboxComponent;
 
   constructor(
-      private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService,
-      private readonly _cdr: ChangeDetectorRef) {
+    private readonly _builder: FormBuilder,
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _cdr: ChangeDetectorRef
+  ) {
     super();
   }
 
@@ -80,21 +111,24 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
     });
 
     this._nodeDataService.nodeData = this._getNodeData();
-    this._zonesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultZone.bind(this));
+    this._zonesObservable
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._setDefaultZone.bind(this));
 
-    this._zoneChanges.pipe(filter(hasValue => hasValue))
-        .pipe(switchMap(_ => this._diskTypesObservable))
-        .pipe(tap(this._setDefaultDiskType.bind(this)))
-        .pipe(switchMap(_ => this._machineSizesObservable))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(this._setDefaultMachineSize.bind(this));
+    this._zoneChanges
+      .pipe(filter(hasValue => hasValue))
+      .pipe(switchMap(_ => this._diskTypesObservable))
+      .pipe(tap(this._setDefaultDiskType.bind(this)))
+      .pipe(switchMap(_ => this._machineSizesObservable))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._setDefaultMachineSize.bind(this));
 
     merge(
-        this.form.get(Controls.DiskSize).valueChanges,
-        this.form.get(Controls.Preemptible).valueChanges,
-        )
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._nodeDataService.nodeData = this._getNodeData());
+      this.form.get(Controls.DiskSize).valueChanges,
+      this.form.get(Controls.Preemptible).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
 
   ngOnDestroy(): void {
@@ -116,8 +150,13 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   private get _zonesObservable(): Observable<GCPZone[]> {
-    return this._nodeDataService.gcp.zones(this._clearZone.bind(this), this._onZoneLoading.bind(this))
-        .pipe(map((zones: GCPZone[]) => zones.sort((a, b) => a.name.localeCompare(b.name))));
+    return this._nodeDataService.gcp
+      .zones(this._clearZone.bind(this), this._onZoneLoading.bind(this))
+      .pipe(
+        map((zones: GCPZone[]) =>
+          zones.sort((a, b) => a.name.localeCompare(b.name))
+        )
+      );
   }
 
   private _clearZone(): void {
@@ -144,8 +183,16 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   private get _diskTypesObservable(): Observable<GCPDiskType[]> {
-    return this._nodeDataService.gcp.diskTypes(this._clearDiskTypes.bind(this), this._onDiskTypeLoading.bind(this))
-        .pipe(map((types: GCPDiskType[]) => types.sort((a, b) => a.name.localeCompare(b.name))));
+    return this._nodeDataService.gcp
+      .diskTypes(
+        this._clearDiskTypes.bind(this),
+        this._onDiskTypeLoading.bind(this)
+      )
+      .pipe(
+        map((types: GCPDiskType[]) =>
+          types.sort((a, b) => a.name.localeCompare(b.name))
+        )
+      );
   }
 
   private _clearDiskTypes(): void {
@@ -173,8 +220,15 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   private get _machineSizesObservable(): Observable<GCPMachineSize[]> {
     return this._nodeDataService.gcp
-        .machineSize(this._clearMachineSize.bind(this), this._onMachineSizeLoading.bind(this))
-        .pipe(map((sizes: GCPMachineSize[]) => sizes.sort((a, b) => a.name.localeCompare(b.name))));
+      .machineSize(
+        this._clearMachineSize.bind(this),
+        this._onMachineSizeLoading.bind(this)
+      )
+      .pipe(
+        map((sizes: GCPMachineSize[]) =>
+          sizes.sort((a, b) => a.name.localeCompare(b.name))
+        )
+      );
   }
 
   private _clearMachineSize(): void {

@@ -7,7 +7,11 @@ import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../../app-config.service';
-import {ClusterService, NotificationService, UserService} from '../../../core/services';
+import {
+  ClusterService,
+  NotificationService,
+  UserService,
+} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
@@ -15,7 +19,10 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {GroupConfig} from '../../../shared/model/Config';
-import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
+import {
+  MemberUtils,
+  Permission,
+} from '../../../shared/utils/member-utils/member-utils';
 
 import {AddClusterSSHKeysComponent} from './add-cluster-sshkeys/add-cluster-sshkeys.component';
 
@@ -24,7 +31,6 @@ import {AddClusterSSHKeysComponent} from './add-cluster-sshkeys/add-cluster-sshk
   templateUrl: './edit-sshkeys.component.html',
   styleUrls: ['./edit-sshkeys.component.scss'],
 })
-
 export class EditSSHKeysComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
@@ -41,34 +47,52 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   private _sshKeysUpdate: Subject<any> = new Subject();
 
   constructor(
-      private readonly _userService: UserService,
-      private readonly _appConfig: AppConfigService,
-      private readonly _dialog: MatDialog,
-      private readonly _clusterService: ClusterService,
-      private readonly _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _notificationService: NotificationService,
+    private readonly _userService: UserService,
+    private readonly _appConfig: AppConfigService,
+    private readonly _dialog: MatDialog,
+    private readonly _clusterService: ClusterService,
+    private readonly _googleAnalyticsService: GoogleAnalyticsService,
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
-    this._userService.loggedInUser.pipe(first()).subscribe(user => this._user = user);
+    this._userService.loggedInUser
+      .pipe(first())
+      .subscribe(user => (this._user = user));
 
-    this._userService.currentUserGroup(this.projectID)
-        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
+    this._userService
+      .currentUserGroup(this.projectID)
+      .subscribe(
+        userGroup =>
+          (this._currentGroupConfig = this._userService.userGroupConfig(
+            userGroup
+          ))
+      );
 
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    merge(timer(0, 5 * this._appConfig.getRefreshTimeBase()), this._sshKeysUpdate)
-        .pipe(switchMap(
-            () => this.projectID ?
-                this._clusterService.sshKeys(this.projectID, this.cluster.id, this.datacenter.metadata.name) :
-                EMPTY))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(sshkeys => {
-          this.sshKeys = sshkeys;
-          this.loading = false;
-        });
+    merge(
+      timer(0, 5 * this._appConfig.getRefreshTimeBase()),
+      this._sshKeysUpdate
+    )
+      .pipe(
+        switchMap(() =>
+          this.projectID
+            ? this._clusterService.sshKeys(
+                this.projectID,
+                this.cluster.id,
+                this.datacenter.metadata.name
+              )
+            : EMPTY
+        )
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(sshkeys => {
+        this.sshKeys = sshkeys;
+        this.loading = false;
+      });
   }
 
   ngOnDestroy(): void {
@@ -86,7 +110,12 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   canAdd(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshKeys', Permission.Create);
+    return MemberUtils.hasPermission(
+      this._user,
+      this._currentGroupConfig,
+      'sshKeys',
+      Permission.Create
+    );
   }
 
   addSshKey(): void {
@@ -96,16 +125,24 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.datacenter = this.datacenter;
     dialogRef.componentInstance.sshKeys = this.sshKeys;
 
-    dialogRef.afterClosed().pipe(first()).subscribe((sshkey: SSHKeyEntity) => {
-      if (sshkey) {
-        this.sshKeys.push(sshkey);
-        this._sshKeysUpdate.next();
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe((sshkey: SSHKeyEntity) => {
+        if (sshkey) {
+          this.sshKeys.push(sshkey);
+          this._sshKeysUpdate.next();
+        }
+      });
   }
 
   canDelete(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshKeys', Permission.Delete);
+    return MemberUtils.hasPermission(
+      this._user,
+      this._currentGroupConfig,
+      'sshKeys',
+      Permission.Delete
+    );
   }
 
   deleteSshKey(sshKey: SSHKeyEntity): void {
@@ -120,17 +157,33 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
       },
     };
 
-    const dialogRef = this._dialog.open(ConfirmationDialogComponent, dialogConfig);
-    this._googleAnalyticsService.emitEvent('clusterOverview', 'deleteSshKeyOpened');
+    const dialogRef = this._dialog.open(
+      ConfirmationDialogComponent,
+      dialogConfig
+    );
+    this._googleAnalyticsService.emitEvent(
+      'clusterOverview',
+      'deleteSshKeyOpened'
+    );
 
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
-        this._clusterService.deleteSSHKey(this.projectID, this.cluster.id, this.datacenter.metadata.name, sshKey.id)
-            .subscribe(() => {
-              this._notificationService.success(
-                  `SSH key ${sshKey.name} has been removed from cluster ${this.cluster.name}`);
-              this._googleAnalyticsService.emitEvent('clusterOverview', 'SshKeyDeleted');
-            });
+        this._clusterService
+          .deleteSSHKey(
+            this.projectID,
+            this.cluster.id,
+            this.datacenter.metadata.name,
+            sshKey.id
+          )
+          .subscribe(() => {
+            this._notificationService.success(
+              `SSH key ${sshKey.name} has been removed from cluster ${this.cluster.name}`
+            );
+            this._googleAnalyticsService.emitEvent(
+              'clusterOverview',
+              'SshKeyDeleted'
+            );
+          });
       }
     });
   }

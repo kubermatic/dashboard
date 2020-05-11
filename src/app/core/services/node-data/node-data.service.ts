@@ -1,6 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
-import {NodeData, NodeOperatingSystemData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
+import {
+  NodeData,
+  NodeOperatingSystemData,
+  NodeProviderData,
+} from '../../../shared/model/NodeSpecChange';
 
 @Injectable()
 export class NodeDataService {

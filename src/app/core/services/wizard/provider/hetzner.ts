@@ -37,5 +37,7 @@ export class Hetzner extends Provider {
 }
 
 export namespace Hetzner {
-  export enum Header {Token = 'HetznerToken'}
+  export enum Header {
+    Token = 'HetznerToken',
+  }
 }

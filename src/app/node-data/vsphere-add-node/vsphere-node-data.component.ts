@@ -10,7 +10,6 @@ import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
   selector: 'km-vsphere-node-data',
   templateUrl: './vsphere-node-data.component.html',
 })
-
 export class VSphereNodeDataComponent implements OnInit, OnDestroy {
   @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
@@ -19,23 +18,18 @@ export class VSphereNodeDataComponent implements OnInit, OnDestroy {
   form: FormGroup;
   private _unsubscribe = new Subject<void>();
 
-
   constructor(private _nodeDataService: NodeDataService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      cpu: new FormControl(
-          this.nodeData.spec.cloud.vsphere.cpus,
-          [
-            Validators.required,
-            Validators.min(1),
-          ]),
-      memory: new FormControl(
-          this.nodeData.spec.cloud.vsphere.memory,
-          [
-            Validators.required,
-            Validators.min(512),
-          ]),
+      cpu: new FormControl(this.nodeData.spec.cloud.vsphere.cpus, [
+        Validators.required,
+        Validators.min(1),
+      ]),
+      memory: new FormControl(this.nodeData.spec.cloud.vsphere.memory, [
+        Validators.required,
+        Validators.min(512),
+      ]),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {

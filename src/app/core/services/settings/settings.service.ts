@@ -1,12 +1,32 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, iif, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, delay, map, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
+import {
+  BehaviorSubject,
+  iif,
+  merge,
+  Observable,
+  of,
+  Subject,
+  timer,
+} from 'rxjs';
+import {
+  catchError,
+  delay,
+  map,
+  retryWhen,
+  shareReplay,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 import {webSocket} from 'rxjs/webSocket';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
-import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../../shared/entity/AdminSettings';
+import {
+  AdminEntity,
+  AdminSettings,
+  ClusterTypeOptions,
+} from '../../../shared/entity/AdminSettings';
 import {Theme, UserSettings} from '../../../shared/entity/MemberEntity';
 import {CustomLink} from '../../../shared/utils/custom-link-utils/custom-link';
 import {Auth} from '../auth/auth.service';
@@ -42,17 +62,24 @@ export class SettingsService {
   private readonly wsRoot = environment.wsRoot;
   private _userSettings$: Observable<UserSettings>;
   private _userSettingsRefresh$ = new Subject();
-  private readonly _adminSettings$ = new BehaviorSubject(DEFAULT_ADMIN_SETTINGS);
+  private readonly _adminSettings$ = new BehaviorSubject(
+    DEFAULT_ADMIN_SETTINGS
+  );
   private _adminSettingsWatch$: Observable<AdminSettings>;
   private _admins$: Observable<AdminEntity[]>;
   private _adminsRefresh$ = new Subject();
   private _customLinks$: Observable<CustomLink[]>;
   private _customLinksRefresh$ = new Subject();
-  private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * 5);
+  private _refreshTimer$ = timer(
+    0,
+    this._appConfigService.getRefreshTimeBase() * 5
+  );
 
   constructor(
-      private readonly _httpClient: HttpClient, private readonly _appConfigService: AppConfigService,
-      private readonly _auth: Auth) {}
+    private readonly _httpClient: HttpClient,
+    private readonly _appConfigService: AppConfigService,
+    private readonly _auth: Auth
+  ) {}
 
   get defaultUserSettings(): UserSettings {
     return DEFAULT_USER_SETTINGS;
@@ -60,12 +87,21 @@ export class SettingsService {
 
   get userSettings(): Observable<UserSettings> {
     if (!this._userSettings$) {
-      this._userSettings$ =
-          merge(this._refreshTimer$, this._userSettingsRefresh$)
-              .pipe(switchMap(
-                  () => iif(() => this._auth.authenticated(), this._getUserSettings(true), of(DEFAULT_USER_SETTINGS))))
-              .pipe(map(settings => this._defaultUserSettings(settings)))
-              .pipe(shareReplay({refCount: true, bufferSize: 1}));
+      this._userSettings$ = merge(
+        this._refreshTimer$,
+        this._userSettingsRefresh$
+      )
+        .pipe(
+          switchMap(() =>
+            iif(
+              () => this._auth.authenticated(),
+              this._getUserSettings(true),
+              of(DEFAULT_USER_SETTINGS)
+            )
+          )
+        )
+        .pipe(map(settings => this._defaultUserSettings(settings)))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this._userSettings$;
   }
@@ -73,7 +109,9 @@ export class SettingsService {
   private _getUserSettings(defaultOnError = false): Observable<UserSettings> {
     const url = `${this.restRoot}/me/settings`;
     const observable = this._httpClient.get<UserSettings>(url);
-    return defaultOnError ? observable.pipe(catchError(() => of(DEFAULT_USER_SETTINGS))) : observable;
+    return defaultOnError
+      ? observable.pipe(catchError(() => of(DEFAULT_USER_SETTINGS)))
+      : observable;
   }
 
   private _defaultUserSettings(settings: UserSettings): UserSettings {
@@ -103,15 +141,29 @@ export class SettingsService {
     // will run in the background if connection will fail. Subscription to the API should happen only once.
     // Behavior subject is used internally to always emit last value when subscription happens.
     if (!this._adminSettingsWatch$) {
-      const webSocket$ =
-          webSocket<AdminSettings>(`${this.wsRoot}/admin/settings`)
-              .asObservable()
-              .pipe(retryWhen(
-                  // Display error in the console for debugging purposes, otherwise it would be ignored.
-                  // tslint:disable-next-line:no-console
-                  errors => errors.pipe(tap(console.debug), delay(this._appConfigService.getRefreshTimeBase() * 3))));
-      this._adminSettingsWatch$ = iif(() => this._auth.authenticated(), webSocket$, of(DEFAULT_ADMIN_SETTINGS));
-      this._adminSettingsWatch$.subscribe(settings => this._adminSettings$.next(this._defaultAdminSettings(settings)));
+      const webSocket$ = webSocket<AdminSettings>(
+        `${this.wsRoot}/admin/settings`
+      )
+        .asObservable()
+        .pipe(
+          retryWhen(
+            // Display error in the console for debugging purposes, otherwise it would be ignored.
+            errors =>
+              errors.pipe(
+                // eslint-disable-next-line no-console
+                tap(console.debug),
+                delay(this._appConfigService.getRefreshTimeBase() * 3)
+              )
+          )
+        );
+      this._adminSettingsWatch$ = iif(
+        () => this._auth.authenticated(),
+        webSocket$,
+        of(DEFAULT_ADMIN_SETTINGS)
+      );
+      this._adminSettingsWatch$.subscribe(settings =>
+        this._adminSettings$.next(this._defaultAdminSettings(settings))
+      );
     }
 
     return this._adminSettings$;
@@ -127,7 +179,10 @@ export class SettingsService {
     }
 
     Object.keys(DEFAULT_ADMIN_SETTINGS).forEach(key => {
-      settings[key] = settings[key] === undefined ? DEFAULT_ADMIN_SETTINGS[key] : settings[key];
+      settings[key] =
+        settings[key] === undefined
+          ? DEFAULT_ADMIN_SETTINGS[key]
+          : settings[key];
     });
 
     return settings;
@@ -141,15 +196,17 @@ export class SettingsService {
   get customLinks(): Observable<CustomLink[]> {
     if (!this._customLinks$) {
       this._customLinks$ = merge(this._refreshTimer$, this._customLinksRefresh$)
-                               .pipe(switchMap(() => this.getCustomLinks_()))
-                               .pipe(shareReplay({refCount: true, bufferSize: 1}));
+        .pipe(switchMap(() => this.getCustomLinks_()))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this._customLinks$;
   }
 
   private getCustomLinks_(): Observable<CustomLink[]> {
     const url = `${this.restRoot}/admin/settings/customlinks`;
-    return this._httpClient.get<CustomLink[]>(url).pipe(catchError(() => of([])));
+    return this._httpClient
+      .get<CustomLink[]>(url)
+      .pipe(catchError(() => of([])));
   }
 
   refreshCustomLinks(): void {
@@ -159,8 +216,8 @@ export class SettingsService {
   get admins(): Observable<AdminEntity[]> {
     if (!this._admins$) {
       this._admins$ = merge(this._refreshTimer$, this._adminsRefresh$)
-                          .pipe(switchMap(() => this._getAdmins()))
-                          .pipe(shareReplay({refCount: true, bufferSize: 1}));
+        .pipe(switchMap(() => this._getAdmins()))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this._admins$;
   }

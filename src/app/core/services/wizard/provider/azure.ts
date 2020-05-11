@@ -9,10 +9,10 @@ export class Azure extends Provider {
     super(http, provider);
 
     this._setRequiredHeaders(
-        Azure.Header.ClientID,
-        Azure.Header.ClientSecret,
-        Azure.Header.SubscriptionID,
-        Azure.Header.TenantID,
+      Azure.Header.ClientID,
+      Azure.Header.ClientSecret,
+      Azure.Header.SubscriptionID,
+      Azure.Header.TenantID
     );
   }
 
@@ -25,14 +25,20 @@ export class Azure extends Provider {
 
   clientSecret(clientSecret: string): Azure {
     if (clientSecret) {
-      this._headers = this._headers.set(Azure.Header.ClientSecret, clientSecret);
+      this._headers = this._headers.set(
+        Azure.Header.ClientSecret,
+        clientSecret
+      );
     }
     return this;
   }
 
   subscriptionID(subscriptionID: string): Azure {
     if (subscriptionID) {
-      this._headers = this._headers.set(Azure.Header.SubscriptionID, subscriptionID);
+      this._headers = this._headers.set(
+        Azure.Header.SubscriptionID,
+        subscriptionID
+      );
     }
     return this;
   }

@@ -13,30 +13,28 @@ describe('GCPProviderOptionsComponent', () => {
   let component: GCPProviderOptionsComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            BrowserAnimationsModule,
-            HttpClientModule,
-            ReactiveFormsModule,
-            SharedModule,
-          ],
-          declarations: [
-            GCPProviderOptionsComponent,
-          ],
-          providers: [
-            WizardService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        SharedModule,
+      ],
+      declarations: [GCPProviderOptionsComponent],
+      providers: [WizardService],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GCPProviderOptionsComponent);
     component = fixture.componentInstance;
     component.cluster = fakeGCPCluster();
-    component.cluster.spec.cloud.gcp = {serviceAccount: '', network: '', subnetwork: ''};
+    component.cluster.spec.cloud.gcp = {
+      serviceAccount: '',
+      network: '',
+      subnetwork: '',
+    };
     fixture.detectChanges();
   });
 

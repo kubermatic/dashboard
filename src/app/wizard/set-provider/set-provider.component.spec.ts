@@ -1,5 +1,11 @@
 import {HttpClientModule} from '@angular/common/http';
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {BrowserModule} from '@angular/platform-browser';
@@ -17,28 +23,24 @@ describe('SetProviderComponent', () => {
   let component: SetProviderComponent;
 
   beforeEach(async(() => {
-    const dcMock = {'getDataCenters': jest.fn()};
+    const dcMock = {getDataCenters: jest.fn()};
     dcMock.getDataCenters.mockReturnValue(asyncData(fakeNodeDatacenters()));
 
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            BrowserAnimationsModule,
-            ReactiveFormsModule,
-            SharedModule,
-            MatButtonToggleModule,
-            HttpClientModule,
-          ],
-          declarations: [
-            SetProviderComponent,
-          ],
-          providers: [
-            {provide: DatacenterService, useValue: dcMock},
-            WizardService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        SharedModule,
+        MatButtonToggleModule,
+        HttpClientModule,
+      ],
+      declarations: [SetProviderComponent],
+      providers: [
+        {provide: DatacenterService, useValue: dcMock},
+        WizardService,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -47,33 +49,35 @@ describe('SetProviderComponent', () => {
   });
 
   it('should create the set-provider cmp', fakeAsync(() => {
-       expect(component).toBeTruthy();
-       component.cluster = fakeDigitaloceanCluster();
-       fixture.detectChanges();
-       tick();
-     }));
+    expect(component).toBeTruthy();
+    component.cluster = fakeDigitaloceanCluster();
+    fixture.detectChanges();
+    tick();
+  }));
 
   it('should get provider from cluster', fakeAsync(() => {
-       component.cluster = fakeDigitaloceanCluster();
-       fixture.detectChanges();
-       tick();
-       expect(component.setProviderForm.controls.provider.valid).toBeTruthy();
-       expect(component.setProviderForm.controls.provider.value === 'digitalocean').toBeTruthy();
-     }));
+    component.cluster = fakeDigitaloceanCluster();
+    fixture.detectChanges();
+    tick();
+    expect(component.setProviderForm.controls.provider.valid).toBeTruthy();
+    expect(
+      component.setProviderForm.controls.provider.value === 'digitalocean'
+    ).toBeTruthy();
+  }));
 
   it('should be initially invalid', fakeAsync(() => {
-       component.cluster = {
-         name: '',
-         spec: {
-           cloud: {
-             dc: '',
-           },
-           version: '',
-         },
-         type: ClusterType.Empty,
-       };
-       fixture.detectChanges();
-       tick();
-       expect(component.setProviderForm.controls.provider.valid).toBeFalsy();
-     }));
+    component.cluster = {
+      name: '',
+      spec: {
+        cloud: {
+          dc: '',
+        },
+        version: '',
+      },
+      type: ClusterType.Empty,
+    };
+    fixture.detectChanges();
+    tick();
+    expect(component.setProviderForm.controls.provider.valid).toBeFalsy();
+  }));
 });

@@ -26,21 +26,15 @@ describe('PacketNodeDataComponent', () => {
   let component: PacketNodeDataComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            PacketNodeDataComponent,
-          ],
-          providers: [
-            NodeDataService,
-            WizardService,
-            {provide: ApiService, useClass: ApiMockService},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [PacketNodeDataComponent],
+      providers: [
+        NodeDataService,
+        WizardService,
+        {provide: ApiService, useClass: ApiMockService},
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

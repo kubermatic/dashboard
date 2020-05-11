@@ -5,22 +5,16 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SharedModule} from '../../shared.module';
 import {TagListComponent} from './tag-list.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 describe('TagListComponent', () => {
   let fixture: ComponentFixture<TagListComponent>;
   let component: TagListComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [...modules],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+    }).compileComponents();
   });
 
   beforeEach(() => {

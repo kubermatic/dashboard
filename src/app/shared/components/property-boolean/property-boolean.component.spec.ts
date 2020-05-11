@@ -8,26 +8,20 @@ import {SharedModule} from '../../shared.module';
 
 import {PropertyBooleanComponent} from './property-boolean.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 describe('PropertyBooleanComponent', () => {
   let fixture: ComponentFixture<PropertyBooleanComponent>;
   let component: PropertyBooleanComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [...modules],
-          providers: [
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-            {provide: MAT_DIALOG_DATA, useValue: {}},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: MAT_DIALOG_DATA, useValue: {}},
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -36,6 +30,6 @@ describe('PropertyBooleanComponent', () => {
   });
 
   it('should initialize', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 });

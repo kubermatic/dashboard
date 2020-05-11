@@ -3,7 +3,11 @@ import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '../../../app-config.service';
-import {ClusterService, NotificationService, UserService} from '../../../core/services';
+import {
+  ClusterService,
+  NotificationService,
+  UserService,
+} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
@@ -11,35 +15,25 @@ import {ClusterMockService} from '../../../testing/services/cluster-mock-service
 import {UserMockService} from '../../../testing/services/user-mock.service';
 import {EditSSHKeysComponent} from './edit-sshkeys.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 describe('EditSSHKeysComponent', () => {
   let fixture: ComponentFixture<EditSSHKeysComponent>;
   let component: EditSSHKeysComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            EditSSHKeysComponent,
-          ],
-          providers: [
-            {provide: ClusterService, useClass: ClusterMockService},
-            {provide: UserService, useClass: UserMockService},
-            {provide: AppConfigService, useClass: AppConfigMockService},
-            MatDialog,
-            GoogleAnalyticsService,
-            NotificationService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [EditSSHKeysComponent],
+      providers: [
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: UserService, useClass: UserMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        MatDialog,
+        GoogleAnalyticsService,
+        NotificationService,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(async(() => {
@@ -48,6 +42,6 @@ describe('EditSSHKeysComponent', () => {
   }));
 
   it('should create the edit sshkeys component', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 });

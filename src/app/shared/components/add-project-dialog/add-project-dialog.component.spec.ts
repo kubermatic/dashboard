@@ -1,4 +1,10 @@
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -28,22 +34,20 @@ describe('AddProjectDialogComponent', () => {
   let createProjectSpy;
 
   beforeEach(async(() => {
-    const apiMock = {'createProject': jest.fn()};
-    createProjectSpy = apiMock.createProject.mockReturnValue(asyncData(fakeDigitaloceanCluster));
+    const apiMock = {createProject: jest.fn()};
+    createProjectSpy = apiMock.createProject.mockReturnValue(
+      asyncData(fakeDigitaloceanCluster)
+    );
 
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          providers: [
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-            {provide: ApiService, useValue: apiMock},
-            {provide: ProjectService, useClass: ProjectMockService},
-            {provide: Router, useClass: RouterStub},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: ApiService, useValue: apiMock},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: Router, useClass: RouterStub},
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(async(() => {
@@ -55,14 +59,14 @@ describe('AddProjectDialogComponent', () => {
   }));
 
   it('should create the add project component', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 
   it('should call createProject method', fakeAsync(() => {
-       component.form.controls.name.patchValue('new-project-name');
-       component.addProject();
-       tick();
+    component.form.controls.name.patchValue('new-project-name');
+    component.addProject();
+    tick();
 
-       expect(createProjectSpy).toHaveBeenCalled();
-     }));
+    expect(createProjectSpy).toHaveBeenCalled();
+  }));
 });

@@ -15,23 +15,17 @@ describe('AWSProviderOptionsComponent', () => {
   let component: AWSProviderOptionsComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            BrowserAnimationsModule,
-            ReactiveFormsModule,
-            SharedModule,
-            HttpClientModule,
-          ],
-          declarations: [
-            AWSProviderOptionsComponent,
-          ],
-          providers: [
-            WizardService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        SharedModule,
+        HttpClientModule,
+      ],
+      declarations: [AWSProviderOptionsComponent],
+      providers: [WizardService],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

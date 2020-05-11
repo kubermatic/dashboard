@@ -9,7 +9,6 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
   templateUrl: './share-kubeconfig.component.html',
   styleUrls: ['./share-kubeconfig.component.scss'],
 })
-
 export class ShareKubeconfigComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
@@ -18,14 +17,21 @@ export class ShareKubeconfigComponent implements OnInit {
   kubeconfigLink: string;
 
   constructor(
-      private readonly _api: ApiService, private readonly _auth: Auth, private readonly _userService: UserService) {}
+    private readonly _api: ApiService,
+    private readonly _auth: Auth,
+    private readonly _userService: UserService
+  ) {}
 
   ngOnInit(): void {
     if (this._auth.authenticated()) {
-      this._userService.loggedInUser.pipe(first()).subscribe((user) => {
+      this._userService.loggedInUser.pipe(first()).subscribe(user => {
         this.userID = user.id;
         this.kubeconfigLink = this._api.getShareKubeconfigURL(
-            this.projectID, this.datacenter.metadata.name, this.cluster.id, this.userID);
+          this.projectID,
+          this.datacenter.metadata.name,
+          this.cluster.id,
+          this.userID
+        );
       });
     }
   }

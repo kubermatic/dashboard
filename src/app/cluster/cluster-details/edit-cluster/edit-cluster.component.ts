@@ -30,40 +30,54 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   };
 
   private _unsubscribe = new Subject<void>();
-  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
+  asyncLabelValidators = [
+    AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster),
+  ];
 
   constructor(
-      private readonly _clusterService: ClusterService,
-      private readonly _matDialogRef: MatDialogRef<EditClusterComponent>,
-      private readonly _notificationService: NotificationService) {}
+    private readonly _clusterService: ClusterService,
+    private readonly _matDialogRef: MatDialogRef<EditClusterComponent>,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.labels = _.cloneDeep(this.cluster.labels);
 
     this.form = new FormGroup({
-      name: new FormControl(
-          this.cluster.name,
-          [
-            Validators.required,
-            Validators.minLength(3),
-            Validators.pattern('[a-zA-Z0-9-]*'),
-          ]),
-      auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
-      usePodSecurityPolicyAdmissionPlugin: new FormControl(this.cluster.spec.usePodSecurityPolicyAdmissionPlugin),
-      usePodNodeSelectorAdmissionPlugin: new FormControl(this.cluster.spec.usePodNodeSelectorAdmissionPlugin),
+      name: new FormControl(this.cluster.name, [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.pattern('[a-zA-Z0-9-]*'),
+      ]),
+      auditLogging: new FormControl(
+        !!this.cluster.spec.auditLogging &&
+          this.cluster.spec.auditLogging.enabled
+      ),
+      usePodSecurityPolicyAdmissionPlugin: new FormControl(
+        this.cluster.spec.usePodSecurityPolicyAdmissionPlugin
+      ),
+      usePodNodeSelectorAdmissionPlugin: new FormControl(
+        this.cluster.spec.usePodNodeSelectorAdmissionPlugin
+      ),
       labels: new FormControl(''),
     });
 
-    this._clusterService.providerSettingsPatchChanges$.pipe(takeUntil(this._unsubscribe))
-        .subscribe(async patch => this.providerSettingsPatch = await patch);
+    this._clusterService.providerSettingsPatchChanges$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(async patch => (this.providerSettingsPatch = await patch));
 
-    this.checkAuditLoggingState();
+    this.checkEnforcedFieldsState();
   }
 
-  checkAuditLoggingState(): void {
-    if (!!this.datacenter.spec.enforceAuditLogging) {
+  checkEnforcedFieldsState(): void {
+    if (this.datacenter.spec.enforceAuditLogging) {
       this.form.controls.auditLogging.setValue(true);
       this.form.controls.auditLogging.disable();
+    }
+
+    if (this.datacenter.spec.enforcePodSecurityPolicy) {
+      this.form.controls.usePodSecurityPolicyAdmissionPlugin.setValue(true);
+      this.form.controls.usePodSecurityPolicyAdmissionPlugin.disable();
     }
   }
 
@@ -76,17 +90,27 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         auditLogging: {
           enabled: this.form.controls.auditLogging.value,
         },
-        usePodSecurityPolicyAdmissionPlugin: this.form.controls.usePodSecurityPolicyAdmissionPlugin.value,
-        usePodNodeSelectorAdmissionPlugin: this.form.controls.usePodNodeSelectorAdmissionPlugin.value,
+        usePodSecurityPolicyAdmissionPlugin: this.form.controls
+          .usePodSecurityPolicyAdmissionPlugin.value,
+        usePodNodeSelectorAdmissionPlugin: this.form.controls
+          .usePodNodeSelectorAdmissionPlugin.value,
       },
     };
 
-    this._clusterService.patch(this.projectID, this.cluster.id, this.datacenter.metadata.name, patch)
-        .subscribe((cluster) => {
-          this._matDialogRef.close(cluster);
-          this._clusterService.onClusterUpdate.next();
-          this._notificationService.success(`Cluster ${this.cluster.name} has been successfully edited`);
-        });
+    this._clusterService
+      .patch(
+        this.projectID,
+        this.cluster.id,
+        this.datacenter.metadata.name,
+        patch
+      )
+      .subscribe(cluster => {
+        this._matDialogRef.close(cluster);
+        this._clusterService.onClusterUpdate.next();
+        this._notificationService.success(
+          `Cluster ${this.cluster.name} has been successfully edited`
+        );
+      });
   }
 
   ngOnDestroy(): void {

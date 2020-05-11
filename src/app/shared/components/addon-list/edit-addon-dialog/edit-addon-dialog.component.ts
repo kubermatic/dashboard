@@ -16,15 +16,18 @@ export class EditAddonDialogComponent implements OnInit {
   @Input() addonConfig: AddonConfigEntity;
   form: FormGroup;
 
-  constructor(public dialogRef: MatDialogRef<EditAddonDialogComponent>, private readonly _domSanitizer: DomSanitizer) {}
+  constructor(
+    public dialogRef: MatDialogRef<EditAddonDialogComponent>,
+    private readonly _domSanitizer: DomSanitizer
+  ) {}
 
   ngOnInit(): void {
     const group = {};
     if (this.addonConfig.spec.formSpec) {
       this.addonConfig.spec.formSpec.forEach(control => {
         group[control.internalName] = new FormControl(
-            this.addon.spec.variables[control.internalName],
-            InstallAddonDialogComponent.getControlValidators(control),
+          this.addon.spec.variables[control.internalName],
+          InstallAddonDialogComponent.getControlValidators(control)
         );
       });
     }
@@ -33,12 +36,17 @@ export class EditAddonDialogComponent implements OnInit {
   }
 
   hasLogo(): boolean {
-    return !!this.addonConfig && !!this.addonConfig.spec.logo && !!this.addonConfig.spec.logoFormat;
+    return (
+      !!this.addonConfig &&
+      !!this.addonConfig.spec.logo &&
+      !!this.addonConfig.spec.logoFormat
+    );
   }
 
   getAddonLogo(): SafeUrl {
     return this._domSanitizer.bypassSecurityTrustUrl(
-        `data:image/${this.addonConfig.spec.logoFormat};base64,${this.addonConfig.spec.logo}`);
+      `data:image/${this.addonConfig.spec.logoFormat};base64,${this.addonConfig.spec.logo}`
+    );
   }
 
   private _getAddonPatch(): AddonEntity {

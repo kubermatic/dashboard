@@ -17,27 +17,28 @@ describe('ShareKubeconfigComponent', () => {
   let fixture: ComponentFixture<ShareKubeconfigComponent>;
 
   beforeEach(async(() => {
-    const apiMock = {'getShareKubeconfigURL': jest.fn()};
-    const authMock = {'authenticated': jest.fn()};
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            HttpClientModule,
-            BrowserAnimationsModule,
-            RouterTestingModule,
-            SharedModule,
-          ],
-          declarations: [ShareKubeconfigComponent],
-          providers: [
-            {provide: ApiService, useValue: apiMock},
-            {provide: Auth, useValue: authMock},
-            {provide: UserService, useClass: UserMockService},
-            {provide: MAT_DIALOG_DATA, useValue: {cluster: fakeDigitaloceanCluster()}},
-            {provide: MatDialogRef, useValue: {}},
-          ],
-        })
-        .compileComponents();
+    const apiMock = {getShareKubeconfigURL: jest.fn()};
+    const authMock = {authenticated: jest.fn()};
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        RouterTestingModule,
+        SharedModule,
+      ],
+      declarations: [ShareKubeconfigComponent],
+      providers: [
+        {provide: ApiService, useValue: apiMock},
+        {provide: Auth, useValue: authMock},
+        {provide: UserService, useClass: UserMockService},
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {cluster: fakeDigitaloceanCluster()},
+        },
+        {provide: MatDialogRef, useValue: {}},
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

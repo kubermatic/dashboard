@@ -20,42 +20,34 @@ import {PacketProviderSettingsComponent} from '../packet-provider-settings/packe
 
 import {VSphereProviderSettingsComponent} from './vsphere-provider-settings.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 describe('VSphereProviderSettingsComponent', () => {
   let fixture: ComponentFixture<VSphereProviderSettingsComponent>;
   let component: VSphereProviderSettingsComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            EditProviderSettingsComponent,
-            AWSProviderSettingsComponent,
-            DigitaloceanProviderSettingsComponent,
-            HetznerProviderSettingsComponent,
-            OpenstackProviderSettingsComponent,
-            VSphereProviderSettingsComponent,
-            AzureProviderSettingsComponent,
-            PacketProviderSettingsComponent,
-            GCPProviderSettingsComponent,
-            KubevirtProviderSettingsComponent,
-            AlibabaProviderSettingsComponent,
-          ],
-          providers: [
-            ClusterService,
-            {provide: ClusterService, useClass: ClusterMockService},
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [
+        EditProviderSettingsComponent,
+        AWSProviderSettingsComponent,
+        DigitaloceanProviderSettingsComponent,
+        HetznerProviderSettingsComponent,
+        OpenstackProviderSettingsComponent,
+        VSphereProviderSettingsComponent,
+        AzureProviderSettingsComponent,
+        PacketProviderSettingsComponent,
+        GCPProviderSettingsComponent,
+        KubevirtProviderSettingsComponent,
+        AlibabaProviderSettingsComponent,
+      ],
+      providers: [
+        ClusterService,
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

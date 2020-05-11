@@ -9,25 +9,17 @@ import {SharedModule} from '../../shared.module';
 
 import {EventListComponent} from './event-list.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 describe('EventListComponent', () => {
   let fixture: ComponentFixture<EventListComponent>;
   let component: EventListComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [...modules],
-          providers: [
-            {provide: SettingsService, useClass: SettingsMockService},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      providers: [{provide: SettingsService, useClass: SettingsMockService}],
+    }).compileComponents();
   });
 
   beforeEach(() => {

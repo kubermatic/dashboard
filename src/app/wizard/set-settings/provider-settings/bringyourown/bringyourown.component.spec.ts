@@ -9,19 +9,11 @@ describe('BringyourownClusterSettingsComponent', () => {
   let component: BringyourownClusterSettingsComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            BrowserAnimationsModule,
-            SharedModule,
-          ],
-          declarations: [
-            BringyourownClusterSettingsComponent,
-          ],
-          providers: [],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
+      declarations: [BringyourownClusterSettingsComponent],
+      providers: [],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

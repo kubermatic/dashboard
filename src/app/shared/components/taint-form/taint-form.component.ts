@@ -1,5 +1,20 @@
-import {Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angular/core';
-import {AbstractControl, FormArray, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  Validators,
+} from '@angular/forms';
 import {Taint} from '../../entity/NodeEntity';
 import {LabelFormValidators} from '../../validators/label-form.validators';
 import {TaintFormValidators} from '../../validators/taint-form.validators';
@@ -18,7 +33,7 @@ import {TaintFormValidators} from '../../validators/taint-form.validators';
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => TaintFormComponent),
       multi: true,
-    }
+    },
   ],
 })
 export class TaintFormComponent implements OnInit {
@@ -87,33 +102,38 @@ export class TaintFormComponent implements OnInit {
   }
 
   private static _isFilled(taint: AbstractControl): boolean {
-    return taint.get('key').value.length !== 0 && taint.get('value').value.length !== 0 &&
-        taint.get('effect').value.length !== 0;
+    return (
+      taint.get('key').value.length !== 0 &&
+      taint.get('value').value.length !== 0 &&
+      taint.get('effect').value.length !== 0
+    );
   }
 
   private _addTaint(taint: Taint = null): void {
-    this.taintArray.push(this._formBuilder.group({
-      key: [
-        {value: taint ? taint.key : '', disabled: false}, Validators.compose([
-          LabelFormValidators.labelKeyNameLength,
-          LabelFormValidators.labelKeyPrefixLength,
-          LabelFormValidators.labelKeyNamePattern,
-          LabelFormValidators.labelKeyPrefixPattern,
-        ])
-      ],
-      value: [
-        {value: taint ? taint.value : '', disabled: false}, Validators.compose([
-          TaintFormValidators.taintValueLength,
-          LabelFormValidators.labelValuePattern,
-        ])
-      ],
-      effect: [
-        {value: taint ? taint.effect : '', disabled: false},
-        Validators.compose([
-          TaintFormValidators.taintValidEffect,
-        ]),
-      ],
-    }));
+    this.taintArray.push(
+      this._formBuilder.group({
+        key: [
+          {value: taint ? taint.key : '', disabled: false},
+          Validators.compose([
+            LabelFormValidators.labelKeyNameLength,
+            LabelFormValidators.labelKeyPrefixLength,
+            LabelFormValidators.labelKeyNamePattern,
+            LabelFormValidators.labelKeyPrefixPattern,
+          ]),
+        ],
+        value: [
+          {value: taint ? taint.value : '', disabled: false},
+          Validators.compose([
+            TaintFormValidators.taintValueLength,
+            LabelFormValidators.labelValuePattern,
+          ]),
+        ],
+        effect: [
+          {value: taint ? taint.effect : '', disabled: false},
+          Validators.compose([TaintFormValidators.taintValidEffect]),
+        ],
+      })
+    );
   }
 
   private _validateKey(index: number): void {
@@ -142,7 +162,9 @@ export class TaintFormComponent implements OnInit {
   }
 
   private _updateTaints(): void {
-    this.taints = TaintFormComponent.filterNullifiedTaints(this.taintArray.getRawValue());
+    this.taints = TaintFormComponent.filterNullifiedTaints(
+      this.taintArray.getRawValue()
+    );
 
     // Emit the change event.
     this.taintsChange.emit(this.taints);

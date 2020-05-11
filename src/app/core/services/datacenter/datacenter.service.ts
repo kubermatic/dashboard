@@ -17,13 +17,16 @@ export class DatacenterService {
   getDataCenters(): Observable<DataCenterEntity[]> {
     const url = `${this.restRoot}/dc`;
     if (!this.dataCenterCache) {
-      this.dataCenterCache = this._http.get<DataCenterEntity[]>(url, {headers: this.headers})
-                                 .pipe(shareReplay({refCount: true, bufferSize: 1}));
+      this.dataCenterCache = this._http
+        .get<DataCenterEntity[]>(url, {headers: this.headers})
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this.dataCenterCache;
   }
 
   getDataCenter(name: string): Observable<DataCenterEntity> {
-    return this.getDataCenters().pipe(map((datacenters) => datacenters.find(dc => dc.metadata.name === name)));
+    return this.getDataCenters().pipe(
+      map(datacenters => datacenters.find(dc => dc.metadata.name === name))
+    );
   }
 }

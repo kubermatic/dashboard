@@ -1,6 +1,6 @@
-import {Group} from "../utils/member";
-import {wait} from "../utils/wait";
-import {Condition} from "../utils/condition";
+import {Group} from '../utils/member';
+import {wait} from '../utils/wait';
+import {Condition} from '../utils/condition';
 
 export class MembersPage {
   static getAddMemberBtn(): Cypress.Chainable<any> {
@@ -70,19 +70,25 @@ export class MembersPage {
   }
 
   static visit(): void {
-    cy.get('#km-nav-item-members').click().then(() => {
-      this.waitForRefresh();
-      this.verifyUrl();
-    });
+    cy.get('#km-nav-item-members')
+      .click()
+      .then(() => {
+        this.waitForRefresh();
+        this.verifyUrl();
+      });
   }
 
   static addMember(email: string, group: Group): void {
     this.getAddMemberBtn().should(Condition.NotBe, 'disabled').click();
-    this.getAddMemberDialogEmailInput().type(email).should(Condition.HaveValue, email);
+    this.getAddMemberDialogEmailInput()
+      .type(email)
+      .should(Condition.HaveValue, email);
     this.getAddMemberDialogGroupCombobox().click();
     this.getMemberDialogGroup(group).click();
     this.waitForRefresh();
-    this.getAddMemberDialogSaveBtn().should(Condition.NotBe, 'disabled').click();
+    this.getAddMemberDialogSaveBtn()
+      .should(Condition.NotBe, 'disabled')
+      .click();
     this.getTable().should(Condition.Contain, email);
   }
 

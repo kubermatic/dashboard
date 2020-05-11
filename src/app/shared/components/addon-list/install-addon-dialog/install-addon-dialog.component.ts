@@ -3,7 +3,11 @@ import {FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
-import {AddonConfigEntity, AddonEntity, AddonFormSpec} from '../../../entity/AddonEntity';
+import {
+  AddonConfigEntity,
+  AddonEntity,
+  AddonFormSpec,
+} from '../../../entity/AddonEntity';
 
 @Component({
   selector: 'km-install-addon-dialog',
@@ -19,20 +23,22 @@ export class InstallAddonDialogComponent implements OnInit {
     return control.required ? [Validators.required] : [];
   }
 
-  static getFormState(control: AddonFormSpec): string|number {
+  static getFormState(control: AddonFormSpec): string | number {
     return control.type === 'number' ? 0 : '';
   }
 
   constructor(
-      public dialogRef: MatDialogRef<InstallAddonDialogComponent>, private readonly _domSanitizer: DomSanitizer) {}
+    public dialogRef: MatDialogRef<InstallAddonDialogComponent>,
+    private readonly _domSanitizer: DomSanitizer
+  ) {}
 
   ngOnInit(): void {
     const group = {};
     if (this.hasForm()) {
       this.addonConfig.spec.formSpec.forEach(control => {
         group[control.internalName] = new FormControl(
-            InstallAddonDialogComponent.getFormState(control),
-            InstallAddonDialogComponent.getControlValidators(control),
+          InstallAddonDialogComponent.getFormState(control),
+          InstallAddonDialogComponent.getControlValidators(control)
         );
       });
     }
@@ -41,16 +47,25 @@ export class InstallAddonDialogComponent implements OnInit {
   }
 
   hasForm(): boolean {
-    return !!this.addonConfig && !!this.addonConfig.spec && !!this.addonConfig.spec.formSpec;
+    return (
+      !!this.addonConfig &&
+      !!this.addonConfig.spec &&
+      !!this.addonConfig.spec.formSpec
+    );
   }
 
   hasLogo(): boolean {
-    return !!this.addonConfig && !!this.addonConfig.spec.logo && !!this.addonConfig.spec.logoFormat;
+    return (
+      !!this.addonConfig &&
+      !!this.addonConfig.spec.logo &&
+      !!this.addonConfig.spec.logoFormat
+    );
   }
 
   getAddonLogo(): SafeUrl {
     return this._domSanitizer.bypassSecurityTrustUrl(
-        `data:image/${this.addonConfig.spec.logoFormat};base64,${this.addonConfig.spec.logo}`);
+      `data:image/${this.addonConfig.spec.logoFormat};base64,${this.addonConfig.spec.logo}`
+    );
   }
 
   private _getAddonEntity(): AddonEntity {

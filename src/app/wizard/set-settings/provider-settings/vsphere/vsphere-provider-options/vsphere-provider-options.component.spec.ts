@@ -14,24 +14,20 @@ describe('VSphereProviderOptionsComponent', () => {
   let component: VSphereProviderOptionsComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            BrowserAnimationsModule,
-            ReactiveFormsModule,
-            SharedModule,
-            HttpClientModule,
-          ],
-          declarations: [
-            VSphereProviderOptionsComponent,
-          ],
-          providers: [
-            {provide: ApiService, useClass: ApiMockService},
-            WizardService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        SharedModule,
+        HttpClientModule,
+      ],
+      declarations: [VSphereProviderOptionsComponent],
+      providers: [
+        {provide: ApiService, useClass: ApiMockService},
+        WizardService,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -81,20 +81,9 @@ const entryComponents: any[] = [
     MachineNetworksModule,
     NodeDataModule,
   ],
-  declarations: [
-    ...components,
-    ...entryComponents,
-    VersionPickerComponent,
-  ],
-  exports: [
-    ...components,
-  ],
-  entryComponents: [
-    ...entryComponents,
-  ],
-  providers: [
-    NodeService,
-  ]
+  declarations: [...components, ...entryComponents, VersionPickerComponent],
+  exports: [...components],
+  entryComponents: [...entryComponents],
+  providers: [NodeService],
 })
-export class ClusterModule {
-}
+export class ClusterModule {}
