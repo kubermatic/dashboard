@@ -48,9 +48,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._screenWidth.subscribe(width => this.screenWidth = width);
+    this._screenWidth.subscribe(width => (this.screenWidth = width));
 
-    this._userService.loggedInUser.subscribe(user => this.currentUser = user);
+    this._userService.loggedInUser.subscribe(user => (this.currentUser = user));
 
     this._settingsService.adminSettings
       .pipe(takeUntil(this._unsubscribe))
@@ -64,10 +64,12 @@ export class SidenavComponent implements OnInit, OnDestroy {
         }
       });
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      this._isSidenavCollapsed = settings.collapseSidenav;
-      this.settings = settings;
-    });
+    this._settingsService.userSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => {
+        this._isSidenavCollapsed = settings.collapseSidenav;
+        this.settings = settings;
+      });
 
     merge(
       this._projectService.selectedProject,
