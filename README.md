@@ -1,5 +1,5 @@
 # Kubermatic Dashboard
-[![codecov](https://codecov.io/gh/kubermatic/dashboard-v2/branch/master/graph/badge.svg?token=njXM3OrmAM)](https://codecov.io/gh/kubermatic/dashboard-v2)
+[![codecov](https://codecov.io/gh/kubermatic/dashboard/branch/master/graph/badge.svg?token=njXM3OrmAM)](https://codecov.io/gh/kubermatic/dashboard)
 
 ## Development
 

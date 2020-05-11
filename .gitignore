@@ -2,7 +2,7 @@
 /dist
 /tmp
 /coverage
-/dashboard-v2
+/dashboard
 
 # Dependencies.
 /node_modules
