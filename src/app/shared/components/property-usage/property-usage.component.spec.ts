@@ -8,26 +8,20 @@ import {SharedModule} from '../../shared.module';
 
 import {PropertyUsageComponent} from './property-usage.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 describe('PropertyUsageComponent', () => {
   let fixture: ComponentFixture<PropertyUsageComponent>;
   let component: PropertyUsageComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [...modules],
-          providers: [
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-            {provide: MAT_DIALOG_DATA, useValue: {}},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: MAT_DIALOG_DATA, useValue: {}},
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -36,6 +30,6 @@ describe('PropertyUsageComponent', () => {
   });
 
   it('should initialize', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 });

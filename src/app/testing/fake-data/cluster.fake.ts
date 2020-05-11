@@ -10,15 +10,14 @@ export function clusterModelFake(): CreateClusterModel {
         cloud: {
           dc: 'do-fra1',
           digitalocean: {
-            token: 'd6fec6ec65cd1fe6b2e6bba7bef91395ad9e3539646ccf8ed9eeac01f629570d',
+            token:
+              'd6fec6ec65cd1fe6b2e6bba7bef91395ad9e3539646ccf8ed9eeac01f629570d',
           },
         },
         version: '',
       },
       type: ClusterType.Kubernetes,
-      sshKeys: [
-        'key-ssh1',
-      ],
+      sshKeys: ['key-ssh1'],
     },
   };
 }
@@ -57,7 +56,7 @@ export function fakePacketCluster(): ClusterEntity {
           apiKey: '123',
           projectID: '1',
           billingCycle: 'hourly',
-        }
+        },
       },
       version: '1.8.5',
     },
@@ -81,7 +80,7 @@ export function fakeGCPCluster(): ClusterEntity {
           serviceAccount: 'test-service-account',
           network: 'test-network',
           subnetwork: 'test-subnetwork',
-        }
+        },
       },
       version: '1.8.5',
     },
@@ -102,7 +101,8 @@ export function fakeHetznerCluster(): ClusterEntity {
       cloud: {
         dc: 'do-fra1',
         hetzner: {
-          token: 'pixH4QgO2nbVY1Xoo8yVN0RPN2d3CBQYPKcPrfd1BWwFsWrKMsdUKyos7wYAa6hQ',
+          token:
+            'pixH4QgO2nbVY1Xoo8yVN0RPN2d3CBQYPKcPrfd1BWwFsWrKMsdUKyos7wYAa6hQ',
         },
       },
       version: '1.8.5',
@@ -283,7 +283,12 @@ export function fakeToken(): Token {
 
 export function fakeClusters(): ClusterEntity[] {
   return [
-    fakeDigitaloceanCluster(), fakeAWSCluster(), fakeOpenstackCluster(), fakeHetznerCluster(), fakeAzureCluster(),
-    fakeBringyourownCluster(), fakeAlibabaCluster()
+    fakeDigitaloceanCluster(),
+    fakeAWSCluster(),
+    fakeOpenstackCluster(),
+    fakeHetznerCluster(),
+    fakeAzureCluster(),
+    fakeBringyourownCluster(),
+    fakeAlibabaCluster(),
   ];
 }

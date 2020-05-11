@@ -1,10 +1,20 @@
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {of} from 'rxjs';
 
-import {ClusterService, NotificationService, UserService} from '../../../core/services';
+import {
+  ClusterService,
+  NotificationService,
+  UserService,
+} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
@@ -24,11 +34,7 @@ class MatDialogMock {
   }
 }
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 describe('NodeComponent', () => {
   let fixture: ComponentFixture<NodeListComponent>;
@@ -36,24 +42,18 @@ describe('NodeComponent', () => {
   let clusterService: ClusterService;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            NodeListComponent,
-          ],
-          providers: [
-            {provide: ClusterService, useClass: ClusterMockService},
-            {provide: MatDialog, useClass: MatDialogMock},
-            {provide: SettingsService, useClass: SettingsMockService},
-            {provide: UserService, useClass: UserMockService},
-            GoogleAnalyticsService,
-            NotificationService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [NodeListComponent],
+      providers: [
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: MatDialog, useClass: MatDialogMock},
+        {provide: SettingsService, useClass: SettingsMockService},
+        {provide: UserService, useClass: UserMockService},
+        GoogleAnalyticsService,
+        NotificationService,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -63,23 +63,25 @@ describe('NodeComponent', () => {
   });
 
   it('should create the cluster details cmp', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 
   it('should call deleteNode', fakeAsync(() => {
-       component.cluster = fakeDigitaloceanCluster();
-       component.datacenter = fakeDigitaloceanDatacenter();
-       component.projectID = fakeProject().id;
-       const event = new MouseEvent('click');
+    component.cluster = fakeDigitaloceanCluster();
+    component.datacenter = fakeDigitaloceanDatacenter();
+    component.projectID = fakeProject().id;
+    const event = new MouseEvent('click');
 
-       fixture.detectChanges();
-       const spyDeleteClusterNode = jest.spyOn(clusterService, 'deleteNode').mockReturnValue(of(null));
+    fixture.detectChanges();
+    const spyDeleteClusterNode = jest
+      .spyOn(clusterService, 'deleteNode')
+      .mockReturnValue(of(null));
 
-       component.deleteNodeDialog(nodeFake(), event);
-       tick();
+    component.deleteNodeDialog(nodeFake(), event);
+    tick();
 
-       expect(spyDeleteClusterNode).toHaveBeenCalledTimes(1);
-     }));
+    expect(spyDeleteClusterNode).toHaveBeenCalledTimes(1);
+  }));
 
   it('should get operating system name', () => {
     expect(component.getSystem(nodeFake())).toBe('Ubuntu');
@@ -90,11 +92,15 @@ describe('NodeComponent', () => {
   });
 
   it('should get info text for aws name', () => {
-    expect(component.getInfo(nodeAWSFake())).toBe('ip-172-31-1-240.eu-central-1.compute.internal');
+    expect(component.getInfo(nodeAWSFake())).toBe(
+      'ip-172-31-1-240.eu-central-1.compute.internal'
+    );
   });
 
   it('should get node name', () => {
-    expect(component.getNodeName(nodeFake())).toBe('kubermatic-tbbfvttvs-v5hmk');
+    expect(component.getNodeName(nodeFake())).toBe(
+      'kubermatic-tbbfvttvs-v5hmk'
+    );
   });
 
   it('should display tags', () => {

@@ -21,20 +21,11 @@ describe('VSphereNodeDataComponent', () => {
   let component: VSphereNodeDataComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            VSphereNodeDataComponent,
-          ],
-          providers: [
-            NodeDataService,
-            WizardService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [VSphereNodeDataComponent],
+      providers: [NodeDataService, WizardService],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

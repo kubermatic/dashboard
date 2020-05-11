@@ -4,7 +4,10 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '../../core/services';
 
 import {ApiService} from '../../core/services';
-import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity';
+import {
+  CreateMemberEntity,
+  MemberEntity,
+} from '../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 
 @Component({
@@ -16,8 +19,10 @@ export class AddMemberComponent implements OnInit {
   addMemberForm: FormGroup;
 
   constructor(
-      private readonly _apiService: ApiService, private readonly _matDialogRef: MatDialogRef<AddMemberComponent>,
-      private readonly _notificationService: NotificationService) {}
+    private readonly _apiService: ApiService,
+    private readonly _matDialogRef: MatDialogRef<AddMemberComponent>,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.addMemberForm = new FormGroup({
@@ -29,15 +34,21 @@ export class AddMemberComponent implements OnInit {
   addMember(): void {
     const createMember: CreateMemberEntity = {
       email: this.addMemberForm.controls.email.value,
-      projects: [{
-        group: this.addMemberForm.controls.group.value,
-        id: this.project.id,
-      }],
+      projects: [
+        {
+          group: this.addMemberForm.controls.group.value,
+          id: this.project.id,
+        },
+      ],
     };
 
-    this._apiService.createMembers(this.project.id, createMember).subscribe((member: MemberEntity) => {
-      this._matDialogRef.close(member);
-      this._notificationService.success(`Member ${member.email} is added successfully to project ${this.project.name}`);
-    });
+    this._apiService
+      .createMembers(this.project.id, createMember)
+      .subscribe((member: MemberEntity) => {
+        this._matDialogRef.close(member);
+        this._notificationService.success(
+          `Member ${member.email} is added successfully to project ${this.project.name}`
+        );
+      });
   }
 }

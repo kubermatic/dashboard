@@ -35,13 +35,26 @@ import {VSphereNodeDataComponent} from './vsphere-add-node/vsphere-node-data.com
 import {VSphereNodeOptionsComponent} from './vsphere-add-node/vsphere-node-options/vsphere-node-options.component';
 
 const components: any[] = [
-  NodeDataComponent,          NodeDataOptionsComponent,      AWSNodeDataComponent,
-  AWSNodeOptionsComponent,    DigitaloceanNodeDataComponent, DigitaloceanNodeOptionsComponent,
-  OpenstackNodeDataComponent, OpenstackNodeOptionsComponent, HetznerNodeDataComponent,
-  VSphereNodeDataComponent,   VSphereNodeOptionsComponent,   AzureNodeDataComponent,
-  AzureNodeOptionsComponent,  PacketNodeDataComponent,       PacketNodeOptionsComponent,
-  GCPNodeDataComponent,       GCPNodeOptionsComponent,       KubeVirtNodeDataComponent,
-  AlibabaNodeDataComponent,   AlibabaNodeOptionsComponent,
+  NodeDataComponent,
+  NodeDataOptionsComponent,
+  AWSNodeDataComponent,
+  AWSNodeOptionsComponent,
+  DigitaloceanNodeDataComponent,
+  DigitaloceanNodeOptionsComponent,
+  OpenstackNodeDataComponent,
+  OpenstackNodeOptionsComponent,
+  HetznerNodeDataComponent,
+  VSphereNodeDataComponent,
+  VSphereNodeOptionsComponent,
+  AzureNodeDataComponent,
+  AzureNodeOptionsComponent,
+  PacketNodeDataComponent,
+  PacketNodeOptionsComponent,
+  GCPNodeDataComponent,
+  GCPNodeOptionsComponent,
+  KubeVirtNodeDataComponent,
+  AlibabaNodeDataComponent,
+  AlibabaNodeOptionsComponent,
 ];
 
 @NgModule({
@@ -59,12 +72,7 @@ const components: any[] = [
     MatTooltipModule,
     MatChipsModule,
   ],
-  declarations: [
-    ...components,
-  ],
-  exports: [
-    ...components,
-  ],
+  declarations: [...components],
+  exports: [...components],
 })
-export class NodeDataModule {
-}
+export class NodeDataModule {}

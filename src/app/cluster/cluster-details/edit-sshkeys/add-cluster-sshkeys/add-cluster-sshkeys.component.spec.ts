@@ -3,7 +3,13 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '../../../../app-config.service';
-import {ApiService, ClusterService, NotificationService, ProjectService, UserService} from '../../../../core/services';
+import {
+  ApiService,
+  ClusterService,
+  NotificationService,
+  ProjectService,
+  UserService,
+} from '../../../../core/services';
 import {SharedModule} from '../../../../shared/shared.module';
 import {ApiMockService} from '../../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../../testing/services/app-config-mock.service';
@@ -13,37 +19,27 @@ import {ProjectMockService} from '../../../../testing/services/project-mock.serv
 import {UserMockService} from '../../../../testing/services/user-mock.service';
 import {AddClusterSSHKeysComponent} from './add-cluster-sshkeys.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 describe('AddClusterSSHKeysComponent', () => {
   let fixture: ComponentFixture<AddClusterSSHKeysComponent>;
   let component: AddClusterSSHKeysComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            AddClusterSSHKeysComponent,
-          ],
-          providers: [
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-            {provide: ApiService, useValue: ApiMockService},
-            {provide: ClusterService, useClass: ClusterMockService},
-            {provide: ProjectService, useClass: ProjectMockService},
-            {provide: UserService, useClass: UserMockService},
-            {provide: AppConfigService, useClass: AppConfigMockService},
-            MatDialog,
-            NotificationService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [AddClusterSSHKeysComponent],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: ApiService, useValue: ApiMockService},
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: UserService, useClass: UserMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        MatDialog,
+        NotificationService,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(async(() => {
@@ -52,6 +48,6 @@ describe('AddClusterSSHKeysComponent', () => {
   }));
 
   it('should create the add cluster sshkeys component', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 });

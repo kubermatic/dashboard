@@ -1,5 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
@@ -10,10 +15,14 @@ import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.s
   selector: 'km-azure-provider-settings',
   templateUrl: './azure-provider-settings.component.html',
 })
-
 export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
   form: FormGroup;
-  private _formData = {clientID: '', clientSecret: '', subscriptionID: '', tenantID: ''};
+  private _formData = {
+    clientID: '',
+    clientSecret: '',
+    subscriptionID: '',
+    tenantID: '',
+  };
   private _unsubscribe = new Subject<void>();
 
   constructor(private clusterService: ClusterService) {}
@@ -26,14 +35,23 @@ export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
       tenantID: new FormControl(''),
     });
 
-    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      if (data.clientID !== this._formData.clientID || data.clientSecret !== this._formData.clientSecret ||
-          data.subscriptionID !== this._formData.subscriptionID || data.tenantID !== this._formData.tenantID) {
-        this._formData = data;
-        this.setValidators();
-        this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-      }
-    });
+    this.form.valueChanges
+      .pipe(debounceTime(1000))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        if (
+          data.clientID !== this._formData.clientID ||
+          data.clientSecret !== this._formData.clientSecret ||
+          data.subscriptionID !== this._formData.subscriptionID ||
+          data.tenantID !== this._formData.tenantID
+        ) {
+          this._formData = data;
+          this.setValidators();
+          this.clusterService.changeProviderSettingsPatch(
+            this.getProviderSettingsPatch()
+          );
+        }
+      });
   }
 
   get clientID(): AbstractControl {
@@ -53,7 +71,12 @@ export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
   }
 
   setValidators(): void {
-    if (!this.clientID.value && !this.clientSecret.value && !this.subscriptionID.value && !this.tenantID.value) {
+    if (
+      !this.clientID.value &&
+      !this.clientSecret.value &&
+      !this.subscriptionID.value &&
+      !this.tenantID.value
+    ) {
       this.clientID.clearValidators();
       this.clientSecret.clearValidators();
       this.subscriptionID.clearValidators();
@@ -72,9 +95,12 @@ export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
   }
 
   isRequiredField(): string {
-    return (!this.clientID.value && !this.clientSecret.value && !this.subscriptionID.value && !this.tenantID.value) ?
-        '' :
-        '*';
+    return !this.clientID.value &&
+      !this.clientSecret.value &&
+      !this.subscriptionID.value &&
+      !this.tenantID.value
+      ? ''
+      : '*';
   }
 
   ngOnDestroy(): void {

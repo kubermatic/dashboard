@@ -7,7 +7,6 @@ import {fadeInOut} from '../../animations/fade';
   styleUrls: ['./settings-status.component.scss'],
   animations: [fadeInOut],
 })
-
 export class SettingsStatusComponent implements OnChanges {
   @Input() isSaved = true;
   @Input() confirmationTimeout = 3000;
@@ -16,7 +15,10 @@ export class SettingsStatusComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.isSaved && !changes.isSaved.isFirstChange()) {
       this.isSaveConfirmationVisible = this.isSaved;
-      setTimeout(() => this.isSaveConfirmationVisible = false, this.confirmationTimeout);
+      setTimeout(
+        () => (this.isSaveConfirmationVisible = false),
+        this.confirmationTimeout
+      );
     }
   }
 }

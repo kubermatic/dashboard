@@ -1,5 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 import {ClusterService} from '../../../../core/services';
@@ -9,7 +14,6 @@ import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.s
   selector: 'km-gcp-provider-settings',
   templateUrl: './gcp-provider-settings.component.html',
 })
-
 export class GCPProviderSettingsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   private _formData = {serviceAccount: ''};
@@ -22,13 +26,18 @@ export class GCPProviderSettingsComponent implements OnInit, OnDestroy {
       serviceAccount: new FormControl(''),
     });
 
-    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      if (data.serviceAccount !== this._formData.serviceAccount) {
-        this._formData = data;
-        this.setValidators();
-        this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-      }
-    });
+    this.form.valueChanges
+      .pipe(debounceTime(1000))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        if (data.serviceAccount !== this._formData.serviceAccount) {
+          this._formData = data;
+          this.setValidators();
+          this.clusterService.changeProviderSettingsPatch(
+            this.getProviderSettingsPatch()
+          );
+        }
+      });
   }
 
   get serviceAccount(): AbstractControl {

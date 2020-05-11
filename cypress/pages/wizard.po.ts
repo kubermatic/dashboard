@@ -1,4 +1,4 @@
-import {Condition} from "../utils/condition";
+import {Condition} from '../utils/condition';
 
 export class WizardPage {
   static getNextBtn(): Cypress.Chainable<any> {

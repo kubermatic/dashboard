@@ -1,30 +1,26 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
-
-# compiled output
+# Compiled output.
 /dist
 /tmp
 /coverage
 /dashboard-v2
 
-# dependencies
+# Dependencies.
 /node_modules
 
-# IDEs and editors
+# IDEs and editors.
 /.idea
 .project
 .classpath
 .c9/
 *.launch
 .settings/
-
-# IDE - VSCode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
 
-# misc
+# Misc.
 /.sass-cache
 /connect.lock
 /coverage/*
@@ -33,15 +29,15 @@ npm-debug.log
 testem.log
 /typings
 
-#System Files
+# System files.
 .DS_Store
 Thumbs.db
 
-# generated
+# Generated.
 bindata_assetfs.go
 git-version.json
 
-# cypress
+# Cypress.
 cypress/fixtures
 cypress/screenshots
 cypress/videos

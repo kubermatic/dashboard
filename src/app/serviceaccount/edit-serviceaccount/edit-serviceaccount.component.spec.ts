@@ -1,4 +1,10 @@
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -26,21 +32,19 @@ describe('EditServiceAccountComponent', () => {
   let editServiceAccountSpy;
 
   beforeEach(async(() => {
-    const apiMock = {'editServiceAccount': jest.fn()};
-    editServiceAccountSpy = apiMock.editServiceAccount.mockReturnValue(asyncData(fakeServiceAccount()));
+    const apiMock = {editServiceAccount: jest.fn()};
+    editServiceAccountSpy = apiMock.editServiceAccount.mockReturnValue(
+      asyncData(fakeServiceAccount())
+    );
 
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          providers: [
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-            {provide: ApiService, useValue: apiMock},
-            NotificationService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: ApiService, useValue: apiMock},
+        NotificationService,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(async(() => {
@@ -52,19 +56,21 @@ describe('EditServiceAccountComponent', () => {
   }));
 
   it('should create the edit service account component', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 
   it('should have valid form after creating', () => {
     expect(component.editServiceAccountForm.valid).toBeTruthy();
   });
 
   it('should call editServiceAccount method', fakeAsync(() => {
-       component.editServiceAccountForm.controls.name.patchValue('test-service-account');
-       component.editServiceAccountForm.controls.group.patchValue('editors');
-       component.editServiceAccount();
-       tick();
+    component.editServiceAccountForm.controls.name.patchValue(
+      'test-service-account'
+    );
+    component.editServiceAccountForm.controls.group.patchValue('editors');
+    component.editServiceAccount();
+    tick();
 
-       expect(editServiceAccountSpy).toHaveBeenCalled();
-     }));
+    expect(editServiceAccountSpy).toHaveBeenCalled();
+  }));
 });

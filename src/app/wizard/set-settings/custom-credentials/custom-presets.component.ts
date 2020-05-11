@@ -10,7 +10,7 @@ import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 export enum PresetsState {
   Ready = 'Custom Preset',
   Loading = 'Loading...',
-  Empty = 'No Presets available'
+  Empty = 'No Presets available',
 }
 
 @Component({
@@ -49,21 +49,34 @@ export class CustomPresetsSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this._wizard.clusterProviderFormChanges$
-        .pipe(switchMap(
-            providerForm => providerForm.provider === NodeProvider.BRINGYOUROWN || !providerForm.provider ?
-                EMPTY :
-                this._wizard.presets(providerForm.provider, this.cluster.spec.cloud.dc)))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(presetList => {
-          this.presetsLoaded = presetList.names ? presetList.names.length > 0 : false;
-          this._state = this.presetsLoaded ? PresetsState.Ready : PresetsState.Empty;
-          this.presetList = presetList;
-        });
+      .pipe(
+        switchMap(providerForm =>
+          providerForm.provider === NodeProvider.BRINGYOUROWN ||
+          !providerForm.provider
+            ? EMPTY
+            : this._wizard.presets(
+                providerForm.provider,
+                this.cluster.spec.cloud.dc
+              )
+        )
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(presetList => {
+        this.presetsLoaded = presetList.names
+          ? presetList.names.length > 0
+          : false;
+        this._state = this.presetsLoaded
+          ? PresetsState.Ready
+          : PresetsState.Empty;
+        this.presetList = presetList;
+      });
 
-    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe))
-        .subscribe(preset => this._selectedPreset = preset);
+    this._wizard.onCustomPresetSelect
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(preset => (this._selectedPreset = preset));
 
-    this._wizard.onCustomPresetsDisable.pipe(takeUntil(this._unsubscribe))
-        .subscribe(disable => this._disabled = disable);
+    this._wizard.onCustomPresetsDisable
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(disable => (this._disabled = disable));
   }
 }

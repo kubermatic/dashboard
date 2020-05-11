@@ -15,11 +15,15 @@ import {AsyncValidators} from '../../validators/async-label-form.validator';
 export class AddProjectDialogComponent implements OnInit {
   form: FormGroup;
   labels: object;
-  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Project)];
+  asyncLabelValidators = [
+    AsyncValidators.RestrictedLabelKeyName(ResourceType.Project),
+  ];
 
   constructor(
-      private readonly _apiService: ApiService, private readonly _matDialogRef: MatDialogRef<AddProjectDialogComponent>,
-      private readonly _notificationService: NotificationService) {}
+    private readonly _apiService: ApiService,
+    private readonly _matDialogRef: MatDialogRef<AddProjectDialogComponent>,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -33,9 +37,11 @@ export class AddProjectDialogComponent implements OnInit {
       name: this.form.controls.name.value,
       labels: this.labels,
     };
-    this._apiService.createProject(createProject).subscribe((res) => {
+    this._apiService.createProject(createProject).subscribe(res => {
       this._matDialogRef.close(res);
-      this._notificationService.success(`Project ${createProject.name} is added successfully`);
+      this._notificationService.success(
+        `Project ${createProject.name} is added successfully`
+      );
     });
   }
 }

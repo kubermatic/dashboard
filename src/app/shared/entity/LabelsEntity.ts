@@ -1,9 +1,9 @@
 export enum ResourceType {
   Cluster = 'cluster',
   Project = 'project',
-  NodeDeployment = 'nodedeployment'
+  NodeDeployment = 'nodedeployment',
 }
 
 export type ResourceLabelMap = {
-  [key in ResourceType]: string[]
+  [key in ResourceType]: string[];
 };

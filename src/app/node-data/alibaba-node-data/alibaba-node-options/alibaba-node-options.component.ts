@@ -10,19 +10,23 @@ import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
   selector: 'km-alibaba-node-options',
   templateUrl: './alibaba-node-options.component.html',
 })
-
 export class AlibabaNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
 
   hideOptional = true;
   private _unsubscribe: Subject<any> = new Subject();
 
-  constructor(private readonly _nodeDataService: NodeDataService, private readonly _wizardService: WizardService) {}
+  constructor(
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _wizardService: WizardService
+  ) {}
 
   ngOnInit(): void {
-    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.hideOptional = data.hideOptional;
-    });
+    this._wizardService.clusterSettingsFormViewChanged$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        this.hideOptional = data.hideOptional;
+      });
 
     this._nodeDataService.changeNodeProviderData(this.getNodeProviderData());
   }
@@ -40,7 +44,8 @@ export class AlibabaNodeOptionsComponent implements OnInit, OnDestroy {
           diskSize: this.nodeData.spec.cloud.alibaba.diskSize,
           diskType: this.nodeData.spec.cloud.alibaba.diskType,
           vSwitchID: this.nodeData.spec.cloud.alibaba.vSwitchID,
-          internetMaxBandwidthOut: this.nodeData.spec.cloud.alibaba.internetMaxBandwidthOut,
+          internetMaxBandwidthOut: this.nodeData.spec.cloud.alibaba
+            .internetMaxBandwidthOut,
           zoneID: this.nodeData.spec.cloud.alibaba.zoneID,
           labels: this.nodeData.spec.cloud.alibaba.labels,
         },

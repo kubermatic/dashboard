@@ -12,21 +12,24 @@ import {ServiceAccountEntity} from '../../shared/entity/ServiceAccountEntity';
   selector: 'km-edit-serviceaccount',
   templateUrl: './edit-serviceaccount.component.html',
 })
-
 export class EditServiceAccountComponent implements OnInit {
   @Input() project: ProjectEntity;
   @Input() serviceaccount: ServiceAccountEntity;
   editServiceAccountForm: FormGroup;
 
   constructor(
-      private readonly _apiService: ApiService,
-      private readonly _matDialogRef: MatDialogRef<EditServiceAccountComponent>,
-      private readonly _notificationService: NotificationService) {}
+    private readonly _apiService: ApiService,
+    private readonly _matDialogRef: MatDialogRef<EditServiceAccountComponent>,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.editServiceAccountForm = new FormGroup({
       name: new FormControl(this.serviceaccount.name, [Validators.required]),
-      group: new FormControl(this.serviceaccount.group.replace(/(\-[\w\d]+$)/, ''), [Validators.required]),
+      group: new FormControl(
+        this.serviceaccount.group.replace(/(-[\w\d]+$)/, ''),
+        [Validators.required]
+      ),
     });
   }
 
@@ -40,9 +43,14 @@ export class EditServiceAccountComponent implements OnInit {
       status: this.serviceaccount.id,
     };
 
-    this._apiService.editServiceAccount(this.project.id, editServiceAccount).pipe(first()).subscribe(() => {
-      this._matDialogRef.close(true);
-      this._notificationService.success(`Service Account ${this.serviceaccount.name} is edited successfully`);
-    });
+    this._apiService
+      .editServiceAccount(this.project.id, editServiceAccount)
+      .pipe(first())
+      .subscribe(() => {
+        this._matDialogRef.close(true);
+        this._notificationService.success(
+          `Service Account ${this.serviceaccount.name} is edited successfully`
+        );
+      });
   }
 }

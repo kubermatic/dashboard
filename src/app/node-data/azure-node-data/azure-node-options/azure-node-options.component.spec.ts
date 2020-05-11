@@ -3,7 +3,11 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ApiService, DatacenterService, WizardService} from '../../../core/services';
+import {
+  ApiService,
+  DatacenterService,
+  WizardService,
+} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeAzureSizes} from '../../../testing/fake-data/addNodeModal.fake';
@@ -25,28 +29,27 @@ describe('AzureNodeOptionsComponent', () => {
   let component: AzureNodeOptionsComponent;
 
   beforeEach(async(() => {
-    const apiMock = {'getAzureSizes': jest.fn(), 'getAzureSizesForWizard': jest.fn()};
+    const apiMock = {
+      getAzureSizes: jest.fn(),
+      getAzureSizesForWizard: jest.fn(),
+    };
     apiMock.getAzureSizes.mockReturnValue(asyncData(fakeAzureSizes()));
     apiMock.getAzureSizesForWizard.mockReturnValue(asyncData(fakeAzureSizes()));
-    const datacenterMock = {'getDataCenter': jest.fn()};
-    datacenterMock.getDataCenter.mockReturnValue(asyncData(fakeAzureDatacenter()));
+    const datacenterMock = {getDataCenter: jest.fn()};
+    datacenterMock.getDataCenter.mockReturnValue(
+      asyncData(fakeAzureDatacenter())
+    );
 
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            AzureNodeOptionsComponent,
-          ],
-          providers: [
-            NodeDataService,
-            WizardService,
-            {provide: ApiService, useValue: apiMock},
-            {provide: DatacenterService, useValue: datacenterMock},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [AzureNodeOptionsComponent],
+      providers: [
+        NodeDataService,
+        WizardService,
+        {provide: ApiService, useValue: apiMock},
+        {provide: DatacenterService, useValue: datacenterMock},
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

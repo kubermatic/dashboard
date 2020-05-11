@@ -9,10 +9,7 @@ import {PagesRoutingModule} from './pages-routing.module';
 import {TermsOfServiceComponent} from './terms-of-service/terms-of-service.component';
 
 @NgModule({
-  imports: [
-    PagesRoutingModule,
-    SharedModule,
-  ],
+  imports: [PagesRoutingModule, SharedModule],
   declarations: [
     PageNotFoundComponent,
     FrontpageComponent,
@@ -21,6 +18,4 @@ import {TermsOfServiceComponent} from './terms-of-service/terms-of-service.compo
   ],
   exports: [],
 })
-
-export class PagesModule {
-}
+export class PagesModule {}

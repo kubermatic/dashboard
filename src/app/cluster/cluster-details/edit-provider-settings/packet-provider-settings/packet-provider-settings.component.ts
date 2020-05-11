@@ -1,5 +1,10 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
@@ -12,7 +17,6 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
   selector: 'km-packet-provider-settings',
   templateUrl: './packet-provider-settings.component.html',
 })
-
 export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   form: FormGroup;
@@ -22,8 +26,11 @@ export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
   constructor(private clusterService: ClusterService) {}
 
   ngOnInit(): void {
-    const billingCycle = !!this.cluster.spec.cloud.packet.billingCycle ? this.cluster.spec.cloud.packet.billingCycle :
-                                                                         this.getAvailableBillingCycles()[0];
+    let billingCycle = this.cluster.spec.cloud.packet.billingCycle;
+    if (!billingCycle) {
+      billingCycle = this.getAvailableBillingCycles()[0];
+    }
+
     this._formData.billingCycle = billingCycle;
 
     this.form = new FormGroup({
@@ -32,14 +39,22 @@ export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
       billingCycle: new FormControl(billingCycle, [Validators.maxLength(64)]),
     });
 
-    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      if (data.apiKey !== this._formData.apiKey || data.projectID !== this._formData.projectID ||
-          data.billingCycle !== this._formData.billingCycle) {
-        this._formData = data;
-        this.setValidators();
-        this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-      }
-    });
+    this.form.valueChanges
+      .pipe(debounceTime(1000))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        if (
+          data.apiKey !== this._formData.apiKey ||
+          data.projectID !== this._formData.projectID ||
+          data.billingCycle !== this._formData.billingCycle
+        ) {
+          this._formData = data;
+          this.setValidators();
+          this.clusterService.changeProviderSettingsPatch(
+            this.getProviderSettingsPatch()
+          );
+        }
+      });
   }
 
   get apiKey(): AbstractControl {
@@ -55,8 +70,14 @@ export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
       this.apiKey.clearValidators();
       this.projectID.clearValidators();
     } else {
-      this.apiKey.setValidators([Validators.required, Validators.maxLength(256)]);
-      this.projectID.setValidators([Validators.required, Validators.maxLength(256)]);
+      this.apiKey.setValidators([
+        Validators.required,
+        Validators.maxLength(256),
+      ]);
+      this.projectID.setValidators([
+        Validators.required,
+        Validators.maxLength(256),
+      ]);
     }
 
     this.apiKey.updateValueAndValidity();

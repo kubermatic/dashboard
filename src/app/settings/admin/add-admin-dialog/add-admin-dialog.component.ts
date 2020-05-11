@@ -6,7 +6,6 @@ import {NotificationService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {AdminEntity} from '../../../shared/entity/AdminSettings';
 
-
 @Component({
   selector: 'km-add-admin-dialog',
   templateUrl: './add-admin-dialog.component.html',
@@ -16,9 +15,10 @@ export class AddAdminDialogComponent implements OnInit {
   form: FormGroup;
 
   constructor(
-      private readonly _settingsService: SettingsService,
-      private readonly _matDialogRef: MatDialogRef<AddAdminDialogComponent>,
-      private readonly _notificationService: NotificationService) {}
+    private readonly _settingsService: SettingsService,
+    private readonly _matDialogRef: MatDialogRef<AddAdminDialogComponent>,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -32,8 +32,10 @@ export class AddAdminDialogComponent implements OnInit {
       isAdmin: true,
     };
 
-    this._settingsService.setAdmin(adminEntity).subscribe((admin) => {
-      this._notificationService.success(`${admin.name} was successfully added to admin group`);
+    this._settingsService.setAdmin(adminEntity).subscribe(admin => {
+      this._notificationService.success(
+        `${admin.name} was successfully added to admin group`
+      );
       this._matDialogRef.close(admin);
     });
   }

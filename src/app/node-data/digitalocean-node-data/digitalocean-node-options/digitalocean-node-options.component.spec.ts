@@ -22,20 +22,11 @@ describe('DigitaloceanNodeOptionsComponent', () => {
   let component: DigitaloceanNodeOptionsComponent;
 
   beforeEach(async(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          declarations: [
-            DigitaloceanNodeOptionsComponent,
-          ],
-          providers: [
-            NodeDataService,
-            WizardService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [DigitaloceanNodeOptionsComponent],
+      providers: [NodeDataService, WizardService],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -58,8 +49,16 @@ describe('DigitaloceanNodeOptionsComponent', () => {
     fixture.detectChanges();
 
     expect(component.getDoOptionsData()).toEqual({
-      spec: {digitalocean: {size: 's-1vcpu-1gb', backups: false, ipv6: true, monitoring: false, tags: []}},
-      valid: true
+      spec: {
+        digitalocean: {
+          size: 's-1vcpu-1gb',
+          backups: false,
+          ipv6: true,
+          monitoring: false,
+          tags: [],
+        },
+      },
+      valid: true,
     });
   });
 });

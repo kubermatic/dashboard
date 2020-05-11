@@ -20,24 +20,38 @@ export class NavigationComponent implements OnInit {
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
-      private readonly _auth: Auth, private readonly _router: Router, private readonly _userService: UserService,
-      private _settingsService: SettingsService) {}
+    private readonly _auth: Auth,
+    private readonly _router: Router,
+    private readonly _userService: UserService,
+    private _settingsService: SettingsService
+  ) {}
 
   ngOnInit(): void {
     if (this._auth.authenticated()) {
-      this._userService.loggedInUser.subscribe(user => this.currentUser = user);
+      this._userService.loggedInUser.subscribe(
+        user => (this.currentUser = user)
+      );
     }
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      this.showSidenav = !settings.collapseSidenav;
-    });
+    this._settingsService.userSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => {
+        this.showSidenav = !settings.collapseSidenav;
+      });
 
-    this._settingsChange.pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(() => this._settingsService.patchUserSettings({'collapseSidenav': !this.showSidenav})))
-        .subscribe(settings => {
-          this._settingsService.refreshUserSettings();
-          this.showSidenav = !settings.collapseSidenav;
-        });
+    this._settingsChange
+      .pipe(takeUntil(this._unsubscribe))
+      .pipe(
+        switchMap(() =>
+          this._settingsService.patchUserSettings({
+            collapseSidenav: !this.showSidenav,
+          })
+        )
+      )
+      .subscribe(settings => {
+        this._settingsService.refreshUserSettings();
+        this.showSidenav = !settings.collapseSidenav;
+      });
   }
 
   isAuthenticated(): boolean {

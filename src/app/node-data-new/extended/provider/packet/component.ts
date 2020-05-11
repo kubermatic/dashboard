@@ -12,11 +12,20 @@ enum Controls {
   selector: 'km-packet-extended-node-data',
   templateUrl: './template.html',
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => PacketExtendedNodeDataComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => PacketExtendedNodeDataComponent), multi: true}
-  ]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PacketExtendedNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PacketExtendedNodeDataComponent),
+      multi: true,
+    },
+  ],
 })
-export class PacketExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class PacketExtendedNodeDataComponent extends BaseFormValidator
+  implements OnInit, OnDestroy {
   tags: string[] = [];
 
   readonly Controls = Controls;
@@ -25,7 +34,10 @@ export class PacketExtendedNodeDataComponent extends BaseFormValidator implement
     return this._nodeDataService.nodeData;
   }
 
-  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _nodeDataService: NodeDataService
+  ) {
     super();
   }
 

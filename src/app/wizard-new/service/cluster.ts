@@ -17,13 +17,15 @@ export class ClusterService {
   private _sshKeysEntity: SSHKeyEntity[] = [];
 
   set cluster(cluster: ClusterEntity) {
-    if (this._getProvider(this._clusterEntity) !== NodeProvider.NONE &&
-        this._getProvider(cluster) !== NodeProvider.NONE &&
-        this._getProvider(this._clusterEntity) !== this._getProvider(cluster)) {
+    if (
+      this._getProvider(this._clusterEntity) !== NodeProvider.NONE &&
+      this._getProvider(cluster) !== NodeProvider.NONE &&
+      this._getProvider(this._clusterEntity) !== this._getProvider(cluster)
+    ) {
       return;
     }
 
-    this._clusterEntity = _.mergeWith(this._clusterEntity, cluster, (value) => {
+    this._clusterEntity = _.mergeWith(this._clusterEntity, cluster, value => {
       if (_.isArray(value)) {
         return value;
       }
@@ -52,10 +54,14 @@ export class ClusterService {
 
   get provider(): NodeProvider {
     const clusterProviders = Object.values(NodeProvider)
-                                 .map(provider => this._clusterEntity.spec.cloud[provider] ? provider : undefined)
-                                 .filter(p => p !== undefined);
+      .map(provider =>
+        this._clusterEntity.spec.cloud[provider] ? provider : undefined
+      )
+      .filter(p => p !== undefined);
 
-    return clusterProviders.length > 0 ? clusterProviders[0] : NodeProvider.NONE;
+    return clusterProviders.length > 0
+      ? clusterProviders[0]
+      : NodeProvider.NONE;
   }
 
   set datacenter(datacenter: string) {
@@ -109,9 +115,11 @@ export class ClusterService {
     }
 
     const clusterProviders = Object.values(NodeProvider)
-                                 .map(provider => cluster.spec.cloud[provider] ? provider : undefined)
-                                 .filter(p => p !== undefined);
+      .map(provider => (cluster.spec.cloud[provider] ? provider : undefined))
+      .filter(p => p !== undefined);
 
-    return clusterProviders.length > 0 ? clusterProviders[0] : NodeProvider.NONE;
+    return clusterProviders.length > 0
+      ? clusterProviders[0]
+      : NodeProvider.NONE;
   }
 }

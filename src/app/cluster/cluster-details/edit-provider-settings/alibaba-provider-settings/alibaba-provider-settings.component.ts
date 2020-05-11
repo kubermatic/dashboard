@@ -1,5 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
@@ -10,7 +15,6 @@ import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.s
   selector: 'km-alibaba-provider-settings',
   templateUrl: './alibaba-provider-settings.component.html',
 })
-
 export class AlibabaProviderSettingsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   private _formData = {accessKeyID: '', accessKeySecret: ''};
@@ -24,13 +28,21 @@ export class AlibabaProviderSettingsComponent implements OnInit, OnDestroy {
       accessKeySecret: new FormControl(''),
     });
 
-    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      if (data.accessKeyID !== this._formData.accessKeyID || data.accessKeySecret !== this._formData.accessKeySecret) {
-        this._formData = data;
-        this.setValidators();
-        this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-      }
-    });
+    this.form.valueChanges
+      .pipe(debounceTime(1000))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        if (
+          data.accessKeyID !== this._formData.accessKeyID ||
+          data.accessKeySecret !== this._formData.accessKeySecret
+        ) {
+          this._formData = data;
+          this.setValidators();
+          this.clusterService.changeProviderSettingsPatch(
+            this.getProviderSettingsPatch()
+          );
+        }
+      });
   }
 
   get accessKeyID(): AbstractControl {

@@ -1,5 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
@@ -10,7 +15,6 @@ import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.s
   selector: 'km-aws-provider-settings',
   templateUrl: './aws-provider-settings.component.html',
 })
-
 export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   private _formData = {accessKeyId: '', secretAccessKey: ''};
@@ -24,13 +28,21 @@ export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
       secretAccessKey: new FormControl(''),
     });
 
-    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      if (data.accessKeyId !== this._formData.accessKeyId || data.secretAccessKey !== this._formData.secretAccessKey) {
-        this._formData = data;
-        this.setValidators();
-        this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-      }
-    });
+    this.form.valueChanges
+      .pipe(debounceTime(1000))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        if (
+          data.accessKeyId !== this._formData.accessKeyId ||
+          data.secretAccessKey !== this._formData.secretAccessKey
+        ) {
+          this._formData = data;
+          this.setValidators();
+          this.clusterService.changeProviderSettingsPatch(
+            this.getProviderSettingsPatch()
+          );
+        }
+      });
   }
 
   get accessKeyId(): AbstractControl {

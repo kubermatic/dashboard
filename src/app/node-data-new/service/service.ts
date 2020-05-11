@@ -27,8 +27,11 @@ export class NodeDataService {
   readonly operatingSystemChanges = new ReplaySubject<OperatingSystem>();
 
   constructor(
-      @Inject(NODE_DATA_CONFIG) config: NodeDataConfig, private readonly _presetService: PresetsService,
-      private readonly _datacenterService: DatacenterService, private readonly _clusterService: ClusterService) {
+    @Inject(NODE_DATA_CONFIG) config: NodeDataConfig,
+    private readonly _presetService: PresetsService,
+    private readonly _datacenterService: DatacenterService,
+    private readonly _clusterService: ClusterService
+  ) {
     this._config = config;
   }
 
@@ -48,7 +51,9 @@ export class NodeDataService {
   set operatingSystemSpec(spec: OperatingSystemSpec) {
     delete this._nodeData.spec.operatingSystem;
     this._nodeData.spec.operatingSystem = spec;
-    this.operatingSystemChanges.next(OperatingSystemSpec.getOperatingSystem(spec));
+    this.operatingSystemChanges.next(
+      OperatingSystemSpec.getOperatingSystem(spec)
+    );
   }
 
   get operatingSystemSpec(): OperatingSystemSpec {
@@ -56,7 +61,9 @@ export class NodeDataService {
   }
 
   get operatingSystem(): OperatingSystem {
-    return OperatingSystemSpec.getOperatingSystem(this._nodeData.spec.operatingSystem);
+    return OperatingSystemSpec.getOperatingSystem(
+      this._nodeData.spec.operatingSystem
+    );
   }
 
   set labels(labels: object) {
@@ -78,14 +85,48 @@ export class NodeDataService {
     return this.mode === NodeDataMode.Wizard;
   }
 
-  readonly alibaba =
-      new NodeDataAlibabaProvider(this, this._clusterService, this._presetService, this._datacenterService);
-  readonly aws = new NodeDataAWSProvider(this, this._clusterService, this._presetService, this._datacenterService);
-  readonly azure = new NodeDataAzureProvider(this, this._clusterService, this._presetService, this._datacenterService);
-  readonly digitalOcean = new NodeDataDigitalOceanProvider(this, this._clusterService, this._presetService);
-  readonly hetzner = new NodeDataHetznerProvider(this, this._clusterService, this._presetService);
-  readonly packet = new NodeDataPacketProvider(this, this._clusterService, this._presetService);
-  readonly gcp = new NodeDataGCPProvider(this, this._clusterService, this._presetService);
-  readonly openstack =
-      new NodeDataOpenstackProvider(this, this._clusterService, this._presetService, this._datacenterService);
+  readonly alibaba = new NodeDataAlibabaProvider(
+    this,
+    this._clusterService,
+    this._presetService,
+    this._datacenterService
+  );
+  readonly aws = new NodeDataAWSProvider(
+    this,
+    this._clusterService,
+    this._presetService,
+    this._datacenterService
+  );
+  readonly azure = new NodeDataAzureProvider(
+    this,
+    this._clusterService,
+    this._presetService,
+    this._datacenterService
+  );
+  readonly digitalOcean = new NodeDataDigitalOceanProvider(
+    this,
+    this._clusterService,
+    this._presetService
+  );
+  readonly hetzner = new NodeDataHetznerProvider(
+    this,
+    this._clusterService,
+    this._presetService
+  );
+  readonly packet = new NodeDataPacketProvider(
+    this,
+    this._clusterService,
+    this._presetService
+  );
+  readonly gcp = new NodeDataGCPProvider(
+    this,
+    this._clusterService,
+    this._presetService
+  );
+  readonly openstack = new NodeDataOpenstackProvider(
+    this,
+    this._clusterService,
+    this._presetService,
+    this._datacenterService
+  );
 }

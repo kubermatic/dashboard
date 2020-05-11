@@ -18,25 +18,38 @@ enum Controls {
   selector: 'km-wizard-provider-settings-step',
   templateUrl: './template.html',
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ProviderSettingsStepComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => ProviderSettingsStepComponent), multi: true}
-  ]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ProviderSettingsStepComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => ProviderSettingsStepComponent),
+      multi: true,
+    },
+  ],
 })
-export class ProviderSettingsStepComponent extends StepBase implements OnInit, OnDestroy {
+export class ProviderSettingsStepComponent extends StepBase
+  implements OnInit, OnDestroy {
   readonly Provider = NodeProvider;
   readonly Control = Controls;
 
   provider: NodeProvider;
 
   constructor(
-      private readonly _builder: FormBuilder, private readonly _clusterService: ClusterService, wizard: WizardService) {
+    private readonly _builder: FormBuilder,
+    private readonly _clusterService: ClusterService,
+    wizard: WizardService
+  ) {
     super(wizard, 'Provider settings');
   }
 
   ngOnInit(): void {
     this._init();
-    this._clusterService.providerChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(provider => this.provider = provider);
+    this._clusterService.providerChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(provider => (this.provider = provider));
   }
 
   _init(): void {

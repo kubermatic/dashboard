@@ -1,5 +1,17 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import {
+  FormBuilder,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  Validators,
+} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {PacketNodeSpec} from '../../../../shared/entity/node/PacketNodeSpec';
@@ -23,12 +35,21 @@ enum SizeState {
   selector: 'km-packet-basic-node-data',
   templateUrl: './template.html',
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => PacketBasicNodeDataComponent), multi: true},
-    {provide: NG_VALIDATORS, useExisting: forwardRef(() => PacketBasicNodeDataComponent), multi: true}
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PacketBasicNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PacketBasicNodeDataComponent),
+      multi: true,
+    },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PacketBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class PacketBasicNodeDataComponent extends BaseFormValidator
+  implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
   sizes: PacketSize[] = [];
@@ -36,8 +57,10 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
   sizeLabel = SizeState.Empty;
 
   constructor(
-      private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService,
-      private readonly _cdr: ChangeDetectorRef) {
+    private readonly _builder: FormBuilder,
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _cdr: ChangeDetectorRef
+  ) {
     super();
   }
 
@@ -46,7 +69,9 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
       [Controls.InstanceType]: this._builder.control('', Validators.required),
     });
 
-    this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
+    this._sizesObservable
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._setDefaultSize.bind(this));
   }
 
   ngOnDestroy(): void {
@@ -60,9 +85,9 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
         cloud: {
           packet: {
             instanceType: size,
-          } as PacketNodeSpec
-        } as NodeCloudSpec
-      } as NodeSpec
+          } as PacketNodeSpec,
+        } as NodeCloudSpec,
+      } as NodeSpec,
     } as NodeData;
   }
 
@@ -87,7 +112,10 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
   }
 
   private get _sizesObservable(): Observable<PacketSize[]> {
-    return this._nodeDataService.packet.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
+    return this._nodeDataService.packet.flavors(
+      this._clearSize.bind(this),
+      this._onSizeLoading.bind(this)
+    );
   }
 
   private _onSizeLoading(): void {

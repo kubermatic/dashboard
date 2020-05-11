@@ -1,4 +1,10 @@
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -26,21 +32,19 @@ describe('EditMemberComponent', () => {
   let editMemberSpy;
 
   beforeEach(async(() => {
-    const apiMock = {'editMembers': jest.fn()};
-    editMemberSpy = apiMock.editMembers.mockReturnValue(asyncData(fakeMember()));
+    const apiMock = {editMembers: jest.fn()};
+    editMemberSpy = apiMock.editMembers.mockReturnValue(
+      asyncData(fakeMember())
+    );
 
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          providers: [
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-            {provide: ApiService, useValue: apiMock},
-            NotificationService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: ApiService, useValue: apiMock},
+        NotificationService,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(async(() => {
@@ -52,8 +56,8 @@ describe('EditMemberComponent', () => {
   }));
 
   it('should initialize', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 
   it('should have valid form defaults', () => {
     expect(component.editMemberForm.valid).toBeTruthy();
@@ -62,17 +66,21 @@ describe('EditMemberComponent', () => {
   it('should have required fields', () => {
     component.editMemberForm.controls.group.patchValue('');
     expect(component.editMemberForm.controls.group.valid).toBeFalsy();
-    expect(component.editMemberForm.controls.group.hasError('required')).toBeTruthy();
+    expect(
+      component.editMemberForm.controls.group.hasError('required')
+    ).toBeTruthy();
 
     component.editMemberForm.controls.group.patchValue('editor');
-    expect(component.editMemberForm.controls.group.hasError('required')).toBeFalsy();
+    expect(
+      component.editMemberForm.controls.group.hasError('required')
+    ).toBeFalsy();
   });
 
   it('should call editMember method', fakeAsync(() => {
-       component.editMemberForm.controls.group.patchValue('editor');
-       component.editMember();
-       tick();
+    component.editMemberForm.controls.group.patchValue('editor');
+    component.editMember();
+    tick();
 
-       expect(editMemberSpy).toHaveBeenCalled();
-     }));
+    expect(editMemberSpy).toHaveBeenCalled();
+  }));
 });

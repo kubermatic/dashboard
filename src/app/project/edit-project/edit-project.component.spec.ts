@@ -1,4 +1,10 @@
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -27,20 +33,18 @@ describe('EditProjectComponent', () => {
   let editProjectSpy;
 
   beforeEach(async(() => {
-    const apiMock = {'editProject': jest.fn()};
-    editProjectSpy = apiMock.editProject.mockReturnValue(asyncData(fakeProject()));
+    const apiMock = {editProject: jest.fn()};
+    editProjectSpy = apiMock.editProject.mockReturnValue(
+      asyncData(fakeProject())
+    );
 
-    TestBed
-        .configureTestingModule({
-          imports: [
-            ...modules,
-          ],
-          providers: [
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-            {provide: ApiService, useValue: apiMock},
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: ApiService, useValue: apiMock},
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(async(() => {
@@ -53,8 +57,8 @@ describe('EditProjectComponent', () => {
   }));
 
   it('should initialize', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 
   it('should have valid form after creating', () => {
     expect(component.form.valid).toBeTruthy();
@@ -71,10 +75,10 @@ describe('EditProjectComponent', () => {
   });
 
   it('should call editProject method', fakeAsync(() => {
-       component.form.controls.name.patchValue('new-project-name');
-       component.editProject();
-       tick();
+    component.form.controls.name.patchValue('new-project-name');
+    component.editProject();
+    tick();
 
-       expect(editProjectSpy).toHaveBeenCalled();
-     }));
+    expect(editProjectSpy).toHaveBeenCalled();
+  }));
 });

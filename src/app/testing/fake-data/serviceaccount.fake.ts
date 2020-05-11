@@ -1,14 +1,23 @@
-import {ServiceAccountEntity, ServiceAccountTokenEntity} from '../../shared/entity/ServiceAccountEntity';
+import {
+  ServiceAccountEntity,
+  ServiceAccountTokenEntity,
+} from '../../shared/entity/ServiceAccountEntity';
 
 export function fakeServiceAccounts(): ServiceAccountEntity[] {
   return [
-    {creationTimestamp: new Date(), id: '987zy6xv5u', name: 'test-service-account', status: 'Active', group: 'editors'},
+    {
+      creationTimestamp: new Date(),
+      id: '987zy6xv5u',
+      name: 'test-service-account',
+      status: 'Active',
+      group: 'editors',
+    },
     {
       creationTimestamp: new Date(),
       id: '765zy4xv3u',
       name: 'test-service-account-2',
       status: 'Active',
-      group: 'viewers'
+      group: 'viewers',
     },
   ];
 }
@@ -19,7 +28,7 @@ export function fakeServiceAccount(): ServiceAccountEntity {
     id: '987zy6xv5u',
     name: 'test-service-account',
     status: 'Active',
-    group: 'editors'
+    group: 'editors',
   };
 }
 
@@ -30,14 +39,14 @@ export function fakeServiceAccountTokens(): ServiceAccountTokenEntity[] {
       expiry: new Date(),
       id: 'sa-token-987zy6xv5u',
       name: 'test-service-account-token',
-      token: 'secret-test-token'
+      token: 'secret-test-token',
     },
     {
       creationTimestamp: new Date(),
       expiry: new Date(),
       id: '765zy4xv3u',
       name: 'test-service-account-token-2',
-      token: 'secret-test-token-2'
+      token: 'secret-test-token-2',
     },
   ];
 }
@@ -48,6 +57,6 @@ export function fakeServiceAccountToken(): ServiceAccountTokenEntity {
     expiry: new Date(),
     id: 'sa-token-987zy6xv5u',
     name: 'test-service-account-token',
-    token: 'secret-test-token'
+    token: 'secret-test-token',
   };
 }

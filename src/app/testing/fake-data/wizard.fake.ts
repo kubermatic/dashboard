@@ -1,4 +1,9 @@
-import {OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet, OpenstackTenant} from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {
+  OpenstackNetwork,
+  OpenstackSecurityGroup,
+  OpenstackSubnet,
+  OpenstackTenant,
+} from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
 
 export function doClusterModelFake(): CreateClusterModel {
@@ -19,9 +24,7 @@ export function doClusterModelFake(): CreateClusterModel {
         version: '',
       },
       type: 'kubernetes',
-      sshKeys: [
-        'key1',
-      ],
+      sshKeys: ['key1'],
     },
   };
 }

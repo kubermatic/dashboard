@@ -26,29 +26,27 @@ describe('AdminSettingsComponent', () => {
   let component: AdminSettingsComponent;
 
   beforeEach(() => {
-    TestBed
-        .configureTestingModule({
-          imports: [
-            BrowserModule,
-            RouterTestingModule,
-            BrowserAnimationsModule,
-            SharedModule,
-          ],
-          declarations: [
-            AdminSettingsComponent,
-            AddAdminDialogComponent,
-            CustomLinksFormComponent,
-          ],
-          providers: [
-            {provide: UserService, useClass: UserMockService},
-            {provide: SettingsService, useClass: SettingsMockService},
-            {provide: MatDialogRef, useClass: MatDialogRefMock},
-            {provide: MatDialog, useClass: MatDialogMock},
-            HistoryService,
-            NotificationService,
-          ],
-        })
-        .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        RouterTestingModule,
+        BrowserAnimationsModule,
+        SharedModule,
+      ],
+      declarations: [
+        AdminSettingsComponent,
+        AddAdminDialogComponent,
+        CustomLinksFormComponent,
+      ],
+      providers: [
+        {provide: UserService, useClass: UserMockService},
+        {provide: SettingsService, useClass: SettingsMockService},
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: MatDialog, useClass: MatDialogMock},
+        HistoryService,
+        NotificationService,
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -57,8 +55,8 @@ describe('AdminSettingsComponent', () => {
   });
 
   it('should initialize', async(() => {
-       expect(component).toBeTruthy();
-     }));
+    expect(component).toBeTruthy();
+  }));
 
   it('should correctly check if the last one distribution is selected', () => {
     const group = {} as MatButtonToggleGroup;
