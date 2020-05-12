@@ -4,7 +4,7 @@
 # you will have /host-pwd inside the container to work.
 #
 
-image=localdev-dashboard-v2
+image=localdev-dashboard
 name=$image
 
 docker run \
