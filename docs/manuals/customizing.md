@@ -92,8 +92,8 @@ This approach is very similar to the first one, but this time application source
 container that was prepared specially for it. It allows to modify stylesheets just like in the first approach, but files
 could be easily mounted into existing custom container, so there is no need to build another image.
 
-Custom image is defined inside `Dockerfile.custom` and should be kept inside `quay.io/kubermatic/ui-v2-custom`
-repository.
+Custom image is defined inside `Dockerfile.custom` and should be kept inside `quay.io/kubermatic/dashboard`
+repository under specific tag version that ends with `-custom` suffix.
 
 ### Customizing the Application Without Changing the Sources
 This approach is recommended for those who cannot or do not want to modify application sources. It does not require
@@ -101,11 +101,11 @@ access to the sources, as all customizations will be applied as CSS rules writte
 into the application container.
 
 Custom CSS file needs to be mounted as specified in `environment.prod.ts`, so as `dist/assets/custom/style.css`.
-Assuming that we have application image `kubermatic/ui-v2:test` that we want to customize and CSS file named `c.css`
+Assuming that we have application image `kubermatic/ui:test` that we want to customize and CSS file named `c.css`
 we can run following command to start application and apply custom CSS rules:
 
 ```
-docker run --rm -ti -v $(pwd)/c.css:/dist/assets/custom/style.css --user=$(id -u) -p 8080:8080 kubermatic/ui-v2:test
+docker run --rm -ti -v $(pwd)/c.css:/dist/assets/custom/style.css --user=$(id -u) -p 8080:8080 kubermatic/ui:test
 ```
 
 **Tip**: Custom CSS file can be used as a root file that will import other custom files.
@@ -119,7 +119,7 @@ icons color to green.
 
 It is easiest to start with running the container with customizations file mounted to it:
 ```
-docker run --rm -ti -v $(pwd)/c.css:/dist/assets/custom/style.css --user=$(id -u) -p 8080:8080 kubermatic/ui-v2:test
+docker run --rm -ti -v $(pwd)/c.css:/dist/assets/custom/style.css --user=$(id -u) -p 8080:8080 kubermatic/ui:test
 ```
 
 Then we can apply customizations to the `$(pwd)/c.css` file:

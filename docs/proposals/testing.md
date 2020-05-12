@@ -38,17 +38,17 @@ How To use it:
 
 ## Task & effort:
 
-https://github.com/kubermatic/dashboard-v2/issues/365 angular cli testing
+https://github.com/kubermatic/dashboard/issues/365 angular cli testing
 
-https://github.com/kubermatic/dashboard-v2/issues/392 Testing/pages,shared,dashboard folders - about 1 day
+https://github.com/kubermatic/dashboard/issues/392 Testing/pages,shared,dashboard folders - about 1 day
 
-https://github.com/kubermatic/dashboard-v2/issues/390 Testing/cluster folder - about 2-3 days
+https://github.com/kubermatic/dashboard/issues/390 Testing/cluster folder - about 2-3 days
 
-https://github.com/kubermatic/dashboard-v2/issues/393 Testing/wizard - about 3 days
+https://github.com/kubermatic/dashboard/issues/393 Testing/wizard - about 3 days
 
-https://github.com/kubermatic/dashboard-v2/issues/394 Testing/add-node -  about 1-2 days
+https://github.com/kubermatic/dashboard/issues/394 Testing/add-node -  about 1-2 days
 
-https://github.com/kubermatic/dashboard-v2/issues/395 Testing/sshkey - about 1 day
+https://github.com/kubermatic/dashboard/issues/395 Testing/sshkey - about 1 day
 
 
 ## Branch:

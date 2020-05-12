@@ -1,9 +1,9 @@
 {
   "name": "kubermatic",
   "private": true,
-  "version": "1.0.0-SNAPSHOT",
+  "version": "v2.14.0-rc.1",
   "description": "Kubermatic",
-  "repository": "https://github.com/kubermatic/dashboard-v2",
+  "repository": "https://github.com/kubermatic/dashboard",
   "license": "proprietary",
   "angular-cli": {},
   "scripts": {

@@ -19,7 +19,7 @@ You should have 127.0.0.1:8080 and 127.0.0.1:8085 listening.
 Also change `proxy.conf.json` to have `"target": "http://localhost:8080/"`.
 
 ```
-cd .../dashboard-v2
+cd .../dashboard
 # Run the container. Your working directory is important here.
 ./containers/localdev/run.sh
 
