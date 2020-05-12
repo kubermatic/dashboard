@@ -1,7 +1,7 @@
 #!/bin/sh
 
 
-image=localdev-dashboard-v2
+image=localdev-dashboard
 
 cd `dirname $0`
 docker build -t $image .

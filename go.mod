@@ -1,4 +1,4 @@
-module github.com/kubermatic/dashboard-v2
+module github.com/kubermatic/dashboard
 
 go 1.12
 

@@ -4,6 +4,6 @@ LABEL maintainer="sebastian@loodse.com"
 
 RUN apk add -U ca-certificates && rm -rf /var/cache/apk/*
 
-COPY ./dashboard-v2 /
+COPY ./dashboard /
 COPY ./dist /dist
-CMD ["/dashboard-v2"]
+CMD ["/dashboard"]
