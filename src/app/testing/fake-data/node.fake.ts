@@ -349,6 +349,7 @@ export function nodeDataFake(): NodeData {
         azure: {
           size: 'cx31',
           assignPublicIP: false,
+          zone: '1',
           tags: {},
         },
         packet: {
@@ -428,6 +429,7 @@ export function nodeDataCentOsFake(): NodeData {
         azure: {
           size: 'cx31',
           assignPublicIP: false,
+          zone: '1',
           tags: {},
         },
         gcp: {
@@ -491,6 +493,7 @@ export function nodeDataContainerLinuxFake(): NodeData {
         azure: {
           size: 'cx31',
           assignPublicIP: false,
+          zone: '1',
           tags: {},
         },
         gcp: {
@@ -555,6 +558,7 @@ export function nodeDataSLESFake(): NodeData {
         azure: {
           size: 'cx31',
           assignPublicIP: false,
+          zone: '1',
           tags: {},
         },
         gcp: {

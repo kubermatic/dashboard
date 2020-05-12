@@ -14,4 +14,18 @@
       {{size.name}} ({{size.numberOfCores}} vCPU, {{size.memoryInMB}} MB RAM)
     </div>
   </km-combobox>
+
+  <km-combobox [required]="false"
+               [grouped]="false"
+               [options]="zones"
+               [hint]="getHint(Controls.Zone)"
+               [formControlName]="Controls.Zone"
+               (changed)="onZoneChange($event)"
+               [label]="zoneLabel"
+               inputLabel="Select zone..."
+               filterBy="name">
+    <div *option="let zone">
+      {{zone.name}}
+    </div>
+  </km-combobox>
 </form>

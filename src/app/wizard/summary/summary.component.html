@@ -382,6 +382,10 @@
         <!-- Azure Nodes -->
         <ng-container *ngIf="cluster.spec.cloud.azure">
           <div class="km-summary-row km-summary-row-with-margin">{{nodeData.spec.cloud.azure.size}}</div>
+          <km-property *ngIf="nodeData.spec.cloud.azure.zone">
+            <div key>Zone</div>
+            <div value>{{nodeData.spec.cloud.azure.zone}}</div>
+          </km-property>
         </ng-container>
 
         <!-- Alibaba Nodes -->

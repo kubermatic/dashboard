@@ -3,4 +3,5 @@ export class AzureNodeSpec {
   assignPublicIP: boolean;
   tags: object;
   imageID?: string;
+  zone: string;
 }

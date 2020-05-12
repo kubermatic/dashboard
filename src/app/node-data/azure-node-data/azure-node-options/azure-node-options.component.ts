@@ -55,6 +55,7 @@ export class AzureNodeOptionsComponent implements OnInit, OnDestroy {
       spec: {
         azure: {
           size: this.nodeData.spec.cloud.azure.size,
+          zone: this.nodeData.spec.cloud.azure.zone,
           assignPublicIP: this.form.controls.assignPublicIP.value,
           tags: this.nodeData.spec.cloud.azure.tags,
         },
