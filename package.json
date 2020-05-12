@@ -70,7 +70,7 @@
     "moment": "2.25.3",
     "ngx-clipboard": "13.0.1",
     "ngx-cookie-service": "2.4.0",
-    "ngx-custom-validators": "8.0.0",
+    "ngx-custom-validators": "9.1.0",
     "ngx-filter-pipe": "2.1.2",
     "rxjs": "6.5.5",
     "rxjs-compat": "6.5.5",
