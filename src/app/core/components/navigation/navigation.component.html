@@ -13,6 +13,7 @@
        routerLink="projects"></a>
     <km-project-selector *ngIf="isAuthenticated() && showMenuSwitchAndProjectSelector"
                          [showSidenav]="showSidenav"
+                         class="project-selector"
                          fxFlex></km-project-selector>
 
     <km-notification-panel *ngIf="isAuthenticated()"></km-notification-panel>
