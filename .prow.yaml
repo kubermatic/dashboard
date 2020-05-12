@@ -2,7 +2,7 @@ presubmits:
 - name: pull-kubermatic-dashboard-validate-prow-yaml
   always_run: true
   decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
   extra_refs:
     - org: kubermatic
       repo: infra
@@ -22,7 +22,7 @@ presubmits:
 - name: pull-dashboard-godep-check
   always_run: true
   decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
   spec:
     containers:
       - image: quay.io/kubermatic/dep:0.5.4-2
@@ -37,7 +37,7 @@ presubmits:
 - name: pull-dashboard-dependencies
   always_run: true
   decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
   spec:
     containers:
       - image: node:12
@@ -56,7 +56,7 @@ presubmits:
 - name: pull-dashboard-node-dist
   always_run: true
   decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
   spec:
     containers:
       - image: node:12
@@ -75,7 +75,7 @@ presubmits:
 - name: pull-dashboard-build
   always_run: true
   decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
   spec:
     containers:
       - image: golang:1.13.3
@@ -97,7 +97,7 @@ presubmits:
 - name: pre-build-dashboard-image
   always_run: true
   decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
   labels:
     preset-docker-push: "true"
   spec:
@@ -128,7 +128,7 @@ presubmits:
 - name: pull-dashboard-static-check
   always_run: true
   decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
   spec:
     containers:
       - image: node:12
@@ -147,7 +147,7 @@ presubmits:
 - name: pull-dashboard-test-headless
   always_run: true
   decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
   spec:
     containers:
       - image: quay.io/kubermatic/chrome-headless:v0.5
@@ -172,7 +172,7 @@ presubmits:
 - name: pull-dashboard-test-e2e
   always_run: true
   decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard-v2.git"
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
   extra_refs:
   # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
   - org: kubermatic
