@@ -99,7 +99,7 @@ export class NodeDataGCPProvider {
     }
   }
 
-  machineSize(
+  machineTypes(
     onError: () => void = undefined,
     onLoadingCb: () => void = null
   ): Observable<GCPMachineSize[]> {
