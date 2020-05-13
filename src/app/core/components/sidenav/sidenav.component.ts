@@ -1,8 +1,8 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
-import {merge, Subject} from 'rxjs';
+import {BehaviorSubject, merge, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
@@ -32,9 +32,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
   customLinks: CustomLink[] = [];
   settings: UserSettings;
   currentUser: MemberEntity;
-  showSidenav = true;
+  screenWidth = 0;
   private _selectedProject = {} as ProjectEntity;
   private _currentGroupConfig: GroupConfig;
+  private _isSidenavCollapsed = false;
+  private _screenWidth = new BehaviorSubject<number>(window.innerWidth);
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -46,6 +48,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this._screenWidth.subscribe(width => (this.screenWidth = width));
+
     this._userService.loggedInUser.subscribe(user => (this.currentUser = user));
 
     this._settingsService.adminSettings
@@ -63,7 +67,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this._settingsService.userSettings
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(settings => {
-        this.showSidenav = !settings.collapseSidenav;
+        this._isSidenavCollapsed = settings.collapseSidenav;
         this.settings = settings;
       });
 
@@ -91,6 +95,15 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event): void {
+    this._screenWidth.next(event.target.innerWidth);
+  }
+
+  isSidenavCollapsed(): boolean {
+    return this._isSidenavCollapsed || this.screenWidth < 767;
+  }
+
   getLinkClass(url: string): string {
     return this.checkUrl(url) ? 'active' : '';
   }
@@ -113,7 +126,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   getTooltip(viewName: string): string {
     let tooltip = '';
 
-    if (!this.showSidenav) {
+    if (this.isSidenavCollapsed()) {
       switch (viewName) {
         case View.Clusters:
           tooltip += 'Clusters';

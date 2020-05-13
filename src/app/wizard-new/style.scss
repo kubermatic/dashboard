@@ -7,3 +7,17 @@
 .km-button-navigation {
   margin-top: 5 * $baseline-grid;
 }
+
+::ng-deep.mat-horizontal-stepper-content[aria-expanded="false"] {
+  width: 0 !important;
+}
+
+@include km-breakpoint('small') {
+  ::ng-deep.mat-horizontal-stepper-header-container {
+    display: none !important;
+  }
+
+  ::ng-deep.mat-card-title {
+    margin-top: 2.5 * $baseline-grid !important;
+  }
+}

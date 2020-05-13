@@ -171,7 +171,7 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator
       case Controls.SubnetID:
         return this._hasRequiredCredentials()
           ? ''
-          : 'Please enter your credentials & network first.';
+          : 'Please enter your credentials and network first.';
     }
   }
 

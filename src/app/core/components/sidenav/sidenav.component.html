@@ -1,6 +1,6 @@
 <div class="km-sidenav"
      fxLayout="column"
-     [ngClass]="!showSidenav ? 'km-collapse-sidenav' : ''">
+     [ngClass]="isSidenavCollapsed() ? 'km-collapse-sidenav' : ''">
   <div [matTooltip]="getTooltip('clusters')"
        [ngClass]="getMenuItemClass('clusters')"
        class="menu-item">
@@ -9,7 +9,7 @@
        [routerLink]="getRouterLink('clusters')"
        [ngClass]="getLinkClass('clusters')">
       <i class="km-icon-cluster"></i>
-      <span *ngIf="showSidenav">Clusters</span>
+      <span *ngIf="!isSidenavCollapsed()">Clusters</span>
     </a>
   </div>
 
@@ -21,7 +21,7 @@
        [routerLink]="getRouterLink('sshkeys')"
        [ngClass]="getLinkClass('sshkeys')">
       <i class="km-icon-key"></i>
-      <span *ngIf="showSidenav">SSH Keys</span>
+      <span *ngIf="!isSidenavCollapsed()">SSH Keys</span>
     </a>
   </div>
 
@@ -33,7 +33,7 @@
        [routerLink]="getRouterLink('members')"
        [ngClass]="getLinkClass('members')">
       <i class="km-icon-member"></i>
-      <span *ngIf="showSidenav">Members</span>
+      <span *ngIf="!isSidenavCollapsed()">Members</span>
     </a>
   </div>
 
@@ -45,7 +45,7 @@
        [routerLink]="getRouterLink('serviceaccounts')"
        [ngClass]="getLinkClass('serviceaccounts')">
       <i class="km-icon-serviceaccount"></i>
-      <span *ngIf="showSidenav">Service Accounts</span></a>
+      <span *ngIf="!isSidenavCollapsed()">Service Accounts</span></a>
   </div>
 
   <mat-divider *ngIf="isCustomLinkPanelVisible()"></mat-divider>
@@ -58,7 +58,7 @@
          target="_blank"
          rel="noopener">
         <i [ngStyle]="getCustomLinkIconStyle(link)"></i>
-        <span *ngIf="showSidenav">{{link.label}}</span>
+        <span *ngIf="!isSidenavCollapsed()">{{link.label}}</span>
       </a>
     </div>
   </div>
@@ -71,7 +71,7 @@
        fxLayoutAlign=" center"
        routerLink="/projects">
       <i class="km-icon-arrow-left"></i>
-      <span *ngIf="showSidenav">back to projects</span>
+      <span *ngIf="!isSidenavCollapsed()">back to projects</span>
     </a>
   </div>
 </div>
