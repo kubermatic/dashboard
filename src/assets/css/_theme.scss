@@ -844,12 +844,13 @@
 
   .km-projects-external p {
     border: 1px solid map-get($colors, primary);
-    line-height: 1.6 * $line-height;
     border-radius: $border-radius;
-    padding: 0.625 * $baseline-grid;
+    color: $text;
     font-size: $font-size-body !important;
+    line-height: 1.2 * $line-height;
     margin-bottom: 0;
     max-width: 100px;
+    padding: .5 * $baseline-grid;
   }
 
   .km-sidenav {
