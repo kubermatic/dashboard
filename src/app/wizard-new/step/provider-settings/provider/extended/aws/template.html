@@ -8,7 +8,7 @@
            [name]="Controls.SecurityGroup"
            type="text"
            autocomplete="off">
-    <mat-hint>When specified, all worker nodes will be attached to this security group. If not specified, a security group will be created.</mat-hint>
+    <mat-hint>Specify to attach worker nodes to it, otherwise a new security group will be used.</mat-hint>
     <mat-error *ngIf="form.get(Controls.SecurityGroup).hasError( 'pattern')">
       The security group ID need to look similar to 'sg-a2c195ca'.
     </mat-error>
@@ -21,7 +21,7 @@
            [name]="Controls.RouteTableID"
            type="text"
            autocomplete="off">
-    <mat-hint>When specified, all worker nodes will be attached to this Route table. If not specified, the default Route Table will be used.</mat-hint>
+    <mat-hint>Specify to attach worker nodes to it, otherwise the default route table will be used.</mat-hint>
     <mat-error *ngIf="form.get(Controls.RouteTableID).hasError( 'pattern')">
       The route table ID needs to look similar to 'rtb-0bd18f60'.
     </mat-error>
@@ -33,7 +33,7 @@
            [name]="Controls.InstanceProfileName"
            type="text"
            autocomplete="off">
-    <mat-hint>When specified, the worker nodes will use this instance profile. If not specified, a new instance profile will be created.</mat-hint>
+    <mat-hint>Specify to attach worker nodes to it, otherwise a new instance profile will be used.</mat-hint>
   </mat-form-field>
   <mat-form-field fxFlex>
     <mat-label>Control plane role (ARN)</mat-label>
@@ -42,6 +42,6 @@
            [name]="Controls.RoleARN"
            type="text"
            autocomplete="off">
-    <mat-hint>When specified, the Kubernetes control plane will use this role when communicating with the AWS API. If not specified, a new role will be created.</mat-hint>
+    <mat-hint>Specify to use it to talk with the AWS API, otherwise a new role will be used.</mat-hint>
   </mat-form-field>
 </form>
