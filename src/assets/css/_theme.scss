@@ -806,17 +806,17 @@
 
   .km-notification {
     background: $background-card !important;
-    border-radius: $border-radius;
-    box-shadow: $notification-border-box-shadow;
+    border-radius: $border-radius !important;
+    box-shadow: $notification-border-box-shadow !important;
     color: $text !important;
-    display: flex;
-    flex: 1 1 auto;
-    margin: $notification-margin;
-    min-height: $notification-min-height;
-    max-height: $notification-height;
-    max-width: $notification-width;
-    min-width: $notification-width;
-    padding: 0;
+    display: flex !important;
+    flex: 1 1 auto !important;
+    margin: $notification-margin !important;
+    min-height: $notification-min-height !important;
+    max-height: $notification-height !important;
+    max-width: $notification-width !important;
+    min-width: $notification-width !important;
+    padding: 0 !important;
   }
 
   .km-notification-type {
@@ -831,7 +831,7 @@
 
   .km-notification-panel .panel {
     background-color: $background-app-bar;
-    box-shadow: map-get($colors, shadow-dark);
+    box-shadow: map-get($colors, shadow-dark) !important;
 
     .notification-info .km-icon-mask {
       background-color: $text-secondary !important;

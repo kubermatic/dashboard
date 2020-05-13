@@ -1,0 +1,24 @@
+<div *ngIf="!isThemeEnforced"
+     fxLayout="row">
+  <div class="km-account-settings-entry-label"
+       fxLayoutAlign=" center">Theme</div>
+  <mat-button-toggle-group [(value)]="selectedThemeOption"
+                           (change)="onThemeChange($event.value)"
+                           class="km-account-settings-toggle"
+                           fxLayout="row wrap">
+    <mat-button-toggle *ngIf="hasPreferredTheme"
+                       [value]="systemDefaultOption">
+      <i class="km-icon-mask"
+         [ngClass]="isSystemDefaultThemeDark ? 'km-icon-moon' : 'km-icon-sun'"></i>
+      <span>System</span>
+    </mat-button-toggle>
+    <mat-button-toggle *ngFor="let theme of themes"
+                       [value]="theme.name">
+      <i class="km-icon-mask"
+         [ngClass]="theme.isDark ? 'km-icon-moon' : 'km-icon-sun'"></i>
+      {{theme.displayName}}
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+  <km-settings-status [isSaved]="isEqual(settings?.selectedTheme, apiSettings?.selectedTheme)"
+                      class="km-settings-status-margin-sm"></km-settings-status>
+</div>

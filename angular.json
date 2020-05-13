@@ -12,18 +12,43 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
+            "sourceMap": true,
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
+            "extractCss": true,
             "assets": [
               "src/assets",
               "src/favicon.ico"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/assets/css"
+              ]
+            },
             "styles": [
               "node_modules/swagger-ui/dist/swagger-ui.css",
-              "src/assets/css/main.scss"
+              "src/assets/css/main.scss",
+              {
+                "input": "src/assets/themes/light.scss",
+                "bundleName": "assets/themes/light",
+                "lazy": true,
+                "inject": false
+              },
+              {
+                "input": "src/assets/themes/dark.scss",
+                "bundleName": "assets/themes/dark",
+                "lazy": true,
+                "inject": false
+              },
+              {
+                "input": "src/assets/themes/solar.scss",
+                "bundleName": "assets/themes/solar",
+                "lazy": true,
+                "inject": false
+              }
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js"
@@ -37,10 +62,10 @@
                   "maximumWarning": "6kb"
                 }
               ],
+              "commonChunk": false,
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,

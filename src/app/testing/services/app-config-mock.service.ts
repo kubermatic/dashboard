@@ -21,14 +21,6 @@ export class AppConfigMockService {
     return fakeVersionInfo();
   }
 
-  hasCustomCSS(): boolean {
-    return false;
-  }
-
-  getCustomCSS(): string {
-    return '';
-  }
-
   getCustomLinks(): CustomLink[] {
     return [];
   }

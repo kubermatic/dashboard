@@ -1,0 +1,109 @@
+@import "~@angular/material/theming";
+@import "theme";
+@import "variables";
+@import "images";
+
+$colors-dark: (
+  primary: #00a3d9,
+  primary-hover: #4dc3ea,
+  primary-dark: #4dc3ea,
+  secondary: #00cca7,
+  secondary-hover: #67dab9,
+  secondary-dark: #67dab9,
+  indicator-green: #1dc67f,
+  indicator-orange: #f7b500,
+  indicator-red: #eb5757,
+  footer-text: #fff,
+  sidenav-background-hover: #202021,
+  sidenav-background-active: rgba(#4dc3ea, 0.18),
+  sidenav-divider: #373738,
+  project-selector-hover: #313132,
+  tooltip-background: #373738,
+  option-background: #2b2b2c,
+  option-background-hover: #535354,
+  wizard-step-background: #b6ebfc,
+  wizard-step-background-active: #b9ccdf,
+  scrollbar: #464647,
+  scrollbar-background: #202021,
+  shadow: 0 4px 4px rgba(#000, .08),
+  shadow-dark: (0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12)),
+);
+
+$theme-dark: mat-dark-theme(mat-palette($mat-blue), mat-palette($mat-light-blue), mat-palette($mat-pink));
+
+// sass-lint:disable function-name-format
+$background: map-get($theme-dark, background);
+$background: map_merge($background, (background: #ba1f1f));
+$background: map_merge($background, (hover: #2b2bad));
+$background: map_merge($background, (app-bar: #4c4cbb));
+$background: map_merge($background, (card: #5757cb));
+$background: map_merge($background, (dialog: #4b4bbf));
+$theme-dark: map_merge($theme-dark, (background: $background));
+
+$foreground: map-get($theme-dark, foreground);
+$foreground: map_merge($foreground, (text: #fff));
+$foreground: map_merge($foreground, (secondary-text: #b8b8b8));
+$foreground: map_merge($foreground, (disabled-text: #636363));
+$foreground: map_merge($foreground, (disabled: #313132));
+$foreground: map_merge($foreground, (divider: #464647));
+$theme-dark: map_merge($theme-dark, (foreground: $foreground));
+// sass-lint:enable function-name-format
+
+@include angular-material-theme($theme-dark);
+@include km-theme($theme-dark, $colors-dark);
+
+// Make icons and logos white.
+.km-provider-logo,
+.km-addon-logo,
+.km-icon-randomize,
+.km-cluster-spec-type mat-button-toggle .km-icon-openshift,
+.km-sidenav a:not(.active) i,
+footer i,
+*[class*="km-os-image-"] {
+  filter: invert(.25) brightness(100) contrast(100);
+}
+
+// Swap some of the images.
+.km-header-logo {
+  background-image: url("/assets/images/branding/logo-dark.svg") !important;
+}
+
+.km-error-background {
+  background-image: url("/assets/images/branding/404-illustration-dark.svg") !important;
+}
+
+.km-provider-logo-bringyourown {
+  @include km-image(3.75 * $baseline-grid);
+
+  background-image: url("/assets/images/clouds/bringyourown-dark.svg") !important;
+  filter: none;
+  min-height: 3.75 * $baseline-grid;
+}
+
+.km-provider-logo-kubevirt {
+  @include km-image(3.75 * $baseline-grid);
+
+  background-image: url("/assets/images/clouds/kubevirt-dark.svg") !important;
+  filter: none;
+  min-height: 3.75 * $baseline-grid;
+}
+
+.km-provider-logo-vsphere {
+  @include km-image(3.75 * $baseline-grid);
+
+  background-image: url("/assets/images/clouds/vsphere-dark.svg") !important;
+  filter: none;
+  min-height: 3.75 * $baseline-grid;
+}
+
+.km-icon-info {
+  @include km-image(2 * $baseline-grid);
+
+  background-image: url("/assets/images/icons/info-dark.svg") !important;
+  cursor: pointer;
+}
+
+// Make checkbox marks white.
+.mat-checkbox-checkmark-path {
+  stroke: #fff !important;
+}

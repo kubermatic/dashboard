@@ -13,6 +13,13 @@ const routes: Routes = [
     path: '',
     component: FrontpageComponent,
     pathMatch: 'full',
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('../theming/module').then(module => module.ThemingModule),
+      },
+    ],
   },
   {
     path: 'terms-of-service',

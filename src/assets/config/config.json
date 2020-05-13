@@ -3,5 +3,21 @@
     "wizard_use_default_user": false
   },
   "share_kubeconfig": false,
-  "disable_themes": false
+  "themes": [
+    {
+      "name": "light",
+      "displayName": "Light",
+      "isDark": false
+    },
+    {
+      "name": "dark",
+      "displayName": "Dark",
+      "isDark": true
+    },
+    {
+      "name": "solar",
+      "displayName": "Solar",
+      "isDark": true
+    }
+  ]
 }

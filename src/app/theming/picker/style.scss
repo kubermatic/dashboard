@@ -1,0 +1,35 @@
+@import 'variables';
+
+.km-account-settings-entry-label {
+  align-items: center;
+  display: flex;
+  min-width: 23 * $baseline-grid;
+  line-height: 8 * $baseline-grid;
+
+  span {
+    margin-right: .625 * $baseline-grid;
+  }
+}
+
+.km-account-settings-toggle {
+  mat-button-toggle {
+    min-height: 50px;
+    max-height: 50px;
+    min-width: 140px;
+    max-width: 140px;
+    border-radius: $border-radius;
+
+    ::ng-deep.mat-button-toggle-label-content {
+      font-weight: normal;
+      font-size: $font-size-subhead;
+    }
+  }
+}
+
+.km-settings-status-margin-sm {
+  margin-top: .5 * $baseline-grid;
+
+  .km-settings-status-container {
+    line-height: initial;
+  }
+}

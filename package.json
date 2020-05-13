@@ -8,6 +8,7 @@
   "angular-cli": {},
   "scripts": {
     "start": "npm run versioninfo && ng serve",
+    "start:prod": "npm run versioninfo && ng serve --prod",
     "start:local": "npm run versioninfo && ng serve --configuration=local",
     "start:e2e": "npm run versioninfo && ng serve --configuration=e2e",
     "start:e2e-local": "npm run versioninfo && ng serve --configuration=e2e-local",
