@@ -49,3 +49,13 @@ header {
   margin-right: $baseline-grid;
   width: 1.75 * $baseline-grid;
 }
+
+@include km-breakpoint('small') {
+  .collapse-button {
+    display: none !important;
+  }
+
+  .project-selector {
+    display: none !important;
+  }
+}

@@ -1,45 +1,29 @@
 <footer fxFlex
         fxLayoutAlign=" center"
         [ngClass]="authenticated ? 'km-footer' : 'km-login-footer'">
-  <div fxLayout="row">
-    <div>powered by
+  <div fxLayout="row wrap"
+       fxFlex
+       fxLayoutAlign=" center"
+       class="content">
+    <div>
       <a href="https://loodse.com"
          target="_blank"
-         rel="noopener">Loodse
-      </a>
+         rel="noopener">powered by Loodse</a>
     </div>
-  </div>
 
-  <div fxFlexAlign=" center"
-       fxLayout="row"
-       *ngIf="settings.displayAPIDocs">
-    <div class="km-separator">–</div>
-    <a routerLink="rest-api">
-      API
-    </a>
-  </div>
+    <div *ngIf="!!version && !version.distance">{{version.tag}}</div>
 
-  <div *ngIf="!!version"
-       fxFlexAlign=" center"
-       fxLayout="row">
-    <div class="km-separator">–</div>
-    <div *ngIf="!version.distance">{{version.tag}}</div>
-    <div *ngIf="!!version.distance">v{{version.semverString}}</div>
-  </div>
+    <div *ngIf="!!version && !!version.distance">v{{version.semverString}}</div>
 
-  <div fxFlex
-       fxLayoutAlign=" center">
-    <div *ngIf="settings.displayTermsOfService"
-         fxLayoutAlign=" center">
-      <div class="km-separator">|</div>
+    <div *ngIf="settings.displayTermsOfService">
       <a routerLink="terms-of-service">Terms of Service</a>
     </div>
 
-    <div *ngIf="settings.displayDemoInfo"
-         fxLayoutAlign=" center">
-      <div class="km-separator">|</div>
-      <div>Demo system</div>
+    <div *ngIf="settings.displayAPIDocs">
+      <a routerLink="rest-api">API</a>
     </div>
+
+    <div *ngIf="settings.displayDemoInfo">Demo system</div>
   </div>
 
   <div *ngFor="let link of getCustomLinks()"

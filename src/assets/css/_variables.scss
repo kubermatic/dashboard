@@ -1,3 +1,17 @@
+$breakpoints: (
+  'small':  767px,
+  'medium': 992px,
+  'large':  1200px
+) !default;
+
+@mixin km-breakpoint($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (max-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  }
+}
+
 $font-primary: 'Roboto', Helvetica, Arial, sans-serif;
 $font-primary-mono: 'Roboto Mono', monospace;
 $font-secondary: 'Ubuntu', sans-serif;
