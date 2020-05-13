@@ -12,13 +12,14 @@ import {merge} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../../app-config.service';
-import {ApiService} from '../../../core/services';
+import {ApiService, DatacenterService} from '../../../core/services';
 import {ClusterNameGenerator} from '../../../core/util/name-generator.service';
 import {
   ClusterEntity,
   ClusterSpec,
   MasterVersion,
 } from '../../../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {ResourceType} from '../../../shared/entity/LabelsEntity';
 import {ClusterType} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
@@ -62,6 +63,7 @@ export class ClusterStepComponent extends StepBase
     AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster),
   ];
 
+  private _datacenterSpec: DataCenterEntity;
   readonly Controls = Controls;
 
   constructor(
@@ -70,6 +72,7 @@ export class ClusterStepComponent extends StepBase
     private readonly _appConfig: AppConfigService,
     private readonly _nameGenerator: ClusterNameGenerator,
     private readonly _clusterService: ClusterService,
+    private readonly _datacenterService: DatacenterService,
     wizard: WizardService
   ) {
     super(wizard);
@@ -92,6 +95,18 @@ export class ClusterStepComponent extends StepBase
       [Controls.PodNodeSelectorAdmissionPlugin]: new FormControl(false),
       [Controls.Labels]: new FormControl(''),
     });
+
+    this._clusterService.datacenterChanges
+      .pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(dc => {
+        this._datacenterSpec = dc;
+        this._enforce(Controls.AuditLogging, dc.spec.enforceAuditLogging);
+        this._enforce(
+          Controls.PodSecurityPolicyAdmissionPlugin,
+          dc.spec.enforcePodSecurityPolicy
+        );
+      });
 
     this.control(Controls.Type)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
@@ -142,6 +157,30 @@ export class ClusterStepComponent extends StepBase
   onLabelsChange(labels: object): void {
     this.labels = labels;
     this._clusterService.labels = this.labels;
+  }
+
+  isEnforced(control: Controls): boolean {
+    switch (control) {
+      case Controls.AuditLogging:
+        return (
+          !!this._datacenterSpec &&
+          this._datacenterSpec.spec.enforceAuditLogging
+        );
+      case Controls.PodSecurityPolicyAdmissionPlugin:
+        return (
+          !!this._datacenterSpec &&
+          this._datacenterSpec.spec.enforcePodSecurityPolicy
+        );
+      default:
+        return false;
+    }
+  }
+
+  private _enforce(control: Controls, isEnforced: boolean): void {
+    if (isEnforced) {
+      this.form.get(control).setValue(true);
+      this.form.get(control).disable();
+    }
   }
 
   private _handleImagePullSecret(type: ClusterType): void {

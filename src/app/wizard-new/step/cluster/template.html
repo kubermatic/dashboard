@@ -89,7 +89,12 @@
                fxFlex>
             <div fxLayout="row"
                  fxLayoutGap="16px">
-              <mat-checkbox [formControlName]="Controls.AuditLogging">Audit Logging</mat-checkbox>
+              <mat-checkbox [formControlName]="Controls.AuditLogging">
+                Audit Logging
+                <i *ngIf="isEnforced(Controls.AuditLogging)"
+                   class="km-icon-info"
+                   matTooltip="Audit Logging is enforced by your admin in the chosen datacenter."></i>
+              </mat-checkbox>
               <div fxLayout="row"
                    fxLayoutGap="8px"
                    fxLayoutAlign=" center">
@@ -98,6 +103,9 @@
                 </mat-checkbox>
                 <i class="km-icon-info"
                    matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
+                <i *ngIf="isEnforced(Controls.PodSecurityPolicyAdmissionPlugin)"
+                   class="km-icon-info"
+                   matTooltip="Pod Security Policy is enforced by your admin in the chosen datacenter."></i>
                 <i *ngIf="controlValue(Controls.PodSecurityPolicyAdmissionPlugin)"
                    class="km-icon-warning km-warning"
                    matTooltip="Activating Pod Security Policy will mean that a lot of Pod specifications, Operators and Helm charts will not work out of the box. Make sure that you know the consequences of activating this feature.">
