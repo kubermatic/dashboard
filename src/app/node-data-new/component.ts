@@ -6,14 +6,16 @@ import {
   Validators,
 } from '@angular/forms';
 import {merge} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {takeUntil, switchMap} from 'rxjs/operators';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
+import {DatacenterService} from '../core/services';
 import {OperatingSystemSpec, Taint} from '../shared/entity/NodeEntity';
 import {
   NodeProvider,
   NodeProviderConstants,
   OperatingSystem,
 } from '../shared/model/NodeProviderConstants';
+import {DataCenterEntity} from '../shared/entity/DatacenterEntity';
 import {NodeData} from '../shared/model/NodeSpecChange';
 import {ClusterType} from '../shared/utils/cluster-utils/cluster-utils';
 import {BaseFormValidator} from '../shared/validators/base-form.validator';
@@ -57,6 +59,8 @@ export class NodeDataComponent extends BaseFormValidator
   labels: object = {};
   taints: Taint[] = [];
 
+  private _datacenterSpec: DataCenterEntity;
+
   readonly NodeProvider = NodeProvider;
   readonly OperatingSystem = OperatingSystem;
   readonly Controls = Controls;
@@ -69,6 +73,7 @@ export class NodeDataComponent extends BaseFormValidator
     private readonly _builder: FormBuilder,
     private readonly _nameGenerator: ClusterNameGenerator,
     private readonly _clusterService: ClusterService,
+    private readonly _datacenterService: DatacenterService,
     private readonly _nodeDataService: NodeDataService
   ) {
     super();
@@ -100,6 +105,11 @@ export class NodeDataComponent extends BaseFormValidator
       .subscribe(_ =>
         this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS())
       );
+
+    this._clusterService.datacenterChanges
+      .pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(dc => (this._datacenterSpec = dc));
 
     merge(
       this.form.get(Controls.Name).valueChanges,
@@ -142,6 +152,20 @@ export class NodeDataComponent extends BaseFormValidator
     return this.form.get(Controls.OperatingSystem).value === osName;
   }
 
+  isAvailable(osName: string): boolean {
+    if (this._clusterService.cluster.spec.cloud.vsphere) {
+      return (
+        !!this._datacenterSpec &&
+        !!this._datacenterSpec.spec &&
+        !!this._datacenterSpec.spec.vsphere &&
+        !!this._datacenterSpec.spec.vsphere.templates[osName] &&
+        this._datacenterSpec.spec.vsphere.templates[osName] !== ''
+      );
+    } else {
+      return true;
+    }
+  }
+
   isBasicViewOnly(): boolean {
     // In the wizard we do not split extended and basic options.
     return !this._nodeDataService.isInWizardMode();
@@ -179,9 +203,21 @@ export class NodeDataComponent extends BaseFormValidator
   }
 
   private _getDefaultOS(): OperatingSystem {
-    return this.isOpenshiftCluster()
-      ? OperatingSystem.CentOS
-      : OperatingSystem.Ubuntu;
+    if (this.isOpenshiftCluster()) {
+      return OperatingSystem.CentOS;
+    } else {
+      if (this._clusterService.cluster.spec.cloud.vsphere) {
+        if (this.isAvailable(OperatingSystem.Ubuntu)) {
+          return OperatingSystem.Ubuntu;
+        } else if (this.isAvailable(OperatingSystem.CentOS)) {
+          return OperatingSystem.CentOS;
+        } else if (this.isAvailable('coreos')) {
+          return OperatingSystem.ContainerLinux;
+        }
+      } else {
+        return OperatingSystem.Ubuntu;
+      }
+    }
   }
 
   private _getNodeData(): NodeData {

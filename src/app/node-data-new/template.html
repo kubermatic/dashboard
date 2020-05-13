@@ -49,16 +49,17 @@
       <mat-button-toggle-group group="operatingSystemGroup"
                                [formControlName]="Controls.OperatingSystem">
         <mat-button-toggle [value]="OperatingSystem.Ubuntu"
-                           *ngIf="!isOpenshiftCluster()">
+                           *ngIf="!isOpenshiftCluster() && isAvailable('ubuntu')">
           <i class="km-os-image-ubuntu"></i>
           Ubuntu
         </mat-button-toggle>
-        <mat-button-toggle [value]="OperatingSystem.CentOS">
+        <mat-button-toggle [value]="OperatingSystem.CentOS"
+                           *ngIf="isAvailable('centos')">
           <i class="km-os-image-centos"></i>
           CentOS
         </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.ContainerLinux"
-                           *ngIf="!isProvider(NodeProvider.HETZNER) && !isProvider(NodeProvider.ALIBABA) && !isOpenshiftCluster()">
+                           *ngIf="!isProvider(NodeProvider.HETZNER) && !isProvider(NodeProvider.ALIBABA) && !isOpenshiftCluster() && isAvailable('coreos')">
           <i class="km-os-image-container-linux"></i>
           Container Linux
         </mat-button-toggle>
