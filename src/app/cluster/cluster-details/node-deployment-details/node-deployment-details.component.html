@@ -94,7 +94,8 @@
                        *ngIf="nodeDeployment.spec.template.labels">
             <div key>Node Labels</div>
             <div value>
-              <km-labels [labels]="nodeDeployment.spec.template.labels"></km-labels>
+              <km-labels [labels]="nodeDeployment.spec.template.labels"
+                         emptyMessage="No assigned labels"></km-labels>
             </div>
           </km-property>
           <km-property fxFlex="50%"

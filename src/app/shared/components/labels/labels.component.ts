@@ -13,7 +13,7 @@ import {
 export class LabelsComponent implements OnInit, OnChanges {
   @Input() labels = {};
   @Input() limit: number;
-  @Input() emptyMessage = 'No assigned labels';
+  @Input() emptyMessage = '';
   labelKeys: string[] = [];
 
   ngOnInit(): void {
