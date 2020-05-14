@@ -29,6 +29,9 @@ enum Controls {
   OperatingSystem = 'operatingSystem',
   UpgradeOnBoot = 'upgradeOnBoot',
   DisableAutoUpdate = 'disableAutoUpdate',
+  RhelSubscriptionManagerUser = 'rhelSubscriptionManagerUser',
+  RhelSubscriptionManagerPassword = 'rhelSubscriptionManagerPassword',
+  RhsmOfflineToken = 'rhsmOfflineToken',
   ProviderBasic = 'providerBasic',
   ProviderExtended = 'providerExtended',
 }
@@ -94,6 +97,9 @@ export class NodeDataComponent extends BaseFormValidator
       ]),
       [Controls.UpgradeOnBoot]: this._builder.control(false),
       [Controls.DisableAutoUpdate]: this._builder.control(false),
+      [Controls.RhelSubscriptionManagerUser]: this._builder.control(''),
+      [Controls.RhelSubscriptionManagerPassword]: this._builder.control(''),
+      [Controls.RhsmOfflineToken]: this._builder.control(''),
       [Controls.ProviderBasic]: this._builder.control(''),
       [Controls.ProviderExtended]: this._builder.control(''),
     });
@@ -111,6 +117,24 @@ export class NodeDataComponent extends BaseFormValidator
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => (this._datacenterSpec = dc));
 
+    this.form
+      .get(Controls.OperatingSystem)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(os => {
+        if (os !== OperatingSystem.RHEL) {
+          this.form.get(Controls.RhelSubscriptionManagerUser).clearValidators();
+          this.form
+            .get(Controls.RhelSubscriptionManagerPassword)
+            .clearValidators();
+          this.form
+            .get(Controls.RhelSubscriptionManagerUser)
+            .updateValueAndValidity();
+          this.form
+            .get(Controls.RhelSubscriptionManagerPassword)
+            .updateValueAndValidity();
+        }
+      });
+
     merge(
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Count).valueChanges,
@@ -122,7 +146,10 @@ export class NodeDataComponent extends BaseFormValidator
     merge(
       this.form.get(Controls.OperatingSystem).valueChanges,
       this.form.get(Controls.UpgradeOnBoot).valueChanges,
-      this.form.get(Controls.DisableAutoUpdate).valueChanges
+      this.form.get(Controls.DisableAutoUpdate).valueChanges,
+      this.form.get(Controls.RhelSubscriptionManagerUser).valueChanges,
+      this.form.get(Controls.RhelSubscriptionManagerPassword).valueChanges,
+      this.form.get(Controls.RhsmOfflineToken).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(
@@ -144,6 +171,17 @@ export class NodeDataComponent extends BaseFormValidator
     return this._clusterService.clusterType === ClusterType.OpenShift;
   }
 
+  isRHELAvailable(): boolean {
+    return (
+      !!this.isProvider(NodeProvider.AWS) ||
+      !!this.isProvider(NodeProvider.AZURE) ||
+      !!this.isProvider(NodeProvider.GCP) ||
+      !!this.isProvider(NodeProvider.KUBEVIRT) ||
+      !!this.isProvider(NodeProvider.OPENSTACK) ||
+      !!this.isProvider(NodeProvider.VSPHERE)
+    );
+  }
+
   generateName(): void {
     this.form.get(Controls.Name).setValue(this._nameGenerator.generateName());
   }
@@ -153,7 +191,7 @@ export class NodeDataComponent extends BaseFormValidator
   }
 
   isAvailable(osName: string): boolean {
-    if (this._clusterService.cluster.spec.cloud.vsphere) {
+    if (this.isProvider(NodeProvider.VSPHERE)) {
       return (
         !!this._datacenterSpec &&
         !!this._datacenterSpec.spec &&
@@ -197,6 +235,19 @@ export class NodeDataComponent extends BaseFormValidator
             disableAutoUpdate: this.form.get(Controls.DisableAutoUpdate).value,
           },
         };
+      case OperatingSystem.RHEL:
+        return {
+          rhel: {
+            distUpgradeOnBoot: this.form.get(Controls.UpgradeOnBoot).value,
+            rhelSubscriptionManagerUser: this.form.get(
+              Controls.RhelSubscriptionManagerUser
+            ).value,
+            rhelSubscriptionManagerPassword: this.form.get(
+              Controls.RhelSubscriptionManagerPassword
+            ).value,
+            rhsmOfflineToken: this.form.get(Controls.RhsmOfflineToken).value,
+          },
+        };
       default:
         return {ubuntu: {distUpgradeOnBoot: false}};
     }
@@ -211,6 +262,8 @@ export class NodeDataComponent extends BaseFormValidator
           return OperatingSystem.Ubuntu;
         } else if (this.isAvailable(OperatingSystem.CentOS)) {
           return OperatingSystem.CentOS;
+        } else if (this.isAvailable(OperatingSystem.RHEL)) {
+          return OperatingSystem.RHEL;
         } else if (this.isAvailable('coreos')) {
           return OperatingSystem.ContainerLinux;
         }
