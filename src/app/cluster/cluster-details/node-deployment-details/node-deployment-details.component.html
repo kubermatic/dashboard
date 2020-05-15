@@ -10,7 +10,10 @@
         <i [matTooltip]="nodeDeploymentHealthStatus.message"
            [ngClass]="nodeDeploymentHealthStatus.color"
            class="km-node-deployment-health"></i>
-        <span class="km-node-deployment-name">{{nodeDeployment.name}}</span>
+        <span ngxClipboard
+              [cbContent]="nodeDeployment.name"
+              matTooltip="Click to copy"
+              class="km-node-deployment-name km-copy">{{nodeDeployment.name}}</span>
       </mat-card-title>
 
       <div class="km-node-deployment-actions"
