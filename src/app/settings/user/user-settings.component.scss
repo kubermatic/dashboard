@@ -1,38 +1,36 @@
 @import "../../../assets/css/variables";
 
 .mat-card {
-  margin-top: 3 * $baseline-grid !important;
-  padding: 3.75 * $baseline-grid;
+  margin-top: $content-padding !important;
 
   .mat-card-header {
-    padding: 0 (3.75 * $baseline-grid) (3.75 * $baseline-grid);
+    padding: 0 (3.75 * $baseline-grid);
   }
 
-  .km-account-info {
+  .mat-card-content {
     padding: 3.75 * $baseline-grid;
+  }
 
-    .km-user {
-      align-items: center;
-      display: flex;
-      min-height: 3 * $baseline-grid;
-      margin-right: 3.75 * $baseline-grid;
-      min-width: 3 * $baseline-grid;
-    }
+  .km-user {
+    align-items: center;
+    display: flex;
+    min-height: 3 * $baseline-grid;
+    margin-right: 3.75 * $baseline-grid;
+    min-width: 3 * $baseline-grid;
+  }
 
-    .km-account-info-name {
-      font-size: $font-size-subhead-lg;
-      line-height: 21px;
-    }
+  .km-account-info-name {
+    font-size: $font-size-subhead-lg;
+    line-height: 21px;
+  }
 
-    .km-account-info-email {
-      font-size: $font-size-subhead;
-    }
+  .km-account-info-email {
+    font-size: $font-size-subhead;
   }
 
   .km-account-settings {
     min-width: 390px;
     font-size: $font-size-subhead;
-    padding: 3.75 * $baseline-grid;
 
     .km-account-settings-header {
       font-size: $font-size-subhead-lg;
