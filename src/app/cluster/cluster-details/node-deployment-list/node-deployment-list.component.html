@@ -31,12 +31,13 @@
         <td mat-cell
             *matCellDef="let element"
             [attr.id]="'km-node-deployment-' + element.name">
-          <span class="km-eol-warning with-margin">
-            {{element.name}}
-            <i *ngIf="getOperatingSystem(element) === 'Container Linux'"
-               class="km-icon-warning with-margin"
+          <div fxLayoutAlign=" center"
+               fxLayoutGap="4px">
+            <span>{{element.name}}</span>
+            <i class="km-icon-warning"
+               *ngIf="getOperatingSystem(element) === 'Container Linux'"
                matTooltip="Container Linux is going end-of-life on May 26, 2020."></i>
-          </span>
+          </div>
         </td>
       </ng-container>
 
@@ -47,8 +48,7 @@
         <td mat-cell
             *matCellDef="let element">
           <km-labels [labels]="element?.spec?.template?.labels"
-                     [limit]="2"
-                     emptyMessage="-"></km-labels>
+                     [limit]="2"></km-labels>
         </td>
       </ng-container>
 
@@ -61,7 +61,7 @@
             fxLayoutGap="4px">
           <span>Replicas</span>
           <div class="km-icon-info"
-               matTooltip="Number of available machines of desired machines from the template. A machine is considered as available when it is ready for at least 'minReadySeconds'."></div>
+               matTooltip="Number of running machines/Number of desired machines."></div>
         </th>
         <td mat-cell
             *matCellDef="let element"

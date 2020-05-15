@@ -119,7 +119,7 @@ export class ServiceAccountTokenComponent implements OnInit {
             .subscribe(token => {
               this.openTokenDialog(token);
               this._notificationService.success(
-                `Token ${token.name} has been regenerated.`
+                `The <strong>${token.name}</strong> was regenerated`
               );
               this._googleAnalyticsService.emitEvent(
                 'serviceAccountTokenOverview',
@@ -171,7 +171,7 @@ export class ServiceAccountTokenComponent implements OnInit {
             .pipe(first())
             .subscribe(() => {
               this._notificationService.success(
-                `Token ${token.name} has been removed from Service Account ${this.serviceaccount.name}`
+                `The <strong>${token.name}</strong> token was removed from the <strong>${this.serviceaccount.name}</strong> service account`
               );
               this._googleAnalyticsService.emitEvent(
                 'serviceAccountTokenOverview',

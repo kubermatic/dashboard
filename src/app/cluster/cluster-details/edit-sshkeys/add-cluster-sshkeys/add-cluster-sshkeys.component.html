@@ -1,24 +1,19 @@
 <km-dialog-title>Add SSH Keys to the Cluster</km-dialog-title>
 <mat-dialog-content class="km-content-add-sshkeys">
-  <div class="mat-dialog-content">
-
-    <p *ngIf="!!keys && keys.length > 0">Select an SSH key to add to the cluster "<strong>{{cluster.name}}</strong>".</p>
-    <p *ngIf="!keys || keys.length === 0">No SSH keys available in this project.</p>
-
-    <form [formGroup]="keysForm"
-          [hidden]="keys.length === 0">
-      <mat-form-field *ngIf="keys.length > 0">
-        <mat-label>SSH key</mat-label>
-        <mat-select formControlName="keys"
-                    panelClass="km-add-dialog-dropdown"
-                    disableOptionCentering>
-          <mat-option *ngFor="let key of keys"
-                      value="{{key.id}}">{{key.name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </form>
-
-  </div>
+  <p *ngIf="!!keys && keys.length > 0">Select an SSH key to add to the cluster "<strong>{{cluster.name}}</strong>".</p>
+  <p *ngIf="!keys || keys.length === 0">No SSH keys available in this project.</p>
+  <form [formGroup]="keysForm"
+        [hidden]="keys.length === 0">
+    <mat-form-field *ngIf="keys.length > 0">
+      <mat-label>SSH key</mat-label>
+      <mat-select formControlName="keys"
+                  panelClass="km-add-dialog-dropdown"
+                  disableOptionCentering>
+        <mat-option *ngFor="let key of keys"
+                    value="{{key.id}}">{{key.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
 </mat-dialog-content>
 
 <mat-dialog-actions>

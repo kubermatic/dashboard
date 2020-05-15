@@ -1,15 +1,13 @@
 <km-dialog-title>Install Addon</km-dialog-title>
 <mat-dialog-content>
-  <div class="mat-dialog-content">
-    <img class="km-addon-logo"
-         *ngIf="hasLogo()"
-         [src]="getAddonLogo()"
-         [alt]="addonName">
-    <div *ngIf="!hasLogo()">{{addonName}}</div>
-    <div *ngIf="!!addonConfig?.spec?.description"
-         [innerHTML]="addonConfig.spec.description"
-         class="km-install-addon-dialog-option-desc">
-    </div>
+  <img class="km-addon-logo"
+       *ngIf="hasLogo()"
+       [src]="getAddonLogo()"
+       [alt]="addonName">
+  <div *ngIf="!hasLogo()">{{addonName}}</div>
+  <div *ngIf="!!addonConfig?.spec?.description"
+       [innerHTML]="addonConfig.spec.description"
+       class="km-install-addon-dialog-option-desc">
   </div>
   <form [formGroup]="form">
     <div *ngFor="let control of addonConfig?.spec?.formSpec">

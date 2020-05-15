@@ -108,7 +108,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         this._matDialogRef.close(cluster);
         this._clusterService.onClusterUpdate.next();
         this._notificationService.success(
-          `Cluster ${this.cluster.name} has been successfully edited`
+          `The <strong>${this.cluster.name}</strong> cluster was updated`
         );
       });
   }

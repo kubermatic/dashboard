@@ -388,7 +388,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       if (isConfirmed) {
         this._projectService.delete(project.id).subscribe(() => {
           this._notificationService.success(
-            `Project ${project.name} is being deleted`
+            `The <strong>${project.name}</strong> project is being deleted`
           );
           this._googleAnalyticsService.emitEvent(
             'projectOverview',

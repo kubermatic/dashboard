@@ -275,31 +275,36 @@
             <km-property *ngIf="element.spec.cloud.aws && displayTags(element.spec.cloud.aws.tags)">
               <div key>Tags</div>
               <div value>
-                <km-labels [labels]="element.spec.cloud.aws.tags"></km-labels>
+                <km-labels [labels]="element.spec.cloud.aws.tags"
+                           emptyMessage="No assigned tags"></km-labels>
               </div>
             </km-property>
             <km-property *ngIf="element.spec.cloud.azure && displayTags(element.spec.cloud.azure.tags)">
               <div key>Tags</div>
               <div value>
-                <km-labels [labels]="element.spec.cloud.azure.tags"></km-labels>
+                <km-labels [labels]="element.spec.cloud.azure.tags"
+                           emptyMessage="No assigned tags"></km-labels>
               </div>
             </km-property>
             <km-property *ngIf="element.spec.cloud.digitalocean && element.spec.cloud.digitalocean.tags.length > 0">
               <div key>Tags</div>
               <div value>
-                <km-labels [labels]="element.spec.cloud.digitalocean.tags"></km-labels>
+                <km-labels [labels]="element.spec.cloud.digitalocean.tags"
+                           emptyMessage="No assigned tags"></km-labels>
               </div>
             </km-property>
             <km-property *ngIf="element.spec.cloud.packet && element.spec.cloud.packet.tags.length > 0">
               <div key>Tags</div>
               <div value>
-                <km-labels [labels]="element.spec.cloud.packet.tags"></km-labels>
+                <km-labels [labels]="element.spec.cloud.packet.tags"
+                           emptyMessage="No assigned tags"></km-labels>
               </div>
             </km-property>
             <km-property *ngIf="element.spec.cloud.openstack && displayTags(element.spec.cloud.openstack.tags)">
               <div key>Tags</div>
               <div value>
-                <km-labels [labels]="element.spec.cloud.openstack.tags"></km-labels>
+                <km-labels [labels]="element.spec.cloud.openstack.tags"
+                           emptyMessage="No assigned tags"></km-labels>
               </div>
             </km-property>
             <!-- End of tags.-->

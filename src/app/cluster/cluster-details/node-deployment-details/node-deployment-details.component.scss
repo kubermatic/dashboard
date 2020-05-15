@@ -6,6 +6,7 @@
 
 .km-node-deployment-name {
   font-size: $font-size-card-title !important;
+  font-weight: 500 !important;
 }
 
 mat-card-header {
@@ -17,11 +18,12 @@ mat-card-header {
 
   .mat-icon-button {
     font-size: 2.5 * $baseline-grid;
-  }
 
-  .km-icon-delete {
-    height: 2.5 * $baseline-grid;
-    width: 2.5 * $baseline-grid;
+    i {
+      height: 2.5 * $baseline-grid;
+      margin-top: -.5 * $baseline-grid;
+      width: 2.5 * $baseline-grid;
+    }
   }
 }
 

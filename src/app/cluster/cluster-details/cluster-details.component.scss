@@ -4,11 +4,10 @@
   padding: 0 (7 * $baseline-grid);
 }
 
-// setting menu
 .km-cluster-detail-actions {
-  padding-bottom: 1.875 * $baseline-grid;
+  padding-bottom: 2.5 * $baseline-grid;
 
-  mat-button {
+  .mat-button {
     margin-left: 0.625 * $baseline-grid;
   }
 
@@ -16,6 +15,10 @@
     height: 3 * $baseline-grid;
     width: 3 * $baseline-grid;
   }
+}
+
+.km-cluster-name {
+  font-weight: 500 !important;
 }
 
 .km-provider-menu {

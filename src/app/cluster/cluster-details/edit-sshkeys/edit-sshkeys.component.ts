@@ -177,7 +177,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
           )
           .subscribe(() => {
             this._notificationService.success(
-              `SSH key ${sshKey.name} has been removed from cluster ${this.cluster.name}`
+              `The <strong>${sshKey.name}</strong> SSH key was removed from the <strong>${this.cluster.name}</strong> cluster`
             );
             this._googleAnalyticsService.emitEvent(
               'clusterOverview',

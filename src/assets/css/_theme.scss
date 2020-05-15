@@ -844,12 +844,13 @@
 
   .km-projects-external p {
     border: 1px solid map-get($colors, primary);
-    line-height: 1.6 * $line-height;
     border-radius: $border-radius;
-    padding: 0.625 * $baseline-grid;
+    color: $text;
     font-size: $font-size-body !important;
+    line-height: 1.2 * $line-height;
     margin-bottom: 0;
     max-width: 100px;
+    padding: .5 * $baseline-grid;
   }
 
   .km-sidenav {
@@ -905,12 +906,6 @@
       height: $font-size-subhead;
       font-size: $font-size-subhead;
     }
-  }
-
-  .km-serviceaccount-token-wrapper,
-  .km-publickey-wrapper,
-  .km-node-details {
-    background-color: $background-hover;
   }
 
   .km-table {
@@ -1502,8 +1497,9 @@
     margin-top: 4.25 * $baseline-grid !important;
   }
 
-  .km-confirmation-dialog,
-  .km-delete-cluster-dialog mat-dialog-content {
+  .km-confirmation-dialog .mat-dialog-content,
+  .km-delete-cluster-dialog .mat-dialog-content {
+    line-height: 2.4 * $line-height;
     margin-bottom: 3.75 * $baseline-grid;
   }
 
