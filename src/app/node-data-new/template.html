@@ -49,16 +49,17 @@
       <mat-button-toggle-group group="operatingSystemGroup"
                                [formControlName]="Controls.OperatingSystem">
         <mat-button-toggle [value]="OperatingSystem.Ubuntu"
-                           *ngIf="!isOpenshiftCluster()">
+                           *ngIf="!isOpenshiftCluster() && isAvailable('ubuntu')">
           <i class="km-os-image-ubuntu"></i>
           Ubuntu
         </mat-button-toggle>
-        <mat-button-toggle [value]="OperatingSystem.CentOS">
+        <mat-button-toggle [value]="OperatingSystem.CentOS"
+                           *ngIf="isAvailable('centos')">
           <i class="km-os-image-centos"></i>
           CentOS
         </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.ContainerLinux"
-                           *ngIf="!isProvider(NodeProvider.HETZNER) && !isProvider(NodeProvider.ALIBABA) && !isOpenshiftCluster()">
+                           *ngIf="!isProvider(NodeProvider.HETZNER) && !isProvider(NodeProvider.ALIBABA) && !isOpenshiftCluster() && isAvailable('coreos')">
           <i class="km-os-image-container-linux"></i>
           Container Linux
         </mat-button-toggle>
@@ -66,6 +67,11 @@
                            *ngIf="isProvider(NodeProvider.AWS) && !isOpenshiftCluster()">
           <i class="km-os-image-sles"></i>
           SLES
+        </mat-button-toggle>
+        <mat-button-toggle [value]="OperatingSystem.RHEL"
+                           *ngIf="isRHELAvailable && !isOpenshiftCluster() && isAvailable('rhel')">
+          <i class="km-os-image-rhel"></i>
+          RHEL
         </mat-button-toggle>
       </mat-button-toggle-group>
 
@@ -75,10 +81,41 @@
         Container Linux is going end-of-life on May 26, 2020
       </span>
 
+      <!-- Options for RHEL -->
+      <div *ngIf="isOsSelected(OperatingSystem.RHEL)"
+           class="km-os-options">
+        <mat-form-field>
+          <mat-label>RHEL Subscription Manager User</mat-label>
+          <input [formControlName]="Controls.RhelSubscriptionManagerUser"
+                 matInput
+                 type="text"
+                 autocomplete="off"
+                 required>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>RHEL Subscription Manager Password</mat-label>
+          <input [formControlName]="Controls.RhelSubscriptionManagerPassword"
+                 matInput
+                 type="password"
+                 autocomplete="off"
+                 required>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>RHEL Subscription Manager Offline Token</mat-label>
+          <input [formControlName]="Controls.RhsmOfflineToken"
+                 matInput
+                 type="password"
+                 autocomplete="off">
+          <mat-hint>Offline token is required to remove subscriptions. </mat-hint>
+        </mat-form-field>
+      </div>
+
       <div fxLayout="row"
            fxLayoutGap="16px">
-        <!-- Options for Ubuntu and CenOS -->
-        <div *ngIf="isOsSelected(OperatingSystem.Ubuntu) || isOsSelected(OperatingSystem.CentOS) || isOsSelected(OperatingSystem.SLES)"
+        <!-- Options for Ubuntu, CenOS, SLES and RHEL -->
+        <div *ngIf="isOsSelected(OperatingSystem.Ubuntu) || isOsSelected(OperatingSystem.CentOS) || isOsSelected(OperatingSystem.SLES) || isOsSelected(OperatingSystem.RHEL)"
              class="km-os-options">
           <mat-checkbox [id]="Controls.UpgradeOnBoot"
                         [formControlName]="Controls.UpgradeOnBoot">Upgrade system on first boot

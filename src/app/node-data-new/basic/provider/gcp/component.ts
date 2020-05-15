@@ -32,7 +32,7 @@ enum Controls {
   DiskSize = 'diskSize',
   DiskType = 'diskType',
   Zone = 'zone',
-  MachineSize = 'machineSize',
+  MachineType = 'machineType',
   Preemptible = 'preemptible',
 }
 
@@ -48,10 +48,10 @@ enum DiskTypeState {
   Empty = 'No Disk Types Available',
 }
 
-enum MachineSizeState {
-  Ready = 'Machine Size',
+enum MachineTypeState {
+  Ready = 'Machine Type',
   Loading = 'Loading...',
-  Empty = 'No Machine Sizes Available',
+  Empty = 'No Machine Types Available',
 }
 
 @Component({
@@ -77,9 +77,9 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator
 
   readonly Controls = Controls;
 
-  machineSizes: GCPMachineSize[] = [];
-  selectedMachineSize = '';
-  machineSizeLabel = MachineSizeState.Empty;
+  machineTypes: GCPMachineSize[] = [];
+  selectedMachineType = '';
+  machineTypeLabel = MachineTypeState.Empty;
   zones: GCPZone[] = [];
   selectedZone = '';
   zoneLabel = ZoneState.Empty;
@@ -90,8 +90,8 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator
   @ViewChild('zonesCombobox') private _zonesCombobox: FilteredComboboxComponent;
   @ViewChild('diskTypesCombobox')
   private _diskTypesCombobox: FilteredComboboxComponent;
-  @ViewChild('machineSizesCombobox')
-  private _machineSizesCombobox: FilteredComboboxComponent;
+  @ViewChild('machineTypesCombobox')
+  private _machineTypesCombobox: FilteredComboboxComponent;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -106,7 +106,7 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator
       [Controls.DiskSize]: this._builder.control(25, Validators.required),
       [Controls.DiskType]: this._builder.control('', Validators.required),
       [Controls.Zone]: this._builder.control('', Validators.required),
-      [Controls.MachineSize]: this._builder.control('', Validators.required),
+      [Controls.MachineType]: this._builder.control('', Validators.required),
       [Controls.Preemptible]: this._builder.control(''),
     });
 
@@ -119,9 +119,9 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator
       .pipe(filter(hasValue => hasValue))
       .pipe(switchMap(_ => this._diskTypesObservable))
       .pipe(tap(this._setDefaultDiskType.bind(this)))
-      .pipe(switchMap(_ => this._machineSizesObservable))
+      .pipe(switchMap(_ => this._machineTypesObservable))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._setDefaultMachineSize.bind(this));
+      .subscribe(this._setDefaultMachineType.bind(this));
 
     merge(
       this.form.get(Controls.DiskSize).valueChanges,
@@ -145,8 +145,8 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator
     this._nodeDataService.nodeData.spec.cloud.gcp.diskType = diskType;
   }
 
-  onMachineSizeChange(machineSize: string): void {
-    this._nodeDataService.nodeData.spec.cloud.gcp.machineType = machineSize;
+  onMachineTypeChange(machineType: string): void {
+    this._nodeDataService.nodeData.spec.cloud.gcp.machineType = machineType;
   }
 
   private get _zonesObservable(): Observable<GCPZone[]> {
@@ -218,11 +218,11 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator
     }
   }
 
-  private get _machineSizesObservable(): Observable<GCPMachineSize[]> {
+  private get _machineTypesObservable(): Observable<GCPMachineSize[]> {
     return this._nodeDataService.gcp
-      .machineSize(
-        this._clearMachineSize.bind(this),
-        this._onMachineSizeLoading.bind(this)
+      .machineTypes(
+        this._clearMachineType.bind(this),
+        this._onMachineTypeLoading.bind(this)
       )
       .pipe(
         map((sizes: GCPMachineSize[]) =>
@@ -231,25 +231,25 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator
       );
   }
 
-  private _clearMachineSize(): void {
-    this.machineSizes = [];
-    this.selectedMachineSize = '';
-    this.machineSizeLabel = MachineSizeState.Empty;
-    this._machineSizesCombobox.reset();
+  private _clearMachineType(): void {
+    this.machineTypes = [];
+    this.selectedMachineType = '';
+    this.machineTypeLabel = MachineTypeState.Empty;
+    this._machineTypesCombobox.reset();
     this._cdr.detectChanges();
   }
 
-  private _onMachineSizeLoading(): void {
-    this._clearMachineSize();
-    this.machineSizeLabel = MachineSizeState.Loading;
+  private _onMachineTypeLoading(): void {
+    this._clearMachineType();
+    this.machineTypeLabel = MachineTypeState.Loading;
     this._cdr.detectChanges();
   }
 
-  private _setDefaultMachineSize(machineSizes: GCPMachineSize[]): void {
-    this.machineSizes = machineSizes;
-    if (this.machineSizes.length > 0) {
-      this.selectedMachineSize = this.machineSizes[0].name;
-      this.machineSizeLabel = MachineSizeState.Ready;
+  private _setDefaultMachineType(machineTypes: GCPMachineSize[]): void {
+    this.machineTypes = machineTypes;
+    if (this.machineTypes.length > 0) {
+      this.selectedMachineType = this.machineTypes[0].name;
+      this.machineTypeLabel = MachineTypeState.Ready;
       this._cdr.detectChanges();
     }
   }

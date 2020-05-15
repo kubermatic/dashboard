@@ -103,7 +103,10 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator
       .pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
       .pipe(tap(dc => (this._images = dc.spec.openstack.images)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._setDefaultImage(OperatingSystem.Ubuntu));
+      .subscribe(dc => {
+        this._setDefaultImage(OperatingSystem.Ubuntu);
+        this._enforceFloatingIP(dc.spec.openstack.enforce_floating_ip);
+      });
 
     this._clusterService.clusterTypeChanges
       .pipe(filter(_ => !!this._images))
@@ -209,6 +212,19 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator
     }
 
     this.form.get(Controls.Image).setValue(this._defaultImage);
+  }
+
+  private _enforceFloatingIP(isEnforced: boolean): void {
+    if (isEnforced) {
+      this.form.get(Controls.UseFloatingIP).setValue(true);
+      this.form.get(Controls.UseFloatingIP).disable();
+      return;
+    }
+
+    if (!this._clusterService.cluster.spec.cloud.openstack.floatingIpPool) {
+      this.form.get(Controls.UseFloatingIP).setValue(false);
+      this.form.get(Controls.UseFloatingIP).disable();
+    }
   }
 
   private _getCurrentFlavor(): OpenstackFlavor {
