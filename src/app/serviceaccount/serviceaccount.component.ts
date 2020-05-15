@@ -228,7 +228,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
               delete this.tokenList[serviceAccount.id];
               this._serviceAccountUpdate.next();
               this._notificationService.success(
-                `Service Account ${serviceAccount.name} has been removed from project ${this._selectedProject.name}`
+                `The <strong>${serviceAccount.name}</strong> service account was removed from the <strong>${this._selectedProject.name}</strong> project`
               );
               this._googleAnalyticsService.emitEvent(
                 'serviceAccountOverview',

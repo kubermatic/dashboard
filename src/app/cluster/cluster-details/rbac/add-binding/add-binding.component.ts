@@ -219,7 +219,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       .subscribe(binding => {
         this._matDialogRef.close(binding);
         this._notificationService.success(
-          `${bindingName} has been added successfully`
+          `The <strong>${bindingName}</strong> binding was added`
         );
       });
   }
@@ -249,7 +249,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       .subscribe(binding => {
         this._matDialogRef.close(binding);
         this._notificationService.success(
-          `${bindingName} has been added successfully`
+          `The <strong>${bindingName}</strong> binding was added`
         );
       });
   }

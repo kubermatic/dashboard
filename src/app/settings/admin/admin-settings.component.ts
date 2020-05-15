@@ -85,7 +85,7 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
             )
           ) {
             this._notificationService.success(
-              'Successfully applied settings update'
+              'The settings update was applied'
             );
           }
           this._applySettings(settings);
@@ -236,7 +236,7 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
             .pipe(first())
             .subscribe(() => {
               this._notificationService.success(
-                `${admin.name} was deleted from admin group`
+                `The <strong>${admin.name}</strong> user was deleted from admin group`
               );
               this._settingsService.refreshAdmins();
             });

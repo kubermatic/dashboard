@@ -1,41 +1,38 @@
 <div id="km-edit-member-dialog">
   <km-dialog-title>Edit Member</km-dialog-title>
   <mat-dialog-content>
-    <div class="mat-dialog-content">
-      <form [formGroup]="editMemberForm"
-            fxLayout="column">
-        <mat-form-field fxFlex>
-          <mat-label>Name</mat-label>
-          <input matInput
-                 disabled
-                 [value]="member.name">
-        </mat-form-field>
+    <form [formGroup]="editMemberForm"
+          fxLayout="column">
+      <mat-form-field fxFlex>
+        <mat-label>Name</mat-label>
+        <input matInput
+               disabled
+               [value]="member.name">
+      </mat-form-field>
 
-        <mat-form-field fxFlex>
-          <mat-label>Email</mat-label>
-          <input matInput
-                 disabled
-                 [value]="member.email">
-        </mat-form-field>
+      <mat-form-field fxFlex>
+        <mat-label>Email</mat-label>
+        <input matInput
+               disabled
+               [value]="member.email">
+      </mat-form-field>
 
-        <mat-form-field fxFlex>
-          <mat-label>Group*</mat-label>
-          <mat-select id="km-edit-member-dialog-group-combobox"
-                      panelClass="km-add-dialog-dropdown"
-                      disableOptionCentering
-                      formControlName="group"
-                      cdkFocusInitial>
-            <mat-option value="owners">Owner</mat-option>
-            <mat-option value="editors">Editor</mat-option>
-            <mat-option value="viewers">Viewer</mat-option>
-          </mat-select>
-          <mat-error *ngIf="editMemberForm.controls.group.hasError('required')">
-            Group is <strong>required</strong>.
-          </mat-error>
-        </mat-form-field>
-
-      </form>
-    </div>
+      <mat-form-field fxFlex>
+        <mat-label>Group*</mat-label>
+        <mat-select id="km-edit-member-dialog-group-combobox"
+                    panelClass="km-add-dialog-dropdown"
+                    disableOptionCentering
+                    formControlName="group"
+                    cdkFocusInitial>
+          <mat-option value="owners">Owner</mat-option>
+          <mat-option value="editors">Editor</mat-option>
+          <mat-option value="viewers">Viewer</mat-option>
+        </mat-select>
+        <mat-error *ngIf="editMemberForm.controls.group.hasError('required')">
+          Group is <strong>required</strong>.
+        </mat-error>
+      </mat-form-field>
+    </form>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button id="km-edit-member-dialog-edit-btn"

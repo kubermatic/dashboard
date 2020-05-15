@@ -10,7 +10,10 @@
         <i [matTooltip]="nodeDeploymentHealthStatus.message"
            [ngClass]="nodeDeploymentHealthStatus.color"
            class="km-node-deployment-health"></i>
-        <span class="km-node-deployment-name">{{nodeDeployment.name}}</span>
+        <span ngxClipboard
+              [cbContent]="nodeDeployment.name"
+              matTooltip="Click to copy"
+              class="km-node-deployment-name km-copy">{{nodeDeployment.name}}</span>
       </mat-card-title>
 
       <div class="km-node-deployment-actions"
@@ -21,7 +24,6 @@
           <i class="km-icon-edit"></i>
         </button>
         <button mat-icon-button
-                color="primary"
                 (click)="showDeleteDialog()"
                 [disabled]="!isDeleteEnabled()">
           <i class="km-icon-delete"></i>
@@ -94,7 +96,8 @@
                        *ngIf="nodeDeployment.spec.template.labels">
             <div key>Node Labels</div>
             <div value>
-              <km-labels [labels]="nodeDeployment.spec.template.labels"></km-labels>
+              <km-labels [labels]="nodeDeployment.spec.template.labels"
+                         emptyMessage="No assigned labels"></km-labels>
             </div>
           </km-property>
           <km-property fxFlex="50%"

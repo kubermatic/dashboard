@@ -40,7 +40,7 @@ export class AddSshKeyDialogComponent implements OnInit {
       .addSSHKey(new SSHKeyEntity(name, null, key), this.projectID)
       .subscribe(result => {
         this._notificationService.success(
-          `SSH key ${name} added successfully to project`
+          `The <strong>${name}</strong> SSH key was added`
         );
         this.googleAnalyticsService.emitEvent('addSshKey', 'sshKeyAdded');
         this.dialogRef.close(result);

@@ -54,7 +54,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   nodeDC: DataCenterEntity[] = [];
   seedDC: DataCenterEntity[] = [];
   health: HealthEntity[] = [];
-  nodeDeployments: NodeDeploymentEntity[] = [];
+  nodeDeployments: NodeDeploymentEntity[][] = [];
   provider = [];
   displayedColumns: string[] = [
     'status',
@@ -267,15 +267,11 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   showEOLWarning(element): boolean {
-    let showEOLWarning = false;
-    for (const nd in this.nodeDeployments[element.id]) {
-      if (
-        this.nodeDeployments[element.id][nd].spec.template.operatingSystem
-          .containerLinux
-      ) {
-        showEOLWarning = true;
-      }
-    }
-    return showEOLWarning;
+    return (
+      !!this.nodeDeployments[element.id] &&
+      this.nodeDeployments[element.id].filter(
+        nd => !!nd.spec.template.operatingSystem.containerLinux
+      ).length > 0
+    );
   }
 }

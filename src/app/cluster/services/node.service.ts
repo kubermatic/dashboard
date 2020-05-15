@@ -84,7 +84,7 @@ export class NodeService {
       .pipe(first())
       .subscribe(() => {
         this._notificationService.success(
-          `Node Deployment for ${cluster.name} successfully created`
+          `A new node deployment was created in the <strong>${cluster.name}</strong> cluster`
         );
         this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeAdded');
       });
@@ -166,7 +166,7 @@ export class NodeService {
                 .pipe(
                   catchError(() => {
                     this._notificationService.error(
-                      `Could not update Node Deployment ${data.nodeDeployment.name}`
+                      `Could not update the <strong>${data.nodeDeployment.name}</strong> node deployment `
                     );
                     this._googleAnalyticsService.emitEvent(
                       'clusterOverview',
@@ -185,7 +185,7 @@ export class NodeService {
           (nd: NodeDeploymentEntity): Observable<boolean> => {
             if (nd) {
               this._notificationService.success(
-                `Node Deployment ${nd.name} updated successfully`
+                `The <strong>${nd.name}</strong> node deployment was updated`
               );
               this._googleAnalyticsService.emitEvent(
                 'clusterOverview',
@@ -241,7 +241,7 @@ export class NodeService {
                 .pipe(
                   catchError(() => {
                     this._notificationService.error(
-                      'Could not remove Node Deployment'
+                      'Could not remove the <strong>${nd.name}</strong> node deployment'
                     );
                     this._googleAnalyticsService.emitEvent(
                       'clusterOverview',
@@ -260,7 +260,7 @@ export class NodeService {
           (data: any): Observable<boolean> => {
             if (data) {
               this._notificationService.success(
-                'Node Deployment removed successfully'
+                `The <strong>${nd.name}</strong> node deployment was removed`
               );
               this._googleAnalyticsService.emitEvent(
                 'clusterOverview',

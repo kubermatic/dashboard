@@ -42,7 +42,8 @@
       <div *ngIf="cluster.labels && displayTags(cluster.labels); else noLabels"
            class="km-summary-tags">
         <div class="km-summary-row">Cluster Labels</div>
-        <km-labels [labels]="cluster.labels"></km-labels>
+        <km-labels [labels]="cluster.labels"
+                   emptyMessage="No assigned labels"></km-labels>
       </div>
       <ng-template #noLabels>
         <div class="km-summary-row">
@@ -498,7 +499,8 @@
         <ng-container *ngIf="nodeData.spec.cloud.digitalocean && nodeData.spec.cloud.digitalocean.tags?.length > 0">
           <div class="km-summary-tags">
             <div class="km-summary-row">Provider Tags</div>
-            <km-labels [labels]="nodeData.spec.cloud.digitalocean.tags"></km-labels>
+            <km-labels [labels]="nodeData.spec.cloud.digitalocean.tags"
+                       emptyMessage="No assigned tags"></km-labels>
           </div>
         </ng-container>
 
@@ -506,7 +508,8 @@
         <ng-container *ngIf="nodeData.spec.cloud.gcp && nodeData.spec.cloud.gcp?.tags?.length > 0">
           <div class="km-summary-tags">
             <div class="km-summary-row">Provider Tags</div>
-            <km-labels [labels]="nodeData.spec.cloud.gcp?.tags"></km-labels>
+            <km-labels [labels]="nodeData.spec.cloud.gcp?.tags"
+                       emptyMessage="No assigned tags"></km-labels>
           </div>
         </ng-container>
 
@@ -514,7 +517,8 @@
         <ng-container *ngIf="nodeData.spec.cloud.packet && nodeData.spec.cloud.packet.tags?.length > 0">
           <div class="km-summary-tags">
             <div class="km-summary-row">Provider Tags</div>
-            <km-labels [labels]="nodeData.spec.cloud.packet.tags"></km-labels>
+            <km-labels [labels]="nodeData.spec.cloud.packet.tags"
+                       emptyMessage="No assigned tags"></km-labels>
           </div>
         </ng-container>
 
@@ -522,7 +526,8 @@
         <ng-container *ngIf="nodeData.spec.cloud.aws && displayTags(nodeData.spec.cloud?.aws?.tags)">
           <div class="km-summary-tags">
             <div class="km-summary-row">Provider Tags</div>
-            <km-labels [labels]="nodeData.spec.cloud?.aws?.tags"></km-labels>
+            <km-labels [labels]="nodeData.spec.cloud?.aws?.tags"
+                       emptyMessage="No assigned tags"></km-labels>
           </div>
         </ng-container>
 
@@ -530,7 +535,8 @@
         <ng-container *ngIf="nodeData.spec.cloud.openstack && displayTags(nodeData.spec.cloud.openstack.tags)">
           <div class="km-summary-tags">
             <div class="km-summary-row">Provider Tags</div>
-            <km-labels [labels]="nodeData.spec.cloud.openstack.tags"></km-labels>
+            <km-labels [labels]="nodeData.spec.cloud.openstack.tags"
+                       emptyMessage="No assigned tags"></km-labels>
           </div>
         </ng-container>
 
@@ -538,7 +544,8 @@
         <ng-container *ngIf="nodeData.spec.cloud.azure && displayTags(nodeData.spec.cloud.azure.tags)">
           <div class="km-summary-tags">
             <div class="km-summary-row">Provider Tags</div>
-            <km-labels [labels]="nodeData.spec.cloud.azure.tags"></km-labels>
+            <km-labels [labels]="nodeData.spec.cloud.azure.tags"
+                       emptyMessage="No assigned tags"></km-labels>
           </div>
         </ng-container>
 
@@ -556,7 +563,8 @@
         <ng-container *ngIf="nodeData.spec.cloud.alibaba && displayTags(nodeData.spec.cloud.alibaba.labels)">
           <div class="km-summary-tags">
             <div class="km-summary-row">Provider Labels</div>
-            <km-labels [labels]="nodeData.spec.cloud.alibaba.labels"></km-labels>
+            <km-labels [labels]="nodeData.spec.cloud.alibaba.labels"
+                       emptyMessage="No assigned labels"></km-labels>
           </div>
         </ng-container>
         <ng-container *ngIf="nodeData.spec.cloud.alibaba && !displayTags(nodeData.spec.cloud.alibaba.labels)">
@@ -572,7 +580,8 @@
         <ng-container *ngIf="nodeData.spec.cloud.gcp && displayTags(nodeData.spec.cloud.gcp?.labels)">
           <div class="km-summary-tags">
             <div class="km-summary-row">Provider Labels</div>
-            <km-labels [labels]="nodeData.spec.cloud.gcp?.labels"></km-labels>
+            <km-labels [labels]="nodeData.spec.cloud.gcp?.labels"
+                       emptyMessage="No assigned labels"></km-labels>
           </div>
         </ng-container>
         <ng-container *ngIf="nodeData.spec.cloud.gcp && !displayTags(nodeData.spec.cloud.gcp?.labels)">
@@ -588,7 +597,8 @@
         <div *ngIf="nodeData.spec.labels && displayTags(nodeData.spec.labels)"
              class="km-summary-tags">
           <div class="km-summary-row">Node Labels</div>
-          <km-labels [labels]="nodeData.spec.labels"></km-labels>
+          <km-labels [labels]="nodeData.spec.labels"
+                     emptyMessage="No assigned labels"></km-labels>
         </div>
         <div *ngIf="!nodeData.spec.labels || !displayTags(nodeData.spec.labels)">
           <div class="km-summary-row">

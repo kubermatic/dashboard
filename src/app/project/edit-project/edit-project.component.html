@@ -1,27 +1,25 @@
 <div id="km-edit-project-dialog">
   <km-dialog-title>Edit Project</km-dialog-title>
   <mat-dialog-content>
-    <div class="mat-dialog-content">
-      <form [formGroup]="form"
-            fxLayout="column">
-        <mat-form-field fxFlex>
-          <mat-label>Name*</mat-label>
-          <input id="km-edit-project-dialog-input"
-                 matInput
-                 formControlName="name"
-                 type="text"
-                 autocomplete="off"
-                 cdkFocusInitial>
-          <mat-error *ngIf="form.controls.name.hasError('required')">
-            Name is <strong>required</strong>.
-          </mat-error>
-        </mat-form-field>
-        <km-label-form title="Labels"
-                       [(labels)]="labels"
-                       [asyncKeyValidators]=asyncLabelValidators
-                       formControlName="labels"></km-label-form>
-      </form>
-    </div>
+    <form [formGroup]="form"
+          fxLayout="column">
+      <mat-form-field fxFlex>
+        <mat-label>Name*</mat-label>
+        <input id="km-edit-project-dialog-input"
+               matInput
+               formControlName="name"
+               type="text"
+               autocomplete="off"
+               cdkFocusInitial>
+        <mat-error *ngIf="form.controls.name.hasError('required')">
+          Name is <strong>required</strong>.
+        </mat-error>
+      </mat-form-field>
+      <km-label-form title="Labels"
+                     [(labels)]="labels"
+                     [asyncKeyValidators]=asyncLabelValidators
+                     formControlName="labels"></km-label-form>
+    </form>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button id="km-edit-project-dialog-edit-btn"

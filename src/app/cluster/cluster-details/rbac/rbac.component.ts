@@ -121,7 +121,7 @@ export class RBACComponent implements OnInit, OnDestroy {
             .pipe(first())
             .subscribe(() => {
               this._notificationService.success(
-                `${element.kind} ${element.name} has been removed from binding`
+                `The <strong>${element.name}</strong> ${element.kind} was removed from the binding`
               );
             });
         }
@@ -166,7 +166,7 @@ export class RBACComponent implements OnInit, OnDestroy {
             .pipe(first())
             .subscribe(() => {
               this._notificationService.success(
-                `${element.kind} ${element.name} has been removed from binding`
+                `The <strong>${element.name}</strong> ${element.kind} was removed from the binding`
               );
             });
         }
