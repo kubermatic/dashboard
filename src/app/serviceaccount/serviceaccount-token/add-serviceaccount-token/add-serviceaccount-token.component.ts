@@ -51,7 +51,7 @@ export class AddServiceAccountTokenComponent implements OnInit {
       .subscribe(token => {
         this._matDialogRef.close(true);
         this._notificationService.success(
-          `Token ${createServiceAccountToken.name} is added successfully to service account ${this.serviceaccount.name}`
+          `The <strong>${createServiceAccountToken.name}</strong> token was added to the <strong>${this.serviceaccount.name}</strong> service account`
         );
         this.openTokenDialog(token);
       });

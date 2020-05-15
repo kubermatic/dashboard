@@ -513,7 +513,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.reloadAddons();
         this._notificationService.success(
-          `The ${addon.name} addon has been added to the ${this.cluster.name} cluster`
+          `The <strong>${addon.name}</strong> addon was added to the <strong>${this.cluster.name}</strong> cluster`
         );
       });
   }
@@ -531,7 +531,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.reloadAddons();
         this._notificationService.success(
-          `The ${addon.name} addon has been updated`
+          `The <strong>${addon.name}</strong> addon was updated`
         );
       });
   }
@@ -549,7 +549,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.reloadAddons();
         this._notificationService.success(
-          `The ${addon.name} addon has been removed from the ${this.cluster.name} cluster`
+          `The <strong>${addon.name}</strong> addon was removed from the <strong>${this.cluster.name}</strong> cluster`
         );
       });
   }

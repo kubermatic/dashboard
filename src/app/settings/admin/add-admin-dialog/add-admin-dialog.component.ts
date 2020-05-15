@@ -34,7 +34,7 @@ export class AddAdminDialogComponent implements OnInit {
 
     this._settingsService.setAdmin(adminEntity).subscribe(admin => {
       this._notificationService.success(
-        `${admin.name} was successfully added to admin group`
+        `The <strong>${admin.name}</strong> user was successfully added to admin group`
       );
       this._matDialogRef.close(admin);
     });
