@@ -1497,8 +1497,9 @@
     margin-top: 4.25 * $baseline-grid !important;
   }
 
-  .km-confirmation-dialog,
-  .km-delete-cluster-dialog mat-dialog-content {
+  .km-confirmation-dialog .mat-dialog-content,
+  .km-delete-cluster-dialog .mat-dialog-content {
+    line-height: 2.4 * $line-height;
     margin-bottom: 3.75 * $baseline-grid;
   }
 
