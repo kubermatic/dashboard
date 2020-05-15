@@ -28,4 +28,13 @@
       {{zone.name}}
     </div>
   </km-combobox>
+
+  <mat-form-field fxFlex>
+    <mat-label>Image ID</mat-label>
+    <input [formControlName]="Controls.ImageID"
+           matInput
+           type="text"
+           autocomplete="off">
+    <mat-hint>Please note that snapshots are not supported.</mat-hint>
+  </mat-form-field>
 </form>

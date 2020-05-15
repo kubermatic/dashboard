@@ -409,6 +409,10 @@
             <div key>Zone</div>
             <div value>{{nodeData.spec.cloud.azure.zone}}</div>
           </km-property>
+          <km-property *ngIf="nodeData.spec.cloud.azure.imageID">
+            <div key>Image ID</div>
+            <div value>{{nodeData.spec.cloud.azure.imageID}}</div>
+          </km-property>
         </ng-container>
 
         <!-- Initial Node Replicas -->

@@ -40,18 +40,18 @@
     </div>
   </km-combobox>
 
-  <km-combobox #machineSizesCombobox
+  <km-combobox #machineTypesCombobox
                [required]="true"
                [grouped]="false"
-               [selected]="selectedMachineSize"
-               [options]="machineSizes"
-               [formControlName]="Controls.MachineSize"
-               (changed)="onMachineSizeChange($event)"
-               [label]="machineSizeLabel"
-               inputLabel="Select machine size..."
+               [selected]="selectedMachineType"
+               [options]="machineTypes"
+               [formControlName]="Controls.MachineType"
+               (changed)="onMachineTypeChange($event)"
+               [label]="machineTypeLabel"
+               inputLabel="Select machine type..."
                filterBy="name">
-    <div *option="let machineSize">
-      {{machineSize.name}} ({{machineSize.description}})
+    <div *option="let machineType">
+      {{machineType.name}} ({{machineType.description}})
     </div>
   </km-combobox>
 

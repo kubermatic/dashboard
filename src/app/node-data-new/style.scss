@@ -7,6 +7,8 @@ div.km-os-options {
 }
 
 mat-button-toggle-group[group='operatingSystemGroup'] {
+  flex-wrap: wrap;
+
   .mat-button-toggle {
     border-radius: $border-radius;
     max-width: 170px;

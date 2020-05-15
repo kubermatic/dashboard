@@ -10,7 +10,8 @@
                (changed)="onNetworkChange($event)"
                [label]="networkLabel"
                inputLabel="Select network..."
-               filterBy="name">
+               filterBy="name"
+               selectBy="path">
     <div *option="let network">
       {{network.name}}
     </div>

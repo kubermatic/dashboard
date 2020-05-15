@@ -24,7 +24,10 @@ import {
   tap,
 } from 'rxjs/operators';
 
-import {PresetsService} from '../../../../../../core/services';
+import {
+  PresetsService,
+  DatacenterService,
+} from '../../../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
 import {OpenstackCloudSpec} from '../../../../../../shared/entity/cloud/OpenstackCloudSpec';
 import {
@@ -80,6 +83,7 @@ enum ProjectState {
 })
 export class OpenstackProviderBasicComponent extends BaseFormValidator
   implements OnInit, OnDestroy {
+  private _isFloatingPoolIPEnforced = false;
   private readonly _debounceTime = 250;
   private readonly _domains: string[] = ['Default'];
 
@@ -98,6 +102,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
     private readonly _clusterService: ClusterService,
+    private readonly _datacenterService: DatacenterService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super('Openstack Provider Basic');
@@ -135,6 +140,18 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator
       this._clusterService.providerChanges,
       this._clusterService.datacenterChanges
     )
+      .pipe(
+        switchMap(_ =>
+          this._datacenterService.getDataCenter(this._clusterService.datacenter)
+        )
+      )
+      .pipe(
+        tap(
+          dc =>
+            (this._isFloatingPoolIPEnforced =
+              dc.spec.openstack.enforce_floating_ip)
+        )
+      )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
 
@@ -233,6 +250,8 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator
         return !this.form.get(Controls.ProjectID).value;
       case Controls.ProjectID:
         return !this.form.get(Controls.Project).value;
+      case Controls.FloatingIPPool:
+        return this._isFloatingPoolIPEnforced;
       default:
         return true;
     }
