@@ -443,18 +443,12 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   private _getCreateCluterModel(): CreateClusterModel {
-    const keyNames: string[] = [];
-    for (const key of this.clusterSSHKeys) {
-      keyNames.push(key.name);
-    }
-
     return {
       cluster: {
         name: this.cluster.name,
         labels: this.cluster.labels,
         spec: this.cluster.spec,
         type: this.cluster.type,
-        sshKeys: keyNames,
         credential: this.cluster.credential,
       },
       nodeDeployment: {
