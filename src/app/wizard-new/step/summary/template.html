@@ -3,109 +3,105 @@
      fxLayout.sm="column"
      fxLayout.xs="column"
      fxLayoutGap="20px">
-
   <div fxFlex="50%">
-    <mat-card-header>
-      <mat-card-title>Cluster</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="km-summary-row"><strong>{{cluster.name}}</strong></div>
-      <span class="km-cluster-type"
-            [matTooltip]="cluster.type">
-        <i class="km-icon-{{cluster.type}}"></i>
-      </span>
-      <div class="km-summary-row">v{{cluster.spec.version}}</div>
-      <div class="km-summary-row">{{location}}
-        ({{country}})
-      </div>
-      <div class="km-summary-row">
-        <i class="km-provider-logo km-provider-logo-{{provider}}"></i>
-      </div>
-      <div class="km-summary-row">
-        <span class="km-summary-left km-text">
-          <i [ngClass]="{'km-icon-disabled': !cluster.spec.auditLogging?.enabled, 'km-icon-running': cluster.spec.auditLogging?.enabled}"></i>
-        </span>
-        <span>Audit Logging</span>
-      </div>
-      <div class="km-summary-row">
-        <span class="km-summary-left km-text">
-          <i [ngClass]="{'km-icon-disabled': !cluster.spec.usePodSecurityPolicyAdmissionPlugin, 'km-icon-running': cluster.spec.usePodSecurityPolicyAdmissionPlugin}"></i>
-        </span>
-        <span>Pod Security Policy</span>
-      </div>
-      <div class="km-summary-row">
-        <span class="km-summary-left km-text">
-          <i [ngClass]="{'km-icon-disabled': !cluster.spec.usePodNodeSelectorAdmissionPlugin, 'km-icon-running': cluster.spec.usePodNodeSelectorAdmissionPlugin}"></i>
-        </span>
-        <span>Pod Node Selector</span>
-      </div>
-      <div *ngIf="cluster.labels && displayTags(cluster.labels); else noLabels"
-           class="km-summary-tags">
-        <div class="km-summary-row">Cluster Labels</div>
-        <km-labels [labels]="cluster.labels"
-                   emptyMessage="No assigned labels"></km-labels>
-      </div>
-      <ng-template #noLabels>
-        <div class="km-summary-row">
-          <span class="km-summary-left km-text">
-            <i class="km-icon-disabled"></i>
-          </span>
-          <span>Cluster Labels</span>
-        </div>
-      </ng-template>
-    </mat-card-content>
 
-    <mat-card-header>
-      <mat-card-title>System</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="km-summary-row km-summary-row-with-margin">
-        <span class="km-summary-left km-text km-summary-os">
+    <div class="section">
+      <div fxLayout="row"
+           fxLayoutAlign=" center"
+           fxLayoutGap="8px">
+        <div class="number">1</div>
+        <div class="title">Provider</div>
+      </div>
+      <div class="properties">
+        <km-property>
+          <div key>Provider</div>
+          <div value><i class="km-provider-logo km-provider-logo-{{provider}}"></i></div>
+        </km-property>
+        <km-property>
+          <div key>Datacenter</div>
+          <div value>{{location}} ({{country}})</div>
+        </km-property>
+      </div>
+    </div>
+
+    <div class="section">
+      <div fxLayout="row"
+           fxLayoutAlign=" center"
+           fxLayoutGap="8px">
+        <div class="number">2</div>
+        <div class="title">Cluster</div>
+      </div>
+      <div class="properties">
+        <km-property>
+          <div key>Name</div>
+          <div value>{{cluster.name}}</div>
+        </km-property>
+        <km-property>
+          <div key>Type</div>
+          <div value
+               fxLayout="row"
+               fxLayoutAlign=" center"
+               fxLayoutGap="8px">
+            <i class="km-icon-{{cluster.type}}"></i>
+            <span>{{cluster.type}}</span>
+          </div>
+        </km-property>
+        <km-property>
+          <div key>Version</div>
+          <div value>{{cluster.spec.version}}</div>
+        </km-property>
+        <div fxLayout="row"
+             fxLayoutAlign=" center"
+             fxLayoutGap="8px">
           <i class="km-os-image km-os-image-{{getOperatingSystemLogoClass()}}"></i>
-        </span>
-        <span>{{getOperatingSystem()}}</span>
-        <span class="km-eol-warning"
-              *ngIf="nodeData.spec.operatingSystem.containerLinux">
-          <i class="km-icon-warning with-margin"
+          <span>{{getOperatingSystem()}}</span>
+          <i *ngIf="nodeData.spec.operatingSystem.containerLinux"
+             class="km-icon-warning with-margin"
              matTooltip="Container Linux is going end-of-life on May 26, 2020."></i>
-        </span>
+        </div>
+        <div [ngSwitch]="displayTags(cluster.labels)">
+          <km-property *ngSwitchCase="true">
+            <div key>Cluster Labels</div>
+            <div value>
+              <km-labels [labels]="cluster.labels"></km-labels>
+            </div>
+          </km-property>
+          <km-property-boolean *ngSwitchCase="false"
+                               label="Cluster Labels"
+                               [value]="false">
+          </km-property-boolean>
+        </div>
+        <km-property-boolean label="Audit Logging"
+                             [value]="cluster.spec.auditLogging?.enabled">
+        </km-property-boolean>
+        <km-property-boolean label="Pod Security Policy"
+                             [value]="cluster.spec.usePodSecurityPolicyAdmissionPlugin">
+        </km-property-boolean>
+        <km-property-boolean label="Pod Node Selector"
+                             [value]="cluster.spec.usePodNodeSelectorAdmissionPlugin">
+        </km-property-boolean>
+        <km-property-boolean *ngIf="nodeData.spec.operatingSystem.ubuntu"
+                             label="Upgrade system on first boot"
+                             [value]="nodeData.spec.operatingSystem.ubuntu.distUpgradeOnBoot">
+        </km-property-boolean>
+        <km-property-boolean *ngIf="nodeData.spec.operatingSystem.centos"
+                             label="Upgrade system on first boot"
+                             [value]="nodeData.spec.operatingSystem.centos.distUpgradeOnBoot">
+        </km-property-boolean>
+        <km-property-boolean *ngIf="nodeData.spec.operatingSystem.sles"
+                             label="Upgrade system on first boot"
+                             [value]="nodeData.spec.operatingSystem.sles.distUpgradeOnBoot">
+        </km-property-boolean>
+        <km-property-boolean *ngIf="nodeData.spec.operatingSystem.rhel"
+                             label="Upgrade system on first boot"
+                             [value]="nodeData.spec.operatingSystem.rhel.distUpgradeOnBoot">
+        </km-property-boolean>
+        <km-property-boolean *ngIf="nodeData.spec.operatingSystem.containerLinux"
+                             label="Disable auto-update"
+                             [value]="nodeData.spec.operatingSystem.containerLinux.disableAutoUpdate">
+        </km-property-boolean>
       </div>
-      <div class="km-summary-row"
-           *ngIf="nodeData.spec.operatingSystem.ubuntu">
-        <span class="km-summary-left km-text">
-          <i [ngClass]="nodeData.spec.operatingSystem.ubuntu.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></i>
-        </span>
-        <span>Upgrade system on first boot</span>
-      </div>
-      <div class="km-summary-row"
-           *ngIf="nodeData.spec.operatingSystem.centos">
-        <span class="km-summary-left km-text">
-          <i [ngClass]="nodeData.spec.operatingSystem.centos.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></i>
-        </span>
-        <span>Upgrade system on first boot</span>
-      </div>
-      <div class="km-summary-row"
-           *ngIf="nodeData.spec.operatingSystem.containerLinux">
-        <span class="km-summary-left km-text">
-          <i [ngClass]="nodeData.spec.operatingSystem.containerLinux.disableAutoUpdate ? 'km-icon-running' : 'km-icon-disabled'"></i>
-        </span>
-        <span>Disable auto-update</span>
-      </div>
-      <div class="km-summary-row"
-           *ngIf="nodeData.spec.operatingSystem.sles">
-        <span class="km-summary-left km-text">
-          <i [ngClass]="nodeData.spec.operatingSystem.sles.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></i>
-        </span>
-        <span>Upgrade system on first boot</span>
-      </div>
-      <div class="km-summary-row"
-           *ngIf="nodeData.spec.operatingSystem.rhel">
-        <span class="km-summary-left km-text">
-          <i [ngClass]="nodeData.spec.operatingSystem.rhel.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></i>
-        </span>
-        <span>Upgrade system on first boot</span>
-      </div>
-    </mat-card-content>
+    </div>
 
     <ng-container *ngIf="clusterSSHKeys.length && !cluster.spec.cloud.bringyourown">
       <mat-card-header>
