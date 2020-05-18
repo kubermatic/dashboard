@@ -67,7 +67,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this._notificationService.success(
-          `Cluster ${this.cluster.name} is being updated to version ${this.selectedVersion}`
+          `The <strong>${this.cluster.name}</strong> cluster is being updated to the ${this.selectedVersion} version`
         );
         this._googleAnalyticsService.emitEvent(
           'clusterOverview',
@@ -93,7 +93,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe(() => {
         this._notificationService.success(
-          `Node Deployments from cluster ${this.cluster.name} are being updated to version ${this.selectedVersion}`
+          `The node deployments from the <strong>${this.cluster.name}</strong> cluster are being updated to the ${this.selectedVersion} version`
         );
       });
   }

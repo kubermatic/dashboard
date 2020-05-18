@@ -37,12 +37,13 @@
         <td mat-cell
             *matCellDef="let element"
             [attr.id]="'km-clusters-' + element.name">
-          <span class="km-eol-warning">
-            {{element.name}}
+          <div fxLayoutAlign=" center"
+               fxLayoutGap="4px">
+            <span>{{element.name}}</span>
             <i *ngIf="showEOLWarning(element)"
                class="km-icon-warning with-margin"
                matTooltip="Container Linux is going end-of-life on May 26, 2020."></i>
-          </span>
+          </div>
         </td>
       </ng-container>
 
@@ -53,8 +54,7 @@
         <td mat-cell
             *matCellDef="let element">
           <km-labels [labels]="element.labels"
-                     [limit]="2"
-                     emptyMessage="-"></km-labels>
+                     [limit]="2"></km-labels>
         </td>
       </ng-container>
 

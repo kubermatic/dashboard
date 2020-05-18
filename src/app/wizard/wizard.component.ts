@@ -382,7 +382,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(cluster => {
           this._notificationService.success(
-            `Cluster ${createCluster.cluster.name} successfully created`
+            `The <strong>${createCluster.cluster.name}</strong> cluster was created`
           );
           this._googleAnalyticsService.emitEvent(
             'clusterCreation',
@@ -425,13 +425,13 @@ export class WizardComponent implements OnInit, OnDestroy {
           ]);
           keys.forEach(key =>
             this._notificationService.success(
-              `SSH key ${key.name} was added successfully to cluster ${createCluster.cluster.name}`
+              `The <strong>${key.name}</strong> SSH key was added to the <strong>${createCluster.cluster.name}</strong> cluster`
             )
           );
         },
         () => {
           this._notificationService.error(
-            `Could not create cluster ${createCluster.cluster.name}`
+            `Could not create the <strong>${createCluster.cluster.name}</strong> cluster`
           );
           this._googleAnalyticsService.emitEvent(
             'clusterCreation',

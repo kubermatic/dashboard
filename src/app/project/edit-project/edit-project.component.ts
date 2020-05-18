@@ -61,7 +61,7 @@ export class EditProjectComponent implements OnInit {
     this.api.editProject(this.project.id, project).subscribe(project => {
       this.dialogRef.close(project);
       this._notificationService.success(
-        `Project ${this.project.name} has been edited successfully`
+        `The <strong>${this.project.name}</strong> project was updated`
       );
     });
   }

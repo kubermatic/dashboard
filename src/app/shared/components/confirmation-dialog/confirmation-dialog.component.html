@@ -3,25 +3,23 @@
      (keydown.enter)="onEnterKeyDown()">
   <km-dialog-title>{{data.title}}</km-dialog-title>
   <mat-dialog-content>
-    <div class="mat-dialog-content">
-      <p [innerHTML]="data.message"></p>
-      <div *ngIf="!!data.warning"
-           class="km-dialog-warning"
-           fxLayoutAlign=" center">
-        <i class="km-icon-warning"></i>
-        <span [innerHTML]="data.warning"></span>
-      </div>
-      <mat-form-field *ngIf="!!data.compareName && data.compareName.length > 0">
-        <mat-label>{{data.inputPlaceholder}}</mat-label>
-        <input id="km-confirmation-dialog-input"
-               matInput
-               type="text"
-               title={{data.inputTitle}}
-               (blur)="onChange($event)"
-               (keyup)="onChange($event)"
-               cdkFocusInitial>
-      </mat-form-field>
+    <p [innerHTML]="data.message"></p>
+    <div *ngIf="!!data.warning"
+         class="km-dialog-warning"
+         fxLayoutAlign=" center">
+      <i class="km-icon-warning"></i>
+      <span [innerHTML]="data.warning"></span>
     </div>
+    <mat-form-field *ngIf="!!data.compareName && data.compareName.length > 0">
+      <mat-label>{{data.inputPlaceholder}}</mat-label>
+      <input id="km-confirmation-dialog-input"
+             matInput
+             type="text"
+             title={{data.inputTitle}}
+             (blur)="onChange($event)"
+             (keyup)="onChange($event)"
+             cdkFocusInitial>
+    </mat-form-field>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-flat-button

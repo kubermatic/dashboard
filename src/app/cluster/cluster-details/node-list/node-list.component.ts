@@ -168,7 +168,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
           )
           .subscribe(() => {
             this._notificationService.success(
-              `Node removed successfully from ${this.cluster.name}`
+              `The <strong>${node.name}</strong> node was removed from the <strong>${this.cluster.name}</strong> cluster`
             );
             this._googleAnalyticsService.emitEvent(
               'clusterOverview',

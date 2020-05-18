@@ -1,12 +1,9 @@
 <km-dialog-title>Token</km-dialog-title>
 <mat-dialog-content>
-  <div class="mat-dialog-content">
-    <p class="km-code-block km-copy"
-       ngxClipboard
-       [cbContent]="serviceaccountToken.token"
-       matTooltip="click to copy">{{serviceaccountToken.token}}</p>
-  </div>
-
+  <p class="km-code-block km-copy"
+     ngxClipboard
+     [cbContent]="serviceaccountToken.token"
+     matTooltip="click to copy">{{serviceaccountToken.token}}</p>
   <div class="km-dialog-warning">
     <i class="km-icon-warning"></i>
     <div>Store this token securely on your device. It will not be displayed again.</div>

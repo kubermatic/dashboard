@@ -21,12 +21,16 @@ import {
   AzureSizes,
   AzureZones,
 } from '../../../../shared/entity/provider/azure/AzureSizeEntity';
+import {AzureNodeSpec} from '../../../../shared/entity/node/AzureNodeSpec';
+import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
+import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
 
 enum Controls {
   Size = 'size',
   Zone = 'zone',
+  ImageID = 'imageID',
 }
 
 enum SizeState {
@@ -81,7 +85,10 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator
     this.form = this._builder.group({
       [Controls.Size]: this._builder.control('', Validators.required),
       [Controls.Zone]: this._builder.control(''),
+      [Controls.ImageID]: this._builder.control(''),
     });
+
+    this._nodeDataService.nodeData = this._getNodeData();
 
     this._presets.presetChanges
       .pipe(takeUntil(this._unsubscribe))
@@ -96,6 +103,11 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator
       .pipe(switchMap(_ => this._zonesObservable))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setZones.bind(this));
+
+    this.form
+      .get(Controls.ImageID)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
 
   ngOnDestroy(): void {
@@ -179,5 +191,17 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator
       .map(zone => ({name: zone}));
     this.zoneLabel = this.zones.length > 0 ? ZoneState.Ready : ZoneState.Empty;
     this._cdr.detectChanges();
+  }
+
+  private _getNodeData(): NodeData {
+    return {
+      spec: {
+        cloud: {
+          azure: {
+            imageID: this.form.get(Controls.ImageID).value,
+          } as AzureNodeSpec,
+        } as NodeCloudSpec,
+      } as NodeSpec,
+    } as NodeData;
   }
 }

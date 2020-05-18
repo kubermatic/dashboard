@@ -67,7 +67,7 @@ export class RevokeTokenComponent implements OnInit {
         )
         .subscribe(res => {
           this._notificationService.success(
-            `Successfully revoked Admin Token for cluster ${this.cluster.name}`
+            `The admin token for the <strong>${this.cluster.name}</strong> cluster was revoked`
           );
           this._matDialogRef.close(res);
         });
@@ -83,7 +83,7 @@ export class RevokeTokenComponent implements OnInit {
         )
         .subscribe(res => {
           this._notificationService.success(
-            `Successfully revoked Viewer Token for cluster ${this.cluster.name}`
+            `The viewer token for the <strong>${this.cluster.name}</strong> cluster was revoked`
           );
           this._matDialogRef.close(res);
         });

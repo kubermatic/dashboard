@@ -49,7 +49,7 @@ export class EditServiceAccountComponent implements OnInit {
       .subscribe(() => {
         this._matDialogRef.close(true);
         this._notificationService.success(
-          `Service Account ${this.serviceaccount.name} is edited successfully`
+          `The <strong>${this.serviceaccount.name}</strong> service account was updated`
         );
       });
   }

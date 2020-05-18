@@ -41,7 +41,7 @@ export class AddServiceAccountComponent implements OnInit {
       .subscribe(() => {
         this._matDialogRef.close(true);
         this._notificationService.success(
-          `Service Account ${createServiceAccount.name} is added successfully to project ${this.project.name}`
+          `The <strong>${createServiceAccount.name}</strong> service account was added to the <strong>${this.project.name}</strong> project`
         );
       });
   }

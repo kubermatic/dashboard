@@ -1,65 +1,63 @@
 <div id="km-edit-cluster-dialog">
   <km-dialog-title>Edit Cluster</km-dialog-title>
   <mat-dialog-content>
-    <div class="mat-dialog-content">
-      <form [formGroup]="form"
-            fxLayout="column"
-            class="km-edit-cluster-form">
-        <mat-form-field fxFlex>
-          <mat-label>Name*</mat-label>
-          <input id="km-edit-cluster-dialog-input"
-                 matInput
-                 formControlName="name"
-                 type="text"
-                 autocomplete="off"
-                 cdkFocusInitial>
-          <mat-error *ngIf="form.controls.name.hasError('required')">
-            Name is <strong>required</strong>.
-          </mat-error>
-          <mat-error *ngIf="form.controls.name.hasError('minlength')">
-            Name must be at least {{form.controls.name.getError('minlength').requiredLength}} characters.
-          </mat-error>
-          <mat-error *ngIf="form.controls.name.hasError('pattern')">
-            Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
-          </mat-error>
-        </mat-form-field>
+    <form [formGroup]="form"
+          fxLayout="column"
+          class="km-edit-cluster-form">
+      <mat-form-field fxFlex>
+        <mat-label>Name*</mat-label>
+        <input id="km-edit-cluster-dialog-input"
+               matInput
+               formControlName="name"
+               type="text"
+               autocomplete="off"
+               cdkFocusInitial>
+        <mat-error *ngIf="form.controls.name.hasError('required')">
+          Name is <strong>required</strong>.
+        </mat-error>
+        <mat-error *ngIf="form.controls.name.hasError('minlength')">
+          Name must be at least {{form.controls.name.getError('minlength').requiredLength}} characters.
+        </mat-error>
+        <mat-error *ngIf="form.controls.name.hasError('pattern')">
+          Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
+        </mat-error>
+      </mat-form-field>
+      <div fxLayout="row"
+           fxLayoutGap="16px">
         <div fxLayout="row"
-             fxLayoutGap="16px">
-          <div fxLayout="row"
-               fxLayoutGap="8px"
-               fxLayoutAlign=" center">
-            <mat-checkbox formControlName="auditLogging">Audit Logging</mat-checkbox>
-            <i *ngIf="!!datacenter.spec.enforceAuditLogging"
-               class="km-icon-warning km-warning"
-               matTooltip="Audit Logging is enforced by your admin in the chosen datacenter.">
-            </i>
-          </div>
-          <div fxLayout="row"
-               fxLayoutGap="8px"
-               fxLayoutAlign=" center">
-            <mat-checkbox formControlName="usePodSecurityPolicyAdmissionPlugin">Pod Security Policy</mat-checkbox>
-            <i *ngIf="!!datacenter.spec.enforcePodSecurityPolicy"
-               class="km-icon-warning km-warning"
-               matTooltip="Pod Security Policy is enforced by your admin in the chosen datacenter.">
-            </i>
-            <i class="km-icon-info"
-               matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
-            <i *ngIf="form.controls.usePodSecurityPolicyAdmissionPlugin.value"
-               class="km-icon-warning km-warning"
-               matTooltip="Activating Pod Security Policy will mean that a lot of Pod specifications, Operators and Helm charts will not work out of the box. Make sure that you know the consequences of activating this feature.">
-            </i>
-          </div>
-          <mat-checkbox formControlName="usePodNodeSelectorAdmissionPlugin">Pod Node Selector</mat-checkbox>
+             fxLayoutGap="8px"
+             fxLayoutAlign=" center">
+          <mat-checkbox formControlName="auditLogging">Audit Logging</mat-checkbox>
+          <i *ngIf="!!datacenter.spec.enforceAuditLogging"
+             class="km-icon-warning km-warning"
+             matTooltip="Audit Logging is enforced by your admin in the chosen datacenter.">
+          </i>
         </div>
-        <km-label-form title="Labels"
-                       [(labels)]="labels"
-                       [inheritedLabels]="cluster.inheritedLabels"
-                       [asyncKeyValidators]=asyncLabelValidators
-                       formControlName="labels"></km-label-form>
-      </form>
-      <km-edit-provider-settings [cluster]="cluster"
-                                 *ngIf="!cluster.spec.cloud.bringyourown"></km-edit-provider-settings>
-    </div>
+        <div fxLayout="row"
+             fxLayoutGap="8px"
+             fxLayoutAlign=" center">
+          <mat-checkbox formControlName="usePodSecurityPolicyAdmissionPlugin">Pod Security Policy</mat-checkbox>
+          <i *ngIf="!!datacenter.spec.enforcePodSecurityPolicy"
+             class="km-icon-warning km-warning"
+             matTooltip="Pod Security Policy is enforced by your admin in the chosen datacenter.">
+          </i>
+          <i class="km-icon-info"
+             matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
+          <i *ngIf="form.controls.usePodSecurityPolicyAdmissionPlugin.value"
+             class="km-icon-warning km-warning"
+             matTooltip="Activating Pod Security Policy will mean that a lot of Pod specifications, Operators and Helm charts will not work out of the box. Make sure that you know the consequences of activating this feature.">
+          </i>
+        </div>
+        <mat-checkbox formControlName="usePodNodeSelectorAdmissionPlugin">Pod Node Selector</mat-checkbox>
+      </div>
+      <km-label-form title="Labels"
+                     [(labels)]="labels"
+                     [inheritedLabels]="cluster.inheritedLabels"
+                     [asyncKeyValidators]=asyncLabelValidators
+                     formControlName="labels"></km-label-form>
+    </form>
+    <km-edit-provider-settings [cluster]="cluster"
+                               *ngIf="!cluster.spec.cloud.bringyourown"></km-edit-provider-settings>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button id="km-edit-cluster-dialog-edit-btn"

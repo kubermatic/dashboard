@@ -223,7 +223,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
             .pipe(first())
             .subscribe(() => {
               this._notificationService.success(
-                `Member ${member.name} has been removed from project ${this._selectedProject.name}`
+                `The <strong>${member.name}</strong> member was removed from the <strong>${this._selectedProject.name}</strong> project`
               );
               this._googleAnalyticsService.emitEvent(
                 'memberOverview',

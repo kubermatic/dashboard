@@ -123,7 +123,7 @@ export class ClusterDeleteConfirmationComponent
         )
         .subscribe(() => {
           this._notificationService.success(
-            `Cluster ${this.cluster.name} is being deleted`
+            `The <strong>${this.cluster.name}</strong> is being deleted`
           );
           this._googleAnalyticsService.emitEvent(
             'clusterOverview',
