@@ -44,4 +44,15 @@ export class ClusterUtils {
       return 'OpenShift Version';
     }
   }
+
+  static getClusterType(cluster: ClusterEntity): string {
+    switch (cluster.type) {
+      case ClusterType.Kubernetes:
+        return 'Kubernetes';
+      case ClusterType.OpenShift:
+        return 'OpenShift';
+      default:
+        return '';
+    }
+  }
 }

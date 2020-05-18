@@ -6,10 +6,12 @@
   <div fxFlex="50%">
 
     <div class="section">
-      <div fxLayout="row"
+      <div class="header"
+           fxLayout="row"
            fxLayoutAlign=" center"
-           fxLayoutGap="8px">
-        <div class="number">1</div>
+           fxLayoutGap="14px">
+        <div class="number km-border-dark"
+             fxLayoutAlign="center center">1</div>
         <div class="title">Provider</div>
       </div>
       <div class="properties">
@@ -25,10 +27,12 @@
     </div>
 
     <div class="section">
-      <div fxLayout="row"
+      <div class="header"
+           fxLayout="row"
            fxLayoutAlign=" center"
-           fxLayoutGap="8px">
-        <div class="number">2</div>
+           fxLayoutGap="14px">
+        <div class="number km-border-dark"
+             fxLayoutAlign="center center">2</div>
         <div class="title">Cluster</div>
       </div>
       <div class="properties">
@@ -41,9 +45,9 @@
           <div value
                fxLayout="row"
                fxLayoutAlign=" center"
-               fxLayoutGap="8px">
+               fxLayoutGap="10px">
             <i class="km-icon-{{cluster.type}}"></i>
-            <span>{{cluster.type}}</span>
+            <span>{{getClusterType()}}</span>
           </div>
         </km-property>
         <km-property>
@@ -52,7 +56,8 @@
         </km-property>
         <div fxLayout="row"
              fxLayoutAlign=" center"
-             fxLayoutGap="8px">
+             fxLayoutGap="10px"
+             class="os">
           <i class="km-os-image km-os-image-{{getOperatingSystemLogoClass()}}"></i>
           <span>{{getOperatingSystem()}}</span>
           <i *ngIf="nodeData.spec.operatingSystem.containerLinux"
@@ -81,23 +86,23 @@
                              [value]="cluster.spec.usePodNodeSelectorAdmissionPlugin">
         </km-property-boolean>
         <km-property-boolean *ngIf="nodeData.spec.operatingSystem.ubuntu"
-                             label="Upgrade system on first boot"
+                             label="Upgrade system on the first boot"
                              [value]="nodeData.spec.operatingSystem.ubuntu.distUpgradeOnBoot">
         </km-property-boolean>
         <km-property-boolean *ngIf="nodeData.spec.operatingSystem.centos"
-                             label="Upgrade system on first boot"
+                             label="Upgrade system on the first boot"
                              [value]="nodeData.spec.operatingSystem.centos.distUpgradeOnBoot">
         </km-property-boolean>
         <km-property-boolean *ngIf="nodeData.spec.operatingSystem.sles"
-                             label="Upgrade system on first boot"
+                             label="Upgrade system on the first boot"
                              [value]="nodeData.spec.operatingSystem.sles.distUpgradeOnBoot">
         </km-property-boolean>
         <km-property-boolean *ngIf="nodeData.spec.operatingSystem.rhel"
-                             label="Upgrade system on first boot"
+                             label="Upgrade system on the first boot"
                              [value]="nodeData.spec.operatingSystem.rhel.distUpgradeOnBoot">
         </km-property-boolean>
         <km-property-boolean *ngIf="nodeData.spec.operatingSystem.containerLinux"
-                             label="Disable auto-update"
+                             label="Disable system auto-update"
                              [value]="nodeData.spec.operatingSystem.containerLinux.disableAutoUpdate">
         </km-property-boolean>
       </div>

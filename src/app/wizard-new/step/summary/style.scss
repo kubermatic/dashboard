@@ -1,5 +1,41 @@
 @import "../../../../assets/css/variables";
 
+.section {
+  margin: (2 * $baseline-grid) 0 (5 * $baseline-grid);
+
+  .header {
+    margin-bottom: 2 * $baseline-grid;
+
+    .number {
+      border-radius: 50%;
+      width: 3 * $baseline-grid;
+      height: 3 * $baseline-grid;
+    }
+
+    .title {
+      font-size: $font-size-subhead-lg;
+    }
+  }
+
+  .properties {
+    .os {
+      margin: $baseline-grid 0 (3 * $baseline-grid);
+    }
+  }
+}
+
+::ng-deep km-property-boolean {
+  .km-property-label {
+    display: none !important;
+  }
+
+  i {
+    margin-right: 1.5 * $baseline-grid !important;
+  }
+}
+
+/// TODO
+
 .km-summary-row {
   display: flex;
   align-items: center;
