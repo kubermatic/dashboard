@@ -6,6 +6,7 @@ import {
   RHELSpec,
   SLESSpec,
   UbuntuSpec,
+  FlatcarSpec,
 } from '../entity/NodeEntity';
 
 export class NodeData {
@@ -38,4 +39,5 @@ export class NodeOperatingSystemData {
   containerLinux?: ContainerLinuxSpec;
   sles?: SLESSpec;
   rhel?: RHELSpec;
+  flatcar?: FlatcarSpec;
 }

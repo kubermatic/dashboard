@@ -100,6 +100,13 @@
         <span>Disable auto-update</span>
       </div>
       <div class="km-summary-row"
+           *ngIf="nodeData.spec.operatingSystem.flatcar">
+        <span class="km-summary-left km-text">
+          <i [ngClass]="nodeData.spec.operatingSystem.flatcar.disableAutoUpdate ? 'km-icon-running' : 'km-icon-disabled'"></i>
+        </span>
+        <span>Disable auto-update</span>
+      </div>
+      <div class="km-summary-row"
            *ngIf="nodeData.spec.operatingSystem.sles">
         <span class="km-summary-left km-text">
           <i [ngClass]="nodeData.spec.operatingSystem.sles.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></i>
