@@ -17,7 +17,6 @@ export function clusterModelFake(): CreateClusterModel {
         version: '',
       },
       type: ClusterType.Kubernetes,
-      sshKeys: ['key-ssh1'],
     },
   };
 }
