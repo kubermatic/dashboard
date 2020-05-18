@@ -24,7 +24,6 @@ export function doClusterModelFake(): CreateClusterModel {
         version: '',
       },
       type: 'kubernetes',
-      sshKeys: ['key1'],
     },
   };
 }
