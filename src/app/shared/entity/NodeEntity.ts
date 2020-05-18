@@ -62,6 +62,7 @@ export class OperatingSystemSpec {
   containerLinux?: ContainerLinuxSpec;
   sles?: SLESSpec;
   rhel?: RHELSpec;
+  flatcar?: FlatcarSpec;
 
   static getOperatingSystem(spec: OperatingSystemSpec): OperatingSystem {
     return Object.keys(spec).find(
@@ -79,6 +80,10 @@ export class CentosSpec {
 }
 
 export class ContainerLinuxSpec {
+  disableAutoUpdate: boolean;
+}
+
+export class FlatcarSpec {
   disableAutoUpdate: boolean;
 }
 

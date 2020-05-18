@@ -182,6 +182,14 @@ export class NodeDataComponent extends BaseFormValidator
     );
   }
 
+  isFlatcarAvailable(): boolean {
+    return (
+      !!this.isProvider(NodeProvider.AWS) ||
+      !!this.isProvider(NodeProvider.AZURE) ||
+      !!this.isProvider(NodeProvider.VSPHERE)
+    );
+  }
+
   generateName(): void {
     this.form.get(Controls.Name).setValue(this._nameGenerator.generateName());
   }
@@ -230,8 +238,9 @@ export class NodeDataComponent extends BaseFormValidator
           },
         };
       case OperatingSystem.ContainerLinux:
+      case OperatingSystem.Flatcar:
         return {
-          containerLinux: {
+          [this.form.get(Controls.OperatingSystem).value]: {
             disableAutoUpdate: this.form.get(Controls.DisableAutoUpdate).value,
           },
         };
@@ -266,6 +275,8 @@ export class NodeDataComponent extends BaseFormValidator
           return OperatingSystem.RHEL;
         } else if (this.isAvailable('coreos')) {
           return OperatingSystem.ContainerLinux;
+        } else if (this.isAvailable(OperatingSystem.Flatcar)) {
+          return OperatingSystem.Flatcar;
         }
       } else {
         return OperatingSystem.Ubuntu;

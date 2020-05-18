@@ -132,6 +132,11 @@
       <i class="km-os-image-container-linux"></i>
       Container Linux
     </mat-button-toggle>
+    <mat-button-toggle value="flatcar"
+                       *ngIf="(cluster.spec.cloud.aws || cluster.spec.cloud.azure || cluster.spec.cloud.vsphere) && !isClusterOpenshift() && isAvailable('flatcar')">
+      <i class="km-os-image-flatcar"></i>
+      Flatcar
+    </mat-button-toggle>
     <mat-button-toggle value="sles"
                        *ngIf="cluster.spec.cloud.aws && !isClusterOpenshift()">
       <i class="km-os-image-sles"></i>
@@ -175,6 +180,14 @@
          class="km-os-options"
          [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'km-with-margin' : ''">
       <mat-checkbox id="disableAutoUpdate"
+                    formControlName="disableAutoUpdate">Disable auto-update</mat-checkbox>
+    </div>
+
+    <!-- Options for Flatcar -->
+    <div *ngIf="form.controls.operatingSystem.value === 'flatcar'"
+         class="km-os-options"
+         [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'km-with-margin' : ''">
+      <mat-checkbox id="disableAutoUpdatFlatcar"
                     formControlName="disableAutoUpdate">Disable auto-update</mat-checkbox>
     </div>
 

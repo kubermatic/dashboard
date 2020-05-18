@@ -73,6 +73,7 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
       let centosTemplate = '';
       let ubuntuTemplate = '';
       let rhelTemplate = '';
+      let flatcarTemplate = '';
 
       for (const i in res.spec.vsphere.templates) {
         if (i === 'coreos') {
@@ -83,6 +84,8 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
           rhelTemplate = res.spec.vsphere.templates[i];
         } else if (i === 'ubuntu') {
           ubuntuTemplate = res.spec.vsphere.templates[i];
+        } else if (i === 'flatcar') {
+          flatcarTemplate = res.spec.vsphere.templates[i];
         }
       }
 
@@ -98,6 +101,9 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
       } else if (operatingSystem.rhel) {
         this.defaultTemplate = rhelTemplate;
         return this.form.controls.template.setValue(rhelTemplate);
+      } else if (operatingSystem.flatcar) {
+        this.defaultTemplate = flatcarTemplate;
+        return this.form.controls.template.setValue(flatcarTemplate);
       }
     });
   }

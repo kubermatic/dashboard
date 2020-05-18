@@ -182,6 +182,7 @@ export function fakeVSphereDatacenter(): DataCenterEntity {
           centos: 'centos-template',
           coreos: 'coreos-template',
           ubuntu: 'ubuntu-template',
+          flatcar: 'flatcar-template',
         },
       },
     },

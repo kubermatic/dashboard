@@ -12,6 +12,8 @@ export class NodeUtils {
       return 'SLES';
     } else if (spec.operatingSystem.rhel) {
       return 'RHEL';
+    } else if (spec.operatingSystem.flatcar) {
+      return 'Flatcar';
     } else {
       return '';
     }
@@ -28,6 +30,8 @@ export class NodeUtils {
       return 'sles';
     } else if (spec.operatingSystem.rhel) {
       return 'rhel';
+    } else if (spec.operatingSystem.flatcar) {
+      return 'flatcar';
     } else {
       return '';
     }
