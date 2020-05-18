@@ -46,6 +46,7 @@ export class DatacenterOperatingSystemOptions {
   ubuntu: string;
   sles?: string;
   rhel?: string;
+  flatcar?: string;
 }
 
 export function getDatacenterProvider(

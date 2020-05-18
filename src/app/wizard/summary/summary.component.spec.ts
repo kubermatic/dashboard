@@ -10,6 +10,7 @@ import {
   nodeDataFake,
   nodeDataRHELFake,
   nodeDataSLESFake,
+  nodeDataFlatcarFake,
 } from '../../testing/fake-data/node.fake';
 import {ApiMockService} from '../../testing/services/api-mock.service';
 import {SummaryComponent} from './summary.component';
@@ -52,6 +53,9 @@ describe('SummaryComponent', () => {
 
     component.nodeData = nodeDataRHELFake();
     expect(component.getOperatingSystem()).toBe('RHEL');
+
+    component.nodeData = nodeDataFlatcarFake();
+    expect(component.getOperatingSystem()).toBe('Flatcar');
   });
 
   it('should validate if tags should be displayed', () => {

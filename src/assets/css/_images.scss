@@ -437,3 +437,9 @@
 
   background-image: url("/assets/images/os/rhel.svg");
 }
+
+.km-os-image-flatcar {
+  @include km-image(3 * $baseline-grid);
+
+  background-image: url("/assets/images/os/flatcar.svg");
+}

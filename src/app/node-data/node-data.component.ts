@@ -142,6 +142,10 @@ export class NodeDataComponent implements OnInit, OnDestroy {
         !!this.nodeData.spec.operatingSystem.containerLinux &&
           this.nodeData.spec.operatingSystem.containerLinux.disableAutoUpdate
       ),
+      disableAutoUpdateFlatcar: new FormControl(
+        !!this.nodeData.spec.operatingSystem.flatcar &&
+          this.nodeData.spec.operatingSystem.flatcar.disableAutoUpdate
+      ),
     });
 
     this.nodeDataForm = new FormGroup({
@@ -259,6 +263,13 @@ export class NodeDataComponent implements OnInit, OnDestroy {
           containerLinux: {
             disableAutoUpdate: this.operatingSystemForm.controls
               .disableAutoUpdate.value,
+          },
+        };
+      case OperatingSystem.Flatcar:
+        return {
+          flatcar: {
+            disableAutoUpdate: this.operatingSystemForm.controls
+              .disableAutoUpdateFlatcar.value,
           },
         };
       case OperatingSystem.SLES:

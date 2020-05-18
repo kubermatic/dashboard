@@ -624,3 +624,49 @@ export function nodeDataRHELFake(): NodeData {
     valid: true,
   };
 }
+
+export function nodeDataFlatcarFake(): NodeData {
+  return {
+    spec: {
+      cloud: {
+        digitalocean: {
+          size: 's-1vcpu-1gb',
+          backups: false,
+          ipv6: false,
+          monitoring: false,
+          tags: [],
+        },
+        aws: {
+          instanceType: 't3.small',
+          diskSize: 25,
+          volumeType: 'standard',
+          ami: '',
+          tags: {},
+          subnetID: 'subnet-f3427db9',
+          availabilityZone: 'eu-central-1c',
+        },
+        vsphere: {
+          cpus: 1,
+          memory: 512,
+          template: '',
+        },
+        azure: {
+          size: 'cx31',
+          assignPublicIP: false,
+          zone: '1',
+          tags: {},
+        },
+      },
+      operatingSystem: {
+        flatcar: {
+          disableAutoUpdate: false,
+        },
+      },
+      versions: {
+        kubelet: null,
+      },
+    },
+    count: 3,
+    valid: true,
+  };
+}
