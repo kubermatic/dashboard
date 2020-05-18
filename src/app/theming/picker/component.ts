@@ -7,7 +7,6 @@ import {
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
-import {AppConfigService} from '../../app-config.service';
 import {NotificationService} from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {UserSettings} from '../../shared/entity/MemberEntity';
@@ -27,12 +26,12 @@ export class StylePickerComponent implements OnInit {
   private readonly _debounceTime = 1000;
 
   readonly systemDefaultOption = 'systemDefault';
+  readonly isEqual = _.isEqual;
 
   apiSettings: UserSettings;
   settings: UserSettings;
   themes: Theme[];
   selectedThemeOption: string;
-  isEqual = _.isEqual;
 
   get isThemeEnforced(): boolean {
     return this._styleManger.isThemeEnforced();
@@ -56,7 +55,6 @@ export class StylePickerComponent implements OnInit {
   }
 
   constructor(
-    private readonly _appConfig: AppConfigService,
     private readonly _styleManger: StyleManager,
     private readonly _settingsService: SettingsService,
     private readonly _colorSchemeService: ColorSchemeService,
@@ -65,7 +63,7 @@ export class StylePickerComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.themes = this._appConfig.getConfig().themes;
+    this.themes = this._styleManger.themes;
 
     this._settingsService.userSettings
       .pipe(first())

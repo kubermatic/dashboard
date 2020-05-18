@@ -44,8 +44,8 @@
                 "inject": false
               },
               {
-                "input": "src/assets/themes/solar.scss",
-                "bundleName": "assets/themes/solar",
+                "input": "src/assets/themes/custom.scss",
+                "bundleName": "assets/themes/custom",
                 "lazy": true,
                 "inject": false
               }

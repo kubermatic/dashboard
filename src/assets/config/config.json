@@ -13,11 +13,6 @@
       "name": "dark",
       "displayName": "Dark",
       "isDark": true
-    },
-    {
-      "name": "solar",
-      "displayName": "Solar",
-      "isDark": true
     }
   ]
 }

@@ -2,6 +2,7 @@ import {DOCUMENT} from '@angular/common';
 import {Inject, Injectable} from '@angular/core';
 import {AppConfigService} from '../../app-config.service';
 import {UserSettings} from '../../shared/entity/MemberEntity';
+import {Theme} from '../../shared/model/Config';
 import {ColorSchemeService} from './color-scheme';
 
 @Injectable()
@@ -10,6 +11,10 @@ export class StyleManager {
   private readonly _themesPath = styleName => `assets/themes/${styleName}.css`;
   private readonly _defaultTheme = 'light';
   private _selectedStyle = this._defaultTheme;
+
+  get themes(): Theme[] {
+    return this._appConfig.getConfig().themes;
+  }
 
   constructor(
     @Inject(DOCUMENT) private readonly _document: Document,

@@ -3,6 +3,7 @@
 /tmp
 /coverage
 /dashboard
+/themes
 
 # Dependencies.
 /node_modules

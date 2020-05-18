@@ -16,7 +16,7 @@ export class ColorSchemeService {
   private _selectedColorScheme = ColorScheme.NoPreference;
   private _timerInterval = 1000;
 
-  onColorSchemeUpdate = new EventEmitter<ColorScheme>();
+  readonly onColorSchemeUpdate = new EventEmitter<ColorScheme>();
 
   constructor(private readonly _appConfigService: AppConfigService) {
     timer(0, this._timerInterval).subscribe(_ =>

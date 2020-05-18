@@ -2,132 +2,92 @@
 This manual explains multiple approaches to adding custom themes to the application.
 
 ## Modifying Available Themes
-Currently the application has two themes by default, light and dark. Each user can specify theme that we want to use
-in the `Account` view which is accessible from the user menu:
+Currently, the application offers two themes by default, light and dark. There is also an option to choose system theme and let the application choose dark/light theme based
+on the user's operating system theme. Each user can specify a theme to use in the `Account` view which is accessible from the user menu under `User Settings`:
 
 ![Custom Theme](../assets/customizing-account.png)
 
-### Changing Available Themes
-To add a new theme complete following steps:
-
-- Prepare theme specification, look at `src/assets/css/_dark.scss` and `src/assets/css/_dark.scss` for the examples.
-- Import theme specification in the `src/assets/css/main.scss`.
-- Add theme to `Theme` enum in `src/app/shared/entity/MemberEntity.ts`.
-- Add theme option to `src/app/settings/user/user-settings.component.html`.
-
-In order to delete theme do the opposite in each step.
-
-### Choosing Default Theme
-The default theme is defined in the following locations:
-
-- `src/app/core/services/settings/settings.service.ts`
-- `src/app/kubermatic.component.ts`
-- `src/index.html`
-
-**Tip**: Consistency needs to be ensured here to avoid any potential issues.
-
 ### Disabling Theming Functionality
-In order to disable theming options for the user and enforce using only the default theme for all of the users set
-`disable_themes` property to `true` in the application config.
+In order to disable theming options for all users and enforce using only the default theme, set
+`enforced_theme` property in the application `config.json` file to the name of the theme that should be enforced (i.e. `light`).
  
 ## Possible Customizing Approaches
-There are a few possible options to customize the application codebase. 
+There are two possible approaches of preparing custom themes. They all rely on the same functionality. It all depends on user access to the application code in order
+to prepare and quickly test the new theme before using it in the official deployment. 
  
-### Changing Application Sources
-This is the most obvious approach. However, it requires access to the repository as some of the sources need changes.
-Its biggest advantage is possibility to reuse code that are already defined.
+### Preparing a New Theme With Access to the Sources
+This approach gives user the possibility to reuse already defined code, work with `scss` instead of `css` 
+and quickly test your new theme before uploading it to the official deployment.
 
-All the application-wide rules are stored inside `src/assets/css` directory, where `main.scss` is the main file that
-imports all other files that are required. The recommended approach to override application default styling is to
-register custom stylesheets inside `main.scss` and override existing stylesheets only if it is required. Overriding
-existing files is required when for example color variables need to be changed application-wide.
+All available themes can be found inside `src/assets/themes` directory. Follow the below steps to prepare a new custom theme:
 
-After applying all the required changes, a new container can be build and deployed into the cluster.
+- Create a new `scss` theme file inside `src/asssets/themes` directory called `custom.scss`. This is only a temporary name that can be changed later.
+- As a base reuse code from one of the default themes, either `light.scss` or `dark.scss`.
+- Register a new style in `src/assets/config/config.json` similar to how it's done for `light` and `dark` themes. As the `name` use `custom`.
+    - `name` - refers to the theme file name stored inside `assets/themes` directory.
+    - `displayName` - will be used by the theme picker available in the `Account` view to display a new theme.
+    - `isDark` - defines the icon to be used by the theme picker (sun/moon).
 
-**Tip**: It is easier to avoid merge conflicts and maintain rules stored inside separate files that will be only
-imported inside the application sources.
+    ![Config JSON](../assets/config-json.png)
 
-**Tip**: The order of imports is important. It is better to keep customizations at the end of the file to make them
-more important than the default application style.
+- Run the application using `npm start`, open the `Account` view under `User settings`, select your new theme and update `custom.scss` according to your needs.
+  It is possible to override basically everything inside this theme file. In example if you want to change background color of a `mat-form-field` do this:
+  ```scss
+  .mat-form-field {
+    background-color: red;
+  }
+  ```
+  **TIP:** As currently selected theme name is saved inside user settings, change it back to one of the default themes before uploading your theme to the official deployment.
+- Once your new theme is ready run `npm run build:themes`. It should create a `themes` directory inside Kubermatic Dashboard directory with compiled `css` files of all themes
+  stored inside `src/assets/themes` directory. Now you can rename your `custom.css` theme file to some other name, i.e. `solar.css`.
+  
+  ![Themes dir](../assets/themes-dir.png)
 
-### Example
-Let's override the default application theme and change the primary color to red and social link icons color to green.
+- Now, simply update your `config.json` file used by `Kubermatic Dashboard` Deployment and register the new theme same as it was done earlier.
+  Make sure that `name` entry corresponds to the name of your theme file (without the `css` suffix).
+- As the last step, mount your custom CSS theme file to the `dist/assets/themes` directory. Make sure not to override whole directory as default themes are required by the application.
+- After application restart, theme picker should show your new theme.
+  
+  ![Theme picker](../assets/custom-theme.png)
+  
 
-First, we need to find out what changes are needed.
+### Preparing a New Theme Without Access to the Sources
+In this case the easiest way of preparing a new theme is to download one of the existing themes light/dark. This can be done in a few different ways. 
+We'll describe here two possible ways of downloading enabled themes.
 
-To change application primary color to red we need to modify `_theme.scss`:
+#### Download Theme Using the Browser
+1. Open Kubermatic UI
+2. Open `Developer tools` and navigate to `Sources` tab.
+3. There should be a CSS file of a currently selected theme available to be downloaded inside `assts/themes` directory.
 
-```scss
-$primary: red;
+   ![Dev tools](../assets/developer-tools.png)
 
-...
+#### Download Themes Directly From the Kubermatic Dashboard container
+Assuming that you know how to exec into the container and copy resources from/to it, themes can be simply copied over to your machine
+from the running Kubermatic Dashboard container. They are stored inside the container in `dist/assets/themes` directory.
+
+##### Kubernetes
+Assumming that the Kubermatic Dashboard pod name is `kubermatic-dashboard-5b96d7f5df-mkmgh` you can copy themes to your `${HOME}/themes` directory using below command:
+```bash
+kubectl -n kubermatic cp kubermatic-dashboard-5b96d7f5df-mkmgh:/dist/assets/themes ~/themes
 ```
 
-To change social link icons color to green we will add a custom theme file named `custom.scss` with the following
-contents:
-
-```scss
-.km-footer i {
-  filter: sepia(100%) contrast(50%) saturate(500%) hue-rotate(410deg) !important;
-}
+##### Docker
+Assumming that the Kubermatic Dashboard container name is `kubermatic-dashboard` you can copy themes to your `${HOME}/themes` directory using below command:
+```bash
+docker cp kubermatic-dashboard:/dist/assets/themes/. ~/themes
 ```
 
-To register this file we will need to import it in the `main.scss` file:
+#### Using Compiled Theme to Prepare a New Theme
+Once you have a base theme file ready, we can use it to prepare a new theme. To easier understand the process, let's
+assume that we have downloaded a `light.css` file and will be preparing a new theme called `solar.css`.
 
-```scss
-...
+1. Rename `light.css` to `solar.css`.
+2. Update `solar.css` file according to your needs. Anything in the file can be changed or new rules can be added.
+   In case you are changing colors, remember to update it in the whole file.
+3. Mount new `solar.css` file to `dist/assets/themes` directory inside the application container. **Make sure not to override whole directory.**
+4. Update `config.json` file inside `dist/config` directory and register the new theme.
 
-// Load custom theme.
-@import "custom";
-```
-
-Now, having all the changes prepared let's build a container image and deploy it to the cluster.
-
-The result of this example should look like this:
-
-![Custom Theme](../assets/customizing-result.png)
-
-### Customizing the Application Sources inside Custom Container
-This approach is very similar to the first one, but this time application sources can be changed inside the custom
-container that was prepared specially for it. It allows to modify stylesheets just like in the first approach, but files
-could be easily mounted into existing custom container, so there is no need to build another image.
-
-Custom image is defined inside `Dockerfile.custom` and should be kept inside `quay.io/kubermatic/dashboard`
-repository under specific tag version that ends with `-custom` suffix.
-
-### Customizing the Application Without Changing the Sources
-This approach is recommended for those who cannot or do not want to modify application sources. It does not require
-access to the sources, as all customizations will be applied as CSS rules written from the scratch that will be mounted
-into the application container.
-
-Custom CSS file needs to be mounted as specified in `environment.prod.ts`, so as `dist/assets/custom/style.css`.
-Assuming that we have application image `kubermatic/ui:test` that we want to customize and CSS file named `c.css`
-we can run following command to start application and apply custom CSS rules:
-
-```
-docker run --rm -ti -v $(pwd)/c.css:/dist/assets/custom/style.css --user=$(id -u) -p 8080:8080 kubermatic/ui:test
-```
-
-**Tip**: Custom CSS file can be used as a root file that will import other custom files.
-
-**Tip**: Assets from an already running application can be viewed by accessing `http://<host>>:<port>>/assets/<file>`.
-For example: `http://localhost:8080/assets/custom/style.css`.
-
-### Example
-Like in the example to the first approach, let's override the default application theme and change the social link
-icons color to green.
-
-It is easiest to start with running the container with customizations file mounted to it:
-```
-docker run --rm -ti -v $(pwd)/c.css:/dist/assets/custom/style.css --user=$(id -u) -p 8080:8080 kubermatic/ui:test
-```
-
-Then we can apply customizations to the `$(pwd)/c.css` file:
-
-```css
-.km-footer i {
-  filter: sepia(100%) contrast(50%) saturate(500%) hue-rotate(410deg) !important;
-}
-```
-
-The result of this example should look the same as in the example to the first approach.
+   ![Solar theme](../assets/solar-theme.png)
+   
+That's it. After restarting the application, theme picker in the `Account` view should show your new `Solar` theme.
