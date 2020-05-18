@@ -198,18 +198,12 @@ export class WizardComponent implements OnInit, OnDestroy {
     cluster: ClusterEntity,
     nodeData: NodeData
   ): CreateClusterModel {
-    const keyNames: string[] = [];
-    for (const key of this._clusterModelService.sshKeys) {
-      keyNames.push(key.name);
-    }
-
     return {
       cluster: {
         name: cluster.name,
         labels: cluster.labels,
         spec: cluster.spec,
         type: cluster.type,
-        sshKeys: keyNames,
         credential: cluster.credential,
       },
       nodeDeployment: {
