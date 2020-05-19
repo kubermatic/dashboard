@@ -108,6 +108,14 @@
       </div>
     </div>
 
+    <div class="km-summary-row"
+         *ngIf="nodeData.spec.operatingSystem.flatcar">
+      <span class="km-summary-left km-text">
+        <i [ngClass]="nodeData.spec.operatingSystem.flatcar.disableAutoUpdate ? 'km-icon-running' : 'km-icon-disabled'"></i>
+      </span>
+      <span>Disable auto-update</span>
+    </div>
+
     <ng-container *ngIf="clusterSSHKeys.length && !cluster.spec.cloud.bringyourown">
       <mat-card-header>
         <mat-card-title>SSH keys</mat-card-title>

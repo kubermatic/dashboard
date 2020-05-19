@@ -53,4 +53,5 @@ export enum OperatingSystem {
   ContainerLinux = 'containerLinux',
   SLES = 'sles',
   RHEL = 'rhel',
+  Flatcar = 'flatcar',
 }

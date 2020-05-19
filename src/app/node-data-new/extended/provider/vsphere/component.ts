@@ -115,6 +115,9 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator
       case OperatingSystem.ContainerLinux:
         this._defaultTemplate = this._templates.coreos;
         break;
+      case OperatingSystem.Flatcar:
+        this._defaultTemplate = this._templates.flatcar;
+        break;
       default:
         this._defaultTemplate = this._templates.ubuntu;
     }
