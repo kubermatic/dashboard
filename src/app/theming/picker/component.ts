@@ -13,7 +13,8 @@ import {UserSettings} from '../../shared/entity/MemberEntity';
 import {Theme} from '../../shared/model/Config';
 import {objectDiff} from '../../shared/utils/common-utils';
 import {ColorSchemeService} from '../services/color-scheme';
-import {StyleManager} from '../services/manager';
+import {ThemeManagerService} from '../services/manager';
+import {ThemeService} from '../services/theme';
 
 @Component({
   templateUrl: 'template.html',
@@ -34,7 +35,7 @@ export class StylePickerComponent implements OnInit {
   selectedThemeOption: string;
 
   get isThemeEnforced(): boolean {
-    return this._styleManger.isThemeEnforced();
+    return this._themeService.isThemeEnforced();
   }
 
   get hasPreferredTheme(): boolean {
@@ -51,11 +52,12 @@ export class StylePickerComponent implements OnInit {
   private get _systemDefaultThemeName(): string {
     return this._colorSchemeService.hasPreferredTheme()
       ? this._colorSchemeService.getPreferredTheme().name
-      : this._styleManger.getDefaultTheme(this.settings);
+      : this._themeManageService.getDefaultTheme(this.settings);
   }
 
   constructor(
-    private readonly _styleManger: StyleManager,
+    private readonly _themeManageService: ThemeManagerService,
+    private readonly _themeService: ThemeService,
     private readonly _settingsService: SettingsService,
     private readonly _colorSchemeService: ColorSchemeService,
     private readonly _notificationService: NotificationService,
@@ -63,7 +65,7 @@ export class StylePickerComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.themes = this._styleManger.themes;
+    this.themes = this._themeService.themes;
 
     this._settingsService.userSettings
       .pipe(first())
@@ -97,7 +99,7 @@ export class StylePickerComponent implements OnInit {
         }
 
         if (this.selectedThemeOption === this.systemDefaultOption) {
-          this._styleManger.setStyle(theme);
+          this._themeManageService.setTheme(theme);
         }
 
         this._cdr.detectChanges();
@@ -106,7 +108,7 @@ export class StylePickerComponent implements OnInit {
 
   onThemeChange(option: string): void {
     this.selectedThemeOption = option;
-    this._styleManger.setStyle(this._getThemeForOption(option));
+    this._themeManageService.setTheme(this._getThemeForOption(option));
     this.settings.selectedTheme = this._getUserThemeForOption(option);
     this._settingsChange.next();
     this._cdr.detectChanges();
@@ -127,7 +129,7 @@ export class StylePickerComponent implements OnInit {
       themeName === undefined ? this.systemDefaultOption : themeName;
     if (this.selectedThemeOption !== expectedOption) {
       this.selectedThemeOption = expectedOption;
-      this._styleManger.setStyle(
+      this._themeManageService.setTheme(
         this._getThemeForOption(this.selectedThemeOption)
       );
     }
@@ -150,14 +152,14 @@ export class StylePickerComponent implements OnInit {
   }
 
   private _selectDefaultTheme(settings: UserSettings): void {
-    const defaultTheme = this._styleManger.getDefaultTheme(settings);
+    const defaultTheme = this._themeManageService.getDefaultTheme(settings);
     this.selectedThemeOption = defaultTheme;
 
     if (settings && !settings.selectedTheme && this.hasPreferredTheme) {
       this.selectedThemeOption = this.systemDefaultOption;
     }
 
-    this._styleManger.setStyle(defaultTheme);
+    this._themeManageService.setTheme(defaultTheme);
     this._cdr.detectChanges();
   }
 }

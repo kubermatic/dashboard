@@ -1,7 +1,7 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {timer} from 'rxjs';
-import {AppConfigService} from '../../app-config.service';
 import {Theme} from '../../shared/model/Config';
+import {ThemeService} from './theme';
 
 export enum ColorScheme {
   Dark = 'dark',
@@ -18,7 +18,7 @@ export class ColorSchemeService {
 
   readonly onColorSchemeUpdate = new EventEmitter<ColorScheme>();
 
-  constructor(private readonly _appConfigService: AppConfigService) {
+  constructor(private readonly _themeService: ThemeService) {
     timer(0, this._timerInterval).subscribe(_ =>
       this._updateColorScheme(this._getCurrentColorScheme())
     );
@@ -52,9 +52,7 @@ export class ColorSchemeService {
   }
 
   private _getThemeForScheme(scheme: ColorScheme): Theme {
-    return this._appConfigService
-      .getConfig()
-      .themes.find(theme => scheme === theme.name);
+    return this._themeService.themes.find(theme => scheme === theme.name);
   }
 
   private _matchesColorScheme(scheme: ColorScheme): boolean {

@@ -2,54 +2,33 @@ import {DOCUMENT} from '@angular/common';
 import {Inject, Injectable} from '@angular/core';
 import {AppConfigService} from '../../app-config.service';
 import {UserSettings} from '../../shared/entity/MemberEntity';
-import {Theme} from '../../shared/model/Config';
 import {ColorSchemeService} from './color-scheme';
+import {ThemeService} from './theme';
 
 @Injectable()
-export class StyleManager {
-  private readonly _styleClassName = styleName => `km-style-${styleName}`;
-  private readonly _themesPath = styleName => `assets/themes/${styleName}.css`;
+export class ThemeManagerService {
+  private readonly _themeClassName = themeName => `km-style-${themeName}`;
+  private readonly _themesPath = themeName => `assets/themes/${themeName}.css`;
   private readonly _defaultTheme = 'light';
-  private readonly _defaultThemes = [
-    {
-      name: 'light',
-      displayName: 'Light',
-      isDark: false,
-    } as Theme,
-    {
-      name: 'dark',
-      displayName: 'Dark',
-      isDark: true,
-    } as Theme,
-  ];
-  private _selectedStyle = this._defaultTheme;
-
-  get themes(): Theme[] {
-    const defaultThemeNames = new Set(
-      this._defaultThemes.map(theme => theme.name)
-    );
-    const filteredThemes = this._appConfig
-      .getConfig()
-      .themes.filter(theme => !defaultThemeNames.has(theme.name));
-    return [...this._defaultThemes, ...filteredThemes];
-  }
+  private _selectedTheme = this._defaultTheme;
 
   constructor(
     @Inject(DOCUMENT) private readonly _document: Document,
     private readonly _appConfig: AppConfigService,
-    private readonly _colorSchemeService: ColorSchemeService
+    private readonly _colorSchemeService: ColorSchemeService,
+    private readonly _themeService: ThemeService
   ) {}
 
-  setStyle(styleName: string) {
-    if (this._selectedStyle) {
-      this._removeStyle(this._selectedStyle);
+  setTheme(themeName: string) {
+    if (this._selectedTheme) {
+      this._removeTheme(this._selectedTheme);
     }
 
-    this._getLinkElementForStyle(styleName).setAttribute(
+    this._getLinkElementForTheme(themeName).setAttribute(
       'href',
-      this._themesPath(styleName)
+      this._themesPath(themeName)
     );
-    this._selectedStyle = styleName;
+    this._selectedTheme = themeName;
   }
 
   /**
@@ -60,7 +39,7 @@ export class StyleManager {
    - use light theme as a fallback
    **/
   getDefaultTheme(settings: UserSettings): string {
-    if (this.isThemeEnforced()) {
+    if (this._themeService.isThemeEnforced()) {
       return this._appConfig.getConfig().enforced_theme;
     }
 
@@ -75,32 +54,28 @@ export class StyleManager {
     return this._defaultTheme;
   }
 
-  isThemeEnforced(): boolean {
-    return !!this._appConfig.getConfig().enforced_theme;
-  }
-
-  private _removeStyle(styleName: string) {
-    const existingLinkElement = this._getExistingLinkElementForStyle(styleName);
+  private _removeTheme(styleName: string) {
+    const existingLinkElement = this._getExistingLinkElementForTheme(styleName);
     if (existingLinkElement) {
       this._document.head.removeChild(existingLinkElement);
     }
   }
 
-  private _getLinkElementForStyle(styleName: string): Element {
-    const linkEl = this._getExistingLinkElementForStyle(styleName);
-    return linkEl ? linkEl : this._createLinkElementForStyle(styleName);
+  private _getLinkElementForTheme(styleName: string): Element {
+    const linkEl = this._getExistingLinkElementForTheme(styleName);
+    return linkEl ? linkEl : this._createLinkElementForTheme(styleName);
   }
 
-  private _getExistingLinkElementForStyle(styleName: string): Element {
+  private _getExistingLinkElementForTheme(styleName: string): Element {
     return this._document.head.querySelector(
-      `link[rel="stylesheet"].${this._styleClassName(styleName)}`
+      `link[rel="stylesheet"].${this._themeClassName(styleName)}`
     );
   }
 
-  private _createLinkElementForStyle(styleName: string): Element {
+  private _createLinkElementForTheme(styleName: string): Element {
     const linkEl: HTMLLinkElement = this._document.createElement('link');
     linkEl.setAttribute('rel', 'stylesheet');
-    linkEl.classList.add(this._styleClassName(styleName));
+    linkEl.classList.add(this._themeClassName(styleName));
     this._document.head.appendChild(linkEl);
     return linkEl;
   }

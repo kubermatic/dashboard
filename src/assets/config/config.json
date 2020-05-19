@@ -5,18 +5,8 @@
   "share_kubeconfig": false,
   "themes": [
     {
-      "name": "light",
-      "displayName": "Light",
-      "isDark": false
-    },
-    {
-      "name": "dark",
-      "displayName": "Dark",
-      "isDark": true
-    },
-    {
       "name": "custom",
-      "displayName": "Test",
+      "displayName": "Custom",
       "isDark": true
     }
   ]
