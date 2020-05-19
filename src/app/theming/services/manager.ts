@@ -1,6 +1,5 @@
 import {DOCUMENT} from '@angular/common';
 import {Inject, Injectable} from '@angular/core';
-import {AppConfigService} from '../../app-config.service';
 import {UserSettings} from '../../shared/entity/MemberEntity';
 import {ColorSchemeService} from './color-scheme';
 import {ThemeService} from './theme';
@@ -14,7 +13,6 @@ export class ThemeManagerService {
 
   constructor(
     @Inject(DOCUMENT) private readonly _document: Document,
-    private readonly _appConfig: AppConfigService,
     private readonly _colorSchemeService: ColorSchemeService,
     private readonly _themeService: ThemeService
   ) {}
@@ -32,7 +30,7 @@ export class ThemeManagerService {
   }
 
   /**
-   Pre-selects theme based on user preference. Priority is as follows:
+   Chooses theme based on user preference. Priority is as follows:
    - use enforced_theme from the config.json
    - use theme stored in user settings config
    - use theme based on 'prefers-color-scheme' value
@@ -40,7 +38,7 @@ export class ThemeManagerService {
    **/
   getDefaultTheme(settings: UserSettings): string {
     if (this._themeService.isThemeEnforced()) {
-      return this._appConfig.getConfig().enforced_theme;
+      return this._themeService.enforcedTheme;
     }
 
     if (settings && !!settings.selectedTheme) {

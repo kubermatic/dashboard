@@ -27,8 +27,21 @@ All available themes can be found inside `src/assets/themes` directory. Follow t
     - `name` - refers to the theme file name stored inside `assets/themes` directory.
     - `displayName` - will be used by the theme picker available in the `Account` view to display a new theme.
     - `isDark` - defines the icon to be used by the theme picker (sun/moon).
-
-    ![Config JSON](../assets/config-json.png)
+    ```json
+    {
+      "openstack": {
+        "wizard_use_default_user": false
+      },
+      "share_kubeconfig": false,
+      "themes": [
+        {
+          "name": "custom",
+          "displayName": "Custom",
+          "isDark": false
+        }
+      ]
+    }
+    ```
 
 - Run the application using `npm start`, open the `Account` view under `User settings`, select your new theme and update `custom.scss` according to your needs.
   It is possible to override basically everything inside this theme file. In example if you want to change background color of a `mat-form-field` do this:
@@ -88,6 +101,20 @@ assume that we have downloaded a `light.css` file and will be preparing a new th
 3. Mount new `solar.css` file to `dist/assets/themes` directory inside the application container. **Make sure not to override whole directory.**
 4. Update `config.json` file inside `dist/config` directory and register the new theme.
 
-   ![Solar theme](../assets/solar-theme.png)
+    ```json
+    {
+      "openstack": {
+        "wizard_use_default_user": false
+      },
+      "share_kubeconfig": false,
+      "themes": [
+        {
+          "name": "solar",
+          "displayName": "Solar",
+          "isDark": true
+        }
+      ]
+    }
+    ```
    
 That's it. After restarting the application, theme picker in the `Account` view should show your new `Solar` theme.

@@ -2,12 +2,5 @@
   "openstack": {
     "wizard_use_default_user": false
   },
-  "share_kubeconfig": false,
-  "themes": [
-    {
-      "name": "custom",
-      "displayName": "Custom",
-      "isDark": true
-    }
-  ]
+  "share_kubeconfig": false
 }
