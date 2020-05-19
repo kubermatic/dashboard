@@ -4,5 +4,6 @@
   <mat-spinner [@fadeInOut]="!isSaved"
                color="accent"
                class="km-spinner"
+               [ngClass]="placeHigher ? 'km-spinner placeHigher' : 'km-spinner'"
                [diameter]="22"></mat-spinner>
 </div>

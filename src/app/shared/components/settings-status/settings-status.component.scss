@@ -10,6 +10,10 @@
     top: -.5 * $baseline-grid;
     left: -.5 * $baseline-grid;
     height: 3 * $baseline-grid;
+
+    &.placeHigher {
+      top: -2.5 * $baseline-grid;
+    }
   }
 }
 

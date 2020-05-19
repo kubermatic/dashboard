@@ -48,12 +48,14 @@
                           (change)="onSettingsChange()">Display Terms of Service</mat-checkbox>
             <mat-checkbox [(ngModel)]="settings.displayDemoInfo"
                           (change)="onSettingsChange()">Display Demo Information</mat-checkbox>
-            <km-settings-status [isSaved]="isDisplayLinksEqual()"></km-settings-status>
+            <km-settings-status [isSaved]="isDisplayLinksEqual()"
+                                [placeHigher]="true"></km-settings-status>
           </div>
         </div>
       </div>
 
-      <div fxLayout="row">
+      <div fxLayout="row"
+           fxLayoutAlign=" center">
         <div fxFlex="16%"
              fxLayoutAlign=" center">
           <span>Cleanup on Cluster Deletion</span>
@@ -73,6 +75,7 @@
       </div>
 
       <div fxLayout="row"
+           fxLayoutAlign=" center"
            class="km-admin-settings-distro-container">
         <div fxFlex="16%"
              fxLayoutAlign=" center">
@@ -96,7 +99,8 @@
             OpenShift
           </mat-button-toggle>
         </mat-button-toggle-group>
-        <km-settings-status [isSaved]="isEqual(settings.clusterTypeOptions, apiSettings.clusterTypeOptions)"></km-settings-status>
+        <km-settings-status [isSaved]="isEqual(settings.clusterTypeOptions, apiSettings.clusterTypeOptions)"
+                            [placeHigher]="true"></km-settings-status>
       </div>
 
       <div fxLayout="row">
@@ -111,10 +115,12 @@
                  [(ngModel)]="settings.defaultNodeCount"
                  (change)="onSettingsChange()">
         </mat-form-field>
-        <km-settings-status [isSaved]="isEqual(settings.defaultNodeCount, apiSettings.defaultNodeCount)"></km-settings-status>
+        <km-settings-status [isSaved]="isEqual(settings.defaultNodeCount, apiSettings.defaultNodeCount)"
+                            [placeHigher]="true"></km-settings-status>
       </div>
 
-      <div fxLayout="row">
+      <div fxLayout="row"
+           fxLayoutAlign=" center">
         <div fxFlex="16%"
              fxLayoutAlign=" center">
           <span>Enable Kubernetes Dashboard</span>
@@ -123,10 +129,12 @@
         </div>
         <mat-checkbox [(ngModel)]="settings.enableDashboard"
                       (change)="onSettingsChange()"></mat-checkbox>
-        <km-settings-status [isSaved]="isEqual(settings.enableDashboard, apiSettings.enableDashboard)"></km-settings-status>
+        <km-settings-status [isSaved]="isEqual(settings.enableDashboard, apiSettings.enableDashboard)"
+                            [placeHigher]="true"></km-settings-status>
       </div>
 
-      <div fxLayout="row">
+      <div fxLayout="row"
+           fxLayoutAlign=" center">
         <div fxFlex="16%"
              fxLayoutAlign=" center">
           <span>Enable OIDC Kubeconfig</span>
@@ -135,7 +143,8 @@
         </div>
         <mat-checkbox [(ngModel)]="settings.enableOIDCKubeconfig"
                       (change)="onSettingsChange()"></mat-checkbox>
-        <km-settings-status [isSaved]="isEqual(settings.enableOIDCKubeconfig, apiSettings.enableOIDCKubeconfig)"></km-settings-status>
+        <km-settings-status [isSaved]="isEqual(settings.enableOIDCKubeconfig, apiSettings.enableOIDCKubeconfig)"
+                            [placeHigher]="true"></km-settings-status>
       </div>
     </div>
   </mat-card-content>
