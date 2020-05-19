@@ -21,7 +21,7 @@ and quickly test your new theme before uploading it to the official deployment.
 
 All available themes can be found inside `src/assets/themes` directory. Follow the below steps to prepare a new custom theme:
 
-- Create a new `scss` theme file inside `src/asssets/themes` directory called `custom.scss`. This is only a temporary name that can be changed later.
+- Create a new `scss` theme file inside `src/assets/themes` directory called `custom.scss`. This is only a temporary name that can be changed later.
 - As a base reuse code from one of the default themes, either `light.scss` or `dark.scss`.
 - Register a new style in `src/assets/config/config.json` similar to how it's done for `light` and `dark` themes. As the `name` use `custom`.
     - `name` - refers to the theme file name stored inside `assets/themes` directory.
@@ -38,7 +38,7 @@ All available themes can be found inside `src/assets/themes` directory. Follow t
   }
   ```
   **TIP:** As currently selected theme name is saved inside user settings, change it back to one of the default themes before uploading your theme to the official deployment.
-- Once your new theme is ready run `npm run build:themes`. It should create a `themes` directory inside Kubermatic Dashboard directory with compiled `css` files of all themes
+- Once your new theme is ready run `npm run build:themes`. It should create a `dist-themes` directory inside Kubermatic Dashboard directory with compiled `css` files of all themes
   stored inside `src/assets/themes` directory. Now you can rename your `custom.css` theme file to some other name, i.e. `solar.css`.
   
   ![Themes dir](../assets/themes-dir.png)
