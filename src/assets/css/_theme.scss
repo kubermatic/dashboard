@@ -37,15 +37,15 @@
     box-shadow: $border-box-shadow !important;
     color: $text;
     margin: 0;
-    padding: (3.75 * $baseline-grid) 0;
+    padding: (3.75 * $baseline-grid) 0 !important;
 
     &.km-with-table-header {
       margin: (2.5 * $baseline-grid) 0 0 0;
 
       .mat-card-header {
-        padding: 0 7 * $baseline-grid;
-        margin: 0;
-        line-height: 1.6 * $line-height;
+        padding: 0 7 * $baseline-grid !important;
+        margin: 0 !important;
+        line-height: 1.6 * $line-height !important;
         border-radius: $border-radius $border-radius 0 0;
       }
 
@@ -276,7 +276,7 @@
   .mat-button,
   .mat-flat-button,
   .mat-raised-button {
-    font-size: $font-size-subhead;
+    font-size: $font-size-subhead !important;
     line-height: 5 * $baseline-grid !important;
     background-color: map-get($colors, primary);
     color: #fff;
@@ -747,11 +747,9 @@
   }
 
   .km-spinner {
-    top: $baseline-grid;
     left: 0;
     right: 0;
     bottom: 0;
-    margin: 2 * $baseline-grid auto;
   }
 
   .km-provider-logo {
@@ -1627,5 +1625,11 @@
     &.with-margin {
       margin-left: $baseline-grid;
     }
+  }
+}
+
+.km-no-padding {
+  .mat-form-field-wrapper {
+    padding-bottom: 0 !important;
   }
 }

@@ -10,10 +10,28 @@ export class StyleManager {
   private readonly _styleClassName = styleName => `km-style-${styleName}`;
   private readonly _themesPath = styleName => `assets/themes/${styleName}.css`;
   private readonly _defaultTheme = 'light';
+  private readonly _defaultThemes = [
+    {
+      name: 'light',
+      displayName: 'Light',
+      isDark: false,
+    } as Theme,
+    {
+      name: 'dark',
+      displayName: 'Dark',
+      isDark: true,
+    } as Theme,
+  ];
   private _selectedStyle = this._defaultTheme;
 
   get themes(): Theme[] {
-    return this._appConfig.getConfig().themes;
+    const defaultThemeNames = new Set(
+      this._defaultThemes.map(theme => theme.name)
+    );
+    const filteredThemes = this._appConfig
+      .getConfig()
+      .themes.filter(theme => !defaultThemeNames.has(theme.name));
+    return [...this._defaultThemes, ...filteredThemes];
   }
 
   constructor(

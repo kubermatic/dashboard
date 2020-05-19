@@ -47,7 +47,7 @@
           </mat-select>
         </mat-form-field>
         <km-settings-status [isSaved]="isEqual(settings.itemsPerPage, apiSettings.itemsPerPage)"
-                            class="km-settings-status-margin"></km-settings-status>
+                            fxFlexAlign=" center"></km-settings-status>
       </div>
 
       <!-- Load the theming module -->
@@ -74,7 +74,7 @@
           </mat-select>
         </mat-form-field>
         <km-settings-status [isSaved]="isEqual(settings.selectedProjectId, apiSettings.selectedProjectId)"
-                            class="km-settings-status-margin"></km-settings-status>
+                            fxFlexAlign=" center"></km-settings-status>
       </div>
 
       <div *ngIf="isAdmin()"
@@ -91,7 +91,7 @@
                           (toggleChange)="onSettingsChange()"
                           *ngIf="isAdmin()"></mat-slide-toggle>
         <km-settings-status [isSaved]="isEqual(settings.displayAllProjectsForAdmin, apiSettings.displayAllProjectsForAdmin)"
-                            class="km-settings-status-margin-sm"></km-settings-status>
+                            fxFlexAlign=" center"></km-settings-status>
       </div>
 
     </div>

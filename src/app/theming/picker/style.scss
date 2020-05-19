@@ -26,10 +26,6 @@
   }
 }
 
-.km-settings-status-margin-sm {
-  margin-top: .5 * $baseline-grid;
-
-  .km-settings-status-container {
-    line-height: initial;
-  }
+.km-settings-status-margin {
+  margin-bottom: $baseline-grid;
 }

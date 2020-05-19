@@ -13,6 +13,11 @@
       "name": "dark",
       "displayName": "Dark",
       "isDark": true
+    },
+    {
+      "name": "custom",
+      "displayName": "Test",
+      "isDark": true
     }
   ]
 }
