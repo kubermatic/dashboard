@@ -4,7 +4,6 @@
      fxLayout.xs="column"
      fxLayoutGap="20px">
   <div fxFlex="50%">
-
     <div class="section">
       <div class="header"
            fxLayout="row"
@@ -112,33 +111,24 @@
       </div>
     </div>
 
-    <ng-container *ngIf="clusterSSHKeys.length && !cluster.spec.cloud.bringyourown">
-      <mat-card-header>
-        <mat-card-title>SSH keys</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="km-summary-row km-summary-sshkeys">
-          <span class="km-summary-left km-text"><i class="km-icon-key"></i></span>
-          <span>{{getSSHKeyNames()}}</span>
+    <div *ngIf="cluster.credential || displayProvider()"
+         class="section">
+      <div class="header"
+           fxLayout="row"
+           fxLayoutAlign=" center"
+           fxLayoutGap="14px">
+        <div class="number km-border-dark"
+             fxLayoutAlign="center center">3
         </div>
-      </mat-card-content>
-    </ng-container>
-  </div>
-
-  <div fxFlex="50%">
-    <ng-container *ngIf="cluster.credential || displayProvider()">
-      <mat-card-header>
-        <mat-card-title>Provider</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <!-- Custom Preset -->
+        <div class="title">Settings</div>
+      </div>
+      <div class="properties">
         <ng-container *ngIf="cluster.credential">
           <km-property>
             <div key>Preset</div>
             <div value>{{cluster.credential}}</div>
           </km-property>
         </ng-container>
-
         <ng-container *ngIf="!cluster.credential">
           <!-- GCP -->
           <ng-container *ngIf="cluster.spec.cloud.gcp">
@@ -159,7 +149,7 @@
               <div value>{{cluster.spec.cloud.packet.projectID}}</div>
             </km-property>
             <km-property>
-              <div key>Billing cycle</div>
+              <div key>Billing Cycle</div>
               <div value>{{cluster.spec.cloud.packet.billingCycle}}</div>
             </km-property>
           </ng-container>
@@ -175,7 +165,7 @@
               <div value>{{cluster.spec.cloud?.aws?.vpcId}}</div>
             </km-property>
             <km-property *ngIf="cluster.spec.cloud?.aws?.routeTableId">
-              <div key>Route table ID</div>
+              <div key>Route Table ID</div>
               <div value>{{cluster.spec.cloud?.aws?.routeTableId}}</div>
             </km-property>
             <km-property *ngIf="cluster.spec.cloud?.aws?.instanceProfileName">
@@ -183,7 +173,7 @@
               <div value>{{cluster.spec.cloud?.aws?.instanceProfileName}}</div>
             </km-property>
             <km-property *ngIf="cluster.spec.cloud?.aws?.roleARN">
-              <div key>Control plane role (ARN)</div>
+              <div key>Control Plane Role (ARN)</div>
               <div value>{{cluster.spec.cloud?.aws?.roleARN}}</div>
             </km-property>
           </ng-container>
@@ -207,7 +197,7 @@
               <div value>{{cluster.spec.cloud.openstack.tenantID}}</div>
             </km-property>
             <km-property *ngIf="cluster.spec.cloud.openstack.network">
-              <div key>Network name</div>
+              <div key>Network Name</div>
               <div value>{{cluster.spec.cloud.openstack.network}}</div>
             </km-property>
             <km-property *ngIf="cluster.spec.cloud.openstack.securityGroups">
@@ -267,11 +257,18 @@
               <div value>{{cluster.spec.cloud.azure.vnet}}</div>
             </km-property>
           </ng-container>
-
         </ng-container>
-      </mat-card-content>
-    </ng-container>
+        <div fxLayout="row"
+             fxLayoutAlign=" center"
+             fxLayoutGap="10px">
+          <i class="km-icon-key"></i>
+          <span>{{getSSHKeyNames()}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <div fxFlex="50%">
     <ng-container *ngIf="!cluster.spec.cloud.bringyourown">
       <mat-card-header>
         <mat-card-title>Node Settings</mat-card-title>
