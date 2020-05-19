@@ -105,15 +105,11 @@
                              label="Disable system auto-update"
                              [value]="nodeData.spec.operatingSystem.containerLinux.disableAutoUpdate">
         </km-property-boolean>
+        <km-property-boolean *ngIf="nodeData.spec.operatingSystem.flatcar"
+                             label="Disable system auto-update"
+                             [value]="nodeData.spec.operatingSystem.flatcar.disableAutoUpdate">
+        </km-property-boolean>
       </div>
-    </div>
-
-    <div class="km-summary-row"
-         *ngIf="nodeData.spec.operatingSystem.flatcar">
-      <span class="km-summary-left km-text">
-        <i [ngClass]="nodeData.spec.operatingSystem.flatcar.disableAutoUpdate ? 'km-icon-running' : 'km-icon-disabled'"></i>
-      </span>
-      <span>Disable auto-update</span>
     </div>
 
     <ng-container *ngIf="clusterSSHKeys.length && !cluster.spec.cloud.bringyourown">
