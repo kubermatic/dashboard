@@ -87,15 +87,8 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
     return ClusterUtils.getClusterType(this.cluster);
   }
 
-  displayProvider(): boolean {
-    return (
-      Object.values(NodeProvider)
-        .filter(
-          p => p !== NodeProvider.BAREMETAL && p !== NodeProvider.BRINGYOUROWN
-        )
-        .some(p => this._hasProviderOptions(p)) ||
-      this._clusterService.provider === NodeProvider.BRINGYOUROWN
-    );
+  displaySettings(): boolean {
+    return Object.values(NodeProvider).some(p => this._hasProviderOptions(p));
   }
 
   displayTags(tags: object): boolean {

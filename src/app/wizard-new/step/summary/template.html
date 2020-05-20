@@ -10,7 +10,8 @@
            fxLayoutAlign=" center"
            fxLayoutGap="14px">
         <div class="number km-border-dark"
-             fxLayoutAlign="center center">1</div>
+             fxLayoutAlign="center center">1
+        </div>
         <div class="title">Provider</div>
       </div>
       <div class="properties">
@@ -31,7 +32,8 @@
            fxLayoutAlign=" center"
            fxLayoutGap="14px">
         <div class="number km-border-dark"
-             fxLayoutAlign="center center">2</div>
+             fxLayoutAlign="center center">2
+        </div>
         <div class="title">Cluster</div>
       </div>
       <div class="properties">
@@ -111,7 +113,7 @@
       </div>
     </div>
 
-    <div *ngIf="cluster.credential || displayProvider()"
+    <div *ngIf="cluster.credential || displaySettings()"
          class="section">
       <div class="header"
            fxLayout="row"
@@ -260,7 +262,8 @@
         </ng-container>
         <div fxLayout="row"
              fxLayoutAlign=" center"
-             fxLayoutGap="10px">
+             fxLayoutGap="10px"
+             *ngIf="clusterSSHKeys.length">
           <i class="km-icon-key"></i>
           <span>{{getSSHKeyNames()}}</span>
         </div>
