@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable, Injector} from '@angular/core';
-import {first, tap} from 'rxjs/operators';
+import {tap} from 'rxjs/operators';
 
 import {environment} from '../environments/environment';
 
@@ -13,7 +13,6 @@ export class AppConfigService {
   private _appConfig: Config;
   private _userGroupConfig: UserGroupConfig;
   private _gitVersion: VersionInfo;
-  private _hasCustomCSS: boolean;
   private readonly _http: HttpClient;
   private readonly _notificationService: NotificationService;
 
@@ -84,32 +83,6 @@ export class AppConfigService {
 
   getGitVersion(): VersionInfo {
     return this._gitVersion;
-  }
-
-  checkCustomCSS(): Promise<{}> {
-    return new Promise(resolve => {
-      this._http
-        .head(environment.customCSS)
-        .pipe(first())
-        .subscribe(
-          () => {
-            this._hasCustomCSS = true;
-            resolve();
-          },
-          () => {
-            this._hasCustomCSS = false;
-            resolve();
-          }
-        );
-    });
-  }
-
-  hasCustomCSS(): boolean {
-    return this._hasCustomCSS;
-  }
-
-  getCustomCSS(): string {
-    return environment.customCSS;
   }
 
   getRefreshTimeBase(): number {

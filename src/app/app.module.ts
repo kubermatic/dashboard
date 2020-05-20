@@ -41,8 +41,7 @@ const appInitializerFn = (
     return appConfigService
       .loadAppConfig()
       .then(() => appConfigService.loadUserGroupConfig())
-      .then(() => appConfigService.loadGitVersion())
-      .then(() => appConfigService.checkCustomCSS());
+      .then(() => appConfigService.loadGitVersion());
   };
 };
 

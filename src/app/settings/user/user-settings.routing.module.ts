@@ -10,6 +10,13 @@ const routes: Routes = [
     path: '',
     component: UserSettingsComponent,
     canActivate: [AuthGuard],
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('../../theming/module').then(module => module.ThemingModule),
+      },
+    ],
   },
 ];
 

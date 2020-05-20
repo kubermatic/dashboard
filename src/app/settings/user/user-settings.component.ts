@@ -2,8 +2,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
-
-import {AppConfigService} from '../../app-config.service';
 import {
   NotificationService,
   ProjectService,
@@ -11,11 +9,7 @@ import {
 } from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
-import {
-  MemberEntity,
-  Theme,
-  UserSettings,
-} from '../../shared/entity/MemberEntity';
+import {MemberEntity, UserSettings} from '../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
 
@@ -25,8 +19,6 @@ import {objectDiff} from '../../shared/utils/common-utils';
   styleUrls: ['user-settings.component.scss'],
 })
 export class UserSettingsComponent implements OnInit, OnDestroy {
-  Theme = Theme;
-  enableThemes = false;
   itemsPerPageOptions = [5, 10, 15, 20, 25];
   projects: ProjectEntity[] = [];
   user: MemberEntity;
@@ -39,14 +31,11 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     private readonly _userService: UserService,
     private readonly _settingsService: SettingsService,
     private readonly _historyService: HistoryService,
-    private readonly _appConfigService: AppConfigService,
     private readonly _notificationService: NotificationService,
     private readonly _projectService: ProjectService
   ) {}
 
   ngOnInit(): void {
-    this.enableThemes = !this._appConfigService.getConfig().disable_themes;
-
     this._userService.loggedInUser
       .pipe(first())
       .subscribe(user => (this.user = user));

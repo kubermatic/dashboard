@@ -27,14 +27,13 @@ import {
   AdminSettings,
   ClusterTypeOptions,
 } from '../../../shared/entity/AdminSettings';
-import {Theme, UserSettings} from '../../../shared/entity/MemberEntity';
+import {UserSettings} from '../../../shared/entity/MemberEntity';
 import {CustomLink} from '../../../shared/utils/custom-link-utils/custom-link';
 import {Auth} from '../auth/auth.service';
 
 const DEFAULT_USER_SETTINGS: UserSettings = {
   itemsPerPage: 10,
   selectProjectTableView: false,
-  selectedTheme: Theme.Light,
   collapseSidenav: false,
   displayAllProjectsForAdmin: false,
 };

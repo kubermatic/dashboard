@@ -2,6 +2,5 @@
   "openstack": {
     "wizard_use_default_user": false
   },
-  "share_kubeconfig": false,
-  "disable_themes": false
+  "share_kubeconfig": false
 }

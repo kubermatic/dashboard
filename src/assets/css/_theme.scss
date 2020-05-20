@@ -37,15 +37,15 @@
     box-shadow: $border-box-shadow !important;
     color: $text;
     margin: 0;
-    padding: (3.75 * $baseline-grid) 0;
+    padding: (3.75 * $baseline-grid) 0 !important;
 
     &.km-with-table-header {
       margin: (2.5 * $baseline-grid) 0 0 0;
 
       .mat-card-header {
-        padding: 0 7 * $baseline-grid;
-        margin: 0;
-        line-height: 1.6 * $line-height;
+        padding: 0 7 * $baseline-grid !important;
+        margin: 0 !important;
+        line-height: 1.6 * $line-height !important;
         border-radius: $border-radius $border-radius 0 0;
       }
 
@@ -276,7 +276,7 @@
   .mat-button,
   .mat-flat-button,
   .mat-raised-button {
-    font-size: $font-size-subhead;
+    font-size: $font-size-subhead !important;
     line-height: 5 * $baseline-grid !important;
     background-color: map-get($colors, primary);
     color: #fff;
@@ -747,11 +747,9 @@
   }
 
   .km-spinner {
-    top: $baseline-grid;
     left: 0;
     right: 0;
     bottom: 0;
-    margin: 2 * $baseline-grid auto;
   }
 
   .km-provider-logo {
@@ -806,17 +804,17 @@
 
   .km-notification {
     background: $background-card !important;
-    border-radius: $border-radius;
-    box-shadow: $notification-border-box-shadow;
+    border-radius: $border-radius !important;
+    box-shadow: $notification-border-box-shadow !important;
     color: $text !important;
-    display: flex;
-    flex: 1 1 auto;
-    margin: $notification-margin;
-    min-height: $notification-min-height;
-    max-height: $notification-height;
-    max-width: $notification-width;
-    min-width: $notification-width;
-    padding: 0;
+    display: flex !important;
+    flex: 1 1 auto !important;
+    margin: $notification-margin !important;
+    min-height: $notification-min-height !important;
+    max-height: $notification-height !important;
+    max-width: $notification-width !important;
+    min-width: $notification-width !important;
+    padding: 0 !important;
   }
 
   .km-notification-type {
@@ -831,7 +829,7 @@
 
   .km-notification-panel .panel {
     background-color: $background-app-bar;
-    box-shadow: map-get($colors, shadow-dark);
+    box-shadow: map-get($colors, shadow-dark) !important;
 
     .notification-info .km-icon-mask {
       background-color: $text-secondary !important;
@@ -1627,5 +1625,11 @@
     &.with-margin {
       margin-left: $baseline-grid;
     }
+  }
+}
+
+.km-no-padding {
+  .mat-form-field-wrapper {
+    padding-bottom: 0 !important;
   }
 }

@@ -23,10 +23,14 @@
   <mat-divider></mat-divider>
   <mat-card-content>
     <div *ngIf="!!settings"
-         class="km-admin-settings">
+         class="km-admin-settings"
+         fxFlex
+         fxLayout="column"
+         fxLayoutGap="32px">
       <div fxLayout="row">
-        <div>
-          <div class="km-admin-settings-label">
+        <div fxFlex="16%"
+             fxLayoutAlign=" center">
+          <div fxLayout="row">
             <span>Custom Links</span>
             <div class="km-icon-info"
                  matTooltip="Customize your theme or improve the workflow by adding links in the sidebar or footer."></div>
@@ -50,21 +54,28 @@
       </div>
 
       <div fxLayout="row">
-        <div class="km-admin-settings-label">
+        <div fxFlex="16%"
+             fxLayoutAlign=" center">
           <span>Cleanup on Cluster Deletion</span>
           <div class="km-icon-info"
                matTooltip="Set &quot;clean up connected load balancers&quot; and &quot;clean up connected volumes (PVs and PVCS)&quot; checkboxes on Cluster Deletion to enabled by default. Enable &quot;Enforce&quot; to make users unable to edit the checkboxes."></div>
         </div>
-        <mat-checkbox [(ngModel)]="settings.cleanupOptions.Enabled"
-                      (change)="onSettingsChange()">Enable by Default</mat-checkbox>
-        <mat-checkbox [(ngModel)]="settings.cleanupOptions.Enforced"
-                      (change)="onSettingsChange()">Enforce</mat-checkbox>
-        <km-settings-status [isSaved]="isEqual(settings.cleanupOptions, apiSettings.cleanupOptions)"></km-settings-status>
+        <div fxFlexAlign=" center"
+             fxLayout="row">
+          <mat-checkbox [(ngModel)]="settings.cleanupOptions.Enabled"
+                        (change)="onSettingsChange()"
+                        fxFlexAlign=" center">Enable by Default</mat-checkbox>
+          <mat-checkbox [(ngModel)]="settings.cleanupOptions.Enforced"
+                        (change)="onSettingsChange()"
+                        fxFlexAlign=" center">Enforce</mat-checkbox>
+          <km-settings-status [isSaved]="isEqual(settings.cleanupOptions, apiSettings.cleanupOptions)"></km-settings-status>
+        </div>
       </div>
 
       <div fxLayout="row"
            class="km-admin-settings-distro-container">
-        <div class="km-admin-settings-label">
+        <div fxFlex="16%"
+             fxLayoutAlign=" center">
           <span>Displayed Distributions</span>
           <div class="km-icon-info"
                matTooltip="Deactivate the distributions you want to hide from the users. At least one distribution has to be enabled."></div>
@@ -88,10 +99,10 @@
         <km-settings-status [isSaved]="isEqual(settings.clusterTypeOptions, apiSettings.clusterTypeOptions)"></km-settings-status>
       </div>
 
-      <div fxLayout="row"
-           class="km-admin-settings-nd-container">
-        <div class="km-admin-settings-label">Node Deployment</div>
-        <mat-form-field class="km-admin-settings-field-nd">
+      <div fxLayout="row">
+        <div fxFlex="16%"
+             fxLayoutAlign=" center">Node Deployment</div>
+        <mat-form-field class="km-admin-settings-field-nd km-no-padding">
           <input matInput
                  type="number"
                  min="0"
@@ -104,7 +115,8 @@
       </div>
 
       <div fxLayout="row">
-        <div class="km-admin-settings-label">
+        <div fxFlex="16%"
+             fxLayoutAlign=" center">
           <span>Enable Kubernetes Dashboard</span>
           <div class="km-icon-info"
                matTooltip="Show/Hide &quot;Open Dashboard&quot; button on cluster details and allow/block Kubernetes Dashboard access through the API."></div>
@@ -115,7 +127,8 @@
       </div>
 
       <div fxLayout="row">
-        <div class="km-admin-settings-label">
+        <div fxFlex="16%"
+             fxLayoutAlign=" center">
           <span>Enable OIDC Kubeconfig</span>
           <div class="km-icon-info"
                matTooltip="Use OIDC provider as a proxy for kubeconfig download."></div>

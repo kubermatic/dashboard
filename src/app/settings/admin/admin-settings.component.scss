@@ -14,25 +14,8 @@
   .km-admin-settings {
     font-size: $font-size-subhead;
 
-    .km-admin-settings-nd-container {
-      margin-top: 1.5 * $baseline-grid;
-    }
-
-    .km-admin-settings-distro-container km-settings-status {
-      margin-top: .2 * $baseline-grid;
-    }
-
-    .km-admin-settings-label {
-      width: 35 * $baseline-grid;
-      line-height: 8 * $baseline-grid;
-      display: flex;
-      align-items: center;
-    }
-
     .km-icon-info {
-      line-height: 18px;
       margin-left: .5 * $baseline-grid;
-      text-align: center;
     }
 
     .km-account-settings-toggle {
@@ -42,6 +25,7 @@
         min-width: 150px;
         max-width: 150px;
         border-radius: $border-radius;
+        margin-bottom: 0;
 
         i {
           -webkit-filter: grayscale(100%);
@@ -76,11 +60,7 @@
     }
 
     mat-checkbox {
-      margin: (.66 * $baseline-grid) (6 * $baseline-grid) 0 0;
-    }
-
-    km-settings-status {
-      margin-top: 10px;
+      margin-right: 6 * $baseline-grid;
     }
   }
 }

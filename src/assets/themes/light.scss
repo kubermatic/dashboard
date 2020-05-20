@@ -44,7 +44,5 @@ $foreground: map_merge($foreground, (divider: #e0e3e5));
 $theme-light: map_merge($theme-light, (foreground: $foreground));
 // sass-lint:enable function-name-format
 
-.light {
-  @include angular-material-theme($theme-light);
-  @include km-theme($theme-light, $colors-light);
-}
+@include angular-material-theme($theme-light);
+@include km-theme($theme-light, $colors-light);
