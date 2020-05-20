@@ -1,6 +1,7 @@
 @import "~@angular/material/theming";
 @import "theme";
 @import "variables";
+@import "images";
 
 $colors-dark: (
   primary: #00a3d9,
@@ -48,63 +49,61 @@ $foreground: map_merge($foreground, (divider: #464647));
 $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 // sass-lint:enable function-name-format
 
-.dark {
-  @include angular-material-theme($theme-dark);
-  @include km-theme($theme-dark, $colors-dark);
+@include angular-material-theme($theme-dark);
+@include km-theme($theme-dark, $colors-dark);
 
-  // Make icons and logos white.
-  .km-provider-logo,
-  .km-addon-logo,
-  .km-icon-randomize,
-  .km-cluster-spec-type mat-button-toggle .km-icon-openshift,
-  .km-sidenav a:not(.active) i,
-  footer i,
-  *[class*="km-os-image-"] {
-    filter: invert(.25) brightness(100) contrast(100);
-  }
+// Make icons and logos white.
+.km-provider-logo,
+.km-addon-logo,
+.km-icon-randomize,
+.km-cluster-spec-type mat-button-toggle .km-icon-openshift,
+.km-sidenav a:not(.active) i,
+footer i,
+*[class*="km-os-image-"] {
+  filter: invert(.25) brightness(100) contrast(100);
+}
 
-  // Swap some of the images.
-  .km-header-logo {
-    background-image: url("/assets/images/branding/logo-dark.svg") !important;
-  }
+// Swap some of the images.
+.km-header-logo {
+  background-image: url("/assets/images/branding/logo-dark.svg") !important;
+}
 
-  .km-error-background {
-    background-image: url("/assets/images/branding/404-illustration-dark.svg") !important;
-  }
+.km-error-background {
+  background-image: url("/assets/images/branding/404-illustration-dark.svg") !important;
+}
 
-  .km-provider-logo-bringyourown {
-    @include km-image(3.75 * $baseline-grid);
+.km-provider-logo-bringyourown {
+  @include km-image(3.75 * $baseline-grid);
 
-    background-image: url("/assets/images/clouds/bringyourown-dark.svg") !important;
-    filter: none;
-    min-height: 3.75 * $baseline-grid;
-  }
+  background-image: url("/assets/images/clouds/bringyourown-dark.svg") !important;
+  filter: none;
+  min-height: 3.75 * $baseline-grid;
+}
 
-  .km-provider-logo-kubevirt {
-    @include km-image(3.75 * $baseline-grid);
+.km-provider-logo-kubevirt {
+  @include km-image(3.75 * $baseline-grid);
 
-    background-image: url("/assets/images/clouds/kubevirt-dark.svg") !important;
-    filter: none;
-    min-height: 3.75 * $baseline-grid;
-  }
+  background-image: url("/assets/images/clouds/kubevirt-dark.svg") !important;
+  filter: none;
+  min-height: 3.75 * $baseline-grid;
+}
 
-  .km-provider-logo-vsphere {
-    @include km-image(3.75 * $baseline-grid);
+.km-provider-logo-vsphere {
+  @include km-image(3.75 * $baseline-grid);
 
-    background-image: url("/assets/images/clouds/vsphere-dark.svg") !important;
-    filter: none;
-    min-height: 3.75 * $baseline-grid;
-  }
+  background-image: url("/assets/images/clouds/vsphere-dark.svg") !important;
+  filter: none;
+  min-height: 3.75 * $baseline-grid;
+}
 
-  .km-icon-info {
-    @include km-image(2 * $baseline-grid);
+.km-icon-info {
+  @include km-image(2 * $baseline-grid);
 
-    background-image: url("/assets/images/icons/info-dark.svg") !important;
-    cursor: pointer;
-  }
+  background-image: url("/assets/images/icons/info-dark.svg") !important;
+  cursor: pointer;
+}
 
-  // Make checkbox marks white.
-  .mat-checkbox-checkmark-path {
-    stroke: #fff !important;
-  }
+// Make checkbox marks white.
+.mat-checkbox-checkmark-path {
+  stroke: #fff !important;
 }

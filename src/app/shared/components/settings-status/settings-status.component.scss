@@ -12,3 +12,7 @@
     height: 3 * $baseline-grid;
   }
 }
+
+:host {
+  align-self: center;
+}
