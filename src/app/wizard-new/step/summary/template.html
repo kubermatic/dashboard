@@ -447,248 +447,197 @@
             <div value>{{nodeData.spec.cloud.vsphere?.template}}</div>
           </km-property>
         </ng-container>
-      </div>
-    </div>
 
-    <!--TODO-->
-    <p *ngIf="noMoreIpsLeft"
-       class="km-warning km-error">Not enough IPs left. Reduce number of nodes or add more machine networks.</p>
-    <ng-container>
-      <mat-card-content>
-        <div class="km-summary-row">
-          <span class="km-summary-left km-text">
-            <i *ngIf="!nodeData.dynamicConfig"
-               class="km-icon-disabled"></i>
-            <i *ngIf="nodeData.dynamicConfig"
-               class="km-icon-running"></i>
-          </span>
-          <span>Dynamic kubelet config</span>
-        </div>
+        <km-property-boolean *ngIf="nodeData.spec.operatingSystem.centos"
+                             label="Dynamic kubelet Config"
+                             [value]="nodeData.dynamicConfig">
+        </km-property-boolean>
 
         <!-- AWS Node Options -->
         <ng-container *ngIf="cluster.spec.cloud.aws">
-          <div *ngIf="nodeData.spec.cloud?.aws?.assignPublicIP !== undefined">
-            <div class="km-summary-row">
-              <span class="km-summary-left km-text">
-                <i [ngClass]="{'km-icon-disabled': !nodeData.spec.cloud?.aws?.assignPublicIP, 'km-icon-running': nodeData.spec.cloud?.aws?.assignPublicIP}"></i>
-              </span>
-              <span>Assign Public IP</span>
-            </div>
-          </div>
+          <km-property-boolean *ngIf="nodeData.spec.cloud?.aws?.assignPublicIP !== undefined"
+                               label="Assign Public IP"
+                               [value]="nodeData.spec.cloud?.aws?.assignPublicIP">
+          </km-property-boolean>
         </ng-container>
 
-        <!-- DO Node Options -->
+        <!-- Azure Node Options -->
+        <ng-container *ngIf="cluster.spec.cloud.gcp">
+          <km-property-boolean label="Assign Public IP"
+                               [value]="nodeData.spec.cloud.azure.assignPublicIP">
+          </km-property-boolean>
+        </ng-container>
+
+        <!-- DigitalOcean Node Options -->
         <ng-container *ngIf="cluster.spec.cloud.digitalocean">
-          <div class="km-summary-row">
-            <span class="km-summary-left km-text">
-              <i [ngClass]="nodeData.spec.cloud.digitalocean?.backups ? 'km-icon-running' : 'km-icon-disabled'"></i>
-            </span>
-            <span>Backups</span>
-          </div>
-          <div class="km-summary-row">
-            <span class="km-summary-left km-text">
-              <i [ngClass]="nodeData.spec.cloud.digitalocean?.ipv6 ? 'km-icon-running' : 'km-icon-disabled'"></i>
-            </span>
-            <span>IPv6</span>
-          </div>
-          <div class="km-summary-row">
-            <span class="km-summary-left km-text">
-              <i [ngClass]="nodeData.spec.cloud.digitalocean?.monitoring ? 'km-icon-running' : 'km-icon-disabled'"></i>
-            </span>
-            <span>Monitoring</span>
-          </div>
+          <km-property-boolean label="Backups"
+                               [value]="nodeData.spec.cloud.digitalocean?.backups">
+          </km-property-boolean>
+          <km-property-boolean label="IPv6"
+                               [value]="nodeData.spec.cloud.digitalocean?.ipv6">
+          </km-property-boolean>
+          <km-property-boolean label="Monitoring"
+                               [value]="nodeData.spec.cloud.digitalocean?.monitoring">
+          </km-property-boolean>
         </ng-container>
 
         <!-- GCP Node Options -->
         <ng-container *ngIf="cluster.spec.cloud.gcp">
-          <div class="km-summary-row">
-            <span class="km-summary-left km-text">
-              <i [ngClass]="nodeData.spec.cloud.gcp?.preemptible ? 'km-icon-running' : 'km-icon-disabled'"></i>
-            </span>
-            <span>Preemptible</span>
-          </div>
+          <km-property-boolean label="Preemptible"
+                               [value]="nodeData.spec.cloud.gcp?.preemptible">
+          </km-property-boolean>
         </ng-container>
 
         <!-- Openstack Node Options -->
-        <ng-container *ngIf="cluster.spec.cloud.openstack">
-          <div class="km-summary-row">
-            <span class="km-summary-left km-text">
-              <i [ngClass]="nodeData.spec.cloud.openstack.useFloatingIP ? 'km-icon-running' : 'km-icon-disabled'"></i>
-            </span>
-            <span>Allocate Floating IP</span>
-          </div>
+        <ng-container *ngIf="cluster.spec.cloud.gcp">
+          <km-property-boolean label="Allocate Floating IP"
+                               [value]="nodeData.spec.cloud.openstack.useFloatingIP">
+          </km-property-boolean>
         </ng-container>
 
-        <!-- Azure Node Options -->
-        <ng-container *ngIf="cluster.spec.cloud.azure">
-          <div class="km-summary-row">
-            <span class="km-summary-left km-text">
-              <i [ngClass]="nodeData.spec.cloud.azure.assignPublicIP ? 'km-icon-running' : 'km-icon-disabled'"></i>
-            </span>
-            <span>Assign Public IP</span>
-          </div>
-        </ng-container>
+        <div [ngSwitch]="displayTags(nodeData.spec.labels)">
+          <km-property *ngSwitchCase="true">
+            <div key>Node Labels</div>
+            <div value>
+              <km-labels [labels]="nodeData.spec.labels"></km-labels>
+            </div>
+          </km-property>
+          <km-property-boolean *ngSwitchCase="false"
+                               label="Node Labels"
+                               [value]="false">
+          </km-property-boolean>
+        </div>
 
-        <!-- DO Tags -->
-        <ng-container *ngIf="nodeData.spec.cloud.digitalocean && nodeData.spec.cloud.digitalocean.tags?.length > 0">
-          <div class="km-summary-tags">
-            <div class="km-summary-row">Provider Tags</div>
-            <km-labels [labels]="nodeData.spec.cloud.digitalocean.tags"
-                       emptyMessage="No assigned tags"></km-labels>
-          </div>
-        </ng-container>
-
-        <!-- GCP Tags -->
-        <ng-container *ngIf="nodeData.spec.cloud.gcp && nodeData.spec.cloud.gcp?.tags?.length > 0">
-          <div class="km-summary-tags">
-            <div class="km-summary-row">Provider Tags</div>
-            <km-labels [labels]="nodeData.spec.cloud.gcp?.tags"
-                       emptyMessage="No assigned tags"></km-labels>
-          </div>
-        </ng-container>
-
-        <!-- Packet Tags -->
-        <ng-container *ngIf="nodeData.spec.cloud.packet && nodeData.spec.cloud.packet.tags?.length > 0">
-          <div class="km-summary-tags">
-            <div class="km-summary-row">Provider Tags</div>
-            <km-labels [labels]="nodeData.spec.cloud.packet.tags"
-                       emptyMessage="No assigned tags"></km-labels>
-          </div>
-        </ng-container>
+        <div [ngSwitch]="nodeData.spec.taints && nodeData.spec.taints?.length > 0">
+          <km-property *ngSwitchCase="true">
+            <div key>Node Taints</div>
+            <div value>
+              <km-labels [labels]="nodeData.spec.taints"></km-labels>
+            </div>
+          </km-property>
+        </div>
 
         <!-- AWS Tags -->
-        <ng-container *ngIf="nodeData.spec.cloud.aws && displayTags(nodeData.spec.cloud?.aws?.tags)">
-          <div class="km-summary-tags">
-            <div class="km-summary-row">Provider Tags</div>
-            <km-labels [labels]="nodeData.spec.cloud?.aws?.tags"
-                       emptyMessage="No assigned tags"></km-labels>
+        <km-property *ngIf="nodeData.spec.cloud.aws && displayTags(nodeData.spec.cloud?.aws?.tags)">
+          <div key>Provider Tags</div>
+          <div value>
+            <km-labels [labels]="nodeData.spec.cloud?.aws?.tags"></km-labels>
           </div>
-        </ng-container>
-
-        <!-- Openstack Tags -->
-        <ng-container *ngIf="nodeData.spec.cloud.openstack && displayTags(nodeData.spec.cloud.openstack.tags)">
-          <div class="km-summary-tags">
-            <div class="km-summary-row">Provider Tags</div>
-            <km-labels [labels]="nodeData.spec.cloud.openstack.tags"
-                       emptyMessage="No assigned tags"></km-labels>
-          </div>
-        </ng-container>
+        </km-property>
 
         <!-- Azure Tags -->
-        <ng-container *ngIf="nodeData.spec.cloud.azure && displayTags(nodeData.spec.cloud.azure.tags)">
-          <div class="km-summary-tags">
-            <div class="km-summary-row">Provider Tags</div>
-            <km-labels [labels]="nodeData.spec.cloud.azure.tags"
-                       emptyMessage="No assigned tags"></km-labels>
+        <km-property *ngIf="nodeData.spec.cloud.azure && displayTags(nodeData.spec.cloud.azure.tags)">
+          <div key>Provider Tags</div>
+          <div value>
+            <km-labels [labels]="nodeData.spec.cloud.azure.tags"></km-labels>
           </div>
-        </ng-container>
+        </km-property>
+
+        <!-- DigitalOcean Tags -->
+        <km-property *ngIf="nodeData.spec.cloud.digitalocean && nodeData.spec.cloud.digitalocean.tags?.length > 0">
+          <div key>Provider Tags</div>
+          <div value>
+            <km-labels [labels]="nodeData.spec.cloud.digitalocean?.tags"></km-labels>
+          </div>
+        </km-property>
+
+        <!-- GCP Tags -->
+        <km-property *ngIf="nodeData.spec.cloud.gcp && nodeData.spec.cloud.gcp?.tags?.length > 0">
+          <div key>Provider Tags</div>
+          <div value>
+            <km-labels [labels]="nodeData.spec.cloud.gcp.tags"></km-labels>
+          </div>
+        </km-property>
+
+        <!-- Openstack Tags -->
+        <km-property *ngIf="nodeData.spec.cloud.openstack && displayTags(nodeData.spec.cloud.openstack.tags)">
+          <div key>Provider Tags</div>
+          <div value>
+            <km-labels [labels]="nodeData.spec.cloud.openstack.tags"></km-labels>
+          </div>
+        </km-property>
+
+        <!-- Packet Tags -->
+        <km-property *ngIf="nodeData.spec.cloud.packet && nodeData.spec.cloud.packet.tags?.length > 0">
+          <div key>Provider Tags</div>
+          <div value>
+            <km-labels [labels]="nodeData.spec.cloud.packet.tags"></km-labels>
+          </div>
+        </km-property>
 
         <!-- No Provider Tags -->
-        <ng-container *ngIf="displayNoProviderTags()">
-          <div class="km-summary-row">
-            <span class="km-summary-left km-text">
-              <i class="km-icon-disabled"></i>
-            </span>
-            <span>Provider Tags</span>
-          </div>
-        </ng-container>
+        <km-property-boolean *ngIf="displayNoProviderTags()"
+                             label="Provider Tags"
+                             [value]="false">
+        </km-property-boolean>
+      </div>
 
-        <!-- Alibaba Labels -->
-        <ng-container *ngIf="nodeData.spec.cloud.alibaba && displayTags(nodeData.spec.cloud.alibaba.labels)">
-          <div class="km-summary-tags">
-            <div class="km-summary-row">Provider Labels</div>
-            <km-labels [labels]="nodeData.spec.cloud.alibaba.labels"
-                       emptyMessage="No assigned labels"></km-labels>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="nodeData.spec.cloud.alibaba && !displayTags(nodeData.spec.cloud.alibaba.labels)">
-          <div class="km-summary-row">
-            <span class="km-summary-left km-text">
-              <i class="km-icon-disabled"></i>
-            </span>
-            <span>Provider Labels</span>
-          </div>
-        </ng-container>
+      <!--TODO-->
+      <p *ngIf="noMoreIpsLeft"
+         class="km-warning km-error">Not enough IPs left. Reduce number of nodes or add more machine networks.</p>
 
-        <!-- GCP Labels -->
-        <ng-container *ngIf="nodeData.spec.cloud.gcp && displayTags(nodeData.spec.cloud.gcp?.labels)">
-          <div class="km-summary-tags">
-            <div class="km-summary-row">Provider Labels</div>
-            <km-labels [labels]="nodeData.spec.cloud.gcp?.labels"
-                       emptyMessage="No assigned labels"></km-labels>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="nodeData.spec.cloud.gcp && !displayTags(nodeData.spec.cloud.gcp?.labels)">
-          <div class="km-summary-row">
-            <span class="km-summary-left km-text">
-              <i class="km-icon-disabled"></i>
-            </span>
-            <span>Provider Labels</span>
-          </div>
-        </ng-container>
-
-        <!-- Node Labels -->
-        <div *ngIf="nodeData.spec.labels && displayTags(nodeData.spec.labels)"
-             class="km-summary-tags">
-          <div class="km-summary-row">Node Labels</div>
-          <km-labels [labels]="nodeData.spec.labels"
+      <!-- Alibaba Labels -->
+      <ng-container *ngIf="nodeData.spec.cloud.alibaba && displayTags(nodeData.spec.cloud.alibaba.labels)">
+        <div class="km-summary-tags">
+          <div class="km-summary-row">Provider Labels</div>
+          <km-labels [labels]="nodeData.spec.cloud.alibaba.labels"
                      emptyMessage="No assigned labels"></km-labels>
         </div>
-        <div *ngIf="!nodeData.spec.labels || !displayTags(nodeData.spec.labels)">
-          <div class="km-summary-row">
-            <span class="km-summary-left km-text">
-              <i class="km-icon-disabled"></i>
-            </span>
-            <span>Node Labels</span>
-          </div>
+      </ng-container>
+      <ng-container *ngIf="nodeData.spec.cloud.alibaba && !displayTags(nodeData.spec.cloud.alibaba.labels)">
+        <div class="km-summary-row">
+          <span class="km-summary-left km-text">
+            <i class="km-icon-disabled"></i>
+          </span>
+          <span>Provider Labels</span>
         </div>
+      </ng-container>
 
-        <!-- Node Taints -->
-        <div *ngIf="nodeData.spec.taints && nodeData.spec.taints?.length > 0"
-             class="km-summary-tags">
-          <div class="km-summary-row">Node Taints</div>
-          <km-taints [taints]="nodeData.spec.taints"></km-taints>
+      <!-- GCP Labels -->
+      <ng-container *ngIf="nodeData.spec.cloud.gcp && displayTags(nodeData.spec.cloud.gcp?.labels)">
+        <div class="km-summary-tags">
+          <div class="km-summary-row">Provider Labels</div>
+          <km-labels [labels]="nodeData.spec.cloud.gcp?.labels"
+                     emptyMessage="No assigned labels"></km-labels>
         </div>
-        <div *ngIf="!nodeData.spec.taints || nodeData.spec.taints?.length === 0">
-          <div class="km-summary-row">
-            <span class="km-summary-left km-text">
-              <i class="km-icon-disabled"></i>
-            </span>
-            <span>Node Taints</span>
-          </div>
+      </ng-container>
+      <ng-container *ngIf="nodeData.spec.cloud.gcp && !displayTags(nodeData.spec.cloud.gcp?.labels)">
+        <div class="km-summary-row">
+          <span class="km-summary-left km-text">
+            <i class="km-icon-disabled"></i>
+          </span>
+          <span>Provider Labels</span>
         </div>
+      </ng-container>
 
-      </mat-card-content>
-    </ng-container>
-
-    <ng-container *ngIf="cluster.spec.cloud.vsphere && cluster.spec.machineNetworks && cluster.spec.machineNetworks?.length > 0">
-      <mat-card-header>
-        <mat-card-title>Machine Networks</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div fxLayout="row"
-             fxLayoutGap="20px">
-          <div fxFlex="50%"
-               *ngFor="let network of cluster.spec.machineNetworks; let i=index">
-            <div fxLayout="column">
-              <span class="km-summary-row km-summary-row-with-margin">#{{i + 1}}</span>
-              <km-property>
-                <div key>CIDR Range</div>
-                <div value>{{network.cidr}}</div>
-              </km-property>
-              <km-property>
-                <div key>DNS Server</div>
-                <div value>{{getDnsServers(network.dnsServers)}}</div>
-              </km-property>
-              <km-property>
-                <div key>Gateway</div>
-                <div value>{{network.gateway}}</div>
-              </km-property>
+      <ng-container *ngIf="cluster.spec.cloud.vsphere && cluster.spec.machineNetworks && cluster.spec.machineNetworks?.length > 0">
+        <mat-card-header>
+          <mat-card-title>Machine Networks</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div fxLayout="row"
+               fxLayoutGap="20px">
+            <div fxFlex="50%"
+                 *ngFor="let network of cluster.spec.machineNetworks; let i=index">
+              <div fxLayout="column">
+                <span class="km-summary-row km-summary-row-with-margin">#{{i + 1}}</span>
+                <km-property>
+                  <div key>CIDR Range</div>
+                  <div value>{{network.cidr}}</div>
+                </km-property>
+                <km-property>
+                  <div key>DNS Server</div>
+                  <div value>{{getDnsServers(network.dnsServers)}}</div>
+                </km-property>
+                <km-property>
+                  <div key>Gateway</div>
+                  <div value>{{network.gateway}}</div>
+                </km-property>
+              </div>
             </div>
           </div>
-        </div>
-      </mat-card-content>
-    </ng-container>
+        </mat-card-content>
+      </ng-container>
 
+    </div>
   </div>
-</div>
