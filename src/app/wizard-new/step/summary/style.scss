@@ -1,19 +1,26 @@
 @import "../../../../assets/css/variables";
 
+:host {
+  counter-reset: section-number;
+}
+
 .section {
   margin: (2 * $baseline-grid) 0 (5 * $baseline-grid);
 
   .header {
+    font-size: $font-size-subhead-lg;
     margin-bottom: 2 * $baseline-grid;
 
-    .number {
+    &::before {
+      border: 1px solid;
       border-radius: 50%;
-      width: 3 * $baseline-grid;
+      counter-increment: section-number;
+      content: counter(section-number);
+      display: inline-block;
       height: 3 * $baseline-grid;
-    }
-
-    .title {
-      font-size: $font-size-subhead-lg;
+      text-align: center;
+      margin-right: 1.5 * $baseline-grid;
+      width: 3 * $baseline-grid;
     }
   }
 
