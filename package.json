@@ -23,7 +23,7 @@
     "check": "npm run check:ts && npm run check:scss && npm run check:licenses",
     "check:ts": "gts check",
     "check:scss": "stylelint \"src/**/*.scss\"",
-    "check:licenses": "license-checker --summary --failOn=GPL",
+    "check:licenses": "./hack/check-licenses.sh",
     "fix": "npm run fix:ts && npm run fix:scss && npm run fix:html",
     "fix:ts": "gts fix",
     "fix:scss": "stylelint \"src/**/*.scss\" --fix",
@@ -34,7 +34,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged && npm run check:licenses"
     }
   },
   "lint-staged": {
@@ -95,7 +95,7 @@
     "jest": "25.5.4",
     "jest-preset-angular": "8.2.0",
     "js-beautify": "1.11.0",
-    "license-checker": "25.0.1",
+    "license-compliance": "1.0.2",
     "lint-staged": "10.2.4",
     "ng2-mock-component": "0.2.0",
     "start-server-and-test": "1.11.0",
