@@ -9,7 +9,6 @@ import {fadeInOut} from '../../animations/fade';
 })
 export class SettingsStatusComponent implements OnChanges {
   @Input() isSaved = true;
-  @Input() placeHigher = false;
   @Input() confirmationTimeout = 3000;
   isSaveConfirmationVisible = false;
 
