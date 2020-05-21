@@ -512,7 +512,7 @@
           <km-property *ngSwitchCase="true">
             <div key>Node Taints</div>
             <div value>
-              <km-labels [labels]="nodeData.spec.taints"></km-labels>
+              <km-taints [taints]="nodeData.spec.taints"></km-taints>
             </div>
           </km-property>
         </div>
@@ -570,74 +570,72 @@
                              label="Provider Tags"
                              [value]="false">
         </km-property-boolean>
-      </div>
 
-      <!--TODO-->
-      <p *ngIf="noMoreIpsLeft"
-         class="km-warning km-error">Not enough IPs left. Reduce number of nodes or add more machine networks.</p>
-
-      <!-- Alibaba Labels -->
-      <ng-container *ngIf="nodeData.spec.cloud.alibaba && displayTags(nodeData.spec.cloud.alibaba.labels)">
-        <div class="km-summary-tags">
-          <div class="km-summary-row">Provider Labels</div>
-          <km-labels [labels]="nodeData.spec.cloud.alibaba.labels"
-                     emptyMessage="No assigned labels"></km-labels>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="nodeData.spec.cloud.alibaba && !displayTags(nodeData.spec.cloud.alibaba.labels)">
-        <div class="km-summary-row">
-          <span class="km-summary-left km-text">
-            <i class="km-icon-disabled"></i>
-          </span>
-          <span>Provider Labels</span>
-        </div>
-      </ng-container>
-
-      <!-- GCP Labels -->
-      <ng-container *ngIf="nodeData.spec.cloud.gcp && displayTags(nodeData.spec.cloud.gcp?.labels)">
-        <div class="km-summary-tags">
-          <div class="km-summary-row">Provider Labels</div>
-          <km-labels [labels]="nodeData.spec.cloud.gcp?.labels"
-                     emptyMessage="No assigned labels"></km-labels>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="nodeData.spec.cloud.gcp && !displayTags(nodeData.spec.cloud.gcp?.labels)">
-        <div class="km-summary-row">
-          <span class="km-summary-left km-text">
-            <i class="km-icon-disabled"></i>
-          </span>
-          <span>Provider Labels</span>
-        </div>
-      </ng-container>
-
-      <ng-container *ngIf="cluster.spec.cloud.vsphere && cluster.spec.machineNetworks && cluster.spec.machineNetworks?.length > 0">
-        <mat-card-header>
-          <mat-card-title>Machine Networks</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div fxLayout="row"
-               fxLayoutGap="20px">
-            <div fxFlex="50%"
-                 *ngFor="let network of cluster.spec.machineNetworks; let i=index">
-              <div fxLayout="column">
-                <span class="km-summary-row km-summary-row-with-margin">#{{i + 1}}</span>
-                <km-property>
-                  <div key>CIDR Range</div>
-                  <div value>{{network.cidr}}</div>
-                </km-property>
-                <km-property>
-                  <div key>DNS Server</div>
-                  <div value>{{getDnsServers(network.dnsServers)}}</div>
-                </km-property>
-                <km-property>
-                  <div key>Gateway</div>
-                  <div value>{{network.gateway}}</div>
-                </km-property>
+        <!-- Alibaba Labels -->
+        <ng-container *ngIf="nodeData.spec.cloud.alibaba">
+          <div [ngSwitch]="displayTags(nodeData.spec.cloud.alibaba.labels)">
+            <km-property *ngSwitchCase="true">
+              <div key>Provider Labels</div>
+              <div value>
+                <km-labels [labels]="nodeData.spec.cloud.alibaba.labels"></km-labels>
               </div>
-            </div>
+            </km-property>
+            <km-property-boolean *ngSwitchCase="false"
+                                 label="Provider Labels"
+                                 [value]="false">
+            </km-property-boolean>
           </div>
-        </mat-card-content>
-      </ng-container>
+        </ng-container>
 
+        <!-- GCP Labels -->
+        <ng-container *ngIf="nodeData.spec.cloud.gcp">
+          <div [ngSwitch]="displayTags(nodeData.spec.cloud.gcp.labels)">
+            <km-property *ngSwitchCase="true">
+              <div key>Provider Labels</div>
+              <div value>
+                <km-labels [labels]="nodeData.spec.cloud.gcp.labels"></km-labels>
+              </div>
+            </km-property>
+            <km-property-boolean *ngSwitchCase="false"
+                                 label="Provider Labels"
+                                 [value]="false">
+            </km-property-boolean>
+          </div>
+        </ng-container>
+      </div>
     </div>
+
+
+    <div class="section"
+         *ngIf="cluster.spec.cloud.vsphere && cluster.spec.machineNetworks && cluster.spec.machineNetworks?.length > 0">
+      <div class="header">Machine Networks</div>
+      <div class="properties"
+           fxLayout="row"
+           fxLayoutGap="20px">
+        <div fxFlex="50%"
+             *ngFor="let network of cluster.spec.machineNetworks; let i=index">
+          <div fxLayout="column">
+            <span class="network-id">#{{i + 1}}</span>
+            <km-property>
+              <div key>CIDR Range</div>
+              <div value>{{network.cidr}}</div>
+            </km-property>
+            <km-property>
+              <div key>DNS Server</div>
+              <div value>{{getDnsServers(network.dnsServers)}}</div>
+            </km-property>
+            <km-property>
+              <div key>Gateway</div>
+              <div value>{{network.gateway}}</div>
+            </km-property>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p *ngIf="noMoreIpsLeft"
+       class="km-warning km-error">
+      Not enough IPs left. Reduce number of nodes or add more machine networks.
+    </p>
   </div>
+</div>
