@@ -28,6 +28,8 @@ func main() {
 	rawLog, _ := config.Build()
 	log := rawLog.Sugar()
 
+	log.Infof("Kubermatic Dashboard %s", Edition)
+
 	mux := http.NewServeMux()
 	mux.Handle("/metrics", promhttp.HandlerFor(registry, promhttp.HandlerOpts{}))
 	mux.Handle("/", InstrumentHandler(http.HandlerFunc(handler)))

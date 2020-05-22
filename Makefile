@@ -1,5 +1,6 @@
 SHELL=/bin/bash
-REPO=quay.io/kubermatic/dashboard
+KUBERMATIC_EDITION?=ce
+REPO=quay.io/kubermatic/dashboard$(shell [ "$(KUBERMATIC_EDITION)" != "ee" ] && echo "-$(KUBERMATIC_EDITION)" )
 IMAGE_TAG=$(shell echo $$(git rev-parse HEAD)|tr -d '\n')
 CC=npm
 export GOOS?=linux
@@ -40,7 +41,7 @@ dist: install
 	@$(CC) run build
 
 build:
-	CGO_ENABLED=0 go build -ldflags '-w -extldflags '-static'' -o dashboard .
+	CGO_ENABLED=0 go build -tags '$(KUBERMATIC_EDITION)' -ldflags '-w -extldflags '-static'' -o dashboard .
 
 docker-build: build dist
 	docker build -t $(REPO):$(IMAGE_TAG) .
