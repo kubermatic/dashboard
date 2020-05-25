@@ -1,5 +1,4 @@
 import {NodeProvider} from '../model/NodeProviderConstants';
-import {ClusterType} from '../utils/cluster-utils/cluster-utils';
 
 import {AlibabaCloudSpec} from './cloud/AlibabaCloudSpec';
 import {AWSCloudSpec} from './cloud/AWSCloudSpec';
@@ -28,6 +27,12 @@ export const enum Finalizer {
   DeleteLoadBalancers = 'DeleteLoadBalancers',
 }
 
+export enum ClusterType {
+  Kubernetes = 'kubernetes',
+  OpenShift = 'openshift',
+  Empty = '',
+}
+
 export class ClusterEntity {
   creationTimestamp?: Date;
   deletionTimestamp?: Date;
@@ -40,7 +45,56 @@ export class ClusterEntity {
   inheritedLabels?: object;
   credential?: string;
 
-  static NewEmptyClusterEntity(): ClusterEntity {
+  static getProvider(cloud: CloudSpec): string {
+    if (cloud.aws) {
+      return 'aws';
+    } else if (cloud.digitalocean) {
+      return 'digitalocean';
+    } else if (cloud.openstack) {
+      return 'openstack';
+    } else if (cloud.bringyourown) {
+      return 'bringyourown';
+    } else if (cloud.hetzner) {
+      return 'hetzner';
+    } else if (cloud.vsphere) {
+      return 'vsphere';
+    } else if (cloud.azure) {
+      return 'azure';
+    } else if (cloud.packet) {
+      return 'packet';
+    } else if (cloud.gcp) {
+      return 'gcp';
+    } else if (cloud.kubevirt) {
+      return 'kubevirt';
+    } else if (cloud.alibaba) {
+      return 'alibaba';
+    }
+  }
+
+  static isOpenshiftType(cluster: ClusterEntity): boolean {
+    return cluster.type === ClusterType.OpenShift;
+  }
+
+  static getDisplayType(cluster: ClusterEntity): string {
+    switch (cluster.type) {
+      case ClusterType.Kubernetes:
+        return 'Kubernetes';
+      case ClusterType.OpenShift:
+        return 'OpenShift';
+      default:
+        return '';
+    }
+  }
+
+  static getVersionHeadline(type: string, isKubelet: boolean): string {
+    if (type === 'kubernetes') {
+      return isKubelet ? 'kubelet Version' : 'Master Version';
+    } else if (type === 'openshift') {
+      return 'OpenShift Version';
+    }
+  }
+
+  static newEmptyClusterEntity(): ClusterEntity {
     return {
       spec: {
         cloud: {} as CloudSpec,

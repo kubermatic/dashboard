@@ -35,7 +35,6 @@ import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {GroupConfig} from '../../shared/model/Config';
-import {ClusterUtils} from '../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
 import {
   MemberUtils,
@@ -243,7 +242,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getProvider(cloud: CloudSpec): string {
-    return ClusterUtils.getProvider(cloud);
+    return ClusterEntity.getProvider(cloud);
   }
 
   deleteClusterDialog(cluster: ClusterEntity, event: Event): void {

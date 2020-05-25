@@ -3,7 +3,6 @@ import {Router} from '@angular/router';
 
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
-import {ClusterUtils} from '../../../../shared/utils/cluster-utils/cluster-utils';
 
 @Component({
   selector: 'km-cluster-panel',
@@ -18,7 +17,7 @@ export class ClusterPanelComponent {
   constructor(private readonly _router: Router) {}
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterUtils.getVersionHeadline(type, isKubelet);
+    return ClusterEntity.getVersionHeadline(type, isKubelet);
   }
 
   navigate(): void {

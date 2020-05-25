@@ -17,10 +17,10 @@ import {
 } from '../shared/model/NodeProviderConstants';
 import {DataCenterEntity} from '../shared/entity/DatacenterEntity';
 import {NodeData} from '../shared/model/NodeSpecChange';
-import {ClusterType} from '../shared/utils/cluster-utils/cluster-utils';
 import {BaseFormValidator} from '../shared/validators/base-form.validator';
 import {ClusterService} from '../wizard-new/service/cluster';
 import {NodeDataService} from './service/service';
+import {ClusterType} from '../shared/entity/ClusterEntity';
 
 enum Controls {
   Name = 'name',

@@ -16,7 +16,6 @@ import {
   MasterVersion,
 } from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {ChangeClusterVersionComponent} from '../change-cluster-version/change-cluster-version.component';
 
 @Component({
@@ -74,7 +73,7 @@ export class VersionPickerComponent implements OnInit, OnChanges {
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterUtils.getVersionHeadline(type, isKubelet);
+    return ClusterEntity.getVersionHeadline(type, isKubelet);
   }
 
   isEnabled(): boolean {

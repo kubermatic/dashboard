@@ -1,9 +1,12 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import * as _ from 'lodash';
-import {CloudSpec, ClusterEntity} from '../../shared/entity/ClusterEntity';
+import {
+  CloudSpec,
+  ClusterEntity,
+  ClusterType,
+} from '../../shared/entity/ClusterEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
-import {ClusterType} from '../../shared/utils/cluster-utils/cluster-utils';
 
 @Injectable()
 export class ClusterService {
@@ -13,7 +16,7 @@ export class ClusterService {
   readonly clusterChanges = new EventEmitter<ClusterEntity>();
   readonly clusterTypeChanges = new EventEmitter<ClusterType>();
 
-  private _clusterEntity: ClusterEntity = ClusterEntity.NewEmptyClusterEntity();
+  private _clusterEntity: ClusterEntity = ClusterEntity.newEmptyClusterEntity();
   private _sshKeysEntity: SSHKeyEntity[] = [];
 
   set cluster(cluster: ClusterEntity) {
@@ -106,7 +109,7 @@ export class ClusterService {
   }
 
   reset(): void {
-    this._clusterEntity = ClusterEntity.NewEmptyClusterEntity();
+    this._clusterEntity = ClusterEntity.newEmptyClusterEntity();
   }
 
   private _getProvider(cluster: ClusterEntity): NodeProvider {

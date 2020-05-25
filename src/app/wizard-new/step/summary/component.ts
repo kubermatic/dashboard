@@ -11,7 +11,6 @@ import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../shared/model/NodeSpecChange';
 import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 import {ClusterService} from '../../service/cluster';
-import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 
 @Component({
   selector: 'km-wizard-summary-step',
@@ -84,7 +83,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   getClusterType(): string {
-    return ClusterUtils.getClusterType(this.cluster);
+    return ClusterEntity.getDisplayType(this.cluster);
   }
 
   displaySettings(): boolean {
