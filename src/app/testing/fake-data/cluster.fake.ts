@@ -1,6 +1,9 @@
-import {ClusterEntity, Token} from '../../shared/entity/ClusterEntity';
+import {
+  ClusterEntity,
+  ClusterType,
+  Token,
+} from '../../shared/entity/ClusterEntity';
 import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
-import {ClusterType} from '../../shared/utils/cluster-utils/cluster-utils';
 
 export function clusterModelFake(): CreateClusterModel {
   return {
