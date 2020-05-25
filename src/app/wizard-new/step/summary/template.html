@@ -39,16 +39,19 @@
           <div key>Version</div>
           <div value>{{cluster.spec.version}}</div>
         </km-property>
-        <div fxLayout="row"
-             fxLayoutAlign=" center"
-             fxLayoutGap="10px"
-             class="os">
-          <i class="km-os-image km-os-image-{{getOperatingSystemLogoClass()}}"></i>
-          <span>{{getOperatingSystem()}}</span>
-          <i *ngIf="nodeData.spec.operatingSystem.containerLinux"
-             class="km-icon-warning with-margin"
-             matTooltip="Container Linux is going end-of-life on May 26, 2020."></i>
-        </div>
+        <km-property>
+          <div key>Operating System</div>
+          <div value
+               fxLayout="row"
+               fxLayoutAlign=" center"
+               fxLayoutGap="10px">
+            <i class="km-os-image km-os-image-{{getOperatingSystemLogoClass()}}"></i>
+            <span>{{getOperatingSystem()}}</span>
+            <i *ngIf="nodeData.spec.operatingSystem.containerLinux"
+               class="km-icon-warning with-margin"
+               matTooltip="Container Linux is going end-of-life on May 26, 2020."></i>
+          </div>
+        </km-property>
         <div [ngSwitch]="displayTags(cluster.labels)">
           <km-property *ngSwitchCase="true">
             <div key>Cluster Labels</div>
