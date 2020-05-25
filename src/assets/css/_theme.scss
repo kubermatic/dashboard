@@ -10,6 +10,7 @@
   $text: mat-color($palette-foreground, text);
   $text-secondary: mat-color($palette-foreground, secondary-text);
   $text-disabled: mat-color($palette-foreground, disabled-text);
+  $checkbox-disabled: mat-color($palette-foreground, disabled-checkbox);
 
   $background: mat-color($palette-background, background);
   $background-hover: mat-color($palette-background, hover);
@@ -364,7 +365,7 @@
   }
 
   .mat-checkbox-disabled .mat-checkbox-background {
-    background-color: $background-disabled-button !important;
+    background-color: $checkbox-disabled !important;
   }
 
   .mat-checkbox-frame {
