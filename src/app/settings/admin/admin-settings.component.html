@@ -192,7 +192,8 @@
             class="km-header-cell"
             mat-sort-header>Provider</th>
         <td mat-cell
-            *matCellDef="let element">{{element.spec.provider}}</td>
+            *matCellDef="let element"
+            fxLayoutAlign=" center"><span class="km-provider-logo km-provider-logo-{{element.spec.provider}}"></span></td>
       </ng-container>
 
       <ng-container matColumnDef="hidden">

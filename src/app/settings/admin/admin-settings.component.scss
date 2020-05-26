@@ -69,6 +69,15 @@
   padding-left: 3.75 * $baseline-grid !important;
 }
 
+.km-provider-logo {
+  background-position: left !important;
+  max-height: 3.5 * $baseline-grid;
+  max-width: 14 * $baseline-grid !important;
+  min-height: 3.5 * $baseline-grid;
+  min-width: 5 * $baseline-grid !important;
+  margin: $baseline-grid $baseline-grid 0 0;
+}
+
 .km-admin-item-actions {
   display: flex;
   justify-content: flex-end;
