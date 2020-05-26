@@ -10,7 +10,6 @@ import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {AdminEntity} from '../../shared/entity/AdminSettings';
 import {SharedModule} from '../../shared/shared.module';
-import {ClusterType} from '../../shared/utils/cluster-utils/cluster-utils';
 import {fakeMember} from '../../testing/fake-data/member.fake';
 import {MatDialogMock} from '../../testing/services/mat-dialog-mock';
 import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
@@ -20,6 +19,7 @@ import {UserMockService} from '../../testing/services/user-mock.service';
 import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.component';
 import {AdminSettingsComponent} from './admin-settings.component';
 import {CustomLinksFormComponent} from './custom-link-form/custom-links-form.component';
+import {ClusterType} from '../../shared/entity/ClusterEntity';
 
 describe('AdminSettingsComponent', () => {
   let fixture: ComponentFixture<AdminSettingsComponent>;

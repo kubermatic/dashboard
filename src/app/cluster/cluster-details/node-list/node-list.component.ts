@@ -29,7 +29,6 @@ import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {NodeMetrics} from '../../../shared/entity/Metrics';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {GroupConfig} from '../../../shared/model/Config';
-import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeHealthStatus} from '../../../shared/utils/health-status/node-health-status';
 import {
@@ -124,7 +123,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterUtils.getVersionHeadline(type, isKubelet);
+    return ClusterEntity.getVersionHeadline(type, isKubelet);
   }
 
   canDelete(): boolean {

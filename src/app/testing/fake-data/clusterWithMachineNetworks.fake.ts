@@ -1,5 +1,4 @@
-import {ClusterEntity} from '../../shared/entity/ClusterEntity';
-import {ClusterType} from '../../shared/utils/cluster-utils/cluster-utils';
+import {ClusterEntity, ClusterType} from '../../shared/entity/ClusterEntity';
 
 // fakeClusterWithMachineNetwork could contain 6 IPs
 export function fakeClusterWithMachineNetwork(): ClusterEntity {

@@ -82,15 +82,12 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
     return NodeUtils.getOperatingSystemLogoClass(this.nodeData.spec);
   }
 
-  displayProvider(): boolean {
-    return (
-      Object.values(NodeProvider)
-        .filter(
-          p => p !== NodeProvider.BAREMETAL && p !== NodeProvider.BRINGYOUROWN
-        )
-        .some(p => this._hasProviderOptions(p)) ||
-      this._clusterService.provider === NodeProvider.BRINGYOUROWN
-    );
+  getClusterType(): string {
+    return ClusterEntity.getDisplayType(this.cluster);
+  }
+
+  displaySettings(): boolean {
+    return Object.values(NodeProvider).some(p => this._hasProviderOptions(p));
   }
 
   displayTags(tags: object): boolean {
