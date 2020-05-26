@@ -3,9 +3,9 @@ const {resolve} = require('path');
 const {writeFileSync} = require('fs');
 
 function getEditionDisplayName() {
-  return process.env.KUBERMATIC_EDITION !== 'ce'
-    ? 'Enterprise Edition'
-    : 'Community Edition';
+  return process.env.KUBERMATIC_EDITION === 'ce'
+    ? 'Community Edition'
+    : 'Enterprise Edition';
 }
 
 const gitInfo = gitDescribeSync({

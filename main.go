@@ -98,9 +98,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func getEditionDisplayName() string {
-	if Edition != "ce" {
-		return "Enterprise Edition"
+	if Edition == "ce" {
+		return "Community Edition"
 	}
 
-	return "Community Edition"
+	return "Enterprise Edition"
 }
