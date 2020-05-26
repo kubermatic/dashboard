@@ -59,22 +59,22 @@
           CentOS
         </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.ContainerLinux"
-                           *ngIf="!isProvider(NodeProvider.HETZNER) && !isProvider(NodeProvider.ALIBABA) && !isOpenshiftCluster() && isAvailable('coreos')">
+                           *ngIf="isContainerLinuxAvailable() && !isOpenshiftCluster()">
           <i class="km-os-image-container-linux"></i>
           Container Linux
         </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.Flatcar"
-                           *ngIf="isFlatcarAvailable() && !isOpenshiftCluster() && isAvailable('flatcar')">
+                           *ngIf="isFlatcarAvailable() && !isOpenshiftCluster()">
           <i class="km-os-image-flatcar"></i>
           Flatcar
         </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.SLES"
-                           *ngIf="isProvider(NodeProvider.AWS) && !isOpenshiftCluster()">
+                           *ngIf="isSLESAvailable() && !isOpenshiftCluster()">
           <i class="km-os-image-sles"></i>
           SLES
         </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.RHEL"
-                           *ngIf="isRHELAvailable && !isOpenshiftCluster() && isAvailable('rhel')">
+                           *ngIf="isRHELAvailable() && !isOpenshiftCluster()">
           <i class="km-os-image-rhel"></i>
           RHEL
         </mat-button-toggle>

@@ -128,17 +128,17 @@
       CentOS
     </mat-button-toggle>
     <mat-button-toggle value="containerLinux"
-                       *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.alibaba && !isClusterOpenshift() && isAvailable('coreos')">
+                       *ngIf="isContainerLinuxAvailable() && !isClusterOpenshift()">
       <i class="km-os-image-container-linux"></i>
       Container Linux
     </mat-button-toggle>
     <mat-button-toggle value="flatcar"
-                       *ngIf="(cluster.spec.cloud.aws || cluster.spec.cloud.azure || cluster.spec.cloud.vsphere) && !isClusterOpenshift() && isAvailable('flatcar')">
+                       *ngIf="isFlatcarAvailable() && !isClusterOpenshift()">
       <i class="km-os-image-flatcar"></i>
       Flatcar
     </mat-button-toggle>
     <mat-button-toggle value="sles"
-                       *ngIf="cluster.spec.cloud.aws && !isClusterOpenshift()">
+                       *ngIf="isSLESAvailable() && !isClusterOpenshift()">
       <i class="km-os-image-sles"></i>
       SLES
     </mat-button-toggle>

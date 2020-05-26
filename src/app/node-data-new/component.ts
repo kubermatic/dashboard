@@ -106,7 +106,10 @@ export class NodeDataComponent extends BaseFormValidator
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this._clusterService.clusterTypeChanges
+    merge(
+      this._clusterService.clusterTypeChanges,
+      this._clusterService.providerChanges
+    )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS())
@@ -171,6 +174,23 @@ export class NodeDataComponent extends BaseFormValidator
     return this._clusterService.clusterType === ClusterType.OpenShift;
   }
 
+  isContainerLinuxAvailable(): boolean {
+    return (
+      !!this.isProvider(NodeProvider.AWS) ||
+      !!this.isProvider(NodeProvider.AZURE) ||
+      !!this.isProvider(NodeProvider.DIGITALOCEAN) ||
+      !!this.isProvider(NodeProvider.GCP) ||
+      !!this.isProvider(NodeProvider.KUBEVIRT) ||
+      !!this.isProvider(NodeProvider.PACKET) ||
+      !!this.isProvider(NodeProvider.OPENSTACK) ||
+      (!!this.isProvider(NodeProvider.VSPHERE) && this.isAvailable('coreos'))
+    );
+  }
+
+  isSLESAvailable(): boolean {
+    return !!this.isProvider(NodeProvider.AWS);
+  }
+
   isRHELAvailable(): boolean {
     return (
       !!this.isProvider(NodeProvider.AWS) ||
@@ -178,7 +198,8 @@ export class NodeDataComponent extends BaseFormValidator
       !!this.isProvider(NodeProvider.GCP) ||
       !!this.isProvider(NodeProvider.KUBEVIRT) ||
       !!this.isProvider(NodeProvider.OPENSTACK) ||
-      !!this.isProvider(NodeProvider.VSPHERE)
+      (!!this.isProvider(NodeProvider.VSPHERE) &&
+        this.isAvailable(OperatingSystem.RHEL))
     );
   }
 
@@ -186,7 +207,8 @@ export class NodeDataComponent extends BaseFormValidator
     return (
       !!this.isProvider(NodeProvider.AWS) ||
       !!this.isProvider(NodeProvider.AZURE) ||
-      !!this.isProvider(NodeProvider.VSPHERE)
+      (!!this.isProvider(NodeProvider.VSPHERE) &&
+        this.isAvailable(OperatingSystem.Flatcar))
     );
   }
 
