@@ -18,7 +18,6 @@ import {NodeMetrics} from '../../../shared/entity/Metrics';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {GroupConfig} from '../../../shared/model/Config';
-import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
 import {
   MemberUtils,
@@ -186,7 +185,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe(c => {
         this.cluster = c;
-        this.clusterProvider = ClusterUtils.getProvider(
+        this.clusterProvider = ClusterEntity.getProvider(
           this.cluster.spec.cloud
         );
         this._isClusterLoaded = true;
@@ -230,7 +229,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterUtils.getVersionHeadline(type, isKubelet);
+    return ClusterEntity.getVersionHeadline(type, isKubelet);
   }
 
   goBackToCluster(): void {

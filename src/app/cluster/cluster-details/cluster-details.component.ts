@@ -17,6 +17,7 @@ import {SettingsService} from '../../core/services/settings/settings.service';
 import {AddonEntity} from '../../shared/entity/AddonEntity';
 import {
   ClusterEntity,
+  ClusterType,
   getClusterProvider,
   MasterVersion,
 } from '../../shared/entity/ClusterEntity';
@@ -36,10 +37,6 @@ import {
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {Config, GroupConfig} from '../../shared/model/Config';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
-import {
-  ClusterType,
-  ClusterUtils,
-} from '../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
 import {
   MemberUtils,
@@ -566,7 +563,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   getConnectName(): string {
-    return ClusterUtils.isOpenshiftType(this.cluster)
+    return ClusterEntity.isOpenshiftType(this.cluster)
       ? 'Open Console'
       : 'Open Dashboard';
   }

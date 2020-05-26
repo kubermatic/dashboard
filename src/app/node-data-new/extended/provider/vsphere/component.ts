@@ -8,10 +8,10 @@ import {VSphereNodeSpec} from '../../../../shared/entity/node/VSphereNodeSpec';
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
 import {OperatingSystem} from '../../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
-import {ClusterType} from '../../../../shared/utils/cluster-utils/cluster-utils';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../wizard-new/service/cluster';
 import {NodeDataService} from '../../../service/service';
+import {ClusterType} from '../../../../shared/entity/ClusterEntity';
 
 enum Controls {
   DiskSizeGB = 'diskSizeGB',

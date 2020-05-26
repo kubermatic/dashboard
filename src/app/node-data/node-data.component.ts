@@ -24,7 +24,6 @@ import {ResourceType} from '../shared/entity/LabelsEntity';
 import {OperatingSystemSpec} from '../shared/entity/NodeEntity';
 import {OperatingSystem} from '../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../shared/model/NodeSpecChange';
-import {ClusterUtils} from '../shared/utils/cluster-utils/cluster-utils';
 import {AsyncValidators} from '../shared/validators/async-label-form.validator';
 import {NoIpsLeftValidator} from '../shared/validators/no-ips-left.validator';
 
@@ -306,11 +305,11 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterUtils.getVersionHeadline(type, isKubelet);
+    return ClusterEntity.getVersionHeadline(type, isKubelet);
   }
 
   isClusterOpenshift(): boolean {
-    return ClusterUtils.isOpenshiftType(this.cluster);
+    return ClusterEntity.isOpenshiftType(this.cluster);
   }
 
   isRHELAvailable(): boolean {
