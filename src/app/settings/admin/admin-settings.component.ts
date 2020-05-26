@@ -14,7 +14,7 @@ import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
-import {NotificationService} from '../../core/services';
+import {DatacenterService, NotificationService} from '../../core/services';
 import {UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
@@ -28,6 +28,7 @@ import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
 
 import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.component';
+import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 
 @Component({
   selector: 'km-admin-settings',
@@ -36,11 +37,23 @@ import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.compo
 })
 export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   user: MemberEntity;
-  admins = [];
-  dataSource = new MatTableDataSource<AdminEntity>();
-  displayedColumns: string[] = ['name', 'email', 'actions'];
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  datacenters: DataCenterEntity[] = [];
+  datacentersDataSource = new MatTableDataSource<DataCenterEntity>();
+  datacentersDisplayedColumns: string[] = [
+    'datacenter',
+    'seed',
+    'country',
+    'provider',
+    'hidden',
+  ];
+  @ViewChild('datacentersSort', {static: true}) datacentersSort: MatSort;
+  @ViewChild('datacentersPaginator', {static: true})
+  datacentersPaginator: MatPaginator;
+  admins: AdminEntity[] = [];
+  adminsDataSource = new MatTableDataSource<AdminEntity>();
+  adminsDisplayedColumns: string[] = ['name', 'email', 'actions'];
+  @ViewChild('adminsSort', {static: true}) adminsSort: MatSort;
+  @ViewChild('adminsPaginator', {static: true}) adminsPaginator: MatPaginator;
   selectedDistro = [];
   settings: AdminSettings; // Local settings copy. User can edit it.
   apiSettings: AdminSettings; // Original settings from the API. Cannot be edited by the user.
@@ -50,28 +63,45 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private readonly _userService: UserService,
     private readonly _settingsService: SettingsService,
+    private readonly _datacenterService: DatacenterService,
     private readonly _historyService: HistoryService,
     private readonly _matDialog: MatDialog,
     private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
-    this.dataSource.data = this.admins;
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.sort.active = 'name';
-    this.sort.direction = 'asc';
-
-    this._userService.loggedInUser
-      .pipe(first())
-      .subscribe(user => (this.user = user));
+    this.adminsDataSource.data = this.admins;
+    this.adminsDataSource.sort = this.adminsSort;
+    this.adminsDataSource.paginator = this.adminsPaginator;
+    this.adminsSort.active = 'name';
+    this.adminsSort.direction = 'asc';
 
     this._settingsService.admins
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(admins => {
         this.admins = admins.sort((a, b) => a.email.localeCompare(b.email));
-        this.dataSource.data = this.admins;
+        this.adminsDataSource.data = this.admins;
       });
+
+    this.datacentersDataSource.data = this.datacenters;
+    this.datacentersDataSource.sort = this.datacentersSort;
+    this.datacentersDataSource.paginator = this.datacentersPaginator;
+    this.datacentersSort.active = 'datacenter';
+    this.datacentersSort.direction = 'asc';
+
+    this._datacenterService
+      .getDataCenters()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(datacenters => {
+        this.datacenters = datacenters.sort((a, b) =>
+          a.metadata.name.localeCompare(b.metadata.name)
+        );
+        this.datacentersDataSource.data = this.datacenters;
+      });
+
+    this._userService.loggedInUser
+      .pipe(first())
+      .subscribe(user => (this.user = user));
 
     this._settingsService.adminSettings
       .pipe(takeUntil(this._unsubscribe))
@@ -105,13 +135,16 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
     this._settingsService.userSettings
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(settings => {
-        this.paginator.pageSize = settings.itemsPerPage;
-        this.dataSource.paginator = this.paginator; // Force refresh.
+        this.adminsPaginator.pageSize = settings.itemsPerPage;
+        this.adminsDataSource.paginator = this.adminsPaginator; // Force refresh.
+
+        this.datacentersPaginator.pageSize = settings.itemsPerPage;
+        this.datacentersDataSource.paginator = this.datacentersPaginator; // Force refresh.
       });
   }
 
   ngOnChanges(): void {
-    this.dataSource.data = this.admins;
+    this.adminsDataSource.data = this.admins;
   }
 
   ngOnDestroy(): void {
@@ -260,11 +293,19 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
     return this.admins && this.admins.length > 0;
   }
 
-  isPaginatorVisible(): boolean {
+  isAdminsPaginatorVisible(): boolean {
     return (
       this.hasItems() &&
-      this.paginator &&
-      this.admins.length > this.paginator.pageSize
+      this.adminsPaginator &&
+      this.admins.length > this.adminsPaginator.pageSize
+    );
+  }
+
+  isDatacentersPaginatorVisible(): boolean {
+    return (
+      this.hasItems() &&
+      this.datacentersPaginator &&
+      this.admins.length > this.datacentersPaginator.pageSize
     );
   }
 }
