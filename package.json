@@ -96,7 +96,7 @@
     "jest-preset-angular": "8.2.0",
     "js-beautify": "1.11.0",
     "license-checker": "25.0.1",
-    "lint-staged": "10.2.4",
+    "lint-staged": "10.2.6",
     "ng2-mock-component": "0.2.0",
     "start-server-and-test": "1.11.0",
     "stylelint": "13.5.0",
