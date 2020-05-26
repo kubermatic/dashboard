@@ -1,6 +1,8 @@
 SHELL=/bin/bash
-REPO=quay.io/kubermatic/dashboard
+KUBERMATIC_EDITION?=ee
+REPO=quay.io/kubermatic/dashboard$(shell [ "$(KUBERMATIC_EDITION)" != "ee" ] && echo "-$(KUBERMATIC_EDITION)" )
 IMAGE_TAG=$(shell echo $$(git rev-parse HEAD)|tr -d '\n')
+VERSION=$(shell git describe --tags --match "v[0-9]*")
 CC=npm
 export GOOS?=linux
 
@@ -37,10 +39,10 @@ run-e2e-ci: install
 	./hack/e2e/ci-e2e.sh
 
 dist: install
-	@$(CC) run build
+	@KUBERMATIC_EDITION=${KUBERMATIC_EDITION} $(CC) run build
 
 build:
-	CGO_ENABLED=0 go build -ldflags '-w -extldflags '-static'' -o dashboard .
+	CGO_ENABLED=0 go build -a -ldflags '-w -extldflags -static -X 'main.Edition=${KUBERMATIC_EDITION}' -X 'main.Version=${VERSION}'' -o dashboard .
 
 docker-build: build dist
 	docker build -t $(REPO):$(IMAGE_TAG) .

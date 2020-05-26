@@ -24,6 +24,13 @@ footer {
   & > div {
     display: inline-block;
     margin-right: 20px;
+
+    & > span::before {
+      content: '–';
+      display: inline-block;
+      width: 15px;
+      margin-left: .5 * $baseline-grid;
+    }
   }
 
   & > div::before {

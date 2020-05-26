@@ -11,9 +11,9 @@
          rel="noopener">powered by Loodse</a>
     </div>
 
-    <div *ngIf="!!version && !version.distance">{{version.tag}}</div>
+    <div *ngIf="!!version && !version.distance">{{version.tag}} <span>{{version.edition}}</span></div>
 
-    <div *ngIf="!!version && !!version.distance">v{{version.semverString}}</div>
+    <div *ngIf="!!version && !!version.distance">v{{version.semverString}} <span>{{version.edition}}</span></div>
 
     <div *ngIf="settings.displayTermsOfService">
       <a routerLink="terms-of-service">Terms of Service</a>
