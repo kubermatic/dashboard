@@ -11,6 +11,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import * as _ from 'lodash';
+import * as countryCodeLookup from 'country-code-lookup';
 import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
@@ -240,6 +241,11 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
         this.apiSettings.displayTermsOfService
       )
     );
+  }
+
+  getCountryName(code: string): string {
+    const country = countryCodeLookup.byIso(code);
+    return country ? country.country : code;
   }
 
   isDeleteAdminEnabled(admin: AdminEntity): boolean {
