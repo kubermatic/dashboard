@@ -50,6 +50,8 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('datacentersSort', {static: true}) datacentersSort: MatSort;
   @ViewChild('datacentersPaginator', {static: true})
   datacentersPaginator: MatPaginator;
+  datacenterCountries: string[] = [];
+  datacenterCountryFilter: string;
   admins: AdminEntity[] = [];
   adminsDataSource = new MatTableDataSource<AdminEntity>();
   adminsDisplayedColumns: string[] = ['name', 'email', 'actions'];
@@ -94,10 +96,15 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
       .getDataCenters()
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(datacenters => {
-        this.datacenters = datacenters.sort((a, b) =>
-          a.metadata.name.localeCompare(b.metadata.name)
-        );
+        this.datacenters = datacenters
+          .filter(
+            datacenter => !!datacenter.spec.country && !!datacenter.spec.seed
+          )
+          .sort((a, b) => a.metadata.name.localeCompare(b.metadata.name));
         this.datacentersDataSource.data = this.datacenters;
+        this.datacenterCountries = Array.from(
+          new Set(this.datacenters.map(datacenter => datacenter.spec.country))
+        );
       });
 
     this._userService.loggedInUser
