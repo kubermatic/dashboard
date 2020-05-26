@@ -75,23 +75,28 @@
       <div fxLayout="row"
            class="km-admin-settings-distro-container">
         <div fxFlex="16%"
-             fxLayoutAlign=" center">
+             fxLayoutAlign=" center"
+             fxLayoutGap="4px">
           <span>Displayed Distributions</span>
           <div class="km-icon-info"
                matTooltip="Deactivate the distributions you want to hide from the users. At least one distribution has to be enabled."></div>
+          <div *ngIf="isOpenShiftEnabled()"
+               class="km-icon-warning km-warning-bg"
+               matTooltip="OpenShift is enabled. Please note that it currently has the tech-preview status."></div>
         </div>
         <mat-button-toggle-group #group="matButtonToggleGroup"
                                  [value]="selectedDistro"
                                  (change)="onDistroChange(group)"
                                  class="km-account-settings-toggle"
                                  multiple="true">
-          <mat-button-toggle value="kubernetes"
-                             [disabled]="isLastDistro(group, 'kubernetes')">
+          <mat-button-toggle [value]="clusterType.Kubernetes"
+                             [disabled]="isLastDistro(group, clusterType.Kubernetes)">
             <i class="km-icon-kubernetes"></i>
             Kubernetes
           </mat-button-toggle>
-          <mat-button-toggle value="openshift"
-                             [disabled]="isLastDistro(group, 'openshift')">
+          <mat-button-toggle [value]="clusterType.OpenShift"
+                             [disabled]="isLastDistro(group, clusterType.OpenShift)"
+                             matTooltip="This feature has currently the tech-preview status.">
             <i class="km-icon-openshift"></i>
             OpenShift
           </mat-button-toggle>
