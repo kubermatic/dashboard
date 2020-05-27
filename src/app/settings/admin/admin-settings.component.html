@@ -82,7 +82,7 @@
                matTooltip="Deactivate the distributions you want to hide from the users. At least one distribution has to be enabled."></div>
           <div *ngIf="isOpenShiftEnabled()"
                class="km-icon-warning km-warning-bg"
-               matTooltip="OpenShift is enabled. Please note that it currently has the tech-preview status."></div>
+               matTooltip="OpenShift is enabled, note that OpenShift is a tech-preview, an early test version for demonstration purposes."></div>
         </div>
         <mat-button-toggle-group #group="matButtonToggleGroup"
                                  [value]="selectedDistro"
@@ -96,9 +96,12 @@
           </mat-button-toggle>
           <mat-button-toggle [value]="clusterType.OpenShift"
                              [disabled]="isLastDistro(group, clusterType.OpenShift)"
-                             matTooltip="This feature has currently the tech-preview status.">
+                             matTooltip="OpenShift is a tech-preview, an early test version for demonstration purposes.">
             <i class="km-icon-openshift"></i>
-            OpenShift
+            <div fxLayout="column">
+              <div class="tech-preview-name">OpenShift</div>
+              <div class="tech-preview-tag km-border">tech-preview</div>
+            </div>
           </mat-button-toggle>
         </mat-button-toggle-group>
         <km-settings-status [isSaved]="isEqual(settings.clusterTypeOptions, apiSettings.clusterTypeOptions)"></km-settings-status>
