@@ -74,4 +74,5 @@ export enum OperatingSystem {
   SLES = 'sles',
   RHEL = 'rhel',
   Flatcar = 'flatcar',
+  CoreOS = 'coreos',
 }
