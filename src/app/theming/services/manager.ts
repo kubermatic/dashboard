@@ -1,5 +1,7 @@
 import {DOCUMENT} from '@angular/common';
 import {Inject, Injectable} from '@angular/core';
+import {first} from 'rxjs/operators';
+import {SettingsService} from '../../core/services/settings/settings.service';
 import {UserSettings} from '../../shared/entity/MemberEntity';
 import {ColorSchemeService} from './color-scheme';
 import {ThemeService} from './theme';
@@ -14,8 +16,16 @@ export class ThemeManagerService {
   constructor(
     @Inject(DOCUMENT) private readonly _document: Document,
     private readonly _colorSchemeService: ColorSchemeService,
-    private readonly _themeService: ThemeService
+    private readonly _themeService: ThemeService,
+    private readonly _settingsService: SettingsService
   ) {}
+
+  // Force the initial theme load during application start.
+  init(): void {
+    this._settingsService.userSettings
+      .pipe(first())
+      .subscribe(settings => this.setTheme(this.getDefaultTheme(settings)));
+  }
 
   setTheme(themeName: string) {
     if (this._selectedTheme) {

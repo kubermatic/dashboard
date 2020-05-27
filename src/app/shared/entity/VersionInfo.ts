@@ -7,6 +7,7 @@ export class VersionInfo {
   semverString: string;
   suffix: string;
   tag: string;
+  edition: string;
 }
 
 export class Semver {

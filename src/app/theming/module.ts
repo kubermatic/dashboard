@@ -15,4 +15,8 @@ const routes: Routes = [
   providers: [ThemeService, ThemeManagerService, ColorSchemeService],
   declarations: [StylePickerComponent],
 })
-export class ThemingModule {}
+export class ThemingModule {
+  constructor(private readonly _themeManager: ThemeManagerService) {
+    this._themeManager.init();
+  }
+}
