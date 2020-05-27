@@ -145,7 +145,8 @@
   <mat-card-header>
     <mat-card-title>Dynamic Datacenters</mat-card-title>
     <div fxFlex></div>
-    <div fxLayoutAlign=" center"
+    <div class="datacenter-filters"
+         fxLayoutAlign=" center"
          fxLayoutGap="16px">
       <div>Filter by</div>
       <mat-form-field fxFlex>
@@ -153,6 +154,22 @@
         <mat-select disableOptionCentering
                     [(ngModel)]="datacenterSeedFilter"
                     (selectionChange)="filterDatacenters()">
+          <mat-select-trigger fxFlex
+                              fxLayout="row">
+            <div fxFlex
+                 fxLayoutAlign="start">{{datacenterSeedFilter}}</div>
+            <div fxFlex
+                 fxLayoutAlign="end">
+              <button *ngIf="datacenterSeedFilter"
+                      (click)="datacenterSeedFilter = undefined; filterDatacenters(); $event.stopPropagation()"
+                      mat-icon-button
+                      aria-label="Clear"
+                      class="clear-filter">
+                <mat-icon class="km-icon"
+                          inline="true">close</mat-icon>
+              </button>
+            </div>
+          </mat-select-trigger>
           <mat-option *ngFor="let seed of datacenterSeeds"
                       [value]="seed">
             {{seed}}
@@ -164,6 +181,22 @@
         <mat-select disableOptionCentering
                     [(ngModel)]="datacenterCountryFilter"
                     (selectionChange)="filterDatacenters()">
+          <mat-select-trigger fxFlex
+                              fxLayout="row">
+            <div fxFlex
+                 fxLayoutAlign="start">{{getCountryName(datacenterCountryFilter)}}</div>
+            <div fxFlex
+                 fxLayoutAlign="end">
+              <button *ngIf="datacenterCountryFilter"
+                      (click)="datacenterCountryFilter = undefined; filterDatacenters(); $event.stopPropagation()"
+                      mat-icon-button
+                      aria-label="Clear"
+                      class="clear-filter">
+                <mat-icon class="km-icon"
+                          inline="true">close</mat-icon>
+              </button>
+            </div>
+          </mat-select-trigger>
           <mat-option *ngFor="let country of datacenterCountries"
                       [value]="country">
             {{getCountryName(country)}}
@@ -175,6 +208,22 @@
         <mat-select disableOptionCentering
                     [(ngModel)]="datacenterProviderFilter"
                     (selectionChange)="filterDatacenters()">
+          <mat-select-trigger fxFlex
+                              fxLayout="row">
+            <div fxFlex
+                 fxLayoutAlign="start">{{getProviderName(datacenterProviderFilter)}}</div>
+            <div fxFlex
+                 fxLayoutAlign="end">
+              <button *ngIf="datacenterProviderFilter"
+                      (click)="datacenterProviderFilter = undefined; filterDatacenters(); $event.stopPropagation()"
+                      mat-icon-button
+                      aria-label="Clear"
+                      class="clear-filter">
+                <mat-icon class="km-icon"
+                          inline="true">close</mat-icon>
+              </button>
+            </div>
+          </mat-select-trigger>
           <mat-option *ngFor="let provider of datacenterProviders"
                       [value]="provider">
             {{getProviderName(provider)}}

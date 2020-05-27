@@ -272,11 +272,15 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  getProviderName(provider: NodeProvider): string {
+  getProviderName(provider: NodeProvider | string): string {
     return NodeProviderConstants.displayName(provider);
   }
 
   getCountryName(code: string): string {
+    if (!code) {
+      return '';
+    }
+
     const country = countryCodeLookup.byIso(code);
     return country ? country.country : code;
   }
