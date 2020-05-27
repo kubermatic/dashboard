@@ -30,6 +30,10 @@ import {objectDiff} from '../../shared/utils/common-utils';
 
 import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.component';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
+import {
+  NodeProvider,
+  NodeProviderConstants,
+} from '../../shared/model/NodeProviderConstants';
 
 @Component({
   selector: 'km-admin-settings',
@@ -50,8 +54,14 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('datacentersSort', {static: true}) datacentersSort: MatSort;
   @ViewChild('datacentersPaginator', {static: true})
   datacentersPaginator: MatPaginator;
+  datacenterSeeds: string[] = [];
+  datacenterSeedFilter: string;
   datacenterCountries: string[] = [];
   datacenterCountryFilter: string;
+  datacenterProviders: string[] = Object.values(NodeProvider).filter(
+    provider => !!provider
+  );
+  datacenterProviderFilter: string;
   admins: AdminEntity[] = [];
   adminsDataSource = new MatTableDataSource<AdminEntity>();
   adminsDisplayedColumns: string[] = ['name', 'email', 'actions'];
@@ -115,9 +125,8 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
           .filter(datacenter => !datacenter.seed)
           .sort((a, b) => a.metadata.name.localeCompare(b.metadata.name));
         this.datacentersDataSource.data = this.datacenters;
-        this.datacenterCountries = Array.from(
-          new Set(this.datacenters.map(datacenter => datacenter.spec.country))
-        );
+        this._setDatacenterSeeds();
+        this._setDatacenterCountries();
       });
 
     this._userService.loggedInUser
@@ -263,9 +272,25 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
+  getProviderName(provider: NodeProvider): string {
+    return NodeProviderConstants.displayName(provider);
+  }
+
   getCountryName(code: string): string {
     const country = countryCodeLookup.byIso(code);
     return country ? country.country : code;
+  }
+
+  private _setDatacenterCountries() {
+    this.datacenterCountries = Array.from(
+      new Set(this.datacenters.map(datacenter => datacenter.spec.country))
+    ).sort((a, b) => a.localeCompare(b));
+  }
+
+  private _setDatacenterSeeds() {
+    this.datacenterSeeds = Array.from(
+      new Set(this.datacenters.map(datacenter => datacenter.spec.seed))
+    ).sort((a, b) => a.localeCompare(b));
   }
 
   deleteDatacenter(datacenter: DataCenterEntity): void {

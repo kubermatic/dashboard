@@ -145,8 +145,20 @@
   <mat-card-header>
     <mat-card-title>Dynamic Datacenters</mat-card-title>
     <div fxFlex></div>
-    <div fxLayoutAlign=" center">
-      <span>Filter by</span>
+    <div fxLayoutAlign=" center"
+         fxLayoutGap="16px">
+      <div>Filter by</div>
+      <mat-form-field fxFlex>
+        <mat-label>Seed</mat-label>
+        <mat-select disableOptionCentering
+                    [(ngModel)]="datacenterSeedFilter"
+                    (selectionChange)="getCountryName(datacenterCountryFilter)">
+          <mat-option *ngFor="let seed of datacenterSeeds"
+                      [value]="seed">
+            {{seed}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
       <mat-form-field fxFlex>
         <mat-label>Country</mat-label>
         <mat-select disableOptionCentering
@@ -155,6 +167,17 @@
           <mat-option *ngFor="let country of datacenterCountries"
                       [value]="country">
             {{getCountryName(country)}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field fxFlex>
+        <mat-label>Provider</mat-label>
+        <mat-select disableOptionCentering
+                    [(ngModel)]="datacenterProviderFilter"
+                    (selectionChange)="getCountryName(datacenterCountryFilter)">
+          <mat-option *ngFor="let provider of datacenterProviders"
+                      [value]="provider">
+            {{getProviderName(provider)}}
           </mat-option>
         </mat-select>
       </mat-form-field>
