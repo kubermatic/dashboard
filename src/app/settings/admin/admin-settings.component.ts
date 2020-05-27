@@ -92,6 +92,21 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
     this.datacentersSort.active = 'datacenter';
     this.datacentersSort.direction = 'asc';
 
+    this.datacentersDataSource.sortingDataAccessor = (datacenter, property) => {
+      switch (property) {
+        case 'datacenter':
+          return datacenter.metadata.name;
+        case 'seed':
+          return datacenter.spec.seed;
+        case 'country':
+          return this.getCountryName(datacenter.spec.country);
+        case 'provider':
+          return datacenter.spec.provider;
+        default:
+          return datacenter[property];
+      }
+    };
+
     this._datacenterService
       .getDataCenters()
       .pipe(takeUntil(this._unsubscribe))
