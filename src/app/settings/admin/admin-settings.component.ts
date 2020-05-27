@@ -34,6 +34,7 @@ import {
   NodeProvider,
   NodeProviderConstants,
 } from '../../shared/model/NodeProviderConstants';
+import {ClusterType} from '../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'km-admin-settings',
@@ -41,6 +42,7 @@ import {
   styleUrls: ['admin-settings.component.scss'],
 })
 export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
+  clusterType = ClusterType;
   user: MemberEntity;
   datacenters: DataCenterEntity[] = [];
   datacentersDataSource = new MatTableDataSource<DataCenterEntity>();
@@ -209,9 +211,9 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
   private _getDistro(group: MatButtonToggleGroup): ClusterTypeOptions {
     const isKubernetesSelected =
-      group.value && group.value.indexOf('kubernetes') > -1;
+      group.value && group.value.indexOf(ClusterType.Kubernetes) > -1;
     const isOpenshiftSelected =
-      group.value && group.value.indexOf('openshift') > -1;
+      group.value && group.value.indexOf(ClusterType.OpenShift) > -1;
 
     if (isKubernetesSelected && isOpenshiftSelected) {
       return ClusterTypeOptions.All;
@@ -225,13 +227,13 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   private _setDistro(distro: ClusterTypeOptions): void {
     switch (distro) {
       case ClusterTypeOptions.All:
-        this.selectedDistro = ['kubernetes', 'openshift'];
+        this.selectedDistro = [ClusterType.Kubernetes, ClusterType.OpenShift];
         break;
       case ClusterTypeOptions.Kubernetes:
-        this.selectedDistro = ['kubernetes'];
+        this.selectedDistro = [ClusterType.Kubernetes];
         break;
       case ClusterTypeOptions.OpenShift:
-        this.selectedDistro = ['openshift'];
+        this.selectedDistro = [ClusterType.OpenShift];
         break;
     }
   }
@@ -240,6 +242,10 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
     return (
       group.value && group.value.length <= 1 && group.value.indexOf(distro) > -1
     );
+  }
+
+  isOpenShiftEnabled(): boolean {
+    return this.selectedDistro.includes(ClusterType.OpenShift);
   }
 
   resetDefaults(): void {

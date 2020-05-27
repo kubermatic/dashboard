@@ -15,6 +15,10 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
+// Those values will be overridden during the build
+var Version = "Development"
+var Edition = "N/A"
+
 func main() {
 	addr := flag.String("address", "0.0.0.0:8080", "Address to listen on")
 	flag.Parse()
@@ -27,6 +31,8 @@ func main() {
 
 	rawLog, _ := config.Build()
 	log := rawLog.Sugar()
+
+	log.Infof("Kubermatic Dashboard %s - %s", getEditionDisplayName(), Version)
 
 	mux := http.NewServeMux()
 	mux.Handle("/metrics", promhttp.HandlerFor(registry, promhttp.HandlerOpts{}))
@@ -89,4 +95,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	// If we can't find the file, we still serve index.html
 	// to show dynamic pages or a 404 page
 	http.ServeFile(w, r, "./dist/index.html")
+}
+
+func getEditionDisplayName() string {
+	if Edition == "ce" {
+		return "Community Edition"
+	}
+
+	return "Enterprise Edition"
 }

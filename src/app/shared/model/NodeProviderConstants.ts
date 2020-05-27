@@ -1,3 +1,5 @@
+import {NodeSpec} from '../entity/NodeEntity';
+
 export namespace NodeProviderConstants {
   export function displayName(provider: NodeProvider | string): string {
     switch (provider) {
@@ -27,6 +29,24 @@ export namespace NodeProviderConstants {
         return 'VSphere';
       default:
         return '';
+    }
+  }
+
+  export function getOperatingSystemSpecName(spec: NodeSpec) {
+    if (spec.operatingSystem.ubuntu) {
+      return OperatingSystem.Ubuntu;
+    } else if (spec.operatingSystem.centos) {
+      return OperatingSystem.CentOS;
+    } else if (spec.operatingSystem.containerLinux) {
+      return OperatingSystem.ContainerLinux;
+    } else if (spec.operatingSystem.sles) {
+      return OperatingSystem.SLES;
+    } else if (spec.operatingSystem.rhel) {
+      return OperatingSystem.RHEL;
+    } else if (spec.operatingSystem.flatcar) {
+      return OperatingSystem.Flatcar;
+    } else {
+      return '';
     }
   }
 }
