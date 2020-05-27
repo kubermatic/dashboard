@@ -170,7 +170,7 @@ export class NodeDataComponent extends BaseFormValidator
   }
 
   isProvider(...provider: NodeProvider[]): boolean {
-    return provider.indexOf(this.provider) > -1;
+    return provider.includes(this.provider);
   }
 
   isOpenshiftCluster(): boolean {
@@ -187,7 +187,7 @@ export class NodeDataComponent extends BaseFormValidator
         OperatingSystem.ContainerLinux,
         OperatingSystem.Ubuntu,
         OperatingSystem.RHEL,
-      ].indexOf(os) > -1
+      ].includes(os)
     ) {
       return false;
     }
@@ -304,7 +304,7 @@ export class NodeDataComponent extends BaseFormValidator
       case NodeProvider.VSPHERE: {
         const vSphereSpec = this._datacenterSpec.spec.vsphere;
         const templates = vSphereSpec ? Object.keys(vSphereSpec.templates) : [];
-        return templates.indexOf(os) > -1;
+        return templates.includes(os);
       }
       default: {
         return false;
