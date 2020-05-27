@@ -152,7 +152,7 @@
         <mat-label>Seed</mat-label>
         <mat-select disableOptionCentering
                     [(ngModel)]="datacenterSeedFilter"
-                    (selectionChange)="getCountryName(datacenterCountryFilter)">
+                    (selectionChange)="filterDatacenters()">
           <mat-option *ngFor="let seed of datacenterSeeds"
                       [value]="seed">
             {{seed}}
@@ -163,7 +163,7 @@
         <mat-label>Country</mat-label>
         <mat-select disableOptionCentering
                     [(ngModel)]="datacenterCountryFilter"
-                    (selectionChange)="getCountryName(datacenterCountryFilter)">
+                    (selectionChange)="filterDatacenters()">
           <mat-option *ngFor="let country of datacenterCountries"
                       [value]="country">
             {{getCountryName(country)}}
@@ -174,7 +174,7 @@
         <mat-label>Provider</mat-label>
         <mat-select disableOptionCentering
                     [(ngModel)]="datacenterProviderFilter"
-                    (selectionChange)="getCountryName(datacenterCountryFilter)">
+                    (selectionChange)="filterDatacenters()">
           <mat-option *ngFor="let provider of datacenterProviders"
                       [value]="provider">
             {{getProviderName(provider)}}

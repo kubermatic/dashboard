@@ -293,6 +293,30 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
     ).sort((a, b) => a.localeCompare(b));
   }
 
+  filterDatacenters(): void {
+    this.datacentersDataSource.data = this.datacenters.filter(datacenter => {
+      let isVisible = true;
+
+      if (this.datacenterCountryFilter) {
+        isVisible =
+          isVisible && datacenter.spec.country === this.datacenterCountryFilter;
+      }
+
+      if (this.datacenterSeedFilter) {
+        isVisible =
+          isVisible && datacenter.spec.seed === this.datacenterSeedFilter;
+      }
+
+      if (this.datacenterProviderFilter) {
+        isVisible =
+          isVisible &&
+          datacenter.spec.provider === this.datacenterProviderFilter;
+      }
+
+      return isVisible;
+    });
+  }
+
   deleteDatacenter(datacenter: DataCenterEntity): void {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
