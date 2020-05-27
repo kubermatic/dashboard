@@ -12,11 +12,11 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DatacenterService, WizardService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
-import {ClusterType} from '../../shared/utils/cluster-utils/cluster-utils';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
 import {fakeNodeDatacenters} from '../../testing/fake-data/datacenter.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {SetProviderComponent} from './set-provider.component';
+import {ClusterType} from '../../shared/entity/ClusterEntity';
 
 describe('SetProviderComponent', () => {
   let fixture: ComponentFixture<SetProviderComponent>;

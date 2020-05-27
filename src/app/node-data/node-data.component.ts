@@ -22,9 +22,11 @@ import {ClusterEntity, MasterVersion} from '../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../shared/entity/DatacenterEntity';
 import {ResourceType} from '../shared/entity/LabelsEntity';
 import {OperatingSystemSpec} from '../shared/entity/NodeEntity';
-import {OperatingSystem} from '../shared/model/NodeProviderConstants';
+import {
+  OperatingSystem,
+  NodeProviderConstants,
+} from '../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../shared/model/NodeSpecChange';
-import {ClusterUtils} from '../shared/utils/cluster-utils/cluster-utils';
 import {AsyncValidators} from '../shared/validators/async-label-form.validator';
 import {NoIpsLeftValidator} from '../shared/validators/no-ips-left.validator';
 
@@ -227,18 +229,17 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   }
 
   selectDefaultOS(): string {
-    if (this.cluster.spec.cloud.vsphere) {
-      if (this.isAvailable(OperatingSystem.Ubuntu)) {
-        return OperatingSystem.Ubuntu;
-      } else if (this.isAvailable(OperatingSystem.CentOS)) {
-        return OperatingSystem.CentOS;
-      } else if (this.isAvailable('coreos')) {
-        return OperatingSystem.ContainerLinux;
-      } else {
-        return OperatingSystem.Ubuntu;
-      }
+    const osName = NodeProviderConstants.getOperatingSystemSpecName(
+      this.nodeData.spec
+    );
+    if (osName === OperatingSystem.ContainerLinux) {
+      return this.isImageAvailableForVsphere('coreos')
+        ? OperatingSystem.ContainerLinux
+        : OperatingSystem.Ubuntu;
     } else {
-      return OperatingSystem.Ubuntu;
+      return this.isImageAvailableForVsphere(osName)
+        ? osName
+        : OperatingSystem.Ubuntu;
     }
   }
 
@@ -306,11 +307,29 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterUtils.getVersionHeadline(type, isKubelet);
+    return ClusterEntity.getVersionHeadline(type, isKubelet);
   }
 
   isClusterOpenshift(): boolean {
-    return ClusterUtils.isOpenshiftType(this.cluster);
+    return ClusterEntity.isOpenshiftType(this.cluster);
+  }
+
+  isContainerLinuxAvailable(): boolean {
+    return (
+      !!this.cluster.spec.cloud.aws ||
+      !!this.cluster.spec.cloud.azure ||
+      !!this.cluster.spec.cloud.digitalocean ||
+      !!this.cluster.spec.cloud.gcp ||
+      !!this.cluster.spec.cloud.kubevirt ||
+      !!this.cluster.spec.cloud.packet ||
+      !!this.cluster.spec.cloud.openstack ||
+      (!!this.cluster.spec.cloud.vsphere &&
+        this.isImageAvailableForVsphere('coreos'))
+    );
+  }
+
+  isSLESAvailable(): boolean {
+    return !!this.cluster.spec.cloud.aws;
   }
 
   isRHELAvailable(): boolean {
@@ -320,11 +339,21 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       !!this.cluster.spec.cloud.gcp ||
       !!this.cluster.spec.cloud.kubevirt ||
       !!this.cluster.spec.cloud.openstack ||
-      !!this.cluster.spec.cloud.vsphere
+      (!!this.cluster.spec.cloud.vsphere &&
+        this.isImageAvailableForVsphere(OperatingSystem.RHEL))
     );
   }
 
-  isAvailable(os: string): boolean {
+  isFlatcarAvailable(): boolean {
+    return (
+      !!this.cluster.spec.cloud.aws ||
+      !!this.cluster.spec.cloud.azure ||
+      (!!this.cluster.spec.cloud.vsphere &&
+        this.isImageAvailableForVsphere(OperatingSystem.Flatcar))
+    );
+  }
+
+  isImageAvailableForVsphere(os: string): boolean {
     if (this.cluster.spec.cloud.vsphere) {
       return (
         !!this.seedDc &&

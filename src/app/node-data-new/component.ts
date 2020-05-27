@@ -17,10 +17,10 @@ import {
 } from '../shared/model/NodeProviderConstants';
 import {DataCenterEntity} from '../shared/entity/DatacenterEntity';
 import {NodeData} from '../shared/model/NodeSpecChange';
-import {ClusterType} from '../shared/utils/cluster-utils/cluster-utils';
 import {BaseFormValidator} from '../shared/validators/base-form.validator';
 import {ClusterService} from '../wizard-new/service/cluster';
 import {NodeDataService} from './service/service';
+import {ClusterType} from '../shared/entity/ClusterEntity';
 
 enum Controls {
   Name = 'name',
@@ -106,7 +106,10 @@ export class NodeDataComponent extends BaseFormValidator
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this._clusterService.clusterTypeChanges
+    merge(
+      this._clusterService.clusterTypeChanges,
+      this._clusterService.providerChanges
+    )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS())
@@ -171,6 +174,24 @@ export class NodeDataComponent extends BaseFormValidator
     return this._clusterService.clusterType === ClusterType.OpenShift;
   }
 
+  isContainerLinuxAvailable(): boolean {
+    return (
+      !!this.isProvider(NodeProvider.AWS) ||
+      !!this.isProvider(NodeProvider.AZURE) ||
+      !!this.isProvider(NodeProvider.DIGITALOCEAN) ||
+      !!this.isProvider(NodeProvider.GCP) ||
+      !!this.isProvider(NodeProvider.KUBEVIRT) ||
+      !!this.isProvider(NodeProvider.PACKET) ||
+      !!this.isProvider(NodeProvider.OPENSTACK) ||
+      (!!this.isProvider(NodeProvider.VSPHERE) &&
+        this.isImageAvailableForVsphere('coreos'))
+    );
+  }
+
+  isSLESAvailable(): boolean {
+    return !!this.isProvider(NodeProvider.AWS);
+  }
+
   isRHELAvailable(): boolean {
     return (
       !!this.isProvider(NodeProvider.AWS) ||
@@ -178,7 +199,8 @@ export class NodeDataComponent extends BaseFormValidator
       !!this.isProvider(NodeProvider.GCP) ||
       !!this.isProvider(NodeProvider.KUBEVIRT) ||
       !!this.isProvider(NodeProvider.OPENSTACK) ||
-      !!this.isProvider(NodeProvider.VSPHERE)
+      (!!this.isProvider(NodeProvider.VSPHERE) &&
+        this.isImageAvailableForVsphere(OperatingSystem.RHEL))
     );
   }
 
@@ -186,7 +208,8 @@ export class NodeDataComponent extends BaseFormValidator
     return (
       !!this.isProvider(NodeProvider.AWS) ||
       !!this.isProvider(NodeProvider.AZURE) ||
-      !!this.isProvider(NodeProvider.VSPHERE)
+      (!!this.isProvider(NodeProvider.VSPHERE) &&
+        this.isImageAvailableForVsphere(OperatingSystem.Flatcar))
     );
   }
 
@@ -198,7 +221,7 @@ export class NodeDataComponent extends BaseFormValidator
     return this.form.get(Controls.OperatingSystem).value === osName;
   }
 
-  isAvailable(osName: string): boolean {
+  isImageAvailableForVsphere(osName: string): boolean {
     if (this.isProvider(NodeProvider.VSPHERE)) {
       return (
         !!this._datacenterSpec &&
@@ -267,15 +290,15 @@ export class NodeDataComponent extends BaseFormValidator
       return OperatingSystem.CentOS;
     } else {
       if (this._clusterService.cluster.spec.cloud.vsphere) {
-        if (this.isAvailable(OperatingSystem.Ubuntu)) {
+        if (this.isImageAvailableForVsphere(OperatingSystem.Ubuntu)) {
           return OperatingSystem.Ubuntu;
-        } else if (this.isAvailable(OperatingSystem.CentOS)) {
+        } else if (this.isImageAvailableForVsphere(OperatingSystem.CentOS)) {
           return OperatingSystem.CentOS;
-        } else if (this.isAvailable(OperatingSystem.RHEL)) {
+        } else if (this.isImageAvailableForVsphere(OperatingSystem.RHEL)) {
           return OperatingSystem.RHEL;
-        } else if (this.isAvailable('coreos')) {
+        } else if (this.isImageAvailableForVsphere('coreos')) {
           return OperatingSystem.ContainerLinux;
-        } else if (this.isAvailable(OperatingSystem.Flatcar)) {
+        } else if (this.isImageAvailableForVsphere(OperatingSystem.Flatcar)) {
           return OperatingSystem.Flatcar;
         }
       } else {

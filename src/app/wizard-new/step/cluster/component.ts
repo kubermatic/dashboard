@@ -17,11 +17,11 @@ import {ClusterNameGenerator} from '../../../core/util/name-generator.service';
 import {
   ClusterEntity,
   ClusterSpec,
+  ClusterType,
   MasterVersion,
 } from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {ResourceType} from '../../../shared/entity/LabelsEntity';
-import {ClusterType} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
 import {ClusterService} from '../../service/cluster';
 import {WizardService} from '../../service/wizard';

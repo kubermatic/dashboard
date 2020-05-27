@@ -10,13 +10,13 @@ import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {MachineNetworksModule} from '../../machine-networks/machine-networks.module';
 import {ClusterTypeOptions} from '../../shared/entity/AdminSettings';
 import {SharedModule} from '../../shared/shared.module';
-import {ClusterType} from '../../shared/utils/cluster-utils/cluster-utils';
 import {masterVersionsFake} from '../../testing/fake-data/cluster-spec.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {ClusterNameGeneratorMock} from '../../testing/services/name-generator-mock.service';
 import {DEFAULT_ADMIN_SETTINGS_MOCK} from '../../testing/services/settings-mock.service';
 
 import {SetClusterSpecComponent} from './set-cluster-spec.component';
+import {ClusterType} from '../../shared/entity/ClusterEntity';
 
 const modules: any[] = [
   BrowserModule,

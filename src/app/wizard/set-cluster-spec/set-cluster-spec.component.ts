@@ -9,12 +9,12 @@ import {
   AdminSettings,
   ClusterTypeOptions,
 } from '../../shared/entity/AdminSettings';
-import {ClusterEntity, MasterVersion} from '../../shared/entity/ClusterEntity';
-import {ResourceType} from '../../shared/entity/LabelsEntity';
 import {
+  ClusterEntity,
   ClusterType,
-  ClusterUtils,
-} from '../../shared/utils/cluster-utils/cluster-utils';
+  MasterVersion,
+} from '../../shared/entity/ClusterEntity';
+import {ResourceType} from '../../shared/entity/LabelsEntity';
 import {AsyncValidators} from '../../shared/validators/async-label-form.validator';
 
 @Component({
@@ -124,7 +124,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterUtils.getVersionHeadline(type, isKubelet);
+    return ClusterEntity.getVersionHeadline(type, isKubelet);
   }
 
   hideKubernetes(): boolean {

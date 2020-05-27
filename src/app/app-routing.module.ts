@@ -1,7 +1,14 @@
 import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import {PreloadingStrategy, Route, RouterModule, Routes} from '@angular/router';
+import {Observable, of} from 'rxjs';
 import {environment} from '../environments/environment';
 import {DashboardComponent} from './dashboard/dashboard.component';
+
+class SelectedPreloadingStrategy implements PreloadingStrategy {
+  preload(route: Route, load: Function): Observable<any> {
+    return route.data && route.data['preload'] ? load() : of(null);
+  }
+}
 
 function createRouting(): Routes {
   const routes = [
@@ -52,6 +59,7 @@ function createRouting(): Routes {
             import('./settings/user/user-settings.module').then(
               m => m.UserSettingsModule
             ),
+          data: {preload: true},
         },
         {
           path: 'settings',
@@ -90,7 +98,12 @@ function createRouting(): Routes {
 }
 
 @NgModule({
-  imports: [RouterModule.forRoot(createRouting())],
+  imports: [
+    RouterModule.forRoot(createRouting(), {
+      preloadingStrategy: SelectedPreloadingStrategy,
+    }),
+  ],
+  providers: [SelectedPreloadingStrategy],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

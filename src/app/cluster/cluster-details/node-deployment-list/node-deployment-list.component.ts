@@ -21,7 +21,6 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {GroupConfig} from '../../../shared/model/Config';
-import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
 import {
@@ -133,7 +132,7 @@ export class NodeDeploymentListComponent
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterUtils.getVersionHeadline(type, isKubelet);
+    return ClusterEntity.getVersionHeadline(type, isKubelet);
   }
 
   goToDetails(nd: NodeDeploymentEntity): void {

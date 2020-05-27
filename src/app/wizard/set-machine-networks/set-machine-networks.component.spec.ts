@@ -6,9 +6,9 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {WizardService} from '../../core/services';
 import {MachineNetworksModule} from '../../machine-networks/machine-networks.module';
 import {SharedModule} from '../../shared/shared.module';
-import {ClusterType} from '../../shared/utils/cluster-utils/cluster-utils';
 import {nodeDataFake} from '../../testing/fake-data/node.fake';
 import {SetMachineNetworksComponent} from './set-machine-networks.component';
+import {ClusterType} from '../../shared/entity/ClusterEntity';
 
 const modules: any[] = [
   BrowserModule,
