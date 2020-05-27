@@ -209,13 +209,18 @@
             fxLayoutAlign=" center"><span class="km-provider-logo km-provider-logo-{{element.spec.provider}}"></span></td>
       </ng-container>
 
-      <ng-container matColumnDef="hidden">
+      <ng-container matColumnDef="actions">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell">Hidden</th>
+            class="km-header-cell"></th>
         <td mat-cell
             *matCellDef="let element">
-          <!-- TODO -->
+          <div class="km-table-actions">
+            <button mat-icon-button
+                    (click)="deleteDatacenter(element)">
+              <i class="km-icon-delete"></i>
+            </button>
+          </div>
         </td>
       </ng-container>
 
@@ -285,9 +290,8 @@
             class="km-header-cell"></th>
         <td mat-cell
             *matCellDef="let element">
-          <div class="km-table-actions km-admin-item-actions">
+          <div class="km-table-actions">
             <button mat-icon-button
-                    matTooltip="Delete Admin"
                     (click)="deleteAdmin(element)"
                     [disabled]="!isDeleteAdminEnabled(element)">
               <i class="km-icon-delete"></i>

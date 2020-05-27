@@ -45,7 +45,7 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
     'seed',
     'country',
     'provider',
-    'hidden',
+    'actions',
   ];
   @ViewChild('datacentersSort', {static: true}) datacentersSort: MatSort;
   @ViewChild('datacentersPaginator', {static: true})
@@ -97,9 +97,7 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(datacenters => {
         this.datacenters = datacenters
-          .filter(
-            datacenter => !!datacenter.spec.country && !!datacenter.spec.seed
-          )
+          .filter(datacenter => !datacenter.seed)
           .sort((a, b) => a.metadata.name.localeCompare(b.metadata.name));
         this.datacentersDataSource.data = this.datacenters;
         this.datacenterCountries = Array.from(
@@ -253,6 +251,35 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   getCountryName(code: string): string {
     const country = countryCodeLookup.byIso(code);
     return country ? country.country : code;
+  }
+
+  deleteDatacenter(datacenter: DataCenterEntity): void {
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        title: 'Delete Datacenter',
+        message: `Are you sure you want to delete the ${datacenter.metadata.name} datacenter?`,
+        confirmLabel: 'Delete',
+      },
+    };
+
+    this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(first())
+      .subscribe((isConfirmed: boolean) => {
+        if (isConfirmed) {
+          this._datacenterService
+            .deleteDatacenter(datacenter)
+            .pipe(first())
+            .subscribe(() => {
+              this._notificationService.success(
+                `The <strong>${datacenter.metadata.name}</strong> datacenter was deleted`
+              );
+            });
+        }
+      });
   }
 
   isDeleteAdminEnabled(admin: AdminEntity): boolean {

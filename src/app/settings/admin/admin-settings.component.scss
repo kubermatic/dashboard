@@ -78,11 +78,7 @@
   margin: $baseline-grid $baseline-grid 0 0;
 }
 
-.mat-column-hidden {
-  width: 2 * $baseline-grid;
-}
-
-.km-admin-item-actions {
+.km-table-actions {
   display: flex;
   justify-content: flex-end;
 }

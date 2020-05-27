@@ -29,4 +29,9 @@ export class DatacenterService {
       map(datacenters => datacenters.find(dc => dc.metadata.name === name))
     );
   }
+
+  deleteDatacenter(datacenter: DataCenterEntity): Observable<any> {
+    const url = `${this.restRoot}/seed/${datacenter.spec.seed}/dc/${datacenter.metadata.name}`;
+    return this._http.delete(url);
+  }
 }
