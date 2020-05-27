@@ -183,7 +183,8 @@ export class NodeDataComponent extends BaseFormValidator
       !!this.isProvider(NodeProvider.KUBEVIRT) ||
       !!this.isProvider(NodeProvider.PACKET) ||
       !!this.isProvider(NodeProvider.OPENSTACK) ||
-      (!!this.isProvider(NodeProvider.VSPHERE) && this.isAvailable('coreos'))
+      (!!this.isProvider(NodeProvider.VSPHERE) &&
+        this.isImageAvailableForVsphere('coreos'))
     );
   }
 
@@ -199,7 +200,7 @@ export class NodeDataComponent extends BaseFormValidator
       !!this.isProvider(NodeProvider.KUBEVIRT) ||
       !!this.isProvider(NodeProvider.OPENSTACK) ||
       (!!this.isProvider(NodeProvider.VSPHERE) &&
-        this.isAvailable(OperatingSystem.RHEL))
+        this.isImageAvailableForVsphere(OperatingSystem.RHEL))
     );
   }
 
@@ -208,7 +209,7 @@ export class NodeDataComponent extends BaseFormValidator
       !!this.isProvider(NodeProvider.AWS) ||
       !!this.isProvider(NodeProvider.AZURE) ||
       (!!this.isProvider(NodeProvider.VSPHERE) &&
-        this.isAvailable(OperatingSystem.Flatcar))
+        this.isImageAvailableForVsphere(OperatingSystem.Flatcar))
     );
   }
 
@@ -220,7 +221,7 @@ export class NodeDataComponent extends BaseFormValidator
     return this.form.get(Controls.OperatingSystem).value === osName;
   }
 
-  isAvailable(osName: string): boolean {
+  isImageAvailableForVsphere(osName: string): boolean {
     if (this.isProvider(NodeProvider.VSPHERE)) {
       return (
         !!this._datacenterSpec &&
@@ -289,15 +290,15 @@ export class NodeDataComponent extends BaseFormValidator
       return OperatingSystem.CentOS;
     } else {
       if (this._clusterService.cluster.spec.cloud.vsphere) {
-        if (this.isAvailable(OperatingSystem.Ubuntu)) {
+        if (this.isImageAvailableForVsphere(OperatingSystem.Ubuntu)) {
           return OperatingSystem.Ubuntu;
-        } else if (this.isAvailable(OperatingSystem.CentOS)) {
+        } else if (this.isImageAvailableForVsphere(OperatingSystem.CentOS)) {
           return OperatingSystem.CentOS;
-        } else if (this.isAvailable(OperatingSystem.RHEL)) {
+        } else if (this.isImageAvailableForVsphere(OperatingSystem.RHEL)) {
           return OperatingSystem.RHEL;
-        } else if (this.isAvailable('coreos')) {
+        } else if (this.isImageAvailableForVsphere('coreos')) {
           return OperatingSystem.ContainerLinux;
-        } else if (this.isAvailable(OperatingSystem.Flatcar)) {
+        } else if (this.isImageAvailableForVsphere(OperatingSystem.Flatcar)) {
           return OperatingSystem.Flatcar;
         }
       } else {

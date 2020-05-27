@@ -118,12 +118,12 @@
   <mat-button-toggle-group group="operatingSystemGroup"
                            formControlName="operatingSystem">
     <mat-button-toggle value="ubuntu"
-                       *ngIf="!isClusterOpenshift() && isAvailable('ubuntu')">
+                       *ngIf="!isClusterOpenshift() && isImageAvailableForVsphere('ubuntu')">
       <i class="km-os-image-ubuntu"></i>
       Ubuntu
     </mat-button-toggle>
     <mat-button-toggle value="centos"
-                       *ngIf="isAvailable('centos')">
+                       *ngIf="isImageAvailableForVsphere('centos')">
       <i class="km-os-image-centos"></i>
       CentOS
     </mat-button-toggle>

@@ -230,18 +230,16 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   }
 
   selectDefaultOS(): string {
-    if (
-      NodeProviderConstants.getOperatingSystemSpecName(this.nodeData.spec) ===
-      OperatingSystem.ContainerLinux
-    ) {
-      return this.isAvailable('coreos')
+    const osName = NodeProviderConstants.getOperatingSystemSpecName(
+      this.nodeData.spec
+    );
+    if (osName === OperatingSystem.ContainerLinux) {
+      return this.isImageAvailableForVsphere('coreos')
         ? OperatingSystem.ContainerLinux
         : OperatingSystem.Ubuntu;
     } else {
-      return this.isAvailable(
-        NodeProviderConstants.getOperatingSystemSpecName(this.nodeData.spec)
-      )
-        ? NodeProviderConstants.getOperatingSystemSpecName(this.nodeData.spec)
+      return this.isImageAvailableForVsphere(osName)
+        ? osName
         : OperatingSystem.Ubuntu;
     }
   }
@@ -326,7 +324,8 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       !!this.cluster.spec.cloud.kubevirt ||
       !!this.cluster.spec.cloud.packet ||
       !!this.cluster.spec.cloud.openstack ||
-      (!!this.cluster.spec.cloud.vsphere && this.isAvailable('coreos'))
+      (!!this.cluster.spec.cloud.vsphere &&
+        this.isImageAvailableForVsphere('coreos'))
     );
   }
 
@@ -342,7 +341,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       !!this.cluster.spec.cloud.kubevirt ||
       !!this.cluster.spec.cloud.openstack ||
       (!!this.cluster.spec.cloud.vsphere &&
-        this.isAvailable(OperatingSystem.RHEL))
+        this.isImageAvailableForVsphere(OperatingSystem.RHEL))
     );
   }
 
@@ -351,11 +350,11 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       !!this.cluster.spec.cloud.aws ||
       !!this.cluster.spec.cloud.azure ||
       (!!this.cluster.spec.cloud.vsphere &&
-        this.isAvailable(OperatingSystem.Flatcar))
+        this.isImageAvailableForVsphere(OperatingSystem.Flatcar))
     );
   }
 
-  isAvailable(os: string): boolean {
+  isImageAvailableForVsphere(os: string): boolean {
     if (this.cluster.spec.cloud.vsphere) {
       return (
         !!this.seedDc &&
