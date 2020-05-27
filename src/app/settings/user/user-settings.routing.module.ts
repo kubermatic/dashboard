@@ -15,6 +15,7 @@ const routes: Routes = [
         path: '',
         loadChildren: () =>
           import('../../theming/module').then(module => module.ThemingModule),
+        data: {preload: true},
       },
     ],
   },
