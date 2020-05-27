@@ -27,6 +27,16 @@
         border-radius: $border-radius;
         margin-bottom: 0;
 
+        .tech-preview-name {
+          line-height: 2.2 * $line-height;
+        }
+
+        .tech-preview-tag {
+          border-radius: 4px;
+          font-size: $font-size-small;
+          line-height: 1.2 * $line-height;
+        }
+
         i {
           -webkit-filter: grayscale(100%);
           -ms-filter: grayscale(100%);
