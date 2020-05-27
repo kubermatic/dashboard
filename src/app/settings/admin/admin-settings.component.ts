@@ -28,7 +28,7 @@ import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
 
 import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.component';
-import {ClusterType} from '../../shared/utils/cluster-utils/cluster-utils';
+import {ClusterType} from '../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'km-admin-settings',
