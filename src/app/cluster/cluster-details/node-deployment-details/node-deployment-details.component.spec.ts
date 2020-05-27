@@ -63,8 +63,8 @@ describe('NodeDeploymentDetailsComponent', () => {
     );
     apiMock.getNodeDeploymentNodes.mockReturnValue(asyncData(nodesFake()));
     apiMock.getNodeDeploymentNodesEvents.mockReturnValue(asyncData([]));
-    dcMock = {getDataCenter: jest.fn()};
-    dcMock.getDataCenter.mockReturnValue(
+    dcMock = {getDatacenter: jest.fn()};
+    dcMock.getDatacenter.mockReturnValue(
       asyncData(fakeDigitaloceanDatacenter())
     );
 

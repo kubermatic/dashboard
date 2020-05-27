@@ -36,8 +36,8 @@ describe('AWSNodeDataComponent', () => {
   beforeEach(async(() => {
     apiMock = {getAWSSubnets: jest.fn()};
     apiMock.getAWSSubnets.mockReturnValue(asyncData(fakeAwsSubnets()));
-    datacenterMock = {getDataCenter: jest.fn()};
-    datacenterMock.getDataCenter.mockReturnValue(
+    datacenterMock = {getDatacenter: jest.fn()};
+    datacenterMock.getDatacenter.mockReturnValue(
       asyncData(fakeAWSDatacenter())
     );
 

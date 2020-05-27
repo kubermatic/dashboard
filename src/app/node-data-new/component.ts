@@ -116,7 +116,7 @@ export class NodeDataComponent extends BaseFormValidator
       );
 
     this._clusterService.datacenterChanges
-      .pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => (this._datacenterSpec = dc));
 

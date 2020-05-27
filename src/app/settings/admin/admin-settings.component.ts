@@ -119,16 +119,15 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
       }
     };
 
-    this._datacenterService
-      .getDataCenters()
+    this._datacenterService.datacenters
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(datacenters => {
         this.datacenters = datacenters
           .filter(datacenter => !datacenter.seed)
           .sort((a, b) => a.metadata.name.localeCompare(b.metadata.name));
-        this.datacentersDataSource.data = this.datacenters;
         this._setDatacenterSeeds();
         this._setDatacenterCountries();
+        this.filterDatacenters();
       });
 
     this._userService.loggedInUser
@@ -351,6 +350,7 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
               this._notificationService.success(
                 `The <strong>${datacenter.metadata.name}</strong> datacenter was deleted`
               );
+              this._datacenterService.refreshDatacenters();
             });
         }
       });

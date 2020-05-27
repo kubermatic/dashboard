@@ -118,7 +118,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       });
 
     this._dcService
-      .getDataCenter(this.cloudSpec.dc)
+      .getDatacenter(this.cloudSpec.dc)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => {
         if (dc.spec.openstack.enforce_floating_ip) {
@@ -159,7 +159,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   }
 
   setImage(operatingSystem: OperatingSystemSpec): void {
-    this._dcService.getDataCenter(this.cloudSpec.dc).subscribe(res => {
+    this._dcService.getDatacenter(this.cloudSpec.dc).subscribe(res => {
       let coreosImage = '';
       let centosImage = '';
       let ubuntuImage = '';

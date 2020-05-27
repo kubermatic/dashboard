@@ -41,7 +41,7 @@ export class NodeDataAzureProvider {
           .pipe(tap(c => (cluster = c)))
           .pipe(
             switchMap(_ =>
-              this._datacenterService.getDataCenter(cluster.spec.cloud.dc)
+              this._datacenterService.getDatacenter(cluster.spec.cloud.dc)
             )
           )
           .pipe(tap(dc => (location = dc.spec.azure.location)))
@@ -80,7 +80,7 @@ export class NodeDataAzureProvider {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._datacenterService
-          .getDataCenter(this._clusterService.cluster.spec.cloud.dc)
+          .getDatacenter(this._clusterService.cluster.spec.cloud.dc)
           .pipe(
             filter(_ => this._clusterService.provider === NodeProvider.AZURE)
           )

@@ -192,7 +192,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       });
 
     this._dc
-      .getDataCenter(this.cluster.spec.cloud.dc)
+      .getDatacenter(this.cluster.spec.cloud.dc)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => {
         this.seedDc = dc;

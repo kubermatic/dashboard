@@ -142,7 +142,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator
     )
       .pipe(
         switchMap(_ =>
-          this._datacenterService.getDataCenter(this._clusterService.datacenter)
+          this._datacenterService.getDatacenter(this._clusterService.datacenter)
         )
       )
       .pipe(

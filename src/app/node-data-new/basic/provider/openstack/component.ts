@@ -100,7 +100,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator
       .subscribe(this._setDefaultFlavor.bind(this));
 
     this._clusterService.datacenterChanges
-      .pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
       .pipe(tap(dc => (this._images = dc.spec.openstack.images)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => {

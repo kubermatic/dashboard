@@ -23,8 +23,8 @@ describe('SetProviderComponent', () => {
   let component: SetProviderComponent;
 
   beforeEach(async(() => {
-    const dcMock = {getDataCenters: jest.fn()};
-    dcMock.getDataCenters.mockReturnValue(asyncData(fakeNodeDatacenters()));
+    const dcMock = {datacenters: jest.fn()};
+    dcMock.datacenters.mockReturnValue(asyncData(fakeNodeDatacenters()));
 
     TestBed.configureTestingModule({
       imports: [

@@ -137,7 +137,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   loadDatacenter(): void {
     if (this.cloudSpec.dc) {
       this._dcService
-        .getDataCenter(this.cloudSpec.dc)
+        .getDatacenter(this.cloudSpec.dc)
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(data => {
           this.datacenter = data;
@@ -203,7 +203,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
 
     iif(
       () => !!this.cloudSpec.dc,
-      this._dcService.getDataCenter(this.cloudSpec.dc),
+      this._dcService.getDatacenter(this.cloudSpec.dc),
       EMPTY
     )
       .pipe(
@@ -294,7 +294,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
 
     iif(
       () => !!this.cloudSpec.dc,
-      this._dcService.getDataCenter(this.cloudSpec.dc),
+      this._dcService.getDatacenter(this.cloudSpec.dc),
       EMPTY
     )
       .pipe(
