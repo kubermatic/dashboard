@@ -70,7 +70,7 @@ mat-slide-toggle {
     min-height: 25.5 * $baseline-grid;
     max-height: 25.5 * $baseline-grid;
     margin-top: 2.5 * $baseline-grid;
-    padding: 0;
+    padding: 0 !important;
     cursor: pointer;
     box-shadow: $border-box-shadow !important;
 
