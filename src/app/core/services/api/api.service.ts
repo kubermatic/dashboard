@@ -10,6 +10,7 @@ import {TaintFormComponent} from '../../../shared/components/taint-form/taint-fo
 import {AddonConfigEntity} from '../../../shared/entity/AddonEntity';
 import {
   ClusterEntity,
+  ClusterType,
   MasterVersion,
   Token,
 } from '../../../shared/entity/ClusterEntity';
@@ -55,7 +56,6 @@ import {
 } from '../../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
-import {ClusterType} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {Auth} from '../auth/auth.service';
 
 @Injectable()

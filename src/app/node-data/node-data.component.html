@@ -118,27 +118,27 @@
   <mat-button-toggle-group group="operatingSystemGroup"
                            formControlName="operatingSystem">
     <mat-button-toggle value="ubuntu"
-                       *ngIf="!isClusterOpenshift() && isAvailable('ubuntu')">
+                       *ngIf="!isClusterOpenshift() && isImageAvailableForVsphere('ubuntu')">
       <i class="km-os-image-ubuntu"></i>
       Ubuntu
     </mat-button-toggle>
     <mat-button-toggle value="centos"
-                       *ngIf="isAvailable('centos')">
+                       *ngIf="isImageAvailableForVsphere('centos')">
       <i class="km-os-image-centos"></i>
       CentOS
     </mat-button-toggle>
     <mat-button-toggle value="containerLinux"
-                       *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.alibaba && !isClusterOpenshift() && isAvailable('coreos')">
+                       *ngIf="isContainerLinuxAvailable() && !isClusterOpenshift()">
       <i class="km-os-image-container-linux"></i>
       Container Linux
     </mat-button-toggle>
     <mat-button-toggle value="flatcar"
-                       *ngIf="(cluster.spec.cloud.aws || cluster.spec.cloud.azure || cluster.spec.cloud.vsphere) && !isClusterOpenshift() && isAvailable('flatcar')">
+                       *ngIf="isFlatcarAvailable() && !isClusterOpenshift()">
       <i class="km-os-image-flatcar"></i>
       Flatcar
     </mat-button-toggle>
     <mat-button-toggle value="sles"
-                       *ngIf="cluster.spec.cloud.aws && !isClusterOpenshift()">
+                       *ngIf="isSLESAvailable() && !isClusterOpenshift()">
       <i class="km-os-image-sles"></i>
       SLES
     </mat-button-toggle>

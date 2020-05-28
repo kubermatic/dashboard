@@ -28,8 +28,8 @@
 
   .mat-raised-button {
     background-color: #fff;
-    color: #203f58;
-    font-size: 20px;
+    color: #203f58 !important;
+    font-size: 20px !important;
     font-family: $font-primary;
     font-weight: 500 !important;
     line-height: 50px !important;

@@ -1,21 +1,52 @@
 @import "../../../../assets/css/variables";
 
-.km-summary-row {
-  display: flex;
-  align-items: center;
-  line-height: 2.4 * $line-height;
-  font-size: $font-size-subhead;
+:host {
+  counter-reset: section-number;
+}
 
-  &.km-summary-sshkeys {
-    align-items: flex-start;
+.section {
+  margin: (2 * $baseline-grid) 0 (5 * $baseline-grid);
+
+  .header {
+    font-size: $font-size-subhead-lg;
+    margin-bottom: 2 * $baseline-grid;
+
+    &::before {
+      border: 1px solid;
+      border-radius: 50%;
+      counter-increment: section-number;
+      content: counter(section-number);
+      display: inline-block;
+      height: 3 * $baseline-grid;
+      text-align: center;
+      margin-right: 1.5 * $baseline-grid;
+      width: 3 * $baseline-grid;
+    }
+  }
+
+  .properties {
+    .network-id {
+      margin-bottom: 2 * $baseline-grid;
+    }
   }
 }
 
-.km-summary-row-with-margin {
-  margin-bottom: 2 * $baseline-grid;
+::ng-deep km-property-boolean {
+  .km-property-label {
+    display: none !important;
+  }
+
+  i {
+    margin-right: 1.5 * $baseline-grid !important;
+  }
+}
+
+::ng-deep .km-property-container {
+  margin: 0 0 (0.6 * $baseline-grid) !important;
 }
 
 .km-provider-logo {
+  background-position: left !important;
   max-width: 100px !important;
   margin: (1.25 * $baseline-grid) 0;
 }
@@ -26,27 +57,8 @@
   width: 28px;
 }
 
-.km-summary-left {
-  display: flex;
-  align-items: center;
-  width: 4.25 * $baseline-grid;
-  font-size: $font-size-subhead;
-}
-
 .km-icon-key {
   cursor: default;
   margin-right: 2 * $baseline-grid;
   user-select: none;
-}
-
-.km-summary-tags {
-  margin: (2 * $baseline-grid) 0;
-}
-
-::ng-deep .km-property-container {
-  margin: 0 0 (0.6 * $baseline-grid) !important;
-}
-
-.km-icon-disabled {
-  margin-left: -2px;
 }

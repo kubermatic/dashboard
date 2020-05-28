@@ -49,45 +49,45 @@
       <mat-button-toggle-group group="operatingSystemGroup"
                                [formControlName]="Controls.OperatingSystem">
         <mat-button-toggle [value]="OperatingSystem.Ubuntu"
-                           *ngIf="!isOpenshiftCluster() && isAvailable('ubuntu')">
+                           *ngIf="isOperatingSystemSupported(OperatingSystem.Ubuntu)">
           <i class="km-os-image-ubuntu"></i>
           Ubuntu
         </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.CentOS"
-                           *ngIf="isAvailable('centos')">
+                           *ngIf="isOperatingSystemSupported(OperatingSystem.CentOS)">
           <i class="km-os-image-centos"></i>
           CentOS
         </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.ContainerLinux"
-                           *ngIf="!isProvider(NodeProvider.HETZNER) && !isProvider(NodeProvider.ALIBABA) && !isOpenshiftCluster() && isAvailable('coreos')">
+                           *ngIf="isOperatingSystemSupported(OperatingSystem.ContainerLinux)">
           <i class="km-os-image-container-linux"></i>
           Container Linux
         </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.Flatcar"
-                           *ngIf="isFlatcarAvailable() && !isOpenshiftCluster() && isAvailable('flatcar')">
+                           *ngIf="isOperatingSystemSupported(OperatingSystem.Flatcar)">
           <i class="km-os-image-flatcar"></i>
           Flatcar
         </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.SLES"
-                           *ngIf="isProvider(NodeProvider.AWS) && !isOpenshiftCluster()">
+                           *ngIf="isOperatingSystemSupported(OperatingSystem.SLES)">
           <i class="km-os-image-sles"></i>
           SLES
         </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.RHEL"
-                           *ngIf="isRHELAvailable && !isOpenshiftCluster() && isAvailable('rhel')">
+                           *ngIf="isOperatingSystemSupported(OperatingSystem.RHEL)">
           <i class="km-os-image-rhel"></i>
           RHEL
         </mat-button-toggle>
       </mat-button-toggle-group>
 
-      <span *ngIf="isOsSelected(OperatingSystem.ContainerLinux)"
+      <span *ngIf="isOperatingSystemSelected(OperatingSystem.ContainerLinux)"
             class="km-eol-warning with-margin">
         <i class="km-icon-warning"></i>
         Container Linux is going end-of-life on May 26, 2020
       </span>
 
       <!-- Options for RHEL -->
-      <div *ngIf="isOsSelected(OperatingSystem.RHEL)"
+      <div *ngIf="isOperatingSystemSelected(OperatingSystem.RHEL)"
            class="km-os-options">
         <mat-form-field>
           <mat-label>RHEL Subscription Manager User</mat-label>
@@ -120,7 +120,7 @@
       <div fxLayout="row"
            fxLayoutGap="16px">
         <!-- Options for Ubuntu, CenOS, SLES and RHEL -->
-        <div *ngIf="isOsSelected(OperatingSystem.Ubuntu) || isOsSelected(OperatingSystem.CentOS) || isOsSelected(OperatingSystem.SLES) || isOsSelected(OperatingSystem.RHEL)"
+        <div *ngIf="isOperatingSystemSelected(OperatingSystem.Ubuntu) || isOperatingSystemSelected(OperatingSystem.CentOS) || isOperatingSystemSelected(OperatingSystem.SLES) || isOperatingSystemSelected(OperatingSystem.RHEL)"
              class="km-os-options">
           <mat-checkbox [id]="Controls.UpgradeOnBoot"
                         [formControlName]="Controls.UpgradeOnBoot">Upgrade system on first boot
@@ -128,7 +128,7 @@
         </div>
 
         <!-- Options for Container Linux -->
-        <div *ngIf="isOsSelected(OperatingSystem.ContainerLinux) || isOsSelected(OperatingSystem.Flatcar)"
+        <div *ngIf="isOperatingSystemSelected(OperatingSystem.ContainerLinux) || isOperatingSystemSelected(OperatingSystem.Flatcar)"
              class="km-os-options">
           <mat-checkbox [id]="Controls.DisableAutoUpdate"
                         [formControlName]="Controls.DisableAutoUpdate">Disable auto-update

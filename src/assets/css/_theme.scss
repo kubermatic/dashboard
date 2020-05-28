@@ -10,6 +10,7 @@
   $text: mat-color($palette-foreground, text);
   $text-secondary: mat-color($palette-foreground, secondary-text);
   $text-disabled: mat-color($palette-foreground, disabled-text);
+  $checkbox-disabled: mat-color($palette-foreground, disabled-checkbox);
 
   $background: mat-color($palette-background, background);
   $background-hover: mat-color($palette-background, hover);
@@ -38,6 +39,10 @@
     color: $text;
     margin: 0;
     padding: (3.75 * $baseline-grid) 0 !important;
+
+    &.km-with-padding {
+      padding: (2 * $baseline-grid) (3.75 * $baseline-grid) (3.75 * $baseline-grid) (3.75 * $baseline-grid) !important;
+    }
 
     &.km-with-table-header {
       margin: (2.5 * $baseline-grid) 0 0 0;
@@ -127,6 +132,10 @@
         }
       }
     }
+  }
+
+  .mat-horizontal-content-container {
+    padding: 0 !important;
   }
 
   .mat-drawer-container {
@@ -364,7 +373,7 @@
   }
 
   .mat-checkbox-disabled .mat-checkbox-background {
-    background-color: $background-disabled-button !important;
+    background-color: $checkbox-disabled !important;
   }
 
   .mat-checkbox-frame {
@@ -450,7 +459,7 @@
     .mat-button-toggle-label-content {
       padding: 0 (0.625 * $baseline-grid);
       width: 100%;
-      display: inline-block;
+      display: flex;
     }
   }
 
@@ -655,31 +664,31 @@
   }
 
   .km-info {
-    color: map-get($colors, primary-hover);
+    color: map-get($colors, primary-hover) !important;
   }
 
   .km-success {
-    color: map-get($colors, indicator-green);
+    color: map-get($colors, indicator-green) !important;
   }
 
   .km-success-bg {
-    background-color: map-get($colors, indicator-green);
+    background-color: map-get($colors, indicator-green) !important;
   }
 
   .km-warning {
-    color: map-get($colors, indicator-orange);
+    color: map-get($colors, indicator-orange) !important;
   }
 
   .km-warning-bg {
-    background-color: map-get($colors, indicator-orange);
+    background-color: map-get($colors, indicator-orange) !important;
   }
 
   .km-error {
-    color: map-get($colors, indicator-red);
+    color: map-get($colors, indicator-red) !important;
   }
 
   .km-error-bg {
-    background-color: map-get($colors, indicator-red);
+    background-color: map-get($colors, indicator-red) !important;
   }
 
   .km-border {
@@ -750,6 +759,11 @@
     left: 0;
     right: 0;
     bottom: 0;
+    margin: 0 auto;
+
+    &.km-with-spacing {
+      margin-top: 2.5 * $baseline-grid;
+    }
   }
 
   .km-provider-logo {
@@ -1528,6 +1542,7 @@
   }
 
   .mat-step-header {
+    max-height: 4 * $baseline-grid;
     pointer-events: none !important;
 
     .mat-step-icon {
@@ -1560,6 +1575,14 @@
     &.cdk-program-focused {
       background-color: unset !important;
     }
+  }
+
+  .mat-stepper-horizontal-line {
+    margin: 0 (2.5 * $baseline-grid) (2.5 * $baseline-grid) !important;
+  }
+
+  .mat-horizontal-stepper-header {
+    padding: 0 0 (2.5 * $baseline-grid) 0 !important;
   }
 
   .km-select-input {
