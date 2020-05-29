@@ -121,6 +121,7 @@
     "node_modules/*",
     "src/assets/*"
   ],
+  "prettier": "gts/.prettierrc.json",
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
