@@ -117,6 +117,10 @@
       }
     ]
   },
+  "eslintIgnore": [
+    "node_modules/*",
+    "src/assets/*"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
