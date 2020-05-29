@@ -13,19 +13,15 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DatacenterService, WizardService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
-import {fakeNodeDatacenters} from '../../testing/fake-data/datacenter.fake';
-import {asyncData} from '../../testing/services/api-mock.service';
 import {SetProviderComponent} from './set-provider.component';
 import {ClusterType} from '../../shared/entity/ClusterEntity';
+import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
 
 describe('SetProviderComponent', () => {
   let fixture: ComponentFixture<SetProviderComponent>;
   let component: SetProviderComponent;
 
   beforeEach(async(() => {
-    const dcMock = {datacenters: jest.fn()};
-    dcMock.datacenters.mockReturnValue(asyncData(fakeNodeDatacenters()));
-
     TestBed.configureTestingModule({
       imports: [
         BrowserModule,
@@ -37,7 +33,7 @@ describe('SetProviderComponent', () => {
       ],
       declarations: [SetProviderComponent],
       providers: [
-        {provide: DatacenterService, useValue: dcMock},
+        {provide: DatacenterService, useClass: DatacenterMockService},
         WizardService,
       ],
     }).compileComponents();
