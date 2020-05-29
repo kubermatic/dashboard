@@ -32,25 +32,6 @@
     "versioninfo": "node git-version.js",
     "postinstall": "ngcc"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.ts": [
-      "gts fix",
-      "git add"
-    ],
-    "src/**/*.scss": [
-      "stylelint --fix",
-      "git add"
-    ],
-    "src/**/*.html": [
-      "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f ",
-      "git add"
-    ]
-  },
   "dependencies": {
     "@angular/animations": "9.1.4",
     "@angular/cdk": "9.2.2",
@@ -107,6 +88,25 @@
     "typescript": "3.8.3"
   },
   "engines": {
-    "node": ">=10.9.0"
+    "node": ">=12.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "gts fix",
+      "git add"
+    ],
+    "src/**/*.scss": [
+      "stylelint --fix",
+      "git add"
+    ],
+    "src/**/*.html": [
+      "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f ",
+      "git add"
+    ]
   }
 }
