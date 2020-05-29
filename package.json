@@ -1,8 +1,8 @@
 {
-  "name": "kubermatic",
+  "name": "kubermatic-dashboard",
   "private": true,
-  "version": "v2.14.0-rc.1",
-  "description": "Kubermatic",
+  "version": "v2.14.0-rc.2",
+  "description": "Kubermatic Dashboard",
   "repository": "https://github.com/kubermatic/dashboard",
   "license": "proprietary",
   "angular-cli": {},
@@ -121,7 +121,6 @@
     "node_modules/*",
     "src/assets/*"
   ],
-  "prettier": "gts/.prettierrc.json",
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
@@ -140,5 +139,19 @@
       "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f ",
       "git add"
     ]
+  },
+  "prettier": "gts/.prettierrc.json",
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "at-rule-no-unknown": null,
+      "font-family-no-missing-generic-family-keyword": null,
+      "no-descending-specificity": null,
+      "number-leading-zero": null,
+      "selector-type-no-unknown": null,
+      "selector-pseudo-element-no-unknown": [true, {
+        "ignorePseudoElements": ["ng-deep"]
+      }]
+    }
   }
 }
