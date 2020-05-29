@@ -6,21 +6,21 @@ import {
   Validators,
 } from '@angular/forms';
 import {merge} from 'rxjs';
-import {takeUntil, switchMap} from 'rxjs/operators';
-import {ClusterNameGenerator} from '../core/util/name-generator.service';
+import {switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../core/services';
+import {ClusterNameGenerator} from '../core/util/name-generator.service';
+import {ClusterType} from '../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../shared/entity/DatacenterEntity';
 import {OperatingSystemSpec, Taint} from '../shared/entity/NodeEntity';
 import {
   NodeProvider,
   NodeProviderConstants,
   OperatingSystem,
 } from '../shared/model/NodeProviderConstants';
-import {DataCenterEntity} from '../shared/entity/DatacenterEntity';
 import {NodeData} from '../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../shared/validators/base-form.validator';
 import {ClusterService} from '../wizard-new/service/cluster';
 import {NodeDataService} from './service/service';
-import {ClusterType} from '../shared/entity/ClusterEntity';
 
 enum Controls {
   Name = 'name',
@@ -118,7 +118,10 @@ export class NodeDataComponent extends BaseFormValidator
     this._clusterService.datacenterChanges
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(dc => (this._datacenterSpec = dc));
+      .pipe(tap(dc => (this._datacenterSpec = dc)))
+      .subscribe(_ =>
+        this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS())
+      );
 
     this.form
       .get(Controls.OperatingSystem)
@@ -166,73 +169,72 @@ export class NodeDataComponent extends BaseFormValidator
     this._unsubscribe.complete();
   }
 
-  isProvider(provider: NodeProvider): boolean {
-    return this.provider === provider;
+  isProvider(...provider: NodeProvider[]): boolean {
+    return provider.includes(this.provider);
   }
 
   isOpenshiftCluster(): boolean {
     return this._clusterService.clusterType === ClusterType.OpenShift;
   }
 
-  isContainerLinuxAvailable(): boolean {
-    return (
-      !!this.isProvider(NodeProvider.AWS) ||
-      !!this.isProvider(NodeProvider.AZURE) ||
-      !!this.isProvider(NodeProvider.DIGITALOCEAN) ||
-      !!this.isProvider(NodeProvider.GCP) ||
-      !!this.isProvider(NodeProvider.KUBEVIRT) ||
-      !!this.isProvider(NodeProvider.PACKET) ||
-      !!this.isProvider(NodeProvider.OPENSTACK) ||
-      (!!this.isProvider(NodeProvider.VSPHERE) &&
-        this.isImageAvailableForVsphere('coreos'))
-    );
+  isOperatingSystemSupported(os: OperatingSystem): boolean {
+    // Disable unsupported systems when Openshift is used
+    if (
+      this.isOpenshiftCluster() &&
+      [
+        OperatingSystem.Flatcar,
+        OperatingSystem.SLES,
+        OperatingSystem.ContainerLinux,
+        OperatingSystem.Ubuntu,
+        OperatingSystem.RHEL,
+      ].includes(os)
+    ) {
+      return false;
+    }
+
+    // If VSphere is selected enable OS only if it is also defined in the datacenter spec
+    if (this._hasSystemTemplate(NodeProvider.VSPHERE, os)) {
+      return true;
+    }
+
+    // Enable OS per-provider basis
+    switch (os) {
+      case OperatingSystem.ContainerLinux:
+        return this.isProvider(
+          NodeProvider.AWS,
+          NodeProvider.AZURE,
+          NodeProvider.DIGITALOCEAN,
+          NodeProvider.GCP,
+          NodeProvider.KUBEVIRT,
+          NodeProvider.PACKET,
+          NodeProvider.OPENSTACK
+        );
+      case OperatingSystem.SLES:
+        return this.isProvider(NodeProvider.AWS);
+      case OperatingSystem.RHEL:
+        return this.isProvider(
+          NodeProvider.AWS,
+          NodeProvider.AZURE,
+          NodeProvider.GCP,
+          NodeProvider.KUBEVIRT,
+          NodeProvider.OPENSTACK
+        );
+      case OperatingSystem.Flatcar:
+        return this.isProvider(NodeProvider.AWS, NodeProvider.AZURE);
+      case OperatingSystem.Ubuntu:
+      case OperatingSystem.CentOS:
+        return !this.isProvider(NodeProvider.VSPHERE);
+    }
+
+    return false;
   }
 
-  isSLESAvailable(): boolean {
-    return !!this.isProvider(NodeProvider.AWS);
-  }
-
-  isRHELAvailable(): boolean {
-    return (
-      !!this.isProvider(NodeProvider.AWS) ||
-      !!this.isProvider(NodeProvider.AZURE) ||
-      !!this.isProvider(NodeProvider.GCP) ||
-      !!this.isProvider(NodeProvider.KUBEVIRT) ||
-      !!this.isProvider(NodeProvider.OPENSTACK) ||
-      (!!this.isProvider(NodeProvider.VSPHERE) &&
-        this.isImageAvailableForVsphere(OperatingSystem.RHEL))
-    );
-  }
-
-  isFlatcarAvailable(): boolean {
-    return (
-      !!this.isProvider(NodeProvider.AWS) ||
-      !!this.isProvider(NodeProvider.AZURE) ||
-      (!!this.isProvider(NodeProvider.VSPHERE) &&
-        this.isImageAvailableForVsphere(OperatingSystem.Flatcar))
-    );
+  isOperatingSystemSelected(os: OperatingSystem): boolean {
+    return this.form.get(Controls.OperatingSystem).value === os;
   }
 
   generateName(): void {
     this.form.get(Controls.Name).setValue(this._nameGenerator.generateName());
-  }
-
-  isOsSelected(osName: OperatingSystem): boolean {
-    return this.form.get(Controls.OperatingSystem).value === osName;
-  }
-
-  isImageAvailableForVsphere(osName: string): boolean {
-    if (this.isProvider(NodeProvider.VSPHERE)) {
-      return (
-        !!this._datacenterSpec &&
-        !!this._datacenterSpec.spec &&
-        !!this._datacenterSpec.spec.vsphere &&
-        !!this._datacenterSpec.spec.vsphere.templates[osName] &&
-        this._datacenterSpec.spec.vsphere.templates[osName] !== ''
-      );
-    } else {
-      return true;
-    }
   }
 
   isBasicViewOnly(): boolean {
@@ -285,26 +287,60 @@ export class NodeDataComponent extends BaseFormValidator
     }
   }
 
+  private _hasSystemTemplate(
+    provider: NodeProvider,
+    os: OperatingSystem
+  ): boolean {
+    if (!this._datacenterSpec) {
+      return false;
+    }
+
+    // Map Container Linux to CoreOS template
+    if (os === OperatingSystem.ContainerLinux) {
+      os = OperatingSystem.CoreOS;
+    }
+
+    switch (provider) {
+      case NodeProvider.VSPHERE: {
+        const vSphereSpec = this._datacenterSpec.spec.vsphere;
+        const templates = vSphereSpec ? Object.keys(vSphereSpec.templates) : [];
+        return templates.includes(os);
+      }
+      default: {
+        return false;
+      }
+    }
+  }
+
+  // Returns first template from the provider datacenter spec templates list if any,
+  // Ubuntu otherwise
+  private _getDefaultSystemTemplate(provider: NodeProvider): OperatingSystem {
+    switch (provider) {
+      case NodeProvider.VSPHERE: {
+        const defaultTemplate = this._datacenterSpec.spec.vsphere.templates
+          ? (Object.keys(
+              this._datacenterSpec.spec.vsphere.templates
+            )[0] as OperatingSystem)
+          : OperatingSystem.Ubuntu;
+        return defaultTemplate === OperatingSystem.CoreOS
+          ? OperatingSystem.ContainerLinux
+          : defaultTemplate;
+      }
+    }
+
+    return OperatingSystem.Ubuntu;
+  }
+
   private _getDefaultOS(): OperatingSystem {
     if (this.isOpenshiftCluster()) {
       return OperatingSystem.CentOS;
-    } else {
-      if (this._clusterService.cluster.spec.cloud.vsphere) {
-        if (this.isImageAvailableForVsphere(OperatingSystem.Ubuntu)) {
-          return OperatingSystem.Ubuntu;
-        } else if (this.isImageAvailableForVsphere(OperatingSystem.CentOS)) {
-          return OperatingSystem.CentOS;
-        } else if (this.isImageAvailableForVsphere(OperatingSystem.RHEL)) {
-          return OperatingSystem.RHEL;
-        } else if (this.isImageAvailableForVsphere('coreos')) {
-          return OperatingSystem.ContainerLinux;
-        } else if (this.isImageAvailableForVsphere(OperatingSystem.Flatcar)) {
-          return OperatingSystem.Flatcar;
-        }
-      } else {
-        return OperatingSystem.Ubuntu;
-      }
     }
+
+    if (this._datacenterSpec) {
+      return this._getDefaultSystemTemplate(this.provider);
+    }
+
+    return OperatingSystem.Ubuntu;
   }
 
   private _getNodeData(): NodeData {
