@@ -1,8 +1,8 @@
 {
-  "name": "kubermatic",
+  "name": "kubermatic-dashboard",
   "private": true,
-  "version": "v2.14.0-rc.1",
-  "description": "Kubermatic",
+  "version": "v2.14.0-rc.2",
+  "description": "Kubermatic Dashboard",
   "repository": "https://github.com/kubermatic/dashboard",
   "license": "proprietary",
   "angular-cli": {},
@@ -31,25 +31,6 @@
     "clean": "gts clean",
     "versioninfo": "node git-version.js",
     "postinstall": "ngcc"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged && npm run check:licenses"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.ts": [
-      "gts fix",
-      "git add"
-    ],
-    "src/**/*.scss": [
-      "stylelint --fix",
-      "git add"
-    ],
-    "src/**/*.html": [
-      "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f ",
-      "git add"
-    ]
   },
   "dependencies": {
     "@angular/animations": "9.1.4",
@@ -107,6 +88,70 @@
     "typescript": "3.8.3"
   },
   "engines": {
-    "node": ">=10.9.0"
+    "node": ">=12.0.0"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/gts/",
+    "rules": {
+      "@typescript-eslint/no-namespace": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "eol-last": "error",
+      "no-console": "error",
+      "no-inner-declarations": "warn",
+      "no-prototype-builtins": "warn",
+      "no-redeclare": "warn",
+      "no-undef": "warn",
+      "no-unused-vars": "warn",
+      "node/no-extraneous-require": "warn",
+      "node/no-unpublished-import": "warn",
+      "node/no-unpublished-require": "warn",
+      "prefer-rest-params": "warn"
+    },
+    "overrides": [
+      {
+        "files": ["**/*.spec.ts"],
+        "env": {
+          "browser": true,
+          "jest": true
+        }
+      }
+    ]
+  },
+  "eslintIgnore": [
+    "node_modules/*",
+    "src/assets/*"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && npm run check:licenses"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "gts fix",
+      "git add"
+    ],
+    "src/**/*.scss": [
+      "stylelint --fix",
+      "git add"
+    ],
+    "src/**/*.html": [
+      "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f ",
+      "git add"
+    ]
+  },
+  "prettier": "gts/.prettierrc.json",
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "at-rule-no-unknown": null,
+      "font-family-no-missing-generic-family-keyword": null,
+      "no-descending-specificity": null,
+      "number-leading-zero": null,
+      "selector-type-no-unknown": null,
+      "selector-pseudo-element-no-unknown": [true, {
+        "ignorePseudoElements": ["ng-deep"]
+      }]
+    }
   }
 }
