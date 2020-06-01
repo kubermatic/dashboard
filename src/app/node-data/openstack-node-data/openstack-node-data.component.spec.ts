@@ -71,7 +71,7 @@ describe('OpenstackNodeDataComponent', () => {
     const datacenterService = TestBed.inject(DatacenterService);
     const dc = fakeOpenstackDatacenter();
     dc.spec.openstack.enforce_floating_ip = true;
-    jest.spyOn(datacenterService, 'getDataCenter').mockReturnValue(of(dc));
+    jest.spyOn(datacenterService, 'getDatacenter').mockReturnValue(of(dc));
     jest.spyOn(component, 'isInWizard').mockReturnValue(false);
 
     fixture.detectChanges();

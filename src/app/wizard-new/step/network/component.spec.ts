@@ -10,6 +10,7 @@ import {SharedModule} from '../../../shared/shared.module';
 import {ClusterService} from '../../service/cluster';
 import {WizardService} from '../../service/wizard';
 import {MachineNetworkStepComponent} from './component';
+import {AppConfigService} from '../../../app-config.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -35,6 +36,7 @@ describe('MachineNetworkStepComponent', () => {
         {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
         PresetsService,
         DatacenterService,
+        AppConfigService,
       ],
     }).compileComponents();
   }));

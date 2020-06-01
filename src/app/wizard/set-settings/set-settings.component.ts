@@ -27,7 +27,7 @@ export class SetSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this._dc
-      .getDataCenter(this.cluster.spec.cloud.dc)
+      .getDatacenter(this.cluster.spec.cloud.dc)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => {
         this.seedDc = dc;

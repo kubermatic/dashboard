@@ -83,7 +83,7 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
     }
 
     this.dcService
-      .getDataCenter(this.data.cluster.spec.cloud.dc)
+      .getDatacenter(this.data.cluster.spec.cloud.dc)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(result => (this.nodeDC = result));
 

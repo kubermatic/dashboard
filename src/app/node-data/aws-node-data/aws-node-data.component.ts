@@ -246,7 +246,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
 
     iif(
       () => !!this.cloudSpec.dc,
-      this._dcService.getDataCenter(this.cloudSpec.dc),
+      this._dcService.getDatacenter(this.cloudSpec.dc),
       EMPTY
     )
       .pipe(

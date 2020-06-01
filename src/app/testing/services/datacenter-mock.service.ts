@@ -9,17 +9,16 @@ import {
 
 @Injectable()
 export class DatacenterMockService {
-  private datacenters: DataCenterEntity[] = fakeNodeDatacenters();
   private seedDatacenters: DataCenterEntity[] = [
     fakeBringyourownSeedDatacenter(),
   ];
 
-  getDataCenters(cluster: string): Observable<DataCenterEntity[]> {
-    return of(this.datacenters);
+  get datacenters(): Observable<DataCenterEntity[]> {
+    return of(fakeNodeDatacenters());
   }
 
-  getDataCenter(dcName: string): Observable<DataCenterEntity> {
-    const dc = find(this.datacenters, ['metadata.name', dcName]);
+  getDatacenter(dcName: string): Observable<DataCenterEntity> {
+    const dc = find(fakeNodeDatacenters(), ['metadata.name', dcName]);
     return of(dc);
   }
 

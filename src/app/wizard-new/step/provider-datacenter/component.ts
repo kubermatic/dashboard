@@ -78,8 +78,7 @@ export class ProviderStepComponent extends StepBase
       NodeProvider.GCP,
       NodeProvider.OPENSTACK,
     ];
-    this._dcService
-      .getDataCenters()
+    this._dcService.datacenters
       .pipe(
         map(dcs =>
           dcs.filter(dc =>
@@ -112,7 +111,7 @@ export class ProviderStepComponent extends StepBase
       });
 
     this._clusterService.providerChanges
-      .pipe(switchMap(_ => this._dcService.getDataCenters()))
+      .pipe(switchMap(_ => this._dcService.datacenters))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(datacenters => {
         const providerDatacenters: DataCenterEntity[] = [];

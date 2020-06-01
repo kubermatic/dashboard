@@ -117,7 +117,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     );
 
     this._datacenterService
-      .getDataCenter(this._clusterModelService.datacenter)
+      .getDatacenter(this._clusterModelService.datacenter)
       .pipe(tap(dc => (datacenter = dc)))
       .pipe(
         switchMap(_ =>

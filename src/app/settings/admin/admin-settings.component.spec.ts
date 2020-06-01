@@ -5,7 +5,11 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
 
-import {NotificationService, UserService} from '../../core/services';
+import {
+  DatacenterService,
+  NotificationService,
+  UserService,
+} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {AdminEntity} from '../../shared/entity/AdminSettings';
@@ -20,6 +24,7 @@ import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.compo
 import {AdminSettingsComponent} from './admin-settings.component';
 import {CustomLinksFormComponent} from './custom-link-form/custom-links-form.component';
 import {ClusterType} from '../../shared/entity/ClusterEntity';
+import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
 
 describe('AdminSettingsComponent', () => {
   let fixture: ComponentFixture<AdminSettingsComponent>;
@@ -43,6 +48,7 @@ describe('AdminSettingsComponent', () => {
         {provide: SettingsService, useClass: SettingsMockService},
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: MatDialog, useClass: MatDialogMock},
+        {provide: DatacenterService, useClass: DatacenterMockService},
         HistoryService,
         NotificationService,
       ],

@@ -114,7 +114,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       );
 
     combineLatest([
-      this._datacenterService.getDataCenter(seedDCName),
+      this._datacenterService.getDatacenter(seedDCName),
       this._clusterService.cluster(this.projectID, clusterID, seedDCName),
     ])
       .pipe(
@@ -122,7 +122,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.datacenter = seedDatacenter;
           this.cluster = cluster;
 
-          return this._datacenterService.getDataCenter(cluster.spec.cloud.dc);
+          return this._datacenterService.getDatacenter(cluster.spec.cloud.dc);
         })
       )
       .pipe(

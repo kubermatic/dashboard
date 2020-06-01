@@ -18,7 +18,7 @@ import {environment} from '../environments/environment';
 import {AppConfigService} from './app-config.service';
 import {AppRoutingModule} from './app-routing.module';
 import {CoreModule} from './core/core.module';
-import {ProjectService, UserService} from './core/services';
+import {DatacenterService, ProjectService, UserService} from './core/services';
 import {HistoryService} from './core/services/history/history.service';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {GoogleAnalyticsService} from './google-analytics.service';
@@ -34,10 +34,12 @@ import {SharedModule} from './shared/shared.module';
 
 const appInitializerFn = (
   appConfigService: AppConfigService,
-  historyService: HistoryService
+  historyService: HistoryService,
+  datacenterService: DatacenterService
 ): Function => {
   return () => {
     historyService.init();
+    datacenterService.init();
     return appConfigService
       .loadAppConfig()
       .then(() => appConfigService.loadUserGroupConfig())
@@ -65,7 +67,7 @@ const appearance: MatFormFieldDefaultOptions = {
       provide: APP_INITIALIZER,
       useFactory: appInitializerFn,
       multi: true,
-      deps: [AppConfigService, HistoryService],
+      deps: [AppConfigService, HistoryService, DatacenterService],
     },
     {
       provide: MAT_TOOLTIP_DEFAULT_OPTIONS,
