@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -49,7 +50,7 @@ enum SizeState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PacketBasicNodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy, AfterViewInit {
   readonly Controls = Controls;
 
   sizes: PacketSize[] = [];
@@ -68,7 +69,9 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator
     this.form = this._builder.group({
       [Controls.InstanceType]: this._builder.control('', Validators.required),
     });
+  }
 
+  ngAfterViewInit() {
     this._sizesObservable
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultSize.bind(this));

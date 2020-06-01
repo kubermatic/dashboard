@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {merge} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {filter, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
 import {AWSCloudSpec} from '../../../../../../shared/entity/cloud/AWSCloudSpec';
@@ -15,6 +15,7 @@ import {
   ClusterEntity,
   ClusterSpec,
 } from '../../../../../../shared/entity/ClusterEntity';
+import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
 
@@ -75,13 +76,16 @@ export class AWSProviderExtendedComponent extends BaseFormValidator
         )
       );
 
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._presets.enablePresets(
-        Object.values(this._clusterService.cluster.spec.cloud.aws).every(
-          value => !value
-        )
-      );
-    });
+    this.form.valueChanges
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AWS))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this._presets.enablePresets(
+          Object.values(this._clusterService.cluster.spec.cloud.aws).every(
+            value => !value
+          )
+        );
+      });
 
     merge(
       this.form.get(Controls.SecurityGroup).valueChanges,
