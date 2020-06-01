@@ -45,9 +45,8 @@ export namespace NodeProviderConstants {
       return OperatingSystem.RHEL;
     } else if (spec.operatingSystem.flatcar) {
       return OperatingSystem.Flatcar;
-    } else {
-      return '';
     }
+    return '';
   }
 }
 

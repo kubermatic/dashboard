@@ -9,13 +9,7 @@ import {SharedModule} from '../../../shared/shared.module';
 import {nodeDataFake} from '../../../testing/fake-data/node.fake';
 import {DigitaloceanNodeOptionsComponent} from './digitalocean-node-options.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  ReactiveFormsModule,
-  HttpClientModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, ReactiveFormsModule, HttpClientModule];
 
 describe('DigitaloceanNodeOptionsComponent', () => {
   let fixture: ComponentFixture<DigitaloceanNodeOptionsComponent>;

@@ -1,11 +1,4 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  flush,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, flush, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {MatTabsModule} from '@angular/material/tabs';
 import {BrowserModule} from '@angular/platform-browser';
@@ -14,19 +7,11 @@ import {Router} from '@angular/router';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../app-config.service';
-import {
-  ApiService,
-  NotificationService,
-  ProjectService,
-  UserService,
-} from '../core/services';
+import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {SharedModule} from '../shared/shared.module';
-import {
-  DialogTestModule,
-  NoopConfirmDialogComponent,
-} from '../testing/components/noop-confirmation-dialog.component';
+import {DialogTestModule, NoopConfirmDialogComponent} from '../testing/components/noop-confirmation-dialog.component';
 import {fakeMembers} from '../testing/fake-data/member.fake';
 import {RouterStub, RouterTestingModule} from '../testing/router-stubs';
 import {asyncData} from '../testing/services/api-mock.service';
@@ -90,9 +75,7 @@ describe('MemberComponent', () => {
     tick(15000);
 
     const dialogTitle = document.body.querySelector('.mat-dialog-title');
-    const deleteButton = document.body.querySelector(
-      '#km-confirmation-dialog-confirm-btn'
-    ) as HTMLInputElement;
+    const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
 
     expect(dialogTitle.textContent).toBe('Delete Member');
     expect(deleteButton.textContent).toBe(' Delete ');

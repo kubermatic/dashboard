@@ -16,10 +16,7 @@ export class EditAddonDialogComponent implements OnInit {
   @Input() addonConfig: AddonConfigEntity;
   form: FormGroup;
 
-  constructor(
-    public dialogRef: MatDialogRef<EditAddonDialogComponent>,
-    private readonly _domSanitizer: DomSanitizer
-  ) {}
+  constructor(public dialogRef: MatDialogRef<EditAddonDialogComponent>, private readonly _domSanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     const group = {};
@@ -36,11 +33,7 @@ export class EditAddonDialogComponent implements OnInit {
   }
 
   hasLogo(): boolean {
-    return (
-      !!this.addonConfig &&
-      !!this.addonConfig.spec.logo &&
-      !!this.addonConfig.spec.logoFormat
-    );
+    return !!this.addonConfig && !!this.addonConfig.spec.logo && !!this.addonConfig.spec.logoFormat;
   }
 
   getAddonLogo(): SafeUrl {

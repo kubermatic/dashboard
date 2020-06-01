@@ -2,10 +2,7 @@ import {Component, Input} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
 
-import {
-  ClusterEntity,
-  MachineNetwork,
-} from '../../../shared/entity/ClusterEntity';
+import {ClusterEntity, MachineNetwork} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 
 import {AddMachineNetworkComponent} from '../add-machine-network/add-machine-network.component';

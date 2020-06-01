@@ -15,10 +15,7 @@ export class SettingsStatusComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.isSaved && !changes.isSaved.isFirstChange()) {
       this.isSaveConfirmationVisible = this.isSaved;
-      setTimeout(
-        () => (this.isSaveConfirmationVisible = false),
-        this.confirmationTimeout
-      );
+      setTimeout(() => (this.isSaveConfirmationVisible = false), this.confirmationTimeout);
     }
   }
 }

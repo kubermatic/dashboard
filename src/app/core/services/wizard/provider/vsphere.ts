@@ -1,9 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
-import {
-  VSphereFolder,
-  VSphereNetwork,
-} from '../../../../shared/entity/provider/vsphere/VSphereEntity';
+import {VSphereFolder, VSphereNetwork} from '../../../../shared/entity/provider/vsphere/VSphereEntity';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {Provider} from './provider';
 
@@ -14,11 +11,7 @@ export class VSphere extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
     super(http, provider);
 
-    this._setRequiredHeaders(
-      VSphere.Header.Username,
-      VSphere.Header.Password,
-      VSphere.Header.Datacenter
-    );
+    this._setRequiredHeaders(VSphere.Header.Username, VSphere.Header.Password, VSphere.Header.Datacenter);
   }
 
   username(username: string): VSphere {

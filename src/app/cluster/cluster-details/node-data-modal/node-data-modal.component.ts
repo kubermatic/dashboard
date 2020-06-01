@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Inject,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -88,24 +81,17 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
       .subscribe(result => (this.nodeDC = result));
 
     if (this.data.editMode !== true) {
-      this.data.nodeData.spec.cloud[
-        this.nodeDC.spec.provider
-      ] = getEmptyNodeProviderSpec(this.nodeDC.spec.provider);
+      this.data.nodeData.spec.cloud[this.nodeDC.spec.provider] = getEmptyNodeProviderSpec(this.nodeDC.spec.provider);
       this.data.nodeData.spec.operatingSystem = getEmptyOperatingSystemSpec();
       this.data.nodeData.spec.versions = getEmptyNodeVersionSpec();
     }
 
-    this.nodeDataService.nodeDataChanges$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(async data => {
-        this.data.nodeData = await data;
-        this.isRecreationWarningVisible = this._isRecreationWarningVisible();
-      });
+    this.nodeDataService.nodeDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(async data => {
+      this.data.nodeData = await data;
+      this.isRecreationWarningVisible = this._isRecreationWarningVisible();
+    });
 
-    this.googleAnalyticsService.emitEvent(
-      'clusterOverview',
-      'addNodeDialogOpened'
-    );
+    this.googleAnalyticsService.emitEvent('clusterOverview', 'addNodeDialogOpened');
   }
 
   ngOnDestroy(): void {
@@ -119,10 +105,7 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
   }
 
   private _isRecreationWarningVisible(): boolean {
-    return (
-      this.data.editMode &&
-      !_.isEqual(objectDiff(this._initialNodeSpec, this.data.nodeData.spec), {})
-    );
+    return this.data.editMode && !_.isEqual(objectDiff(this._initialNodeSpec, this.data.nodeData.spec), {});
   }
 
   getDialogLabel(): string {

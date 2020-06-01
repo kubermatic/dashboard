@@ -14,13 +14,7 @@ describe('GCPProviderOptionsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        SharedModule,
-      ],
+      imports: [BrowserModule, BrowserAnimationsModule, HttpClientModule, ReactiveFormsModule, SharedModule],
       declarations: [GCPProviderOptionsComponent],
       providers: [WizardService],
     }).compileComponents();

@@ -2,34 +2,15 @@ import {Injectable} from '@angular/core';
 import {defer, Observable, of} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
 
-import {
-  ClusterEntity,
-  MasterVersion,
-  Token,
-} from '../../shared/entity/ClusterEntity';
-import {
-  CreateMemberEntity,
-  MemberEntity,
-} from '../../shared/entity/MemberEntity';
+import {ClusterEntity, MasterVersion, Token} from '../../shared/entity/ClusterEntity';
+import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity';
 import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {PacketSize} from '../../shared/entity/packet/PacketSizeEntity';
-import {
-  EditProjectEntity,
-  ProjectEntity,
-} from '../../shared/entity/ProjectEntity';
-import {
-  AlibabaInstanceType,
-  AlibabaZone,
-} from '../../shared/entity/provider/alibaba/Alibaba';
+import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
+import {AlibabaInstanceType, AlibabaZone} from '../../shared/entity/provider/alibaba/Alibaba';
 import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
-import {
-  GCPDiskType,
-  GCPMachineSize,
-  GCPNetwork,
-  GCPSubnetwork,
-  GCPZone,
-} from '../../shared/entity/provider/gcp/GCP';
+import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '../../shared/entity/provider/gcp/GCP';
 import {VSphereNetwork} from '../../shared/entity/provider/vsphere/VSphereEntity';
 import {
   CreateServiceAccountEntity,
@@ -38,14 +19,8 @@ import {
   ServiceAccountTokenPatch,
 } from '../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
-import {
-  fakeDigitaloceanSizes,
-  fakePacketSizes,
-} from '../fake-data/addNodeModal.fake';
-import {
-  fakeAlibabaInstanceTypes,
-  fakeAlibabaZones,
-} from '../fake-data/alibaba.fake';
+import {fakeDigitaloceanSizes, fakePacketSizes} from '../fake-data/addNodeModal.fake';
+import {fakeAlibabaInstanceTypes, fakeAlibabaZones} from '../fake-data/alibaba.fake';
 import {masterVersionsFake} from '../fake-data/cluster-spec.fake';
 import {fakeToken} from '../fake-data/cluster.fake';
 import {fakeMember, fakeMembers} from '../fake-data/member.fake';
@@ -84,29 +59,15 @@ export class ApiMockService {
     return of([]);
   }
 
-  getNodeDeployments(
-    cluster: string,
-    dc: string,
-    projectID: string
-  ): Observable<NodeDeploymentEntity[]> {
+  getNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeploymentEntity[]> {
     return of(nodeDeploymentsFake());
   }
 
-  deleteNodeDeployment(
-    cluster: string,
-    nodeDeployment: string,
-    dc: string,
-    project: string
-  ): Observable<any> {
+  deleteNodeDeployment(cluster: string, nodeDeployment: string, dc: string, project: string): Observable<any> {
     return of({});
   }
 
-  getNodeDeploymentNodesEvents(
-    ndId: string,
-    cluster: string,
-    dc: string,
-    projectID: string
-  ): Observable<any[]> {
+  getNodeDeploymentNodesEvents(ndId: string, cluster: string, dc: string, projectID: string): Observable<any[]> {
     return of([]);
   }
 
@@ -118,10 +79,7 @@ export class ApiMockService {
     return of(this.project);
   }
 
-  editProject(
-    projectID: string,
-    editProjectEntity: EditProjectEntity
-  ): Observable<any> {
+  editProject(projectID: string, editProjectEntity: EditProjectEntity): Observable<any> {
     return of(this.project);
   }
 
@@ -141,29 +99,15 @@ export class ApiMockService {
     return of(null);
   }
 
-  getToken(
-    cluster: ClusterEntity,
-    dc: string,
-    projectID: string
-  ): Observable<Token> {
+  getToken(cluster: ClusterEntity, dc: string, projectID: string): Observable<Token> {
     return of(this.token);
   }
 
-  editToken(
-    cluster: ClusterEntity,
-    dc: string,
-    projectID: string,
-    token: Token
-  ): Observable<Token> {
+  editToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
     return of(this.token);
   }
 
-  editViewerToken(
-    cluster: ClusterEntity,
-    dc: string,
-    projectID: string,
-    token: Token
-  ): Observable<Token> {
+  editViewerToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
     return of(this.token);
   }
 
@@ -175,17 +119,11 @@ export class ApiMockService {
     return of(this.members);
   }
 
-  createMembers(
-    projectID: string,
-    member: CreateMemberEntity
-  ): Observable<MemberEntity> {
+  createMembers(projectID: string, member: CreateMemberEntity): Observable<MemberEntity> {
     return of(this.member);
   }
 
-  editMembers(
-    projectID: string,
-    member: MemberEntity
-  ): Observable<MemberEntity> {
+  editMembers(projectID: string, member: MemberEntity): Observable<MemberEntity> {
     return of(this.member);
   }
 
@@ -204,25 +142,15 @@ export class ApiMockService {
     return of(this.serviceAccount);
   }
 
-  editServiceAccount(
-    projectID: string,
-    serviceAccount: ServiceAccountEntity
-  ): Observable<ServiceAccountEntity> {
+  editServiceAccount(projectID: string, serviceAccount: ServiceAccountEntity): Observable<ServiceAccountEntity> {
     return of(this.serviceAccount);
   }
 
-  deleteServiceAccount(
-    projectID: string,
-    serviceAccount: ServiceAccountEntity
-  ): Observable<any> {
+  deleteServiceAccount(projectID: string, serviceAccount: ServiceAccountEntity): Observable<any> {
     return of(null);
   }
 
-  getVSphereNetworks(
-    username: string,
-    password: string,
-    datacenterName: string
-  ): Observable<VSphereNetwork[]> {
+  getVSphereNetworks(username: string, password: string, datacenterName: string): Observable<VSphereNetwork[]> {
     return of(this.vsphereNetworks);
   }
 
@@ -277,46 +205,23 @@ export class ApiMockService {
     return of(fakeDigitaloceanSizes());
   }
 
-  getGCPSizes(
-    zone: string,
-    projectId: string,
-    dc: string,
-    clusterId: string
-  ): Observable<GCPMachineSize[]> {
+  getGCPSizes(zone: string, projectId: string, dc: string, clusterId: string): Observable<GCPMachineSize[]> {
     return of([]);
   }
 
-  getGCPDiskTypes(
-    zone: string,
-    projectId: string,
-    dc: string,
-    clusterId: string
-  ): Observable<GCPDiskType[]> {
+  getGCPDiskTypes(zone: string, projectId: string, dc: string, clusterId: string): Observable<GCPDiskType[]> {
     return of([]);
   }
 
-  getGCPZones(
-    projectId: string,
-    dc: string,
-    clusterId: string
-  ): Observable<GCPZone[]> {
+  getGCPZones(projectId: string, dc: string, clusterId: string): Observable<GCPZone[]> {
     return of([]);
   }
 
-  getGCPNetworks(
-    projectId: string,
-    dc: string,
-    clusterId: string
-  ): Observable<GCPNetwork[]> {
+  getGCPNetworks(projectId: string, dc: string, clusterId: string): Observable<GCPNetwork[]> {
     return of([]);
   }
 
-  getGCPSubnetworks(
-    projectId: string,
-    dc: string,
-    clusterId: string,
-    network: string
-  ): Observable<GCPSubnetwork[]> {
+  getGCPSubnetworks(projectId: string, dc: string, clusterId: string, network: string): Observable<GCPSubnetwork[]> {
     return of([]);
   }
 

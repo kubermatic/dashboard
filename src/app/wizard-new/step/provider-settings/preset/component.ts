@@ -1,11 +1,5 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
@@ -41,8 +35,7 @@ export enum PresetsState {
     },
   ],
 })
-export class PresetsComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class PresetsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   presetList = new PresetListEntity();
   presetsLoaded = false;
 
@@ -77,25 +70,15 @@ export class PresetsComponent extends BaseFormValidator
       [Controls.Preset]: new FormControl('', Validators.required),
     });
 
-    this._clusterService.providerChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this.reset());
+    this._clusterService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.reset());
 
     this._clusterService.datacenterChanges
-      .pipe(
-        switchMap(dc =>
-          this._presets.presets(this._clusterService.provider, dc)
-        )
-      )
+      .pipe(switchMap(dc => this._presets.presets(this._clusterService.provider, dc)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(presetList => {
         this.reset();
-        this.presetsLoaded = presetList.names
-          ? presetList.names.length > 0
-          : false;
-        this._state = this.presetsLoaded
-          ? PresetsState.Ready
-          : PresetsState.Empty;
+        this.presetsLoaded = presetList.names ? presetList.names.length > 0 : false;
+        this._state = this.presetsLoaded ? PresetsState.Ready : PresetsState.Empty;
         this.presetList = presetList;
         this._enable(this._state !== PresetsState.Empty, Controls.Preset);
       });
@@ -108,13 +91,11 @@ export class PresetsComponent extends BaseFormValidator
         this._clusterService.cluster = {credential: preset} as ClusterEntity;
       });
 
-    this._presets.presetStatusChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(enable => {
-        if (this._state !== PresetsState.Empty) {
-          this._enable(enable, Controls.Preset);
-        }
-      });
+    this._presets.presetStatusChanges.pipe(takeUntil(this._unsubscribe)).subscribe(enable => {
+      if (this._state !== PresetsState.Empty) {
+        this._enable(enable, Controls.Preset);
+      }
+    });
   }
 
   reset(): void {

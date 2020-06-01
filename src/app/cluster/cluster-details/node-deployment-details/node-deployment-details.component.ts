@@ -4,12 +4,7 @@ import {Subject, timer} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../../app-config.service';
-import {
-  ApiService,
-  ClusterService,
-  DatacenterService,
-  UserService,
-} from '../../../core/services';
+import {ApiService, ClusterService, DatacenterService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {EventEntity} from '../../../shared/entity/EventEntity';
@@ -19,10 +14,7 @@ import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity'
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {GroupConfig} from '../../../shared/model/Config';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
-import {
-  MemberUtils,
-  Permission,
-} from '../../../shared/utils/member-utils/member-utils';
+import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 import {NodeService} from '../../services/node.service';
 
@@ -69,28 +61,17 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._clusterName = this._activatedRoute.snapshot.paramMap.get(
-      'clusterName'
-    );
+    this._clusterName = this._activatedRoute.snapshot.paramMap.get('clusterName');
     this.dcName = this._activatedRoute.snapshot.paramMap.get('seedDc');
-    this._nodeDeploymentID = this._activatedRoute.snapshot.paramMap.get(
-      'nodeDeploymentID'
-    );
+    this._nodeDeploymentID = this._activatedRoute.snapshot.paramMap.get('nodeDeploymentID');
     this.projectID = this._activatedRoute.snapshot.paramMap.get('projectID');
 
-    this._userService.loggedInUser
-      .pipe(first())
-      .subscribe(user => (this._user = user));
+    this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
 
     this._userService
       .currentUserGroup(this.projectID)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        userGroup =>
-          (this._currentGroupConfig = this._userService.userGroupConfig(
-            userGroup
-          ))
-      );
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
 
     timer(0, 10 * this._appConfig.getRefreshTimeBase())
       .pipe(takeUntil(this._unsubscribe))
@@ -107,36 +88,20 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodeDeployment(): void {
     this._apiService
-      .getNodeDeployment(
-        this._nodeDeploymentID,
-        this._clusterName,
-        this.dcName,
-        this.projectID
-      )
+      .getNodeDeployment(this._nodeDeploymentID, this._clusterName, this.dcName, this.projectID)
       .pipe(first())
       .subscribe((nd: NodeDeploymentEntity) => {
         this.nodeDeployment = nd;
-        this.system = NodeUtils.getOperatingSystem(
-          this.nodeDeployment.spec.template
-        );
-        this.systemLogoClass = NodeUtils.getOperatingSystemLogoClass(
-          this.nodeDeployment.spec.template
-        );
-        this.nodeDeploymentHealthStatus = NodeDeploymentHealthStatus.getHealthStatus(
-          this.nodeDeployment
-        );
+        this.system = NodeUtils.getOperatingSystem(this.nodeDeployment.spec.template);
+        this.systemLogoClass = NodeUtils.getOperatingSystemLogoClass(this.nodeDeployment.spec.template);
+        this.nodeDeploymentHealthStatus = NodeDeploymentHealthStatus.getHealthStatus(this.nodeDeployment);
         this._isNodeDeploymentLoaded = true;
       });
   }
 
   loadNodes(): void {
     this._apiService
-      .getNodeDeploymentNodes(
-        this._nodeDeploymentID,
-        this._clusterName,
-        this.dcName,
-        this.projectID
-      )
+      .getNodeDeploymentNodes(this._nodeDeploymentID, this._clusterName, this.dcName, this.projectID)
       .pipe(first())
       .subscribe(n => {
         this.nodes = n;
@@ -146,12 +111,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodesEvents(): void {
     this._apiService
-      .getNodeDeploymentNodesEvents(
-        this._nodeDeploymentID,
-        this._clusterName,
-        this.dcName,
-        this.projectID
-      )
+      .getNodeDeploymentNodesEvents(this._nodeDeploymentID, this._clusterName, this.dcName, this.projectID)
       .pipe(first())
       .subscribe(e => {
         this.events = e;
@@ -161,12 +121,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodesMetrics(): void {
     this._apiService
-      .getNodeDeploymentNodesMetrics(
-        this._nodeDeploymentID,
-        this._clusterName,
-        this.dcName,
-        this.projectID
-      )
+      .getNodeDeploymentNodesMetrics(this._nodeDeploymentID, this._clusterName, this.dcName, this.projectID)
       .pipe(first())
       .subscribe(metrics => {
         this.storeNodeMetrics(metrics);
@@ -185,9 +140,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe(c => {
         this.cluster = c;
-        this.clusterProvider = ClusterEntity.getProvider(
-          this.cluster.spec.cloud
-        );
+        this.clusterProvider = ClusterEntity.getProvider(this.cluster.spec.cloud);
         this._isClusterLoaded = true;
         this.loadDatacenter();
       });
@@ -233,34 +186,16 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   goBackToCluster(): void {
-    this._router.navigate([
-      '/projects/' +
-        this.projectID +
-        '/dc/' +
-        this.dcName +
-        '/clusters/' +
-        this._clusterName,
-    ]);
+    this._router.navigate(['/projects/' + this.projectID + '/dc/' + this.dcName + '/clusters/' + this._clusterName]);
   }
 
   isEditEnabled(): boolean {
-    return MemberUtils.hasPermission(
-      this._user,
-      this._currentGroupConfig,
-      'nodeDeployments',
-      Permission.Edit
-    );
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'nodeDeployments', Permission.Edit);
   }
 
   showEditDialog(): void {
     this._nodeService
-      .showNodeDeploymentEditDialog(
-        this.nodeDeployment,
-        this.cluster,
-        this.projectID,
-        this.seedDatacenter,
-        undefined
-      )
+      .showNodeDeploymentEditDialog(this.nodeDeployment, this.cluster, this.projectID, this.seedDatacenter, undefined)
       .subscribe(isConfirmed => {
         if (isConfirmed) {
           this.loadNodeDeployment();
@@ -270,12 +205,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   isDeleteEnabled(): boolean {
-    return MemberUtils.hasPermission(
-      this._user,
-      this._currentGroupConfig,
-      'nodeDeployments',
-      Permission.Delete
-    );
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'nodeDeployments', Permission.Delete);
   }
 
   showDeleteDialog(): void {

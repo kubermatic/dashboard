@@ -24,9 +24,7 @@ export class AddServiceAccountTokenComponent implements OnInit {
   constructor(
     private readonly _apiService: ApiService,
     private readonly _matDialog: MatDialog,
-    private readonly _matDialogRef: MatDialogRef<
-      AddServiceAccountTokenComponent
-    >,
+    private readonly _matDialogRef: MatDialogRef<AddServiceAccountTokenComponent>,
     private readonly _notificationService: NotificationService
   ) {}
 
@@ -42,11 +40,7 @@ export class AddServiceAccountTokenComponent implements OnInit {
     };
 
     this._apiService
-      .createServiceAccountToken(
-        this.project.id,
-        this.serviceaccount,
-        createServiceAccountToken
-      )
+      .createServiceAccountToken(this.project.id, this.serviceaccount, createServiceAccountToken)
       .pipe(first())
       .subscribe(token => {
         this._matDialogRef.close(true);

@@ -25,37 +25,22 @@ export class KubeVirtNodeDataComponent implements OnInit, OnDestroy {
         Validators.required,
         Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/),
       ]),
-      memory: new FormControl(
-        this.nodeData.spec.cloud.kubevirt.memory || '2Gi',
-        [
-          Validators.required,
-          Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/),
-        ]
-      ),
-      namespace: new FormControl(this.nodeData.spec.cloud.kubevirt.namespace, [
+      memory: new FormControl(this.nodeData.spec.cloud.kubevirt.memory || '2Gi', [
         Validators.required,
+        Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/),
       ]),
-      sourceURL: new FormControl(this.nodeData.spec.cloud.kubevirt.sourceURL, [
+      namespace: new FormControl(this.nodeData.spec.cloud.kubevirt.namespace, [Validators.required]),
+      sourceURL: new FormControl(this.nodeData.spec.cloud.kubevirt.sourceURL, [Validators.required]),
+      storageClassName: new FormControl(this.nodeData.spec.cloud.kubevirt.storageClassName, [Validators.required]),
+      pvcSize: new FormControl(this.nodeData.spec.cloud.kubevirt.pvcSize || '10Gi', [
         Validators.required,
+        Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/),
       ]),
-      storageClassName: new FormControl(
-        this.nodeData.spec.cloud.kubevirt.storageClassName,
-        [Validators.required]
-      ),
-      pvcSize: new FormControl(
-        this.nodeData.spec.cloud.kubevirt.pvcSize || '10Gi',
-        [
-          Validators.required,
-          Validators.pattern(/^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/),
-        ]
-      ),
     });
 
-    this.formGroup.valueChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(() => {
-        this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
-      });
+    this.formGroup.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    });
 
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }

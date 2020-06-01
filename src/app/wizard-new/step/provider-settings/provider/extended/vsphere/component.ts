@@ -10,22 +10,12 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {EMPTY, Observable, onErrorResumeNext} from 'rxjs';
-import {
-  catchError,
-  filter,
-  map,
-  switchMap,
-  takeUntil,
-  tap,
-} from 'rxjs/operators';
+import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
 import {ClusterEntity} from '../../../../../../shared/entity/ClusterEntity';
-import {
-  VSphereFolder,
-  VSphereNetwork,
-} from '../../../../../../shared/entity/provider/vsphere/VSphereEntity';
+import {VSphereFolder, VSphereNetwork} from '../../../../../../shared/entity/provider/vsphere/VSphereEntity';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {isObjectEmpty} from '../../../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
@@ -65,8 +55,7 @@ enum FolderState {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class VSphereProviderExtendedComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class VSphereProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private _networkMap: {[type: string]: VSphereNetwork[]} = {};
   private _credentialsChanged = new EventEmitter<void>();
   private _username = '';
@@ -105,19 +94,11 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator
     this.form.valueChanges
       .pipe(filter(_ => this._clusterService.provider === NodeProvider.VSPHERE))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ =>
-        this._presets.enablePresets(
-          isObjectEmpty(this._clusterService.cluster.spec.cloud.vsphere)
-        )
-      );
+      .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterService.cluster.spec.cloud.vsphere)));
 
     this._presets.presetChanges
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset =>
-        Object.values(Controls).forEach(control =>
-          this._enable(!preset, control)
-        )
-      );
+      .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
     this._clusterService.clusterChanges
       .pipe(filter(_ => this._clusterService.provider === NodeProvider.VSPHERE))
@@ -153,9 +134,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator
     switch (control) {
       case Controls.VMNetName:
       case Controls.Folder:
-        return this._hasRequiredCredentials()
-          ? ''
-          : 'Please enter your credentials first.';
+        return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
     }
   }
 
@@ -222,9 +201,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator
       .password(this._clusterService.cluster.spec.cloud.vsphere.password)
       .datacenter(this._clusterService.datacenter)
       .networks(this._onNetworksLoading.bind(this))
-      .pipe(
-        map(networks => networks.sort((a, b) => a.name.localeCompare(b.name)))
-      )
+      .pipe(map(networks => networks.sort((a, b) => a.name.localeCompare(b.name))))
       .pipe(
         catchError(() => {
           this._clearNetworks();

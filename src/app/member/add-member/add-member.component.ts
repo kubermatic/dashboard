@@ -4,10 +4,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '../../core/services';
 
 import {ApiService} from '../../core/services';
-import {
-  CreateMemberEntity,
-  MemberEntity,
-} from '../../shared/entity/MemberEntity';
+import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 
 @Component({
@@ -42,13 +39,11 @@ export class AddMemberComponent implements OnInit {
       ],
     };
 
-    this._apiService
-      .createMembers(this.project.id, createMember)
-      .subscribe((member: MemberEntity) => {
-        this._matDialogRef.close(member);
-        this._notificationService.success(
-          `The <strong>${member.email}</strong> member was added to the <strong>${this.project.name}</strong> project`
-        );
-      });
+    this._apiService.createMembers(this.project.id, createMember).subscribe((member: MemberEntity) => {
+      this._matDialogRef.close(member);
+      this._notificationService.success(
+        `The <strong>${member.email}</strong> member was added to the <strong>${this.project.name}</strong> project`
+      );
+    });
   }
 }

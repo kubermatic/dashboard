@@ -1,28 +1,12 @@
-import {
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {iif, Subject} from 'rxjs';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  first,
-  startWith,
-  takeUntil,
-} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, first, startWith, takeUntil} from 'rxjs/operators';
 
 import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {
-  GCPDiskType,
-  GCPMachineSize,
-  GCPZone,
-} from '../../shared/entity/provider/gcp/GCP';
+import {GCPDiskType, GCPMachineSize, GCPZone} from '../../shared/entity/provider/gcp/GCP';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 import {filterArrayOptions} from '../../shared/utils/common-utils';
@@ -60,29 +44,13 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      diskSize: new FormControl(
-        this.nodeData.spec.cloud.gcp.diskSize,
-        Validators.required
-      ),
-      diskType: new FormControl(
-        {value: this.nodeData.spec.cloud.gcp.diskType, disabled: true},
-        Validators.required
-      ),
-      machineType: new FormControl(
-        {value: this.nodeData.spec.cloud.gcp.machineType, disabled: true},
-        [
-          Validators.required,
-          AutocompleteFilterValidators.mustBeInArrayList(
-            this.machineTypes,
-            'name',
-            true
-          ),
-        ]
-      ),
-      zone: new FormControl(
-        {value: this.nodeData.spec.cloud.gcp.zone, disabled: true},
-        Validators.required
-      ),
+      diskSize: new FormControl(this.nodeData.spec.cloud.gcp.diskSize, Validators.required),
+      diskType: new FormControl({value: this.nodeData.spec.cloud.gcp.diskType, disabled: true}, Validators.required),
+      machineType: new FormControl({value: this.nodeData.spec.cloud.gcp.machineType, disabled: true}, [
+        Validators.required,
+        AutocompleteFilterValidators.mustBeInArrayList(this.machineTypes, 'name', true),
+      ]),
+      zone: new FormControl({value: this.nodeData.spec.cloud.gcp.zone, disabled: true}, Validators.required),
       customImage: new FormControl(this.nodeData.spec.cloud.gcp.customImage),
       preemptible: new FormControl(this.nodeData.spec.cloud.gcp.preemptible),
     });
@@ -93,30 +61,22 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
 
     this._nodeDataService.changeNodeProviderData(this.getNodeProviderData());
 
-    this._wizardService.clusterProviderSettingsFormChanges$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.cloudSpec = data.cloudSpec;
-        this._disableSizes();
-        this._reloadSizes();
-        this._disableDiskTypes();
-        this._reloadDiskTypes();
-        this._disableZones();
-        this._reloadZones();
-      });
+    this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      this.cloudSpec = data.cloudSpec;
+      this._disableSizes();
+      this._reloadSizes();
+      this._disableDiskTypes();
+      this._reloadDiskTypes();
+      this._disableZones();
+      this._reloadZones();
+    });
 
-    this._wizardService.onCustomPresetSelect
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(credentials => {
-        this._selectedPreset = credentials;
-      });
+    this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
+      this._selectedPreset = credentials;
+    });
 
     this.form.controls.zone.valueChanges
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged(),
-        takeUntil(this._unsubscribe)
-      )
+      .pipe(debounceTime(1000), distinctUntilChanged(), takeUntil(this._unsubscribe))
       .subscribe(value => {
         this.nodeData.spec.cloud.gcp.zone = value;
         this._reloadSizes();
@@ -124,24 +84,16 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
       });
 
     this.form.controls.machineType.valueChanges
-      .pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+      .pipe(debounceTime(1000), startWith(''), takeUntil(this._unsubscribe))
       .subscribe(value => {
         if (value !== '' && !this.form.controls.machineType.pristine) {
-          this.filteredMachineTypes = filterArrayOptions(
-            value,
-            'name',
-            this.machineTypes
-          );
+          this.filteredMachineTypes = filterArrayOptions(value, 'name', this.machineTypes);
         } else {
           this.filteredMachineTypes = this.machineTypes;
         }
         this.form.controls.machineType.setValidators([
           Validators.required,
-          AutocompleteFilterValidators.mustBeInArrayList(
-            this.machineTypes,
-            'name',
-            true
-          ),
+          AutocompleteFilterValidators.mustBeInArrayList(this.machineTypes, 'name', true),
         ]);
       });
 
@@ -154,8 +106,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
     if (changes.cloudSpec && !changes.cloudSpec.firstChange) {
       if (
         !changes.cloudSpec.previousValue ||
-        changes.cloudSpec.currentValue.gcp.serviceAccount !==
-          changes.cloudSpec.previousValue.gcp.serviceAccount
+        changes.cloudSpec.currentValue.gcp.serviceAccount !== changes.cloudSpec.previousValue.gcp.serviceAccount
       ) {
         this._reloadZones();
         this._reloadSizes();
@@ -174,11 +125,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
   }
 
   private _hasCredentials(): boolean {
-    return (
-      !!this.cloudSpec.gcp.serviceAccount ||
-      !!this._selectedPreset ||
-      !this.isInWizard()
-    );
+    return !!this.cloudSpec.gcp.serviceAccount || !!this._selectedPreset || !this.isInWizard();
   }
 
   private _disableZones(): void {
@@ -195,9 +142,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
     if (this.zones.length > 0) {
       if (
         this.nodeData.spec.cloud.gcp.zone !== '' &&
-        this.zones.filter(
-          value => value.name === this.nodeData.spec.cloud.gcp.zone
-        ).length > 0
+        this.zones.filter(value => value.name === this.nodeData.spec.cloud.gcp.zone).length > 0
       ) {
         this.form.controls.zone.setValue(this.nodeData.spec.cloud.gcp.zone);
       } else {
@@ -211,17 +156,12 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
       return '';
     }
 
-    if (
-      this.isInWizard() &&
-      !this._loadingZones &&
-      !(this.cloudSpec.gcp.serviceAccount || this._selectedPreset)
-    ) {
+    if (this.isInWizard() && !this._loadingZones && !(this.cloudSpec.gcp.serviceAccount || this._selectedPreset)) {
       return 'Please enter valid service account first.';
     } else if (this._loadingZones) {
       return 'Loading zones...';
-    } else {
-      return '';
     }
+    return '';
   }
 
   private _reloadZones(): void {
@@ -237,11 +177,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
         .serviceAccount(this.cloudSpec.gcp.serviceAccount)
         .credential(this._selectedPreset)
         .zones(this.cloudSpec.dc),
-      this._apiService.getGCPZones(
-        this.projectId,
-        this.seedDCName,
-        this.clusterId
-      )
+      this._apiService.getGCPZones(this.projectId, this.seedDCName, this.clusterId)
     )
       .pipe(first())
       .pipe(takeUntil(this._unsubscribe))
@@ -268,13 +204,9 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
     if (this.diskTypes.length > 0) {
       if (
         this.nodeData.spec.cloud.gcp.diskType !== '' &&
-        this.diskTypes.filter(
-          value => value.name === this.nodeData.spec.cloud.gcp.diskType
-        ).length > 0
+        this.diskTypes.filter(value => value.name === this.nodeData.spec.cloud.gcp.diskType).length > 0
       ) {
-        this.form.controls.diskType.setValue(
-          this.nodeData.spec.cloud.gcp.diskType
-        );
+        this.form.controls.diskType.setValue(this.nodeData.spec.cloud.gcp.diskType);
       } else {
         this.form.controls.diskType.setValue(this.diskTypes[0].name);
       }
@@ -303,9 +235,8 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
       return 'Please enter valid zone first.';
     } else if (this._loadingDiskTypes) {
       return 'Loading disk types...';
-    } else {
-      return '';
     }
+    return '';
   }
 
   private _reloadDiskTypes(): void {
@@ -354,13 +285,9 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
     if (this.machineTypes.length > 0) {
       if (
         this.nodeData.spec.cloud.gcp.machineType !== '' &&
-        this.machineTypes.filter(
-          value => value.name === this.nodeData.spec.cloud.gcp.machineType
-        ).length > 0
+        this.machineTypes.filter(value => value.name === this.nodeData.spec.cloud.gcp.machineType).length > 0
       ) {
-        this.form.controls.machineType.setValue(
-          this.nodeData.spec.cloud.gcp.machineType
-        );
+        this.form.controls.machineType.setValue(this.nodeData.spec.cloud.gcp.machineType);
       } else {
         this.form.controls.machineType.setValue(this.machineTypes[0].name);
       }
@@ -389,9 +316,8 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
       return 'Please enter valid zone first.';
     } else if (this._loadingSizes) {
       return 'Loading machine types...';
-    } else {
-      return '';
     }
+    return '';
   }
 
   private _reloadSizes(): void {
@@ -408,12 +334,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
         .serviceAccount(this.cloudSpec.gcp.serviceAccount)
         .credential(this._selectedPreset)
         .machineTypes(),
-      this._apiService.getGCPSizes(
-        this.nodeData.spec.cloud.gcp.zone,
-        this.projectId,
-        this.seedDCName,
-        this.clusterId
-      )
+      this._apiService.getGCPSizes(this.nodeData.spec.cloud.gcp.zone, this.projectId, this.seedDCName, this.clusterId)
     )
       .pipe(first())
       .pipe(takeUntil(this._unsubscribe))

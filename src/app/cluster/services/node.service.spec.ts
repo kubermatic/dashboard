@@ -47,11 +47,9 @@ describe('NodeService', () => {
       const dcName = fakeDigitaloceanDatacenter().metadata.name;
       let isConfirmed = false;
 
-      service
-        .showNodeDeploymentDeleteDialog(nd, clusterID, projectID, dcName, null)
-        .subscribe(confirmed => {
-          isConfirmed = confirmed;
-        });
+      service.showNodeDeploymentDeleteDialog(nd, clusterID, projectID, dcName, null).subscribe(confirmed => {
+        isConfirmed = confirmed;
+      });
       tick();
 
       expect(isConfirmed).toBeTruthy();

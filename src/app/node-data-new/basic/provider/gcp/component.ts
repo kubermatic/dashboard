@@ -8,22 +8,13 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge, Observable} from 'rxjs';
 import {filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
 import {GCPNodeSpec} from '../../../../shared/entity/node/GCPNodeSpec';
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
-import {
-  GCPDiskType,
-  GCPMachineSize,
-  GCPZone,
-} from '../../../../shared/entity/provider/gcp/GCP';
+import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../../shared/entity/provider/gcp/GCP';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
@@ -71,8 +62,7 @@ enum MachineTypeState {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GCPBasicNodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private _zoneChanges = new EventEmitter<boolean>();
 
   readonly Controls = Controls;
@@ -111,9 +101,7 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator
     });
 
     this._nodeDataService.nodeData = this._getNodeData();
-    this._zonesObservable
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._setDefaultZone.bind(this));
+    this._zonesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultZone.bind(this));
 
     this._zoneChanges
       .pipe(filter(hasValue => hasValue))
@@ -123,10 +111,7 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultMachineType.bind(this));
 
-    merge(
-      this.form.get(Controls.DiskSize).valueChanges,
-      this.form.get(Controls.Preemptible).valueChanges
-    )
+    merge(this.form.get(Controls.DiskSize).valueChanges, this.form.get(Controls.Preemptible).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
@@ -152,11 +137,7 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator
   private get _zonesObservable(): Observable<GCPZone[]> {
     return this._nodeDataService.gcp
       .zones(this._clearZone.bind(this), this._onZoneLoading.bind(this))
-      .pipe(
-        map((zones: GCPZone[]) =>
-          zones.sort((a, b) => a.name.localeCompare(b.name))
-        )
-      );
+      .pipe(map((zones: GCPZone[]) => zones.sort((a, b) => a.name.localeCompare(b.name))));
   }
 
   private _clearZone(): void {
@@ -184,15 +165,8 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator
 
   private get _diskTypesObservable(): Observable<GCPDiskType[]> {
     return this._nodeDataService.gcp
-      .diskTypes(
-        this._clearDiskTypes.bind(this),
-        this._onDiskTypeLoading.bind(this)
-      )
-      .pipe(
-        map((types: GCPDiskType[]) =>
-          types.sort((a, b) => a.name.localeCompare(b.name))
-        )
-      );
+      .diskTypes(this._clearDiskTypes.bind(this), this._onDiskTypeLoading.bind(this))
+      .pipe(map((types: GCPDiskType[]) => types.sort((a, b) => a.name.localeCompare(b.name))));
   }
 
   private _clearDiskTypes(): void {
@@ -220,15 +194,8 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator
 
   private get _machineTypesObservable(): Observable<GCPMachineSize[]> {
     return this._nodeDataService.gcp
-      .machineTypes(
-        this._clearMachineType.bind(this),
-        this._onMachineTypeLoading.bind(this)
-      )
-      .pipe(
-        map((sizes: GCPMachineSize[]) =>
-          sizes.sort((a, b) => a.name.localeCompare(b.name))
-        )
-      );
+      .machineTypes(this._clearMachineType.bind(this), this._onMachineTypeLoading.bind(this))
+      .pipe(map((sizes: GCPMachineSize[]) => sizes.sort((a, b) => a.name.localeCompare(b.name))));
   }
 
   private _clearMachineType(): void {

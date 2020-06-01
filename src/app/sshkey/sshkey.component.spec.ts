@@ -1,11 +1,4 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  flush,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, flush, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {MatTabsModule} from '@angular/material/tabs';
 import {BrowserModule} from '@angular/platform-browser';
@@ -14,26 +7,14 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../app-config.service';
-import {
-  ApiService,
-  NotificationService,
-  ProjectService,
-  UserService,
-} from '../core/services';
+import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {SharedModule} from '../shared/shared.module';
-import {
-  DialogTestModule,
-  NoopConfirmDialogComponent,
-} from '../testing/components/noop-confirmation-dialog.component';
+import {DialogTestModule, NoopConfirmDialogComponent} from '../testing/components/noop-confirmation-dialog.component';
 import {fakeProject} from '../testing/fake-data/project.fake';
 import {fakeSSHKeys} from '../testing/fake-data/sshkey.fake';
-import {
-  ActivatedRouteStub,
-  RouterStub,
-  RouterTestingModule,
-} from '../testing/router-stubs';
+import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../testing/router-stubs';
 import {asyncData} from '../testing/services/api-mock.service';
 import {AppConfigMockService} from '../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../testing/services/project-mock.service';
@@ -107,9 +88,7 @@ describe('SSHKeyComponent', () => {
     tick(15000);
 
     const dialogTitle = document.body.querySelector('.mat-dialog-title');
-    const deleteButton = document.body.querySelector(
-      '#km-confirmation-dialog-confirm-btn'
-    ) as HTMLInputElement;
+    const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
 
     expect(dialogTitle.textContent).toBe('Delete SSH Key');
     expect(deleteButton.textContent).toBe(' Delete ');

@@ -1,10 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
@@ -50,9 +45,7 @@ export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
         ) {
           this._formData = data;
           this.setValidators();
-          this.clusterService.changeProviderSettingsPatch(
-            this.getProviderSettingsPatch()
-          );
+          this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
         }
       });
   }
@@ -70,14 +63,8 @@ export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
       this.apiKey.clearValidators();
       this.projectID.clearValidators();
     } else {
-      this.apiKey.setValidators([
-        Validators.required,
-        Validators.maxLength(256),
-      ]);
-      this.projectID.setValidators([
-        Validators.required,
-        Validators.maxLength(256),
-      ]);
+      this.apiKey.setValidators([Validators.required, Validators.maxLength(256)]);
+      this.projectID.setValidators([Validators.required, Validators.maxLength(256)]);
     }
 
     this.apiKey.updateValueAndValidity();

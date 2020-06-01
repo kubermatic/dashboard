@@ -27,8 +27,7 @@ enum Controls {
     },
   ],
 })
-export class AWSExtendedNodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class AWSExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: object;
 
   readonly Controls = Controls;
@@ -37,10 +36,7 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator
     return this._nodeDataService.nodeData;
   }
 
-  constructor(
-    private readonly _builder: FormBuilder,
-    private readonly _nodeDataService: NodeDataService
-  ) {
+  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
     super();
   }
 

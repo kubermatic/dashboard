@@ -1,9 +1,5 @@
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {
-  fakeHealth,
-  fakeHealthFailed,
-  fakeHealthProvisioning,
-} from '../../../testing/fake-data/health.fake';
+import {fakeHealth, fakeHealthFailed, fakeHealthProvisioning} from '../../../testing/fake-data/health.fake';
 
 import {ClusterHealthStatus, HealthStatusCss} from './cluster-health-status';
 import {HealthStatusColor, HealthStatusMessage} from './health-status';
@@ -16,29 +12,15 @@ describe('ClusterHealthStatus', () => {
 
   it('should return correct status for clusters', () => {
     expect(ClusterHealthStatus.getHealthStatus(cluster, health)).toEqual(
-      new ClusterHealthStatus(
-        HealthStatusMessage.Running,
-        HealthStatusColor.Green,
-        HealthStatusCss.Running
-      )
+      new ClusterHealthStatus(HealthStatusMessage.Running, HealthStatusColor.Green, HealthStatusCss.Running)
     );
-    expect(
-      ClusterHealthStatus.getHealthStatus(cluster, healthProvisioning)
-    ).toEqual(
-      new ClusterHealthStatus(
-        HealthStatusMessage.Provisioning,
-        HealthStatusColor.Orange,
-        HealthStatusCss.Provisioning
-      )
+    expect(ClusterHealthStatus.getHealthStatus(cluster, healthProvisioning)).toEqual(
+      new ClusterHealthStatus(HealthStatusMessage.Provisioning, HealthStatusColor.Orange, HealthStatusCss.Provisioning)
     );
   });
 
   it('should return if cluster is running', () => {
-    expect(
-      ClusterHealthStatus.isClusterAPIRunning(cluster, health)
-    ).toBeTruthy();
-    expect(
-      ClusterHealthStatus.isClusterAPIRunning(cluster, healthFailed)
-    ).toBeFalsy();
+    expect(ClusterHealthStatus.isClusterAPIRunning(cluster, health)).toBeTruthy();
+    expect(ClusterHealthStatus.isClusterAPIRunning(cluster, healthFailed)).toBeFalsy();
   });
 });

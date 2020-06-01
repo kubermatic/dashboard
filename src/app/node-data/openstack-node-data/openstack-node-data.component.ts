@@ -2,11 +2,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {iif, Subject} from 'rxjs';
 import {debounceTime, startWith, take, takeUntil} from 'rxjs/operators';
-import {
-  ApiService,
-  DatacenterService,
-  WizardService,
-} from '../../core/services';
+import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {OperatingSystemSpec} from '../../shared/entity/NodeEntity';
@@ -47,23 +43,13 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       flavor: new FormControl(this.nodeData.spec.cloud.openstack.flavor, [
         Validators.required,
-        AutocompleteFilterValidators.mustBeInArrayList(
-          this.flavors,
-          'slug',
-          true
-        ),
+        AutocompleteFilterValidators.mustBeInArrayList(this.flavors, 'slug', true),
       ]),
-      useFloatingIP: new FormControl(
-        this.nodeData.spec.cloud.openstack.useFloatingIP
-      ),
+      useFloatingIP: new FormControl(this.nodeData.spec.cloud.openstack.useFloatingIP),
       disk_size: new FormControl(
-        this.nodeData.spec.cloud.openstack.diskSize > 0
-          ? this.nodeData.spec.cloud.openstack.diskSize
-          : ''
+        this.nodeData.spec.cloud.openstack.diskSize > 0 ? this.nodeData.spec.cloud.openstack.diskSize : ''
       ),
-      customDiskSize: new FormControl(
-        this.nodeData.spec.cloud.openstack.diskSize > 0
-      ),
+      customDiskSize: new FormControl(this.nodeData.spec.cloud.openstack.diskSize > 0),
       image: new FormControl(this.nodeData.spec.cloud.openstack.image),
     });
 
@@ -72,24 +58,16 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     });
 
     this.form.controls.flavor.valueChanges
-      .pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+      .pipe(debounceTime(1000), startWith(''), takeUntil(this._unsubscribe))
       .subscribe(value => {
         if (value !== '' && !this.form.controls.flavor.pristine) {
-          this.filteredFlavors = filterArrayOptions(
-            value,
-            'slug',
-            this.flavors
-          );
+          this.filteredFlavors = filterArrayOptions(value, 'slug', this.flavors);
         } else {
           this.filteredFlavors = this.flavors;
         }
         this.form.controls.flavor.setValidators([
           Validators.required,
-          AutocompleteFilterValidators.mustBeInArrayList(
-            this.flavors,
-            'slug',
-            true
-          ),
+          AutocompleteFilterValidators.mustBeInArrayList(this.flavors, 'slug', true),
         ]);
       });
 
@@ -101,21 +79,16 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       this.setImage(this.nodeData.spec.operatingSystem);
     }
 
-    this._addNodeService.nodeOperatingSystemDataChanges$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        if (
-          (!!this.nodeData.spec.operatingSystem.ubuntu && !data.ubuntu) ||
-          (!!this.nodeData.spec.operatingSystem.centos && !data.centos) ||
-          (!!this.nodeData.spec.operatingSystem.containerLinux &&
-            !data.containerLinux)
-        ) {
-          this.setImage(data);
-        }
-        this._addNodeService.changeNodeProviderData(
-          this._getNodeProviderData()
-        );
-      });
+    this._addNodeService.nodeOperatingSystemDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      if (
+        (!!this.nodeData.spec.operatingSystem.ubuntu && !data.ubuntu) ||
+        (!!this.nodeData.spec.operatingSystem.centos && !data.centos) ||
+        (!!this.nodeData.spec.operatingSystem.containerLinux && !data.containerLinux)
+      ) {
+        this.setImage(data);
+      }
+      this._addNodeService.changeNodeProviderData(this._getNodeProviderData());
+    });
 
     this._dcService
       .getDatacenter(this.cloudSpec.dc)
@@ -133,29 +106,25 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
         }
       });
 
-    this._wizard.clusterProviderSettingsFormChanges$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.cloudSpec = data.cloudSpec;
+    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      this.cloudSpec = data.cloudSpec;
+      this.form.controls.flavor.setValue('');
+      this.flavors = [];
+      this.checkFlavorState();
+
+      if (this._hasCredentials() || this._selectedPreset) {
+        this._loadFlavors();
+      }
+    });
+
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
+      this._selectedPreset = preset;
+      if (!preset) {
         this.form.controls.flavor.setValue('');
         this.flavors = [];
         this.checkFlavorState();
-
-        if (this._hasCredentials() || this._selectedPreset) {
-          this._loadFlavors();
-        }
-      });
-
-    this._wizard.onCustomPresetSelect
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset => {
-        this._selectedPreset = preset;
-        if (!preset) {
-          this.form.controls.flavor.setValue('');
-          this.flavors = [];
-          this.checkFlavorState();
-        }
-      });
+      }
+    });
   }
 
   setImage(operatingSystem: OperatingSystemSpec): void {
@@ -198,12 +167,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   }
 
   showFlavorHint(): boolean {
-    return (
-      !this.loadingFlavors &&
-      !this._hasCredentials() &&
-      !this._selectedPreset &&
-      this.isInWizard()
-    );
+    return !this.loadingFlavors && !this._hasCredentials() && !this._selectedPreset && this.isInWizard();
   }
 
   getFlavorsFormState(): string {
@@ -213,9 +177,8 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       return 'Loading flavors...';
     } else if (!this.loadingFlavors && this.flavors.length === 0) {
       return 'No Flavors available';
-    } else {
-      return 'Flavor*';
     }
+    return 'Flavor*';
   }
 
   isInWizard(): boolean {
@@ -259,17 +222,13 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       this.cloudSpec.openstack.password.length > 0 &&
       !!this.cloudSpec.openstack.domain &&
       this.cloudSpec.openstack.domain.length > 0 &&
-      ((!!this.cloudSpec.openstack.tenant &&
-        this.cloudSpec.openstack.tenant.length > 0) ||
-        (!!this.cloudSpec.openstack.tenantID &&
-          this.cloudSpec.openstack.tenantID.length > 0))
+      ((!!this.cloudSpec.openstack.tenant && this.cloudSpec.openstack.tenant.length > 0) ||
+        (!!this.cloudSpec.openstack.tenantID && this.cloudSpec.openstack.tenantID.length > 0))
     );
   }
 
   private _handleFlavours(flavors: OpenstackFlavor[]): void {
-    const sortedFlavors = flavors.sort((a, b) =>
-      a.memory < b.memory ? -1 : 1
-    );
+    const sortedFlavors = flavors.sort((a, b) => (a.memory < b.memory ? -1 : 1));
     this.flavors = sortedFlavors;
     if (
       sortedFlavors.length > 0 &&
@@ -286,8 +245,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.loadingFlavors =
-      !this.isInWizard() || this._hasCredentials() || !!this._selectedPreset;
+    this.loadingFlavors = !this.isInWizard() || this._hasCredentials() || !!this._selectedPreset;
 
     iif(
       () => this.isInWizard(),
@@ -301,11 +259,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
         .credential(this._selectedPreset)
         .datacenter(this.cloudSpec.dc)
         .flavors(),
-      this._api.getOpenStackFlavors(
-        this.projectId,
-        this.seedDCName,
-        this.clusterId
-      )
+      this._api.getOpenStackFlavors(this.projectId, this.seedDCName, this.clusterId)
     )
       .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))

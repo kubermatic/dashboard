@@ -2,11 +2,7 @@ import {Component, Input} from '@angular/core';
 
 import {AdminSettings} from '../../../shared/entity/AdminSettings';
 import {VersionInfo} from '../../../shared/entity/VersionInfo';
-import {
-  CustomLink,
-  CustomLinkLocation,
-  filterCustomLinks,
-} from '../../../shared/utils/custom-link-utils/custom-link';
+import {CustomLink, CustomLinkLocation, filterCustomLinks} from '../../../shared/utils/custom-link-utils/custom-link';
 
 @Component({
   selector: 'km-footer',
@@ -20,9 +16,7 @@ export class FooterComponent {
   @Input() authenticated: boolean;
 
   getCustomLinks(): CustomLink[] {
-    const customLinks = this.authenticated
-      ? this.settings.customLinks
-      : this.customLinks;
+    const customLinks = this.authenticated ? this.settings.customLinks : this.customLinks;
     return filterCustomLinks(customLinks, CustomLinkLocation.Footer);
   }
 

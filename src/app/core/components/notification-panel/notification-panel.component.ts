@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -55,10 +49,7 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
 
   @HostListener('document:click', ['$event'])
   onOutsideClick(event: Event): void {
-    if (
-      !this._elementRef.nativeElement.contains(event.target) &&
-      this.isOpen()
-    ) {
+    if (!this._elementRef.nativeElement.contains(event.target) && this.isOpen()) {
       this.close();
     }
   }

@@ -1,10 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
@@ -34,9 +29,7 @@ export class HetznerProviderSettingsComponent implements OnInit, OnDestroy {
         if (data.token !== this._formData.token) {
           this._formData = data;
           this.setValidators();
-          this.clusterService.changeProviderSettingsPatch(
-            this.getProviderSettingsPatch()
-          );
+          this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
         }
       });
   }
@@ -49,11 +42,7 @@ export class HetznerProviderSettingsComponent implements OnInit, OnDestroy {
     if (!this.token.value) {
       this.token.clearValidators();
     } else {
-      this.token.setValidators([
-        Validators.required,
-        Validators.minLength(64),
-        Validators.maxLength(64),
-      ]);
+      this.token.setValidators([Validators.required, Validators.minLength(64), Validators.maxLength(64)]);
     }
 
     this.token.updateValueAndValidity();

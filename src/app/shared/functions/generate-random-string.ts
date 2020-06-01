@@ -1,6 +1,5 @@
 export function RandomString(length): string {
-  const charset =
-    '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._~';
+  const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._~';
   let result = '';
 
   while (length > 0) {

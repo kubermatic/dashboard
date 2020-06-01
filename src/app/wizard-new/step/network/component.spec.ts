@@ -12,13 +12,7 @@ import {WizardService} from '../../service/wizard';
 import {MachineNetworkStepComponent} from './component';
 import {AppConfigService} from '../../../app-config.service';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  ReactiveFormsModule,
-  SharedModule,
-  HttpClientModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule];
 
 describe('MachineNetworkStepComponent', () => {
   let fixture: ComponentFixture<MachineNetworkStepComponent>;

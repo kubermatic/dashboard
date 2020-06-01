@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnInit,
-} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
@@ -43,10 +38,7 @@ export class StylePickerComponent implements OnInit {
   }
 
   get isSystemDefaultThemeDark(): boolean {
-    return (
-      this._colorSchemeService.hasPreferredTheme() &&
-      this._colorSchemeService.getPreferredTheme().isDark
-    );
+    return this._colorSchemeService.hasPreferredTheme() && this._colorSchemeService.getPreferredTheme().isDark;
   }
 
   private get _systemDefaultThemeName(): string {
@@ -67,43 +59,27 @@ export class StylePickerComponent implements OnInit {
   ngOnInit(): void {
     this.themes = this._themeService.themes;
 
-    this._settingsService.userSettings
-      .pipe(first())
-      .subscribe(this._selectDefaultTheme.bind(this));
+    this._settingsService.userSettings.pipe(first()).subscribe(this._selectDefaultTheme.bind(this));
 
-    this._settingsService.userSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._onSettingsUpdate.bind(this));
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(this._onSettingsUpdate.bind(this));
 
     this._settingsChange
       .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
-      .pipe(
-        switchMap(() =>
-          this._settingsService.patchUserSettings(
-            objectDiff(this.settings, this.apiSettings)
-          )
-        )
-      )
+      .pipe(switchMap(() => this._settingsService.patchUserSettings(objectDiff(this.settings, this.apiSettings))))
       .subscribe(_ => this._settingsService.refreshUserSettings());
 
-    this._colorSchemeService.onColorSchemeUpdate
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(theme => {
-        if (
-          this.settings &&
-          !this.settings.selectedTheme &&
-          this.hasPreferredTheme
-        ) {
-          this.selectedThemeOption = this.systemDefaultOption;
-        }
+    this._colorSchemeService.onColorSchemeUpdate.pipe(takeUntil(this._unsubscribe)).subscribe(theme => {
+      if (this.settings && !this.settings.selectedTheme && this.hasPreferredTheme) {
+        this.selectedThemeOption = this.systemDefaultOption;
+      }
 
-        if (this.selectedThemeOption === this.systemDefaultOption) {
-          this._themeManageService.setTheme(theme);
-        }
+      if (this.selectedThemeOption === this.systemDefaultOption) {
+        this._themeManageService.setTheme(theme);
+      }
 
-        this._cdr.detectChanges();
-      });
+      this._cdr.detectChanges();
+    });
   }
 
   onThemeChange(option: string): void {
@@ -115,9 +91,7 @@ export class StylePickerComponent implements OnInit {
   }
 
   private _getThemeForOption(option: string): string {
-    return option === this.systemDefaultOption
-      ? this._systemDefaultThemeName
-      : option;
+    return option === this.systemDefaultOption ? this._systemDefaultThemeName : option;
   }
 
   private _getUserThemeForOption(option: string): string {
@@ -125,22 +99,17 @@ export class StylePickerComponent implements OnInit {
   }
 
   private _selectTheme(themeName: string): void {
-    const expectedOption =
-      themeName === undefined ? this.systemDefaultOption : themeName;
+    const expectedOption = themeName === undefined ? this.systemDefaultOption : themeName;
     if (this.selectedThemeOption !== expectedOption) {
       this.selectedThemeOption = expectedOption;
-      this._themeManageService.setTheme(
-        this._getThemeForOption(this.selectedThemeOption)
-      );
+      this._themeManageService.setTheme(this._getThemeForOption(this.selectedThemeOption));
     }
   }
 
   private _onSettingsUpdate(settings: UserSettings): void {
     if (!_.isEqual(settings, this.apiSettings)) {
       if (this.apiSettings) {
-        this._notificationService.success(
-          'Successfully applied external settings update'
-        );
+        this._notificationService.success('Successfully applied external settings update');
       }
 
       this.apiSettings = settings;
