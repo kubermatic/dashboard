@@ -20,10 +20,10 @@ import {MemberEntity} from '../../../shared/entity/MemberEntity';
 export class AdminsComponent implements OnInit, OnChanges {
   user: MemberEntity;
   admins: AdminEntity[] = [];
-  adminsDataSource = new MatTableDataSource<AdminEntity>();
-  adminsDisplayedColumns: string[] = ['name', 'email', 'actions'];
-  @ViewChild('adminsSort', {static: true}) adminsSort: MatSort;
-  @ViewChild('adminsPaginator', {static: true}) adminsPaginator: MatPaginator;
+  dataSource = new MatTableDataSource<AdminEntity>();
+  displayedColumns: string[] = ['name', 'email', 'actions'];
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -34,24 +34,24 @@ export class AdminsComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit() {
-    this.adminsDataSource.data = this.admins;
-    this.adminsDataSource.sort = this.adminsSort;
-    this.adminsDataSource.paginator = this.adminsPaginator;
-    this.adminsSort.active = 'name';
-    this.adminsSort.direction = 'asc';
+    this.dataSource.data = this.admins;
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    this.sort.active = 'name';
+    this.sort.direction = 'asc';
 
     this._settingsService.admins
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(admins => {
         this.admins = admins.sort((a, b) => a.email.localeCompare(b.email));
-        this.adminsDataSource.data = this.admins;
+        this.dataSource.data = this.admins;
       });
 
     this._settingsService.userSettings
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(settings => {
-        this.adminsPaginator.pageSize = settings.itemsPerPage;
-        this.adminsDataSource.paginator = this.adminsPaginator; // Force refresh.
+        this.paginator.pageSize = settings.itemsPerPage;
+        this.dataSource.paginator = this.paginator; // Force refresh.
       });
 
     this._userService.loggedInUser
@@ -60,7 +60,7 @@ export class AdminsComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(): void {
-    this.adminsDataSource.data = this.admins;
+    this.dataSource.data = this.admins;
   }
 
   ngOnDestroy(): void {
@@ -68,11 +68,11 @@ export class AdminsComponent implements OnInit, OnChanges {
     this._unsubscribe.complete();
   }
 
-  isDeleteAdminEnabled(admin: AdminEntity): boolean {
+  isDeleteEnabled(admin: AdminEntity): boolean {
     return !!this.user && admin.email !== this.user.email;
   }
 
-  deleteAdmin(admin: AdminEntity): void {
+  delete(admin: AdminEntity): void {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
@@ -103,7 +103,7 @@ export class AdminsComponent implements OnInit, OnChanges {
       });
   }
 
-  addAdmin(): void {
+  add(): void {
     this._matDialog
       .open(AddAdminDialogComponent)
       .afterClosed()
@@ -115,15 +115,12 @@ export class AdminsComponent implements OnInit, OnChanges {
       });
   }
 
-  hasItems(): boolean {
-    return this.admins && this.admins.length > 0;
-  }
-
-  isAdminsPaginatorVisible(): boolean {
+  isPaginatorVisible(): boolean {
     return (
-      this.hasItems() &&
-      this.adminsPaginator &&
-      this.admins.length > this.adminsPaginator.pageSize
+      this.admins &&
+      this.admins.length > 0 &&
+      this.paginator &&
+      this.admins.length > this.paginator.pageSize
     );
   }
 }

@@ -30,9 +30,8 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
     'provider',
     'actions',
   ];
-  @ViewChild('datacentersSort', {static: true}) datacentersSort: MatSort;
-  @ViewChild('datacentersPaginator', {static: true})
-  paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   seeds: string[] = [];
   seedFilter: string;
   countries: string[] = [];
@@ -52,10 +51,10 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.dataSource.data = this.datacenters;
-    this.dataSource.sort = this.datacentersSort;
+    this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.datacentersSort.active = 'datacenter';
-    this.datacentersSort.direction = 'asc';
+    this.sort.active = 'datacenter';
+    this.sort.direction = 'asc';
 
     this.dataSource.sortingDataAccessor = (datacenter, property) => {
       switch (property) {
@@ -78,9 +77,9 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
         this.datacenters = datacenters
           .filter(datacenter => !datacenter.seed)
           .sort((a, b) => a.metadata.name.localeCompare(b.metadata.name));
-        this._setDatacenterSeeds();
-        this._setDatacenterCountries();
-        this.filterDatacenters();
+        this._setSeeds();
+        this._setCountries();
+        this.filter();
       });
 
     this._settingsService.userSettings
@@ -92,7 +91,7 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(): void {
-    this.filterDatacenters();
+    this.filter();
   }
 
   ngOnDestroy(): void {
@@ -113,19 +112,19 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
     return country ? country.country : code;
   }
 
-  private _setDatacenterCountries() {
+  private _setCountries() {
     this.countries = Array.from(
       new Set(this.datacenters.map(datacenter => datacenter.spec.country))
     ).sort((a, b) => a.localeCompare(b));
   }
 
-  private _setDatacenterSeeds() {
+  private _setSeeds() {
     this.seeds = Array.from(
       new Set(this.datacenters.map(datacenter => datacenter.spec.seed))
     ).sort((a, b) => a.localeCompare(b));
   }
 
-  filterDatacenters(): void {
+  filter(): void {
     this.dataSource.data = this.datacenters.filter(datacenter => {
       let isVisible = true;
 
@@ -146,7 +145,7 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
     });
   }
 
-  deleteDatacenter(datacenter: DataCenterEntity): void {
+  delete(datacenter: DataCenterEntity): void {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
@@ -176,13 +175,10 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
       });
   }
 
-  hasItems(): boolean {
-    return this.datacenters && this.datacenters.length > 0;
-  }
-
-  isDatacentersPaginatorVisible(): boolean {
+  isPaginatorVisible(): boolean {
     return (
-      this.hasItems() &&
+      this.datacenters &&
+      this.datacenters.length > 0 &&
       this.paginator &&
       this.datacenters.length > this.paginator.pageSize
     );

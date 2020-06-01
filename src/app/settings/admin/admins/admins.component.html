@@ -4,7 +4,7 @@
     <div fxFlex></div>
     <button mat-icon-button
             matTooltip="Add Administrator"
-            (click)="addAdmin()">
+            (click)="add()">
       <i class="km-icon-add"></i>
     </button>
   </mat-card-header>
@@ -12,8 +12,7 @@
     <table class="km-table"
            mat-table
            matSort
-           #adminsSort="matSort"
-           [dataSource]="adminsDataSource">
+           [dataSource]="dataSource">
       <ng-container matColumnDef="name">
         <th mat-header-cell
             *matHeaderCellDef
@@ -40,8 +39,8 @@
             *matCellDef="let element">
           <div class="km-table-actions">
             <button mat-icon-button
-                    (click)="deleteAdmin(element)"
-                    [disabled]="!isDeleteAdminEnabled(element)">
+                    (click)="delete(element)"
+                    [disabled]="!isDeleteEnabled(element)">
               <i class="km-icon-delete"></i>
             </button>
           </div>
@@ -50,9 +49,9 @@
 
       <tr mat-header-row
           class="km-header-row"
-          *matHeaderRowDef="adminsDisplayedColumns"></tr>
+          *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row
-          *matRowDef="let row; columns: adminsDisplayedColumns"
+          *matRowDef="let row; columns: displayedColumns"
           class="km-mat-row"></tr>
     </table>
 
@@ -64,9 +63,8 @@
       </div>
     </ng-container>
 
-    <div [hidden]="!isAdminsPaginatorVisible()">
+    <div [hidden]="!isPaginatorVisible()">
       <mat-paginator showFirstLastButtons
-                     #adminsPaginator
                      class="km-paginator"></mat-paginator>
     </div>
 

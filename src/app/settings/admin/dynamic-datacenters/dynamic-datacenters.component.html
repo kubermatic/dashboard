@@ -10,7 +10,7 @@
         <mat-label>Seed</mat-label>
         <mat-select disableOptionCentering
                     [(ngModel)]="seedFilter"
-                    (selectionChange)="filterDatacenters()">
+                    (selectionChange)="filter()">
           <mat-select-trigger fxFlex
                               fxLayout="row">
             <div fxFlex
@@ -18,7 +18,7 @@
             <div fxFlex
                  fxLayoutAlign="end">
               <button *ngIf="seedFilter"
-                      (click)="seedFilter = undefined; filterDatacenters(); $event.stopPropagation()"
+                      (click)="seedFilter = undefined; filter(); $event.stopPropagation()"
                       mat-icon-button
                       aria-label="Clear"
                       class="clear-filter">
@@ -37,7 +37,7 @@
         <mat-label>Country</mat-label>
         <mat-select disableOptionCentering
                     [(ngModel)]="countryFilter"
-                    (selectionChange)="filterDatacenters()">
+                    (selectionChange)="filter()">
           <mat-select-trigger fxFlex
                               fxLayout="row">
             <div fxFlex
@@ -45,7 +45,7 @@
             <div fxFlex
                  fxLayoutAlign="end">
               <button *ngIf="countryFilter"
-                      (click)="countryFilter = undefined; filterDatacenters(); $event.stopPropagation()"
+                      (click)="countryFilter = undefined; filter(); $event.stopPropagation()"
                       mat-icon-button
                       aria-label="Clear"
                       class="clear-filter">
@@ -64,7 +64,7 @@
         <mat-label>Provider</mat-label>
         <mat-select disableOptionCentering
                     [(ngModel)]="providerFilter"
-                    (selectionChange)="filterDatacenters()">
+                    (selectionChange)="filter()">
           <mat-select-trigger fxFlex
                               fxLayout="row">
             <div fxFlex
@@ -72,7 +72,7 @@
             <div fxFlex
                  fxLayoutAlign="end">
               <button *ngIf="providerFilter"
-                      (click)="providerFilter = undefined; filterDatacenters(); $event.stopPropagation()"
+                      (click)="providerFilter = undefined; filter(); $event.stopPropagation()"
                       mat-icon-button
                       aria-label="Clear"
                       class="clear-filter">
@@ -93,7 +93,6 @@
     <table class="km-table"
            mat-table
            matSort
-           #datacentersSort="matSort"
            [dataSource]="dataSource">
       <ng-container matColumnDef="datacenter">
         <th mat-header-cell
@@ -146,7 +145,7 @@
             *matCellDef="let element">
           <div class="km-table-actions">
             <button mat-icon-button
-                    (click)="deleteDatacenter(element)">
+                    (click)="delete(element)">
               <i class="km-icon-delete"></i>
             </button>
           </div>
@@ -169,9 +168,8 @@
       </div>
     </ng-container>
 
-    <div [hidden]="!isDatacentersPaginatorVisible()">
+    <div [hidden]="!isPaginatorVisible()">
       <mat-paginator showFirstLastButtons
-                     #datacentersPaginator
                      class="km-paginator"></mat-paginator>
     </div>
 
