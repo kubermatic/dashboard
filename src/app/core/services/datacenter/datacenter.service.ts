@@ -25,7 +25,7 @@ export class DatacenterService {
     if (!this._datacenters$) {
       this._datacenters$ = merge(this._datacentersRefresh$, this._refreshTimer$)
         .pipe(switchMap(() => this._getDatacenters()))
-        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+        .pipe(shareReplay(1));
     }
     return this._datacenters$;
   }
