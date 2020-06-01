@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {merge, Observable, Subject, timer} from 'rxjs';
-import {map, shareReplay, switchMap} from 'rxjs/operators';
+import {first, map, shareReplay, switchMap} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {AppConfigService} from '../../../app-config.service';
@@ -21,12 +21,15 @@ export class DatacenterService {
     private readonly _appConfigService: AppConfigService
   ) {}
 
+  init(): void {
+    this._datacenters$ = merge(this._datacentersRefresh$, this._refreshTimer$)
+      .pipe(switchMap(() => this._getDatacenters()))
+      .pipe(shareReplay(1));
+
+    this._datacenters$.pipe(first()).subscribe(_ => {});
+  }
+
   get datacenters(): Observable<DataCenterEntity[]> {
-    if (!this._datacenters$) {
-      this._datacenters$ = merge(this._datacentersRefresh$, this._refreshTimer$)
-        .pipe(switchMap(() => this._getDatacenters()))
-        .pipe(shareReplay(1));
-    }
     return this._datacenters$;
   }
 
