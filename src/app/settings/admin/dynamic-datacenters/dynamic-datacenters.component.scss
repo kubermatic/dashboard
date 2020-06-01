@@ -28,6 +28,10 @@
 
 .km-with-table-header .mat-card-header {
   padding: 0 (3.75 * $baseline-grid) !important;
+
+  .mat-icon-button {
+    margin-top: -.33 * $baseline-grid;
+  }
 }
 
 .km-provider-logo {

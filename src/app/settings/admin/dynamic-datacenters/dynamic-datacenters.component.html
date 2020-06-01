@@ -1,5 +1,5 @@
 <mat-card class="km-with-table-header">
-  <mat-card-header>
+  <mat-card-header fxLayoutGap="24px">
     <mat-card-title>Dynamic Datacenters</mat-card-title>
     <div fxFlex></div>
     <div class="filters"
@@ -88,6 +88,11 @@
         </mat-select>
       </mat-form-field>
     </div>
+    <button mat-icon-button
+            matTooltip="Add datacenter"
+            (click)="add()">
+      <i class="km-icon-add"></i>
+    </button>
   </mat-card-header>
   <mat-card-content>
     <table class="km-table"
@@ -144,6 +149,11 @@
         <td mat-cell
             *matCellDef="let element">
           <div class="km-table-actions">
+            <button mat-icon-button
+                    (click)="edit(element)">
+              <i class="km-icon-edit"></i>
+            </button>
+
             <button mat-icon-button
                     (click)="delete(element)">
               <i class="km-icon-delete"></i>

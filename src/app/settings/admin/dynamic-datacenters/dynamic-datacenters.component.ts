@@ -145,6 +145,10 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
     });
   }
 
+  add(): void {}
+
+  edit(datacenter: DataCenterEntity): void {}
+
   delete(datacenter: DataCenterEntity): void {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
