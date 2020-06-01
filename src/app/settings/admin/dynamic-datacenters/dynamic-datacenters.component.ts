@@ -22,8 +22,8 @@ import {Subject} from 'rxjs';
 })
 export class DynamicDatacentersComponent implements OnInit, OnChanges {
   datacenters: DataCenterEntity[] = [];
-  datacentersDataSource = new MatTableDataSource<DataCenterEntity>();
-  datacentersDisplayedColumns: string[] = [
+  dataSource = new MatTableDataSource<DataCenterEntity>();
+  displayedColumns: string[] = [
     'datacenter',
     'seed',
     'country',
@@ -32,15 +32,15 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
   ];
   @ViewChild('datacentersSort', {static: true}) datacentersSort: MatSort;
   @ViewChild('datacentersPaginator', {static: true})
-  datacentersPaginator: MatPaginator;
-  datacenterSeeds: string[] = [];
-  datacenterSeedFilter: string;
-  datacenterCountries: string[] = [];
-  datacenterCountryFilter: string;
-  datacenterProviders: string[] = Object.values(NodeProvider).filter(
+  paginator: MatPaginator;
+  seeds: string[] = [];
+  seedFilter: string;
+  countries: string[] = [];
+  countryFilter: string;
+  providers: string[] = Object.values(NodeProvider).filter(
     provider => !!provider
   );
-  datacenterProviderFilter: string;
+  providerFilter: string;
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -51,13 +51,13 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit() {
-    this.datacentersDataSource.data = this.datacenters;
-    this.datacentersDataSource.sort = this.datacentersSort;
-    this.datacentersDataSource.paginator = this.datacentersPaginator;
+    this.dataSource.data = this.datacenters;
+    this.dataSource.sort = this.datacentersSort;
+    this.dataSource.paginator = this.paginator;
     this.datacentersSort.active = 'datacenter';
     this.datacentersSort.direction = 'asc';
 
-    this.datacentersDataSource.sortingDataAccessor = (datacenter, property) => {
+    this.dataSource.sortingDataAccessor = (datacenter, property) => {
       switch (property) {
         case 'datacenter':
           return datacenter.metadata.name;
@@ -86,13 +86,13 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
     this._settingsService.userSettings
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(settings => {
-        this.datacentersPaginator.pageSize = settings.itemsPerPage;
-        this.datacentersDataSource.paginator = this.datacentersPaginator; // Force refresh.
+        this.paginator.pageSize = settings.itemsPerPage;
+        this.dataSource.paginator = this.paginator; // Force refresh.
       });
   }
 
   ngOnChanges(): void {
-    this.datacentersDataSource.data = this.datacenters;
+    this.filterDatacenters();
   }
 
   ngOnDestroy(): void {
@@ -114,35 +114,32 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
   }
 
   private _setDatacenterCountries() {
-    this.datacenterCountries = Array.from(
+    this.countries = Array.from(
       new Set(this.datacenters.map(datacenter => datacenter.spec.country))
     ).sort((a, b) => a.localeCompare(b));
   }
 
   private _setDatacenterSeeds() {
-    this.datacenterSeeds = Array.from(
+    this.seeds = Array.from(
       new Set(this.datacenters.map(datacenter => datacenter.spec.seed))
     ).sort((a, b) => a.localeCompare(b));
   }
 
   filterDatacenters(): void {
-    this.datacentersDataSource.data = this.datacenters.filter(datacenter => {
+    this.dataSource.data = this.datacenters.filter(datacenter => {
       let isVisible = true;
 
-      if (this.datacenterCountryFilter) {
-        isVisible =
-          isVisible && datacenter.spec.country === this.datacenterCountryFilter;
+      if (this.countryFilter) {
+        isVisible = isVisible && datacenter.spec.country === this.countryFilter;
       }
 
-      if (this.datacenterSeedFilter) {
-        isVisible =
-          isVisible && datacenter.spec.seed === this.datacenterSeedFilter;
+      if (this.seedFilter) {
+        isVisible = isVisible && datacenter.spec.seed === this.seedFilter;
       }
 
-      if (this.datacenterProviderFilter) {
+      if (this.providerFilter) {
         isVisible =
-          isVisible &&
-          datacenter.spec.provider === this.datacenterProviderFilter;
+          isVisible && datacenter.spec.provider === this.providerFilter;
       }
 
       return isVisible;
@@ -186,8 +183,8 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
   isDatacentersPaginatorVisible(): boolean {
     return (
       this.hasItems() &&
-      this.datacentersPaginator &&
-      this.datacenters.length > this.datacentersPaginator.pageSize
+      this.paginator &&
+      this.datacenters.length > this.paginator.pageSize
     );
   }
 }
