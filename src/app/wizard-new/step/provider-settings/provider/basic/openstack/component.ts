@@ -18,6 +18,7 @@ import {
   catchError,
   debounceTime,
   distinctUntilChanged,
+  filter,
   map,
   switchMap,
   takeUntil,
@@ -127,6 +128,9 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator
       );
 
     this.form.valueChanges
+      .pipe(
+        filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK)
+      )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this._presets.enablePresets(
@@ -140,6 +144,9 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator
       this._clusterService.providerChanges,
       this._clusterService.datacenterChanges
     )
+      .pipe(
+        filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK)
+      )
       .pipe(
         switchMap(_ =>
           this._datacenterService.getDataCenter(this._clusterService.datacenter)
@@ -278,7 +285,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator
 
   private _hasRequiredCredentials(): boolean {
     return (
-      !!this._hasRequiredBasicCredentials &&
+      this._hasRequiredBasicCredentials() &&
       (!!this._clusterService.cluster.spec.cloud.openstack.tenant ||
         !!this._clusterService.cluster.spec.cloud.openstack.tenantID)
     );

@@ -10,7 +10,14 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {EMPTY, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {
+  catchError,
+  filter,
+  map,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
@@ -96,6 +103,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator
     });
 
     this.form.valueChanges
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.VSPHERE))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this._presets.enablePresets(
@@ -112,6 +120,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator
       );
 
     this._clusterService.clusterChanges
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.VSPHERE))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._handleClusterChange.bind(this));
 

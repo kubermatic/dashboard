@@ -103,6 +103,7 @@ export class GCPProviderExtendedComponent extends BaseFormValidator
       );
 
     this.form.valueChanges
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.GCP))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this._presets.enablePresets(
@@ -113,6 +114,7 @@ export class GCPProviderExtendedComponent extends BaseFormValidator
       );
 
     this._clusterService.clusterChanges
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.GCP))
       .pipe(
         tap(_ => {
           if (!this._hasRequiredCredentials()) {

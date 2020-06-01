@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {merge} from 'rxjs';
-import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 import {PresetsService} from '../../../../../../core/services';
 import {GCPCloudSpec} from '../../../../../../shared/entity/cloud/GCPCloudSpec';
 import {
@@ -14,6 +14,7 @@ import {
   ClusterEntity,
   ClusterSpec,
 } from '../../../../../../shared/entity/ClusterEntity';
+import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
 
@@ -66,6 +67,7 @@ export class GCPProviderBasicComponent extends BaseFormValidator
       );
 
     this.form.valueChanges
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.GCP))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this._presets.enablePresets(
