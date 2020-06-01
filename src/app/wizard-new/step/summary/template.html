@@ -465,7 +465,7 @@
         </ng-container>
 
         <!-- Azure Node Options -->
-        <ng-container *ngIf="cluster.spec.cloud.gcp">
+        <ng-container *ngIf="cluster.spec.cloud.azure">
           <km-property-boolean label="Assign Public IP"
                                [value]="nodeData.spec.cloud.azure.assignPublicIP">
           </km-property-boolean>
@@ -492,7 +492,7 @@
         </ng-container>
 
         <!-- Openstack Node Options -->
-        <ng-container *ngIf="cluster.spec.cloud.gcp">
+        <ng-container *ngIf="cluster.spec.cloud.openstack">
           <km-property-boolean label="Allocate Floating IP"
                                [value]="nodeData.spec.cloud.openstack.useFloatingIP">
           </km-property-boolean>

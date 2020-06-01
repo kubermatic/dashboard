@@ -18,6 +18,7 @@ import {
   catchError,
   debounceTime,
   distinctUntilChanged,
+  filter,
   map,
   switchMap,
   takeUntil,
@@ -106,6 +107,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator
       );
 
     this.form.valueChanges
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AWS))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this._presets.enablePresets(

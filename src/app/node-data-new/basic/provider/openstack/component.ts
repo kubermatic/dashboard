@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -17,6 +18,7 @@ import {merge, Observable} from 'rxjs';
 import {delay, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
+import {ClusterType} from '../../../../shared/entity/ClusterEntity';
 
 import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/DatacenterEntity';
 import {OpenstackNodeSpec} from '../../../../shared/entity/node/OpenstackNodeSpec';
@@ -27,7 +29,6 @@ import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../wizard-new/service/cluster';
 import {NodeDataService} from '../../../service/service';
-import {ClusterType} from '../../../../shared/entity/ClusterEntity';
 
 enum Controls {
   Flavor = 'flavor',
@@ -62,7 +63,7 @@ enum FlavorState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpenstackBasicNodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy, AfterViewInit {
   private _defaultImage = '';
   private _images: DatacenterOperatingSystemOptions;
 
@@ -95,9 +96,6 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator
     });
 
     this._nodeDataService.nodeData = this._getNodeData();
-    this._flavorsObservable
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._setDefaultFlavor.bind(this));
 
     this._clusterService.datacenterChanges
       .pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
@@ -129,6 +127,12 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+  }
+
+  ngAfterViewInit() {
+    this._flavorsObservable
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._setDefaultFlavor.bind(this));
   }
 
   ngOnDestroy(): void {
