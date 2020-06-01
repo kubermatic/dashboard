@@ -1,6 +1,6 @@
 @import "../../../assets/css/variables";
 
-.mat-card:not(.km-with-table-header) {
+.mat-card {
   margin-top: $content-padding !important;
 
   .mat-card-header {
@@ -73,13 +73,4 @@
       margin-right: 6 * $baseline-grid;
     }
   }
-}
-
-.km-with-table-header .mat-card-header {
-  padding: 0 (3.75 * $baseline-grid) !important;
-}
-
-.km-table-actions {
-  display: flex;
-  justify-content: flex-end;
 }

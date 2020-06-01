@@ -1,0 +1,129 @@
+import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {first, takeUntil} from 'rxjs/operators';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatSort} from '@angular/material/sort';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {NotificationService, UserService} from '../../../core/services';
+import {SettingsService} from '../../../core/services/settings/settings.service';
+import {Subject} from 'rxjs';
+import {AdminEntity} from '../../../shared/entity/AdminSettings';
+import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.component';
+import {MemberEntity} from '../../../shared/entity/MemberEntity';
+
+@Component({
+  selector: 'km-admins',
+  templateUrl: './admins.component.html',
+  styleUrls: ['./admins.component.scss'],
+})
+export class AdminsComponent implements OnInit, OnChanges {
+  user: MemberEntity;
+  admins: AdminEntity[] = [];
+  adminsDataSource = new MatTableDataSource<AdminEntity>();
+  adminsDisplayedColumns: string[] = ['name', 'email', 'actions'];
+  @ViewChild('adminsSort', {static: true}) adminsSort: MatSort;
+  @ViewChild('adminsPaginator', {static: true}) adminsPaginator: MatPaginator;
+  private _unsubscribe = new Subject<void>();
+
+  constructor(
+    private readonly _settingsService: SettingsService,
+    private readonly _userService: UserService,
+    private readonly _notificationService: NotificationService,
+    private readonly _matDialog: MatDialog
+  ) {}
+
+  ngOnInit() {
+    this.adminsDataSource.data = this.admins;
+    this.adminsDataSource.sort = this.adminsSort;
+    this.adminsDataSource.paginator = this.adminsPaginator;
+    this.adminsSort.active = 'name';
+    this.adminsSort.direction = 'asc';
+
+    this._settingsService.admins
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(admins => {
+        this.admins = admins.sort((a, b) => a.email.localeCompare(b.email));
+        this.adminsDataSource.data = this.admins;
+      });
+
+    this._settingsService.userSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => {
+        this.adminsPaginator.pageSize = settings.itemsPerPage;
+        this.adminsDataSource.paginator = this.adminsPaginator; // Force refresh.
+      });
+
+    this._userService.loggedInUser
+      .pipe(first())
+      .subscribe(user => (this.user = user));
+  }
+
+  ngOnChanges(): void {
+    this.adminsDataSource.data = this.admins;
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
+  isDeleteAdminEnabled(admin: AdminEntity): boolean {
+    return !!this.user && admin.email !== this.user.email;
+  }
+
+  deleteAdmin(admin: AdminEntity): void {
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        title: 'Delete Admin',
+        message: `Are you sure you want to take admin rights from ${admin.name}?`,
+        confirmLabel: 'Delete',
+      },
+    };
+
+    this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(first())
+      .subscribe((isConfirmed: boolean) => {
+        if (isConfirmed) {
+          admin.isAdmin = false;
+          this._settingsService
+            .setAdmin(admin)
+            .pipe(first())
+            .subscribe(() => {
+              this._notificationService.success(
+                `The <strong>${admin.name}</strong> user was deleted from admin group`
+              );
+              this._settingsService.refreshAdmins();
+            });
+        }
+      });
+  }
+
+  addAdmin(): void {
+    this._matDialog
+      .open(AddAdminDialogComponent)
+      .afterClosed()
+      .pipe(first())
+      .subscribe(admin => {
+        if (admin) {
+          this._settingsService.refreshAdmins();
+        }
+      });
+  }
+
+  hasItems(): boolean {
+    return this.admins && this.admins.length > 0;
+  }
+
+  isAdminsPaginatorVisible(): boolean {
+    return (
+      this.hasItems() &&
+      this.adminsPaginator &&
+      this.admins.length > this.adminsPaginator.pageSize
+    );
+  }
+}
