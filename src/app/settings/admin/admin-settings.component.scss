@@ -79,42 +79,7 @@
   padding: 0 (3.75 * $baseline-grid) !important;
 }
 
-.km-provider-logo {
-  background-position: left !important;
-  max-height: 3.5 * $baseline-grid;
-  max-width: 14 * $baseline-grid !important;
-  min-height: 3.5 * $baseline-grid;
-  min-width: 5 * $baseline-grid !important;
-  margin: $baseline-grid $baseline-grid 0 0;
-}
-
 .km-table-actions {
   display: flex;
   justify-content: flex-end;
-}
-
-.datacenter-filters {
-  margin-top: -2 * $baseline-grid;
-
-  .filter-title {
-    margin: -2.5 * $baseline-grid $baseline-grid 0 0;
-  }
-
-  .mat-form-field {
-    width: 35 * $baseline-grid;
-  }
-
-  .clear-filter {
-    line-height: 2.5 * $line-height;
-    margin-right: 0.625 * $baseline-grid !important;
-    right: 3.75 * $baseline-grid;
-    top: -0.5 * $baseline-grid;
-    max-height: 3 * $baseline-grid;
-    max-width: 3 * $baseline-grid;
-    position: absolute;
-
-    .km-icon {
-      margin-top: -.5 * $baseline-grid !important;
-    }
-  }
 }

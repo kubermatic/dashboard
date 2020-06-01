@@ -6,6 +6,7 @@ import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.compo
 import {AdminSettingsComponent} from './admin-settings.component';
 import {AdminSettingsRoutingModule} from './admin-settings.routing.module';
 import {CustomLinksFormComponent} from './custom-link-form/custom-links-form.component';
+import {DynamicDatacentersComponent} from './dynamic-datacenters/dynamic-datacenters.component';
 
 @NgModule({
   imports: [SharedModule, AdminSettingsRoutingModule],
@@ -13,6 +14,7 @@ import {CustomLinksFormComponent} from './custom-link-form/custom-links-form.com
     AdminSettingsComponent,
     AddAdminDialogComponent,
     CustomLinksFormComponent,
+    DynamicDatacentersComponent,
   ],
   entryComponents: [AddAdminDialogComponent],
 })

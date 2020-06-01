@@ -11,11 +11,10 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import * as _ from 'lodash';
-import * as countryCodeLookup from 'country-code-lookup';
 import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
-import {DatacenterService, NotificationService} from '../../core/services';
+import {NotificationService} from '../../core/services';
 import {UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
@@ -29,11 +28,6 @@ import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
 
 import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.component';
-import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
-import {
-  NodeProvider,
-  NodeProviderConstants,
-} from '../../shared/model/NodeProviderConstants';
 import {ClusterType} from '../../shared/entity/ClusterEntity';
 
 @Component({
@@ -44,26 +38,6 @@ import {ClusterType} from '../../shared/entity/ClusterEntity';
 export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   clusterType = ClusterType;
   user: MemberEntity;
-  datacenters: DataCenterEntity[] = [];
-  datacentersDataSource = new MatTableDataSource<DataCenterEntity>();
-  datacentersDisplayedColumns: string[] = [
-    'datacenter',
-    'seed',
-    'country',
-    'provider',
-    'actions',
-  ];
-  @ViewChild('datacentersSort', {static: true}) datacentersSort: MatSort;
-  @ViewChild('datacentersPaginator', {static: true})
-  datacentersPaginator: MatPaginator;
-  datacenterSeeds: string[] = [];
-  datacenterSeedFilter: string;
-  datacenterCountries: string[] = [];
-  datacenterCountryFilter: string;
-  datacenterProviders: string[] = Object.values(NodeProvider).filter(
-    provider => !!provider
-  );
-  datacenterProviderFilter: string;
   admins: AdminEntity[] = [];
   adminsDataSource = new MatTableDataSource<AdminEntity>();
   adminsDisplayedColumns: string[] = ['name', 'email', 'actions'];
@@ -78,7 +52,6 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private readonly _userService: UserService,
     private readonly _settingsService: SettingsService,
-    private readonly _datacenterService: DatacenterService,
     private readonly _historyService: HistoryService,
     private readonly _matDialog: MatDialog,
     private readonly _notificationService: NotificationService
@@ -96,38 +69,6 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(admins => {
         this.admins = admins.sort((a, b) => a.email.localeCompare(b.email));
         this.adminsDataSource.data = this.admins;
-      });
-
-    this.datacentersDataSource.data = this.datacenters;
-    this.datacentersDataSource.sort = this.datacentersSort;
-    this.datacentersDataSource.paginator = this.datacentersPaginator;
-    this.datacentersSort.active = 'datacenter';
-    this.datacentersSort.direction = 'asc';
-
-    this.datacentersDataSource.sortingDataAccessor = (datacenter, property) => {
-      switch (property) {
-        case 'datacenter':
-          return datacenter.metadata.name;
-        case 'seed':
-          return datacenter.spec.seed;
-        case 'country':
-          return this.getCountryName(datacenter.spec.country);
-        case 'provider':
-          return datacenter.spec.provider;
-        default:
-          return datacenter[property];
-      }
-    };
-
-    this._datacenterService.datacenters
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(datacenters => {
-        this.datacenters = datacenters
-          .filter(datacenter => !datacenter.seed)
-          .sort((a, b) => a.metadata.name.localeCompare(b.metadata.name));
-        this._setDatacenterSeeds();
-        this._setDatacenterCountries();
-        this.filterDatacenters();
       });
 
     this._userService.loggedInUser
@@ -168,9 +109,6 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(settings => {
         this.adminsPaginator.pageSize = settings.itemsPerPage;
         this.adminsDataSource.paginator = this.adminsPaginator; // Force refresh.
-
-        this.datacentersPaginator.pageSize = settings.itemsPerPage;
-        this.datacentersDataSource.paginator = this.datacentersPaginator; // Force refresh.
       });
   }
 
@@ -277,85 +215,6 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  getProviderName(provider: NodeProvider | string): string {
-    return NodeProviderConstants.displayName(provider);
-  }
-
-  getCountryName(code: string): string {
-    if (!code) {
-      return '';
-    }
-
-    const country = countryCodeLookup.byIso(code);
-    return country ? country.country : code;
-  }
-
-  private _setDatacenterCountries() {
-    this.datacenterCountries = Array.from(
-      new Set(this.datacenters.map(datacenter => datacenter.spec.country))
-    ).sort((a, b) => a.localeCompare(b));
-  }
-
-  private _setDatacenterSeeds() {
-    this.datacenterSeeds = Array.from(
-      new Set(this.datacenters.map(datacenter => datacenter.spec.seed))
-    ).sort((a, b) => a.localeCompare(b));
-  }
-
-  filterDatacenters(): void {
-    this.datacentersDataSource.data = this.datacenters.filter(datacenter => {
-      let isVisible = true;
-
-      if (this.datacenterCountryFilter) {
-        isVisible =
-          isVisible && datacenter.spec.country === this.datacenterCountryFilter;
-      }
-
-      if (this.datacenterSeedFilter) {
-        isVisible =
-          isVisible && datacenter.spec.seed === this.datacenterSeedFilter;
-      }
-
-      if (this.datacenterProviderFilter) {
-        isVisible =
-          isVisible &&
-          datacenter.spec.provider === this.datacenterProviderFilter;
-      }
-
-      return isVisible;
-    });
-  }
-
-  deleteDatacenter(datacenter: DataCenterEntity): void {
-    const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
-      data: {
-        title: 'Delete Datacenter',
-        message: `Are you sure you want to delete the ${datacenter.metadata.name} datacenter?`,
-        confirmLabel: 'Delete',
-      },
-    };
-
-    this._matDialog
-      .open(ConfirmationDialogComponent, dialogConfig)
-      .afterClosed()
-      .pipe(first())
-      .subscribe((isConfirmed: boolean) => {
-        if (isConfirmed) {
-          this._datacenterService
-            .deleteDatacenter(datacenter)
-            .pipe(first())
-            .subscribe(() => {
-              this._notificationService.success(
-                `The <strong>${datacenter.metadata.name}</strong> datacenter was deleted`
-              );
-              this._datacenterService.refreshDatacenters();
-            });
-        }
-      });
-  }
-
   isDeleteAdminEnabled(admin: AdminEntity): boolean {
     return !!this.user && admin.email !== this.user.email;
   }
@@ -412,14 +271,6 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
       this.hasItems() &&
       this.adminsPaginator &&
       this.admins.length > this.adminsPaginator.pageSize
-    );
-  }
-
-  isDatacentersPaginatorVisible(): boolean {
-    return (
-      this.hasItems() &&
-      this.datacentersPaginator &&
-      this.admins.length > this.datacentersPaginator.pageSize
     );
   }
 }
