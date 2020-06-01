@@ -30,22 +30,20 @@ export class SetProviderComponent implements OnInit, OnDestroy {
       this.changeClusterProvider();
     });
 
-    this._dcService.datacenters
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(datacenters => {
-        const providers: NodeProvider[] = [];
-        for (const datacenter of datacenters) {
-          if (datacenter.seed) {
-            continue;
-          }
-
-          const provider = getDatacenterProvider(datacenter);
-          if (!providers.includes(provider)) {
-            providers.push(provider);
-          }
+    this._dcService.datacenters.pipe(takeUntil(this._unsubscribe)).subscribe(datacenters => {
+      const providers: NodeProvider[] = [];
+      for (const datacenter of datacenters) {
+        if (datacenter.seed) {
+          continue;
         }
-        this.providers = providers;
-      });
+
+        const provider = getDatacenterProvider(datacenter);
+        if (!providers.includes(provider)) {
+          providers.push(provider);
+        }
+      }
+      this.providers = providers;
+    });
   }
 
   changeClusterProvider(): void {

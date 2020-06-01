@@ -26,22 +26,20 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
     });
 
     // Get all datacenters for the cluster cloud provider
-    this._dcService.datacenters
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(datacenters => {
-        const providerDatacenters: DataCenterEntity[] = [];
-        for (const datacenter of datacenters) {
-          if (datacenter.seed) {
-            continue;
-          }
-          const provider = getDatacenterProvider(datacenter);
-          const clusterProvider = getClusterProvider(this.cluster);
-          if (provider === clusterProvider) {
-            providerDatacenters.push(datacenter);
-          }
+    this._dcService.datacenters.pipe(takeUntil(this._unsubscribe)).subscribe(datacenters => {
+      const providerDatacenters: DataCenterEntity[] = [];
+      for (const datacenter of datacenters) {
+        if (datacenter.seed) {
+          continue;
         }
-        this.datacenters = providerDatacenters;
-      });
+        const provider = getDatacenterProvider(datacenter);
+        const clusterProvider = getClusterProvider(this.cluster);
+        if (provider === clusterProvider) {
+          providerDatacenters.push(datacenter);
+        }
+      }
+      this.datacenters = providerDatacenters;
+    });
 
     this.setDatacenterForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.changeClusterDatacenter();

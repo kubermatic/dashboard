@@ -114,7 +114,6 @@
       "no-prototype-builtins": "error",
       "no-extra-boolean-cast": "error",
       "no-else-return": "error",
-      "no-unused-vars": "warn",
       "node/no-extraneous-require": "error",
       "node/no-unpublished-require": "error",
       "prefer-rest-params": "error",

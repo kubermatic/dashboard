@@ -1,40 +1,26 @@
-import {
-  Component,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatButtonToggleGroup} from '@angular/material/button-toggle';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import * as _ from 'lodash';
 import * as countryCodeLookup from 'country-code-lookup';
+import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
+import {debounceTime, filter, first, switchMap, takeUntil} from 'rxjs/operators';
 
-import {DatacenterService, NotificationService} from '../../core/services';
-import {UserService} from '../../core/services';
+import {DatacenterService, NotificationService, UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {
-  AdminEntity,
-  AdminSettings,
-  ClusterTypeOptions,
-} from '../../shared/entity/AdminSettings';
+import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
+import {ClusterType} from '../../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {MemberEntity} from '../../shared/entity/MemberEntity';
+import {NodeProvider, NodeProviderConstants} from '../../shared/model/NodeProviderConstants';
 import {objectDiff} from '../../shared/utils/common-utils';
 
 import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.component';
-import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
-import {
-  NodeProvider,
-  NodeProviderConstants,
-} from '../../shared/model/NodeProviderConstants';
-import {ClusterType} from '../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'km-admin-settings',
@@ -46,13 +32,7 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   user: MemberEntity;
   datacenters: DataCenterEntity[] = [];
   datacentersDataSource = new MatTableDataSource<DataCenterEntity>();
-  datacentersDisplayedColumns: string[] = [
-    'datacenter',
-    'seed',
-    'country',
-    'provider',
-    'actions',
-  ];
+  datacentersDisplayedColumns: string[] = ['datacenter', 'seed', 'country', 'provider', 'actions'];
   @ViewChild('datacentersSort', {static: true}) datacentersSort: MatSort;
   @ViewChild('datacentersPaginator', {static: true})
   datacentersPaginator: MatPaginator;
@@ -60,9 +40,7 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   datacenterSeedFilter: string;
   datacenterCountries: string[] = [];
   datacenterCountryFilter: string;
-  datacenterProviders: string[] = Object.values(NodeProvider).filter(
-    provider => !!provider
-  );
+  datacenterProviders: string[] = Object.values(NodeProvider).filter(provider => !!provider);
   datacenterProviderFilter: string;
   admins: AdminEntity[] = [];
   adminsDataSource = new MatTableDataSource<AdminEntity>();
@@ -91,12 +69,10 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
     this.adminsSort.active = 'name';
     this.adminsSort.direction = 'asc';
 
-    this._settingsService.admins
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(admins => {
-        this.admins = admins.sort((a, b) => a.email.localeCompare(b.email));
-        this.adminsDataSource.data = this.admins;
-      });
+    this._settingsService.admins.pipe(takeUntil(this._unsubscribe)).subscribe(admins => {
+      this.admins = admins.sort((a, b) => a.email.localeCompare(b.email));
+      this.adminsDataSource.data = this.admins;
+    });
 
     this.datacentersDataSource.data = this.datacenters;
     this.datacentersDataSource.sort = this.datacentersSort;
@@ -119,59 +95,41 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
       }
     };
 
-    this._datacenterService.datacenters
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(datacenters => {
-        this.datacenters = datacenters
-          .filter(datacenter => !datacenter.seed)
-          .sort((a, b) => a.metadata.name.localeCompare(b.metadata.name));
-        this._setDatacenterSeeds();
-        this._setDatacenterCountries();
-        this.filterDatacenters();
-      });
+    this._datacenterService.datacenters.pipe(takeUntil(this._unsubscribe)).subscribe(datacenters => {
+      this.datacenters = datacenters
+        .filter(datacenter => !datacenter.seed)
+        .sort((a, b) => a.metadata.name.localeCompare(b.metadata.name));
+      this._setDatacenterSeeds();
+      this._setDatacenterCountries();
+      this.filterDatacenters();
+    });
 
-    this._userService.loggedInUser
-      .pipe(first())
-      .subscribe(user => (this.user = user));
+    this._userService.loggedInUser.pipe(first()).subscribe(user => (this.user = user));
 
-    this._settingsService.adminSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        if (!_.isEqual(settings, this.apiSettings)) {
-          if (
-            this.apiSettings &&
-            !_.isEqual(
-              this.apiSettings,
-              this._settingsService.defaultAdminSettings
-            )
-          ) {
-            this._notificationService.success(
-              'The settings update was applied'
-            );
-          }
-          this._applySettings(settings);
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      if (!_.isEqual(settings, this.apiSettings)) {
+        if (this.apiSettings && !_.isEqual(this.apiSettings, this._settingsService.defaultAdminSettings)) {
+          this._notificationService.success('The settings update was applied');
         }
-      });
+        this._applySettings(settings);
+      }
+    });
 
     this._settingsChange
       .pipe(
         debounceTime(500),
-        switchMap(() =>
-          this._settingsService.patchAdminSettings(this._getPatch())
-        ),
+        switchMap(() => this._settingsService.patchAdminSettings(this._getPatch())),
         takeUntil(this._unsubscribe)
       )
       .subscribe(_ => {});
 
-    this._settingsService.userSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        this.adminsPaginator.pageSize = settings.itemsPerPage;
-        this.adminsDataSource.paginator = this.adminsPaginator; // Force refresh.
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.adminsPaginator.pageSize = settings.itemsPerPage;
+      this.adminsDataSource.paginator = this.adminsPaginator; // Force refresh.
 
-        this.datacentersPaginator.pageSize = settings.itemsPerPage;
-        this.datacentersDataSource.paginator = this.datacentersPaginator; // Force refresh.
-      });
+      this.datacentersPaginator.pageSize = settings.itemsPerPage;
+      this.datacentersDataSource.paginator = this.datacentersPaginator; // Force refresh.
+    });
   }
 
   ngOnChanges(): void {
@@ -209,18 +167,15 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private _getDistro(group: MatButtonToggleGroup): ClusterTypeOptions {
-    const isKubernetesSelected =
-      group.value && group.value.indexOf(ClusterType.Kubernetes) > -1;
-    const isOpenshiftSelected =
-      group.value && group.value.indexOf(ClusterType.OpenShift) > -1;
+    const isKubernetesSelected = group.value && group.value.indexOf(ClusterType.Kubernetes) > -1;
+    const isOpenshiftSelected = group.value && group.value.indexOf(ClusterType.OpenShift) > -1;
 
     if (isKubernetesSelected && isOpenshiftSelected) {
       return ClusterTypeOptions.All;
     } else if (isKubernetesSelected) {
       return ClusterTypeOptions.Kubernetes;
-    } else {
-      return ClusterTypeOptions.OpenShift;
     }
+    return ClusterTypeOptions.OpenShift;
   }
 
   private _setDistro(distro: ClusterTypeOptions): void {
@@ -238,9 +193,7 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isLastDistro(group: MatButtonToggleGroup, distro: string): boolean {
-    return (
-      group.value && group.value.length <= 1 && group.value.indexOf(distro) > -1
-    );
+    return group.value && group.value.length <= 1 && group.value.indexOf(distro) > -1;
   }
 
   isOpenShiftEnabled(): boolean {
@@ -262,18 +215,9 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
   isDisplayLinksEqual(): boolean {
     return (
-      this.isEqual(
-        this.settings.displayAPIDocs,
-        this.apiSettings.displayAPIDocs
-      ) &&
-      this.isEqual(
-        this.settings.displayDemoInfo,
-        this.apiSettings.displayDemoInfo
-      ) &&
-      this.isEqual(
-        this.settings.displayTermsOfService,
-        this.apiSettings.displayTermsOfService
-      )
+      this.isEqual(this.settings.displayAPIDocs, this.apiSettings.displayAPIDocs) &&
+      this.isEqual(this.settings.displayDemoInfo, this.apiSettings.displayDemoInfo) &&
+      this.isEqual(this.settings.displayTermsOfService, this.apiSettings.displayTermsOfService)
     );
   }
 
@@ -297,9 +241,9 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private _setDatacenterSeeds() {
-    this.datacenterSeeds = Array.from(
-      new Set(this.datacenters.map(datacenter => datacenter.spec.seed))
-    ).sort((a, b) => a.localeCompare(b));
+    this.datacenterSeeds = Array.from(new Set(this.datacenters.map(datacenter => datacenter.spec.seed))).sort((a, b) =>
+      a.localeCompare(b)
+    );
   }
 
   filterDatacenters(): void {
@@ -307,19 +251,15 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
       let isVisible = true;
 
       if (this.datacenterCountryFilter) {
-        isVisible =
-          isVisible && datacenter.spec.country === this.datacenterCountryFilter;
+        isVisible = isVisible && datacenter.spec.country === this.datacenterCountryFilter;
       }
 
       if (this.datacenterSeedFilter) {
-        isVisible =
-          isVisible && datacenter.spec.seed === this.datacenterSeedFilter;
+        isVisible = isVisible && datacenter.spec.seed === this.datacenterSeedFilter;
       }
 
       if (this.datacenterProviderFilter) {
-        isVisible =
-          isVisible &&
-          datacenter.spec.provider === this.datacenterProviderFilter;
+        isVisible = isVisible && datacenter.spec.provider === this.datacenterProviderFilter;
       }
 
       return isVisible;
@@ -340,19 +280,12 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
     this._matDialog
       .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(switchMap(_ => this._datacenterService.deleteDatacenter(datacenter)))
       .pipe(first())
-      .subscribe((isConfirmed: boolean) => {
-        if (isConfirmed) {
-          this._datacenterService
-            .deleteDatacenter(datacenter)
-            .pipe(first())
-            .subscribe(() => {
-              this._notificationService.success(
-                `The <strong>${datacenter.metadata.name}</strong> datacenter was deleted`
-              );
-              this._datacenterService.refreshDatacenters();
-            });
-        }
+      .subscribe(() => {
+        this._notificationService.success(`The <strong>${datacenter.metadata.name}</strong> datacenter was deleted`);
+        this._datacenterService.refreshDatacenters();
       });
   }
 
@@ -374,20 +307,13 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
     this._matDialog
       .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(switchMap(_ => this._settingsService.setAdmin(admin)))
       .pipe(first())
-      .subscribe((isConfirmed: boolean) => {
-        if (isConfirmed) {
-          admin.isAdmin = false;
-          this._settingsService
-            .setAdmin(admin)
-            .pipe(first())
-            .subscribe(() => {
-              this._notificationService.success(
-                `The <strong>${admin.name}</strong> user was deleted from admin group`
-              );
-              this._settingsService.refreshAdmins();
-            });
-        }
+      .subscribe(() => {
+        admin.isAdmin = false;
+        this._notificationService.success(`The <strong>${admin.name}</strong> user was deleted from admin group`);
+        this._settingsService.refreshAdmins();
       });
   }
 
@@ -408,18 +334,10 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isAdminsPaginatorVisible(): boolean {
-    return (
-      this.hasItems() &&
-      this.adminsPaginator &&
-      this.admins.length > this.adminsPaginator.pageSize
-    );
+    return this.hasItems() && this.adminsPaginator && this.admins.length > this.adminsPaginator.pageSize;
   }
 
   isDatacentersPaginatorVisible(): boolean {
-    return (
-      this.hasItems() &&
-      this.datacentersPaginator &&
-      this.admins.length > this.datacentersPaginator.pageSize
-    );
+    return this.hasItems() && this.datacentersPaginator && this.admins.length > this.datacentersPaginator.pageSize;
   }
 }
