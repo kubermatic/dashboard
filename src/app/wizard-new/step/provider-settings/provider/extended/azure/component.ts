@@ -1,7 +1,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {merge} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {filter, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
 import {AzureCloudSpec} from '../../../../../../shared/entity/cloud/AzureCloudSpec';
@@ -10,6 +10,7 @@ import {
   ClusterEntity,
   ClusterSpec,
 } from '../../../../../../shared/entity/ClusterEntity';
+import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
 
@@ -58,13 +59,16 @@ export class AzureProviderExtendedComponent extends BaseFormValidator
       [Controls.VNet]: this._builder.control(''),
     });
 
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._presets.enablePresets(
-        Object.values(this._clusterService.cluster.spec.cloud.azure).every(
-          value => !value
-        )
-      );
-    });
+    this.form.valueChanges
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this._presets.enablePresets(
+          Object.values(this._clusterService.cluster.spec.cloud.azure).every(
+            value => !value
+          )
+        );
+      });
 
     this._presets.presetChanges
       .pipe(takeUntil(this._unsubscribe))

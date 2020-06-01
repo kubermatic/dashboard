@@ -77,6 +77,10 @@ export class PresetsComponent extends BaseFormValidator
       [Controls.Preset]: new FormControl('', Validators.required),
     });
 
+    this._clusterService.providerChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this.reset());
+
     this._clusterService.datacenterChanges
       .pipe(
         switchMap(dc =>

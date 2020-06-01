@@ -9,7 +9,14 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {EMPTY, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {
+  catchError,
+  filter,
+  map,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
@@ -106,6 +113,9 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator
       );
 
     this.form.valueChanges
+      .pipe(
+        filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK)
+      )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this._presets.enablePresets(
@@ -116,6 +126,9 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator
       );
 
     this._clusterService.clusterChanges
+      .pipe(
+        filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK)
+      )
       .pipe(
         tap(_ =>
           !this._hasRequiredBasicCredentials()
@@ -129,6 +142,9 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator
 
     this._clusterService.clusterChanges
       .pipe(
+        filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK)
+      )
+      .pipe(
         tap(_ =>
           !this._hasRequiredBasicCredentials() ? this._clearNetwork() : null
         )
@@ -140,6 +156,9 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator
     this.form
       .get(Controls.Network)
       .valueChanges.pipe(
+        filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK)
+      )
+      .pipe(
         tap(_ =>
           !this._hasRequiredCredentials() ? this._clearSubnetID() : null
         )
@@ -221,7 +240,8 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator
 
   private _hasRequiredCredentials(): boolean {
     return (
-      !!this._hasRequiredBasicCredentials &&
+      this._hasRequiredBasicCredentials() &&
+      !!this._clusterService.cluster.spec.cloud.openstack &&
       !!this._clusterService.cluster.spec.cloud.openstack.network
     );
   }
