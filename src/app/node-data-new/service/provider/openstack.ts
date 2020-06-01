@@ -88,7 +88,7 @@ export class NodeDataOpenstackProvider {
           )
           .pipe(
             switchMap(_ =>
-              this._datacenterService.getDataCenter(
+              this._datacenterService.getDatacenter(
                 this._clusterService.cluster.spec.cloud.dc
               )
             )

@@ -33,7 +33,7 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
       template: new FormControl(this.nodeData.spec.cloud.vsphere.template),
     });
 
-    this.dcService.getDataCenter(this.cloudSpec.dc).subscribe(res => {
+    this.dcService.getDatacenter(this.cloudSpec.dc).subscribe(res => {
       this.defaultTemplate = res.spec.vsphere.templates.ubuntu;
     });
 
@@ -68,7 +68,7 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
   }
 
   setImage(operatingSystem: OperatingSystemSpec): void {
-    this.dcService.getDataCenter(this.cloudSpec.dc).subscribe(res => {
+    this.dcService.getDatacenter(this.cloudSpec.dc).subscribe(res => {
       let coreosTemplate = '';
       let centosTemplate = '';
       let ubuntuTemplate = '';

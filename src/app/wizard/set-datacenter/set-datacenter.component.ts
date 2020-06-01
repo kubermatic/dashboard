@@ -38,8 +38,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
     });
 
     // Get all datacenters for the cluster cloud provider
-    this._dcService
-      .getDataCenters()
+    this._dcService.datacenters
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(datacenters => {
         const providerDatacenters: DataCenterEntity[] = [];

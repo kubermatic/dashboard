@@ -57,7 +57,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
       .subscribe(keys => (this.clusterSSHKeys = keys));
 
     this._clusterService.datacenterChanges
-      .pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => {
         this._location = dc.spec.location;

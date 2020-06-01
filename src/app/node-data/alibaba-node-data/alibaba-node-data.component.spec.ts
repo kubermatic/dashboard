@@ -42,8 +42,8 @@ describe('AlibabaNodeDataComponent', () => {
       asyncData(fakeAlibabaInstanceTypes())
     );
     apiMock.getAlibabaZones.mockReturnValue(asyncData(fakeAlibabaZones()));
-    datacenterMock = {getDataCenter: jest.fn()};
-    datacenterMock.getDataCenter.mockReturnValue(
+    datacenterMock = {getDatacenter: jest.fn()};
+    datacenterMock.getDatacenter.mockReturnValue(
       asyncData(fakeAlibabaDatacenter())
     );
 

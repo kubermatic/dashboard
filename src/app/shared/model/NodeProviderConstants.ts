@@ -1,7 +1,7 @@
 import {NodeSpec} from '../entity/NodeEntity';
 
 export namespace NodeProviderConstants {
-  export function displayName(provider: NodeProvider): string {
+  export function displayName(provider: NodeProvider | string): string {
     switch (provider) {
       case NodeProvider.ALIBABA:
         return 'Alibaba';

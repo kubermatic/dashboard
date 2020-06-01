@@ -195,7 +195,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadDatacenter(): void {
     this._datacenterService
-      .getDataCenter(this.cluster.spec.cloud.dc)
+      .getDatacenter(this.cluster.spec.cloud.dc)
       .pipe(first())
       .subscribe(d => {
         this.datacenter = d;
@@ -205,7 +205,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadSeedDatacenter(): void {
     this._datacenterService
-      .getDataCenter(this.dcName)
+      .getDatacenter(this.dcName)
       .pipe(first())
       .subscribe(d => {
         this.seedDatacenter = d;

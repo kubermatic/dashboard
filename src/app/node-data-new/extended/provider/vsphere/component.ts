@@ -65,7 +65,7 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator
     this._nodeDataService.nodeData = this._getNodeData();
 
     this._clusterService.datacenterChanges
-      .pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
       .pipe(tap(dc => (this._templates = dc.spec.vsphere.templates)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._setDefaultTemplate(OperatingSystem.Ubuntu));

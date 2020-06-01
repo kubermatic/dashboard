@@ -42,7 +42,7 @@ export class NodeDataAlibabaProvider {
           .pipe(tap(c => (cluster = c)))
           .pipe(
             switchMap(_ =>
-              this._datacenterService.getDataCenter(cluster.spec.cloud.dc)
+              this._datacenterService.getDatacenter(cluster.spec.cloud.dc)
             )
           )
           .pipe(tap(dc => (region = dc.spec.alibaba.region)))
@@ -86,7 +86,7 @@ export class NodeDataAlibabaProvider {
           .pipe(tap(c => (cluster = c)))
           .pipe(
             switchMap(_ =>
-              this._datacenterService.getDataCenter(cluster.spec.cloud.dc)
+              this._datacenterService.getDatacenter(cluster.spec.cloud.dc)
             )
           )
           .pipe(tap(dc => (region = dc.spec.alibaba.region)))

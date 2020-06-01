@@ -28,7 +28,7 @@ export class NodeDataAWSProvider {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterService.datacenterChanges
-          .pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
+          .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
           .pipe(
             switchMap(dc =>
               this._presetService

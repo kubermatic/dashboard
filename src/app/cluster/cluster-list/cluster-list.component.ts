@@ -139,13 +139,13 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
             clusters.map(cluster => {
               return (
                 this._datacenterService
-                  .getDataCenter(cluster.spec.cloud.dc)
+                  .getDatacenter(cluster.spec.cloud.dc)
                   .pipe(
                     tap(datacenter => (this.nodeDC[cluster.id] = datacenter))
                   )
                   .pipe(
                     switchMap(datacenter =>
-                      this._datacenterService.getDataCenter(
+                      this._datacenterService.getDatacenter(
                         datacenter.spec.seed
                       )
                     )

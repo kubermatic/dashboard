@@ -36,8 +36,8 @@ describe('AzureNodeDataComponent', () => {
     };
     apiMock.getAzureSizes.mockReturnValue(asyncData(fakeAzureSizes()));
     apiMock.getAzureSizesForWizard.mockReturnValue(asyncData(fakeAzureSizes()));
-    const datacenterMock = {getDataCenter: jest.fn()};
-    datacenterMock.getDataCenter.mockReturnValue(
+    const datacenterMock = {getDatacenter: jest.fn()};
+    datacenterMock.getDatacenter.mockReturnValue(
       asyncData(fakeAzureDatacenter())
     );
 
