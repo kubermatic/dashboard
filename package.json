@@ -1,8 +1,8 @@
 {
-  "name": "kubermatic",
+  "name": "kubermatic-dashboard",
   "private": true,
-  "version": "v2.14.0-rc.1",
-  "description": "Kubermatic",
+  "version": "v2.14.0-rc.2",
+  "description": "Kubermatic Dashboard",
   "repository": "https://github.com/kubermatic/dashboard",
   "license": "proprietary",
   "angular-cli": {},
@@ -23,7 +23,7 @@
     "check": "npm run check:ts && npm run check:scss && npm run check:licenses",
     "check:ts": "gts check",
     "check:scss": "stylelint \"src/**/*.scss\"",
-    "check:licenses": "license-checker --summary --failOn=GPL",
+    "check:licenses": "./hack/check-licenses.sh",
     "fix": "npm run fix:ts && npm run fix:scss && npm run fix:html",
     "fix:ts": "gts fix",
     "fix:scss": "stylelint \"src/**/*.scss\" --fix",
@@ -31,25 +31,6 @@
     "clean": "gts clean",
     "versioninfo": "node git-version.js",
     "postinstall": "ngcc"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.ts": [
-      "gts fix",
-      "git add"
-    ],
-    "src/**/*.scss": [
-      "stylelint --fix",
-      "git add"
-    ],
-    "src/**/*.html": [
-      "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f ",
-      "git add"
-    ]
   },
   "dependencies": {
     "@angular/animations": "9.1.4",
@@ -88,7 +69,7 @@
     "@angular/compiler-cli": "9.1.4",
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
     "@types/jest": "25.2.3",
-    "@types/lodash": "4.14.153",
+    "@types/lodash": "4.14.154",
     "@types/node": "14.0.5",
     "cypress": "4.6.0",
     "gts": "2.0.2",
@@ -96,18 +77,82 @@
     "jest": "25.5.4",
     "jest-preset-angular": "8.2.0",
     "js-beautify": "1.11.0",
-    "license-checker": "25.0.1",
+    "license-compliance": "1.0.2",
     "lint-staged": "10.2.7",
     "ng2-mock-component": "0.2.0",
     "start-server-and-test": "1.11.0",
     "stylelint": "13.5.0",
     "stylelint-config-standard": "19.0.0",
     "ts-jest": "25.5.1",
-    "ts-node": "8.10.1",
+    "ts-node": "8.10.2",
     "tslint": "6.1.2",
     "typescript": "3.8.3"
   },
   "engines": {
-    "node": ">=10.9.0"
+    "node": ">=12.0.0"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/gts/",
+    "rules": {
+      "@typescript-eslint/no-namespace": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "eol-last": "error",
+      "no-console": "error",
+      "no-inner-declarations": "warn",
+      "no-prototype-builtins": "warn",
+      "no-redeclare": "warn",
+      "no-undef": "warn",
+      "no-unused-vars": "warn",
+      "node/no-extraneous-require": "warn",
+      "node/no-unpublished-import": "warn",
+      "node/no-unpublished-require": "warn",
+      "prefer-rest-params": "warn"
+    },
+    "overrides": [
+      {
+        "files": ["**/*.spec.ts"],
+        "env": {
+          "browser": true,
+          "jest": true
+        }
+      }
+    ]
+  },
+  "eslintIgnore": [
+    "node_modules/*",
+    "src/assets/*"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && npm run check:licenses"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "gts fix",
+      "git add"
+    ],
+    "src/**/*.scss": [
+      "stylelint --fix",
+      "git add"
+    ],
+    "src/**/*.html": [
+      "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f ",
+      "git add"
+    ]
+  },
+  "prettier": "gts/.prettierrc.json",
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "at-rule-no-unknown": null,
+      "font-family-no-missing-generic-family-keyword": null,
+      "no-descending-specificity": null,
+      "number-leading-zero": null,
+      "selector-type-no-unknown": null,
+      "selector-pseudo-element-no-unknown": [true, {
+        "ignorePseudoElements": ["ng-deep"]
+      }]
+    }
   }
 }
