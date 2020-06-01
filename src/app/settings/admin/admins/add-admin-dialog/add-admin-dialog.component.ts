@@ -9,7 +9,6 @@ import {AdminEntity} from '../../../../shared/entity/AdminSettings';
 @Component({
   selector: 'km-add-admin-dialog',
   templateUrl: './add-admin-dialog.component.html',
-  styleUrls: ['./add-admin-dialog.component.scss'],
 })
 export class AddAdminDialogComponent implements OnInit {
   form: FormGroup;
@@ -26,7 +25,7 @@ export class AddAdminDialogComponent implements OnInit {
     });
   }
 
-  addProject(): void {
+  add(): void {
     const adminEntity: AdminEntity = {
       email: this.form.controls.email.value,
       isAdmin: true,

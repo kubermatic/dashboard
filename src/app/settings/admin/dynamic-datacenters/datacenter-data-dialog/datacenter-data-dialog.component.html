@@ -1,0 +1,77 @@
+<km-dialog-title>{{data.title}}</km-dialog-title>
+<mat-dialog-content>
+  <form [formGroup]="form"
+        fxLayout="column">
+    <mat-form-field fxFlex>
+      <mat-label>Name</mat-label>
+      <input required
+             matInput
+             formControlName="name"
+             type="text"
+             autocomplete="off"
+             cdkFocusInitial>
+      <mat-error *ngIf="form.controls.name.hasError('required')">
+        Name is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>Provider</mat-label>
+      <input required
+             matInput
+             formControlName="provider"
+             type="text"
+             autocomplete="off"
+             cdkFocusInitial>
+      <mat-error *ngIf="form.controls.provider.hasError('required')">
+        Provider is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>Seed</mat-label>
+      <input required
+             matInput
+             formControlName="seed"
+             type="text"
+             autocomplete="off"
+             cdkFocusInitial>
+      <mat-error *ngIf="form.controls.seed.hasError('required')">
+        Seed is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>Country</mat-label>
+      <input required
+             matInput
+             formControlName="country"
+             type="text"
+             autocomplete="off"
+             cdkFocusInitial>
+      <mat-error *ngIf="form.controls.country.hasError('required')">
+        Country is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>Location</mat-label>
+      <input required
+             matInput
+             formControlName="location"
+             type="text"
+             autocomplete="off"
+             cdkFocusInitial>
+      <mat-error *ngIf="form.controls.location.hasError('required')">
+        Location is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button
+          (click)="submit()"
+          [disabled]="!form.valid">
+    {{data.confirmLabel}}
+  </button>
+</mat-dialog-actions>

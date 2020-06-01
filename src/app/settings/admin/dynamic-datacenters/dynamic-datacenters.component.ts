@@ -14,6 +14,7 @@ import * as countryCodeLookup from 'country-code-lookup';
 import {DatacenterService, NotificationService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {Subject} from 'rxjs';
+import {DatacenterDataDialogComponent} from './datacenter-data-dialog/datacenter-data-dialog.component';
 
 @Component({
   selector: 'km-dynamic-datacenters',
@@ -145,14 +146,43 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
     });
   }
 
-  add(): void {}
+  add(): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Add Datacenter',
+        confirmLabel: 'Add',
+      },
+    };
 
-  edit(datacenter: DataCenterEntity): void {}
+    this._matDialog
+      .open(DatacenterDataDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(first())
+      .subscribe((result: DataCenterEntity) => {
+        console.log(result);
+      });
+  }
+
+  edit(datacenter: DataCenterEntity): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Edit Datacenter',
+        datacenter: datacenter,
+        confirmLabel: 'Edit',
+      },
+    };
+
+    this._matDialog
+      .open(DatacenterDataDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(first())
+      .subscribe((result: DataCenterEntity) => {
+        console.log(result);
+      });
+  }
 
   delete(datacenter: DataCenterEntity): void {
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Delete Datacenter',
         message: `Are you sure you want to delete the ${datacenter.metadata.name} datacenter?`,
