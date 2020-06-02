@@ -52,9 +52,7 @@ export function fakeAzureSizes(): AzureSizes[] {
 
 export function fakeHetznerTypes(): HetznerTypes {
   return {
-    standard: [
-      {id: 1, name: 'cx11', description: 'CX11', cores: 1, memory: 2, disk: 20},
-    ],
+    standard: [{id: 1, name: 'cx11', description: 'CX11', cores: 1, memory: 2, disk: 20}],
     dedicated: [],
   };
 }

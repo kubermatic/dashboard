@@ -14,14 +14,7 @@ import {VersionInfo} from './shared/entity/VersionInfo';
 import {Config} from './shared/model/Config';
 import {CustomLink} from './shared/utils/custom-link-utils/custom-link';
 
-const PAGES_WITHOUT_MENU = [
-  '/projects',
-  '/account',
-  '/settings',
-  '/rest-api',
-  '/terms-of-service',
-  '/404',
-];
+const PAGES_WITHOUT_MENU = ['/projects', '/account', '/settings', '/rest-api', '/terms-of-service', '/404'];
 
 @Component({
   selector: 'km-root',
@@ -62,13 +55,11 @@ export class KubermaticComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(customLinks => (this.customLinks = customLinks));
 
-    this._settingsService.adminSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        if (!_.isEqual(this.settings, settings)) {
-          this.settings = settings;
-        }
-      });
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      if (!_.isEqual(this.settings, settings)) {
+        this.settings = settings;
+      }
+    });
   }
 
   ngOnDestroy(): void {

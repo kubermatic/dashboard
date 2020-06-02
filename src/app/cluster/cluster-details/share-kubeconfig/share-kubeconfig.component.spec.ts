@@ -20,13 +20,7 @@ describe('ShareKubeconfigComponent', () => {
     const apiMock = {getShareKubeconfigURL: jest.fn()};
     const authMock = {authenticated: jest.fn()};
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        RouterTestingModule,
-        SharedModule,
-      ],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
       declarations: [ShareKubeconfigComponent],
       providers: [
         {provide: ApiService, useValue: apiMock},

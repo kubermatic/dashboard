@@ -72,6 +72,7 @@
     "@types/lodash": "4.14.154",
     "@types/node": "14.0.5",
     "cypress": "4.6.0",
+    "eslint-plugin-rxjs": "0.0.2-beta.23",
     "gts": "2.0.2",
     "husky": "4.2.5",
     "jest": "25.5.4",
@@ -92,30 +93,60 @@
     "node": ">=12.0.0"
   },
   "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": 2019,
+      "project": "./tsconfig.json",
+      "sourceType": "module"
+    },
     "extends": "./node_modules/gts/",
+    "plugins": ["rxjs"],
     "rules": {
       "@typescript-eslint/no-namespace": "off",
       "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "node/no-unpublished-import": "off",
+      "no-undef": "off",
+      "no-inner-declarations": "off",
+      "no-redeclare": "off",
       "eol-last": "error",
       "no-console": "error",
-      "no-inner-declarations": "warn",
-      "no-prototype-builtins": "warn",
-      "no-redeclare": "warn",
-      "no-undef": "warn",
-      "no-unused-vars": "warn",
-      "node/no-extraneous-require": "warn",
-      "node/no-unpublished-import": "warn",
-      "node/no-unpublished-require": "warn",
-      "prefer-rest-params": "warn"
+      "no-prototype-builtins": "error",
+      "no-extra-boolean-cast": "error",
+      "no-else-return": "error",
+      "node/no-extraneous-require": "error",
+      "node/no-unpublished-require": "error",
+      "prefer-rest-params": "error",
+      "rxjs/no-ignored-observable": "error",
+      "rxjs/no-nested-subscribe": "error",
+      "rxjs/no-unbound-methods": "error",
+      "rxjs/no-unsafe-takeuntil": "error"
     },
     "overrides": [
       {
-        "files": ["**/*.spec.ts"],
+        "files": ["cypress/**/*.ts"],
+        "parser": "@typescript-eslint/parser",
+        "parserOptions": {
+
+          "ecmaVersion": 2019,
+          "project": "./cypress/tsconfig.e2e.json",
+          "sourceType": "module"
+        },
+        "env": {
+          "browser": true,
+          "jest": true
+        }
+      },
+      {
+        "files": ["src/**/*.spec.ts"],
         "env": {
           "browser": true,
           "jest": true
         }
       }
+    ],
+    "ignorePatterns": [
+      "**/*.js"
     ]
   },
   "eslintIgnore": [
@@ -141,7 +172,6 @@
       "git add"
     ]
   },
-  "prettier": "gts/.prettierrc.json",
   "stylelint": {
     "extends": "stylelint-config-standard",
     "rules": {

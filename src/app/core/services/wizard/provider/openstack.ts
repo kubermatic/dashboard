@@ -55,10 +55,7 @@ export class Openstack extends Provider {
 
   datacenter(datacenter: string): Openstack {
     if (datacenter) {
-      this._headers = this._headers.set(
-        Openstack.Header.Datacenter,
-        datacenter
-      );
+      this._headers = this._headers.set(Openstack.Header.Datacenter, datacenter);
     }
     return this;
   }
@@ -72,10 +69,7 @@ export class Openstack extends Provider {
 
   tenantID(tenantID: string): Openstack {
     if (tenantID) {
-      this._changeRequiredHeader(
-        Openstack.Header.Tenant,
-        Openstack.Header.TenantID
-      );
+      this._changeRequiredHeader(Openstack.Header.Tenant, Openstack.Header.TenantID);
       this._headers = this._headers.set(Openstack.Header.TenantID, tenantID);
     }
     return this;
@@ -115,9 +109,7 @@ export class Openstack extends Provider {
     });
   }
 
-  securityGroups(
-    onLoadingCb: () => void = null
-  ): Observable<OpenstackSecurityGroup[]> {
+  securityGroups(onLoadingCb: () => void = null): Observable<OpenstackSecurityGroup[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -145,10 +137,7 @@ export class Openstack extends Provider {
     });
   }
 
-  subnets(
-    network: string,
-    onLoadingCb: () => void = null
-  ): Observable<OpenstackSubnet[]> {
+  subnets(network: string, onLoadingCb: () => void = null): Observable<OpenstackSubnet[]> {
     if (!this._hasRequiredHeaders() || !network) {
       return EMPTY;
     }

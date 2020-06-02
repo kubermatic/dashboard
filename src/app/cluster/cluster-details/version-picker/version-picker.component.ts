@@ -1,20 +1,10 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {first} from 'rxjs/operators';
 import {gt, lt} from 'semver';
 
 import {ClusterService} from '../../../core/services';
-import {
-  ClusterEntity,
-  MasterVersion,
-} from '../../../shared/entity/ClusterEntity';
+import {ClusterEntity, MasterVersion} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {ChangeClusterVersionComponent} from '../change-cluster-version/change-cluster-version.component';
 
@@ -77,10 +67,7 @@ export class VersionPickerComponent implements OnInit, OnChanges {
   }
 
   isEnabled(): boolean {
-    return (
-      this.isClusterRunning &&
-      (this.updatesAvailable || this.downgradesAvailable)
-    );
+    return this.isClusterRunning && (this.updatesAvailable || this.downgradesAvailable);
   }
 
   changeClusterVersionDialog(): void {

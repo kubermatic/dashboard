@@ -1,7 +1,4 @@
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
@@ -14,10 +11,7 @@ import {ClusterProviderForm} from '../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {
-  CustomPresetsSettingsComponent,
-  PresetsState,
-} from './custom-presets.component';
+import {CustomPresetsSettingsComponent, PresetsState} from './custom-presets.component';
 
 describe('CustomPresetsSettingsComponent', () => {
   let fixture: ComponentFixture<CustomPresetsSettingsComponent>;
@@ -27,13 +21,7 @@ describe('CustomPresetsSettingsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        ReactiveFormsModule,
-        SharedModule,
-        HttpClientTestingModule,
-      ],
+      imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientTestingModule],
       declarations: [CustomPresetsSettingsComponent],
       providers: [WizardService],
     }).compileComponents();
@@ -61,11 +49,7 @@ describe('CustomPresetsSettingsComponent', () => {
     const provider = NodeProvider.DIGITALOCEAN;
     jest
       .spyOn(wizardService, 'clusterProviderFormChanges$', 'get')
-      .mockReturnValue(
-        of({provider} as ClusterProviderForm) as BehaviorSubject<
-          ClusterProviderForm
-        >
-      );
+      .mockReturnValue(of({provider} as ClusterProviderForm) as BehaviorSubject<ClusterProviderForm>);
 
     fixture.detectChanges();
 
@@ -82,11 +66,7 @@ describe('CustomPresetsSettingsComponent', () => {
     const provider = NodeProvider.DIGITALOCEAN;
     jest
       .spyOn(wizardService, 'clusterProviderFormChanges$', 'get')
-      .mockReturnValue(
-        of({provider} as ClusterProviderForm) as BehaviorSubject<
-          ClusterProviderForm
-        >
-      );
+      .mockReturnValue(of({provider} as ClusterProviderForm) as BehaviorSubject<ClusterProviderForm>);
 
     fixture.detectChanges();
 

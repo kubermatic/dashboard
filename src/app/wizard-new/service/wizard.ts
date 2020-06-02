@@ -1,10 +1,7 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {MatStepper} from '@angular/material/stepper';
 import {NodeDataService} from '../../node-data-new/service/service';
-import {
-  NodeProvider,
-  OperatingSystem,
-} from '../../shared/model/NodeProviderConstants';
+import {NodeProvider, OperatingSystem} from '../../shared/model/NodeProviderConstants';
 import {StepRegistry, WizardStep} from '../config';
 import {ClusterService} from './cluster';
 
@@ -15,13 +12,8 @@ export class WizardService {
   private _stepper: MatStepper;
   private _steps: WizardStep[];
 
-  constructor(
-    private readonly _clusterService: ClusterService,
-    private readonly _nodeDataService: NodeDataService
-  ) {
-    this._nodeDataService.operatingSystemChanges.subscribe(os =>
-      this._stepHandler.handleOSChange(os)
-    );
+  constructor(private readonly _clusterService: ClusterService, private readonly _nodeDataService: NodeDataService) {
+    this._nodeDataService.operatingSystemChanges.subscribe(os => this._stepHandler.handleOSChange(os));
   }
 
   set provider(provider: NodeProvider) {

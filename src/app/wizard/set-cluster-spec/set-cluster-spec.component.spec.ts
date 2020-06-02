@@ -97,22 +97,16 @@ describe('SetClusterSpecComponent', () => {
 
   it('should call generateName method', () => {
     const generatedName = 'generated-name';
-    const spyGenerateName = jest
-      .spyOn(nameGenerator, 'generateName')
-      .mockReturnValue(generatedName);
+    const spyGenerateName = jest.spyOn(nameGenerator, 'generateName').mockReturnValue(generatedName);
     fixture.detectChanges();
 
     component.generateName();
     fixture.detectChanges();
 
-    const nameElement = fixture.debugElement.query(
-      By.css('#km-create-cluster-name-input')
-    ).nativeElement;
+    const nameElement = fixture.debugElement.query(By.css('#km-create-cluster-name-input')).nativeElement;
 
     expect(spyGenerateName).toHaveBeenCalledTimes(1);
-    expect(component.clusterSpecForm.controls['name'].value).toBe(
-      generatedName
-    );
+    expect(component.clusterSpecForm.controls['name'].value).toBe(generatedName);
     expect(nameElement.value).toBe(generatedName);
   });
 

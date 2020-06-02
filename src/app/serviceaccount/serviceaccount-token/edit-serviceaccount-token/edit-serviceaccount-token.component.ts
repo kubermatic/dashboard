@@ -23,9 +23,7 @@ export class EditServiceAccountTokenComponent implements OnInit {
 
   constructor(
     private readonly _apiService: ApiService,
-    private readonly _matDialogRef: MatDialogRef<
-      EditServiceAccountTokenComponent
-    >,
+    private readonly _matDialogRef: MatDialogRef<EditServiceAccountTokenComponent>,
     private readonly _notificationService: NotificationService
   ) {}
 
@@ -41,18 +39,11 @@ export class EditServiceAccountTokenComponent implements OnInit {
     };
 
     this._apiService
-      .patchServiceAccountToken(
-        this.project.id,
-        this.serviceaccount,
-        this.token,
-        patchServiceAccountToken
-      )
+      .patchServiceAccountToken(this.project.id, this.serviceaccount, this.token, patchServiceAccountToken)
       .pipe(first())
       .subscribe(() => {
         this._matDialogRef.close(true);
-        this._notificationService.success(
-          `The <strong>${this.token.name}</strong> token was updated`
-        );
+        this._notificationService.success(`The <strong>${this.token.name}</strong> token was updated`);
       });
   }
 }

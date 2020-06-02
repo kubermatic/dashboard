@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -13,15 +7,10 @@ import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
 import {Subject, timer} from 'rxjs';
-import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
+import {debounceTime, filter, first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
-import {
-  Auth,
-  NotificationService,
-  ProjectService,
-  UserService,
-} from '../core/services';
+import {Auth, NotificationService, ProjectService, UserService} from '../core/services';
 import {PreviousRouteService} from '../core/services/previous-route/previous-route.service';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
@@ -29,10 +18,7 @@ import {AddProjectDialogComponent} from '../shared/components/add-project-dialog
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {MemberEntity, UserSettings} from '../shared/entity/MemberEntity';
 import {ProjectEntity, ProjectOwners} from '../shared/entity/ProjectEntity';
-import {
-  MemberUtils,
-  Permission,
-} from '../shared/utils/member-utils/member-utils';
+import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 
 import {EditProjectComponent} from './edit-project/edit-project.component';
@@ -48,21 +34,13 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   isInitializing = true;
   role = [];
   rawRole = [];
-  displayedColumns: string[] = [
-    'status',
-    'name',
-    'labels',
-    'id',
-    'role',
-    'clusters',
-    'owners',
-    'actions',
-  ];
+  displayedColumns: string[] = ['status', 'name', 'labels', 'id', 'role', 'clusters', 'owners', 'actions'];
   dataSource = new MatTableDataSource<ProjectEntity>();
   isPaginatorVisible = false;
   showCards = true;
 
   paginator: MatPaginator;
+
   @ViewChild(MatPaginator)
   set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
@@ -78,6 +56,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   sort: MatSort;
+
   @ViewChild(MatSort)
   set matSort(ms: MatSort) {
     this.sort = ms;
@@ -107,16 +86,14 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
     this._userService.loggedInUser.subscribe(user => (this.currentUser = user));
 
-    this._settingsService.userSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        if (this.settings) {
-          return;
-        }
-        this.settings = settings;
-        this.showCards = !settings.selectProjectTableView;
-        this.selectDefaultProject();
-      });
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      if (this.settings) {
+        return;
+      }
+      this.settings = settings;
+      this.showCards = !settings.selectProjectTableView;
+      this.selectDefaultProject();
+    });
 
     this._settingsChange
       .pipe(debounceTime(1000))
@@ -164,9 +141,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   private _sortProjectOwners(): void {
     this.projects.forEach(project => {
-      project.owners = project.owners.sort((a, b) =>
-        a.name.localeCompare(b.name)
-      );
+      project.owners = project.owners.sort((a, b) => a.name.localeCompare(b.name));
     });
   }
 
@@ -187,17 +162,12 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
     return ownProjects
       .sort((a, b) => (a.name + a.id).localeCompare(b.name + b.id))
-      .concat(
-        externalProjects.sort((a, b) =>
-          (a.name + a.id).localeCompare(b.name + b.id)
-        )
-      );
+      .concat(externalProjects.sort((a, b) => (a.name + a.id).localeCompare(b.name + b.id)));
   }
 
   changeView(): void {
     this.showCards = !this.showCards;
-    this.settings.selectProjectTableView = !this.settings
-      .selectProjectTableView;
+    this.settings.selectProjectTableView = !this.settings.selectProjectTableView;
     this._settingsChange.next();
   }
 
@@ -213,9 +183,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       this._previousRouteService.getPreviousUrl() === '/' &&
       this._previousRouteService.getHistory().length === 1
     ) {
-      const defaultProject = this.projects.find(
-        x => x.id === this.settings.selectedProjectId
-      );
+      const defaultProject = this.projects.find(x => x.id === this.settings.selectedProjectId);
       this.selectProject(defaultProject);
     }
   }
@@ -223,7 +191,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   getOwnerNameArray(owners: ProjectOwners[]): string[] {
     const ownerNameArray = [];
     for (const i in owners) {
-      if (owners.hasOwnProperty(i)) {
+      if (Object.prototype.hasOwnProperty.call(owners, i)) {
         ownerNameArray.push(owners[i].name);
       }
     }
@@ -235,9 +203,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getOwners(owners: ProjectOwners[]): string {
-    return this.isMoreOwners(owners)
-      ? this.getOwnerString(owners).substring(0, 30)
-      : this.getOwnerString(owners);
+    return this.isMoreOwners(owners) ? this.getOwnerString(owners).substring(0, 30) : this.getOwnerString(owners);
   }
 
   isMoreOwners(owners: ProjectOwners[]): boolean {
@@ -246,16 +212,13 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   getMoreOwnersCount(owners: ProjectOwners[]): number {
     return this.isMoreOwners(owners)
-      ? owners.length -
-          this.getOwnerString(owners).substring(0, 30).split(', ').length
+      ? owners.length - this.getOwnerString(owners).substring(0, 30).split(', ').length
       : 0;
   }
 
   getMoreOwners(owners: ProjectOwners[]): string {
     // truncatedLength = number of displayed owner names
-    const truncatedLength = this.getOwnerString(owners)
-      .substring(0, 30)
-      .split(', ').length;
+    const truncatedLength = this.getOwnerString(owners).substring(0, 30).split(', ').length;
     // count = length of original owner names that are displayed
     // (truncatedLength - 1) * 2 = additional number of seperators (', ' = 2)
     let count: number = (truncatedLength - 1) * 2;
@@ -267,9 +230,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       ? this.getOwnerNameArray(owners)
           .slice(truncatedLength - 1, owners.length)
           .join(', ')
-      : this.getOwnerNameArray(owners)
-          .slice(truncatedLength, owners.length)
-          .join(', ');
+      : this.getOwnerNameArray(owners).slice(truncatedLength, owners.length).join(', ');
   }
 
   getLabelsLength(project: ProjectEntity): number {
@@ -283,7 +244,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
     if (labelLength > 0) {
       for (const key in project.labels) {
-        if (project.labels.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(project.labels, key)) {
           counter++;
           if (project.labels[key]) {
             labels += `${key}: ${project.labels[key]}`;
@@ -375,34 +336,23 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       },
     };
 
-    const dialogRef = this._matDialog.open(
-      ConfirmationDialogComponent,
-      dialogConfig
-    );
-    this._googleAnalyticsService.emitEvent(
-      'projectOverview',
-      'deleteProjectOpened'
-    );
+    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
+    this._googleAnalyticsService.emitEvent('projectOverview', 'deleteProjectOpened');
 
-    dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
-      if (isConfirmed) {
-        this._projectService.delete(project.id).subscribe(() => {
-          this._notificationService.success(
-            `The <strong>${project.name}</strong> project is being deleted`
-          );
-          this._googleAnalyticsService.emitEvent(
-            'projectOverview',
-            'ProjectDeleted'
-          );
-          this._projectService.onProjectsUpdate.next();
-        });
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(switchMap(_ => this._projectService.delete(project.id)))
+      .pipe(first())
+      .subscribe(() => {
+        this._notificationService.success(`The <strong>${project.name}</strong> project is being deleted`);
+        this._googleAnalyticsService.emitEvent('projectOverview', 'ProjectDeleted');
+        this._projectService.onProjectsUpdate.next();
+      });
   }
 
   private _shouldRedirectToCluster(): boolean {
-    const autoredirect: boolean =
-      this._cookieService.get(Auth.Cookie.Autoredirect) === 'true';
+    const autoredirect: boolean = this._cookieService.get(Auth.Cookie.Autoredirect) === 'true';
     this._cookieService.delete(Auth.Cookie.Autoredirect, '/');
     return this.projects.length === 1 && autoredirect;
   }
@@ -412,10 +362,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private _isPaginatorVisible(): boolean {
-    return (
-      !_.isEmpty(this.projects) &&
-      this.paginator &&
-      this.projects.length > this.paginator.pageSize
-    );
+    return !_.isEmpty(this.projects) && this.paginator && this.projects.length > this.paginator.pageSize;
   }
 }

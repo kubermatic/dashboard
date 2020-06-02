@@ -16,13 +16,7 @@ describe('AWSClusterSettingsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        ReactiveFormsModule,
-        SharedModule,
-        HttpClientModule,
-      ],
+      imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
       declarations: [AWSClusterSettingsComponent],
       providers: [WizardService],
     }).compileComponents();
@@ -58,25 +52,17 @@ describe('AWSClusterSettingsComponent', () => {
     fixture.detectChanges();
 
     expect(component.form.valid).toBeFalsy();
-    expect(
-      component.form.controls.accessKeyId.hasError('required')
-    ).toBeTruthy();
-    expect(
-      component.form.controls.secretAccessKey.hasError('required')
-    ).toBeTruthy();
+    expect(component.form.controls.accessKeyId.hasError('required')).toBeTruthy();
+    expect(component.form.controls.secretAccessKey.hasError('required')).toBeTruthy();
 
     component.form.controls.accessKeyId.patchValue('foo');
     fixture.detectChanges();
-    expect(
-      component.form.controls.accessKeyId.hasError('required')
-    ).toBeFalsy();
+    expect(component.form.controls.accessKeyId.hasError('required')).toBeFalsy();
     expect(component.form.valid).toBeFalsy();
 
     component.form.controls.secretAccessKey.patchValue('bar');
     fixture.detectChanges();
-    expect(
-      component.form.controls.secretAccessKey.hasError('required')
-    ).toBeFalsy();
+    expect(component.form.controls.secretAccessKey.hasError('required')).toBeFalsy();
     expect(component.form.valid).toBeTruthy();
   });
 });

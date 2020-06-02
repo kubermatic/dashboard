@@ -7,31 +7,13 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
-import {
-  catchError,
-  debounceTime,
-  distinctUntilChanged,
-  filter,
-  map,
-  switchMap,
-  takeUntil,
-  tap,
-} from 'rxjs/operators';
+import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {PresetsService} from '../../../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
 import {AWSCloudSpec} from '../../../../../../shared/entity/cloud/AWSCloudSpec';
-import {
-  CloudSpec,
-  ClusterEntity,
-  ClusterSpec,
-} from '../../../../../../shared/entity/ClusterEntity';
+import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
 import {AWSVPC} from '../../../../../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
@@ -66,8 +48,7 @@ enum VPCState {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AWSProviderBasicComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class AWSProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _debounceTime = 250;
 
   readonly Controls = Controls;
@@ -91,43 +72,26 @@ export class AWSProviderBasicComponent extends BaseFormValidator
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.AccessKeyID]: this._builder.control('', Validators.required),
-      [Controls.AccessKeySecret]: this._builder.control(
-        '',
-        Validators.required
-      ),
+      [Controls.AccessKeySecret]: this._builder.control('', Validators.required),
       [Controls.VPCID]: this._builder.control('', Validators.required),
     });
 
     this._presets.presetChanges
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset =>
-        Object.values(Controls).forEach(control =>
-          this._enable(!preset, control)
-        )
-      );
+      .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
     this.form.valueChanges
       .pipe(filter(_ => this._clusterService.provider === NodeProvider.AWS))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
-        this._presets.enablePresets(
-          Object.values(this._clusterService.cluster.spec.cloud.aws).every(
-            value => !value
-          )
-        )
+        this._presets.enablePresets(Object.values(this._clusterService.cluster.spec.cloud.aws).every(value => !value))
       );
 
-    merge(
-      this._clusterService.providerChanges,
-      this._clusterService.datacenterChanges
-    )
+    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
 
-    merge(
-      this.form.get(Controls.AccessKeyID).valueChanges,
-      this.form.get(Controls.AccessKeySecret).valueChanges
-    )
+    merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.AccessKeySecret).valueChanges)
       .pipe(debounceTime(this._debounceTime))
       .pipe(tap(_ => this._clearVPC()))
       .pipe(switchMap(_ => this._vpcListObservable()))
@@ -138,9 +102,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator
       .get(Controls.VPCID)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .pipe(distinctUntilChanged())
-      .subscribe(
-        _ => (this._clusterService.cluster = this._getClusterEntity())
-      );
+      .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
   }
 
   getHint(control: Controls): string {

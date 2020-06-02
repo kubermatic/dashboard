@@ -14,13 +14,7 @@ describe('HetznerClusterSettingsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        ReactiveFormsModule,
-        SharedModule,
-        HttpClientModule,
-      ],
+      imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
       declarations: [HetznerClusterSettingsComponent],
       providers: [WizardService],
     }).compileComponents();
@@ -51,16 +45,12 @@ describe('HetznerClusterSettingsComponent', () => {
     expect(component.form.controls.token.hasError('required')).toBeFalsy();
     expect(component.form.controls.token.hasError('minlength')).toBeTruthy();
 
-    component.form.controls.token.patchValue(
-      '1234567890123456789012345678901234567890123456789012345678901234567890'
-    );
+    component.form.controls.token.patchValue('1234567890123456789012345678901234567890123456789012345678901234567890');
     expect(component.form.controls.token.hasError('required')).toBeFalsy();
     expect(component.form.controls.token.hasError('minlength')).toBeFalsy();
     expect(component.form.controls.token.hasError('maxlength')).toBeTruthy();
 
-    component.form.controls.token.patchValue(
-      'vhn92zesby42uw9f31wzn1e01ia4tso5tq2x52xyihidhma62yonrp4ebu9nlc6p'
-    );
+    component.form.controls.token.patchValue('vhn92zesby42uw9f31wzn1e01ia4tso5tq2x52xyihidhma62yonrp4ebu9nlc6p');
     expect(component.form.controls.token.hasError('required')).toBeFalsy();
     expect(component.form.controls.token.hasError('minlength')).toBeFalsy();
     expect(component.form.controls.token.hasError('maxlength')).toBeFalsy();

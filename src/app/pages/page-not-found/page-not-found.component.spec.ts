@@ -10,12 +10,7 @@ import {AuthMockService} from '../../testing/services/auth-mock.service';
 import {click} from '../../testing/utils/click-handler';
 import {PageNotFoundComponent} from './page-not-found.component';
 
-const modules: any[] = [
-  BrowserModule,
-  RouterTestingModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];
 
 describe('PageNotFoundComponent', () => {
   let fixture: ComponentFixture<PageNotFoundComponent>;

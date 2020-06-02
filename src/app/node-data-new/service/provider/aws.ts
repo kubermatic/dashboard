@@ -20,10 +20,7 @@ export class NodeDataAWSProvider {
     this._nodeDataService.nodeData.spec.cloud.aws.tags = tags;
   }
 
-  flavors(
-    onError: () => void = undefined,
-    onLoadingCb: () => void = null
-  ): Observable<AWSSize[]> {
+  flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AWSSize[]> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
@@ -49,10 +46,7 @@ export class NodeDataAWSProvider {
     }
   }
 
-  subnets(
-    onError: () => void = undefined,
-    onLoadingCb: () => void = null
-  ): Observable<AWSSubnet[]> {
+  subnets(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AWSSubnet[]> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:

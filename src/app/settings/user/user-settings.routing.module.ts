@@ -13,8 +13,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: () =>
-          import('../../theming/module').then(module => module.ThemingModule),
+        loadChildren: () => import('../../theming/module').then(module => module.ThemingModule),
         data: {preload: true},
       },
     ],

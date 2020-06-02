@@ -12,13 +12,7 @@ import {nodeDataFake} from '../../../testing/fake-data/node.fake';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 import {VSphereNodeOptionsComponent} from './vsphere-node-options.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  ReactiveFormsModule,
-  HttpClientModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, ReactiveFormsModule, HttpClientModule];
 
 describe('VSphereNodeOptionsComponent', () => {
   let fixture: ComponentFixture<VSphereNodeOptionsComponent>;
@@ -28,11 +22,7 @@ describe('VSphereNodeOptionsComponent', () => {
     TestBed.configureTestingModule({
       imports: [...modules],
       declarations: [VSphereNodeOptionsComponent],
-      providers: [
-        NodeDataService,
-        WizardService,
-        {provide: DatacenterService, useClass: DatacenterMockService},
-      ],
+      providers: [NodeDataService, WizardService, {provide: DatacenterService, useClass: DatacenterMockService}],
     }).compileComponents();
   }));
 

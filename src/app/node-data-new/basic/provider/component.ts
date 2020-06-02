@@ -26,17 +26,13 @@ enum Controls {
     },
   ],
 })
-export class BasicNodeDataComponent extends BaseFormValidator
-  implements OnInit {
+export class BasicNodeDataComponent extends BaseFormValidator implements OnInit {
   @Input() provider: string;
 
   readonly Provider = NodeProvider;
   readonly Control = Controls;
 
-  constructor(
-    private readonly _builder: FormBuilder,
-    private readonly _clusterService: ClusterService
-  ) {
+  constructor(private readonly _builder: FormBuilder, private readonly _clusterService: ClusterService) {
     super();
   }
 
@@ -45,10 +41,7 @@ export class BasicNodeDataComponent extends BaseFormValidator
       [Controls.ProviderBasic]: this._builder.control(''),
     });
 
-    merge(
-      this._clusterService.providerChanges,
-      this._clusterService.datacenterChanges
-    )
+    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this.form.removeControl(Controls.ProviderBasic);

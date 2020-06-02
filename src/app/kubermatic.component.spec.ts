@@ -5,14 +5,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
 import {AppConfigService} from './app-config.service';
 import {CoreModule} from './core/core.module';
-import {
-  ApiService,
-  Auth,
-  AuthGuard,
-  DatacenterService,
-  ProjectService,
-  UserService,
-} from './core/services';
+import {ApiService, Auth, AuthGuard, DatacenterService, ProjectService, UserService} from './core/services';
 import {GoogleAnalyticsService} from './google-analytics.service';
 import {KubermaticComponent} from './kubermatic.component';
 import {SharedModule} from './shared/shared.module';

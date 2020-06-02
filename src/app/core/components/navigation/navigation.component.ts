@@ -28,16 +28,12 @@ export class NavigationComponent implements OnInit {
 
   ngOnInit(): void {
     if (this._auth.authenticated()) {
-      this._userService.loggedInUser.subscribe(
-        user => (this.currentUser = user)
-      );
+      this._userService.loggedInUser.subscribe(user => (this.currentUser = user));
     }
 
-    this._settingsService.userSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        this.showSidenav = !settings.collapseSidenav;
-      });
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.showSidenav = !settings.collapseSidenav;
+    });
 
     this._settingsChange
       .pipe(takeUntil(this._unsubscribe))

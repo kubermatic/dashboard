@@ -1,10 +1,4 @@
-import {
-  AbstractControl,
-  ControlValueAccessor,
-  FormGroup,
-  ValidationErrors,
-  Validator,
-} from '@angular/forms';
+import {AbstractControl, ControlValueAccessor, FormGroup, ValidationErrors, Validator} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 

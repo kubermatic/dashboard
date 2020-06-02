@@ -2,16 +2,13 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
 import {Subject} from 'rxjs';
-import {first} from 'rxjs/operators';
+import {filter, first, switchMap} from 'rxjs/operators';
 
 import {NotificationService, RBACService} from '../../../core/services';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {
-  SimpleBinding,
-  SimpleClusterBinding,
-} from '../../../shared/entity/RBACEntity';
+import {SimpleBinding, SimpleClusterBinding} from '../../../shared/entity/RBACEntity';
 
 import {AddBindingComponent} from './add-binding/add-binding.component';
 
@@ -30,20 +27,9 @@ export class RBACComponent implements OnInit, OnDestroy {
 
   isShowRBAC = false;
   dataSourceCluster = new MatTableDataSource<SimpleClusterBinding>();
-  displayedColumnsCluster: string[] = [
-    'kind',
-    'name',
-    'clusterRole',
-    'actions',
-  ];
+  displayedColumnsCluster: string[] = ['kind', 'name', 'clusterRole', 'actions'];
   dataSourceNamespace = new MatTableDataSource<SimpleBinding>();
-  displayedColumnsNamespace: string[] = [
-    'kind',
-    'name',
-    'clusterRole',
-    'namespace',
-    'actions',
-  ];
+  displayedColumnsNamespace: string[] = ['kind', 'name', 'clusterRole', 'namespace', 'actions'];
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -99,32 +85,28 @@ export class RBACComponent implements OnInit, OnDestroy {
       },
     };
 
-    const dialogRef = this._matDialog.open(
-      ConfirmationDialogComponent,
-      dialogConfig
-    );
+    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
 
     dialogRef
       .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(
+        switchMap(_ =>
+          this._rbacService.deleteClusterBinding(
+            this.cluster.id,
+            this.datacenter.metadata.name,
+            this.projectID,
+            element.role,
+            element.kind,
+            element.name
+          )
+        )
+      )
       .pipe(first())
-      .subscribe(isConfirmed => {
-        if (isConfirmed) {
-          this._rbacService
-            .deleteClusterBinding(
-              this.cluster.id,
-              this.datacenter.metadata.name,
-              this.projectID,
-              element.role,
-              element.kind,
-              element.name
-            )
-            .pipe(first())
-            .subscribe(() => {
-              this._notificationService.success(
-                `The <strong>${element.name}</strong> ${element.kind} was removed from the binding`
-              );
-            });
-        }
+      .subscribe(() => {
+        this._notificationService.success(
+          `The <strong>${element.name}</strong> ${element.kind} was removed from the binding`
+        );
       });
   }
 
@@ -143,33 +125,29 @@ export class RBACComponent implements OnInit, OnDestroy {
       },
     };
 
-    const dialogRef = this._matDialog.open(
-      ConfirmationDialogComponent,
-      dialogConfig
-    );
+    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
 
     dialogRef
       .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(
+        switchMap(_ =>
+          this._rbacService.deleteBinding(
+            this.cluster.id,
+            this.datacenter.metadata.name,
+            this.projectID,
+            element.role,
+            element.namespace,
+            element.kind,
+            element.name
+          )
+        )
+      )
       .pipe(first())
-      .subscribe(isConfirmed => {
-        if (isConfirmed) {
-          this._rbacService
-            .deleteBinding(
-              this.cluster.id,
-              this.datacenter.metadata.name,
-              this.projectID,
-              element.role,
-              element.namespace,
-              element.kind,
-              element.name
-            )
-            .pipe(first())
-            .subscribe(() => {
-              this._notificationService.success(
-                `The <strong>${element.name}</strong> ${element.kind} was removed from the binding`
-              );
-            });
-        }
+      .subscribe(() => {
+        this._notificationService.success(
+          `The <strong>${element.name}</strong> ${element.kind} was removed from the binding`
+        );
       });
   }
 }

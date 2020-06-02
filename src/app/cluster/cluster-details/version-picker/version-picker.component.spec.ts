@@ -1,12 +1,5 @@
 import {HttpClientModule} from '@angular/common/http';
-import {
-  async,
-  ComponentFixture,
-  discardPeriodicTasks,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -14,14 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 
 import {AppConfigService} from '../../../app-config.service';
-import {
-  ApiService,
-  Auth,
-  ClusterService,
-  DatacenterService,
-  ProjectService,
-  UserService,
-} from '../../../core/services';
+import {ApiService, Auth, ClusterService, DatacenterService, ProjectService, UserService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
@@ -50,13 +36,7 @@ describe('VersionPickerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        RouterTestingModule,
-        SharedModule,
-      ],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
       declarations: [
         VersionPickerComponent,
         ClusterSecretsComponent,

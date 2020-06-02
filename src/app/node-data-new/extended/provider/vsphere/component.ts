@@ -34,17 +34,14 @@ enum Controls {
     },
   ],
 })
-export class VSphereExtendedNodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class VSphereExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private _defaultTemplate = '';
   private _templates: DatacenterOperatingSystemOptions;
 
   readonly Controls = Controls;
 
   get template(): string {
-    return this.form.get(Controls.Template).value
-      ? this.form.get(Controls.Template).value
-      : this._defaultTemplate;
+    return this.form.get(Controls.Template).value ? this.form.get(Controls.Template).value : this._defaultTemplate;
   }
 
   constructor(
@@ -84,10 +81,7 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultTemplate.bind(this));
 
-    merge(
-      this.form.get(Controls.DiskSizeGB).valueChanges,
-      this.form.get(Controls.Template).valueChanges
-    )
+    merge(this.form.get(Controls.DiskSizeGB).valueChanges, this.form.get(Controls.Template).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }

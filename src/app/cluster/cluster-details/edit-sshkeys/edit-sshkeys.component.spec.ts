@@ -3,11 +3,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '../../../app-config.service';
-import {
-  ClusterService,
-  NotificationService,
-  UserService,
-} from '../../../core/services';
+import {ClusterService, NotificationService, UserService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
