@@ -12,13 +12,7 @@ import {ApiMockService} from '../../../testing/services/api-mock.service';
 
 import {AlibabaNodeOptionsComponent} from './alibaba-node-options.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  ReactiveFormsModule,
-  HttpClientModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, ReactiveFormsModule, HttpClientModule];
 
 describe('AlibabaNodeOptionsComponent', () => {
   let fixture: ComponentFixture<AlibabaNodeOptionsComponent>;
@@ -28,11 +22,7 @@ describe('AlibabaNodeOptionsComponent', () => {
     TestBed.configureTestingModule({
       imports: [...modules],
       declarations: [AlibabaNodeOptionsComponent],
-      providers: [
-        {provide: ApiService, useClass: ApiMockService},
-        NodeDataService,
-        WizardService,
-      ],
+      providers: [{provide: ApiService, useClass: ApiMockService}, NodeDataService, WizardService],
     }).compileComponents();
   });
 

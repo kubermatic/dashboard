@@ -13,13 +13,7 @@ import {ApiMockService} from '../../testing/services/api-mock.service';
 
 import {GCPNodeDataComponent} from './gcp-node-data.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  ReactiveFormsModule,
-  HttpClientModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, ReactiveFormsModule, HttpClientModule];
 
 describe('GCPNodeDataComponent', () => {
   let fixture: ComponentFixture<GCPNodeDataComponent>;
@@ -29,11 +23,7 @@ describe('GCPNodeDataComponent', () => {
     TestBed.configureTestingModule({
       imports: [...modules],
       declarations: [GCPNodeDataComponent],
-      providers: [
-        {provide: ApiService, useClass: ApiMockService},
-        NodeDataService,
-        WizardService,
-      ],
+      providers: [{provide: ApiService, useClass: ApiMockService}, NodeDataService, WizardService],
     }).compileComponents();
   });
 

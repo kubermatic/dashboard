@@ -11,15 +11,9 @@ export class DatacenterService {
   private restRoot: string = environment.restRoot;
   private _datacenters$: Observable<DataCenterEntity[]>;
   private _datacentersRefresh$ = new Subject();
-  private _refreshTimer$ = timer(
-    0,
-    this._appConfigService.getRefreshTimeBase() * 60
-  );
+  private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * 60);
 
-  constructor(
-    private readonly _httpClient: HttpClient,
-    private readonly _appConfigService: AppConfigService
-  ) {}
+  constructor(private readonly _httpClient: HttpClient, private readonly _appConfigService: AppConfigService) {}
 
   init(): void {
     this._datacenters$ = merge(this._datacentersRefresh$, this._refreshTimer$)
@@ -43,9 +37,7 @@ export class DatacenterService {
   }
 
   getDatacenter(name: string): Observable<DataCenterEntity> {
-    return this.datacenters.pipe(
-      map(datacenters => datacenters.find(dc => dc.metadata.name === name))
-    );
+    return this.datacenters.pipe(map(datacenters => datacenters.find(dc => dc.metadata.name === name)));
   }
 
   deleteDatacenter(datacenter: DataCenterEntity): Observable<any> {

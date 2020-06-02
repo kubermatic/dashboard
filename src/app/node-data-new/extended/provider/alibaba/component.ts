@@ -23,16 +23,12 @@ enum Controls {
     },
   ],
 })
-export class AlibabaExtendedNodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class AlibabaExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   labels: object;
 
   readonly Controls = Controls;
 
-  constructor(
-    private readonly _builder: FormBuilder,
-    private readonly _nodeDataService: NodeDataService
-  ) {
+  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
     super();
   }
 

@@ -6,9 +6,7 @@ import {ColorSchemeService} from './services/color-scheme';
 import {ThemeManagerService} from './services/manager';
 import {ThemeService} from './services/theme';
 
-const routes: Routes = [
-  {path: '', outlet: 'theming', component: StylePickerComponent},
-];
+const routes: Routes = [{path: '', outlet: 'theming', component: StylePickerComponent}];
 
 @NgModule({
   imports: [SharedModule, RouterModule.forChild(routes)],

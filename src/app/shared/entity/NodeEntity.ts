@@ -65,9 +65,7 @@ export class OperatingSystemSpec {
   flatcar?: FlatcarSpec;
 
   static getOperatingSystem(spec: OperatingSystemSpec): OperatingSystem {
-    return Object.keys(spec).find(
-      key => spec[key] !== undefined
-    ) as OperatingSystem;
+    return Object.keys(spec).find(key => spec[key] !== undefined) as OperatingSystem;
   }
 }
 

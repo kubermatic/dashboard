@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ProjectOwners} from '../../entity/ProjectEntity';
 
 @Component({
@@ -28,7 +22,7 @@ export class ShortNameInCircleComponent implements OnInit, OnChanges {
   getHiddenOwners(): string {
     const hiddenOwners = [];
     for (const i in this.owners) {
-      if (this.owners.hasOwnProperty(i)) {
+      if (Object.prototype.hasOwnProperty.call(this.owners, i)) {
         hiddenOwners.push(this.owners[i].name);
       }
     }
@@ -39,7 +33,7 @@ export class ShortNameInCircleComponent implements OnInit, OnChanges {
     this.shortNames = [];
 
     for (const owner in this.owners) {
-      if (this.owners.hasOwnProperty(owner)) {
+      if (Object.prototype.hasOwnProperty.call(this.owners, owner)) {
         const capitalLetters = this.owners[owner].name.match(/\b(\w)/g);
         const short = capitalLetters.slice(0, 3).join('').toUpperCase();
         this.shortNames.push(short);

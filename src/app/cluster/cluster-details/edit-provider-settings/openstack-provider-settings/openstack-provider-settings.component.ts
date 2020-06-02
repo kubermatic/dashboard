@@ -1,10 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
@@ -32,15 +27,10 @@ export class OpenstackProviderSettingsComponent implements OnInit, OnDestroy {
       .pipe(debounceTime(1000))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(data => {
-        if (
-          data.username !== this._formData.username ||
-          data.password !== this._formData.password
-        ) {
+        if (data.username !== this._formData.username || data.password !== this._formData.password) {
           this._formData = data;
           this.setValidators();
-          this.clusterService.changeProviderSettingsPatch(
-            this.getProviderSettingsPatch()
-          );
+          this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
         }
       });
   }

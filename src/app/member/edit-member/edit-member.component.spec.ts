@@ -1,10 +1,4 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -19,12 +13,7 @@ import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
 
 import {EditMemberComponent} from './edit-member.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  CoreModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 
 describe('EditMemberComponent', () => {
   let fixture: ComponentFixture<EditMemberComponent>;
@@ -33,9 +22,7 @@ describe('EditMemberComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = {editMembers: jest.fn()};
-    editMemberSpy = apiMock.editMembers.mockReturnValue(
-      asyncData(fakeMember())
-    );
+    editMemberSpy = apiMock.editMembers.mockReturnValue(asyncData(fakeMember()));
 
     TestBed.configureTestingModule({
       imports: [...modules],
@@ -66,14 +53,10 @@ describe('EditMemberComponent', () => {
   it('should have required fields', () => {
     component.editMemberForm.controls.group.patchValue('');
     expect(component.editMemberForm.controls.group.valid).toBeFalsy();
-    expect(
-      component.editMemberForm.controls.group.hasError('required')
-    ).toBeTruthy();
+    expect(component.editMemberForm.controls.group.hasError('required')).toBeTruthy();
 
     component.editMemberForm.controls.group.patchValue('editor');
-    expect(
-      component.editMemberForm.controls.group.hasError('required')
-    ).toBeFalsy();
+    expect(component.editMemberForm.controls.group.hasError('required')).toBeFalsy();
   });
 
   it('should call editMember method', fakeAsync(() => {

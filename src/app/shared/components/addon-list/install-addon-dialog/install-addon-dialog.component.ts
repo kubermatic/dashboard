@@ -3,11 +3,7 @@ import {FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
-import {
-  AddonConfigEntity,
-  AddonEntity,
-  AddonFormSpec,
-} from '../../../entity/AddonEntity';
+import {AddonConfigEntity, AddonEntity, AddonFormSpec} from '../../../entity/AddonEntity';
 
 @Component({
   selector: 'km-install-addon-dialog',
@@ -47,19 +43,11 @@ export class InstallAddonDialogComponent implements OnInit {
   }
 
   hasForm(): boolean {
-    return (
-      !!this.addonConfig &&
-      !!this.addonConfig.spec &&
-      !!this.addonConfig.spec.formSpec
-    );
+    return !!this.addonConfig && !!this.addonConfig.spec && !!this.addonConfig.spec.formSpec;
   }
 
   hasLogo(): boolean {
-    return (
-      !!this.addonConfig &&
-      !!this.addonConfig.spec.logo &&
-      !!this.addonConfig.spec.logoFormat
-    );
+    return !!this.addonConfig && !!this.addonConfig.spec.logo && !!this.addonConfig.spec.logoFormat;
   }
 
   getAddonLogo(): SafeUrl {

@@ -1,13 +1,10 @@
 import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
-import {first, takeUntil} from 'rxjs/operators';
+import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
-import {
-  NodeProvider,
-  NodeProviderConstants,
-} from '../../../shared/model/NodeProviderConstants';
+import {NodeProvider, NodeProviderConstants} from '../../../shared/model/NodeProviderConstants';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import * as countryCodeLookup from 'country-code-lookup';
@@ -24,22 +21,14 @@ import {DatacenterDataDialogComponent} from './datacenter-data-dialog/datacenter
 export class DynamicDatacentersComponent implements OnInit, OnChanges {
   datacenters: DataCenterEntity[] = [];
   dataSource = new MatTableDataSource<DataCenterEntity>();
-  displayedColumns: string[] = [
-    'datacenter',
-    'seed',
-    'country',
-    'provider',
-    'actions',
-  ];
+  displayedColumns: string[] = ['datacenter', 'seed', 'country', 'provider', 'actions'];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   seeds: string[] = [];
   seedFilter: string;
   countries: string[] = [];
   countryFilter: string;
-  providers: string[] = Object.values(NodeProvider).filter(
-    provider => !!provider
-  );
+  providers: string[] = Object.values(NodeProvider).filter(provider => !!provider);
   providerFilter: string;
   private _unsubscribe = new Subject<void>();
 
@@ -72,23 +61,19 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
       }
     };
 
-    this._datacenterService.datacenters
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(datacenters => {
-        this.datacenters = datacenters
-          .filter(datacenter => !datacenter.seed)
-          .sort((a, b) => a.metadata.name.localeCompare(b.metadata.name));
-        this._setSeeds();
-        this._setCountries();
-        this.filter();
-      });
+    this._datacenterService.datacenters.pipe(takeUntil(this._unsubscribe)).subscribe(datacenters => {
+      this.datacenters = datacenters
+        .filter(datacenter => !datacenter.seed)
+        .sort((a, b) => a.metadata.name.localeCompare(b.metadata.name));
+      this._setSeeds();
+      this._setCountries();
+      this.filter();
+    });
 
-    this._settingsService.userSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        this.paginator.pageSize = settings.itemsPerPage;
-        this.dataSource.paginator = this.paginator; // Force refresh.
-      });
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = this.paginator; // Force refresh.
+    });
   }
 
   ngOnChanges(): void {
@@ -114,15 +99,15 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
   }
 
   private _setCountries() {
-    this.countries = Array.from(
-      new Set(this.datacenters.map(datacenter => datacenter.spec.country))
-    ).sort((a, b) => a.localeCompare(b));
+    this.countries = Array.from(new Set(this.datacenters.map(datacenter => datacenter.spec.country))).sort((a, b) =>
+      a.localeCompare(b)
+    );
   }
 
   private _setSeeds() {
-    this.seeds = Array.from(
-      new Set(this.datacenters.map(datacenter => datacenter.spec.seed))
-    ).sort((a, b) => a.localeCompare(b));
+    this.seeds = Array.from(new Set(this.datacenters.map(datacenter => datacenter.spec.seed))).sort((a, b) =>
+      a.localeCompare(b)
+    );
   }
 
   filter(): void {
@@ -138,8 +123,7 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
       }
 
       if (this.providerFilter) {
-        isVisible =
-          isVisible && datacenter.spec.provider === this.providerFilter;
+        isVisible = isVisible && datacenter.spec.provider === this.providerFilter;
       }
 
       return isVisible;
@@ -159,6 +143,7 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
       .afterClosed()
       .pipe(first())
       .subscribe((result: DataCenterEntity) => {
+        // eslint-disable-next-line no-console
         console.log(result);
       });
   }
@@ -177,6 +162,7 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
       .afterClosed()
       .pipe(first())
       .subscribe((result: DataCenterEntity) => {
+        // eslint-disable-next-line no-console
         console.log(result);
       });
   }
@@ -193,19 +179,12 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
     this._matDialog
       .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(switchMap(_ => this._datacenterService.deleteDatacenter(datacenter)))
       .pipe(first())
-      .subscribe((isConfirmed: boolean) => {
-        if (isConfirmed) {
-          this._datacenterService
-            .deleteDatacenter(datacenter)
-            .pipe(first())
-            .subscribe(() => {
-              this._notificationService.success(
-                `The <strong>${datacenter.metadata.name}</strong> datacenter was deleted`
-              );
-              this._datacenterService.refreshDatacenters();
-            });
-        }
+      .subscribe(_ => {
+        this._notificationService.success(`The <strong>${datacenter.metadata.name}</strong> datacenter was deleted`);
+        this._datacenterService.refreshDatacenters();
       });
   }
 

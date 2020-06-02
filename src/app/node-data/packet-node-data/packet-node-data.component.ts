@@ -41,41 +41,31 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       size: new FormControl(this.nodeData.spec.cloud.packet.instanceType, [
         Validators.required,
-        AutocompleteFilterValidators.mustBeInArrayList(
-          this.sizes,
-          'name',
-          true
-        ),
+        AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true),
       ]),
     });
 
     this.form.valueChanges
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(() =>
-        this._addNodeService.changeNodeProviderData(this._getNodeProviderData())
-      );
+      .subscribe(() => this._addNodeService.changeNodeProviderData(this._getNodeProviderData()));
 
-    this._wizard.clusterProviderSettingsFormChanges$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.cloudSpec = data.cloudSpec;
-        this.form.controls.size.setValue('');
-        this.sizes = [];
-        this._checkSizeState();
+    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      this.cloudSpec = data.cloudSpec;
+      this.form.controls.size.setValue('');
+      this.sizes = [];
+      this._checkSizeState();
 
-        if (this._canLoadSizes()) {
-          this._reloadPacketSizes();
-        }
-      });
+      if (this._canLoadSizes()) {
+        this._reloadPacketSizes();
+      }
+    });
 
-    this._wizard.onCustomPresetSelect
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(credentials => {
-        this._selectedCredentials = credentials;
-      });
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
+      this._selectedCredentials = credentials;
+    });
 
     this.form.controls.size.valueChanges
-      .pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+      .pipe(debounceTime(1000), startWith(''), takeUntil(this._unsubscribe))
       .subscribe(value => {
         if (value !== '' && !this.form.controls.size.pristine) {
           this.filteredSizes = filterArrayOptions(value, 'name', this.sizes);
@@ -84,11 +74,7 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
         }
         this.form.controls.size.setValidators([
           Validators.required,
-          AutocompleteFilterValidators.mustBeInArrayList(
-            this.sizes,
-            'name',
-            true
-          ),
+          AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true),
         ]);
       });
 
@@ -112,9 +98,8 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
       return 'Loading Plans...';
     } else if (!this.loadingSizes && this.sizes.length === 0) {
       return 'No Plans available';
-    } else {
-      return 'Plan*';
     }
+    return 'Plan*';
   }
 
   getPlanDetails(size: PacketSize): string {
@@ -177,10 +162,7 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
               this.sizes.push(size);
             }
           });
-          if (
-            this.nodeData.spec.cloud.packet.instanceType === '' &&
-            this.sizes.length
-          ) {
+          if (this.nodeData.spec.cloud.packet.instanceType === '' && this.sizes.length) {
             this.form.controls.size.setValue(this.sizes[0].name);
           }
 
@@ -200,10 +182,7 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
   }
 
   private _canLoadSizes(): boolean {
-    return (
-      (!!this.cloudSpec.packet.apiKey && !!this.cloudSpec.packet.projectID) ||
-      !!this._selectedCredentials
-    );
+    return (!!this.cloudSpec.packet.apiKey && !!this.cloudSpec.packet.projectID) || !!this._selectedCredentials;
   }
 
   ngOnDestroy(): void {

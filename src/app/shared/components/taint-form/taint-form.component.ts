@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  forwardRef,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import {Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -123,10 +116,7 @@ export class TaintFormComponent implements OnInit {
         ],
         value: [
           {value: taint ? taint.value : '', disabled: false},
-          Validators.compose([
-            TaintFormValidators.taintValueLength,
-            LabelFormValidators.labelValuePattern,
-          ]),
+          Validators.compose([TaintFormValidators.taintValueLength, LabelFormValidators.labelValuePattern]),
         ],
         effect: [
           {value: taint ? taint.effect : '', disabled: false},
@@ -162,9 +152,7 @@ export class TaintFormComponent implements OnInit {
   }
 
   private _updateTaints(): void {
-    this.taints = TaintFormComponent.filterNullifiedTaints(
-      this.taintArray.getRawValue()
-    );
+    this.taints = TaintFormComponent.filterNullifiedTaints(this.taintArray.getRawValue());
 
     // Emit the change event.
     this.taintsChange.emit(this.taints);

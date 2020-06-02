@@ -13,13 +13,7 @@ import {ApiMockService} from '../../testing/services/api-mock.service';
 
 import {PacketNodeDataComponent} from './packet-node-data.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  ReactiveFormsModule,
-  HttpClientModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, ReactiveFormsModule, HttpClientModule];
 
 describe('PacketNodeDataComponent', () => {
   let fixture: ComponentFixture<PacketNodeDataComponent>;
@@ -29,11 +23,7 @@ describe('PacketNodeDataComponent', () => {
     TestBed.configureTestingModule({
       imports: [...modules],
       declarations: [PacketNodeDataComponent],
-      providers: [
-        NodeDataService,
-        WizardService,
-        {provide: ApiService, useClass: ApiMockService},
-      ],
+      providers: [NodeDataService, WizardService, {provide: ApiService, useClass: ApiMockService}],
     }).compileComponents();
   });
 

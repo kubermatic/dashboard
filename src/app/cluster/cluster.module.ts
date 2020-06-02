@@ -75,12 +75,7 @@ const entryComponents: any[] = [
 ];
 
 @NgModule({
-  imports: [
-    SharedModule,
-    ClusterRoutingModule,
-    MachineNetworksModule,
-    NodeDataModule,
-  ],
+  imports: [SharedModule, ClusterRoutingModule, MachineNetworksModule, NodeDataModule],
   declarations: [...components, ...entryComponents, VersionPickerComponent],
   exports: [...components],
   entryComponents: [...entryComponents],

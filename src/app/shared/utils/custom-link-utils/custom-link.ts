@@ -5,9 +5,7 @@ export class CustomLink {
   location?: CustomLinkLocation;
 
   static getIcon(link: CustomLink): string {
-    return link.icon && link.icon.length > 0
-      ? link.icon
-      : CustomLink._findMatchingServiceIcon(link);
+    return link.icon && link.icon.length > 0 ? link.icon : CustomLink._findMatchingServiceIcon(link);
   }
 
   private static _findMatchingServiceIcon(link: CustomLink): CustomLinkIcon {
@@ -25,23 +23,16 @@ export class CustomLink {
       return CustomLinkIcon.Twitter;
     } else if (CustomLink._isMatching(link, 'jfrog')) {
       return CustomLinkIcon.JFrog;
-    } else {
-      return CustomLinkIcon.Default;
     }
+    return CustomLinkIcon.Default;
   }
 
   private static _isMatching(link: CustomLink, service: string): boolean {
-    return (
-      link.label.toLowerCase().includes(service) ||
-      link.url.toLowerCase().includes(service)
-    );
+    return link.label.toLowerCase().includes(service) || link.url.toLowerCase().includes(service);
   }
 }
 
-export function filterCustomLinks(
-  links: CustomLink[],
-  location?: CustomLinkLocation
-): CustomLink[] {
+export function filterCustomLinks(links: CustomLink[], location?: CustomLinkLocation): CustomLink[] {
   return links.filter(link => {
     // Return all links if the location param is not specified.
     return (
@@ -49,8 +40,7 @@ export function filterCustomLinks(
       // Return link if location does match.
       location === link.location ||
       // Return link if default location was specified and link config is missing or is invalid.
-      (location === CustomLinkLocation.Default &&
-        !Object.values(CustomLinkLocation).includes(link.location))
+      (location === CustomLinkLocation.Default && !Object.values(CustomLinkLocation).includes(link.location))
     );
   });
 }

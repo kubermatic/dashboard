@@ -2,19 +2,12 @@ import {Component, Input, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {first} from 'rxjs/operators';
 
-import {
-  ApiService,
-  NotificationService,
-  UserService,
-} from '../../../core/services';
+import {ApiService, NotificationService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {GroupConfig} from '../../../shared/model/Config';
-import {
-  MemberUtils,
-  Permission,
-} from '../../../shared/utils/member-utils/member-utils';
+import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 
 @Component({
   selector: 'km-revoke-token',
@@ -38,9 +31,7 @@ export class RevokeTokenComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this._userService.loggedInUser
-      .pipe(first())
-      .subscribe(user => (this._user = user));
+    this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
 
     this._userService.currentUserGroup(this.projectID).subscribe(userGroup => {
       this._currentGroupConfig = this._userService.userGroupConfig(userGroup);
@@ -48,23 +39,13 @@ export class RevokeTokenComponent implements OnInit {
   }
 
   isRevokeTokenEnabled(): boolean {
-    return MemberUtils.hasPermission(
-      this._user,
-      this._currentGroupConfig,
-      'clusters',
-      Permission.Edit
-    );
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'clusters', Permission.Edit);
   }
 
   revokeToken(): void {
     if (this.revokeAdminToken) {
       this._apiService
-        .editToken(
-          this.cluster,
-          this.datacenter.metadata.name,
-          this.projectID,
-          {token: ''}
-        )
+        .editToken(this.cluster, this.datacenter.metadata.name, this.projectID, {token: ''})
         .subscribe(res => {
           this._notificationService.success(
             `The admin token for the <strong>${this.cluster.name}</strong> cluster was revoked`
@@ -75,12 +56,7 @@ export class RevokeTokenComponent implements OnInit {
 
     if (this.revokeViewerToken) {
       this._apiService
-        .editViewerToken(
-          this.cluster,
-          this.datacenter.metadata.name,
-          this.projectID,
-          {token: ''}
-        )
+        .editViewerToken(this.cluster, this.datacenter.metadata.name, this.projectID, {token: ''})
         .subscribe(res => {
           this._notificationService.success(
             `The viewer token for the <strong>${this.cluster.name}</strong> cluster was revoked`

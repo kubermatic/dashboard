@@ -3,10 +3,7 @@ import {LabelFormComponent} from '../../shared/components/label-form/label-form.
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {getIpCount} from '../../shared/functions/get-ip-count';
-import {
-  ClusterDatacenterForm,
-  ClusterProviderForm,
-} from '../../shared/model/ClusterForm';
+import {ClusterDatacenterForm, ClusterProviderForm} from '../../shared/model/ClusterForm';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {NodeUtils} from '../../shared/utils/node-utils/node-utils';
 
@@ -61,10 +58,7 @@ export class SummaryComponent implements OnInit {
   }
 
   hasGCPProviderOptions(): boolean {
-    return (
-      this.cluster.spec.cloud.gcp.network !== '' ||
-      this.cluster.spec.cloud.gcp.subnetwork !== ''
-    );
+    return this.cluster.spec.cloud.gcp.network !== '' || this.cluster.spec.cloud.gcp.subnetwork !== '';
   }
 
   hasAzureProviderOptions(): boolean {
@@ -78,10 +72,7 @@ export class SummaryComponent implements OnInit {
   }
 
   displayTags(tags: object): boolean {
-    return (
-      !!tags &&
-      Object.keys(LabelFormComponent.filterNullifiedKeys(tags)).length > 0
-    );
+    return !!tags && Object.keys(LabelFormComponent.filterNullifiedKeys(tags)).length > 0;
   }
 
   displayNoProviderTags(): boolean {
@@ -97,9 +88,8 @@ export class SummaryComponent implements OnInit {
       return !this.displayTags(this.nodeData.spec.cloud.openstack.tags);
     } else if (this.nodeData.spec.cloud.azure) {
       return !this.displayTags(this.nodeData.spec.cloud.azure.tags);
-    } else {
-      return false;
     }
+    return false;
   }
 
   getDnsServers(dnsServers: string[]): string {
@@ -115,8 +105,7 @@ export class SummaryComponent implements OnInit {
 
     if (!!ipCount && ipCount > 0) {
       return !(ipCount - nodeCount >= 0);
-    } else {
-      return false;
     }
+    return false;
   }
 }

@@ -22,13 +22,7 @@ import {NavigationComponent} from '../navigation.component';
 
 import {ProjectSelectorComponent} from './selector.component';
 
-const modules: any[] = [
-  BrowserModule,
-  RouterTestingModule,
-  HttpClientModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, RouterTestingModule, HttpClientModule, BrowserAnimationsModule, SharedModule];
 
 describe('SidenavComponent', () => {
   let fixture: ComponentFixture<ProjectSelectorComponent>;

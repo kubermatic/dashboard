@@ -19,16 +19,11 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
 
   private _unsubscribe = new Subject<void>();
 
-  constructor(
-    private readonly _addNodeService: NodeDataService,
-    private readonly _wizardService: WizardService
-  ) {}
+  constructor(private readonly _addNodeService: NodeDataService, private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
     const isInEdit = !!this.nodeData.name; // Existing node deployment will always have assigned name.
-    const assignPublicIP = isInEdit
-      ? this.nodeData.spec.cloud.aws.assignPublicIP
-      : true; // Default to true.
+    const assignPublicIP = isInEdit ? this.nodeData.spec.cloud.aws.assignPublicIP : true; // Default to true.
 
     this.form = new FormGroup({
       assignPublicIP: new FormControl(assignPublicIP),
@@ -38,18 +33,14 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
     });
 
-    this._wizardService.clusterSettingsFormViewChanged$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.hideOptional = data.hideOptional;
-      });
+    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      this.hideOptional = data.hideOptional;
+    });
 
-    this._addNodeService.nodeProviderDataChanges$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.nodeData.spec.cloud.aws = data.spec.aws;
-        this.nodeData.valid = data.valid;
-      });
+    this._addNodeService.nodeProviderDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      this.nodeData.spec.cloud.aws = data.spec.aws;
+      this.nodeData.valid = data.valid;
+    });
 
     this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }

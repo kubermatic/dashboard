@@ -10,11 +10,7 @@ import {AuthMockService} from '../testing/services/auth-mock.service';
 import {DatacenterMockService} from '../testing/services/datacenter-mock.service';
 import {DashboardComponent} from './dashboard.component';
 
-const modules: any[] = [
-  BrowserModule,
-  RouterTestingModule,
-  BrowserAnimationsModule,
-];
+const modules: any[] = [BrowserModule, RouterTestingModule, BrowserAnimationsModule];
 
 describe('DashboardComponent', () => {
   let fixture: ComponentFixture<DashboardComponent>;

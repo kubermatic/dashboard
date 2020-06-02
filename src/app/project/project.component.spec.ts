@@ -1,10 +1,4 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -17,10 +11,7 @@ import {DatacenterService, ProjectService, UserService} from '../core/services';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {SharedModule} from '../shared/shared.module';
-import {
-  DialogTestModule,
-  NoopConfirmDialogComponent,
-} from '../testing/components/noop-confirmation-dialog.component';
+import {DialogTestModule, NoopConfirmDialogComponent} from '../testing/components/noop-confirmation-dialog.component';
 import {fakeProject} from '../testing/fake-data/project.fake';
 import {RouterStub, RouterTestingModule} from '../testing/router-stubs';
 import {AppConfigMockService} from '../testing/services/app-config-mock.service';
@@ -83,9 +74,7 @@ describe('ProjectComponent', () => {
     tick(15000);
 
     const dialogTitle = document.body.querySelector('.mat-dialog-title');
-    const deleteButton = document.body.querySelector(
-      '#km-confirmation-dialog-confirm-btn'
-    ) as HTMLInputElement;
+    const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
     const dialogInput = document.querySelector('#km-confirmation-dialog-input');
 
     dialogInput.setAttribute('value', project.name);
@@ -95,10 +84,6 @@ describe('ProjectComponent', () => {
     fixture.detectChanges();
 
     expect(dialogTitle.textContent).toBe('Delete Project');
-    expect(
-      document
-        .querySelector('#km-confirmation-dialog-input')
-        .getAttribute('value')
-    ).toBe(project.name);
+    expect(document.querySelector('#km-confirmation-dialog-input').getAttribute('value')).toBe(project.name);
   }));
 });

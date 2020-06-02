@@ -28,20 +28,14 @@ export class ClustersPage {
   }
 
   static getTableRow(nodeDeploymentName: string): Cypress.Chainable<any> {
-    return this.getTableRowNodeDeploymentNameColumn(
-      nodeDeploymentName
-    ).parent();
+    return this.getTableRowNodeDeploymentNameColumn(nodeDeploymentName).parent();
   }
 
-  static getTableRowNodeDeploymentNameColumn(
-    nodeDeploymentName: string
-  ): Cypress.Chainable<any> {
+  static getTableRowNodeDeploymentNameColumn(nodeDeploymentName: string): Cypress.Chainable<any> {
     return cy.get(`td#km-node-deployment-${nodeDeploymentName}`);
   }
 
-  static getNodeDeploymentRemoveBtn(
-    nodeDeploymentName: string
-  ): Cypress.Chainable<any> {
+  static getNodeDeploymentRemoveBtn(nodeDeploymentName: string): Cypress.Chainable<any> {
     return this.getTableRow(nodeDeploymentName).find('button i.km-icon-delete');
   }
 

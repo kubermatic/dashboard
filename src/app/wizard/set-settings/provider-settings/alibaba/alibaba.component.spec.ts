@@ -16,13 +16,7 @@ describe('AlibabaClusterSettingsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        ReactiveFormsModule,
-        SharedModule,
-        HttpClientModule,
-      ],
+      imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
       declarations: [AlibabaClusterSettingsComponent],
       providers: [WizardService],
     }).compileComponents();
@@ -53,25 +47,17 @@ describe('AlibabaClusterSettingsComponent', () => {
     fixture.detectChanges();
 
     expect(component.form.valid).toBeFalsy();
-    expect(
-      component.form.controls.accessKeyID.hasError('required')
-    ).toBeTruthy();
-    expect(
-      component.form.controls.accessKeySecret.hasError('required')
-    ).toBeTruthy();
+    expect(component.form.controls.accessKeyID.hasError('required')).toBeTruthy();
+    expect(component.form.controls.accessKeySecret.hasError('required')).toBeTruthy();
 
     component.form.controls.accessKeyID.patchValue('foo');
     fixture.detectChanges();
-    expect(
-      component.form.controls.accessKeyID.hasError('required')
-    ).toBeFalsy();
+    expect(component.form.controls.accessKeyID.hasError('required')).toBeFalsy();
     expect(component.form.valid).toBeFalsy();
 
     component.form.controls.accessKeySecret.patchValue('bar');
     fixture.detectChanges();
-    expect(
-      component.form.controls.accessKeySecret.hasError('required')
-    ).toBeFalsy();
+    expect(component.form.controls.accessKeySecret.hasError('required')).toBeFalsy();
     expect(component.form.valid).toBeTruthy();
   });
 });

@@ -91,10 +91,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   displayTags(tags: object): boolean {
-    return (
-      !!tags &&
-      Object.keys(LabelFormComponent.filterNullifiedKeys(tags)).length > 0
-    );
+    return !!tags && Object.keys(LabelFormComponent.filterNullifiedKeys(tags)).length > 0;
   }
 
   displayNoProviderTags(): boolean {
@@ -140,8 +137,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
 
     if (!!ipCount && ipCount > 0) {
       return !(ipCount - nodeCount >= 0);
-    } else {
-      return false;
     }
+    return false;
   }
 }

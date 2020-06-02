@@ -1,5 +1,5 @@
 import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
-import {first, takeUntil} from 'rxjs/operators';
+import {filter, first, takeUntil} from 'rxjs/operators';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
@@ -40,23 +40,17 @@ export class AdminsComponent implements OnInit, OnChanges {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._settingsService.admins
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(admins => {
-        this.admins = admins.sort((a, b) => a.email.localeCompare(b.email));
-        this.dataSource.data = this.admins;
-      });
+    this._settingsService.admins.pipe(takeUntil(this._unsubscribe)).subscribe(admins => {
+      this.admins = admins.sort((a, b) => a.email.localeCompare(b.email));
+      this.dataSource.data = this.admins;
+    });
 
-    this._settingsService.userSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        this.paginator.pageSize = settings.itemsPerPage;
-        this.dataSource.paginator = this.paginator; // Force refresh.
-      });
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = this.paginator; // Force refresh.
+    });
 
-    this._userService.loggedInUser
-      .pipe(first())
-      .subscribe(user => (this.user = user));
+    this._userService.loggedInUser.pipe(first()).subscribe(user => (this.user = user));
   }
 
   ngOnChanges(): void {
@@ -86,20 +80,21 @@ export class AdminsComponent implements OnInit, OnChanges {
     this._matDialog
       .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
       .pipe(first())
-      .subscribe((isConfirmed: boolean) => {
-        if (isConfirmed) {
-          admin.isAdmin = false;
-          this._settingsService
-            .setAdmin(admin)
-            .pipe(first())
-            .subscribe(() => {
-              this._notificationService.success(
-                `The <strong>${admin.name}</strong> user was deleted from admin group`
-              );
-              this._settingsService.refreshAdmins();
-            });
-        }
+      .subscribe(_ => {
+        admin.isAdmin = false;
+        this._updateAdmin(admin);
+      });
+  }
+
+  private _updateAdmin(admin: AdminEntity): void {
+    this._settingsService
+      .setAdmin(admin)
+      .pipe(first())
+      .subscribe(() => {
+        this._notificationService.success(`The <strong>${admin.name}</strong> user was deleted from admin group`);
+        this._settingsService.refreshAdmins();
       });
   }
 
@@ -116,11 +111,6 @@ export class AdminsComponent implements OnInit, OnChanges {
   }
 
   isPaginatorVisible(): boolean {
-    return (
-      this.admins &&
-      this.admins.length > 0 &&
-      this.paginator &&
-      this.admins.length > this.paginator.pageSize
-    );
+    return this.admins && this.admins.length > 0 && this.paginator && this.admins.length > this.paginator.pageSize;
   }
 }

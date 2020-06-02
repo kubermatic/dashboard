@@ -13,8 +13,7 @@ export class PropertyUsageComponent {
 
   getPercentage(): number | undefined {
     return this.used && this.total
-      ? Math.round(((this.used / this.total) * 100 + Number.EPSILON) * 100) /
-          100
+      ? Math.round(((this.used / this.total) * 100 + Number.EPSILON) * 100) / 100
       : undefined;
   }
 

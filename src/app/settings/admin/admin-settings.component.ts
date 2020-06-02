@@ -7,10 +7,7 @@ import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 import {NotificationService} from '../../core/services';
 import {UserService, HistoryService} from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
-import {
-  AdminSettings,
-  ClusterTypeOptions,
-} from '../../shared/entity/AdminSettings';
+import {AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
 import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
 
@@ -38,35 +35,21 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._userService.loggedInUser
-      .pipe(first())
-      .subscribe(user => (this.user = user));
+    this._userService.loggedInUser.pipe(first()).subscribe(user => (this.user = user));
 
-    this._settingsService.adminSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        if (!_.isEqual(settings, this.apiSettings)) {
-          if (
-            this.apiSettings &&
-            !_.isEqual(
-              this.apiSettings,
-              this._settingsService.defaultAdminSettings
-            )
-          ) {
-            this._notificationService.success(
-              'The settings update was applied'
-            );
-          }
-          this._applySettings(settings);
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      if (!_.isEqual(settings, this.apiSettings)) {
+        if (this.apiSettings && !_.isEqual(this.apiSettings, this._settingsService.defaultAdminSettings)) {
+          this._notificationService.success('The settings update was applied');
         }
-      });
+        this._applySettings(settings);
+      }
+    });
 
     this._settingsChange
       .pipe(
         debounceTime(500),
-        switchMap(() =>
-          this._settingsService.patchAdminSettings(this._getPatch())
-        ),
+        switchMap(() => this._settingsService.patchAdminSettings(this._getPatch())),
         takeUntil(this._unsubscribe)
       )
       .subscribe(_ => {});
@@ -103,18 +86,15 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   }
 
   private _getDistro(group: MatButtonToggleGroup): ClusterTypeOptions {
-    const isKubernetesSelected =
-      group.value && group.value.indexOf(ClusterType.Kubernetes) > -1;
-    const isOpenshiftSelected =
-      group.value && group.value.indexOf(ClusterType.OpenShift) > -1;
+    const isKubernetesSelected = group.value && group.value.indexOf(ClusterType.Kubernetes) > -1;
+    const isOpenshiftSelected = group.value && group.value.indexOf(ClusterType.OpenShift) > -1;
 
     if (isKubernetesSelected && isOpenshiftSelected) {
       return ClusterTypeOptions.All;
     } else if (isKubernetesSelected) {
       return ClusterTypeOptions.Kubernetes;
-    } else {
-      return ClusterTypeOptions.OpenShift;
     }
+    return ClusterTypeOptions.OpenShift;
   }
 
   private _setDistro(distro: ClusterTypeOptions): void {
@@ -132,9 +112,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   }
 
   isLastDistro(group: MatButtonToggleGroup, distro: string): boolean {
-    return (
-      group.value && group.value.length <= 1 && group.value.indexOf(distro) > -1
-    );
+    return group.value && group.value.length <= 1 && group.value.indexOf(distro) > -1;
   }
 
   isOpenShiftEnabled(): boolean {
@@ -156,18 +134,9 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
   isDisplayLinksEqual(): boolean {
     return (
-      this.isEqual(
-        this.settings.displayAPIDocs,
-        this.apiSettings.displayAPIDocs
-      ) &&
-      this.isEqual(
-        this.settings.displayDemoInfo,
-        this.apiSettings.displayDemoInfo
-      ) &&
-      this.isEqual(
-        this.settings.displayTermsOfService,
-        this.apiSettings.displayTermsOfService
-      )
+      this.isEqual(this.settings.displayAPIDocs, this.apiSettings.displayAPIDocs) &&
+      this.isEqual(this.settings.displayDemoInfo, this.apiSettings.displayDemoInfo) &&
+      this.isEqual(this.settings.displayTermsOfService, this.apiSettings.displayTermsOfService)
     );
   }
 }

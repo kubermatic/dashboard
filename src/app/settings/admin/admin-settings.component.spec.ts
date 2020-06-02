@@ -5,26 +5,19 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
 
-import {
-  DatacenterService,
-  NotificationService,
-  UserService,
-} from '../../core/services';
-import {HistoryService} from '../../core/services/history/history.service';
+import {DatacenterService, NotificationService, UserService, HistoryService} from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
-import {AdminEntity} from '../../shared/entity/AdminSettings';
 import {SharedModule} from '../../shared/shared.module';
-import {fakeMember} from '../../testing/fake-data/member.fake';
 import {MatDialogMock} from '../../testing/services/mat-dialog-mock';
 import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
 import {SettingsMockService} from '../../testing/services/settings-mock.service';
 import {UserMockService} from '../../testing/services/user-mock.service';
 
-import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.component';
 import {AdminSettingsComponent} from './admin-settings.component';
 import {CustomLinksFormComponent} from './custom-link-form/custom-links-form.component';
 import {ClusterType} from '../../shared/entity/ClusterEntity';
 import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
+import {AddAdminDialogComponent} from './admins/add-admin-dialog/add-admin-dialog.component';
 
 describe('AdminSettingsComponent', () => {
   let fixture: ComponentFixture<AdminSettingsComponent>;
@@ -32,17 +25,8 @@ describe('AdminSettingsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        RouterTestingModule,
-        BrowserAnimationsModule,
-        SharedModule,
-      ],
-      declarations: [
-        AdminSettingsComponent,
-        AddAdminDialogComponent,
-        CustomLinksFormComponent,
-      ],
+      imports: [BrowserModule, RouterTestingModule, BrowserAnimationsModule, SharedModule],
+      declarations: [AdminSettingsComponent, AddAdminDialogComponent, CustomLinksFormComponent],
       providers: [
         {provide: UserService, useClass: UserMockService},
         {provide: SettingsService, useClass: SettingsMockService},
@@ -69,17 +53,5 @@ describe('AdminSettingsComponent', () => {
     group.value = [ClusterType.Kubernetes];
     expect(component.isLastDistro(group, ClusterType.Kubernetes)).toBeTruthy();
     expect(component.isLastDistro(group, ClusterType.OpenShift)).toBeFalsy();
-  });
-
-  it('should not allow users to take admin role from themselves', () => {
-    component.user = fakeMember();
-    const admin: AdminEntity = {
-      email: component.user.email,
-      isAdmin: true,
-    };
-    expect(component.isDeleteAdminEnabled(admin)).toBeFalsy();
-
-    admin.email = 'xyz@abc.com';
-    expect(component.isDeleteAdminEnabled(admin)).toBeTruthy();
   });
 });

@@ -16,24 +16,12 @@ export class UserService {
   private _user$: Observable<MemberEntity>;
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
 
-  constructor(
-    private _http: HttpClient,
-    private _appConfig: AppConfigService,
-    private readonly _auth: Auth
-  ) {}
+  constructor(private _http: HttpClient, private _appConfig: AppConfigService, private readonly _auth: Auth) {}
 
   get loggedInUser(): Observable<MemberEntity> {
     if (!this._user$) {
       this._user$ = this._refreshTimer$
-        .pipe(
-          switchMap(() =>
-            iif(
-              () => this._auth.authenticated(),
-              this._getLoggedInUser(),
-              EMPTY
-            )
-          )
-        )
+        .pipe(switchMap(() => iif(() => this._auth.authenticated(), this._getLoggedInUser(), EMPTY)))
         .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
 
@@ -41,9 +29,7 @@ export class UserService {
   }
 
   currentUserGroup(projectID: string): Observable<string> {
-    return this.loggedInUser
-      .pipe(first())
-      .pipe(map(member => MemberUtils.getGroupInProject(member, projectID)));
+    return this.loggedInUser.pipe(first()).pipe(map(member => MemberUtils.getGroupInProject(member, projectID)));
   }
 
   userGroupConfig(userGroup: string): GroupConfig {
@@ -53,8 +39,6 @@ export class UserService {
 
   private _getLoggedInUser(): Observable<MemberEntity> {
     const url = `${this.restRoot}/me`;
-    return this._http
-      .get<MemberEntity>(url)
-      .pipe(catchError(() => of<MemberEntity>()));
+    return this._http.get<MemberEntity>(url).pipe(catchError(() => of<MemberEntity>()));
   }
 }

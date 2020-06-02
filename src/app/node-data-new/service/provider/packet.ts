@@ -20,17 +20,12 @@ export class NodeDataPacketProvider {
     this._nodeDataService.nodeData.spec.cloud.packet.tags = tags;
   }
 
-  flavors(
-    onError: () => void = undefined,
-    onLoadingCb: () => void = null
-  ): Observable<PacketSize[]> {
+  flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<PacketSize[]> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterService.clusterChanges
-          .pipe(
-            filter(_ => this._clusterService.provider === NodeProvider.PACKET)
-          )
+          .pipe(filter(_ => this._clusterService.provider === NodeProvider.PACKET))
           .pipe(
             switchMap(cluster =>
               this._presetService

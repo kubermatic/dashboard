@@ -14,13 +14,7 @@ import {Auth, ProjectService, UserService} from '../../services';
 
 import {FooterComponent} from './footer.component';
 
-const modules: any[] = [
-  BrowserModule,
-  HttpClientModule,
-  RouterTestingModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, HttpClientModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];
 
 describe('FooterComponent', () => {
   let fixture: ComponentFixture<FooterComponent>;

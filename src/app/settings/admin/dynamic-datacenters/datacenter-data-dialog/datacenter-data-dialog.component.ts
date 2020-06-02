@@ -25,33 +25,15 @@ export class DatacenterDataDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      name: new FormControl(
-        this.data.datacenter ? this.data.datacenter.metadata.name : '',
-        [Validators.required]
-      ),
-      provider: new FormControl(
-        this.data.datacenter ? this.data.datacenter.spec.provider : '',
-        [Validators.required]
-      ),
-      seed: new FormControl(
-        this.data.datacenter ? this.data.datacenter.spec.seed : '',
-        [Validators.required]
-      ),
-      country: new FormControl(
-        this.data.datacenter ? this.data.datacenter.spec.country : '',
-        [Validators.required]
-      ),
-      location: new FormControl(
-        this.data.datacenter ? this.data.datacenter.spec.location : '',
-        [Validators.required]
-      ),
+      name: new FormControl(this.data.datacenter ? this.data.datacenter.metadata.name : '', [Validators.required]),
+      provider: new FormControl(this.data.datacenter ? this.data.datacenter.spec.provider : '', [Validators.required]),
+      seed: new FormControl(this.data.datacenter ? this.data.datacenter.spec.seed : '', [Validators.required]),
+      country: new FormControl(this.data.datacenter ? this.data.datacenter.spec.country : '', [Validators.required]),
+      location: new FormControl(this.data.datacenter ? this.data.datacenter.spec.location : '', [Validators.required]),
       enforcePodSecurityPolicy: new FormControl(
-        !!this.data.datacenter &&
-          this.data.datacenter.spec.enforcePodSecurityPolicy
+        !!this.data.datacenter && this.data.datacenter.spec.enforcePodSecurityPolicy
       ),
-      enforceAuditLogging: new FormControl(
-        !!this.data.datacenter && this.data.datacenter.spec.enforceAuditLogging
-      ),
+      enforceAuditLogging: new FormControl(!!this.data.datacenter && this.data.datacenter.spec.enforceAuditLogging),
     });
   }
 
@@ -66,8 +48,7 @@ export class DatacenterDataDialogComponent implements OnInit {
         country: this.form.controls.country.value,
         location: this.form.controls.location.value,
         requiredEmailDomains: [],
-        enforcePodSecurityPolicy: this.form.controls.enforcePodSecurityPolicy
-          .value,
+        enforcePodSecurityPolicy: this.form.controls.enforcePodSecurityPolicy.value,
         enforceAuditLogging: this.form.controls.enforceAuditLogging.value,
       },
       seed: false,
