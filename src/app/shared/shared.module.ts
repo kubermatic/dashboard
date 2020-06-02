@@ -65,6 +65,7 @@ import {TaintFormComponent} from './components/taint-form/taint-form.component';
 import {TaintsComponent} from './components/taints/taints.component';
 import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
+import {MonacoEditorModule} from 'ngx-monaco-editor';
 
 const modules: any[] = [
   CommonModule,
@@ -105,6 +106,7 @@ const modules: any[] = [
   MatBadgeModule,
   MatStepperModule,
   FilterPipeModule,
+  MonacoEditorModule,
 ];
 
 const components: any[] = [

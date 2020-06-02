@@ -1,0 +1,11 @@
+@import '../../../../../assets/css/variables';
+
+.mat-dialog-content {
+  overflow: scroll;
+}
+
+.editor {
+  border-radius: $border-radius;
+  margin-top: 2 * $baseline-grid;
+  overflow: hidden;
+}

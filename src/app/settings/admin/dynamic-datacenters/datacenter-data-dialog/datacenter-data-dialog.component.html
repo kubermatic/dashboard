@@ -68,9 +68,12 @@
     </mat-form-field>
 
     <mat-checkbox formControlName="enforcePodSecurityPolicy">Enforce Pod Security Policy</mat-checkbox>
-
     <mat-checkbox formControlName="enforceAuditLogging">Enforce Audit Logging</mat-checkbox>
   </form>
+
+  <ngx-monaco-editor class="editor km-border"
+                     [options]="editorOptions"
+                     [(ngModel)]="providerSpec"></ngx-monaco-editor>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button

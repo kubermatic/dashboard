@@ -1,22 +1,38 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {dump as toYaml} from 'js-yaml';
+import * as _ from 'lodash';
 
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
 
 export interface DatacenterDataDialogConfig {
   title: string;
   confirmLabel: string;
-  // Following field is required only if dialog is used in edit mode.
+  // Datacenter should be only specified if dialog is used in the edit mode.
   datacenter?: DataCenterEntity;
 }
 
 @Component({
   selector: 'km-add-admin-dialog',
   templateUrl: './datacenter-data-dialog.component.html',
+  styleUrls: ['./datacenter-data-dialog.component.scss'],
 })
 export class DatacenterDataDialogComponent implements OnInit {
   form: FormGroup;
+  providerSpec = '';
+  editorOptions = {
+    language: 'yaml',
+    minimap: {
+      enabled: false,
+    },
+    renderLineHighlight: 'none',
+    scrollbar: {
+      verticalScrollbarSize: 5,
+      useShadows: false,
+    },
+    scrollBeyondLastLine: false,
+  };
 
   constructor(
     public _matDialogRef: MatDialogRef<DatacenterDataDialogComponent>,
@@ -35,6 +51,13 @@ export class DatacenterDataDialogComponent implements OnInit {
       ),
       enforceAuditLogging: new FormControl(!!this.data.datacenter && this.data.datacenter.spec.enforceAuditLogging),
     });
+
+    if (this.data.datacenter && this.data.datacenter.spec.provider) {
+      const spec = this.data.datacenter.spec[this.data.datacenter.spec.provider];
+      if (!_.isEmpty(spec)) {
+        this.providerSpec = toYaml(spec);
+      }
+    }
   }
 
   submit(): void {
@@ -53,6 +76,10 @@ export class DatacenterDataDialogComponent implements OnInit {
       },
       seed: false,
     };
+
+    // TODO: Set provider spec.
+
+    // TODO: Nullify previous values if in edit mode.
 
     this._matDialogRef.close(datacenter);
   }
