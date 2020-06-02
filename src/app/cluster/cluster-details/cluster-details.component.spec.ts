@@ -1,11 +1,5 @@
 import {HttpClientModule} from '@angular/common/http';
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
@@ -35,15 +29,8 @@ import {
   fakeSimpleBindings,
   fakeSimpleClusterBindings,
 } from '../../testing/fake-data/rbac.fake';
-import {
-  ActivatedRouteStub,
-  RouterStub,
-  RouterTestingModule,
-} from '../../testing/router-stubs';
-import {
-  ApiMockService,
-  asyncData,
-} from '../../testing/services/api-mock.service';
+import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../testing/router-stubs';
+import {ApiMockService, asyncData} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../testing/services/auth-mock.service';
 import {ClusterMockService} from '../../testing/services/cluster-mock-service';
@@ -76,21 +63,13 @@ describe('ClusterDetailsComponent', () => {
       deleteClusterBinding: jest.fn(),
       deleteBinding: jest.fn(),
     };
-    rbacMock.getClusterBindings.mockReturnValue(
-      asyncData([fakeClusterBindings()])
-    );
+    rbacMock.getClusterBindings.mockReturnValue(asyncData([fakeClusterBindings()]));
     rbacMock.getBindings.mockReturnValue(asyncData([fakeBindings()]));
     rbacMock.deleteClusterBinding.mockReturnValue(of(null));
     rbacMock.deleteBinding.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        RouterTestingModule,
-        SharedModule,
-      ],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
       declarations: [
         ClusterDetailsComponent,
         ClusterSecretsComponent,
@@ -161,9 +140,7 @@ describe('ClusterDetailsComponent', () => {
   }));
 
   it('should create simple cluster binding for rbac', () => {
-    const simpleClusterBindings = component.createSimpleClusterBinding(
-      fakeClusterBindings()
-    );
+    const simpleClusterBindings = component.createSimpleClusterBinding(fakeClusterBindings());
     expect(simpleClusterBindings).toEqual(fakeSimpleClusterBindings());
   });
 

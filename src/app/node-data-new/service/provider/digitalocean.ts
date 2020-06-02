@@ -20,19 +20,12 @@ export class NodeDataDigitalOceanProvider {
     this._nodeDataService.nodeData.spec.cloud.digitalocean.tags = tags;
   }
 
-  flavors(
-    onError: () => void = undefined,
-    onLoadingCb: () => void = null
-  ): Observable<DigitaloceanSizes> {
+  flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<DigitaloceanSizes> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterService.clusterChanges
-          .pipe(
-            filter(
-              _ => this._clusterService.provider === NodeProvider.DIGITALOCEAN
-            )
-          )
+          .pipe(filter(_ => this._clusterService.provider === NodeProvider.DIGITALOCEAN))
           .pipe(
             switchMap(cluster =>
               this._presetService
@@ -46,9 +39,7 @@ export class NodeDataDigitalOceanProvider {
                       onError();
                     }
 
-                    return onErrorResumeNext(
-                      of(DigitaloceanSizes.newDigitalOceanSizes())
-                    );
+                    return onErrorResumeNext(of(DigitaloceanSizes.newDigitalOceanSizes()));
                   })
                 )
             )

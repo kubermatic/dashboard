@@ -3,11 +3,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {
-  ClusterService,
-  NotificationService,
-  WizardService,
-} from '../../../core/services';
+import {ClusterService, NotificationService, WizardService} from '../../../core/services';
 import {MachineNetworksComponent} from '../../../machine-networks/machine-networks.component';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeClusterWithMachineNetwork} from '../../../testing/fake-data/clusterWithMachineNetworks.fake';
@@ -18,13 +14,7 @@ import {ClusterMockService} from '../../../testing/services/cluster-mock-service
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {AddMachineNetworkComponent} from './add-machine-network.component';
 
-const modules: any[] = [
-  BrowserModule,
-  HttpClientModule,
-  BrowserAnimationsModule,
-  RouterTestingModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
 
 describe('AddMachineNetworkComponent', () => {
   let component: AddMachineNetworkComponent;

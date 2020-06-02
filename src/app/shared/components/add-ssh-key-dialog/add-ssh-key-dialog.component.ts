@@ -36,15 +36,11 @@ export class AddSshKeyDialogComponent implements OnInit {
     const name = this.addSSHKeyForm.controls['name'].value;
     const key = this.addSSHKeyForm.controls['key'].value;
 
-    this.api
-      .addSSHKey(new SSHKeyEntity(name, null, key), this.projectID)
-      .subscribe(result => {
-        this._notificationService.success(
-          `The <strong>${name}</strong> SSH key was added`
-        );
-        this.googleAnalyticsService.emitEvent('addSshKey', 'sshKeyAdded');
-        this.dialogRef.close(result);
-      });
+    this.api.addSSHKey(new SSHKeyEntity(name, null, key), this.projectID).subscribe(result => {
+      this._notificationService.success(`The <strong>${name}</strong> SSH key was added`);
+      this.googleAnalyticsService.emitEvent('addSshKey', 'sshKeyAdded');
+      this.dialogRef.close(result);
+    });
   }
 
   onNewKeyTextChanged(): void {

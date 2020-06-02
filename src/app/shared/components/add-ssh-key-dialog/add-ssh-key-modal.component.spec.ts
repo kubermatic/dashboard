@@ -1,10 +1,4 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -62,10 +56,7 @@ describe('AddSshKeyDialogComponent', () => {
     component = fixture.componentInstance;
     component.projectID = fakeProject().id;
     fixture.detectChanges();
-    dialogRef = fixture.debugElement.injector.get(MatDialogRef) as MatDialogRef<
-      AddSshKeyDialogComponent,
-      any
-    >;
+    dialogRef = fixture.debugElement.injector.get(MatDialogRef) as MatDialogRef<AddSshKeyDialogComponent, any>;
   });
 
   it('should create the add node modal cmp', async(() => {
@@ -105,14 +96,10 @@ describe('AddSshKeyDialogComponent', () => {
   it('validation should fail when SSH key is invalid', fakeAsync(() => {
     expect(component.addSSHKeyForm.valid).toBeFalsy();
     component.addSSHKeyForm.controls['name'].setValue('test');
-    component.addSSHKeyForm.controls['key'].setValue(
-      'ssh-rsa 7Kq3O9ZIvDwt9cbGUf55xN'
-    );
+    component.addSSHKeyForm.controls['key'].setValue('ssh-rsa 7Kq3O9ZIvDwt9cbGUf55xN');
     expect(component.addSSHKeyForm.valid).toBeFalsy();
 
-    component.addSSHKeyForm.controls['key'].setValue(
-      'ssh-rda 7Kq3O9ZIvDwt9cbGUf55xN'
-    );
+    component.addSSHKeyForm.controls['key'].setValue('ssh-rda 7Kq3O9ZIvDwt9cbGUf55xN');
     expect(component.addSSHKeyForm.valid).toBeFalsy();
 
     component.addSSHKeyForm.controls['key'].setValue('test');

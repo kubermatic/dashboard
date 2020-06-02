@@ -1,10 +1,4 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -19,13 +13,7 @@ import {ProjectModule} from '../project.module';
 
 import {EditProjectComponent} from './edit-project.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  CoreModule,
-  ProjectModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, ProjectModule];
 
 describe('EditProjectComponent', () => {
   let fixture: ComponentFixture<EditProjectComponent>;
@@ -34,9 +22,7 @@ describe('EditProjectComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = {editProject: jest.fn()};
-    editProjectSpy = apiMock.editProject.mockReturnValue(
-      asyncData(fakeProject())
-    );
+    editProjectSpy = apiMock.editProject.mockReturnValue(asyncData(fakeProject()));
 
     TestBed.configureTestingModule({
       imports: [...modules],

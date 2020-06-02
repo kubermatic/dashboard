@@ -9,11 +9,7 @@ import {CustomLinksFormComponent} from './custom-link-form/custom-links-form.com
 
 @NgModule({
   imports: [SharedModule, AdminSettingsRoutingModule],
-  declarations: [
-    AdminSettingsComponent,
-    AddAdminDialogComponent,
-    CustomLinksFormComponent,
-  ],
+  declarations: [AdminSettingsComponent, AddAdminDialogComponent, CustomLinksFormComponent],
   entryComponents: [AddAdminDialogComponent],
 })
 export class AdminSettingsModule {}

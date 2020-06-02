@@ -67,15 +67,12 @@ describe('SummaryComponent', () => {
   });
 
   it('should concat DNS Servers', () => {
-    const dnsServers = fakeClusterWithMachineNetwork().spec.machineNetworks[0]
-      .dnsServers;
+    const dnsServers = fakeClusterWithMachineNetwork().spec.machineNetworks[0].dnsServers;
     expect(component.getDnsServers(dnsServers)).toBe('8.8.8.8, 8.8.1.1');
   });
 
   it('should return true if there are no IPs left', () => {
     expect(component.noIpsLeft(fakeClusterWithMachineNetwork(), 3)).toBeFalsy();
-    expect(
-      component.noIpsLeft(fakeClusterWithMachineNetwork(), 10)
-    ).toBeTruthy();
+    expect(component.noIpsLeft(fakeClusterWithMachineNetwork(), 10)).toBeTruthy();
   });
 });

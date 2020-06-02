@@ -8,11 +8,7 @@ import {debounceTime, takeUntil} from 'rxjs/operators';
 import {NotificationService, RBACService} from '../../../../core/services';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
-import {
-  ClusterRoleName,
-  CreateBinding,
-  RoleName,
-} from '../../../../shared/entity/RBACEntity';
+import {ClusterRoleName, CreateBinding, RoleName} from '../../../../shared/entity/RBACEntity';
 
 export enum Controls {
   Email = 'email',
@@ -54,11 +50,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     });
 
     this._rbacService
-      .getClusterRoleNames(
-        this.cluster.id,
-        this.datacenter.metadata.name,
-        this.projectID
-      )
+      .getClusterRoleNames(this.cluster.id, this.datacenter.metadata.name, this.projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((clusterRoles: ClusterRoleName[]) => {
         if (clusterRoles.length > 0) {
@@ -71,11 +63,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       });
 
     this._rbacService
-      .getRoleNames(
-        this.cluster.id,
-        this.datacenter.metadata.name,
-        this.projectID
-      )
+      .getRoleNames(this.cluster.id, this.datacenter.metadata.name, this.projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((roles: RoleName[]) => {
         if (roles.length > 0) {
@@ -138,19 +126,15 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   getRoleFormState(): string {
     let roleLength = 0;
     if (!!this.clusterRoles || !!this.roles) {
-      roleLength =
-        this.bindingType === 'cluster'
-          ? this.clusterRoles.length
-          : this.roles.length;
+      roleLength = this.bindingType === 'cluster' ? this.clusterRoles.length : this.roles.length;
     }
 
     if (roleLength) {
       return 'Role*';
     } else if (!roleLength) {
       return 'No Roles available';
-    } else {
-      return 'Role*';
     }
+    return 'Role*';
   }
 
   getNamespaceFormState(): string {
@@ -162,21 +146,14 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       return 'Please select a Role first';
     } else if (!roleLength) {
       return 'No Namespaces available';
-    } else {
-      return 'Namespace*';
     }
+    return 'Namespace*';
   }
 
   checkNamespaceState(): void {
-    if (
-      this.form.get(Controls.Role).value === '' &&
-      this.form.get(Controls.Namespace).enabled
-    ) {
+    if (this.form.get(Controls.Role).value === '' && this.form.get(Controls.Namespace).enabled) {
       this.form.get(Controls.Namespace).disable();
-    } else if (
-      this.form.get(Controls.Role).value !== '' &&
-      this.form.get(Controls.Namespace).disabled
-    ) {
+    } else if (this.form.get(Controls.Role).value !== '' && this.form.get(Controls.Namespace).disabled) {
       this.form.get(Controls.Namespace).enable();
     }
   }
@@ -190,9 +167,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   }
 
   addBinding(): void {
-    this.bindingType === 'cluster'
-      ? this.addClusterBinding()
-      : this.addNamespaceBinding();
+    this.bindingType === 'cluster' ? this.addClusterBinding() : this.addNamespaceBinding();
   }
 
   addClusterBinding(): void {
@@ -218,9 +193,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(binding => {
         this._matDialogRef.close(binding);
-        this._notificationService.success(
-          `The <strong>${bindingName}</strong> binding was added`
-        );
+        this._notificationService.success(`The <strong>${bindingName}</strong> binding was added`);
       });
   }
 
@@ -248,9 +221,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(binding => {
         this._matDialogRef.close(binding);
-        this._notificationService.success(
-          `The <strong>${bindingName}</strong> binding was added`
-        );
+        this._notificationService.success(`The <strong>${bindingName}</strong> binding was added`);
       });
   }
 }

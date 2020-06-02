@@ -6,10 +6,7 @@ import * as _ from 'lodash';
 import {NotificationService} from '../../core/services';
 import {ApiService} from '../../core/services';
 import {ResourceType} from '../../shared/entity/LabelsEntity';
-import {
-  EditProjectEntity,
-  ProjectEntity,
-} from '../../shared/entity/ProjectEntity';
+import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {AsyncValidators} from '../../shared/validators/async-label-form.validator';
 
 @Component({
@@ -20,9 +17,7 @@ export class EditProjectComponent implements OnInit {
   @Input() project: ProjectEntity;
   labels: object;
   form: FormGroup;
-  asyncLabelValidators = [
-    AsyncValidators.RestrictedLabelKeyName(ResourceType.Project),
-  ];
+  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Project)];
 
   constructor(
     private api: ApiService,
@@ -50,19 +45,14 @@ export class EditProjectComponent implements OnInit {
     //  or entity (without nullified labels).
     // TODO: Implement and use PATCH endpoint for project edits.
     for (const label in project.labels) {
-      if (
-        project.labels.hasOwnProperty(label) &&
-        project.labels[label] === null
-      ) {
+      if (Object.prototype.hasOwnProperty.call(project.labels, label) && project.labels[label] === null) {
         delete project.labels[label];
       }
     }
 
     this.api.editProject(this.project.id, project).subscribe(project => {
       this.dialogRef.close(project);
-      this._notificationService.success(
-        `The <strong>${this.project.name}</strong> project was updated`
-      );
+      this._notificationService.success(`The <strong>${this.project.name}</strong> project was updated`);
     });
   }
 }

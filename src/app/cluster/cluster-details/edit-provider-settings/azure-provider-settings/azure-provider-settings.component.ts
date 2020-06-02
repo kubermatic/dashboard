@@ -1,10 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
@@ -47,9 +42,7 @@ export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
         ) {
           this._formData = data;
           this.setValidators();
-          this.clusterService.changeProviderSettingsPatch(
-            this.getProviderSettingsPatch()
-          );
+          this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
         }
       });
   }
@@ -71,12 +64,7 @@ export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
   }
 
   setValidators(): void {
-    if (
-      !this.clientID.value &&
-      !this.clientSecret.value &&
-      !this.subscriptionID.value &&
-      !this.tenantID.value
-    ) {
+    if (!this.clientID.value && !this.clientSecret.value && !this.subscriptionID.value && !this.tenantID.value) {
       this.clientID.clearValidators();
       this.clientSecret.clearValidators();
       this.subscriptionID.clearValidators();
@@ -95,10 +83,7 @@ export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
   }
 
   isRequiredField(): string {
-    return !this.clientID.value &&
-      !this.clientSecret.value &&
-      !this.subscriptionID.value &&
-      !this.tenantID.value
+    return !this.clientID.value && !this.clientSecret.value && !this.subscriptionID.value && !this.tenantID.value
       ? ''
       : '*';
   }

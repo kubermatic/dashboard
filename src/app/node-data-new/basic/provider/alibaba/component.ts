@@ -8,22 +8,14 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge, Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
-import {
-  AlibabaInstanceType,
-  AlibabaZone,
-} from '../../../../shared/entity/provider/alibaba/Alibaba';
+import {AlibabaInstanceType, AlibabaZone} from '../../../../shared/entity/provider/alibaba/Alibaba';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
@@ -66,16 +58,8 @@ enum ZoneState {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AlibabaBasicNodeDataComponent extends BaseFormValidator
-  implements OnInit, AfterViewChecked, OnDestroy {
-  private _diskTypes: string[] = [
-    'cloud',
-    'cloud_efficiency',
-    'cloud_ssd',
-    'cloud_essd',
-    'san_ssd',
-    'san_efficiency',
-  ];
+export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewChecked, OnDestroy {
+  private _diskTypes: string[] = ['cloud', 'cloud_efficiency', 'cloud_ssd', 'cloud_essd', 'san_ssd', 'san_efficiency'];
 
   readonly Controls = Controls;
 
@@ -106,29 +90,20 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator
       [Controls.InstanceType]: this._builder.control('', Validators.required),
       [Controls.DiskSize]: this._builder.control(25, Validators.required),
       [Controls.DiskType]: this._builder.control('', Validators.required),
-      [Controls.InternetMaxBandwidthOut]: this._builder.control(
-        '',
-        Validators.required
-      ),
+      [Controls.InternetMaxBandwidthOut]: this._builder.control('', Validators.required),
       [Controls.VSwitchID]: this._builder.control('', Validators.required),
       [Controls.ZoneID]: this._builder.control('', Validators.required),
     });
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this._instanceTypesObservable
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._setDefaultInstanceType.bind(this));
-    this._zoneIdsObservable
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._setDefaultZone.bind(this));
+    this._instanceTypesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultInstanceType.bind(this));
+    this._zoneIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultZone.bind(this));
 
-    this._presets.presetChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(() => {
-        this._clearInstanceType();
-        this._clearZone();
-      });
+    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      this._clearInstanceType();
+      this._clearZone();
+    });
 
     merge(
       this.form.get(Controls.DiskSize).valueChanges,
@@ -168,10 +143,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator
   }
 
   private get _zoneIdsObservable(): Observable<AlibabaZone[]> {
-    return this._nodeDataService.alibaba.zones(
-      this._clearZone.bind(this),
-      this._onZoneLoading.bind(this)
-    );
+    return this._nodeDataService.alibaba.zones(this._clearZone.bind(this), this._onZoneLoading.bind(this));
   }
 
   private _onInstanceTypeLoading(): void {
@@ -233,9 +205,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator
         cloud: {
           alibaba: {
             diskSize: this.form.get(Controls.DiskSize).value,
-            internetMaxBandwidthOut: this.form.get(
-              Controls.InternetMaxBandwidthOut
-            ).value,
+            internetMaxBandwidthOut: this.form.get(Controls.InternetMaxBandwidthOut).value,
             vSwitchID: this.form.get(Controls.VSwitchID).value,
           },
         } as NodeCloudSpec,

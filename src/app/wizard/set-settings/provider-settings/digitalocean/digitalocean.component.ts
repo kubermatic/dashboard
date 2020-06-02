@@ -40,26 +40,20 @@ export class DigitaloceanClusterSettingsComponent implements OnInit, OnDestroy {
           ? this._wizard.onCustomPresetsDisable.emit(false)
           : this._wizard.onCustomPresetsDisable.emit(true);
 
-        this._wizard.changeClusterProviderSettings(
-          this._clusterProviderSettingsForm(this._formHelper.isFormValid())
-        );
+        this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
       });
 
-    this._wizard.onCustomPresetSelect
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset => {
-        if (preset) {
-          this.form.disable();
-          this.tokenRequired = false;
-          this._wizard.changeClusterProviderSettings(
-            this._clusterProviderSettingsForm(true)
-          );
-          return;
-        }
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
+      if (preset) {
+        this.form.disable();
+        this.tokenRequired = false;
+        this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(true));
+        return;
+      }
 
-        this.form.enable();
-        this.tokenRequired = true;
-      });
+      this.form.enable();
+      this.tokenRequired = true;
+    });
   }
 
   ngOnDestroy(): void {
@@ -67,9 +61,7 @@ export class DigitaloceanClusterSettingsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  private _clusterProviderSettingsForm(
-    valid: boolean
-  ): ClusterProviderSettingsForm {
+  private _clusterProviderSettingsForm(valid: boolean): ClusterProviderSettingsForm {
     return {
       cloudSpec: {
         digitalocean: {

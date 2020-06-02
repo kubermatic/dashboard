@@ -1,11 +1,7 @@
 import {FormControl} from '@angular/forms';
 
 export class AutocompleteFilterValidators {
-  static mustBeInArrayList = (
-    list: any[],
-    key: string,
-    isRequired: boolean
-  ) => {
+  static mustBeInArrayList = (list: any[], key: string, isRequired: boolean) => {
     return (control: FormControl) => {
       let isInside = false;
       const valueToCompare: string | boolean =
@@ -50,11 +46,7 @@ export class AutocompleteFilterValidators {
         isInside = true;
       }
 
-      if (
-        !!isRequired &&
-        Object.keys(list).length === 0 &&
-        valueToCompare !== ''
-      ) {
+      if (!!isRequired && Object.keys(list).length === 0 && valueToCompare !== '') {
         isInside = true;
       }
 

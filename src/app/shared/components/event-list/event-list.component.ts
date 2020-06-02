@@ -1,11 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -49,12 +42,10 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
     this.sort.active = 'lastTimestamp';
     this.sort.direction = 'desc';
 
-    this._settingsService.userSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        this.paginator.pageSize = settings.itemsPerPage;
-        this.dataSource.paginator = this.paginator; // Force refresh.
-      });
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = this.paginator; // Force refresh.
+    });
   }
 
   ngOnChanges(): void {
@@ -82,12 +73,7 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isPaginatorVisible(): boolean {
-    return (
-      this.isShowEvents &&
-      this.hasEvents() &&
-      this.paginator &&
-      this.events.length >= this.paginator.pageSize
-    );
+    return this.isShowEvents && this.hasEvents() && this.paginator && this.events.length >= this.paginator.pageSize;
   }
 
   toggleEvents(): void {
@@ -97,12 +83,9 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
   getTypeIconForEvents(): string {
     if (this.events.filter(event => event.type === 'Warning').length > 0) {
       return HealthStatusColor.Orange;
-    } else if (
-      this.events.filter(event => event.type === 'Normal').length > 0
-    ) {
+    } else if (this.events.filter(event => event.type === 'Normal').length > 0) {
       return HealthStatusColor.Green;
-    } else {
-      return '';
     }
+    return '';
   }
 }

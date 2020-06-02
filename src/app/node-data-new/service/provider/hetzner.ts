@@ -15,17 +15,12 @@ export class NodeDataHetznerProvider {
     private readonly _presetService: PresetsService
   ) {}
 
-  flavors(
-    onError: () => void = undefined,
-    onLoadingCb: () => void = null
-  ): Observable<HetznerTypes> {
+  flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<HetznerTypes> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterService.clusterChanges
-          .pipe(
-            filter(_ => this._clusterService.provider === NodeProvider.HETZNER)
-          )
+          .pipe(filter(_ => this._clusterService.provider === NodeProvider.HETZNER))
           .pipe(
             switchMap(cluster =>
               this._presetService
@@ -39,9 +34,7 @@ export class NodeDataHetznerProvider {
                       onError();
                     }
 
-                    return onErrorResumeNext(
-                      of(HetznerTypes.newHetznerTypes())
-                    );
+                    return onErrorResumeNext(of(HetznerTypes.newHetznerTypes()));
                   })
                 )
             )

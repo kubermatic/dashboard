@@ -14,9 +14,8 @@ export class NodeUtils {
       return 'RHEL';
     } else if (spec.operatingSystem.flatcar) {
       return 'Flatcar';
-    } else {
-      return '';
     }
+    return '';
   }
 
   static getOperatingSystemLogoClass(spec: NodeSpec): string {
@@ -32,8 +31,7 @@ export class NodeUtils {
       return 'rhel';
     } else if (spec.operatingSystem.flatcar) {
       return 'flatcar';
-    } else {
-      return '';
     }
+    return '';
   }
 }

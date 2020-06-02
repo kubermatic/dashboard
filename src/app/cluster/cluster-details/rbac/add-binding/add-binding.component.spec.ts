@@ -1,10 +1,4 @@
-import {
-  async,
-  ComponentFixture,
-  discardPeriodicTasks,
-  fakeAsync,
-  TestBed,
-} from '@angular/core/testing';
+import {async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -26,12 +20,7 @@ import {MatDialogRefMock} from '../../../../testing/services/mat-dialog-ref-mock
 
 import {AddBindingComponent} from './add-binding.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  CoreModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 
 describe('AddBindingComponent', () => {
   let fixture: ComponentFixture<AddBindingComponent>;
@@ -45,13 +34,9 @@ describe('AddBindingComponent', () => {
       createBinding: jest.fn(),
     };
 
-    rbacMock.getClusterRoleNames.mockReturnValue(
-      asyncData([fakeClusterRoleNames()])
-    );
+    rbacMock.getClusterRoleNames.mockReturnValue(asyncData([fakeClusterRoleNames()]));
     rbacMock.getRoleNames.mockReturnValue(asyncData([fakeRoleNames()]));
-    rbacMock.createClusterBinding.mockReturnValue(
-      asyncData([fakeClusterBinding()])
-    );
+    rbacMock.createClusterBinding.mockReturnValue(asyncData([fakeClusterBinding()]));
     rbacMock.createBinding.mockReturnValue(asyncData([fakeBinding()]));
 
     TestBed.configureTestingModule({

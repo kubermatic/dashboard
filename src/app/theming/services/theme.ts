@@ -19,12 +19,8 @@ export class ThemeService {
   ];
 
   get themes(): Theme[] {
-    const defaultThemeNames = new Set(
-      this._defaultThemes.map(theme => theme.name)
-    );
-    const filteredThemes = this._configThemes.filter(
-      theme => !defaultThemeNames.has(theme.name)
-    );
+    const defaultThemeNames = new Set(this._defaultThemes.map(theme => theme.name));
+    const filteredThemes = this._configThemes.filter(theme => !defaultThemeNames.has(theme.name));
     return [...this._defaultThemes, ...filteredThemes];
   }
 
@@ -33,9 +29,7 @@ export class ThemeService {
   }
 
   constructor(private readonly _appConfig: AppConfigService) {
-    this._configThemes = this._hasAdditionalThemes()
-      ? this._appConfig.getConfig().themes
-      : [];
+    this._configThemes = this._hasAdditionalThemes() ? this._appConfig.getConfig().themes : [];
   }
 
   isThemeEnforced(): boolean {
@@ -43,9 +37,6 @@ export class ThemeService {
   }
 
   private _hasAdditionalThemes(): boolean {
-    return (
-      this._appConfig.getConfig().themes &&
-      this._appConfig.getConfig().themes.length > 0
-    );
+    return this._appConfig.getConfig().themes && this._appConfig.getConfig().themes.length > 0;
   }
 }

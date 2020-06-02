@@ -12,13 +12,7 @@ import {nodeDataFake} from '../../testing/fake-data/node.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {HetznerNodeDataComponent} from './hetzner-node-data.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  ReactiveFormsModule,
-  HttpClientModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, ReactiveFormsModule, HttpClientModule];
 
 describe('HetznerNodeDataComponent', () => {
   let fixture: ComponentFixture<HetznerNodeDataComponent>;
@@ -31,11 +25,7 @@ describe('HetznerNodeDataComponent', () => {
     TestBed.configureTestingModule({
       imports: [...modules],
       declarations: [HetznerNodeDataComponent],
-      providers: [
-        WizardService,
-        NodeDataService,
-        {provide: ApiService, useValue: apiMock},
-      ],
+      providers: [WizardService, NodeDataService, {provide: ApiService, useValue: apiMock}],
     }).compileComponents();
   }));
 

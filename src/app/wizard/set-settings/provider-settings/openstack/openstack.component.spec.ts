@@ -1,23 +1,13 @@
 import {HttpClientModule} from '@angular/common/http';
 import {EventEmitter} from '@angular/core';
-import {
-  async,
-  ComponentFixture,
-  discardPeriodicTasks,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {AppConfigService} from '../../../../app-config.service';
 import {Auth, WizardService} from '../../../../core/services';
-import {
-  ClusterProviderSettingsForm,
-  ClusterSettingsFormView,
-} from '../../../../shared/model/ClusterForm';
+import {ClusterProviderSettingsForm, ClusterSettingsFormView} from '../../../../shared/model/ClusterForm';
 import {Config} from '../../../../shared/model/Config';
 import {SharedModule} from '../../../../shared/shared.module';
 import {fakeOpenstackCluster} from '../../../../testing/fake-data/cluster.fake';
@@ -64,12 +54,8 @@ describe('OpenstackClusterSettingsComponent', () => {
 
     wizardMock.onCustomPresetsDisable = new EventEmitter<boolean>();
     wizardMock.onCustomPresetSelect = new EventEmitter<string>();
-    wizardMock.clusterSettingsFormViewChanged$ = new EventEmitter<
-      ClusterSettingsFormView
-    >();
-    wizardMock.clusterProviderSettingsFormChanges$ = new EventEmitter<
-      ClusterProviderSettingsForm
-    >();
+    wizardMock.clusterSettingsFormViewChanged$ = new EventEmitter<ClusterSettingsFormView>();
+    wizardMock.clusterProviderSettingsFormChanges$ = new EventEmitter<ClusterProviderSettingsForm>();
 
     providerMock.username.mockReturnValue(providerMock);
     providerMock.password.mockReturnValue(providerMock);
@@ -87,9 +73,7 @@ describe('OpenstackClusterSettingsComponent', () => {
     providerMock.networks.mockReturnValue(asyncData(openstackNetworksFake()));
 
     wizardMock.provider.mockReturnValue(providerMock);
-    providerMock.securityGroups.mockReturnValue(
-      asyncData(openstackSecurityGroupsFake())
-    );
+    providerMock.securityGroups.mockReturnValue(asyncData(openstackSecurityGroupsFake()));
 
     wizardMock.provider.mockReturnValue(providerMock);
     providerMock.subnets.mockReturnValue(asyncData(openstackSubnetIdsFake()));
@@ -99,13 +83,7 @@ describe('OpenstackClusterSettingsComponent', () => {
     appConfigServiceMock.getConfig.mockReturnValue(config);
 
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        ReactiveFormsModule,
-        SharedModule,
-        HttpClientModule,
-      ],
+      imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
       declarations: [OpenstackClusterSettingsComponent],
       providers: [
         {provide: WizardService, useValue: wizardMock},
@@ -152,9 +130,7 @@ describe('OpenstackClusterSettingsComponent', () => {
       wizardMock.getSelectedDatacenter.mockReturnValue(dc);
 
       fixture.detectChanges();
-      const el = fixture.debugElement.query(
-        By.css('#km-floating-ip-pool-field')
-      );
+      const el = fixture.debugElement.query(By.css('#km-floating-ip-pool-field'));
       expect(el).not.toBeNull();
       expect(component.form.controls.floatingIpPool.hasError('required'));
     });

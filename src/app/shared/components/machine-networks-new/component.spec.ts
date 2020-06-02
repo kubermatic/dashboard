@@ -12,13 +12,7 @@ import {SharedModule} from '../../shared.module';
 import {MachineNetworkComponent} from './component';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 
-const modules: any[] = [
-  BrowserModule,
-  HttpClientModule,
-  BrowserAnimationsModule,
-  RouterTestingModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
 
 describe('MachineNetworksComponent', () => {
   let component: MachineNetworkComponent;

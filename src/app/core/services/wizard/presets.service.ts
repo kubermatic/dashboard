@@ -74,10 +74,7 @@ export class PresetsService {
     }
   }
 
-  presets(
-    provider: NodeProvider,
-    datacenter: string
-  ): Observable<PresetListEntity> {
+  presets(provider: NodeProvider, datacenter: string): Observable<PresetListEntity> {
     if (!provider || !datacenter) {
       return EMPTY;
     }

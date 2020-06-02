@@ -27,10 +27,7 @@ describe('ErrorNotificationsInterceptorService', () => {
     });
   });
 
-  it('should be created', inject(
-    [ErrorNotificationsInterceptor],
-    (service: ErrorNotificationsInterceptor) => {
-      expect(service).toBeTruthy();
-    }
-  ));
+  it('should be created', inject([ErrorNotificationsInterceptor], (service: ErrorNotificationsInterceptor) => {
+    expect(service).toBeTruthy();
+  }));
 });

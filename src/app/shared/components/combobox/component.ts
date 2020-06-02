@@ -12,12 +12,7 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import {
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {MatSelect} from '@angular/material/select';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import {BaseFormValidator} from '../../validators/base-form.validator';
@@ -44,8 +39,7 @@ enum Controls {
     },
   ],
 })
-export class FilteredComboboxComponent extends BaseFormValidator
-  implements OnInit, OnDestroy, OnChanges {
+export class FilteredComboboxComponent extends BaseFormValidator implements OnInit, OnDestroy, OnChanges {
   @Input() label: string;
   @Input() inputLabel: string;
   @Input() required = false;
@@ -75,10 +69,7 @@ export class FilteredComboboxComponent extends BaseFormValidator
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Select]: this._builder.control(
-        '',
-        this.required ? Validators.required : []
-      ),
+      [Controls.Select]: this._builder.control('', this.required ? Validators.required : []),
     });
 
     if (!this.selectBy) {
@@ -105,11 +96,7 @@ export class FilteredComboboxComponent extends BaseFormValidator
   }
 
   hasOptions(): boolean {
-    return (
-      this._matSelect &&
-      this._matSelect.options &&
-      this._matSelect.options.length > 0
-    );
+    return this._matSelect && this._matSelect.options && this._matSelect.options.length > 0;
   }
 
   ngOnChanges(): void {

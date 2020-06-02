@@ -22,9 +22,7 @@ export class KubeVirtClusterSettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      kubeconfig: new FormControl(this.cluster.spec.cloud.kubevirt.kubeconfig, [
-        Validators.required,
-      ]),
+      kubeconfig: new FormControl(this.cluster.spec.cloud.kubevirt.kubeconfig, [Validators.required]),
     });
 
     this._formHelper = new FormHelper(this.form);
@@ -38,20 +36,16 @@ export class KubeVirtClusterSettingsComponent implements OnInit, OnDestroy {
           ? this._wizard.onCustomPresetsDisable.emit(false)
           : this._wizard.onCustomPresetsDisable.emit(true);
 
-        this._wizard.changeClusterProviderSettings(
-          this._clusterProviderSettingsForm(this._formHelper.isFormValid())
-        );
+        this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
       });
 
-    this._wizard.onCustomPresetSelect
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(newCredentials => {
-        if (newCredentials) {
-          this.form.disable();
-        } else {
-          this.form.enable();
-        }
-      });
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+      if (newCredentials) {
+        this.form.disable();
+      } else {
+        this.form.enable();
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -59,9 +53,7 @@ export class KubeVirtClusterSettingsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  private _clusterProviderSettingsForm(
-    valid: boolean
-  ): ClusterProviderSettingsForm {
+  private _clusterProviderSettingsForm(valid: boolean): ClusterProviderSettingsForm {
     return {
       cloudSpec: {
         kubevirt: {

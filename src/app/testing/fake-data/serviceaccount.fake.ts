@@ -1,7 +1,4 @@
-import {
-  ServiceAccountEntity,
-  ServiceAccountTokenEntity,
-} from '../../shared/entity/ServiceAccountEntity';
+import {ServiceAccountEntity, ServiceAccountTokenEntity} from '../../shared/entity/ServiceAccountEntity';
 
 export function fakeServiceAccounts(): ServiceAccountEntity[] {
   return [

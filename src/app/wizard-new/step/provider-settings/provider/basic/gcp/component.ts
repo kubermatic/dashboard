@@ -1,19 +1,10 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge} from 'rxjs';
 import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 import {PresetsService} from '../../../../../../core/services';
 import {GCPCloudSpec} from '../../../../../../shared/entity/cloud/GCPCloudSpec';
-import {
-  CloudSpec,
-  ClusterEntity,
-  ClusterSpec,
-} from '../../../../../../shared/entity/ClusterEntity';
+import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
@@ -38,8 +29,7 @@ export enum Controls {
     },
   ],
 })
-export class GCPProviderBasicComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class GCPProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
   constructor(
@@ -52,35 +42,21 @@ export class GCPProviderBasicComponent extends BaseFormValidator
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.ServiceAccoount]: this._builder.control(
-        '',
-        Validators.required
-      ),
+      [Controls.ServiceAccoount]: this._builder.control('', Validators.required),
     });
 
     this._presets.presetChanges
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset =>
-        Object.values(Controls).forEach(control =>
-          this._enable(!preset, control)
-        )
-      );
+      .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
     this.form.valueChanges
       .pipe(filter(_ => this._clusterService.provider === NodeProvider.GCP))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
-        this._presets.enablePresets(
-          Object.values(this._clusterService.cluster.spec.cloud.gcp).every(
-            value => !value
-          )
-        )
+        this._presets.enablePresets(Object.values(this._clusterService.cluster.spec.cloud.gcp).every(value => !value))
       );
 
-    merge(
-      this._clusterService.providerChanges,
-      this._clusterService.datacenterChanges
-    )
+    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
 
@@ -88,9 +64,7 @@ export class GCPProviderBasicComponent extends BaseFormValidator
       .get(Controls.ServiceAccoount)
       .valueChanges.pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        _ => (this._clusterService.cluster = this._getClusterEntity())
-      );
+      .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
   }
 
   ngOnDestroy(): void {

@@ -1,11 +1,7 @@
 import {ClusterEntity} from '../../entity/ClusterEntity';
 import {HealthEntity, HealthState} from '../../entity/HealthEntity';
 
-import {
-  HealthStatus,
-  HealthStatusColor,
-  HealthStatusMessage,
-} from './health-status';
+import {HealthStatus, HealthStatusColor, HealthStatusMessage} from './health-status';
 
 export enum HealthStatusCss {
   Deleting = 'km-status-deleting',
@@ -15,29 +11,17 @@ export enum HealthStatusCss {
 }
 
 export class ClusterHealthStatus extends HealthStatus {
-  static getHealthStatus(
-    c: ClusterEntity,
-    h: HealthEntity
-  ): ClusterHealthStatus {
+  static getHealthStatus(c: ClusterEntity, h: HealthEntity): ClusterHealthStatus {
     if (c.deletionTimestamp) {
-      return new ClusterHealthStatus(
-        HealthStatusMessage.Deleting,
-        HealthStatusColor.Red,
-        HealthStatusCss.Deleting
-      );
+      return new ClusterHealthStatus(HealthStatusMessage.Deleting, HealthStatusColor.Red, HealthStatusCss.Deleting);
     } else if (this.isClusterRunning(c, h)) {
-      return new ClusterHealthStatus(
-        HealthStatusMessage.Running,
-        HealthStatusColor.Green,
-        HealthStatusCss.Running
-      );
-    } else {
-      return new ClusterHealthStatus(
-        HealthStatusMessage.Provisioning,
-        HealthStatusColor.Orange,
-        HealthStatusCss.Provisioning
-      );
+      return new ClusterHealthStatus(HealthStatusMessage.Running, HealthStatusColor.Green, HealthStatusCss.Running);
     }
+    return new ClusterHealthStatus(
+      HealthStatusMessage.Provisioning,
+      HealthStatusColor.Orange,
+      HealthStatusCss.Provisioning
+    );
   }
 
   static isClusterRunning(c: ClusterEntity, h: HealthEntity): boolean {
@@ -50,11 +34,7 @@ export class ClusterHealthStatus extends HealthStatus {
 
   css: string;
 
-  constructor(
-    message: HealthStatusMessage,
-    color: HealthStatusColor,
-    css: string
-  ) {
+  constructor(message: HealthStatusMessage, color: HealthStatusColor, css: string) {
     super(message, color);
     this.css = css;
   }

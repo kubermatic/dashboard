@@ -1,8 +1,4 @@
-import {
-  AuditLoggingSettings,
-  CloudSpec,
-  ClusterType,
-} from '../entity/ClusterEntity';
+import {AuditLoggingSettings, CloudSpec, ClusterType} from '../entity/ClusterEntity';
 import {DataCenterEntity} from '../entity/DatacenterEntity';
 import {NodeProvider} from './NodeProviderConstants';
 

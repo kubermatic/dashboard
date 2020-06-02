@@ -11,10 +11,7 @@ import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
-import {
-  fakeSimpleBindings,
-  fakeSimpleClusterBindings,
-} from '../../../testing/fake-data/rbac.fake';
+import {fakeSimpleBindings, fakeSimpleClusterBindings} from '../../../testing/fake-data/rbac.fake';
 import {RouterStub} from '../../../testing/router-stubs';
 
 import {RBACComponent} from './rbac.component';

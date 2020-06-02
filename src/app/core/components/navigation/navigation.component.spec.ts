@@ -18,13 +18,7 @@ import {NotificationPanelComponent} from '../notification-panel/notification-pan
 import {NavigationComponent} from './navigation.component';
 import {ProjectSelectorComponent} from './project/selector.component';
 
-const modules: any[] = [
-  BrowserModule,
-  HttpClientModule,
-  RouterTestingModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, HttpClientModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];
 
 describe('NavigationComponent', () => {
   let fixture: ComponentFixture<NavigationComponent>;
@@ -34,11 +28,7 @@ describe('NavigationComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [...modules],
-      declarations: [
-        NavigationComponent,
-        NotificationPanelComponent,
-        ProjectSelectorComponent,
-      ],
+      declarations: [NavigationComponent, NotificationPanelComponent, ProjectSelectorComponent],
       providers: [
         MatDialog,
         {provide: UserService, useClass: UserMockService},
@@ -58,19 +48,16 @@ describe('NavigationComponent', () => {
     expect(component).toBeTruthy();
   }));
 
-  it('should tell Router to navigate when user logout', inject(
-    [Router],
-    (router: Router) => {
-      authService = fixture.debugElement.injector.get(Auth) as any;
-      const spyNavigate = jest.spyOn(router, 'navigate');
-      const spyLogOut = jest.spyOn(authService, 'logout');
+  it('should tell Router to navigate when user logout', inject([Router], (router: Router) => {
+    authService = fixture.debugElement.injector.get(Auth) as any;
+    const spyNavigate = jest.spyOn(router, 'navigate');
+    const spyLogOut = jest.spyOn(authService, 'logout');
 
-      component.logout();
+    component.logout();
 
-      expect(spyNavigate).toHaveBeenCalled();
-      expect(spyLogOut).toHaveBeenCalled();
-    }
-  ));
+    expect(spyNavigate).toHaveBeenCalled();
+    expect(spyLogOut).toHaveBeenCalled();
+  }));
 
   it('should not display user information after logout', async(() => {
     fixture.detectChanges();

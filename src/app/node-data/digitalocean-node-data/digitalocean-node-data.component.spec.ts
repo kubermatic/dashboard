@@ -12,13 +12,7 @@ import {nodeDataFake} from '../../testing/fake-data/node.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {DigitaloceanNodeDataComponent} from './digitalocean-node-data.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  ReactiveFormsModule,
-  HttpClientModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, ReactiveFormsModule, HttpClientModule];
 
 describe('DigitaloceanNodeDataComponent', () => {
   let fixture: ComponentFixture<DigitaloceanNodeDataComponent>;
@@ -26,17 +20,11 @@ describe('DigitaloceanNodeDataComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = {getDigitaloceanSizes: jest.fn()};
-    apiMock.getDigitaloceanSizes.mockReturnValue(
-      asyncData(fakeDigitaloceanSizes())
-    );
+    apiMock.getDigitaloceanSizes.mockReturnValue(asyncData(fakeDigitaloceanSizes()));
     TestBed.configureTestingModule({
       imports: [...modules],
       declarations: [DigitaloceanNodeDataComponent],
-      providers: [
-        NodeDataService,
-        WizardService,
-        {provide: ApiService, useValue: apiMock},
-      ],
+      providers: [NodeDataService, WizardService, {provide: ApiService, useValue: apiMock}],
     }).compileComponents();
   }));
 

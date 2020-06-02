@@ -1,11 +1,5 @@
 import {HttpClientModule} from '@angular/common/http';
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {BrowserModule} from '@angular/platform-browser';
@@ -32,10 +26,7 @@ describe('SetProviderComponent', () => {
         HttpClientModule,
       ],
       declarations: [SetProviderComponent],
-      providers: [
-        {provide: DatacenterService, useClass: DatacenterMockService},
-        WizardService,
-      ],
+      providers: [{provide: DatacenterService, useClass: DatacenterMockService}, WizardService],
     }).compileComponents();
   }));
 
@@ -56,9 +47,7 @@ describe('SetProviderComponent', () => {
     fixture.detectChanges();
     tick();
     expect(component.setProviderForm.controls.provider.valid).toBeTruthy();
-    expect(
-      component.setProviderForm.controls.provider.value === 'digitalocean'
-    ).toBeTruthy();
+    expect(component.setProviderForm.controls.provider.value === 'digitalocean').toBeTruthy();
   }));
 
   it('should be initially invalid', fakeAsync(() => {

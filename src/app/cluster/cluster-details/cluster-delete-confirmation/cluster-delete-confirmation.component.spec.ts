@@ -1,11 +1,5 @@
 import {HttpClientModule} from '@angular/common/http';
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -13,11 +7,7 @@ import {Router} from '@angular/router';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../../../app-config.service';
-import {
-  ClusterService,
-  DatacenterService,
-  NotificationService,
-} from '../../../core/services';
+import {ClusterService, DatacenterService, NotificationService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
@@ -33,13 +23,7 @@ import {SettingsMockService} from '../../../testing/services/settings-mock.servi
 
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation.component';
 
-const modules: any[] = [
-  BrowserModule,
-  HttpClientModule,
-  BrowserAnimationsModule,
-  RouterTestingModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
 
 describe('ClusterDeleteConfirmationComponent', () => {
   let fixture: ComponentFixture<ClusterDeleteConfirmationComponent>;
@@ -82,9 +66,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
 
     fixture.detectChanges();
 
-    const input = fixture.debugElement.query(
-      By.css('#km-delete-cluster-dialog-input')
-    );
+    const input = fixture.debugElement.query(By.css('#km-delete-cluster-dialog-input'));
     const inputElement = input.nativeElement;
     inputElement.value = fakeDigitaloceanCluster().name;
 
@@ -100,9 +82,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
     component.projectID = fakeProject().id;
 
     fixture.detectChanges();
-    const spyDeleteCluster = jest
-      .spyOn(clusterService, 'delete')
-      .mockReturnValue(of(null));
+    const spyDeleteCluster = jest.spyOn(clusterService, 'delete').mockReturnValue(of(null));
 
     component.deleteCluster();
     tick();
