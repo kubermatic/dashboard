@@ -4,8 +4,16 @@
   overflow: scroll;
 }
 
-.editor {
-  border-radius: $border-radius;
-  margin-top: 2 * $baseline-grid;
-  overflow: hidden;
+.property-name {
+  font-size: $font-size-subhead-lg;
+  line-height: 2.5 * $line-height;
+  margin-top: 3 * $baseline-grid;
+}
+
+::ng-deep.monaco-editor {
+  margin-top: 2 * $baseline-grid !important;
+}
+
+.mat-hint {
+  font-size: $font-size-caption;
 }

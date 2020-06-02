@@ -22,6 +22,7 @@ export class DatacenterDataDialogComponent implements OnInit {
   form: FormGroup;
   providerSpec = '';
   editorOptions = {
+    contextmenu: false,
     language: 'yaml',
     minimap: {
       enabled: false,
