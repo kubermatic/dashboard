@@ -134,6 +134,7 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Add Datacenter',
+        isEditing: false,
         confirmLabel: 'Add',
       },
     };
@@ -153,6 +154,7 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
       data: {
         title: 'Edit Datacenter',
         datacenter: datacenter,
+        isEditing: true,
         confirmLabel: 'Edit',
       },
     };

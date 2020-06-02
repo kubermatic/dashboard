@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {dump as toYaml} from 'js-yaml';
+import {dump, load} from 'js-yaml';
 import * as _ from 'lodash';
 
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
@@ -9,7 +9,9 @@ import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
 export interface DatacenterDataDialogConfig {
   title: string;
   confirmLabel: string;
-  // Datacenter should be only specified if dialog is used in the edit mode.
+  isEditing: boolean;
+
+  // Datacenter has to be specified only if dialog is used in the edit mode.
   datacenter?: DataCenterEntity;
 }
 
@@ -20,7 +22,7 @@ export interface DatacenterDataDialogConfig {
 })
 export class DatacenterDataDialogComponent implements OnInit {
   form: FormGroup;
-  providerSpec = '';
+  providerConfig = '';
   editorOptions = {
     contextmenu: false,
     language: 'yaml',
@@ -42,23 +44,31 @@ export class DatacenterDataDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      name: new FormControl(this.data.datacenter ? this.data.datacenter.metadata.name : '', [Validators.required]),
-      provider: new FormControl(this.data.datacenter ? this.data.datacenter.spec.provider : '', [Validators.required]),
-      seed: new FormControl(this.data.datacenter ? this.data.datacenter.spec.seed : '', [Validators.required]),
-      country: new FormControl(this.data.datacenter ? this.data.datacenter.spec.country : '', [Validators.required]),
-      location: new FormControl(this.data.datacenter ? this.data.datacenter.spec.location : '', [Validators.required]),
-      enforcePodSecurityPolicy: new FormControl(
-        !!this.data.datacenter && this.data.datacenter.spec.enforcePodSecurityPolicy
+      name: new FormControl(this.data.isEditing ? this.data.datacenter.metadata.name : '', [Validators.required]),
+      provider: new FormControl(this.data.isEditing ? this.data.datacenter.spec.provider : '', [Validators.required]),
+      seed: new FormControl(
+        {value: this.data.isEditing ? this.data.datacenter.spec.seed : '', disabled: this.data.isEditing},
+        [Validators.required]
       ),
-      enforceAuditLogging: new FormControl(!!this.data.datacenter && this.data.datacenter.spec.enforceAuditLogging),
+      country: new FormControl(this.data.isEditing ? this.data.datacenter.spec.country : '', [Validators.required]),
+      location: new FormControl(this.data.isEditing ? this.data.datacenter.spec.location : '', [Validators.required]),
+      enforcePodSecurityPolicy: new FormControl(
+        this.data.isEditing && this.data.datacenter.spec.enforcePodSecurityPolicy
+      ),
+      enforceAuditLogging: new FormControl(this.data.isEditing && this.data.datacenter.spec.enforceAuditLogging),
     });
 
-    if (this.data.datacenter && this.data.datacenter.spec.provider) {
+    if (this.data.isEditing && this.data.datacenter.spec.provider) {
       const spec = this.data.datacenter.spec[this.data.datacenter.spec.provider];
       if (!_.isEmpty(spec)) {
-        this.providerSpec = toYaml(spec);
+        this.providerConfig = dump(spec);
       }
     }
+  }
+
+  private _getProviderConfig(): any {
+    const raw = load(this.providerConfig);
+    return !_.isEmpty(raw) ? raw : {};
   }
 
   submit(): void {
@@ -78,9 +88,13 @@ export class DatacenterDataDialogComponent implements OnInit {
       seed: false,
     };
 
-    // TODO: Set provider spec.
+    datacenter.spec[datacenter.spec.provider] = this._getProviderConfig();
 
-    // TODO: Nullify previous values if in edit mode.
+    // Nullify old provider value (it is needed to make edit work as it uses JSON Merge Patch).
+    const oldProvider = this.data.datacenter.spec.provider;
+    if (this.data.isEditing && datacenter.spec.provider !== oldProvider) {
+      datacenter.spec[oldProvider] = null;
+    }
 
     this._matDialogRef.close(datacenter);
   }
