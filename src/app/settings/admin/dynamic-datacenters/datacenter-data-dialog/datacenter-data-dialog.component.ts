@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import * as countryCodeLookup from 'country-code-lookup';
 
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
+import {NodeProvider, NodeProviderConstants} from '../../../../shared/model/NodeProviderConstants';
 
 export interface DatacenterDataDialogConfig {
   title: string;
@@ -23,7 +24,8 @@ export interface DatacenterDataDialogConfig {
 })
 export class DatacenterDataDialogComponent implements OnInit {
   form: FormGroup;
-  countryCodes = countryCodeLookup.countries.map(country => country.iso2);
+  countryCodes: string[] = countryCodeLookup.countries.map(country => country.iso2);
+  providers: string[] = Object.values(NodeProvider).filter(provider => !!provider);
   providerConfig = '';
   editorOptions = {
     contextmenu: false,
@@ -66,6 +68,10 @@ export class DatacenterDataDialogComponent implements OnInit {
         this.providerConfig = dump(spec);
       }
     }
+  }
+
+  getProviderName(provider: NodeProvider | string): string {
+    return NodeProviderConstants.displayName(provider);
   }
 
   getCountryName(code: string): string {

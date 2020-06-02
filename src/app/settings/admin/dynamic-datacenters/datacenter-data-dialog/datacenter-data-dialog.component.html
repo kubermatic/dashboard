@@ -17,11 +17,14 @@
 
     <mat-form-field fxFlex>
       <mat-label>Provider</mat-label>
-      <input required
-             matInput
-             formControlName="provider"
-             type="text"
-             autocomplete="off">
+      <mat-select required
+                  disableOptionCentering
+                  formControlName="provider">
+        <mat-option *ngFor="let provider of providers"
+                    [value]="provider">
+          {{getProviderName(provider)}}
+        </mat-option>
+      </mat-select>
       <mat-error *ngIf="form.controls.provider.hasError('required')">
         Provider is <strong>required</strong>.
       </mat-error>
