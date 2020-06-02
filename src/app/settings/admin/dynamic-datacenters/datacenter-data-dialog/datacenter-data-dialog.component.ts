@@ -45,6 +45,13 @@ export class DatacenterDataDialogComponent implements OnInit {
         this.data.datacenter ? this.data.datacenter.spec.location : '',
         [Validators.required]
       ),
+      enforcePodSecurityPolicy: new FormControl(
+        !!this.data.datacenter &&
+          this.data.datacenter.spec.enforcePodSecurityPolicy
+      ),
+      enforceAuditLogging: new FormControl(
+        !!this.data.datacenter && this.data.datacenter.spec.enforceAuditLogging
+      ),
     });
   }
 
@@ -59,8 +66,9 @@ export class DatacenterDataDialogComponent implements OnInit {
         country: this.form.controls.country.value,
         location: this.form.controls.location.value,
         requiredEmailDomains: [],
-        enforcePodSecurityPolicy: false,
-        enforceAuditLogging: false,
+        enforcePodSecurityPolicy: this.form.controls.enforcePodSecurityPolicy
+          .value,
+        enforceAuditLogging: this.form.controls.enforceAuditLogging.value,
       },
       seed: false,
     };
