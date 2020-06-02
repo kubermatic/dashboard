@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {dump, load} from 'js-yaml';
 import * as _ from 'lodash';
+import * as countryCodeLookup from 'country-code-lookup';
 
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
 
@@ -22,6 +23,7 @@ export interface DatacenterDataDialogConfig {
 })
 export class DatacenterDataDialogComponent implements OnInit {
   form: FormGroup;
+  countryCodes = countryCodeLookup.countries.map(country => country.iso2);
   providerConfig = '';
   editorOptions = {
     contextmenu: false,
@@ -64,6 +66,15 @@ export class DatacenterDataDialogComponent implements OnInit {
         this.providerConfig = dump(spec);
       }
     }
+  }
+
+  getCountryName(code: string): string {
+    if (!code) {
+      return '';
+    }
+
+    const country = countryCodeLookup.byIso(code);
+    return country ? country.country : code;
   }
 
   private _getProviderConfig(): any {

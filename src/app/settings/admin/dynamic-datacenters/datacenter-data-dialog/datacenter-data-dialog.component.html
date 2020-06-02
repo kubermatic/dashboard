@@ -21,8 +21,7 @@
              matInput
              formControlName="provider"
              type="text"
-             autocomplete="off"
-             cdkFocusInitial>
+             autocomplete="off">
       <mat-error *ngIf="form.controls.provider.hasError('required')">
         Provider is <strong>required</strong>.
       </mat-error>
@@ -34,8 +33,7 @@
              matInput
              formControlName="seed"
              type="text"
-             autocomplete="off"
-             cdkFocusInitial>
+             autocomplete="off">
       <mat-error *ngIf="form.controls.seed.hasError('required')">
         Seed is <strong>required</strong>.
       </mat-error>
@@ -43,12 +41,14 @@
 
     <mat-form-field fxFlex>
       <mat-label>Country</mat-label>
-      <input required
-             matInput
-             formControlName="country"
-             type="text"
-             autocomplete="off"
-             cdkFocusInitial>
+      <mat-select required
+                  disableOptionCentering
+                  formControlName="country">
+        <mat-option *ngFor="let countryCode of countryCodes"
+                    [value]="countryCode">
+          {{getCountryName(countryCode)}}
+        </mat-option>
+      </mat-select>
       <mat-error *ngIf="form.controls.country.hasError('required')">
         Country is <strong>required</strong>.
       </mat-error>
@@ -60,8 +60,7 @@
              matInput
              formControlName="location"
              type="text"
-             autocomplete="off"
-             cdkFocusInitial>
+             autocomplete="off">
       <mat-error *ngIf="form.controls.location.hasError('required')">
         Location is <strong>required</strong>.
       </mat-error>
