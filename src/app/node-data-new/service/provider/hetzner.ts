@@ -4,7 +4,7 @@ import {catchError, filter, switchMap} from 'rxjs/operators';
 import {PresetsService} from '../../../core/services';
 import {HetznerTypes} from '../../../shared/entity/provider/hetzner/TypeEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../wizard-new/service/cluster';
+import {ClusterService} from '../../../shared/services/cluster.service';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
 

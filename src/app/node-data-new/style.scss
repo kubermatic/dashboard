@@ -52,3 +52,9 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
 .mat-icon-button i {
   background-color: transparent;
 }
+
+.km-provider-options {
+  font-size: $font-size-card-title;
+  font-weight: normal;
+  margin-bottom: 2 * $baseline-grid;
+}

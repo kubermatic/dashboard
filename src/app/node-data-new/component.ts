@@ -1,4 +1,4 @@
-import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
@@ -9,8 +9,9 @@ import {DataCenterEntity} from '../shared/entity/DatacenterEntity';
 import {OperatingSystemSpec, Taint} from '../shared/entity/NodeEntity';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '../shared/model/NodeProviderConstants';
 import {NodeData} from '../shared/model/NodeSpecChange';
+import {ClusterService} from '../shared/services/cluster.service';
 import {BaseFormValidator} from '../shared/validators/base-form.validator';
-import {ClusterService} from '../wizard-new/service/cluster';
+import {NoIpsLeftValidator} from '../shared/validators/no-ips-left.validator';
 import {NodeDataService} from './service/service';
 
 enum Controls {
@@ -25,6 +26,7 @@ enum Controls {
   RhsmOfflineToken = 'rhsmOfflineToken',
   ProviderBasic = 'providerBasic',
   ProviderExtended = 'providerExtended',
+  Kubelet = 'kubelet',
 }
 
 @Component({
@@ -43,20 +45,23 @@ enum Controls {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  @Input() replicas = 3;
-  @Input() provider: NodeProvider;
-  @Input() clusterType: ClusterType;
-
-  labels: object = {};
-  taints: Taint[] = [];
-
   private _datacenterSpec: DataCenterEntity;
 
   readonly NodeProvider = NodeProvider;
-  readonly OperatingSystem = OperatingSystem;
   readonly Controls = Controls;
+  readonly OperatingSystem = OperatingSystem;
+
+  @Input() provider: NodeProvider;
+  // Used only when in dialog mode.
+  @Input() showExtended = false;
+  @Input() existingNodesCount = 0;
+
+  labels: object = {};
+  taints: Taint[] = [];
+  dialogEditMode = false;
 
   get providerDisplayName(): string {
     return NodeProviderConstants.displayName(this.provider);
@@ -73,10 +78,18 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   ngOnInit(): void {
+    const replicas = this._nodeDataService.nodeData.count ? this._nodeDataService.nodeData.count : 1;
+
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control('', [Validators.pattern('[a-zA-Z0-9-]*')]),
-      [Controls.Count]: this._builder.control(this.replicas, [Validators.required, Validators.min(0)]),
-      [Controls.DynamicConfig]: this._builder.control(false),
+      [Controls.Name]: this._builder.control(this._nodeDataService.nodeData.name, [
+        Validators.pattern('[a-zA-Z0-9-]*'),
+      ]),
+      [Controls.Count]: this._builder.control(replicas, [
+        Validators.required,
+        Validators.min(0),
+        NoIpsLeftValidator(this._clusterService.cluster.spec.machineNetworks, this.existingNodesCount),
+      ]),
+      [Controls.DynamicConfig]: this._builder.control(this._nodeDataService.nodeData.dynamicConfig),
       [Controls.OperatingSystem]: this._builder.control(this._getDefaultOS(), [Validators.required]),
       [Controls.UpgradeOnBoot]: this._builder.control(false),
       [Controls.DisableAutoUpdate]: this._builder.control(false),
@@ -87,7 +100,18 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.ProviderExtended]: this._builder.control(''),
     });
 
+    if (this.isDialogView()) {
+      this.form.addControl(Controls.Kubelet, this._builder.control(''));
+      this.dialogEditMode = !!this._nodeDataService.nodeData.name;
+    }
+
+    if (this.dialogEditMode) {
+      this.form.get(Controls.Name).disable();
+    }
+
     this._nodeDataService.nodeData = this._getNodeData();
+    this.labels = this._nodeDataService.nodeData.spec.labels;
+    this.taints = this._nodeDataService.nodeData.spec.taints;
 
     merge(this._clusterService.clusterTypeChanges, this._clusterService.providerChanges)
       .pipe(takeUntil(this._unsubscribe))
@@ -204,7 +228,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     this.form.get(Controls.Name).setValue(this._nameGenerator.generateName());
   }
 
-  isBasicViewOnly(): boolean {
+  isDialogView(): boolean {
     // In the wizard we do not split extended and basic options.
     return !this._nodeDataService.isInWizardMode();
   }
@@ -272,7 +296,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     }
   }
 
-  // Returns first template from the provider datacenter spec templates list if any,
   // Ubuntu otherwise
   private _getDefaultSystemTemplate(provider: NodeProvider): OperatingSystem {
     switch (provider) {
@@ -288,6 +311,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   private _getDefaultOS(): OperatingSystem {
+    if (this._nodeDataService.operatingSystem) {
+      return this._nodeDataService.operatingSystem;
+    }
+
     if (this.isOpenshiftCluster()) {
       return OperatingSystem.CentOS;
     }

@@ -5,7 +5,7 @@ import {DatacenterService, PresetsService} from '../../../core/services';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {OpenstackFlavor} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../wizard-new/service/cluster';
+import {ClusterService} from '../../../shared/services/cluster.service';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
 
@@ -20,6 +20,7 @@ export class NodeDataOpenstackProvider {
   set tags(tags: object) {
     delete this._nodeDataService.nodeData.spec.cloud.openstack.tags;
     this._nodeDataService.nodeData.spec.cloud.openstack.tags = tags;
+    this._nodeDataService.nodeDataChanges.next();
   }
 
   flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<OpenstackFlavor[]> {

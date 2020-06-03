@@ -16,7 +16,7 @@ import {CreateClusterModel} from '../shared/model/CreateClusterModel';
 import {NodeData} from '../shared/model/NodeSpecChange';
 
 import {StepRegistry, steps, WizardStep} from './config';
-import {ClusterService as ClusterModelService} from './service/cluster';
+import {ClusterService as ClusterModelService} from '../shared/services/cluster.service';
 import {WizardService} from './service/wizard';
 
 @Component({

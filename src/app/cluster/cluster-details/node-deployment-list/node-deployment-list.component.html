@@ -125,7 +125,7 @@
                 <button mat-icon-button
                         class="km-node-deployment-action"
                         matTooltip="Edit Node Deployment"
-                        (click)="showEditDialog(element, $event)"
+                        (click)="showEditDialog(element); $event.stopPropagation()"
                         [disabled]="!isEditEnabled()">
                   <i class="km-icon-edit"></i>
                 </button>
@@ -133,7 +133,7 @@
                 <button mat-icon-button
                         class="km-node-deployment-action"
                         matTooltip="Delete Node Deployment"
-                        (click)="showDeleteDialog(element, $event)"
+                        (click)="showDeleteDialog(element); $event.stopPropagation()"
                         [disabled]="!isDeleteEnabled()">
                   <i class="km-icon-delete"
                      aria-hidden="true"></i>

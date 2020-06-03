@@ -6,7 +6,7 @@ import {PresetsService} from '../../../../core/services';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 import {PresetListEntity} from '../../../../shared/entity/provider/credentials/PresetListEntity';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../service/cluster';
+import {ClusterService} from '../../../../shared/services/cluster.service';
 
 export enum Controls {
   Preset = 'name',

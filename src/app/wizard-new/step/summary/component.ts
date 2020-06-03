@@ -10,7 +10,7 @@ import {getIpCount} from '../../../shared/functions/get-ip-count';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../shared/model/NodeSpecChange';
 import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
-import {ClusterService} from '../../service/cluster';
+import {ClusterService} from '../../../shared/services/cluster.service';
 
 @Component({
   selector: 'km-wizard-summary-step',

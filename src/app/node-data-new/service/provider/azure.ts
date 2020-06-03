@@ -4,7 +4,7 @@ import {DatacenterService, PresetsService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {AzureSizes, AzureZones} from '../../../shared/entity/provider/azure/AzureSizeEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../wizard-new/service/cluster';
+import {ClusterService} from '../../../shared/services/cluster.service';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
 

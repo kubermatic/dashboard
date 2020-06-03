@@ -1,17 +1,17 @@
-<div *ngIf="data.nodeData">
-  <km-dialog-title>{{getDialogLabel()}}</km-dialog-title>
+<form [formGroup]="form">
+  <km-dialog-title>{{mode}} Node Deployment</km-dialog-title>
   <mat-dialog-content class="km-add-node-outer">
-    <km-node-data [cluster]="data.cluster"
-                  [nodeData]="data.nodeData"
-                  [existingNodesCount]="data.existingNodesCount"
-                  (valid)="nodeDataValid = $event"
-                  [seedDc]="seedDC"></km-node-data>
+    <km-node-data [provider]="provider"
+                  [showExtended]="isExtended"
+                  [existingNodesCount]="existingNodesCount"
+                  [formControl]="form.get(Control.NodeData)">
+    </km-node-data>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-flat-button
             color="pure"
             (click)="onViewChange()"
-            *ngIf="!data.cluster.spec.cloud.hetzner && !data.cluster.spec.cloud.packet && !data.cluster.spec.cloud.bringyourown">
+            *ngIf="hasExtendedOptions()">
       <span *ngIf="!isExtended">Show Advanced Settings</span>
       <span *ngIf="isExtended">Hide Advanced Settings</span>
     </button>
@@ -21,10 +21,10 @@
        matTooltip="You have changed node specification. All nodes will be recreated.">
     </i>
     <button mat-flat-button
-            [mat-dialog-close]="data"
-            [disabled]="!data?.nodeData?.valid || !nodeDataValid"
+            (click)="onConfirm()"
+            [disabled]="form.invalid"
             class="btn btn-primary">
-      {{getDialogLabel()}}
+      {{mode}} Node Deployment
     </button>
   </mat-dialog-actions>
-</div>
+</form>

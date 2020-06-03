@@ -3,7 +3,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {takeUntil} from 'rxjs/operators';
 
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../service/cluster';
+import {ClusterService} from '../../../shared/services/cluster.service';
 import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
 

@@ -2,18 +2,15 @@ import {EventEmitter, Injectable, Injector} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import * as _ from 'lodash';
 import {Observable, of} from 'rxjs';
-import {catchError, first, flatMap, map} from 'rxjs/operators';
+import {catchError, filter, first, flatMap, switchMap} from 'rxjs/operators';
 
-import {NotificationService} from '../../core/services';
-import {ApiService} from '../../core/services';
-import {GoogleAnalyticsService} from '../../google-analytics.service';
+import {ApiService, NotificationService} from '../../core/services';
+import {DialogDataInput, DialogDataOutput, NodeDataDialogComponent} from '../../node-data-new/dialog/component';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeDeploymentPatch} from '../../shared/entity/NodeDeploymentPatch';
 import {NodeData} from '../../shared/model/NodeSpecChange';
-import {NodeDataModalComponent, NodeDataModalData} from '../cluster-details/node-data-modal/node-data-modal.component';
 
 @Injectable()
 export class NodeService {
@@ -30,7 +27,7 @@ export class NodeService {
     };
   }
 
-  private static _createPatch(data: NodeDataModalData): NodeDeploymentPatch {
+  private static _createPatch(data: DialogDataOutput): NodeDeploymentPatch {
     const patch: NodeDeploymentPatch = {
       spec: {
         replicas: data.nodeData.count,
@@ -53,122 +50,77 @@ export class NodeService {
 
   constructor(
     private readonly _apiService: ApiService,
-    private readonly _googleAnalyticsService: GoogleAnalyticsService,
     private readonly _matDialog: MatDialog,
     private readonly _inj: Injector
   ) {
     this._notificationService = this._inj.get(NotificationService);
   }
 
-  createNodeDeployment(nodeData: NodeData, dc: DataCenterEntity, cluster: ClusterEntity, project: string): void {
-    this._apiService
-      .createNodeDeployment(cluster, NodeService._getNodeDeploymentEntity(nodeData), dc.metadata.name, project)
-      .pipe(first())
-      .subscribe(() => {
-        this._notificationService.success(
-          `A new node deployment was created in the <strong>${cluster.name}</strong> cluster`
-        );
-        this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeAdded');
-      });
+  createNodeDeployment(
+    nodeData: NodeData,
+    projectID: string,
+    seedDCName: string,
+    clusterID: string
+  ): Observable<NodeDeploymentEntity> {
+    return this._apiService.createNodeDeployment(
+      NodeService._getNodeDeploymentEntity(nodeData),
+      clusterID,
+      seedDCName,
+      projectID
+    );
   }
 
   showNodeDeploymentCreateDialog(
-    count: number,
     cluster: ClusterEntity,
     projectID: string,
-    datacenter: DataCenterEntity
-  ): Observable<boolean> {
-    const dialogRef = this._matDialog.open(NodeDataModalComponent, {
-      data: {
-        cluster,
-        datacenter,
-        projectID,
-        existingNodesCount: count,
-        editMode: false,
-      },
-    });
-
-    return dialogRef.afterClosed().pipe<boolean>(
-      map((data: NodeDataModalData) => {
-        if (data) {
-          this.createNodeDeployment(data.nodeData, data.datacenter, data.cluster, data.projectID);
-          return true;
-        }
-        return false;
-      })
+    seedDCName: string,
+    existingNodesCount: number
+  ): Observable<NodeDeploymentEntity> {
+    const dialogRef = this._matDialog.open<NodeDataDialogComponent, DialogDataInput, DialogDataOutput>(
+      NodeDataDialogComponent,
+      {
+        data: {
+          initialClusterData: cluster,
+        } as DialogDataInput,
+      }
     );
+
+    return dialogRef
+      .afterClosed()
+      .pipe(filter(data => !!data))
+      .pipe(switchMap(data => this.createNodeDeployment(data.nodeData, projectID, seedDCName, cluster.id)));
   }
 
   showNodeDeploymentEditDialog(
     nd: NodeDeploymentEntity,
     cluster: ClusterEntity,
     projectID: string,
-    datacenter: DataCenterEntity,
-    changeEventEmitter: EventEmitter<NodeDeploymentEntity>
-  ): Observable<boolean> {
-    const dialogRef = this._matDialog.open(NodeDataModalComponent, {
-      data: {
-        cluster,
-        datacenter,
-        projectID,
-        existingNodesCount: nd.spec.replicas,
-        editMode: true,
-        nodeDeployment: nd,
-        nodeData: {
-          count: nd.spec.replicas,
-          name: nd.name,
-          spec: _.cloneDeep(nd.spec.template),
-          valid: true,
-          dynamicConfig: nd.spec.dynamicConfig,
-        } as NodeData,
-      },
-    });
+    seedDCName: string
+  ): Observable<NodeDeploymentEntity> {
+    const dialogRef = this._matDialog.open<NodeDataDialogComponent, DialogDataInput, DialogDataOutput>(
+      NodeDataDialogComponent,
+      {
+        data: {
+          existingNodesCount: nd.spec.replicas,
+          initialClusterData: cluster,
+          initialNodeData: {
+            count: nd.spec.replicas,
+            name: nd.name,
+            spec: _.cloneDeep(nd.spec.template),
+            dynamicConfig: nd.spec.dynamicConfig,
+          } as NodeData,
+        },
+      }
+    );
 
     return dialogRef
       .afterClosed()
+      .pipe(filter(data => !!data))
       .pipe(
-        flatMap(
-          (data: NodeDataModalData): Observable<NodeDeploymentEntity> => {
-            if (data) {
-              return this._apiService
-                .patchNodeDeployment(
-                  data.nodeDeployment,
-                  NodeService._createPatch(data),
-                  data.cluster.id,
-                  data.datacenter.metadata.name,
-                  data.projectID
-                )
-                .pipe(first())
-                .pipe(
-                  catchError(() => {
-                    this._notificationService.error(
-                      `Could not update the <strong>${data.nodeDeployment.name}</strong> node deployment `
-                    );
-                    this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdateFailed');
-                    return of(undefined);
-                  })
-                );
-            }
-            return of(undefined);
-          }
+        switchMap(data =>
+          this._apiService.patchNodeDeployment(NodeService._createPatch(data), nd.id, cluster.id, seedDCName, projectID)
         )
-      )
-      .pipe(
-        flatMap(
-          (nd: NodeDeploymentEntity): Observable<boolean> => {
-            if (nd) {
-              this._notificationService.success(`The <strong>${nd.name}</strong> node deployment was updated`);
-              this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdated');
-              if (changeEventEmitter) {
-                changeEventEmitter.emit(nd);
-              }
-              return of(true);
-            }
-            return of(false);
-          }
-        )
-      )
-      .pipe(first());
+      );
   }
 
   showNodeDeploymentDeleteDialog(
@@ -189,7 +141,6 @@ export class NodeService {
     };
 
     const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
-    this._googleAnalyticsService.emitEvent('clusterOverview', 'deleteNodeDialogOpened');
 
     return dialogRef
       .afterClosed()
@@ -203,7 +154,6 @@ export class NodeService {
                 .pipe(
                   catchError(() => {
                     this._notificationService.error('Could not remove the <strong>${nd.name}</strong> node deployment');
-                    this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentDeleteFailed');
                     return of(false);
                   })
                 );
@@ -217,7 +167,6 @@ export class NodeService {
           (data: any): Observable<boolean> => {
             if (data) {
               this._notificationService.success(`The <strong>${nd.name}</strong> node deployment was removed`);
-              this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentDeleted');
               if (changeEventEmitter) {
                 changeEventEmitter.emit(nd);
               }

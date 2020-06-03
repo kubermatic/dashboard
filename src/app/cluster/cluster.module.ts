@@ -1,7 +1,8 @@
 import {NgModule} from '@angular/core';
 
 import {MachineNetworksModule} from '../machine-networks/machine-networks.module';
-import {NodeDataModule} from '../node-data/node-data.module';
+import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../node-data-new/config';
+import {NodeDataModule} from '../node-data-new/module';
 import {SharedModule} from '../shared/shared.module';
 
 import {AddMachineNetworkComponent} from './cluster-details/add-machine-network/add-machine-network.component';
@@ -24,7 +25,6 @@ import {VSphereProviderSettingsComponent} from './cluster-details/edit-provider-
 import {AddClusterSSHKeysComponent} from './cluster-details/edit-sshkeys/add-cluster-sshkeys/add-cluster-sshkeys.component';
 import {EditSSHKeysComponent} from './cluster-details/edit-sshkeys/edit-sshkeys.component';
 import {MachineNetworksDisplayComponent} from './cluster-details/machine-networks-display/machine-networks-display.component';
-import {NodeDataModalComponent} from './cluster-details/node-data-modal/node-data-modal.component';
 import {ClusterPanelComponent} from './cluster-details/node-deployment-details/cluster-panel/cluster-panel.component';
 import {NodeDeploymentDetailsComponent} from './cluster-details/node-deployment-details/node-deployment-details.component';
 import {NodeDeploymentListComponent} from './cluster-details/node-deployment-list/node-deployment-list.component';
@@ -51,7 +51,6 @@ const components: any[] = [
 const entryComponents: any[] = [
   ClusterDeleteConfirmationComponent,
   ChangeClusterVersionComponent,
-  NodeDataModalComponent,
   ClusterSecretsComponent,
   EditClusterComponent,
   RevokeTokenComponent,
@@ -79,6 +78,12 @@ const entryComponents: any[] = [
   declarations: [...components, ...entryComponents, VersionPickerComponent],
   exports: [...components],
   entryComponents: [...entryComponents],
-  providers: [NodeService],
+  providers: [
+    NodeService,
+    {
+      provide: NODE_DATA_CONFIG,
+      useValue: {mode: NodeDataMode.Dialog} as NodeDataConfig,
+    },
+  ],
 })
 export class ClusterModule {}

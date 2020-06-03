@@ -19,7 +19,7 @@ import {VSphereFolder, VSphereNetwork} from '../../../../../../shared/entity/pro
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {isObjectEmpty} from '../../../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../../../service/cluster';
+import {ClusterService} from '../../../../../../shared/services/cluster.service';
 
 enum Controls {
   VMNetName = 'vmNetName',

@@ -17,7 +17,7 @@ import {FilteredComboboxComponent} from '../../../../../../shared/components/com
 import {GCPNetwork, GCPSubnetwork} from '../../../../../../shared/entity/provider/gcp/GCP';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../../../service/cluster';
+import {ClusterService} from '../../../../../../shared/services/cluster.service';
 
 enum Controls {
   Network = 'network',

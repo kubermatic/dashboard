@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subject, timer} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {first, take, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../../app-config.service';
-import {ApiService, ClusterService, DatacenterService, UserService} from '../../../core/services';
+import {ApiService, ClusterService, DatacenterService, NotificationService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {EventEntity} from '../../../shared/entity/EventEntity';
@@ -57,7 +57,8 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     private readonly _nodeService: NodeService,
     private readonly _appConfig: AppConfigService,
     private readonly _userService: UserService,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterService: ClusterService,
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -195,13 +196,18 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   showEditDialog(): void {
     this._nodeService
-      .showNodeDeploymentEditDialog(this.nodeDeployment, this.cluster, this.projectID, this.seedDatacenter, undefined)
-      .subscribe(isConfirmed => {
-        if (isConfirmed) {
+      .showNodeDeploymentEditDialog(this.nodeDeployment, this.cluster, this.projectID, this.datacenter.metadata.name)
+      .pipe(take(1))
+      .subscribe(
+        _ => {
           this.loadNodeDeployment();
           this.loadNodes();
-        }
-      });
+          this._notificationService.success(
+            `The <strong>${this.nodeDeployment.name}</strong> node deployment was updated`
+          );
+        },
+        _ => this._notificationService.error('There was an error during node deployment edition.')
+      );
   }
 
   isDeleteEnabled(): boolean {

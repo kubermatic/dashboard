@@ -14,7 +14,7 @@ import {asyncData} from '../../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../../../../testing/services/project-mock.service';
 import {UserMockService} from '../../../../testing/services/user-mock.service';
-import {ClusterService} from '../../../service/cluster';
+import {ClusterService} from '../../../../shared/services/cluster.service';
 import {ClusterSSHKeysComponent} from './component';
 
 describe('ClusterSSHKeys', () => {

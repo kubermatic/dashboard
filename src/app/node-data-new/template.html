@@ -1,5 +1,5 @@
 <form [formGroup]="form"
-      fxLayout="row"
+      [fxLayout]="isDialogView() ? 'column' : 'row'"
       fxLayoutGap="30px"
       fxLayout.md="column"
       fxLayoutGap.md="30px"
@@ -7,10 +7,10 @@
       fxLayoutGap.sm="30px"
       fxLayout.xs="column"
       fxLayoutGap.xs="30px">
-  <div fxFlex="50%"
+  <div [fxFlex]="isDialogView() ? '100%' : '50%'"
        fxLayout="column"
        fxLayoutGap="16px">
-    <mat-card-title>Basic</mat-card-title>
+    <mat-card-title *ngIf="!isDialogView()">Basic</mat-card-title>
     <mat-form-field>
       <mat-label>Name</mat-label>
       <input [formControlName]="Controls.Name"
@@ -18,7 +18,8 @@
              matInput
              type="text"
              autocomplete="off">
-      <button mat-icon-button
+      <button *ngIf="!dialogEditMode"
+              mat-icon-button
               class="km-randomize-btn"
               matTooltip="Generate name"
               (click)="generateName()">
@@ -40,10 +41,19 @@
              autocomplete="off"
              required>
       <mat-error *ngIf="form.get(Controls.Count).hasError('required')">Number of replicas is required.</mat-error>
-      <mat-error *ngIf="form.get(Controls.Count).hasError('ipsMissing')">Not enough IPs left. Reduce number of replicas or
-        add more machine networks.
+      <mat-error *ngIf="form.get(Controls.Count).hasError('ipsMissing')">
+        Not enough IPs left. Reduce number of replicas or add more machine networks.
       </mat-error>
     </mat-form-field>
+
+    <km-node-data-kubelet-version *ngIf="isDialogView()"
+                                  [formControl]="form.get(Controls.Kubelet)"></km-node-data-kubelet-version>
+
+    <ng-container *ngIf="isDialogView()">
+      <km-basic-node-data [provider]="provider"
+                          [formControlName]="Controls.ProviderBasic">
+      </km-basic-node-data>
+    </ng-container>
 
     <div fxLayout="column">
       <mat-button-toggle-group group="operatingSystemGroup"
@@ -113,7 +123,7 @@
                  matInput
                  type="password"
                  autocomplete="off">
-          <mat-hint>Offline token is required to remove subscriptions. </mat-hint>
+          <mat-hint>Offline token is required to remove subscriptions.</mat-hint>
         </mat-form-field>
       </div>
 
@@ -143,6 +153,13 @@
       </div>
     </div>
 
+    <div *ngIf="isDialogView() && showExtended">
+      <mat-card-title class="km-provider-options">{{ providerDisplayName }} Options</mat-card-title>
+      <km-extended-node-data [provider]="provider"
+                             [visible]="true"
+                             [formControlName]="Controls.ProviderExtended"></km-extended-node-data>
+    </div>
+
     <km-label-form title="Node Labels"
                    [labels]="labels"
                    (labelsChange)="onLabelsChange($event)"></km-label-form>
@@ -152,7 +169,8 @@
                    (taintsChange)="onTaintsChange($event)"></km-taint-form>
   </div>
 
-  <div fxFlex="50%"
+  <div *ngIf="!isDialogView()"
+       fxFlex="50%"
        fxLayout="column"
        fxLayoutGap="16px">
     <mat-card-title>{{ providerDisplayName }}</mat-card-title>
@@ -160,10 +178,8 @@
                         [formControlName]="Controls.ProviderBasic">
     </km-basic-node-data>
 
-    <ng-container *ngIf="!isBasicViewOnly()">
-      <km-extended-node-data [provider]="provider"
-                             [visible]="true"
-                             [formControlName]="Controls.ProviderExtended"></km-extended-node-data>
-    </ng-container>
+    <km-extended-node-data [provider]="provider"
+                           [visible]="true"
+                           [formControlName]="Controls.ProviderExtended"></km-extended-node-data>
   </div>
 </form>

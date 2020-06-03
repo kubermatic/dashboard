@@ -22,7 +22,7 @@ import {OpenstackFlavor} from '../../../../shared/entity/provider/openstack/Open
 import {OperatingSystem} from '../../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../../wizard-new/service/cluster';
+import {ClusterService} from '../../../../shared/services/cluster.service';
 import {NodeDataService} from '../../../service/service';
 
 enum Controls {
@@ -138,6 +138,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
   onFlavorChange(flavor: string): void {
     this._nodeDataService.nodeData.spec.cloud.openstack.flavor = flavor;
+    this._nodeDataService.nodeDataChanges.next();
   }
 
   flavorDisplayName(slug: string): string {

@@ -8,7 +8,7 @@ import {HetznerCloudSpec} from '../../../../../../shared/entity/cloud/HetznerClo
 import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../../../service/cluster';
+import {ClusterService} from '../../../../../../shared/services/cluster.service';
 
 export enum Controls {
   Token = 'token',

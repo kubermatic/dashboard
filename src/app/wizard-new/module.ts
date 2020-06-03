@@ -5,7 +5,6 @@ import {SharedModule} from '../shared/shared.module';
 
 import {WizardComponent} from './component';
 import {Routing} from './routing';
-import {ClusterService} from './service/cluster';
 import {WizardService} from './service/wizard';
 import {ClusterStepComponent} from './step/cluster/component';
 import {MachineNetworkStepComponent} from './step/network/component';
@@ -71,7 +70,6 @@ const components: any[] = [
       useValue: {mode: NodeDataMode.Wizard} as NodeDataConfig,
     },
     WizardService,
-    ClusterService,
   ],
   exports: [...components],
 })

@@ -13,7 +13,7 @@ import {filter, map, switchMap, takeUntil} from 'rxjs/operators';
 import {DatacenterService} from '../../../core/services';
 import {DataCenterEntity, getDatacenterProvider} from '../../../shared/entity/DatacenterEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../service/cluster';
+import {ClusterService} from '../../../shared/services/cluster.service';
 import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
 

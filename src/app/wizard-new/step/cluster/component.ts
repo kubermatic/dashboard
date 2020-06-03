@@ -18,7 +18,7 @@ import {ClusterEntity, ClusterSpec, ClusterType, MasterVersion} from '../../../s
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {ResourceType} from '../../../shared/entity/LabelsEntity';
 import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
-import {ClusterService} from '../../service/cluster';
+import {ClusterService} from '../../../shared/services/cluster.service';
 import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
 

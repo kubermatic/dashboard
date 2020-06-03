@@ -6,7 +6,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {DatacenterService, PresetsService} from '../../../core/services';
 import {NODE_DATA_CONFIG, NodeDataMode} from '../../../node-data-new/config';
 import {NodeDataService} from '../../../node-data-new/service/service';
-import {ClusterService} from '../../../wizard-new/service/cluster';
+import {ClusterService} from '../../../shared/services/cluster.service';
 import {WizardService} from '../../../wizard-new/service/wizard';
 import {SharedModule} from '../../shared.module';
 import {MachineNetworkComponent} from './component';

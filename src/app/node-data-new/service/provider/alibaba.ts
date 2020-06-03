@@ -5,7 +5,7 @@ import {DatacenterService, PresetsService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {AlibabaInstanceType, AlibabaZone} from '../../../shared/entity/provider/alibaba/Alibaba';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../wizard-new/service/cluster';
+import {ClusterService} from "../../../shared/services/cluster.service";
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
 
@@ -20,6 +20,7 @@ export class NodeDataAlibabaProvider {
   set labels(labels: object) {
     delete this._nodeDataService.nodeData.spec.cloud.alibaba.labels;
     this._nodeDataService.nodeData.spec.cloud.alibaba.labels = labels;
+    this._nodeDataService.nodeDataChanges.next();
   }
 
   instanceTypes(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AlibabaInstanceType[]> {
@@ -42,7 +43,7 @@ export class NodeDataAlibabaProvider {
                 .accessKeySecret(cluster.spec.cloud.alibaba.accessKeySecret)
                 .region(region)
                 .credential(this._presetService.preset)
-                .instanceTypes()
+                .instanceTypes(onLoadingCb)
                 .pipe(
                   catchError(_ => {
                     if (onError) {

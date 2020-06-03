@@ -4,7 +4,7 @@ import {catchError, filter, switchMap} from 'rxjs/operators';
 import {PresetsService} from '../../../core/services';
 import {PacketSize} from '../../../shared/entity/packet/PacketSizeEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../wizard-new/service/cluster';
+import {ClusterService} from '../../../shared/services/cluster.service';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
 
@@ -18,6 +18,7 @@ export class NodeDataPacketProvider {
   set tags(tags: string[]) {
     delete this._nodeDataService.nodeData.spec.cloud.packet.tags;
     this._nodeDataService.nodeData.spec.cloud.packet.tags = tags;
+    this._nodeDataService.nodeDataChanges.next();
   }
 
   flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<PacketSize[]> {

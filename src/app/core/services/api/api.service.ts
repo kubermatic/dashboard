@@ -61,15 +61,15 @@ export class ApiService {
   }
 
   createNodeDeployment(
-    cluster: ClusterEntity,
     nd: NodeDeploymentEntity,
-    dc: string,
+    clusterID: string,
+    seedDCName: string,
     projectID: string
   ): Observable<NodeDeploymentEntity> {
     nd.spec.template.labels = LabelFormComponent.filterNullifiedKeys(nd.spec.template.labels);
     nd.spec.template.taints = TaintFormComponent.filterNullifiedTaints(nd.spec.template.taints);
 
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/nodedeployments`;
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seedDCName}/clusters/${clusterID}/nodedeployments`;
     return this._http.post<NodeDeploymentEntity>(url, nd);
   }
 
@@ -108,13 +108,13 @@ export class ApiService {
   }
 
   patchNodeDeployment(
-    nd: NodeDeploymentEntity,
     patch: NodeDeploymentPatch,
+    nodeDeploymentId: string,
     clusterId: string,
     dc: string,
     projectID: string
   ): Observable<NodeDeploymentEntity> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterId}/nodedeployments/${nd.id}`;
+    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterId}/nodedeployments/${nodeDeploymentId}`;
     return this._http.patch<NodeDeploymentEntity>(url, patch);
   }
 

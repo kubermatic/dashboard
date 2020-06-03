@@ -78,6 +78,7 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
 
   onTypeChange(type: string): void {
     this._nodeDataService.nodeData.spec.cloud = {hetzner: {type}};
+    this._nodeDataService.nodeDataChanges.next();
   }
 
   typeDisplayName(name: string): string {

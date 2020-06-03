@@ -3,9 +3,9 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
-import {switchMap, takeUntil} from 'rxjs/operators';
+import {switchMap, take, takeUntil} from 'rxjs/operators';
 
-import {ProjectService, UserService} from '../../../core/services';
+import {NotificationService, ProjectService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
@@ -45,7 +45,8 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
     private readonly _nodeService: NodeService,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -112,19 +113,24 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'nodeDeployments', Permission.Edit);
   }
 
-  showEditDialog(nd: NodeDeploymentEntity, event: Event): void {
-    event.stopPropagation();
+  showEditDialog(nd: NodeDeploymentEntity): void {
     this._nodeService
-      .showNodeDeploymentEditDialog(nd, this.cluster, this.projectID, this.datacenter, this.changeNodeDeployment)
-      .subscribe(() => {});
+      .showNodeDeploymentEditDialog(nd, this.cluster, this.projectID, this.datacenter.metadata.name)
+      .pipe(take(1))
+      .subscribe(
+        _ => {
+          this._notificationService.success(`The <strong>${nd.name}</strong> node deployment was updated`);
+          this.changeNodeDeployment.emit(nd);
+        },
+        _ => this._notificationService.error('There was an error during node deployment edition.')
+      );
   }
 
   isDeleteEnabled(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'nodeDeployments', Permission.Delete);
   }
 
-  showDeleteDialog(nd: NodeDeploymentEntity, event: Event): void {
-    event.stopPropagation();
+  showDeleteDialog(nd: NodeDeploymentEntity): void {
     this._nodeService
       .showNodeDeploymentDeleteDialog(
         nd,

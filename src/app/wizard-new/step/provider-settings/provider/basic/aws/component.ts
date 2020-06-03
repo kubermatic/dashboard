@@ -17,7 +17,7 @@ import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/en
 import {AWSVPC} from '../../../../../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../../../service/cluster';
+import {ClusterService} from '../../../../../../shared/services/cluster.service';
 
 export enum Controls {
   AccessKeyID = 'accessKeyID',
