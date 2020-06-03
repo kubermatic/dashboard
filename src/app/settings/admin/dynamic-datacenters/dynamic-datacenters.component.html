@@ -41,7 +41,13 @@
           <mat-select-trigger fxFlex
                               fxLayout="row">
             <div fxFlex
-                 fxLayoutAlign="start">{{getCountryName(countryFilter)}}</div>
+                 fxLayoutAlign="start"
+                 fxLayoutGap="6px">
+              <ng-container *ngIf="countryFilter">
+                <span class="flag-icon flag-icon-{{countryFilter.toLowerCase()}}"></span>
+                <span>{{getCountryName(countryFilter)}}</span>
+              </ng-container>
+            </div>
             <div fxFlex
                  fxLayoutAlign="end">
               <button *ngIf="countryFilter"
@@ -56,7 +62,10 @@
           </mat-select-trigger>
           <mat-option *ngFor="let country of countries"
                       [value]="country">
-            {{getCountryName(country)}}
+            <div fxLayoutGap="6px">
+              <span class="flag-icon flag-icon-{{country.toLowerCase()}}"></span>
+              <span>{{getCountryName(country)}}</span>
+            </div>
           </mat-option>
         </mat-select>
       </mat-form-field>

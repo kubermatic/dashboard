@@ -47,9 +47,23 @@
       <mat-select required
                   disableOptionCentering
                   formControlName="country">
+        <mat-select-trigger fxFlex
+                            fxLayout="row">
+          <div fxFlex
+               fxLayoutAlign="start"
+               fxLayoutGap="6px">
+            <ng-container *ngIf="form.controls.country.value">
+              <span class="flag-icon flag-icon-{{form.controls.country.value.toLowerCase()}}"></span>
+              <span>{{getCountryName(form.controls.country.value)}}</span>
+            </ng-container>
+          </div>
+        </mat-select-trigger>
         <mat-option *ngFor="let countryCode of countryCodes"
                     [value]="countryCode">
-          {{getCountryName(countryCode)}}
+          <div fxLayoutGap="6px">
+            <span class="flag-icon flag-icon-{{countryCode.toLowerCase()}}"></span>
+            <span>{{getCountryName(countryCode)}}</span>
+          </div>
         </mat-option>
       </mat-select>
       <mat-error *ngIf="form.controls.country.hasError('required')">
