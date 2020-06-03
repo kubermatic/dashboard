@@ -8,6 +8,8 @@ import * as countryCodeLookup from 'country-code-lookup';
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
 import {NodeProvider, NodeProviderConstants} from '../../../../shared/model/NodeProviderConstants';
 import {GlobalThemeService} from '../../../../core/services/global-theme/global-theme.service';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {MatChipInputEvent} from '@angular/material/chips';
 
 export interface DatacenterDataDialogConfig {
   title: string;
@@ -24,9 +26,11 @@ export interface DatacenterDataDialogConfig {
   styleUrls: ['./datacenter-data-dialog.component.scss'],
 })
 export class DatacenterDataDialogComponent implements OnInit {
+  readonly separatorKeyCodes: number[] = [ENTER, COMMA];
+  readonly countryCodes: string[] = countryCodeLookup.countries.map(country => country.iso2);
+  readonly providers: string[] = Object.values(NodeProvider).filter(provider => !!provider);
   form: FormGroup;
-  countryCodes: string[] = countryCodeLookup.countries.map(country => country.iso2);
-  providers: string[] = Object.values(NodeProvider).filter(provider => !!provider);
+  requiredEmailDomains: string[] = [];
   providerConfig = '';
   editorOptions: any = {
     contextmenu: false,
@@ -51,6 +55,12 @@ export class DatacenterDataDialogComponent implements OnInit {
   ngOnInit(): void {
     this.editorOptions.theme = this._globalThemeService.isCurrentThemeDark ? 'vs-dark' : 'vs';
 
+    if (this.data.isEditing && !_.isEmpty(this.data.datacenter.spec.requiredEmailDomains)) {
+      this.requiredEmailDomains = this.data.datacenter.spec.requiredEmailDomains;
+    } else {
+      this.requiredEmailDomains = [];
+    }
+
     this.form = new FormGroup({
       name: new FormControl(this.data.isEditing ? this.data.datacenter.metadata.name : '', [Validators.required]),
       provider: new FormControl(this.data.isEditing ? this.data.datacenter.spec.provider : '', [Validators.required]),
@@ -60,6 +70,7 @@ export class DatacenterDataDialogComponent implements OnInit {
       ),
       country: new FormControl(this.data.isEditing ? this.data.datacenter.spec.country : '', [Validators.required]),
       location: new FormControl(this.data.isEditing ? this.data.datacenter.spec.location : '', [Validators.required]),
+      requiredEmailDomains: new FormControl(this.requiredEmailDomains),
       enforcePodSecurityPolicy: new FormControl(
         this.data.isEditing && this.data.datacenter.spec.enforcePodSecurityPolicy
       ),
@@ -87,6 +98,27 @@ export class DatacenterDataDialogComponent implements OnInit {
     return country ? country.country : code;
   }
 
+  addDomain(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    if ((value || '').trim()) {
+      this.requiredEmailDomains.push(value.trim());
+    }
+
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  removeDomain(domain: string): void {
+    const index = this.requiredEmailDomains.indexOf(domain);
+
+    if (index >= 0) {
+      this.requiredEmailDomains.splice(index, 1);
+    }
+  }
+
   private _getProviderConfig(): any {
     const raw = load(this.providerConfig);
     return !_.isEmpty(raw) ? raw : {};
@@ -102,7 +134,7 @@ export class DatacenterDataDialogComponent implements OnInit {
         seed: this.form.controls.seed.value,
         country: this.form.controls.country.value,
         location: this.form.controls.location.value,
-        requiredEmailDomains: [],
+        requiredEmailDomains: this.requiredEmailDomains,
         enforcePodSecurityPolicy: this.form.controls.enforcePodSecurityPolicy.value,
         enforceAuditLogging: this.form.controls.enforceAuditLogging.value,
       },

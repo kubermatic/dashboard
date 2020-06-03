@@ -83,6 +83,26 @@
       </mat-error>
     </mat-form-field>
 
+    <mat-form-field class="domain-input">
+      <mat-label>Required Email Domains</mat-label>
+      <mat-chip-list #chipList
+                     class="km-chip-list-with-input">
+        <mat-chip *ngFor="let domain of requiredEmailDomains"
+                  removable
+                  (removed)="removeDomain(domain)"
+                  [selectable]="false">
+          {{domain}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input formControlName="requiredEmailDomains"
+               matChipInputAddOnBlur
+               [matChipInputFor]="chipList"
+               [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+               (matChipInputTokenEnd)="addDomain($event)">
+      </mat-chip-list>
+      <mat-hint>Use commas or enter key as the separators.</mat-hint>
+    </mat-form-field>
+
     <mat-checkbox formControlName="enforcePodSecurityPolicy">Enforce Pod Security Policy</mat-checkbox>
     <mat-checkbox formControlName="enforceAuditLogging">Enforce Audit Logging</mat-checkbox>
   </form>

@@ -4,6 +4,10 @@
   overflow-y: scroll !important;
 }
 
+.domain-input {
+  margin-bottom: 2 * $baseline-grid;
+}
+
 .property-name {
   font-size: $font-size-subhead-lg;
   line-height: 2.5 * $line-height;
