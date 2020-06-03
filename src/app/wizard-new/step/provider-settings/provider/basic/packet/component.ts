@@ -24,7 +24,7 @@ import {
 } from '../../../../../../shared/entity/cluster';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../../../service/cluster';
+import {ClusterService} from '../../../../../../shared/services/cluster.service';
 
 export enum Controls {
   APIKey = 'apiKey',

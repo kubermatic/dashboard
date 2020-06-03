@@ -11,9 +11,9 @@
 
 import {EventEmitter, Injectable} from '@angular/core';
 import * as _ from 'lodash';
-import {CloudSpec, Cluster, ClusterType} from '../../shared/entity/cluster';
-import {SSHKey} from '../../shared/entity/ssh-key';
-import {NodeProvider} from '../../shared/model/NodeProviderConstants';
+import {CloudSpec, Cluster, ClusterType} from '../entity/cluster';
+import {SSHKey} from '../entity/ssh-key';
+import {NodeProvider} from '../model/NodeProviderConstants';
 
 @Injectable()
 export class ClusterService {

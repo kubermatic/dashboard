@@ -27,8 +27,8 @@ import {FilteredComboboxComponent} from '../../../../../../shared/components/com
 import {CloudSpec, Cluster, ClusterSpec, OpenstackCloudSpec} from '../../../../../../shared/entity/cluster';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../../../service/cluster';
 import {OpenstackFloatingIpPool, OpenstackTenant} from '../../../../../../shared/entity/provider/openstack';
+import {ClusterService} from '../../../../../../shared/services/cluster.service';
 
 enum Controls {
   Domain = 'domain',

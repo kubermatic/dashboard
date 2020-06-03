@@ -12,7 +12,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator} from '@angular/forms';
 import {Cluster} from '../../../shared/entity/cluster';
-import {ClusterService} from '../../service/cluster';
+import {ClusterService} from '../../../shared/services/cluster.service';
 import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
 

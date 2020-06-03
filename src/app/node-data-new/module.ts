@@ -35,6 +35,7 @@ import {OpenstackBasicNodeDataComponent} from './basic/provider/openstack/compon
 import {PacketBasicNodeDataComponent} from './basic/provider/packet/component';
 import {VSphereBasicNodeDataComponent} from './basic/provider/vsphere/component';
 import {NodeDataComponent} from './component';
+import {NodeDataDialogComponent} from "./dialog/component";
 import {ExtendedNodeDataComponent} from './extended/component';
 import {AlibabaExtendedNodeDataComponent} from './extended/provider/alibaba/component';
 import {AWSExtendedNodeDataComponent} from './extended/provider/aws/component';
@@ -44,6 +45,7 @@ import {GCPExtendedNodeDataComponent} from './extended/provider/gcp/component';
 import {OpenstackExtendedNodeDataComponent} from './extended/provider/openstack/component';
 import {PacketExtendedNodeDataComponent} from './extended/provider/packet/component';
 import {VSphereExtendedNodeDataComponent} from './extended/provider/vsphere/component';
+import {KubeletVersionNodeDataComponent} from "./kubelet-version/component";
 import {NodeDataService} from './service/service';
 
 const components = [
@@ -68,6 +70,8 @@ const components = [
   NodeDataComponent,
   BasicNodeDataComponent,
   ExtendedNodeDataComponent,
+  KubeletVersionNodeDataComponent,
+  NodeDataDialogComponent,
 ];
 
 const services = [NodeDataService];
@@ -90,4 +94,5 @@ const services = [NodeDataService];
   providers: [...services],
   exports: [...components],
 })
-export class NodeDataModule {}
+export class NodeDataModule {
+}

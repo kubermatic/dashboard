@@ -19,7 +19,7 @@ import {NodeCloudSpec, NodeSpec, VSphereNodeSpec} from '../../../../shared/entit
 import {OperatingSystem} from '../../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../../wizard-new/service/cluster';
+import {ClusterService} from '../../../../shared/services/cluster.service';
 import {NodeDataService} from '../../../service/service';
 import {ClusterType} from '../../../../shared/entity/cluster';
 

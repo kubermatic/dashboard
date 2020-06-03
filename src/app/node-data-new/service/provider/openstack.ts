@@ -15,7 +15,7 @@ import {catchError, filter, switchMap} from 'rxjs/operators';
 import {DatacenterService, PresetsService} from '../../../core/services';
 import {Datacenter} from '../../../shared/entity/datacenter';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../wizard-new/service/cluster';
+import {ClusterService} from '../../../shared/services/cluster.service';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
 import {OpenstackFlavor, OpenstackAvailabilityZone} from '../../../shared/entity/provider/openstack';
@@ -31,6 +31,7 @@ export class NodeDataOpenstackProvider {
   set tags(tags: object) {
     delete this._nodeDataService.nodeData.spec.cloud.openstack.tags;
     this._nodeDataService.nodeData.spec.cloud.openstack.tags = tags;
+    this._nodeDataService.nodeDataChanges.next();
   }
 
   flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<OpenstackFlavor[]> {

@@ -61,6 +61,10 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
     return Object.values(SizeTypes);
   }
 
+  private get _sizesObservable(): Observable<DigitaloceanSizes> {
+    return this._nodeDataService.digitalOcean.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
+  }
+
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
@@ -70,6 +74,8 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
   }
 
   ngOnInit(): void {
+    this._init();
+
     this.form = this._builder.group({
       [Controls.Size]: this._builder.control('', Validators.required),
     });
@@ -89,6 +95,7 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
 
   onTypeChange(size: string): void {
     this._nodeDataService.nodeData.spec.cloud.digitalocean.size = size;
+    this._nodeDataService.nodeDataChanges.next();
   }
 
   sizeDisplayName(slug: string): string {
@@ -100,8 +107,10 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
       : '';
   }
 
-  private get _sizesObservable(): Observable<DigitaloceanSizes> {
-    return this._nodeDataService.digitalOcean.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
+  private _init(): void {
+    if (this._nodeDataService.nodeData.spec.cloud.digitalocean) {
+      this.selectedSize = this._nodeDataService.nodeData.spec.cloud.digitalocean.size;
+    }
   }
 
   private _onSizeLoading(): void {
@@ -119,10 +128,12 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
 
   private _setDefaultSize(sizes: DigitaloceanSizes): void {
     this._sizes = sizes;
-    if (this._sizes && this._sizes.standard && this._sizes.standard.length > 0) {
+
+    if (!this.selectedSize && this._sizes && this._sizes.standard && this._sizes.standard.length > 0) {
       this.selectedSize = this._sizes.standard[0].slug;
-      this.sizeLabel = SizeState.Ready;
-      this._cdr.detectChanges();
     }
+
+    this.sizeLabel = this.selectedSize ? SizeState.Ready : SizeState.Empty;
+    this._cdr.detectChanges();
   }
 }

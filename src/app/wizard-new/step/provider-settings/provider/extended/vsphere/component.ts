@@ -29,8 +29,8 @@ import {Cluster} from '../../../../../../shared/entity/cluster';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {isObjectEmpty} from '../../../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../../../service/cluster';
 import {VSphereFolder, VSphereNetwork} from '../../../../../../shared/entity/provider/vsphere';
+import {ClusterService} from '../../../../../../shared/services/cluster.service';
 
 enum Controls {
   VMNetName = 'vmNetName',
