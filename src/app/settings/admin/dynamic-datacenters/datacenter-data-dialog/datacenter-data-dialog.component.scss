@@ -1,7 +1,7 @@
 @import '../../../../../assets/css/variables';
 
 .mat-dialog-content {
-  overflow-y: scroll;
+  overflow-y: scroll !important;
 }
 
 .property-name {
