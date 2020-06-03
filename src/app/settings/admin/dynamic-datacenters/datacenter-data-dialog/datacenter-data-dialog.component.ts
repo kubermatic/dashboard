@@ -7,6 +7,7 @@ import * as countryCodeLookup from 'country-code-lookup';
 
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
 import {NodeProvider, NodeProviderConstants} from '../../../../shared/model/NodeProviderConstants';
+import {GlobalThemeService} from '../../../../core/services/global-theme/global-theme.service';
 
 export interface DatacenterDataDialogConfig {
   title: string;
@@ -27,7 +28,7 @@ export class DatacenterDataDialogComponent implements OnInit {
   countryCodes: string[] = countryCodeLookup.countries.map(country => country.iso2);
   providers: string[] = Object.values(NodeProvider).filter(provider => !!provider);
   providerConfig = '';
-  editorOptions = {
+  editorOptions: any = {
     contextmenu: false,
     language: 'yaml',
     minimap: {
@@ -43,10 +44,13 @@ export class DatacenterDataDialogComponent implements OnInit {
 
   constructor(
     public _matDialogRef: MatDialogRef<DatacenterDataDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DatacenterDataDialogConfig
+    @Inject(MAT_DIALOG_DATA) public data: DatacenterDataDialogConfig,
+    private readonly _globalThemeService: GlobalThemeService
   ) {}
 
   ngOnInit(): void {
+    this.editorOptions.theme = this._globalThemeService.isCurrentThemeDark ? 'vs-dark' : 'vs';
+
     this.form = new FormGroup({
       name: new FormControl(this.data.isEditing ? this.data.datacenter.metadata.name : '', [Validators.required]),
       provider: new FormControl(this.data.isEditing ? this.data.datacenter.spec.provider : '', [Validators.required]),

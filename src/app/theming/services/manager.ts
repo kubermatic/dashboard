@@ -5,19 +5,22 @@ import {SettingsService} from '../../core/services/settings/settings.service';
 import {UserSettings} from '../../shared/entity/MemberEntity';
 import {ColorSchemeService} from './color-scheme';
 import {ThemeService} from './theme';
+import {GlobalThemeService} from '../../core/services/global-theme/global-theme.service';
 
 @Injectable()
 export class ThemeManagerService {
   private readonly _themeClassName = themeName => `km-style-${themeName}`;
   private readonly _themesPath = themeName => `assets/themes/${themeName}.css`;
   private readonly _defaultTheme = 'light';
+  private readonly _systemDefaultOption = 'systemDefault';
   private _selectedTheme = this._defaultTheme;
 
   constructor(
     @Inject(DOCUMENT) private readonly _document: Document,
     private readonly _colorSchemeService: ColorSchemeService,
     private readonly _themeService: ThemeService,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
+    private readonly _globalThemeService: GlobalThemeService
   ) {}
 
   // Force the initial theme load during application start.
@@ -34,6 +37,17 @@ export class ThemeManagerService {
 
     this._getLinkElementForTheme(themeName).setAttribute('href', this._themesPath(themeName));
     this._selectedTheme = themeName;
+
+    this._globalThemeService.isCurrentThemeDark$.next(this._isThemeDark(themeName));
+  }
+
+  private _isThemeDark(name: string): boolean {
+    if (name === this._systemDefaultOption) {
+      return this._colorSchemeService.hasPreferredTheme() && this._colorSchemeService.getPreferredTheme().isDark;
+    }
+
+    const selectedThemeObject = this._themeService.themes.find(theme => theme.name === name);
+    return selectedThemeObject ? selectedThemeObject.isDark : false;
   }
 
   /**

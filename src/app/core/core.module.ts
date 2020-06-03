@@ -38,6 +38,7 @@ import {PreviousRouteService} from './services/previous-route/previous-route.ser
 import {SettingsService} from './services/settings/settings.service';
 import {StepsService} from './services/wizard/steps.service';
 import {ClusterNameGenerator} from './util/name-generator.service';
+import {GlobalThemeService} from './services/global-theme/global-theme.service';
 
 const modules: any[] = [
   CommonModule,
@@ -80,6 +81,7 @@ const services: any[] = [
   RBACService,
   PresetsService,
   PreviousRouteService,
+  GlobalThemeService,
 ];
 
 const interceptors: any[] = [
