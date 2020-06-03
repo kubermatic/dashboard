@@ -112,9 +112,8 @@ export class DatacenterDataDialogComponent implements OnInit {
     datacenter.spec[datacenter.spec.provider] = this._getProviderConfig();
 
     // Nullify old provider value (it is needed to make edit work as it uses JSON Merge Patch).
-    const oldProvider = this.data.datacenter.spec.provider;
-    if (this.data.isEditing && datacenter.spec.provider !== oldProvider) {
-      datacenter.spec[oldProvider] = null;
+    if (this.data.isEditing && datacenter.spec.provider !== this.data.datacenter.spec.provider) {
+      datacenter.spec[this.data.datacenter.spec.provider] = null;
     }
 
     this._matDialogRef.close(datacenter);
