@@ -15,7 +15,7 @@ import {catchError, filter, switchMap, tap} from 'rxjs/operators';
 import {PresetsService} from '../../../core/services';
 import {Cluster} from '../../../shared/entity/cluster';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../wizard-new/service/cluster';
+import {ClusterService} from '../../../shared/services/cluster.service';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../shared/entity/provider/gcp';
@@ -30,11 +30,13 @@ export class NodeDataGCPProvider {
   set labels(labels: object) {
     delete this._nodeDataService.nodeData.spec.cloud.gcp.labels;
     this._nodeDataService.nodeData.spec.cloud.gcp.labels = labels;
+    this._nodeDataService.nodeDataChanges.next();
   }
 
   set tags(tags: string[]) {
     delete this._nodeDataService.nodeData.spec.cloud.gcp.tags;
     this._nodeDataService.nodeData.spec.cloud.gcp.tags = tags;
+    this._nodeDataService.nodeDataChanges.next();
   }
 
   zones(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<GCPZone[]> {

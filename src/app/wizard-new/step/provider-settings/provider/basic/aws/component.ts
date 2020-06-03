@@ -26,8 +26,8 @@ import {FilteredComboboxComponent} from '../../../../../../shared/components/com
 import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '../../../../../../shared/entity/cluster';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../../../service/cluster';
 import {AWSVPC} from '../../../../../../shared/entity/provider/aws';
+import {ClusterService} from '../../../../../../shared/services/cluster.service';
 
 export enum Controls {
   AccessKeyID = 'accessKeyID',

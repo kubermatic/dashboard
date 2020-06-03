@@ -14,10 +14,10 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
-import {switchMap, takeUntil} from 'rxjs/operators';
+import {switchMap, takeUntil, take} from 'rxjs/operators';
 import * as _ from 'lodash';
 
-import {ProjectService, UserService} from '../../../core/services';
+import {NotificationService, ProjectService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {Cluster} from '../../../shared/entity/cluster';
 import {Member} from '../../../shared/entity/member';
@@ -56,7 +56,8 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
     private readonly _nodeService: NodeService,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -111,21 +112,32 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Edit);
   }
 
-  showEditDialog(md: MachineDeployment, event: Event): void {
-    event.stopPropagation();
+  showEditDialog(md: MachineDeployment): void {
     this._nodeService
-      .showMachineDeploymentEditDialog(md, this.cluster, this.projectID, this.seed, this.changeMachineDeployment)
-      .subscribe(() => {});
+      .showMachineDeploymentEditDialog(md, this.cluster, this.projectID, this.seed)
+      .pipe(take(1))
+      .subscribe(
+        _ => {
+          this._notificationService.success(`The <strong>${md.name}</strong> node deployment was updated`);
+          this.changeMachineDeployment.emit(md);
+        },
+        _ => this._notificationService.error('There was an error during node deployment edition.')
+      );
   }
 
   isDeleteEnabled(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Delete);
   }
 
-  showDeleteDialog(md: MachineDeployment, event: Event): void {
-    event.stopPropagation();
+  showDeleteDialog(md: MachineDeployment): void {
     this._nodeService
-      .showMachineDeploymentDeleteDialog(md, this.cluster.id, this.projectID, this.seed, this.changeMachineDeployment)
+      .showMachineDeploymentDeleteDialog(
+        md,
+        this.cluster.id,
+        this.projectID,
+        this.seed,
+        this.changeMachineDeployment
+      )
       .subscribe(() => {});
   }
 

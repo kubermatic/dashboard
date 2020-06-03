@@ -104,12 +104,13 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.Size]: this._builder.control(''),
-      [Controls.DiskSize]: this._builder.control(25, Validators.required),
+      [Controls.DiskSize]: this._builder.control('', Validators.required),
       [Controls.DiskType]: this._builder.control('', Validators.required),
       [Controls.SubnetID]: this._builder.control(''),
       [Controls.AMI]: this._builder.control(''),
     });
 
+    this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
     this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
@@ -150,15 +151,28 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   onSizeChange(size: string): void {
     this._nodeDataService.nodeData.spec.cloud.aws.instanceType = size;
+    this._nodeDataService.nodeDataChanges.next();
   }
 
   onSubnetChange(subnet: string): void {
     this._nodeDataService.nodeData.spec.cloud.aws.subnetID = subnet;
     this._nodeDataService.nodeData.spec.cloud.aws.availabilityZone = this._getAZFromSubnet(subnet);
+    this._nodeDataService.nodeDataChanges.next();
   }
 
   onDiskTypeChange(diskType: string): void {
     this._nodeDataService.nodeData.spec.cloud.aws.volumeType = diskType;
+    this._nodeDataService.nodeDataChanges.next();
+  }
+
+  private _init(): void {
+    if (this._nodeDataService.nodeData.spec.cloud.aws) {
+      this.selectedSize = this._nodeDataService.nodeData.spec.cloud.aws.instanceType;
+      this.selectedSubnet = this._nodeDataService.nodeData.spec.cloud.aws.subnetID;
+
+      this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.aws.diskSize);
+      this.form.get(Controls.DiskType).setValue(this._nodeDataService.nodeData.spec.cloud.aws.volumeType);
+    }
   }
 
   private get _sizesObservable(): Observable<AWSSize[]> {
@@ -178,12 +192,14 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   private _setDefaultSize(sizes: AWSSize[]): void {
     this.sizes = sizes;
-    if (this.sizes.length > 0) {
+
+    if (!this.selectedSize && this.sizes.length > 0) {
       const cheapestInstance = this.sizes.reduce((prev, curr) => (prev.price < curr.price ? prev : curr));
       this.selectedSize = cheapestInstance.name;
-      this.sizeLabel = SizeState.Ready;
-      this._cdr.detectChanges();
     }
+
+    this.sizeLabel = this.selectedSize ? SizeState.Ready : SizeState.Empty;
+    this._cdr.detectChanges();
   }
 
   private _setDefaultSubnet(subnets: AWSSubnet[]): void {
@@ -193,11 +209,16 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
     this._subnets = subnets;
     this._subnetMap = {};
-    const defaultSubnet = this._subnets.find(s => s.isDefaultSubnet);
-    this.selectedSubnet = defaultSubnet ? defaultSubnet.id : this._subnets[0].id;
+
+    if (!this.selectedSubnet && this._subnets.length > 0) {
+      const defaultSubnet = this._subnets.find(s => s.isDefaultSubnet);
+      this.selectedSubnet = defaultSubnet ? defaultSubnet.id : this._subnets[0].id;
+    }
+
     this.subnetLabel = this._subnets.length ? SubnetState.Ready : SubnetState.Empty;
-    this._cdr.detectChanges();
     this._initSubnetMap();
+    this.onSubnetChange(this.selectedSubnet);
+    this._cdr.detectChanges();
   }
 
   private _clearSize(): void {

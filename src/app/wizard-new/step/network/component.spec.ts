@@ -18,7 +18,7 @@ import {Auth, DatacenterService, PresetsService} from '../../../core/services';
 import {NODE_DATA_CONFIG, NodeDataMode} from '../../../node-data-new/config';
 import {NodeDataService} from '../../../node-data-new/service/service';
 import {SharedModule} from '../../../shared/shared.module';
-import {ClusterService} from '../../service/cluster';
+import {ClusterService} from '../../../shared/services/cluster.service';
 import {WizardService} from '../../service/wizard';
 import {MachineNetworkStepComponent} from './component';
 import {AppConfigService} from '../../../app-config.service';

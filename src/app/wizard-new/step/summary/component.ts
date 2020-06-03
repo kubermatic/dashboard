@@ -23,8 +23,8 @@ import {getIpCount} from '../../../shared/functions/get-ip-count';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../shared/model/NodeSpecChange';
 import {AdmissionPluginUtils} from '../../../shared/utils/admission-plugin-utils/admission-plugin-utils';
-import {ClusterService} from '../../service/cluster';
 import {getOperatingSystem, getOperatingSystemLogoClass} from '../../../shared/entity/node';
+import {ClusterService} from '../../../shared/services/cluster.service';
 
 @Component({
   selector: 'km-wizard-summary-step',

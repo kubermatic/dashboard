@@ -72,15 +72,15 @@ export class ApiService {
 
   // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
   createMachineDeployment(
-    cluster: Cluster,
     md: MachineDeployment,
+    clusterID: string,
     seed: string,
     projectID: string
   ): Observable<MachineDeployment> {
     md.spec.template.labels = LabelFormComponent.filterNullifiedKeys(md.spec.template.labels);
     md.spec.template.taints = TaintFormComponent.filterNullifiedTaints(md.spec.template.taints);
 
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster.id}/nodedeployments`;
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/nodedeployments`;
     return this._http.post<MachineDeployment>(url, md);
   }
 
@@ -121,13 +121,13 @@ export class ApiService {
 
   // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
   patchMachineDeployment(
-    md: MachineDeployment,
     patch: MachineDeploymentPatch,
+    machineDeploymentId: string,
     clusterId: string,
     seed: string,
     projectID: string
   ): Observable<MachineDeployment> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterId}/nodedeployments/${md.id}`;
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterId}/nodedeployments/${machineDeploymentId}`;
     return this._http.patch<MachineDeployment>(url, patch);
   }
 

@@ -16,8 +16,8 @@ import {switchMap, takeUntil} from 'rxjs/operators';
 import {PresetsService} from '../../../../core/services';
 import {Cluster} from '../../../../shared/entity/cluster';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../service/cluster';
 import {PresetList} from '../../../../shared/entity/preset';
+import {ClusterService} from '../../../../shared/services/cluster.service';
 
 export enum Controls {
   Preset = 'name',

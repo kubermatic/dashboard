@@ -13,11 +13,11 @@ import {Inject, Injectable} from '@angular/core';
 import * as _ from 'lodash';
 import {ReplaySubject} from 'rxjs';
 
-import {DatacenterService, PresetsService} from '../../core/services';
+import {ApiService, DatacenterService, PresetsService, ProjectService} from '../../core/services';
 import {OperatingSystemSpec, Taint} from '../../shared/entity/node';
 import {OperatingSystem} from '../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../shared/model/NodeSpecChange';
-import {ClusterService} from '../../wizard-new/service/cluster';
+import {ClusterService} from '../../shared/services/cluster.service';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../config';
 
 import {NodeDataAlibabaProvider} from './provider/alibaba';
@@ -41,7 +41,9 @@ export class NodeDataService {
     @Inject(NODE_DATA_CONFIG) config: NodeDataConfig,
     private readonly _presetService: PresetsService,
     private readonly _datacenterService: DatacenterService,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterService: ClusterService,
+    private readonly _apiService: ApiService,
+    private readonly _projectService: ProjectService
   ) {
     this._config = config;
   }
@@ -92,15 +94,42 @@ export class NodeDataService {
     return this.mode === NodeDataMode.Wizard;
   }
 
+  reset(): void {
+    this._nodeData = NodeData.NewEmptyNodeData();
+  }
+
   readonly alibaba = new NodeDataAlibabaProvider(
     this,
     this._clusterService,
     this._presetService,
+    this._datacenterService,
+    this._apiService,
+    this._projectService
+  );
+  readonly aws = new NodeDataAWSProvider(
+    this,
+    this._clusterService,
+    this._presetService,
+    this._apiService,
+    this._projectService,
     this._datacenterService
   );
-  readonly aws = new NodeDataAWSProvider(this, this._clusterService, this._presetService, this._datacenterService);
-  readonly azure = new NodeDataAzureProvider(this, this._clusterService, this._presetService, this._datacenterService);
-  readonly digitalOcean = new NodeDataDigitalOceanProvider(this, this._clusterService, this._presetService);
+  readonly azure = new NodeDataAzureProvider(
+    this,
+    this._clusterService,
+    this._presetService,
+    this._apiService,
+    this._projectService,
+    this._datacenterService
+  );
+  readonly digitalOcean = new NodeDataDigitalOceanProvider(
+    this,
+    this._clusterService,
+    this._presetService,
+    this._apiService,
+    this._projectService,
+    this._datacenterService
+  );
   readonly hetzner = new NodeDataHetznerProvider(this, this._clusterService, this._presetService);
   readonly packet = new NodeDataPacketProvider(this, this._clusterService, this._presetService);
   readonly gcp = new NodeDataGCPProvider(this, this._clusterService, this._presetService);

@@ -27,8 +27,8 @@ import {PresetsService} from '../../../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../../../service/cluster';
 import {GCPNetwork, GCPSubnetwork} from '../../../../../../shared/entity/provider/gcp';
+import {ClusterService} from '../../../../../../shared/services/cluster.service';
 
 enum Controls {
   Network = 'network',

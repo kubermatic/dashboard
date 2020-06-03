@@ -23,7 +23,7 @@ import {SSHKey} from '../../../../shared/entity/ssh-key';
 import {GroupConfig} from '../../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../../shared/utils/member-utils/member-utils';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../service/cluster';
+import {ClusterService} from '../../../../shared/services/cluster.service';
 
 enum Controls {
   Keys = 'keys',

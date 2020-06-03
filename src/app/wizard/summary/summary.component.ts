@@ -20,6 +20,7 @@ import {ClusterDatacenterForm, ClusterProviderForm} from '../../shared/model/Clu
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {getOperatingSystem, getOperatingSystemLogoClass} from '../../shared/entity/node';
 import {AdmissionPluginUtils} from '../../shared/utils/admission-plugin-utils/admission-plugin-utils';
+
 @Component({
   selector: 'km-summary',
   templateUrl: './summary.component.html',

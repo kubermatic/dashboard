@@ -20,7 +20,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {filter, switchMap, takeUntil} from 'rxjs/operators';
+import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
 import {AzureNodeSpec, NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
@@ -66,12 +66,25 @@ enum ZoneState {
 })
 export class AzureBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private _sizeChanges = new EventEmitter<boolean>();
+
   readonly Controls = Controls;
+
   sizes: AzureSizes[] = [];
   zones: Array<{name: string}> = [];
   sizeLabel = SizeState.Empty;
   zoneLabel = ZoneState.Empty;
   selectedSize = '';
+  selectedZone = '';
+
+  private get _sizesObservable(): Observable<AzureSizes[]> {
+    return this._nodeDataService.azure
+      .flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this))
+      .pipe(first());
+  }
+
+  private get _zonesObservable(): Observable<AzureZones> {
+    return this._nodeDataService.azure.zones(this._clearZone.bind(this), this._onZoneLoading.bind(this)).pipe(first());
+  }
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -89,11 +102,12 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
       [Controls.ImageID]: this._builder.control(''),
     });
 
+    this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(this._clearSize.bind(this));
-
     this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
+
+    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(this._clearSize.bind(this));
 
     this._sizeChanges
       .pipe(filter(hasValue => hasValue))
@@ -114,11 +128,13 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
   onSizeChange(size: string): void {
     this._nodeDataService.nodeData.spec.cloud.azure.size = size;
+    this._nodeDataService.nodeDataChanges.next();
     this._sizeChanges.emit(!!size);
   }
 
   onZoneChange(zone: string): void {
     this._nodeDataService.nodeData.spec.cloud.azure.zone = zone;
+    this._nodeDataService.nodeDataChanges.next();
   }
 
   getHint(control: Controls): string {
@@ -128,12 +144,13 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     }
   }
 
-  private get _sizesObservable(): Observable<AzureSizes[]> {
-    return this._nodeDataService.azure.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
-  }
+  private _init(): void {
+    if (this._nodeDataService.nodeData.spec.cloud.azure) {
+      this.selectedSize = this._nodeDataService.nodeData.spec.cloud.azure.size;
+      this.selectedZone = this._nodeDataService.nodeData.spec.cloud.azure.zone;
 
-  private get _zonesObservable(): Observable<AzureZones> {
-    return this._nodeDataService.azure.zones(this._clearZone.bind(this), this._onZoneLoading.bind(this));
+      this.form.get(Controls.ImageID).setValue(this._nodeDataService.nodeData.spec.cloud.azure.imageID);
+    }
   }
 
   private _onSizeLoading(): void {
@@ -163,20 +180,25 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
   private _setDefaultSize(sizes: AzureSizes[]): void {
     this.sizes = sizes;
-    this.selectedSize = '';
-    this.sizeLabel = SizeState.Empty;
 
-    if (this.sizes.length > 0) {
+    if (!this.selectedSize && this.sizes.length > 0) {
       this.selectedSize = this.sizes[0].name;
-      this.sizeLabel = SizeState.Ready;
     }
 
+    this.sizeLabel = this.selectedSize ? SizeState.Ready : SizeState.Empty;
     this._cdr.detectChanges();
   }
 
   private _setZones(zones: AzureZones): void {
-    this.zones = zones.zones.sort((a, b) => a.localeCompare(b)).map(zone => ({name: zone}));
-    this.zoneLabel = this.zones.length > 0 ? ZoneState.Ready : ZoneState.Empty;
+    if (zones && zones.zones) {
+      this.zones = zones.zones.sort((a, b) => a.localeCompare(b)).map(zone => ({name: zone}));
+    }
+
+    if (this.selectedZone) {
+      this.form.get(Controls.Zone).setValue(this.selectedZone);
+    }
+
+    this.zoneLabel = this.zones && this.zones.length > 0 ? ZoneState.Ready : ZoneState.Empty;
     this._cdr.detectChanges();
   }
 

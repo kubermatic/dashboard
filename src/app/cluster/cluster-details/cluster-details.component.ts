@@ -13,7 +13,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
-import {first, map, switchMap, takeUntil} from 'rxjs/operators';
+import {filter, first, map, switchMap, takeUntil, take} from 'rxjs/operators';
 
 import {AppConfigService} from '../../app-config.service';
 import {
@@ -184,7 +184,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.machineDeployments = machineDeployments;
           this.metrics = metrics;
           this.isMachineDeploymentLoadFinished = true;
-          this.upgrades = upgrades;
+          this.upgrades = upgrades || [];
           this.clusterBindings = this.createSimpleClusterBinding(clusterBindings);
           this.bindings = this.createSimpleBinding(bindings);
         },
@@ -260,12 +260,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   addNode(): void {
     this._node
       .showMachineDeploymentCreateDialog(this.nodes.length, this.cluster, this.projectID, this.seed)
-      .pipe(first())
-      .subscribe(isConfirmed => {
-        if (isConfirmed) {
-          this._clusterService.onClusterUpdate.next();
-        }
-      });
+      .pipe(take(1))
+      .subscribe(_ => this._clusterService.onClusterUpdate.next(),
+        _ => this._notificationService.error('There was an error during node deployment creation.')
+      );
   }
 
   isDeleteEnabled(): boolean {
@@ -279,12 +277,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.projectID = this.projectID;
     modal
       .afterClosed()
-      .pipe(first())
-      .subscribe(deleted => {
-        if (deleted) {
-          this._router.navigate(['/projects/' + this.projectID + '/clusters']);
-        }
-      });
+      .pipe(filter(deleted => deleted))
+      .pipe(take(1))
+      .subscribe(_ => this._router.navigate(['/projects/' + this.projectID + '/clusters']));
   }
 
   shareConfigDialog(): void {
