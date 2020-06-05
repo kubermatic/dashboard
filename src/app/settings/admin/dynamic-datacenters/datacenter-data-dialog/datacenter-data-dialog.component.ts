@@ -7,9 +7,9 @@ import * as countryCodeLookup from 'country-code-lookup';
 
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
 import {NodeProvider, NodeProviderConstants} from '../../../../shared/model/NodeProviderConstants';
-import {GlobalThemeService} from '../../../../core/services/global-theme/global-theme.service';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material/chips';
+import {ThemeInformerService} from '../../../../core/services/theme-informer/theme-informer.service';
 
 export interface DatacenterDataDialogConfig {
   title: string;
@@ -49,11 +49,11 @@ export class DatacenterDataDialogComponent implements OnInit {
   constructor(
     public _matDialogRef: MatDialogRef<DatacenterDataDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DatacenterDataDialogConfig,
-    private readonly _globalThemeService: GlobalThemeService
+    private readonly _themeInformerService: ThemeInformerService
   ) {}
 
   ngOnInit(): void {
-    this.editorOptions.theme = this._globalThemeService.isCurrentThemeDark ? 'vs-dark' : 'vs';
+    this.editorOptions.theme = this._themeInformerService.isCurrentThemeDark ? 'vs-dark' : 'vs';
 
     if (this.data.isEditing && !_.isEmpty(this.data.datacenter.spec.requiredEmailDomains)) {
       this.requiredEmailDomains = this.data.datacenter.spec.requiredEmailDomains;

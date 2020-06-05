@@ -4,7 +4,7 @@ import {BehaviorSubject} from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class GlobalThemeService {
+export class ThemeInformerService {
   readonly isCurrentThemeDark$ = new BehaviorSubject<boolean>(false);
 
   get isCurrentThemeDark(): boolean {

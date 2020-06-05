@@ -5,7 +5,7 @@ import {SettingsService} from '../../core/services/settings/settings.service';
 import {UserSettings} from '../../shared/entity/MemberEntity';
 import {ColorSchemeService} from './color-scheme';
 import {ThemeService} from './theme';
-import {GlobalThemeService} from '../../core/services/global-theme/global-theme.service';
+import {ThemeInformerService} from '../../core/services/theme-informer/theme-informer.service';
 
 @Injectable()
 export class ThemeManagerService {
@@ -20,7 +20,7 @@ export class ThemeManagerService {
     private readonly _colorSchemeService: ColorSchemeService,
     private readonly _themeService: ThemeService,
     private readonly _settingsService: SettingsService,
-    private readonly _globalThemeService: GlobalThemeService
+    private readonly _themeInformerService: ThemeInformerService
   ) {}
 
   // Force the initial theme load during application start.
@@ -38,7 +38,7 @@ export class ThemeManagerService {
     this._getLinkElementForTheme(themeName).setAttribute('href', this._themesPath(themeName));
     this._selectedTheme = themeName;
 
-    this._globalThemeService.isCurrentThemeDark$.next(this._isThemeDark(themeName));
+    this._themeInformerService.isCurrentThemeDark$.next(this._isThemeDark(themeName));
   }
 
   private _isThemeDark(name: string): boolean {
