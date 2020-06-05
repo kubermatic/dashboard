@@ -1,5 +1,5 @@
 import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
-import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
+import {filter, first, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {CreateDatacenterModel, DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
@@ -61,14 +61,21 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
       }
     };
 
-    this._datacenterService.datacenters.pipe(takeUntil(this._unsubscribe)).subscribe(datacenters => {
-      this.datacenters = datacenters
-        .filter(datacenter => !datacenter.seed)
-        .sort((a, b) => a.metadata.name.localeCompare(b.metadata.name));
-      this._setSeeds();
-      this._setCountries();
-      this.filter();
-    });
+    this._datacenterService.datacenters
+      .pipe(
+        map((datacenters: DataCenterEntity[]) =>
+          datacenters
+            .filter(datacenter => !datacenter.seed)
+            .sort((a, b) => a.metadata.name.localeCompare(b.metadata.name))
+        ),
+        tap(datacenters => this._setSeeds(datacenters)),
+        tap(datacenters => this._setCountries(datacenters))
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(datacenters => {
+        this.datacenters = datacenters;
+        this.filter();
+      });
 
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
@@ -98,14 +105,14 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
     return country ? country.country : code;
   }
 
-  private _setCountries() {
-    this.countries = Array.from(new Set(this.datacenters.map(datacenter => datacenter.spec.country))).sort((a, b) =>
+  private _setCountries(datacenters: DataCenterEntity[]) {
+    this.countries = Array.from(new Set(datacenters.map(datacenter => datacenter.spec.country))).sort((a, b) =>
       a.localeCompare(b)
     );
   }
 
-  private _setSeeds() {
-    this.seeds = Array.from(new Set(this.datacenters.map(datacenter => datacenter.spec.seed))).sort((a, b) =>
+  private _setSeeds(datacenters: DataCenterEntity[]) {
+    this.seeds = Array.from(new Set(datacenters.map(datacenter => datacenter.spec.seed))).sort((a, b) =>
       a.localeCompare(b)
     );
   }
