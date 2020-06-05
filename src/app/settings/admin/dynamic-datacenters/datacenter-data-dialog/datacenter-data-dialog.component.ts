@@ -70,7 +70,7 @@ export class DatacenterDataDialogComponent implements OnInit {
       ),
       country: new FormControl(this.data.isEditing ? this.data.datacenter.spec.country : '', [Validators.required]),
       location: new FormControl(this.data.isEditing ? this.data.datacenter.spec.location : '', [Validators.required]),
-      requiredEmailDomains: new FormControl(this.requiredEmailDomains),
+      requiredEmailDomains: new FormControl(),
       enforcePodSecurityPolicy: new FormControl(
         this.data.isEditing && this.data.datacenter.spec.enforcePodSecurityPolicy
       ),

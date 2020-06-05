@@ -1,6 +1,6 @@
 import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
 import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {CreateDatacenterModel, DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
@@ -143,9 +143,22 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
       .open(DatacenterDataDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(first())
-      .subscribe((result: DataCenterEntity) => {
-        // eslint-disable-next-line no-console
-        console.log(result);
+      .subscribe((result: DataCenterEntity) => this._add(result));
+  }
+
+  private _add(datacenter: DataCenterEntity): void {
+    const model: CreateDatacenterModel = {
+      name: datacenter.metadata.name,
+      spec: datacenter.spec,
+    };
+
+    this._datacenterService
+      .createDatacenter(model)
+      .pipe(filter(datacenter => !!datacenter))
+      .pipe(first())
+      .subscribe(datacenter => {
+        this._notificationService.success(`The <strong>${datacenter.metadata.name}</strong> datacenter was created`);
+        this._datacenterService.refreshDatacenters();
       });
   }
 
