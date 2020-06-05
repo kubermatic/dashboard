@@ -176,9 +176,17 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
       .open(DatacenterDataDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(first())
-      .subscribe((result: DataCenterEntity) => {
-        // eslint-disable-next-line no-console
-        console.log(result);
+      .subscribe((result: DataCenterEntity) => this._edit(datacenter, result));
+  }
+
+  private _edit(original: DataCenterEntity, edited: DataCenterEntity): void {
+    this._datacenterService
+      .patchDatacenter(original.spec.seed, original.metadata.name, edited)
+      .pipe(filter(datacenter => !!datacenter))
+      .pipe(first())
+      .subscribe(datacenter => {
+        this._notificationService.success(`The <strong>${datacenter.metadata.name}</strong> datacenter was updated`);
+        this._datacenterService.refreshDatacenters();
       });
   }
 

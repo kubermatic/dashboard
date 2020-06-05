@@ -63,7 +63,10 @@ export class DatacenterDataDialogComponent implements OnInit {
 
     this.form = new FormGroup({
       name: new FormControl(this.data.isEditing ? this.data.datacenter.metadata.name : '', [Validators.required]),
-      provider: new FormControl(this.data.isEditing ? this.data.datacenter.spec.provider : '', [Validators.required]),
+      provider: new FormControl(
+        {value: this.data.isEditing ? this.data.datacenter.spec.provider : '', disabled: this.data.isEditing},
+        [Validators.required]
+      ),
       seed: new FormControl(
         {value: this.data.isEditing ? this.data.datacenter.spec.seed : '', disabled: this.data.isEditing},
         [Validators.required]
