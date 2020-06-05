@@ -70,7 +70,7 @@
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
     "@types/jest": "25.2.3",
     "@types/lodash": "4.14.155",
-    "@types/node": "14.0.10",
+    "@types/node": "14.0.11",
     "cypress": "4.6.0",
     "eslint-plugin-rxjs": "0.0.2-beta.24",
     "gts": "2.0.2",
