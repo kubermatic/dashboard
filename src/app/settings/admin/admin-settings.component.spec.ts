@@ -18,6 +18,8 @@ import {CustomLinksFormComponent} from './custom-link-form/custom-links-form.com
 import {ClusterType} from '../../shared/entity/ClusterEntity';
 import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
 import {AddAdminDialogComponent} from './admins/add-admin-dialog/add-admin-dialog.component';
+import {DynamicDatacentersComponent} from './dynamic-datacenters/dynamic-datacenters.component';
+import {AdminsComponent} from './admins/admins.component';
 
 describe('AdminSettingsComponent', () => {
   let fixture: ComponentFixture<AdminSettingsComponent>;
@@ -26,7 +28,13 @@ describe('AdminSettingsComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [BrowserModule, RouterTestingModule, BrowserAnimationsModule, SharedModule],
-      declarations: [AdminSettingsComponent, AddAdminDialogComponent, CustomLinksFormComponent],
+      declarations: [
+        AdminSettingsComponent,
+        DynamicDatacentersComponent,
+        AdminsComponent,
+        AddAdminDialogComponent,
+        CustomLinksFormComponent,
+      ],
       providers: [
         {provide: UserService, useClass: UserMockService},
         {provide: SettingsService, useClass: SettingsMockService},

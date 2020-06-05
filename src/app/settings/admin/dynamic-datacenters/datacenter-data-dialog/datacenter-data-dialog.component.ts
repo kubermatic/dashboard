@@ -35,12 +35,12 @@ export class DatacenterDataDialogComponent implements OnInit {
   editorOptions: any = {
     contextmenu: false,
     language: 'yaml',
+    lineNumbersMinChars: 4,
     minimap: {
       enabled: false,
     },
-    renderLineHighlight: 'none',
     scrollbar: {
-      verticalScrollbarSize: 5,
+      verticalScrollbarSize: 10,
       useShadows: false,
     },
     scrollBeyondLastLine: false,
