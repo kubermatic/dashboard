@@ -22,8 +22,8 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(
-    private addNodeService: NodeDataService,
-    private dcService: DatacenterService,
+    private readonly addNodeService: NodeDataService,
+    private readonly dcService: DatacenterService,
     private readonly _wizardService: WizardService
   ) {}
 
