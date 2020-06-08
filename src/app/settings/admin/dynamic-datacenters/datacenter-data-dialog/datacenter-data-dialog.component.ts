@@ -139,7 +139,7 @@ export class DatacenterDataDialogComponent implements OnInit {
     return !_.isEmpty(raw) ? raw : {};
   }
 
-  submit(): void {
+  save(): void {
     const datacenter: DataCenterEntity = {
       metadata: {
         name: this.form.controls.name.value,

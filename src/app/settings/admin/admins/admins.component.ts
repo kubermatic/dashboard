@@ -1,5 +1,5 @@
 import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
-import {filter, first, takeUntil} from 'rxjs/operators';
+import {filter, take, takeUntil} from 'rxjs/operators';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
@@ -50,7 +50,7 @@ export class AdminsComponent implements OnInit, OnChanges {
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
 
-    this._userService.loggedInUser.pipe(first()).subscribe(user => (this.user = user));
+    this._userService.loggedInUser.pipe(take(1)).subscribe(user => (this.user = user));
   }
 
   ngOnChanges(): void {
@@ -81,7 +81,7 @@ export class AdminsComponent implements OnInit, OnChanges {
       .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(_ => {
         admin.isAdmin = false;
         this._updateAdmin(admin);
@@ -91,7 +91,7 @@ export class AdminsComponent implements OnInit, OnChanges {
   private _updateAdmin(admin: AdminEntity): void {
     this._settingsService
       .setAdmin(admin)
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(`The <strong>${admin.name}</strong> user was deleted from admin group`);
         this._settingsService.refreshAdmins();
@@ -102,7 +102,7 @@ export class AdminsComponent implements OnInit, OnChanges {
     this._matDialog
       .open(AddAdminDialogComponent)
       .afterClosed()
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(admin => {
         if (admin) {
           this._settingsService.refreshAdmins();

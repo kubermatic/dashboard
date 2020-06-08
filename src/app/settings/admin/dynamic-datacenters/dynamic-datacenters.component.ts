@@ -1,5 +1,5 @@
 import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
-import {filter, first, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {CreateDatacenterModel, DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
@@ -149,7 +149,8 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
     this._matDialog
       .open(DatacenterDataDialogComponent, dialogConfig)
       .afterClosed()
-      .pipe(first())
+      .pipe(filter(datacenter => !!datacenter))
+      .pipe(take(1))
       .subscribe((result: DataCenterEntity) => this._add(result));
   }
 
@@ -161,8 +162,7 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
 
     this._datacenterService
       .createDatacenter(model)
-      .pipe(filter(datacenter => !!datacenter))
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(datacenter => {
         this._notificationService.success(`The <strong>${datacenter.metadata.name}</strong> datacenter was created`);
         this._datacenterService.refreshDatacenters();
@@ -182,15 +182,15 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
     this._matDialog
       .open(DatacenterDataDialogComponent, dialogConfig)
       .afterClosed()
-      .pipe(first())
+      .pipe(filter(datacenter => !!datacenter))
+      .pipe(take(1))
       .subscribe((result: DataCenterEntity) => this._edit(datacenter, result));
   }
 
   private _edit(original: DataCenterEntity, edited: DataCenterEntity): void {
     this._datacenterService
       .patchDatacenter(original.spec.seed, original.metadata.name, edited)
-      .pipe(filter(datacenter => !!datacenter))
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(datacenter => {
         this._notificationService.success(`The <strong>${datacenter.metadata.name}</strong> datacenter was updated`);
         this._datacenterService.refreshDatacenters();
@@ -211,7 +211,7 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
       .pipe(switchMap(_ => this._datacenterService.deleteDatacenter(datacenter)))
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(_ => {
         this._notificationService.success(`The <strong>${datacenter.metadata.name}</strong> datacenter was deleted`);
         this._datacenterService.refreshDatacenters();
