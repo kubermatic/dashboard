@@ -734,6 +734,21 @@
     }
   }
 
+  .monaco-editor {
+    box-shadow: 0 0 0 1px $divider;
+    border-radius: $border-radius;
+    overflow: hidden;
+    transition: all .2s ease;
+
+    &:hover {
+      box-shadow: 0 0 0 2px map-get($colors, secondary-hover);
+    }
+
+    &.focused {
+      box-shadow: 0 0 0 2px map-get($colors, primary-hover) !important;
+    }
+  }
+
   .km-code-block {
     background-color: $divider;
     border-radius: $baseline-grid / 1.5;

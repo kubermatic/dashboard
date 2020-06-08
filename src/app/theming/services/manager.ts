@@ -5,6 +5,7 @@ import {SettingsService} from '../../core/services/settings/settings.service';
 import {UserSettings} from '../../shared/entity/MemberEntity';
 import {ColorSchemeService} from './color-scheme';
 import {ThemeService} from './theme';
+import {ThemeInformerService} from '../../core/services/theme-informer/theme-informer.service';
 
 @Injectable()
 export class ThemeManagerService {
@@ -12,12 +13,14 @@ export class ThemeManagerService {
   private readonly _themesPath = themeName => `assets/themes/${themeName}.css`;
   private readonly _defaultTheme = 'light';
   private _selectedTheme = this._defaultTheme;
+  readonly systemDefaultOption = 'systemDefault';
 
   constructor(
     @Inject(DOCUMENT) private readonly _document: Document,
     private readonly _colorSchemeService: ColorSchemeService,
     private readonly _themeService: ThemeService,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
+    private readonly _themeInformerService: ThemeInformerService
   ) {}
 
   // Force the initial theme load during application start.
@@ -27,6 +30,10 @@ export class ThemeManagerService {
       .subscribe(settings => this.setTheme(this.getDefaultTheme(settings)));
   }
 
+  get isSystemDefaultThemeDark(): boolean {
+    return this._colorSchemeService.hasPreferredTheme() && this._colorSchemeService.getPreferredTheme().isDark;
+  }
+
   setTheme(themeName: string) {
     if (this._selectedTheme) {
       this._removeTheme(this._selectedTheme);
@@ -34,6 +41,17 @@ export class ThemeManagerService {
 
     this._getLinkElementForTheme(themeName).setAttribute('href', this._themesPath(themeName));
     this._selectedTheme = themeName;
+
+    this._themeInformerService.isCurrentThemeDark$.next(this._isThemeDark(themeName));
+  }
+
+  private _isThemeDark(name: string): boolean {
+    if (name === this.systemDefaultOption) {
+      return this.isSystemDefaultThemeDark;
+    }
+
+    const selectedThemeObject = this._themeService.themes.find(theme => theme.name === name);
+    return selectedThemeObject ? selectedThemeObject.isDark : false;
   }
 
   /**

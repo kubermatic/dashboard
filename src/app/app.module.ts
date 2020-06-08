@@ -25,6 +25,7 @@ import {AddServiceAccountTokenComponent} from './serviceaccount/serviceaccount-t
 import {EditServiceAccountTokenComponent} from './serviceaccount/serviceaccount-token/edit-serviceaccount-token/edit-serviceaccount-token.component';
 import {TokenDialogComponent} from './serviceaccount/serviceaccount-token/token-dialog/token-dialog.component';
 import {SharedModule} from './shared/shared.module';
+import {MonacoEditorModule} from 'ngx-monaco-editor';
 
 const appInitializerFn = (
   appConfigService: AppConfigService,
@@ -51,6 +52,7 @@ const appearance: MatFormFieldDefaultOptions = {
     SharedModule,
     BrowserModule,
     environment.animations ? BrowserAnimationsModule : NoopAnimationsModule,
+    MonacoEditorModule.forRoot(),
     AppRoutingModule,
     RouterModule,
   ],

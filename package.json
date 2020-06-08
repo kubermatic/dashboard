@@ -50,12 +50,14 @@
     "flag-icon-css": "3.4.6",
     "git-describe": "4.0.4",
     "jquery": "3.5.1",
+    "js-yaml": "3.14.0",
     "lodash": "4.17.15",
     "moment": "2.26.0",
     "ngx-clipboard": "13.0.1",
     "ngx-cookie-service": "3.0.4",
     "ngx-custom-validators": "9.1.0",
     "ngx-filter-pipe": "2.1.2",
+    "ngx-monaco-editor": "9.0.0",
     "rxjs": "6.5.5",
     "rxjs-compat": "6.5.5",
     "semver": "7.3.2",
@@ -69,6 +71,7 @@
     "@angular/compiler-cli": "9.1.4",
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
     "@types/jest": "25.2.3",
+    "@types/js-yaml": "^3.12.4",
     "@types/lodash": "4.14.155",
     "@types/node": "14.0.11",
     "cypress": "4.7.0",
@@ -100,7 +103,9 @@
       "sourceType": "module"
     },
     "extends": "./node_modules/gts/",
-    "plugins": ["rxjs"],
+    "plugins": [
+      "rxjs"
+    ],
     "rules": {
       "@typescript-eslint/no-namespace": "off",
       "@typescript-eslint/no-unused-vars": "off",
@@ -124,10 +129,11 @@
     },
     "overrides": [
       {
-        "files": ["cypress/**/*.ts"],
+        "files": [
+          "cypress/**/*.ts"
+        ],
         "parser": "@typescript-eslint/parser",
         "parserOptions": {
-
           "ecmaVersion": 2019,
           "project": "./cypress/tsconfig.e2e.json",
           "sourceType": "module"
@@ -138,7 +144,9 @@
         }
       },
       {
-        "files": ["src/**/*.spec.ts"],
+        "files": [
+          "src/**/*.spec.ts"
+        ],
         "env": {
           "browser": true,
           "jest": true
@@ -180,9 +188,14 @@
       "no-descending-specificity": null,
       "number-leading-zero": null,
       "selector-type-no-unknown": null,
-      "selector-pseudo-element-no-unknown": [true, {
-        "ignorePseudoElements": ["ng-deep"]
-      }]
+      "selector-pseudo-element-no-unknown": [
+        true,
+        {
+          "ignorePseudoElements": [
+            "ng-deep"
+          ]
+        }
+      ]
     }
   }
 }
