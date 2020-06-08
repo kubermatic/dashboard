@@ -6,11 +6,11 @@
       <mat-label>Name</mat-label>
       <input required
              matInput
-             formControlName="name"
+             [formControlName]="controls.Name"
              type="text"
              autocomplete="off"
              cdkFocusInitial>
-      <mat-error *ngIf="form.controls.name.hasError('required')">
+      <mat-error *ngIf="form.get(controls.Name).hasError('required')">
         Name is <strong>required</strong>.
       </mat-error>
     </mat-form-field>
@@ -19,13 +19,13 @@
       <mat-label>Provider</mat-label>
       <mat-select required
                   disableOptionCentering
-                  formControlName="provider">
+                  [formControlName]="controls.Provider">
         <mat-option *ngFor="let provider of providers"
                     [value]="provider">
           {{getProviderName(provider)}}
         </mat-option>
       </mat-select>
-      <mat-error *ngIf="form.controls.provider.hasError('required')">
+      <mat-error *ngIf="form.get(controls.Provider).hasError('required')">
         Provider is <strong>required</strong>.
       </mat-error>
     </mat-form-field>
@@ -34,10 +34,10 @@
       <mat-label>Seed</mat-label>
       <input required
              matInput
-             formControlName="seed"
+             [formControlName]="controls.Seed"
              type="text"
              autocomplete="off">
-      <mat-error *ngIf="form.controls.seed.hasError('required')">
+      <mat-error *ngIf="form.get(controls.Seed).hasError('required')">
         Seed is <strong>required</strong>.
       </mat-error>
     </mat-form-field>
@@ -46,15 +46,15 @@
       <mat-label>Country</mat-label>
       <mat-select required
                   disableOptionCentering
-                  formControlName="country">
+                  [formControlName]="controls.Country">
         <mat-select-trigger fxFlex
                             fxLayout="row">
           <div fxFlex
                fxLayoutAlign="start"
                fxLayoutGap="6px">
-            <ng-container *ngIf="form.controls.country.value">
-              <span class="flag-icon flag-icon-{{form.controls.country.value.toLowerCase()}}"></span>
-              <span>{{getCountryName(form.controls.country.value)}}</span>
+            <ng-container *ngIf="form.get(controls.Country).value">
+              <span class="flag-icon flag-icon-{{form.get(controls.Country).value.toLowerCase()}}"></span>
+              <span>{{getCountryName(form.get(controls.Country).value)}}</span>
             </ng-container>
           </div>
         </mat-select-trigger>
@@ -66,7 +66,7 @@
           </div>
         </mat-option>
       </mat-select>
-      <mat-error *ngIf="form.controls.country.hasError('required')">
+      <mat-error *ngIf="form.get(controls.Country).hasError('required')">
         Country is <strong>required</strong>.
       </mat-error>
     </mat-form-field>
@@ -75,10 +75,10 @@
       <mat-label>Location</mat-label>
       <input required
              matInput
-             formControlName="location"
+             [formControlName]="controls.Location"
              type="text"
              autocomplete="off">
-      <mat-error *ngIf="form.controls.location.hasError('required')">
+      <mat-error *ngIf="form.get(controls.Location).hasError('required')">
         Location is <strong>required</strong>.
       </mat-error>
     </mat-form-field>
@@ -94,7 +94,7 @@
           {{domain}}
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
-        <input formControlName="requiredEmailDomains"
+        <input [formControlName]="controls.RequiredEmailDomains"
                matChipInputAddOnBlur
                [matChipInputFor]="chipList"
                [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
@@ -103,8 +103,8 @@
       <mat-hint>Use commas or enter key as the separators.</mat-hint>
     </mat-form-field>
 
-    <mat-checkbox formControlName="enforcePodSecurityPolicy">Enforce Pod Security Policy</mat-checkbox>
-    <mat-checkbox formControlName="enforceAuditLogging">Enforce Audit Logging</mat-checkbox>
+    <mat-checkbox [formControlName]="controls.EnforcePodSecurityPolicy">Enforce Pod Security Policy</mat-checkbox>
+    <mat-checkbox [formControlName]="controls.EnforceAuditLogging">Enforce Audit Logging</mat-checkbox>
   </form>
 
   <div class="property-name">Provider Configuration</div>

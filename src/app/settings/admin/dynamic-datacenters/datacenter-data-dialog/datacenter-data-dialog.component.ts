@@ -20,12 +20,24 @@ export interface DatacenterDataDialogConfig {
   datacenter?: DataCenterEntity;
 }
 
+export enum Controls {
+  Name = 'name',
+  Provider = 'provider',
+  Seed = 'seed',
+  Country = 'country',
+  Location = 'location',
+  RequiredEmailDomains = 'requiredEmailDomains',
+  EnforcePodSecurityPolicy = 'enforcePodSecurityPolicy',
+  EnforceAuditLogging = 'enforceAuditLogging',
+}
+
 @Component({
   selector: 'km-add-admin-dialog',
   templateUrl: './datacenter-data-dialog.component.html',
   styleUrls: ['./datacenter-data-dialog.component.scss'],
 })
 export class DatacenterDataDialogComponent implements OnInit {
+  readonly controls = Controls;
   readonly separatorKeyCodes: number[] = [ENTER, COMMA];
   readonly countryCodes: string[] = countryCodeLookup.countries.map(country => country.iso2);
   readonly providers: string[] = Object.values(NodeProvider).filter(provider => !!provider);
@@ -133,13 +145,13 @@ export class DatacenterDataDialogComponent implements OnInit {
         name: this.form.controls.name.value,
       },
       spec: {
-        provider: this.form.controls.provider.value,
-        seed: this.form.controls.seed.value,
-        country: this.form.controls.country.value,
-        location: this.form.controls.location.value,
+        provider: this.form.get(Controls.Provider).value,
+        seed: this.form.get(Controls.Seed).value,
+        country: this.form.get(Controls.Country).value,
+        location: this.form.get(Controls.Location).value,
         requiredEmailDomains: this.requiredEmailDomains,
-        enforcePodSecurityPolicy: this.form.controls.enforcePodSecurityPolicy.value,
-        enforceAuditLogging: this.form.controls.enforceAuditLogging.value,
+        enforcePodSecurityPolicy: this.form.get(Controls.EnforcePodSecurityPolicy).value,
+        enforceAuditLogging: this.form.get(Controls.EnforceAuditLogging).value,
       },
       seed: false,
     };
