@@ -12,8 +12,8 @@ export class ThemeManagerService {
   private readonly _themeClassName = themeName => `km-style-${themeName}`;
   private readonly _themesPath = themeName => `assets/themes/${themeName}.css`;
   private readonly _defaultTheme = 'light';
-  private readonly _systemDefaultOption = 'systemDefault';
   private _selectedTheme = this._defaultTheme;
+  readonly systemDefaultOption = 'systemDefault';
 
   constructor(
     @Inject(DOCUMENT) private readonly _document: Document,
@@ -30,6 +30,10 @@ export class ThemeManagerService {
       .subscribe(settings => this.setTheme(this.getDefaultTheme(settings)));
   }
 
+  get isSystemDefaultThemeDark(): boolean {
+    return this._colorSchemeService.hasPreferredTheme() && this._colorSchemeService.getPreferredTheme().isDark;
+  }
+
   setTheme(themeName: string) {
     if (this._selectedTheme) {
       this._removeTheme(this._selectedTheme);
@@ -42,8 +46,8 @@ export class ThemeManagerService {
   }
 
   private _isThemeDark(name: string): boolean {
-    if (name === this._systemDefaultOption) {
-      return this._colorSchemeService.hasPreferredTheme() && this._colorSchemeService.getPreferredTheme().isDark;
+    if (name === this.systemDefaultOption) {
+      return this.isSystemDefaultThemeDark;
     }
 
     const selectedThemeObject = this._themeService.themes.find(theme => theme.name === name);
