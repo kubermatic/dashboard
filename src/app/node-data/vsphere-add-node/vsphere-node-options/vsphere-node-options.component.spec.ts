@@ -3,14 +3,16 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {DatacenterService} from '../../../core/services/datacenter/datacenter.service';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
-import {WizardService} from '../../../core/services/wizard/wizard.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeVSphereCluster} from '../../../testing/fake-data/cluster.fake';
 import {nodeDataFake} from '../../../testing/fake-data/node.fake';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 import {VSphereNodeOptionsComponent} from './vsphere-node-options.component';
+import {AuthMockService} from '../../../testing/services/auth-mock.service';
+import {Auth, WizardService, DatacenterService} from '../../../core/services';
+import {AppConfigService} from '../../../app-config.service';
+import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, ReactiveFormsModule, HttpClientModule];
 
@@ -22,7 +24,13 @@ describe('VSphereNodeOptionsComponent', () => {
     TestBed.configureTestingModule({
       imports: [...modules],
       declarations: [VSphereNodeOptionsComponent],
-      providers: [NodeDataService, WizardService, {provide: DatacenterService, useClass: DatacenterMockService}],
+      providers: [
+        NodeDataService,
+        WizardService,
+        {provide: DatacenterService, useClass: DatacenterMockService},
+        {provide: Auth, useClass: AuthMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+      ],
     }).compileComponents();
   }));
 

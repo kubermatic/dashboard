@@ -13,10 +13,15 @@ import {PacketDatacenterSpec} from './datacenter/PacketDatacenterSpec';
 import {VSphereDatacenterSpec} from './datacenter/VSphereDatacenterSpec';
 import {MetadataEntity} from './MetadataEntity';
 
+export class CreateDatacenterModel {
+  name: string;
+  spec: DatacenterSpec;
+}
+
 export class DataCenterEntity {
   metadata: MetadataEntity;
   spec: DatacenterSpec;
-  seed: boolean;
+  seed?: boolean;
 }
 
 export class DatacenterSpec {
@@ -24,6 +29,7 @@ export class DatacenterSpec {
   country: string;
   location: string;
   provider: string;
+  requiredEmailDomains?: string[];
   enforceAuditLogging: boolean;
   enforcePodSecurityPolicy: boolean;
 

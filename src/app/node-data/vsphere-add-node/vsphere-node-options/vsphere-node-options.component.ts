@@ -22,8 +22,8 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(
-    private addNodeService: NodeDataService,
-    private dcService: DatacenterService,
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _datacenterService: DatacenterService,
     private readonly _wizardService: WizardService
   ) {}
 
@@ -33,20 +33,20 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
       template: new FormControl(this.nodeData.spec.cloud.vsphere.template),
     });
 
-    this.dcService.getDatacenter(this.cloudSpec.dc).subscribe(res => {
+    this._datacenterService.getDatacenter(this.cloudSpec.dc).subscribe(res => {
       this.defaultTemplate = res.spec.vsphere.templates.ubuntu;
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
+      this._nodeDataService.changeNodeProviderData(this.getVSphereOptionsData());
     });
 
-    this.addNodeService.nodeOperatingSystemDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+    this._nodeDataService.nodeOperatingSystemDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
       this.setImage(data);
-      this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
+      this._nodeDataService.changeNodeProviderData(this.getVSphereOptionsData());
     });
 
-    this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
+    this._nodeDataService.changeNodeProviderData(this.getVSphereOptionsData());
     if (this.nodeData.spec.cloud.vsphere.template === '') {
       this.setImage(this.nodeData.spec.operatingSystem);
     }
@@ -62,7 +62,7 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
   }
 
   setImage(operatingSystem: OperatingSystemSpec): void {
-    this.dcService.getDatacenter(this.cloudSpec.dc).subscribe(res => {
+    this._datacenterService.getDatacenter(this.cloudSpec.dc).subscribe(res => {
       let coreosTemplate = '';
       let centosTemplate = '';
       let ubuntuTemplate = '';

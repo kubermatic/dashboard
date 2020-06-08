@@ -21,7 +21,8 @@
             "extractCss": true,
             "assets": [
               "src/assets",
-              "src/favicon.ico"
+              "src/favicon.ico",
+              { "glob": "**/*", "input": "node_modules/ngx-monaco-editor/assets/monaco", "output": "./assets/monaco/" }
             ],
             "stylePreprocessorOptions": {
               "includePaths": [

@@ -1,0 +1,121 @@
+<km-dialog-title>{{data.title}}</km-dialog-title>
+<mat-dialog-content>
+  <form [formGroup]="form"
+        fxLayout="column">
+    <mat-form-field fxFlex>
+      <mat-label>Name</mat-label>
+      <input required
+             matInput
+             [formControlName]="controls.Name"
+             type="text"
+             autocomplete="off"
+             cdkFocusInitial>
+      <mat-error *ngIf="form.get(controls.Name).hasError('required')">
+        Name is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>Provider</mat-label>
+      <mat-select required
+                  disableOptionCentering
+                  [formControlName]="controls.Provider">
+        <mat-option *ngFor="let provider of providers"
+                    [value]="provider">
+          {{getProviderName(provider)}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get(controls.Provider).hasError('required')">
+        Provider is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>Seed</mat-label>
+      <input required
+             matInput
+             [formControlName]="controls.Seed"
+             type="text"
+             autocomplete="off">
+      <mat-error *ngIf="form.get(controls.Seed).hasError('required')">
+        Seed is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>Country</mat-label>
+      <mat-select required
+                  disableOptionCentering
+                  [formControlName]="controls.Country">
+        <mat-select-trigger fxFlex
+                            fxLayout="row">
+          <div fxFlex
+               fxLayoutAlign="start"
+               fxLayoutGap="6px">
+            <ng-container *ngIf="form.get(controls.Country).value">
+              <span class="flag-icon flag-icon-{{form.get(controls.Country).value.toLowerCase()}}"></span>
+              <span>{{getCountryName(form.get(controls.Country).value)}}</span>
+            </ng-container>
+          </div>
+        </mat-select-trigger>
+        <mat-option *ngFor="let countryCode of countryCodes"
+                    [value]="countryCode">
+          <div fxLayoutGap="6px">
+            <span class="flag-icon flag-icon-{{countryCode.toLowerCase()}}"></span>
+            <span>{{getCountryName(countryCode)}}</span>
+          </div>
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get(controls.Country).hasError('required')">
+        Country is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>Location</mat-label>
+      <input required
+             matInput
+             [formControlName]="controls.Location"
+             type="text"
+             autocomplete="off">
+      <mat-error *ngIf="form.get(controls.Location).hasError('required')">
+        Location is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="domain-input">
+      <mat-label>Required Email Domains</mat-label>
+      <mat-chip-list #chipList
+                     class="km-chip-list-with-input">
+        <mat-chip *ngFor="let domain of requiredEmailDomains"
+                  removable
+                  (removed)="removeDomain(domain)"
+                  [selectable]="false">
+          {{domain}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input [formControlName]="controls.RequiredEmailDomains"
+               matChipInputAddOnBlur
+               [matChipInputFor]="chipList"
+               [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+               (matChipInputTokenEnd)="addDomain($event)">
+      </mat-chip-list>
+      <mat-hint>Use commas or enter key as the separators.</mat-hint>
+    </mat-form-field>
+
+    <mat-checkbox [formControlName]="controls.EnforcePodSecurityPolicy">Enforce Pod Security Policy</mat-checkbox>
+    <mat-checkbox [formControlName]="controls.EnforceAuditLogging">Enforce Audit Logging</mat-checkbox>
+  </form>
+
+  <div class="property-name">Provider Configuration</div>
+  <ngx-monaco-editor [options]="editorOptions"
+                     [(ngModel)]="providerConfig"></ngx-monaco-editor>
+  <mat-hint>Use YAML format. If not specified default configuration will be used.</mat-hint>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button
+          (click)="save()"
+          [disabled]="!form.valid">
+    {{data.confirmLabel}}
+  </button>
+</mat-dialog-actions>

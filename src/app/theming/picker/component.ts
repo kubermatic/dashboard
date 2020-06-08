@@ -21,7 +21,6 @@ export class StylePickerComponent implements OnInit {
   private readonly _unsubscribe = new Subject<void>();
   private readonly _debounceTime = 1000;
 
-  readonly systemDefaultOption = 'systemDefault';
   readonly isEqual = _.isEqual;
 
   apiSettings: UserSettings;
@@ -38,7 +37,7 @@ export class StylePickerComponent implements OnInit {
   }
 
   get isSystemDefaultThemeDark(): boolean {
-    return this._colorSchemeService.hasPreferredTheme() && this._colorSchemeService.getPreferredTheme().isDark;
+    return this._themeManageService.isSystemDefaultThemeDark;
   }
 
   private get _systemDefaultThemeName(): string {
@@ -71,10 +70,10 @@ export class StylePickerComponent implements OnInit {
 
     this._colorSchemeService.onColorSchemeUpdate.pipe(takeUntil(this._unsubscribe)).subscribe(theme => {
       if (this.settings && !this.settings.selectedTheme && this.hasPreferredTheme) {
-        this.selectedThemeOption = this.systemDefaultOption;
+        this.selectedThemeOption = this._themeManageService.systemDefaultOption;
       }
 
-      if (this.selectedThemeOption === this.systemDefaultOption) {
+      if (this.selectedThemeOption === this._themeManageService.systemDefaultOption) {
         this._themeManageService.setTheme(theme);
       }
 
@@ -91,15 +90,15 @@ export class StylePickerComponent implements OnInit {
   }
 
   private _getThemeForOption(option: string): string {
-    return option === this.systemDefaultOption ? this._systemDefaultThemeName : option;
+    return option === this._themeManageService.systemDefaultOption ? this._systemDefaultThemeName : option;
   }
 
   private _getUserThemeForOption(option: string): string {
-    return option === this.systemDefaultOption ? null : option;
+    return option === this._themeManageService.systemDefaultOption ? null : option;
   }
 
   private _selectTheme(themeName: string): void {
-    const expectedOption = themeName === undefined ? this.systemDefaultOption : themeName;
+    const expectedOption = themeName === undefined ? this._themeManageService.systemDefaultOption : themeName;
     if (this.selectedThemeOption !== expectedOption) {
       this.selectedThemeOption = expectedOption;
       this._themeManageService.setTheme(this._getThemeForOption(this.selectedThemeOption));
@@ -125,7 +124,7 @@ export class StylePickerComponent implements OnInit {
     this.selectedThemeOption = defaultTheme;
 
     if (settings && !settings.selectedTheme && this.hasPreferredTheme) {
-      this.selectedThemeOption = this.systemDefaultOption;
+      this.selectedThemeOption = this._themeManageService.systemDefaultOption;
     }
 
     this._themeManageService.setTheme(defaultTheme);
