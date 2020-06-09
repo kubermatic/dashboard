@@ -29,12 +29,12 @@
          fxLayoutGap="32px">
       <div fxLayout="row">
         <div fxFlex="16%"
-             fxLayoutAlign=" center">
-          <div fxLayout="row">
-            <span>Custom Links</span>
-            <div class="km-icon-info"
-                 matTooltip="Customize your theme or improve the workflow by adding links in the sidebar or footer."></div>
-          </div>
+             fxLayout="row"
+             fxLayoutAlign=" center"
+             class="entry-label">
+          <span>Custom Links</span>
+          <div class="km-icon-info"
+               matTooltip="Customize your theme or improve the workflow by adding links in the sidebar or footer."></div>
         </div>
         <div fxFlex
              fxLayout="column">
@@ -43,11 +43,14 @@
                                 (customLinksChange)="onSettingsChange()"></km-custom-links-form>
           <div fxLayout="row">
             <mat-checkbox [(ngModel)]="settings.displayAPIDocs"
-                          (change)="onSettingsChange()">Display API Docs</mat-checkbox>
+                          (change)="onSettingsChange()">Display API Docs
+            </mat-checkbox>
             <mat-checkbox [(ngModel)]="settings.displayTermsOfService"
-                          (change)="onSettingsChange()">Display Terms of Service</mat-checkbox>
+                          (change)="onSettingsChange()">Display Terms of Service
+            </mat-checkbox>
             <mat-checkbox [(ngModel)]="settings.displayDemoInfo"
-                          (change)="onSettingsChange()">Display Demo Information</mat-checkbox>
+                          (change)="onSettingsChange()">Display Demo Information
+            </mat-checkbox>
             <km-settings-status [isSaved]="isDisplayLinksEqual()"></km-settings-status>
           </div>
         </div>
@@ -55,7 +58,8 @@
 
       <div fxLayout="row">
         <div fxFlex="16%"
-             fxLayoutAlign=" center">
+             fxLayoutAlign=" center"
+             class="entry-label">
           <span>Cleanup on Cluster Deletion</span>
           <div class="km-icon-info"
                matTooltip="Set &quot;clean up connected load balancers&quot; and &quot;clean up connected volumes (PVs and PVCS)&quot; checkboxes on Cluster Deletion to enabled by default. Enable &quot;Enforce&quot; to make users unable to edit the checkboxes."></div>
@@ -64,10 +68,12 @@
              fxLayout="row">
           <mat-checkbox [(ngModel)]="settings.cleanupOptions.Enabled"
                         (change)="onSettingsChange()"
-                        fxFlexAlign=" center">Enable by Default</mat-checkbox>
+                        fxFlexAlign=" center">Enable by Default
+          </mat-checkbox>
           <mat-checkbox [(ngModel)]="settings.cleanupOptions.Enforced"
                         (change)="onSettingsChange()"
-                        fxFlexAlign=" center">Enforce</mat-checkbox>
+                        fxFlexAlign=" center">Enforce
+          </mat-checkbox>
           <km-settings-status [isSaved]="isEqual(settings.cleanupOptions, apiSettings.cleanupOptions)"></km-settings-status>
         </div>
       </div>
@@ -76,7 +82,7 @@
            class="km-admin-settings-distro-container">
         <div fxFlex="16%"
              fxLayoutAlign=" center"
-             fxLayoutGap="4px">
+             class="entry-label">
           <span>Displayed Distributions</span>
           <div class="km-icon-info"
                matTooltip="Deactivate the distributions you want to hide from the users. At least one distribution has to be enabled."></div>
@@ -109,7 +115,9 @@
 
       <div fxLayout="row">
         <div fxFlex="16%"
-             fxLayoutAlign=" center">Node Deployment</div>
+             fxLayoutAlign=" center"
+             class="entry-label">Node Deployment
+        </div>
         <mat-form-field class="km-admin-settings-field-nd km-no-padding">
           <input matInput
                  type="number"
@@ -124,7 +132,8 @@
 
       <div fxLayout="row">
         <div fxFlex="16%"
-             fxLayoutAlign=" center">
+             fxLayoutAlign=" center"
+             class="entry-label">
           <span>Enable Kubernetes Dashboard</span>
           <div class="km-icon-info"
                matTooltip="Show/Hide &quot;Open Dashboard&quot; button on cluster details and allow/block Kubernetes Dashboard access through the API."></div>
@@ -136,7 +145,8 @@
 
       <div fxLayout="row">
         <div fxFlex="16%"
-             fxLayoutAlign=" center">
+             fxLayoutAlign=" center"
+             class="entry-label">
           <span>Enable OIDC Kubeconfig</span>
           <div class="km-icon-info"
                matTooltip="Use OIDC provider as a proxy for kubeconfig download."></div>

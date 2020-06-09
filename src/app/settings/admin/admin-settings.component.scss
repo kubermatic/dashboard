@@ -14,8 +14,15 @@
   .km-admin-settings {
     font-size: $font-size-subhead;
 
-    .km-icon-info {
+    .entry-label {
+      min-width: 32 * $baseline-grid;
+    }
+
+    .km-icon-info,
+    .km-icon-warning {
+      min-height: 2 * $baseline-grid;
       margin-left: .5 * $baseline-grid;
+      min-width: 2 * $baseline-grid;
     }
 
     .km-account-settings-toggle {
