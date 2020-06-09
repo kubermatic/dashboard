@@ -14,7 +14,7 @@ import {
   UserService,
 } from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
-import {AddonEntity} from '../../shared/entity/AddonEntity';
+import {AddonEntity} from '../../shared/entity/addon';
 import {ClusterEntity, ClusterType, getClusterProvider, MasterVersion} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {EventEntity} from '../../shared/entity/EventEntity';

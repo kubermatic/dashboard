@@ -5,7 +5,7 @@ import {Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
 
 import {ApiService} from '../../../core/services';
-import {AddonConfigEntity, AddonEntity} from '../../entity/AddonEntity';
+import {AddonConfigEntity, AddonEntity, getAddonLogoData, hasAddonLogoData} from '../../entity/addon';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
 
 import {EditAddonDialogComponent} from './edit-addon-dialog/edit-addon-dialog.component';
@@ -75,15 +75,11 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   hasLogo(name: string): boolean {
-    const addonConfig = this.addonConfigs.get(name);
-    return !!addonConfig && !!addonConfig.spec.logo && !!addonConfig.spec.logoFormat;
+    return hasAddonLogoData(this.addonConfigs.get(name));
   }
 
   getAddonLogo(name: string): SafeUrl {
-    const addonConfig = this.addonConfigs.get(name);
-    return this._domSanitizer.bypassSecurityTrustUrl(
-      `data:image/${addonConfig.spec.logoFormat};base64,${addonConfig.spec.logo}`
-    );
+    return this._domSanitizer.bypassSecurityTrustUrl(getAddonLogoData(this.addonConfigs.get(name)));
   }
 
   canAdd(): boolean {

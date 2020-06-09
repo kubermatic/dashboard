@@ -3,7 +3,7 @@ import {defer, Observable, of, Subject} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
 
 import {ProviderSettingsPatch} from '../../core/services/cluster/cluster.service';
-import {AddonEntity} from '../../shared/entity/AddonEntity';
+import {AddonEntity} from '../../shared/entity/addon';
 import {ClusterEntity, MasterVersion} from '../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../shared/entity/ClusterEntityPatch';
 import {EventEntity} from '../../shared/entity/EventEntity';

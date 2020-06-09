@@ -3,7 +3,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
-import {AddonConfigEntity, AddonEntity} from '../../../entity/AddonEntity';
+import {AddonConfigEntity, AddonEntity, getAddonLogoData, hasAddonLogoData} from '../../../entity/addon';
 import {InstallAddonDialogComponent} from '../install-addon-dialog/install-addon-dialog.component';
 
 @Component({
@@ -33,13 +33,11 @@ export class EditAddonDialogComponent implements OnInit {
   }
 
   hasLogo(): boolean {
-    return !!this.addonConfig && !!this.addonConfig.spec.logo && !!this.addonConfig.spec.logoFormat;
+    return hasAddonLogoData(this.addonConfig);
   }
 
   getAddonLogo(): SafeUrl {
-    return this._domSanitizer.bypassSecurityTrustUrl(
-      `data:image/${this.addonConfig.spec.logoFormat};base64,${this.addonConfig.spec.logo}`
-    );
+    return this._domSanitizer.bypassSecurityTrustUrl(getAddonLogoData(this.addonConfig));
   }
 
   private _getAddonPatch(): AddonEntity {
