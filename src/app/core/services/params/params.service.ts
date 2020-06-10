@@ -5,6 +5,8 @@ import {filter, switchMap} from 'rxjs/operators';
 
 export enum PathParam {
   ProjectID = 'projectID',
+  ClusterID = 'clusterName',
+  SeedDC = 'seedDc',
 }
 
 @Injectable()
