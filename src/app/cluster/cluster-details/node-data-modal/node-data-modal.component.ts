@@ -9,7 +9,7 @@ import {NodeDataService} from '../../../core/services/node-data/node-data.servic
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
+import {NodeDeployment} from '../../../shared/entity/node-deployment';
 import {
   getEmptyNodeProviderSpec,
   getEmptyNodeVersionSpec,
@@ -28,7 +28,7 @@ export interface NodeDataModalData {
   // Fields specific for edit mode (not required if using dialog to add new nodes).
   editMode?: boolean;
   nodeData?: NodeData;
-  nodeDeployment?: NodeDeploymentEntity;
+  nodeDeployment?: NodeDeployment;
 }
 
 @Component({
@@ -37,7 +37,7 @@ export interface NodeDataModalData {
   styleUrls: ['./node-data-modal.component.scss'],
 })
 export class NodeDataModalComponent implements OnInit, OnDestroy {
-  @Output() editNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
+  @Output() editNodeDeployment = new EventEmitter<NodeDeployment>();
   nodeDC: DataCenterEntity;
   seedDC: DataCenterEntity;
   isExtended = false;

@@ -13,7 +13,7 @@ import {CloudSpec, ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
 import {MemberEntity} from '../../shared/entity/MemberEntity';
-import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
+import {NodeDeployment} from '../../shared/entity/node-deployment';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {GroupConfig} from '../../shared/model/Config';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
@@ -31,7 +31,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   nodeDC: DataCenterEntity[] = [];
   seedDC: DataCenterEntity[] = [];
   health: HealthEntity[] = [];
-  nodeDeployments: NodeDeploymentEntity[][] = [];
+  nodeDeployments: NodeDeployment[][] = [];
   provider = [];
   displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'region', 'type', 'created', 'actions'];
   dataSource = new MatTableDataSource<ClusterEntity>();

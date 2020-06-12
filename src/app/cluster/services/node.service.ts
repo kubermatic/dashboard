@@ -10,8 +10,7 @@ import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
-import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
-import {NodeDeploymentPatch} from '../../shared/entity/NodeDeploymentPatch';
+import {NodeDeployment, NodeDeploymentPatch} from '../../shared/entity/node-deployment';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {NodeDataModalComponent, NodeDataModalData} from '../cluster-details/node-data-modal/node-data-modal.component';
 
@@ -19,7 +18,7 @@ import {NodeDataModalComponent, NodeDataModalData} from '../cluster-details/node
 export class NodeService {
   private readonly _notificationService: NotificationService;
 
-  private static _getNodeDeploymentEntity(nodeData: NodeData): NodeDeploymentEntity {
+  private static _getNodeDeploymentEntity(nodeData: NodeData): NodeDeployment {
     return {
       name: nodeData.name,
       spec: {
@@ -100,11 +99,11 @@ export class NodeService {
   }
 
   showNodeDeploymentEditDialog(
-    nd: NodeDeploymentEntity,
+    nd: NodeDeployment,
     cluster: ClusterEntity,
     projectID: string,
     datacenter: DataCenterEntity,
-    changeEventEmitter: EventEmitter<NodeDeploymentEntity>
+    changeEventEmitter: EventEmitter<NodeDeployment>
   ): Observable<boolean> {
     const dialogRef = this._matDialog.open(NodeDataModalComponent, {
       data: {
@@ -128,7 +127,7 @@ export class NodeService {
       .afterClosed()
       .pipe(
         flatMap(
-          (data: NodeDataModalData): Observable<NodeDeploymentEntity> => {
+          (data: NodeDataModalData): Observable<NodeDeployment> => {
             if (data) {
               return this._apiService
                 .patchNodeDeployment(
@@ -155,7 +154,7 @@ export class NodeService {
       )
       .pipe(
         flatMap(
-          (nd: NodeDeploymentEntity): Observable<boolean> => {
+          (nd: NodeDeployment): Observable<boolean> => {
             if (nd) {
               this._notificationService.success(`The <strong>${nd.name}</strong> node deployment was updated`);
               this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdated');
@@ -172,11 +171,11 @@ export class NodeService {
   }
 
   showNodeDeploymentDeleteDialog(
-    nd: NodeDeploymentEntity,
+    nd: NodeDeployment,
     clusterID: string,
     projectID: string,
     dcName: string,
-    changeEventEmitter: EventEmitter<NodeDeploymentEntity>
+    changeEventEmitter: EventEmitter<NodeDeployment>
   ): Observable<boolean> {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,

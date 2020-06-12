@@ -21,7 +21,7 @@ import {EventEntity} from '../../shared/entity/EventEntity';
 import {HealthEntity, HealthState} from '../../shared/entity/HealthEntity';
 import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {ClusterMetrics} from '../../shared/entity/Metrics';
-import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
+import {NodeDeployment} from '../../shared/entity/node-deployment';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '../../shared/entity/RBACEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
@@ -48,7 +48,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   datacenter: DataCenterEntity;
   sshKeys: SSHKeyEntity[] = [];
   nodes: NodeEntity[] = [];
-  nodeDeployments: NodeDeploymentEntity[];
+  nodeDeployments: NodeDeployment[];
   isNodeDeploymentLoadFinished = false;
   isClusterRunning = false;
   isClusterAPIRunning = false;
@@ -170,7 +170,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           Binding[],
           AddonEntity[],
           NodeEntity[],
-          NodeDeploymentEntity[],
+          NodeDeployment[],
           ClusterMetrics
         ]) => {
           this.addons = addons;

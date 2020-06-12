@@ -4,7 +4,7 @@ import {async} from 'rxjs-compat/scheduler/async';
 
 import {ClusterEntity, MasterVersion, Token} from '../../shared/entity/ClusterEntity';
 import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity';
-import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
+import {NodeDeployment} from '../../shared/entity/node-deployment';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {PacketSize} from '../../shared/entity/packet/PacketSizeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
@@ -59,7 +59,7 @@ export class ApiMockService {
     return of([]);
   }
 
-  getNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeploymentEntity[]> {
+  getNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeployment[]> {
     return of(nodeDeploymentsFake());
   }
 

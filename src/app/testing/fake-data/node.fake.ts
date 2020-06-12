@@ -1,4 +1,4 @@
-import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
+import {NodeDeployment} from '../../shared/entity/node-deployment';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 
@@ -137,7 +137,7 @@ export function nodeAWSFake(): NodeEntity {
   };
 }
 
-export function nodeDeploymentsFake(): NodeDeploymentEntity[] {
+export function nodeDeploymentsFake(): NodeDeployment[] {
   return [
     {
       id: 'machine-deployment-324343dfs-sdfsd',

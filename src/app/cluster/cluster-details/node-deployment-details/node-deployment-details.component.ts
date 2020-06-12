@@ -10,7 +10,7 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {EventEntity} from '../../../shared/entity/EventEntity';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {NodeMetrics} from '../../../shared/entity/Metrics';
-import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
+import {NodeDeployment} from '../../../shared/entity/node-deployment';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {GroupConfig} from '../../../shared/model/Config';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
@@ -24,7 +24,7 @@ import {NodeService} from '../../services/node.service';
   styleUrls: ['./node-deployment-details.component.scss'],
 })
 export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
-  nodeDeployment: NodeDeploymentEntity;
+  nodeDeployment: NodeDeployment;
   nodeDeploymentHealthStatus: NodeDeploymentHealthStatus;
   nodes: NodeEntity[] = [];
   events: EventEntity[] = [];
@@ -90,7 +90,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     this._apiService
       .getNodeDeployment(this._nodeDeploymentID, this._clusterName, this.dcName, this.projectID)
       .pipe(first())
-      .subscribe((nd: NodeDeploymentEntity) => {
+      .subscribe((nd: NodeDeployment) => {
         this.nodeDeployment = nd;
         this.system = NodeUtils.getOperatingSystem(this.nodeDeployment.spec.template);
         this.systemLogoClass = NodeUtils.getOperatingSystemLogoClass(this.nodeDeployment.spec.template);

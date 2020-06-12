@@ -12,8 +12,7 @@ import {ClusterEntity, ClusterType, MasterVersion, Token} from '../../../shared/
 import {EventEntity} from '../../../shared/entity/EventEntity';
 import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
 import {NodeMetrics} from '../../../shared/entity/Metrics';
-import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
-import {NodeDeploymentPatch} from '../../../shared/entity/NodeDeploymentPatch';
+import {NodeDeployment, NodeDeploymentPatch} from '../../../shared/entity/node-deployment';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {PacketSize} from '../../../shared/entity/packet/PacketSizeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../../shared/entity/ProjectEntity';
@@ -62,25 +61,25 @@ export class ApiService {
 
   createNodeDeployment(
     cluster: ClusterEntity,
-    nd: NodeDeploymentEntity,
+    nd: NodeDeployment,
     dc: string,
     projectID: string
-  ): Observable<NodeDeploymentEntity> {
+  ): Observable<NodeDeployment> {
     nd.spec.template.labels = LabelFormComponent.filterNullifiedKeys(nd.spec.template.labels);
     nd.spec.template.taints = TaintFormComponent.filterNullifiedTaints(nd.spec.template.taints);
 
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/nodedeployments`;
-    return this._http.post<NodeDeploymentEntity>(url, nd);
+    return this._http.post<NodeDeployment>(url, nd);
   }
 
-  getNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeploymentEntity[]> {
+  getNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeployment[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments`;
-    return this._http.get<NodeDeploymentEntity[]>(url).pipe(catchError(() => of<NodeDeploymentEntity[]>()));
+    return this._http.get<NodeDeployment[]>(url).pipe(catchError(() => of<NodeDeployment[]>()));
   }
 
-  getNodeDeployment(ndId: string, cluster: string, dc: string, projectID: string): Observable<NodeDeploymentEntity> {
+  getNodeDeployment(ndId: string, cluster: string, dc: string, projectID: string): Observable<NodeDeployment> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}`;
-    return this._http.get<NodeDeploymentEntity>(url);
+    return this._http.get<NodeDeployment>(url);
   }
 
   getNodeDeploymentNodes(ndId: string, cluster: string, dc: string, projectID: string): Observable<NodeEntity[]> {
@@ -108,17 +107,17 @@ export class ApiService {
   }
 
   patchNodeDeployment(
-    nd: NodeDeploymentEntity,
+    nd: NodeDeployment,
     patch: NodeDeploymentPatch,
     clusterId: string,
     dc: string,
     projectID: string
-  ): Observable<NodeDeploymentEntity> {
+  ): Observable<NodeDeployment> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterId}/nodedeployments/${nd.id}`;
-    return this._http.patch<NodeDeploymentEntity>(url, patch);
+    return this._http.patch<NodeDeployment>(url, patch);
   }
 
-  deleteNodeDeployment(cluster: string, nd: NodeDeploymentEntity, dc: string, projectID: string): Observable<any> {
+  deleteNodeDeployment(cluster: string, nd: NodeDeployment, dc: string, projectID: string): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${nd.id}`;
     return this._http.delete(url);
   }
