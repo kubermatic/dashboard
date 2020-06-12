@@ -8,9 +8,8 @@ import {ConfirmationDialogComponent} from '../../../shared/components/confirmati
 import {NotificationService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {Subject} from 'rxjs';
-import {AdminEntity} from '../../../shared/entity/AdminSettings';
 import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.component';
-import {MemberEntity} from '../../../shared/entity/MemberEntity';
+import {AdminEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
 
 @Component({
   selector: 'km-admins',

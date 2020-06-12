@@ -7,9 +7,9 @@ import {takeUntil} from 'rxjs/operators';
 import {ClusterService, NotificationService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {AdminSettings} from '../../../shared/entity/AdminSettings';
 import {ClusterEntity, Finalizer} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {AdminSettings} from '../../../shared/entity/settings';
 
 @Component({
   selector: 'km-cluster-delete-confirmation',

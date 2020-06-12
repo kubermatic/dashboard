@@ -4,7 +4,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 
 import {NotificationService} from '../../../../core/services';
 import {SettingsService} from '../../../../core/services/settings/settings.service';
-import {AdminEntity} from '../../../../shared/entity/AdminSettings';
+import {AdminEntity} from '../../../../shared/entity/MemberEntity';
 
 @Component({
   selector: 'km-add-admin-dialog',

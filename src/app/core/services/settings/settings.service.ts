@@ -6,32 +6,16 @@ import {webSocket} from 'rxjs/webSocket';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
-import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../../shared/entity/AdminSettings';
-import {UserSettings} from '../../../shared/entity/MemberEntity';
-import {CustomLink} from '../../../shared/utils/custom-link-utils/custom-link';
 import {Auth} from '../auth/auth.service';
-
-const DEFAULT_USER_SETTINGS: UserSettings = {
-  itemsPerPage: 10,
-  selectProjectTableView: false,
-  collapseSidenav: false,
-  displayAllProjectsForAdmin: false,
-};
-
-const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
-  cleanupOptions: {
-    Enforced: false,
-    Enabled: false,
-  },
-  clusterTypeOptions: ClusterTypeOptions.All,
-  customLinks: [],
-  defaultNodeCount: 1,
-  displayAPIDocs: true,
-  displayDemoInfo: false,
-  displayTermsOfService: false,
-  enableDashboard: true,
-  enableOIDCKubeconfig: false,
-};
+import {
+  AdminSettings,
+  CustomLink,
+  DEFAULT_ADMIN_SETTINGS,
+  DEFAULT_USER_SETTINGS,
+  UserSettings,
+} from '../../../shared/entity/settings';
+import {Settings} from 'http2';
+import {AdminEntity} from '../../../shared/entity/MemberEntity';
 
 @Injectable({
   providedIn: 'root',
@@ -140,9 +124,9 @@ export class SettingsService {
     return settings;
   }
 
-  patchAdminSettings(patch: any): Observable<AdminSettings> {
+  patchAdminSettings(patch: any): Observable<Settings> {
     const url = `${this.restRoot}/admin/settings`;
-    return this._httpClient.patch<AdminSettings>(url, patch);
+    return this._httpClient.patch<Settings>(url, patch);
   }
 
   get customLinks(): Observable<CustomLink[]> {

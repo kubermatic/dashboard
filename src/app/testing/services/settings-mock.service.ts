@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 
-import {AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
+import {Settings, ClusterTypeOptions} from '../../shared/entity/settings';
 import {UserSettings} from '../../shared/entity/MemberEntity';
 
 export const DEFAULT_USER_SETTINGS_MOCK: UserSettings = {
@@ -10,7 +10,7 @@ export const DEFAULT_USER_SETTINGS_MOCK: UserSettings = {
   collapseSidenav: false,
 };
 
-export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
+export const DEFAULT_ADMIN_SETTINGS_MOCK: Settings = {
   cleanupOptions: {
     Enforced: false,
     Enabled: false,
@@ -35,11 +35,11 @@ export class SettingsMockService {
     return DEFAULT_USER_SETTINGS_MOCK;
   }
 
-  get adminSettings(): Observable<AdminSettings> {
+  get adminSettings(): Observable<Settings> {
     return of(DEFAULT_ADMIN_SETTINGS_MOCK);
   }
 
-  get defaultAdminSettings(): AdminSettings {
+  get defaultAdminSettings(): Settings {
     return DEFAULT_ADMIN_SETTINGS_MOCK;
   }
 

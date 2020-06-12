@@ -16,12 +16,13 @@ import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {MemberEntity, UserSettings} from '../shared/entity/MemberEntity';
 import {ProjectEntity, ProjectOwners} from '../shared/entity/ProjectEntity';
 import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 
 import {EditProjectComponent} from './edit-project/edit-project.component';
+import {MemberEntity} from '../shared/entity/MemberEntity';
+import {UserSettings} from '../shared/entity/settings';
 
 @Component({
   selector: 'km-project',

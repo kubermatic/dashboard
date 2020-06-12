@@ -8,7 +8,7 @@ import {CoreModule} from '../../core/core.module';
 import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {MachineNetworksModule} from '../../machine-networks/machine-networks.module';
-import {ClusterTypeOptions} from '../../shared/entity/AdminSettings';
+import {ClusterTypeOptions} from '../../shared/entity/settings';
 import {SharedModule} from '../../shared/shared.module';
 import {masterVersionsFake} from '../../testing/fake-data/cluster-spec.fake';
 import {asyncData} from '../../testing/services/api-mock.service';

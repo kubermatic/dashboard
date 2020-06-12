@@ -5,7 +5,7 @@ import {debounce, first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
-import {AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
+import {ClusterTypeOptions, AdminSettings} from '../../shared/entity/settings';
 import {ClusterEntity, ClusterType, MasterVersion} from '../../shared/entity/ClusterEntity';
 import {ResourceType} from '../../shared/entity/LabelsEntity';
 import {AsyncValidators} from '../../shared/validators/async-label-form.validator';

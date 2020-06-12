@@ -8,7 +8,6 @@ import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {Step, StepsService} from '../core/services/wizard/steps.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
-import {AdminSettings} from '../shared/entity/AdminSettings';
 import {ClusterEntity, ClusterType, getEmptyCloudProviderSpec} from '../shared/entity/ClusterEntity';
 import {
   getEmptyNodeProviderSpec,
@@ -28,6 +27,7 @@ import {
 import {CreateClusterModel} from '../shared/model/CreateClusterModel';
 import {NodeProvider} from '../shared/model/NodeProviderConstants';
 import {NodeData} from '../shared/model/NodeSpecChange';
+import {AdminSettings} from '../shared/entity/settings';
 
 @Component({
   selector: 'km-wizard',

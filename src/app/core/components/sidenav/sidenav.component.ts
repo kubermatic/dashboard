@@ -6,14 +6,14 @@ import {BehaviorSubject, merge, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
-import {MemberEntity, UserSettings} from '../../../shared/entity/MemberEntity';
+import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {GroupConfig} from '../../../shared/model/Config';
-import {CustomLink, CustomLinkLocation, filterCustomLinks} from '../../../shared/utils/custom-link-utils/custom-link';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {ProjectService, UserService} from '../../services';
 import {View} from '../../services/auth/auth.guard';
 import {SettingsService} from '../../services/settings/settings.service';
+import {CustomLink, CustomLinkLocation, filterCustomLinks, UserSettings} from '../../../shared/entity/settings';
 
 @Component({
   selector: 'km-sidenav',

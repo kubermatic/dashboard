@@ -7,7 +7,7 @@ import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 import {NotificationService} from '../../core/services';
 import {UserService, HistoryService} from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
-import {AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
+import {AdminSettings, ClusterTypeOptions} from '../../shared/entity/settings';
 import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
 
