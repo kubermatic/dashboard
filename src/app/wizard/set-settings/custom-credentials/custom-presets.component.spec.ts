@@ -6,12 +6,12 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BehaviorSubject, of} from 'rxjs';
 import {environment} from '../../../../environments/environment';
 import {WizardService} from '../../../core/services';
-import {PresetListEntity} from '../../../shared/entity/provider/credentials/PresetListEntity';
 import {ClusterProviderForm} from '../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {CustomPresetsSettingsComponent, PresetsState} from './custom-presets.component';
+import {PresetListEntity} from '../../../shared/entity/preset';
 
 describe('CustomPresetsSettingsComponent', () => {
   let fixture: ComponentFixture<CustomPresetsSettingsComponent>;

@@ -6,12 +6,6 @@ import {Cluster, MasterVersion, Token} from '../../shared/entity/cluster';
 import {CreateMember, Member} from '../../shared/entity/member';
 import {NodeDeployment} from '../../shared/entity/node-deployment';
 import {Node} from '../../shared/entity/node';
-import {PacketSize} from '../../shared/entity/packet/PacketSizeEntity';
-import {EditProject, Project} from '../../shared/entity/project';
-import {AlibabaInstanceType, AlibabaZone} from '../../shared/entity/provider/alibaba/Alibaba';
-import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
-import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '../../shared/entity/provider/gcp/GCP';
-import {VSphereNetwork} from '../../shared/entity/provider/vsphere/VSphereEntity';
 import {
   CreateServiceAccountEntity,
   ServiceAccount,
@@ -34,6 +28,12 @@ import {
 } from '../fake-data/serviceaccount.fake';
 import {fakeSSHKeys} from '../fake-data/sshkey.fake';
 import {fakeVSphereNetworks} from '../fake-data/vsphere.fake';
+import {EditProject, Project} from '../../shared/entity/project';
+import {VSphereNetwork} from '../../shared/entity/provider/vsphere';
+import {AlibabaInstanceType, AlibabaZone} from '../../shared/entity/provider/alibaba';
+import {PacketSize} from '../../shared/entity/provider/packet';
+import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '../../shared/entity/provider/gcp';
+import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean';
 
 @Injectable()
 export class ApiMockService {

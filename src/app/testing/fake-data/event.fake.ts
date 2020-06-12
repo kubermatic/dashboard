@@ -1,4 +1,5 @@
-import {Event, ObjectReference} from '../../shared/entity/event';
+import {ObjectReference} from '../../shared/entity/common';
+import {Event} from '../../shared/entity/event';
 
 export function fakeEvents(): Event[] {
   return [

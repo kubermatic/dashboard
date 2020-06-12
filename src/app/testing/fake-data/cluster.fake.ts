@@ -1,23 +1,4 @@
 import {Cluster, ClusterType, Token} from '../../shared/entity/cluster';
-import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
-
-export function clusterModelFake(): CreateClusterModel {
-  return {
-    cluster: {
-      name: 'nifty-haibt',
-      spec: {
-        cloud: {
-          dc: 'do-fra1',
-          digitalocean: {
-            token: 'd6fec6ec65cd1fe6b2e6bba7bef91395ad9e3539646ccf8ed9eeac01f629570d',
-          },
-        },
-        version: '',
-      },
-      type: ClusterType.Kubernetes,
-    },
-  };
-}
 
 export function fakeDigitaloceanCluster(): Cluster {
   return {
