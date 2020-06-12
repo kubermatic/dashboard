@@ -2,7 +2,7 @@ import {merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, switchMap} from 'rxjs/operators';
 
 import {DatacenterService, PresetsService} from '../../../core/services';
-import {DataCenterEntity} from '../../../shared/entity/datacenter';
+import {Datacenter} from '../../../shared/entity/datacenter';
 import {OpenstackFlavor} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../wizard-new/service/cluster';
@@ -54,7 +54,7 @@ export class NodeDataOpenstackProvider {
     }
   }
 
-  dc(): Observable<DataCenterEntity> {
+  dc(): Observable<Datacenter> {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return merge(this._nodeDataService.operatingSystemChanges, this._clusterService.datacenterChanges)

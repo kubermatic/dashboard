@@ -14,13 +14,13 @@ import {switchMap, takeUntil} from 'rxjs/operators';
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService, DatacenterService} from '../../../core/services';
 import {ClusterNameGenerator} from '../../../core/util/name-generator.service';
-import {ClusterEntity, ClusterSpec, ClusterType, MasterVersion} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/datacenter';
-import {ResourceType} from '../../../shared/entity/LabelsEntity';
+import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
 import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
 import {ClusterService} from '../../service/cluster';
 import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
+import {ResourceType} from '../../../shared/entity/common';
 
 enum Controls {
   Name = 'name',
@@ -55,7 +55,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   labels: object;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
 
-  private _datacenterSpec: DataCenterEntity;
+  private _datacenterSpec: Datacenter;
   readonly Controls = Controls;
 
   constructor(
@@ -191,7 +191,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return !this._appConfig.getConfig()[`hide_${type}`];
   }
 
-  private _getClusterEntity(): ClusterEntity {
+  private _getClusterEntity(): Cluster {
     return {
       name: this.controlValue(Controls.Name),
       type: this.controlValue(Controls.Type),
@@ -206,6 +206,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           enabled: this.controlValue(Controls.AuditLogging),
         },
       } as ClusterSpec,
-    } as ClusterEntity;
+    } as Cluster;
   }
 }

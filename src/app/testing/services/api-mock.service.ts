@@ -2,12 +2,12 @@ import {Injectable} from '@angular/core';
 import {defer, Observable, of} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
 
-import {ClusterEntity, MasterVersion, Token} from '../../shared/entity/ClusterEntity';
-import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity';
+import {Cluster, MasterVersion, Token} from '../../shared/entity/cluster';
+import {CreateMember, Member} from '../../shared/entity/Member';
 import {NodeDeployment} from '../../shared/entity/node-deployment';
-import {NodeEntity} from '../../shared/entity/NodeEntity';
+import {Node} from '../../shared/entity/node';
 import {PacketSize} from '../../shared/entity/packet/PacketSizeEntity';
-import {EditProjectEntity, Project} from '../../shared/entity/project';
+import {EditProject, Project} from '../../shared/entity/project';
 import {AlibabaInstanceType, AlibabaZone} from '../../shared/entity/provider/alibaba/Alibaba';
 import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '../../shared/entity/provider/gcp/GCP';
@@ -18,7 +18,7 @@ import {
   ServiceAccountTokenEntity,
   ServiceAccountTokenPatch,
 } from '../../shared/entity/service-account';
-import {SSHKeyEntity} from '../../shared/entity/ssh-key';
+import {SSHKey} from '../../shared/entity/ssh-key';
 import {fakeDigitaloceanSizes, fakePacketSizes} from '../fake-data/addNodeModal.fake';
 import {fakeAlibabaInstanceTypes, fakeAlibabaZones} from '../fake-data/alibaba.fake';
 import {masterVersionsFake} from '../fake-data/cluster-spec.fake';
@@ -39,12 +39,12 @@ import {fakeVSphereNetworks} from '../fake-data/vsphere.fake';
 export class ApiMockService {
   project: Project = fakeProject();
   projects: Project[] = fakeProjects();
-  sshKeys: SSHKeyEntity[] = fakeSSHKeys();
-  nodes: NodeEntity[] = nodesFake();
+  sshKeys: SSHKey[] = fakeSSHKeys();
+  nodes: Node[] = nodesFake();
   masterVersions: MasterVersion[] = masterVersionsFake();
   token: Token = fakeToken();
-  member: MemberEntity = fakeMember();
-  members: MemberEntity[] = fakeMembers();
+  member: Member = fakeMember();
+  members: Member[] = fakeMembers();
   serviceAccount: ServiceAccount = fakeServiceAccount();
   serviceAccounts: ServiceAccount[] = fakeServiceAccounts();
   serviceAccountToken: ServiceAccountTokenEntity = fakeServiceAccountToken();
@@ -79,7 +79,7 @@ export class ApiMockService {
     return of(this.project);
   }
 
-  editProject(projectID: string, editProjectEntity: EditProjectEntity): Observable<any> {
+  editProject(projectID: string, editProjectEntity: EditProject): Observable<any> {
     return of(this.project);
   }
 
@@ -87,7 +87,7 @@ export class ApiMockService {
     return of(null);
   }
 
-  getSSHKeys(): Observable<SSHKeyEntity[]> {
+  getSSHKeys(): Observable<SSHKey[]> {
     return of(this.sshKeys);
   }
 
@@ -95,19 +95,19 @@ export class ApiMockService {
     return of(null);
   }
 
-  addSSHKey(sshKey: SSHKeyEntity): Observable<SSHKeyEntity> {
+  addSSHKey(sshKey: SSHKey): Observable<SSHKey> {
     return of(null);
   }
 
-  getToken(cluster: ClusterEntity, dc: string, projectID: string): Observable<Token> {
+  getToken(cluster: Cluster, dc: string, projectID: string): Observable<Token> {
     return of(this.token);
   }
 
-  editToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
+  editToken(cluster: Cluster, dc: string, projectID: string, token: Token): Observable<Token> {
     return of(this.token);
   }
 
-  editViewerToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
+  editViewerToken(cluster: Cluster, dc: string, projectID: string, token: Token): Observable<Token> {
     return of(this.token);
   }
 
@@ -115,19 +115,19 @@ export class ApiMockService {
     return of(this.masterVersions);
   }
 
-  getMembers(projectID: string): Observable<MemberEntity[]> {
+  getMembers(projectID: string): Observable<Member[]> {
     return of(this.members);
   }
 
-  createMembers(projectID: string, member: CreateMemberEntity): Observable<MemberEntity> {
+  createMembers(projectID: string, member: CreateMember): Observable<Member> {
     return of(this.member);
   }
 
-  editMembers(projectID: string, member: MemberEntity): Observable<MemberEntity> {
+  editMembers(projectID: string, member: Member): Observable<Member> {
     return of(this.member);
   }
 
-  deleteMembers(projectID: string, member: MemberEntity): Observable<any> {
+  deleteMembers(projectID: string, member: Member): Observable<any> {
     return of(null);
   }
 

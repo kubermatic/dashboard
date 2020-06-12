@@ -8,14 +8,10 @@ import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {Step, StepsService} from '../core/services/wizard/steps.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
-import {ClusterEntity, ClusterType, getEmptyCloudProviderSpec} from '../shared/entity/ClusterEntity';
-import {
-  getEmptyNodeProviderSpec,
-  getEmptyNodeVersionSpec,
-  getEmptyOperatingSystemSpec,
-} from '../shared/entity/NodeEntity';
+import {Cluster, ClusterType, getEmptyCloudProviderSpec} from '../shared/entity/cluster';
+import {getEmptyNodeProviderSpec, getEmptyNodeVersionSpec, getEmptyOperatingSystemSpec} from '../shared/entity/node';
 import {Project} from '../shared/entity/project';
-import {SSHKeyEntity} from '../shared/entity/ssh-key';
+import {SSHKey} from '../shared/entity/ssh-key';
 import {
   ClusterDatacenterForm,
   ClusterProviderForm,
@@ -57,13 +53,13 @@ export class WizardComponent implements OnInit, OnDestroy {
   steps: Step[] = [];
   currentStep: Step;
   currentStepIndex = 0;
-  cluster: ClusterEntity;
+  cluster: Cluster;
   clusterProviderFormData: ClusterProviderForm = {
     valid: false,
     provider: NodeProvider.NONE,
   };
   clusterDatacenterFormData: ClusterDatacenterForm = {valid: false};
-  clusterSSHKeys: SSHKeyEntity[] = [];
+  clusterSSHKeys: SSHKey[] = [];
   addNodeData: NodeData;
   creating = false;
   project = {} as Project;
@@ -311,7 +307,7 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   createCluster(): void {
     this.creating = true;
-    let createdCluster: ClusterEntity;
+    let createdCluster: Cluster;
     const datacenter = this.clusterDatacenterFormData.datacenter;
     const createCluster = this._getCreateCluterModel();
 
@@ -343,7 +339,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(
-        (keys: SSHKeyEntity[]) => {
+        (keys: SSHKey[]) => {
           this._router.navigate([
             `/projects/${this.project.id}/dc/${datacenter.spec.seed}/clusters/${createdCluster.id}`,
           ]);

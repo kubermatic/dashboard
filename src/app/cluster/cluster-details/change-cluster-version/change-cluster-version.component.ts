@@ -5,9 +5,8 @@ import {first, takeUntil} from 'rxjs/operators';
 
 import {ClusterService, NotificationService, ProjectService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
-import {DataCenterEntity} from '../../../shared/entity/datacenter';
+import {Cluster, ClusterEntityPatch} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
 import {Project} from '../../../shared/entity/project';
 
 @Component({
@@ -15,8 +14,8 @@ import {Project} from '../../../shared/entity/project';
   templateUrl: './change-cluster-version.component.html',
 })
 export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  @Input() datacenter: DataCenterEntity;
+  @Input() cluster: Cluster;
+  @Input() datacenter: Datacenter;
   controlPlaneVersions: string[] = [];
   selectedVersion: string;
   project: Project;

@@ -1,4 +1,4 @@
-import {NodeCloudSpec, NodeSpec, NodeVersionInfo, OperatingSystemSpec, Taint} from './NodeEntity';
+import {NodeCloudSpec, NodeSpec, NodeVersionInfo, OperatingSystemSpec, Taint} from './node';
 
 export class NodeDeployment {
   creationTimestamp?: Date;

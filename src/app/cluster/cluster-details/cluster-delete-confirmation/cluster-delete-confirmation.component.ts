@@ -7,8 +7,8 @@ import {takeUntil} from 'rxjs/operators';
 import {ClusterService, NotificationService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {ClusterEntity, Finalizer} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/datacenter';
+import {Cluster, Finalizer} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
 import {AdminSettings} from '../../../shared/entity/settings';
 
 @Component({
@@ -17,8 +17,8 @@ import {AdminSettings} from '../../../shared/entity/settings';
   styleUrls: ['cluster-delete-confirmation.component.scss'],
 })
 export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  @Input() datacenter: DataCenterEntity;
+  @Input() cluster: Cluster;
+  @Input() datacenter: Datacenter;
   @Input() projectID: string;
   @ViewChild('clusterNameInput', {static: true})
   clusterNameInputRef: ElementRef;

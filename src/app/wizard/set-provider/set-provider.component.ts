@@ -4,7 +4,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {DatacenterService, WizardService} from '../../core/services';
-import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
+import {Cluster, getClusterProvider} from '../../shared/entity/cluster';
 import {getDatacenterProvider} from '../../shared/entity/datacenter';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 
@@ -14,7 +14,7 @@ import {NodeProvider} from '../../shared/model/NodeProviderConstants';
   styleUrls: ['set-provider.component.scss'],
 })
 export class SetProviderComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
   setProviderForm: FormGroup;
   providers: NodeProvider[] = [];
   private _unsubscribe: Subject<any> = new Subject();

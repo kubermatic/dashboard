@@ -2,9 +2,9 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {WizardService, DatacenterService} from '../../core/services';
-import {ClusterEntity} from '../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../shared/entity/datacenter';
-import {SSHKeyEntity} from '../../shared/entity/ssh-key';
+import {Cluster} from '../../shared/entity/cluster';
+import {Datacenter} from '../../shared/entity/datacenter';
+import {SSHKey} from '../../shared/entity/ssh-key';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 
 @Component({
@@ -13,11 +13,11 @@ import {NodeData} from '../../shared/model/NodeSpecChange';
   styleUrls: ['./set-settings.component.scss'],
 })
 export class SetSettingsComponent implements OnInit {
-  @Input() cluster: ClusterEntity;
-  @Input() clusterSSHKeys: SSHKeyEntity[] = [];
+  @Input() cluster: Cluster;
+  @Input() clusterSSHKeys: SSHKey[] = [];
   @Input() nodeData: NodeData;
   isExtended = false;
-  seedDc: DataCenterEntity;
+  seedDc: Datacenter;
   private _unsubscribe = new Subject<void>();
 
   constructor(private wizardService: WizardService, private _dc: DatacenterService) {}

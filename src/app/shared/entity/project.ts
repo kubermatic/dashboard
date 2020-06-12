@@ -23,7 +23,7 @@ export class OwnerProjects {
   id: string;
 }
 
-export class EditProjectEntity {
+export class EditProject {
   name: string;
   labels?: object;
 }

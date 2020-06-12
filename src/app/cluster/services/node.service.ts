@@ -8,8 +8,8 @@ import {NotificationService} from '../../core/services';
 import {ApiService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {ClusterEntity} from '../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../shared/entity/datacenter';
+import {Cluster} from '../../shared/entity/cluster';
+import {Datacenter} from '../../shared/entity/datacenter';
 import {NodeDeployment, NodeDeploymentPatch} from '../../shared/entity/node-deployment';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {NodeDataModalComponent, NodeDataModalData} from '../cluster-details/node-data-modal/node-data-modal.component';
@@ -59,7 +59,7 @@ export class NodeService {
     this._notificationService = this._inj.get(NotificationService);
   }
 
-  createNodeDeployment(nodeData: NodeData, dc: DataCenterEntity, cluster: ClusterEntity, project: string): void {
+  createNodeDeployment(nodeData: NodeData, dc: Datacenter, cluster: Cluster, project: string): void {
     this._apiService
       .createNodeDeployment(cluster, NodeService._getNodeDeploymentEntity(nodeData), dc.metadata.name, project)
       .pipe(first())
@@ -73,9 +73,9 @@ export class NodeService {
 
   showNodeDeploymentCreateDialog(
     count: number,
-    cluster: ClusterEntity,
+    cluster: Cluster,
     projectID: string,
-    datacenter: DataCenterEntity
+    datacenter: Datacenter
   ): Observable<boolean> {
     const dialogRef = this._matDialog.open(NodeDataModalComponent, {
       data: {
@@ -100,9 +100,9 @@ export class NodeService {
 
   showNodeDeploymentEditDialog(
     nd: NodeDeployment,
-    cluster: ClusterEntity,
+    cluster: Cluster,
     projectID: string,
-    datacenter: DataCenterEntity,
+    datacenter: Datacenter,
     changeEventEmitter: EventEmitter<NodeDeployment>
   ): Observable<boolean> {
     const dialogRef = this._matDialog.open(NodeDataModalComponent, {

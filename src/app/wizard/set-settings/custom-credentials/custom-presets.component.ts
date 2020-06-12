@@ -3,7 +3,7 @@ import {EMPTY, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../core/services';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {Cluster} from '../../../shared/entity/cluster';
 import {PresetListEntity} from '../../../shared/entity/provider/credentials/PresetListEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 
@@ -19,7 +19,7 @@ export enum PresetsState {
   styleUrls: ['./custom-presets.component.scss'],
 })
 export class CustomPresetsSettingsComponent implements OnInit {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
   presetList = new PresetListEntity();
   presetsLoaded = false;
 

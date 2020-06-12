@@ -4,7 +4,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
-import {DataCenterEntity} from '../../../shared/entity/datacenter';
+import {Datacenter} from '../../../shared/entity/datacenter';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
@@ -15,7 +15,7 @@ export class AzureNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
 
   form: FormGroup;
-  datacenter: DataCenterEntity;
+  datacenter: Datacenter;
   hideOptional = true;
 
   private _unsubscribe = new Subject<void>();

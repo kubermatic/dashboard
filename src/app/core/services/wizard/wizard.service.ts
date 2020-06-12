@@ -3,10 +3,10 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
 
 import {environment} from '../../../../environments/environment';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/datacenter';
+import {Cluster} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
 import {PresetListEntity} from '../../../shared/entity/provider/credentials/PresetListEntity';
-import {SSHKeyEntity} from '../../../shared/entity/ssh-key';
+import {SSHKey} from '../../../shared/entity/ssh-key';
 import {
   ClusterDatacenterForm,
   ClusterProviderForm,
@@ -32,7 +32,7 @@ import {VSphere} from './provider/vsphere';
 @Injectable()
 export class WizardService {
   // Complete cluster object
-  clusterChanges$ = new EventEmitter<ClusterEntity>();
+  clusterChanges$ = new EventEmitter<Cluster>();
   // Cluster spec - form data
   clusterSpecFormChanges$ = new EventEmitter<ClusterSpecForm>();
   // Machine Networks List - form data
@@ -42,12 +42,12 @@ export class WizardService {
   // Cluster provider - form data
   private _clusterProviderFormChanges$ = new BehaviorSubject<ClusterProviderForm>({} as ClusterProviderForm);
   // Cluster datacenter - form data
-  private _selectedDatacenter: DataCenterEntity;
+  private _selectedDatacenter: Datacenter;
   clusterDatacenterFormChanges$ = new EventEmitter<ClusterDatacenterForm>();
   // Cluster provider settings - form data
   clusterProviderSettingsFormChanges$ = new EventEmitter<ClusterProviderSettingsForm>();
   // Cluster ssh keys
-  clusterSSHKeysChanges$ = new EventEmitter<SSHKeyEntity[]>();
+  clusterSSHKeysChanges$ = new EventEmitter<SSHKey[]>();
   // Cluster settings form view (hide optional fields or not)
   clusterSettingsFormViewChanged$ = new EventEmitter<ClusterSettingsFormView>();
   // Custom preset selection state
@@ -61,7 +61,7 @@ export class WizardService {
     return this._clusterProviderFormChanges$;
   }
 
-  changeCluster(data: ClusterEntity): void {
+  changeCluster(data: Cluster): void {
     this.clusterChanges$.emit(data);
   }
 
@@ -90,7 +90,7 @@ export class WizardService {
     this.clusterProviderSettingsFormChanges$.emit(data);
   }
 
-  changeClusterSSHKeys(keys: SSHKeyEntity[]): void {
+  changeClusterSSHKeys(keys: SSHKey[]): void {
     this.clusterSSHKeysChanges$.emit(keys);
   }
 
@@ -98,7 +98,7 @@ export class WizardService {
     this.clusterSettingsFormViewChanged$.emit(data);
   }
 
-  getSelectedDatacenter(): DataCenterEntity {
+  getSelectedDatacenter(): Datacenter {
     return this._selectedDatacenter;
   }
 

@@ -1,4 +1,4 @@
-export class SSHKeyEntity {
+export class SSHKey {
   creationTimestamp: Date;
   deletionTimestamp: Date;
   id: string;

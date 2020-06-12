@@ -5,7 +5,7 @@ import {catchError, first, map, shareReplay, switchMap} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
-import {MemberEntity} from '../../../shared/entity/MemberEntity';
+import {Member} from '../../../shared/entity/Member';
 import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils} from '../../../shared/utils/member-utils/member-utils';
 import {Auth} from '../auth/auth.service';
@@ -13,12 +13,12 @@ import {Auth} from '../auth/auth.service';
 @Injectable()
 export class UserService {
   private readonly restRoot: string = environment.restRoot;
-  private _user$: Observable<MemberEntity>;
+  private _user$: Observable<Member>;
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
 
   constructor(private _http: HttpClient, private _appConfig: AppConfigService, private readonly _auth: Auth) {}
 
-  get loggedInUser(): Observable<MemberEntity> {
+  get loggedInUser(): Observable<Member> {
     if (!this._user$) {
       this._user$ = this._refreshTimer$
         .pipe(switchMap(() => iif(() => this._auth.authenticated(), this._getLoggedInUser(), EMPTY)))
@@ -37,8 +37,8 @@ export class UserService {
     return userGroupConfig ? userGroupConfig[userGroup] : undefined;
   }
 
-  private _getLoggedInUser(): Observable<MemberEntity> {
+  private _getLoggedInUser(): Observable<Member> {
     const url = `${this.restRoot}/me`;
-    return this._http.get<MemberEntity>(url).pipe(catchError(() => of<MemberEntity>()));
+    return this._http.get<Member>(url).pipe(catchError(() => of<Member>()));
   }
 }

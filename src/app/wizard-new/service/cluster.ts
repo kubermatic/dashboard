@@ -1,21 +1,21 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import * as _ from 'lodash';
-import {CloudSpec, ClusterEntity, ClusterType} from '../../shared/entity/ClusterEntity';
-import {SSHKeyEntity} from '../../shared/entity/ssh-key';
+import {CloudSpec, Cluster, ClusterType} from '../../shared/entity/cluster';
+import {SSHKey} from '../../shared/entity/ssh-key';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 
 @Injectable()
 export class ClusterService {
   readonly providerChanges = new EventEmitter<NodeProvider>();
   readonly datacenterChanges = new EventEmitter<string>();
-  readonly sshKeyChanges = new EventEmitter<SSHKeyEntity[]>();
-  readonly clusterChanges = new EventEmitter<ClusterEntity>();
+  readonly sshKeyChanges = new EventEmitter<SSHKey[]>();
+  readonly clusterChanges = new EventEmitter<Cluster>();
   readonly clusterTypeChanges = new EventEmitter<ClusterType>();
 
-  private _clusterEntity: ClusterEntity = ClusterEntity.newEmptyClusterEntity();
-  private _sshKeysEntity: SSHKeyEntity[] = [];
+  private _clusterEntity: Cluster = Cluster.newEmptyClusterEntity();
+  private _sshKeysEntity: SSHKey[] = [];
 
-  set cluster(cluster: ClusterEntity) {
+  set cluster(cluster: Cluster) {
     if (
       this._getProvider(this._clusterEntity) !== NodeProvider.NONE &&
       this._getProvider(cluster) !== NodeProvider.NONE &&
@@ -32,7 +32,7 @@ export class ClusterService {
     this.clusterChanges.emit(this._clusterEntity);
   }
 
-  get cluster(): ClusterEntity {
+  get cluster(): Cluster {
     return this._clusterEntity;
   }
 
@@ -44,7 +44,7 @@ export class ClusterService {
           [provider]: {},
         } as any,
       },
-    } as ClusterEntity;
+    } as Cluster;
 
     if (provider) {
       this.providerChanges.emit(provider);
@@ -66,7 +66,7 @@ export class ClusterService {
           dc: datacenter,
         } as CloudSpec,
       },
-    } as ClusterEntity;
+    } as Cluster;
 
     if (datacenter) {
       this.datacenterChanges.emit(datacenter);
@@ -82,12 +82,12 @@ export class ClusterService {
     this._clusterEntity.labels = labels;
   }
 
-  set sshKeys(keys: SSHKeyEntity[]) {
+  set sshKeys(keys: SSHKey[]) {
     this._sshKeysEntity = keys;
     this.sshKeyChanges.emit(this._sshKeysEntity);
   }
 
-  get sshKeys(): SSHKeyEntity[] {
+  get sshKeys(): SSHKey[] {
     return this._sshKeysEntity;
   }
 
@@ -101,10 +101,10 @@ export class ClusterService {
   }
 
   reset(): void {
-    this._clusterEntity = ClusterEntity.newEmptyClusterEntity();
+    this._clusterEntity = Cluster.newEmptyClusterEntity();
   }
 
-  private _getProvider(cluster: ClusterEntity): NodeProvider {
+  private _getProvider(cluster: Cluster): NodeProvider {
     if (!cluster || !cluster.spec || !cluster.spec.cloud) {
       return NodeProvider.NONE;
     }

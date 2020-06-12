@@ -4,7 +4,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '../../core/services';
 
 import {ApiService} from '../../core/services';
-import {MemberEntity} from '../../shared/entity/MemberEntity';
+import {Member} from '../../shared/entity/Member';
 import {Project} from '../../shared/entity/project';
 import {MemberUtils} from '../../shared/utils/member-utils/member-utils';
 
@@ -14,7 +14,7 @@ import {MemberUtils} from '../../shared/utils/member-utils/member-utils';
 })
 export class EditMemberComponent implements OnInit {
   @Input() project: Project;
-  @Input() member: MemberEntity;
+  @Input() member: Member;
   editMemberForm: FormGroup;
 
   constructor(
@@ -30,7 +30,7 @@ export class EditMemberComponent implements OnInit {
   }
 
   editMember(): void {
-    const editMember: MemberEntity = {
+    const editMember: Member = {
       id: this.member.id,
       name: this.member.name,
       email: this.member.email,

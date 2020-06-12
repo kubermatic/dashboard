@@ -3,14 +3,14 @@ import {defer, Observable, of, Subject} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
 
 import {ProviderSettingsPatch} from '../../core/services/cluster/cluster.service';
-import {AddonEntity} from '../../shared/entity/addon';
-import {ClusterEntity, MasterVersion} from '../../shared/entity/ClusterEntity';
+import {Addon} from '../../shared/entity/addon';
+import {Cluster, MasterVersion} from '../../shared/entity/cluster';
 import {ClusterEntityPatch} from '../../shared/entity/ClusterEntityPatch';
 import {Event} from '../../shared/entity/event';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
 import {ClusterMetrics} from '../../shared/entity/metrics';
-import {NodeEntity} from '../../shared/entity/NodeEntity';
-import {SSHKeyEntity} from '../../shared/entity/ssh-key';
+import {Node} from '../../shared/entity/node';
+import {SSHKey} from '../../shared/entity/ssh-key';
 import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
 import {fakeClusters, fakeDigitaloceanCluster} from '../fake-data/cluster.fake';
 import {fakeEvents} from '../fake-data/event.fake';
@@ -20,21 +20,21 @@ import {fakeSSHKeys} from '../fake-data/sshkey.fake';
 
 @Injectable()
 export class ClusterMockService {
-  private _cluster: ClusterEntity = fakeDigitaloceanCluster();
-  private _clusters: ClusterEntity[] = fakeClusters();
-  private _sshKeys: SSHKeyEntity[] = fakeSSHKeys();
-  private _nodes: NodeEntity[] = nodesFake();
+  private _cluster: Cluster = fakeDigitaloceanCluster();
+  private _clusters: Cluster[] = fakeClusters();
+  private _sshKeys: SSHKey[] = fakeSSHKeys();
+  private _nodes: Node[] = nodesFake();
   private _health: HealthEntity = fakeHealth();
 
   providerSettingsPatchChanges$ = new Subject<ProviderSettingsPatch>().asObservable();
 
   changeProviderSettingsPatch(): void {}
 
-  cluster(clusterId: string, dc: string, projectID: string): Observable<ClusterEntity> {
+  cluster(clusterId: string, dc: string, projectID: string): Observable<Cluster> {
     return asyncData(this._cluster);
   }
 
-  clusters(projectID: string): Observable<ClusterEntity[]> {
+  clusters(projectID: string): Observable<Cluster[]> {
     return asyncData(this._clusters);
   }
 
@@ -42,7 +42,7 @@ export class ClusterMockService {
     return asyncData(this._health);
   }
 
-  sshKeys(): Observable<SSHKeyEntity[]> {
+  sshKeys(): Observable<SSHKey[]> {
     return asyncData(this._sshKeys);
   }
 
@@ -50,7 +50,7 @@ export class ClusterMockService {
     return asyncData(null);
   }
 
-  create(createClusterModel: CreateClusterModel, dc: string, projectID: string): Observable<ClusterEntity> {
+  create(createClusterModel: CreateClusterModel, dc: string, projectID: string): Observable<Cluster> {
     return asyncData(this._cluster);
   }
 
@@ -58,16 +58,11 @@ export class ClusterMockService {
     return asyncData(null);
   }
 
-  edit(cluster: ClusterEntity, dc: string, projectID: string): Observable<ClusterEntity> {
+  edit(cluster: Cluster, dc: string, projectID: string): Observable<Cluster> {
     return asyncData(this._cluster);
   }
 
-  patch(
-    projectID: string,
-    clusterID: string,
-    datacenter: string,
-    patch: ClusterEntityPatch
-  ): Observable<ClusterEntity> {
+  patch(projectID: string, clusterID: string, datacenter: string, patch: ClusterEntityPatch): Observable<Cluster> {
     return asyncData(this._cluster);
   }
 
@@ -75,7 +70,7 @@ export class ClusterMockService {
     return asyncData(null);
   }
 
-  getNodes(cluster: string, dc: string, projectID: string): Observable<NodeEntity[]> {
+  getNodes(cluster: string, dc: string, projectID: string): Observable<Node[]> {
     return asyncData(this._nodes);
   }
 
@@ -83,7 +78,7 @@ export class ClusterMockService {
     return asyncData([]);
   }
 
-  nodes(projectID: string, clusterID: string, datacenter: string): Observable<NodeEntity[]> {
+  nodes(projectID: string, clusterID: string, datacenter: string): Observable<Node[]> {
     return asyncData(nodesFake());
   }
 
@@ -99,7 +94,7 @@ export class ClusterMockService {
     return of([]);
   }
 
-  createSSHKey(sshKey: SSHKeyEntity): Observable<SSHKeyEntity> {
+  createSSHKey(sshKey: SSHKey): Observable<SSHKey> {
     return of(null);
   }
 
@@ -107,7 +102,7 @@ export class ClusterMockService {
     return of(fakeEvents());
   }
 
-  addons(projectID: string, cluster: string, dc: string): Observable<AddonEntity[]> {
+  addons(projectID: string, cluster: string, dc: string): Observable<Addon[]> {
     return of([]);
   }
 

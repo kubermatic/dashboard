@@ -6,7 +6,7 @@ import {debounceTime, startWith, switchMap, takeUntil} from 'rxjs/operators';
 
 import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
-import {CloudSpec} from '../../shared/entity/ClusterEntity';
+import {CloudSpec} from '../../shared/entity/cluster';
 import {AlibabaInstanceType, AlibabaZone} from '../../shared/entity/provider/alibaba/Alibaba';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';

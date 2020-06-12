@@ -1,4 +1,4 @@
-import {NodeSpec} from '../entity/NodeEntity';
+import {NodeSpec} from '../entity/node';
 
 export namespace NodeProviderConstants {
   export function displayName(provider: NodeProvider | string): string {

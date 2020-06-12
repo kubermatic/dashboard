@@ -5,7 +5,7 @@ import {debounceTime, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../../core/services';
 import {AVAILABLE_PACKET_BILLING_CYCLES} from '../../../../shared/entity/cloud/PacketCloudSpec';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
+import {Cluster} from '../../../../shared/entity/cluster';
 import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm';
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
@@ -14,7 +14,7 @@ import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
   templateUrl: './packet.component.html',
 })
 export class PacketClusterSettingsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
   form: FormGroup;
 
   private _formHelper: FormHelper;

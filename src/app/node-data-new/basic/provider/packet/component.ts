@@ -11,7 +11,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {PacketNodeSpec} from '../../../../shared/entity/node/PacketNodeSpec';
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
+import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
 import {PacketSize} from '../../../../shared/entity/packet/PacketSizeEntity';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';

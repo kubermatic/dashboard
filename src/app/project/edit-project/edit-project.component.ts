@@ -5,9 +5,9 @@ import * as _ from 'lodash';
 
 import {NotificationService} from '../../core/services';
 import {ApiService} from '../../core/services';
-import {ResourceType} from '../../shared/entity/LabelsEntity';
-import {EditProjectEntity, Project} from '../../shared/entity/project';
+import {EditProject, Project} from '../../shared/entity/project';
 import {AsyncValidators} from '../../shared/validators/async-label-form.validator';
+import {ResourceType} from '../../shared/entity/common';
 
 @Component({
   selector: 'km-edit-project',
@@ -35,7 +35,7 @@ export class EditProjectComponent implements OnInit {
   }
 
   editProject(): void {
-    const project: EditProjectEntity = {
+    const project: EditProject = {
       name: this.form.controls.name.value,
       labels: this.labels,
     };

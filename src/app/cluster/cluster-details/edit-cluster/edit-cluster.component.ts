@@ -7,11 +7,10 @@ import {takeUntil} from 'rxjs/operators';
 
 import {ClusterService, NotificationService} from '../../../core/services';
 import {ProviderSettingsPatch} from '../../../core/services/cluster/cluster.service';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
-import {DataCenterEntity} from '../../../shared/entity/datacenter';
-import {ResourceType} from '../../../shared/entity/LabelsEntity';
+import {Cluster, ClusterEntityPatch} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
 import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
+import {ResourceType} from '../../../shared/entity/common';
 
 @Component({
   selector: 'km-edit-cluster',
@@ -19,8 +18,8 @@ import {AsyncValidators} from '../../../shared/validators/async-label-form.valid
   styleUrls: ['./edit-cluster.component.scss'],
 })
 export class EditClusterComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  @Input() datacenter: DataCenterEntity;
+  @Input() cluster: Cluster;
+  @Input() datacenter: Datacenter;
   @Input() projectID: string;
   form: FormGroup;
   labels: object;

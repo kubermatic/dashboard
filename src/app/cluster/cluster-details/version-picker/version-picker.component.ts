@@ -4,8 +4,8 @@ import {first} from 'rxjs/operators';
 import {gt, lt} from 'semver';
 
 import {ClusterService} from '../../../core/services';
-import {ClusterEntity, MasterVersion} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/datacenter';
+import {Cluster, MasterVersion} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
 import {ChangeClusterVersionComponent} from '../change-cluster-version/change-cluster-version.component';
 
 @Component({
@@ -13,8 +13,8 @@ import {ChangeClusterVersionComponent} from '../change-cluster-version/change-cl
   templateUrl: './version-picker.component.html',
 })
 export class VersionPickerComponent implements OnInit, OnChanges {
-  @Input() datacenter: DataCenterEntity;
-  @Input() cluster: ClusterEntity;
+  @Input() datacenter: Datacenter;
+  @Input() cluster: Cluster;
   @Input() isClusterRunning = false;
   @Input() upgrades: MasterVersion[] = [];
   versionsList: string[] = [];
@@ -63,7 +63,7 @@ export class VersionPickerComponent implements OnInit, OnChanges {
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterEntity.getVersionHeadline(type, isKubelet);
+    return Cluster.getVersionHeadline(type, isKubelet);
   }
 
   isEnabled(): boolean {

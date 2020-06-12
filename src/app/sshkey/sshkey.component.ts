@@ -12,8 +12,8 @@ import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddSshKeyDialogComponent} from '../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {MemberEntity} from '../shared/entity/MemberEntity';
-import {SSHKeyEntity} from '../shared/entity/ssh-key';
+import {Member} from '../shared/entity/Member';
+import {SSHKey} from '../shared/entity/ssh-key';
 import {GroupConfig} from '../shared/model/Config';
 import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
 
@@ -24,16 +24,16 @@ import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils
 })
 export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   loading = true;
-  sshKeys: SSHKeyEntity[] = [];
+  sshKeys: SSHKey[] = [];
   userGroup: string;
   projectID: string;
   isShowPublicKey = [];
   displayedColumns: string[] = ['stateArrow', 'name', 'fingerprint', 'creationTimestamp', 'actions'];
   toggledColumns: string[] = ['publickey'];
-  dataSource = new MatTableDataSource<SSHKeyEntity>();
+  dataSource = new MatTableDataSource<SSHKey>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  private _user: MemberEntity;
+  private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _unsubscribe: Subject<any> = new Subject();
 
@@ -91,11 +91,11 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getPublicKeyName(sshKey: SSHKeyEntity): string {
+  getPublicKeyName(sshKey: SSHKey): string {
     return sshKey.spec.publicKey.split(' ')[0];
   }
 
-  getPublicKey(sshKey: SSHKeyEntity): string {
+  getPublicKey(sshKey: SSHKey): string {
     return sshKey.spec.publicKey.slice(this.getPublicKeyName(sshKey).length + 1, -1);
   }
 
@@ -128,7 +128,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshKeys', Permission.Delete);
   }
 
-  deleteSshKey(sshKey: SSHKeyEntity, event: Event): void {
+  deleteSshKey(sshKey: SSHKey, event: Event): void {
     event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
@@ -158,7 +158,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  togglePublicKey(element: SSHKeyEntity): void {
+  togglePublicKey(element: SSHKey): void {
     this.isShowPublicKey[element.id] = !this.isShowPublicKey[element.id];
   }
 

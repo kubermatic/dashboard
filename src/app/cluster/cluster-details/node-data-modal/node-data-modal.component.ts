@@ -7,21 +7,21 @@ import {takeUntil} from 'rxjs/operators';
 import {DatacenterService, WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/datacenter';
+import {Cluster} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
 import {NodeDeployment} from '../../../shared/entity/node-deployment';
 import {
   getEmptyNodeProviderSpec,
   getEmptyNodeVersionSpec,
   getEmptyOperatingSystemSpec,
   NodeSpec,
-} from '../../../shared/entity/NodeEntity';
+} from '../../../shared/entity/node';
 import {NodeData} from '../../../shared/model/NodeSpecChange';
 import {objectDiff} from '../../../shared/utils/common-utils';
 
 export interface NodeDataModalData {
-  cluster: ClusterEntity;
-  datacenter: DataCenterEntity;
+  cluster: Cluster;
+  datacenter: Datacenter;
   projectID: string;
   existingNodesCount: number;
 
@@ -38,8 +38,8 @@ export interface NodeDataModalData {
 })
 export class NodeDataModalComponent implements OnInit, OnDestroy {
   @Output() editNodeDeployment = new EventEmitter<NodeDeployment>();
-  nodeDC: DataCenterEntity;
-  seedDC: DataCenterEntity;
+  nodeDC: Datacenter;
+  seedDC: Datacenter;
   isExtended = false;
   isRecreationWarningVisible = false;
   nodeDataValid = false;

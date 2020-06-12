@@ -6,14 +6,14 @@ import {debounceTime, takeUntil} from 'rxjs/operators';
 import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
 import {AVAILABLE_PACKET_BILLING_CYCLES} from '../../../../shared/entity/cloud/PacketCloudSpec';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
+import {Cluster} from '../../../../shared/entity/cluster';
 
 @Component({
   selector: 'km-packet-provider-settings',
   templateUrl: './packet-provider-settings.component.html',
 })
 export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
   form: FormGroup;
   private _formData = {apiKey: '', projectID: '', billingCycle: ''};
   private _unsubscribe: Subject<any> = new Subject();

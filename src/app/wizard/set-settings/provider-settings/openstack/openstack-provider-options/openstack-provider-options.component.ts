@@ -3,7 +3,7 @@ import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
 import {merge, Subject} from 'rxjs';
 import {distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../../../core/services';
-import {ClusterEntity} from '../../../../../shared/entity/ClusterEntity';
+import {Cluster} from '../../../../../shared/entity/cluster';
 import {
   OpenstackNetwork,
   OpenstackSecurityGroup,
@@ -17,7 +17,7 @@ import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
   templateUrl: './openstack-provider-options.component.html',
 })
 export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
 
   hideOptional = true;
   form: FormGroup;

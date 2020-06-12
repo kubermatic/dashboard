@@ -4,7 +4,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '../../core/services';
 
 import {ApiService} from '../../core/services';
-import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity';
+import {CreateMember, Member} from '../../shared/entity/Member';
 import {Project} from '../../shared/entity/project';
 
 @Component({
@@ -29,7 +29,7 @@ export class AddMemberComponent implements OnInit {
   }
 
   addMember(): void {
-    const createMember: CreateMemberEntity = {
+    const createMember: CreateMember = {
       email: this.addMemberForm.controls.email.value,
       projects: [
         {
@@ -39,7 +39,7 @@ export class AddMemberComponent implements OnInit {
       ],
     };
 
-    this._apiService.createMembers(this.project.id, createMember).subscribe((member: MemberEntity) => {
+    this._apiService.createMembers(this.project.id, createMember).subscribe((member: Member) => {
       this._matDialogRef.close(member);
       this._notificationService.success(
         `The <strong>${member.email}</strong> member was added to the <strong>${this.project.name}</strong> project`

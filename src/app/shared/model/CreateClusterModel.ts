@@ -1,4 +1,4 @@
-import {ClusterSpec} from '../entity/ClusterEntity';
+import {ClusterSpec} from '../entity/cluster';
 import {NodeDeployment} from '../entity/node-deployment';
 
 export class CreateClusterModel {

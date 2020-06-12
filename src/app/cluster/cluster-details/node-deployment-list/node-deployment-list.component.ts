@@ -7,16 +7,16 @@ import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {ProjectService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/datacenter';
-import {MemberEntity} from '../../../shared/entity/MemberEntity';
+import {Cluster} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
+import {Member} from '../../../shared/entity/Member';
 import {NodeDeployment} from '../../../shared/entity/node-deployment';
 import {GroupConfig} from '../../../shared/model/Config';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
-import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 import {NodeService} from '../../services/node.service';
+import {getOperatingSystem} from '../../../shared/entity/node';
 
 @Component({
   selector: 'km-node-deployment-list',
@@ -24,8 +24,8 @@ import {NodeService} from '../../services/node.service';
   styleUrls: ['node-deployment-list.component.scss'],
 })
 export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  @Input() datacenter: DataCenterEntity;
+  @Input() cluster: Cluster;
+  @Input() datacenter: Datacenter;
   @Input() nodeDeployments: NodeDeployment[] = [];
   @Input() projectID: string;
   @Input() clusterHealthStatus: ClusterHealthStatus;
@@ -37,7 +37,7 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
   displayedColumns: string[] = ['status', 'name', 'labels', 'replicas', 'ver', 'os', 'created', 'actions'];
 
   private _unsubscribe: Subject<any> = new Subject();
-  private _user: MemberEntity;
+  private _user: Member;
   private _currentGroupConfig: GroupConfig;
 
   constructor(
@@ -88,11 +88,11 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
   }
 
   getOperatingSystem(nd: NodeDeployment): string {
-    return NodeUtils.getOperatingSystem(nd.spec.template);
+    return getOperatingSystem(nd.spec.template);
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterEntity.getVersionHeadline(type, isKubelet);
+    return Cluster.getVersionHeadline(type, isKubelet);
   }
 
   goToDetails(nd: NodeDeployment): void {

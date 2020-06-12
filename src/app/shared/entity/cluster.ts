@@ -14,7 +14,7 @@ import {OpenstackCloudSpec} from './cloud/OpenstackCloudSpec';
 import {PacketCloudSpec} from './cloud/PacketCloudSpec';
 import {VSphereCloudSpec} from './cloud/VSphereCloudSpec';
 
-export function getClusterProvider(cluster: ClusterEntity): NodeProvider {
+export function getClusterProvider(cluster: Cluster): NodeProvider {
   const clusterProviders = Object.values(NodeProvider)
     .map(provider => (cluster.spec.cloud[provider] ? provider : undefined))
     .filter(p => p !== undefined);
@@ -33,7 +33,7 @@ export enum ClusterType {
   Empty = '',
 }
 
-export class ClusterEntity {
+export class Cluster {
   creationTimestamp?: Date;
   deletionTimestamp?: Date;
   id?: string;
@@ -71,11 +71,11 @@ export class ClusterEntity {
     }
   }
 
-  static isOpenshiftType(cluster: ClusterEntity): boolean {
+  static isOpenshiftType(cluster: Cluster): boolean {
     return cluster.type === ClusterType.OpenShift;
   }
 
-  static getDisplayType(cluster: ClusterEntity): string {
+  static getDisplayType(cluster: Cluster): string {
     switch (cluster.type) {
       case ClusterType.Kubernetes:
         return 'Kubernetes';
@@ -94,13 +94,157 @@ export class ClusterEntity {
     }
   }
 
-  static newEmptyClusterEntity(): ClusterEntity {
+  static newEmptyClusterEntity(): Cluster {
     return {
       spec: {
         cloud: {} as CloudSpec,
       } as ClusterSpec,
-    } as ClusterEntity;
+    } as Cluster;
   }
+}
+
+export class CloudSpec {
+  dc: string;
+  digitalocean?: DigitaloceanCloudSpec;
+  aws?: AWSCloudSpec;
+  bringyourown?: BringYourOwnCloudSpec;
+  openstack?: OpenstackCloudSpec;
+  packet?: PacketCloudSpec;
+  baremetal?: BareMetalCloudSpec;
+  vsphere?: VSphereCloudSpec;
+  hetzner?: HetznerCloudSpec;
+  azure?: AzureCloudSpec;
+  fake?: FakeCloudSpec;
+  gcp?: GCPCloudSpec;
+  kubevirt?: KubeVirtCloudSpec;
+  alibaba?: AlibabaCloudSpec;
+}
+
+export class ClusterSpec {
+  cloud: CloudSpec;
+  machineNetworks?: MachineNetwork[];
+  auditLogging?: AuditLoggingSettings;
+  version?: string;
+  usePodSecurityPolicyAdmissionPlugin?: boolean;
+  usePodNodeSelectorAdmissionPlugin?: boolean;
+  openshift?: OpenShift;
+}
+
+export class AuditLoggingSettings {
+  enabled?: boolean;
+}
+
+export class OpenShift {
+  imagePullSecret?: string;
+}
+
+export class MachineNetwork {
+  cidr: string;
+  dnsServers: string[];
+  gateway: string;
+}
+
+export class Status {
+  url: string;
+  version: string;
+}
+
+export class MasterVersion {
+  version: string;
+  default?: boolean;
+  restrictedByKubeletVersion?: boolean;
+}
+
+export class Token {
+  token: string;
+}
+
+export class ClusterEntityPatch {
+  id?: string;
+  name?: string;
+  labels?: object;
+  spec?: ClusterSpecPatch;
+}
+
+export class ClusterSpecPatch {
+  cloud?: CloudSpecPatch;
+  version?: string;
+  usePodSecurityPolicyAdmissionPlugin?: boolean;
+  usePodNodeSelectorAdmissionPlugin?: boolean;
+  auditLogging?: AuditLoggingSettings;
+  openshift?: OpenShiftPatch;
+}
+
+export class OpenShiftPatch {
+  imagePullSecret?: string;
+}
+
+export class CloudSpecPatch {
+  digitalocean?: DigitaloceanCloudSpecPatch;
+  aws?: AWSCloudSpecPatch;
+  openstack?: OpenstackCloudSpecPatch;
+  packet?: PacketCloudSpecPatch;
+  vsphere?: VSphereCloudSpecPatch;
+  hetzner?: HetznerCloudSpecPatch;
+  azure?: AzureCloudSpecPatch;
+  gcp?: GCPCloudSpecPatch;
+  kubevirt?: KubevirtCloudSpecPatch;
+  alibaba?: AlibabaCloudSpecPatch;
+}
+
+export class DigitaloceanCloudSpecPatch {
+  token?: string;
+}
+
+export class GCPCloudSpecPatch {
+  serviceAccount?: string;
+}
+
+export class OpenstackCloudSpecPatch {
+  username?: string;
+  password?: string;
+}
+
+export class PacketCloudSpecPatch {
+  apiKey?: string;
+  projectID?: string;
+  billingCycle?: string;
+}
+
+export class HetznerCloudSpecPatch {
+  token?: string;
+}
+
+export class AWSCloudSpecPatch {
+  accessKeyId?: string;
+  secretAccessKey?: string;
+}
+
+export class AzureCloudSpecPatch {
+  clientID?: string;
+  clientSecret?: string;
+  subscriptionID?: string;
+  tenantID?: string;
+}
+
+export class VSphereCloudSpecPatch {
+  username?: string;
+  password?: string;
+  infraManagementUser?: VSphereInfraManagementUser;
+}
+
+export class VSphereInfraManagementUser {
+  username?: string;
+  password?: string;
+}
+
+export class KubevirtCloudSpecPatch {
+  kubeconfig?: string;
+}
+
+export class AlibabaCloudSpecPatch {
+  accessKeyID?: string;
+  accessKeySecret?: string;
 }
 
 export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
@@ -181,60 +325,4 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
       } as AlibabaCloudSpec;
   }
   return {};
-}
-
-export class CloudSpec {
-  dc: string;
-  digitalocean?: DigitaloceanCloudSpec;
-  aws?: AWSCloudSpec;
-  bringyourown?: BringYourOwnCloudSpec;
-  openstack?: OpenstackCloudSpec;
-  packet?: PacketCloudSpec;
-  baremetal?: BareMetalCloudSpec;
-  vsphere?: VSphereCloudSpec;
-  hetzner?: HetznerCloudSpec;
-  azure?: AzureCloudSpec;
-  fake?: FakeCloudSpec;
-  gcp?: GCPCloudSpec;
-  kubevirt?: KubeVirtCloudSpec;
-  alibaba?: AlibabaCloudSpec;
-}
-
-export class ClusterSpec {
-  cloud: CloudSpec;
-  machineNetworks?: MachineNetwork[];
-  auditLogging?: AuditLoggingSettings;
-  version?: string;
-  usePodSecurityPolicyAdmissionPlugin?: boolean;
-  usePodNodeSelectorAdmissionPlugin?: boolean;
-  openshift?: OpenShift;
-}
-
-export class AuditLoggingSettings {
-  enabled?: boolean;
-}
-
-export class OpenShift {
-  imagePullSecret?: string;
-}
-
-export class MachineNetwork {
-  cidr: string;
-  dnsServers: string[];
-  gateway: string;
-}
-
-export class Status {
-  url: string;
-  version: string;
-}
-
-export class MasterVersion {
-  version: string;
-  default?: boolean;
-  restrictedByKubeletVersion?: boolean;
-}
-
-export class Token {
-  token: string;
 }

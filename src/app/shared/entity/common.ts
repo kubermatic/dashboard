@@ -13,3 +13,13 @@ export class ObjectReference {
   namespace: string;
   type: string;
 }
+
+export enum ResourceType {
+  Cluster = 'cluster',
+  Project = 'project',
+  NodeDeployment = 'nodedeployment',
+}
+
+export type ResourceLabelMap = {
+  [key in ResourceType]: string[];
+};

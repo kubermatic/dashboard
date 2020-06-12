@@ -14,17 +14,17 @@ import {
   UserService,
 } from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
-import {AddonEntity} from '../../shared/entity/addon';
-import {ClusterEntity, ClusterType, getClusterProvider, MasterVersion} from '../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../shared/entity/datacenter';
+import {Addon} from '../../shared/entity/addon';
+import {Cluster, ClusterType, getClusterProvider, MasterVersion} from '../../shared/entity/cluster';
+import {Datacenter} from '../../shared/entity/datacenter';
 import {Event} from '../../shared/entity/event';
 import {HealthEntity, HealthState} from '../../shared/entity/HealthEntity';
-import {MemberEntity} from '../../shared/entity/MemberEntity';
+import {Member} from '../../shared/entity/Member';
 import {ClusterMetrics} from '../../shared/entity/metrics';
 import {NodeDeployment} from '../../shared/entity/node-deployment';
-import {NodeEntity} from '../../shared/entity/NodeEntity';
+import {Node} from '../../shared/entity/node';
 import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '../../shared/entity/rbac';
-import {SSHKeyEntity} from '../../shared/entity/ssh-key';
+import {SSHKey} from '../../shared/entity/ssh-key';
 import {Config, GroupConfig} from '../../shared/model/Config';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
@@ -43,11 +43,11 @@ import {ShareKubeconfigComponent} from './share-kubeconfig/share-kubeconfig.comp
   styleUrls: ['./cluster-details.component.scss'],
 })
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
-  cluster: ClusterEntity;
-  nodeDc: DataCenterEntity;
-  datacenter: DataCenterEntity;
-  sshKeys: SSHKeyEntity[] = [];
-  nodes: NodeEntity[] = [];
+  cluster: Cluster;
+  nodeDc: Datacenter;
+  datacenter: Datacenter;
+  sshKeys: SSHKey[] = [];
+  nodes: Node[] = [];
   nodeDeployments: NodeDeployment[];
   isNodeDeploymentLoadFinished = false;
   isClusterRunning = false;
@@ -58,12 +58,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   projectID: string;
   metrics: ClusterMetrics;
   events: Event[] = [];
-  addons: AddonEntity[] = [];
+  addons: Addon[] = [];
   upgrades: MasterVersion[] = [];
   clusterBindings: SimpleClusterBinding[] = [];
   bindings: SimpleBinding[] = [];
   private _unsubscribe: Subject<any> = new Subject();
-  private _user: MemberEntity;
+  private _user: Member;
   private _currentGroupConfig: GroupConfig;
 
   constructor(
@@ -168,8 +168,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           MasterVersion[],
           ClusterBinding[],
           Binding[],
-          AddonEntity[],
-          NodeEntity[],
+          Addon[],
+          Node[],
           NodeDeployment[],
           ClusterMetrics
         ]) => {
@@ -298,7 +298,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         iif(
           () => settings.enableOIDCKubeconfig,
           this._userService.loggedInUser.pipe(
-            map((user: MemberEntity) =>
+            map((user: Member) =>
               this._api.getShareKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id, user.id)
             )
           ),
@@ -363,7 +363,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.projectID = this.projectID;
   }
 
-  handleAddonCreation(addon: AddonEntity): void {
+  handleAddonCreation(addon: Addon): void {
     this._clusterService
       .createAddon(addon, this.projectID, this.cluster.id, this.datacenter.metadata.name)
       .pipe(first())
@@ -376,7 +376,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  handleAddonEdition(addon: AddonEntity): void {
+  handleAddonEdition(addon: Addon): void {
     this._clusterService
       .editAddon(addon, this.projectID, this.cluster.id, this.datacenter.metadata.name)
       .pipe(first())
@@ -387,7 +387,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  handleAddonDeletion(addon: AddonEntity): void {
+  handleAddonDeletion(addon: Addon): void {
     this._clusterService
       .deleteAddon(addon.id, this.projectID, this.cluster.id, this.datacenter.metadata.name)
       .pipe(first())
@@ -412,7 +412,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   getConnectName(): string {
-    return ClusterEntity.isOpenshiftType(this.cluster) ? 'Open Console' : 'Open Dashboard';
+    return Cluster.isOpenshiftType(this.cluster) ? 'Open Console' : 'Open Dashboard';
   }
 
   isRBACEnabled(): boolean {

@@ -21,7 +21,7 @@ import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 
 import {EditProjectComponent} from './edit-project/edit-project.component';
-import {MemberEntity} from '../shared/entity/MemberEntity';
+import {Member} from '../shared/entity/Member';
 import {UserSettings} from '../shared/entity/settings';
 
 @Component({
@@ -31,7 +31,7 @@ import {UserSettings} from '../shared/entity/settings';
 })
 export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   projects: Project[] = [];
-  currentUser: MemberEntity;
+  currentUser: Member;
   isInitializing = true;
   role = [];
   rawRole = [];

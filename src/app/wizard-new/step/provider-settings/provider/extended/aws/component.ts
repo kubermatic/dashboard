@@ -5,7 +5,7 @@ import {filter, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
 import {AWSCloudSpec} from '../../../../../../shared/entity/cloud/AWSCloudSpec';
-import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
+import {CloudSpec, Cluster, ClusterSpec} from '../../../../../../shared/entity/cluster';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
@@ -88,7 +88,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     }
   }
 
-  private _getClusterEntity(): ClusterEntity {
+  private _getClusterEntity(): Cluster {
     return {
       spec: {
         cloud: {
@@ -100,6 +100,6 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
           } as AWSCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
-    } as ClusterEntity;
+    } as Cluster;
   }
 }

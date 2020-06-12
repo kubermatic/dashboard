@@ -8,7 +8,7 @@ import {MachineNetworksModule} from '../../machine-networks/machine-networks.mod
 import {SharedModule} from '../../shared/shared.module';
 import {nodeDataFake} from '../../testing/fake-data/node.fake';
 import {SetMachineNetworksComponent} from './set-machine-networks.component';
-import {ClusterType} from '../../shared/entity/ClusterEntity';
+import {ClusterType} from '../../shared/entity/cluster';
 
 const modules: any[] = [
   BrowserModule,

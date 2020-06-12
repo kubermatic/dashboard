@@ -14,7 +14,7 @@ import {map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
+import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
 import {AWSSize, AWSSubnet} from '../../../../shared/entity/provider/aws/AWS';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';

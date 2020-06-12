@@ -4,7 +4,7 @@ import {merge} from 'rxjs';
 import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 import {PresetsService} from '../../../../../../core/services';
 import {VSphereCloudSpec} from '../../../../../../shared/entity/cloud/VSphereCloudSpec';
-import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
+import {CloudSpec, Cluster, ClusterSpec} from '../../../../../../shared/entity/cluster';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {isObjectEmpty} from '../../../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
@@ -128,7 +128,7 @@ export class VSphereProviderBasicComponent extends BaseFormValidator implements 
     }
   }
 
-  private _getClusterEntity(): ClusterEntity {
+  private _getClusterEntity(): Cluster {
     return {
       spec: {
         cloud: {
@@ -142,6 +142,6 @@ export class VSphereProviderBasicComponent extends BaseFormValidator implements 
           } as VSphereCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
-    } as ClusterEntity;
+    } as Cluster;
   }
 }

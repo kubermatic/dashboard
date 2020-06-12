@@ -6,7 +6,7 @@ export class CreateDatacenterModel {
   spec: DatacenterSpec;
 }
 
-export class DataCenterEntity {
+export class Datacenter {
   metadata: Metadata;
   spec: DatacenterSpec;
   seed?: boolean;
@@ -93,6 +93,6 @@ export class VSphereDatacenterSpec {
   templates: DatacenterOperatingSystemOptions;
 }
 
-export function getDatacenterProvider(datacenter: DataCenterEntity): NodeProvider {
+export function getDatacenterProvider(datacenter: Datacenter): NodeProvider {
   return Object.values(NodeProvider).find(provider => provider === datacenter.spec.provider) || NodeProvider.NONE;
 }

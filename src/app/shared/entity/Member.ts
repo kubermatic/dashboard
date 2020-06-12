@@ -1,6 +1,6 @@
 import {UserSettings} from './settings';
 
-export class MemberEntity {
+export class Member {
   creationTimestamp: Date;
   deletionTimestamp?: Date;
   email: string;
@@ -16,12 +16,12 @@ export class MemberProject {
   id: string;
 }
 
-export class CreateMemberEntity {
+export class CreateMember {
   email: string;
   projects: MemberProject[];
 }
 
-export class AdminEntity {
+export class Admin {
   name?: string;
   email?: string;
   isAdmin?: boolean;

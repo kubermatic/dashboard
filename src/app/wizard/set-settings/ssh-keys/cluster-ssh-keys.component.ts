@@ -8,10 +8,10 @@ import {first, switchMap, takeUntil} from 'rxjs/operators';
 import {ApiService, ProjectService, UserService} from '../../../core/services';
 import {WizardService} from '../../../core/services';
 import {AddSshKeyDialogComponent} from '../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {MemberEntity} from '../../../shared/entity/MemberEntity';
+import {Cluster} from '../../../shared/entity/cluster';
+import {Member} from '../../../shared/entity/Member';
 import {Project} from '../../../shared/entity/project';
-import {SSHKeyEntity} from '../../../shared/entity/ssh-key';
+import {SSHKey} from '../../../shared/entity/ssh-key';
 import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 
@@ -21,16 +21,16 @@ import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member
   styleUrls: ['cluster-ssh-keys.component.scss'],
 })
 export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  @Input() selectedKeys: SSHKeyEntity[] = [];
-  keys: SSHKeyEntity[] = [];
+  @Input() cluster: Cluster;
+  @Input() selectedKeys: SSHKey[] = [];
+  keys: SSHKey[] = [];
   keysForm: FormGroup = new FormGroup({
     keys: new FormControl([], []),
   });
   project = {} as Project;
   groupConfig: GroupConfig;
 
-  private _currentUser: MemberEntity;
+  private _currentUser: Member;
   private _currentGroupConfig: GroupConfig;
   private _unsubscribe = new Subject<void>();
 
@@ -107,7 +107,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   setClusterSSHKeysSpec(): void {
-    const clusterKeys: SSHKeyEntity[] = [];
+    const clusterKeys: SSHKey[] = [];
     for (const selectedKey of this.keysForm.controls.keys.value) {
       for (const key of this.keys) {
         if (selectedKey.id === key.id) {
@@ -118,7 +118,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
     this._wizardService.changeClusterSSHKeys(clusterKeys);
   }
 
-  compareValues(value1: SSHKeyEntity, value2: SSHKeyEntity): boolean {
+  compareValues(value1: SSHKey, value2: SSHKey): boolean {
     return value1 && value2 ? value1.id === value2.id : value1 === value2;
   }
 }

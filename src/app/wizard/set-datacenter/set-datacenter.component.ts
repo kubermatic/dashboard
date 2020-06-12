@@ -4,8 +4,8 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {DatacenterService, WizardService} from '../../core/services';
-import {AuditLoggingSettings, ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
-import {DataCenterEntity, getDatacenterProvider} from '../../shared/entity/datacenter';
+import {AuditLoggingSettings, Cluster, getClusterProvider} from '../../shared/entity/cluster';
+import {Datacenter, getDatacenterProvider} from '../../shared/entity/datacenter';
 
 @Component({
   selector: 'km-set-datacenter',
@@ -13,9 +13,9 @@ import {DataCenterEntity, getDatacenterProvider} from '../../shared/entity/datac
   styleUrls: ['set-datacenter.component.scss'],
 })
 export class SetDatacenterComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
   setDatacenterForm: FormGroup;
-  datacenters: DataCenterEntity[] = [];
+  datacenters: Datacenter[] = [];
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(private readonly _dcService: DatacenterService, private readonly _wizardService: WizardService) {}
@@ -27,7 +27,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
 
     // Get all datacenters for the cluster cloud provider
     this._dcService.datacenters.pipe(takeUntil(this._unsubscribe)).subscribe(datacenters => {
-      const providerDatacenters: DataCenterEntity[] = [];
+      const providerDatacenters: Datacenter[] = [];
       for (const datacenter of datacenters) {
         if (datacenter.seed) {
           continue;
@@ -47,7 +47,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
   }
 
   changeClusterDatacenter(): void {
-    let dc: DataCenterEntity = null;
+    let dc: Datacenter = null;
     for (const datacenter of this.datacenters) {
       if (this.setDatacenterForm.controls.datacenter.value === datacenter.metadata.name) {
         dc = datacenter;
@@ -65,7 +65,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
     });
   }
 
-  getLocationName(datacenter: DataCenterEntity): string {
+  getLocationName(datacenter: Datacenter): string {
     if (datacenter.spec.location.includes('(')) {
       const splitted = datacenter.spec.location.replace(')', '').split('(');
       return '<span class="km-country-prefix">' + splitted[0].trim() + '</span><span>' + splitted[1].trim() + '</span>';

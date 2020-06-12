@@ -4,8 +4,8 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 import {
-  AddonConfigEntity,
-  AddonEntity,
+  AddonConfig,
+  Addon,
   AddonFormSpec,
   getAddonLogoData,
   hasAddonFormData,
@@ -19,7 +19,7 @@ import {
 })
 export class InstallAddonDialogComponent implements OnInit {
   @Input() addonName: string;
-  @Input() addonConfig: AddonConfigEntity;
+  @Input() addonConfig: AddonConfig;
   form: FormGroup;
 
   static getControlValidators(control: AddonFormSpec): ValidatorFn[] {
@@ -61,7 +61,7 @@ export class InstallAddonDialogComponent implements OnInit {
     return this._domSanitizer.bypassSecurityTrustUrl(getAddonLogoData(this.addonConfig));
   }
 
-  private _getAddonEntity(): AddonEntity {
+  private _getAddonEntity(): Addon {
     const variables = {};
 
     Object.keys(this.form.controls).forEach(key => {

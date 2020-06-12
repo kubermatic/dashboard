@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 
 import {Settings, ClusterTypeOptions} from '../../shared/entity/settings';
-import {UserSettings} from '../../shared/entity/MemberEntity';
+import {UserSettings} from '../../shared/entity/Member';
 
 export const DEFAULT_USER_SETTINGS_MOCK: UserSettings = {
   itemsPerPage: 10,

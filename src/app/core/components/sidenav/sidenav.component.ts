@@ -6,7 +6,7 @@ import {BehaviorSubject, merge, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
-import {MemberEntity} from '../../../shared/entity/MemberEntity';
+import {Member} from '../../../shared/entity/Member';
 import {Project} from '../../../shared/entity/project';
 import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
@@ -24,7 +24,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   environment: any = environment;
   customLinks: CustomLink[] = [];
   settings: UserSettings;
-  currentUser: MemberEntity;
+  currentUser: Member;
   screenWidth = 0;
   private _selectedProject = {} as Project;
   private _currentGroupConfig: GroupConfig;

@@ -1,15 +1,15 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 
-import {ClusterEntity} from '../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../shared/entity/datacenter';
+import {Cluster} from '../../shared/entity/cluster';
+import {Datacenter} from '../../shared/entity/datacenter';
 import {NodeDeployment} from '../../shared/entity/node-deployment';
-import {NodeSpec} from '../../shared/entity/NodeEntity';
+import {NodeSpec} from '../../shared/entity/node';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 
 @Injectable()
 export class NodeMockService {
-  createNodes(nodeData: NodeData, dc: DataCenterEntity, cluster: ClusterEntity, project: string): void {}
+  createNodes(nodeData: NodeData, dc: Datacenter, cluster: Cluster, project: string): void {}
 
   getOperatingSystem(spec: NodeSpec): string {
     return 'ubuntu';
@@ -25,9 +25,9 @@ export class NodeMockService {
 
   showNodeDeploymentEditDialog(
     nd: NodeDeployment,
-    cluster: ClusterEntity,
+    cluster: Cluster,
     projectID: string,
-    datacenter: DataCenterEntity,
+    datacenter: Datacenter,
     changeEventEmitter: EventEmitter<NodeDeployment>
   ): Observable<boolean> {
     return of(true);

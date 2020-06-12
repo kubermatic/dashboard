@@ -10,10 +10,10 @@ import {AppConfigService} from '../../../app-config.service';
 import {ClusterService, NotificationService, UserService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/datacenter';
-import {MemberEntity} from '../../../shared/entity/MemberEntity';
-import {SSHKeyEntity} from '../../../shared/entity/ssh-key';
+import {Cluster} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
+import {Member} from '../../../shared/entity/Member';
+import {SSHKey} from '../../../shared/entity/ssh-key';
 import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 
@@ -25,16 +25,16 @@ import {AddClusterSSHKeysComponent} from './add-cluster-sshkeys/add-cluster-sshk
   styleUrls: ['./edit-sshkeys.component.scss'],
 })
 export class EditSSHKeysComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  @Input() datacenter: DataCenterEntity;
+  @Input() cluster: Cluster;
+  @Input() datacenter: Datacenter;
   @Input() projectID: string;
 
   loading = true;
-  sshKeys: SSHKeyEntity[] = [];
+  sshKeys: SSHKey[] = [];
   displayedColumns: string[] = ['name', 'actions'];
-  dataSource = new MatTableDataSource<SSHKeyEntity>();
+  dataSource = new MatTableDataSource<SSHKey>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  private _user: MemberEntity;
+  private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _unsubscribe: Subject<any> = new Subject();
   private _sshKeysUpdate: Subject<any> = new Subject();
@@ -79,7 +79,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getDataSource(): MatTableDataSource<SSHKeyEntity> {
+  getDataSource(): MatTableDataSource<SSHKey> {
     this.dataSource.data = this.sshKeys;
     return this.dataSource;
   }
@@ -102,7 +102,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     dialogRef
       .afterClosed()
       .pipe(first())
-      .subscribe((sshkey: SSHKeyEntity) => {
+      .subscribe((sshkey: SSHKey) => {
         if (sshkey) {
           this.sshKeys.push(sshkey);
           this._sshKeysUpdate.next();
@@ -114,7 +114,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshKeys', Permission.Delete);
   }
 
-  deleteSshKey(sshKey: SSHKeyEntity): void {
+  deleteSshKey(sshKey: SSHKey): void {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,

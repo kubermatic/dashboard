@@ -1,8 +1,8 @@
 import {NodeDeployment} from '../../shared/entity/node-deployment';
-import {NodeEntity} from '../../shared/entity/NodeEntity';
+import {Node} from '../../shared/entity/node';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 
-export function fakeDigitaloceanCreateNode(): NodeEntity {
+export function fakeDigitaloceanCreateNode(): Node {
   return {
     spec: {
       cloud: {
@@ -26,7 +26,7 @@ export function fakeDigitaloceanCreateNode(): NodeEntity {
   };
 }
 
-export function nodeFake(): NodeEntity {
+export function nodeFake(): Node {
   return {
     id: 'machine-kubermatic-tbbfvttvs-v5hmk',
     name: 'kubermatic-tbbfvttvs-v5hmk',
@@ -84,7 +84,7 @@ export function nodeFake(): NodeEntity {
   };
 }
 
-export function nodeAWSFake(): NodeEntity {
+export function nodeAWSFake(): Node {
   return {
     id: 'worker-cht5l-684d57f97b-hkgrz',
     name: 'ip-172-31-1-240.eu-central-1.compute.internal',
@@ -199,7 +199,7 @@ export function nodeDeploymentsFake(): NodeDeployment[] {
   ];
 }
 
-export function nodesFake(): NodeEntity[] {
+export function nodesFake(): Node[] {
   return [
     {
       id: 'machine-kubermatic-tbbfvttvs-v5hmk',

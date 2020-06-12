@@ -4,7 +4,7 @@ import {merge} from 'rxjs';
 import {filter, takeUntil} from 'rxjs/operators';
 import {PresetsService} from '../../../../../../core/services';
 import {AzureCloudSpec} from '../../../../../../shared/entity/cloud/AzureCloudSpec';
-import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
+import {CloudSpec, Cluster, ClusterSpec} from '../../../../../../shared/entity/cluster';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
@@ -93,7 +93,7 @@ export class AzureProviderBasicComponent extends BaseFormValidator implements On
     }
   }
 
-  private _getClusterEntity(): ClusterEntity {
+  private _getClusterEntity(): Cluster {
     return {
       spec: {
         cloud: {
@@ -105,6 +105,6 @@ export class AzureProviderBasicComponent extends BaseFormValidator implements On
           } as AzureCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
-    } as ClusterEntity;
+    } as Cluster;
   }
 }

@@ -5,7 +5,7 @@ import {debounceTime, distinctUntilChanged, first, startWith, takeUntil} from 'r
 
 import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
-import {CloudSpec} from '../../shared/entity/ClusterEntity';
+import {CloudSpec} from '../../shared/entity/cluster';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '../../shared/entity/provider/gcp/GCP';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';

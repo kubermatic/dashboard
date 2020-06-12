@@ -6,14 +6,14 @@ import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {ClusterService, DatacenterService, ProjectService, WizardService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
-import {ClusterEntity, MasterVersion} from '../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../shared/entity/datacenter';
-import {ResourceType} from '../shared/entity/LabelsEntity';
-import {OperatingSystemSpec} from '../shared/entity/NodeEntity';
+import {Cluster, MasterVersion} from '../shared/entity/cluster';
+import {Datacenter} from '../shared/entity/datacenter';
+import {OperatingSystemSpec} from '../shared/entity/node';
 import {NodeProviderConstants, OperatingSystem} from '../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../shared/model/NodeSpecChange';
 import {AsyncValidators} from '../shared/validators/async-label-form.validator';
 import {NoIpsLeftValidator} from '../shared/validators/no-ips-left.validator';
+import {ResourceType} from '../shared/entity/common';
 
 @Component({
   selector: 'km-node-data',
@@ -21,11 +21,11 @@ import {NoIpsLeftValidator} from '../shared/validators/no-ips-left.validator';
   styleUrls: ['./node-data.component.scss'],
 })
 export class NodeDataComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
   @Input() nodeData: NodeData;
   @Input() existingNodesCount: number;
   @Input() isInWizard = false;
-  @Input() seedDc: DataCenterEntity;
+  @Input() seedDc: Datacenter;
   @Output() valid = new EventEmitter<boolean>();
   isNameDisabled: boolean;
   projectId: string;
@@ -245,11 +245,11 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterEntity.getVersionHeadline(type, isKubelet);
+    return Cluster.getVersionHeadline(type, isKubelet);
   }
 
   isClusterOpenshift(): boolean {
-    return ClusterEntity.isOpenshiftType(this.cluster);
+    return Cluster.isOpenshiftType(this.cluster);
   }
 
   isContainerLinuxAvailable(): boolean {

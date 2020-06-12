@@ -1,4 +1,4 @@
-import {NodeEntity} from '../../entity/NodeEntity';
+import {Node} from '../../entity/node';
 
 import {HealthStatus, HealthStatusColor, HealthStatusMessage} from './health-status';
 
@@ -10,7 +10,7 @@ export enum HealthStatusCss {
 }
 
 export class NodeHealthStatus extends HealthStatus {
-  static getHealthStatus(n: NodeEntity): NodeHealthStatus {
+  static getHealthStatus(n: Node): NodeHealthStatus {
     if (n.deletionTimestamp) {
       return new NodeHealthStatus(HealthStatusMessage.Deleting, HealthStatusColor.Red, HealthStatusCss.Deleting);
     } else if (n.status.errorMessage) {

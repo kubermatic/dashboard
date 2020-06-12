@@ -7,15 +7,15 @@ import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
 import {TaintFormComponent} from '../../../shared/components/taint-form/taint-form.component';
-import {AddonConfigEntity} from '../../../shared/entity/addon';
-import {ClusterEntity, ClusterType, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
+import {AddonConfig} from '../../../shared/entity/addon';
+import {Cluster, ClusterType, MasterVersion, Token} from '../../../shared/entity/cluster';
 import {Event} from '../../../shared/entity/event';
-import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
+import {CreateMember, Member} from '../../../shared/entity/Member';
 import {NodeMetrics} from '../../../shared/entity/metrics';
 import {NodeDeployment, NodeDeploymentPatch} from '../../../shared/entity/node-deployment';
-import {NodeEntity} from '../../../shared/entity/NodeEntity';
+import {Node} from '../../../shared/entity/node';
 import {PacketSize} from '../../../shared/entity/packet/PacketSizeEntity';
-import {EditProjectEntity, Project} from '../../../shared/entity/project';
+import {EditProject, Project} from '../../../shared/entity/project';
 import {AlibabaInstanceType, AlibabaZone} from '../../../shared/entity/provider/alibaba/Alibaba';
 import {AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws/AWS';
 import {AzureSizes, AzureZones} from '../../../shared/entity/provider/azure/AzureSizeEntity';
@@ -30,7 +30,7 @@ import {
   ServiceAccountTokenEntity,
   ServiceAccountTokenPatch,
 } from '../../../shared/entity/service-account';
-import {SSHKeyEntity} from '../../../shared/entity/ssh-key';
+import {SSHKey} from '../../../shared/entity/ssh-key';
 import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
 import {Auth} from '../auth/auth.service';
 
@@ -50,7 +50,7 @@ export class ApiService {
     this._token = this._auth.getBearerToken();
   }
 
-  get addonConfigs(): Observable<AddonConfigEntity[]> {
+  get addonConfigs(): Observable<AddonConfig[]> {
     if (!this._addonConfigs$) {
       this._addonConfigs$ = this._refreshTimer$
         .pipe(switchMap(() => this._http.get(`${this._restRoot}/addonconfigs`)))
@@ -60,7 +60,7 @@ export class ApiService {
   }
 
   createNodeDeployment(
-    cluster: ClusterEntity,
+    cluster: Cluster,
     nd: NodeDeployment,
     dc: string,
     projectID: string
@@ -82,9 +82,9 @@ export class ApiService {
     return this._http.get<NodeDeployment>(url);
   }
 
-  getNodeDeploymentNodes(ndId: string, cluster: string, dc: string, projectID: string): Observable<NodeEntity[]> {
+  getNodeDeploymentNodes(ndId: string, cluster: string, dc: string, projectID: string): Observable<Node[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}/nodes`;
-    return this._http.get<NodeEntity[]>(url);
+    return this._http.get<Node[]>(url);
   }
   getNodeDeploymentNodesMetrics(
     ndId: string,
@@ -122,14 +122,14 @@ export class ApiService {
     return this._http.post<Project>(url, createProjectModel);
   }
 
-  editProject(projectID: string, editProjectEntity: EditProjectEntity): Observable<any> {
+  editProject(projectID: string, editProjectEntity: EditProject): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}`;
     return this._http.put(url, editProjectEntity);
   }
 
-  getSSHKeys(projectID: string): Observable<SSHKeyEntity[]> {
+  getSSHKeys(projectID: string): Observable<SSHKey[]> {
     const url = `${this._restRoot}/projects/${projectID}/sshkeys`;
-    return this._http.get<SSHKeyEntity[]>(url);
+    return this._http.get<SSHKey[]>(url);
   }
 
   deleteSSHKey(sshkeyID: string, projectID: string): Observable<any> {
@@ -137,9 +137,9 @@ export class ApiService {
     return this._http.delete(url);
   }
 
-  addSSHKey(sshKey: SSHKeyEntity, projectID: string): Observable<SSHKeyEntity> {
+  addSSHKey(sshKey: SSHKey, projectID: string): Observable<SSHKey> {
     const url = `${this._restRoot}/projects/${projectID}/sshkeys`;
-    return this._http.post<SSHKeyEntity>(url, sshKey);
+    return this._http.post<SSHKey>(url, sshKey);
   }
 
   getDigitaloceanSizes(projectId: string, dc: string, clusterId: string): Observable<DigitaloceanSizes> {
@@ -174,12 +174,12 @@ export class ApiService {
     return this._http.get<AlibabaZone[]>(url, {headers});
   }
 
-  editToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
+  editToken(cluster: Cluster, dc: string, projectID: string, token: Token): Observable<Token> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/token`;
     return this._http.put<Token>(url, token);
   }
 
-  editViewerToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
+  editViewerToken(cluster: Cluster, dc: string, projectID: string, token: Token): Observable<Token> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/viewertoken`;
     return this._http.put<Token>(url, token);
   }
@@ -259,22 +259,22 @@ export class ApiService {
     return this._http.get<AzureZones>(url, {headers});
   }
 
-  getMembers(projectID: string): Observable<MemberEntity[]> {
+  getMembers(projectID: string): Observable<Member[]> {
     const url = `${this._restRoot}/projects/${projectID}/users`;
-    return this._http.get<MemberEntity[]>(url);
+    return this._http.get<Member[]>(url);
   }
 
-  createMembers(projectID: string, member: CreateMemberEntity): Observable<MemberEntity> {
+  createMembers(projectID: string, member: CreateMember): Observable<Member> {
     const url = `${this._restRoot}/projects/${projectID}/users`;
-    return this._http.post<MemberEntity>(url, member);
+    return this._http.post<Member>(url, member);
   }
 
-  editMembers(projectID: string, member: MemberEntity): Observable<MemberEntity> {
+  editMembers(projectID: string, member: Member): Observable<Member> {
     const url = `${this._restRoot}/projects/${projectID}/users/${member.id}`;
-    return this._http.put<MemberEntity>(url, member);
+    return this._http.put<Member>(url, member);
   }
 
-  deleteMembers(projectID: string, member: MemberEntity): Observable<any> {
+  deleteMembers(projectID: string, member: Member): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/users/${member.id}`;
     return this._http.delete(url);
   }

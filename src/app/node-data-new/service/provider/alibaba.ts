@@ -2,7 +2,7 @@ import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, switchMap, tap} from 'rxjs/operators';
 
 import {DatacenterService, PresetsService} from '../../../core/services';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {Cluster} from '../../../shared/entity/cluster';
 import {AlibabaInstanceType, AlibabaZone} from '../../../shared/entity/provider/alibaba/Alibaba';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../wizard-new/service/cluster';
@@ -23,7 +23,7 @@ export class NodeDataAlibabaProvider {
   }
 
   instanceTypes(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AlibabaInstanceType[]> {
-    let cluster: ClusterEntity;
+    let cluster: Cluster;
     let region = '';
 
     // TODO: support dialog mode
@@ -58,7 +58,7 @@ export class NodeDataAlibabaProvider {
   }
 
   zones(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AlibabaZone[]> {
-    let cluster: ClusterEntity;
+    let cluster: Cluster;
     let region = '';
 
     // TODO: support dialog mode

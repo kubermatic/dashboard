@@ -3,7 +3,7 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {first} from 'rxjs/operators';
 
-import {AddonConfigEntity, getAddonLogoData, getAddonShortDescription, hasAddonLogoData} from '../../../entity/addon';
+import {AddonConfig, getAddonLogoData, getAddonShortDescription, hasAddonLogoData} from '../../../entity/addon';
 import {InstallAddonDialogComponent} from '../install-addon-dialog/install-addon-dialog.component';
 
 @Component({
@@ -13,7 +13,7 @@ import {InstallAddonDialogComponent} from '../install-addon-dialog/install-addon
 })
 export class SelectAddonDialogComponent {
   @Input() installableAddons: string[] = [];
-  @Input() addonConfigs = new Map<string, AddonConfigEntity>();
+  @Input() addonConfigs = new Map<string, AddonConfig>();
 
   constructor(
     public dialogRef: MatDialogRef<SelectAddonDialogComponent>,

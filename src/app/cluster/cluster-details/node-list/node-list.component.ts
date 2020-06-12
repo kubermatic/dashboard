@@ -10,16 +10,15 @@ import {ClusterService, NotificationService, UserService} from '../../../core/se
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/datacenter';
-import {MemberEntity} from '../../../shared/entity/MemberEntity';
+import {Cluster} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
+import {Member} from '../../../shared/entity/Member';
 import {NodeMetrics} from '../../../shared/entity/metrics';
-import {NodeEntity} from '../../../shared/entity/NodeEntity';
+import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '../../../shared/entity/node';
 import {GroupConfig} from '../../../shared/model/Config';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeHealthStatus} from '../../../shared/utils/health-status/node-health-status';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
-import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 
 @Component({
   selector: 'km-node-list',
@@ -27,12 +26,12 @@ import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
   styleUrls: ['node-list.component.scss'],
 })
 export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  @Input() datacenter: DataCenterEntity;
-  @Input() nodes: NodeEntity[] = [];
+  @Input() cluster: Cluster;
+  @Input() datacenter: Datacenter;
+  @Input() nodes: Node[] = [];
   @Input() nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   @Input() projectID: string;
-  @Output() deleteNode = new EventEmitter<NodeEntity>();
+  @Output() deleteNode = new EventEmitter<Node>();
   @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
   config: MatDialogConfig = {
@@ -50,10 +49,10 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     'actions',
   ];
   toggledColumns: string[] = ['nodeDetails'];
-  dataSource = new MatTableDataSource<NodeEntity>();
+  dataSource = new MatTableDataSource<Node>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  private _user: MemberEntity;
+  private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _unsubscribe = new Subject<void>();
 
@@ -95,14 +94,14 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterEntity.getVersionHeadline(type, isKubelet);
+    return Cluster.getVersionHeadline(type, isKubelet);
   }
 
   canDelete(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'nodes', Permission.Delete);
   }
 
-  deleteNodeDialog(node: NodeEntity, event: Event): void {
+  deleteNodeDialog(node: Node, event: Event): void {
     event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
@@ -135,7 +134,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  getNodeHealthStatus(n: NodeEntity, i: number): object {
+  getNodeHealthStatus(n: Node, i: number): object {
     return NodeHealthStatus.getHealthStatus(n);
   }
 
@@ -159,7 +158,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     return nodeCapacity ? `${nodeCapacity} ${prefixes[i - 1]}` : 'unknown';
   }
 
-  getAddresses(node: NodeEntity): object {
+  getAddresses(node: Node): object {
     const addresses = {};
     for (const i in node.status.addresses) {
       if (node.status.addresses[i].type === 'InternalIP') {
@@ -171,18 +170,18 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     return addresses;
   }
 
-  showInfo(node: NodeEntity): boolean {
+  showInfo(node: Node): boolean {
     return node.name !== node.id.replace('machine-', '') && node.id !== '';
   }
 
-  getInfo(node: NodeEntity): string {
+  getInfo(node: Node): string {
     if (node.spec.cloud.aws) {
       return node.name;
     }
     return node.id.replace('machine-', '');
   }
 
-  getNodeName(node: NodeEntity): string {
+  getNodeName(node: Node): string {
     return node.id.replace('machine-', '');
   }
 
@@ -190,7 +189,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     return !!tags && Object.keys(tags).length > 0;
   }
 
-  toggleNodeItem(element: NodeEntity): void {
+  toggleNodeItem(element: Node): void {
     const elem = event.target as HTMLElement;
     const className = elem.className;
     if (className !== 'km-copy') {
@@ -198,12 +197,12 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  getSystem(node: NodeEntity): string {
-    return NodeUtils.getOperatingSystem(node.spec);
+  getSystem(node: Node): string {
+    return getOperatingSystem(node.spec);
   }
 
-  getSystemLogoClass(node: NodeEntity): string {
-    return NodeUtils.getOperatingSystemLogoClass(node.spec);
+  getSystemLogoClass(node: Node): string {
+    return getOperatingSystemLogoClass(node.spec);
   }
 
   hasItems(): boolean {

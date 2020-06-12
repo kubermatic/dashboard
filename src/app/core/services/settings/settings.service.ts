@@ -15,7 +15,7 @@ import {
   UserSettings,
 } from '../../../shared/entity/settings';
 import {Settings} from 'http2';
-import {AdminEntity} from '../../../shared/entity/MemberEntity';
+import {Admin} from '../../../shared/entity/Member';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +27,7 @@ export class SettingsService {
   private _userSettingsRefresh$ = new Subject();
   private readonly _adminSettings$ = new BehaviorSubject(DEFAULT_ADMIN_SETTINGS);
   private _adminSettingsWatch$: Observable<AdminSettings>;
-  private _admins$: Observable<AdminEntity[]>;
+  private _admins$: Observable<Admin[]>;
   private _adminsRefresh$ = new Subject();
   private _customLinks$: Observable<CustomLink[]>;
   private _customLinksRefresh$ = new Subject();
@@ -147,7 +147,7 @@ export class SettingsService {
     this._customLinksRefresh$.next();
   }
 
-  get admins(): Observable<AdminEntity[]> {
+  get admins(): Observable<Admin[]> {
     if (!this._admins$) {
       this._admins$ = merge(this._refreshTimer$, this._adminsRefresh$)
         .pipe(switchMap(() => this._getAdmins()))
@@ -156,17 +156,17 @@ export class SettingsService {
     return this._admins$;
   }
 
-  private _getAdmins(): Observable<AdminEntity[]> {
+  private _getAdmins(): Observable<Admin[]> {
     const url = `${this.restRoot}/admin`;
-    return this._httpClient.get<AdminEntity[]>(url);
+    return this._httpClient.get<Admin[]>(url);
   }
 
   refreshAdmins(): void {
     this._adminsRefresh$.next();
   }
 
-  setAdmin(admin: AdminEntity): Observable<AdminEntity> {
+  setAdmin(admin: Admin): Observable<Admin> {
     const url = `${this.restRoot}/admin`;
-    return this._httpClient.put<AdminEntity>(url, admin);
+    return this._httpClient.put<Admin>(url, admin);
   }
 }

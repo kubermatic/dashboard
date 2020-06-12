@@ -16,7 +16,7 @@ import {ClusterNameGeneratorMock} from '../../testing/services/name-generator-mo
 import {DEFAULT_ADMIN_SETTINGS_MOCK} from '../../testing/services/settings-mock.service';
 
 import {SetClusterSpecComponent} from './set-cluster-spec.component';
-import {ClusterType} from '../../shared/entity/ClusterEntity';
+import {ClusterType} from '../../shared/entity/cluster';
 
 const modules: any[] = [
   BrowserModule,

@@ -4,7 +4,7 @@ import {merge, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
 import {AppConfigService} from '../../../../app-config.service';
 import {Auth, WizardService} from '../../../../core/services';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
+import {Cluster} from '../../../../shared/entity/cluster';
 import {
   OpenstackFloatingIpPool,
   OpenstackNetwork,
@@ -21,7 +21,7 @@ import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
   styleUrls: ['./openstack.component.scss'],
 })
 export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
 
   form: FormGroup;
   tenants: OpenstackTenant[] = [];

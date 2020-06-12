@@ -4,7 +4,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 
 import {NotificationService} from '../../../../core/services';
 import {SettingsService} from '../../../../core/services/settings/settings.service';
-import {AdminEntity} from '../../../../shared/entity/MemberEntity';
+import {Admin} from '../../../../shared/entity/Member';
 
 @Component({
   selector: 'km-add-admin-dialog',
@@ -26,7 +26,7 @@ export class AddAdminDialogComponent implements OnInit {
   }
 
   add(): void {
-    const adminEntity: AdminEntity = {
+    const adminEntity: Admin = {
       email: this.form.controls.email.value,
       isAdmin: true,
     };

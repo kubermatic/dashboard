@@ -8,7 +8,7 @@ import {DatacenterService, WizardService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
 import {SetProviderComponent} from './set-provider.component';
-import {ClusterType} from '../../shared/entity/ClusterEntity';
+import {ClusterType} from '../../shared/entity/cluster';
 import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
 
 describe('SetProviderComponent', () => {

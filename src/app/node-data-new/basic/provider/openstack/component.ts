@@ -13,11 +13,11 @@ import {merge, Observable} from 'rxjs';
 import {delay, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
-import {ClusterType} from '../../../../shared/entity/ClusterEntity';
+import {ClusterType} from '../../../../shared/entity/cluster';
 
 import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/datacenter';
 import {OpenstackNodeSpec} from '../../../../shared/entity/node/OpenstackNodeSpec';
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
+import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
 import {OpenstackFlavor} from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {OperatingSystem} from '../../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';

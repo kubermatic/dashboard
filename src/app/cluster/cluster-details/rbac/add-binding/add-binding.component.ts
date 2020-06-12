@@ -6,8 +6,8 @@ import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
 import {NotificationService, RBACService} from '../../../../core/services';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../../shared/entity/datacenter';
+import {Cluster} from '../../../../shared/entity/cluster';
+import {Datacenter} from '../../../../shared/entity/datacenter';
 import {ClusterRoleName, CreateBinding, RoleName} from '../../../../shared/entity/rbac';
 
 export enum Controls {
@@ -23,8 +23,8 @@ export enum Controls {
   styleUrls: ['./add-binding.component.scss'],
 })
 export class AddBindingComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  @Input() datacenter: DataCenterEntity;
+  @Input() cluster: Cluster;
+  @Input() datacenter: Datacenter;
   @Input() projectID: string;
   readonly controls = Controls;
   form: FormGroup;

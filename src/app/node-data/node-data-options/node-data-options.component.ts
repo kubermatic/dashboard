@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 
-import {CloudSpec} from '../../shared/entity/ClusterEntity';
+import {CloudSpec} from '../../shared/entity/cluster';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 
 @Component({

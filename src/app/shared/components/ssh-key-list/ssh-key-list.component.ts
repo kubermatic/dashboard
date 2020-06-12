@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {SSHKeyEntity} from '../../entity/ssh-key';
+import {SSHKey} from '../../entity/ssh-key';
 
 @Component({
   selector: 'km-ssh-key-list',
@@ -7,7 +7,7 @@ import {SSHKeyEntity} from '../../entity/ssh-key';
   styleUrls: ['./ssh-key-list.component.scss'],
 })
 export class SSHKeyListComponent {
-  @Input() sshKeys: SSHKeyEntity[] = [];
+  @Input() sshKeys: SSHKey[] = [];
   @Input() maxDisplayed = 3;
 
   getDisplayed(): string {

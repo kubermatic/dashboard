@@ -5,7 +5,7 @@ import {debounceTime, first, startWith, takeUntil} from 'rxjs/operators';
 
 import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
-import {CloudSpec} from '../../shared/entity/ClusterEntity';
+import {CloudSpec} from '../../shared/entity/cluster';
 import {PacketSize} from '../../shared/entity/packet/PacketSizeEntity';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';

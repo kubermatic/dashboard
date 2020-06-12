@@ -4,7 +4,7 @@ import {Subject} from 'rxjs';
 import {debounceTime, take, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../../../core/services';
-import {ClusterEntity} from '../../../../../shared/entity/ClusterEntity';
+import {Cluster} from '../../../../../shared/entity/cluster';
 import {AWSVPC} from '../../../../../shared/entity/provider/aws/AWS';
 import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
@@ -14,7 +14,7 @@ import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
   templateUrl: './aws-provider-options.component.html',
 })
 export class AWSProviderOptionsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
 
   hideOptional = true;
   form: FormGroup;
