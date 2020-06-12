@@ -12,12 +12,11 @@ import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {PresetsService} from '../../../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
-import {AWSCloudSpec} from '../../../../../../shared/entity/cloud/AWSCloudSpec';
-import {CloudSpec, Cluster, ClusterSpec} from '../../../../../../shared/entity/cluster';
-import {AWSVPC} from '../../../../../../shared/entity/provider/aws/AWS';
+import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '../../../../../../shared/entity/cluster';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
+import {AWSVPC} from '../../../../../../shared/entity/provider/aws';
 
 export enum Controls {
   AccessKeyID = 'accessKeyID',

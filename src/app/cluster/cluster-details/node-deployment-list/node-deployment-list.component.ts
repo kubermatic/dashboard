@@ -9,7 +9,7 @@ import {ProjectService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {Cluster} from '../../../shared/entity/cluster';
 import {Datacenter} from '../../../shared/entity/datacenter';
-import {Member} from '../../../shared/entity/Member';
+import {Member} from '../../../shared/entity/member';
 import {NodeDeployment} from '../../../shared/entity/node-deployment';
 import {GroupConfig} from '../../../shared/model/Config';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';

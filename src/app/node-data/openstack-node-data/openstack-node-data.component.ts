@@ -6,11 +6,11 @@ import {ApiService, DatacenterService, WizardService} from '../../core/services'
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/cluster';
 import {OperatingSystemSpec} from '../../shared/entity/node';
-import {OpenstackFlavor} from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 import {filterArrayOptions} from '../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
+import {OpenstackFlavor} from '../../shared/entity/provider/openstack';
 
 @Component({
   selector: 'km-openstack-node-data',

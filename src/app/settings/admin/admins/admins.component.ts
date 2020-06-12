@@ -9,7 +9,7 @@ import {NotificationService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {Subject} from 'rxjs';
 import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.component';
-import {Admin, Member} from '../../../shared/entity/Member';
+import {Admin, Member} from '../../../shared/entity/member';
 
 @Component({
   selector: 'km-admins',

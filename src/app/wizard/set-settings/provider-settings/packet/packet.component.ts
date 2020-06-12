@@ -4,8 +4,7 @@ import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../../core/services';
-import {AVAILABLE_PACKET_BILLING_CYCLES} from '../../../../shared/entity/cloud/PacketCloudSpec';
-import {Cluster} from '../../../../shared/entity/cluster';
+import {AVAILABLE_PACKET_BILLING_CYCLES, Cluster} from '../../../../shared/entity/cluster';
 import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm';
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 

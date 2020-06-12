@@ -1,4 +1,4 @@
-export class HealthEntity {
+export class Health {
   apiserver: HealthState;
   controller: HealthState;
   etcd: HealthState;
@@ -7,7 +7,7 @@ export class HealthEntity {
   cloudProviderInfrastructure: HealthState;
   userClusterControllerManager: HealthState;
 
-  static allHealthy(health: HealthEntity): boolean {
+  static allHealthy(health: Health): boolean {
     return Object.values(health).every(status => HealthState.isUp(status));
   }
 }

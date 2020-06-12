@@ -4,8 +4,13 @@ import {merge} from 'rxjs';
 import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
-import {AVAILABLE_PACKET_BILLING_CYCLES, PacketCloudSpec} from '../../../../../../shared/entity/cloud/PacketCloudSpec';
-import {CloudSpec, Cluster, ClusterSpec} from '../../../../../../shared/entity/cluster';
+import {
+  AVAILABLE_PACKET_BILLING_CYCLES,
+  CloudSpec,
+  Cluster,
+  ClusterSpec,
+  PacketCloudSpec,
+} from '../../../../../../shared/entity/cluster';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';

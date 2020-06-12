@@ -3,8 +3,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {merge} from 'rxjs';
 import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 import {PresetsService} from '../../../../../../core/services';
-import {VSphereCloudSpec} from '../../../../../../shared/entity/cloud/VSphereCloudSpec';
-import {CloudSpec, Cluster, ClusterSpec} from '../../../../../../shared/entity/cluster';
+import {CloudSpec, Cluster, ClusterSpec, VSphereCloudSpec} from '../../../../../../shared/entity/cluster';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {isObjectEmpty} from '../../../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';

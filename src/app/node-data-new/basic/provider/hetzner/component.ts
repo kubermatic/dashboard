@@ -2,9 +2,9 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDes
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {HetznerTypes, Type} from '../../../../shared/entity/provider/hetzner/TypeEntity';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
+import {HetznerTypes, Type} from '../../../../shared/entity/provider/hetzner';
 
 enum Controls {
   Type = 'type',

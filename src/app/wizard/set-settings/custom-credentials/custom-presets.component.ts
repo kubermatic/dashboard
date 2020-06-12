@@ -4,8 +4,8 @@ import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../core/services';
 import {Cluster} from '../../../shared/entity/cluster';
-import {PresetListEntity} from '../../../shared/entity/provider/credentials/PresetListEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
+import {PresetListEntity} from '../../../shared/entity/preset';
 
 export enum PresetsState {
   Ready = 'Custom Preset',

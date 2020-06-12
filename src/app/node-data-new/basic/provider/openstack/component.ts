@@ -16,14 +16,13 @@ import {FilteredComboboxComponent} from '../../../../shared/components/combobox/
 import {ClusterType} from '../../../../shared/entity/cluster';
 
 import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/datacenter';
-import {OpenstackNodeSpec} from '../../../../shared/entity/node/OpenstackNodeSpec';
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
-import {OpenstackFlavor} from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {NodeCloudSpec, NodeSpec, OpenstackNodeSpec} from '../../../../shared/entity/node';
 import {OperatingSystem} from '../../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../wizard-new/service/cluster';
 import {NodeDataService} from '../../../service/service';
+import {OpenstackFlavor} from '../../../../shared/entity/provider/openstack';
 
 enum Controls {
   Flavor = 'flavor',

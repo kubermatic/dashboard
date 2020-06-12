@@ -8,7 +8,7 @@ import {NotificationService} from '../../core/services';
 import {UserService, HistoryService} from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {AdminSettings, ClusterTypeOptions} from '../../shared/entity/settings';
-import {Member} from '../../shared/entity/Member';
+import {Member} from '../../shared/entity/member';
 import {objectDiff} from '../../shared/utils/common-utils';
 
 import {ClusterType} from '../../shared/entity/cluster';

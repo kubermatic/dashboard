@@ -10,19 +10,12 @@ import {TaintFormComponent} from '../../../shared/components/taint-form/taint-fo
 import {AddonConfig} from '../../../shared/entity/addon';
 import {Cluster, ClusterType, MasterVersion, Token} from '../../../shared/entity/cluster';
 import {Event} from '../../../shared/entity/event';
-import {CreateMember, Member} from '../../../shared/entity/Member';
+import {CreateMember, Member} from '../../../shared/entity/member';
 import {NodeMetrics} from '../../../shared/entity/metrics';
 import {NodeDeployment, NodeDeploymentPatch} from '../../../shared/entity/node-deployment';
 import {Node} from '../../../shared/entity/node';
-import {PacketSize} from '../../../shared/entity/packet/PacketSizeEntity';
 import {EditProject, Project} from '../../../shared/entity/project';
-import {AlibabaInstanceType, AlibabaZone} from '../../../shared/entity/provider/alibaba/Alibaba';
-import {AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws/AWS';
-import {AzureSizes, AzureZones} from '../../../shared/entity/provider/azure/AzureSizeEntity';
-import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
-import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '../../../shared/entity/provider/gcp/GCP';
-import {HetznerTypes} from '../../../shared/entity/provider/hetzner/TypeEntity';
-import {OpenstackFlavor} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
+
 import {
   CreateServiceAccountEntity,
   CreateTokenEntity,
@@ -33,6 +26,14 @@ import {
 import {SSHKey} from '../../../shared/entity/ssh-key';
 import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
 import {Auth} from '../auth/auth.service';
+import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean';
+import {HetznerTypes} from '../../../shared/entity/provider/hetzner';
+import {PacketSize} from '../../../shared/entity/provider/packet';
+import {AlibabaInstanceType, AlibabaZone} from '../../../shared/entity/provider/alibaba';
+import {AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws';
+import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '../../../shared/entity/provider/gcp';
+import {OpenstackFlavor} from '../../../shared/entity/provider/openstack';
+import {AzureSizes, AzureZones} from '../../../shared/entity/provider/azure';
 
 @Injectable()
 export class ApiService {

@@ -3,7 +3,7 @@ import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '
 import {from, Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
-import {Member} from '../../../shared/entity/Member';
+import {Member} from '../../../shared/entity/member';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {UserService} from '../user/user.service';
 

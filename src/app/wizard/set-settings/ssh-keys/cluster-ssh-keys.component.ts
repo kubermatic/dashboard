@@ -9,7 +9,7 @@ import {ApiService, ProjectService, UserService} from '../../../core/services';
 import {WizardService} from '../../../core/services';
 import {AddSshKeyDialogComponent} from '../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {Cluster} from '../../../shared/entity/cluster';
-import {Member} from '../../../shared/entity/Member';
+import {Member} from '../../../shared/entity/member';
 import {Project} from '../../../shared/entity/project';
 import {SSHKey} from '../../../shared/entity/ssh-key';
 import {GroupConfig} from '../../../shared/model/Config';

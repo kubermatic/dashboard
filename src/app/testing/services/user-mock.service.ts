@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {Member} from '../../shared/entity/Member';
+import {Member} from '../../shared/entity/member';
 import {GroupConfig} from '../../shared/model/Config';
 import {fakeMember} from '../fake-data/member.fake';
 import {fakeUserGroupConfig} from '../fake-data/userGroupConfig.fake';

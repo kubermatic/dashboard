@@ -5,9 +5,9 @@ import {debounceTime, take, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../../../core/services';
 import {Cluster} from '../../../../../shared/entity/cluster';
-import {AWSVPC} from '../../../../../shared/entity/provider/aws/AWS';
 import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
+import {AWSVPC} from '../../../../../shared/entity/provider/aws';
 
 @Component({
   selector: 'km-aws-provider-options',

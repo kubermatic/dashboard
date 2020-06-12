@@ -4,8 +4,7 @@ import {merge} from 'rxjs';
 import {filter, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
-import {AWSCloudSpec} from '../../../../../../shared/entity/cloud/AWSCloudSpec';
-import {CloudSpec, Cluster, ClusterSpec} from '../../../../../../shared/entity/cluster';
+import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '../../../../../../shared/entity/cluster';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';

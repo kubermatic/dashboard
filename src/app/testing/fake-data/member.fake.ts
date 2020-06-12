@@ -1,4 +1,4 @@
-import {Member} from '../../shared/entity/Member';
+import {Member} from '../../shared/entity/member';
 
 export function fakeMembers(): Member[] {
   return [

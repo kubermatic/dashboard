@@ -5,7 +5,7 @@ import {first} from 'rxjs/operators';
 import {ApiService, NotificationService, UserService} from '../../../core/services';
 import {Cluster} from '../../../shared/entity/cluster';
 import {Datacenter} from '../../../shared/entity/datacenter';
-import {Member} from '../../../shared/entity/Member';
+import {Member} from '../../../shared/entity/member';
 import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 

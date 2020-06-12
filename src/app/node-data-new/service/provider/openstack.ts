@@ -3,11 +3,11 @@ import {catchError, filter, switchMap} from 'rxjs/operators';
 
 import {DatacenterService, PresetsService} from '../../../core/services';
 import {Datacenter} from '../../../shared/entity/datacenter';
-import {OpenstackFlavor} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../wizard-new/service/cluster';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
+import {OpenstackFlavor} from '../../../shared/entity/provider/openstack';
 
 export class NodeDataOpenstackProvider {
   constructor(

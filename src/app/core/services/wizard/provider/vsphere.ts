@@ -1,8 +1,8 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
-import {VSphereFolder, VSphereNetwork} from '../../../../shared/entity/provider/vsphere/VSphereEntity';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {Provider} from './provider';
+import {VSphereFolder, VSphereNetwork} from '../../../../shared/entity/provider/vsphere';
 
 export class VSphere extends Provider {
   private readonly _networksUrl = `${this._restRoot}/providers/vsphere/networks`;

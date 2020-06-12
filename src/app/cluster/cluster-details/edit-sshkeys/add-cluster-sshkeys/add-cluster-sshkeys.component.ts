@@ -8,7 +8,7 @@ import {ApiService, ClusterService, NotificationService, UserService} from '../.
 import {AddSshKeyDialogComponent} from '../../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {Cluster} from '../../../../shared/entity/cluster';
 import {Datacenter} from '../../../../shared/entity/datacenter';
-import {Member} from '../../../../shared/entity/Member';
+import {Member} from '../../../../shared/entity/member';
 import {SSHKey} from '../../../../shared/entity/ssh-key';
 import {GroupConfig} from '../../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../../shared/utils/member-utils/member-utils';

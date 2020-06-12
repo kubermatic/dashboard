@@ -5,7 +5,7 @@ import {catchError, first, map, shareReplay, switchMap} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
-import {Member} from '../../../shared/entity/Member';
+import {Member} from '../../../shared/entity/member';
 import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils} from '../../../shared/utils/member-utils/member-utils';
 import {Auth} from '../auth/auth.service';

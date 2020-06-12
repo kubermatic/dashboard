@@ -8,7 +8,7 @@ import {ApiService, ClusterService, DatacenterService, UserService} from '../../
 import {Cluster} from '../../../shared/entity/cluster';
 import {Datacenter} from '../../../shared/entity/datacenter';
 import {Event} from '../../../shared/entity/event';
-import {Member} from '../../../shared/entity/Member';
+import {Member} from '../../../shared/entity/member';
 import {NodeMetrics} from '../../../shared/entity/metrics';
 import {NodeDeployment} from '../../../shared/entity/node-deployment';
 import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '../../../shared/entity/node';

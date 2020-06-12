@@ -3,7 +3,7 @@ import {defer, Observable, of} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
 
 import {Cluster, MasterVersion, Token} from '../../shared/entity/cluster';
-import {CreateMember, Member} from '../../shared/entity/Member';
+import {CreateMember, Member} from '../../shared/entity/member';
 import {NodeDeployment} from '../../shared/entity/node-deployment';
 import {Node} from '../../shared/entity/node';
 import {PacketSize} from '../../shared/entity/packet/PacketSizeEntity';

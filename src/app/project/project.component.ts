@@ -21,7 +21,7 @@ import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 
 import {EditProjectComponent} from './edit-project/edit-project.component';
-import {Member} from '../shared/entity/Member';
+import {Member} from '../shared/entity/member';
 import {UserSettings} from '../shared/entity/settings';
 
 @Component({

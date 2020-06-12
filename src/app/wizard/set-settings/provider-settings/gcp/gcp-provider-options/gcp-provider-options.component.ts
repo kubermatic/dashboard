@@ -4,9 +4,9 @@ import {Subject} from 'rxjs';
 import {debounceTime, first, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../../../core/services/wizard/wizard.service';
 import {Cluster} from '../../../../../shared/entity/cluster';
-import {GCPNetwork, GCPSubnetwork} from '../../../../../shared/entity/provider/gcp/GCP';
 import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
+import {GCPNetwork, GCPSubnetwork} from '../../../../../shared/entity/provider/gcp';
 
 @Component({
   selector: 'km-gcp-provider-options',

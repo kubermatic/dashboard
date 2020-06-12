@@ -7,11 +7,11 @@ import {debounceTime, startWith, switchMap, take, takeUntil} from 'rxjs/operator
 import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/cluster';
-import {AWSSize, AWSSubnet} from '../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 import {filterArrayOptions, filterObjectOptions} from '../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
+import {AWSSize, AWSSubnet} from '../../shared/entity/provider/aws';
 
 @Component({
   selector: 'km-aws-node-data',

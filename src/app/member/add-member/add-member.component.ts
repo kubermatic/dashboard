@@ -4,7 +4,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '../../core/services';
 
 import {ApiService} from '../../core/services';
-import {CreateMember, Member} from '../../shared/entity/Member';
+import {CreateMember, Member} from '../../shared/entity/member';
 import {Project} from '../../shared/entity/project';
 
 @Component({

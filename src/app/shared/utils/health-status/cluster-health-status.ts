@@ -1,5 +1,5 @@
 import {Cluster} from '../../entity/cluster';
-import {HealthEntity, HealthState} from '../../entity/HealthEntity';
+import {Health, HealthState} from '../../entity/health';
 
 import {HealthStatus, HealthStatusColor, HealthStatusMessage} from './health-status';
 
@@ -11,7 +11,7 @@ export enum HealthStatusCss {
 }
 
 export class ClusterHealthStatus extends HealthStatus {
-  static getHealthStatus(c: Cluster, h: HealthEntity): ClusterHealthStatus {
+  static getHealthStatus(c: Cluster, h: Health): ClusterHealthStatus {
     if (c.deletionTimestamp) {
       return new ClusterHealthStatus(HealthStatusMessage.Deleting, HealthStatusColor.Red, HealthStatusCss.Deleting);
     } else if (this.isClusterRunning(c, h)) {
@@ -24,11 +24,11 @@ export class ClusterHealthStatus extends HealthStatus {
     );
   }
 
-  static isClusterRunning(c: Cluster, h: HealthEntity): boolean {
-    return !!h && HealthEntity.allHealthy(h) && !c.deletionTimestamp;
+  static isClusterRunning(c: Cluster, h: Health): boolean {
+    return !!h && Health.allHealthy(h) && !c.deletionTimestamp;
   }
 
-  static isClusterAPIRunning(c: Cluster, h: HealthEntity): boolean {
+  static isClusterAPIRunning(c: Cluster, h: Health): boolean {
     return !!h && HealthState.isUp(h.apiserver) && !c.deletionTimestamp;
   }
 

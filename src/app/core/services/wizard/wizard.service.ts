@@ -5,7 +5,6 @@ import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
 import {environment} from '../../../../environments/environment';
 import {Cluster} from '../../../shared/entity/cluster';
 import {Datacenter} from '../../../shared/entity/datacenter';
-import {PresetListEntity} from '../../../shared/entity/provider/credentials/PresetListEntity';
 import {SSHKey} from '../../../shared/entity/ssh-key';
 import {
   ClusterDatacenterForm,
@@ -28,6 +27,7 @@ import {Openstack} from './provider/openstack';
 import {Packet} from './provider/packet';
 import {Provider} from './provider/provider';
 import {VSphere} from './provider/vsphere';
+import {PresetListEntity} from '../../../shared/entity/preset';
 
 @Injectable()
 export class WizardService {

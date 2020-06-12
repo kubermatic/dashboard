@@ -5,7 +5,7 @@ import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 import {NotificationService, ProjectService, UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
-import {Member} from '../../shared/entity/Member';
+import {Member} from '../../shared/entity/member';
 import {Project} from '../../shared/entity/project';
 import {objectDiff} from '../../shared/utils/common-utils';
 import {UserSettings} from '../../shared/entity/settings';

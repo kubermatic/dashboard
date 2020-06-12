@@ -1,4 +1,4 @@
-import {Member} from '../../entity/Member';
+import {Member} from '../../entity/member';
 import {GroupConfig} from '../../model/Config';
 
 export enum Permission {

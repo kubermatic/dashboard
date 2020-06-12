@@ -3,7 +3,6 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {EMPTY, Observable} from 'rxjs';
 
 import {environment} from '../../../../environments/environment';
-import {PresetListEntity} from '../../../shared/entity/provider/credentials/PresetListEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {Alibaba} from './provider/alibaba';
 
@@ -16,6 +15,7 @@ import {Openstack} from './provider/openstack';
 import {Packet} from './provider/packet';
 import {Provider} from './provider/provider';
 import {VSphere} from './provider/vsphere';
+import {PresetListEntity} from '../../../shared/entity/preset';
 
 @Injectable()
 export class PresetsService {

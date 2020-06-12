@@ -12,7 +12,7 @@ import {ApiService, NotificationService, ProjectService, UserService} from '../c
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {Member} from '../shared/entity/Member';
+import {Member} from '../shared/entity/member';
 import {Project} from '../shared/entity/project';
 import {GroupConfig} from '../shared/model/Config';
 import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';

@@ -3,11 +3,11 @@ import {catchError, filter, switchMap, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../core/services';
 import {Cluster} from '../../../shared/entity/cluster';
-import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../shared/entity/provider/gcp/GCP';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../wizard-new/service/cluster';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
+import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../shared/entity/provider/gcp';
 
 export class NodeDataGCPProvider {
   constructor(

@@ -13,14 +13,14 @@ import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators
 
 import {PresetsService} from '../../../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
+import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
+import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
+import {ClusterService} from '../../../../../service/cluster';
 import {
   OpenstackNetwork,
   OpenstackSecurityGroup,
   OpenstackSubnet,
-} from '../../../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
-import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
-import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../../../service/cluster';
+} from '../../../../../../shared/entity/provider/openstack';
 
 enum Controls {
   SecurityGroup = 'securityGroup',

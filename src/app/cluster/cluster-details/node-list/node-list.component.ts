@@ -12,7 +12,7 @@ import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '../../../shared/entity/cluster';
 import {Datacenter} from '../../../shared/entity/datacenter';
-import {Member} from '../../../shared/entity/Member';
+import {Member} from '../../../shared/entity/member';
 import {NodeMetrics} from '../../../shared/entity/metrics';
 import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '../../../shared/entity/node';
 import {GroupConfig} from '../../../shared/model/Config';

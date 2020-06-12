@@ -2,11 +2,11 @@ import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, switchMap, tap} from 'rxjs/operators';
 import {DatacenterService, PresetsService} from '../../../core/services';
 import {Cluster} from '../../../shared/entity/cluster';
-import {AzureSizes, AzureZones} from '../../../shared/entity/provider/azure/AzureSizeEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../wizard-new/service/cluster';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
+import {AzureSizes, AzureZones} from '../../../shared/entity/provider/azure';
 
 export class NodeDataAzureProvider {
   constructor(

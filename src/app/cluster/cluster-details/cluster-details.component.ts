@@ -18,8 +18,8 @@ import {Addon} from '../../shared/entity/addon';
 import {Cluster, ClusterType, getClusterProvider, MasterVersion} from '../../shared/entity/cluster';
 import {Datacenter} from '../../shared/entity/datacenter';
 import {Event} from '../../shared/entity/event';
-import {HealthEntity, HealthState} from '../../shared/entity/HealthEntity';
-import {Member} from '../../shared/entity/Member';
+import {Health, HealthState} from '../../shared/entity/health';
+import {Member} from '../../shared/entity/member';
 import {ClusterMetrics} from '../../shared/entity/metrics';
 import {NodeDeployment} from '../../shared/entity/node-deployment';
 import {Node} from '../../shared/entity/node';
@@ -53,7 +53,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   isClusterRunning = false;
   isClusterAPIRunning = false;
   clusterHealthStatus: ClusterHealthStatus;
-  health: HealthEntity;
+  health: Health;
   config: Config = {share_kubeconfig: false};
   projectID: string;
   metrics: ClusterMetrics;
@@ -200,11 +200,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   private _canReloadBindings(): boolean {
-    return this.cluster && HealthEntity.allHealthy(this.health) && this.isRBACEnabled();
+    return this.cluster && Health.allHealthy(this.health) && this.isRBACEnabled();
   }
 
   private _canReloadNodes(): boolean {
-    return this.cluster && HealthEntity.allHealthy(this.health);
+    return this.cluster && Health.allHealthy(this.health);
   }
 
   getProvider(provider: string): string {

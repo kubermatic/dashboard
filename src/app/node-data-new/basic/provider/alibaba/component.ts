@@ -15,10 +15,10 @@ import {takeUntil} from 'rxjs/operators';
 import {PresetsService} from '../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
-import {AlibabaInstanceType, AlibabaZone} from '../../../../shared/entity/provider/alibaba/Alibaba';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
+import {AlibabaInstanceType, AlibabaZone} from '../../../../shared/entity/provider/alibaba';
 
 enum Controls {
   InstanceType = 'instanceType',

@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
-import {Member} from '../../../shared/entity/Member';
+import {Member} from '../../../shared/entity/member';
 import {Auth, UserService} from '../../services';
 import {SettingsService} from '../../services/settings/settings.service';
 

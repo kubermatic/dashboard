@@ -5,11 +5,11 @@ import {debounceTime, startWith, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../../../core/services';
 import {Cluster} from '../../../../../shared/entity/cluster';
-import {VSphereFolder, VSphereNetwork} from '../../../../../shared/entity/provider/vsphere/VSphereEntity';
 import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
 import {filterArrayOptions, filterObjectOptions} from '../../../../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../../../../shared/validators/autocomplete-filter.validator';
+import {VSphereFolder, VSphereNetwork} from '../../../../../shared/entity/provider/vsphere';
 
 @Component({
   selector: 'km-vsphere-provider-options',

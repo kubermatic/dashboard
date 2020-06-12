@@ -4,8 +4,7 @@ import {merge} from 'rxjs';
 import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
-import {DigitaloceanCloudSpec} from '../../../../../../shared/entity/cloud/DigitaloceanCloudSpec';
-import {CloudSpec, Cluster, ClusterSpec} from '../../../../../../shared/entity/cluster';
+import {CloudSpec, Cluster, ClusterSpec, DigitaloceanCloudSpec} from '../../../../../../shared/entity/cluster';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';

@@ -15,7 +15,7 @@ import {
   UserSettings,
 } from '../../../shared/entity/settings';
 import {Settings} from 'http2';
-import {Admin} from '../../../shared/entity/Member';
+import {Admin} from '../../../shared/entity/member';
 
 @Injectable({
   providedIn: 'root',

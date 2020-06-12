@@ -1,16 +1,5 @@
 import {NodeProvider, OperatingSystem} from '../model/NodeProviderConstants';
 
-import {AlibabaNodeSpec} from './node/AlibabaNodeSpec';
-import {AWSNodeSpec} from './node/AWSNodeSpec';
-import {AzureNodeSpec} from './node/AzureNodeSpec';
-import {DigitaloceanNodeSpec} from './node/DigitaloceanNodeSpec';
-import {GCPNodeSpec} from './node/GCPNodeSpec';
-import {HetznerNodeSpec} from './node/HetznerNodeSpec';
-import {KubeVirtNodeSpec} from './node/KubeVirtNodeSpec';
-import {OpenstackNodeSpec} from './node/OpenstackNodeSpec';
-import {PacketNodeSpec} from './node/PacketNodeSpec';
-import {VSphereNodeSpec} from './node/VSphereNodeSpec';
-
 export class Node {
   creationTimestamp?: Date;
   deletionTimestamp?: Date;
@@ -126,6 +115,87 @@ export class NodeSystemInfo {
   operatingSystem: string;
   architecture: string;
   containerRuntimeVersion: string;
+}
+
+export class AlibabaNodeSpec {
+  instanceType: string;
+  diskSize: string;
+  diskType: string;
+  vSwitchID: string;
+  internetMaxBandwidthOut: string;
+  labels: object;
+  zoneID: string;
+}
+
+export class AWSNodeSpec {
+  instanceType: string;
+  diskSize: number;
+  volumeType: string;
+  ami: string;
+  tags: object;
+  subnetID: string;
+  availabilityZone: string;
+  assignPublicIP?: boolean;
+}
+
+export class AzureNodeSpec {
+  size: string;
+  assignPublicIP: boolean;
+  tags: object;
+  imageID?: string;
+  zone: string;
+}
+
+export class DigitaloceanNodeSpec {
+  size: string;
+  backups: boolean;
+  ipv6: boolean;
+  monitoring: boolean;
+  tags: string[];
+}
+
+export class GCPNodeSpec {
+  diskSize: number;
+  diskType: string;
+  labels: object;
+  machineType: string;
+  preemptible: boolean;
+  tags: string[];
+  zone: string;
+  customImage?: string;
+}
+
+export class HetznerNodeSpec {
+  type: string;
+}
+
+export class KubeVirtNodeSpec {
+  cpus: string;
+  memory: string;
+  namespace: string;
+  sourceURL: string;
+  storageClassName: string;
+  pvcSize: string;
+}
+
+export class OpenstackNodeSpec {
+  flavor: string;
+  image: string;
+  useFloatingIP: boolean;
+  tags: object;
+  diskSize?: number;
+}
+
+export class PacketNodeSpec {
+  instanceType: string;
+  tags: string[];
+}
+
+export class VSphereNodeSpec {
+  cpus: number;
+  memory: number;
+  template: string;
+  diskSizeGB?: number;
 }
 
 export function getEmptyNodeProviderSpec(provider: string): object {

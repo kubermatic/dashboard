@@ -5,11 +5,11 @@ import {debounceTime, first, startWith, takeUntil} from 'rxjs/operators';
 import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/cluster';
-import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 import {filterObjectOptions} from '../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
+import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean';
 
 @Component({
   selector: 'km-digitalocean-node-data',

@@ -10,12 +10,11 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {PacketNodeSpec} from '../../../../shared/entity/node/PacketNodeSpec';
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
-import {PacketSize} from '../../../../shared/entity/packet/PacketSizeEntity';
+import {NodeCloudSpec, NodeSpec, PacketNodeSpec} from '../../../../shared/entity/node';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
+import {PacketSize} from '../../../../shared/entity/provider/packet';
 
 enum Controls {
   InstanceType = 'instanceType',

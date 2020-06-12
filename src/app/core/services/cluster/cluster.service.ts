@@ -11,7 +11,7 @@ import {TaintFormComponent} from '../../../shared/components/taint-form/taint-fo
 import {Addon} from '../../../shared/entity/addon';
 import {CloudSpecPatch, Cluster, ClusterEntityPatch, Finalizer, MasterVersion} from '../../../shared/entity/cluster';
 import {Event} from '../../../shared/entity/event';
-import {HealthEntity} from '../../../shared/entity/HealthEntity';
+import {Health} from '../../../shared/entity/health';
 import {ClusterMetrics} from '../../../shared/entity/metrics';
 import {Node} from '../../../shared/entity/node';
 import {SSHKey} from '../../../shared/entity/ssh-key';
@@ -114,9 +114,9 @@ export class ClusterService {
     return this._http.get<Event[]>(url).pipe(catchError(() => of<Event[]>()));
   }
 
-  health(projectID: string, clusterID: string, datacenter: string): Observable<HealthEntity> {
+  health(projectID: string, clusterID: string, datacenter: string): Observable<Health> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/health`;
-    return this._http.get<HealthEntity>(url).pipe(catchError(() => of<HealthEntity>()));
+    return this._http.get<Health>(url).pipe(catchError(() => of<Health>()));
   }
 
   upgradeNodeDeployments(projectID: string, clusterID: string, datacenter: string, version: string): Observable<any> {

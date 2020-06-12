@@ -6,7 +6,7 @@ import {BehaviorSubject, merge, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
-import {Member} from '../../../shared/entity/Member';
+import {Member} from '../../../shared/entity/member';
 import {Project} from '../../../shared/entity/project';
 import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';

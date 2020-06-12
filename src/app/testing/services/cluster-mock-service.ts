@@ -7,7 +7,7 @@ import {Addon} from '../../shared/entity/addon';
 import {Cluster, MasterVersion} from '../../shared/entity/cluster';
 import {ClusterEntityPatch} from '../../shared/entity/ClusterEntityPatch';
 import {Event} from '../../shared/entity/event';
-import {HealthEntity} from '../../shared/entity/HealthEntity';
+import {Health} from '../../shared/entity/health';
 import {ClusterMetrics} from '../../shared/entity/metrics';
 import {Node} from '../../shared/entity/node';
 import {SSHKey} from '../../shared/entity/ssh-key';
@@ -24,7 +24,7 @@ export class ClusterMockService {
   private _clusters: Cluster[] = fakeClusters();
   private _sshKeys: SSHKey[] = fakeSSHKeys();
   private _nodes: Node[] = nodesFake();
-  private _health: HealthEntity = fakeHealth();
+  private _health: Health = fakeHealth();
 
   providerSettingsPatchChanges$ = new Subject<ProviderSettingsPatch>().asObservable();
 
@@ -38,7 +38,7 @@ export class ClusterMockService {
     return asyncData(this._clusters);
   }
 
-  health(cluster: string, dc: string, projectID: string): Observable<HealthEntity> {
+  health(cluster: string, dc: string, projectID: string): Observable<Health> {
     return asyncData(this._health);
   }
 

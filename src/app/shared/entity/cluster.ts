@@ -1,27 +1,5 @@
 import {NodeProvider} from '../model/NodeProviderConstants';
 
-import {AlibabaCloudSpec} from './cloud/AlibabaCloudSpec';
-import {AWSCloudSpec} from './cloud/AWSCloudSpec';
-import {AzureCloudSpec} from './cloud/AzureCloudSpec';
-import {BareMetalCloudSpec} from './cloud/BareMetalCloudSpec';
-import {BringYourOwnCloudSpec} from './cloud/BringYourOwnCloudSpec';
-import {DigitaloceanCloudSpec} from './cloud/DigitaloceanCloudSpec';
-import {FakeCloudSpec} from './cloud/FakeCloudSpec';
-import {GCPCloudSpec} from './cloud/GCPCloudSpec';
-import {HetznerCloudSpec} from './cloud/HetznerCloudSpec';
-import {KubeVirtCloudSpec} from './cloud/KubeVirtCloudSpec';
-import {OpenstackCloudSpec} from './cloud/OpenstackCloudSpec';
-import {PacketCloudSpec} from './cloud/PacketCloudSpec';
-import {VSphereCloudSpec} from './cloud/VSphereCloudSpec';
-
-export function getClusterProvider(cluster: Cluster): NodeProvider {
-  const clusterProviders = Object.values(NodeProvider)
-    .map(provider => (cluster.spec.cloud[provider] ? provider : undefined))
-    .filter(p => p !== undefined);
-
-  return clusterProviders.length > 0 ? clusterProviders[0] : NodeProvider.NONE;
-}
-
 export const enum Finalizer {
   DeleteVolumes = 'DeleteVolumes',
   DeleteLoadBalancers = 'DeleteLoadBalancers',
@@ -103,6 +81,14 @@ export class Cluster {
   }
 }
 
+export function getClusterProvider(cluster: Cluster): NodeProvider {
+  const clusterProviders = Object.values(NodeProvider)
+    .map(provider => (cluster.spec.cloud[provider] ? provider : undefined))
+    .filter(p => p !== undefined);
+
+  return clusterProviders.length > 0 ? clusterProviders[0] : NodeProvider.NONE;
+}
+
 export class CloudSpec {
   dc: string;
   digitalocean?: DigitaloceanCloudSpec;
@@ -118,6 +104,92 @@ export class CloudSpec {
   gcp?: GCPCloudSpec;
   kubevirt?: KubeVirtCloudSpec;
   alibaba?: AlibabaCloudSpec;
+}
+
+export class AlibabaCloudSpec {
+  accessKeyID: string;
+  accessKeySecret: string;
+}
+
+export class AWSCloudSpec {
+  accessKeyId: string;
+  secretAccessKey: string;
+  vpcId: string;
+  routeTableId: string;
+  securityGroupID: string;
+  instanceProfileName: string;
+  roleARN: string;
+}
+
+export class AzureCloudSpec {
+  clientID: string;
+  clientSecret: string;
+  resourceGroup: string;
+  routeTable: string;
+  securityGroup: string;
+  subnet: string;
+  subscriptionID: string;
+  tenantID: string;
+  vnet: string;
+}
+
+export class BareMetalCloudSpec {
+  name: string;
+}
+
+export class BringYourOwnCloudSpec {}
+
+export class DigitaloceanCloudSpec {
+  token: string;
+}
+
+export class FakeCloudSpec {
+  token: string;
+}
+
+export class GCPCloudSpec {
+  network: string;
+  serviceAccount: string;
+  subnetwork: string;
+}
+
+export class HetznerCloudSpec {
+  token: string;
+}
+
+export class KubeVirtCloudSpec {
+  kubeconfig: string;
+}
+
+export class OpenstackCloudSpec {
+  username: string;
+  password: string;
+  tenant: string;
+  tenantID: string;
+  domain: string;
+  network: string;
+  securityGroups: string;
+  floatingIpPool: string;
+  subnetID: string;
+}
+
+export class PacketCloudSpec {
+  apiKey: string;
+  projectID: string;
+  billingCycle: string;
+}
+
+export class VSphereCloudSpec {
+  username: string;
+  password: string;
+  vmNetName: string;
+  folder?: string;
+  infraManagementUser: VSphereInfraManagementUser;
+}
+
+export class VSphereInfraManagementUser {
+  username: string;
+  password: string;
 }
 
 export class ClusterSpec {
@@ -230,10 +302,10 @@ export class AzureCloudSpecPatch {
 export class VSphereCloudSpecPatch {
   username?: string;
   password?: string;
-  infraManagementUser?: VSphereInfraManagementUser;
+  infraManagementUser?: VSphereInfraManagementUserPatch;
 }
 
-export class VSphereInfraManagementUser {
+export class VSphereInfraManagementUserPatch {
   username?: string;
   password?: string;
 }
@@ -326,3 +398,5 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
   }
   return {};
 }
+
+export const AVAILABLE_PACKET_BILLING_CYCLES = ['hourly', 'daily'];

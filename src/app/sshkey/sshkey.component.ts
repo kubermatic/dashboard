@@ -12,7 +12,7 @@ import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddSshKeyDialogComponent} from '../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {Member} from '../shared/entity/Member';
+import {Member} from '../shared/entity/member';
 import {SSHKey} from '../shared/entity/ssh-key';
 import {GroupConfig} from '../shared/model/Config';
 import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';

@@ -3,11 +3,11 @@ import {catchError, filter, switchMap, tap} from 'rxjs/operators';
 
 import {DatacenterService, PresetsService} from '../../../core/services';
 import {Cluster} from '../../../shared/entity/cluster';
-import {AlibabaInstanceType, AlibabaZone} from '../../../shared/entity/provider/alibaba/Alibaba';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../wizard-new/service/cluster';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
+import {AlibabaInstanceType, AlibabaZone} from '../../../shared/entity/provider/alibaba';
 
 export class NodeDataAlibabaProvider {
   constructor(

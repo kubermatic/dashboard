@@ -11,8 +11,8 @@ import {ApiService, ClusterService, DatacenterService, ProjectService, UserServi
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {CloudSpec, Cluster} from '../../shared/entity/cluster';
 import {Datacenter} from '../../shared/entity/datacenter';
-import {HealthEntity} from '../../shared/entity/HealthEntity';
-import {Member} from '../../shared/entity/Member';
+import {Health} from '../../shared/entity/health';
+import {Member} from '../../shared/entity/member';
 import {NodeDeployment} from '../../shared/entity/node-deployment';
 import {Project} from '../../shared/entity/project';
 import {GroupConfig} from '../../shared/model/Config';
@@ -30,7 +30,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   isInitialized = true;
   nodeDC: Datacenter[] = [];
   seedDC: Datacenter[] = [];
-  health: HealthEntity[] = [];
+  health: Health[] = [];
   nodeDeployments: NodeDeployment[][] = [];
   provider = [];
   displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'region', 'type', 'created', 'actions'];
@@ -108,7 +108,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
                   .pipe(tap(health => (this.health[cluster.id] = health)))
                   .pipe(
                     switchMap(_ =>
-                      HealthEntity.allHealthy(this.health[cluster.id])
+                      Health.allHealthy(this.health[cluster.id])
                         ? this._apiService.getNodeDeployments(
                             cluster.id,
                             this.seedDC[cluster.id].metadata.name,
