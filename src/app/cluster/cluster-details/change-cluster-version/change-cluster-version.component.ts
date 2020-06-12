@@ -5,7 +5,7 @@ import {first, takeUntil} from 'rxjs/operators';
 
 import {ClusterService, NotificationService, ProjectService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {Cluster, ClusterEntityPatch} from '../../../shared/entity/cluster';
+import {Cluster, ClusterPatch} from '../../../shared/entity/cluster';
 import {Datacenter} from '../../../shared/entity/datacenter';
 import {Project} from '../../../shared/entity/project';
 
@@ -42,7 +42,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   }
 
   changeVersion(): void {
-    const patch: ClusterEntityPatch = {
+    const patch: ClusterPatch = {
       spec: {
         version: this.selectedVersion,
       },

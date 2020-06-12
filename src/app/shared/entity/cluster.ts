@@ -231,7 +231,7 @@ export class Token {
   token: string;
 }
 
-export class ClusterEntityPatch {
+export class ClusterPatch {
   id?: string;
   name?: string;
   labels?: object;

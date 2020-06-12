@@ -92,7 +92,7 @@ export class VSphereProviderBasicComponent extends BaseFormValidator implements 
     )
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
+      .subscribe(_ => (this._clusterService.cluster = this._getCluster()));
 
     merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
@@ -127,7 +127,7 @@ export class VSphereProviderBasicComponent extends BaseFormValidator implements 
     }
   }
 
-  private _getClusterEntity(): Cluster {
+  private _getCluster(): Cluster {
     return {
       spec: {
         cloud: {

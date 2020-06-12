@@ -6,7 +6,7 @@ import {first} from 'rxjs/operators';
 import {NotificationService} from '../../core/services';
 import {ApiService} from '../../core/services';
 import {Project} from '../../shared/entity/project';
-import {CreateServiceAccountEntity} from '../../shared/entity/service-account';
+import {ServiceAccountModel} from '../../shared/entity/service-account';
 
 @Component({
   selector: 'km-add-serviceaccount',
@@ -30,7 +30,7 @@ export class AddServiceAccountComponent implements OnInit {
   }
 
   addServiceAccount(): void {
-    const createServiceAccount: CreateServiceAccountEntity = {
+    const createServiceAccount: ServiceAccountModel = {
       name: this.addServiceAccountForm.controls.name.value,
       group: this.addServiceAccountForm.controls.group.value,
     };

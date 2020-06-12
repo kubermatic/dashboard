@@ -7,12 +7,12 @@ export class ServiceAccount {
   status: string;
 }
 
-export class CreateServiceAccountEntity {
+export class ServiceAccountModel {
   name: string;
   group: string;
 }
 
-export class ServiceAccountTokenEntity {
+export class ServiceAccountToken {
   creationTimestamp: Date;
   deletionTimestamp?: Date;
   expiry: Date;

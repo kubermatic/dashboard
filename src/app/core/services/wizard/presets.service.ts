@@ -15,7 +15,7 @@ import {Openstack} from './provider/openstack';
 import {Packet} from './provider/packet';
 import {Provider} from './provider/provider';
 import {VSphere} from './provider/vsphere';
-import {PresetListEntity} from '../../../shared/entity/preset';
+import {PresetList} from '../../../shared/entity/preset';
 
 @Injectable()
 export class PresetsService {
@@ -74,12 +74,12 @@ export class PresetsService {
     }
   }
 
-  presets(provider: NodeProvider, datacenter: string): Observable<PresetListEntity> {
+  presets(provider: NodeProvider, datacenter: string): Observable<PresetList> {
     if (!provider || !datacenter) {
       return EMPTY;
     }
 
     const url = `${environment.restRoot}/providers/${provider}/presets/credentials?datacenter=${datacenter}`;
-    return this._http.get<PresetListEntity>(url);
+    return this._http.get<PresetList>(url);
   }
 }

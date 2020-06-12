@@ -5,7 +5,7 @@ import {first} from 'rxjs/operators';
 
 import {ApiService, NotificationService} from '../../../core/services';
 import {Project} from '../../../shared/entity/project';
-import {CreateTokenEntity, ServiceAccount, ServiceAccountTokenEntity} from '../../../shared/entity/service-account';
+import {CreateTokenEntity, ServiceAccount, ServiceAccountToken} from '../../../shared/entity/service-account';
 import {TokenDialogComponent} from '../token-dialog/token-dialog.component';
 
 @Component({
@@ -47,7 +47,7 @@ export class AddServiceAccountTokenComponent implements OnInit {
       });
   }
 
-  openTokenDialog(token: ServiceAccountTokenEntity): void {
+  openTokenDialog(token: ServiceAccountToken): void {
     const modal = this._matDialog.open(TokenDialogComponent);
     modal.componentInstance.serviceaccountToken = token;
     modal.componentInstance.projectID = this.project.id;

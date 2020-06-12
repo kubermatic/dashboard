@@ -4,7 +4,7 @@ import {async} from 'rxjs-compat/scheduler/async';
 
 import {ProviderSettingsPatch} from '../../core/services/cluster/cluster.service';
 import {Addon} from '../../shared/entity/addon';
-import {Cluster, ClusterEntityPatch, MasterVersion} from '../../shared/entity/cluster';
+import {Cluster, ClusterPatch, MasterVersion} from '../../shared/entity/cluster';
 import {Event} from '../../shared/entity/event';
 import {Health} from '../../shared/entity/health';
 import {ClusterMetrics} from '../../shared/entity/metrics';
@@ -61,7 +61,7 @@ export class ClusterMockService {
     return asyncData(this._cluster);
   }
 
-  patch(projectID: string, clusterID: string, datacenter: string, patch: ClusterEntityPatch): Observable<Cluster> {
+  patch(projectID: string, clusterID: string, datacenter: string, patch: ClusterPatch): Observable<Cluster> {
     return asyncData(this._cluster);
   }
 

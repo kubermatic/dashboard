@@ -5,7 +5,7 @@ import {switchMap, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../core/services';
 import {Cluster} from '../../../shared/entity/cluster';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {PresetListEntity} from '../../../shared/entity/preset';
+import {PresetList} from '../../../shared/entity/preset';
 
 export enum PresetsState {
   Ready = 'Custom Preset',
@@ -20,7 +20,7 @@ export enum PresetsState {
 })
 export class CustomPresetsSettingsComponent implements OnInit {
   @Input() cluster: Cluster;
-  presetList = new PresetListEntity();
+  presetList = new PresetList();
   presetsLoaded = false;
 
   private _disabled = false;

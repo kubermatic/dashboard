@@ -6,7 +6,7 @@ import {PresetsService} from '../../../../core/services';
 import {Cluster} from '../../../../shared/entity/cluster';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../service/cluster';
-import {PresetListEntity} from '../../../../shared/entity/preset';
+import {PresetList} from '../../../../shared/entity/preset';
 
 export enum Controls {
   Preset = 'name',
@@ -36,7 +36,7 @@ export enum PresetsState {
   ],
 })
 export class PresetsComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  presetList = new PresetListEntity();
+  presetList = new PresetList();
   presetsLoaded = false;
 
   readonly Controls = Controls;

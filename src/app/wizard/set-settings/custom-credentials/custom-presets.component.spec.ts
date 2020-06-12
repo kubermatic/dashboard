@@ -11,7 +11,7 @@ import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {CustomPresetsSettingsComponent, PresetsState} from './custom-presets.component';
-import {PresetListEntity} from '../../../shared/entity/preset';
+import {PresetList} from '../../../shared/entity/preset';
 
 describe('CustomPresetsSettingsComponent', () => {
   let fixture: ComponentFixture<CustomPresetsSettingsComponent>;
@@ -56,7 +56,7 @@ describe('CustomPresetsSettingsComponent', () => {
     const req = httpTestingController.expectOne(
       `${environment.restRoot}/providers/${provider}/presets/credentials?datacenter=${component.cluster.spec.cloud.dc}`
     );
-    req.flush(new PresetListEntity());
+    req.flush(new PresetList());
 
     expect(req.request.method).toEqual('GET');
     expect(component.label).toEqual(PresetsState.Empty);
@@ -73,7 +73,7 @@ describe('CustomPresetsSettingsComponent', () => {
     const req = httpTestingController.expectOne(
       `${environment.restRoot}/providers/${provider}/presets/credentials?datacenter=${component.cluster.spec.cloud.dc}`
     );
-    req.flush(new PresetListEntity('some-preset'));
+    req.flush(new PresetList('some-preset'));
 
     expect(req.request.method).toEqual('GET');
     expect(component.label).toEqual(PresetsState.Ready);

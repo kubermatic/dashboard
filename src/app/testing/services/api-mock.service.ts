@@ -7,9 +7,9 @@ import {CreateMember, Member} from '../../shared/entity/member';
 import {NodeDeployment} from '../../shared/entity/node-deployment';
 import {Node} from '../../shared/entity/node';
 import {
-  CreateServiceAccountEntity,
+  ServiceAccountModel,
   ServiceAccount,
-  ServiceAccountTokenEntity,
+  ServiceAccountToken,
   ServiceAccountTokenPatch,
 } from '../../shared/entity/service-account';
 import {SSHKey} from '../../shared/entity/ssh-key';
@@ -47,8 +47,8 @@ export class ApiMockService {
   members: Member[] = fakeMembers();
   serviceAccount: ServiceAccount = fakeServiceAccount();
   serviceAccounts: ServiceAccount[] = fakeServiceAccounts();
-  serviceAccountToken: ServiceAccountTokenEntity = fakeServiceAccountToken();
-  serviceAccountTokens: ServiceAccountTokenEntity[] = fakeServiceAccountTokens();
+  serviceAccountToken: ServiceAccountToken = fakeServiceAccountToken();
+  serviceAccountTokens: ServiceAccountToken[] = fakeServiceAccountTokens();
   vsphereNetworks: VSphereNetwork[] = fakeVSphereNetworks();
 
   get addonConfigs(): Observable<any> {
@@ -135,7 +135,7 @@ export class ApiMockService {
     return of(this.serviceAccounts);
   }
 
-  createServiceAccount(projectID: string, serviceAccount: CreateServiceAccountEntity): Observable<ServiceAccount> {
+  createServiceAccount(projectID: string, serviceAccount: ServiceAccountModel): Observable<ServiceAccount> {
     return of(this.serviceAccount);
   }
 
@@ -151,43 +151,43 @@ export class ApiMockService {
     return of(this.vsphereNetworks);
   }
 
-  getServiceAccountTokens(projectID: string, serviceaccount: ServiceAccount): Observable<ServiceAccountTokenEntity[]> {
+  getServiceAccountTokens(projectID: string, serviceaccount: ServiceAccount): Observable<ServiceAccountToken[]> {
     return of(this.serviceAccountTokens);
   }
 
-  createServiceAccountToken(projectID: string, serviceaccount: ServiceAccount): Observable<ServiceAccountTokenEntity> {
+  createServiceAccountToken(projectID: string, serviceaccount: ServiceAccount): Observable<ServiceAccountToken> {
     return of(this.serviceAccountToken);
   }
 
   editServiceAccountToken(
     projectID: string,
     serviceAccount: ServiceAccount,
-    token: ServiceAccountTokenEntity
-  ): Observable<ServiceAccountTokenEntity> {
+    token: ServiceAccountToken
+  ): Observable<ServiceAccountToken> {
     return of(this.serviceAccountToken);
   }
 
   regenerateServiceAccountToken(
     projectID: string,
     serviceaccount: ServiceAccount,
-    token: ServiceAccountTokenEntity
-  ): Observable<ServiceAccountTokenEntity> {
+    token: ServiceAccountToken
+  ): Observable<ServiceAccountToken> {
     return of(this.serviceAccountToken);
   }
 
   patchServiceAccountToken(
     projectID: string,
     serviceaccount: ServiceAccount,
-    token: ServiceAccountTokenEntity,
+    token: ServiceAccountToken,
     patchToken: ServiceAccountTokenPatch
-  ): Observable<ServiceAccountTokenEntity> {
+  ): Observable<ServiceAccountToken> {
     return of(this.serviceAccountToken);
   }
 
   deleteServiceAccountToken(
     projectID: string,
     serviceaccount: ServiceAccount,
-    token: ServiceAccountTokenEntity
+    token: ServiceAccountToken
   ): Observable<any> {
     return of(null);
   }

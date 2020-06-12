@@ -74,7 +74,7 @@ export class AzureProviderBasicComponent extends BaseFormValidator implements On
       this.form.get(Controls.SubscriptionID).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(() => (this._clusterService.cluster = this._getClusterEntity()));
+      .subscribe(() => (this._clusterService.cluster = this._getCluster()));
   }
 
   ngOnDestroy(): void {
@@ -92,7 +92,7 @@ export class AzureProviderBasicComponent extends BaseFormValidator implements On
     }
   }
 
-  private _getClusterEntity(): Cluster {
+  private _getCluster(): Cluster {
     return {
       spec: {
         cloud: {

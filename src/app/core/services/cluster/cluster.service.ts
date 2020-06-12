@@ -9,7 +9,7 @@ import {AppConfigService} from '../../../app-config.service';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
 import {TaintFormComponent} from '../../../shared/components/taint-form/taint-form.component';
 import {Addon} from '../../../shared/entity/addon';
-import {CloudSpecPatch, Cluster, ClusterEntityPatch, Finalizer, MasterVersion} from '../../../shared/entity/cluster';
+import {CloudSpecPatch, Cluster, ClusterPatch, Finalizer, MasterVersion} from '../../../shared/entity/cluster';
 import {Event} from '../../../shared/entity/event';
 import {Health} from '../../../shared/entity/health';
 import {ClusterMetrics} from '../../../shared/entity/metrics';
@@ -74,7 +74,7 @@ export class ClusterService {
     return this._http.post<Cluster>(url, createClusterModel);
   }
 
-  patch(projectID: string, clusterID: string, datacenter: string, patch: ClusterEntityPatch): Observable<Cluster> {
+  patch(projectID: string, clusterID: string, datacenter: string, patch: ClusterPatch): Observable<Cluster> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}`;
     return this._http.patch<Cluster>(url, patch);
   }

@@ -12,32 +12,32 @@ export class ClusterService {
   readonly clusterChanges = new EventEmitter<Cluster>();
   readonly clusterTypeChanges = new EventEmitter<ClusterType>();
 
-  private _clusterEntity: Cluster = Cluster.newEmptyClusterEntity();
-  private _sshKeysEntity: SSHKey[] = [];
+  private _cluster: Cluster = Cluster.newEmptyClusterEntity();
+  private _sshKeys: SSHKey[] = [];
 
   set cluster(cluster: Cluster) {
     if (
-      this._getProvider(this._clusterEntity) !== NodeProvider.NONE &&
+      this._getProvider(this._cluster) !== NodeProvider.NONE &&
       this._getProvider(cluster) !== NodeProvider.NONE &&
-      this._getProvider(this._clusterEntity) !== this._getProvider(cluster)
+      this._getProvider(this._cluster) !== this._getProvider(cluster)
     ) {
       return;
     }
 
-    this._clusterEntity = _.mergeWith(this._clusterEntity, cluster, value => {
+    this._cluster = _.mergeWith(this._cluster, cluster, value => {
       if (_.isArray(value)) {
         return value;
       }
     });
-    this.clusterChanges.emit(this._clusterEntity);
+    this.clusterChanges.emit(this._cluster);
   }
 
   get cluster(): Cluster {
-    return this._clusterEntity;
+    return this._cluster;
   }
 
   set provider(provider: NodeProvider) {
-    this._clusterEntity.spec.cloud = {} as CloudSpec;
+    this._cluster.spec.cloud = {} as CloudSpec;
     this.cluster = {
       spec: {
         cloud: {
@@ -53,7 +53,7 @@ export class ClusterService {
 
   get provider(): NodeProvider {
     const clusterProviders = Object.values(NodeProvider)
-      .map(provider => (this._clusterEntity.spec.cloud[provider] ? provider : undefined))
+      .map(provider => (this._cluster.spec.cloud[provider] ? provider : undefined))
       .filter(p => p !== undefined);
 
     return clusterProviders.length > 0 ? clusterProviders[0] : NodeProvider.NONE;
@@ -74,34 +74,34 @@ export class ClusterService {
   }
 
   get datacenter(): string {
-    return this._clusterEntity.spec.cloud.dc;
+    return this._cluster.spec.cloud.dc;
   }
 
   set labels(labels: object) {
-    delete this._clusterEntity.labels;
-    this._clusterEntity.labels = labels;
+    delete this._cluster.labels;
+    this._cluster.labels = labels;
   }
 
   set sshKeys(keys: SSHKey[]) {
-    this._sshKeysEntity = keys;
-    this.sshKeyChanges.emit(this._sshKeysEntity);
+    this._sshKeys = keys;
+    this.sshKeyChanges.emit(this._sshKeys);
   }
 
   get sshKeys(): SSHKey[] {
-    return this._sshKeysEntity;
+    return this._sshKeys;
   }
 
   set clusterType(type: ClusterType) {
-    this._clusterEntity.type = type;
+    this._cluster.type = type;
     this.clusterTypeChanges.emit(type);
   }
 
   get clusterType(): ClusterType {
-    return this._clusterEntity.type;
+    return this._cluster.type;
   }
 
   reset(): void {
-    this._clusterEntity = Cluster.newEmptyClusterEntity();
+    this._cluster = Cluster.newEmptyClusterEntity();
   }
 
   private _getProvider(cluster: Cluster): NodeProvider {

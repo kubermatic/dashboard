@@ -8,7 +8,7 @@ import {ApiService, NotificationService, ProjectService, UserService} from '../.
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Project} from '../../shared/entity/project';
-import {ServiceAccount, ServiceAccountTokenEntity} from '../../shared/entity/service-account';
+import {ServiceAccount, ServiceAccountToken} from '../../shared/entity/service-account';
 import {GroupConfig} from '../../shared/model/Config';
 
 import {AddServiceAccountTokenComponent} from './add-serviceaccount-token/add-serviceaccount-token.component';
@@ -22,10 +22,10 @@ import {TokenDialogComponent} from './token-dialog/token-dialog.component';
 })
 export class ServiceAccountTokenComponent implements OnInit {
   @Input() serviceaccount: ServiceAccount;
-  @Input() serviceaccountTokens: ServiceAccountTokenEntity[];
+  @Input() serviceaccountTokens: ServiceAccountToken[];
   @Input() isInitializing: boolean;
   displayedColumns: string[] = ['name', 'expiry', 'creationDate', 'actions'];
-  dataSource = new MatTableDataSource<ServiceAccountTokenEntity>();
+  dataSource = new MatTableDataSource<ServiceAccountToken>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   private _selectedProject: Project;
   private _currentGroupConfig: GroupConfig;
@@ -55,7 +55,7 @@ export class ServiceAccountTokenComponent implements OnInit {
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
   }
 
-  getDataSource(): MatTableDataSource<ServiceAccountTokenEntity> {
+  getDataSource(): MatTableDataSource<ServiceAccountToken> {
     this.dataSource.data = this.serviceaccountTokens ? this.serviceaccountTokens : [];
     return this.dataSource;
   }
@@ -70,7 +70,7 @@ export class ServiceAccountTokenComponent implements OnInit {
     modal.componentInstance.serviceaccount = this.serviceaccount;
   }
 
-  regenerateServiceAccountToken(token: ServiceAccountTokenEntity): void {
+  regenerateServiceAccountToken(token: ServiceAccountToken): void {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
@@ -100,14 +100,14 @@ export class ServiceAccountTokenComponent implements OnInit {
       });
   }
 
-  editServiceAccountToken(token: ServiceAccountTokenEntity): void {
+  editServiceAccountToken(token: ServiceAccountToken): void {
     const modal = this._matDialog.open(EditServiceAccountTokenComponent);
     modal.componentInstance.project = this._selectedProject;
     modal.componentInstance.serviceaccount = this.serviceaccount;
     modal.componentInstance.token = token;
   }
 
-  deleteServiceAccountToken(token: ServiceAccountTokenEntity): void {
+  deleteServiceAccountToken(token: ServiceAccountToken): void {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
@@ -136,7 +136,7 @@ export class ServiceAccountTokenComponent implements OnInit {
       });
   }
 
-  openTokenDialog(token: ServiceAccountTokenEntity): void {
+  openTokenDialog(token: ServiceAccountToken): void {
     const modal = this._matDialog.open(TokenDialogComponent);
     modal.componentInstance.serviceaccountToken = token;
   }

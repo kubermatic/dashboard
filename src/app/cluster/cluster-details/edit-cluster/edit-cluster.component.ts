@@ -7,7 +7,7 @@ import {takeUntil} from 'rxjs/operators';
 
 import {ClusterService, NotificationService} from '../../../core/services';
 import {ProviderSettingsPatch} from '../../../core/services/cluster/cluster.service';
-import {Cluster, ClusterEntityPatch} from '../../../shared/entity/cluster';
+import {Cluster, ClusterPatch} from '../../../shared/entity/cluster';
 import {Datacenter} from '../../../shared/entity/datacenter';
 import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
 import {ResourceType} from '../../../shared/entity/common';
@@ -72,7 +72,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   }
 
   editCluster(): void {
-    const patch: ClusterEntityPatch = {
+    const patch: ClusterPatch = {
       name: this.form.controls.name.value,
       labels: this.labels,
       spec: {
