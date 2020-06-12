@@ -13,7 +13,7 @@ import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {MemberEntity} from '../shared/entity/MemberEntity';
-import {ProjectEntity} from '../shared/entity/ProjectEntity';
+import {Project} from '../shared/entity/project';
 import {GroupConfig} from '../shared/model/Config';
 import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
 
@@ -36,7 +36,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   private _unsubscribe: Subject<any> = new Subject();
   private _membersUpdate: Subject<any> = new Subject();
   private _currentGroupConfig: GroupConfig;
-  private _selectedProject: ProjectEntity;
+  private _selectedProject: Project;
 
   constructor(
     private readonly _apiService: ApiService,

@@ -7,7 +7,7 @@ import {filter, first, switchMap} from 'rxjs/operators';
 import {ApiService, NotificationService, ProjectService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {ProjectEntity} from '../../shared/entity/ProjectEntity';
+import {Project} from '../../shared/entity/project';
 import {ServiceAccount, ServiceAccountTokenEntity} from '../../shared/entity/service-account';
 import {GroupConfig} from '../../shared/model/Config';
 
@@ -27,7 +27,7 @@ export class ServiceAccountTokenComponent implements OnInit {
   displayedColumns: string[] = ['name', 'expiry', 'creationDate', 'actions'];
   dataSource = new MatTableDataSource<ServiceAccountTokenEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  private _selectedProject: ProjectEntity;
+  private _selectedProject: Project;
   private _currentGroupConfig: GroupConfig;
 
   constructor(

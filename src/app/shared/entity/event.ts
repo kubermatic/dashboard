@@ -1,4 +1,6 @@
-export class EventEntity {
+import {ObjectReference} from './common';
+
+export class Event {
   creationTimestamp?: Date;
   deletionTimestamp?: Date;
   id?: string;
@@ -8,10 +10,4 @@ export class EventEntity {
   involvedObject: ObjectReference;
   lastTimestamp: Date;
   count: number;
-}
-
-export class ObjectReference {
-  name: string;
-  namespace: string;
-  type: string;
 }

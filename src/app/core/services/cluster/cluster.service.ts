@@ -11,9 +11,9 @@ import {TaintFormComponent} from '../../../shared/components/taint-form/taint-fo
 import {AddonEntity} from '../../../shared/entity/addon';
 import {ClusterEntity, Finalizer, MasterVersion} from '../../../shared/entity/ClusterEntity';
 import {CloudSpecPatch, ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
-import {EventEntity} from '../../../shared/entity/EventEntity';
+import {Event} from '../../../shared/entity/event';
 import {HealthEntity} from '../../../shared/entity/HealthEntity';
-import {ClusterMetrics} from '../../../shared/entity/Metrics';
+import {ClusterMetrics} from '../../../shared/entity/metrics';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {SSHKeyEntity} from '../../../shared/entity/ssh-key';
 import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
@@ -115,9 +115,9 @@ export class ClusterService {
     return this._http.get<ClusterMetrics>(url).pipe(catchError(() => of<ClusterMetrics>(undefined)));
   }
 
-  events(projectID: string, clusterID: string, datacenter: string): Observable<EventEntity[]> {
+  events(projectID: string, clusterID: string, datacenter: string): Observable<Event[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/events`;
-    return this._http.get<EventEntity[]>(url).pipe(catchError(() => of<EventEntity[]>()));
+    return this._http.get<Event[]>(url).pipe(catchError(() => of<Event[]>()));
   }
 
   health(projectID: string, clusterID: string, datacenter: string): Observable<HealthEntity> {

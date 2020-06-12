@@ -11,7 +11,7 @@ import {ApiService, NotificationService, ProjectService, UserService} from '../c
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {ProjectEntity} from '../shared/entity/ProjectEntity';
+import {Project} from '../shared/entity/project';
 import {ServiceAccount} from '../shared/entity/service-account';
 import {GroupConfig} from '../shared/model/Config';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
@@ -38,7 +38,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private _unsubscribe: Subject<any> = new Subject();
   private _serviceAccountUpdate: Subject<any> = new Subject();
-  private _selectedProject = {} as ProjectEntity;
+  private _selectedProject = {} as Project;
   private _currentGroupConfig: GroupConfig;
 
   constructor(

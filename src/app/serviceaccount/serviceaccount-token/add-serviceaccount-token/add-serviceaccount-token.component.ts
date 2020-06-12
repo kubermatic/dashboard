@@ -4,7 +4,7 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {first} from 'rxjs/operators';
 
 import {ApiService, NotificationService} from '../../../core/services';
-import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import {Project} from '../../../shared/entity/project';
 import {CreateTokenEntity, ServiceAccount, ServiceAccountTokenEntity} from '../../../shared/entity/service-account';
 import {TokenDialogComponent} from '../token-dialog/token-dialog.component';
 
@@ -13,7 +13,7 @@ import {TokenDialogComponent} from '../token-dialog/token-dialog.component';
   templateUrl: './add-serviceaccount-token.component.html',
 })
 export class AddServiceAccountTokenComponent implements OnInit {
-  @Input() project: ProjectEntity;
+  @Input() project: Project;
   @Input() serviceaccount: ServiceAccount;
   addServiceAccountTokenForm: FormGroup;
 

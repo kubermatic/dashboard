@@ -7,7 +7,7 @@ import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity
 import {NodeDeployment} from '../../shared/entity/node-deployment';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {PacketSize} from '../../shared/entity/packet/PacketSizeEntity';
-import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
+import {EditProjectEntity, Project} from '../../shared/entity/project';
 import {AlibabaInstanceType, AlibabaZone} from '../../shared/entity/provider/alibaba/Alibaba';
 import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '../../shared/entity/provider/gcp/GCP';
@@ -37,8 +37,8 @@ import {fakeVSphereNetworks} from '../fake-data/vsphere.fake';
 
 @Injectable()
 export class ApiMockService {
-  project: ProjectEntity = fakeProject();
-  projects: ProjectEntity[] = fakeProjects();
+  project: Project = fakeProject();
+  projects: Project[] = fakeProjects();
   sshKeys: SSHKeyEntity[] = fakeSSHKeys();
   nodes: NodeEntity[] = nodesFake();
   masterVersions: MasterVersion[] = masterVersionsFake();
@@ -71,11 +71,11 @@ export class ApiMockService {
     return of([]);
   }
 
-  getProjects(): Observable<ProjectEntity[]> {
+  getProjects(): Observable<Project[]> {
     return of(this.projects);
   }
 
-  createProject(): Observable<ProjectEntity> {
+  createProject(): Observable<Project> {
     return of(this.project);
   }
 

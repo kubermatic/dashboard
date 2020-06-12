@@ -14,7 +14,7 @@ import {
   getEmptyNodeVersionSpec,
   getEmptyOperatingSystemSpec,
 } from '../shared/entity/NodeEntity';
-import {ProjectEntity} from '../shared/entity/ProjectEntity';
+import {Project} from '../shared/entity/project';
 import {SSHKeyEntity} from '../shared/entity/ssh-key';
 import {
   ClusterDatacenterForm,
@@ -66,7 +66,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   clusterSSHKeys: SSHKeyEntity[] = [];
   addNodeData: NodeData;
   creating = false;
-  project = {} as ProjectEntity;
+  project = {} as Project;
 
   constructor(
     private readonly _wizardService: WizardService,

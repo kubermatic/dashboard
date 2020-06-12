@@ -5,7 +5,7 @@ import {NotificationService} from '../../core/services';
 
 import {ApiService} from '../../core/services';
 import {MemberEntity} from '../../shared/entity/MemberEntity';
-import {ProjectEntity} from '../../shared/entity/ProjectEntity';
+import {Project} from '../../shared/entity/project';
 import {MemberUtils} from '../../shared/utils/member-utils/member-utils';
 
 @Component({
@@ -13,7 +13,7 @@ import {MemberUtils} from '../../shared/utils/member-utils/member-utils';
   templateUrl: './edit-member.component.html',
 })
 export class EditMemberComponent implements OnInit {
-  @Input() project: ProjectEntity;
+  @Input() project: Project;
   @Input() member: MemberEntity;
   editMemberForm: FormGroup;
 

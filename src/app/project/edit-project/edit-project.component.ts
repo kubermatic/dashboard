@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 import {NotificationService} from '../../core/services';
 import {ApiService} from '../../core/services';
 import {ResourceType} from '../../shared/entity/LabelsEntity';
-import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
+import {EditProjectEntity, Project} from '../../shared/entity/project';
 import {AsyncValidators} from '../../shared/validators/async-label-form.validator';
 
 @Component({
@@ -14,7 +14,7 @@ import {AsyncValidators} from '../../shared/validators/async-label-form.validato
   templateUrl: './edit-project.component.html',
 })
 export class EditProjectComponent implements OnInit {
-  @Input() project: ProjectEntity;
+  @Input() project: Project;
   labels: object;
   form: FormGroup;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Project)];

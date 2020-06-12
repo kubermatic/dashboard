@@ -1,6 +1,6 @@
-import {ProjectEntity} from '../../shared/entity/ProjectEntity';
+import {Project} from '../../shared/entity/project';
 
-export function fakeProjects(): ProjectEntity[] {
+export function fakeProjects(): Project[] {
   return [
     {
       creationTimestamp: new Date(),
@@ -36,7 +36,7 @@ export function fakeProjects(): ProjectEntity[] {
   ];
 }
 
-export function fakeProject(): ProjectEntity {
+export function fakeProject(): Project {
   return {
     creationTimestamp: new Date(),
     id: '123ab4cd5e',
@@ -52,7 +52,7 @@ export function fakeProject(): ProjectEntity {
   };
 }
 
-export function fakeInactiveProject(): ProjectEntity {
+export function fakeInactiveProject(): Project {
   return {
     creationTimestamp: new Date(),
     id: '345ab6cd7e',

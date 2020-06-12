@@ -6,9 +6,9 @@ import {ProviderSettingsPatch} from '../../core/services/cluster/cluster.service
 import {AddonEntity} from '../../shared/entity/addon';
 import {ClusterEntity, MasterVersion} from '../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../shared/entity/ClusterEntityPatch';
-import {EventEntity} from '../../shared/entity/EventEntity';
+import {Event} from '../../shared/entity/event';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
-import {ClusterMetrics} from '../../shared/entity/Metrics';
+import {ClusterMetrics} from '../../shared/entity/metrics';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {SSHKeyEntity} from '../../shared/entity/ssh-key';
 import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
@@ -103,7 +103,7 @@ export class ClusterMockService {
     return of(null);
   }
 
-  events(projectID: string, clusterID: string, datacenter: string): Observable<EventEntity[]> {
+  events(projectID: string, clusterID: string, datacenter: string): Observable<Event[]> {
     return of(fakeEvents());
   }
 

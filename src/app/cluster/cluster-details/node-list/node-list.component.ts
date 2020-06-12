@@ -13,7 +13,7 @@ import {ConfirmationDialogComponent} from '../../../shared/components/confirmati
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/datacenter';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
-import {NodeMetrics} from '../../../shared/entity/Metrics';
+import {NodeMetrics} from '../../../shared/entity/metrics';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {GroupConfig} from '../../../shared/model/Config';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';

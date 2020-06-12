@@ -7,7 +7,7 @@ import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
-import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import {Project} from '../../../shared/entity/project';
 import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {ProjectService, UserService} from '../../services';
@@ -26,7 +26,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   settings: UserSettings;
   currentUser: MemberEntity;
   screenWidth = 0;
-  private _selectedProject = {} as ProjectEntity;
+  private _selectedProject = {} as Project;
   private _currentGroupConfig: GroupConfig;
   private _isSidenavCollapsed = false;
   private _screenWidth = new BehaviorSubject<number>(window.innerWidth);
@@ -60,7 +60,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     merge(this._projectService.selectedProject, this._projectService.onProjectChange)
       .pipe(takeUntil(this._unsubscribe))
       .pipe(
-        switchMap((project: ProjectEntity) => {
+        switchMap((project: Project) => {
           this._selectedProject = project;
           return this._userService.currentUserGroup(project.id);
         })

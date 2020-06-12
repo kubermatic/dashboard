@@ -1,4 +1,4 @@
-export class ProjectEntity {
+export class Project {
   creationTimestamp: Date;
   deletionTimestamp?: Date;
   id: string;

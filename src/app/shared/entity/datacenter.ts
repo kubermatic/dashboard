@@ -1,5 +1,5 @@
 import {NodeProvider} from '../model/NodeProviderConstants';
-import {MetadataEntity} from './MetadataEntity';
+import {Metadata} from './common';
 
 export class CreateDatacenterModel {
   name: string;
@@ -7,7 +7,7 @@ export class CreateDatacenterModel {
 }
 
 export class DataCenterEntity {
-  metadata: MetadataEntity;
+  metadata: Metadata;
   spec: DatacenterSpec;
   seed?: boolean;
 }

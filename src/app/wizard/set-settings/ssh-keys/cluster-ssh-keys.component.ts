@@ -10,7 +10,7 @@ import {WizardService} from '../../../core/services';
 import {AddSshKeyDialogComponent} from '../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
-import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import {Project} from '../../../shared/entity/project';
 import {SSHKeyEntity} from '../../../shared/entity/ssh-key';
 import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
@@ -27,7 +27,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   keysForm: FormGroup = new FormGroup({
     keys: new FormControl([], []),
   });
-  project = {} as ProjectEntity;
+  project = {} as Project;
   groupConfig: GroupConfig;
 
   private _currentUser: MemberEntity;

@@ -1,4 +1,4 @@
-export class MetadataEntity {
+export class Metadata {
   name?: string;
   selfLink?: string;
   uid?: string;
@@ -6,4 +6,10 @@ export class MetadataEntity {
   creationTimestamp?: Date;
   labels?: Map<string, string>;
   deletionTimestamp?: Date;
+}
+
+export class ObjectReference {
+  name: string;
+  namespace: string;
+  type: string;
 }

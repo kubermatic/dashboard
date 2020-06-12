@@ -9,13 +9,13 @@ import {LabelFormComponent} from '../../../shared/components/label-form/label-fo
 import {TaintFormComponent} from '../../../shared/components/taint-form/taint-form.component';
 import {AddonConfigEntity} from '../../../shared/entity/addon';
 import {ClusterEntity, ClusterType, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
-import {EventEntity} from '../../../shared/entity/EventEntity';
+import {Event} from '../../../shared/entity/event';
 import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
-import {NodeMetrics} from '../../../shared/entity/Metrics';
+import {NodeMetrics} from '../../../shared/entity/metrics';
 import {NodeDeployment, NodeDeploymentPatch} from '../../../shared/entity/node-deployment';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {PacketSize} from '../../../shared/entity/packet/PacketSizeEntity';
-import {EditProjectEntity, ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import {EditProjectEntity, Project} from '../../../shared/entity/project';
 import {AlibabaInstanceType, AlibabaZone} from '../../../shared/entity/provider/alibaba/Alibaba';
 import {AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws/AWS';
 import {AzureSizes, AzureZones} from '../../../shared/entity/provider/azure/AzureSizeEntity';
@@ -96,14 +96,9 @@ export class ApiService {
     return this._http.get<NodeMetrics[]>(url);
   }
 
-  getNodeDeploymentNodesEvents(
-    ndId: string,
-    cluster: string,
-    dc: string,
-    projectID: string
-  ): Observable<EventEntity[]> {
+  getNodeDeploymentNodesEvents(ndId: string, cluster: string, dc: string, projectID: string): Observable<Event[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}/nodes/events`;
-    return this._http.get<EventEntity[]>(url);
+    return this._http.get<Event[]>(url);
   }
 
   patchNodeDeployment(
@@ -122,9 +117,9 @@ export class ApiService {
     return this._http.delete(url);
   }
 
-  createProject(createProjectModel: CreateProjectModel): Observable<ProjectEntity> {
+  createProject(createProjectModel: CreateProjectModel): Observable<Project> {
     const url = `${this._restRoot}/projects`;
-    return this._http.post<ProjectEntity>(url, createProjectModel);
+    return this._http.post<Project>(url, createProjectModel);
   }
 
   editProject(projectID: string, editProjectEntity: EditProjectEntity): Observable<any> {

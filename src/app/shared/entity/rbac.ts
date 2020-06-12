@@ -1,6 +1,3 @@
-export const KIND_GROUP = 'Group';
-export const KIND_USER = 'User';
-
 export class ClusterRoleName {
   name: string;
 }
@@ -73,3 +70,6 @@ export class SimpleBinding {
   namespace: string;
   kind: string;
 }
+
+export const KIND_GROUP = 'Group';
+export const KIND_USER = 'User';

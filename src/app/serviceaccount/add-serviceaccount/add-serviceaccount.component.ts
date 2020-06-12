@@ -5,7 +5,7 @@ import {first} from 'rxjs/operators';
 
 import {NotificationService} from '../../core/services';
 import {ApiService} from '../../core/services';
-import {ProjectEntity} from '../../shared/entity/ProjectEntity';
+import {Project} from '../../shared/entity/project';
 import {CreateServiceAccountEntity} from '../../shared/entity/service-account';
 
 @Component({
@@ -13,7 +13,7 @@ import {CreateServiceAccountEntity} from '../../shared/entity/service-account';
   templateUrl: './add-serviceaccount.component.html',
 })
 export class AddServiceAccountComponent implements OnInit {
-  @Input() project: ProjectEntity;
+  @Input() project: Project;
   addServiceAccountForm: FormGroup;
 
   constructor(

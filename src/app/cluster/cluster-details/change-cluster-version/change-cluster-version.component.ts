@@ -8,7 +8,7 @@ import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
 import {DataCenterEntity} from '../../../shared/entity/datacenter';
-import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import {Project} from '../../../shared/entity/project';
 
 @Component({
   selector: 'km-change-cluster-version',
@@ -19,7 +19,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   @Input() datacenter: DataCenterEntity;
   controlPlaneVersions: string[] = [];
   selectedVersion: string;
-  project: ProjectEntity;
+  project: Project;
   isNodeDeploymentUpgradeEnabled = false;
   private _unsubscribe = new Subject<void>();
 

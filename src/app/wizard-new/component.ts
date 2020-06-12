@@ -10,7 +10,7 @@ import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NodeDataService} from '../node-data-new/service/service';
 import {ClusterEntity} from '../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../shared/entity/datacenter';
-import {ProjectEntity} from '../shared/entity/ProjectEntity';
+import {Project} from '../shared/entity/project';
 import {SSHKeyEntity} from '../shared/entity/ssh-key';
 import {CreateClusterModel} from '../shared/model/CreateClusterModel';
 import {NodeData} from '../shared/model/NodeSpecChange';
@@ -27,7 +27,7 @@ import {WizardService} from './service/wizard';
 })
 export class WizardComponent implements OnInit, OnDestroy {
   form: FormGroup;
-  project = {} as ProjectEntity;
+  project = {} as Project;
   creating = false;
   readonly stepRegistry = StepRegistry;
 

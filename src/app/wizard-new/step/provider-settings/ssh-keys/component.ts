@@ -6,7 +6,7 @@ import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {ApiService, ProjectService, UserService} from '../../../../core/services';
 import {AddSshKeyDialogComponent} from '../../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {MemberEntity} from '../../../../shared/entity/MemberEntity';
-import {ProjectEntity} from '../../../../shared/entity/ProjectEntity';
+import {Project} from '../../../../shared/entity/project';
 import {SSHKeyEntity} from '../../../../shared/entity/ssh-key';
 import {GroupConfig} from '../../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../../shared/utils/member-utils/member-utils';
@@ -38,7 +38,7 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
   readonly Controls = Controls;
 
   private _keys: SSHKeyEntity[] = [];
-  private _project = {} as ProjectEntity;
+  private _project = {} as Project;
   private _user: MemberEntity;
   private _groupConfig: GroupConfig;
 

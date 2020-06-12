@@ -14,7 +14,7 @@ import {DataCenterEntity} from '../../shared/entity/datacenter';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
 import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {NodeDeployment} from '../../shared/entity/node-deployment';
-import {ProjectEntity} from '../../shared/entity/ProjectEntity';
+import {Project} from '../../shared/entity/project';
 import {GroupConfig} from '../../shared/model/Config';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
 import {MemberUtils, Permission} from '../../shared/utils/member-utils/member-utils';
@@ -38,7 +38,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private _unsubscribe: Subject<any> = new Subject();
-  private _selectedProject = {} as ProjectEntity;
+  private _selectedProject = {} as Project;
   private _user: MemberEntity;
   private _currentGroupConfig: GroupConfig;
 
@@ -81,7 +81,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
 
     this._projectService.selectedProject
       // Do not allow project refresh to fire clusters refresh unless project has been changed.
-      .pipe(distinctUntilChanged((p: ProjectEntity, q: ProjectEntity) => p.id === q.id))
+      .pipe(distinctUntilChanged((p: Project, q: Project) => p.id === q.id))
       .pipe(switchMap(project => this._clusterService.clusters(project.id)))
       .pipe(
         switchMap((clusters: ClusterEntity[]) => {

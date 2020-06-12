@@ -8,7 +8,7 @@ import {NotificationService, RBACService} from '../../../core/services';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/datacenter';
-import {SimpleBinding, SimpleClusterBinding} from '../../../shared/entity/RBACEntity';
+import {SimpleBinding, SimpleClusterBinding} from '../../../shared/entity/rbac';
 
 import {AddBindingComponent} from './add-binding/add-binding.component';
 

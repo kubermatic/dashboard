@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {ProjectOwners} from '../../entity/ProjectEntity';
+import {ProjectOwners} from '../../entity/project';
 
 @Component({
   selector: 'km-short-name-in-circle',
