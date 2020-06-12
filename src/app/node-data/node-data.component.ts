@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angula
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
+import * as _ from 'lodash';
 
 import {ClusterService, DatacenterService, ProjectService, WizardService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
@@ -160,7 +161,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe((upgrades: MasterVersion[]) => {
         upgrades.forEach(upgrade => this.versions.push(upgrade.version));
-        if (this.versions.length > 0) {
+        if (!_.isEmpty(this.versions)) {
           if (this.versions.includes(initialKubeletVersion)) {
             // First, try to default to kubelet version from node data (edit mode).
             this.form.patchValue({kubelet: initialKubeletVersion});

@@ -5,6 +5,7 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Subject, timer} from 'rxjs';
 import {filter, first, retry, switchMap, takeUntil} from 'rxjs/operators';
+import * as _ from 'lodash';
 
 import {AppConfigService} from '../app-config.service';
 import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
@@ -162,11 +163,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
     this.isShowPublicKey[element.id] = !this.isShowPublicKey[element.id];
   }
 
-  hasItems(): boolean {
-    return this.sshKeys && this.sshKeys.length > 0;
-  }
-
   isPaginatorVisible(): boolean {
-    return this.hasItems() && this.paginator && this.sshKeys.length > this.paginator.pageSize;
+    return !_.isEmpty(this.sshKeys) && this.paginator && this.sshKeys.length > this.paginator.pageSize;
   }
 }

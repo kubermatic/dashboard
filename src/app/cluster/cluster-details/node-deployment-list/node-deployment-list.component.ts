@@ -4,6 +4,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
+import * as _ from 'lodash';
 
 import {ProjectService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
@@ -136,11 +137,7 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
       .subscribe(() => {});
   }
 
-  hasItems(): boolean {
-    return !!this.nodeDeployments && this.nodeDeployments.length > 0;
-  }
-
   isPaginatorVisible(): boolean {
-    return this.hasItems() && this.paginator && this.nodeDeployments.length > this.paginator.pageSize;
+    return !_.isEmpty(this.nodeDeployments) && this.paginator && this.nodeDeployments.length > this.paginator.pageSize;
   }
 }

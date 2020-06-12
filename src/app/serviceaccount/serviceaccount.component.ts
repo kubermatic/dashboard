@@ -5,6 +5,7 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {filter, first, switchMap, switchMapTo, takeUntil} from 'rxjs/operators';
+import * as _ from 'lodash';
 
 import {AppConfigService} from '../app-config.service';
 import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
@@ -191,11 +192,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  hasItems(): boolean {
-    return this.serviceAccounts && this.serviceAccounts.length > 0;
-  }
-
   isPaginatorVisible(): boolean {
-    return this.hasItems() && this.paginator && this.serviceAccounts.length > this.paginator.pageSize;
+    return !_.isEmpty(this.serviceAccounts) && this.paginator && this.serviceAccounts.length > this.paginator.pageSize;
   }
 }

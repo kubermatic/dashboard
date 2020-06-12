@@ -6,6 +6,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EMPTY, forkJoin, of, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, distinctUntilChanged, first, switchMap, takeUntil, tap} from 'rxjs/operators';
+import * as _ from 'lodash';
 
 import {ApiService, ClusterService, DatacenterService, ProjectService, UserService} from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
@@ -170,12 +171,8 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     modal.componentInstance.projectID = this._selectedProject.id;
   }
 
-  hasItems(): boolean {
-    return this.clusters && this.clusters.length > 0;
-  }
-
   isPaginatorVisible(): boolean {
-    return this.hasItems() && this.paginator && this.clusters.length > this.paginator.pageSize;
+    return !_.isEmpty(this.clusters) && this.paginator && this.clusters.length > this.paginator.pageSize;
   }
 
   showEOLWarning(element): boolean {

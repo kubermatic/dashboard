@@ -4,6 +4,7 @@ import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {MatDialogRef} from '@angular/material/dialog';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
+import * as _ from 'lodash';
 
 import {NotificationService, RBACService} from '../../../../core/services';
 import {Cluster} from '../../../../shared/entity/cluster';
@@ -53,7 +54,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       .getClusterRoleNames(this.cluster.id, this.datacenter.metadata.name, this.projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((clusterRoles: ClusterRoleName[]) => {
-        if (clusterRoles.length > 0) {
+        if (!_.isEmpty(clusterRoles)) {
           this.clusterRoles = clusterRoles.sort((a, b) => {
             return a.name.localeCompare(b.name);
           });

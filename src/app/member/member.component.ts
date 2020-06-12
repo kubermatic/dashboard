@@ -171,11 +171,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  hasItems(): boolean {
-    return !_.isEmpty(this.members);
-  }
-
   isPaginatorVisible(): boolean {
-    return this.hasItems() && this.paginator && this.members.length > this.paginator.pageSize;
+    return !_.isEmpty(this.members) && this.paginator && this.members.length > this.paginator.pageSize;
   }
 }

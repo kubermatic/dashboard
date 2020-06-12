@@ -5,6 +5,7 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Subject} from 'rxjs';
 import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
+import * as _ from 'lodash';
 
 import {ClusterService, NotificationService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
@@ -205,12 +206,8 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     return getOperatingSystemLogoClass(node.spec);
   }
 
-  hasItems(): boolean {
-    return !!this.nodes && this.nodes.length > 0;
-  }
-
   isPaginatorVisible(): boolean {
-    return this.hasItems() && this.paginator && this.nodes.length > this.paginator.pageSize;
+    return !_.isEmpty(this.nodes) && this.paginator && this.nodes.length > this.paginator.pageSize;
   }
 
   getMetrics(nodeName: string): NodeMetrics | undefined {

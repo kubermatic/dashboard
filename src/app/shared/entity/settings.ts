@@ -1,3 +1,5 @@
+import * as _ from 'lodash';
+
 export class UserSettings {
   selectedTheme?: string;
   selectedProjectId?: string;
@@ -37,7 +39,7 @@ export class CustomLink {
   location?: CustomLinkLocation;
 
   static getIcon(link: CustomLink): string {
-    return link.icon && link.icon.length > 0 ? link.icon : CustomLink._findMatchingServiceIcon(link);
+    return !_.isEmpty(link.icon) ? link.icon : CustomLink._findMatchingServiceIcon(link);
   }
 
   private static _findMatchingServiceIcon(link: CustomLink): CustomLinkIcon {

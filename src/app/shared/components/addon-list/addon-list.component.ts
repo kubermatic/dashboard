@@ -3,6 +3,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
+import * as _ from 'lodash';
 
 import {ApiService} from '../../../core/services';
 import {AddonConfig, Addon, getAddonLogoData, hasAddonLogoData} from '../../entity/addon';
@@ -86,7 +87,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     return (
       this.isClusterReady &&
       this.canEdit &&
-      this.accessibleAddons.length > 0 &&
+      !_.isEmpty(this.accessibleAddons) &&
       this.addons.length < this.accessibleAddons.length
     );
   }
