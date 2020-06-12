@@ -6,7 +6,7 @@ import {first, takeUntil} from 'rxjs/operators';
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService, ClusterService, DatacenterService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../../shared/entity/datacenter';
 import {EventEntity} from '../../../shared/entity/EventEntity';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {NodeMetrics} from '../../../shared/entity/Metrics';

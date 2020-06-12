@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../../../shared/entity/datacenter';
 
 @Component({
   selector: 'km-cluster-panel',

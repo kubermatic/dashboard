@@ -5,7 +5,7 @@ import {takeUntil} from 'rxjs/operators';
 
 import {DatacenterService, WizardService} from '../../core/services';
 import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
-import {getDatacenterProvider} from '../../shared/entity/DatacenterEntity';
+import {getDatacenterProvider} from '../../shared/entity/datacenter';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 
 @Component({

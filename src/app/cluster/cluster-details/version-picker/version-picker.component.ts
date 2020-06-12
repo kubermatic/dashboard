@@ -5,7 +5,7 @@ import {gt, lt} from 'semver';
 
 import {ClusterService} from '../../../core/services';
 import {ClusterEntity, MasterVersion} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../../shared/entity/datacenter';
 import {ChangeClusterVersionComponent} from '../change-cluster-version/change-cluster-version.component';
 
 @Component({

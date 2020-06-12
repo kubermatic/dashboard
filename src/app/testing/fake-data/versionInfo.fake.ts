@@ -1,4 +1,4 @@
-import {VersionInfo} from '../../shared/entity/VersionInfo';
+import {VersionInfo} from '../../shared/entity/version-info';
 
 export function fakeVersionInfo(): VersionInfo {
   return {

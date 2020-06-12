@@ -9,7 +9,7 @@ import {ClusterService, NotificationService} from '../../../core/services';
 import {ProviderSettingsPatch} from '../../../core/services/cluster/cluster.service';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../../shared/entity/datacenter';
 import {ResourceType} from '../../../shared/entity/LabelsEntity';
 import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
 

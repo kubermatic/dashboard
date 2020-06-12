@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 
-import {VersionInfo} from '../../../shared/entity/VersionInfo';
+import {VersionInfo} from '../../../shared/entity/version-info';
 import {AdminSettings, CustomLink, CustomLinkLocation, filterCustomLinks} from '../../../shared/entity/settings';
 
 @Component({

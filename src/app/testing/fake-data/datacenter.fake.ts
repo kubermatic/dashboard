@@ -1,4 +1,4 @@
-import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../shared/entity/datacenter';
 
 export function fakeDigitaloceanDatacenter(): DataCenterEntity {
   return {

@@ -8,7 +8,7 @@ import {ClusterService, NotificationService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ClusterEntity, Finalizer} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../../shared/entity/datacenter';
 import {AdminSettings} from '../../../shared/entity/settings';
 
 @Component({

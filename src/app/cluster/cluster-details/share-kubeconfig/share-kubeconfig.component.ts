@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {first} from 'rxjs/operators';
 import {ApiService, Auth, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../../shared/entity/datacenter';
 
 @Component({
   selector: 'km-share-kubeconfig',

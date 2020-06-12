@@ -7,7 +7,7 @@ import {debounceTime, takeUntil} from 'rxjs/operators';
 
 import {NotificationService, RBACService} from '../../../../core/services';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../../../shared/entity/datacenter';
 import {ClusterRoleName, CreateBinding, RoleName} from '../../../../shared/entity/RBACEntity';
 
 export enum Controls {

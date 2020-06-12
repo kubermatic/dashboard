@@ -3,7 +3,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {WizardService, DatacenterService} from '../../core/services';
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../shared/entity/datacenter';
 import {SSHKeyEntity} from '../../shared/entity/ssh-key';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 

@@ -11,7 +11,7 @@ import {ClusterService, NotificationService, UserService} from '../../../core/se
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../../shared/entity/datacenter';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {SSHKeyEntity} from '../../../shared/entity/ssh-key';
 import {GroupConfig} from '../../../shared/model/Config';

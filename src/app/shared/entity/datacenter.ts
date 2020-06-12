@@ -1,16 +1,4 @@
 import {NodeProvider} from '../model/NodeProviderConstants';
-
-import {AlibabaDatacenterSpec} from './datacenter/AlibabaDatacenterSpec';
-import {AWSDatacenterSpec} from './datacenter/AWSDatacenterSpec';
-import {AzureDatacenterSpec} from './datacenter/AzureDatacenterSpec';
-import {BringYourOwnDatacenterSpec} from './datacenter/BringYourOwnDatacenterSpec';
-import {DigitaloceanDatacenterSpec} from './datacenter/DigitaloceanDatacenterSpec';
-import {GCPDatacenterSpec} from './datacenter/GCPDatacenterSpec';
-import {HetznerDatacenterSpec} from './datacenter/HetznerDatacenterSpec';
-import {KubeVirtDatacenterSpec} from './datacenter/KubeVirtDatacenterSpec';
-import {OpenStackDatacenterSpec} from './datacenter/OpenStackDatacenterSpec';
-import {PacketDatacenterSpec} from './datacenter/PacketDatacenterSpec';
-import {VSphereDatacenterSpec} from './datacenter/VSphereDatacenterSpec';
 import {MetadataEntity} from './MetadataEntity';
 
 export class CreateDatacenterModel {
@@ -32,7 +20,6 @@ export class DatacenterSpec {
   requiredEmailDomains?: string[];
   enforceAuditLogging: boolean;
   enforcePodSecurityPolicy: boolean;
-
   digitalocean?: DigitaloceanDatacenterSpec;
   bringyourown?: BringYourOwnDatacenterSpec;
   aws?: AWSDatacenterSpec;
@@ -53,6 +40,57 @@ export class DatacenterOperatingSystemOptions {
   sles?: string;
   rhel?: string;
   flatcar?: string;
+}
+
+export class AlibabaDatacenterSpec {
+  region: string;
+}
+
+export class AWSDatacenterSpec {
+  region: string;
+}
+
+export class AzureDatacenterSpec {
+  location: string;
+}
+
+export class BringYourOwnDatacenterSpec {}
+
+export class DigitaloceanDatacenterSpec {
+  region: string;
+}
+
+export class GCPDatacenterSpec {
+  region: string;
+  regional: boolean;
+  zone_suffixes: string[];
+}
+
+export class HetznerDatacenterSpec {
+  datacenter: string;
+  location: string;
+}
+
+export class KubeVirtDatacenterSpec {}
+
+export class OpenStackDatacenterSpec {
+  availability_zone: string;
+  auth_url: string;
+  region: string;
+  images: DatacenterOperatingSystemOptions;
+  enforce_floating_ip: boolean;
+}
+
+export class PacketDatacenterSpec {
+  facilities: string[];
+}
+
+export class VSphereDatacenterSpec {
+  datastore: string;
+  endpoint: string;
+  cluster: string;
+  datacenter: string;
+  templates: DatacenterOperatingSystemOptions;
 }
 
 export function getDatacenterProvider(datacenter: DataCenterEntity): NodeProvider {

@@ -7,7 +7,7 @@ import {ClusterService, NotificationService, ProjectService} from '../../../core
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../../shared/entity/datacenter';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 
 @Component({

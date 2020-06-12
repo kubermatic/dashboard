@@ -5,7 +5,7 @@ import {dump, load} from 'js-yaml';
 import * as _ from 'lodash';
 import * as countryCodeLookup from 'country-code-lookup';
 
-import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../../../shared/entity/datacenter';
 import {NodeProvider, NodeProviderConstants} from '../../../../shared/model/NodeProviderConstants';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material/chips';

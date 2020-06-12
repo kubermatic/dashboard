@@ -5,7 +5,7 @@ import {switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../core/services';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {ClusterType} from '../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '../shared/entity/NodeEntity';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '../shared/model/NodeProviderConstants';
 import {NodeData} from '../shared/model/NodeSpecChange';

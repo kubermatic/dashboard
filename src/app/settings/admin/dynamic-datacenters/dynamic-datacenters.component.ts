@@ -1,6 +1,6 @@
 import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
 import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {CreateDatacenterModel, DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {CreateDatacenterModel, DataCenterEntity} from '../../../shared/entity/datacenter';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';

@@ -15,7 +15,7 @@ import {DatacenterService} from '../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
 import {ClusterType} from '../../../../shared/entity/ClusterEntity';
 
-import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/DatacenterEntity';
+import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/datacenter';
 import {OpenstackNodeSpec} from '../../../../shared/entity/node/OpenstackNodeSpec';
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
 import {OpenstackFlavor} from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';

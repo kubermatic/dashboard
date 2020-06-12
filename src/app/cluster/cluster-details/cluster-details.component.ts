@@ -16,7 +16,7 @@ import {
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {AddonEntity} from '../../shared/entity/addon';
 import {ClusterEntity, ClusterType, getClusterProvider, MasterVersion} from '../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../shared/entity/datacenter';
 import {EventEntity} from '../../shared/entity/EventEntity';
 import {HealthEntity, HealthState} from '../../shared/entity/HealthEntity';
 import {MemberEntity} from '../../shared/entity/MemberEntity';

@@ -7,7 +7,7 @@ import {filter, first, switchMap} from 'rxjs/operators';
 import {NotificationService, RBACService} from '../../../core/services';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../../shared/entity/datacenter';
 import {SimpleBinding, SimpleClusterBinding} from '../../../shared/entity/RBACEntity';
 
 import {AddBindingComponent} from './add-binding/add-binding.component';

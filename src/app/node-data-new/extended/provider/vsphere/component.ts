@@ -3,7 +3,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {merge} from 'rxjs';
 import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../../../../core/services';
-import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/DatacenterEntity';
+import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/datacenter';
 import {VSphereNodeSpec} from '../../../../shared/entity/node/VSphereNodeSpec';
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
 import {OperatingSystem} from '../../../../shared/model/NodeProviderConstants';

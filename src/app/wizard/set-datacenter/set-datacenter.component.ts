@@ -5,7 +5,7 @@ import {takeUntil} from 'rxjs/operators';
 
 import {DatacenterService, WizardService} from '../../core/services';
 import {AuditLoggingSettings, ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
-import {DataCenterEntity, getDatacenterProvider} from '../../shared/entity/DatacenterEntity';
+import {DataCenterEntity, getDatacenterProvider} from '../../shared/entity/datacenter';
 
 @Component({
   selector: 'km-set-datacenter',

@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {iif, merge, Observable, of, Subject, timer} from 'rxjs';
 import {first, map, shareReplay, switchMap} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
-import {CreateDatacenterModel, DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {CreateDatacenterModel, DataCenterEntity} from '../../../shared/entity/datacenter';
 import {AppConfigService} from '../../../app-config.service';
 import {Auth} from '..';
 

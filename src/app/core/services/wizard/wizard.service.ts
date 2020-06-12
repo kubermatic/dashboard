@@ -4,7 +4,7 @@ import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
 
 import {environment} from '../../../../environments/environment';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../../shared/entity/datacenter';
 import {PresetListEntity} from '../../../shared/entity/provider/credentials/PresetListEntity';
 import {SSHKeyEntity} from '../../../shared/entity/ssh-key';
 import {

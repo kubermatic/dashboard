@@ -9,7 +9,7 @@ import {ClusterService, DatacenterService, NotificationService, ProjectService} 
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NodeDataService} from '../node-data-new/service/service';
 import {ClusterEntity} from '../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../shared/entity/datacenter';
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
 import {SSHKeyEntity} from '../shared/entity/ssh-key';
 import {CreateClusterModel} from '../shared/model/CreateClusterModel';

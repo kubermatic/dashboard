@@ -7,7 +7,7 @@ import {ClusterService, DatacenterService, ProjectService, WizardService} from '
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {ClusterEntity, MasterVersion} from '../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../shared/entity/datacenter';
 import {ResourceType} from '../shared/entity/LabelsEntity';
 import {OperatingSystemSpec} from '../shared/entity/NodeEntity';
 import {NodeProviderConstants, OperatingSystem} from '../shared/model/NodeProviderConstants';

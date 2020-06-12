@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {find} from 'lodash';
 import {Observable, of} from 'rxjs';
-import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../shared/entity/datacenter';
 import {fakeBringyourownSeedDatacenter, fakeNodeDatacenters} from '../fake-data/datacenter.fake';
 
 @Injectable()

@@ -2,7 +2,7 @@ import {merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, switchMap} from 'rxjs/operators';
 
 import {DatacenterService, PresetsService} from '../../../core/services';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../../shared/entity/datacenter';
 import {OpenstackFlavor} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../wizard-new/service/cluster';

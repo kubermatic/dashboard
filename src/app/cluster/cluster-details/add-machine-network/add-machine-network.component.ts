@@ -5,7 +5,7 @@ import {takeUntil} from 'rxjs/operators';
 
 import {ClusterService, NotificationService, WizardService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../../shared/entity/datacenter';
 import {MachineNetworkForm} from '../../../shared/model/ClusterForm';
 
 @Component({

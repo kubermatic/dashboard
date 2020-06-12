@@ -8,7 +8,7 @@ import {switchMap, takeUntil} from 'rxjs/operators';
 import {ProjectService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../../shared/entity/datacenter';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {NodeDeployment} from '../../../shared/entity/node-deployment';
 import {GroupConfig} from '../../../shared/model/Config';

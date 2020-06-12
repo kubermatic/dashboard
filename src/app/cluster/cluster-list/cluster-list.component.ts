@@ -10,7 +10,7 @@ import {catchError, distinctUntilChanged, first, switchMap, takeUntil, tap} from
 import {ApiService, ClusterService, DatacenterService, ProjectService, UserService} from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {CloudSpec, ClusterEntity} from '../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../shared/entity/datacenter';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
 import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {NodeDeployment} from '../../shared/entity/node-deployment';

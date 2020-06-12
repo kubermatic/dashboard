@@ -2,7 +2,7 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
+import {DataCenterEntity} from '../../shared/entity/datacenter';
 import {NodeDeployment} from '../../shared/entity/node-deployment';
 import {NodeSpec} from '../../shared/entity/NodeEntity';
 import {NodeData} from '../../shared/model/NodeSpecChange';
