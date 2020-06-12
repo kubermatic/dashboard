@@ -13,7 +13,7 @@ import {ConfirmationDialogComponent} from '../../../shared/components/confirmati
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
-import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
+import {SSHKeyEntity} from '../../../shared/entity/ssh-key';
 import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 

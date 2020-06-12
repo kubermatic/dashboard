@@ -6,7 +6,7 @@ import {first} from 'rxjs/operators';
 import {NotificationService} from '../../core/services';
 import {ApiService} from '../../core/services';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
-import {ServiceAccountEntity} from '../../shared/entity/ServiceAccountEntity';
+import {ServiceAccount} from '../../shared/entity/service-account';
 
 @Component({
   selector: 'km-edit-serviceaccount',
@@ -14,7 +14,7 @@ import {ServiceAccountEntity} from '../../shared/entity/ServiceAccountEntity';
 })
 export class EditServiceAccountComponent implements OnInit {
   @Input() project: ProjectEntity;
-  @Input() serviceaccount: ServiceAccountEntity;
+  @Input() serviceaccount: ServiceAccount;
   editServiceAccountForm: FormGroup;
 
   constructor(
@@ -31,7 +31,7 @@ export class EditServiceAccountComponent implements OnInit {
   }
 
   editServiceAccount(): void {
-    const editServiceAccount: ServiceAccountEntity = {
+    const editServiceAccount: ServiceAccount = {
       id: this.serviceaccount.id,
       name: this.editServiceAccountForm.controls.name.value,
       creationTimestamp: this.serviceaccount.creationTimestamp,

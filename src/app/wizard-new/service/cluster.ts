@@ -1,7 +1,7 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import * as _ from 'lodash';
 import {CloudSpec, ClusterEntity, ClusterType} from '../../shared/entity/ClusterEntity';
-import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
+import {SSHKeyEntity} from '../../shared/entity/ssh-key';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 
 @Injectable()

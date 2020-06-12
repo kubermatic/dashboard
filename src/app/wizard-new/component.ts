@@ -11,7 +11,7 @@ import {NodeDataService} from '../node-data-new/service/service';
 import {ClusterEntity} from '../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../shared/entity/DatacenterEntity';
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
-import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
+import {SSHKeyEntity} from '../shared/entity/ssh-key';
 import {CreateClusterModel} from '../shared/model/CreateClusterModel';
 import {NodeData} from '../shared/model/NodeSpecChange';
 

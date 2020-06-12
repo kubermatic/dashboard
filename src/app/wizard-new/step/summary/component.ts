@@ -5,7 +5,7 @@ import {DatacenterService} from '../../../core/services';
 import {NodeDataService} from '../../../node-data-new/service/service';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
+import {SSHKeyEntity} from '../../../shared/entity/ssh-key';
 import {getIpCount} from '../../../shared/functions/get-ip-count';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../shared/model/NodeSpecChange';

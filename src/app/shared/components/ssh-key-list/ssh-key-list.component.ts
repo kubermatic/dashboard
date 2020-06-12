@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {SSHKeyEntity} from '../../entity/SSHKeyEntity';
+import {SSHKeyEntity} from '../../entity/ssh-key';
 
 @Component({
   selector: 'km-ssh-key-list',

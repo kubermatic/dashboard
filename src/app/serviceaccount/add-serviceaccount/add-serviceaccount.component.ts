@@ -6,7 +6,7 @@ import {first} from 'rxjs/operators';
 import {NotificationService} from '../../core/services';
 import {ApiService} from '../../core/services';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
-import {CreateServiceAccountEntity} from '../../shared/entity/ServiceAccountEntity';
+import {CreateServiceAccountEntity} from '../../shared/entity/service-account';
 
 @Component({
   selector: 'km-add-serviceaccount',

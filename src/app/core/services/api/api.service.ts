@@ -26,11 +26,11 @@ import {OpenstackFlavor} from '../../../shared/entity/provider/openstack/Opensta
 import {
   CreateServiceAccountEntity,
   CreateTokenEntity,
-  ServiceAccountEntity,
+  ServiceAccount,
   ServiceAccountTokenEntity,
   ServiceAccountTokenPatch,
-} from '../../../shared/entity/ServiceAccountEntity';
-import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
+} from '../../../shared/entity/service-account';
+import {SSHKeyEntity} from '../../../shared/entity/ssh-key';
 import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
 import {Auth} from '../auth/auth.service';
 
@@ -284,40 +284,34 @@ export class ApiService {
     return this._http.delete(url);
   }
 
-  getServiceAccounts(projectID: string): Observable<ServiceAccountEntity[]> {
+  getServiceAccounts(projectID: string): Observable<ServiceAccount[]> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts`;
-    return this._http.get<ServiceAccountEntity[]>(url);
+    return this._http.get<ServiceAccount[]>(url);
   }
 
-  createServiceAccount(
-    projectID: string,
-    serviceaccount: CreateServiceAccountEntity
-  ): Observable<ServiceAccountEntity> {
+  createServiceAccount(projectID: string, serviceaccount: CreateServiceAccountEntity): Observable<ServiceAccount> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts`;
-    return this._http.post<ServiceAccountEntity>(url, serviceaccount);
+    return this._http.post<ServiceAccount>(url, serviceaccount);
   }
 
-  editServiceAccount(projectID: string, serviceaccount: ServiceAccountEntity): Observable<ServiceAccountEntity> {
+  editServiceAccount(projectID: string, serviceaccount: ServiceAccount): Observable<ServiceAccount> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}`;
-    return this._http.put<ServiceAccountEntity>(url, serviceaccount);
+    return this._http.put<ServiceAccount>(url, serviceaccount);
   }
 
-  deleteServiceAccount(projectID: string, serviceaccount: ServiceAccountEntity): Observable<any> {
+  deleteServiceAccount(projectID: string, serviceaccount: ServiceAccount): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}`;
     return this._http.delete(url);
   }
 
-  getServiceAccountTokens(
-    projectID: string,
-    serviceaccount: ServiceAccountEntity
-  ): Observable<ServiceAccountTokenEntity[]> {
+  getServiceAccountTokens(projectID: string, serviceaccount: ServiceAccount): Observable<ServiceAccountTokenEntity[]> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens`;
     return this._http.get<ServiceAccountTokenEntity[]>(url);
   }
 
   createServiceAccountToken(
     projectID: string,
-    serviceaccount: ServiceAccountEntity,
+    serviceaccount: ServiceAccount,
     token: CreateTokenEntity
   ): Observable<ServiceAccountTokenEntity> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens`;
@@ -326,7 +320,7 @@ export class ApiService {
 
   regenerateServiceAccountToken(
     projectID: string,
-    serviceaccount: ServiceAccountEntity,
+    serviceaccount: ServiceAccount,
     token: ServiceAccountTokenEntity
   ): Observable<ServiceAccountTokenEntity> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
@@ -335,7 +329,7 @@ export class ApiService {
 
   patchServiceAccountToken(
     projectID: string,
-    serviceaccount: ServiceAccountEntity,
+    serviceaccount: ServiceAccount,
     token: ServiceAccountTokenEntity,
     patchToken: ServiceAccountTokenPatch
   ): Observable<ServiceAccountTokenEntity> {
@@ -345,7 +339,7 @@ export class ApiService {
 
   deleteServiceAccountToken(
     projectID: string,
-    serviceaccount: ServiceAccountEntity,
+    serviceaccount: ServiceAccount,
     token: ServiceAccountTokenEntity
   ): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;

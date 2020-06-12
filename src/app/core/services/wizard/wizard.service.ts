@@ -6,7 +6,7 @@ import {environment} from '../../../../environments/environment';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {PresetListEntity} from '../../../shared/entity/provider/credentials/PresetListEntity';
-import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
+import {SSHKeyEntity} from '../../../shared/entity/ssh-key';
 import {
   ClusterDatacenterForm,
   ClusterProviderForm,

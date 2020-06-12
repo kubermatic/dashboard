@@ -1,4 +1,4 @@
-export class ServiceAccountEntity {
+export class ServiceAccount {
   creationTimestamp: Date;
   deletionTimestamp?: Date;
   id: string;

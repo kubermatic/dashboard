@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {LabelFormComponent} from '../../shared/components/label-form/label-form.component';
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
-import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
+import {SSHKeyEntity} from '../../shared/entity/ssh-key';
 import {getIpCount} from '../../shared/functions/get-ip-count';
 import {ClusterDatacenterForm, ClusterProviderForm} from '../../shared/model/ClusterForm';
 import {NodeData} from '../../shared/model/NodeSpecChange';

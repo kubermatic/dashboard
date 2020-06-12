@@ -14,11 +14,11 @@ import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '.
 import {VSphereNetwork} from '../../shared/entity/provider/vsphere/VSphereEntity';
 import {
   CreateServiceAccountEntity,
-  ServiceAccountEntity,
+  ServiceAccount,
   ServiceAccountTokenEntity,
   ServiceAccountTokenPatch,
-} from '../../shared/entity/ServiceAccountEntity';
-import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
+} from '../../shared/entity/service-account';
+import {SSHKeyEntity} from '../../shared/entity/ssh-key';
 import {fakeDigitaloceanSizes, fakePacketSizes} from '../fake-data/addNodeModal.fake';
 import {fakeAlibabaInstanceTypes, fakeAlibabaZones} from '../fake-data/alibaba.fake';
 import {masterVersionsFake} from '../fake-data/cluster-spec.fake';
@@ -45,8 +45,8 @@ export class ApiMockService {
   token: Token = fakeToken();
   member: MemberEntity = fakeMember();
   members: MemberEntity[] = fakeMembers();
-  serviceAccount: ServiceAccountEntity = fakeServiceAccount();
-  serviceAccounts: ServiceAccountEntity[] = fakeServiceAccounts();
+  serviceAccount: ServiceAccount = fakeServiceAccount();
+  serviceAccounts: ServiceAccount[] = fakeServiceAccounts();
   serviceAccountToken: ServiceAccountTokenEntity = fakeServiceAccountToken();
   serviceAccountTokens: ServiceAccountTokenEntity[] = fakeServiceAccountTokens();
   vsphereNetworks: VSphereNetwork[] = fakeVSphereNetworks();
@@ -131,22 +131,19 @@ export class ApiMockService {
     return of(null);
   }
 
-  getServiceAccounts(projectID: string): Observable<ServiceAccountEntity[]> {
+  getServiceAccounts(projectID: string): Observable<ServiceAccount[]> {
     return of(this.serviceAccounts);
   }
 
-  createServiceAccount(
-    projectID: string,
-    serviceAccount: CreateServiceAccountEntity
-  ): Observable<ServiceAccountEntity> {
+  createServiceAccount(projectID: string, serviceAccount: CreateServiceAccountEntity): Observable<ServiceAccount> {
     return of(this.serviceAccount);
   }
 
-  editServiceAccount(projectID: string, serviceAccount: ServiceAccountEntity): Observable<ServiceAccountEntity> {
+  editServiceAccount(projectID: string, serviceAccount: ServiceAccount): Observable<ServiceAccount> {
     return of(this.serviceAccount);
   }
 
-  deleteServiceAccount(projectID: string, serviceAccount: ServiceAccountEntity): Observable<any> {
+  deleteServiceAccount(projectID: string, serviceAccount: ServiceAccount): Observable<any> {
     return of(null);
   }
 
@@ -154,23 +151,17 @@ export class ApiMockService {
     return of(this.vsphereNetworks);
   }
 
-  getServiceAccountTokens(
-    projectID: string,
-    serviceaccount: ServiceAccountEntity
-  ): Observable<ServiceAccountTokenEntity[]> {
+  getServiceAccountTokens(projectID: string, serviceaccount: ServiceAccount): Observable<ServiceAccountTokenEntity[]> {
     return of(this.serviceAccountTokens);
   }
 
-  createServiceAccountToken(
-    projectID: string,
-    serviceaccount: ServiceAccountEntity
-  ): Observable<ServiceAccountTokenEntity> {
+  createServiceAccountToken(projectID: string, serviceaccount: ServiceAccount): Observable<ServiceAccountTokenEntity> {
     return of(this.serviceAccountToken);
   }
 
   editServiceAccountToken(
     projectID: string,
-    serviceAccount: ServiceAccountEntity,
+    serviceAccount: ServiceAccount,
     token: ServiceAccountTokenEntity
   ): Observable<ServiceAccountTokenEntity> {
     return of(this.serviceAccountToken);
@@ -178,7 +169,7 @@ export class ApiMockService {
 
   regenerateServiceAccountToken(
     projectID: string,
-    serviceaccount: ServiceAccountEntity,
+    serviceaccount: ServiceAccount,
     token: ServiceAccountTokenEntity
   ): Observable<ServiceAccountTokenEntity> {
     return of(this.serviceAccountToken);
@@ -186,7 +177,7 @@ export class ApiMockService {
 
   patchServiceAccountToken(
     projectID: string,
-    serviceaccount: ServiceAccountEntity,
+    serviceaccount: ServiceAccount,
     token: ServiceAccountTokenEntity,
     patchToken: ServiceAccountTokenPatch
   ): Observable<ServiceAccountTokenEntity> {
@@ -195,7 +186,7 @@ export class ApiMockService {
 
   deleteServiceAccountToken(
     projectID: string,
-    serviceaccount: ServiceAccountEntity,
+    serviceaccount: ServiceAccount,
     token: ServiceAccountTokenEntity
   ): Observable<any> {
     return of(null);

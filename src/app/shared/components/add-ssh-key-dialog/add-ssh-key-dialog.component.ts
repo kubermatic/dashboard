@@ -4,7 +4,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 
 import {ApiService, NotificationService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {SSHKeyEntity} from '../../entity/SSHKeyEntity';
+import {SSHKeyEntity} from '../../entity/ssh-key';
 import {SSHKeyFormValidator} from '../../validators/ssh-key-form.validator';
 
 @Component({

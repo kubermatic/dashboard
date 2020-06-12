@@ -5,11 +5,7 @@ import {first} from 'rxjs/operators';
 
 import {ApiService, NotificationService} from '../../../core/services';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
-import {
-  CreateTokenEntity,
-  ServiceAccountEntity,
-  ServiceAccountTokenEntity,
-} from '../../../shared/entity/ServiceAccountEntity';
+import {CreateTokenEntity, ServiceAccount, ServiceAccountTokenEntity} from '../../../shared/entity/service-account';
 import {TokenDialogComponent} from '../token-dialog/token-dialog.component';
 
 @Component({
@@ -18,7 +14,7 @@ import {TokenDialogComponent} from '../token-dialog/token-dialog.component';
 })
 export class AddServiceAccountTokenComponent implements OnInit {
   @Input() project: ProjectEntity;
-  @Input() serviceaccount: ServiceAccountEntity;
+  @Input() serviceaccount: ServiceAccount;
   addServiceAccountTokenForm: FormGroup;
 
   constructor(

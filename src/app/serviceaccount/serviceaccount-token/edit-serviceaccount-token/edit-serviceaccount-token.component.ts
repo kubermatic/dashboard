@@ -6,10 +6,10 @@ import {first} from 'rxjs/operators';
 import {ApiService, NotificationService} from '../../../core/services';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {
-  ServiceAccountEntity,
+  ServiceAccount,
   ServiceAccountTokenEntity,
   ServiceAccountTokenPatch,
-} from '../../../shared/entity/ServiceAccountEntity';
+} from '../../../shared/entity/service-account';
 
 @Component({
   selector: 'km-edit-serviceaccount-token',
@@ -17,7 +17,7 @@ import {
 })
 export class EditServiceAccountTokenComponent implements OnInit {
   @Input() project: ProjectEntity;
-  @Input() serviceaccount: ServiceAccountEntity;
+  @Input() serviceaccount: ServiceAccount;
   @Input() token: ServiceAccountTokenEntity;
   editServiceAccountTokenForm: FormGroup;
 

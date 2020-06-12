@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
+import {SSHKeyEntity} from '../../../shared/entity/ssh-key';
 
 @Component({
   selector: 'km-cluster-provider-settings',

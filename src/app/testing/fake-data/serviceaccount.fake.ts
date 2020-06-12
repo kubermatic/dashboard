@@ -1,6 +1,6 @@
-import {ServiceAccountEntity, ServiceAccountTokenEntity} from '../../shared/entity/ServiceAccountEntity';
+import {ServiceAccount, ServiceAccountTokenEntity} from '../../shared/entity/service-account';
 
-export function fakeServiceAccounts(): ServiceAccountEntity[] {
+export function fakeServiceAccounts(): ServiceAccount[] {
   return [
     {
       creationTimestamp: new Date(),
@@ -19,7 +19,7 @@ export function fakeServiceAccounts(): ServiceAccountEntity[] {
   ];
 }
 
-export function fakeServiceAccount(): ServiceAccountEntity {
+export function fakeServiceAccount(): ServiceAccount {
   return {
     creationTimestamp: new Date(),
     id: '987zy6xv5u',

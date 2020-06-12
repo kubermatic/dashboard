@@ -11,7 +11,7 @@ import {AddSshKeyDialogComponent} from '../../../shared/components/add-ssh-key-d
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
-import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
+import {SSHKeyEntity} from '../../../shared/entity/ssh-key';
 import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 

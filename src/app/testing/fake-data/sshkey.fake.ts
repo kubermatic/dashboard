@@ -1,4 +1,4 @@
-import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
+import {SSHKeyEntity} from '../../shared/entity/ssh-key';
 
 export function fakeSSHKeys(): SSHKeyEntity[] {
   return [

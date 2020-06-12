@@ -15,7 +15,7 @@ import {EventEntity} from '../../../shared/entity/EventEntity';
 import {HealthEntity} from '../../../shared/entity/HealthEntity';
 import {ClusterMetrics} from '../../../shared/entity/Metrics';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
-import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
+import {SSHKeyEntity} from '../../../shared/entity/ssh-key';
 import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
 
 export class ProviderSettingsPatch {

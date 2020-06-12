@@ -8,7 +8,7 @@ import {ApiService, NotificationService, ProjectService, UserService} from '../.
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
-import {ServiceAccountEntity, ServiceAccountTokenEntity} from '../../shared/entity/ServiceAccountEntity';
+import {ServiceAccount, ServiceAccountTokenEntity} from '../../shared/entity/service-account';
 import {GroupConfig} from '../../shared/model/Config';
 
 import {AddServiceAccountTokenComponent} from './add-serviceaccount-token/add-serviceaccount-token.component';
@@ -21,7 +21,7 @@ import {TokenDialogComponent} from './token-dialog/token-dialog.component';
   styleUrls: ['./serviceaccount-token.component.scss'],
 })
 export class ServiceAccountTokenComponent implements OnInit {
-  @Input() serviceaccount: ServiceAccountEntity;
+  @Input() serviceaccount: ServiceAccount;
   @Input() serviceaccountTokens: ServiceAccountTokenEntity[];
   @Input() isInitializing: boolean;
   displayedColumns: string[] = ['name', 'expiry', 'creationDate', 'actions'];

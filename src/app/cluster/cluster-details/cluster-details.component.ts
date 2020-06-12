@@ -24,7 +24,7 @@ import {ClusterMetrics} from '../../shared/entity/Metrics';
 import {NodeDeployment} from '../../shared/entity/node-deployment';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '../../shared/entity/RBACEntity';
-import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
+import {SSHKeyEntity} from '../../shared/entity/ssh-key';
 import {Config, GroupConfig} from '../../shared/model/Config';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';

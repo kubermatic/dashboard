@@ -15,7 +15,7 @@ import {
   getEmptyOperatingSystemSpec,
 } from '../shared/entity/NodeEntity';
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
-import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
+import {SSHKeyEntity} from '../shared/entity/ssh-key';
 import {
   ClusterDatacenterForm,
   ClusterProviderForm,
