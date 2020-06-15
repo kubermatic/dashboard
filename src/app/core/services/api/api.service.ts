@@ -254,6 +254,11 @@ export class ApiService {
     return this._http.get<MasterVersion[]>(url);
   }
 
+  getAdmissionPlugins(version: string): Observable<string[]> {
+    const url = `${this._restRoot}/admission/plugins/${version}`;
+    return this._http.get<string[]>(url);
+  }
+
   getAzureSizes(projectId: string, dc: string, cluster: string): Observable<AzureSizes[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/azure/sizes`;
     return this._http.get<AzureSizes[]>(url);
