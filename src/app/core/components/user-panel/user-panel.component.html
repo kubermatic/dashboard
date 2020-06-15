@@ -18,17 +18,26 @@
         <i class="km-icon-mask km-icon-arrow-up"></i>
       </button>
     </div>
-    <button (click)="goToAccount()">
-      User Settings
-    </button>
-    <button *ngIf="isAdminPanelVisible()"
-            (click)="goToAdminPanel()">
-      Admin Panel
-    </button>
-    <button id="km-navbar-logout-btn"
-            *ngIf="isAuthenticated()"
-            (click)="logout()">
-      Sign out
-    </button>
+    <div class="menu"
+         fxLayout="column">
+      <div class="km-hover-bg"
+           matRipple
+           (click)="goToAccount()">
+        User Settings
+      </div>
+      <div class="km-hover-bg"
+           matRipple
+           *ngIf="isAdminPanelVisible()"
+           (click)="goToAdminPanel()">
+        Admin Panel
+      </div>
+      <div class="km-hover-bg"
+           id="km-navbar-logout-btn"
+           matRipple
+           *ngIf="isAuthenticated()"
+           (click)="logout()">
+        Sign out
+      </div>
+    </div>
   </div>
 </div>

@@ -691,6 +691,10 @@
     background-color: map-get($colors, indicator-red) !important;
   }
 
+  .km-hover-bg:hover {
+    background-color: $background-hover;
+  }
+
   .km-border {
     border: 1px solid $divider;
   }

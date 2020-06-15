@@ -11,6 +11,7 @@
 .panel {
   border-radius: $border-radius;
   position: fixed;
+  overflow: hidden;
   right: 5 * $baseline-grid;
   top: 6.25 * $baseline-grid;
   width: $user-panel-width;
@@ -31,63 +32,11 @@
         height: 2 * $baseline-grid;
         width: 2 * $baseline-grid;
       }
-
-      .km-icon-clear {
-        height: 2.25 * $baseline-grid;
-        width: 2.25 * $baseline-grid;
-      }
-
-      .filter-indicator {
-        border-radius: 50%;
-        bottom: 1.25 * $baseline-grid;
-        height: $baseline-grid;
-        position: absolute;
-        right: $baseline-grid;
-        width: $baseline-grid;
-      }
     }
   }
 
-  .notification-list {
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    .notification {
-      margin: $baseline-grid (2.5 * $baseline-grid) (2.5 * $baseline-grid) $baseline-grid;
-
-      .notification-icon {
-        margin: 0 (2 * $baseline-grid) 0 $baseline-grid;
-        min-height: 2.25 * $baseline-grid;
-        min-width: 2.25 * $baseline-grid;
-      }
-
-      .notification-message {
-        word-break: break-word;
-        font-size: $font-size-body;
-        line-height: 1.6 * $line-height;
-        margin-bottom: $baseline-grid;
-      }
-
-      .notification-info {
-        padding: 0 (2.5 * $baseline-grid) $baseline-grid 0;
-
-        .km-icon-copy-small {
-          cursor: pointer;
-          height: 1.75 * $baseline-grid;
-          width: 1.75 * $baseline-grid;
-          margin-right: $baseline-grid;
-        }
-      }
-
-      .notification-timestamp {
-        cursor: pointer;
-        font-size: $font-size-caption;
-        line-height: 1.4 * $line-height;
-      }
-    }
-  }
-
-  .zero-state {
-    font-size: $font-size-subhead;
+  .menu div {
+    cursor: pointer;
+    padding: (1.5 * $baseline-grid) (2.5 * $baseline-grid);
   }
 }
