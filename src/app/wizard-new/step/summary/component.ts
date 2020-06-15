@@ -19,6 +19,7 @@ import {getOperatingSystem, getOperatingSystemLogoClass} from '../../../shared/e
 })
 export class SummaryStepComponent implements OnInit, OnDestroy {
   clusterSSHKeys: SSHKey[] = [];
+  clusterAdmissionPlugins: string[] = [];
   nodeData: NodeData;
   cluster: Cluster;
   noMoreIpsLeft = false;
@@ -55,6 +56,10 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
     this._clusterService.sshKeyChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(keys => (this.clusterSSHKeys = keys));
+
+    this._clusterService.admissionPluginsChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(plugins => (this.clusterAdmissionPlugins = plugins));
 
     this._clusterService.datacenterChanges
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
@@ -122,6 +127,14 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
 
   getSSHKeyNames(): string {
     return this.clusterSSHKeys.map(key => key.name).join(', ');
+  }
+
+  hasAdminPlugins(): boolean {
+    return !!this.clusterAdmissionPlugins && this.clusterAdmissionPlugins.length > 0;
+  }
+
+  getAdmissionPlugins(): string {
+    return this.clusterAdmissionPlugins.join(', ');
   }
 
   private _hasProviderOptions(provider: NodeProvider): boolean {
