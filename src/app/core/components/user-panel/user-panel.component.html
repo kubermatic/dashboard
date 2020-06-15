@@ -1,0 +1,34 @@
+<div class="km-notification-panel">
+  <button mat-icon-button
+          class="root-button"
+          fxLayoutAlign="center center"
+          (click)="toggle()">
+    <i class="km-icon-mask km-user"></i>
+  </button>
+  <div class="panel"
+       fxLayout="column"
+       *ngIf="isOpen() && !!user">
+    <div class="header"
+         fxLayout="row">
+      <span fxFlex>{{user.name}}</span>
+      <button mat-icon-button
+              fxLayoutAlign="center center"
+              (click)="close()"
+              matTooltip="Close panel">
+        <i class="km-icon-mask km-icon-arrow-up"></i>
+      </button>
+    </div>
+    <button (click)="goToAccount()">
+      User Settings
+    </button>
+    <button *ngIf="isAdminPanelVisible()"
+            (click)="goToAdminPanel()">
+      Admin Panel
+    </button>
+    <button id="km-navbar-logout-btn"
+            *ngIf="isAuthenticated()"
+            (click)="logout()">
+      Sign out
+    </button>
+  </div>
+</div>

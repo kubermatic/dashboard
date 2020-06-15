@@ -13,22 +13,19 @@ import {SettingsMockService} from '../../../testing/services/settings-mock.servi
 import {UserMockService} from '../../../testing/services/user-mock.service';
 import {Auth, ProjectService, UserService} from '../../services/index';
 import {SettingsService} from '../../services/settings/settings.service';
-import {NotificationPanelComponent} from '../notification-panel/notification-panel.component';
-
-import {NavigationComponent} from './navigation.component';
-import {ProjectSelectorComponent} from './project/selector.component';
+import {UserPanelComponent} from './user-panel.component';
 
 const modules: any[] = [BrowserModule, HttpClientModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];
 
-describe('NavigationComponent', () => {
-  let fixture: ComponentFixture<NavigationComponent>;
-  let component: NavigationComponent;
+describe('UserPanelComponent', () => {
+  let fixture: ComponentFixture<UserPanelComponent>;
+  let component: UserPanelComponent;
   let authService: AuthMockService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [...modules],
-      declarations: [NavigationComponent, NotificationPanelComponent, ProjectSelectorComponent],
+      declarations: [UserPanelComponent],
       providers: [
         MatDialog,
         {provide: UserService, useClass: UserMockService},
@@ -40,7 +37,7 @@ describe('NavigationComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NavigationComponent);
+    fixture = TestBed.createComponent(UserPanelComponent);
     component = fixture.componentInstance;
   });
 
@@ -61,9 +58,9 @@ describe('NavigationComponent', () => {
 
   it('should not display user information after logout', async(() => {
     fixture.detectChanges();
-    expect(component.currentUser).toBeDefined();
+    expect(component.user).toBeDefined();
 
     component.logout();
-    expect(component.currentUser).not.toBeDefined();
+    expect(component.user).not.toBeDefined();
   }));
 });

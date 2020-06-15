@@ -15,42 +15,7 @@
                          [showSidenav]="showSidenav"
                          class="project-selector"
                          fxFlex></km-project-selector>
-
     <km-notification-panel *ngIf="isAuthenticated()"></km-notification-panel>
-    <div *ngIf="isAuthenticated()"
-         class="km-user-panel">
-      <button mat-icon-button
-              [matMenuTriggerFor]="menu"
-              fxLayoutAlign="center center"
-              id="km-navbar-user-menu">
-        <i class="km-icon-mask km-user"></i>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item
-                  class="km-menu-header"
-                  *ngIf="currentUser && !!currentUser.name"
-                  (click)="$event.stopPropagation()"
-                  [disabled]="true">
-            <span>{{currentUser.name}}</span>
-            <i class="km-icon-mask km-icon-arrow-up"
-               matTooltip="Close panel"></i>
-          </button>
-          <button mat-menu-item
-                  (click)="goToAccount()">
-            User Settings
-          </button>
-          <button mat-menu-item
-                  *ngIf="isAdminPanelVisible()"
-                  (click)="goToAdminPanel()">
-            Admin Panel
-          </button>
-          <button mat-menu-item
-                  id="km-navbar-logout-btn"
-                  *ngIf="isAuthenticated()"
-                  (click)="logout()">
-            Sign out
-          </button>
-        </mat-menu>
-      </button>
-    </div>
+    <km-user-panel *ngIf="isAuthenticated()"></km-user-panel>
   </div>
 </header>

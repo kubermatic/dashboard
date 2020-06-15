@@ -26,21 +26,6 @@ header {
     background-size: $logo-width;
     background-position: $logo-margin-top $logo-margin-top;
   }
-
-  .km-user-panel {
-    font-size: $font-size-subhead;
-    font-weight: 400;
-    text-align: right;
-    position: fixed;
-    right: 5 * $baseline-grid;
-  }
-}
-
-.mat-menu-item {
-  font-family: $font-primary !important;
-  font-size: $font-size-subhead !important;
-  font-weight: 400 !important;
-  line-height: 2.4 * $line-height;
 }
 
 .km-icon-arrow-up {
