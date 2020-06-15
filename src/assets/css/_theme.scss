@@ -1516,7 +1516,7 @@
     margin-left: 2.75 * $baseline-grid !important;
   }
 
-  .km-sshkey-dropdown {
+  .km-multiple-values-dropdown {
     margin-left: 3.75 * $baseline-grid !important;
   }
 
@@ -1644,6 +1644,19 @@
   .km-user-settings-form-field {
     .mat-form-field-wrapper {
       padding-bottom: 0;
+    }
+  }
+
+  .km-admission-plugin-warning {
+    margin-bottom: 3 * $baseline-grid;
+
+    i {
+      margin: 0 $baseline-grid;
+    }
+
+    p {
+      margin: 0;
+      font-size: $font-size-body;
     }
   }
 }

@@ -108,4 +108,12 @@ export class SummaryComponent implements OnInit {
     }
     return false;
   }
+
+  hasAdminPlugins(): boolean {
+    return !!this.cluster.spec.admissionPlugins && this.cluster.spec.admissionPlugins.length > 0;
+  }
+
+  getAdmissionPlugins(): string {
+    return this.cluster.spec.admissionPlugins.join(', ');
+  }
 }
