@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-IMAGE_NAME="node:11.15-stretch"
+IMAGE_NAME="node:12"
 REL_ROOT_DIR="$(dirname "$0")/../"
 ABS_ROOT_DIR="$(cd ${REL_ROOT_DIR}; pwd)"
 
