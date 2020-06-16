@@ -429,4 +429,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       map(settings => !!this.config.share_kubeconfig && !settings.enableOIDCKubeconfig)
     );
   }
+
+  getAdmissionPlugins(): string {
+    return this.cluster.spec.admissionPlugins.join(', ');
+  }
 }
