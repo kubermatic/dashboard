@@ -1,62 +1,55 @@
-# Kubermatic Dashboard
+# Dashboard for the Kubermatic Kubernetes Platform
 [![codecov](https://codecov.io/gh/kubermatic/dashboard/branch/master/graph/badge.svg?token=njXM3OrmAM)](https://codecov.io/gh/kubermatic/dashboard)
 
-## Development
 
-### Preparation
-Before you can start the application locally you should install the dependencies using `npm ci` command.
+## Overview & More information
 
-### Starting the Application
+This repo contains the Dashboard for the Kubermatic Kubernetes Platform. For more information regarding overview, installation and user guides check [Kubermatic Kubernetes Platform repo][4] & [Kubermatic Kubernetes Platform docs website][21].
 
-#### Using Locally Installed NodeJS
-To start development server that will proxy API calls to the https://dev.kubermatic.io/ use 
-`npm start` command and navigate to http://localhost:8000/.
+## Editions
+There are two editions of Kubermatic Kubernetes Platform:
 
-If you would like to connect with your local API then you should use `npm run serve:local`.
+Kubermatic Kubernetes Platform Community Edition (CE) is available freely under the Apache License, Version 2.0.
+Kubermatic Kubernetes Platform Enterprise Edition (EE) includes premium features that are most useful for organizations with large-scale Kubernetes installations with more than 50 clusters. To access the Enterprise Edition and get official support please become a subscriber.
 
-The application will automatically reload if you change any of the source files.
+## Licensing
+See the [LICENSE](LICENSE) file for licensing information as it pertains to files in this repository.
 
-#### Using a Docker Container
+## Troubleshooting
 
-##### With dev.kubermatic.io API
-```bash
-./hack/run-dashboard.sh
-```
+If you encounter issues [file an issue][1] or talk to us on the [#kubermatic channel][12] on the [Kubermatic Slack][15].
 
-##### With Local API
-```bash
-./hack/run-local-dashboard.sh
-```
+## Contributing
 
-### Formatting the Code
-We are using [Google TypeScript Style](https://github.com/google/ts-style) and [Stylelint](https://github.com/stylelint/stylelint) to ensure consistent code formatting and linting.
+Thanks for taking the time to join our community and start contributing!
 
-To check if files are formatted and linted use `npm run check` command.
+Feedback and discussion are available on [the mailing list][11].
 
-To automatically fix issues run `npm run fix` command.
+### Before you start
 
-### Running the Unit Tests
-Run `npm test` to execute the unit tests via [Jest](https://jestjs.io/).
+* Please familiarize yourself with the [Code of Conduct][4] before contributing.
+* See [CONTRIBUTING.md][2] and [Development.md][3] for instructions on the developer certificate of origin that we require.
+* Read how [we're using ZenHub][13] for project and roadmap planning
 
-### Running the End-to-end Tests
-End-to-end tests by default are executed against `dev.kubermatic.io` server. Before running tests set `CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME`, `CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME_2` and `CYPRESS_KUBERMATIC_DEX_DEV_E2E_PASSWORD` environment variables. To run tests, execute `npm run e2e`.
 
-**NOTE**: For the local tests `roxy@kubermatic.io` & `roxy2@kubermatic.io` users can be used. Password can be found in our vault inside `e2e-dex` secret.
+### Pull requests
 
-**NOTE**: `npm run e2e` command uses configuration from `src/environments/environment.e2e.ts`. You can modify it to match your setup.
+* We welcome pull requests. Feel free to dig through the [issues][1] and jump in.
 
-**NOTE**: End-to-end tests can be also run manually with `npm run cy` command. It requires app running at `http://localhost:8000`.
+## Changelog
 
-### Building the Application
-Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
+See [the list of releases][3] to find out about feature changes.
 
-Please check `package.json` for more information regarding the available commands and the project setup.
+[1]: https://github.com/kubermatic/dashboard/issues
+[2]: https://github.com/kubermatic/dashboard/blob/master/CONTRIBUTING.md
+[3]: https://github.com/kubermatic/dashboard/blob/master/Development.md
+[3]: https://github.com/kubermatic/dashboard/releases
+[4]: https://github.com/kubermatic/dashboard/blob/master/CODE_OF_CONDUCT.md
+[5]: https://github.com/kubermatic/kubermatic/blob/master/README.md
 
-### Running Commands Within the Docker Container
+[11]: https://groups.google.com/forum/#!forum/kubermatic-dev
+[12]: https://kubermatic.slack.com/messages/kubermatic
+[13]: https://github.com/kubermatic/dashboard/blob/master/Zenhub.md
+[15]: http://slack.kubermatic.io/
 
-This will run the below commands in a NodeJS Docker container with the source code mounted and set as working directory.
-```bash
-./hack/run-in-docker.sh npm install
-./hack/run-in-docker.sh npm foo
-./hack/run-in-docker.sh npm bar
-```
+[21]: https://docs.kubermatic.com/kubermatic/
