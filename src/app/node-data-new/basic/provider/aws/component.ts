@@ -91,6 +91,10 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   ngOnInit(): void {
+    this.selectedSize = this._nodeDataService.nodeData.spec.cloud.aws
+      ? this._nodeDataService.nodeData.spec.cloud.aws.instanceType
+      : '';
+
     this.form = this._builder.group({
       [Controls.Size]: this._builder.control(''),
       [Controls.DiskSize]: this._builder.control(25, Validators.required),
@@ -170,12 +174,14 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   private _setDefaultSize(sizes: AWSSize[]): void {
     this.sizes = sizes;
-    if (this.sizes.length > 0) {
+
+    if (!this.selectedSize && this.sizes.length > 0) {
       const cheapestInstance = this.sizes.reduce((prev, curr) => (prev.price < curr.price ? prev : curr));
       this.selectedSize = cheapestInstance.name;
-      this.sizeLabel = SizeState.Ready;
-      this._cdr.detectChanges();
     }
+
+    this.sizeLabel = this.selectedSize ? SizeState.Ready : SizeState.Empty;
+    this._cdr.detectChanges();
   }
 
   private _setDefaultSubnet(subnets: AWSSubnet[]): void {

@@ -93,7 +93,14 @@ export class NodeDataService {
     this._presetService,
     this._datacenterService
   );
-  readonly aws = new NodeDataAWSProvider(this, this._clusterService, this._presetService, this._datacenterService);
+  readonly aws = new NodeDataAWSProvider(
+    this,
+    this._clusterService,
+    this._presetService,
+    this._apiService,
+    this._projectService,
+    this._datacenterService
+  );
   readonly azure = new NodeDataAzureProvider(this, this._clusterService, this._presetService, this._datacenterService);
   readonly digitalOcean = new NodeDataDigitalOceanProvider(
     this,

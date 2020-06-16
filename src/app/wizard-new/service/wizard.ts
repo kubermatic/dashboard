@@ -2,7 +2,7 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {MatStepper} from '@angular/material/stepper';
 import {NodeDataService} from '../../node-data-new/service/service';
 import {NodeProvider, OperatingSystem} from '../../shared/model/NodeProviderConstants';
-import {ClusterService} from "../../shared/services/cluster.service";
+import {ClusterService} from '../../shared/services/cluster.service';
 import {StepRegistry, WizardStep} from '../config';
 
 @Injectable()
@@ -39,6 +39,7 @@ export class WizardService {
 
   reset(): void {
     this._clusterService.reset();
+    this._nodeDataService.reset();
   }
 
   private _stepHandler = new (class {

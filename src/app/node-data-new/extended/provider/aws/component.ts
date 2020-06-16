@@ -41,9 +41,13 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
   }
 
   ngOnInit(): void {
-    const assignPublicIP = this._nodeDataService.isInDialogEditMode()
-      ? this.nodeData.spec.cloud.aws.assignPublicIP
-      : true;
+    let assignPublicIP = false;
+
+    // Try to fill form fields with preexisting data if available
+    if (this.nodeData.spec.cloud.aws) {
+      assignPublicIP = !!this.nodeData.spec.cloud.aws.assignPublicIP;
+      this.tags = this.nodeData.spec.cloud.aws.tags;
+    }
 
     this.form = this._builder.group({
       [Controls.AssignPublicIP]: this._builder.control(assignPublicIP),

@@ -15,7 +15,8 @@ export class NodeDataDigitalOceanProvider {
     private readonly _presetService: PresetsService,
     private readonly _apiService: ApiService,
     private readonly _projectService: ProjectService,
-    private readonly _datacenterService: DatacenterService) {}
+    private readonly _datacenterService: DatacenterService
+  ) {}
 
   set tags(tags: string[]) {
     delete this._nodeDataService.nodeData.spec.cloud.digitalocean.tags;
@@ -24,7 +25,6 @@ export class NodeDataDigitalOceanProvider {
   }
 
   flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<DigitaloceanSizes> {
-    // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterService.clusterChanges
@@ -47,23 +47,26 @@ export class NodeDataDigitalOceanProvider {
                 )
             )
           );
-      case NodeDataMode.Dialog:
+      case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
-          .pipe(tap(project => selectedProject = project.id))
+          .pipe(tap(project => (selectedProject = project.id)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc)))
-          .pipe(switchMap(dc => this._apiService.getDigitaloceanSizes(
-            selectedProject,
-            dc.spec.seed,
-            this._clusterService.cluster.id,
-          )))
-          .pipe(catchError(_ => {
-            if (onError) {
-              onError();
-            }
+          .pipe(
+            switchMap(dc =>
+              this._apiService.getDigitaloceanSizes(selectedProject, dc.spec.seed, this._clusterService.cluster.id)
+            )
+          )
+          .pipe(
+            catchError(_ => {
+              if (onError) {
+                onError();
+              }
 
-            return onErrorResumeNext(of(DigitaloceanSizes.newDigitalOceanSizes()));
-          }));
+              return onErrorResumeNext(of(DigitaloceanSizes.newDigitalOceanSizes()));
+            })
+          );
+      }
     }
   }
 }
