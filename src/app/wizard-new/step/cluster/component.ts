@@ -16,6 +16,7 @@ import {ApiService, DatacenterService} from '../../../core/services';
 import {ClusterNameGenerator} from '../../../core/util/name-generator.service';
 import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '../../../shared/entity/cluster';
 import {Datacenter} from '../../../shared/entity/datacenter';
+import {AdmissionPluginUtils} from '../../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
 import {ClusterService} from '../../service/cluster';
 import {WizardService} from '../../service/wizard';
@@ -157,18 +158,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   isPodSecurityPolicyEnforced(): boolean {
-    return !!this._datacenterSpec && !!this._datacenterSpec.spec.enforcePodSecurityPolicy;
+    return AdmissionPluginUtils.isPodSecurityPolicyEnforced(this._datacenterSpec);
   }
 
   getPluginName(name: string): string {
-    return name.replace(/([A-Z])/g, ' $1').trim();
+    return AdmissionPluginUtils.getPluginName(name);
   }
 
   isPluginEnabled(name: string): boolean {
-    return (
-      !!this.form.get(Controls.AdmissionPlugins).value &&
-      this.form.get(Controls.AdmissionPlugins).value.some(x => x === name)
-    );
+    return AdmissionPluginUtils.isPluginEnabled(this.form.get(Controls.AdmissionPlugins), name);
   }
 
   private _enforce(control: Controls, isEnforced: boolean): void {
@@ -180,7 +178,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   private _enforcePodSecurityPolicy(isEnforced: boolean): void {
     if (isEnforced) {
-      this.form.get(Controls.AdmissionPlugins).patchValue(['PodSecurityPolicy']);
+      const value = AdmissionPluginUtils.updateSelectedPluginArray(
+        this.form.get(Controls.AdmissionPlugins),
+        'PodSecurityPolicy'
+      );
+      this.form.get(Controls.AdmissionPlugins).setValue(value);
     }
   }
 

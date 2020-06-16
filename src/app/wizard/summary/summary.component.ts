@@ -6,7 +6,7 @@ import {getIpCount} from '../../shared/functions/get-ip-count';
 import {ClusterDatacenterForm, ClusterProviderForm} from '../../shared/model/ClusterForm';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {getOperatingSystem, getOperatingSystemLogoClass} from '../../shared/entity/node';
-
+import {AdmissionPluginUtils} from '../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 @Component({
   selector: 'km-summary',
   templateUrl: './summary.component.html',
@@ -109,11 +109,11 @@ export class SummaryComponent implements OnInit {
     return false;
   }
 
-  hasAdminPlugins(): boolean {
+  hasAdmissionPlugins(): boolean {
     return !!this.cluster.spec.admissionPlugins && this.cluster.spec.admissionPlugins.length > 0;
   }
 
   getAdmissionPlugins(): string {
-    return this.cluster.spec.admissionPlugins.join(', ');
+    return AdmissionPluginUtils.getJoinedPluginNames(this.cluster.spec.admissionPlugins);
   }
 }

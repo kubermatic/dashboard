@@ -55,7 +55,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
         const auditLogging = dc.spec.enforceAuditLogging ? {enabled: true} : this.cluster.spec.auditLogging;
 
         const admissionPlugins = this.cluster.spec.admissionPlugins ? this.cluster.spec.admissionPlugins : [];
-        if (!!dc.spec.enforcePodSecurityPolicy && !!admissionPlugins.some(x => x === 'PodSecurityPolicy')) {
+        if (!!dc.spec.enforcePodSecurityPolicy && !admissionPlugins.some(x => x === 'PodSecurityPolicy')) {
           admissionPlugins.push('PodSecurityPolicy');
         }
         this.enforceClusterProperties(auditLogging, admissionPlugins);

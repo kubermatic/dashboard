@@ -9,6 +9,7 @@ import {SSHKey} from '../../../shared/entity/ssh-key';
 import {getIpCount} from '../../../shared/functions/get-ip-count';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../shared/model/NodeSpecChange';
+import {AdmissionPluginUtils} from '../../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {ClusterService} from '../../service/cluster';
 import {getOperatingSystem, getOperatingSystemLogoClass} from '../../../shared/entity/node';
 
@@ -129,12 +130,12 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
     return this.clusterSSHKeys.map(key => key.name).join(', ');
   }
 
-  hasAdminPlugins(): boolean {
+  hasAdmissionPlugins(): boolean {
     return !!this.clusterAdmissionPlugins && this.clusterAdmissionPlugins.length > 0;
   }
 
   getAdmissionPlugins(): string {
-    return this.clusterAdmissionPlugins.join(', ');
+    return AdmissionPluginUtils.getJoinedPluginNames(this.clusterAdmissionPlugins);
   }
 
   private _hasProviderOptions(provider: NodeProvider): boolean {
