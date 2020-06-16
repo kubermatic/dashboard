@@ -180,7 +180,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   private _enforcePodSecurityPolicy(isEnforced: boolean): void {
     if (isEnforced) {
-      this.form.get(Controls.AdmissionPlugins).setValue(['PodSecurityPolicy']);
+      this.form.get(Controls.AdmissionPlugins).patchValue(['PodSecurityPolicy']);
     }
   }
 

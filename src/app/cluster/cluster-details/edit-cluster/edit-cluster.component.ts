@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {ClusterService, NotificationService} from '../../../core/services';
+import {ApiService, ClusterService, NotificationService} from '../../../core/services';
 import {ProviderSettingsPatch} from '../../../core/services/cluster/cluster.service';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
@@ -24,6 +24,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   @Input() projectID: string;
   form: FormGroup;
   labels: object;
+  admissionPlugins: string[] = [];
   providerSettingsPatch: ProviderSettingsPatch = {
     isValid: true,
     cloudSpecPatch: {},
@@ -34,6 +35,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly _clusterService: ClusterService,
+    private readonly _apiService: ApiService,
     private readonly _matDialogRef: MatDialogRef<EditClusterComponent>,
     private readonly _notificationService: NotificationService
   ) {}
@@ -48,14 +50,32 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         Validators.pattern('[a-zA-Z0-9-]*'),
       ]),
       auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
-      usePodSecurityPolicyAdmissionPlugin: new FormControl(this.cluster.spec.usePodSecurityPolicyAdmissionPlugin),
-      usePodNodeSelectorAdmissionPlugin: new FormControl(this.cluster.spec.usePodNodeSelectorAdmissionPlugin),
+      admissionPlugins: new FormControl(this.cluster.spec.admissionPlugins),
       labels: new FormControl(''),
     });
 
     this._clusterService.providerSettingsPatchChanges$
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(async patch => (this.providerSettingsPatch = await patch));
+
+    this._apiService
+      .getAdmissionPlugins(this.cluster.spec.version)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(plugins => (this.admissionPlugins = plugins));
+
+    this.checkForLegacyAdmissionPlugins();
+  }
+
+  checkForLegacyAdmissionPlugins(): void {
+    if (this.cluster.spec.usePodNodeSelectorAdmissionPlugin) {
+      const value = this.updateSelectedPluginArray('PodNodeSelector');
+      this.form.controls.admissionPlugins.setValue(value);
+    }
+
+    if (this.cluster.spec.usePodSecurityPolicyAdmissionPlugin) {
+      const value = this.updateSelectedPluginArray('PodSecurityPolicy');
+      this.form.controls.admissionPlugins.setValue(value);
+    }
 
     this.checkEnforcedFieldsState();
   }
@@ -67,9 +87,33 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     }
 
     if (this.datacenter.spec.enforcePodSecurityPolicy) {
-      this.form.controls.usePodSecurityPolicyAdmissionPlugin.setValue(true);
-      this.form.controls.usePodSecurityPolicyAdmissionPlugin.disable();
+      const value = this.updateSelectedPluginArray('PodSecurityPolicy');
+      this.form.controls.admissionPlugins.setValue(value);
     }
+  }
+
+  updateSelectedPluginArray(name: string): string[] {
+    const plugins: string[] = this.form.controls.admissionPlugins.value
+      ? this.form.controls.admissionPlugins.value
+      : [];
+    if (!plugins.some(x => x === name)) {
+      plugins.push(name);
+    }
+    return plugins;
+  }
+
+  getPluginName(name: string): string {
+    return name.replace(/([A-Z])/g, ' $1').trim();
+  }
+
+  isPluginEnabled(name: string): boolean {
+    return (
+      !!this.form.controls.admissionPlugins.value && this.form.controls.admissionPlugins.value.some(x => x === name)
+    );
+  }
+
+  isPodSecurityPolicyEnforced(): boolean {
+    return !!this.datacenter && !!this.datacenter.spec && !!this.datacenter.spec.enforcePodSecurityPolicy;
   }
 
   editCluster(): void {
@@ -81,8 +125,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         auditLogging: {
           enabled: this.form.controls.auditLogging.value,
         },
-        usePodSecurityPolicyAdmissionPlugin: this.form.controls.usePodSecurityPolicyAdmissionPlugin.value,
-        usePodNodeSelectorAdmissionPlugin: this.form.controls.usePodNodeSelectorAdmissionPlugin.value,
+        usePodNodeSelectorAdmissionPlugin: null,
+        usePodSecurityPolicyAdmissionPlugin: null,
+        admissionPlugins: this.form.controls.admissionPlugins.value,
       },
     };
 
