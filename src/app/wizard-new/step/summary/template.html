@@ -64,7 +64,7 @@
                                [value]="false">
           </km-property-boolean>
         </div>
-        <div [ngSwitch]="hasAdminPlugins()">
+        <div [ngSwitch]="hasAdmissionPlugins()">
           <km-property *ngSwitchCase="true">
             <div key>Enabled Admission Plugins</div>
             <div value>{{getAdmissionPlugins()}}</div>

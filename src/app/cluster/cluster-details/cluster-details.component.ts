@@ -27,6 +27,7 @@ import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '../.
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {Config, GroupConfig} from '../../shared/model/Config';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
+import {AdmissionPluginUtils} from '../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
 import {MemberUtils, Permission} from '../../shared/utils/member-utils/member-utils';
 import {NodeService} from '../services/node.service';
@@ -431,6 +432,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   getAdmissionPlugins(): string {
-    return this.cluster.spec.admissionPlugins.join(', ');
+    return AdmissionPluginUtils.getJoinedPluginNames(this.cluster.spec.admissionPlugins);
   }
 }

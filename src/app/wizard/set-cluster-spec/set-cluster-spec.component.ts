@@ -8,6 +8,7 @@ import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
 import {ClusterEntity, ClusterType, MasterVersion} from '../../shared/entity/ClusterEntity';
 import {ResourceType} from '../../shared/entity/LabelsEntity';
+import {AdmissionPluginUtils} from '../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '../../shared/validators/async-label-form.validator';
 
 @Component({
@@ -121,14 +122,11 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   }
 
   getPluginName(name: string): string {
-    return name.replace(/([A-Z])/g, ' $1').trim();
+    return AdmissionPluginUtils.getPluginName(name);
   }
 
   isPluginEnabled(name: string): boolean {
-    return (
-      !!this.clusterSpecForm.controls.admissionPlugins.value &&
-      this.clusterSpecForm.controls.admissionPlugins.value.some(x => x === name)
-    );
+    return AdmissionPluginUtils.isPluginEnabled(this.clusterSpecForm.controls.admissionPlugins, name);
   }
 
   setClusterSpec(): void {

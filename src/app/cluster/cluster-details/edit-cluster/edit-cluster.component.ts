@@ -12,6 +12,7 @@ import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {ResourceType} from '../../../shared/entity/LabelsEntity';
 import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
+import {AdmissionPluginUtils} from '../../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 
 @Component({
   selector: 'km-edit-cluster',
@@ -68,12 +69,18 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
   checkForLegacyAdmissionPlugins(): void {
     if (this.cluster.spec.usePodNodeSelectorAdmissionPlugin) {
-      const value = this.updateSelectedPluginArray('PodNodeSelector');
+      const value = AdmissionPluginUtils.updateSelectedPluginArray(
+        this.form.controls.admissionPlugins,
+        'PodNodeSelector'
+      );
       this.form.controls.admissionPlugins.setValue(value);
     }
 
     if (this.cluster.spec.usePodSecurityPolicyAdmissionPlugin) {
-      const value = this.updateSelectedPluginArray('PodSecurityPolicy');
+      const value = AdmissionPluginUtils.updateSelectedPluginArray(
+        this.form.controls.admissionPlugins,
+        'PodSecurityPolicy'
+      );
       this.form.controls.admissionPlugins.setValue(value);
     }
 
@@ -87,33 +94,24 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     }
 
     if (this.datacenter.spec.enforcePodSecurityPolicy) {
-      const value = this.updateSelectedPluginArray('PodSecurityPolicy');
+      const value = AdmissionPluginUtils.updateSelectedPluginArray(
+        this.form.controls.admissionPlugins,
+        'PodSecurityPolicy'
+      );
       this.form.controls.admissionPlugins.setValue(value);
     }
   }
 
-  updateSelectedPluginArray(name: string): string[] {
-    const plugins: string[] = this.form.controls.admissionPlugins.value
-      ? this.form.controls.admissionPlugins.value
-      : [];
-    if (!plugins.some(x => x === name)) {
-      plugins.push(name);
-    }
-    return plugins;
-  }
-
   getPluginName(name: string): string {
-    return name.replace(/([A-Z])/g, ' $1').trim();
+    return AdmissionPluginUtils.getPluginName(name);
   }
 
   isPluginEnabled(name: string): boolean {
-    return (
-      !!this.form.controls.admissionPlugins.value && this.form.controls.admissionPlugins.value.some(x => x === name)
-    );
+    return AdmissionPluginUtils.isPluginEnabled(this.form.controls.admissionPlugins, name);
   }
 
   isPodSecurityPolicyEnforced(): boolean {
-    return !!this.datacenter && !!this.datacenter.spec && !!this.datacenter.spec.enforcePodSecurityPolicy;
+    return AdmissionPluginUtils.isPodSecurityPolicyEnforced(this.datacenter);
   }
 
   editCluster(): void {
