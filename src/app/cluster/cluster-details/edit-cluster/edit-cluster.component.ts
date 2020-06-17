@@ -12,7 +12,10 @@ import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {ResourceType} from '../../../shared/entity/LabelsEntity';
 import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
-import {AdmissionPluginUtils} from '../../../shared/utils/admission-plugin-utils/admission-plugin-utils';
+import {
+  AdmissionPlugin,
+  AdmissionPluginUtils,
+} from '../../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 
 @Component({
   selector: 'km-edit-cluster',
@@ -23,6 +26,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
+  admissionPlugin = AdmissionPlugin;
   form: FormGroup;
   labels: object;
   admissionPlugins: string[] = [];
@@ -71,7 +75,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     if (this.cluster.spec.usePodNodeSelectorAdmissionPlugin) {
       const value = AdmissionPluginUtils.updateSelectedPluginArray(
         this.form.controls.admissionPlugins,
-        'PodNodeSelector'
+        AdmissionPlugin.PodNodeSelector
       );
       this.form.controls.admissionPlugins.setValue(value);
     }
@@ -79,7 +83,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     if (this.cluster.spec.usePodSecurityPolicyAdmissionPlugin) {
       const value = AdmissionPluginUtils.updateSelectedPluginArray(
         this.form.controls.admissionPlugins,
-        'PodSecurityPolicy'
+        AdmissionPlugin.PodSecurityPolicy
       );
       this.form.controls.admissionPlugins.setValue(value);
     }
@@ -96,7 +100,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     if (this.datacenter.spec.enforcePodSecurityPolicy) {
       const value = AdmissionPluginUtils.updateSelectedPluginArray(
         this.form.controls.admissionPlugins,
-        'PodSecurityPolicy'
+        AdmissionPlugin.PodSecurityPolicy
       );
       this.form.controls.admissionPlugins.setValue(value);
     }

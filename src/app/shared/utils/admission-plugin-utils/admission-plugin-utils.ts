@@ -1,5 +1,11 @@
 import {AbstractControl} from '@angular/forms';
 import {DataCenterEntity} from '../../entity/DatacenterEntity';
+import {ClusterEntity} from '../../entity/ClusterEntity';
+
+export enum AdmissionPlugin {
+  PodSecurityPolicy = 'PodSecurityPolicy',
+  PodNodeSelector = 'PodNodeSelector',
+}
 
 export class AdmissionPluginUtils {
   static getPluginName(name: string): string {
@@ -7,9 +13,7 @@ export class AdmissionPluginUtils {
   }
 
   static getJoinedPluginNames(plugins: string[]): string {
-    const prettifiedNames: string[] = [];
-    plugins.forEach(plugin => prettifiedNames.push(this.getPluginName(plugin)));
-    return prettifiedNames.join(', ');
+    return plugins.map(plugin => this.getPluginName(plugin)).join(', ');
   }
 
   static isPluginEnabled(form: AbstractControl, name: string): boolean {
@@ -24,6 +28,14 @@ export class AdmissionPluginUtils {
     const plugins: string[] = form.value ? form.value : [];
     if (!plugins.some(x => x === name)) {
       plugins.push(name);
+    }
+    return plugins;
+  }
+
+  static updateSelectedPluginArrayIfPSPEnforced(cluster: ClusterEntity, datacenter: DataCenterEntity): string[] {
+    const plugins: string[] = cluster.spec.admissionPlugins ? cluster.spec.admissionPlugins : [];
+    if (!!this.isPodSecurityPolicyEnforced(datacenter) && !plugins.some(x => x === AdmissionPlugin.PodSecurityPolicy)) {
+      plugins.push(AdmissionPlugin.PodSecurityPolicy);
     }
     return plugins;
   }
