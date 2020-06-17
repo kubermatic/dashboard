@@ -33,15 +33,15 @@
                       disableOptionCentering>
             <mat-option *ngFor="let admissionPlugin of admissionPlugins"
                         [value]="admissionPlugin"
-                        [disabled]="admissionPlugin === 'PodSecurityPolicy' && !!isPodSecurityPolicyEnforced()">
+                        [disabled]="admissionPlugin === admissionPlugin.PodSecurityPolicy && !!isPodSecurityPolicyEnforced()">
               {{getPluginName(admissionPlugin)}}
-              <i *ngIf="admissionPlugin === 'PodSecurityPolicy'"
+              <i *ngIf="admissionPlugin === admissionPlugin.PodSecurityPolicy"
                  class="km-icon-info"
                  matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <span *ngIf="isPluginEnabled('PodSecurityPolicy')"
+        <span *ngIf="isPluginEnabled(admissionPlugin.PodSecurityPolicy)"
               class="km-admission-plugin-warning"
               fxLayout="row">
           <i class="km-icon-warning km-warning"></i>

@@ -1,4 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
+import * as _ from 'lodash';
+
 import {LabelFormComponent} from '../../shared/components/label-form/label-form.component';
 import {Cluster} from '../../shared/entity/cluster';
 import {SSHKey} from '../../shared/entity/ssh-key';
@@ -110,7 +112,7 @@ export class SummaryComponent implements OnInit {
   }
 
   hasAdmissionPlugins(): boolean {
-    return !!this.cluster.spec.admissionPlugins && this.cluster.spec.admissionPlugins.length > 0;
+    return !_.isEmpty(this.cluster.spec.admissionPlugins);
   }
 
   getAdmissionPlugins(): string {

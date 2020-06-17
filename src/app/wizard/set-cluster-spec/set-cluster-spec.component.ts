@@ -7,7 +7,7 @@ import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {ClusterTypeOptions, AdminSettings} from '../../shared/entity/settings';
 import {Cluster, ClusterType, MasterVersion} from '../../shared/entity/cluster';
-import {AdmissionPluginUtils} from '../../shared/utils/admission-plugin-utils/admission-plugin-utils';
+import {AdmissionPlugin, AdmissionPluginUtils} from '../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '../../shared/validators/async-label-form.validator';
 import {ResourceType} from '../../shared/entity/common';
 
@@ -19,6 +19,7 @@ import {ResourceType} from '../../shared/entity/common';
 export class SetClusterSpecComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
   @Input() settings: AdminSettings;
+  admissionPlugin = AdmissionPlugin;
   labels: object;
   clusterSpecForm: FormGroup;
   masterVersions: MasterVersion[] = [];

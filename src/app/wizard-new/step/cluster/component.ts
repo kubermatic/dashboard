@@ -16,7 +16,10 @@ import {ApiService, DatacenterService} from '../../../core/services';
 import {ClusterNameGenerator} from '../../../core/util/name-generator.service';
 import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '../../../shared/entity/cluster';
 import {Datacenter} from '../../../shared/entity/datacenter';
-import {AdmissionPluginUtils} from '../../../shared/utils/admission-plugin-utils/admission-plugin-utils';
+import {
+  AdmissionPlugin,
+  AdmissionPluginUtils,
+} from '../../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
 import {ClusterService} from '../../service/cluster';
 import {WizardService} from '../../service/wizard';
@@ -51,6 +54,7 @@ enum Controls {
   ],
 })
 export class ClusterStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
+  admissionPlugin = AdmissionPlugin;
   masterVersions: MasterVersion[] = [];
   admissionPlugins: string[] = [];
   labels: object;
@@ -180,7 +184,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     if (isEnforced) {
       const value = AdmissionPluginUtils.updateSelectedPluginArray(
         this.form.get(Controls.AdmissionPlugins),
-        'PodSecurityPolicy'
+        AdmissionPlugin.PodSecurityPolicy
       );
       this.form.get(Controls.AdmissionPlugins).setValue(value);
     }

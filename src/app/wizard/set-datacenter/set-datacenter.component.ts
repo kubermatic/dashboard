@@ -6,6 +6,7 @@ import {takeUntil} from 'rxjs/operators';
 import {DatacenterService, WizardService} from '../../core/services';
 import {AuditLoggingSettings, Cluster, getClusterProvider} from '../../shared/entity/cluster';
 import {Datacenter, getDatacenterProvider} from '../../shared/entity/datacenter';
+import {AdmissionPluginUtils} from '../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 
 @Component({
   selector: 'km-set-datacenter',
@@ -54,10 +55,8 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
 
         const auditLogging = dc.spec.enforceAuditLogging ? {enabled: true} : this.cluster.spec.auditLogging;
 
-        const admissionPlugins = this.cluster.spec.admissionPlugins ? this.cluster.spec.admissionPlugins : [];
-        if (!!dc.spec.enforcePodSecurityPolicy && !admissionPlugins.some(x => x === 'PodSecurityPolicy')) {
-          admissionPlugins.push('PodSecurityPolicy');
-        }
+        const admissionPlugins = AdmissionPluginUtils.updateSelectedPluginArrayIfPSPEnforced(this.cluster, dc);
+
         this.enforceClusterProperties(auditLogging, admissionPlugins);
       }
     }

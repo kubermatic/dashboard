@@ -1,6 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
+import * as _ from 'lodash';
+
 import {DatacenterService} from '../../../core/services';
 import {NodeDataService} from '../../../node-data-new/service/service';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
@@ -131,7 +133,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   hasAdmissionPlugins(): boolean {
-    return !!this.clusterAdmissionPlugins && this.clusterAdmissionPlugins.length > 0;
+    return !_.isEmpty(this.clusterAdmissionPlugins);
   }
 
   getAdmissionPlugins(): string {
