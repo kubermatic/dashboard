@@ -61,6 +61,7 @@ export class UserPanelComponent implements OnInit, OnDestroy {
     this._auth.logout();
     this._settingsService.refreshCustomLinks();
     this._router.navigate(['']);
+    this._isOpen = false;
     delete this.user;
   }
 
@@ -70,6 +71,7 @@ export class UserPanelComponent implements OnInit, OnDestroy {
 
   goToAccount(): void {
     this._router.navigate(['account']);
+    this._isOpen = false;
   }
 
   isAuthenticated(): boolean {
@@ -82,5 +84,6 @@ export class UserPanelComponent implements OnInit, OnDestroy {
 
   goToAdminPanel(): void {
     this._router.navigate(['settings']);
+    this._isOpen = false;
   }
 }

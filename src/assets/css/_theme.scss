@@ -860,9 +860,13 @@
     }
   }
 
-  .km-notification-panel .panel {
+  .km-panel .panel {
     background-color: $background-app-bar;
+    border-radius: $border-radius;
     box-shadow: map-get($colors, shadow-dark) !important;
+    position: fixed;
+    overflow: hidden;
+    z-index: 3;
 
     .notification-info .km-icon-mask {
       background-color: $text-secondary !important;
