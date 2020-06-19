@@ -1,6 +1,6 @@
 import {AbstractControl} from '@angular/forms';
-import {DataCenterEntity} from '../../entity/DatacenterEntity';
-import {ClusterEntity} from '../../entity/ClusterEntity';
+import {Datacenter} from '../../entity/datacenter';
+import {Cluster} from '../../entity/cluster';
 
 export enum AdmissionPlugin {
   PodSecurityPolicy = 'PodSecurityPolicy',
@@ -20,7 +20,7 @@ export class AdmissionPluginUtils {
     return !!form.value && form.value.some(x => x === name);
   }
 
-  static isPodSecurityPolicyEnforced(datacenter: DataCenterEntity): boolean {
+  static isPodSecurityPolicyEnforced(datacenter: Datacenter): boolean {
     return !!datacenter && !!datacenter.spec && !!datacenter.spec.enforcePodSecurityPolicy;
   }
 
@@ -32,7 +32,7 @@ export class AdmissionPluginUtils {
     return plugins;
   }
 
-  static updateSelectedPluginArrayIfPSPEnforced(cluster: ClusterEntity, datacenter: DataCenterEntity): string[] {
+  static updateSelectedPluginArrayIfPSPEnforced(cluster: Cluster, datacenter: Datacenter): string[] {
     const plugins: string[] = cluster.spec.admissionPlugins ? cluster.spec.admissionPlugins : [];
     if (!!this.isPodSecurityPolicyEnforced(datacenter) && !plugins.some(x => x === AdmissionPlugin.PodSecurityPolicy)) {
       plugins.push(AdmissionPlugin.PodSecurityPolicy);
