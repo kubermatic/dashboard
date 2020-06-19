@@ -6,32 +6,16 @@ import {webSocket} from 'rxjs/webSocket';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
-import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../../shared/entity/AdminSettings';
-import {UserSettings} from '../../../shared/entity/MemberEntity';
-import {CustomLink} from '../../../shared/utils/custom-link-utils/custom-link';
 import {Auth} from '../auth/auth.service';
-
-const DEFAULT_USER_SETTINGS: UserSettings = {
-  itemsPerPage: 10,
-  selectProjectTableView: false,
-  collapseSidenav: false,
-  displayAllProjectsForAdmin: false,
-};
-
-const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
-  cleanupOptions: {
-    Enforced: false,
-    Enabled: false,
-  },
-  clusterTypeOptions: ClusterTypeOptions.All,
-  customLinks: [],
-  defaultNodeCount: 1,
-  displayAPIDocs: true,
-  displayDemoInfo: false,
-  displayTermsOfService: false,
-  enableDashboard: true,
-  enableOIDCKubeconfig: false,
-};
+import {
+  AdminSettings,
+  CustomLink,
+  DEFAULT_ADMIN_SETTINGS,
+  DEFAULT_USER_SETTINGS,
+  UserSettings,
+} from '../../../shared/entity/settings';
+import {Settings} from 'http2';
+import {Admin} from '../../../shared/entity/member';
 
 @Injectable({
   providedIn: 'root',
@@ -43,7 +27,7 @@ export class SettingsService {
   private _userSettingsRefresh$ = new Subject();
   private readonly _adminSettings$ = new BehaviorSubject(DEFAULT_ADMIN_SETTINGS);
   private _adminSettingsWatch$: Observable<AdminSettings>;
-  private _admins$: Observable<AdminEntity[]>;
+  private _admins$: Observable<Admin[]>;
   private _adminsRefresh$ = new Subject();
   private _customLinks$: Observable<CustomLink[]>;
   private _customLinksRefresh$ = new Subject();
@@ -140,9 +124,9 @@ export class SettingsService {
     return settings;
   }
 
-  patchAdminSettings(patch: any): Observable<AdminSettings> {
+  patchAdminSettings(patch: any): Observable<Settings> {
     const url = `${this.restRoot}/admin/settings`;
-    return this._httpClient.patch<AdminSettings>(url, patch);
+    return this._httpClient.patch<Settings>(url, patch);
   }
 
   get customLinks(): Observable<CustomLink[]> {
@@ -163,7 +147,7 @@ export class SettingsService {
     this._customLinksRefresh$.next();
   }
 
-  get admins(): Observable<AdminEntity[]> {
+  get admins(): Observable<Admin[]> {
     if (!this._admins$) {
       this._admins$ = merge(this._refreshTimer$, this._adminsRefresh$)
         .pipe(switchMap(() => this._getAdmins()))
@@ -172,17 +156,17 @@ export class SettingsService {
     return this._admins$;
   }
 
-  private _getAdmins(): Observable<AdminEntity[]> {
+  private _getAdmins(): Observable<Admin[]> {
     const url = `${this.restRoot}/admin`;
-    return this._httpClient.get<AdminEntity[]>(url);
+    return this._httpClient.get<Admin[]>(url);
   }
 
   refreshAdmins(): void {
     this._adminsRefresh$.next();
   }
 
-  setAdmin(admin: AdminEntity): Observable<AdminEntity> {
+  setAdmin(admin: Admin): Observable<Admin> {
     const url = `${this.restRoot}/admin`;
-    return this._httpClient.put<AdminEntity>(url, admin);
+    return this._httpClient.put<Admin>(url, admin);
   }
 }

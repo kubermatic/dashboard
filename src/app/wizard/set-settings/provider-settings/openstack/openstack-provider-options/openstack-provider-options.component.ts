@@ -3,21 +3,21 @@ import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
 import {merge, Subject} from 'rxjs';
 import {distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../../../core/services';
-import {ClusterEntity} from '../../../../../shared/entity/ClusterEntity';
+import {Cluster} from '../../../../../shared/entity/cluster';
+import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
+import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
 import {
   OpenstackNetwork,
   OpenstackSecurityGroup,
   OpenstackSubnet,
-} from '../../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
-import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
-import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
+} from '../../../../../shared/entity/provider/openstack';
 
 @Component({
   selector: 'km-openstack-provider-options',
   templateUrl: './openstack-provider-options.component.html',
 })
 export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
 
   hideOptional = true;
   form: FormGroup;

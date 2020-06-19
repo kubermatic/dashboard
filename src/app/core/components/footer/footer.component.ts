@@ -1,8 +1,7 @@
 import {Component, Input} from '@angular/core';
 
-import {AdminSettings} from '../../../shared/entity/AdminSettings';
-import {VersionInfo} from '../../../shared/entity/VersionInfo';
-import {CustomLink, CustomLinkLocation, filterCustomLinks} from '../../../shared/utils/custom-link-utils/custom-link';
+import {VersionInfo} from '../../../shared/entity/version-info';
+import {AdminSettings, CustomLink, CustomLinkLocation, filterCustomLinks} from '../../../shared/entity/settings';
 
 @Component({
   selector: 'km-footer',

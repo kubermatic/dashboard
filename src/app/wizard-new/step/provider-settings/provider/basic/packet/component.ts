@@ -4,8 +4,13 @@ import {merge} from 'rxjs';
 import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
-import {AVAILABLE_PACKET_BILLING_CYCLES, PacketCloudSpec} from '../../../../../../shared/entity/cloud/PacketCloudSpec';
-import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
+import {
+  AVAILABLE_PACKET_BILLING_CYCLES,
+  CloudSpec,
+  Cluster,
+  ClusterSpec,
+  PacketCloudSpec,
+} from '../../../../../../shared/entity/cluster';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
@@ -97,7 +102,7 @@ export class PacketProviderBasicComponent extends BaseFormValidator implements O
     }
   }
 
-  private _getClusterEntity(): ClusterEntity {
+  private _getClusterEntity(): Cluster {
     return {
       spec: {
         cloud: {
@@ -108,6 +113,6 @@ export class PacketProviderBasicComponent extends BaseFormValidator implements O
           } as PacketCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
-    } as ClusterEntity;
+    } as Cluster;
   }
 }

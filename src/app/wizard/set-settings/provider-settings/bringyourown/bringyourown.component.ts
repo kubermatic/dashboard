@@ -1,10 +1,10 @@
 import {Component, Input} from '@angular/core';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
+import {Cluster} from '../../../../shared/entity/cluster';
 
 @Component({
   selector: 'km-bringyourown-cluster-settings',
   templateUrl: './bringyourown.component.html',
 })
 export class BringyourownClusterSettingsComponent {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
 }

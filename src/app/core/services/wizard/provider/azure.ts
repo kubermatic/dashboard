@@ -1,8 +1,8 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
-import {AzureSizes, AzureZones} from '../../../../shared/entity/provider/azure/AzureSizeEntity';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {Provider} from './provider';
+import {AzureSizes, AzureZones} from '../../../../shared/entity/provider/azure';
 
 export class Azure extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {

@@ -3,7 +3,7 @@ import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '
 import {from, Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
-import {MemberEntity} from '../../../shared/entity/MemberEntity';
+import {Member} from '../../../shared/entity/member';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {UserService} from '../user/user.service';
 
@@ -38,7 +38,7 @@ export class AuthzGuard implements CanActivate {
   canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     const projectID = this._getProjectID(state.url);
     const view = this._getView(state.url);
-    let currentUser: MemberEntity;
+    let currentUser: Member;
     this._userService.loggedInUser.subscribe(user => (currentUser = user));
 
     return this._userService

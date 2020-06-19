@@ -12,12 +12,12 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {merge, Observable} from 'rxjs';
 import {filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
-import {GCPNodeSpec} from '../../../../shared/entity/node/GCPNodeSpec';
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
-import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../../shared/entity/provider/gcp/GCP';
+import {GCPNodeSpec, NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
+import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../../shared/entity/provider/gcp';
+import * as _ from 'lodash';
 
 enum Controls {
   DiskSize = 'diskSize',
@@ -156,7 +156,7 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   private _setDefaultZone(zones: GCPZone[]): void {
     this.zones = zones;
-    if (this.zones.length > 0) {
+    if (!_.isEmpty(this.zones)) {
       this.selectedZone = this.zones[0].name;
       this.zoneLabel = ZoneState.Ready;
       this._cdr.detectChanges();
@@ -185,7 +185,7 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   private _setDefaultDiskType(diskTypes: GCPDiskType[]): void {
     this.diskTypes = diskTypes;
-    if (this.diskTypes.length > 0) {
+    if (!_.isEmpty(this.diskTypes)) {
       this.selectedDiskType = this.diskTypes[0].name;
       this.diskTypeLabel = DiskTypeState.Ready;
       this._cdr.detectChanges();
@@ -214,7 +214,7 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   private _setDefaultMachineType(machineTypes: GCPMachineSize[]): void {
     this.machineTypes = machineTypes;
-    if (this.machineTypes.length > 0) {
+    if (!_.isEmpty(this.machineTypes)) {
       this.selectedMachineType = this.machineTypes[0].name;
       this.machineTypeLabel = MachineTypeState.Ready;
       this._cdr.detectChanges();

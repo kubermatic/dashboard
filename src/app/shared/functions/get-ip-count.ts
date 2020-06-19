@@ -1,4 +1,4 @@
-import {MachineNetwork} from '../entity/ClusterEntity';
+import {MachineNetwork} from '../entity/cluster';
 
 export function getIpCount(networks: MachineNetwork[]): number {
   const ip4ToInt = ip => ip.split('.').reduce((int, oct) => (int << 8) + parseInt(oct, 10), 0) >>> 0;

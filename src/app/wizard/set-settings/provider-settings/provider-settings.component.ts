@@ -1,14 +1,14 @@
 import {Component, Input} from '@angular/core';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
+import {Cluster} from '../../../shared/entity/cluster';
+import {SSHKey} from '../../../shared/entity/ssh-key';
 
 @Component({
   selector: 'km-cluster-provider-settings',
   templateUrl: './provider-settings.component.html',
 })
 export class ClusterProviderSettingsComponent {
-  @Input() cluster: ClusterEntity;
-  @Input() clusterSSHKeys: SSHKeyEntity[] = [];
+  @Input() cluster: Cluster;
+  @Input() clusterSSHKeys: SSHKey[] = [];
 
   constructor() {}
 

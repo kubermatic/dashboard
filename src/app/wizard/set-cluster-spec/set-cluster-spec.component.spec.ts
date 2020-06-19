@@ -8,7 +8,7 @@ import {CoreModule} from '../../core/core.module';
 import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {MachineNetworksModule} from '../../machine-networks/machine-networks.module';
-import {ClusterTypeOptions} from '../../shared/entity/AdminSettings';
+import {ClusterTypeOptions} from '../../shared/entity/settings';
 import {SharedModule} from '../../shared/shared.module';
 import {masterVersionsFake} from '../../testing/fake-data/cluster-spec.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
@@ -16,7 +16,7 @@ import {ClusterNameGeneratorMock} from '../../testing/services/name-generator-mo
 import {DEFAULT_ADMIN_SETTINGS_MOCK} from '../../testing/services/settings-mock.service';
 
 import {SetClusterSpecComponent} from './set-cluster-spec.component';
-import {ClusterType} from '../../shared/entity/ClusterEntity';
+import {ClusterType} from '../../shared/entity/cluster';
 
 const modules: any[] = [
   BrowserModule,

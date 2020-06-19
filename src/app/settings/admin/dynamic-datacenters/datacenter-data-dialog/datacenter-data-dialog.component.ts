@@ -5,7 +5,7 @@ import {dump, load} from 'js-yaml';
 import * as _ from 'lodash';
 import * as countryCodeLookup from 'country-code-lookup';
 
-import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
+import {Datacenter} from '../../../../shared/entity/datacenter';
 import {NodeProvider, NodeProviderConstants} from '../../../../shared/model/NodeProviderConstants';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material/chips';
@@ -17,7 +17,7 @@ export interface DatacenterDataDialogConfig {
   isEditing: boolean;
 
   // Datacenter has to be specified only if dialog is used in the edit mode.
-  datacenter?: DataCenterEntity;
+  datacenter?: Datacenter;
 }
 
 export enum Controls {
@@ -140,7 +140,7 @@ export class DatacenterDataDialogComponent implements OnInit {
   }
 
   save(): void {
-    const datacenter: DataCenterEntity = {
+    const datacenter: Datacenter = {
       metadata: {
         name: this.form.controls.name.value,
       },

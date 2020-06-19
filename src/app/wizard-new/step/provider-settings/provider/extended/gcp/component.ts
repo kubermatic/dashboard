@@ -14,10 +14,10 @@ import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators
 
 import {PresetsService} from '../../../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
-import {GCPNetwork, GCPSubnetwork} from '../../../../../../shared/entity/provider/gcp/GCP';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
+import {GCPNetwork, GCPSubnetwork} from '../../../../../../shared/entity/provider/gcp';
 
 enum Controls {
   Network = 'network',

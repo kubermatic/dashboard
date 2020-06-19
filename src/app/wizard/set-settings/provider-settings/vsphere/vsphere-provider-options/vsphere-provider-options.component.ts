@@ -4,19 +4,19 @@ import {Subject} from 'rxjs';
 import {debounceTime, startWith, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../../../core/services';
-import {ClusterEntity} from '../../../../../shared/entity/ClusterEntity';
-import {VSphereFolder, VSphereNetwork} from '../../../../../shared/entity/provider/vsphere/VSphereEntity';
+import {Cluster} from '../../../../../shared/entity/cluster';
 import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
 import {filterArrayOptions, filterObjectOptions} from '../../../../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../../../../shared/validators/autocomplete-filter.validator';
+import {VSphereFolder, VSphereNetwork} from '../../../../../shared/entity/provider/vsphere';
 
 @Component({
   selector: 'km-vsphere-provider-options',
   templateUrl: './vsphere-provider-options.component.html',
 })
 export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
 
   form: FormGroup;
   loadingNetworks = false;

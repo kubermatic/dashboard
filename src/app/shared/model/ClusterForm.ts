@@ -1,5 +1,5 @@
-import {AuditLoggingSettings, CloudSpec, ClusterType} from '../entity/ClusterEntity';
-import {DataCenterEntity} from '../entity/DatacenterEntity';
+import {AuditLoggingSettings, CloudSpec, ClusterType} from '../entity/cluster';
+import {Datacenter} from '../entity/datacenter';
 import {NodeProvider} from './NodeProviderConstants';
 
 export class ClusterSpecForm {
@@ -33,7 +33,7 @@ export class ClusterProviderForm {
 }
 
 export class ClusterDatacenterForm {
-  datacenter?: DataCenterEntity;
+  datacenter?: Datacenter;
   valid: boolean;
 }
 

@@ -8,10 +8,9 @@ import {NotificationService} from '../../core/services';
 import {ApiService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {ClusterEntity} from '../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
-import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
-import {NodeDeploymentPatch} from '../../shared/entity/NodeDeploymentPatch';
+import {Cluster} from '../../shared/entity/cluster';
+import {Datacenter} from '../../shared/entity/datacenter';
+import {NodeDeployment, NodeDeploymentPatch} from '../../shared/entity/node-deployment';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {NodeDataModalComponent, NodeDataModalData} from '../cluster-details/node-data-modal/node-data-modal.component';
 
@@ -19,7 +18,7 @@ import {NodeDataModalComponent, NodeDataModalData} from '../cluster-details/node
 export class NodeService {
   private readonly _notificationService: NotificationService;
 
-  private static _getNodeDeploymentEntity(nodeData: NodeData): NodeDeploymentEntity {
+  private static _getNodeDeploymentEntity(nodeData: NodeData): NodeDeployment {
     return {
       name: nodeData.name,
       spec: {
@@ -60,7 +59,7 @@ export class NodeService {
     this._notificationService = this._inj.get(NotificationService);
   }
 
-  createNodeDeployment(nodeData: NodeData, dc: DataCenterEntity, cluster: ClusterEntity, project: string): void {
+  createNodeDeployment(nodeData: NodeData, dc: Datacenter, cluster: Cluster, project: string): void {
     this._apiService
       .createNodeDeployment(cluster, NodeService._getNodeDeploymentEntity(nodeData), dc.metadata.name, project)
       .pipe(first())
@@ -74,9 +73,9 @@ export class NodeService {
 
   showNodeDeploymentCreateDialog(
     count: number,
-    cluster: ClusterEntity,
+    cluster: Cluster,
     projectID: string,
-    datacenter: DataCenterEntity
+    datacenter: Datacenter
   ): Observable<boolean> {
     const dialogRef = this._matDialog.open(NodeDataModalComponent, {
       data: {
@@ -100,11 +99,11 @@ export class NodeService {
   }
 
   showNodeDeploymentEditDialog(
-    nd: NodeDeploymentEntity,
-    cluster: ClusterEntity,
+    nd: NodeDeployment,
+    cluster: Cluster,
     projectID: string,
-    datacenter: DataCenterEntity,
-    changeEventEmitter: EventEmitter<NodeDeploymentEntity>
+    datacenter: Datacenter,
+    changeEventEmitter: EventEmitter<NodeDeployment>
   ): Observable<boolean> {
     const dialogRef = this._matDialog.open(NodeDataModalComponent, {
       data: {
@@ -128,7 +127,7 @@ export class NodeService {
       .afterClosed()
       .pipe(
         flatMap(
-          (data: NodeDataModalData): Observable<NodeDeploymentEntity> => {
+          (data: NodeDataModalData): Observable<NodeDeployment> => {
             if (data) {
               return this._apiService
                 .patchNodeDeployment(
@@ -155,7 +154,7 @@ export class NodeService {
       )
       .pipe(
         flatMap(
-          (nd: NodeDeploymentEntity): Observable<boolean> => {
+          (nd: NodeDeployment): Observable<boolean> => {
             if (nd) {
               this._notificationService.success(`The <strong>${nd.name}</strong> node deployment was updated`);
               this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdated');
@@ -172,11 +171,11 @@ export class NodeService {
   }
 
   showNodeDeploymentDeleteDialog(
-    nd: NodeDeploymentEntity,
+    nd: NodeDeployment,
     clusterID: string,
     projectID: string,
     dcName: string,
-    changeEventEmitter: EventEmitter<NodeDeploymentEntity>
+    changeEventEmitter: EventEmitter<NodeDeployment>
   ): Observable<boolean> {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,

@@ -1,10 +1,10 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 
-import {AlibabaInstanceType, AlibabaZone} from '../../../../shared/entity/provider/alibaba/Alibaba';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
+import {AlibabaInstanceType, AlibabaZone} from '../../../../shared/entity/provider/alibaba';
 
 export class Alibaba extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {

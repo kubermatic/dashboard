@@ -4,9 +4,9 @@ import {merge} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../core/services';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
-import {ClusterType} from '../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../shared/entity/DatacenterEntity';
-import {OperatingSystemSpec, Taint} from '../shared/entity/NodeEntity';
+import {ClusterType} from '../shared/entity/cluster';
+import {Datacenter} from '../shared/entity/datacenter';
+import {OperatingSystemSpec, Taint} from '../shared/entity/node';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '../shared/model/NodeProviderConstants';
 import {NodeData} from '../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../shared/validators/base-form.validator';
@@ -52,7 +52,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   labels: object = {};
   taints: Taint[] = [];
 
-  private _datacenterSpec: DataCenterEntity;
+  private _datacenterSpec: Datacenter;
 
   readonly NodeProvider = NodeProvider;
   readonly OperatingSystem = OperatingSystem;

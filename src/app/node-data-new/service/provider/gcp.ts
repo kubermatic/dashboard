@@ -2,12 +2,12 @@ import {merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, switchMap, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../core/services';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../shared/entity/provider/gcp/GCP';
+import {Cluster} from '../../../shared/entity/cluster';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../wizard-new/service/cluster';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
+import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../shared/entity/provider/gcp';
 
 export class NodeDataGCPProvider {
   constructor(
@@ -27,7 +27,7 @@ export class NodeDataGCPProvider {
   }
 
   zones(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<GCPZone[]> {
-    let cluster: ClusterEntity;
+    let cluster: Cluster;
 
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {

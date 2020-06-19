@@ -1,6 +1,7 @@
-import {EventEntity, ObjectReference} from '../../shared/entity/EventEntity';
+import {ObjectReference} from '../../shared/entity/common';
+import {Event} from '../../shared/entity/event';
 
-export function fakeEvents(): EventEntity[] {
+export function fakeEvents(): Event[] {
   return [
     {
       id: 'event-1',
@@ -13,6 +14,6 @@ export function fakeEvents(): EventEntity[] {
         namespace: 'namespace-a',
         type: 'Cluster',
       } as ObjectReference,
-    } as EventEntity,
+    } as Event,
   ];
 }

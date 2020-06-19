@@ -1,21 +1,21 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 
-import {ClusterEntity} from '../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
-import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
-import {NodeSpec} from '../../shared/entity/NodeEntity';
+import {Cluster} from '../../shared/entity/cluster';
+import {Datacenter} from '../../shared/entity/datacenter';
+import {NodeDeployment} from '../../shared/entity/node-deployment';
+import {NodeSpec} from '../../shared/entity/node';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 
 @Injectable()
 export class NodeMockService {
-  createNodes(nodeData: NodeData, dc: DataCenterEntity, cluster: ClusterEntity, project: string): void {}
+  createNodes(nodeData: NodeData, dc: Datacenter, cluster: Cluster, project: string): void {}
 
   getOperatingSystem(spec: NodeSpec): string {
     return 'ubuntu';
   }
 
-  getHealthStatus(nd: NodeDeploymentEntity): object {
+  getHealthStatus(nd: NodeDeployment): object {
     return {
       color: 'fa fa-circle orange',
       status: 'In progress',
@@ -24,21 +24,21 @@ export class NodeMockService {
   }
 
   showNodeDeploymentEditDialog(
-    nd: NodeDeploymentEntity,
-    cluster: ClusterEntity,
+    nd: NodeDeployment,
+    cluster: Cluster,
     projectID: string,
-    datacenter: DataCenterEntity,
-    changeEventEmitter: EventEmitter<NodeDeploymentEntity>
+    datacenter: Datacenter,
+    changeEventEmitter: EventEmitter<NodeDeployment>
   ): Observable<boolean> {
     return of(true);
   }
 
   showNodeDeploymentDeleteDialog(
-    nd: NodeDeploymentEntity,
+    nd: NodeDeployment,
     clusterID: string,
     projectID: string,
     dcName: string,
-    changeEventEmitter: EventEmitter<NodeDeploymentEntity>
+    changeEventEmitter: EventEmitter<NodeDeployment>
   ): Observable<boolean> {
     return of(true);
   }

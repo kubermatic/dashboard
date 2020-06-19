@@ -5,15 +5,15 @@ import {first} from 'rxjs/operators';
 
 import {NotificationService} from '../../core/services';
 import {ApiService} from '../../core/services';
-import {ProjectEntity} from '../../shared/entity/ProjectEntity';
-import {CreateServiceAccountEntity} from '../../shared/entity/ServiceAccountEntity';
+import {Project} from '../../shared/entity/project';
+import {ServiceAccountModel} from '../../shared/entity/service-account';
 
 @Component({
   selector: 'km-add-serviceaccount',
   templateUrl: './add-serviceaccount.component.html',
 })
 export class AddServiceAccountComponent implements OnInit {
-  @Input() project: ProjectEntity;
+  @Input() project: Project;
   addServiceAccountForm: FormGroup;
 
   constructor(
@@ -30,7 +30,7 @@ export class AddServiceAccountComponent implements OnInit {
   }
 
   addServiceAccount(): void {
-    const createServiceAccount: CreateServiceAccountEntity = {
+    const createServiceAccount: ServiceAccountModel = {
       name: this.addServiceAccountForm.controls.name.value,
       group: this.addServiceAccountForm.controls.group.value,
     };

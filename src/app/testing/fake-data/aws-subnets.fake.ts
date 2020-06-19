@@ -1,4 +1,4 @@
-import {AWSSubnet} from '../../shared/entity/provider/aws/AWS';
+import {AWSSubnet} from '../../shared/entity/provider/aws';
 
 export function fakeAwsSubnets(): AWSSubnet[] {
   return [

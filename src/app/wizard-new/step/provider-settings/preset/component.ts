@@ -3,10 +3,10 @@ import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} 
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
-import {PresetListEntity} from '../../../../shared/entity/provider/credentials/PresetListEntity';
+import {Cluster} from '../../../../shared/entity/cluster';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../service/cluster';
+import {PresetList} from '../../../../shared/entity/preset';
 
 export enum Controls {
   Preset = 'name',
@@ -36,7 +36,7 @@ export enum PresetsState {
   ],
 })
 export class PresetsComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  presetList = new PresetListEntity();
+  presetList = new PresetList();
   presetsLoaded = false;
 
   readonly Controls = Controls;
@@ -54,7 +54,7 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
   set selectedPreset(preset: string) {
     this.form.get(Controls.Preset).setValue(preset);
     this._presets.preset = preset;
-    this._clusterService.cluster = {credential: preset} as ClusterEntity;
+    this._clusterService.cluster = {credential: preset} as Cluster;
   }
 
   constructor(
@@ -88,7 +88,7 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(preset => {
         this._presets.preset = preset;
-        this._clusterService.cluster = {credential: preset} as ClusterEntity;
+        this._clusterService.cluster = {credential: preset} as Cluster;
       });
 
     this._presets.presetStatusChanges.pipe(takeUntil(this._unsubscribe)).subscribe(enable => {

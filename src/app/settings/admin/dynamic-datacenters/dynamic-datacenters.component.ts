@@ -1,6 +1,6 @@
 import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
 import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {CreateDatacenterModel, DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {CreateDatacenterModel, Datacenter} from '../../../shared/entity/datacenter';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
@@ -19,8 +19,8 @@ import {DatacenterDataDialogComponent} from './datacenter-data-dialog/datacenter
   styleUrls: ['./dynamic-datacenters.component.scss'],
 })
 export class DynamicDatacentersComponent implements OnInit, OnChanges {
-  datacenters: DataCenterEntity[] = [];
-  dataSource = new MatTableDataSource<DataCenterEntity>();
+  datacenters: Datacenter[] = [];
+  dataSource = new MatTableDataSource<Datacenter>();
   displayedColumns: string[] = ['datacenter', 'seed', 'country', 'provider', 'actions'];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -63,7 +63,7 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
 
     this._datacenterService.datacenters
       .pipe(
-        map((datacenters: DataCenterEntity[]) =>
+        map((datacenters: Datacenter[]) =>
           datacenters
             .filter(datacenter => !datacenter.seed)
             .sort((a, b) => a.metadata.name.localeCompare(b.metadata.name))
@@ -105,13 +105,13 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
     return country ? country.country : code;
   }
 
-  private _setCountries(datacenters: DataCenterEntity[]) {
+  private _setCountries(datacenters: Datacenter[]) {
     this.countries = Array.from(new Set(datacenters.map(datacenter => datacenter.spec.country))).sort((a, b) =>
       a.localeCompare(b)
     );
   }
 
-  private _setSeeds(datacenters: DataCenterEntity[]) {
+  private _setSeeds(datacenters: Datacenter[]) {
     this.seeds = Array.from(new Set(datacenters.map(datacenter => datacenter.spec.seed))).sort((a, b) =>
       a.localeCompare(b)
     );
@@ -151,10 +151,10 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
       .afterClosed()
       .pipe(filter(datacenter => !!datacenter))
       .pipe(take(1))
-      .subscribe((result: DataCenterEntity) => this._add(result));
+      .subscribe((result: Datacenter) => this._add(result));
   }
 
-  private _add(datacenter: DataCenterEntity): void {
+  private _add(datacenter: Datacenter): void {
     const model: CreateDatacenterModel = {
       name: datacenter.metadata.name,
       spec: datacenter.spec,
@@ -169,7 +169,7 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
       });
   }
 
-  edit(datacenter: DataCenterEntity): void {
+  edit(datacenter: Datacenter): void {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Edit Datacenter',
@@ -184,10 +184,10 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
       .afterClosed()
       .pipe(filter(datacenter => !!datacenter))
       .pipe(take(1))
-      .subscribe((result: DataCenterEntity) => this._edit(datacenter, result));
+      .subscribe((result: Datacenter) => this._edit(datacenter, result));
   }
 
-  private _edit(original: DataCenterEntity, edited: DataCenterEntity): void {
+  private _edit(original: Datacenter, edited: Datacenter): void {
     this._datacenterService
       .patchDatacenter(original.spec.seed, original.metadata.name, edited)
       .pipe(take(1))
@@ -197,7 +197,7 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
       });
   }
 
-  delete(datacenter: DataCenterEntity): void {
+  delete(datacenter: Datacenter): void {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Datacenter',

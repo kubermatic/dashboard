@@ -3,30 +3,7 @@ import {
   OpenstackSecurityGroup,
   OpenstackSubnet,
   OpenstackTenant,
-} from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
-import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
-
-export function doClusterModelFake(): CreateClusterModel {
-  return {
-    cluster: {
-      name: 'nifty-haibt',
-      spec: {
-        cloud: {
-          dc: 'do-fra1',
-          digitalocean: {
-            token: 'token',
-          },
-          bringyourown: null,
-          aws: null,
-          openstack: null,
-          baremetal: null,
-        },
-        version: '',
-      },
-      type: 'kubernetes',
-    },
-  };
-}
+} from '../../shared/entity/provider/openstack';
 
 export function openstackTenantsFake(): OpenstackTenant[] {
   return [
@@ -76,16 +53,6 @@ export function openstackSortedNetworksFake(): OpenstackNetwork[] {
       id: 'net123',
       name: 'test-network',
       external: false,
-    },
-  ];
-}
-
-export function openstackSortedFloatingIpsFake(): OpenstackNetwork[] {
-  return [
-    {
-      id: 'net789',
-      name: 'ext-net',
-      external: true,
     },
   ];
 }

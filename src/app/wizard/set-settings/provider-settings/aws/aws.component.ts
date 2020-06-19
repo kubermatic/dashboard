@@ -4,7 +4,7 @@ import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../../core/services';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
+import {Cluster} from '../../../../shared/entity/cluster';
 import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm';
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
@@ -13,7 +13,7 @@ import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
   templateUrl: './aws.component.html',
 })
 export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
   form: FormGroup;
 
   private _formHelper: FormHelper;

@@ -9,10 +9,9 @@ import {AppConfigService} from './app-config.service';
 import {Auth} from './core/services';
 import {SettingsService} from './core/services/settings/settings.service';
 import {GoogleAnalyticsService} from './google-analytics.service';
-import {AdminSettings} from './shared/entity/AdminSettings';
-import {VersionInfo} from './shared/entity/VersionInfo';
+import {AdminSettings, CustomLink} from './shared/entity/settings';
+import {VersionInfo} from './shared/entity/version-info';
 import {Config} from './shared/model/Config';
-import {CustomLink} from './shared/utils/custom-link-utils/custom-link';
 
 const PAGES_WITHOUT_MENU = ['/projects', '/account', '/settings', '/rest-api', '/terms-of-service', '/404'];
 
