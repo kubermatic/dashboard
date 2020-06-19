@@ -13,17 +13,17 @@ import {merge, Observable} from 'rxjs';
 import {delay, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
-import {ClusterType} from '../../../../shared/entity/ClusterEntity';
+import {ClusterType} from '../../../../shared/entity/cluster';
+import * as _ from 'lodash';
 
-import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/DatacenterEntity';
-import {OpenstackNodeSpec} from '../../../../shared/entity/node/OpenstackNodeSpec';
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
-import {OpenstackFlavor} from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/datacenter';
+import {NodeCloudSpec, NodeSpec, OpenstackNodeSpec} from '../../../../shared/entity/node';
 import {OperatingSystem} from '../../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../wizard-new/service/cluster';
 import {NodeDataService} from '../../../service/service';
+import {OpenstackFlavor} from '../../../../shared/entity/provider/openstack';
 
 enum Controls {
   Flavor = 'flavor',
@@ -177,7 +177,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   private _setDefaultFlavor(flavors: OpenstackFlavor[]): void {
     this.flavors = flavors;
     this.flavorsLabel = this.flavors.length > 0 ? FlavorState.Ready : FlavorState.Empty;
-    if (this.flavors.length > 0) {
+    if (!_.isEmpty(this.flavors)) {
       this.selectedFlavor = this.flavors[0].slug;
     }
 

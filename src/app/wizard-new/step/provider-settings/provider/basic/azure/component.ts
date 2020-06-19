@@ -3,8 +3,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {merge} from 'rxjs';
 import {filter, takeUntil} from 'rxjs/operators';
 import {PresetsService} from '../../../../../../core/services';
-import {AzureCloudSpec} from '../../../../../../shared/entity/cloud/AzureCloudSpec';
-import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
+import {AzureCloudSpec, CloudSpec, Cluster, ClusterSpec} from '../../../../../../shared/entity/cluster';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
@@ -75,7 +74,7 @@ export class AzureProviderBasicComponent extends BaseFormValidator implements On
       this.form.get(Controls.SubscriptionID).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(() => (this._clusterService.cluster = this._getClusterEntity()));
+      .subscribe(() => (this._clusterService.cluster = this._getCluster()));
   }
 
   ngOnDestroy(): void {
@@ -93,7 +92,7 @@ export class AzureProviderBasicComponent extends BaseFormValidator implements On
     }
   }
 
-  private _getClusterEntity(): ClusterEntity {
+  private _getCluster(): Cluster {
     return {
       spec: {
         cloud: {
@@ -105,6 +104,6 @@ export class AzureProviderBasicComponent extends BaseFormValidator implements On
           } as AzureCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
-    } as ClusterEntity;
+    } as Cluster;
   }
 }

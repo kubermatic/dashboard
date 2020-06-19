@@ -4,11 +4,12 @@ import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {MatDialogRef} from '@angular/material/dialog';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
+import * as _ from 'lodash';
 
 import {NotificationService, RBACService} from '../../../../core/services';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
-import {ClusterRoleName, CreateBinding, RoleName} from '../../../../shared/entity/RBACEntity';
+import {Cluster} from '../../../../shared/entity/cluster';
+import {Datacenter} from '../../../../shared/entity/datacenter';
+import {ClusterRoleName, CreateBinding, RoleName} from '../../../../shared/entity/rbac';
 
 export enum Controls {
   Email = 'email',
@@ -23,8 +24,8 @@ export enum Controls {
   styleUrls: ['./add-binding.component.scss'],
 })
 export class AddBindingComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  @Input() datacenter: DataCenterEntity;
+  @Input() cluster: Cluster;
+  @Input() datacenter: Datacenter;
   @Input() projectID: string;
   readonly controls = Controls;
   form: FormGroup;
@@ -53,7 +54,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       .getClusterRoleNames(this.cluster.id, this.datacenter.metadata.name, this.projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((clusterRoles: ClusterRoleName[]) => {
-        if (clusterRoles.length > 0) {
+        if (!_.isEmpty(clusterRoles)) {
           this.clusterRoles = clusterRoles.sort((a, b) => {
             return a.name.localeCompare(b.name);
           });

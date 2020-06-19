@@ -1,6 +1,6 @@
-import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
+import {Datacenter} from '../../shared/entity/datacenter';
 
-export function fakeDigitaloceanDatacenter(): DataCenterEntity {
+export function fakeDigitaloceanDatacenter(): Datacenter {
   return {
     metadata: {
       name: 'do-fra1',
@@ -25,7 +25,7 @@ export function fakeDigitaloceanDatacenter(): DataCenterEntity {
   };
 }
 
-export function fakeAWSDatacenter(): DataCenterEntity {
+export function fakeAWSDatacenter(): Datacenter {
   return {
     metadata: {
       name: 'aws-fra1',
@@ -50,7 +50,7 @@ export function fakeAWSDatacenter(): DataCenterEntity {
   };
 }
 
-export function fakeOpenstackDatacenter(): DataCenterEntity {
+export function fakeOpenstackDatacenter(): Datacenter {
   return {
     metadata: {
       name: 'os-fra1',
@@ -85,7 +85,7 @@ export function fakeOpenstackDatacenter(): DataCenterEntity {
   };
 }
 
-export function fakeBringyourownSeedDatacenter(): DataCenterEntity {
+export function fakeBringyourownSeedDatacenter(): Datacenter {
   return {
     metadata: {
       name: 'europe-west3-c',
@@ -108,7 +108,7 @@ export function fakeBringyourownSeedDatacenter(): DataCenterEntity {
   };
 }
 
-export function fakeAzureDatacenter(): DataCenterEntity {
+export function fakeAzureDatacenter(): Datacenter {
   return {
     metadata: {
       name: 'azure-westeurope',
@@ -133,7 +133,7 @@ export function fakeAzureDatacenter(): DataCenterEntity {
   };
 }
 
-export function fakeGCPDatacenter(): DataCenterEntity {
+export function fakeGCPDatacenter(): Datacenter {
   return {
     metadata: {
       name: 'gcp-westeurope',
@@ -160,7 +160,7 @@ export function fakeGCPDatacenter(): DataCenterEntity {
   };
 }
 
-export function fakeVSphereDatacenter(): DataCenterEntity {
+export function fakeVSphereDatacenter(): Datacenter {
   return {
     metadata: {
       name: 'vsphere-hetzner',
@@ -189,7 +189,7 @@ export function fakeVSphereDatacenter(): DataCenterEntity {
   };
 }
 
-export function fakeAlibabaDatacenter(): DataCenterEntity {
+export function fakeAlibabaDatacenter(): Datacenter {
   return {
     metadata: {
       name: 'alibaba-eu-central-1a',
@@ -214,11 +214,11 @@ export function fakeAlibabaDatacenter(): DataCenterEntity {
   };
 }
 
-export function fakeSeedDatacenters(): DataCenterEntity[] {
+export function fakeSeedDatacenters(): Datacenter[] {
   return [fakeBringyourownSeedDatacenter()];
 }
 
-export function fakeNodeDatacenters(): DataCenterEntity[] {
+export function fakeNodeDatacenters(): Datacenter[] {
   return [
     fakeDigitaloceanDatacenter(),
     fakeAWSDatacenter(),

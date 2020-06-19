@@ -8,10 +8,10 @@ import {switchMap, takeUntil, tap} from 'rxjs/operators';
 import {ClusterService, DatacenterService, NotificationService, ProjectService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NodeDataService} from '../node-data-new/service/service';
-import {ClusterEntity} from '../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../shared/entity/DatacenterEntity';
-import {ProjectEntity} from '../shared/entity/ProjectEntity';
-import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
+import {Cluster} from '../shared/entity/cluster';
+import {Datacenter} from '../shared/entity/datacenter';
+import {Project} from '../shared/entity/project';
+import {SSHKey} from '../shared/entity/ssh-key';
 import {CreateClusterModel} from '../shared/model/CreateClusterModel';
 import {NodeData} from '../shared/model/NodeSpecChange';
 
@@ -27,7 +27,7 @@ import {WizardService} from './service/wizard';
 })
 export class WizardComponent implements OnInit, OnDestroy {
   form: FormGroup;
-  project = {} as ProjectEntity;
+  project = {} as Project;
   creating = false;
   readonly stepRegistry = StepRegistry;
 
@@ -94,8 +94,8 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   create(): void {
     this.creating = true;
-    let createdCluster: ClusterEntity;
-    let datacenter: DataCenterEntity;
+    let createdCluster: Cluster;
+    let datacenter: Datacenter;
     const createCluster = this._getCreateClusterModel(
       this._clusterModelService.cluster,
       this._nodeDataService.nodeData
@@ -130,7 +130,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(
-        (keys: SSHKeyEntity[]) => {
+        (keys: SSHKey[]) => {
           this._router.navigate([
             `/projects/${this.project.id}/dc/${datacenter.spec.seed}/clusters/${createdCluster.id}`,
           ]);
@@ -150,7 +150,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       );
   }
 
-  private _getCreateClusterModel(cluster: ClusterEntity, nodeData: NodeData): CreateClusterModel {
+  private _getCreateClusterModel(cluster: Cluster, nodeData: NodeData): CreateClusterModel {
     return {
       cluster: {
         name: cluster.name,

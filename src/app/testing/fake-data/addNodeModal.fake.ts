@@ -1,8 +1,8 @@
-import {PacketSize} from '../../shared/entity/packet/PacketSizeEntity';
-import {AzureSizes} from '../../shared/entity/provider/azure/AzureSizeEntity';
-import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
-import {HetznerTypes} from '../../shared/entity/provider/hetzner/TypeEntity';
-import {OpenstackFlavor} from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {OpenstackFlavor} from '../../shared/entity/provider/openstack';
+import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean';
+import {AzureSizes} from '../../shared/entity/provider/azure';
+import {HetznerTypes} from '../../shared/entity/provider/hetzner';
+import {PacketSize} from '../../shared/entity/provider/packet';
 
 export function fakeDigitaloceanSizes(): DigitaloceanSizes {
   return {

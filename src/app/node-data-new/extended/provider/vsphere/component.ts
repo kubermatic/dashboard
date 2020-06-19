@@ -3,15 +3,14 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {merge} from 'rxjs';
 import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../../../../core/services';
-import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/DatacenterEntity';
-import {VSphereNodeSpec} from '../../../../shared/entity/node/VSphereNodeSpec';
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
+import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/datacenter';
+import {NodeCloudSpec, NodeSpec, VSphereNodeSpec} from '../../../../shared/entity/node';
 import {OperatingSystem} from '../../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../wizard-new/service/cluster';
 import {NodeDataService} from '../../../service/service';
-import {ClusterType} from '../../../../shared/entity/ClusterEntity';
+import {ClusterType} from '../../../../shared/entity/cluster';
 
 enum Controls {
   DiskSizeGB = 'diskSizeGB',

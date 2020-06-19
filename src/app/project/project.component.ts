@@ -16,12 +16,13 @@ import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {MemberEntity, UserSettings} from '../shared/entity/MemberEntity';
-import {ProjectEntity, ProjectOwners} from '../shared/entity/ProjectEntity';
+import {Project, ProjectOwners} from '../shared/entity/project';
 import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 
 import {EditProjectComponent} from './edit-project/edit-project.component';
+import {Member} from '../shared/entity/member';
+import {UserSettings} from '../shared/entity/settings';
 
 @Component({
   selector: 'km-project',
@@ -29,13 +30,13 @@ import {EditProjectComponent} from './edit-project/edit-project.component';
   styleUrls: ['./project.component.scss'],
 })
 export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
-  projects: ProjectEntity[] = [];
-  currentUser: MemberEntity;
+  projects: Project[] = [];
+  currentUser: Member;
   isInitializing = true;
   role = [];
   rawRole = [];
   displayedColumns: string[] = ['status', 'name', 'labels', 'id', 'role', 'clusters', 'owners', 'actions'];
-  dataSource = new MatTableDataSource<ProjectEntity>();
+  dataSource = new MatTableDataSource<Project>();
   isPaginatorVisible = false;
   showCards = true;
 
@@ -145,9 +146,9 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  private _loadCurrentUserRolesAndSortProjects(projects): ProjectEntity[] {
-    const ownProjects: ProjectEntity[] = [];
-    const externalProjects: ProjectEntity[] = [];
+  private _loadCurrentUserRolesAndSortProjects(projects): Project[] {
+    const ownProjects: Project[] = [];
+    const externalProjects: Project[] = [];
     projects.forEach(project => {
       this._userService.currentUserGroup(project.id).subscribe(group => {
         this.role[project.id] = MemberUtils.getGroupDisplayName(group);
@@ -171,7 +172,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     this._settingsChange.next();
   }
 
-  selectProject(project: ProjectEntity): void {
+  selectProject(project: Project): void {
     this._projectService.selectProject(project);
   }
 
@@ -233,11 +234,11 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       : this.getOwnerNameArray(owners).slice(truncatedLength, owners.length).join(', ');
   }
 
-  getLabelsLength(project: ProjectEntity): number {
+  getLabelsLength(project: Project): number {
     return project.labels ? Object.keys(project.labels).length : 0;
   }
 
-  getLabelsTooltip(project: ProjectEntity): string {
+  getLabelsTooltip(project: Project): string {
     let labels = '';
     let counter = 0;
     const labelLength = this.getLabelsLength(project);
@@ -269,11 +270,11 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     return name.length > 18 ? name : '';
   }
 
-  isProjectActive(project: ProjectEntity): boolean {
+  isProjectActive(project: Project): boolean {
     return ProjectUtils.isProjectActive(project);
   }
 
-  getProjectStateIconClass(project: ProjectEntity): string {
+  getProjectStateIconClass(project: Project): string {
     return ProjectUtils.getStateIconClass(project.status);
   }
 
@@ -289,7 +290,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  isEditEnabled(project: ProjectEntity): boolean {
+  isEditEnabled(project: Project): boolean {
     return MemberUtils.hasPermission(
       this.currentUser,
       this._userService.userGroupConfig(this.rawRole[project.id]),
@@ -298,7 +299,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  editProject(project: ProjectEntity, event: Event): void {
+  editProject(project: Project, event: Event): void {
     event.stopPropagation();
     const modal = this._matDialog.open(EditProjectComponent);
     modal.componentInstance.project = project;
@@ -312,7 +313,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  isDeleteEnabled(project: ProjectEntity): boolean {
+  isDeleteEnabled(project: Project): boolean {
     return MemberUtils.hasPermission(
       this.currentUser,
       this._userService.userGroupConfig(this.rawRole[project.id]),
@@ -321,7 +322,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  deleteProject(project: ProjectEntity, event: Event): void {
+  deleteProject(project: Project, event: Event): void {
     event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,

@@ -14,7 +14,7 @@ import {
   Namespace,
   Role,
   RoleName,
-} from '../../../shared/entity/RBACEntity';
+} from '../../../shared/entity/rbac';
 
 @Injectable()
 export class RBACService {

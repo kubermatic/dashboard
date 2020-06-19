@@ -12,8 +12,8 @@ import {ApiService, NotificationService, ProjectService, UserService} from '../c
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {MemberEntity} from '../shared/entity/MemberEntity';
-import {ProjectEntity} from '../shared/entity/ProjectEntity';
+import {Member} from '../shared/entity/member';
+import {Project} from '../shared/entity/project';
 import {GroupConfig} from '../shared/model/Config';
 import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
 
@@ -26,17 +26,17 @@ import {EditMemberComponent} from './edit-member/edit-member.component';
   styleUrls: ['./member.component.scss'],
 })
 export class MemberComponent implements OnInit, OnChanges, OnDestroy {
-  members: MemberEntity[] = [];
+  members: Member[] = [];
   isInitializing = true;
-  currentUser: MemberEntity;
+  currentUser: Member;
   displayedColumns: string[] = ['name', 'email', 'group', 'actions'];
-  dataSource = new MatTableDataSource<MemberEntity>();
+  dataSource = new MatTableDataSource<Member>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private _unsubscribe: Subject<any> = new Subject();
   private _membersUpdate: Subject<any> = new Subject();
   private _currentGroupConfig: GroupConfig;
-  private _selectedProject: ProjectEntity;
+  private _selectedProject: Project;
 
   constructor(
     private readonly _apiService: ApiService,
@@ -92,7 +92,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getGroup(member: MemberEntity): string {
+  getGroup(member: Member): string {
     return this._selectedProject
       ? MemberUtils.getGroupDisplayName(MemberUtils.getGroupInProject(member, this._selectedProject.id))
       : '';
@@ -108,7 +108,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
     modal
       .afterClosed()
       .pipe(first())
-      .subscribe((member: MemberEntity) => {
+      .subscribe((member: Member) => {
         if (member) {
           this.members.push(member);
           this._membersUpdate.next();
@@ -116,14 +116,14 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  isEditEnabled(member: MemberEntity): boolean {
+  isEditEnabled(member: Member): boolean {
     return (
       MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, 'members', Permission.Edit) ||
       (this.currentUser && member && this.currentUser.email !== member.email)
     );
   }
 
-  editMember(member: MemberEntity): void {
+  editMember(member: Member): void {
     const modal = this._matDialog.open(EditMemberComponent);
     modal.componentInstance.project = this._selectedProject;
     modal.componentInstance.member = member;
@@ -137,14 +137,14 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  isDeleteEnabled(member: MemberEntity): boolean {
+  isDeleteEnabled(member: Member): boolean {
     return (
       MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, 'members', Permission.Delete) ||
       (this.currentUser && member && this.currentUser.email !== member.email)
     );
   }
 
-  deleteMember(member: MemberEntity): void {
+  deleteMember(member: Member): void {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
@@ -171,11 +171,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  hasItems(): boolean {
-    return !_.isEmpty(this.members);
-  }
-
   isPaginatorVisible(): boolean {
-    return this.hasItems() && this.paginator && this.members.length > this.paginator.pageSize;
+    return !_.isEmpty(this.members) && this.paginator && this.members.length > this.paginator.pageSize;
   }
 }

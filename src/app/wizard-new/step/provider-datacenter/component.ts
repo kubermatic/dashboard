@@ -11,7 +11,7 @@ import {
 import {filter, map, switchMap, takeUntil} from 'rxjs/operators';
 
 import {DatacenterService} from '../../../core/services';
-import {DataCenterEntity, getDatacenterProvider} from '../../../shared/entity/DatacenterEntity';
+import {Datacenter, getDatacenterProvider} from '../../../shared/entity/datacenter';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../service/cluster';
 import {WizardService} from '../../service/wizard';
@@ -41,7 +41,7 @@ enum Controls {
 })
 export class ProviderStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   providers: NodeProvider[] = [];
-  datacenters: DataCenterEntity[] = [];
+  datacenters: Datacenter[] = [];
 
   readonly controls = Controls;
 
@@ -104,7 +104,7 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
       .pipe(switchMap(_ => this._dcService.datacenters))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(datacenters => {
-        const providerDatacenters: DataCenterEntity[] = [];
+        const providerDatacenters: Datacenter[] = [];
         for (const datacenter of datacenters) {
           if (datacenter.seed) {
             continue;
@@ -127,7 +127,7 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
       .subscribe(datacenter => (this._clusterService.datacenter = datacenter));
   }
 
-  getLocation(datacenter: DataCenterEntity): string {
+  getLocation(datacenter: Datacenter): string {
     let location = datacenter.spec.location;
     let idx = location.indexOf('(');
 
@@ -140,7 +140,7 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
     return location.trim();
   }
 
-  getZone(datacenter: DataCenterEntity): string {
+  getZone(datacenter: Datacenter): string {
     let location = datacenter.spec.location;
     let idx = location.indexOf('(');
 

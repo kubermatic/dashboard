@@ -6,7 +6,7 @@ import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../service/cluster';
 import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
-import {ClusterType} from '../../../shared/entity/ClusterEntity';
+import {ClusterType} from '../../../shared/entity/cluster';
 
 enum Controls {
   NodeDataBasic = 'nodeDataBasic',

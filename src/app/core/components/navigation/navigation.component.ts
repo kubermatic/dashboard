@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
-import {MemberEntity} from '../../../shared/entity/MemberEntity';
+import {Member} from '../../../shared/entity/member';
 import {Auth, UserService} from '../../services';
 import {SettingsService} from '../../services/settings/settings.service';
 
@@ -14,7 +14,7 @@ import {SettingsService} from '../../services/settings/settings.service';
 })
 export class NavigationComponent implements OnInit {
   @Input() showMenuSwitchAndProjectSelector: boolean;
-  currentUser: MemberEntity;
+  currentUser: Member;
   showSidenav = true;
   private _settingsChange = new Subject<void>();
   private _unsubscribe: Subject<any> = new Subject();

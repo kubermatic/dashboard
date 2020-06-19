@@ -6,9 +6,9 @@ import {filter, first, switchMap} from 'rxjs/operators';
 
 import {NotificationService, RBACService} from '../../../core/services';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {SimpleBinding, SimpleClusterBinding} from '../../../shared/entity/RBACEntity';
+import {Cluster} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
+import {SimpleBinding, SimpleClusterBinding} from '../../../shared/entity/rbac';
 
 import {AddBindingComponent} from './add-binding/add-binding.component';
 
@@ -18,8 +18,8 @@ import {AddBindingComponent} from './add-binding/add-binding.component';
   styleUrls: ['./rbac.component.scss'],
 })
 export class RBACComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  @Input() datacenter: DataCenterEntity;
+  @Input() cluster: Cluster;
+  @Input() datacenter: Datacenter;
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
   @Input() clusterBindings: SimpleClusterBinding[] = [];

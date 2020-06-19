@@ -3,7 +3,7 @@ import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../core/services';
-import {ClusterEntity} from '../shared/entity/ClusterEntity';
+import {Cluster} from '../shared/entity/cluster';
 
 @Component({
   selector: 'km-machine-networks',
@@ -11,7 +11,7 @@ import {ClusterEntity} from '../shared/entity/ClusterEntity';
   styleUrls: ['machine-networks.component.scss'],
 })
 export class MachineNetworksComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
   @Input() width: number;
   @Input() isWizard: boolean;
   machineNetworksForm: FormGroup;

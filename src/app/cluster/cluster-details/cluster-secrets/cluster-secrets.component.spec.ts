@@ -6,7 +6,7 @@ import {Router} from '@angular/router';
 
 import {AppConfigService} from '../../../app-config.service';
 import {ClusterService, ProjectService, UserService} from '../../../core/services';
-import {HealthState} from '../../../shared/entity/HealthEntity';
+import {HealthState} from '../../../shared/entity/health';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeHealth, fakeHealthFailed, fakeHealthProvisioning} from '../../../testing/fake-data/health.fake';
 import {RouterStub} from '../../../testing/router-stubs';

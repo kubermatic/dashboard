@@ -1,10 +1,10 @@
 import {Component, Input} from '@angular/core';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
+import {Cluster} from '../../../../shared/entity/cluster';
 
 @Component({
   selector: 'km-cluster-provider-options',
   templateUrl: './provider-options.component.html',
 })
 export class ClusterProviderOptionsComponent {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
 }

@@ -3,9 +3,9 @@ import {EMPTY, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../core/services';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {PresetListEntity} from '../../../shared/entity/provider/credentials/PresetListEntity';
+import {Cluster} from '../../../shared/entity/cluster';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
+import {PresetList} from '../../../shared/entity/preset';
 
 export enum PresetsState {
   Ready = 'Custom Preset',
@@ -19,8 +19,8 @@ export enum PresetsState {
   styleUrls: ['./custom-presets.component.scss'],
 })
 export class CustomPresetsSettingsComponent implements OnInit {
-  @Input() cluster: ClusterEntity;
-  presetList = new PresetListEntity();
+  @Input() cluster: Cluster;
+  presetList = new PresetList();
   presetsLoaded = false;
 
   private _disabled = false;

@@ -11,14 +11,15 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge, Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import * as _ from 'lodash';
 
 import {PresetsService} from '../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
-import {AlibabaInstanceType, AlibabaZone} from '../../../../shared/entity/provider/alibaba/Alibaba';
+import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
+import {AlibabaInstanceType, AlibabaZone} from '../../../../shared/entity/provider/alibaba';
 
 enum Controls {
   InstanceType = 'instanceType',
@@ -176,7 +177,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
 
   private _setDefaultInstanceType(instanceTypes: AlibabaInstanceType[]): void {
     this.instanceTypes = instanceTypes.sort((a, b) => a.id.localeCompare(b.id));
-    if (this.instanceTypes.length > 0) {
+    if (!_.isEmpty(this.instanceTypes)) {
       this.instanceTypeLabel = InstanceTypeState.Ready;
       this.selectedInstanceType = this.instanceTypes[0].id;
       this._cdr.detectChanges();
@@ -185,7 +186,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
 
   private _setDefaultZone(zones: AlibabaZone[]): void {
     this.zones = zones.sort((a, b) => a.id.localeCompare(b.id));
-    if (this.zones.length > 0) {
+    if (!_.isEmpty(this.zones)) {
       this.zoneLabel = ZoneState.Ready;
       this.selectedZone = this.zones[0].id;
       this._cdr.detectChanges();
@@ -193,7 +194,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   private _setDefaultDiskType(): void {
-    if (this.diskTypes.length > 0) {
+    if (!_.isEmpty(this.diskTypes)) {
       this.selectedDiskType = this.diskTypes[0].name;
       this._cdr.detectChanges();
     }

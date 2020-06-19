@@ -4,8 +4,8 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {ClusterService, NotificationService, WizardService} from '../../../core/services';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {Cluster} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
 import {MachineNetworkForm} from '../../../shared/model/ClusterForm';
 
 @Component({
@@ -13,8 +13,8 @@ import {MachineNetworkForm} from '../../../shared/model/ClusterForm';
   templateUrl: './add-machine-network.component.html',
 })
 export class AddMachineNetworkComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  @Input() datacenter: DataCenterEntity;
+  @Input() cluster: Cluster;
+  @Input() datacenter: Datacenter;
   @Input() projectID: string;
   machineNetworkFormData: MachineNetworkForm[] = [];
   private _unsubscribe = new Subject<void>();

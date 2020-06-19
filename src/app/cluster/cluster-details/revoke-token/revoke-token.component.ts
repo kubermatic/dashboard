@@ -3,9 +3,9 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {first} from 'rxjs/operators';
 
 import {ApiService, NotificationService, UserService} from '../../../core/services';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {MemberEntity} from '../../../shared/entity/MemberEntity';
+import {Cluster} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
+import {Member} from '../../../shared/entity/member';
 import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 
@@ -15,12 +15,12 @@ import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member
   styleUrls: ['./revoke-token.component.scss'],
 })
 export class RevokeTokenComponent implements OnInit {
-  @Input() cluster: ClusterEntity;
-  @Input() datacenter: DataCenterEntity;
+  @Input() cluster: Cluster;
+  @Input() datacenter: Datacenter;
   @Input() projectID: string;
   revokeAdminToken = false;
   revokeViewerToken = false;
-  private _user: MemberEntity;
+  private _user: Member;
   private _currentGroupConfig: GroupConfig;
 
   constructor(

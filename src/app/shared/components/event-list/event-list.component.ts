@@ -6,7 +6,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {SettingsService} from '../../../core/services/settings/settings.service';
-import {EventEntity} from '../../entity/EventEntity';
+import {Event} from '../../entity/event';
 import {HealthStatusColor} from '../../utils/health-status/health-status';
 
 @Component({
@@ -15,13 +15,13 @@ import {HealthStatusColor} from '../../utils/health-status/health-status';
   styleUrls: ['./event-list.component.scss'],
 })
 export class EventListComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() events: EventEntity[] = [];
+  @Input() events: Event[] = [];
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   isShowEvents = false;
-  dataSource = new MatTableDataSource<EventEntity>();
+  dataSource = new MatTableDataSource<Event>();
   displayedColumns: string[] = [
     'status',
     'message',
@@ -57,7 +57,7 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getTypeIcon(event: EventEntity): string {
+  getTypeIcon(event: Event): string {
     switch (event.type) {
       case 'Normal':
         return HealthStatusColor.Green;

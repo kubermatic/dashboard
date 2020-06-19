@@ -1,8 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as _ from 'lodash';
-
-import {CustomLink, CustomLinkLocation} from '../../../shared/utils/custom-link-utils/custom-link';
+import {CustomLink, CustomLinkLocation} from '../../../shared/entity/settings';
 
 @Component({
   selector: 'km-custom-links-form',

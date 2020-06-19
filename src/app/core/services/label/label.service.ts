@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 import {shareReplay} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
-import {ResourceLabelMap} from '../../../shared/entity/LabelsEntity';
+import {ResourceLabelMap} from '../../../shared/entity/common';
 
 @Injectable()
 export class LabelService {

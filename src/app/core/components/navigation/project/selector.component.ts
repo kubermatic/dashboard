@@ -4,7 +4,7 @@ import {differenceBy} from 'lodash';
 import {merge, Subject} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
 
-import {ProjectEntity} from '../../../../shared/entity/ProjectEntity';
+import {Project} from '../../../../shared/entity/project';
 import {ProjectService} from '../../../services';
 import {SettingsService} from '../../../services/settings/settings.service';
 
@@ -15,13 +15,13 @@ import {SettingsService} from '../../../services/settings/settings.service';
 })
 export class ProjectSelectorComponent implements OnInit, OnDestroy {
   @Input() showSidenav: boolean;
-  myProjects: ProjectEntity[] = [];
-  externalProjects: ProjectEntity[] = [];
-  selectedProject: ProjectEntity;
+  myProjects: Project[] = [];
+  externalProjects: Project[] = [];
+  selectedProject: Project;
 
   private _unsubscribe: Subject<any> = new Subject();
   private _displayAllProjects: boolean;
-  private _projects: ProjectEntity[];
+  private _projects: Project[];
 
   constructor(private readonly _projectService: ProjectService, private readonly _settingsService: SettingsService) {}
 
@@ -38,7 +38,7 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
 
     merge(this._projectService.selectedProject, this._projectService.onProjectChange)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe((project: ProjectEntity) => this._appendProject((this.selectedProject = project)));
+      .subscribe((project: Project) => this._appendProject((this.selectedProject = project)));
   }
 
   onSelectionChange(event: MatSelectChange): void {
@@ -53,7 +53,7 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
     matSelect.open();
   }
 
-  areProjectsEqual(a: ProjectEntity, b: ProjectEntity): boolean {
+  areProjectsEqual(a: Project, b: Project): boolean {
     return !!a && !!b && a.id === b.id;
   }
 
@@ -62,11 +62,11 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  private _sortProjects(projects: ProjectEntity[]): ProjectEntity[] {
+  private _sortProjects(projects: Project[]): Project[] {
     return projects.sort((a, b) => (a.name + a.id).localeCompare(b.name + b.id));
   }
 
-  private _appendProject(project: ProjectEntity): void {
+  private _appendProject(project: Project): void {
     if (!project) {
       return;
     }
@@ -77,7 +77,7 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _selectProject(project: ProjectEntity): void {
+  private _selectProject(project: Project): void {
     this._projectService.selectProject(project);
     this._projectService.onProjectsUpdate.next();
     this.selectedProject = project;

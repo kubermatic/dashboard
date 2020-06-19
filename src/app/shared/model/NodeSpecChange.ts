@@ -7,7 +7,7 @@ import {
   SLESSpec,
   UbuntuSpec,
   FlatcarSpec,
-} from '../entity/NodeEntity';
+} from '../entity/node';
 
 export class NodeData {
   name?: string;

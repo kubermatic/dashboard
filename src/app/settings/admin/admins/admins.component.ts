@@ -8,9 +8,8 @@ import {ConfirmationDialogComponent} from '../../../shared/components/confirmati
 import {NotificationService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {Subject} from 'rxjs';
-import {AdminEntity} from '../../../shared/entity/AdminSettings';
 import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.component';
-import {MemberEntity} from '../../../shared/entity/MemberEntity';
+import {Admin, Member} from '../../../shared/entity/member';
 
 @Component({
   selector: 'km-admins',
@@ -18,9 +17,9 @@ import {MemberEntity} from '../../../shared/entity/MemberEntity';
   styleUrls: ['./admins.component.scss'],
 })
 export class AdminsComponent implements OnInit, OnChanges {
-  user: MemberEntity;
-  admins: AdminEntity[] = [];
-  dataSource = new MatTableDataSource<AdminEntity>();
+  user: Member;
+  admins: Admin[] = [];
+  dataSource = new MatTableDataSource<Admin>();
   displayedColumns: string[] = ['name', 'email', 'actions'];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -62,11 +61,11 @@ export class AdminsComponent implements OnInit, OnChanges {
     this._unsubscribe.complete();
   }
 
-  isDeleteEnabled(admin: AdminEntity): boolean {
+  isDeleteEnabled(admin: Admin): boolean {
     return !!this.user && admin.email !== this.user.email;
   }
 
-  delete(admin: AdminEntity): void {
+  delete(admin: Admin): void {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
@@ -88,7 +87,7 @@ export class AdminsComponent implements OnInit, OnChanges {
       });
   }
 
-  private _updateAdmin(admin: AdminEntity): void {
+  private _updateAdmin(admin: Admin): void {
     this._settingsService
       .setAdmin(admin)
       .pipe(take(1))

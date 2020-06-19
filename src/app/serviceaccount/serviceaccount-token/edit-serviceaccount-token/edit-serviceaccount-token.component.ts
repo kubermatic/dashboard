@@ -4,21 +4,17 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {first} from 'rxjs/operators';
 
 import {ApiService, NotificationService} from '../../../core/services';
-import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
-import {
-  ServiceAccountEntity,
-  ServiceAccountTokenEntity,
-  ServiceAccountTokenPatch,
-} from '../../../shared/entity/ServiceAccountEntity';
+import {Project} from '../../../shared/entity/project';
+import {ServiceAccount, ServiceAccountToken, ServiceAccountTokenPatch} from '../../../shared/entity/service-account';
 
 @Component({
   selector: 'km-edit-serviceaccount-token',
   templateUrl: './edit-serviceaccount-token.component.html',
 })
 export class EditServiceAccountTokenComponent implements OnInit {
-  @Input() project: ProjectEntity;
-  @Input() serviceaccount: ServiceAccountEntity;
-  @Input() token: ServiceAccountTokenEntity;
+  @Input() project: Project;
+  @Input() serviceaccount: ServiceAccount;
+  @Input() token: ServiceAccountToken;
   editServiceAccountTokenForm: FormGroup;
 
   constructor(

@@ -5,14 +5,15 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {filter, first, switchMap, switchMapTo, takeUntil} from 'rxjs/operators';
+import * as _ from 'lodash';
 
 import {AppConfigService} from '../app-config.service';
 import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {ProjectEntity} from '../shared/entity/ProjectEntity';
-import {ServiceAccountEntity} from '../shared/entity/ServiceAccountEntity';
+import {Project} from '../shared/entity/project';
+import {ServiceAccount} from '../shared/entity/service-account';
 import {GroupConfig} from '../shared/model/Config';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
@@ -27,18 +28,18 @@ import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceacc
 })
 export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   isInitializing = true;
-  serviceAccounts: ServiceAccountEntity[] = [];
+  serviceAccounts: ServiceAccount[] = [];
   isShowToken = [];
   tokenList = [];
   isTokenInitializing = [];
   displayedColumns: string[] = ['stateArrow', 'status', 'name', 'group', 'creationDate', 'actions'];
   toggledColumns: string[] = ['token'];
-  dataSource = new MatTableDataSource<ServiceAccountEntity>();
+  dataSource = new MatTableDataSource<ServiceAccount>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private _unsubscribe: Subject<any> = new Subject();
   private _serviceAccountUpdate: Subject<any> = new Subject();
-  private _selectedProject = {} as ProjectEntity;
+  private _selectedProject = {} as Project;
   private _currentGroupConfig: GroupConfig;
 
   constructor(
@@ -107,7 +108,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
     return !this._currentGroupConfig || this._currentGroupConfig.serviceaccounts[action];
   }
 
-  toggleToken(element: ServiceAccountEntity): void {
+  toggleToken(element: ServiceAccount): void {
     this.isShowToken[element.id] = !this.isShowToken[element.id];
     if (this.isShowToken) {
       this.getTokenList(element);
@@ -115,7 +116,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  getTokenList(serviceaccount: ServiceAccountEntity): void {
+  getTokenList(serviceaccount: ServiceAccount): void {
     this.tokenList[serviceaccount.id] = [];
     timer(0, 10 * this._appConfig.getRefreshTimeBase())
       .pipe(takeUntil(this._unsubscribe))
@@ -146,7 +147,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  editServiceAccount(serviceAccount: ServiceAccountEntity, event: Event): void {
+  editServiceAccount(serviceAccount: ServiceAccount, event: Event): void {
     event.stopPropagation();
     const modal = this._matDialog.open(EditServiceAccountComponent);
     modal.componentInstance.project = this._selectedProject;
@@ -161,7 +162,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  deleteServiceAccount(serviceAccount: ServiceAccountEntity, event: Event): void {
+  deleteServiceAccount(serviceAccount: ServiceAccount, event: Event): void {
     event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
@@ -191,11 +192,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  hasItems(): boolean {
-    return this.serviceAccounts && this.serviceAccounts.length > 0;
-  }
-
   isPaginatorVisible(): boolean {
-    return this.hasItems() && this.paginator && this.serviceAccounts.length > this.paginator.pageSize;
+    return !_.isEmpty(this.serviceAccounts) && this.paginator && this.serviceAccounts.length > this.paginator.pageSize;
   }
 }

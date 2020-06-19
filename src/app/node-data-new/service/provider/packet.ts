@@ -2,11 +2,11 @@ import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, switchMap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../core/services';
-import {PacketSize} from '../../../shared/entity/packet/PacketSizeEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../wizard-new/service/cluster';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
+import {PacketSize} from '../../../shared/entity/provider/packet';
 
 export class NodeDataPacketProvider {
   constructor(

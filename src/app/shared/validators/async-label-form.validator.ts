@@ -4,7 +4,7 @@ import {catchError, map} from 'rxjs/operators';
 
 import {LabelService} from '../../core/services';
 import {GlobalModule} from '../../core/services/global/global.module';
-import {ResourceLabelMap, ResourceType} from '../entity/LabelsEntity';
+import {ResourceLabelMap, ResourceType} from '../entity/common';
 
 export class RestrictedLabelKeyNameValidator implements AsyncValidator {
   private readonly _labelService: LabelService;

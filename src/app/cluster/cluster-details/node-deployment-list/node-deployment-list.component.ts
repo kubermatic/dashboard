@@ -4,19 +4,20 @@ import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
+import * as _ from 'lodash';
 
 import {ProjectService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {MemberEntity} from '../../../shared/entity/MemberEntity';
-import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
+import {Cluster} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
+import {Member} from '../../../shared/entity/member';
+import {NodeDeployment} from '../../../shared/entity/node-deployment';
 import {GroupConfig} from '../../../shared/model/Config';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
-import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 import {NodeService} from '../../services/node.service';
+import {getOperatingSystem} from '../../../shared/entity/node';
 
 @Component({
   selector: 'km-node-deployment-list',
@@ -24,20 +25,20 @@ import {NodeService} from '../../services/node.service';
   styleUrls: ['node-deployment-list.component.scss'],
 })
 export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  @Input() datacenter: DataCenterEntity;
-  @Input() nodeDeployments: NodeDeploymentEntity[] = [];
+  @Input() cluster: Cluster;
+  @Input() datacenter: Datacenter;
+  @Input() nodeDeployments: NodeDeployment[] = [];
   @Input() projectID: string;
   @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
   @Input() isNodeDeploymentLoadFinished: boolean;
-  @Output() changeNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
+  @Output() changeNodeDeployment = new EventEmitter<NodeDeployment>();
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  dataSource = new MatTableDataSource<NodeDeploymentEntity>();
+  dataSource = new MatTableDataSource<NodeDeployment>();
   displayedColumns: string[] = ['status', 'name', 'labels', 'replicas', 'ver', 'os', 'created', 'actions'];
 
   private _unsubscribe: Subject<any> = new Subject();
-  private _user: MemberEntity;
+  private _user: Member;
   private _currentGroupConfig: GroupConfig;
 
   constructor(
@@ -78,24 +79,24 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
     this._unsubscribe.complete();
   }
 
-  getDataSource(): MatTableDataSource<NodeDeploymentEntity> {
+  getDataSource(): MatTableDataSource<NodeDeployment> {
     this.dataSource.data = this.nodeDeployments ? this.nodeDeployments : [];
     return this.dataSource;
   }
 
-  getHealthStatus(nd: NodeDeploymentEntity): NodeDeploymentHealthStatus {
+  getHealthStatus(nd: NodeDeployment): NodeDeploymentHealthStatus {
     return NodeDeploymentHealthStatus.getHealthStatus(nd);
   }
 
-  getOperatingSystem(nd: NodeDeploymentEntity): string {
-    return NodeUtils.getOperatingSystem(nd.spec.template);
+  getOperatingSystem(nd: NodeDeployment): string {
+    return getOperatingSystem(nd.spec.template);
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterEntity.getVersionHeadline(type, isKubelet);
+    return Cluster.getVersionHeadline(type, isKubelet);
   }
 
-  goToDetails(nd: NodeDeploymentEntity): void {
+  goToDetails(nd: NodeDeployment): void {
     this._router.navigate([
       '/projects/' +
         this.projectID +
@@ -112,7 +113,7 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'nodeDeployments', Permission.Edit);
   }
 
-  showEditDialog(nd: NodeDeploymentEntity, event: Event): void {
+  showEditDialog(nd: NodeDeployment, event: Event): void {
     event.stopPropagation();
     this._nodeService
       .showNodeDeploymentEditDialog(nd, this.cluster, this.projectID, this.datacenter, this.changeNodeDeployment)
@@ -123,7 +124,7 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'nodeDeployments', Permission.Delete);
   }
 
-  showDeleteDialog(nd: NodeDeploymentEntity, event: Event): void {
+  showDeleteDialog(nd: NodeDeployment, event: Event): void {
     event.stopPropagation();
     this._nodeService
       .showNodeDeploymentDeleteDialog(
@@ -136,11 +137,7 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
       .subscribe(() => {});
   }
 
-  hasItems(): boolean {
-    return !!this.nodeDeployments && this.nodeDeployments.length > 0;
-  }
-
   isPaginatorVisible(): boolean {
-    return this.hasItems() && this.paginator && this.nodeDeployments.length > this.paginator.pageSize;
+    return !_.isEmpty(this.nodeDeployments) && this.paginator && this.nodeDeployments.length > this.paginator.pageSize;
   }
 }

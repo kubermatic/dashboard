@@ -14,12 +14,12 @@ import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators
 
 import {PresetsService} from '../../../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
-import {ClusterEntity} from '../../../../../../shared/entity/ClusterEntity';
-import {VSphereFolder, VSphereNetwork} from '../../../../../../shared/entity/provider/vsphere/VSphereEntity';
+import {Cluster} from '../../../../../../shared/entity/cluster';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {isObjectEmpty} from '../../../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
+import {VSphereFolder, VSphereNetwork} from '../../../../../../shared/entity/provider/vsphere';
 
 enum Controls {
   VMNetName = 'vmNetName',
@@ -143,7 +143,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     this._unsubscribe.complete();
   }
 
-  private _handleClusterChange(cluster: ClusterEntity): void {
+  private _handleClusterChange(cluster: Cluster): void {
     let markAsChanged = false;
     const username = cluster.spec.cloud.vsphere.username;
     const password = cluster.spec.cloud.vsphere.password;

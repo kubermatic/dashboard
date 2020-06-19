@@ -5,17 +5,16 @@ import {first, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService, ClusterService, DatacenterService, UserService} from '../../../core/services';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {EventEntity} from '../../../shared/entity/EventEntity';
-import {MemberEntity} from '../../../shared/entity/MemberEntity';
-import {NodeMetrics} from '../../../shared/entity/Metrics';
-import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
-import {NodeEntity} from '../../../shared/entity/NodeEntity';
+import {Cluster} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
+import {Event} from '../../../shared/entity/event';
+import {Member} from '../../../shared/entity/member';
+import {NodeMetrics} from '../../../shared/entity/metrics';
+import {NodeDeployment} from '../../../shared/entity/node-deployment';
+import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '../../../shared/entity/node';
 import {GroupConfig} from '../../../shared/model/Config';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
-import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 import {NodeService} from '../../services/node.service';
 
 @Component({
@@ -24,15 +23,15 @@ import {NodeService} from '../../services/node.service';
   styleUrls: ['./node-deployment-details.component.scss'],
 })
 export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
-  nodeDeployment: NodeDeploymentEntity;
+  nodeDeployment: NodeDeployment;
   nodeDeploymentHealthStatus: NodeDeploymentHealthStatus;
-  nodes: NodeEntity[] = [];
-  events: EventEntity[] = [];
+  nodes: Node[] = [];
+  events: Event[] = [];
   metrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
-  cluster: ClusterEntity;
+  cluster: Cluster;
   clusterProvider: string;
-  datacenter: DataCenterEntity;
-  seedDatacenter: DataCenterEntity;
+  datacenter: Datacenter;
+  seedDatacenter: Datacenter;
   system: string;
   systemLogoClass: string;
   dcName: string;
@@ -46,7 +45,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   private _isSeedDatacenterLoaded = false;
   private _unsubscribe: Subject<any> = new Subject();
   private _clusterName: string;
-  private _user: MemberEntity;
+  private _user: Member;
   private _currentGroupConfig: GroupConfig;
 
   constructor(
@@ -90,10 +89,10 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     this._apiService
       .getNodeDeployment(this._nodeDeploymentID, this._clusterName, this.dcName, this.projectID)
       .pipe(first())
-      .subscribe((nd: NodeDeploymentEntity) => {
+      .subscribe((nd: NodeDeployment) => {
         this.nodeDeployment = nd;
-        this.system = NodeUtils.getOperatingSystem(this.nodeDeployment.spec.template);
-        this.systemLogoClass = NodeUtils.getOperatingSystemLogoClass(this.nodeDeployment.spec.template);
+        this.system = getOperatingSystem(this.nodeDeployment.spec.template);
+        this.systemLogoClass = getOperatingSystemLogoClass(this.nodeDeployment.spec.template);
         this.nodeDeploymentHealthStatus = NodeDeploymentHealthStatus.getHealthStatus(this.nodeDeployment);
         this._isNodeDeploymentLoaded = true;
       });
@@ -140,7 +139,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe(c => {
         this.cluster = c;
-        this.clusterProvider = ClusterEntity.getProvider(this.cluster.spec.cloud);
+        this.clusterProvider = Cluster.getProvider(this.cluster.spec.cloud);
         this._isClusterLoaded = true;
         this.loadDatacenter();
       });
@@ -182,7 +181,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterEntity.getVersionHeadline(type, isKubelet);
+    return Cluster.getVersionHeadline(type, isKubelet);
   }
 
   goBackToCluster(): void {

@@ -1,16 +1,9 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
-
-import {
-  GCPDiskType,
-  GCPMachineSize,
-  GCPNetwork,
-  GCPSubnetwork,
-  GCPZone,
-} from '../../../../shared/entity/provider/gcp/GCP';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
+import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '../../../../shared/entity/provider/gcp';
 
 export class GCP extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {

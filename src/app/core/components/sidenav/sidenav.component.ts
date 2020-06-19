@@ -6,14 +6,14 @@ import {BehaviorSubject, merge, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
-import {MemberEntity, UserSettings} from '../../../shared/entity/MemberEntity';
-import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import {Member} from '../../../shared/entity/member';
+import {Project} from '../../../shared/entity/project';
 import {GroupConfig} from '../../../shared/model/Config';
-import {CustomLink, CustomLinkLocation, filterCustomLinks} from '../../../shared/utils/custom-link-utils/custom-link';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {ProjectService, UserService} from '../../services';
 import {View} from '../../services/auth/auth.guard';
 import {SettingsService} from '../../services/settings/settings.service';
+import {CustomLink, CustomLinkLocation, filterCustomLinks, UserSettings} from '../../../shared/entity/settings';
 
 @Component({
   selector: 'km-sidenav',
@@ -24,9 +24,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
   environment: any = environment;
   customLinks: CustomLink[] = [];
   settings: UserSettings;
-  currentUser: MemberEntity;
+  currentUser: Member;
   screenWidth = 0;
-  private _selectedProject = {} as ProjectEntity;
+  private _selectedProject = {} as Project;
   private _currentGroupConfig: GroupConfig;
   private _isSidenavCollapsed = false;
   private _screenWidth = new BehaviorSubject<number>(window.innerWidth);
@@ -60,7 +60,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     merge(this._projectService.selectedProject, this._projectService.onProjectChange)
       .pipe(takeUntil(this._unsubscribe))
       .pipe(
-        switchMap((project: ProjectEntity) => {
+        switchMap((project: Project) => {
           this._selectedProject = project;
           return this._userService.currentUserGroup(project.id);
         })
