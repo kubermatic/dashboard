@@ -13,4 +13,5 @@ export const environment = {
   oidcProviderUrl: 'https://dev.kubermatic.io/dex/auth',
   oidcConnectorId: 'local',
   animations: false,
+  edition: 'enterprise',
 };

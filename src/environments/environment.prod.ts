@@ -13,4 +13,5 @@ export const environment = {
   oidcProviderUrl: `${protocol}//${host}/dex/auth`,
   oidcConnectorId: null,
   animations: true,
+  edition: 'enterprise',
 };
