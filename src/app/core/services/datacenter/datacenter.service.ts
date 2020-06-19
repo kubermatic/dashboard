@@ -5,7 +5,7 @@ import {first, map, shareReplay, switchMap} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {CreateDatacenterModel, DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {AppConfigService} from '../../../app-config.service';
-import {Auth} from '..';
+import {Auth} from '../auth/auth.service';
 
 @Injectable()
 export class DatacenterService {
