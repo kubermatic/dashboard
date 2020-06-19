@@ -4,9 +4,9 @@ import {takeUntil} from 'rxjs/operators';
 
 import {slideOut} from '../../../shared/animations/slide';
 import {Auth, UserService} from '../../services';
-import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {Router} from '@angular/router';
 import {SettingsService} from '../../services/settings/settings.service';
+import {Member} from '../../../shared/entity/member';
 
 @Component({
   selector: 'km-user-panel',
@@ -15,7 +15,7 @@ import {SettingsService} from '../../services/settings/settings.service';
   animations: [slideOut],
 })
 export class UserPanelComponent implements OnInit, OnDestroy {
-  user: MemberEntity;
+  user: Member;
   private _isOpen = false;
   private _unsubscribe: Subject<any> = new Subject();
 
