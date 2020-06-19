@@ -27,6 +27,7 @@ import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '../.
 import {SSHKey} from '../../shared/entity/ssh-key';
 import {Config, GroupConfig} from '../../shared/model/Config';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
+import {AdmissionPluginUtils} from '../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
 import {MemberUtils, Permission} from '../../shared/utils/member-utils/member-utils';
 import {NodeService} from '../services/node.service';
@@ -428,5 +429,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     return this.settings.adminSettings.pipe(
       map(settings => !!this.config.share_kubeconfig && !settings.enableOIDCKubeconfig)
     );
+  }
+
+  getAdmissionPlugins(): string {
+    return AdmissionPluginUtils.getJoinedPluginNames(this.cluster.spec.admissionPlugins);
   }
 }

@@ -10,10 +10,12 @@ export class ClusterService {
   readonly datacenterChanges = new EventEmitter<string>();
   readonly sshKeyChanges = new EventEmitter<SSHKey[]>();
   readonly clusterChanges = new EventEmitter<Cluster>();
+  readonly admissionPluginsChanges = new EventEmitter<string[]>();
   readonly clusterTypeChanges = new EventEmitter<ClusterType>();
 
   private _cluster: Cluster = Cluster.newEmptyClusterEntity();
   private _sshKeys: SSHKey[] = [];
+  private _admissionPluginsEntity: string[] = [];
 
   set cluster(cluster: Cluster) {
     if (
@@ -89,6 +91,15 @@ export class ClusterService {
 
   get sshKeys(): SSHKey[] {
     return this._sshKeys;
+  }
+
+  set admissionPlugins(plugins: string[]) {
+    this._admissionPluginsEntity = plugins;
+    this.admissionPluginsChanges.emit(this._admissionPluginsEntity);
+  }
+
+  get admissionPlugins(): string[] {
+    return this._admissionPluginsEntity;
   }
 
   set clusterType(type: ClusterType) {

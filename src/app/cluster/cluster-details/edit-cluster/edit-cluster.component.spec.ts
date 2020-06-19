@@ -6,13 +6,14 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Subject} from 'rxjs';
 
 import {CoreModule} from '../../../core/core.module';
-import {ClusterService, ProviderSettingsPatch} from '../../../core/services/cluster/cluster.service';
+import {ApiService, ClusterService} from '../../../core/services';
+import {ProviderSettingsPatch} from '../../../core/services/cluster/cluster.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {doPatchCloudSpecFake} from '../../../testing/fake-data/cloud-spec.fake';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
-import {asyncData} from '../../../testing/services/api-mock.service';
+import {ApiMockService, asyncData} from '../../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {AlibabaProviderSettingsComponent} from '../edit-provider-settings/alibaba-provider-settings/alibaba-provider-settings.component';
 import {AWSProviderSettingsComponent} from '../edit-provider-settings/aws-provider-settings/aws-provider-settings.component';
@@ -63,6 +64,7 @@ describe('EditClusterComponent', () => {
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: ClusterService, useValue: clusterServiceMock},
+        {provide: ApiService, useClass: ApiMockService},
       ],
     }).compileComponents();
   }));

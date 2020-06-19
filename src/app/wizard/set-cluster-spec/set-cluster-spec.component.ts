@@ -7,6 +7,7 @@ import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {ClusterTypeOptions, AdminSettings} from '../../shared/entity/settings';
 import {Cluster, ClusterType, MasterVersion} from '../../shared/entity/cluster';
+import {AdmissionPlugin, AdmissionPluginUtils} from '../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '../../shared/validators/async-label-form.validator';
 import {ResourceType} from '../../shared/entity/common';
 
@@ -18,10 +19,12 @@ import {ResourceType} from '../../shared/entity/common';
 export class SetClusterSpecComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
   @Input() settings: AdminSettings;
+  admissionPlugin = AdmissionPlugin;
   labels: object;
   clusterSpecForm: FormGroup;
   masterVersions: MasterVersion[] = [];
   defaultVersion: string;
+  admissionPlugins: string[] = [];
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   private _unsubscribe: Subject<any> = new Subject();
 
@@ -41,8 +44,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       version: new FormControl(this.cluster.spec.version),
       type: new FormControl(this.cluster.type),
       imagePullSecret: new FormControl(),
-      usePodSecurityPolicyAdmissionPlugin: new FormControl(this.cluster.spec.usePodSecurityPolicyAdmissionPlugin),
-      usePodNodeSelectorAdmissionPlugin: new FormControl(this.cluster.spec.usePodNodeSelectorAdmissionPlugin),
+      admissionPlugins: new FormControl(this.cluster.spec.admissionPlugins),
       auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
       labels: new FormControl(''),
     });
@@ -66,6 +68,11 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .pipe(switchMap(() => this._api.getMasterVersions(this.clusterSpecForm.controls.type.value)))
       .subscribe(this._setDefaultVersion.bind(this));
+
+    this.clusterSpecForm.controls.version.valueChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .pipe(switchMap(() => this._api.getAdmissionPlugins(this.clusterSpecForm.controls.version.value)))
+      .subscribe(plugins => (this.admissionPlugins = plugins));
 
     this.clusterSpecForm.valueChanges
       .pipe(takeUntil(this._unsubscribe))
@@ -115,6 +122,14 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     return this.settings.clusterTypeOptions === ClusterTypeOptions.All;
   }
 
+  getPluginName(name: string): string {
+    return AdmissionPluginUtils.getPluginName(name);
+  }
+
+  isPluginEnabled(name: string): boolean {
+    return AdmissionPluginUtils.isPluginEnabled(this.clusterSpecForm.controls.admissionPlugins, name);
+  }
+
   setClusterSpec(): void {
     this._wizardService.changeClusterSpec({
       name: this.clusterSpecForm.controls.name.value,
@@ -122,8 +137,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       labels: this.labels,
       version: this.clusterSpecForm.controls.version.value,
       imagePullSecret: this.clusterSpecForm.controls.imagePullSecret.value,
-      usePodSecurityPolicyAdmissionPlugin: this.clusterSpecForm.controls.usePodSecurityPolicyAdmissionPlugin.value,
-      usePodNodeSelectorAdmissionPlugin: this.clusterSpecForm.controls.usePodNodeSelectorAdmissionPlugin.value,
+      admissionPlugins: this.clusterSpecForm.controls.admissionPlugins.value,
       auditLogging: {
         enabled: this.clusterSpecForm.controls.auditLogging.value,
       },

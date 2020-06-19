@@ -9,13 +9,17 @@ import {
   Validators,
 } from '@angular/forms';
 import {merge} from 'rxjs';
-import {switchMap, takeUntil} from 'rxjs/operators';
+import {switchMap, takeUntil, filter} from 'rxjs/operators';
 
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService, DatacenterService} from '../../../core/services';
 import {ClusterNameGenerator} from '../../../core/util/name-generator.service';
 import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '../../../shared/entity/cluster';
 import {Datacenter} from '../../../shared/entity/datacenter';
+import {
+  AdmissionPlugin,
+  AdmissionPluginUtils,
+} from '../../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
 import {ClusterService} from '../../service/cluster';
 import {WizardService} from '../../service/wizard';
@@ -27,10 +31,9 @@ enum Controls {
   Version = 'version',
   Type = 'type',
   ImagePullSecret = 'imagePullSecret',
-  PodSecurityPolicyAdmissionPlugin = 'usePodSecurityPolicyAdmissionPlugin',
   AuditLogging = 'auditLogging',
-  PodNodeSelectorAdmissionPlugin = 'usePodNodeSelectorAdmissionPlugin',
   Labels = 'labels',
+  AdmissionPlugins = 'admissionPlugins',
 }
 
 @Component({
@@ -51,7 +54,9 @@ enum Controls {
   ],
 })
 export class ClusterStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
+  admissionPlugin = AdmissionPlugin;
   masterVersions: MasterVersion[] = [];
+  admissionPlugins: string[] = [];
   labels: object;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
 
@@ -81,8 +86,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.Type]: new FormControl(''),
       [Controls.ImagePullSecret]: new FormControl(''),
       [Controls.AuditLogging]: new FormControl(false),
-      [Controls.PodSecurityPolicyAdmissionPlugin]: new FormControl(false),
-      [Controls.PodNodeSelectorAdmissionPlugin]: new FormControl(false),
+      [Controls.AdmissionPlugins]: new FormControl([]),
       [Controls.Labels]: new FormControl(''),
     });
 
@@ -92,7 +96,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe(dc => {
         this._datacenterSpec = dc;
         this._enforce(Controls.AuditLogging, dc.spec.enforceAuditLogging);
-        this._enforce(Controls.PodSecurityPolicyAdmissionPlugin, dc.spec.enforcePodSecurityPolicy);
+        this._enforcePodSecurityPolicy(dc.spec.enforcePodSecurityPolicy);
       });
 
     this.control(Controls.Type)
@@ -109,13 +113,21 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       )
       .subscribe(this._setDefaultVersion.bind(this));
 
+    this.control(Controls.Version)
+      .valueChanges.pipe(filter(value => !!value))
+      .pipe(switchMap(() => this._api.getAdmissionPlugins(this.form.get(Controls.Version).value)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(plugins => (this.admissionPlugins = plugins));
+
+    this.control(Controls.AdmissionPlugins)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(() => (this._clusterService.admissionPlugins = this.form.get(Controls.AdmissionPlugins).value));
+
     merge(
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Version).valueChanges,
       this.form.get(Controls.ImagePullSecret).valueChanges,
-      this.form.get(Controls.AuditLogging).valueChanges,
-      this.form.get(Controls.PodSecurityPolicyAdmissionPlugin).valueChanges,
-      this.form.get(Controls.PodNodeSelectorAdmissionPlugin).valueChanges
+      this.form.get(Controls.AuditLogging).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
@@ -144,17 +156,37 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     switch (control) {
       case Controls.AuditLogging:
         return !!this._datacenterSpec && this._datacenterSpec.spec.enforceAuditLogging;
-      case Controls.PodSecurityPolicyAdmissionPlugin:
-        return !!this._datacenterSpec && this._datacenterSpec.spec.enforcePodSecurityPolicy;
       default:
         return false;
     }
+  }
+
+  isPodSecurityPolicyEnforced(): boolean {
+    return AdmissionPluginUtils.isPodSecurityPolicyEnforced(this._datacenterSpec);
+  }
+
+  getPluginName(name: string): string {
+    return AdmissionPluginUtils.getPluginName(name);
+  }
+
+  isPluginEnabled(name: string): boolean {
+    return AdmissionPluginUtils.isPluginEnabled(this.form.get(Controls.AdmissionPlugins), name);
   }
 
   private _enforce(control: Controls, isEnforced: boolean): void {
     if (isEnforced) {
       this.form.get(control).setValue(true);
       this.form.get(control).disable();
+    }
+  }
+
+  private _enforcePodSecurityPolicy(isEnforced: boolean): void {
+    if (isEnforced) {
+      const value = AdmissionPluginUtils.updateSelectedPluginArray(
+        this.form.get(Controls.AdmissionPlugins),
+        AdmissionPlugin.PodSecurityPolicy
+      );
+      this.form.get(Controls.AdmissionPlugins).setValue(value);
     }
   }
 
@@ -200,8 +232,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         openshift: {
           imagePullSecret: this.controlValue(Controls.ImagePullSecret),
         },
-        usePodNodeSelectorAdmissionPlugin: this.controlValue(Controls.PodNodeSelectorAdmissionPlugin),
-        usePodSecurityPolicyAdmissionPlugin: this.controlValue(Controls.PodSecurityPolicyAdmissionPlugin),
         auditLogging: {
           enabled: this.controlValue(Controls.AuditLogging),
         },
