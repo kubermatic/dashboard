@@ -39,6 +39,7 @@ import {SettingsService} from './services/settings/settings.service';
 import {StepsService} from './services/wizard/steps.service';
 import {ClusterNameGenerator} from './util/name-generator.service';
 import {ThemeInformerService} from './services/theme-informer/theme-informer.service';
+import {UserPanelComponent} from './components/user-panel/user-panel.component';
 
 const modules: any[] = [
   CommonModule,
@@ -61,6 +62,7 @@ const components: any[] = [
   EditServiceAccountTokenComponent,
   FooterComponent,
   NotificationPanelComponent,
+  UserPanelComponent,
 ];
 
 const services: any[] = [

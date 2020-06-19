@@ -9,14 +9,10 @@
 }
 
 .panel {
-  border-radius: $border-radius;
   height: $notification-panel-height;
-  overflow: hidden;
-  position: fixed;
   right: 12 * $baseline-grid;
   top: 6.25 * $baseline-grid;
   width: $notification-panel-width;
-  z-index: 3;
 
   .header {
     font-size: $font-size-subhead;
@@ -29,7 +25,7 @@
       position: relative;
 
       i {
-        margin-top: -.875 * $baseline-grid;
+        margin-top: -.5 * $baseline-grid;
         height: 2 * $baseline-grid;
         width: 2 * $baseline-grid;
       }

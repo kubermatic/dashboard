@@ -9,7 +9,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatChipsModule} from '@angular/material/chips';
-import {MatOptionModule} from '@angular/material/core';
+import {MatOptionModule, MatRippleModule} from '@angular/material/core';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatExpansionModule} from '@angular/material/expansion';
@@ -105,6 +105,7 @@ const modules: any[] = [
   MatSnackBarModule,
   MatBadgeModule,
   MatStepperModule,
+  MatRippleModule,
   FilterPipeModule,
   MonacoEditorModule,
 ];
