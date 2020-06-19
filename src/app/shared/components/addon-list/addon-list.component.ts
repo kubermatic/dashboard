@@ -3,9 +3,10 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
+import * as _ from 'lodash';
 
 import {ApiService} from '../../../core/services';
-import {AddonConfigEntity, AddonEntity} from '../../entity/AddonEntity';
+import {AddonConfig, Addon, getAddonLogoData, hasAddonLogoData} from '../../entity/addon';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
 
 import {EditAddonDialogComponent} from './edit-addon-dialog/edit-addon-dialog.component';
@@ -17,20 +18,20 @@ import {SelectAddonDialogComponent} from './select-addon-dialog/select-addon-dia
   styleUrls: ['addon-list.component.scss'],
 })
 export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() addons: AddonEntity[] = [];
+  @Input() addons: Addon[] = [];
   @Input() isClusterReady = true;
   @Input() canEdit = true;
 
   // Usage of event emitters allows to handle edits and deletions in multiple ways in different places.
   // Thanks to them this component can be used inside wizard (performing actions on a local addons array)
   // and also in the cluster view (calling API endpoints to perform any action).
-  @Output() addAddon = new EventEmitter<AddonEntity>();
-  @Output() editAddon = new EventEmitter<AddonEntity>();
-  @Output() deleteAddon = new EventEmitter<AddonEntity>();
+  @Output() addAddon = new EventEmitter<Addon>();
+  @Output() editAddon = new EventEmitter<Addon>();
+  @Output() deleteAddon = new EventEmitter<Addon>();
 
   accessibleAddons: string[] = [];
   installableAddons: string[] = [];
-  addonConfigs = new Map<string, AddonConfigEntity>();
+  addonConfigs = new Map<string, AddonConfig>();
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
@@ -75,22 +76,18 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   hasLogo(name: string): boolean {
-    const addonConfig = this.addonConfigs.get(name);
-    return !!addonConfig && !!addonConfig.spec.logo && !!addonConfig.spec.logoFormat;
+    return hasAddonLogoData(this.addonConfigs.get(name));
   }
 
   getAddonLogo(name: string): SafeUrl {
-    const addonConfig = this.addonConfigs.get(name);
-    return this._domSanitizer.bypassSecurityTrustUrl(
-      `data:image/${addonConfig.spec.logoFormat};base64,${addonConfig.spec.logo}`
-    );
+    return this._domSanitizer.bypassSecurityTrustUrl(getAddonLogoData(this.addonConfigs.get(name)));
   }
 
   canAdd(): boolean {
     return (
       this.isClusterReady &&
       this.canEdit &&
-      this.accessibleAddons.length > 0 &&
+      !_.isEmpty(this.accessibleAddons) &&
       this.addons.length < this.accessibleAddons.length
     );
   }
@@ -126,7 +123,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  edit(addon: AddonEntity): void {
+  edit(addon: Addon): void {
     const dialog = this._matDialog.open(EditAddonDialogComponent);
     dialog.componentInstance.addon = addon;
     dialog.componentInstance.addonConfig = this.addonConfigs.get(addon.name);
@@ -140,7 +137,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  delete(addon: AddonEntity): void {
+  delete(addon: Addon): void {
     const config: MatDialogConfig = {
       data: {
         title: 'Delete Addon',

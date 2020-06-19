@@ -4,7 +4,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {SettingsMockService} from '../../../testing/services/settings-mock.service';
-import {EventEntity} from '../../entity/EventEntity';
+import {Event} from '../../entity/event';
 import {SharedModule} from '../../shared.module';
 
 import {EventListComponent} from './event-list.component';
@@ -32,7 +32,7 @@ describe('EventListComponent', () => {
   });
 
   it('should return true when there are events', () => {
-    component.events = [{} as EventEntity];
+    component.events = [{} as Event];
     expect(component.hasEvents()).toBeTruthy();
   });
 

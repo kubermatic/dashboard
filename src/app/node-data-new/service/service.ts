@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import {ReplaySubject} from 'rxjs';
 
 import {DatacenterService, PresetsService} from '../../core/services';
-import {OperatingSystemSpec, Taint} from '../../shared/entity/NodeEntity';
+import {OperatingSystemSpec, Taint} from '../../shared/entity/node';
 import {OperatingSystem} from '../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {ClusterService} from '../../wizard-new/service/cluster';

@@ -13,15 +13,11 @@ import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, 
 
 import {PresetsService, DatacenterService} from '../../../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
-import {OpenstackCloudSpec} from '../../../../../../shared/entity/cloud/OpenstackCloudSpec';
-import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
-import {
-  OpenstackFloatingIpPool,
-  OpenstackTenant,
-} from '../../../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {CloudSpec, Cluster, ClusterSpec, OpenstackCloudSpec} from '../../../../../../shared/entity/cluster';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
+import {OpenstackFloatingIpPool, OpenstackTenant} from '../../../../../../shared/entity/provider/openstack';
 
 enum Controls {
   Domain = 'domain',
@@ -300,7 +296,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
     this._cdr.detectChanges();
   }
 
-  private _getClusterEntity(): ClusterEntity {
+  private _getClusterEntity(): Cluster {
     return {
       spec: {
         cloud: {
@@ -313,6 +309,6 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
           } as OpenstackCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
-    } as ClusterEntity;
+    } as Cluster;
   }
 }

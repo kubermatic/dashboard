@@ -2,10 +2,10 @@ import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
-import {AWSSize, AWSSubnet, AWSVPC} from '../../../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
+import {AWSSize, AWSSubnet, AWSVPC} from '../../../../shared/entity/provider/aws';
 
 export class AWS extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {

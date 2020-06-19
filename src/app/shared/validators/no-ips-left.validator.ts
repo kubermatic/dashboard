@@ -1,5 +1,5 @@
 import {AbstractControl, ValidatorFn} from '@angular/forms';
-import {MachineNetwork} from '../entity/ClusterEntity';
+import {MachineNetwork} from '../entity/cluster';
 import {getIpCount} from '../functions/get-ip-count';
 
 // NoIpsLeftValidator will validate if there are enough ips left to create given amount of nodes

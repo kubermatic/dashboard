@@ -5,9 +5,9 @@ import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {ApiService, ProjectService, UserService} from '../../../../core/services';
 import {AddSshKeyDialogComponent} from '../../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
-import {MemberEntity} from '../../../../shared/entity/MemberEntity';
-import {ProjectEntity} from '../../../../shared/entity/ProjectEntity';
-import {SSHKeyEntity} from '../../../../shared/entity/SSHKeyEntity';
+import {Member} from '../../../../shared/entity/member';
+import {Project} from '../../../../shared/entity/project';
+import {SSHKey} from '../../../../shared/entity/ssh-key';
 import {GroupConfig} from '../../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../../shared/utils/member-utils/member-utils';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
@@ -37,9 +37,9 @@ enum Controls {
 export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
-  private _keys: SSHKeyEntity[] = [];
-  private _project = {} as ProjectEntity;
-  private _user: MemberEntity;
+  private _keys: SSHKey[] = [];
+  private _project = {} as Project;
+  private _user: Member;
   private _groupConfig: GroupConfig;
 
   constructor(
@@ -54,11 +54,11 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
     super();
   }
 
-  set keys(keys: SSHKeyEntity[]) {
+  set keys(keys: SSHKey[]) {
     this._keys = keys.sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  get keys(): SSHKeyEntity[] {
+  get keys(): SSHKey[] {
     return this._keys;
   }
 
@@ -104,7 +104,7 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
       });
   }
 
-  compareValues(a: SSHKeyEntity, b: SSHKeyEntity): boolean {
+  compareValues(a: SSHKey, b: SSHKey): boolean {
     return a && b ? a.id === b.id : a === b;
   }
 
@@ -116,7 +116,7 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
     return this._keys.length > 0;
   }
 
-  private _getSelectedKeys(): SSHKeyEntity[] {
+  private _getSelectedKeys(): SSHKey[] {
     return this.form.get(Controls.Keys).value;
   }
 }

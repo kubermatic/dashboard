@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {Taint} from '../../entity/NodeEntity';
+import {Taint} from '../../entity/node';
 
 @Component({
   selector: 'km-taints',

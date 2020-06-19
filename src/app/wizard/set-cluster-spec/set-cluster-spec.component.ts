@@ -5,10 +5,10 @@ import {debounce, first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
-import {AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
-import {ClusterEntity, ClusterType, MasterVersion} from '../../shared/entity/ClusterEntity';
-import {ResourceType} from '../../shared/entity/LabelsEntity';
+import {ClusterTypeOptions, AdminSettings} from '../../shared/entity/settings';
+import {Cluster, ClusterType, MasterVersion} from '../../shared/entity/cluster';
 import {AsyncValidators} from '../../shared/validators/async-label-form.validator';
+import {ResourceType} from '../../shared/entity/common';
 
 @Component({
   selector: 'km-set-cluster-spec',
@@ -16,7 +16,7 @@ import {AsyncValidators} from '../../shared/validators/async-label-form.validato
   styleUrls: ['set-cluster-spec.component.scss'],
 })
 export class SetClusterSpecComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
   @Input() settings: AdminSettings;
   labels: object;
   clusterSpecForm: FormGroup;
@@ -100,7 +100,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterEntity.getVersionHeadline(type, isKubelet);
+    return Cluster.getVersionHeadline(type, isKubelet);
   }
 
   hideKubernetes(): boolean {

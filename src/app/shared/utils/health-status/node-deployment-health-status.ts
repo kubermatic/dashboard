@@ -1,8 +1,8 @@
-import {NodeDeploymentEntity} from '../../entity/NodeDeploymentEntity';
+import {NodeDeployment} from '../../entity/node-deployment';
 import {HealthStatus, HealthStatusColor, HealthStatusMessage} from './health-status';
 
 export class NodeDeploymentHealthStatus extends HealthStatus {
-  static getHealthStatus(nd: NodeDeploymentEntity): NodeDeploymentHealthStatus {
+  static getHealthStatus(nd: NodeDeployment): NodeDeploymentHealthStatus {
     if (nd.deletionTimestamp) {
       return new NodeDeploymentHealthStatus(HealthStatusMessage.Deleting, HealthStatusColor.Red);
     } else if (nd.status && nd.status.availableReplicas === nd.spec.replicas) {

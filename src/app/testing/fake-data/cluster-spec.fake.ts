@@ -1,4 +1,4 @@
-import {MasterVersion} from '../../shared/entity/ClusterEntity';
+import {MasterVersion} from '../../shared/entity/cluster';
 
 export function masterVersionsFake(): MasterVersion[] {
   return [

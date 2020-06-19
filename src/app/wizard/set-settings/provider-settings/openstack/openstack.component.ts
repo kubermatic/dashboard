@@ -4,16 +4,12 @@ import {merge, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
 import {AppConfigService} from '../../../../app-config.service';
 import {Auth, WizardService} from '../../../../core/services';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
-import {
-  OpenstackFloatingIpPool,
-  OpenstackNetwork,
-  OpenstackTenant,
-} from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {Cluster} from '../../../../shared/entity/cluster';
 import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm';
 import {Config} from '../../../../shared/model/Config';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
+import {OpenstackFloatingIpPool, OpenstackNetwork, OpenstackTenant} from '../../../../shared/entity/provider/openstack';
 
 @Component({
   selector: 'km-openstack-cluster-settings',
@@ -21,7 +17,7 @@ import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
   styleUrls: ['./openstack.component.scss'],
 })
 export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
 
   form: FormGroup;
   tenants: OpenstackTenant[] = [];

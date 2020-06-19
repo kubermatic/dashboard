@@ -5,16 +5,16 @@ import * as _ from 'lodash';
 
 import {NotificationService} from '../../core/services';
 import {ApiService} from '../../core/services';
-import {ResourceType} from '../../shared/entity/LabelsEntity';
-import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
+import {EditProject, Project} from '../../shared/entity/project';
 import {AsyncValidators} from '../../shared/validators/async-label-form.validator';
+import {ResourceType} from '../../shared/entity/common';
 
 @Component({
   selector: 'km-edit-project',
   templateUrl: './edit-project.component.html',
 })
 export class EditProjectComponent implements OnInit {
-  @Input() project: ProjectEntity;
+  @Input() project: Project;
   labels: object;
   form: FormGroup;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Project)];
@@ -35,7 +35,7 @@ export class EditProjectComponent implements OnInit {
   }
 
   editProject(): void {
-    const project: EditProjectEntity = {
+    const project: EditProject = {
       name: this.form.controls.name.value,
       labels: this.labels,
     };

@@ -8,7 +8,7 @@ import {
   NG_VALUE_ACCESSOR,
   Validators,
 } from '@angular/forms';
-import {Taint} from '../../entity/NodeEntity';
+import {Taint} from '../../entity/node';
 import {LabelFormValidators} from '../../validators/label-form.validators';
 import {TaintFormValidators} from '../../validators/taint-form.validators';
 

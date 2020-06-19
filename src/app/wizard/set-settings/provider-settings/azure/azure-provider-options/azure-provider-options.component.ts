@@ -4,7 +4,7 @@ import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../../../core/services';
-import {ClusterEntity} from '../../../../../shared/entity/ClusterEntity';
+import {Cluster} from '../../../../../shared/entity/cluster';
 import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
 
 @Component({
@@ -12,7 +12,7 @@ import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterFo
   templateUrl: './azure-provider-options.component.html',
 })
 export class AzureProviderOptionsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
 
   hideOptional = true;
   form: FormGroup;

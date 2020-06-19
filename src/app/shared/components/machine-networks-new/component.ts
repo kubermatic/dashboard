@@ -3,7 +3,7 @@ import {AbstractControl, FormArray, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSO
 import {debounceTime, takeUntil} from 'rxjs/operators';
 import {NodeDataService} from '../../../node-data-new/service/service';
 import {ClusterService} from '../../../wizard-new/service/cluster';
-import {MachineNetwork} from '../../entity/ClusterEntity';
+import {MachineNetwork} from '../../entity/cluster';
 import {BaseFormValidator} from '../../validators/base-form.validator';
 
 enum Controls {

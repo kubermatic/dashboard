@@ -4,13 +4,13 @@ import {switchMap, takeUntil} from 'rxjs/operators';
 import {DatacenterService} from '../../../core/services';
 import {NodeDataService} from '../../../node-data-new/service/service';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
+import {Cluster} from '../../../shared/entity/cluster';
+import {SSHKey} from '../../../shared/entity/ssh-key';
 import {getIpCount} from '../../../shared/functions/get-ip-count';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../shared/model/NodeSpecChange';
-import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 import {ClusterService} from '../../service/cluster';
+import {getOperatingSystem, getOperatingSystemLogoClass} from '../../../shared/entity/node';
 
 @Component({
   selector: 'km-wizard-summary-step',
@@ -18,9 +18,9 @@ import {ClusterService} from '../../service/cluster';
   styleUrls: ['./style.scss'],
 })
 export class SummaryStepComponent implements OnInit, OnDestroy {
-  clusterSSHKeys: SSHKeyEntity[] = [];
+  clusterSSHKeys: SSHKey[] = [];
   nodeData: NodeData;
-  cluster: ClusterEntity;
+  cluster: Cluster;
   noMoreIpsLeft = false;
 
   private _location: string;
@@ -75,15 +75,15 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   getOperatingSystem(): string {
-    return NodeUtils.getOperatingSystem(this.nodeData.spec);
+    return getOperatingSystem(this.nodeData.spec);
   }
 
   getOperatingSystemLogoClass(): string {
-    return NodeUtils.getOperatingSystemLogoClass(this.nodeData.spec);
+    return getOperatingSystemLogoClass(this.nodeData.spec);
   }
 
   getClusterType(): string {
-    return ClusterEntity.getDisplayType(this.cluster);
+    return Cluster.getDisplayType(this.cluster);
   }
 
   displaySettings(): boolean {
@@ -132,7 +132,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
     );
   }
 
-  private _noIpsLeft(cluster: ClusterEntity, nodeCount: number): boolean {
+  private _noIpsLeft(cluster: Cluster, nodeCount: number): boolean {
     const ipCount = getIpCount(cluster.spec.machineNetworks);
 
     if (!!ipCount && ipCount > 0) {

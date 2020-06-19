@@ -1,4 +1,4 @@
-import {ProjectEntity} from '../../entity/ProjectEntity';
+import {Project} from '../../entity/project';
 import {HealthStatusColor} from '../health-status/health-status';
 
 export class ProjectUtils {
@@ -15,7 +15,7 @@ export class ProjectUtils {
     }
   }
 
-  static isProjectActive(project: ProjectEntity): boolean {
+  static isProjectActive(project: Project): boolean {
     return !!project && project.status === 'Active';
   }
 }

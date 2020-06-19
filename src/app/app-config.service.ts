@@ -5,7 +5,7 @@ import {tap} from 'rxjs/operators';
 import {environment} from '../environments/environment';
 
 import {NotificationService} from './core/services/notification/notification.service';
-import {VersionInfo} from './shared/entity/VersionInfo';
+import {VersionInfo} from './shared/entity/version-info';
 import {Config, UserGroupConfig} from './shared/model/Config';
 
 @Injectable()

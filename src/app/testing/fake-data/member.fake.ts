@@ -1,6 +1,6 @@
-import {MemberEntity} from '../../shared/entity/MemberEntity';
+import {Member} from '../../shared/entity/member';
 
-export function fakeMembers(): MemberEntity[] {
+export function fakeMembers(): Member[] {
   return [
     {
       creationTimestamp: new Date(),
@@ -41,7 +41,7 @@ export function fakeMembers(): MemberEntity[] {
   ];
 }
 
-export function fakeMember(): MemberEntity {
+export function fakeMember(): Member {
   return {
     creationTimestamp: new Date(),
     id: '123456',

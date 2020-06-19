@@ -1,12 +1,12 @@
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, switchMap, tap} from 'rxjs/operators';
 import {DatacenterService, PresetsService} from '../../../core/services';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {AzureSizes, AzureZones} from '../../../shared/entity/provider/azure/AzureSizeEntity';
+import {Cluster} from '../../../shared/entity/cluster';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../wizard-new/service/cluster';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
+import {AzureSizes, AzureZones} from '../../../shared/entity/provider/azure';
 
 export class NodeDataAzureProvider {
   constructor(
@@ -22,7 +22,7 @@ export class NodeDataAzureProvider {
   }
 
   flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AzureSizes[]> {
-    let cluster: ClusterEntity;
+    let cluster: Cluster;
     let location = '';
 
     // TODO: support dialog mode

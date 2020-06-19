@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {HealthEntity, HealthState} from '../../../shared/entity/HealthEntity';
+import {Cluster} from '../../../shared/entity/cluster';
+import {Health, HealthState} from '../../../shared/entity/health';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 
 @Component({
@@ -10,8 +10,8 @@ import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-h
   styleUrls: ['./cluster-secrets.component.scss'],
 })
 export class ClusterSecretsComponent implements OnInit {
-  @Input() cluster: ClusterEntity;
-  @Input() health: HealthEntity;
+  @Input() cluster: Cluster;
+  @Input() health: Health;
   isClusterRunning: boolean;
   healthStatus: ClusterHealthStatus;
 

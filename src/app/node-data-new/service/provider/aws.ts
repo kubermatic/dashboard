@@ -1,11 +1,11 @@
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, switchMap} from 'rxjs/operators';
 import {DatacenterService, PresetsService} from '../../../core/services';
-import {AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../wizard-new/service/cluster';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
+import {AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws';
 
 export class NodeDataAWSProvider {
   constructor(

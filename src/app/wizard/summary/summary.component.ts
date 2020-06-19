@@ -1,11 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {LabelFormComponent} from '../../shared/components/label-form/label-form.component';
-import {ClusterEntity} from '../../shared/entity/ClusterEntity';
-import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
+import {Cluster} from '../../shared/entity/cluster';
+import {SSHKey} from '../../shared/entity/ssh-key';
 import {getIpCount} from '../../shared/functions/get-ip-count';
 import {ClusterDatacenterForm, ClusterProviderForm} from '../../shared/model/ClusterForm';
 import {NodeData} from '../../shared/model/NodeSpecChange';
-import {NodeUtils} from '../../shared/utils/node-utils/node-utils';
+import {getOperatingSystem, getOperatingSystemLogoClass} from '../../shared/entity/node';
 
 @Component({
   selector: 'km-summary',
@@ -13,9 +13,9 @@ import {NodeUtils} from '../../shared/utils/node-utils/node-utils';
   styleUrls: ['./summary.component.scss'],
 })
 export class SummaryComponent implements OnInit {
-  @Input() clusterSSHKeys: SSHKeyEntity[];
+  @Input() clusterSSHKeys: SSHKey[];
   @Input() nodeData: NodeData;
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
   @Input() providerFormData: ClusterProviderForm;
   @Input() datacenterFormData: ClusterDatacenterForm;
   noMoreIpsLeft = false;
@@ -27,11 +27,11 @@ export class SummaryComponent implements OnInit {
   }
 
   getOperatingSystem(): string {
-    return NodeUtils.getOperatingSystem(this.nodeData.spec);
+    return getOperatingSystem(this.nodeData.spec);
   }
 
   getOperatingSystemLogoClass(): string {
-    return NodeUtils.getOperatingSystemLogoClass(this.nodeData.spec);
+    return getOperatingSystemLogoClass(this.nodeData.spec);
   }
 
   displayProvider(): boolean {
@@ -100,7 +100,7 @@ export class SummaryComponent implements OnInit {
     return this.clusterSSHKeys.map(key => key.name).join(', ');
   }
 
-  noIpsLeft(cluster: ClusterEntity, nodeCount: number): boolean {
+  noIpsLeft(cluster: Cluster, nodeCount: number): boolean {
     const ipCount = getIpCount(cluster.spec.machineNetworks);
 
     if (!!ipCount && ipCount > 0) {

@@ -1,6 +1,6 @@
-import {HealthEntity, HealthState} from '../../shared/entity/HealthEntity';
+import {Health, HealthState} from '../../shared/entity/health';
 
-export function fakeHealth(): HealthEntity {
+export function fakeHealth(): Health {
   return {
     apiserver: HealthState.up,
     controller: HealthState.up,
@@ -12,7 +12,7 @@ export function fakeHealth(): HealthEntity {
   };
 }
 
-export function fakeHealthProvisioning(): HealthEntity {
+export function fakeHealthProvisioning(): Health {
   return {
     apiserver: HealthState.up,
     controller: HealthState.up,
@@ -24,7 +24,7 @@ export function fakeHealthProvisioning(): HealthEntity {
   };
 }
 
-export function fakeHealthFailed(): HealthEntity {
+export function fakeHealthFailed(): Health {
   return {
     apiserver: HealthState.down,
     controller: HealthState.down,

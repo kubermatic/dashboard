@@ -5,13 +5,13 @@ import {debounceTime, startWith, switchMap, takeUntil} from 'rxjs/operators';
 
 import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
-import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
-import {AzureSizes, AzureZones} from '../../shared/entity/provider/azure/AzureSizeEntity';
+import {CloudSpec} from '../../shared/entity/cluster';
+import {Datacenter} from '../../shared/entity/datacenter';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 import {filterArrayOptions} from '../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
+import {AzureSizes, AzureZones} from '../../shared/entity/provider/azure';
 
 @Component({
   selector: 'km-azure-node-data',
@@ -28,7 +28,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   sizes: AzureSizes[] = [];
   zones: string[] = [];
   form: FormGroup;
-  datacenter: DataCenterEntity;
+  datacenter: Datacenter;
   loadingSizes = false;
   loadingZones = false;
   filteredSizes: AzureSizes[] = [];

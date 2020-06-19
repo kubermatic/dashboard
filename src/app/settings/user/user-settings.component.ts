@@ -5,9 +5,10 @@ import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 import {NotificationService, ProjectService, UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
-import {MemberEntity, UserSettings} from '../../shared/entity/MemberEntity';
-import {ProjectEntity} from '../../shared/entity/ProjectEntity';
+import {Member} from '../../shared/entity/member';
+import {Project} from '../../shared/entity/project';
 import {objectDiff} from '../../shared/utils/common-utils';
+import {UserSettings} from '../../shared/entity/settings';
 
 @Component({
   selector: 'km-user-settings',
@@ -16,8 +17,8 @@ import {objectDiff} from '../../shared/utils/common-utils';
 })
 export class UserSettingsComponent implements OnInit, OnDestroy {
   itemsPerPageOptions = [5, 10, 15, 20, 25];
-  projects: ProjectEntity[] = [];
-  user: MemberEntity;
+  projects: Project[] = [];
+  user: Member;
   settings: UserSettings; // Local settings copy. User can edit it.
   apiSettings: UserSettings; // Original settings from the API. Cannot be edited by the user.
   private _settingsChange = new Subject<void>();

@@ -7,28 +7,28 @@ import {takeUntil} from 'rxjs/operators';
 import {DatacenterService, WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
+import {Cluster} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
+import {NodeDeployment} from '../../../shared/entity/node-deployment';
 import {
   getEmptyNodeProviderSpec,
   getEmptyNodeVersionSpec,
   getEmptyOperatingSystemSpec,
   NodeSpec,
-} from '../../../shared/entity/NodeEntity';
+} from '../../../shared/entity/node';
 import {NodeData} from '../../../shared/model/NodeSpecChange';
 import {objectDiff} from '../../../shared/utils/common-utils';
 
 export interface NodeDataModalData {
-  cluster: ClusterEntity;
-  datacenter: DataCenterEntity;
+  cluster: Cluster;
+  datacenter: Datacenter;
   projectID: string;
   existingNodesCount: number;
 
   // Fields specific for edit mode (not required if using dialog to add new nodes).
   editMode?: boolean;
   nodeData?: NodeData;
-  nodeDeployment?: NodeDeploymentEntity;
+  nodeDeployment?: NodeDeployment;
 }
 
 @Component({
@@ -37,9 +37,9 @@ export interface NodeDataModalData {
   styleUrls: ['./node-data-modal.component.scss'],
 })
 export class NodeDataModalComponent implements OnInit, OnDestroy {
-  @Output() editNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
-  nodeDC: DataCenterEntity;
-  seedDC: DataCenterEntity;
+  @Output() editNodeDeployment = new EventEmitter<NodeDeployment>();
+  nodeDC: Datacenter;
+  seedDC: Datacenter;
   isExtended = false;
   isRecreationWarningVisible = false;
   nodeDataValid = false;

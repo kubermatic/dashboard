@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {Cluster} from '../../../shared/entity/cluster';
 import {NodeData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
@@ -8,7 +8,7 @@ import {NodeData} from '../../../shared/model/NodeSpecChange';
   styleUrls: ['./extended-options.component.scss'],
 })
 export class ExtendedOptionsComponent {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
   @Input() nodeData: NodeData;
   @Input() isExtended: boolean;
 

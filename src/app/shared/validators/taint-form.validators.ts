@@ -1,5 +1,5 @@
 import {FormControl} from '@angular/forms';
-import {Taint} from '../entity/NodeEntity';
+import {Taint} from '../entity/node';
 
 export class TaintFormValidators {
   /**

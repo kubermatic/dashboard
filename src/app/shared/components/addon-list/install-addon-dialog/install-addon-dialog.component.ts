@@ -3,7 +3,14 @@ import {FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
-import {AddonConfigEntity, AddonEntity, AddonFormSpec} from '../../../entity/AddonEntity';
+import {
+  AddonConfig,
+  Addon,
+  AddonFormSpec,
+  getAddonLogoData,
+  hasAddonFormData,
+  hasAddonLogoData,
+} from '../../../entity/addon';
 
 @Component({
   selector: 'km-install-addon-dialog',
@@ -12,7 +19,7 @@ import {AddonConfigEntity, AddonEntity, AddonFormSpec} from '../../../entity/Add
 })
 export class InstallAddonDialogComponent implements OnInit {
   @Input() addonName: string;
-  @Input() addonConfig: AddonConfigEntity;
+  @Input() addonConfig: AddonConfig;
   form: FormGroup;
 
   static getControlValidators(control: AddonFormSpec): ValidatorFn[] {
@@ -43,20 +50,18 @@ export class InstallAddonDialogComponent implements OnInit {
   }
 
   hasForm(): boolean {
-    return !!this.addonConfig && !!this.addonConfig.spec && !!this.addonConfig.spec.formSpec;
+    return hasAddonFormData(this.addonConfig);
   }
 
   hasLogo(): boolean {
-    return !!this.addonConfig && !!this.addonConfig.spec.logo && !!this.addonConfig.spec.logoFormat;
+    return hasAddonLogoData(this.addonConfig);
   }
 
   getAddonLogo(): SafeUrl {
-    return this._domSanitizer.bypassSecurityTrustUrl(
-      `data:image/${this.addonConfig.spec.logoFormat};base64,${this.addonConfig.spec.logo}`
-    );
+    return this._domSanitizer.bypassSecurityTrustUrl(getAddonLogoData(this.addonConfig));
   }
 
-  private _getAddonEntity(): AddonEntity {
+  private _getAddonEntity(): Addon {
     const variables = {};
 
     Object.keys(this.form.controls).forEach(key => {

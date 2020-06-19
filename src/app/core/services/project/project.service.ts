@@ -6,21 +6,21 @@ import {catchError, first, map, shareReplay, switchMap, switchMapTo} from 'rxjs/
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
-import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import {Project} from '../../../shared/entity/project';
 import {ProjectUtils} from '../../../shared/utils/project-utils/project-utils';
 import {ParamsService, PathParam} from '../params/params.service';
 import {SettingsService} from '../settings/settings.service';
 
 @Injectable()
 export class ProjectService {
-  onProjectChange = new EventEmitter<ProjectEntity>();
+  onProjectChange = new EventEmitter<Project>();
   onProjectsUpdate = new Subject<void>();
 
   private readonly _restRoot: string = environment.restRoot;
   private readonly _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
-  private _projects$: Observable<ProjectEntity[]>;
-  private _myProjects$: Observable<ProjectEntity[]>;
-  private _project$: Observable<ProjectEntity>;
+  private _projects$: Observable<Project[]>;
+  private _myProjects$: Observable<Project[]>;
+  private _project$: Observable<Project>;
   private _displayAllChanged = new Subject<boolean>();
   private _displayAll: boolean;
 
@@ -34,7 +34,7 @@ export class ProjectService {
     this._displayAll = this._settingsService.defaultUserSettings.displayAllProjectsForAdmin;
   }
 
-  get projects(): Observable<ProjectEntity[]> {
+  get projects(): Observable<Project[]> {
     if (!this._projects$) {
       this._initProjectsObservable();
     }
@@ -42,7 +42,7 @@ export class ProjectService {
     return this._projects$;
   }
 
-  get myProjects(): Observable<ProjectEntity[]> {
+  get myProjects(): Observable<Project[]> {
     if (!this._myProjects$) {
       this._myProjects$ = merge(this.onProjectsUpdate, this._refreshTimer$)
         .pipe(switchMap(_ => this._getProjects(false)))
@@ -52,7 +52,7 @@ export class ProjectService {
     return this._myProjects$;
   }
 
-  get selectedProject(): Observable<ProjectEntity> {
+  get selectedProject(): Observable<Project> {
     if (!this._project$) {
       this._project$ = merge(this._params.onParamChange, this.projects.pipe(first()))
         .pipe(switchMapTo(this.projects))
@@ -64,12 +64,12 @@ export class ProjectService {
     return this._project$;
   }
 
-  delete(projectID: string): Observable<ProjectEntity> {
+  delete(projectID: string): Observable<Project> {
     const url = `${this._restRoot}/projects/${projectID}`;
-    return this._http.delete<ProjectEntity>(url);
+    return this._http.delete<Project>(url);
   }
 
-  selectProject(project: ProjectEntity): Promise<boolean> {
+  selectProject(project: Project): Promise<boolean> {
     if (ProjectUtils.isProjectActive(project)) {
       this.onProjectChange.emit(project);
       return this._router.navigate([`/projects/${project.id}/clusters`]);
@@ -94,17 +94,17 @@ export class ProjectService {
       .pipe(shareReplay({refCount: true, bufferSize: 1}));
   }
 
-  private _getProjects(displayAll: boolean): Observable<ProjectEntity[]> {
+  private _getProjects(displayAll: boolean): Observable<Project[]> {
     const url = `${this._restRoot}/projects?displayAll=${displayAll}`;
-    return this._http.get<ProjectEntity[]>(url).pipe(catchError(() => of<ProjectEntity[]>()));
+    return this._http.get<Project[]>(url).pipe(catchError(() => of<Project[]>()));
   }
 
-  private _getProject(projectID: string): Observable<ProjectEntity> {
+  private _getProject(projectID: string): Observable<Project> {
     if (!projectID) {
       return EMPTY;
     }
 
     const url = `${this._restRoot}/projects/${projectID}`;
-    return this._http.get<ProjectEntity>(url).pipe(catchError(() => of<ProjectEntity>()));
+    return this._http.get<Project>(url).pipe(catchError(() => of<Project>()));
   }
 }
