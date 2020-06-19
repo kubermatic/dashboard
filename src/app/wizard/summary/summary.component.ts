@@ -1,4 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
+import * as _ from 'lodash';
+
 import {LabelFormComponent} from '../../shared/components/label-form/label-form.component';
 import {Cluster} from '../../shared/entity/cluster';
 import {SSHKey} from '../../shared/entity/ssh-key';
@@ -6,7 +8,7 @@ import {getIpCount} from '../../shared/functions/get-ip-count';
 import {ClusterDatacenterForm, ClusterProviderForm} from '../../shared/model/ClusterForm';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {getOperatingSystem, getOperatingSystemLogoClass} from '../../shared/entity/node';
-
+import {AdmissionPluginUtils} from '../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 @Component({
   selector: 'km-summary',
   templateUrl: './summary.component.html',
@@ -107,5 +109,13 @@ export class SummaryComponent implements OnInit {
       return !(ipCount - nodeCount >= 0);
     }
     return false;
+  }
+
+  hasAdmissionPlugins(): boolean {
+    return !_.isEmpty(this.cluster.spec.admissionPlugins);
+  }
+
+  getAdmissionPlugins(): string {
+    return AdmissionPluginUtils.getJoinedPluginNames(this.cluster.spec.admissionPlugins);
   }
 }

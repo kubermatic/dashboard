@@ -89,24 +89,37 @@
         </mat-form-field>
       </div>
 
+      <div fxFlex="100"
+           fxLayout="column">
+        <mat-form-field>
+          <mat-label>Admission Plugins</mat-label>
+          <mat-select formControlName="admissionPlugins"
+                      multiple
+                      panelClass="km-multiple-values-dropdown"
+                      disableOptionCentering>
+            <mat-option *ngFor="let admissionPlugin of admissionPlugins"
+                        [value]="admissionPlugin">
+              {{getPluginName(admissionPlugin)}}
+              <i *ngIf="admissionPlugin === admissionPlugin.PodSecurityPolicy"
+                 class="km-icon-info"
+                 matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <span *ngIf="isPluginEnabled(admissionPlugin.PodSecurityPolicy)"
+              class="km-admission-plugin-warning"
+              fxLayout="row">
+          <i class="km-icon-warning km-warning"></i>
+          <p fxFlex="95">Activating Pod Security Policy will mean that a lot of Pod specifications, Operators and Helm charts will not work out of the box. Make sure that you know the consequences of activating this feature.</p>
+        </span>
+      </div>
+
       <div fxLayout="row"
            fxLayoutGap="16px">
         <mat-checkbox formControlName="auditLogging">Audit Logging</mat-checkbox>
-        <div fxLayout="row"
-             fxLayoutGap="8px"
-             fxLayoutAlign=" center">
-          <mat-checkbox formControlName="usePodSecurityPolicyAdmissionPlugin">
-            Pod Security Policy
-          </mat-checkbox>
-          <i class="km-icon-info"
-             matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
-          <i *ngIf="clusterSpecForm.controls.usePodSecurityPolicyAdmissionPlugin.value"
-             class="km-icon-warning km-warning"
-             matTooltip="Activating Pod Security Policy will mean that a lot of Pod specifications, Operators and Helm charts will not work out of the box. Make sure that you know the consequences of activating this feature.">
-          </i>
-        </div>
-        <mat-checkbox formControlName="usePodNodeSelectorAdmissionPlugin">Pod Node Selector</mat-checkbox>
       </div>
+
+
       <km-label-form title="Labels"
                      [(labels)]="labels"
                      [asyncKeyValidators]=asyncLabelValidators

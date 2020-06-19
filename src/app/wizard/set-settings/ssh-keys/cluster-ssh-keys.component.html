@@ -7,7 +7,7 @@
     <mat-select formControlName="keys"
                 multiple
                 disableOptionCentering
-                panelClass="km-sshkey-dropdown"
+                panelClass="km-multiple-values-dropdown"
                 [compareWith]="compareValues">
       <mat-option *ngFor="let key of keys"
                   [value]="key">{{key.name}}</mat-option>

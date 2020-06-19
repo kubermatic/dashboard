@@ -6,6 +6,7 @@ import {takeUntil} from 'rxjs/operators';
 import {DatacenterService, WizardService} from '../../core/services';
 import {AuditLoggingSettings, Cluster, getClusterProvider} from '../../shared/entity/cluster';
 import {Datacenter, getDatacenterProvider} from '../../shared/entity/datacenter';
+import {AdmissionPluginUtils} from '../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 
 @Component({
   selector: 'km-set-datacenter',
@@ -52,11 +53,11 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
       if (this.setDatacenterForm.controls.datacenter.value === datacenter.metadata.name) {
         dc = datacenter;
 
-        const usePodSecurityPolicyAdmissionPlugin = dc.spec.enforcePodSecurityPolicy
-          ? true
-          : this.cluster.spec.usePodSecurityPolicyAdmissionPlugin;
         const auditLogging = dc.spec.enforceAuditLogging ? {enabled: true} : this.cluster.spec.auditLogging;
-        this.enforceClusterProperties(auditLogging, usePodSecurityPolicyAdmissionPlugin);
+
+        const admissionPlugins = AdmissionPluginUtils.updateSelectedPluginArrayIfPSPEnforced(this.cluster, dc);
+
+        this.enforceClusterProperties(auditLogging, admissionPlugins);
       }
     }
     this._wizardService.changeClusterDatacenter({
@@ -84,15 +85,14 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  enforceClusterProperties(auditLogging: AuditLoggingSettings, usePodSecurityPolicyAdmissionPlugin: boolean): void {
+  enforceClusterProperties(auditLogging: AuditLoggingSettings, admissionPlugins: string[]): void {
     this._wizardService.changeClusterSpec({
       name: this.cluster.name,
       type: this.cluster.type,
       labels: this.cluster.labels,
       version: this.cluster.spec.version,
       imagePullSecret: this.cluster.spec.openshift ? this.cluster.spec.openshift.imagePullSecret : '',
-      usePodSecurityPolicyAdmissionPlugin,
-      usePodNodeSelectorAdmissionPlugin: this.cluster.spec.usePodNodeSelectorAdmissionPlugin,
+      admissionPlugins,
       auditLogging,
       valid: true,
     });
