@@ -39,3 +39,7 @@ export class OpenstackOptionalFields {
   length: number;
   name: string;
 }
+
+export class OpenstackAvailabilityZone {
+  name: string;
+}
