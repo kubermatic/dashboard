@@ -36,6 +36,7 @@ describe('SidenavComponent', () => {
         NavigationComponent,
         NotificationPanelComponent,
         ProjectSelectorComponent,
+        UserPanelComponent,
         MockComponent({
           selector: 'a',
           inputs: ['routerLink', 'routerLinkActiveOptions'],
@@ -47,7 +48,6 @@ describe('SidenavComponent', () => {
         {provide: UserService, useClass: UserMockService},
         {provide: AppConfigService, useClass: AppConfigMockService},
         {provide: Auth, useClass: AuthMockService},
-        UserPanelComponent,
         {
           provide: Router,
           useValue: {
