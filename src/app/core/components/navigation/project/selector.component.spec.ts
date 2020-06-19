@@ -21,6 +21,7 @@ import {NotificationPanelComponent} from '../../notification-panel/notification-
 import {NavigationComponent} from '../navigation.component';
 
 import {ProjectSelectorComponent} from './selector.component';
+import {UserPanelComponent} from '../../user-panel/user-panel.component';
 
 const modules: any[] = [BrowserModule, RouterTestingModule, HttpClientModule, BrowserAnimationsModule, SharedModule];
 
@@ -35,6 +36,7 @@ describe('SidenavComponent', () => {
         NavigationComponent,
         NotificationPanelComponent,
         ProjectSelectorComponent,
+        UserPanelComponent,
         MockComponent({
           selector: 'a',
           inputs: ['routerLink', 'routerLinkActiveOptions'],
