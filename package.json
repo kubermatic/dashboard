@@ -29,7 +29,7 @@
     "fix:scss": "stylelint \"src/**/*.scss\" --fix",
     "fix:html": "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f \"src/**/*.html\"",
     "clean": "gts clean",
-    "versioninfo": "node git-version.js",
+    "versioninfo": "node version.js",
     "postinstall": "ngcc"
   },
   "dependencies": {

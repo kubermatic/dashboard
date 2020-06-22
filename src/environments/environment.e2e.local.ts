@@ -6,12 +6,11 @@ export const environment = {
   name: 'dev',
   production: false,
   configUrl: '../../assets/config/config.json',
-  gitVersionUrl: '../../assets/config/git-version.json',
+  gitVersionUrl: '../../assets/config/version.json',
   refreshTimeBase: 1000, // Unit: ms
   restRoot: 'api/v1',
   wsRoot: `${wsProtocol}//${host}/api/v1/ws`,
   oidcProviderUrl: 'http://dex.oauth:5556/dex/auth',
   oidcConnectorId: 'local',
   animations: false,
-  edition: 'enterprise',
 };
