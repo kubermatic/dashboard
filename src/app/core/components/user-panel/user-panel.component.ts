@@ -1,4 +1,5 @@
-import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
+import {DOCUMENT} from '@angular/common';
+import {Component, ElementRef, HostListener, Inject, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -24,7 +25,8 @@ export class UserPanelComponent implements OnInit, OnDestroy {
     private readonly _router: Router,
     private readonly _auth: Auth,
     private readonly _userService: UserService,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
+    @Inject(DOCUMENT) private readonly _document: Document
   ) {}
 
   ngOnInit(): void {
@@ -58,11 +60,13 @@ export class UserPanelComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this._auth.logout();
-    this._settingsService.refreshCustomLinks();
-    this._router.navigate(['']);
-    this._isOpen = false;
-    delete this.user;
+    this._auth.logout().subscribe(_ => {
+      this._settingsService.refreshCustomLinks();
+      this._router.navigate(['']);
+      this._document.defaultView.location.reload();
+      this._isOpen = false;
+      delete this.user;
+    });
   }
 
   login(): void {
