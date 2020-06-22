@@ -24,7 +24,7 @@ The application will automatically reload if you change any of the source files.
 
 ### Using a Docker Container
 
-##### With dev.kubermatic.io API
+#### With dev.kubermatic.io API
 ```bash
 ./hack/run-dashboard.sh
 ```
