@@ -11,9 +11,7 @@ To use the Kubermatic Kubernetes Platform Community Edition you should set `KUBE
 environment variable before running any of the following commands. Using the application without
 mentioned environment variable leads to using Kubermatic Kubernetes Platform Enterprise Edition.
 
-**Note:** You can verify your current setup by running the `npm run vi` command and checking the
-`src/assets/config/version.json` file. It contains information about edition that is currently set, i.e.
-`"edition": "Community Edition"`.
+**Note:** You can verify your current setup by running the `npm run vi` command.
 **Note:** `src/assets/config/version.json` should not be edited manually.
 
 ### Using Local Environment
