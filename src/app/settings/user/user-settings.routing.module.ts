@@ -4,6 +4,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from '../../core/services';
 
 import {UserSettingsComponent} from './user-settings.component';
+import {getEditionDirName} from '../../dynamic/common';
 
 const routes: Routes = [
   {
@@ -13,7 +14,8 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: () => import('../../theming/module').then(module => module.ThemingModule),
+        loadChildren: () =>
+          import(`../../dynamic/${getEditionDirName()}/theming/module`).then(module => module.ThemingModule),
         data: {preload: true},
       },
     ],
