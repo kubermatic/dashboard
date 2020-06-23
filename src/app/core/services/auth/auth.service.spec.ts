@@ -5,8 +5,11 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {CookieService} from 'ngx-cookie-service';
 
 import {AppConfigService} from '../../../app-config.service';
+import {COOKIE, COOKIE_DI_TOKEN} from '../../../app.config';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
+import {UserService} from '../index';
 import {PreviousRouteService} from '../previous-route/previous-route.service';
+import {TokenService} from '../token/token.service';
 
 import {Auth} from './auth.service';
 
@@ -16,6 +19,9 @@ describe('Auth', () => {
       imports: [BrowserModule, HttpClientModule, RouterTestingModule],
       declarations: [],
       providers: [
+        {provide: COOKIE_DI_TOKEN, useValue: COOKIE},
+        UserService,
+        TokenService,
         Auth,
         CookieService,
         PreviousRouteService,

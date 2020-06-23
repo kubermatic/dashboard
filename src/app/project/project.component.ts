@@ -1,4 +1,4 @@
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -10,18 +10,19 @@ import {Subject, timer} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
-import {Auth, NotificationService, ProjectService, UserService} from '../core/services';
+import {Cookie, COOKIE_DI_TOKEN} from '../app.config';
+import {NotificationService, ProjectService, UserService} from '../core/services';
 import {PreviousRouteService} from '../core/services/previous-route/previous-route.service';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {MemberEntity, UserSettings} from '../shared/entity/MemberEntity';
-import {ProjectEntity, ProjectOwners} from '../shared/entity/ProjectEntity';
 import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 
 import {EditProjectComponent} from './edit-project/edit-project.component';
+import {ProjectEntity, ProjectOwners} from '../shared/entity/ProjectEntity';
+import {MemberEntity, UserSettings} from '../shared/entity/MemberEntity';
 
 @Component({
   selector: 'km-project',
@@ -76,7 +77,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _settingsService: SettingsService,
     private readonly _notificationService: NotificationService,
     private readonly _previousRouteService: PreviousRouteService,
-    private readonly _appConfig: AppConfigService
+    private readonly _appConfig: AppConfigService,
+    @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie
   ) {}
 
   ngOnInit(): void {
@@ -349,8 +351,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private _shouldRedirectToCluster(): boolean {
-    const autoredirect: boolean = this._cookieService.get(Auth.Cookie.Autoredirect) === 'true';
-    this._cookieService.delete(Auth.Cookie.Autoredirect, '/');
+    const autoredirect: boolean = this._cookieService.get(this._cookie.autoredirect) === 'true';
+    this._cookieService.delete(this._cookie.autoredirect, '/');
     return this.projects.length === 1 && autoredirect;
   }
 
