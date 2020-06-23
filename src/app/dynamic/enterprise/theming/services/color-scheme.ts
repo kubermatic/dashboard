@@ -1,7 +1,7 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {timer} from 'rxjs';
-import {Theme} from '../../shared/model/Config';
 import {ThemeService} from './theme';
+import {Theme} from '../../../../shared/model/Config';
 
 export enum ColorScheme {
   Dark = 'dark',

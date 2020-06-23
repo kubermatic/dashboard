@@ -7,14 +7,14 @@ import {
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
-import {NotificationService} from '../../core/services';
-import {SettingsService} from '../../core/services/settings/settings.service';
-import {UserSettings} from '../../shared/entity/MemberEntity';
-import {Theme} from '../../shared/model/Config';
-import {objectDiff} from '../../shared/utils/common-utils';
 import {ColorSchemeService} from '../services/color-scheme';
 import {ThemeManagerService} from '../services/manager';
 import {ThemeService} from '../services/theme';
+import {UserSettings} from '../../../../shared/entity/settings';
+import {Theme} from '../../../../shared/model/Config';
+import {SettingsService} from '../../../../core/services/settings/settings.service';
+import {NotificationService} from '../../../../core/services';
+import {objectDiff} from '../../../../shared/utils/common-utils';
 
 @Component({
   templateUrl: 'template.html',

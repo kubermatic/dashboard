@@ -1,10 +1,11 @@
 import {DOCUMENT} from '@angular/common';
 import {Inject, Injectable} from '@angular/core';
 import {first} from 'rxjs/operators';
-import {SettingsService} from '../../core/services/settings/settings.service';
-import {UserSettings} from '../../shared/entity/MemberEntity';
 import {ColorSchemeService} from './color-scheme';
 import {ThemeService} from './theme';
+import {SettingsService} from '../../../../core/services/settings/settings.service';
+import {ThemeInformerService} from '../../../../core/services/theme-informer/theme-informer.service';
+import {UserSettings} from '../../../../shared/entity/settings';
 
 @Injectable()
 export class ThemeManagerService {
