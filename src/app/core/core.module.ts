@@ -3,6 +3,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {Injector, NgModule, Optional, SkipSelf} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
+import {COOKIE, COOKIE_DI_TOKEN} from '../app.config';
 
 import {AddMemberComponent} from '../member/add-member/add-member.component';
 import {EditMemberComponent} from '../member/edit-member/edit-member.component';
@@ -36,6 +37,7 @@ import {GlobalModule} from './services/global/global.module';
 import {NodeDataService} from './services/node-data/node-data.service';
 import {PreviousRouteService} from './services/previous-route/previous-route.service';
 import {SettingsService} from './services/settings/settings.service';
+import {TokenService} from './services/token/token.service';
 import {StepsService} from './services/wizard/steps.service';
 import {ClusterNameGenerator} from './util/name-generator.service';
 import {ThemeInformerService} from './services/theme-informer/theme-informer.service';
@@ -84,6 +86,7 @@ const services: any[] = [
   PresetsService,
   PreviousRouteService,
   ThemeInformerService,
+  TokenService,
 ];
 
 const interceptors: any[] = [
@@ -112,7 +115,7 @@ const interceptors: any[] = [
 @NgModule({
   imports: [...modules],
   declarations: [...components],
-  providers: [...services, ...interceptors],
+  providers: [...services, ...interceptors, {provide: COOKIE_DI_TOKEN, useValue: COOKIE}],
   exports: [...components],
 })
 export class CoreModule {

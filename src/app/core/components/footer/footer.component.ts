@@ -1,7 +1,8 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, SecurityContext} from '@angular/core';
+import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
+import {AdminSettings, CustomLink, CustomLinkLocation, filterCustomLinks} from '../../../shared/entity/settings';
 
 import {VersionInfo} from '../../../shared/entity/version-info';
-import {AdminSettings, CustomLink, CustomLinkLocation, filterCustomLinks} from '../../../shared/entity/settings';
 
 @Component({
   selector: 'km-footer',
@@ -14,18 +15,20 @@ export class FooterComponent {
   @Input() customLinks: CustomLink[] = [];
   @Input() authenticated: boolean;
 
+  constructor(private readonly _sanitizer: DomSanitizer) {}
+
   getCustomLinks(): CustomLink[] {
     const customLinks = this.authenticated ? this.settings.customLinks : this.customLinks;
     return filterCustomLinks(customLinks, CustomLinkLocation.Footer);
   }
 
-  getCustomLinkIconStyle(link: CustomLink): any {
-    const style = {'background-image': `url('${CustomLink.getIcon(link)}')`};
+  getBackgroundImageUrlStyle(link: CustomLink): SafeStyle {
+    return this._sanitizer.sanitize(SecurityContext.STYLE, `url(${CustomLink.getIcon(link)})`);
+  }
 
-    if (!this.authenticated) {
-      style['filter'] = 'invert(.25) brightness(100) contrast(100)';
-    }
-
-    return style;
+  getFilterStyle(): SafeStyle {
+    return this.authenticated
+      ? ''
+      : this._sanitizer.bypassSecurityTrustStyle('invert(.25) brightness(100) contrast(100)');
   }
 }
