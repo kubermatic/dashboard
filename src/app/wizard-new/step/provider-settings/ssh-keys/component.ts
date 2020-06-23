@@ -109,7 +109,7 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
   }
 
   canAdd(): boolean {
-    return MemberUtils.hasPermission(this._user, this._groupConfig, 'sshKeys', Permission.Create);
+    return MemberUtils.hasPermission(this._user, this._groupConfig, 'sshkeys', Permission.Create);
   }
 
   hasKeys(): boolean {

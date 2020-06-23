@@ -89,7 +89,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   canAdd(): boolean {
-    return MemberUtils.hasPermission(this._currentUser, this._currentGroupConfig, 'sshKeys', Permission.Create);
+    return MemberUtils.hasPermission(this._currentUser, this._currentGroupConfig, 'sshkeys', Permission.Create);
   }
 
   addSshKeyDialog(): void {

@@ -71,7 +71,7 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   canAdd(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshKeys', Permission.Create);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshkeys', Permission.Create);
   }
 
   addClusterSSHKeys(): void {

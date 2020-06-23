@@ -89,7 +89,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   canAdd(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshKeys', Permission.Create);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshkeys', Permission.Create);
   }
 
   addSshKey(): void {
@@ -111,7 +111,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   canDelete(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshKeys', Permission.Delete);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshkeys', Permission.Delete);
   }
 
   deleteSshKey(sshKey: SSHKey): void {

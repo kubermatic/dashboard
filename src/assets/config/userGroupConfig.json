@@ -12,7 +12,7 @@
       "delete": true,
       "create": true
     },
-    "sshKeys": {
+    "sshkeys": {
       "view": true,
       "edit": true,
       "create": true,
@@ -68,7 +68,7 @@
       "delete": false,
       "create": false
     },
-    "sshKeys": {
+    "sshkeys": {
       "view": true,
       "edit": true,
       "create": true,
@@ -124,7 +124,7 @@
       "delete": false,
       "create": false
     },
-    "sshKeys": {
+    "sshkeys": {
       "view": true,
       "edit": false,
       "create": false,

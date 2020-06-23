@@ -30,7 +30,7 @@ export interface Viewable {
 export class GroupConfig {
   projects?: Projects;
   members?: Members;
-  sshKeys?: SSHKeys;
+  sshkeys?: SSHKeys;
   clusters?: Clusters;
   nodes?: Nodes;
   nodeDeployments?: NodeDeployments;

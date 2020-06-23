@@ -335,7 +335,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isSSHKeysEditEnabled(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshKeys', Permission.Delete);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshkeys', Permission.Delete);
   }
 
   editSSHKeys(): void {
