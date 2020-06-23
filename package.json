@@ -111,6 +111,12 @@
       "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "node/no-unpublished-import": "off",
+      "node/no-extraneous-require": "error",
+      "node/no-unpublished-require": "error",
+      "rxjs/no-ignored-observable": "error",
+      "rxjs/no-nested-subscribe": "error",
+      "rxjs/no-unbound-methods": "error",
+      "rxjs/no-unsafe-takeuntil": "error",
       "no-undef": "off",
       "no-inner-declarations": "off",
       "no-redeclare": "off",
@@ -119,13 +125,8 @@
       "no-prototype-builtins": "error",
       "no-extra-boolean-cast": "error",
       "no-else-return": "error",
-      "node/no-extraneous-require": "error",
-      "node/no-unpublished-require": "error",
       "prefer-rest-params": "error",
-      "rxjs/no-ignored-observable": "error",
-      "rxjs/no-nested-subscribe": "error",
-      "rxjs/no-unbound-methods": "error",
-      "rxjs/no-unsafe-takeuntil": "error"
+      "complexity": ["error", 10]
     },
     "overrides": [
       {
