@@ -126,7 +126,7 @@
       "no-extra-boolean-cast": "error",
       "no-else-return": "error",
       "prefer-rest-params": "error",
-      "complexity": ["error", 10]
+      "complexity": ["error", 15]
     },
     "overrides": [
       {

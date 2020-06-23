@@ -213,6 +213,8 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Complexity check for the following line is disabled as we are switching to the new node data component.
+  // eslint-disable-next-line complexity
   getDiskTypeHint(): string {
     if (this.diskTypes.length > 0) {
       return '';
@@ -294,6 +296,8 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Complexity check for the following line is disabled as we are switching to the new node data component.
+  // eslint-disable-next-line complexity
   getSizeHint(): string {
     if (this.machineTypes.length > 0) {
       return '';
