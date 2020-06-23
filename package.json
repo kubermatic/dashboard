@@ -7,12 +7,12 @@
   "license": "proprietary",
   "angular-cli": {},
   "scripts": {
-    "start": "npm run versioninfo && ng serve",
-    "start:prod": "npm run versioninfo && ng serve --prod",
-    "start:local": "npm run versioninfo && ng serve --configuration=local",
-    "start:e2e": "npm run versioninfo && ng serve --configuration=e2e",
-    "start:e2e-local": "npm run versioninfo && ng serve --configuration=e2e-local",
-    "build": "npm run versioninfo && ng build --prod",
+    "start": "npm run vi && ng serve",
+    "start:prod": "npm run vi && ng serve --prod",
+    "start:local": "npm run vi && ng serve --configuration=local",
+    "start:e2e": "npm run vi && ng serve --configuration=e2e",
+    "start:e2e-local": "npm run vi && ng serve --configuration=e2e-local",
+    "build": "npm run vi && ng build --prod",
     "build:themes": "npm run build && ./hack/extract-themes.sh",
     "test": "jest",
     "test:ci": "jest --coverage -i",
@@ -29,7 +29,7 @@
     "fix:scss": "stylelint \"src/**/*.scss\" --fix",
     "fix:html": "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f \"src/**/*.html\"",
     "clean": "gts clean",
-    "versioninfo": "node git-version.js",
+    "vi": "node version.js",
     "postinstall": "ngcc"
   },
   "dependencies": {

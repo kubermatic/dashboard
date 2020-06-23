@@ -22,6 +22,6 @@ const versionInfoJson = JSON.stringify(gitInfo, null, 2);
 console.log(versionInfoJson + '\n');
 
 writeFileSync(
-  resolve(__dirname, 'src', 'assets', 'config', 'git-version.json'),
+  resolve(__dirname, 'src', 'assets', 'config', 'version.json'),
   versionInfoJson
 );
