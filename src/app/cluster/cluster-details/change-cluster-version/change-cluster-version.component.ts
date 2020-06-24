@@ -79,7 +79,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe(() => {
         this._notificationService.success(
-          `The node deployments from the <strong>${this.cluster.name}</strong> cluster are being updated to the ${this.selectedVersion} version`
+          `The machine deployments from the <strong>${this.cluster.name}</strong> cluster are being updated to the ${this.selectedVersion} version`
         );
       });
   }

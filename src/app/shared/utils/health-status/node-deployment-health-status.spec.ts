@@ -15,7 +15,7 @@ import {HealthStatusColor, HealthStatusMessage} from './health-status';
 import {NodeDeploymentHealthStatus} from './node-deployment-health-status';
 
 describe('NodeDeploymentHealthStatus', () => {
-  it('should return correct status for node deployments', () => {
+  it('should return correct status for machine deployments', () => {
     const nds = nodeDeploymentsFake();
 
     expect(NodeDeploymentHealthStatus.getHealthStatus(nds[0])).toEqual(

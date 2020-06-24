@@ -13,7 +13,7 @@ limitations under the License.
 <mat-card class="km-with-table-header">
   <mat-card-header>
     <mat-card-title>
-      Node Deployments
+      Machine Deployments
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
@@ -136,7 +136,7 @@ limitations under the License.
               <ng-container *ngSwitchCase="false">
                 <button mat-icon-button
                         class="km-node-deployment-action"
-                        matTooltip="Edit Node Deployment"
+                        matTooltip="Edit Machine Deployment"
                         (click)="showEditDialog(element, $event)"
                         [disabled]="!isEditEnabled()">
                   <i class="km-icon-edit"></i>
@@ -144,7 +144,7 @@ limitations under the License.
 
                 <button mat-icon-button
                         class="km-node-deployment-action"
-                        matTooltip="Delete Node Deployment"
+                        matTooltip="Delete Machine Deployment"
                         (click)="showDeleteDialog(element, $event)"
                         [disabled]="!isDeleteEnabled()">
                   <i class="km-icon-delete"
@@ -169,7 +169,7 @@ limitations under the License.
     <ng-container *ngIf="!nodeDeployments || nodeDeployments.length === 0">
       <div class="km-row km-no-item"
            *ngIf="isNodeDeploymentLoadFinished && clusterHealthStatus && clusterHealthStatus.css === 'km-status-running' || cluster.spec.cloud.bringyourown">
-        No node deployments available.
+        No machine deployments available.
       </div>
       <div class="km-row"
            *ngIf="!isNodeDeploymentLoadFinished || !clusterHealthStatus || clusterHealthStatus.css !== 'km-status-running' || !isClusterRunning && !!!cluster.spec.cloud.bringyourown">

@@ -120,6 +120,6 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
   }
 
   getDialogLabel(): string {
-    return `${this.data.editMode ? 'Edit' : 'Add'} Node Deployment`;
+    return `${this.data.editMode ? 'Edit' : 'Add'} Machine Deployment`;
   }
 }

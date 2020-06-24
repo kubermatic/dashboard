@@ -76,7 +76,7 @@ export class NodeService {
       .pipe(first())
       .subscribe(() => {
         this._notificationService.success(
-          `A new node deployment was created in the <strong>${cluster.name}</strong> cluster`
+          `A new machine deployment was created in the <strong>${cluster.name}</strong> cluster`
         );
         this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeAdded');
       });
@@ -152,7 +152,7 @@ export class NodeService {
                 .pipe(
                   catchError(() => {
                     this._notificationService.error(
-                      `Could not update the <strong>${data.nodeDeployment.name}</strong> node deployment `
+                      `Could not update the <strong>${data.nodeDeployment.name}</strong> machine deployment `
                     );
                     this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdateFailed');
                     return of(undefined);
@@ -167,7 +167,7 @@ export class NodeService {
         flatMap(
           (nd: NodeDeployment): Observable<boolean> => {
             if (nd) {
-              this._notificationService.success(`The <strong>${nd.name}</strong> node deployment was updated`);
+              this._notificationService.success(`The <strong>${nd.name}</strong> machine deployment was updated`);
               this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdated');
               if (changeEventEmitter) {
                 changeEventEmitter.emit(nd);
@@ -192,7 +192,7 @@ export class NodeService {
       disableClose: false,
       hasBackdrop: true,
       data: {
-        title: 'Delete Node Deployment',
+        title: 'Delete Machine Deployment',
         message: `Delete "<strong>${nd.name}</strong>" permanently?`,
         confirmLabel: 'Delete',
       },
@@ -212,7 +212,9 @@ export class NodeService {
                 .pipe(first())
                 .pipe(
                   catchError(() => {
-                    this._notificationService.error('Could not remove the <strong>${nd.name}</strong> node deployment');
+                    this._notificationService.error(
+                      'Could not remove the <strong>${nd.name}</strong> machine deployment'
+                    );
                     this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentDeleteFailed');
                     return of(false);
                   })
@@ -226,7 +228,7 @@ export class NodeService {
         flatMap(
           (data: any): Observable<boolean> => {
             if (data) {
-              this._notificationService.success(`The <strong>${nd.name}</strong> node deployment was removed`);
+              this._notificationService.success(`The <strong>${nd.name}</strong> machine deployment was removed`);
               this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentDeleted');
               if (changeEventEmitter) {
                 changeEventEmitter.emit(nd);
