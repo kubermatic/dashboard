@@ -1,5 +1,5 @@
 presubmits:
-- name: check-prow
+- name: validate-prow
   always_run: true
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
