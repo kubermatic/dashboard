@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {Title} from '@angular/platform-browser';
 import {Subject, of, Observable} from 'rxjs';
 import {takeUntil, switchMap, tap} from 'rxjs/operators';
-import * as _ from 'lodash';
 
 import {ProjectService, ClusterService, ApiService} from '../../services';
 import {ParamsService, PathParam} from '../../services/params/params.service';
@@ -26,7 +25,7 @@ export class PageTitleService {
   ) {}
 
   setTitle(url: string): void {
-    const viewName = this._getViewName(url.split('/'));
+    const viewName = this._getViewName(url.split('/').reverse());
     this._titleService.setTitle(viewName);
 
     this._projectService.selectedProject
@@ -42,14 +41,8 @@ export class PageTitleService {
   }
 
   private _getViewName(urlArray: string[]): string {
-    if (!_.isEmpty(urlArray)) {
-      let viewName = Object.values(View).find(view => view === urlArray[urlArray.length - 1]);
-      if (_.isEmpty(viewName)) {
-        viewName = Object.values(View).find(view => view === urlArray[urlArray.length - 2]);
-      }
-      return getViewDisplayName(viewName);
-    }
-    return '';
+    const viewName = urlArray.find(partial => Object.values(View).find(view => view === partial));
+    return viewName ? getViewDisplayName(viewName) : '';
   }
 
   private _generateTitle(viewName: string): string {

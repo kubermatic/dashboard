@@ -48,7 +48,7 @@ export enum ViewDisplayName {
   NodeDeployment = 'Node Deployment',
 }
 
-export function getViewDisplayName(view: View): string {
+export function getViewDisplayName(view: string): string {
   switch (view) {
     case View.Clusters:
       return ViewDisplayName.Clusters;

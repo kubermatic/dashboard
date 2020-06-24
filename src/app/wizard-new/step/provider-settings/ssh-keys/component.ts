@@ -5,6 +5,7 @@ import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {ApiService, ProjectService, UserService} from '../../../../core/services';
 import {AddSshKeyDialogComponent} from '../../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
+import {View} from '../../../../shared/entity/common';
 import {Member} from '../../../../shared/entity/member';
 import {Project} from '../../../../shared/entity/project';
 import {SSHKey} from '../../../../shared/entity/ssh-key';
@@ -109,7 +110,7 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
   }
 
   canAdd(): boolean {
-    return MemberUtils.hasPermission(this._user, this._groupConfig, 'sshkeys', Permission.Create);
+    return MemberUtils.hasPermission(this._user, this._groupConfig, View.SSHKeys, Permission.Create);
   }
 
   hasKeys(): boolean {

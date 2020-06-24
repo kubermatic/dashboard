@@ -11,6 +11,7 @@ import {ClusterService, NotificationService, UserService} from '../../../core/se
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '../../../shared/entity/cluster';
+import {View} from '../../../shared/entity/common';
 import {Datacenter} from '../../../shared/entity/datacenter';
 import {Member} from '../../../shared/entity/member';
 import {SSHKey} from '../../../shared/entity/ssh-key';
@@ -89,7 +90,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   canAdd(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshkeys', Permission.Create);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.SSHKeys, Permission.Create);
   }
 
   addSshKey(): void {
@@ -111,7 +112,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   canDelete(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshkeys', Permission.Delete);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.SSHKeys, Permission.Delete);
   }
 
   deleteSshKey(sshKey: SSHKey): void {

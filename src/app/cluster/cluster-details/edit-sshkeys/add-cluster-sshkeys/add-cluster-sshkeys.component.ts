@@ -7,6 +7,7 @@ import {first} from 'rxjs/operators';
 import {ApiService, ClusterService, NotificationService, UserService} from '../../../../core/services';
 import {AddSshKeyDialogComponent} from '../../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {Cluster} from '../../../../shared/entity/cluster';
+import {View} from '../../../../shared/entity/common';
 import {Datacenter} from '../../../../shared/entity/datacenter';
 import {Member} from '../../../../shared/entity/member';
 import {SSHKey} from '../../../../shared/entity/ssh-key';
@@ -71,7 +72,7 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   canAdd(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshkeys', Permission.Create);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.SSHKeys, Permission.Create);
   }
 
   addClusterSSHKeys(): void {
