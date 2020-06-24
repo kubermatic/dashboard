@@ -49,6 +49,8 @@ export class NodeDataComponent implements OnInit, OnDestroy {
     private readonly _clusterService: ClusterService
   ) {}
 
+  // Complexity check for the following line is disabled as we are switching to the new node data component.
+  // eslint-disable-next-line complexity
   ngOnInit(): void {
     if (this.seedDc) {
       this.seedDCName = this.seedDc.metadata.name;

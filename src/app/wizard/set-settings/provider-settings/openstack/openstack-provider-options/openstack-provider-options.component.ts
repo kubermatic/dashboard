@@ -97,10 +97,6 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
     });
   }
 
-  disableForm(): void {
-    this.form.disable();
-  }
-
   showHint(field: string): boolean {
     switch (field) {
       case 'subnetId':
@@ -116,20 +112,25 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  getOptionalSettingsFormState(field: string): string {
+  getNetworkFormState(): string {
     if (!this._loadingOptionalSettings && !this._hasRequiredCredentials()) {
-      return field;
+      return 'Network';
     } else if (this._loadingOptionalSettings && !this._selectedPreset) {
-      return 'Loading ' + field + 's...';
+      return 'Loading Networks...';
     }
-    switch (field) {
-      case 'Security Group':
-        return this.securityGroups.length === 0 && !this._selectedPreset ? 'No Security Groups available' : field;
-      case 'Network':
-        return this.networks.length === 0 && !this._selectedPreset ? 'No Networks available' : field;
-      default:
-        return '';
+    return this.networks.length === 0 && !this._selectedPreset ? 'No Networks available' : 'Network';
+  }
+
+  getSecurityGroupFormState(): string {
+    if (!this._loadingOptionalSettings && !this._hasRequiredCredentials()) {
+      return 'Security Group';
+    } else if (this._loadingOptionalSettings && !this._selectedPreset) {
+      return 'Loading Security Groups...';
     }
+
+    return this.securityGroups.length === 0 && !this._selectedPreset
+      ? 'No Security Groups available'
+      : 'Security Group';
   }
 
   getSubnetIDFormState(): string {
