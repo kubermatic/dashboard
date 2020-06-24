@@ -234,8 +234,8 @@ presubmits:
       - image: quay.io/kubermatic/e2e-kind-cypress:v1.1.1
         command:
           - /bin/bash
-            - -c
-            - >-
+          - -c
+          - >-
             set -euo pipefail &&
             export KUBERMATIC_EDITION=ce &&
             make run-e2e-ci
