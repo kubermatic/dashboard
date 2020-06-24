@@ -1,5 +1,5 @@
 presubmits:
-- name: validate-prow-yaml
+- name: validate-prow
   always_run: true
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -19,7 +19,7 @@ presubmits:
           - --job-config-path=/home/prow/go/src/github.com/kubermatic/infra/prow/jobs
           - --prow-yaml-repo-name=$(REPO_OWNER)/$(REPO_NAME)
 
-- name: godep-check
+- name: check-godep
   always_run: true
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -34,38 +34,7 @@ presubmits:
           requests:
             cpu: 100m
 
-- name: build-image
-  always_run: true
-  decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
-  labels:
-    preset-docker-push: "true"
-  spec:
-    containers:
-      - image: quay.io/kubermatic/go-docker-node:v1.1.4
-        command:
-          - /bin/bash
-          - -c
-          - >-
-            set -euo pipefail &&
-            /usr/local/bin/entrypoint.sh &&
-            docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD &&
-            docker login -u $QUAY_IO_USERNAME -p $QUAY_IO_PASSWORD quay.io &&
-            make docker-build
-        # docker-in-docker needs privileged mode
-        securityContext:
-          privileged: true
-        resources:
-          requests:
-            cpu: 250m
-            memory: 2.5Gi
-          limits:
-            cpu: 1
-            memory: 3Gi
-    imagePullSecrets:
-      - name: quay
-
-- name: static-check
+- name: check-static
   always_run: true
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -194,3 +163,34 @@ presubmits:
               secretKeyRef:
                 name: e2e-ci
                 key: serviceAccountSigningKey
+
+- name: build-image
+  always_run: true
+  decorate: true
+  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+  labels:
+    preset-docker-push: "true"
+  spec:
+    containers:
+      - image: quay.io/kubermatic/go-docker-node:v1.1.4
+        command:
+          - /bin/bash
+          - -c
+          - >-
+            set -euo pipefail &&
+            /usr/local/bin/entrypoint.sh &&
+            docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD &&
+            docker login -u $QUAY_IO_USERNAME -p $QUAY_IO_PASSWORD quay.io &&
+            make docker-build
+        # docker-in-docker needs privileged mode
+        securityContext:
+          privileged: true
+        resources:
+          requests:
+            cpu: 250m
+            memory: 2.5Gi
+          limits:
+            cpu: 1
+            memory: 3Gi
+    imagePullSecrets:
+      - name: quay
