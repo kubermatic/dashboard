@@ -24,7 +24,7 @@ describe('Edition Story', () => {
   });
 
   it('should check if theme picker is available', () => {
-    UserSettingsPage.getThemePicker().should(isEnterpriseEdition ? Condition.Exist : Condition.NotExist;);
+    UserSettingsPage.getThemePicker().should(isEnterpriseEdition ? Condition.Exist : Condition.NotExist);
   });
 
   it('should logout', () => {
