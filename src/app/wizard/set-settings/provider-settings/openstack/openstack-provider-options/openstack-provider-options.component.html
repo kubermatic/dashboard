@@ -3,8 +3,8 @@
       *ngIf="!hideOptional">
   <mat-form-field fxFlex
                   class="km-with-hint">
-    <mat-label>{{getOptionalSettingsFormState('Security Group')}}</mat-label>
-    <mat-select [placeholder]="getOptionalSettingsFormState('Security Group')"
+    <mat-label>{{getSecurityGroupFormState()}}</mat-label>
+    <mat-select [placeholder]="getSecurityGroupFormState()"
                 disableOptionCentering
                 formControlName="securityGroup">
       <mat-option *ngFor="let item of securityGroups"
@@ -17,8 +17,8 @@
 
   <mat-form-field fxFlex
                   class="km-with-hint">
-    <mat-label>{{getOptionalSettingsFormState('Network')}}</mat-label>
-    <mat-select [placeholder]="getOptionalSettingsFormState('Network')"
+    <mat-label>{{getNetworkFormState()}}</mat-label>
+    <mat-select [placeholder]="getNetworkFormState()"
                 disableOptionCentering
                 formControlName="network">
       <mat-option *ngFor="let item of networks"

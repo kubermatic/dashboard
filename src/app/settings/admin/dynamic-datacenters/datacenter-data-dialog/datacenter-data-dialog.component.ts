@@ -67,12 +67,6 @@ export class DatacenterDataDialogComponent implements OnInit {
   ngOnInit(): void {
     this.editorOptions.theme = this._themeInformerService.isCurrentThemeDark ? 'vs-dark' : 'vs';
 
-    if (this.data.isEditing && !_.isEmpty(this.data.datacenter.spec.requiredEmailDomains)) {
-      this.requiredEmailDomains = this.data.datacenter.spec.requiredEmailDomains;
-    } else {
-      this.requiredEmailDomains = [];
-    }
-
     this.form = new FormGroup({
       name: new FormControl(this.data.isEditing ? this.data.datacenter.metadata.name : '', [Validators.required]),
       provider: new FormControl(
@@ -92,6 +86,19 @@ export class DatacenterDataDialogComponent implements OnInit {
       enforceAuditLogging: new FormControl(this.data.isEditing && this.data.datacenter.spec.enforceAuditLogging),
     });
 
+    this._initRequiredEmailDomainsInput();
+    this._initProviderConfigEditor();
+  }
+
+  private _initRequiredEmailDomainsInput(): void {
+    if (this.data.isEditing && !_.isEmpty(this.data.datacenter.spec.requiredEmailDomains)) {
+      this.requiredEmailDomains = this.data.datacenter.spec.requiredEmailDomains;
+    } else {
+      this.requiredEmailDomains = [];
+    }
+  }
+
+  private _initProviderConfigEditor(): void {
     if (this.data.isEditing && this.data.datacenter.spec.provider) {
       const spec = this.data.datacenter.spec[this.data.datacenter.spec.provider];
       if (!_.isEmpty(spec)) {

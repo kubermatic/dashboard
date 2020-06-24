@@ -149,7 +149,7 @@ describe('OpenstackProviderOptionsComponent', () => {
   it('should set correct optional settings placeholder', () => {
     component.cluster.spec.cloud.openstack.tenant = '';
     fixture.detectChanges();
-    expect(component.getOptionalSettingsFormState('Security Group')).toEqual('Security Group');
+    expect(component.getSecurityGroupFormState()).toEqual('Security Group');
 
     component.cluster.spec.cloud.openstack.username = 'username';
     component.cluster.spec.cloud.openstack.password = 'password';
@@ -158,14 +158,14 @@ describe('OpenstackProviderOptionsComponent', () => {
     component.securityGroups = [];
     component.networks = [];
     fixture.detectChanges();
-    expect(component.getOptionalSettingsFormState('Security Group')).toEqual('No Security Groups available');
-    expect(component.getOptionalSettingsFormState('Network')).toEqual('No Networks available');
+    expect(component.getSecurityGroupFormState()).toEqual('No Security Groups available');
+    expect(component.getNetworkFormState()).toEqual('No Networks available');
 
     component.securityGroups = openstackSecurityGroupsFake();
     component.networks = openstackSortedNetworksFake();
     fixture.detectChanges();
-    expect(component.getOptionalSettingsFormState('Security Group')).toEqual('Security Group');
-    expect(component.getOptionalSettingsFormState('Network')).toEqual('Network');
+    expect(component.getSecurityGroupFormState()).toEqual('Security Group');
+    expect(component.getNetworkFormState()).toEqual('Network');
   });
 
   it('should set correct subnet id placeholder', fakeAsync(() => {

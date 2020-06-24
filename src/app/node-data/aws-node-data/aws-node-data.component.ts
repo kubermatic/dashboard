@@ -101,6 +101,8 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       this.nodeData.valid = data.valid;
     });
 
+    // Complexity check for the following line is disabled as we are switching to the new node data component.
+    // eslint-disable-next-line complexity
     this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
       if (
         (data.cloudSpec.aws.vpcId !== '' &&
