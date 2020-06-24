@@ -1,10 +1,10 @@
 ---
-name: Design Request
-about: Request design/ui drafts for Kubermatic Dashboard
+name: Design Draft Request
+about: Request an UI draft for Kubermatic Kubernetes Platform 
 labels: kind/design, team/ui
 
 ---
 
-**For what do you want a design draft?**:
+### What do you want a draft of?
 
-**Requirements how it should look like / what should be in**:
+### Technical outline, functionality 
