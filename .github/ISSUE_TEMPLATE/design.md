@@ -5,6 +5,6 @@ labels: kind/design, team/ui
 
 ---
 
-### What do you want a draft of?
+**What do you want a draft of?**
 
-### Technical outline, functionality 
+**Technical outline, functionality**
