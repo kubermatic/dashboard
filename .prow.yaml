@@ -236,7 +236,7 @@ presubmits:
           - /bin/bash
           - -c
           - >-
-            set -euo pipefail &&
+            set -eo pipefail &&
             export KUBERMATIC_EDITION=ce &&
             make run-e2e-ci
         securityContext:
