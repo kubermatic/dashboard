@@ -10,6 +10,7 @@ export class ClusterSpecForm {
   imagePullSecret?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
+  admissionPlugins?: string[];
   auditLogging?: AuditLoggingSettings;
   valid: boolean;
 }

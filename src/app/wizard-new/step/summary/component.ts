@@ -1,6 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
+import * as _ from 'lodash';
+
 import {DatacenterService} from '../../../core/services';
 import {NodeDataService} from '../../../node-data-new/service/service';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
@@ -9,6 +11,7 @@ import {SSHKey} from '../../../shared/entity/ssh-key';
 import {getIpCount} from '../../../shared/functions/get-ip-count';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../shared/model/NodeSpecChange';
+import {AdmissionPluginUtils} from '../../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {ClusterService} from '../../service/cluster';
 import {getOperatingSystem, getOperatingSystemLogoClass} from '../../../shared/entity/node';
 
@@ -19,6 +22,7 @@ import {getOperatingSystem, getOperatingSystemLogoClass} from '../../../shared/e
 })
 export class SummaryStepComponent implements OnInit, OnDestroy {
   clusterSSHKeys: SSHKey[] = [];
+  clusterAdmissionPlugins: string[] = [];
   nodeData: NodeData;
   cluster: Cluster;
   noMoreIpsLeft = false;
@@ -55,6 +59,10 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
     this._clusterService.sshKeyChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(keys => (this.clusterSSHKeys = keys));
+
+    this._clusterService.admissionPluginsChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(plugins => (this.clusterAdmissionPlugins = plugins));
 
     this._clusterService.datacenterChanges
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
@@ -122,6 +130,14 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
 
   getSSHKeyNames(): string {
     return this.clusterSSHKeys.map(key => key.name).join(', ');
+  }
+
+  hasAdmissionPlugins(): boolean {
+    return !_.isEmpty(this.clusterAdmissionPlugins);
+  }
+
+  getAdmissionPlugins(): string {
+    return AdmissionPluginUtils.getJoinedPluginNames(this.clusterAdmissionPlugins);
   }
 
   private _hasProviderOptions(provider: NodeProvider): boolean {

@@ -35,7 +35,8 @@
        [matTooltip]="link.label"
        target="_blank"
        rel="noopener">
-      <i [ngStyle]="getCustomLinkIconStyle(link)"></i>
+      <i [style.background-image]="getBackgroundImageUrlStyle(link)"
+         [style.filter]="getFilterStyle()"></i>
     </a>
   </div>
 </footer>

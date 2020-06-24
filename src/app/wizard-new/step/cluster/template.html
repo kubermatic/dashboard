@@ -84,6 +84,38 @@
             </mat-hint>
           </mat-form-field>
 
+          <div fxFlex="100"
+               fxLayout="column">
+            <mat-form-field>
+              <mat-label>Admission Plugins</mat-label>
+              <mat-select [formControlName]="Controls.AdmissionPlugins"
+                          multiple
+                          panelClass="km-multiple-values-dropdown"
+                          disableOptionCentering>
+                <mat-option *ngFor="let admissionPlugin of admissionPlugins"
+                            [value]="admissionPlugin"
+                            [disabled]="admissionPlugin === admissionPlugin.PodSecurityPolicy && !!isPodSecurityPolicyEnforced()">
+                  {{getPluginName(admissionPlugin)}}
+                  <i *ngIf="admissionPlugin === admissionPlugin.PodSecurityPolicy"
+                     class="km-icon-info"
+                     matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <span *ngIf="isPluginEnabled(admissionPlugin.PodSecurityPolicy)"
+                  class="km-admission-plugin-warning"
+                  fxLayout="row">
+              <i class="km-icon-warning km-warning"></i>
+              <p fxFlex="95">Activating Pod Security Policy will mean that a lot of Pod specifications, Operators and Helm charts will not work out of the box. Make sure that you know the consequences of activating this feature.</p>
+            </span>
+            <span *ngIf="isPodSecurityPolicyEnforced()"
+                  class="km-admission-plugin-warning"
+                  fxLayout="row">
+              <i class="km-icon-info"></i>
+              <p fxFlex="95">Pod Security Policy is enforced by your admin in the chosen datacenter.</p>
+            </span>
+          </div>
+
           <div fxLayout="column"
                fxLayoutGap="16px"
                fxFlex>
@@ -95,23 +127,6 @@
                    class="km-icon-info"
                    matTooltip="Audit Logging is enforced by your admin in the chosen datacenter."></i>
               </mat-checkbox>
-              <div fxLayout="row"
-                   fxLayoutGap="8px"
-                   fxLayoutAlign=" center">
-                <mat-checkbox [formControlName]="Controls.PodSecurityPolicyAdmissionPlugin">
-                  Pod Security Policy
-                </mat-checkbox>
-                <i class="km-icon-info"
-                   matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
-                <i *ngIf="isEnforced(Controls.PodSecurityPolicyAdmissionPlugin)"
-                   class="km-icon-info"
-                   matTooltip="Pod Security Policy is enforced by your admin in the chosen datacenter."></i>
-                <i *ngIf="controlValue(Controls.PodSecurityPolicyAdmissionPlugin)"
-                   class="km-icon-warning km-warning"
-                   matTooltip="Activating Pod Security Policy will mean that a lot of Pod specifications, Operators and Helm charts will not work out of the box. Make sure that you know the consequences of activating this feature.">
-                </i>
-              </div>
-              <mat-checkbox [formControlName]="Controls.PodNodeSelectorAdmissionPlugin">Pod Node Selector</mat-checkbox>
             </div>
 
             <km-label-form title="Labels"

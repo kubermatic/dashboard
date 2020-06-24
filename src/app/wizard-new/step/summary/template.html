@@ -64,14 +64,18 @@
                                [value]="false">
           </km-property-boolean>
         </div>
+        <div [ngSwitch]="hasAdmissionPlugins()">
+          <km-property *ngSwitchCase="true">
+            <div key>Enabled Admission Plugins</div>
+            <div value>{{getAdmissionPlugins()}}</div>
+          </km-property>
+          <km-property-boolean *ngSwitchCase="false"
+                               label="Admission Plugins"
+                               [value]="false">
+          </km-property-boolean>
+        </div>
         <km-property-boolean label="Audit Logging"
                              [value]="cluster.spec.auditLogging?.enabled">
-        </km-property-boolean>
-        <km-property-boolean label="Pod Security Policy"
-                             [value]="cluster.spec.usePodSecurityPolicyAdmissionPlugin">
-        </km-property-boolean>
-        <km-property-boolean label="Pod Node Selector"
-                             [value]="cluster.spec.usePodNodeSelectorAdmissionPlugin">
         </km-property-boolean>
         <km-property-boolean *ngIf="nodeData.spec.operatingSystem.ubuntu"
                              label="Upgrade system on the first boot"

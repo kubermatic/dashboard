@@ -134,6 +134,13 @@
                              *ngIf="!!cluster.spec.usePodNodeSelectorAdmissionPlugin">
         </km-property-boolean>
 
+        <km-property *ngIf="cluster.spec.admissionPlugins">
+          <div key>Enabled Admission Plugins</div>
+          <div value>
+            {{getAdmissionPlugins()}}
+          </div>
+        </km-property>
+
         <km-property>
           <div value>
             <km-ssh-key-list [sshKeys]="sshKeys"></km-ssh-key-list>
