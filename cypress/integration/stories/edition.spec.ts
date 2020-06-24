@@ -1,12 +1,13 @@
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
+import {UserSettingsPage} from "../../pages/user-settings.po";
 
-describe('Basic Story', () => {
+describe('Edition Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const kubermaticEdition = Cypress.env('KUBERMATIC_EDITION');
   const isEnterpriseEdition = kubermaticEdition === "ee";
-  const expectedFooter = isEnterpriseEdition ? 'EnterpriseEdition' : 'Community Edition';
+  const editionName = isEnterpriseEdition ? 'Enterprise Edition' : 'Community Edition';
 
   it('should login', () => {
     login(email, password);
@@ -15,7 +16,16 @@ describe('Basic Story', () => {
   });
 
   it('should check if footer contains correct edition', () => {
-    // todo check footer
+    cy.get('#km-edition').should(Condition.HaveValue, editionName);
+  });
+
+  it('should go to the user settings', () => {
+    UserSettingsPage.visit();
+  });
+
+  it('should check if theme picker is available', () => {
+    const condition = isEnterpriseEdition ? Condition.Exist : Condition.NotExist;
+    UserSettingsPage.getThemePicker().should(condition);
   });
 
   it('should logout', () => {
