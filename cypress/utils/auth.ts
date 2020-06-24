@@ -2,7 +2,7 @@ import {DexPage} from '../pages/dex.po';
 import {LoginPage} from '../pages/login.po';
 import {Condition} from './condition';
 import {ProjectsPage} from '../pages/projects.po';
-import {UserPanel} from "../pages/user-panel.po";
+import {UserPanel} from '../pages/user-panel.po';
 
 export function login(email: string, password: string): void {
   LoginPage.visit();
@@ -20,6 +20,5 @@ export function login(email: string, password: string): void {
 }
 
 export function logout(): void {
-  UserPanel.open();
-  UserPanel.getLogoutBtn().click();
+  UserPanel.logout();
 }
