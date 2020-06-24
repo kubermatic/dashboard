@@ -16,7 +16,7 @@ describe('Edition Story', () => {
   });
 
   it('should check if footer contains correct edition', () => {
-    cy.get('#km-edition').should(Condition.HaveValue, editionName);
+    cy.get('#km-edition').should(Condition.Contain, editionName);
   });
 
   it('should go to the user settings', () => {
@@ -24,8 +24,7 @@ describe('Edition Story', () => {
   });
 
   it('should check if theme picker is available', () => {
-    const condition = isEnterpriseEdition ? Condition.Exist : Condition.NotExist;
-    UserSettingsPage.getThemePicker().should(condition);
+    UserSettingsPage.getThemePicker().should(isEnterpriseEdition ? Condition.Exist : Condition.NotExist;);
   });
 
   it('should logout', () => {
