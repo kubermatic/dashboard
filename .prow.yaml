@@ -1,5 +1,5 @@
 presubmits:
-- name: pull-kubermatic-dashboard-validate-prow-yaml
+- name: validate-prow-yaml
   always_run: true
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -19,7 +19,7 @@ presubmits:
           - --job-config-path=/home/prow/go/src/github.com/kubermatic/infra/prow/jobs
           - --prow-yaml-repo-name=$(REPO_OWNER)/$(REPO_NAME)
 
-- name: pull-dashboard-godep-check
+- name: godep-check
   always_run: true
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -34,67 +34,7 @@ presubmits:
           requests:
             cpu: 100m
 
-- name: pull-dashboard-dependencies
-  always_run: true
-  decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
-  spec:
-    containers:
-      - image: node:12
-        command:
-          - make
-        args:
-          - install
-        resources:
-          requests:
-            cpu: 250m
-            memory: 512Mi
-          limits:
-            cpu: 1
-            memory: 1Gi
-
-- name: pull-dashboard-node-dist
-  always_run: true
-  decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
-  spec:
-    containers:
-      - image: node:12
-        command:
-          - make
-        args:
-          - dist
-        resources:
-          requests:
-            cpu: 1
-            memory: 3Gi
-          limits:
-            cpu: 2
-            memory: 5Gi
-
-- name: pull-dashboard-build
-  always_run: true
-  decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
-  spec:
-    containers:
-      - image: golang:1.13.3
-        command:
-          - make
-        args:
-          - build
-        env:
-          - name: GO111MODULE
-            value: 'off'
-        resources:
-          requests:
-            cpu: 100m
-            memory: 512Mi
-          limits:
-            cpu: 250m
-            memory: 512Mi
-
-- name: pre-build-dashboard-image
+- name: build-image
   always_run: true
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -125,7 +65,7 @@ presubmits:
     imagePullSecrets:
       - name: quay
 
-- name: pull-dashboard-static-check
+- name: static-check
   always_run: true
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -144,7 +84,7 @@ presubmits:
             cpu: 1
             memory: 1Gi
 
-- name: pull-dashboard-test-headless
+- name: test-unit
   always_run: true
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -169,7 +109,7 @@ presubmits:
                 name: kubermatic-codecov
                 key: token
 
-- name: pull-dashboard-test-e2e
+- name: test-e2e
   always_run: true
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -210,7 +150,7 @@ presubmits:
             name: e2e-ci
             key: serviceAccountSigningKey
 
-- name: pull-dashboard-test-e2e-ce
+- name: test-e2e-ce
   always_run: true
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
