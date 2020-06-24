@@ -4,6 +4,7 @@ import {first} from 'rxjs/operators';
 
 import {ApiService, NotificationService, UserService} from '../../../core/services';
 import {Cluster} from '../../../shared/entity/cluster';
+import {View} from '../../../shared/entity/common';
 import {Datacenter} from '../../../shared/entity/datacenter';
 import {Member} from '../../../shared/entity/member';
 import {GroupConfig} from '../../../shared/model/Config';
@@ -39,7 +40,7 @@ export class RevokeTokenComponent implements OnInit {
   }
 
   isRevokeTokenEnabled(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'clusters', Permission.Edit);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Edit);
   }
 
   revokeToken(): void {
