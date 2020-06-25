@@ -36,6 +36,7 @@ export enum View {
   NodeDeployment = 'nd',
 }
 
+// IMPORTANT: names in 'ViewDisplayName' have to be in sync with names in 'View'
 export enum ViewDisplayName {
   Clusters = 'Clusters',
   Projects = 'Projects',
@@ -48,27 +49,12 @@ export enum ViewDisplayName {
   NodeDeployment = 'Node Deployment',
 }
 
-export function getViewDisplayName(view: string): string {
-  switch (view) {
-    case View.Clusters:
-      return ViewDisplayName.Clusters;
-    case View.Members:
-      return ViewDisplayName.Members;
-    case View.ServiceAccounts:
-      return ViewDisplayName.ServiceAccounts;
-    case View.SSHKeys:
-      return ViewDisplayName.SSHKeys;
-    case View.Wizard:
-      return ViewDisplayName.Wizard;
-    case View.Projects:
-      return ViewDisplayName.Projects;
-    case View.Account:
-      return ViewDisplayName.Account;
-    case View.Settings:
-      return ViewDisplayName.Settings;
-    case View.NodeDeployment:
-      return ViewDisplayName.NodeDeployment;
-    default:
-      return '';
+export function getViewDisplayName(viewName: string): string {
+  const view: View = Object.values(View).find(view => view === viewName);
+  if (!view) {
+    return '';
   }
+
+  const viewKey = Object.keys(View).find(viewKey => View[viewKey] === view);
+  return ViewDisplayName[viewKey] ? ViewDisplayName[viewKey] : '';
 }
