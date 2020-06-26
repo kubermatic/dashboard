@@ -218,7 +218,7 @@
               <div key>Disk Size in GB</div>
               <div value>{{element.spec.cloud.aws.diskSize}}</div>
             </km-property>
-            <km-property *ngIf="element.spec.cloud.aws && element.spec.cloud.aws.ami">
+            <km-property *ngIf="element.spec.cloud.aws?.ami">
               <div key>AMI ID</div>
               <div value>{{element.spec.cloud.aws.ami}}</div>
             </km-property>
@@ -228,7 +228,7 @@
               <div value>{{element.spec.cloud.openstack.image}}</div>
             </km-property>
 
-            <km-property *ngIf="element.spec.cloud.openstack && element.spec.cloud.openstack.availabilityZone">
+            <km-property *ngIf="element.spec.cloud.openstack?.availabilityZone">
               <div key>Availability Zone</div>
               <div value>{{element.spec.cloud.openstack.availabilityZone}}</div>
             </km-property>
@@ -266,11 +266,11 @@
               <div key>Memory in MB</div>
               <div value>{{element.spec.cloud.vsphere.memory}}</div>
             </km-property>
-            <km-property *ngIf="element.spec.cloud.vsphere && element.spec.cloud.vsphere.diskSizeGB">
+            <km-property *ngIf="element.spec.cloud.vsphere?.diskSizeGB">
               <div key>Disk Size in GB</div>
               <div value>{{element.spec.cloud.vsphere.diskSizeGB}}</div>
             </km-property>
-            <km-property *ngIf="element.spec.cloud.vsphere && element.spec.cloud.vsphere.template">
+            <km-property *ngIf="element.spec.cloud.vsphere?.template">
               <div key>VM Template</div>
               <div value>{{element.spec.cloud.vsphere.template}}</div>
             </km-property>
