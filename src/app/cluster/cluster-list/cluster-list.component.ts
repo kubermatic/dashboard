@@ -12,6 +12,7 @@ import {ApiService, ClusterService, DatacenterService, ProjectService, UserServi
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {CloudSpec, Cluster} from '../../shared/entity/cluster';
 import {Datacenter} from '../../shared/entity/datacenter';
+import {View} from '../../shared/entity/common';
 import {Health} from '../../shared/entity/health';
 import {Member} from '../../shared/entity/member';
 import {NodeDeployment} from '../../shared/entity/node-deployment';
@@ -142,11 +143,11 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   canAdd(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'clusters', Permission.Create);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Create);
   }
 
   canDelete(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'clusters', Permission.Delete);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Delete);
   }
 
   loadWizard(): void {
