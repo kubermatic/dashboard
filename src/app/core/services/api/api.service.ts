@@ -63,42 +63,43 @@ export class ApiService {
   createNodeDeployment(
     cluster: Cluster,
     nd: NodeDeployment,
-    dc: string,
+    seed: string,
     projectID: string
   ): Observable<NodeDeployment> {
     nd.spec.template.labels = LabelFormComponent.filterNullifiedKeys(nd.spec.template.labels);
     nd.spec.template.taints = TaintFormComponent.filterNullifiedTaints(nd.spec.template.taints);
 
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/nodedeployments`;
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster.id}/nodedeployments`;
     return this._http.post<NodeDeployment>(url, nd);
   }
 
-  getNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeployment[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments`;
+  getNodeDeployments(cluster: string, seed: string, projectID: string): Observable<NodeDeployment[]> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/nodedeployments`;
     return this._http.get<NodeDeployment[]>(url).pipe(catchError(() => of<NodeDeployment[]>()));
   }
 
-  getNodeDeployment(ndId: string, cluster: string, dc: string, projectID: string): Observable<NodeDeployment> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}`;
+  getNodeDeployment(ndId: string, cluster: string, seed: string, projectID: string): Observable<NodeDeployment> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/nodedeployments/${ndId}`;
     return this._http.get<NodeDeployment>(url);
   }
 
-  getNodeDeploymentNodes(ndId: string, cluster: string, dc: string, projectID: string): Observable<Node[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}/nodes`;
+  getNodeDeploymentNodes(ndId: string, cluster: string, seed: string, projectID: string): Observable<Node[]> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/nodedeployments/${ndId}/nodes`;
     return this._http.get<Node[]>(url);
   }
+
   getNodeDeploymentNodesMetrics(
     ndId: string,
     cluster: string,
-    dc: string,
+    seed: string,
     projectID: string
   ): Observable<NodeMetrics[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}/nodes/metrics`;
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/nodedeployments/${ndId}/nodes/metrics`;
     return this._http.get<NodeMetrics[]>(url);
   }
 
-  getNodeDeploymentNodesEvents(ndId: string, cluster: string, dc: string, projectID: string): Observable<Event[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}/nodes/events`;
+  getNodeDeploymentNodesEvents(ndId: string, cluster: string, seed: string, projectID: string): Observable<Event[]> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/nodedeployments/${ndId}/nodes/events`;
     return this._http.get<Event[]>(url);
   }
 
@@ -106,15 +107,15 @@ export class ApiService {
     nd: NodeDeployment,
     patch: NodeDeploymentPatch,
     clusterId: string,
-    dc: string,
+    seed: string,
     projectID: string
   ): Observable<NodeDeployment> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterId}/nodedeployments/${nd.id}`;
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterId}/nodedeployments/${nd.id}`;
     return this._http.patch<NodeDeployment>(url, patch);
   }
 
-  deleteNodeDeployment(cluster: string, nd: NodeDeployment, dc: string, projectID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${nd.id}`;
+  deleteNodeDeployment(cluster: string, nd: NodeDeployment, seed: string, projectID: string): Observable<any> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/nodedeployments/${nd.id}`;
     return this._http.delete(url);
   }
 
@@ -143,105 +144,105 @@ export class ApiService {
     return this._http.post<SSHKey>(url, sshKey);
   }
 
-  getDigitaloceanSizes(projectId: string, dc: string, clusterId: string): Observable<DigitaloceanSizes> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/digitalocean/sizes`;
+  getDigitaloceanSizes(projectId: string, seed: string, clusterId: string): Observable<DigitaloceanSizes> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/digitalocean/sizes`;
     return this._http.get<DigitaloceanSizes>(url);
   }
 
-  getHetznerTypes(projectId: string, dc: string, clusterId: string): Observable<HetznerTypes> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/hetzner/sizes`;
+  getHetznerTypes(projectId: string, seed: string, clusterId: string): Observable<HetznerTypes> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/hetzner/sizes`;
     return this._http.get<HetznerTypes>(url);
   }
 
-  getPacketSizes(projectId: string, dc: string, clusterId: string): Observable<PacketSize[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/packet/sizes`;
+  getPacketSizes(projectId: string, seed: string, clusterId: string): Observable<PacketSize[]> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/packet/sizes`;
     return this._http.get<PacketSize[]>(url);
   }
 
   getAlibabaInstanceTypes(
     projectId: string,
-    dc: string,
+    seed: string,
     clusterId: string,
     region: string
   ): Observable<AlibabaInstanceType[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/alibaba/instancetypes`;
+    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/alibaba/instancetypes`;
     const headers = new HttpHeaders().set('Region', region);
     return this._http.get<AlibabaInstanceType[]>(url, {headers});
   }
 
-  getAlibabaZones(projectId: string, dc: string, clusterId: string, region: string): Observable<AlibabaZone[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/alibaba/zones`;
+  getAlibabaZones(projectId: string, seed: string, clusterId: string, region: string): Observable<AlibabaZone[]> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/alibaba/zones`;
     const headers = new HttpHeaders().set('Region', region);
     return this._http.get<AlibabaZone[]>(url, {headers});
   }
 
-  editToken(cluster: Cluster, dc: string, projectID: string, token: Token): Observable<Token> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/token`;
+  editToken(cluster: Cluster, seed: string, projectID: string, token: Token): Observable<Token> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster.id}/token`;
     return this._http.put<Token>(url, token);
   }
 
-  editViewerToken(cluster: Cluster, dc: string, projectID: string, token: Token): Observable<Token> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/viewertoken`;
+  editViewerToken(cluster: Cluster, seed: string, projectID: string, token: Token): Observable<Token> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster.id}/viewertoken`;
     return this._http.put<Token>(url, token);
   }
 
-  getAWSSubnets(projectId: string, dc: string, clusterId: string): Observable<AWSSubnet[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/aws/subnets`;
+  getAWSSubnets(projectId: string, seed: string, clusterId: string): Observable<AWSSubnet[]> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/aws/subnets`;
     return this._http.get<AWSSubnet[]>(url);
   }
 
-  getAWSSizes(projectId: string, dc: string, clusterId: string): Observable<AWSSize[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/aws/sizes`;
+  getAWSSizes(projectId: string, seed: string, clusterId: string): Observable<AWSSize[]> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/aws/sizes`;
     return this._http.get<AWSSize[]>(url);
   }
 
-  getGCPZones(projectId: string, dc: string, clusterId: string): Observable<GCPZone[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/gcp/zones`;
+  getGCPZones(projectId: string, seed: string, clusterId: string): Observable<GCPZone[]> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/gcp/zones`;
     return this._http.get<GCPZone[]>(url);
   }
 
-  getGCPSizes(zone: string, projectId: string, dc: string, clusterId: string): Observable<GCPMachineSize[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/gcp/sizes`;
+  getGCPSizes(zone: string, projectId: string, seed: string, clusterId: string): Observable<GCPMachineSize[]> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/gcp/sizes`;
     const headers = new HttpHeaders().set('Zone', zone);
     return this._http.get<GCPMachineSize[]>(url, {headers});
   }
 
-  getGCPDiskTypes(zone: string, projectId: string, dc: string, clusterId: string): Observable<GCPDiskType[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/gcp/disktypes`;
+  getGCPDiskTypes(zone: string, projectId: string, seed: string, clusterId: string): Observable<GCPDiskType[]> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/gcp/disktypes`;
     const headers = new HttpHeaders().set('Zone', zone);
     return this._http.get<GCPDiskType[]>(url, {headers});
   }
 
-  getGCPNetworks(projectId: string, dc: string, clusterId: string): Observable<GCPNetwork[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/gcp/networks`;
+  getGCPNetworks(projectId: string, seed: string, clusterId: string): Observable<GCPNetwork[]> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/gcp/networks`;
     return this._http.get<GCPNetwork[]>(url);
   }
 
-  getGCPSubnetworks(projectId: string, dc: string, clusterId: string, network: string): Observable<GCPSubnetwork[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/gcp/subnetworks`;
+  getGCPSubnetworks(projectId: string, seed: string, clusterId: string, network: string): Observable<GCPSubnetwork[]> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/gcp/subnetworks`;
     const headers = new HttpHeaders().set('Network', network);
     return this._http.get<GCPSubnetwork[]>(url, {headers});
   }
 
-  getOpenStackFlavors(projectId: string, dc: string, cluster: string): Observable<OpenstackFlavor[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/openstack/sizes`;
+  getOpenStackFlavors(projectId: string, seed: string, cluster: string): Observable<OpenstackFlavor[]> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${cluster}/providers/openstack/sizes`;
     return this._http.get<OpenstackFlavor[]>(url);
   }
 
-  getKubeconfigURL(projectID: string, dc: string, clusterID: string): string {
-    return `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/kubeconfig?token=${this._token}`;
+  getKubeconfigURL(projectID: string, seed: string, clusterID: string): string {
+    return `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/kubeconfig?token=${this._token}`;
   }
 
-  getDashboardProxyURL(projectID: string, dc: string, clusterID: string): string {
-    return `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/dashboard/proxy`;
+  getDashboardProxyURL(projectID: string, seed: string, clusterID: string): string {
+    return `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/dashboard/proxy`;
   }
 
-  getOpenshiftProxyURL(projectID: string, dc: string, clusterID: string): string {
-    return `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/openshift/console/login`;
+  getOpenshiftProxyURL(projectID: string, seed: string, clusterID: string): string {
+    return `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/openshift/console/login`;
   }
 
-  getShareKubeconfigURL(projectID: string, dc: string, clusterID: string, userID: string): string {
-    return `${this._location}/${this._restRoot}/kubeconfig?project_id=${projectID}&datacenter=${dc}&cluster_id=${clusterID}&user_id=${userID}`;
+  getShareKubeconfigURL(projectID: string, seed: string, clusterID: string, userID: string): string {
+    return `${this._location}/${this._restRoot}/kubeconfig?project_id=${projectID}&datacenter=${seed}&cluster_id=${clusterID}&user_id=${userID}`;
   }
 
   getMasterVersions(type: ClusterType): Observable<MasterVersion[]> {
@@ -254,13 +255,13 @@ export class ApiService {
     return this._http.get<string[]>(url);
   }
 
-  getAzureSizes(projectId: string, dc: string, cluster: string): Observable<AzureSizes[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/azure/sizes`;
+  getAzureSizes(projectId: string, seed: string, cluster: string): Observable<AzureSizes[]> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${cluster}/providers/azure/sizes`;
     return this._http.get<AzureSizes[]>(url);
   }
 
-  getAzureAvailabilityZones(projectId: string, dc: string, cluster: string, size: string): Observable<AzureZones> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/azure/availabilityzones`;
+  getAzureAvailabilityZones(projectId: string, seed: string, cluster: string, size: string): Observable<AzureZones> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${cluster}/providers/azure/availabilityzones`;
     const headers = new HttpHeaders().set('SKUName', size);
     return this._http.get<AzureZones>(url, {headers});
   }
