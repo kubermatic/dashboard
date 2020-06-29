@@ -16,6 +16,7 @@ import {
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {Addon} from '../../shared/entity/addon';
 import {Cluster, ClusterType, getClusterProvider, MasterVersion} from '../../shared/entity/cluster';
+import {View} from '../../shared/entity/common';
 import {Datacenter} from '../../shared/entity/datacenter';
 import {Event} from '../../shared/entity/event';
 import {Health, HealthState} from '../../shared/entity/health';
@@ -335,7 +336,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isSSHKeysEditEnabled(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshKeys', Permission.Delete);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.SSHKeys, Permission.Delete);
   }
 
   editSSHKeys(): void {

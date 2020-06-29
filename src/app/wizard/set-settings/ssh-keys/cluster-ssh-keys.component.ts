@@ -9,6 +9,7 @@ import {ApiService, ProjectService, UserService} from '../../../core/services';
 import {WizardService} from '../../../core/services';
 import {AddSshKeyDialogComponent} from '../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {Cluster} from '../../../shared/entity/cluster';
+import {View} from '../../../shared/entity/common';
 import {Member} from '../../../shared/entity/member';
 import {Project} from '../../../shared/entity/project';
 import {SSHKey} from '../../../shared/entity/ssh-key';
@@ -89,7 +90,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   canAdd(): boolean {
-    return MemberUtils.hasPermission(this._currentUser, this._currentGroupConfig, 'sshKeys', Permission.Create);
+    return MemberUtils.hasPermission(this._currentUser, this._currentGroupConfig, View.SSHKeys, Permission.Create);
   }
 
   addSshKeyDialog(): void {

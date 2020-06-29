@@ -13,6 +13,7 @@ import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddSshKeyDialogComponent} from '../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {View} from '../shared/entity/common';
 import {Member} from '../shared/entity/member';
 import {SSHKey} from '../shared/entity/ssh-key';
 import {GroupConfig} from '../shared/model/Config';
@@ -113,7 +114,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   canAdd(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshKeys', Permission.Create);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.SSHKeys, Permission.Create);
   }
 
   addSshKey(): void {
@@ -126,7 +127,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   canDelete(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'sshKeys', Permission.Delete);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.SSHKeys, Permission.Delete);
   }
 
   deleteSshKey(sshKey: SSHKey, event: Event): void {

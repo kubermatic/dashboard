@@ -8,6 +8,7 @@ import {takeUntil} from 'rxjs/operators';
 import {AppConfigService} from './app-config.service';
 import {Auth} from './core/services';
 import {SettingsService} from './core/services/settings/settings.service';
+import {PageTitleService} from './core/services/page-title/page-title.service';
 import {GoogleAnalyticsService} from './google-analytics.service';
 import {AdminSettings, CustomLink} from './shared/entity/settings';
 import {VersionInfo} from './shared/entity/version-info';
@@ -34,7 +35,8 @@ export class KubermaticComponent implements OnInit, OnDestroy {
     private appConfigService: AppConfigService,
     private readonly _settingsService: SettingsService,
     public router: Router,
-    public googleAnalyticsService: GoogleAnalyticsService
+    public googleAnalyticsService: GoogleAnalyticsService,
+    private readonly _pageTitleService: PageTitleService
   ) {
     this._registerRouterWatch();
   }
@@ -69,6 +71,7 @@ export class KubermaticComponent implements OnInit, OnDestroy {
   private _registerRouterWatch(): void {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
+        this._pageTitleService.setTitle(event.urlAfterRedirects);
         this._handleSidenav(event.urlAfterRedirects);
         this.googleAnalyticsService.sendPageView(event.urlAfterRedirects);
       }
