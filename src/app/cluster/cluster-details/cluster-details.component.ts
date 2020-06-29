@@ -265,7 +265,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isDeleteEnabled(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'clusters', Permission.Delete);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Delete);
   }
 
   deleteClusterDialog(): void {
@@ -321,7 +321,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isEditEnabled(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'clusters', Permission.Edit);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Edit);
   }
 
   isOpenshiftCluster(): boolean {
@@ -355,7 +355,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isRevokeTokenEnabled(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'clusters', Permission.Edit);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Edit);
   }
 
   revokeToken(): void {

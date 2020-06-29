@@ -13,6 +13,7 @@ import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Member} from '../shared/entity/member';
+import {View} from '../shared/entity/common';
 import {Project} from '../shared/entity/project';
 import {GroupConfig} from '../shared/model/Config';
 import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
@@ -99,7 +100,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isAddEnabled(): boolean {
-    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, 'members', Permission.Create);
+    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Members, Permission.Create);
   }
 
   addMember(): void {
@@ -118,7 +119,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
 
   isEditEnabled(member: Member): boolean {
     return (
-      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, 'members', Permission.Edit) ||
+      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Members, Permission.Edit) ||
       (this.currentUser && member && this.currentUser.email !== member.email)
     );
   }
@@ -139,7 +140,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
 
   isDeleteEnabled(member: Member): boolean {
     return (
-      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, 'members', Permission.Delete) ||
+      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Members, Permission.Delete) ||
       (this.currentUser && member && this.currentUser.email !== member.email)
     );
   }

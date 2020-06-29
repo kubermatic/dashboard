@@ -91,7 +91,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     const urlArray = this._router.routerState.snapshot.url.split('/');
     return (
       !!urlArray.find(x => x === selectedProjectId) &&
-      (!!urlArray.find(x => x === url) || (url === 'clusters' && !!urlArray.find(x => x === 'wizard')))
+      (!!urlArray.find(x => x === url) || (url === View.Clusters && !!urlArray.find(x => x === View.Wizard)))
     );
   }
 
