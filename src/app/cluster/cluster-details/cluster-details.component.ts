@@ -38,6 +38,7 @@ import {EditClusterComponent} from './edit-cluster/edit-cluster.component';
 import {EditSSHKeysComponent} from './edit-sshkeys/edit-sshkeys.component';
 import {RevokeTokenComponent} from './revoke-token/revoke-token.component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/share-kubeconfig.component';
+import {PathParam} from '../../core/services/params/params.service';
 
 @Component({
   selector: 'km-cluster-details',
@@ -85,9 +86,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.config = this._appConfigService.getConfig();
-    this.projectID = this._route.snapshot.paramMap.get('projectID');
-    const clusterID = this._route.snapshot.paramMap.get('clusterName');
-    this.seed = this._route.snapshot.paramMap.get('seedDc');
+    this.projectID = this._route.snapshot.paramMap.get(PathParam.ProjectID);
+    const clusterID = this._route.snapshot.paramMap.get(PathParam.ClusterID);
+    this.seed = this._route.snapshot.paramMap.get(PathParam.SeedDC);
 
     this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
 

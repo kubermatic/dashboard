@@ -21,7 +21,7 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() projectId: string;
   @Input() clusterId: string;
-  @Input() seedDCName: string;
+  @Input() seed: string;
 
   sizes: PacketSize[] = [];
   form: FormGroup;
@@ -151,7 +151,7 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
         .projectID(this.cloudSpec.packet.projectID)
         .credential(this._selectedCredentials)
         .flavors(),
-      this._api.getPacketSizes(this.projectId, this.seedDCName, this.clusterId)
+      this._api.getPacketSizes(this.projectId, this.seed, this.clusterId)
     )
       .pipe(first())
       .pipe(takeUntil(this._unsubscribe))

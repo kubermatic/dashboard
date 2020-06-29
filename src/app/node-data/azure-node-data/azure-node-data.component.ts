@@ -23,7 +23,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   @Input() nodeData: NodeData;
   @Input() projectId: string;
   @Input() clusterId: string;
-  @Input() seedDCName: string;
+  @Input() seed: string;
 
   sizes: AzureSizes[] = [];
   zones: string[] = [];
@@ -178,7 +178,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
               .location(this.datacenter.spec.azure.location)
               .credential(this._selectedPreset)
               .flavors(),
-            this._api.getAzureSizes(this.projectId, this.seedDCName, this.clusterId)
+            this._api.getAzureSizes(this.projectId, this.seed, this.clusterId)
           );
         })
       )
@@ -259,7 +259,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
               .availabilityZones(),
             this._api.getAzureAvailabilityZones(
               this.projectId,
-              this.seedDCName,
+              this.seed,
               this.clusterId,
               this.form.controls.size.value
             )

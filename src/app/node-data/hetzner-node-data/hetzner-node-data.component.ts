@@ -20,7 +20,7 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() projectId: string;
   @Input() clusterId: string;
-  @Input() seedDCName: string;
+  @Input() seed: string;
 
   types: HetznerTypes = {dedicated: [], standard: []};
   form: FormGroup;
@@ -130,7 +130,7 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
         .token(this.cloudSpec.hetzner.token)
         .credential(this._selectedCredentials)
         .flavors(),
-      this._apiService.getHetznerTypes(this.projectId, this.seedDCName, this.clusterId)
+      this._apiService.getHetznerTypes(this.projectId, this.seed, this.clusterId)
     )
       .pipe(first())
       .pipe(takeUntil(this._unsubscribe))

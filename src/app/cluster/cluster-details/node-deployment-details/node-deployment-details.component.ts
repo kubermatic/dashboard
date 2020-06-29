@@ -16,6 +16,7 @@ import {GroupConfig} from '../../../shared/model/Config';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {NodeService} from '../../services/node.service';
+import {PathParam} from '../../../core/services/params/params.service';
 
 @Component({
   selector: 'km-node-deployment-details',
@@ -58,10 +59,10 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._clusterName = this._activatedRoute.snapshot.paramMap.get('clusterName');
-    this._nodeDeploymentID = this._activatedRoute.snapshot.paramMap.get('nodeDeploymentID');
-    this.projectID = this._activatedRoute.snapshot.paramMap.get('projectID');
-    this.seed = this._activatedRoute.snapshot.paramMap.get('seedDc');
+    this._clusterName = this._activatedRoute.snapshot.paramMap.get(PathParam.ClusterID);
+    this._nodeDeploymentID = this._activatedRoute.snapshot.paramMap.get(PathParam.NodeDeploymentID);
+    this.projectID = this._activatedRoute.snapshot.paramMap.get(PathParam.ProjectID);
+    this.seed = this._activatedRoute.snapshot.paramMap.get(PathParam.SeedDC);
 
     this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
 

@@ -22,7 +22,7 @@ export class AlibabaNodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() clusterId: string;
   @Input() projectId: string;
-  @Input() seedDCName: string;
+  @Input() seed: string;
 
   instanceTypes: AlibabaInstanceType[] = [];
   zones: AlibabaZone[] = [];
@@ -163,12 +163,7 @@ export class AlibabaNodeDataComponent implements OnInit, OnDestroy {
               .region(dc.spec.alibaba.region)
               .credential(this._selectedPreset)
               .instanceTypes(),
-            this._apiService.getAlibabaInstanceTypes(
-              this.projectId,
-              this.seedDCName,
-              this.clusterId,
-              dc.spec.alibaba.region
-            )
+            this._apiService.getAlibabaInstanceTypes(this.projectId, this.seed, this.clusterId, dc.spec.alibaba.region)
           );
         })
       )
@@ -240,7 +235,7 @@ export class AlibabaNodeDataComponent implements OnInit, OnDestroy {
               .region(dc.spec.alibaba.region)
               .credential(this._selectedPreset)
               .zones(),
-            this._apiService.getAlibabaZones(this.projectId, this.seedDCName, this.clusterId, dc.spec.alibaba.region)
+            this._apiService.getAlibabaZones(this.projectId, this.seed, this.clusterId, dc.spec.alibaba.region)
           );
         })
       )

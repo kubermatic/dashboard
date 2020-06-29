@@ -20,7 +20,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
   @Input() nodeData: NodeData;
   @Input() projectId: string;
   @Input() clusterId: string;
-  @Input() seedDCName: string;
+  @Input() seed: string;
 
   sizes: DigitaloceanSizes = {optimized: [], standard: []};
   form: FormGroup;
@@ -128,7 +128,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
         .token(this.cloudSpec.digitalocean.token)
         .credential(this._selectedCredentials)
         .flavors(),
-      this._api.getDigitaloceanSizes(this.projectId, this.seedDCName, this.clusterId)
+      this._api.getDigitaloceanSizes(this.projectId, this.seed, this.clusterId)
     )
       .pipe(first())
       .pipe(takeUntil(this._unsubscribe))

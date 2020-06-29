@@ -22,7 +22,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() projectId: string;
   @Input() clusterId: string;
-  @Input() seedDCName: string;
+  @Input() seed: string;
 
   diskTypes: GCPDiskType[] = [];
   machineTypes: GCPMachineSize[] = [];
@@ -177,7 +177,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
         .serviceAccount(this.cloudSpec.gcp.serviceAccount)
         .credential(this._selectedPreset)
         .zones(this.cloudSpec.dc),
-      this._apiService.getGCPZones(this.projectId, this.seedDCName, this.clusterId)
+      this._apiService.getGCPZones(this.projectId, this.seed, this.clusterId)
     )
       .pipe(first())
       .pipe(takeUntil(this._unsubscribe))
@@ -255,12 +255,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
         .serviceAccount(this.cloudSpec.gcp.serviceAccount)
         .credential(this._selectedPreset)
         .diskTypes(),
-      this._apiService.getGCPDiskTypes(
-        this.nodeData.spec.cloud.gcp.zone,
-        this.projectId,
-        this.seedDCName,
-        this.clusterId
-      )
+      this._apiService.getGCPDiskTypes(this.nodeData.spec.cloud.gcp.zone, this.projectId, this.seed, this.clusterId)
     )
       .pipe(first())
       .pipe(takeUntil(this._unsubscribe))
@@ -338,7 +333,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
         .serviceAccount(this.cloudSpec.gcp.serviceAccount)
         .credential(this._selectedPreset)
         .machineTypes(),
-      this._apiService.getGCPSizes(this.nodeData.spec.cloud.gcp.zone, this.projectId, this.seedDCName, this.clusterId)
+      this._apiService.getGCPSizes(this.nodeData.spec.cloud.gcp.zone, this.projectId, this.seed, this.clusterId)
     )
       .pipe(first())
       .pipe(takeUntil(this._unsubscribe))
