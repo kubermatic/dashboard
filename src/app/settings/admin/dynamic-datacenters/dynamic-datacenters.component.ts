@@ -1,5 +1,5 @@
 import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
-import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {CreateDatacenterModel, Datacenter} from '../../../shared/entity/datacenter';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
@@ -62,20 +62,14 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
     };
 
     this._datacenterService.datacenters
-      .pipe(
-        map((datacenters: Datacenter[]) =>
-          datacenters
-            .filter(datacenter => !datacenter.seed)
-            .sort((a, b) => a.metadata.name.localeCompare(b.metadata.name))
-        ),
-        tap(datacenters => this._setSeeds(datacenters)),
-        tap(datacenters => this._setCountries(datacenters))
-      )
+      .pipe(tap(datacenters => this._setCountries(datacenters)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(datacenters => {
         this.datacenters = datacenters;
         this.filter();
       });
+
+    this._datacenterService.seeds.pipe(takeUntil(this._unsubscribe)).subscribe(seeds => (this.seeds = seeds));
 
     this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
@@ -107,12 +101,6 @@ export class DynamicDatacentersComponent implements OnInit, OnChanges {
 
   private _setCountries(datacenters: Datacenter[]) {
     this.countries = Array.from(new Set(datacenters.map(datacenter => datacenter.spec.country))).sort((a, b) =>
-      a.localeCompare(b)
-    );
-  }
-
-  private _setSeeds(datacenters: Datacenter[]) {
-    this.seeds = Array.from(new Set(datacenters.map(datacenter => datacenter.spec.seed))).sort((a, b) =>
       a.localeCompare(b)
     );
   }
