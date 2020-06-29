@@ -9,7 +9,6 @@ import {ApiService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '../../shared/entity/cluster';
-import {Datacenter} from '../../shared/entity/datacenter';
 import {NodeDeployment, NodeDeploymentPatch} from '../../shared/entity/node-deployment';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {NodeDataModalComponent, NodeDataModalData} from '../cluster-details/node-data-modal/node-data-modal.component';
@@ -59,9 +58,9 @@ export class NodeService {
     this._notificationService = this._inj.get(NotificationService);
   }
 
-  createNodeDeployment(nodeData: NodeData, dc: Datacenter, cluster: Cluster, project: string): void {
+  createNodeDeployment(nodeData: NodeData, seed: string, cluster: Cluster, project: string): void {
     this._apiService
-      .createNodeDeployment(cluster, NodeService._getNodeDeploymentEntity(nodeData), dc.metadata.name, project)
+      .createNodeDeployment(cluster, NodeService._getNodeDeploymentEntity(nodeData), seed, project)
       .pipe(first())
       .subscribe(() => {
         this._notificationService.success(
@@ -75,12 +74,12 @@ export class NodeService {
     count: number,
     cluster: Cluster,
     projectID: string,
-    datacenter: Datacenter
+    seed: string
   ): Observable<boolean> {
     const dialogRef = this._matDialog.open(NodeDataModalComponent, {
       data: {
         cluster,
-        datacenter,
+        seed,
         projectID,
         existingNodesCount: count,
         editMode: false,
@@ -90,7 +89,7 @@ export class NodeService {
     return dialogRef.afterClosed().pipe<boolean>(
       map((data: NodeDataModalData) => {
         if (data) {
-          this.createNodeDeployment(data.nodeData, data.datacenter, data.cluster, data.projectID);
+          this.createNodeDeployment(data.nodeData, data.seed, data.cluster, data.projectID);
           return true;
         }
         return false;
@@ -102,13 +101,13 @@ export class NodeService {
     nd: NodeDeployment,
     cluster: Cluster,
     projectID: string,
-    datacenter: Datacenter,
+    seed: string,
     changeEventEmitter: EventEmitter<NodeDeployment>
   ): Observable<boolean> {
     const dialogRef = this._matDialog.open(NodeDataModalComponent, {
       data: {
         cluster,
-        datacenter,
+        seed,
         projectID,
         existingNodesCount: nd.spec.replicas,
         editMode: true,
@@ -134,7 +133,7 @@ export class NodeService {
                   data.nodeDeployment,
                   NodeService._createPatch(data),
                   data.cluster.id,
-                  data.datacenter.metadata.name,
+                  data.seed,
                   data.projectID
                 )
                 .pipe(first())

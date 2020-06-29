@@ -3,7 +3,6 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
 
 import {Cluster, MachineNetwork} from '../../../shared/entity/cluster';
-import {Datacenter} from '../../../shared/entity/datacenter';
 
 import {AddMachineNetworkComponent} from '../add-machine-network/add-machine-network.component';
 
@@ -14,7 +13,7 @@ import {AddMachineNetworkComponent} from '../add-machine-network/add-machine-net
 })
 export class MachineNetworksDisplayComponent {
   @Input() cluster: Cluster;
-  @Input() datacenter: Datacenter;
+  @Input() seed: string;
   @Input() projectID: string;
 
   displayedColumns: string[] = ['number', 'cidr', 'dnsServers', 'gateway'];
@@ -34,7 +33,7 @@ export class MachineNetworksDisplayComponent {
   addMachineNetwork(): void {
     const dialogRef = this.dialog.open(AddMachineNetworkComponent);
     dialogRef.componentInstance.cluster = this.cluster;
-    dialogRef.componentInstance.datacenter = this.datacenter;
+    dialogRef.componentInstance.seed = this.seed;
     dialogRef.componentInstance.projectID = this.projectID;
   }
 }

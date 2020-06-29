@@ -21,7 +21,7 @@ import {objectDiff} from '../../../shared/utils/common-utils';
 
 export interface NodeDataModalData {
   cluster: Cluster;
-  datacenter: Datacenter;
+  seed: string;
   projectID: string;
   existingNodesCount: number;
 
@@ -39,7 +39,7 @@ export interface NodeDataModalData {
 export class NodeDataModalComponent implements OnInit, OnDestroy {
   @Output() editNodeDeployment = new EventEmitter<NodeDeployment>();
   nodeDC: Datacenter;
-  seedDC: Datacenter;
+  seed: string;
   isExtended = false;
   isRecreationWarningVisible = false;
   nodeDataValid = false;
@@ -55,7 +55,7 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.seedDC = this.data.datacenter;
+    this.seed = this.data.seed;
 
     if (this.data.editMode && this.data.nodeDeployment) {
       // Using data.nodeDeployment as it is not a deep copy created using JSON parse & stringify like data.NodeData.

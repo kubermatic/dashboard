@@ -5,7 +5,6 @@ import {takeUntil} from 'rxjs/operators';
 
 import {ClusterService, NotificationService, WizardService} from '../../../core/services';
 import {Cluster} from '../../../shared/entity/cluster';
-import {Datacenter} from '../../../shared/entity/datacenter';
 import {MachineNetworkForm} from '../../../shared/model/ClusterForm';
 
 @Component({
@@ -14,7 +13,7 @@ import {MachineNetworkForm} from '../../../shared/model/ClusterForm';
 })
 export class AddMachineNetworkComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() datacenter: Datacenter;
+  @Input() seed: string;
   @Input() projectID: string;
   machineNetworkFormData: MachineNetworkForm[] = [];
   private _unsubscribe = new Subject<void>();
@@ -70,7 +69,7 @@ export class AddMachineNetworkComponent implements OnInit, OnDestroy {
         });
       }
     }
-    this._clusterService.cluster(this.projectID, this.cluster.id, this.datacenter.metadata.name).subscribe(res => {
+    this._clusterService.cluster(this.projectID, this.cluster.id, this.seed).subscribe(res => {
       this._notificationService.success(
         `The machine network(s) for the <strong>${this.cluster.name}</strong> cluster were added`
       );

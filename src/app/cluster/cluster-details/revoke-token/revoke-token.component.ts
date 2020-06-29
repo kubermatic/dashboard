@@ -4,7 +4,6 @@ import {first} from 'rxjs/operators';
 
 import {ApiService, NotificationService, UserService} from '../../../core/services';
 import {Cluster} from '../../../shared/entity/cluster';
-import {Datacenter} from '../../../shared/entity/datacenter';
 import {Member} from '../../../shared/entity/member';
 import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
@@ -16,7 +15,7 @@ import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member
 })
 export class RevokeTokenComponent implements OnInit {
   @Input() cluster: Cluster;
-  @Input() datacenter: Datacenter;
+  @Input() seed: string;
   @Input() projectID: string;
   revokeAdminToken = false;
   revokeViewerToken = false;
@@ -44,25 +43,21 @@ export class RevokeTokenComponent implements OnInit {
 
   revokeToken(): void {
     if (this.revokeAdminToken) {
-      this._apiService
-        .editToken(this.cluster, this.datacenter.metadata.name, this.projectID, {token: ''})
-        .subscribe(res => {
-          this._notificationService.success(
-            `The admin token for the <strong>${this.cluster.name}</strong> cluster was revoked`
-          );
-          this._matDialogRef.close(res);
-        });
+      this._apiService.editToken(this.cluster, this.seed, this.projectID, {token: ''}).subscribe(res => {
+        this._notificationService.success(
+          `The admin token for the <strong>${this.cluster.name}</strong> cluster was revoked`
+        );
+        this._matDialogRef.close(res);
+      });
     }
 
     if (this.revokeViewerToken) {
-      this._apiService
-        .editViewerToken(this.cluster, this.datacenter.metadata.name, this.projectID, {token: ''})
-        .subscribe(res => {
-          this._notificationService.success(
-            `The viewer token for the <strong>${this.cluster.name}</strong> cluster was revoked`
-          );
-          this._matDialogRef.close(res);
-        });
+      this._apiService.editViewerToken(this.cluster, this.seed, this.projectID, {token: ''}).subscribe(res => {
+        this._notificationService.success(
+          `The viewer token for the <strong>${this.cluster.name}</strong> cluster was revoked`
+        );
+        this._matDialogRef.close(res);
+      });
     }
   }
 }

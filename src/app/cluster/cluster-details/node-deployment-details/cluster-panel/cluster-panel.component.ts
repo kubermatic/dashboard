@@ -11,7 +11,7 @@ import {Datacenter} from '../../../../shared/entity/datacenter';
 export class ClusterPanelComponent {
   @Input() cluster: Cluster;
   @Input() datacenter: Datacenter;
-  @Input() dcName: string;
+  @Input() seed: string;
   @Input() projectID: string;
 
   constructor(private readonly _router: Router) {}
@@ -21,6 +21,6 @@ export class ClusterPanelComponent {
   }
 
   navigate(): void {
-    this._router.navigate(['/projects/' + this.projectID + '/dc/' + this.dcName + '/clusters/' + this.cluster.id]);
+    this._router.navigate(['/projects/' + this.projectID + '/dc/' + this.seed + '/clusters/' + this.cluster.id]);
   }
 }

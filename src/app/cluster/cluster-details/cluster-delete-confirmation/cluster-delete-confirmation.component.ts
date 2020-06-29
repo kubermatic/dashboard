@@ -8,7 +8,6 @@ import {ClusterService, NotificationService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {Cluster, Finalizer} from '../../../shared/entity/cluster';
-import {Datacenter} from '../../../shared/entity/datacenter';
 import {AdminSettings} from '../../../shared/entity/settings';
 
 @Component({
@@ -18,7 +17,7 @@ import {AdminSettings} from '../../../shared/entity/settings';
 })
 export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() datacenter: Datacenter;
+  @Input() seed: string;
   @Input() projectID: string;
   @ViewChild('clusterNameInput', {static: true})
   clusterNameInputRef: ElementRef;
@@ -90,7 +89,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
       return;
     }
     this._clusterService
-      .delete(this.projectID, this.cluster.id, this.datacenter.metadata.name, {
+      .delete(this.projectID, this.cluster.id, this.seed, {
         [Finalizer.DeleteLoadBalancers]: !!this.deleteForm.controls.clusterLBCleanupCheckbox.value,
         [Finalizer.DeleteVolumes]: !!this.deleteForm.controls.clusterVolumeCleanupCheckbox.value,
       })

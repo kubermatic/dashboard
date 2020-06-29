@@ -191,12 +191,12 @@
   </mat-card>
 
   <km-machine-networks-display [cluster]="cluster"
-                               [datacenter]="datacenter"
+                               [seed]="seed"
                                [projectID]="projectID"></km-machine-networks-display>
 
   <km-node-deployment-list [cluster]="cluster"
                            [nodeDeployments]="nodeDeployments"
-                           [datacenter]="datacenter"
+                           [seed]="seed"
                            [projectID]="projectID"
                            [clusterHealthStatus]="clusterHealthStatus"
                            [isClusterRunning]="isClusterAPIRunning"
@@ -205,7 +205,7 @@
   <div *ngIf="nodes.length > 0">
     <km-node-list [cluster]="cluster"
                   [nodes]="nodes"
-                  [datacenter]="datacenter"
+                  [seed]="seed"
                   [projectID]="projectID"
                   [clusterHealthStatus]="clusterHealthStatus"
                   [isClusterRunning]="isClusterAPIRunning"></km-node-list>
@@ -213,7 +213,7 @@
 
   <km-rbac *ngIf="isRBACEnabled()"
            [cluster]="cluster"
-           [datacenter]="datacenter"
+           [seed]="seed"
            [projectID]="projectID"
            [isClusterRunning]="isClusterRunning"
            [clusterBindings]="clusterBindings"

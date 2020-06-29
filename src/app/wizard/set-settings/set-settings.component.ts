@@ -3,7 +3,6 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {WizardService, DatacenterService} from '../../core/services';
 import {Cluster} from '../../shared/entity/cluster';
-import {Datacenter} from '../../shared/entity/datacenter';
 import {SSHKey} from '../../shared/entity/ssh-key';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 
@@ -17,7 +16,7 @@ export class SetSettingsComponent implements OnInit {
   @Input() clusterSSHKeys: SSHKey[] = [];
   @Input() nodeData: NodeData;
   isExtended = false;
-  seedDc: Datacenter;
+  seed: string;
   private _unsubscribe = new Subject<void>();
 
   constructor(private wizardService: WizardService, private _dc: DatacenterService) {}
@@ -26,9 +25,7 @@ export class SetSettingsComponent implements OnInit {
     this._dc
       .getDatacenter(this.cluster.spec.cloud.dc)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(dc => {
-        this.seedDc = dc;
-      });
+      .subscribe(dc => (this.seed = dc.spec.seed));
   }
 
   extend(): void {

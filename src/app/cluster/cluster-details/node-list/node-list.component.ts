@@ -12,7 +12,6 @@ import {SettingsService} from '../../../core/services/settings/settings.service'
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '../../../shared/entity/cluster';
-import {Datacenter} from '../../../shared/entity/datacenter';
 import {Member} from '../../../shared/entity/member';
 import {NodeMetrics} from '../../../shared/entity/metrics';
 import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '../../../shared/entity/node';
@@ -28,7 +27,7 @@ import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member
 })
 export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() datacenter: Datacenter;
+  @Input() seed: string;
   @Input() nodes: Node[] = [];
   @Input() nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   @Input() projectID: string;
@@ -120,11 +119,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     dialogRef
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(
-        switchMap(_ =>
-          this._clusterService.deleteNode(this.projectID, this.cluster.id, this.datacenter.metadata.name, node.id)
-        )
-      )
+      .pipe(switchMap(_ => this._clusterService.deleteNode(this.projectID, this.cluster.id, this.seed, node.id)))
       .pipe(first())
       .subscribe(() => {
         this._notificationService.success(

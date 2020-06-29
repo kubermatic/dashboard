@@ -9,7 +9,6 @@ import * as _ from 'lodash';
 import {ProjectService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {Cluster} from '../../../shared/entity/cluster';
-import {Datacenter} from '../../../shared/entity/datacenter';
 import {Member} from '../../../shared/entity/member';
 import {NodeDeployment} from '../../../shared/entity/node-deployment';
 import {GroupConfig} from '../../../shared/model/Config';
@@ -26,7 +25,7 @@ import {getOperatingSystem} from '../../../shared/entity/node';
 })
 export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() datacenter: Datacenter;
+  @Input() seed: string;
   @Input() nodeDeployments: NodeDeployment[] = [];
   @Input() projectID: string;
   @Input() clusterHealthStatus: ClusterHealthStatus;
@@ -79,11 +78,6 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
     this._unsubscribe.complete();
   }
 
-  getDataSource(): MatTableDataSource<NodeDeployment> {
-    this.dataSource.data = this.nodeDeployments ? this.nodeDeployments : [];
-    return this.dataSource;
-  }
-
   getHealthStatus(nd: NodeDeployment): NodeDeploymentHealthStatus {
     return NodeDeploymentHealthStatus.getHealthStatus(nd);
   }
@@ -98,14 +92,7 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
 
   goToDetails(nd: NodeDeployment): void {
     this._router.navigate([
-      '/projects/' +
-        this.projectID +
-        '/dc/' +
-        this.datacenter.metadata.name +
-        '/clusters/' +
-        this.cluster.id +
-        /nd/ +
-        nd.id,
+      '/projects/' + this.projectID + '/dc/' + this.seed + '/clusters/' + this.cluster.id + /nd/ + nd.id,
     ]);
   }
 
@@ -116,7 +103,7 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
   showEditDialog(nd: NodeDeployment, event: Event): void {
     event.stopPropagation();
     this._nodeService
-      .showNodeDeploymentEditDialog(nd, this.cluster, this.projectID, this.datacenter, this.changeNodeDeployment)
+      .showNodeDeploymentEditDialog(nd, this.cluster, this.projectID, this.seed, this.changeNodeDeployment)
       .subscribe(() => {});
   }
 
@@ -127,13 +114,7 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
   showDeleteDialog(nd: NodeDeployment, event: Event): void {
     event.stopPropagation();
     this._nodeService
-      .showNodeDeploymentDeleteDialog(
-        nd,
-        this.cluster.id,
-        this.projectID,
-        this.datacenter.metadata.name,
-        this.changeNodeDeployment
-      )
+      .showNodeDeploymentDeleteDialog(nd, this.cluster.id, this.projectID, this.seed, this.changeNodeDeployment)
       .subscribe(() => {});
   }
 

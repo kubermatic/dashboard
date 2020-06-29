@@ -62,7 +62,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
   it('should able add button', () => {
     component.projectID = fakeProject().id;
     component.cluster = fakeDigitaloceanCluster();
-    component.datacenter = fakeDigitaloceanDatacenter();
+    component.seed = fakeDigitaloceanDatacenter().metadata.name;
 
     fixture.detectChanges();
 
@@ -77,7 +77,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
 
   it('should call deleteCluster method', fakeAsync(() => {
     component.cluster = fakeDigitaloceanCluster();
-    component.datacenter = fakeDigitaloceanDatacenter();
+    component.seed = fakeDigitaloceanDatacenter().metadata.name;
     component.inputName = fakeDigitaloceanCluster().name;
     component.projectID = fakeProject().id;
 

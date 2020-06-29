@@ -40,7 +40,7 @@ describe('ShareKubeconfigComponent', () => {
     component = fixture.componentInstance;
     component.projectID = fakeProject().id;
     component.cluster = fakeDigitaloceanCluster();
-    component.datacenter = fakeDigitaloceanDatacenter();
+    component.seed = fakeDigitaloceanDatacenter().metadata.name;
 
     fixture.detectChanges();
   });

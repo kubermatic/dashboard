@@ -31,10 +31,9 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   cluster: Cluster;
   clusterProvider: string;
   datacenter: Datacenter;
-  seedDatacenter: Datacenter;
+  seed: string;
   system: string;
   systemLogoClass: string;
-  dcName: string;
   projectID: string;
   private _nodeDeploymentID: string;
   private _isNodeDeploymentLoaded = false;
@@ -42,7 +41,6 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   private _areNodesEventsLoaded = false;
   private _isClusterLoaded = false;
   private _isDatacenterLoaded = false;
-  private _isSeedDatacenterLoaded = false;
   private _unsubscribe: Subject<any> = new Subject();
   private _clusterName: string;
   private _user: Member;
@@ -61,9 +59,9 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._clusterName = this._activatedRoute.snapshot.paramMap.get('clusterName');
-    this.dcName = this._activatedRoute.snapshot.paramMap.get('seedDc');
     this._nodeDeploymentID = this._activatedRoute.snapshot.paramMap.get('nodeDeploymentID');
     this.projectID = this._activatedRoute.snapshot.paramMap.get('projectID');
+    this.seed = this._activatedRoute.snapshot.paramMap.get('seedDc');
 
     this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
 
@@ -81,13 +79,12 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
         this.loadNodesMetrics();
       });
 
-    this.loadSeedDatacenter();
     this.loadCluster();
   }
 
   loadNodeDeployment(): void {
     this._apiService
-      .getNodeDeployment(this._nodeDeploymentID, this._clusterName, this.dcName, this.projectID)
+      .getNodeDeployment(this._nodeDeploymentID, this._clusterName, this.seed, this.projectID)
       .pipe(first())
       .subscribe((nd: NodeDeployment) => {
         this.nodeDeployment = nd;
@@ -100,7 +97,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodes(): void {
     this._apiService
-      .getNodeDeploymentNodes(this._nodeDeploymentID, this._clusterName, this.dcName, this.projectID)
+      .getNodeDeploymentNodes(this._nodeDeploymentID, this._clusterName, this.seed, this.projectID)
       .pipe(first())
       .subscribe(n => {
         this.nodes = n;
@@ -110,7 +107,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodesEvents(): void {
     this._apiService
-      .getNodeDeploymentNodesEvents(this._nodeDeploymentID, this._clusterName, this.dcName, this.projectID)
+      .getNodeDeploymentNodesEvents(this._nodeDeploymentID, this._clusterName, this.seed, this.projectID)
       .pipe(first())
       .subscribe(e => {
         this.events = e;
@@ -120,7 +117,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodesMetrics(): void {
     this._apiService
-      .getNodeDeploymentNodesMetrics(this._nodeDeploymentID, this._clusterName, this.dcName, this.projectID)
+      .getNodeDeploymentNodesMetrics(this._nodeDeploymentID, this._clusterName, this.seed, this.projectID)
       .pipe(first())
       .subscribe(metrics => {
         this.storeNodeMetrics(metrics);
@@ -135,7 +132,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadCluster(): void {
     this._clusterService
-      .cluster(this.projectID, this._clusterName, this.dcName)
+      .cluster(this.projectID, this._clusterName, this.seed)
       .pipe(first())
       .subscribe(c => {
         this.cluster = c;
@@ -155,21 +152,10 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  loadSeedDatacenter(): void {
-    this._datacenterService
-      .getDatacenter(this.dcName)
-      .pipe(first())
-      .subscribe(d => {
-        this.seedDatacenter = d;
-        this._isSeedDatacenterLoaded = true;
-      });
-  }
-
   isInitialized(): boolean {
     return (
       this._isClusterLoaded &&
       this._isDatacenterLoaded &&
-      this._isSeedDatacenterLoaded &&
       this._areNodesLoaded &&
       this._isNodeDeploymentLoaded &&
       this._areNodesEventsLoaded
@@ -185,7 +171,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   goBackToCluster(): void {
-    this._router.navigate(['/projects/' + this.projectID + '/dc/' + this.dcName + '/clusters/' + this._clusterName]);
+    this._router.navigate(['/projects/' + this.projectID + '/dc/' + this.seed + '/clusters/' + this._clusterName]);
   }
 
   isEditEnabled(): boolean {
@@ -194,7 +180,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   showEditDialog(): void {
     this._nodeService
-      .showNodeDeploymentEditDialog(this.nodeDeployment, this.cluster, this.projectID, this.seedDatacenter, undefined)
+      .showNodeDeploymentEditDialog(this.nodeDeployment, this.cluster, this.projectID, this.seed, undefined)
       .subscribe(isConfirmed => {
         if (isConfirmed) {
           this.loadNodeDeployment();
@@ -209,13 +195,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   showDeleteDialog(): void {
     this._nodeService
-      .showNodeDeploymentDeleteDialog(
-        this.nodeDeployment,
-        this.cluster.id,
-        this.projectID,
-        this.seedDatacenter.metadata.name,
-        undefined
-      )
+      .showNodeDeploymentDeleteDialog(this.nodeDeployment, this.cluster.id, this.projectID, this.seed, undefined)
       .subscribe(isConfirmed => {
         if (isConfirmed) {
           this.goBackToCluster();
