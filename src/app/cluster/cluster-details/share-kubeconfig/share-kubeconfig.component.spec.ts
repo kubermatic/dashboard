@@ -6,7 +6,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ApiService, Auth, UserService} from '../../../core/services';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
+import {fakeSeedDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {RouterTestingModule} from '../../../testing/router-stubs';
 import {UserMockService} from '../../../testing/services/user-mock.service';
@@ -40,7 +40,7 @@ describe('ShareKubeconfigComponent', () => {
     component = fixture.componentInstance;
     component.projectID = fakeProject().id;
     component.cluster = fakeDigitaloceanCluster();
-    component.seed = fakeDigitaloceanDatacenter().metadata.name;
+    component.seed = fakeSeedDatacenter();
 
     fixture.detectChanges();
   });
