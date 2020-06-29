@@ -4,6 +4,7 @@ import {from, Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
 import {Member} from '../../../shared/entity/member';
+import {View} from '../../../shared/entity/common';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {UserService} from '../user/user.service';
 
@@ -21,14 +22,6 @@ export class AuthGuard implements CanActivate {
     window.location.href = this.auth.getOIDCProviderURL();
     return false;
   }
-}
-
-export enum View {
-  Clusters = 'clusters',
-  Projects = 'projects',
-  Members = 'members',
-  SSHKeys = 'sshKeys',
-  ServiceAccounts = 'serviceaccounts',
 }
 
 @Injectable()

@@ -36,6 +36,7 @@ import {
 import {GlobalModule} from './services/global/global.module';
 import {NodeDataService} from './services/node-data/node-data.service';
 import {PreviousRouteService} from './services/previous-route/previous-route.service';
+import {PageTitleService} from './services/page-title/page-title.service';
 import {SettingsService} from './services/settings/settings.service';
 import {TokenService} from './services/token/token.service';
 import {StepsService} from './services/wizard/steps.service';
@@ -87,6 +88,7 @@ const services: any[] = [
   PreviousRouteService,
   ThemeInformerService,
   TokenService,
+  PageTitleService,
 ];
 
 const interceptors: any[] = [
