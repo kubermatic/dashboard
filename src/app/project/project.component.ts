@@ -18,6 +18,7 @@ import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Member} from '../shared/entity/member';
+import {View} from '../shared/entity/common';
 import {Project, ProjectOwners} from '../shared/entity/project';
 import {UserSettings} from '../shared/entity/settings';
 import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
@@ -296,7 +297,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     return MemberUtils.hasPermission(
       this.currentUser,
       this._userService.userGroupConfig(this.rawRole[project.id]),
-      'projects',
+      View.Projects,
       Permission.Edit
     );
   }
@@ -319,7 +320,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     return MemberUtils.hasPermission(
       this.currentUser,
       this._userService.userGroupConfig(this.rawRole[project.id]),
-      'projects',
+      View.Projects,
       Permission.Delete
     );
   }
