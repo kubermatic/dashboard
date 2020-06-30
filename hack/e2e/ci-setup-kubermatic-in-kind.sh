@@ -13,7 +13,7 @@ if [[ -z ${PROW_JOB_ID} ]]; then
 fi
 
 cd "${GOPATH}/src/github.com/kubermatic/kubermatic"
-source ./api/hack/lib.sh
+source hack/lib.sh
 
 TEST_NAME="Get Vault token"
 echodate "Getting secrets from Vault"
@@ -118,8 +118,8 @@ if ls /var/log/clusterexposer.log &>/dev/null; then
   echodate "Cluster-Exposer already running"
 else
   echodate "Starting clusterexposer"
-  make -C api download-gocache
-  CGO_ENABLED=0 go build -v -o /tmp/clusterexposer ./api/pkg/test/clusterexposer/cmd
+  make download-gocache
+  CGO_ENABLED=0 go build --tags "$KUBERMATIC_EDITION" -v -o /tmp/clusterexposer ./pkg/test/clusterexposer/cmd
   CGO_ENABLED=0 /tmp/clusterexposer \
     --kubeconfig-inner "$KUBECONFIG" \
     --kubeconfig-outer "/etc/kubeconfig/kubeconfig" \
@@ -148,6 +148,10 @@ echodate "Cluster exposer is running"
 
 echodate "Setting up iptables rules for to make nodeports available"
 iptables -t nat -A PREROUTING -i eth0 -p tcp -m multiport --dports=30000:33000 -j DNAT --to-destination 172.17.0.2
+# By default all traffic gets dropped unless specified (tested with docker
+# server 18.09.1)
+iptables -t filter -I DOCKER-USER -d 172.17.0.2/32 ! -i docker0 -o docker0 -p tcp -m multiport --dports=30000:33000 -j ACCEPT
+
 # Docker sets up a MASQUERADE rule for postrouting, so nothing to do for us
 echodate "Successfully set up iptables rules for nodeports"
 
@@ -196,7 +200,7 @@ fi
 TEST_NAME="Deploy Dex"
 echodate "Deploying Dex"
 
-export KUBERMATIC_DEX_VALUES_FILE=$(realpath api/hack/ci/testdata/oauth_values.yaml)
+export KUBERMATIC_DEX_VALUES_FILE=$(realpath hack/ci/testdata/oauth_values.yaml)
 
 if kubectl get namespace oauth; then
   echodate "Dex already deployed"
@@ -204,7 +208,7 @@ else
   retry 5 helm install --wait --timeout 180 \
     --values $KUBERMATIC_DEX_VALUES_FILE \
     --namespace oauth \
-    --name oauth ./config/oauth
+    --name oauth charts/oauth/
 fi
 
 export KUBERMATIC_OIDC_LOGIN="roxy@loodse.com"
@@ -213,7 +217,7 @@ export KUBERMATIC_OIDC_PASSWORD="password"
 TEST_NAME="Deploy Kubermatic CRDs"
 echodate "Deploying Kubermatic CRDs"
 
-retry 5 kubectl apply -f config/kubermatic/crd
+retry 5 kubectl apply -f charts/kubermatic/crd/
 
 function check_all_deployments_ready() {
   local namespace="$1"
@@ -242,7 +246,7 @@ function check_all_deployments_ready() {
 # to have the CRDs installed so we can at least create a Certificate resource.
 TEST_NAME="Deploy cert-manager CRDs"
 echodate "Deploying cert-manager CRDs"
-retry 5 kubectl apply -f config/cert-manager/templates/crd.yaml
+retry 5 kubectl apply -f charts/cert-manager/crd/
 
 TEST_NAME="Deploy Kubermatic"
 echodate "Deploying Kubermatic using Helm..."
@@ -280,7 +284,7 @@ retry 3 helm upgrade --install --force --wait --timeout 300 \
   --namespace=kubermatic \
   --values ${VALUES_FILE} \
   kubermatic \
-  ./config/kubermatic/
+  charts/kubermatic/
 
 echodate "Finished installing Kubermatic"
 
