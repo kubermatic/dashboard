@@ -2,7 +2,7 @@ import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {UserSettingsPage} from '../../pages/user-settings.po';
 
-describe('Edition Story', () => {
+describe.skip('Edition Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const kubermaticEdition = Cypress.env('KUBERMATIC_EDITION');
