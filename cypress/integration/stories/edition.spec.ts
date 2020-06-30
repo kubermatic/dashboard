@@ -7,7 +7,9 @@ describe('Edition Story', () => {
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const kubermaticEdition = Cypress.env('KUBERMATIC_EDITION');
   const isEnterpriseEdition = kubermaticEdition === 'ee';
-  const editionName = isEnterpriseEdition ? 'Enterprise Edition' : 'Community Edition';
+  const editionName = isEnterpriseEdition
+    ? 'Enterprise Edition'
+    : 'Community Edition';
 
   it('should login', () => {
     login(email, password);
@@ -24,7 +26,9 @@ describe('Edition Story', () => {
   });
 
   it('should check if theme picker is available', () => {
-    UserSettingsPage.getThemePicker().should(isEnterpriseEdition ? Condition.Exist : Condition.NotExist);
+    UserSettingsPage.getThemePicker().should(
+      isEnterpriseEdition ? Condition.Exist : Condition.NotExist
+    );
   });
 
   it('should logout', () => {
