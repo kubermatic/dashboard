@@ -74,11 +74,11 @@ export class ClusterService {
   }
 
   create(projectID: string, datacenter: string, createClusterModel: CreateClusterModel): Observable<Cluster> {
-    createClusterModel.nodeDeployment.spec.template.labels = LabelFormComponent.filterNullifiedKeys(
-      createClusterModel.nodeDeployment.spec.template.labels
+    createClusterModel.machineDeployment.spec.template.labels = LabelFormComponent.filterNullifiedKeys(
+      createClusterModel.machineDeployment.spec.template.labels
     );
-    createClusterModel.nodeDeployment.spec.template.taints = TaintFormComponent.filterNullifiedTaints(
-      createClusterModel.nodeDeployment.spec.template.taints
+    createClusterModel.machineDeployment.spec.template.taints = TaintFormComponent.filterNullifiedTaints(
+      createClusterModel.machineDeployment.spec.template.taints
     );
 
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters`;
@@ -130,7 +130,12 @@ export class ClusterService {
     return this._http.get<Health>(url).pipe(catchError(() => of<Health>()));
   }
 
-  upgradeNodeDeployments(projectID: string, clusterID: string, datacenter: string, version: string): Observable<any> {
+  upgradeMachineDeployments(
+    projectID: string,
+    clusterID: string,
+    datacenter: string,
+    version: string
+  ): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/nodes/upgrades`;
     return this._http.put(url, {version} as MasterVersion);
   }

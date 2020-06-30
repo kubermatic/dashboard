@@ -10,11 +10,11 @@
 // limitations under the License.
 
 import {ClusterSpec} from '../entity/cluster';
-import {NodeDeployment} from '../entity/node-deployment';
+import {MachineDeployment} from '../entity/machine-deployment';
 
 export class CreateClusterModel {
   cluster: ClusterModel;
-  nodeDeployment?: NodeDeployment;
+  machineDeployment?: MachineDeployment;
 }
 
 class ClusterModel {

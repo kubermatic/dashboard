@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NodeDeployment} from '../../shared/entity/node-deployment';
+import {MachineDeployment} from '../../shared/entity/machine-deployment';
 import {Node} from '../../shared/entity/node';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 
@@ -148,7 +148,7 @@ export function nodeAWSFake(): Node {
   };
 }
 
-export function nodeDeploymentsFake(): NodeDeployment[] {
+export function machineDeploymentsFake(): MachineDeployment[] {
   return [
     {
       id: 'machine-deployment-324343dfs-sdfsd',

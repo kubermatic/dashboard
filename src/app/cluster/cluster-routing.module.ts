@@ -15,7 +15,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard, AuthzGuard} from '../core/services';
 
 import {ClusterDetailsComponent} from './cluster-details/cluster-details.component';
-import {NodeDeploymentDetailsComponent} from './cluster-details/node-deployment-details/node-deployment-details.component';
+import {MachineDeploymentDetailsComponent} from './cluster-details/machine-deployment-details/machine-deployment-details.component';
 import {ClusterListComponent} from './cluster-list/cluster-list.component';
 const routes: Routes = [
   {
@@ -29,8 +29,8 @@ const routes: Routes = [
     canActivate: [AuthGuard, AuthzGuard],
   },
   {
-    path: ':clusterName/nd/:nodeDeploymentID',
-    component: NodeDeploymentDetailsComponent,
+    path: ':clusterName/md/:machineDeploymentID',
+    component: MachineDeploymentDetailsComponent,
     canActivate: [AuthGuard, AuthzGuard],
   },
 ];

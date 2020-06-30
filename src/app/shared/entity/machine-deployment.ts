@@ -11,23 +11,23 @@
 
 import {NodeCloudSpec, NodeSpec, NodeVersionInfo, OperatingSystemSpec, Taint} from './node';
 
-export class NodeDeployment {
+export class MachineDeployment {
   creationTimestamp?: Date;
   deletionTimestamp?: Date;
   id?: string;
   name?: string;
-  spec: NodeDeploymentSpec;
-  status?: NodeDeploymentStatus;
+  spec: MachineDeploymentSpec;
+  status?: MachineDeploymentStatus;
 }
 
-export class NodeDeploymentSpec {
+export class MachineDeploymentSpec {
   replicas: number;
   template: NodeSpec;
   paused?: boolean;
   dynamicConfig?: boolean;
 }
 
-export class NodeDeploymentStatus {
+export class MachineDeploymentStatus {
   observedGeneration?: number;
   replicas?: number;
   updatedReplicas?: number;
@@ -36,11 +36,11 @@ export class NodeDeploymentStatus {
   unavailableReplicas?: number;
 }
 
-export class NodeDeploymentPatch {
-  spec: NodeDeploymentSpecPatch;
+export class MachineDeploymentPatch {
+  spec: MachineDeploymentSpecPatch;
 }
 
-export class NodeDeploymentSpecPatch {
+export class MachineDeploymentSpecPatch {
   replicas?: number;
   template?: NodeSpecPatch;
   paused?: boolean;

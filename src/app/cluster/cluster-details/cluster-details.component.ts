@@ -33,7 +33,7 @@ import {Event} from '../../shared/entity/event';
 import {Health, HealthState} from '../../shared/entity/health';
 import {Member} from '../../shared/entity/member';
 import {ClusterMetrics} from '../../shared/entity/metrics';
-import {NodeDeployment} from '../../shared/entity/node-deployment';
+import {MachineDeployment} from '../../shared/entity/machine-deployment';
 import {Node} from '../../shared/entity/node';
 import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '../../shared/entity/rbac';
 import {SSHKey} from '../../shared/entity/ssh-key';
@@ -61,8 +61,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   datacenter: Datacenter;
   sshKeys: SSHKey[] = [];
   nodes: Node[] = [];
-  nodeDeployments: NodeDeployment[];
-  isNodeDeploymentLoadFinished = false;
+  machineDeployments: MachineDeployment[];
+  isMachineDeploymentLoadFinished = false;
   isClusterRunning = false;
   isClusterAPIRunning = false;
   clusterHealthStatus: ClusterHealthStatus;
@@ -166,7 +166,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                 ? [
                     this._clusterService.addons(this.projectID, this.cluster.id, this.datacenter.metadata.name),
                     this._clusterService.nodes(this.projectID, this.cluster.id, this.datacenter.metadata.name),
-                    this._api.getNodeDeployments(this.cluster.id, this.datacenter.metadata.name, this.projectID),
+                    this._api.getMachineDeployments(this.cluster.id, this.datacenter.metadata.name, this.projectID),
                     this._clusterService.metrics(this.projectID, this.cluster.id, this.datacenter.metadata.name),
                   ]
                 : [of([]), of([]), of([]), of([])]
@@ -177,20 +177,20 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(
-        ([upgrades, clusterBindings, bindings, addons, nodes, nodeDeployments, metrics]: [
+        ([upgrades, clusterBindings, bindings, addons, nodes, machineDeployments, metrics]: [
           MasterVersion[],
           ClusterBinding[],
           Binding[],
           Addon[],
           Node[],
-          NodeDeployment[],
+          MachineDeployment[],
           ClusterMetrics
         ]) => {
           this.addons = addons;
           this.nodes = nodes;
-          this.nodeDeployments = nodeDeployments;
+          this.machineDeployments = machineDeployments;
           this.metrics = metrics;
-          this.isNodeDeploymentLoadFinished = true;
+          this.isMachineDeploymentLoadFinished = true;
           this.upgrades = upgrades;
           this.clusterBindings = this.createSimpleClusterBinding(clusterBindings);
           this.bindings = this.createSimpleBinding(bindings);
@@ -224,10 +224,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     return provider === 'google' ? 'gcp' : provider;
   }
 
-  isAddNodeDeploymentsEnabled(): boolean {
+  isAddMachineDeploymentsEnabled(): boolean {
     return (
       this.isClusterRunning &&
-      MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'nodeDeployments', Permission.Create)
+      MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Create)
     );
   }
 
@@ -266,7 +266,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   addNode(): void {
     this._node
-      .showNodeDeploymentCreateDialog(this.nodes.length, this.cluster, this.projectID, this.datacenter)
+      .showMachineDeploymentCreateDialog(this.nodes.length, this.cluster, this.projectID, this.datacenter)
       .pipe(first())
       .subscribe(isConfirmed => {
         if (isConfirmed) {

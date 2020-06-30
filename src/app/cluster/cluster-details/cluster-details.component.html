@@ -45,7 +45,7 @@ limitations under the License.
               color="alternative"
               (click)="addNode()"
               [fxHide]="nodeDc?.spec?.provider === 'bringyourown'"
-              [disabled]="!isAddNodeDeploymentsEnabled()">
+              [disabled]="!isAddMachineDeploymentsEnabled()">
 
         Add Machine Deployment
       </button>
@@ -206,13 +206,13 @@ limitations under the License.
                                [datacenter]="datacenter"
                                [projectID]="projectID"></km-machine-networks-display>
 
-  <km-node-deployment-list [cluster]="cluster"
-                           [nodeDeployments]="nodeDeployments"
-                           [datacenter]="datacenter"
-                           [projectID]="projectID"
-                           [clusterHealthStatus]="clusterHealthStatus"
-                           [isClusterRunning]="isClusterAPIRunning"
-                           [isNodeDeploymentLoadFinished]="isNodeDeploymentLoadFinished"></km-node-deployment-list>
+  <km-machine-deployment-list [cluster]="cluster"
+                              [machineDeployments]="machineDeployments"
+                              [datacenter]="datacenter"
+                              [projectID]="projectID"
+                              [clusterHealthStatus]="clusterHealthStatus"
+                              [isClusterRunning]="isClusterAPIRunning"
+                              [isMachineDeploymentLoadFinished]="isMachineDeploymentLoadFinished"></km-machine-deployment-list>
 
   <div *ngIf="nodes.length > 0">
     <km-node-list [cluster]="cluster"

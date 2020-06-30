@@ -29,10 +29,10 @@ import {
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
-import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
+import {MachineDeploymentHealthStatus} from '../../../shared/utils/health-status/machine-deployment-health-status';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeBringyourownSeedDatacenter, fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
-import {nodeDeploymentsFake, nodesFake} from '../../../testing/fake-data/node.fake';
+import {machineDeploymentsFake, nodesFake} from '../../../testing/fake-data/node.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {ActivatedRouteStub, RouterStub} from '../../../testing/router-stubs';
 import {asyncData} from '../../../testing/services/api-mock.service';
@@ -47,11 +47,11 @@ import {NodeService} from '../../services/node.service';
 import {NodeListComponent} from '../node-list/node-list.component';
 
 import {ClusterPanelComponent} from './cluster-panel/cluster-panel.component';
-import {NodeDeploymentDetailsComponent} from './node-deployment-details.component';
+import {MachineDeploymentDetailsComponent} from './machine-deployment-details.component';
 
-describe('NodeDeploymentDetailsComponent', () => {
-  let fixture: ComponentFixture<NodeDeploymentDetailsComponent>;
-  let component: NodeDeploymentDetailsComponent;
+describe('MachineDeploymentDetailsComponent', () => {
+  let fixture: ComponentFixture<MachineDeploymentDetailsComponent>;
+  let component: MachineDeploymentDetailsComponent;
   let activatedRoute: ActivatedRouteStub;
 
   let apiMock;
@@ -59,19 +59,19 @@ describe('NodeDeploymentDetailsComponent', () => {
 
   beforeEach(async(() => {
     apiMock = {
-      getNodeDeploymentNodes: jest.fn(),
-      getNodeDeployment: jest.fn(),
-      getNodeDeploymentNodesEvents: jest.fn(),
+      getMachineDeploymentNodes: jest.fn(),
+      getMachineDeployment: jest.fn(),
+      getMachineDeploymentNodesEvents: jest.fn(),
     };
-    apiMock.getNodeDeployment.mockReturnValue(asyncData(nodeDeploymentsFake()[0]));
-    apiMock.getNodeDeploymentNodes.mockReturnValue(asyncData(nodesFake()));
-    apiMock.getNodeDeploymentNodesEvents.mockReturnValue(asyncData([]));
+    apiMock.getMachineDeployment.mockReturnValue(asyncData(machineDeploymentsFake()[0]));
+    apiMock.getMachineDeploymentNodes.mockReturnValue(asyncData(nodesFake()));
+    apiMock.getMachineDeploymentNodesEvents.mockReturnValue(asyncData([]));
     dcMock = {getDatacenter: jest.fn()};
     dcMock.getDatacenter.mockReturnValue(asyncData(fakeDigitaloceanDatacenter()));
 
     TestBed.configureTestingModule({
       imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
-      declarations: [NodeDeploymentDetailsComponent, NodeListComponent, ClusterPanelComponent],
+      declarations: [MachineDeploymentDetailsComponent, NodeListComponent, ClusterPanelComponent],
       providers: [
         {provide: ApiService, useValue: apiMock},
         {provide: ClusterService, useClass: ClusterMockService},
@@ -91,11 +91,13 @@ describe('NodeDeploymentDetailsComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NodeDeploymentDetailsComponent);
+    fixture = TestBed.createComponent(MachineDeploymentDetailsComponent);
     component = fixture.componentInstance;
 
-    component.nodeDeployment = nodeDeploymentsFake()[0];
-    component.nodeDeploymentHealthStatus = NodeDeploymentHealthStatus.getHealthStatus(component.nodeDeployment);
+    component.machineDeployment = machineDeploymentsFake()[0];
+    component.machineDeploymentHealthStatus = MachineDeploymentHealthStatus.getHealthStatus(
+      component.machineDeployment
+    );
     component.nodes = nodesFake();
     component.cluster = fakeDigitaloceanCluster();
     component.datacenter = fakeDigitaloceanDatacenter();
@@ -106,7 +108,7 @@ describe('NodeDeploymentDetailsComponent', () => {
     activatedRoute.testParamMap = {
       clusterName: fakeDigitaloceanCluster().id,
       seedDc: fakeDigitaloceanDatacenter().spec.seed,
-      nodeDeploymentID: nodeDeploymentsFake()[0].id,
+      machineDeploymentID: machineDeploymentsFake()[0].id,
       projectID: fakeProject().id,
     };
 
