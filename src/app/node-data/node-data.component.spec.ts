@@ -9,7 +9,11 @@ import {ApiService, ClusterService, DatacenterService, ProjectService, WizardSer
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {SharedModule} from '../shared/shared.module';
-import {fakeDigitaloceanSizes, fakeOpenstackFlavors} from '../testing/fake-data/addNodeModal.fake';
+import {
+  fakeDigitaloceanSizes,
+  fakeOpenstackFlavors,
+  fakeOpenstackAvailabilityZones,
+} from '../testing/fake-data/addNodeModal.fake';
 import {fakeAwsSubnets} from '../testing/fake-data/aws-subnets.fake';
 import {masterVersionsFake} from '../testing/fake-data/cluster-spec.fake';
 import {fakeAWSCluster, fakeDigitaloceanCluster, fakeOpenstackCluster} from '../testing/fake-data/cluster.fake';
@@ -52,6 +56,8 @@ describe('NodeDataComponent', () => {
       getDigitaloceanSizesForWizard: jest.fn(),
       getOpenStackFlavors: jest.fn(),
       getOpenStackFlavorsForWizard: jest.fn(),
+      getOpenStackAvailabilityZones: jest.fn(),
+      getOpenStackAvailabilityZonesForWizard: jest.fn(),
       nodeUpgrades: jest.fn(),
       getAWSSubnets: jest.fn(),
     };
@@ -59,6 +65,8 @@ describe('NodeDataComponent', () => {
     apiMock.getDigitaloceanSizesForWizard.mockReturnValue(asyncData(fakeDigitaloceanSizes()));
     apiMock.getOpenStackFlavors.mockReturnValue(asyncData(fakeOpenstackFlavors()));
     apiMock.getOpenStackFlavorsForWizard.mockReturnValue(asyncData(fakeOpenstackFlavors()));
+    apiMock.getOpenStackAvailabilityZones.mockReturnValue(asyncData(fakeOpenstackAvailabilityZones()));
+    apiMock.getOpenStackAvailabilityZonesForWizard.mockReturnValue(asyncData(fakeOpenstackAvailabilityZones()));
     apiMock.nodeUpgrades.mockReturnValue(asyncData(masterVersionsFake()));
     apiMock.getAWSSubnets.mockReturnValue(asyncData(fakeAwsSubnets()));
 

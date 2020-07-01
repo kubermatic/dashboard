@@ -56,6 +56,20 @@
   </div>
 
   <mat-form-field>
+    <mat-label>{{getAvailabilityZonesFormState()}}</mat-label>
+    <mat-select formControlName="availabilityZone"
+                [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
+                [placeholder]="getAvailabilityZonesFormState()"
+                disableOptionCentering>
+      <mat-option *ngFor="let availabilityZone of availabilityZones"
+                  [value]="availabilityZone.name">
+        {{availabilityZone.name}}
+      </mat-option>
+    </mat-select>
+    <mat-hint *ngIf="showAvailabilityZoneHint()">Please enter valid credentials first.</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field>
     <mat-label>Image*</mat-label>
     <input matInput
            formControlName="image"

@@ -1,4 +1,4 @@
-import {OpenstackFlavor} from '../../shared/entity/provider/openstack';
+import {OpenstackFlavor, OpenstackAvailabilityZone} from '../../shared/entity/provider/openstack';
 import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean';
 import {AzureSizes} from '../../shared/entity/provider/azure';
 import {HetznerTypes} from '../../shared/entity/provider/hetzner';
@@ -33,6 +33,17 @@ export function fakeOpenstackFlavors(): OpenstackFlavor[] {
       region: 'os1',
       slug: 'tiny-m1',
       swap: 0,
+    },
+  ];
+}
+
+export function fakeOpenstackAvailabilityZones(): OpenstackAvailabilityZone[] {
+  return [
+    {
+      name: 'zone_1',
+    },
+    {
+      name: 'zone_2',
     },
   ];
 }

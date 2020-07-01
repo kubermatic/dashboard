@@ -279,6 +279,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
     return (
       !!this.cluster.spec.cloud.aws ||
       !!this.cluster.spec.cloud.azure ||
+      !!this.cluster.spec.cloud.openstack ||
       (!!this.cluster.spec.cloud.vsphere && this.isImageAvailableForVsphere(OperatingSystem.Flatcar))
     );
   }

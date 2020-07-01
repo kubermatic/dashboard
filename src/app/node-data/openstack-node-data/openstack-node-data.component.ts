@@ -10,7 +10,7 @@ import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 import {filterArrayOptions} from '../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
-import {OpenstackFlavor} from '../../shared/entity/provider/openstack';
+import {OpenstackFlavor, OpenstackAvailabilityZone} from '../../shared/entity/provider/openstack';
 
 @Component({
   selector: 'km-openstack-node-data',
@@ -28,6 +28,8 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   loadingFlavors = false;
   form: FormGroup;
   filteredFlavors: OpenstackFlavor[] = [];
+  availabilityZones: OpenstackAvailabilityZone[] = [];
+  loadingAvailabilityZones = false;
 
   private _unsubscribe = new Subject<void>();
   private _selectedPreset: string;
@@ -51,6 +53,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       ),
       customDiskSize: new FormControl(this.nodeData.spec.cloud.openstack.diskSize > 0),
       image: new FormControl(this.nodeData.spec.cloud.openstack.image),
+      availabilityZone: new FormControl(this.nodeData.spec.cloud.openstack.availabilityZone),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -72,7 +75,9 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       });
 
     this._loadFlavors();
+    this._loadAvailabilityZones();
     this.checkFlavorState();
+    this.checkAvailabilityZoneState();
     this._addNodeService.changeNodeProviderData(this._getNodeProviderData());
 
     if (this.nodeData.spec.cloud.openstack.image === '') {
@@ -111,9 +116,13 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       this.form.controls.flavor.setValue('');
       this.flavors = [];
       this.checkFlavorState();
+      this.form.controls.availabilityZone.setValue('');
+      this.availabilityZones = [];
+      this.checkAvailabilityZoneState();
 
       if (this._hasCredentials() || this._selectedPreset) {
         this._loadFlavors();
+        this._loadAvailabilityZones();
       }
     });
 
@@ -123,6 +132,10 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
         this.form.controls.flavor.setValue('');
         this.flavors = [];
         this.checkFlavorState();
+        this.form.controls.availabilityZone.setValue('');
+        this.availabilityZones = [];
+        this.checkFlavorState();
+        this.checkAvailabilityZoneState();
       }
     });
   }
@@ -181,6 +194,30 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     return 'Flavor*';
   }
 
+  checkAvailabilityZoneState(): void {
+    if (this.availabilityZones.length === 0) {
+      this.form.controls.availabilityZone.disable();
+    } else {
+      this.form.controls.availabilityZone.enable();
+    }
+    this.form.controls.availabilityZone.updateValueAndValidity();
+  }
+
+  showAvailabilityZoneHint(): boolean {
+    return !this.loadingAvailabilityZones && !this._hasCredentials() && !this._selectedPreset && this.isInWizard();
+  }
+
+  getAvailabilityZonesFormState(): string {
+    if (!this.loadingAvailabilityZones && !this._hasCredentials() && this.isInWizard()) {
+      return 'Availability Zone';
+    } else if (this.loadingAvailabilityZones) {
+      return 'Loading availabilityZones...';
+    } else if (!this.loadingAvailabilityZones && this.flavors.length === 0) {
+      return 'No Availability Zones available';
+    }
+    return 'Availability Zone';
+  }
+
   isInWizard(): boolean {
     return !this.clusterId || this.clusterId.length === 0;
   }
@@ -200,6 +237,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
         openstack: {
           flavor: this.form.controls.flavor.value,
           image: this.form.controls.image.value,
+          availabilityZone: this.form.controls.availabilityZone.value,
           useFloatingIP: this.form.controls.useFloatingIP.value,
           tags: this.nodeData.spec.cloud.openstack.tags,
           diskSize:
@@ -279,5 +317,38 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
         return flavor;
       }
     }
+  }
+
+  private _loadAvailabilityZones(): void {
+    if (this.isInWizard() && !this._hasCredentials() && !this._selectedPreset) {
+      return;
+    }
+
+    this.loadingAvailabilityZones = !this.isInWizard() || this._hasCredentials() || !!this._selectedPreset;
+
+    iif(
+      () => this.isInWizard(),
+      this._wizard
+        .provider(NodeProvider.OPENSTACK)
+        .username(this.cloudSpec.openstack.username)
+        .password(this.cloudSpec.openstack.password)
+        .tenant(this.cloudSpec.openstack.tenant)
+        .tenantID(this.cloudSpec.openstack.tenantID)
+        .domain(this.cloudSpec.openstack.domain)
+        .credential(this._selectedPreset)
+        .datacenter(this.cloudSpec.dc)
+        .availabilityZones(),
+      this._api.getOpenStackAvailabilityZones(this.projectId, this.seedDCName, this.clusterId)
+    )
+      .pipe(take(1))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        availabilityZones => {
+          this.availabilityZones = availabilityZones.sort((a, b) => (a.name < b.name ? -1 : 1));
+          this.checkAvailabilityZoneState();
+          this.loadingAvailabilityZones = false;
+        },
+        () => (this.loadingAvailabilityZones = false)
+      );
   }
 }

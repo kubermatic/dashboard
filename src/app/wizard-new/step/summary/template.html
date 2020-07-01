@@ -417,6 +417,10 @@
             <div key>Custom Disk Size</div>
             <div value>{{nodeData.spec.cloud.openstack.diskSize}}</div>
           </km-property>
+          <km-property *ngIf="nodeData.spec.cloud?.openstack?.availabilityZone">
+            <div key>Availability Zone</div>
+            <div value>{{nodeData.spec.cloud.openstack.availabilityZone}}</div>
+          </km-property>
           <km-property>
             <div key>Image</div>
             <div value>{{nodeData.spec.cloud.openstack.image}}</div>
