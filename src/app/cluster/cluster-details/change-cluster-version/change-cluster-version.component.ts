@@ -6,7 +6,6 @@ import {first, takeUntil} from 'rxjs/operators';
 import {ClusterService, NotificationService, ProjectService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {Cluster, ClusterPatch} from '../../../shared/entity/cluster';
-import {Datacenter} from '../../../shared/entity/datacenter';
 import {Project} from '../../../shared/entity/project';
 
 @Component({
@@ -15,7 +14,7 @@ import {Project} from '../../../shared/entity/project';
 })
 export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() datacenter: Datacenter;
+  @Input() seed: string;
   controlPlaneVersions: string[] = [];
   selectedVersion: string;
   project: Project;
@@ -48,7 +47,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
       },
     };
 
-    this._clusterService.patch(this.project.id, this.cluster.id, this.datacenter.metadata.name, patch).subscribe(() => {
+    this._clusterService.patch(this.project.id, this.cluster.id, this.seed, patch).subscribe(() => {
       this._notificationService.success(
         `The <strong>${this.cluster.name}</strong> cluster is being updated to the ${this.selectedVersion} version`
       );
@@ -64,7 +63,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
 
   upgradeNodeDeployments(): void {
     this._clusterService
-      .upgradeNodeDeployments(this.project.id, this.cluster.id, this.datacenter.metadata.name, this.selectedVersion)
+      .upgradeNodeDeployments(this.project.id, this.cluster.id, this.seed, this.selectedVersion)
       .pipe(first())
       .subscribe(() => {
         this._notificationService.success(

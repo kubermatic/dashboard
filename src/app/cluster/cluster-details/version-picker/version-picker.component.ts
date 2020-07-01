@@ -5,7 +5,6 @@ import {gt, lt} from 'semver';
 
 import {ClusterService} from '../../../core/services';
 import {Cluster, MasterVersion} from '../../../shared/entity/cluster';
-import {Datacenter} from '../../../shared/entity/datacenter';
 import {ChangeClusterVersionComponent} from '../change-cluster-version/change-cluster-version.component';
 
 @Component({
@@ -13,7 +12,7 @@ import {ChangeClusterVersionComponent} from '../change-cluster-version/change-cl
   templateUrl: './version-picker.component.html',
 })
 export class VersionPickerComponent implements OnInit, OnChanges {
-  @Input() datacenter: Datacenter;
+  @Input() seed: string;
   @Input() cluster: Cluster;
   @Input() isClusterRunning = false;
   @Input() upgrades: MasterVersion[] = [];
@@ -74,7 +73,7 @@ export class VersionPickerComponent implements OnInit, OnChanges {
     if (this.isEnabled()) {
       const modal = this._matDialog.open(ChangeClusterVersionComponent);
       modal.componentInstance.cluster = this.cluster;
-      modal.componentInstance.datacenter = this.datacenter;
+      modal.componentInstance.seed = this.seed;
       modal.componentInstance.controlPlaneVersions = this.versionsList;
       modal
         .afterClosed()
