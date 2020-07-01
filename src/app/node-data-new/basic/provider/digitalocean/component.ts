@@ -12,7 +12,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {first, takeUntil} from 'rxjs/operators';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
 import {DigitaloceanSizes, Optimized, Standard} from '../../../../shared/entity/provider/digitalocean';
@@ -62,7 +62,9 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
   }
 
   private get _sizesObservable(): Observable<DigitaloceanSizes> {
-    return this._nodeDataService.digitalOcean.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
+    return this._nodeDataService.digitalOcean
+      .flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this))
+      .pipe(first());
   }
 
   constructor(
@@ -110,6 +112,8 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.digitalocean) {
       this.selectedSize = this._nodeDataService.nodeData.spec.cloud.digitalocean.size;
+
+      this._cdr.detectChanges();
     }
   }
 

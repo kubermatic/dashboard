@@ -21,7 +21,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge, Observable} from 'rxjs';
-import {map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {first, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
@@ -73,6 +73,11 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   private _subnets: AWSSubnet[] = [];
   private _subnetMap: {[type: string]: AWSSubnet[]} = {};
 
+  @ViewChild('sizeCombobox')
+  private readonly _sizeCombobox: FilteredComboboxComponent;
+  @ViewChild('subnetCombobox')
+  private readonly _subnetCombobox: FilteredComboboxComponent;
+
   readonly Controls = Controls;
 
   sizes: AWSSize[] = [];
@@ -83,10 +88,18 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   diskTypes = this._diskTypes.map(type => ({name: type}));
   selectedDiskType = '';
 
-  @ViewChild('sizeCombobox')
-  private readonly _sizeCombobox: FilteredComboboxComponent;
-  @ViewChild('subnetCombobox')
-  private readonly _subnetCombobox: FilteredComboboxComponent;
+  private get _sizesObservable(): Observable<AWSSize[]> {
+    return this._nodeDataService.aws
+      .flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this))
+      .pipe(map(sizes => sizes.sort((a, b) => a.name.localeCompare(b.name))))
+      .pipe(first());
+  }
+
+  private get _subnetIdsObservable(): Observable<AWSSubnet[]> {
+    return this._nodeDataService.aws
+      .subnets(this._clearSubnet.bind(this), this._onSubnetLoading.bind(this))
+      .pipe(first());
+  }
 
   get subnetAZ(): string[] {
     return Object.keys(this._subnetMap);
@@ -104,7 +117,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.Size]: this._builder.control(''),
-      [Controls.DiskSize]: this._builder.control('', Validators.required),
+      [Controls.DiskSize]: this._builder.control(25, Validators.required),
       [Controls.DiskType]: this._builder.control('', Validators.required),
       [Controls.SubnetID]: this._builder.control(''),
       [Controls.AMI]: this._builder.control(''),
@@ -172,17 +185,9 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
       this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.aws.diskSize);
       this.form.get(Controls.DiskType).setValue(this._nodeDataService.nodeData.spec.cloud.aws.volumeType);
+
+      this._cdr.detectChanges();
     }
-  }
-
-  private get _sizesObservable(): Observable<AWSSize[]> {
-    return this._nodeDataService.aws
-      .flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this))
-      .pipe(map(sizes => sizes.sort((a, b) => a.name.localeCompare(b.name))));
-  }
-
-  private get _subnetIdsObservable(): Observable<AWSSubnet[]> {
-    return this._nodeDataService.aws.subnets(this._clearSubnet.bind(this), this._onSubnetLoading.bind(this));
   }
 
   private _setDefaultDiskType(): void {
