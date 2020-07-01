@@ -8,7 +8,7 @@ import {of} from 'rxjs';
 import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../shared/shared.module';
-import {fakeOpenstackFlavors} from '../../testing/fake-data/addNodeModal.fake';
+import {fakeOpenstackFlavors, fakeOpenstackAvailabilityZones} from '../../testing/fake-data/addNodeModal.fake';
 import {fakeOpenstackCluster} from '../../testing/fake-data/cluster.fake';
 import {fakeOpenstackDatacenter} from '../../testing/fake-data/datacenter.fake';
 import {nodeDataFake} from '../../testing/fake-data/node.fake';
@@ -25,9 +25,13 @@ describe('OpenstackNodeDataComponent', () => {
     const apiMock = {
       getOpenStackFlavorsForWizard: jest.fn(),
       getOpenStackFlavors: jest.fn(),
+      getOpenStackAvailabilityZonesForWizard: jest.fn(),
+      getOpenStackAvailabilityZones: jest.fn(),
     };
     apiMock.getOpenStackFlavorsForWizard.mockReturnValue(asyncData(fakeOpenstackFlavors()));
     apiMock.getOpenStackFlavors.mockReturnValue(asyncData(fakeOpenstackFlavors()));
+    apiMock.getOpenStackAvailabilityZonesForWizard.mockReturnValue(asyncData(fakeOpenstackAvailabilityZones()));
+    apiMock.getOpenStackAvailabilityZones.mockReturnValue(asyncData(fakeOpenstackAvailabilityZones()));
 
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule, ReactiveFormsModule, HttpClientModule],

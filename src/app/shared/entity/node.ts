@@ -184,6 +184,7 @@ export class OpenstackNodeSpec {
   useFloatingIP: boolean;
   tags: object;
   diskSize?: number;
+  availabilityZone?: string;
 }
 
 export class PacketNodeSpec {

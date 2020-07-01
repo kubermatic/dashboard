@@ -23,7 +23,7 @@ import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../wizard-new/service/cluster';
 import {NodeDataService} from '../../../service/service';
-import {OpenstackFlavor} from '../../../../shared/entity/provider/openstack';
+import {OpenstackFlavor, OpenstackAvailabilityZone} from '../../../../shared/entity/provider/openstack';
 
 enum Controls {
   Flavor = 'flavor',
@@ -31,12 +31,19 @@ enum Controls {
   DiskSize = 'diskSize',
   CustomDiskSize = 'customDiskSize',
   Image = 'image',
+  AvailabilityZone = 'availabilityZone',
 }
 
 enum FlavorState {
   Ready = 'Flavor',
   Loading = 'Loading...',
   Empty = 'No Flavors Available',
+}
+
+enum AvailabilityZoneState {
+  Ready = 'Availability Zone',
+  Loading = 'Loading...',
+  Empty = 'No Availability Zones Available',
 }
 
 @Component({
@@ -64,11 +71,16 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   @ViewChild('flavorCombobox')
   private readonly _flavorCombobox: FilteredComboboxComponent;
 
+  @ViewChild('availabilityZoneCombobox')
+  private readonly _availabilityZoneCombobox: FilteredComboboxComponent;
+
   readonly Controls = Controls;
 
   flavors: OpenstackFlavor[] = [];
   selectedFlavor = '';
   flavorsLabel = FlavorState.Empty;
+  availabilityZones: OpenstackAvailabilityZone[] = [];
+  availabilityZonesLabel = AvailabilityZoneState.Empty;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -87,6 +99,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       [Controls.DiskSize]: this._builder.control(''),
       [Controls.CustomDiskSize]: this._builder.control(''),
       [Controls.Image]: this._builder.control('', Validators.required),
+      [Controls.AvailabilityZone]: this._builder.control(''),
     });
 
     this._nodeDataService.nodeData = this._getNodeData();
@@ -125,6 +138,9 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
   ngAfterViewInit() {
     this._flavorsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultFlavor.bind(this));
+    this._availabilityZonesObservable
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._setAvailabilityZone.bind(this));
   }
 
   ngOnDestroy(): void {
@@ -138,6 +154,10 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
   onFlavorChange(flavor: string): void {
     this._nodeDataService.nodeData.spec.cloud.openstack.flavor = flavor;
+  }
+
+  onAvailabilityZoneChange(availabilityZone: string): void {
+    this._nodeDataService.nodeData.spec.cloud.openstack.availabilityZone = availabilityZone;
   }
 
   flavorDisplayName(slug: string): string {
@@ -181,6 +201,37 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       this.selectedFlavor = this.flavors[0].slug;
     }
 
+    this._cdr.detectChanges();
+  }
+
+  private get _availabilityZonesObservable(): Observable<OpenstackAvailabilityZone[]> {
+    return this._nodeDataService.openstack
+      .availabilityZones(this._clearAvailabilityZone.bind(this), this._onAvailabilityZoneLoading.bind(this))
+      .pipe(delay(3000))
+      .pipe(
+        map((availabilityZones: OpenstackAvailabilityZone[]) =>
+          availabilityZones.sort((a, b) => (a.name < b.name ? -1 : 1))
+        )
+      );
+  }
+
+  private _clearAvailabilityZone(): void {
+    this.availabilityZones = [];
+    this.availabilityZonesLabel = AvailabilityZoneState.Empty;
+    this._availabilityZoneCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _onAvailabilityZoneLoading(): void {
+    this._clearAvailabilityZone();
+    this.availabilityZonesLabel = AvailabilityZoneState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _setAvailabilityZone(availabilityZones: OpenstackAvailabilityZone[]): void {
+    this.availabilityZones = availabilityZones;
+    this.availabilityZonesLabel =
+      this.availabilityZones.length > 0 ? AvailabilityZoneState.Ready : AvailabilityZoneState.Empty;
     this._cdr.detectChanges();
   }
 

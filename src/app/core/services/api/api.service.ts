@@ -15,7 +15,6 @@ import {NodeMetrics} from '../../../shared/entity/metrics';
 import {NodeDeployment, NodeDeploymentPatch} from '../../../shared/entity/node-deployment';
 import {Node} from '../../../shared/entity/node';
 import {EditProject, Project} from '../../../shared/entity/project';
-
 import {
   ServiceAccountModel,
   CreateTokenEntity,
@@ -32,7 +31,7 @@ import {PacketSize} from '../../../shared/entity/provider/packet';
 import {AlibabaInstanceType, AlibabaZone} from '../../../shared/entity/provider/alibaba';
 import {AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws';
 import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '../../../shared/entity/provider/gcp';
-import {OpenstackFlavor} from '../../../shared/entity/provider/openstack';
+import {OpenstackFlavor, OpenstackAvailabilityZone} from '../../../shared/entity/provider/openstack';
 import {AzureSizes, AzureZones} from '../../../shared/entity/provider/azure';
 
 @Injectable()
@@ -226,6 +225,15 @@ export class ApiService {
   getOpenStackFlavors(projectId: string, dc: string, cluster: string): Observable<OpenstackFlavor[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/openstack/sizes`;
     return this._http.get<OpenstackFlavor[]>(url);
+  }
+
+  getOpenStackAvailabilityZones(
+    projectId: string,
+    dc: string,
+    cluster: string
+  ): Observable<OpenstackAvailabilityZone[]> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/openstack/availabilityzones`;
+    return this._http.get<OpenstackAvailabilityZone[]>(url);
   }
 
   getKubeconfigURL(projectID: string, dc: string, clusterID: string): string {
