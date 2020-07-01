@@ -219,10 +219,10 @@ export class ApiService {
 
   getOpenStackAvailabilityZones(
     projectId: string,
-    dc: string,
+    seed: string,
     cluster: string
   ): Observable<OpenstackAvailabilityZone[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/openstack/availabilityzones`;
+    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${cluster}/providers/openstack/availabilityzones`;
     return this._http.get<OpenstackAvailabilityZone[]>(url);
   }
 
