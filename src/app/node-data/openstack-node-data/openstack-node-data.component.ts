@@ -88,7 +88,9 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       if (
         (!!this.nodeData.spec.operatingSystem.ubuntu && !data.ubuntu) ||
         (!!this.nodeData.spec.operatingSystem.centos && !data.centos) ||
-        (!!this.nodeData.spec.operatingSystem.containerLinux && !data.containerLinux)
+        (!!this.nodeData.spec.operatingSystem.containerLinux && !data.containerLinux) ||
+        (!!this.nodeData.spec.operatingSystem.rhel && !data.rhel) ||
+        (!!this.nodeData.spec.operatingSystem.flatcar && !data.flatcar)
       ) {
         this.setImage(data);
       }
@@ -145,6 +147,8 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       let coreosImage = '';
       let centosImage = '';
       let ubuntuImage = '';
+      let rhelImage = '';
+      let flatcarImage = '';
 
       for (const i in res.spec.openstack.images) {
         if (i === 'coreos') {
@@ -153,6 +157,10 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
           centosImage = res.spec.openstack.images[i];
         } else if (i === 'ubuntu') {
           ubuntuImage = res.spec.openstack.images[i];
+        } else if (i === 'rhel') {
+          rhelImage = res.spec.openstack.images[i];
+        } else if (i === 'flatcar') {
+          flatcarImage = res.spec.openstack.images[i];
         }
       }
 
@@ -162,6 +170,10 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
         return this.form.controls.image.setValue(centosImage);
       } else if (operatingSystem.containerLinux) {
         return this.form.controls.image.setValue(coreosImage);
+      } else if (operatingSystem.rhel) {
+        return this.form.controls.image.setValue(rhelImage);
+      } else if (operatingSystem.flatcar) {
+        return this.form.controls.image.setValue(flatcarImage);
       }
     });
   }
