@@ -40,6 +40,10 @@ export class StylePickerComponent implements OnInit {
     return this._themeManageService.isSystemDefaultThemeDark;
   }
 
+  get systemDefaultOption(): string {
+    return this._themeManageService.systemDefaultOption;
+  }
+
   private get _systemDefaultThemeName(): string {
     return this._colorSchemeService.hasPreferredTheme()
       ? this._colorSchemeService.getPreferredTheme().name
