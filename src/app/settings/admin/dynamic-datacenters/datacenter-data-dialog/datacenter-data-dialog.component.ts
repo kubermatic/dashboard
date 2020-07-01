@@ -40,7 +40,7 @@ export class DatacenterDataDialogComponent implements OnInit {
   readonly controls = Controls;
   readonly separatorKeyCodes: number[] = [ENTER, COMMA];
   readonly countryCodes: string[] = countryCodeLookup.countries.map(country => country.iso2);
-  readonly providers: string[] = Object.values(NodeProvider).filter(provider => !!provider);
+  readonly providers: NodeProvider[] = Object.values(NodeProvider).filter(provider => !!provider);
   form: FormGroup;
   requiredEmailDomains: string[] = [];
   providerConfig = '';
@@ -107,7 +107,7 @@ export class DatacenterDataDialogComponent implements OnInit {
     }
   }
 
-  getProviderName(provider: NodeProvider | string): string {
+  getProviderName(provider: NodeProvider): string {
     return NodeProviderConstants.displayName(provider);
   }
 
