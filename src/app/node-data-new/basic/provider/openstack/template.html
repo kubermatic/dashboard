@@ -42,6 +42,20 @@
     <mat-hint>An additional network storage volume will be created and used as the disk for the VM.</mat-hint>
   </mat-form-field>
 
+  <km-combobox #availabilityZoneCombobox
+               [required]="false"
+               [grouped]="false"
+               [options]="availabilityZones"
+               [formControlName]="Controls.AvailabilityZone"
+               (changed)="onAvailabilityZoneChange($event)"
+               [label]="availabilityZonesLabel"
+               inputLabel="Select availability zone..."
+               filterBy="name">
+    <div *option="let availabilityZone">
+      {{availabilityZone.name}}
+    </div>
+  </km-combobox>
+
   <mat-form-field fxFlex>
     <mat-label>Image</mat-label>
     <input [formControlName]="Controls.Image"

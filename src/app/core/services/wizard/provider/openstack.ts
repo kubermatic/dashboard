@@ -3,6 +3,7 @@ import {EMPTY, Observable} from 'rxjs';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {Provider} from './provider';
 import {
+  OpenstackAvailabilityZone,
   OpenstackFlavor,
   OpenstackNetwork,
   OpenstackSecurityGroup,
@@ -14,6 +15,7 @@ export class Openstack extends Provider {
   private readonly _tenantsUrl = `${this._restRoot}/providers/openstack/tenants`;
   private readonly _securityGroupsUrl = `${this._restRoot}/providers/openstack/securitygroups`;
   private readonly _networksUrl = `${this._restRoot}/providers/openstack/networks`;
+  private readonly _availabilityZonesUrl = `${this._restRoot}/providers/openstack/availabilityzones`;
 
   constructor(http: HttpClient, provider: NodeProvider) {
     super(http, provider);
@@ -148,6 +150,20 @@ export class Openstack extends Provider {
 
     const url = `${this._restRoot}/providers/openstack/subnets?network_id=${network}`;
     return this._http.get<OpenstackSubnet[]>(url, {headers: this._headers});
+  }
+
+  availabilityZones(onLoadingCb: () => void = null): Observable<OpenstackAvailabilityZone[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    return this._http.get<OpenstackAvailabilityZone[]>(this._availabilityZonesUrl, {
+      headers: this._headers,
+    });
   }
 }
 
