@@ -9,22 +9,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {merge, Observable, of, onErrorResumeNext} from 'rxjs';
+import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, switchMap, tap} from 'rxjs/operators';
 
-import {PresetsService} from '../../../core/services';
+import {ApiService, DatacenterService, PresetsService, ProjectService} from '../../../core/services';
 import {Cluster} from '../../../shared/entity/cluster';
+import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../shared/entity/provider/gcp';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../shared/services/cluster.service';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
-import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../shared/entity/provider/gcp';
 
 export class NodeDataGCPProvider {
   constructor(
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterService: ClusterService,
-    private readonly _presetService: PresetsService
+    private readonly _presetService: PresetsService,
+    private readonly _apiService: ApiService,
+    private readonly _projectService: ProjectService,
+    private readonly _datacenterService: DatacenterService
   ) {}
 
   set labels(labels: object) {
@@ -42,7 +45,6 @@ export class NodeDataGCPProvider {
   zones(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<GCPZone[]> {
     let cluster: Cluster;
 
-    // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterService.clusterChanges
@@ -66,62 +68,121 @@ export class NodeDataGCPProvider {
                 )
             )
           );
+      case NodeDataMode.Dialog: {
+        let selectedProject: string;
+        return this._projectService.selectedProject
+          .pipe(tap(project => (selectedProject = project.id)))
+          .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc)))
+          .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
+          .pipe(
+            switchMap(dc =>
+              this._apiService.getGCPZones(selectedProject, dc.spec.seed, this._clusterService.cluster.id)
+            )
+          )
+          .pipe(
+            catchError(_ => {
+              if (onError) {
+                onError();
+              }
+
+              return onErrorResumeNext(of([]));
+            })
+          );
+      }
     }
   }
 
   diskTypes(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<GCPDiskType[]> {
-    // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return merge(this._clusterService.clusterChanges, this._nodeDataService.nodeDataChanges)
-          .pipe(filter(_ => this._clusterService.provider === NodeProvider.GCP))
+        return this._presetService
+          .provider(NodeProvider.GCP)
+          .serviceAccount(this._clusterService.cluster.spec.cloud.gcp.serviceAccount)
+          .zone(this._nodeDataService.nodeData.spec.cloud.gcp.zone)
+          .credential(this._presetService.preset)
+          .diskTypes(onLoadingCb)
           .pipe(
-            switchMap(_ =>
-              this._presetService
-                .provider(NodeProvider.GCP)
-                .serviceAccount(this._clusterService.cluster.spec.cloud.gcp.serviceAccount)
-                .zone(this._nodeDataService.nodeData.spec.cloud.gcp.zone)
-                .credential(this._presetService.preset)
-                .diskTypes(onLoadingCb)
-                .pipe(
-                  catchError(_ => {
-                    if (onError) {
-                      onError();
-                    }
+            catchError(_ => {
+              if (onError) {
+                onError();
+              }
 
-                    return onErrorResumeNext(of([]));
-                  })
-                )
-            )
+              return onErrorResumeNext(of([]));
+            })
           );
+      case NodeDataMode.Dialog: {
+        let selectedProject: string;
+        return this._projectService.selectedProject
+          .pipe(tap(project => (selectedProject = project.id)))
+          .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc)))
+          .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
+          .pipe(
+            switchMap(dc =>
+              this._apiService.getGCPDiskTypes(
+                this._nodeDataService.nodeData.spec.cloud.gcp.zone,
+                selectedProject,
+                dc.spec.seed,
+                this._clusterService.cluster.id
+              )
+            )
+          )
+          .pipe(
+            catchError(_ => {
+              if (onError) {
+                onError();
+              }
+
+              return onErrorResumeNext(of([]));
+            })
+          );
+      }
     }
   }
 
   machineTypes(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<GCPMachineSize[]> {
-    // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return merge(this._clusterService.clusterChanges, this._nodeDataService.nodeDataChanges)
-          .pipe(filter(_ => this._clusterService.provider === NodeProvider.GCP))
+        return this._presetService
+          .provider(NodeProvider.GCP)
+          .serviceAccount(this._clusterService.cluster.spec.cloud.gcp.serviceAccount)
+          .zone(this._nodeDataService.nodeData.spec.cloud.gcp.zone)
+          .credential(this._presetService.preset)
+          .machineTypes(onLoadingCb)
           .pipe(
-            switchMap(_ =>
-              this._presetService
-                .provider(NodeProvider.GCP)
-                .serviceAccount(this._clusterService.cluster.spec.cloud.gcp.serviceAccount)
-                .zone(this._nodeDataService.nodeData.spec.cloud.gcp.zone)
-                .credential(this._presetService.preset)
-                .machineTypes(onLoadingCb)
-                .pipe(
-                  catchError(_ => {
-                    if (onError) {
-                      onError();
-                    }
+            catchError(_ => {
+              if (onError) {
+                onError();
+              }
 
-                    return onErrorResumeNext(of([]));
-                  })
-                )
-            )
+              return onErrorResumeNext(of([]));
+            })
           );
+      case NodeDataMode.Dialog: {
+        let selectedProject: string;
+        return this._projectService.selectedProject
+          .pipe(tap(project => (selectedProject = project.id)))
+          .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc)))
+          .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
+          .pipe(
+            switchMap(dc =>
+              this._apiService.getGCPSizes(
+                this._nodeDataService.nodeData.spec.cloud.gcp.zone,
+                selectedProject,
+                dc.spec.seed,
+                this._clusterService.cluster.id
+              )
+            )
+          )
+          .pipe(
+            catchError(_ => {
+              if (onError) {
+                onError();
+              }
+
+              return onErrorResumeNext(of([]));
+            })
+          );
+      }
     }
   }
 }

@@ -120,6 +120,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       this.form.get(Controls.Name).disable();
     }
 
+    this._init();
     this._nodeDataService.nodeData = this._getNodeData();
     this.labels = this._nodeDataService.nodeData.spec.labels;
     this.taints = this._nodeDataService.nodeData.spec.taints;
@@ -252,6 +253,16 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   onTaintsChange(taints: Taint[]): void {
     this.taints = taints;
     this._nodeDataService.taints = this.taints;
+  }
+
+  private _init(): void {
+    const upgradeOnBoot = this._nodeDataService.operatingSystemSpec[this._nodeDataService.operatingSystem]
+      .distUpgradeOnBoot;
+    const disableAutoUpdate = this._nodeDataService.operatingSystemSpec[this._nodeDataService.operatingSystem]
+      .disableAutoUpdate;
+
+    this.form.get(Controls.UpgradeOnBoot).setValue(!!upgradeOnBoot);
+    this.form.get(Controls.DisableAutoUpdate).setValue(!!disableAutoUpdate);
   }
 
   private _getOperatingSystemSpec(): OperatingSystemSpec {

@@ -21,7 +21,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge, Observable} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {first, takeUntil} from 'rxjs/operators';
 import * as _ from 'lodash';
 
 import {PresetsService} from '../../../../core/services';
@@ -90,14 +90,15 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   private _zoneCombobox: FilteredComboboxComponent;
 
   private get _instanceTypesObservable(): Observable<AlibabaInstanceType[]> {
-    return this._nodeDataService.alibaba.instanceTypes(
-      this._clearInstanceType.bind(this),
-      this._onInstanceTypeLoading.bind(this)
-    );
+    return this._nodeDataService.alibaba
+      .instanceTypes(this._clearInstanceType.bind(this), this._onInstanceTypeLoading.bind(this))
+      .pipe(first());
   }
 
   private get _zoneIdsObservable(): Observable<AlibabaZone[]> {
-    return this._nodeDataService.alibaba.zones(this._clearZone.bind(this), this._onZoneLoading.bind(this));
+    return this._nodeDataService.alibaba
+      .zones(this._clearZone.bind(this), this._onZoneLoading.bind(this))
+      .pipe(first());
   }
 
   constructor(

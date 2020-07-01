@@ -10,6 +10,7 @@
 // limitations under the License.
 
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -21,7 +22,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge, Observable} from 'rxjs';
-import {filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {filter, first, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
 import {GCPNodeSpec, NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
@@ -73,8 +74,15 @@ enum MachineTypeState {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewInit, OnDestroy {
   private _zoneChanges = new EventEmitter<boolean>();
+
+  @ViewChild('zonesCombobox')
+  private _zonesCombobox: FilteredComboboxComponent;
+  @ViewChild('diskTypesCombobox')
+  private _diskTypesCombobox: FilteredComboboxComponent;
+  @ViewChild('machineTypesCombobox')
+  private _machineTypesCombobox: FilteredComboboxComponent;
 
   readonly Controls = Controls;
 
@@ -88,11 +96,26 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   selectedDiskType = '';
   diskTypeLabel = DiskTypeState.Empty;
 
-  @ViewChild('zonesCombobox') private _zonesCombobox: FilteredComboboxComponent;
-  @ViewChild('diskTypesCombobox')
-  private _diskTypesCombobox: FilteredComboboxComponent;
-  @ViewChild('machineTypesCombobox')
-  private _machineTypesCombobox: FilteredComboboxComponent;
+  private get _zonesObservable(): Observable<GCPZone[]> {
+    return this._nodeDataService.gcp
+      .zones(this._clearZone.bind(this), this._onZoneLoading.bind(this))
+      .pipe(map((zones: GCPZone[]) => zones.sort((a, b) => a.name.localeCompare(b.name))))
+      .pipe(first());
+  }
+
+  private get _diskTypesObservable(): Observable<GCPDiskType[]> {
+    return this._nodeDataService.gcp
+      .diskTypes(this._clearDiskTypes.bind(this), this._onDiskTypeLoading.bind(this))
+      .pipe(map((types: GCPDiskType[]) => types.sort((a, b) => a.name.localeCompare(b.name))))
+      .pipe(first());
+  }
+
+  private get _machineTypesObservable(): Observable<GCPMachineSize[]> {
+    return this._nodeDataService.gcp
+      .machineTypes(this._clearMachineType.bind(this), this._onMachineTypeLoading.bind(this))
+      .pipe(map((sizes: GCPMachineSize[]) => sizes.sort((a, b) => a.name.localeCompare(b.name))))
+      .pipe(first());
+  }
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -111,10 +134,16 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
       [Controls.Preemptible]: this._builder.control(''),
     });
 
+    this._init();
     this._nodeDataService.nodeData = this._getNodeData();
+  }
+
+  ngAfterViewInit(): void {
     this._zonesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultZone.bind(this));
 
     this._zoneChanges
+      .pipe(tap(_ => this._clearDiskTypes()))
+      .pipe(tap(_ => this._clearMachineType()))
       .pipe(filter(hasValue => hasValue))
       .pipe(switchMap(_ => this._diskTypesObservable))
       .pipe(tap(this._setDefaultDiskType.bind(this)))
@@ -148,10 +177,11 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
     this._nodeDataService.nodeDataChanges.next();
   }
 
-  private get _zonesObservable(): Observable<GCPZone[]> {
-    return this._nodeDataService.gcp
-      .zones(this._clearZone.bind(this), this._onZoneLoading.bind(this))
-      .pipe(map((zones: GCPZone[]) => zones.sort((a, b) => a.name.localeCompare(b.name))));
+  private _init(): void {
+    if (this._nodeDataService.nodeData.spec.cloud.gcp) {
+      this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.gcp.diskSize);
+      this.form.get(Controls.Preemptible).setValue(this._nodeDataService.nodeData.spec.cloud.gcp.preemptible);
+    }
   }
 
   private _clearZone(): void {
@@ -170,17 +200,15 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   private _setDefaultZone(zones: GCPZone[]): void {
     this.zones = zones;
-    if (!_.isEmpty(this.zones)) {
-      this.selectedZone = this.zones[0].name;
-      this.zoneLabel = ZoneState.Ready;
-      this._cdr.detectChanges();
-    }
-  }
+    this.selectedZone = this._nodeDataService.nodeData.spec.cloud.gcp.zone;
 
-  private get _diskTypesObservable(): Observable<GCPDiskType[]> {
-    return this._nodeDataService.gcp
-      .diskTypes(this._clearDiskTypes.bind(this), this._onDiskTypeLoading.bind(this))
-      .pipe(map((types: GCPDiskType[]) => types.sort((a, b) => a.name.localeCompare(b.name))));
+    if (!this.selectedZone && !_.isEmpty(this.zones)) {
+      this.selectedZone = this.zones[0].name;
+    }
+
+    this.zoneLabel = this.selectedZone ? ZoneState.Ready : ZoneState.Empty;
+    this._zoneChanges.emit(!!this.selectedZone);
+    this._cdr.detectChanges();
   }
 
   private _clearDiskTypes(): void {
@@ -199,17 +227,14 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   private _setDefaultDiskType(diskTypes: GCPDiskType[]): void {
     this.diskTypes = diskTypes;
-    if (!_.isEmpty(this.diskTypes)) {
-      this.selectedDiskType = this.diskTypes[0].name;
-      this.diskTypeLabel = DiskTypeState.Ready;
-      this._cdr.detectChanges();
-    }
-  }
+    this.selectedDiskType = this._nodeDataService.nodeData.spec.cloud.gcp.diskType;
 
-  private get _machineTypesObservable(): Observable<GCPMachineSize[]> {
-    return this._nodeDataService.gcp
-      .machineTypes(this._clearMachineType.bind(this), this._onMachineTypeLoading.bind(this))
-      .pipe(map((sizes: GCPMachineSize[]) => sizes.sort((a, b) => a.name.localeCompare(b.name))));
+    if (!this.selectedDiskType && !_.isEmpty(this.diskTypes)) {
+      this.selectedDiskType = this.diskTypes[0].name;
+    }
+
+    this.diskTypeLabel = this.selectedDiskType ? DiskTypeState.Ready : DiskTypeState.Empty;
+    this._cdr.detectChanges();
   }
 
   private _clearMachineType(): void {
@@ -228,11 +253,14 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   private _setDefaultMachineType(machineTypes: GCPMachineSize[]): void {
     this.machineTypes = machineTypes;
-    if (!_.isEmpty(this.machineTypes)) {
+    this.selectedMachineType = this._nodeDataService.nodeData.spec.cloud.gcp.machineType;
+
+    if (!this.selectedMachineType && !_.isEmpty(this.machineTypes)) {
       this.selectedMachineType = this.machineTypes[0].name;
-      this.machineTypeLabel = MachineTypeState.Ready;
-      this._cdr.detectChanges();
     }
+
+    this.machineTypeLabel = this.selectedMachineType ? MachineTypeState.Ready : MachineTypeState.Empty;
+    this._cdr.detectChanges();
   }
 
   private _getNodeData(): NodeData {
@@ -241,7 +269,7 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
         cloud: {
           gcp: {
             diskSize: this.form.get(Controls.DiskSize).value,
-            preemptible: this.form.get(Controls.Preemptible).value,
+            preemptible: !!this.form.get(Controls.Preemptible).value,
           } as GCPNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,

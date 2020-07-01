@@ -60,6 +60,7 @@ export class NodeDataAWSProvider {
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc)))
+          .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(dc =>
               this._apiService.getAWSSizes(selectedProject, dc.spec.seed, this._clusterService.cluster.id)
@@ -108,6 +109,7 @@ export class NodeDataAWSProvider {
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc)))
+          .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(dc =>
               this._apiService.getAWSSubnets(selectedProject, dc.spec.seed, this._clusterService.cluster.id)

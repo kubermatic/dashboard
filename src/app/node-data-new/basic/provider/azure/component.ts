@@ -150,6 +150,8 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
       this.selectedZone = this._nodeDataService.nodeData.spec.cloud.azure.zone;
 
       this.form.get(Controls.ImageID).setValue(this._nodeDataService.nodeData.spec.cloud.azure.imageID);
+
+      this._cdr.detectChanges();
     }
   }
 
