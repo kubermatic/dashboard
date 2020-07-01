@@ -1,4 +1,4 @@
-import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {CreateDatacenterModel, Datacenter} from '../../../shared/entity/datacenter';
 import {MatTableDataSource} from '@angular/material/table';
@@ -18,7 +18,7 @@ import {DatacenterDataDialogComponent} from './datacenter-data-dialog/datacenter
   templateUrl: './dynamic-datacenters.component.html',
   styleUrls: ['./dynamic-datacenters.component.scss'],
 })
-export class DynamicDatacentersComponent implements OnInit, OnChanges {
+export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges {
   datacenters: Datacenter[] = [];
   dataSource = new MatTableDataSource<Datacenter>();
   displayedColumns: string[] = ['datacenter', 'seed', 'country', 'provider', 'actions'];
