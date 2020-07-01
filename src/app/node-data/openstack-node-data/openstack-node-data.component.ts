@@ -338,7 +338,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
         .credential(this._selectedPreset)
         .datacenter(this.cloudSpec.dc)
         .availabilityZones(),
-      this._api.getOpenStackAvailabilityZones(this.projectId, this.seedDCName, this.clusterId)
+      this._api.getOpenStackAvailabilityZones(this.projectId, this.seed, this.clusterId)
     )
       .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))
