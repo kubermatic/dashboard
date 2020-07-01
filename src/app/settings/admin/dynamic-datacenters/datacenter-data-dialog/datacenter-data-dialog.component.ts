@@ -43,7 +43,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
   readonly controls = Controls;
   readonly separatorKeyCodes: number[] = [ENTER, COMMA];
   readonly countryCodes: string[] = countryCodeLookup.countries.map(country => country.iso2);
-  readonly providers: string[] = Object.values(NodeProvider).filter(provider => !!provider);
+  readonly providers: NodeProvider[] = Object.values(NodeProvider).filter(provider => !!provider);
   seeds: string[] = [];
   form: FormGroup;
   requiredEmailDomains: string[] = [];
@@ -120,7 +120,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
     }
   }
 
-  getProviderName(provider: NodeProvider | string): string {
+  getProviderName(provider: NodeProvider): string {
     return NodeProviderConstants.displayName(provider);
   }
 

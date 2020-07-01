@@ -28,8 +28,8 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
   seedFilter: string;
   countries: string[] = [];
   countryFilter: string;
-  providers: string[] = Object.values(NodeProvider).filter(provider => !!provider);
-  providerFilter: string;
+  providers: NodeProvider[] = Object.values(NodeProvider).filter(provider => !!provider);
+  providerFilter: NodeProvider;
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -86,7 +86,7 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
     this._unsubscribe.complete();
   }
 
-  getProviderName(provider: NodeProvider | string): string {
+  getProviderName(provider: NodeProvider): string {
     return NodeProviderConstants.displayName(provider);
   }
 
