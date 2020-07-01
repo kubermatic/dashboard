@@ -42,8 +42,8 @@ export namespace NodeProviderConstants {
     [NodeProvider.VSPHERE, 'VSphere'],
   ]);
 
-  export function displayName(provider: NodeProvider | string): string {
-    return PROVIDER_DISPLAY_NAMES[provider];
+  export function displayName(provider: NodeProvider): string {
+    return PROVIDER_DISPLAY_NAMES.get(provider);
   }
 
   export function getOperatingSystemSpecName(spec: NodeSpec) {
