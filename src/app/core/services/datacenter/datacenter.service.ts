@@ -49,15 +49,6 @@ export class DatacenterService {
     return this._httpClient.get<Datacenter[]>(url);
   }
 
-  get seeds(): Observable<string[]> {
-    return this._seeds$;
-  }
-
-  private _getSeeds(): Observable<string[]> {
-    const url = `${this._restRoot}/seed`;
-    return this._httpClient.get<string[]>(url);
-  }
-
   refreshDatacenters(): void {
     this._datacentersRefresh$.next();
   }
@@ -79,5 +70,14 @@ export class DatacenterService {
   deleteDatacenter(datacenter: Datacenter): Observable<any> {
     const url = `${this._restRoot}/seed/${datacenter.spec.seed}/dc/${datacenter.metadata.name}`;
     return this._httpClient.delete(url);
+  }
+
+  get seeds(): Observable<string[]> {
+    return this._seeds$;
+  }
+
+  private _getSeeds(): Observable<string[]> {
+    const url = `${this._restRoot}/seed`;
+    return this._httpClient.get<string[]>(url);
   }
 }

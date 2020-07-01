@@ -31,7 +31,7 @@ import {HetznerTypes} from '../../../shared/entity/provider/hetzner';
 import {PacketSize} from '../../../shared/entity/provider/packet';
 import {AlibabaInstanceType, AlibabaZone} from '../../../shared/entity/provider/alibaba';
 import {AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws';
-import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '../../../shared/entity/provider/gcp';
+import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../shared/entity/provider/gcp';
 import {OpenstackFlavor} from '../../../shared/entity/provider/openstack';
 import {AzureSizes, AzureZones} from '../../../shared/entity/provider/azure';
 
@@ -211,17 +211,6 @@ export class ApiService {
     const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/gcp/disktypes`;
     const headers = new HttpHeaders().set('Zone', zone);
     return this._http.get<GCPDiskType[]>(url, {headers});
-  }
-
-  getGCPNetworks(projectId: string, seed: string, clusterId: string): Observable<GCPNetwork[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/gcp/networks`;
-    return this._http.get<GCPNetwork[]>(url);
-  }
-
-  getGCPSubnetworks(projectId: string, seed: string, clusterId: string, network: string): Observable<GCPSubnetwork[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/gcp/subnetworks`;
-    const headers = new HttpHeaders().set('Network', network);
-    return this._http.get<GCPSubnetwork[]>(url, {headers});
   }
 
   getOpenStackFlavors(projectId: string, seed: string, cluster: string): Observable<OpenstackFlavor[]> {

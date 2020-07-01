@@ -62,7 +62,7 @@ export class ClusterService {
       .pipe(shareReplay({refCount: true, bufferSize: 1}));
   }
 
-  create(projectID: string, datacenter: string, createClusterModel: CreateClusterModel): Observable<Cluster> {
+  create(projectID: string, seed: string, createClusterModel: CreateClusterModel): Observable<Cluster> {
     createClusterModel.nodeDeployment.spec.template.labels = LabelFormComponent.filterNullifiedKeys(
       createClusterModel.nodeDeployment.spec.template.labels
     );
@@ -70,22 +70,22 @@ export class ClusterService {
       createClusterModel.nodeDeployment.spec.template.taints
     );
 
-    const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters`;
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters`;
     return this._http.post<Cluster>(url, createClusterModel);
   }
 
-  patch(projectID: string, clusterID: string, datacenter: string, patch: ClusterPatch): Observable<Cluster> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}`;
+  patch(projectID: string, clusterID: string, seed: string, patch: ClusterPatch): Observable<Cluster> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}`;
     return this._http.patch<Cluster>(url, patch);
   }
 
   delete(
     projectID: string,
     clusterID: string,
-    datacenter: string,
+    seed: string,
     finalizers?: {[key in Finalizer]: boolean}
   ): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}`;
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}`;
     if (finalizers !== undefined) {
       for (const key of Object.keys(finalizers)) {
         this._headers = this._headers.set(key, finalizers[key].toString());
@@ -95,8 +95,8 @@ export class ClusterService {
     return this._http.delete(url, {headers: this._headers});
   }
 
-  upgrades(projectID: string, clusterID: string, datacenter: string): Observable<MasterVersion[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/upgrades`;
+  upgrades(projectID: string, clusterID: string, seed: string): Observable<MasterVersion[]> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/upgrades`;
     return this._http.get<MasterVersion[]>(url).pipe(
       catchError(() => {
         return of<MasterVersion[]>([]).pipe(catchError(() => of<MasterVersion[]>()));
@@ -104,33 +104,33 @@ export class ClusterService {
     );
   }
 
-  metrics(projectID: string, clusterID: string, datacenter: string): Observable<ClusterMetrics> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/metrics`;
+  metrics(projectID: string, clusterID: string, seed: string): Observable<ClusterMetrics> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/metrics`;
     return this._http.get<ClusterMetrics>(url).pipe(catchError(() => of<ClusterMetrics>(undefined)));
   }
 
-  events(projectID: string, clusterID: string, datacenter: string): Observable<Event[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/events`;
+  events(projectID: string, clusterID: string, seed: string): Observable<Event[]> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/events`;
     return this._http.get<Event[]>(url).pipe(catchError(() => of<Event[]>()));
   }
 
-  health(projectID: string, clusterID: string, datacenter: string): Observable<Health> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/health`;
+  health(projectID: string, clusterID: string, seed: string): Observable<Health> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/health`;
     return this._http.get<Health>(url).pipe(catchError(() => of<Health>()));
   }
 
-  upgradeNodeDeployments(projectID: string, clusterID: string, datacenter: string, version: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/nodes/upgrades`;
+  upgradeNodeDeployments(projectID: string, clusterID: string, seed: string, version: string): Observable<any> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/nodes/upgrades`;
     return this._http.put(url, {version} as MasterVersion);
   }
 
-  nodes(projectID: string, clusterID: string, datacenter: string): Observable<Node[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/nodes?hideInitialConditions=true`;
+  nodes(projectID: string, clusterID: string, seed: string): Observable<Node[]> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/nodes?hideInitialConditions=true`;
     return this._http.get<Node[]>(url).pipe(catchError(() => of<Node[]>()));
   }
 
-  deleteNode(projectID: string, clusterID: string, datacenter: string, nodeID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/nodes/${nodeID}`;
+  deleteNode(projectID: string, clusterID: string, seed: string, nodeID: string): Observable<any> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/nodes/${nodeID}`;
     return this._http.delete(url);
   }
 
@@ -143,38 +143,38 @@ export class ClusterService {
     );
   }
 
-  sshKeys(projectID: string, clusterID: string, datacenter: string): Observable<SSHKey[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/sshkeys`;
+  sshKeys(projectID: string, clusterID: string, seed: string): Observable<SSHKey[]> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/sshkeys`;
     return this._http.get<SSHKey[]>(url).pipe(catchError(() => of<SSHKey[]>()));
   }
 
-  createSSHKey(projectID: string, clusterID: string, datacenter: string, sshKeyID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
+  createSSHKey(projectID: string, clusterID: string, seed: string, sshKeyID: string): Observable<any> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
     return this._http.put(url, null);
   }
 
-  deleteSSHKey(projectID: string, clusterID: string, datacenter: string, sshKeyID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
+  deleteSSHKey(projectID: string, clusterID: string, seed: string, sshKeyID: string): Observable<any> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
     return this._http.delete(url);
   }
 
-  addons(projectID: string, cluster: string, dc: string): Observable<Addon[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/addons`;
+  addons(projectID: string, cluster: string, seed: string): Observable<Addon[]> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/addons`;
     return this._http.get<Addon[]>(url);
   }
 
-  createAddon(addon: Addon, projectID: string, cluster: string, dc: string): Observable<Addon> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/addons`;
+  createAddon(addon: Addon, projectID: string, cluster: string, seed: string): Observable<Addon> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/addons`;
     return this._http.post<Addon>(url, addon);
   }
 
-  editAddon(addon: Addon, projectID: string, cluster: string, dc: string): Observable<Addon> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/addons/${addon.name}`;
+  editAddon(addon: Addon, projectID: string, cluster: string, seed: string): Observable<Addon> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/addons/${addon.name}`;
     return this._http.patch<Addon>(url, addon);
   }
 
-  deleteAddon(addonID: string, projectID: string, cluster: string, dc: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/addons/${addonID}`;
+  deleteAddon(addonID: string, projectID: string, cluster: string, seed: string): Observable<any> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/addons/${addonID}`;
     return this._http.delete(url);
   }
 
@@ -183,8 +183,8 @@ export class ClusterService {
     return this._http.get<Cluster[]>(url).pipe(catchError(() => of<Cluster[]>()));
   }
 
-  private _getCluster(projectID: string, clusterID: string, datacenter: string): Observable<Cluster> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}`;
+  private _getCluster(projectID: string, clusterID: string, seed: string): Observable<Cluster> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}`;
     return this._http.get<Cluster>(url).pipe(catchError(() => of<Cluster>()));
   }
 }
