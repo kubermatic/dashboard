@@ -52,7 +52,7 @@
     "jquery": "3.5.1",
     "js-yaml": "3.14.0",
     "lodash": "4.17.15",
-    "moment": "2.26.0",
+    "moment": "2.27.0",
     "ngx-clipboard": "13.0.1",
     "ngx-cookie-service": "3.0.4",
     "ngx-custom-validators": "9.1.0",
