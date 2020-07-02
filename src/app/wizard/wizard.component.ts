@@ -379,7 +379,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         type: this.cluster.type,
         credential: this.cluster.credential,
       },
-      machineDeployment: {
+      nodeDeployment: {
         name: this.addNodeData.name,
         spec: {
           template: this.addNodeData.spec,

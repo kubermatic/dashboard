@@ -14,7 +14,8 @@ import {MachineDeployment} from '../entity/machine-deployment';
 
 export class CreateClusterModel {
   cluster: ClusterModel;
-  machineDeployment?: MachineDeployment;
+  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
+  nodeDeployment?: MachineDeployment;
 }
 
 class ClusterModel {

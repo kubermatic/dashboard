@@ -74,11 +74,11 @@ export class ClusterService {
   }
 
   create(projectID: string, datacenter: string, createClusterModel: CreateClusterModel): Observable<Cluster> {
-    createClusterModel.machineDeployment.spec.template.labels = LabelFormComponent.filterNullifiedKeys(
-      createClusterModel.machineDeployment.spec.template.labels
+    createClusterModel.nodeDeployment.spec.template.labels = LabelFormComponent.filterNullifiedKeys(
+      createClusterModel.nodeDeployment.spec.template.labels
     );
-    createClusterModel.machineDeployment.spec.template.taints = TaintFormComponent.filterNullifiedTaints(
-      createClusterModel.machineDeployment.spec.template.taints
+    createClusterModel.nodeDeployment.spec.template.taints = TaintFormComponent.filterNullifiedTaints(
+      createClusterModel.nodeDeployment.spec.template.taints
     );
 
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters`;
