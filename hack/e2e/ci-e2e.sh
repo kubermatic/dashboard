@@ -1,13 +1,6 @@
 #!/usr/bin/env bash
 
-set -eo pipefail
-
-shopt -s nocasematch
-if [[ ${KUBERMATIC_EDITION} = ce ]]; then
-  export CYPRESS_KUBERMATIC_EDITION=ce
-else
-  export CYPRESS_KUBERMATIC_EDITION=ee
-fi
+set -euo pipefail
 
 export CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME="roxy@loodse.com"
 export CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME_2="roxy2@loodse.com"

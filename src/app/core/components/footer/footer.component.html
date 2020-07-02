@@ -15,7 +15,7 @@
 
     <div *ngIf="!!version && !!version.distance">v{{version.semverString}}</div>
 
-    <div id="km-edition">{{version.edition}}</div>
+    <div>{{version.edition}}</div>
 
     <div *ngIf="settings.displayTermsOfService">
       <a routerLink="terms-of-service">Terms of Service</a>

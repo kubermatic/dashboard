@@ -97,16 +97,15 @@
       "@typescript-eslint/no-unused-vars": "off",
       "eol-last": "error",
       "no-console": "error",
-      "no-inner-declarations": "off",
-      "no-prototype-builtins": "off",
-      "no-redeclare": "off",
-      "no-undef": "off",
-      "no-unused-vars": "off",
-      "node/no-extraneous-require": "off",
-      "node/no-unpublished-import": "off",
-      "node/no-unpublished-require": "off",
-      "prefer-rest-params": "off",
-      "@typescript-eslint/no-explicit-any": "off"
+      "no-inner-declarations": "warn",
+      "no-prototype-builtins": "warn",
+      "no-redeclare": "warn",
+      "no-undef": "warn",
+      "no-unused-vars": "warn",
+      "node/no-extraneous-require": "warn",
+      "node/no-unpublished-import": "warn",
+      "node/no-unpublished-require": "warn",
+      "prefer-rest-params": "warn"
     },
     "overrides": [
       {
