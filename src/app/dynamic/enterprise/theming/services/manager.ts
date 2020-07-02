@@ -4,8 +4,7 @@ import {first} from 'rxjs/operators';
 import {ColorSchemeService} from './color-scheme';
 import {ThemeService} from './theme';
 import {SettingsService} from '../../../../core/services/settings/settings.service';
-import {ThemeInformerService} from '../../../../core/services/theme-informer/theme-informer.service';
-import {UserSettings} from '../../../../shared/entity/settings';
+import {UserSettings} from '../../../../shared/entity/MemberEntity';
 
 @Injectable()
 export class ThemeManagerService {
