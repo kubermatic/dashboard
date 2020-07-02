@@ -1,11 +1,8 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
-import {
-  AzureSizes,
-  AzureZones,
-} from '../../../../shared/entity/provider/azure/AzureSizeEntity';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {Provider} from './provider';
+import {AzureSizes, AzureZones} from '../../../../shared/entity/provider/azure';
 
 export class Azure extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
@@ -28,20 +25,14 @@ export class Azure extends Provider {
 
   clientSecret(clientSecret: string): Azure {
     if (clientSecret) {
-      this._headers = this._headers.set(
-        Azure.Header.ClientSecret,
-        clientSecret
-      );
+      this._headers = this._headers.set(Azure.Header.ClientSecret, clientSecret);
     }
     return this;
   }
 
   subscriptionID(subscriptionID: string): Azure {
     if (subscriptionID) {
-      this._headers = this._headers.set(
-        Azure.Header.SubscriptionID,
-        subscriptionID
-      );
+      this._headers = this._headers.set(Azure.Header.SubscriptionID, subscriptionID);
     }
     return this;
   }

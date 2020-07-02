@@ -14,13 +14,7 @@ describe('GCPClusterSettingsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        SharedModule,
-      ],
+      imports: [BrowserModule, BrowserAnimationsModule, HttpClientModule, ReactiveFormsModule, SharedModule],
       declarations: [GCPClusterSettingsComponent],
       providers: [WizardService],
     }).compileComponents();
@@ -49,13 +43,9 @@ describe('GCPClusterSettingsComponent', () => {
   it('serviceAccount field validity', () => {
     expect(component.form.valid).toBeFalsy();
     expect(component.form.controls.serviceAccount.valid).toBeFalsy();
-    expect(
-      component.form.controls.serviceAccount.hasError('required')
-    ).toBeTruthy();
+    expect(component.form.controls.serviceAccount.hasError('required')).toBeTruthy();
 
     component.form.controls.serviceAccount.patchValue('foo');
-    expect(
-      component.form.controls.serviceAccount.hasError('required')
-    ).toBeFalsy();
+    expect(component.form.controls.serviceAccount.hasError('required')).toBeFalsy();
   });
 });

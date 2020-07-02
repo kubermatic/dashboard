@@ -4,7 +4,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {Datacenter} from '../../../shared/entity/datacenter';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
@@ -15,28 +15,21 @@ export class AzureNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
 
   form: FormGroup;
-  datacenter: DataCenterEntity;
+  datacenter: Datacenter;
   hideOptional = true;
 
   private _unsubscribe = new Subject<void>();
 
-  constructor(
-    private readonly _addNodeService: NodeDataService,
-    private readonly _wizardService: WizardService
-  ) {}
+  constructor(private readonly _addNodeService: NodeDataService, private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      assignPublicIP: new FormControl(
-        this.nodeData.spec.cloud.azure.assignPublicIP
-      ),
+      assignPublicIP: new FormControl(this.nodeData.spec.cloud.azure.assignPublicIP),
     });
 
-    this._wizardService.clusterSettingsFormViewChanged$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.hideOptional = data.hideOptional;
-      });
+    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      this.hideOptional = data.hideOptional;
+    });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());

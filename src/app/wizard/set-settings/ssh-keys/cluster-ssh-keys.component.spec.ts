@@ -5,12 +5,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '../../../app-config.service';
-import {
-  ApiService,
-  ProjectService,
-  UserService,
-  WizardService,
-} from '../../../core/services';
+import {ApiService, ProjectService, UserService, WizardService} from '../../../core/services';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeSSHKeys} from '../../../testing/fake-data/sshkey.fake';
@@ -31,13 +26,7 @@ describe('ClusterSSHKeys', () => {
     apiMock.getSSHKeys.mockReturnValue(asyncData(fakeSSHKeys()));
 
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        ReactiveFormsModule,
-        SharedModule,
-        HttpClientModule,
-      ],
+      imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
       declarations: [ClusterSSHKeysComponent],
       providers: [
         WizardService,

@@ -72,9 +72,7 @@ export class ProjectsPage {
 
   static addProject(projectName: string): void {
     this.getAddProjectBtn().should(Condition.NotBe, 'disabled').click();
-    this.getAddProjectInput()
-      .type(projectName)
-      .should(Condition.HaveValue, projectName);
+    this.getAddProjectInput().type(projectName).should(Condition.HaveValue, projectName);
     this.getAddProjectConfirmBtn()
       .should(Condition.NotBe, 'disabled')
       .click()
@@ -85,14 +83,8 @@ export class ProjectsPage {
   }
 
   static deleteProject(projectName: string): void {
-    this.getDeleteProjectBtn(projectName)
-      .should(Condition.NotBe, 'disabled')
-      .click();
-    cy.get('#km-confirmation-dialog-input')
-      .type(projectName)
-      .should(Condition.HaveValue, projectName);
-    cy.get('#km-confirmation-dialog-confirm-btn')
-      .should(Condition.NotBe, 'disabled')
-      .click();
+    this.getDeleteProjectBtn(projectName).should(Condition.NotBe, 'disabled').click();
+    cy.get('#km-confirmation-dialog-input').type(projectName).should(Condition.HaveValue, projectName);
+    cy.get('#km-confirmation-dialog-confirm-btn').should(Condition.NotBe, 'disabled').click();
   }
 }

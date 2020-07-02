@@ -1,31 +1,17 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {EMPTY, iif, Subject} from 'rxjs';
 import {debounceTime, startWith, switchMap, takeUntil} from 'rxjs/operators';
 
-import {
-  ApiService,
-  DatacenterService,
-  WizardService,
-} from '../../core/services';
+import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
-import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
-import {
-  AzureSizes,
-  AzureZones,
-} from '../../shared/entity/provider/azure/AzureSizeEntity';
+import {CloudSpec} from '../../shared/entity/cluster';
+import {Datacenter} from '../../shared/entity/datacenter';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 import {filterArrayOptions} from '../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
+import {AzureSizes, AzureZones} from '../../shared/entity/provider/azure';
 
 @Component({
   selector: 'km-azure-node-data',
@@ -42,7 +28,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   sizes: AzureSizes[] = [];
   zones: string[] = [];
   form: FormGroup;
-  datacenter: DataCenterEntity;
+  datacenter: Datacenter;
   loadingSizes = false;
   loadingZones = false;
   filteredSizes: AzureSizes[] = [];
@@ -61,11 +47,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
     this.form = new FormGroup({
       size: new FormControl(this.nodeData.spec.cloud.azure.size, [
         Validators.required,
-        AutocompleteFilterValidators.mustBeInArrayList(
-          this.sizes,
-          'name',
-          true
-        ),
+        AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true),
       ]),
       zone: new FormControl(this.nodeData.spec.cloud.azure.zone),
       imageID: new FormControl(this.nodeData.spec.cloud.azure.imageID),
@@ -75,39 +57,35 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
     });
 
-    this._wizard.clusterProviderSettingsFormChanges$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.cloudSpec = data.cloudSpec;
-        this.form.controls.size.setValue('');
-        this.form.controls.zone.setValue('');
-        this.sizes = [];
-        this.zones = [];
-        this.checkSizeState();
-        this.checkZoneState();
-        if (
-          data.cloudSpec.azure.clientID !== '' ||
-          data.cloudSpec.azure.clientSecret !== '' ||
-          data.cloudSpec.azure.tenantID !== '' ||
-          data.cloudSpec.azure.subscriptionID !== '' ||
-          this._selectedPreset
-        ) {
-          this.reloadAzureSizes();
+    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      this.cloudSpec = data.cloudSpec;
+      this.form.controls.size.setValue('');
+      this.form.controls.zone.setValue('');
+      this.sizes = [];
+      this.zones = [];
+      this.checkSizeState();
+      this.checkZoneState();
+      if (
+        data.cloudSpec.azure.clientID !== '' ||
+        data.cloudSpec.azure.clientSecret !== '' ||
+        data.cloudSpec.azure.tenantID !== '' ||
+        data.cloudSpec.azure.subscriptionID !== '' ||
+        this._selectedPreset
+      ) {
+        this.reloadAzureSizes();
 
-          if (this.form.controls.size.value !== '') {
-            this.reloadAzureZones();
-          }
+        if (this.form.controls.size.value !== '') {
+          this.reloadAzureZones();
         }
-      });
+      }
+    });
 
-    this._wizard.onCustomPresetSelect
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset => {
-        this._selectedPreset = preset;
-      });
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
+      this._selectedPreset = preset;
+    });
 
     this.form.controls.size.valueChanges
-      .pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+      .pipe(debounceTime(1000), startWith(''), takeUntil(this._unsubscribe))
       .subscribe(value => {
         this.reloadAzureZones();
 
@@ -118,11 +96,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
         }
         this.form.controls.size.setValidators([
           Validators.required,
-          AutocompleteFilterValidators.mustBeInArrayList(
-            this.sizes,
-            'name',
-            true
-          ),
+          AutocompleteFilterValidators.mustBeInArrayList(this.sizes, 'name', true),
         ]);
       });
 
@@ -137,7 +111,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   loadDatacenter(): void {
     if (this.cloudSpec.dc) {
       this._dcService
-        .getDataCenter(this.cloudSpec.dc)
+        .getDatacenter(this.cloudSpec.dc)
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(data => {
           this.datacenter = data;
@@ -163,19 +137,14 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getSizesFormState(): string {
-    if (
-      !this.loadingSizes &&
-      this.isMissingCredentials() &&
-      this.isInWizard()
-    ) {
+    if (!this.loadingSizes && this.isMissingCredentials() && this.isInWizard()) {
       return 'Node Size*';
     } else if (this.loadingSizes) {
       return 'Loading sizes...';
     } else if (!this.loadingSizes && this.sizes.length === 0) {
       return 'No Sizes available';
-    } else {
-      return 'Node Size*';
     }
+    return 'Node Size*';
   }
 
   checkSizeState(): void {
@@ -187,25 +156,13 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   showSizeHint(): boolean {
-    return (
-      !this.loadingSizes &&
-      this.isMissingCredentials() &&
-      !this._selectedPreset &&
-      this.isInWizard()
-    );
+    return !this.loadingSizes && this.isMissingCredentials() && !this._selectedPreset && this.isInWizard();
   }
 
   reloadAzureSizes(): void {
-    this.loadingSizes =
-      !this.isMissingCredentials() ||
-      !this.isInWizard() ||
-      !!this._selectedPreset;
+    this.loadingSizes = !this.isMissingCredentials() || !this.isInWizard() || !!this._selectedPreset;
 
-    iif(
-      () => !!this.cloudSpec.dc,
-      this._dcService.getDataCenter(this.cloudSpec.dc),
-      EMPTY
-    )
+    iif(() => !!this.cloudSpec.dc, this._dcService.getDatacenter(this.cloudSpec.dc), EMPTY)
       .pipe(
         switchMap(dc => {
           this.datacenter = dc;
@@ -221,11 +178,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
               .location(this.datacenter.spec.azure.location)
               .credential(this._selectedPreset)
               .flavors(),
-            this._api.getAzureSizes(
-              this.projectId,
-              this.seedDCName,
-              this.clusterId
-            )
+            this._api.getAzureSizes(this.projectId, this.seedDCName, this.clusterId)
           );
         })
       )
@@ -254,15 +207,10 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
       return 'Zone';
     } else if (this.loadingZones) {
       return 'Loading zones...';
-    } else if (
-      this.form.controls.size.value !== '' &&
-      !this.loadingZones &&
-      this.zones.length === 0
-    ) {
+    } else if (this.form.controls.size.value !== '' && !this.loadingZones && this.zones.length === 0) {
       return 'No Zones available';
-    } else {
-      return 'Zone';
     }
+    return 'Zone';
   }
 
   checkZoneState(): void {
@@ -292,11 +240,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
       !this.isInWizard() ||
       !!this._selectedPreset;
 
-    iif(
-      () => !!this.cloudSpec.dc,
-      this._dcService.getDataCenter(this.cloudSpec.dc),
-      EMPTY
-    )
+    iif(() => !!this.cloudSpec.dc, this._dcService.getDatacenter(this.cloudSpec.dc), EMPTY)
       .pipe(
         switchMap(dc => {
           this.datacenter = dc;
@@ -338,14 +282,10 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
     if (changes.cloudSpec && !changes.cloudSpec.firstChange) {
       if (
         !changes.cloudSpec.previousValue ||
-        changes.cloudSpec.currentValue.azure.clientID !==
-          changes.cloudSpec.previousValue.azure.clientID ||
-        changes.cloudSpec.currentValue.azure.clientSecret !==
-          changes.cloudSpec.previousValue.azure.clientSecret ||
-        changes.cloudSpec.currentValue.azure.subscriptionID !==
-          changes.cloudSpec.previousValue.azure.subscriptionID ||
-        changes.cloudSpec.currentValue.azure.tenantID !==
-          changes.cloudSpec.previousValue.azure.tenantID
+        changes.cloudSpec.currentValue.azure.clientID !== changes.cloudSpec.previousValue.azure.clientID ||
+        changes.cloudSpec.currentValue.azure.clientSecret !== changes.cloudSpec.previousValue.azure.clientSecret ||
+        changes.cloudSpec.currentValue.azure.subscriptionID !== changes.cloudSpec.previousValue.azure.subscriptionID ||
+        changes.cloudSpec.currentValue.azure.tenantID !== changes.cloudSpec.previousValue.azure.tenantID
       ) {
         this.reloadAzureSizes();
       }

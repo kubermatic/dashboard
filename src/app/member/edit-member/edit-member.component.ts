@@ -4,8 +4,8 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '../../core/services';
 
 import {ApiService} from '../../core/services';
-import {MemberEntity} from '../../shared/entity/MemberEntity';
-import {ProjectEntity} from '../../shared/entity/ProjectEntity';
+import {Member} from '../../shared/entity/member';
+import {Project} from '../../shared/entity/project';
 import {MemberUtils} from '../../shared/utils/member-utils/member-utils';
 
 @Component({
@@ -13,8 +13,8 @@ import {MemberUtils} from '../../shared/utils/member-utils/member-utils';
   templateUrl: './edit-member.component.html',
 })
 export class EditMemberComponent implements OnInit {
-  @Input() project: ProjectEntity;
-  @Input() member: MemberEntity;
+  @Input() project: Project;
+  @Input() member: Member;
   editMemberForm: FormGroup;
 
   constructor(
@@ -25,15 +25,12 @@ export class EditMemberComponent implements OnInit {
 
   ngOnInit(): void {
     this.editMemberForm = new FormGroup({
-      group: new FormControl(
-        MemberUtils.getGroupInProject(this.member, this.project.id),
-        [Validators.required]
-      ),
+      group: new FormControl(MemberUtils.getGroupInProject(this.member, this.project.id), [Validators.required]),
     });
   }
 
   editMember(): void {
-    const editMember: MemberEntity = {
+    const editMember: Member = {
       id: this.member.id,
       name: this.member.name,
       email: this.member.email,
@@ -49,9 +46,7 @@ export class EditMemberComponent implements OnInit {
 
     this._apiService.editMembers(this.project.id, editMember).subscribe(() => {
       this._matDialogRef.close(true);
-      this._notificationService.success(
-        `The <strong>${this.member.name}</strong> member was updated`
-      );
+      this._notificationService.success(`The <strong>${this.member.name}</strong> member was updated`);
     });
   }
 }

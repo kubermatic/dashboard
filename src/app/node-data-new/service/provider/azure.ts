@@ -1,15 +1,12 @@
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, switchMap, tap} from 'rxjs/operators';
 import {DatacenterService, PresetsService} from '../../../core/services';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {
-  AzureSizes,
-  AzureZones,
-} from '../../../shared/entity/provider/azure/AzureSizeEntity';
+import {Cluster} from '../../../shared/entity/cluster';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../wizard-new/service/cluster';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
+import {AzureSizes, AzureZones} from '../../../shared/entity/provider/azure';
 
 export class NodeDataAzureProvider {
   constructor(
@@ -24,26 +21,17 @@ export class NodeDataAzureProvider {
     this._nodeDataService.nodeData.spec.cloud.azure.tags = tags;
   }
 
-  flavors(
-    onError: () => void = undefined,
-    onLoadingCb: () => void = null
-  ): Observable<AzureSizes[]> {
-    let cluster: ClusterEntity;
+  flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AzureSizes[]> {
+    let cluster: Cluster;
     let location = '';
 
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterService.clusterChanges
-          .pipe(
-            filter(_ => this._clusterService.provider === NodeProvider.AZURE)
-          )
+          .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
           .pipe(tap(c => (cluster = c)))
-          .pipe(
-            switchMap(_ =>
-              this._datacenterService.getDataCenter(cluster.spec.cloud.dc)
-            )
-          )
+          .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc)))
           .pipe(tap(dc => (location = dc.spec.azure.location)))
           .pipe(
             switchMap(_ =>
@@ -70,37 +58,24 @@ export class NodeDataAzureProvider {
     }
   }
 
-  zones(
-    onError: () => void = undefined,
-    onLoadingCb: () => void = null
-  ): Observable<AzureZones> {
+  zones(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AzureZones> {
     let location = '';
 
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._datacenterService
-          .getDataCenter(this._clusterService.cluster.spec.cloud.dc)
-          .pipe(
-            filter(_ => this._clusterService.provider === NodeProvider.AZURE)
-          )
+          .getDatacenter(this._clusterService.cluster.spec.cloud.dc)
+          .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
           .pipe(tap(dc => (location = dc.spec.azure.location)))
           .pipe(
             switchMap(_ =>
               this._presetService
                 .provider(NodeProvider.AZURE)
-                .clientID(
-                  this._clusterService.cluster.spec.cloud.azure.clientID
-                )
-                .clientSecret(
-                  this._clusterService.cluster.spec.cloud.azure.clientSecret
-                )
-                .subscriptionID(
-                  this._clusterService.cluster.spec.cloud.azure.subscriptionID
-                )
-                .tenantID(
-                  this._clusterService.cluster.spec.cloud.azure.tenantID
-                )
+                .clientID(this._clusterService.cluster.spec.cloud.azure.clientID)
+                .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
+                .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
+                .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
                 .location(location)
                 .skuName(this._nodeDataService.nodeData.spec.cloud.azure.size)
                 .credential(this._presetService.preset)

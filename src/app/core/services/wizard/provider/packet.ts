@@ -1,10 +1,10 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 
-import {PacketSize} from '../../../../shared/entity/packet/PacketSizeEntity';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
+import {PacketSize} from '../../../../shared/entity/provider/packet';
 
 export class Packet extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {

@@ -1,30 +1,6 @@
-import {
-  ClusterEntity,
-  ClusterType,
-  Token,
-} from '../../shared/entity/ClusterEntity';
-import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
+import {Cluster, ClusterType, Token} from '../../shared/entity/cluster';
 
-export function clusterModelFake(): CreateClusterModel {
-  return {
-    cluster: {
-      name: 'nifty-haibt',
-      spec: {
-        cloud: {
-          dc: 'do-fra1',
-          digitalocean: {
-            token:
-              'd6fec6ec65cd1fe6b2e6bba7bef91395ad9e3539646ccf8ed9eeac01f629570d',
-          },
-        },
-        version: '',
-      },
-      type: ClusterType.Kubernetes,
-    },
-  };
-}
-
-export function fakeDigitaloceanCluster(): ClusterEntity {
+export function fakeDigitaloceanCluster(): Cluster {
   return {
     creationTimestamp: new Date(),
     id: '4k6txp5sq',
@@ -46,7 +22,7 @@ export function fakeDigitaloceanCluster(): ClusterEntity {
   };
 }
 
-export function fakePacketCluster(): ClusterEntity {
+export function fakePacketCluster(): Cluster {
   return {
     creationTimestamp: new Date(),
     id: '4k6txp5sq',
@@ -70,7 +46,7 @@ export function fakePacketCluster(): ClusterEntity {
   };
 }
 
-export function fakeGCPCluster(): ClusterEntity {
+export function fakeGCPCluster(): Cluster {
   return {
     creationTimestamp: new Date(),
     id: '4k6txp5sq',
@@ -94,7 +70,7 @@ export function fakeGCPCluster(): ClusterEntity {
   };
 }
 
-export function fakeHetznerCluster(): ClusterEntity {
+export function fakeHetznerCluster(): Cluster {
   return {
     creationTimestamp: new Date(),
     id: '4k6txp5sq',
@@ -103,8 +79,7 @@ export function fakeHetznerCluster(): ClusterEntity {
       cloud: {
         dc: 'do-fra1',
         hetzner: {
-          token:
-            'pixH4QgO2nbVY1Xoo8yVN0RPN2d3CBQYPKcPrfd1BWwFsWrKMsdUKyos7wYAa6hQ',
+          token: 'pixH4QgO2nbVY1Xoo8yVN0RPN2d3CBQYPKcPrfd1BWwFsWrKMsdUKyos7wYAa6hQ',
         },
       },
       version: '1.8.5',
@@ -117,7 +92,7 @@ export function fakeHetznerCluster(): ClusterEntity {
   };
 }
 
-export function fakeVSphereCluster(): ClusterEntity {
+export function fakeVSphereCluster(): Cluster {
   return {
     creationTimestamp: new Date(),
     id: '4k6txp5sq',
@@ -146,7 +121,7 @@ export function fakeVSphereCluster(): ClusterEntity {
   };
 }
 
-export function fakeAWSCluster(): ClusterEntity {
+export function fakeAWSCluster(): Cluster {
   return {
     creationTimestamp: new Date(),
     id: 'vr4m6wpqv6',
@@ -174,7 +149,7 @@ export function fakeAWSCluster(): ClusterEntity {
   };
 }
 
-export function fakeOpenstackCluster(): ClusterEntity {
+export function fakeOpenstackCluster(): Cluster {
   return {
     creationTimestamp: new Date(),
     id: 'vr4m6wpqv6',
@@ -204,7 +179,7 @@ export function fakeOpenstackCluster(): ClusterEntity {
   };
 }
 
-export function fakeAzureCluster(): ClusterEntity {
+export function fakeAzureCluster(): Cluster {
   return {
     creationTimestamp: new Date(),
     id: '4k6txp5sq',
@@ -234,7 +209,7 @@ export function fakeAzureCluster(): ClusterEntity {
   };
 }
 
-export function fakeBringyourownCluster(): ClusterEntity {
+export function fakeBringyourownCluster(): Cluster {
   return {
     creationTimestamp: new Date(),
     id: '4k6txp5sq',
@@ -254,7 +229,7 @@ export function fakeBringyourownCluster(): ClusterEntity {
   };
 }
 
-export function fakeAlibabaCluster(): ClusterEntity {
+export function fakeAlibabaCluster(): Cluster {
   return {
     creationTimestamp: new Date(),
     id: 'vr4m6wpqv6',
@@ -283,7 +258,7 @@ export function fakeToken(): Token {
   };
 }
 
-export function fakeClusters(): ClusterEntity[] {
+export function fakeClusters(): Cluster[] {
   return [
     fakeDigitaloceanCluster(),
     fakeAWSCluster(),

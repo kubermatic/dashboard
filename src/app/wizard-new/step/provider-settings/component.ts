@@ -30,8 +30,7 @@ enum Controls {
     },
   ],
 })
-export class ProviderSettingsStepComponent extends StepBase
-  implements OnInit, OnDestroy {
+export class ProviderSettingsStepComponent extends StepBase implements OnInit, OnDestroy {
   readonly Provider = NodeProvider;
   readonly Control = Controls;
 

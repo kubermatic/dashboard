@@ -1,28 +1,17 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatStepper} from '@angular/material/stepper';
 import {Router} from '@angular/router';
 import {forkJoin, of, Subject} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
 
-import {
-  ClusterService,
-  DatacenterService,
-  NotificationService,
-  ProjectService,
-} from '../core/services';
+import {ClusterService, DatacenterService, NotificationService, ProjectService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NodeDataService} from '../node-data-new/service/service';
-import {ClusterEntity} from '../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../shared/entity/DatacenterEntity';
-import {ProjectEntity} from '../shared/entity/ProjectEntity';
-import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
+import {Cluster} from '../shared/entity/cluster';
+import {Datacenter} from '../shared/entity/datacenter';
+import {Project} from '../shared/entity/project';
+import {SSHKey} from '../shared/entity/ssh-key';
 import {CreateClusterModel} from '../shared/model/CreateClusterModel';
 import {NodeData} from '../shared/model/NodeSpecChange';
 
@@ -38,7 +27,7 @@ import {WizardService} from './service/wizard';
 })
 export class WizardComponent implements OnInit, OnDestroy {
   form: FormGroup;
-  project = {} as ProjectEntity;
+  project = {} as Project;
   creating = false;
   readonly stepRegistry = StepRegistry;
 
@@ -85,16 +74,12 @@ export class WizardComponent implements OnInit, OnDestroy {
     this._wizard.stepper = this._stepper;
 
     this._initForm(this.steps);
-    this._wizard.stepsChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._initForm(this.steps));
-    this._stepper.selectionChange
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(selection => {
-        if (selection.previouslySelectedIndex > selection.selectedIndex) {
-          selection.previouslySelectedStep.reset();
-        }
-      });
+    this._wizard.stepsChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._initForm(this.steps));
+    this._stepper.selectionChange.pipe(takeUntil(this._unsubscribe)).subscribe(selection => {
+      if (selection.previouslySelectedIndex > selection.selectedIndex) {
+        selection.previouslySelectedStep.reset();
+      }
+    });
 
     this._projectService.selectedProject
       .pipe(takeUntil(this._unsubscribe))
@@ -109,46 +94,25 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   create(): void {
     this.creating = true;
-    let createdCluster: ClusterEntity;
-    let datacenter: DataCenterEntity;
+    let createdCluster: Cluster;
+    let datacenter: Datacenter;
     const createCluster = this._getCreateClusterModel(
       this._clusterModelService.cluster,
       this._nodeDataService.nodeData
     );
 
     this._datacenterService
-      .getDataCenter(this._clusterModelService.datacenter)
+      .getDatacenter(this._clusterModelService.datacenter)
       .pipe(tap(dc => (datacenter = dc)))
-      .pipe(
-        switchMap(_ =>
-          this._clusterService.create(
-            this.project.id,
-            datacenter.spec.seed,
-            createCluster
-          )
-        )
-      )
+      .pipe(switchMap(_ => this._clusterService.create(this.project.id, datacenter.spec.seed, createCluster)))
       .pipe(
         tap(cluster => {
-          this._notificationService.success(
-            `The <strong>${createCluster.cluster.name}</strong> cluster was created`
-          );
-          this._googleAnalyticsService.emitEvent(
-            'clusterCreation',
-            'clusterCreated'
-          );
+          this._notificationService.success(`The <strong>${createCluster.cluster.name}</strong> cluster was created`);
+          this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
           createdCluster = cluster;
         })
       )
-      .pipe(
-        switchMap(_ =>
-          this._clusterService.cluster(
-            this.project.id,
-            createdCluster.id,
-            datacenter.spec.seed
-          )
-        )
-      )
+      .pipe(switchMap(_ => this._clusterService.cluster(this.project.id, createdCluster.id, datacenter.spec.seed)))
       .pipe(
         switchMap(() => {
           this.creating = false;
@@ -156,12 +120,7 @@ export class WizardComponent implements OnInit, OnDestroy {
           if (this._clusterModelService.sshKeys.length > 0) {
             return forkJoin(
               this._clusterModelService.sshKeys.map(key =>
-                this._clusterService.createSSHKey(
-                  this.project.id,
-                  createdCluster.id,
-                  datacenter.spec.seed,
-                  key.id
-                )
+                this._clusterService.createSSHKey(this.project.id, createdCluster.id, datacenter.spec.seed, key.id)
               )
             );
           }
@@ -171,7 +130,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(
-        (keys: SSHKeyEntity[]) => {
+        (keys: SSHKey[]) => {
           this._router.navigate([
             `/projects/${this.project.id}/dc/${datacenter.spec.seed}/clusters/${createdCluster.id}`,
           ]);
@@ -185,19 +144,13 @@ export class WizardComponent implements OnInit, OnDestroy {
           this._notificationService.error(
             `Could not create the <strong>${createCluster.cluster.name}</strong> cluster`
           );
-          this._googleAnalyticsService.emitEvent(
-            'clusterCreation',
-            'clusterCreationFailed'
-          );
+          this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
           this.creating = false;
         }
       );
   }
 
-  private _getCreateClusterModel(
-    cluster: ClusterEntity,
-    nodeData: NodeData
-  ): CreateClusterModel {
+  private _getCreateClusterModel(cluster: Cluster, nodeData: NodeData): CreateClusterModel {
     return {
       cluster: {
         name: cluster.name,
@@ -219,9 +172,7 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   private _initForm(steps: WizardStep[]): void {
     const controls = {};
-    steps.forEach(
-      step => (controls[step.name] = this._formBuilder.control(''))
-    );
+    steps.forEach(step => (controls[step.name] = this._formBuilder.control('')));
     this.form = this._formBuilder.group(controls);
   }
 }

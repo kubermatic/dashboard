@@ -1,24 +1,18 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
 import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
-import {AVAILABLE_PACKET_BILLING_CYCLES} from '../../../../shared/entity/cloud/PacketCloudSpec';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
+import {AVAILABLE_PACKET_BILLING_CYCLES, Cluster} from '../../../../shared/entity/cluster';
 
 @Component({
   selector: 'km-packet-provider-settings',
   templateUrl: './packet-provider-settings.component.html',
 })
 export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
   form: FormGroup;
   private _formData = {apiKey: '', projectID: '', billingCycle: ''};
   private _unsubscribe: Subject<any> = new Subject();
@@ -50,9 +44,7 @@ export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
         ) {
           this._formData = data;
           this.setValidators();
-          this.clusterService.changeProviderSettingsPatch(
-            this.getProviderSettingsPatch()
-          );
+          this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
         }
       });
   }
@@ -70,14 +62,8 @@ export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
       this.apiKey.clearValidators();
       this.projectID.clearValidators();
     } else {
-      this.apiKey.setValidators([
-        Validators.required,
-        Validators.maxLength(256),
-      ]);
-      this.projectID.setValidators([
-        Validators.required,
-        Validators.maxLength(256),
-      ]);
+      this.apiKey.setValidators([Validators.required, Validators.maxLength(256)]);
+      this.projectID.setValidators([Validators.required, Validators.maxLength(256)]);
     }
 
     this.apiKey.updateValueAndValidity();

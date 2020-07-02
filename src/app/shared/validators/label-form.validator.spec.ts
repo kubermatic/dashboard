@@ -16,8 +16,7 @@ const tooLongPrefix =
   'C9Q8hIumOMFzEc61YgQpXiRAeq9CmTQmJSe.io';
 const invalidPrefix = '!@#$%^&*';
 const validValue = 'test';
-const tooLongValue =
-  'L1txKHOWiSe5dSUakuYw82l2IepfxxBMbDA6JFCzp1TeFQbEvQmpJkcBDU4Npv50';
+const tooLongValue = 'L1txKHOWiSe5dSUakuYw82l2IepfxxBMbDA6JFCzp1TeFQbEvQmpJkcBDU4Npv50';
 const invalidValue = '!@#$%^&*';
 
 describe('LabelFormValidators', () => {

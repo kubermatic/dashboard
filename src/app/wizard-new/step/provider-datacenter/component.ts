@@ -11,10 +11,7 @@ import {
 import {filter, map, switchMap, takeUntil} from 'rxjs/operators';
 
 import {DatacenterService} from '../../../core/services';
-import {
-  DataCenterEntity,
-  getDatacenterProvider,
-} from '../../../shared/entity/DatacenterEntity';
+import {Datacenter, getDatacenterProvider} from '../../../shared/entity/datacenter';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../service/cluster';
 import {WizardService} from '../../service/wizard';
@@ -42,10 +39,9 @@ enum Controls {
     },
   ],
 })
-export class ProviderStepComponent extends StepBase
-  implements OnInit, ControlValueAccessor, Validator, OnDestroy {
+export class ProviderStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   providers: NodeProvider[] = [];
-  datacenters: DataCenterEntity[] = [];
+  datacenters: Datacenter[] = [];
 
   readonly controls = Controls;
 
@@ -78,15 +74,8 @@ export class ProviderStepComponent extends StepBase
       NodeProvider.GCP,
       NodeProvider.OPENSTACK,
     ];
-    this._dcService
-      .getDataCenters()
-      .pipe(
-        map(dcs =>
-          dcs.filter(dc =>
-            dcWhitelist.includes(dc.spec.provider as NodeProvider)
-          )
-        )
-      )
+    this._dcService.datacenters
+      .pipe(map(dcs => dcs.filter(dc => dcWhitelist.includes(dc.spec.provider as NodeProvider))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(datacenters => {
         const providers: NodeProvider[] = [];
@@ -112,10 +101,10 @@ export class ProviderStepComponent extends StepBase
       });
 
     this._clusterService.providerChanges
-      .pipe(switchMap(_ => this._dcService.getDataCenters()))
+      .pipe(switchMap(_ => this._dcService.datacenters))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(datacenters => {
-        const providerDatacenters: DataCenterEntity[] = [];
+        const providerDatacenters: Datacenter[] = [];
         for (const datacenter of datacenters) {
           if (datacenter.seed) {
             continue;
@@ -138,7 +127,7 @@ export class ProviderStepComponent extends StepBase
       .subscribe(datacenter => (this._clusterService.datacenter = datacenter));
   }
 
-  getLocation(datacenter: DataCenterEntity): string {
+  getLocation(datacenter: Datacenter): string {
     let location = datacenter.spec.location;
     let idx = location.indexOf('(');
 
@@ -151,12 +140,11 @@ export class ProviderStepComponent extends StepBase
     return location.trim();
   }
 
-  getZone(datacenter: DataCenterEntity): string {
+  getZone(datacenter: Datacenter): string {
     let location = datacenter.spec.location;
     let idx = location.indexOf('(');
 
-    location =
-      idx > -1 ? location.substring(idx + 1).replace(')', '') : location;
+    location = idx > -1 ? location.substring(idx + 1).replace(')', '') : location;
 
     idx = location.includes(' - ') ? location.indexOf('-') : -1;
     location = idx > -1 ? location.substring(idx + 1) : location;

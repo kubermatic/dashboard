@@ -4,22 +4,15 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Subscription} from 'rxjs';
 import {first} from 'rxjs/operators';
 
-import {
-  ApiService,
-  ClusterService,
-  NotificationService,
-  UserService,
-} from '../../../../core/services';
+import {ApiService, ClusterService, NotificationService, UserService} from '../../../../core/services';
 import {AddSshKeyDialogComponent} from '../../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
-import {MemberEntity} from '../../../../shared/entity/MemberEntity';
-import {SSHKeyEntity} from '../../../../shared/entity/SSHKeyEntity';
+import {Cluster} from '../../../../shared/entity/cluster';
+import {View} from '../../../../shared/entity/common';
+import {Datacenter} from '../../../../shared/entity/datacenter';
+import {Member} from '../../../../shared/entity/member';
+import {SSHKey} from '../../../../shared/entity/ssh-key';
 import {GroupConfig} from '../../../../shared/model/Config';
-import {
-  MemberUtils,
-  Permission,
-} from '../../../../shared/utils/member-utils/member-utils';
+import {MemberUtils, Permission} from '../../../../shared/utils/member-utils/member-utils';
 
 @Component({
   selector: 'km-add-cluster-sshkeys',
@@ -27,18 +20,18 @@ import {
   styleUrls: ['./add-cluster-sshkeys.component.scss'],
 })
 export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
   @Input() projectID: string;
-  @Input() datacenter: DataCenterEntity;
-  @Input() sshKeys: SSHKeyEntity[] = [];
+  @Input() datacenter: Datacenter;
+  @Input() sshKeys: SSHKey[] = [];
 
-  keys: SSHKeyEntity[] = [];
+  keys: SSHKey[] = [];
   keysForm: FormGroup = new FormGroup({
     keys: new FormControl('', [Validators.required]),
   });
   private keysSub: Subscription;
   private _currentGroupConfig: GroupConfig;
-  private _user: MemberEntity;
+  private _user: Member;
 
   constructor(
     private readonly _clusterService: ClusterService,
@@ -50,17 +43,10 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._userService.loggedInUser
-      .pipe(first())
-      .subscribe(user => (this._user = user));
+    this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
     this._userService
       .currentUserGroup(this.projectID)
-      .subscribe(
-        userGroup =>
-          (this._currentGroupConfig = this._userService.userGroupConfig(
-            userGroup
-          ))
-      );
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
 
     this.reloadKeys();
   }
@@ -72,38 +58,26 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   reloadKeys(): void {
-    this.keysSub = this._api
-      .getSSHKeys(this.projectID)
-      .subscribe(sshKeysRes => {
-        const newKeys: SSHKeyEntity[] = [];
-        for (const i in sshKeysRes) {
-          if (!this.sshKeys.find(x => x.name === sshKeysRes[i].name)) {
-            newKeys.push(sshKeysRes[i]);
-          }
+    this.keysSub = this._api.getSSHKeys(this.projectID).subscribe(sshKeysRes => {
+      const newKeys: SSHKey[] = [];
+      for (const i in sshKeysRes) {
+        if (!this.sshKeys.find(x => x.name === sshKeysRes[i].name)) {
+          newKeys.push(sshKeysRes[i]);
         }
-        this.keys = newKeys.sort((a, b) => {
-          return a.name.localeCompare(b.name);
-        });
+      }
+      this.keys = newKeys.sort((a, b) => {
+        return a.name.localeCompare(b.name);
       });
+    });
   }
 
   canAdd(): boolean {
-    return MemberUtils.hasPermission(
-      this._user,
-      this._currentGroupConfig,
-      'sshKeys',
-      Permission.Create
-    );
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.SSHKeys, Permission.Create);
   }
 
   addClusterSSHKeys(): void {
     this._clusterService
-      .createSSHKey(
-        this.projectID,
-        this.cluster.id,
-        this.datacenter.metadata.name,
-        this.keysForm.controls.keys.value
-      )
+      .createSSHKey(this.projectID, this.cluster.id, this.datacenter.metadata.name, this.keysForm.controls.keys.value)
       .subscribe(res => {
         this._notificationService.success(
           `The <strong>${this.keysForm.controls.keys.value}</strong> SSH key was added to the <strong>${this.cluster.name}</strong> cluster`

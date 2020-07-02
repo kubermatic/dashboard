@@ -1,7 +1,4 @@
-import {
-  AlibabaInstanceType,
-  AlibabaZone,
-} from '../../shared/entity/provider/alibaba/Alibaba';
+import {AlibabaInstanceType, AlibabaZone} from '../../shared/entity/provider/alibaba';
 
 export function fakeAlibabaInstanceTypes(): AlibabaInstanceType[] {
   return [

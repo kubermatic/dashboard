@@ -1,20 +1,10 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {of} from 'rxjs';
 
-import {
-  ClusterService,
-  NotificationService,
-  UserService,
-} from '../../../core/services';
+import {ClusterService, NotificationService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
@@ -73,9 +63,7 @@ describe('NodeComponent', () => {
     const event = new MouseEvent('click');
 
     fixture.detectChanges();
-    const spyDeleteClusterNode = jest
-      .spyOn(clusterService, 'deleteNode')
-      .mockReturnValue(of(null));
+    const spyDeleteClusterNode = jest.spyOn(clusterService, 'deleteNode').mockReturnValue(of(null));
 
     component.deleteNodeDialog(nodeFake(), event);
     tick();
@@ -92,15 +80,11 @@ describe('NodeComponent', () => {
   });
 
   it('should get info text for aws name', () => {
-    expect(component.getInfo(nodeAWSFake())).toBe(
-      'ip-172-31-1-240.eu-central-1.compute.internal'
-    );
+    expect(component.getInfo(nodeAWSFake())).toBe('ip-172-31-1-240.eu-central-1.compute.internal');
   });
 
   it('should get node name', () => {
-    expect(component.getNodeName(nodeFake())).toBe(
-      'kubermatic-tbbfvttvs-v5hmk'
-    );
+    expect(component.getNodeName(nodeFake())).toBe('kubermatic-tbbfvttvs-v5hmk');
   });
 
   it('should display tags', () => {

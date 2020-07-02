@@ -1,7 +1,7 @@
-import {ClusterEntity, ClusterType} from '../../shared/entity/ClusterEntity';
+import {Cluster, ClusterType} from '../../shared/entity/cluster';
 
 // fakeClusterWithMachineNetwork could contain 6 IPs
-export function fakeClusterWithMachineNetwork(): ClusterEntity {
+export function fakeClusterWithMachineNetwork(): Cluster {
   return {
     creationTimestamp: new Date(),
     id: '4k6txp5sq',
@@ -38,7 +38,7 @@ export function fakeClusterWithMachineNetwork(): ClusterEntity {
 }
 
 // fakeGatewayInCidr could contain 6 IPs
-export function fakeGatewayInCidr(): ClusterEntity {
+export function fakeGatewayInCidr(): Cluster {
   return {
     creationTimestamp: new Date(),
     id: '4k6txp5sq',
@@ -75,7 +75,7 @@ export function fakeGatewayInCidr(): ClusterEntity {
 }
 
 // fakeGatewayNotInCidr could contain 6 IPs
-export function fakeGatewayNotInCidr(): ClusterEntity {
+export function fakeGatewayNotInCidr(): Cluster {
   return {
     creationTimestamp: new Date(),
     id: '4k6txp5sq',

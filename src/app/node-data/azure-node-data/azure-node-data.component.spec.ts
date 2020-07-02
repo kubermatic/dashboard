@@ -3,11 +3,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {
-  ApiService,
-  DatacenterService,
-  WizardService,
-} from '../../core/services';
+import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeAzureSizes} from '../../testing/fake-data/addNodeModal.fake';
@@ -17,13 +13,7 @@ import {nodeDataFake} from '../../testing/fake-data/node.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {AzureNodeDataComponent} from './azure-node-data.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  ReactiveFormsModule,
-  HttpClientModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, ReactiveFormsModule, HttpClientModule];
 
 describe('AzureNodeDataComponent', () => {
   let fixture: ComponentFixture<AzureNodeDataComponent>;
@@ -36,10 +26,8 @@ describe('AzureNodeDataComponent', () => {
     };
     apiMock.getAzureSizes.mockReturnValue(asyncData(fakeAzureSizes()));
     apiMock.getAzureSizesForWizard.mockReturnValue(asyncData(fakeAzureSizes()));
-    const datacenterMock = {getDataCenter: jest.fn()};
-    datacenterMock.getDataCenter.mockReturnValue(
-      asyncData(fakeAzureDatacenter())
-    );
+    const datacenterMock = {getDatacenter: jest.fn()};
+    datacenterMock.getDatacenter.mockReturnValue(asyncData(fakeAzureDatacenter()));
 
     TestBed.configureTestingModule({
       imports: [...modules],

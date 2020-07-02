@@ -31,28 +31,27 @@
            matTooltip="Audit Logging is enforced by your admin in the chosen datacenter.">
         </i>
       </div>
-      <div class="km-summary-row">
-        <span class="km-summary-left km-text">
-          <i [ngClass]="{'km-icon-disabled': !cluster.spec.usePodSecurityPolicyAdmissionPlugin, 'km-icon-running': cluster.spec.usePodSecurityPolicyAdmissionPlugin}"></i>
-        </span>
-        <span>Pod Security Policy</span>
-        <i *ngIf="!!datacenterFormData.datacenter.spec.enforcePodSecurityPolicy"
-           class="km-icon-warning km-warning"
-           matTooltip="Pod Security Policy is enforced by your admin in the chosen datacenter.">
-        </i>
+
+      <div *ngIf="hasAdmissionPlugins()">
+        <km-property class="km-admission-plugins">
+          <div key>Enabled Admission Plugins</div>
+          <div value>
+            {{getAdmissionPlugins()}}
+            <i *ngIf="!!datacenterFormData.datacenter.spec.enforcePodSecurityPolicy"
+               class="km-icon-warning km-warning"
+               matTooltip="Pod Security Policy is enforced by your admin in the chosen datacenter."></i>
+          </div>
+        </km-property>
       </div>
-      <div class="km-summary-row">
-        <span class="km-summary-left km-text">
-          <i [ngClass]="{'km-icon-disabled': !cluster.spec.usePodNodeSelectorAdmissionPlugin, 'km-icon-running': cluster.spec.usePodNodeSelectorAdmissionPlugin}"></i>
-        </span>
-        <span>Pod Node Selector</span>
+      <div *ngIf="!hasAdmissionPlugins()">
+        <div class="km-summary-row">
+          <span class="km-summary-left km-text">
+            <i class="km-icon-disabled"></i>
+          </span>
+          <span>Admission Plugins</span>
+        </div>
       </div>
-      <div *ngIf="cluster.labels && displayTags(cluster.labels)"
-           class="km-summary-tags">
-        <div class="km-summary-row">Cluster Labels</div>
-        <km-labels [labels]="cluster.labels"
-                   emptyMessage="No assigned labels"></km-labels>
-      </div>
+
       <div *ngIf="!cluster.labels || !displayTags(cluster.labels)">
         <div class="km-summary-row">
           <span class="km-summary-left km-text">
@@ -61,6 +60,13 @@
           <span>Cluster Labels</span>
         </div>
       </div>
+      <div *ngIf="cluster.labels && displayTags(cluster.labels)"
+           class="km-summary-tags">
+        <div class="km-summary-row">Cluster Labels</div>
+        <km-labels [labels]="cluster.labels"
+                   emptyMessage="No assigned labels"></km-labels>
+      </div>
+
     </mat-card-content>
 
     <mat-card-header>
@@ -363,6 +369,10 @@
         <!-- Openstack Nodes -->
         <ng-container *ngIf="cluster.spec.cloud.openstack">
           <div class="km-summary-row km-summary-row-with-margin">{{nodeData.spec.cloud.openstack.flavor}}</div>
+          <km-property *ngIf="nodeData.spec.cloud.openstack.availabilityZone">
+            <div key>Availability Zone</div>
+            <div value>{{nodeData.spec.cloud.openstack.availabilityZone}}</div>
+          </km-property>
           <km-property>
             <div key>Image</div>
             <div value>{{nodeData.spec.cloud.openstack.image}}</div>

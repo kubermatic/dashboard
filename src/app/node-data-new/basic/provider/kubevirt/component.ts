@@ -1,20 +1,9 @@
-import {
-  AfterViewChecked,
-  Component,
-  forwardRef,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
-import {
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {AfterViewChecked, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
+import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
@@ -44,16 +33,12 @@ enum Controls {
     },
   ],
 })
-export class KubeVirtBasicNodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy, AfterViewChecked {
+export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy, AfterViewChecked {
   private readonly _sizeSuffixPattern = /^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/;
 
   readonly Controls = Controls;
 
-  constructor(
-    private readonly _builder: FormBuilder,
-    private readonly _nodeDataService: NodeDataService
-  ) {
+  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
     super();
   }
 
@@ -66,10 +51,7 @@ export class KubeVirtBasicNodeDataComponent extends BaseFormValidator
       ]),
       [Controls.Namespace]: this._builder.control('', Validators.required),
       [Controls.SourceURL]: this._builder.control('', Validators.required),
-      [Controls.StorageClassName]: this._builder.control(
-        '',
-        Validators.required
-      ),
+      [Controls.StorageClassName]: this._builder.control('', Validators.required),
       [Controls.PVCSize]: this._builder.control('10Gi', [
         Validators.required,
         Validators.pattern(this._sizeSuffixPattern),

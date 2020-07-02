@@ -8,21 +8,13 @@ import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
 import {TaintFormComponent} from '../../../shared/components/taint-form/taint-form.component';
-import {AddonEntity} from '../../../shared/entity/AddonEntity';
-import {
-  ClusterEntity,
-  Finalizer,
-  MasterVersion,
-} from '../../../shared/entity/ClusterEntity';
-import {
-  CloudSpecPatch,
-  ClusterEntityPatch,
-} from '../../../shared/entity/ClusterEntityPatch';
-import {EventEntity} from '../../../shared/entity/EventEntity';
-import {HealthEntity} from '../../../shared/entity/HealthEntity';
-import {ClusterMetrics} from '../../../shared/entity/Metrics';
-import {NodeEntity} from '../../../shared/entity/NodeEntity';
-import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
+import {Addon} from '../../../shared/entity/addon';
+import {CloudSpecPatch, Cluster, ClusterPatch, Finalizer, MasterVersion} from '../../../shared/entity/cluster';
+import {Event} from '../../../shared/entity/event';
+import {Health} from '../../../shared/entity/health';
+import {ClusterMetrics} from '../../../shared/entity/metrics';
+import {Node} from '../../../shared/entity/node';
+import {SSHKey} from '../../../shared/entity/ssh-key';
 import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
 
 export class ProviderSettingsPatch {
@@ -35,23 +27,20 @@ export class ClusterService {
   private _providerSettingsPatch = new Subject<ProviderSettingsPatch>();
   private _restRoot: string = environment.restRoot;
   private _headers: HttpHeaders = new HttpHeaders();
-  private _clusters$ = new Map<string, Observable<ClusterEntity[]>>();
+  private _clusters$ = new Map<string, Observable<Cluster[]>>();
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
   private _onClustersUpdate = new Subject<void>();
 
   providerSettingsPatchChanges$ = this._providerSettingsPatch.asObservable();
   onClusterUpdate = new Subject<void>();
 
-  constructor(
-    private readonly _http: HttpClient,
-    private readonly _appConfig: AppConfigService
-  ) {}
+  constructor(private readonly _http: HttpClient, private readonly _appConfig: AppConfigService) {}
 
   changeProviderSettingsPatch(patch: ProviderSettingsPatch): void {
     this._providerSettingsPatch.next(patch);
   }
 
-  clusters(projectID: string): Observable<ClusterEntity[]> {
+  clusters(projectID: string): Observable<Cluster[]> {
     if (!this._clusters$.get(projectID)) {
       const clusters$ = merge(this._onClustersUpdate, this._refreshTimer$)
         .pipe(switchMapTo(this._getClusters(projectID)))
@@ -67,21 +56,13 @@ export class ClusterService {
     this._clusters$.clear();
   }
 
-  cluster(
-    projectID: string,
-    clusterID: string,
-    datacenter: string
-  ): Observable<ClusterEntity> {
+  cluster(projectID: string, clusterID: string, datacenter: string): Observable<Cluster> {
     return merge(this.onClusterUpdate, this._refreshTimer$)
       .pipe(switchMapTo(this._getCluster(projectID, clusterID, datacenter)))
       .pipe(shareReplay({refCount: true, bufferSize: 1}));
   }
 
-  create(
-    projectID: string,
-    datacenter: string,
-    createClusterModel: CreateClusterModel
-  ): Observable<ClusterEntity> {
+  create(projectID: string, datacenter: string, createClusterModel: CreateClusterModel): Observable<Cluster> {
     createClusterModel.nodeDeployment.spec.template.labels = LabelFormComponent.filterNullifiedKeys(
       createClusterModel.nodeDeployment.spec.template.labels
     );
@@ -90,17 +71,12 @@ export class ClusterService {
     );
 
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters`;
-    return this._http.post<ClusterEntity>(url, createClusterModel);
+    return this._http.post<Cluster>(url, createClusterModel);
   }
 
-  patch(
-    projectID: string,
-    clusterID: string,
-    datacenter: string,
-    patch: ClusterEntityPatch
-  ): Observable<ClusterEntity> {
+  patch(projectID: string, clusterID: string, datacenter: string, patch: ClusterPatch): Observable<Cluster> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}`;
-    return this._http.patch<ClusterEntity>(url, patch);
+    return this._http.patch<Cluster>(url, patch);
   }
 
   delete(
@@ -119,89 +95,46 @@ export class ClusterService {
     return this._http.delete(url, {headers: this._headers});
   }
 
-  upgrades(
-    projectID: string,
-    clusterID: string,
-    datacenter: string
-  ): Observable<MasterVersion[]> {
+  upgrades(projectID: string, clusterID: string, datacenter: string): Observable<MasterVersion[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/upgrades`;
     return this._http.get<MasterVersion[]>(url).pipe(
       catchError(() => {
-        return of<MasterVersion[]>([]).pipe(
-          catchError(() => of<MasterVersion[]>())
-        );
+        return of<MasterVersion[]>([]).pipe(catchError(() => of<MasterVersion[]>()));
       })
     );
   }
 
-  metrics(
-    projectID: string,
-    clusterID: string,
-    datacenter: string
-  ): Observable<ClusterMetrics> {
+  metrics(projectID: string, clusterID: string, datacenter: string): Observable<ClusterMetrics> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/metrics`;
-    return this._http
-      .get<ClusterMetrics>(url)
-      .pipe(catchError(() => of<ClusterMetrics>(undefined)));
+    return this._http.get<ClusterMetrics>(url).pipe(catchError(() => of<ClusterMetrics>(undefined)));
   }
 
-  events(
-    projectID: string,
-    clusterID: string,
-    datacenter: string
-  ): Observable<EventEntity[]> {
+  events(projectID: string, clusterID: string, datacenter: string): Observable<Event[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/events`;
-    return this._http
-      .get<EventEntity[]>(url)
-      .pipe(catchError(() => of<EventEntity[]>()));
+    return this._http.get<Event[]>(url).pipe(catchError(() => of<Event[]>()));
   }
 
-  health(
-    projectID: string,
-    clusterID: string,
-    datacenter: string
-  ): Observable<HealthEntity> {
+  health(projectID: string, clusterID: string, datacenter: string): Observable<Health> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/health`;
-    return this._http
-      .get<HealthEntity>(url)
-      .pipe(catchError(() => of<HealthEntity>()));
+    return this._http.get<Health>(url).pipe(catchError(() => of<Health>()));
   }
 
-  upgradeNodeDeployments(
-    projectID: string,
-    clusterID: string,
-    datacenter: string,
-    version: string
-  ): Observable<any> {
+  upgradeNodeDeployments(projectID: string, clusterID: string, datacenter: string, version: string): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/nodes/upgrades`;
     return this._http.put(url, {version} as MasterVersion);
   }
 
-  nodes(
-    projectID: string,
-    clusterID: string,
-    datacenter: string
-  ): Observable<NodeEntity[]> {
+  nodes(projectID: string, clusterID: string, datacenter: string): Observable<Node[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/nodes?hideInitialConditions=true`;
-    return this._http
-      .get<NodeEntity[]>(url)
-      .pipe(catchError(() => of<NodeEntity[]>()));
+    return this._http.get<Node[]>(url).pipe(catchError(() => of<Node[]>()));
   }
 
-  deleteNode(
-    projectID: string,
-    clusterID: string,
-    datacenter: string,
-    nodeID: string
-  ): Observable<any> {
+  deleteNode(projectID: string, clusterID: string, datacenter: string, nodeID: string): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/nodes/${nodeID}`;
     return this._http.delete(url);
   }
 
-  nodeUpgrades(
-    controlPlaneVersion: string,
-    type: string
-  ): Observable<MasterVersion[]> {
+  nodeUpgrades(controlPlaneVersion: string, type: string): Observable<MasterVersion[]> {
     const url = `${this._restRoot}/upgrades/node?control_plane_version=${controlPlaneVersion}&type=${type}`;
     return this._http.get<MasterVersion[]>(url).pipe(
       catchError(() => {
@@ -210,91 +143,48 @@ export class ClusterService {
     );
   }
 
-  sshKeys(
-    projectID: string,
-    clusterID: string,
-    datacenter: string
-  ): Observable<SSHKeyEntity[]> {
+  sshKeys(projectID: string, clusterID: string, datacenter: string): Observable<SSHKey[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/sshkeys`;
-    return this._http
-      .get<SSHKeyEntity[]>(url)
-      .pipe(catchError(() => of<SSHKeyEntity[]>()));
+    return this._http.get<SSHKey[]>(url).pipe(catchError(() => of<SSHKey[]>()));
   }
 
-  createSSHKey(
-    projectID: string,
-    clusterID: string,
-    datacenter: string,
-    sshKeyID: string
-  ): Observable<any> {
+  createSSHKey(projectID: string, clusterID: string, datacenter: string, sshKeyID: string): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
     return this._http.put(url, null);
   }
 
-  deleteSSHKey(
-    projectID: string,
-    clusterID: string,
-    datacenter: string,
-    sshKeyID: string
-  ): Observable<any> {
+  deleteSSHKey(projectID: string, clusterID: string, datacenter: string, sshKeyID: string): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
     return this._http.delete(url);
   }
 
-  addons(
-    projectID: string,
-    cluster: string,
-    dc: string
-  ): Observable<AddonEntity[]> {
+  addons(projectID: string, cluster: string, dc: string): Observable<Addon[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/addons`;
-    return this._http.get<AddonEntity[]>(url);
+    return this._http.get<Addon[]>(url);
   }
 
-  createAddon(
-    addon: AddonEntity,
-    projectID: string,
-    cluster: string,
-    dc: string
-  ): Observable<AddonEntity> {
+  createAddon(addon: Addon, projectID: string, cluster: string, dc: string): Observable<Addon> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/addons`;
-    return this._http.post<AddonEntity>(url, addon);
+    return this._http.post<Addon>(url, addon);
   }
 
-  editAddon(
-    addon: AddonEntity,
-    projectID: string,
-    cluster: string,
-    dc: string
-  ): Observable<AddonEntity> {
+  editAddon(addon: Addon, projectID: string, cluster: string, dc: string): Observable<Addon> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/addons/${addon.name}`;
-    return this._http.patch<AddonEntity>(url, addon);
+    return this._http.patch<Addon>(url, addon);
   }
 
-  deleteAddon(
-    addonID: string,
-    projectID: string,
-    cluster: string,
-    dc: string
-  ): Observable<any> {
+  deleteAddon(addonID: string, projectID: string, cluster: string, dc: string): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/addons/${addonID}`;
     return this._http.delete(url);
   }
 
-  private _getClusters(projectID: string): Observable<ClusterEntity[]> {
+  private _getClusters(projectID: string): Observable<Cluster[]> {
     const url = `${this._restRoot}/projects/${projectID}/clusters`;
-    return this._http
-      .get<ClusterEntity[]>(url)
-      .pipe(catchError(() => of<ClusterEntity[]>()));
+    return this._http.get<Cluster[]>(url).pipe(catchError(() => of<Cluster[]>()));
   }
 
-  private _getCluster(
-    projectID: string,
-    clusterID: string,
-    datacenter: string
-  ): Observable<ClusterEntity> {
+  private _getCluster(projectID: string, clusterID: string, datacenter: string): Observable<Cluster> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}`;
-    return this._http
-      .get<ClusterEntity>(url)
-      .pipe(catchError(() => of<ClusterEntity>()));
+    return this._http.get<Cluster>(url).pipe(catchError(() => of<Cluster>()));
   }
 }

@@ -1,18 +1,11 @@
 import {Injectable} from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  Router,
-  RouterStateSnapshot,
-} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 import {from, Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
-import {MemberEntity} from '../../../shared/entity/MemberEntity';
-import {
-  MemberUtils,
-  Permission,
-} from '../../../shared/utils/member-utils/member-utils';
+import {Member} from '../../../shared/entity/member';
+import {View} from '../../../shared/entity/common';
+import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {UserService} from '../user/user.service';
 
 import {Auth} from './auth.service';
@@ -21,10 +14,7 @@ import {Auth} from './auth.service';
 export class AuthGuard implements CanActivate {
   constructor(private auth: Auth) {}
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): boolean {
+  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.auth.authenticated()) {
       return true;
     }
@@ -34,28 +24,14 @@ export class AuthGuard implements CanActivate {
   }
 }
 
-export enum View {
-  Clusters = 'clusters',
-  Projects = 'projects',
-  Members = 'members',
-  SSHKeys = 'sshKeys',
-  ServiceAccounts = 'serviceaccounts',
-}
-
 @Injectable()
 export class AuthzGuard implements CanActivate {
-  constructor(
-    private readonly _userService: UserService,
-    private readonly _router: Router
-  ) {}
+  constructor(private readonly _userService: UserService, private readonly _router: Router) {}
 
-  canActivate(
-    _: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> {
+  canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     const projectID = this._getProjectID(state.url);
     const view = this._getView(state.url);
-    let currentUser: MemberEntity;
+    let currentUser: Member;
     this._userService.loggedInUser.subscribe(user => (currentUser = user));
 
     return this._userService
@@ -63,14 +39,7 @@ export class AuthzGuard implements CanActivate {
       .pipe(map(userGroup => this._userService.userGroupConfig(userGroup)))
       .pipe(
         map(groupConfig => {
-          if (
-            !MemberUtils.hasPermission(
-              currentUser,
-              groupConfig,
-              view,
-              Permission.View
-            )
-          ) {
+          if (!MemberUtils.hasPermission(currentUser, groupConfig, view, Permission.View)) {
             this._router.navigate([View.Projects]);
             return false;
           }

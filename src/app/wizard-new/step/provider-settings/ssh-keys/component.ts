@@ -1,28 +1,16 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  forwardRef,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
 
-import {
-  ApiService,
-  ProjectService,
-  UserService,
-} from '../../../../core/services';
+import {ApiService, ProjectService, UserService} from '../../../../core/services';
 import {AddSshKeyDialogComponent} from '../../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
-import {MemberEntity} from '../../../../shared/entity/MemberEntity';
-import {ProjectEntity} from '../../../../shared/entity/ProjectEntity';
-import {SSHKeyEntity} from '../../../../shared/entity/SSHKeyEntity';
+import {View} from '../../../../shared/entity/common';
+import {Member} from '../../../../shared/entity/member';
+import {Project} from '../../../../shared/entity/project';
+import {SSHKey} from '../../../../shared/entity/ssh-key';
 import {GroupConfig} from '../../../../shared/model/Config';
-import {
-  MemberUtils,
-  Permission,
-} from '../../../../shared/utils/member-utils/member-utils';
+import {MemberUtils, Permission} from '../../../../shared/utils/member-utils/member-utils';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../service/cluster';
 
@@ -47,13 +35,12 @@ enum Controls {
     },
   ],
 })
-export class ClusterSSHKeysComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
-  private _keys: SSHKeyEntity[] = [];
-  private _project = {} as ProjectEntity;
-  private _user: MemberEntity;
+  private _keys: SSHKey[] = [];
+  private _project = {} as Project;
+  private _user: Member;
   private _groupConfig: GroupConfig;
 
   constructor(
@@ -68,11 +55,11 @@ export class ClusterSSHKeysComponent extends BaseFormValidator
     super();
   }
 
-  set keys(keys: SSHKeyEntity[]) {
+  set keys(keys: SSHKey[]) {
     this._keys = keys.sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  get keys(): SSHKeyEntity[] {
+  get keys(): SSHKey[] {
     return this._keys;
   }
 
@@ -81,21 +68,12 @@ export class ClusterSSHKeysComponent extends BaseFormValidator
       [Controls.Keys]: this._builder.control([]),
     });
 
-    this._userService.loggedInUser
-      .pipe(first())
-      .subscribe(user => (this._user = user));
+    this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
 
     this._projectService.selectedProject
       .pipe(tap(project => (this._project = project)))
-      .pipe(
-        switchMap(_ => this._userService.currentUserGroup(this._project.id))
-      )
-      .pipe(
-        tap(
-          group =>
-            (this._groupConfig = this._userService.userGroupConfig(group))
-        )
-      )
+      .pipe(switchMap(_ => this._userService.currentUserGroup(this._project.id)))
+      .pipe(tap(group => (this._groupConfig = this._userService.userGroupConfig(group))))
       .pipe(switchMap(_ => this._apiService.getSSHKeys(this._project.id)))
       .pipe(first())
       .pipe(takeUntil(this._unsubscribe))
@@ -103,9 +81,7 @@ export class ClusterSSHKeysComponent extends BaseFormValidator
 
     this.form.valueChanges
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        () => (this._clusterService.sshKeys = this._getSelectedKeys())
-      );
+      .subscribe(() => (this._clusterService.sshKeys = this._getSelectedKeys()));
   }
 
   ngOnDestroy(): void {
@@ -124,31 +100,24 @@ export class ClusterSSHKeysComponent extends BaseFormValidator
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(result => {
         this._keys.push(result);
-        this.form
-          .get(Controls.Keys)
-          .setValue([...this.form.get(Controls.Keys).value, result]);
+        this.form.get(Controls.Keys).setValue([...this.form.get(Controls.Keys).value, result]);
         this._changeDetectorRef.detectChanges();
       });
   }
 
-  compareValues(a: SSHKeyEntity, b: SSHKeyEntity): boolean {
+  compareValues(a: SSHKey, b: SSHKey): boolean {
     return a && b ? a.id === b.id : a === b;
   }
 
   canAdd(): boolean {
-    return MemberUtils.hasPermission(
-      this._user,
-      this._groupConfig,
-      'sshKeys',
-      Permission.Create
-    );
+    return MemberUtils.hasPermission(this._user, this._groupConfig, View.SSHKeys, Permission.Create);
   }
 
   hasKeys(): boolean {
     return this._keys.length > 0;
   }
 
-  private _getSelectedKeys(): SSHKeyEntity[] {
+  private _getSelectedKeys(): SSHKey[] {
     return this.form.get(Controls.Keys).value;
   }
 }

@@ -2,11 +2,11 @@ import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, switchMap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../core/services';
-import {PacketSize} from '../../../shared/entity/packet/PacketSizeEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../wizard-new/service/cluster';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
+import {PacketSize} from '../../../shared/entity/provider/packet';
 
 export class NodeDataPacketProvider {
   constructor(
@@ -20,17 +20,12 @@ export class NodeDataPacketProvider {
     this._nodeDataService.nodeData.spec.cloud.packet.tags = tags;
   }
 
-  flavors(
-    onError: () => void = undefined,
-    onLoadingCb: () => void = null
-  ): Observable<PacketSize[]> {
+  flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<PacketSize[]> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterService.clusterChanges
-          .pipe(
-            filter(_ => this._clusterService.provider === NodeProvider.PACKET)
-          )
+          .pipe(filter(_ => this._clusterService.provider === NodeProvider.PACKET))
           .pipe(
             switchMap(cluster =>
               this._presetService

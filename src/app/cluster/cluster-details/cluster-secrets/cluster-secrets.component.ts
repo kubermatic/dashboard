@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {HealthEntity, HealthState} from '../../../shared/entity/HealthEntity';
+import {Cluster} from '../../../shared/entity/cluster';
+import {Health, HealthState} from '../../../shared/entity/health';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 
 @Component({
@@ -10,22 +10,16 @@ import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-h
   styleUrls: ['./cluster-secrets.component.scss'],
 })
 export class ClusterSecretsComponent implements OnInit {
-  @Input() cluster: ClusterEntity;
-  @Input() health: HealthEntity;
+  @Input() cluster: Cluster;
+  @Input() health: Health;
   isClusterRunning: boolean;
   healthStatus: ClusterHealthStatus;
 
   constructor(public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.isClusterRunning = ClusterHealthStatus.isClusterAPIRunning(
-      this.cluster,
-      this.health
-    );
-    this.healthStatus = ClusterHealthStatus.getHealthStatus(
-      this.cluster,
-      this.health
-    );
+    this.isClusterRunning = ClusterHealthStatus.isClusterAPIRunning(this.cluster, this.health);
+    this.healthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, this.health);
   }
 
   getIcon(name: string): string {
@@ -90,12 +84,10 @@ export class ClusterSecretsComponent implements OnInit {
   getHealthStatus(isHealthy: HealthState): string {
     if (HealthState.isUp(isHealthy)) {
       return 'Running';
-    } else {
-      if (HealthState.isDown(this.health.apiserver)) {
-        return 'Failed';
-      } else {
-        return 'Pending';
-      }
     }
+    if (HealthState.isDown(this.health.apiserver)) {
+      return 'Failed';
+    }
+    return 'Pending';
   }
 }

@@ -3,7 +3,7 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {first} from 'rxjs/operators';
 
-import {AddonConfigEntity} from '../../../entity/AddonEntity';
+import {AddonConfig, getAddonLogoData, getAddonShortDescription, hasAddonLogoData} from '../../../entity/addon';
 import {InstallAddonDialogComponent} from '../install-addon-dialog/install-addon-dialog.component';
 
 @Component({
@@ -13,7 +13,7 @@ import {InstallAddonDialogComponent} from '../install-addon-dialog/install-addon
 })
 export class SelectAddonDialogComponent {
   @Input() installableAddons: string[] = [];
-  @Input() addonConfigs = new Map<string, AddonConfigEntity>();
+  @Input() addonConfigs = new Map<string, AddonConfig>();
 
   constructor(
     public dialogRef: MatDialogRef<SelectAddonDialogComponent>,
@@ -22,27 +22,15 @@ export class SelectAddonDialogComponent {
   ) {}
 
   hasLogo(name: string): boolean {
-    const addonConfig = this.addonConfigs.get(name);
-    return (
-      !!addonConfig &&
-      !!addonConfig.spec &&
-      !!addonConfig.spec.logo &&
-      !!addonConfig.spec.logoFormat
-    );
+    return hasAddonLogoData(this.addonConfigs.get(name));
   }
 
   getAddonLogo(name: string): SafeUrl {
-    const addonConfig = this.addonConfigs.get(name);
-    return this._domSanitizer.bypassSecurityTrustUrl(
-      `data:image/${addonConfig.spec.logoFormat};base64,${addonConfig.spec.logo}`
-    );
+    return this._domSanitizer.bypassSecurityTrustUrl(getAddonLogoData(this.addonConfigs.get(name)));
   }
 
   getAddonShortDescription(name: string): string {
-    const addonConfig = this.addonConfigs.get(name);
-    return addonConfig && addonConfig.spec
-      ? addonConfig.spec.shortDescription
-      : '';
+    return getAddonShortDescription(this.addonConfigs.get(name));
   }
 
   select(name: string): void {

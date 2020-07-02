@@ -8,20 +8,13 @@ import {takeUntil} from 'rxjs/operators';
 import {AppConfigService} from './app-config.service';
 import {Auth} from './core/services';
 import {SettingsService} from './core/services/settings/settings.service';
+import {PageTitleService} from './core/services/page-title/page-title.service';
 import {GoogleAnalyticsService} from './google-analytics.service';
-import {AdminSettings} from './shared/entity/AdminSettings';
-import {VersionInfo} from './shared/entity/VersionInfo';
+import {AdminSettings, CustomLink} from './shared/entity/settings';
+import {VersionInfo} from './shared/entity/version-info';
 import {Config} from './shared/model/Config';
-import {CustomLink} from './shared/utils/custom-link-utils/custom-link';
 
-const PAGES_WITHOUT_MENU = [
-  '/projects',
-  '/account',
-  '/settings',
-  '/rest-api',
-  '/terms-of-service',
-  '/404',
-];
+const PAGES_WITHOUT_MENU = ['/projects', '/account', '/settings', '/rest-api', '/terms-of-service', '/404'];
 
 @Component({
   selector: 'km-root',
@@ -42,7 +35,8 @@ export class KubermaticComponent implements OnInit, OnDestroy {
     private appConfigService: AppConfigService,
     private readonly _settingsService: SettingsService,
     public router: Router,
-    public googleAnalyticsService: GoogleAnalyticsService
+    public googleAnalyticsService: GoogleAnalyticsService,
+    private readonly _pageTitleService: PageTitleService
   ) {
     this._registerRouterWatch();
   }
@@ -62,13 +56,11 @@ export class KubermaticComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(customLinks => (this.customLinks = customLinks));
 
-    this._settingsService.adminSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        if (!_.isEqual(this.settings, settings)) {
-          this.settings = settings;
-        }
-      });
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      if (!_.isEqual(this.settings, settings)) {
+        this.settings = settings;
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -79,6 +71,7 @@ export class KubermaticComponent implements OnInit, OnDestroy {
   private _registerRouterWatch(): void {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
+        this._pageTitleService.setTitle(event.urlAfterRedirects);
         this._handleSidenav(event.urlAfterRedirects);
         this.googleAnalyticsService.sendPageView(event.urlAfterRedirects);
       }

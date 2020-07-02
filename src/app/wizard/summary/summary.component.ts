@@ -1,24 +1,23 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {LabelFormComponent} from '../../shared/components/label-form/label-form.component';
-import {ClusterEntity} from '../../shared/entity/ClusterEntity';
-import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
-import {getIpCount} from '../../shared/functions/get-ip-count';
-import {
-  ClusterDatacenterForm,
-  ClusterProviderForm,
-} from '../../shared/model/ClusterForm';
-import {NodeData} from '../../shared/model/NodeSpecChange';
-import {NodeUtils} from '../../shared/utils/node-utils/node-utils';
+import * as _ from 'lodash';
 
+import {LabelFormComponent} from '../../shared/components/label-form/label-form.component';
+import {Cluster} from '../../shared/entity/cluster';
+import {SSHKey} from '../../shared/entity/ssh-key';
+import {getIpCount} from '../../shared/functions/get-ip-count';
+import {ClusterDatacenterForm, ClusterProviderForm} from '../../shared/model/ClusterForm';
+import {NodeData} from '../../shared/model/NodeSpecChange';
+import {getOperatingSystem, getOperatingSystemLogoClass} from '../../shared/entity/node';
+import {AdmissionPluginUtils} from '../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 @Component({
   selector: 'km-summary',
   templateUrl: './summary.component.html',
   styleUrls: ['./summary.component.scss'],
 })
 export class SummaryComponent implements OnInit {
-  @Input() clusterSSHKeys: SSHKeyEntity[];
+  @Input() clusterSSHKeys: SSHKey[];
   @Input() nodeData: NodeData;
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
   @Input() providerFormData: ClusterProviderForm;
   @Input() datacenterFormData: ClusterDatacenterForm;
   noMoreIpsLeft = false;
@@ -30,11 +29,11 @@ export class SummaryComponent implements OnInit {
   }
 
   getOperatingSystem(): string {
-    return NodeUtils.getOperatingSystem(this.nodeData.spec);
+    return getOperatingSystem(this.nodeData.spec);
   }
 
   getOperatingSystemLogoClass(): string {
-    return NodeUtils.getOperatingSystemLogoClass(this.nodeData.spec);
+    return getOperatingSystemLogoClass(this.nodeData.spec);
   }
 
   displayProvider(): boolean {
@@ -61,10 +60,7 @@ export class SummaryComponent implements OnInit {
   }
 
   hasGCPProviderOptions(): boolean {
-    return (
-      this.cluster.spec.cloud.gcp.network !== '' ||
-      this.cluster.spec.cloud.gcp.subnetwork !== ''
-    );
+    return this.cluster.spec.cloud.gcp.network !== '' || this.cluster.spec.cloud.gcp.subnetwork !== '';
   }
 
   hasAzureProviderOptions(): boolean {
@@ -78,10 +74,7 @@ export class SummaryComponent implements OnInit {
   }
 
   displayTags(tags: object): boolean {
-    return (
-      !!tags &&
-      Object.keys(LabelFormComponent.filterNullifiedKeys(tags)).length > 0
-    );
+    return !!tags && Object.keys(LabelFormComponent.filterNullifiedKeys(tags)).length > 0;
   }
 
   displayNoProviderTags(): boolean {
@@ -97,9 +90,8 @@ export class SummaryComponent implements OnInit {
       return !this.displayTags(this.nodeData.spec.cloud.openstack.tags);
     } else if (this.nodeData.spec.cloud.azure) {
       return !this.displayTags(this.nodeData.spec.cloud.azure.tags);
-    } else {
-      return false;
     }
+    return false;
   }
 
   getDnsServers(dnsServers: string[]): string {
@@ -110,13 +102,20 @@ export class SummaryComponent implements OnInit {
     return this.clusterSSHKeys.map(key => key.name).join(', ');
   }
 
-  noIpsLeft(cluster: ClusterEntity, nodeCount: number): boolean {
+  noIpsLeft(cluster: Cluster, nodeCount: number): boolean {
     const ipCount = getIpCount(cluster.spec.machineNetworks);
 
     if (!!ipCount && ipCount > 0) {
       return !(ipCount - nodeCount >= 0);
-    } else {
-      return false;
     }
+    return false;
+  }
+
+  hasAdmissionPlugins(): boolean {
+    return !_.isEmpty(this.cluster.spec.admissionPlugins);
+  }
+
+  getAdmissionPlugins(): string {
+    return AdmissionPluginUtils.getJoinedPluginNames(this.cluster.spec.admissionPlugins);
   }
 }

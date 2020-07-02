@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../../core/services/wizard/wizard.service';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
+import {Cluster} from '../../../../shared/entity/cluster';
 import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm';
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
@@ -12,7 +12,7 @@ import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
   templateUrl: './hetzner.component.html',
 })
 export class HetznerClusterSettingsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
   form: FormGroup;
 
   private _formHelper: FormHelper;
@@ -40,21 +40,17 @@ export class HetznerClusterSettingsComponent implements OnInit, OnDestroy {
           ? this._wizard.onCustomPresetsDisable.emit(false)
           : this._wizard.onCustomPresetsDisable.emit(true);
 
-        this._wizard.changeClusterProviderSettings(
-          this._clusterProviderSettingsForm(this._formHelper.isFormValid())
-        );
+        this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
       });
 
-    this._wizard.onCustomPresetSelect
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(newCredentials => {
-        if (newCredentials) {
-          this.form.disable();
-          return;
-        }
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+      if (newCredentials) {
+        this.form.disable();
+        return;
+      }
 
-        this.form.enable();
-      });
+      this.form.enable();
+    });
   }
 
   ngOnDestroy(): void {
@@ -62,9 +58,7 @@ export class HetznerClusterSettingsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  private _clusterProviderSettingsForm(
-    valid: boolean
-  ): ClusterProviderSettingsForm {
+  private _clusterProviderSettingsForm(valid: boolean): ClusterProviderSettingsForm {
     return {
       cloudSpec: {
         hetzner: {

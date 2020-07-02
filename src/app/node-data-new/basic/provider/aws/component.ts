@@ -8,22 +8,17 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge, Observable} from 'rxjs';
 import {map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
-import {AWSSize, AWSSubnet} from '../../../../shared/entity/provider/aws/AWS';
+import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
+import {AWSSize, AWSSubnet} from '../../../../shared/entity/provider/aws';
 
 enum Controls {
   Size = 'size',
@@ -62,8 +57,7 @@ enum SubnetState {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AWSBasicNodeDataComponent extends BaseFormValidator
-  implements OnInit, AfterViewChecked, OnDestroy {
+export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewChecked, OnDestroy {
   private _diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
   private _subnets: AWSSubnet[] = [];
   private _subnetMap: {[type: string]: AWSSubnet[]} = {};
@@ -107,12 +101,8 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this._sizesObservable
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._setDefaultSize.bind(this));
-    this._subnetIdsObservable
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._setDefaultSubnet.bind(this));
+    this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
+    this._subnetIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSubnet.bind(this));
 
     this._presets.presetChanges
       .pipe(tap(_ => this._clearSubnet()))
@@ -120,10 +110,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultSubnet.bind(this));
 
-    merge(
-      this.form.get(Controls.AMI).valueChanges,
-      this.form.get(Controls.DiskSize).valueChanges
-    )
+    merge(this.form.get(Controls.AMI).valueChanges, this.form.get(Controls.DiskSize).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
@@ -143,9 +130,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator
   }
 
   getSubnetOptionName(subnet: AWSSubnet): string {
-    return subnet.name !== ''
-      ? subnet.name + ' (' + subnet.id + ')'
-      : subnet.id;
+    return subnet.name !== '' ? subnet.name + ' (' + subnet.id + ')' : subnet.id;
   }
 
   isInWizard(): boolean {
@@ -158,9 +143,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator
 
   onSubnetChange(subnet: string): void {
     this._nodeDataService.nodeData.spec.cloud.aws.subnetID = subnet;
-    this._nodeDataService.nodeData.spec.cloud.aws.availabilityZone = this._getAZFromSubnet(
-      subnet
-    );
+    this._nodeDataService.nodeData.spec.cloud.aws.availabilityZone = this._getAZFromSubnet(subnet);
   }
 
   onDiskTypeChange(diskType: string): void {
@@ -174,10 +157,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator
   }
 
   private get _subnetIdsObservable(): Observable<AWSSubnet[]> {
-    return this._nodeDataService.aws.subnets(
-      this._clearSubnet.bind(this),
-      this._onSubnetLoading.bind(this)
-    );
+    return this._nodeDataService.aws.subnets(this._clearSubnet.bind(this), this._onSubnetLoading.bind(this));
   }
 
   private _setDefaultDiskType(): void {
@@ -188,9 +168,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator
   private _setDefaultSize(sizes: AWSSize[]): void {
     this.sizes = sizes;
     if (this.sizes.length > 0) {
-      const cheapestInstance = this.sizes.reduce((prev, curr) =>
-        prev.price < curr.price ? prev : curr
-      );
+      const cheapestInstance = this.sizes.reduce((prev, curr) => (prev.price < curr.price ? prev : curr));
       this.selectedSize = cheapestInstance.name;
       this.sizeLabel = SizeState.Ready;
       this._cdr.detectChanges();
@@ -205,12 +183,8 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator
     this._subnets = subnets;
     this._subnetMap = {};
     const defaultSubnet = this._subnets.find(s => s.isDefaultSubnet);
-    this.selectedSubnet = defaultSubnet
-      ? defaultSubnet.id
-      : this._subnets[0].id;
-    this.subnetLabel = this._subnets.length
-      ? SubnetState.Ready
-      : SubnetState.Empty;
+    this.selectedSubnet = defaultSubnet ? defaultSubnet.id : this._subnets[0].id;
+    this.subnetLabel = this._subnets.length ? SubnetState.Ready : SubnetState.Empty;
     this._cdr.detectChanges();
     this._initSubnetMap();
   }

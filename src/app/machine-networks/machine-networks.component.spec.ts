@@ -9,13 +9,7 @@ import {fakeClusterWithMachineNetwork} from '../testing/fake-data/clusterWithMac
 import {RouterTestingModule} from '../testing/router-stubs';
 import {MachineNetworksComponent} from './machine-networks.component';
 
-const modules: any[] = [
-  BrowserModule,
-  HttpClientModule,
-  BrowserAnimationsModule,
-  RouterTestingModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
 
 describe('MachineNetworksComponent', () => {
   let component: MachineNetworksComponent;
@@ -44,9 +38,7 @@ describe('MachineNetworksComponent', () => {
   });
 
   it('expecting form to be valid', () => {
-    const machineNetworks = component.machineNetworksForm.get(
-      'machineNetworks'
-    ) as FormArray;
+    const machineNetworks = component.machineNetworksForm.get('machineNetworks') as FormArray;
     machineNetworks.controls[0].setValue({
       cidr: '192.182.0.0/29',
       dnsServers: ['8.8.8.8'],
@@ -56,9 +48,7 @@ describe('MachineNetworksComponent', () => {
   });
 
   it('expecting form to be invalid', () => {
-    const machineNetworks = component.machineNetworksForm.get(
-      'machineNetworks'
-    ) as FormArray;
+    const machineNetworks = component.machineNetworksForm.get('machineNetworks') as FormArray;
     machineNetworks.controls[0].setValue({
       cidr: '192.182.0.0',
       dnsServers: ['8.8.8.8'],

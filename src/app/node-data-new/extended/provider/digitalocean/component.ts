@@ -3,7 +3,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
+import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
@@ -31,8 +31,7 @@ enum Controls {
     },
   ],
 })
-export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: string[] = [];
 
   readonly Controls = Controls;
@@ -41,20 +40,13 @@ export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator
     return this._nodeDataService.nodeData;
   }
 
-  constructor(
-    private readonly _builder: FormBuilder,
-    private readonly _nodeDataService: NodeDataService
-  ) {
+  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
     super();
   }
 
   ngOnInit(): void {
-    const backups = this._nodeDataService.isInDialogEditMode()
-      ? this.nodeData.spec.cloud.digitalocean.backups
-      : false;
-    const ipv6 = this._nodeDataService.isInDialogEditMode()
-      ? this.nodeData.spec.cloud.digitalocean.ipv6
-      : false;
+    const backups = this._nodeDataService.isInDialogEditMode() ? this.nodeData.spec.cloud.digitalocean.backups : false;
+    const ipv6 = this._nodeDataService.isInDialogEditMode() ? this.nodeData.spec.cloud.digitalocean.ipv6 : false;
     const monitoring = this._nodeDataService.isInDialogEditMode()
       ? this.nodeData.spec.cloud.digitalocean.monitoring
       : false;

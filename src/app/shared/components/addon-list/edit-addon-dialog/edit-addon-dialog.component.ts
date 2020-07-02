@@ -3,7 +3,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
-import {AddonConfigEntity, AddonEntity} from '../../../entity/AddonEntity';
+import {AddonConfig, Addon, getAddonLogoData, hasAddonLogoData} from '../../../entity/addon';
 import {InstallAddonDialogComponent} from '../install-addon-dialog/install-addon-dialog.component';
 
 @Component({
@@ -12,14 +12,11 @@ import {InstallAddonDialogComponent} from '../install-addon-dialog/install-addon
   styleUrls: ['./edit-addon-dialog.component.scss'],
 })
 export class EditAddonDialogComponent implements OnInit {
-  @Input() addon: AddonEntity;
-  @Input() addonConfig: AddonConfigEntity;
+  @Input() addon: Addon;
+  @Input() addonConfig: AddonConfig;
   form: FormGroup;
 
-  constructor(
-    public dialogRef: MatDialogRef<EditAddonDialogComponent>,
-    private readonly _domSanitizer: DomSanitizer
-  ) {}
+  constructor(public dialogRef: MatDialogRef<EditAddonDialogComponent>, private readonly _domSanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     const group = {};
@@ -36,20 +33,14 @@ export class EditAddonDialogComponent implements OnInit {
   }
 
   hasLogo(): boolean {
-    return (
-      !!this.addonConfig &&
-      !!this.addonConfig.spec.logo &&
-      !!this.addonConfig.spec.logoFormat
-    );
+    return hasAddonLogoData(this.addonConfig);
   }
 
   getAddonLogo(): SafeUrl {
-    return this._domSanitizer.bypassSecurityTrustUrl(
-      `data:image/${this.addonConfig.spec.logoFormat};base64,${this.addonConfig.spec.logo}`
-    );
+    return this._domSanitizer.bypassSecurityTrustUrl(getAddonLogoData(this.addonConfig));
   }
 
-  private _getAddonPatch(): AddonEntity {
+  private _getAddonPatch(): Addon {
     const variables = {};
 
     Object.keys(this.form.controls).forEach(key => {

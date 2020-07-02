@@ -9,7 +9,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatChipsModule} from '@angular/material/chips';
-import {MatOptionModule} from '@angular/material/core';
+import {MatOptionModule, MatRippleModule} from '@angular/material/core';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatExpansionModule} from '@angular/material/expansion';
@@ -65,6 +65,7 @@ import {TaintFormComponent} from './components/taint-form/taint-form.component';
 import {TaintsComponent} from './components/taints/taints.component';
 import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
+import {MonacoEditorModule} from 'ngx-monaco-editor';
 
 const modules: any[] = [
   CommonModule,
@@ -104,7 +105,9 @@ const modules: any[] = [
   MatSnackBarModule,
   MatBadgeModule,
   MatStepperModule,
+  MatRippleModule,
   FilterPipeModule,
+  MonacoEditorModule,
 ];
 
 const components: any[] = [

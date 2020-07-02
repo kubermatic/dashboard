@@ -10,24 +10,14 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {EMPTY, Observable, onErrorResumeNext} from 'rxjs';
-import {
-  catchError,
-  filter,
-  map,
-  switchMap,
-  takeUntil,
-  tap,
-} from 'rxjs/operators';
+import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
-import {
-  GCPNetwork,
-  GCPSubnetwork,
-} from '../../../../../../shared/entity/provider/gcp/GCP';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
+import {GCPNetwork, GCPSubnetwork} from '../../../../../../shared/entity/provider/gcp';
 
 enum Controls {
   Network = 'network',
@@ -63,8 +53,7 @@ enum SubNetworkState {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GCPProviderExtendedComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class GCPProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private _onNetworkChange = new EventEmitter<void>();
 
   readonly Controls = Controls;
@@ -96,23 +85,17 @@ export class GCPProviderExtendedComponent extends BaseFormValidator
 
     this._presets.presetChanges
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset =>
-        Object.values(Controls).forEach(control =>
-          this._enable(!preset, control)
-        )
-      );
+      .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
     this.form.valueChanges
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.GCP))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
-        this._presets.enablePresets(
-          Object.values(this._clusterService.cluster.spec.cloud.gcp).every(
-            value => !value
-          )
-        )
+        this._presets.enablePresets(Object.values(this._clusterService.cluster.spec.cloud.gcp).every(value => !value))
       );
 
     this._clusterService.clusterChanges
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.GCP))
       .pipe(
         tap(_ => {
           if (!this._hasRequiredCredentials()) {
@@ -147,9 +130,7 @@ export class GCPProviderExtendedComponent extends BaseFormValidator
     switch (control) {
       case Controls.Network:
       case Controls.SubNetwork:
-        return this._hasRequiredCredentials()
-          ? ''
-          : 'Please enter your credentials first.';
+        return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
     }
   }
 
@@ -160,14 +141,12 @@ export class GCPProviderExtendedComponent extends BaseFormValidator
 
   private _hasRequiredCredentials(): boolean {
     return (
-      !!this._clusterService.cluster.spec.cloud.gcp &&
-      !!this._clusterService.cluster.spec.cloud.gcp.serviceAccount
+      !!this._clusterService.cluster.spec.cloud.gcp && !!this._clusterService.cluster.spec.cloud.gcp.serviceAccount
     );
   }
 
   private _loadNetworks(networks: GCPNetwork[]): void {
-    this.networkLabel =
-      networks.length > 0 ? NetworkState.Ready : NetworkState.Empty;
+    this.networkLabel = networks.length > 0 ? NetworkState.Ready : NetworkState.Empty;
     this.networks = networks;
     this._cdr.detectChanges();
   }
@@ -181,13 +160,9 @@ export class GCPProviderExtendedComponent extends BaseFormValidator
   private _networkListObservable(): Observable<GCPNetwork[]> {
     return this._presets
       .provider(NodeProvider.GCP)
-      .serviceAccount(
-        this._clusterService.cluster.spec.cloud.gcp.serviceAccount
-      )
+      .serviceAccount(this._clusterService.cluster.spec.cloud.gcp.serviceAccount)
       .networks(this._onNetworkLoading.bind(this))
-      .pipe(
-        map(networks => networks.sort((a, b) => a.name.localeCompare(b.name)))
-      )
+      .pipe(map(networks => networks.sort((a, b) => a.name.localeCompare(b.name))))
       .pipe(
         catchError(() => {
           this._clearNetwork();
@@ -207,17 +182,10 @@ export class GCPProviderExtendedComponent extends BaseFormValidator
   private _subnetworkListObservable(): Observable<GCPSubnetwork[]> {
     return this._presets
       .provider(NodeProvider.GCP)
-      .serviceAccount(
-        this._clusterService.cluster.spec.cloud.gcp.serviceAccount
-      )
+      .serviceAccount(this._clusterService.cluster.spec.cloud.gcp.serviceAccount)
       .network(this._clusterService.cluster.spec.cloud.gcp.network)
-      .subnetworks(
-        this._clusterService.datacenter,
-        this._onSubNetworkLoading.bind(this)
-      )
-      .pipe(
-        map(networks => networks.sort((a, b) => a.name.localeCompare(b.name)))
-      )
+      .subnetworks(this._clusterService.datacenter, this._onSubNetworkLoading.bind(this))
+      .pipe(map(networks => networks.sort((a, b) => a.name.localeCompare(b.name))))
       .pipe(
         catchError(() => {
           this._clearSubNetwork();
@@ -240,8 +208,7 @@ export class GCPProviderExtendedComponent extends BaseFormValidator
   }
 
   private _loadSubNetworks(subNetworks: GCPSubnetwork[]): void {
-    this.subNetworkLabel =
-      subNetworks.length > 0 ? SubNetworkState.Ready : SubNetworkState.Empty;
+    this.subNetworkLabel = subNetworks.length > 0 ? SubNetworkState.Ready : SubNetworkState.Empty;
     this.subNetworks = subNetworks;
     this._cdr.detectChanges();
   }

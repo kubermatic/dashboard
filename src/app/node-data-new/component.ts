@@ -1,22 +1,13 @@
 import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
-import {
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../core/services';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
-import {ClusterType} from '../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../shared/entity/DatacenterEntity';
-import {OperatingSystemSpec, Taint} from '../shared/entity/NodeEntity';
-import {
-  NodeProvider,
-  NodeProviderConstants,
-  OperatingSystem,
-} from '../shared/model/NodeProviderConstants';
+import {ClusterType} from '../shared/entity/cluster';
+import {Datacenter} from '../shared/entity/datacenter';
+import {OperatingSystemSpec, Taint} from '../shared/entity/node';
+import {NodeProvider, NodeProviderConstants, OperatingSystem} from '../shared/model/NodeProviderConstants';
 import {NodeData} from '../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../shared/validators/base-form.validator';
 import {ClusterService} from '../wizard-new/service/cluster';
@@ -53,8 +44,7 @@ enum Controls {
     },
   ],
 })
-export class NodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   @Input() replicas = 3;
   @Input() provider: NodeProvider;
   @Input() clusterType: ClusterType;
@@ -62,7 +52,7 @@ export class NodeDataComponent extends BaseFormValidator
   labels: object = {};
   taints: Taint[] = [];
 
-  private _datacenterSpec: DataCenterEntity;
+  private _datacenterSpec: Datacenter;
 
   readonly NodeProvider = NodeProvider;
   readonly OperatingSystem = OperatingSystem;
@@ -84,17 +74,10 @@ export class NodeDataComponent extends BaseFormValidator
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control('', [
-        Validators.pattern('[a-zA-Z0-9-]*'),
-      ]),
-      [Controls.Count]: this._builder.control(this.replicas, [
-        Validators.required,
-        Validators.min(0),
-      ]),
+      [Controls.Name]: this._builder.control('', [Validators.pattern('[a-zA-Z0-9-]*')]),
+      [Controls.Count]: this._builder.control(this.replicas, [Validators.required, Validators.min(0)]),
       [Controls.DynamicConfig]: this._builder.control(false),
-      [Controls.OperatingSystem]: this._builder.control(this._getDefaultOS(), [
-        Validators.required,
-      ]),
+      [Controls.OperatingSystem]: this._builder.control(this._getDefaultOS(), [Validators.required]),
       [Controls.UpgradeOnBoot]: this._builder.control(false),
       [Controls.DisableAutoUpdate]: this._builder.control(false),
       [Controls.RhelSubscriptionManagerUser]: this._builder.control(''),
@@ -106,22 +89,15 @@ export class NodeDataComponent extends BaseFormValidator
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-    merge(
-      this._clusterService.clusterTypeChanges,
-      this._clusterService.providerChanges
-    )
+    merge(this._clusterService.clusterTypeChanges, this._clusterService.providerChanges)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ =>
-        this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS())
-      );
+      .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
 
     this._clusterService.datacenterChanges
-      .pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
       .pipe(takeUntil(this._unsubscribe))
       .pipe(tap(dc => (this._datacenterSpec = dc)))
-      .subscribe(_ =>
-        this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS())
-      );
+      .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
 
     this.form
       .get(Controls.OperatingSystem)
@@ -129,15 +105,9 @@ export class NodeDataComponent extends BaseFormValidator
       .subscribe(os => {
         if (os !== OperatingSystem.RHEL) {
           this.form.get(Controls.RhelSubscriptionManagerUser).clearValidators();
-          this.form
-            .get(Controls.RhelSubscriptionManagerPassword)
-            .clearValidators();
-          this.form
-            .get(Controls.RhelSubscriptionManagerUser)
-            .updateValueAndValidity();
-          this.form
-            .get(Controls.RhelSubscriptionManagerPassword)
-            .updateValueAndValidity();
+          this.form.get(Controls.RhelSubscriptionManagerPassword).clearValidators();
+          this.form.get(Controls.RhelSubscriptionManagerUser).updateValueAndValidity();
+          this.form.get(Controls.RhelSubscriptionManagerPassword).updateValueAndValidity();
         }
       });
 
@@ -158,10 +128,7 @@ export class NodeDataComponent extends BaseFormValidator
       this.form.get(Controls.RhsmOfflineToken).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        _ =>
-          (this._nodeDataService.operatingSystemSpec = this._getOperatingSystemSpec())
-      );
+      .subscribe(_ => (this._nodeDataService.operatingSystemSpec = this._getOperatingSystemSpec()));
   }
 
   ngOnDestroy(): void {
@@ -220,11 +187,7 @@ export class NodeDataComponent extends BaseFormValidator
           NodeProvider.OPENSTACK
         );
       case OperatingSystem.Flatcar:
-        return this.isProvider(
-          NodeProvider.AWS,
-          NodeProvider.AZURE,
-          NodeProvider.OPENSTACK
-        );
+        return this.isProvider(NodeProvider.AWS, NodeProvider.AZURE, NodeProvider.OPENSTACK);
       case OperatingSystem.Ubuntu:
       case OperatingSystem.CentOS:
         return !this.isProvider(NodeProvider.VSPHERE);
@@ -277,12 +240,8 @@ export class NodeDataComponent extends BaseFormValidator
         return {
           rhel: {
             distUpgradeOnBoot: this.form.get(Controls.UpgradeOnBoot).value,
-            rhelSubscriptionManagerUser: this.form.get(
-              Controls.RhelSubscriptionManagerUser
-            ).value,
-            rhelSubscriptionManagerPassword: this.form.get(
-              Controls.RhelSubscriptionManagerPassword
-            ).value,
+            rhelSubscriptionManagerUser: this.form.get(Controls.RhelSubscriptionManagerUser).value,
+            rhelSubscriptionManagerPassword: this.form.get(Controls.RhelSubscriptionManagerPassword).value,
             rhsmOfflineToken: this.form.get(Controls.RhsmOfflineToken).value,
           },
         };
@@ -291,10 +250,7 @@ export class NodeDataComponent extends BaseFormValidator
     }
   }
 
-  private _hasSystemTemplate(
-    provider: NodeProvider,
-    os: OperatingSystem
-  ): boolean {
+  private _hasSystemTemplate(provider: NodeProvider, os: OperatingSystem): boolean {
     if (!this._datacenterSpec) {
       return false;
     }
@@ -322,13 +278,9 @@ export class NodeDataComponent extends BaseFormValidator
     switch (provider) {
       case NodeProvider.VSPHERE: {
         const defaultTemplate = this._datacenterSpec.spec.vsphere.templates
-          ? (Object.keys(
-              this._datacenterSpec.spec.vsphere.templates
-            )[0] as OperatingSystem)
+          ? (Object.keys(this._datacenterSpec.spec.vsphere.templates)[0] as OperatingSystem)
           : OperatingSystem.Ubuntu;
-        return defaultTemplate === OperatingSystem.CoreOS
-          ? OperatingSystem.ContainerLinux
-          : defaultTemplate;
+        return defaultTemplate === OperatingSystem.CoreOS ? OperatingSystem.ContainerLinux : defaultTemplate;
       }
     }
 

@@ -1,41 +1,25 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Subject} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
+import * as _ from 'lodash';
 
-import {
-  ClusterService,
-  NotificationService,
-  UserService,
-} from '../../../core/services';
+import {ClusterService, NotificationService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {MemberEntity} from '../../../shared/entity/MemberEntity';
-import {NodeMetrics} from '../../../shared/entity/Metrics';
-import {NodeEntity} from '../../../shared/entity/NodeEntity';
+import {Cluster} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
+import {Member} from '../../../shared/entity/member';
+import {NodeMetrics} from '../../../shared/entity/metrics';
+import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '../../../shared/entity/node';
 import {GroupConfig} from '../../../shared/model/Config';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeHealthStatus} from '../../../shared/utils/health-status/node-health-status';
-import {
-  MemberUtils,
-  Permission,
-} from '../../../shared/utils/member-utils/member-utils';
-import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
+import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 
 @Component({
   selector: 'km-node-list',
@@ -43,15 +27,12 @@ import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
   styleUrls: ['node-list.component.scss'],
 })
 export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  @Input() datacenter: DataCenterEntity;
-  @Input() nodes: NodeEntity[] = [];
-  @Input() nodesMetrics: Map<string, NodeMetrics> = new Map<
-    string,
-    NodeMetrics
-  >();
+  @Input() cluster: Cluster;
+  @Input() datacenter: Datacenter;
+  @Input() nodes: Node[] = [];
+  @Input() nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   @Input() projectID: string;
-  @Output() deleteNode = new EventEmitter<NodeEntity>();
+  @Output() deleteNode = new EventEmitter<Node>();
   @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
   config: MatDialogConfig = {
@@ -69,10 +50,10 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     'actions',
   ];
   toggledColumns: string[] = ['nodeDetails'];
-  dataSource = new MatTableDataSource<NodeEntity>();
+  dataSource = new MatTableDataSource<Node>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  private _user: MemberEntity;
+  private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _unsubscribe = new Subject<void>();
 
@@ -92,25 +73,16 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._userService.loggedInUser
-      .pipe(first())
-      .subscribe(user => (this._user = user));
+    this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
 
     this._userService
       .currentUserGroup(this.projectID)
-      .subscribe(
-        userGroup =>
-          (this._currentGroupConfig = this._userService.userGroupConfig(
-            userGroup
-          ))
-      );
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
 
-    this._settingsService.userSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        this.paginator.pageSize = settings.itemsPerPage;
-        this.dataSource.paginator = this.paginator; // Force refresh.
-      });
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = this.paginator; // Force refresh.
+    });
   }
 
   ngOnChanges(): void {
@@ -123,19 +95,14 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterEntity.getVersionHeadline(type, isKubelet);
+    return Cluster.getVersionHeadline(type, isKubelet);
   }
 
   canDelete(): boolean {
-    return MemberUtils.hasPermission(
-      this._user,
-      this._currentGroupConfig,
-      'nodes',
-      Permission.Delete
-    );
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'nodes', Permission.Delete);
   }
 
-  deleteNodeDialog(node: NodeEntity, event: Event): void {
+  deleteNodeDialog(node: Node, event: Event): void {
     event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
@@ -147,39 +114,28 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
       },
     };
 
-    const dialogRef = this._matDialog.open(
-      ConfirmationDialogComponent,
-      dialogConfig
-    );
-    this._googleAnalyticsService.emitEvent(
-      'clusterOverview',
-      'deleteNodeDialogOpened'
-    );
+    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
+    this._googleAnalyticsService.emitEvent('clusterOverview', 'deleteNodeDialogOpened');
 
-    dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
-      if (isConfirmed) {
-        this._clusterService
-          .deleteNode(
-            this.projectID,
-            this.cluster.id,
-            this.datacenter.metadata.name,
-            node.id
-          )
-          .subscribe(() => {
-            this._notificationService.success(
-              `The <strong>${node.name}</strong> node was removed from the <strong>${this.cluster.name}</strong> cluster`
-            );
-            this._googleAnalyticsService.emitEvent(
-              'clusterOverview',
-              'nodeDeleted'
-            );
-            this.deleteNode.emit(node);
-          });
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(
+        switchMap(_ =>
+          this._clusterService.deleteNode(this.projectID, this.cluster.id, this.datacenter.metadata.name, node.id)
+        )
+      )
+      .pipe(first())
+      .subscribe(() => {
+        this._notificationService.success(
+          `The <strong>${node.name}</strong> node was removed from the <strong>${this.cluster.name}</strong> cluster`
+        );
+        this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeleted');
+        this.deleteNode.emit(node);
+      });
   }
 
-  getNodeHealthStatus(n: NodeEntity, i: number): object {
+  getNodeHealthStatus(n: Node, i: number): object {
     return NodeHealthStatus.getHealthStatus(n);
   }
 
@@ -203,7 +159,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     return nodeCapacity ? `${nodeCapacity} ${prefixes[i - 1]}` : 'unknown';
   }
 
-  getAddresses(node: NodeEntity): object {
+  getAddresses(node: Node): object {
     const addresses = {};
     for (const i in node.status.addresses) {
       if (node.status.addresses[i].type === 'InternalIP') {
@@ -215,18 +171,18 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     return addresses;
   }
 
-  showInfo(node: NodeEntity): boolean {
+  showInfo(node: Node): boolean {
     return node.name !== node.id.replace('machine-', '') && node.id !== '';
   }
 
-  getInfo(node: NodeEntity): string {
+  getInfo(node: Node): string {
     if (node.spec.cloud.aws) {
       return node.name;
     }
     return node.id.replace('machine-', '');
   }
 
-  getNodeName(node: NodeEntity): string {
+  getNodeName(node: Node): string {
     return node.id.replace('machine-', '');
   }
 
@@ -234,7 +190,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     return !!tags && Object.keys(tags).length > 0;
   }
 
-  toggleNodeItem(element: NodeEntity): void {
+  toggleNodeItem(element: Node): void {
     const elem = event.target as HTMLElement;
     const className = elem.className;
     if (className !== 'km-copy') {
@@ -242,24 +198,16 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  getSystem(node: NodeEntity): string {
-    return NodeUtils.getOperatingSystem(node.spec);
+  getSystem(node: Node): string {
+    return getOperatingSystem(node.spec);
   }
 
-  getSystemLogoClass(node: NodeEntity): string {
-    return NodeUtils.getOperatingSystemLogoClass(node.spec);
-  }
-
-  hasItems(): boolean {
-    return !!this.nodes && this.nodes.length > 0;
+  getSystemLogoClass(node: Node): string {
+    return getOperatingSystemLogoClass(node.spec);
   }
 
   isPaginatorVisible(): boolean {
-    return (
-      this.hasItems() &&
-      this.paginator &&
-      this.nodes.length > this.paginator.pageSize
-    );
+    return !_.isEmpty(this.nodes) && this.paginator && this.nodes.length > this.paginator.pageSize;
   }
 
   getMetrics(nodeName: string): NodeMetrics | undefined {

@@ -1,11 +1,7 @@
-import {ClusterEntity} from '../../entity/ClusterEntity';
-import {HealthEntity, HealthState} from '../../entity/HealthEntity';
+import {Cluster} from '../../entity/cluster';
+import {Health, HealthState} from '../../entity/health';
 
-import {
-  HealthStatus,
-  HealthStatusColor,
-  HealthStatusMessage,
-} from './health-status';
+import {HealthStatus, HealthStatusColor, HealthStatusMessage} from './health-status';
 
 export enum HealthStatusCss {
   Deleting = 'km-status-deleting',
@@ -15,46 +11,30 @@ export enum HealthStatusCss {
 }
 
 export class ClusterHealthStatus extends HealthStatus {
-  static getHealthStatus(
-    c: ClusterEntity,
-    h: HealthEntity
-  ): ClusterHealthStatus {
+  static getHealthStatus(c: Cluster, h: Health): ClusterHealthStatus {
     if (c.deletionTimestamp) {
-      return new ClusterHealthStatus(
-        HealthStatusMessage.Deleting,
-        HealthStatusColor.Red,
-        HealthStatusCss.Deleting
-      );
+      return new ClusterHealthStatus(HealthStatusMessage.Deleting, HealthStatusColor.Red, HealthStatusCss.Deleting);
     } else if (this.isClusterRunning(c, h)) {
-      return new ClusterHealthStatus(
-        HealthStatusMessage.Running,
-        HealthStatusColor.Green,
-        HealthStatusCss.Running
-      );
-    } else {
-      return new ClusterHealthStatus(
-        HealthStatusMessage.Provisioning,
-        HealthStatusColor.Orange,
-        HealthStatusCss.Provisioning
-      );
+      return new ClusterHealthStatus(HealthStatusMessage.Running, HealthStatusColor.Green, HealthStatusCss.Running);
     }
+    return new ClusterHealthStatus(
+      HealthStatusMessage.Provisioning,
+      HealthStatusColor.Orange,
+      HealthStatusCss.Provisioning
+    );
   }
 
-  static isClusterRunning(c: ClusterEntity, h: HealthEntity): boolean {
-    return !!h && HealthEntity.allHealthy(h) && !c.deletionTimestamp;
+  static isClusterRunning(c: Cluster, h: Health): boolean {
+    return !!h && Health.allHealthy(h) && !c.deletionTimestamp;
   }
 
-  static isClusterAPIRunning(c: ClusterEntity, h: HealthEntity): boolean {
+  static isClusterAPIRunning(c: Cluster, h: Health): boolean {
     return !!h && HealthState.isUp(h.apiserver) && !c.deletionTimestamp;
   }
 
   css: string;
 
-  constructor(
-    message: HealthStatusMessage,
-    color: HealthStatusColor,
-    css: string
-  ) {
+  constructor(message: HealthStatusMessage, color: HealthStatusColor, css: string) {
     super(message, color);
     this.css = css;
   }

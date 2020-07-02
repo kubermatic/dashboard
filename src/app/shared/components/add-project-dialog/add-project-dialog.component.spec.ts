@@ -1,10 +1,4 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -21,12 +15,7 @@ import {SharedModule} from '../../shared.module';
 
 import {AddProjectDialogComponent} from './add-project-dialog.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  CoreModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 
 describe('AddProjectDialogComponent', () => {
   let fixture: ComponentFixture<AddProjectDialogComponent>;
@@ -35,9 +24,7 @@ describe('AddProjectDialogComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = {createProject: jest.fn()};
-    createProjectSpy = apiMock.createProject.mockReturnValue(
-      asyncData(fakeDigitaloceanCluster)
-    );
+    createProjectSpy = apiMock.createProject.mockReturnValue(asyncData(fakeDigitaloceanCluster));
 
     TestBed.configureTestingModule({
       imports: [...modules],

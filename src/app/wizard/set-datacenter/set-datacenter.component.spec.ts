@@ -4,12 +4,12 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {DatacenterService} from '../../core/services/datacenter/datacenter.service';
-import {WizardService} from '../../core/services/wizard/wizard.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
 import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
 import {SetDatacenterComponent} from './set-datacenter.component';
+import {AuthMockService} from '../../testing/services/auth-mock.service';
+import {Auth, WizardService, DatacenterService} from '../../core/services';
 
 describe('SetDatacenterComponent', () => {
   let fixture: ComponentFixture<SetDatacenterComponent>;
@@ -29,6 +29,7 @@ describe('SetDatacenterComponent', () => {
       providers: [
         WizardService,
         {provide: DatacenterService, useClass: DatacenterMockService},
+        {provide: Auth, useClass: AuthMockService},
       ],
     }).compileComponents();
   }));

@@ -2,15 +2,12 @@ import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, switchMap, tap} from 'rxjs/operators';
 
 import {DatacenterService, PresetsService} from '../../../core/services';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {
-  AlibabaInstanceType,
-  AlibabaZone,
-} from '../../../shared/entity/provider/alibaba/Alibaba';
+import {Cluster} from '../../../shared/entity/cluster';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../wizard-new/service/cluster';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
+import {AlibabaInstanceType, AlibabaZone} from '../../../shared/entity/provider/alibaba';
 
 export class NodeDataAlibabaProvider {
   constructor(
@@ -25,26 +22,17 @@ export class NodeDataAlibabaProvider {
     this._nodeDataService.nodeData.spec.cloud.alibaba.labels = labels;
   }
 
-  instanceTypes(
-    onError: () => void = undefined,
-    onLoadingCb: () => void = null
-  ): Observable<AlibabaInstanceType[]> {
-    let cluster: ClusterEntity;
+  instanceTypes(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AlibabaInstanceType[]> {
+    let cluster: Cluster;
     let region = '';
 
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterService.clusterChanges
-          .pipe(
-            filter(_ => this._clusterService.provider === NodeProvider.ALIBABA)
-          )
+          .pipe(filter(_ => this._clusterService.provider === NodeProvider.ALIBABA))
           .pipe(tap(c => (cluster = c)))
-          .pipe(
-            switchMap(_ =>
-              this._datacenterService.getDataCenter(cluster.spec.cloud.dc)
-            )
-          )
+          .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc)))
           .pipe(tap(dc => (region = dc.spec.alibaba.region)))
           .pipe(
             switchMap(_ =>
@@ -69,26 +57,17 @@ export class NodeDataAlibabaProvider {
     }
   }
 
-  zones(
-    onError: () => void = undefined,
-    onLoadingCb: () => void = null
-  ): Observable<AlibabaZone[]> {
-    let cluster: ClusterEntity;
+  zones(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AlibabaZone[]> {
+    let cluster: Cluster;
     let region = '';
 
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterService.clusterChanges
-          .pipe(
-            filter(_ => this._clusterService.provider === NodeProvider.ALIBABA)
-          )
+          .pipe(filter(_ => this._clusterService.provider === NodeProvider.ALIBABA))
           .pipe(tap(c => (cluster = c)))
-          .pipe(
-            switchMap(_ =>
-              this._datacenterService.getDataCenter(cluster.spec.cloud.dc)
-            )
-          )
+          .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc)))
           .pipe(tap(dc => (region = dc.spec.alibaba.region)))
           .pipe(
             switchMap(_ =>

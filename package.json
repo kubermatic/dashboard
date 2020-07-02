@@ -7,12 +7,12 @@
   "license": "proprietary",
   "angular-cli": {},
   "scripts": {
-    "start": "npm run versioninfo && ng serve",
-    "start:prod": "npm run versioninfo && ng serve --prod",
-    "start:local": "npm run versioninfo && ng serve --configuration=local",
-    "start:e2e": "npm run versioninfo && ng serve --configuration=e2e",
-    "start:e2e-local": "npm run versioninfo && ng serve --configuration=e2e-local",
-    "build": "npm run versioninfo && ng build --prod",
+    "start": "npm run vi && ng serve",
+    "start:prod": "npm run vi && ng serve --prod",
+    "start:local": "npm run vi && ng serve --configuration=local",
+    "start:e2e": "npm run vi && ng serve --configuration=e2e",
+    "start:e2e-local": "npm run vi && ng serve --configuration=e2e-local",
+    "build": "npm run vi && ng build --prod",
     "build:themes": "npm run build && ./hack/extract-themes.sh",
     "test": "jest",
     "test:ci": "jest --coverage -i",
@@ -29,7 +29,7 @@
     "fix:scss": "stylelint \"src/**/*.scss\" --fix",
     "fix:html": "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f \"src/**/*.html\"",
     "clean": "gts clean",
-    "versioninfo": "node git-version.js",
+    "vi": "node version.js",
     "postinstall": "ngcc"
   },
   "dependencies": {
@@ -40,47 +40,52 @@
     "@angular/core": "9.1.4",
     "@angular/flex-layout": "9.0.0-beta.29",
     "@angular/forms": "9.1.4",
-    "@angular/localize": "9.1.9",
+    "@angular/localize": "9.1.11",
     "@angular/material": "9.2.2",
     "@angular/platform-browser": "9.1.4",
     "@angular/platform-browser-dynamic": "9.1.4",
     "@angular/router": "9.1.4",
     "core-js": "3.6.5",
-    "flag-icon-css": "3.4.6",
+    "country-code-lookup": "0.0.17",
+    "flag-icon-css": "3.5.0",
     "git-describe": "4.0.4",
     "jquery": "3.5.1",
+    "js-yaml": "3.14.0",
     "lodash": "4.17.15",
     "moment": "2.26.0",
     "ngx-clipboard": "13.0.1",
     "ngx-cookie-service": "3.0.4",
     "ngx-custom-validators": "9.1.0",
     "ngx-filter-pipe": "2.1.2",
+    "ngx-monaco-editor": "9.0.0",
     "rxjs": "6.5.5",
     "rxjs-compat": "6.5.5",
     "semver": "7.3.2",
-    "swagger-ui": "3.25.5",
+    "swagger-ui": "3.27.0",
     "tslib": "1.13.0",
     "zone.js": "0.10.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.901.7",
-    "@angular/cli": "9.1.7",
+    "@angular-devkit/build-angular": "0.901.10",
+    "@angular/cli": "9.1.8",
     "@angular/compiler-cli": "9.1.4",
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
-    "@types/jest": "25.2.3",
-    "@types/lodash": "4.14.153",
-    "@types/node": "14.0.5",
-    "cypress": "4.6.0",
+    "@types/jest": "26.0.3",
+    "@types/js-yaml": "^3.12.4",
+    "@types/lodash": "4.14.157",
+    "@types/node": "14.0.14",
+    "cypress": "4.8.0",
+    "eslint-plugin-rxjs": "0.0.2-beta.27",
     "gts": "2.0.2",
     "husky": "4.2.5",
     "jest": "25.5.4",
     "jest-preset-angular": "8.2.0",
     "js-beautify": "1.11.0",
     "license-compliance": "1.0.2",
-    "lint-staged": "10.2.7",
+    "lint-staged": "10.2.11",
     "ng2-mock-component": "0.2.0",
     "start-server-and-test": "1.11.0",
-    "stylelint": "13.5.0",
+    "stylelint": "13.6.0",
     "stylelint-config-standard": "19.0.0",
     "ts-jest": "25.5.1",
     "ts-node": "8.10.2",
@@ -91,30 +96,66 @@
     "node": ">=12.0.0"
   },
   "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": 2019,
+      "project": "./tsconfig.json",
+      "sourceType": "module"
+    },
     "extends": "./node_modules/gts/",
+    "plugins": [
+      "rxjs"
+    ],
     "rules": {
       "@typescript-eslint/no-namespace": "off",
       "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "node/no-unpublished-import": "off",
+      "node/no-extraneous-require": "error",
+      "node/no-unpublished-require": "error",
+      "rxjs/no-ignored-observable": "error",
+      "rxjs/no-nested-subscribe": "error",
+      "rxjs/no-unbound-methods": "error",
+      "rxjs/no-unsafe-takeuntil": "error",
+      "no-undef": "off",
+      "no-inner-declarations": "off",
+      "no-redeclare": "off",
       "eol-last": "error",
       "no-console": "error",
-      "no-inner-declarations": "warn",
-      "no-prototype-builtins": "warn",
-      "no-redeclare": "warn",
-      "no-undef": "warn",
-      "no-unused-vars": "warn",
-      "node/no-extraneous-require": "warn",
-      "node/no-unpublished-import": "warn",
-      "node/no-unpublished-require": "warn",
-      "prefer-rest-params": "warn"
+      "no-prototype-builtins": "error",
+      "no-extra-boolean-cast": "error",
+      "no-else-return": "error",
+      "prefer-rest-params": "error",
+      "complexity": ["error", 15]
     },
     "overrides": [
       {
-        "files": ["**/*.spec.ts"],
+        "files": [
+          "cypress/**/*.ts"
+        ],
+        "parser": "@typescript-eslint/parser",
+        "parserOptions": {
+          "ecmaVersion": 2019,
+          "project": "./cypress/tsconfig.e2e.json",
+          "sourceType": "module"
+        },
+        "env": {
+          "browser": true,
+          "jest": true
+        }
+      },
+      {
+        "files": [
+          "src/**/*.spec.ts"
+        ],
         "env": {
           "browser": true,
           "jest": true
         }
       }
+    ],
+    "ignorePatterns": [
+      "**/*.js"
     ]
   },
   "eslintIgnore": [
@@ -140,7 +181,6 @@
       "git add"
     ]
   },
-  "prettier": "gts/.prettierrc.json",
   "stylelint": {
     "extends": "stylelint-config-standard",
     "rules": {
@@ -149,9 +189,14 @@
       "no-descending-specificity": null,
       "number-leading-zero": null,
       "selector-type-no-unknown": null,
-      "selector-pseudo-element-no-unknown": [true, {
-        "ignorePseudoElements": ["ng-deep"]
-      }]
+      "selector-pseudo-element-no-unknown": [
+        true,
+        {
+          "ignorePseudoElements": [
+            "ng-deep"
+          ]
+        }
+      ]
     }
   }
 }

@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
-import {CloudSpec} from '../../shared/entity/ClusterEntity';
+import {CloudSpec} from '../../shared/entity/cluster';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
@@ -22,14 +22,8 @@ export class VSphereNodeDataComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      cpu: new FormControl(this.nodeData.spec.cloud.vsphere.cpus, [
-        Validators.required,
-        Validators.min(1),
-      ]),
-      memory: new FormControl(this.nodeData.spec.cloud.vsphere.memory, [
-        Validators.required,
-        Validators.min(512),
-      ]),
+      cpu: new FormControl(this.nodeData.spec.cloud.vsphere.cpus, [Validators.required, Validators.min(1)]),
+      memory: new FormControl(this.nodeData.spec.cloud.vsphere.memory, [Validators.required, Validators.min(512)]),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {

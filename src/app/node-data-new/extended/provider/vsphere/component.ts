@@ -3,15 +3,14 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {merge} from 'rxjs';
 import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../../../../core/services';
-import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/DatacenterEntity';
-import {VSphereNodeSpec} from '../../../../shared/entity/node/VSphereNodeSpec';
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
+import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/datacenter';
+import {NodeCloudSpec, NodeSpec, VSphereNodeSpec} from '../../../../shared/entity/node';
 import {OperatingSystem} from '../../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../wizard-new/service/cluster';
 import {NodeDataService} from '../../../service/service';
-import {ClusterType} from '../../../../shared/entity/ClusterEntity';
+import {ClusterType} from '../../../../shared/entity/cluster';
 
 enum Controls {
   DiskSizeGB = 'diskSizeGB',
@@ -34,17 +33,14 @@ enum Controls {
     },
   ],
 })
-export class VSphereExtendedNodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class VSphereExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private _defaultTemplate = '';
   private _templates: DatacenterOperatingSystemOptions;
 
   readonly Controls = Controls;
 
   get template(): string {
-    return this.form.get(Controls.Template).value
-      ? this.form.get(Controls.Template).value
-      : this._defaultTemplate;
+    return this.form.get(Controls.Template).value ? this.form.get(Controls.Template).value : this._defaultTemplate;
   }
 
   constructor(
@@ -65,7 +61,7 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator
     this._nodeDataService.nodeData = this._getNodeData();
 
     this._clusterService.datacenterChanges
-      .pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
       .pipe(tap(dc => (this._templates = dc.spec.vsphere.templates)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._setDefaultTemplate(OperatingSystem.Ubuntu));
@@ -84,10 +80,7 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultTemplate.bind(this));
 
-    merge(
-      this.form.get(Controls.DiskSizeGB).valueChanges,
-      this.form.get(Controls.Template).valueChanges
-    )
+    merge(this.form.get(Controls.DiskSizeGB).valueChanges, this.form.get(Controls.Template).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }

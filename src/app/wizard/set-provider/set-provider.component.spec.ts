@@ -1,11 +1,5 @@
 import {HttpClientModule} from '@angular/common/http';
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {BrowserModule} from '@angular/platform-browser';
@@ -13,19 +7,15 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DatacenterService, WizardService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
-import {fakeNodeDatacenters} from '../../testing/fake-data/datacenter.fake';
-import {asyncData} from '../../testing/services/api-mock.service';
 import {SetProviderComponent} from './set-provider.component';
-import {ClusterType} from '../../shared/entity/ClusterEntity';
+import {ClusterType} from '../../shared/entity/cluster';
+import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
 
 describe('SetProviderComponent', () => {
   let fixture: ComponentFixture<SetProviderComponent>;
   let component: SetProviderComponent;
 
   beforeEach(async(() => {
-    const dcMock = {getDataCenters: jest.fn()};
-    dcMock.getDataCenters.mockReturnValue(asyncData(fakeNodeDatacenters()));
-
     TestBed.configureTestingModule({
       imports: [
         BrowserModule,
@@ -36,10 +26,7 @@ describe('SetProviderComponent', () => {
         HttpClientModule,
       ],
       declarations: [SetProviderComponent],
-      providers: [
-        {provide: DatacenterService, useValue: dcMock},
-        WizardService,
-      ],
+      providers: [{provide: DatacenterService, useClass: DatacenterMockService}, WizardService],
     }).compileComponents();
   }));
 
@@ -60,9 +47,7 @@ describe('SetProviderComponent', () => {
     fixture.detectChanges();
     tick();
     expect(component.setProviderForm.controls.provider.valid).toBeTruthy();
-    expect(
-      component.setProviderForm.controls.provider.value === 'digitalocean'
-    ).toBeTruthy();
+    expect(component.setProviderForm.controls.provider.value === 'digitalocean').toBeTruthy();
   }));
 
   it('should be initially invalid', fakeAsync(() => {

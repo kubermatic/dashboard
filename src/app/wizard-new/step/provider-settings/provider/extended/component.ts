@@ -26,18 +26,14 @@ enum Controls {
     },
   ],
 })
-export class ProviderExtendedComponent extends BaseFormValidator
-  implements OnInit {
+export class ProviderExtendedComponent extends BaseFormValidator implements OnInit {
   @Input() provider: NodeProvider;
   @Input() visible = false;
 
   readonly Providers = NodeProvider;
   readonly Controls = Controls;
 
-  constructor(
-    private readonly _builder: FormBuilder,
-    private readonly _clusterService: ClusterService
-  ) {
+  constructor(private readonly _builder: FormBuilder, private readonly _clusterService: ClusterService) {
     super('Provider Extended');
   }
 
@@ -46,17 +42,11 @@ export class ProviderExtendedComponent extends BaseFormValidator
       [Controls.ProviderExtended]: this._builder.control(''),
     });
 
-    merge(
-      this._clusterService.providerChanges,
-      this._clusterService.datacenterChanges
-    )
+    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this.form.removeControl(Controls.ProviderExtended);
-        this.form.addControl(
-          Controls.ProviderExtended,
-          this._builder.control('')
-        );
+        this.form.addControl(Controls.ProviderExtended, this._builder.control(''));
       });
   }
 

@@ -1,22 +1,12 @@
 import {HttpClientModule} from '@angular/common/http';
 import {EventEmitter} from '@angular/core';
-import {
-  async,
-  ComponentFixture,
-  discardPeriodicTasks,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {WizardService} from '../../../../../core/services';
-import {
-  ClusterProviderSettingsForm,
-  ClusterSettingsFormView,
-} from '../../../../../shared/model/ClusterForm';
+import {ClusterProviderSettingsForm, ClusterSettingsFormView} from '../../../../../shared/model/ClusterForm';
 import {SharedModule} from '../../../../../shared/shared.module';
 import {fakeOpenstackCluster} from '../../../../../testing/fake-data/cluster.fake';
 import {
@@ -58,12 +48,8 @@ describe('OpenstackProviderOptionsComponent', () => {
     wizardMock.changeClusterProviderSettings.mockImplementation();
     wizardMock.onCustomPresetsDisable = new EventEmitter<boolean>();
     wizardMock.onCustomPresetSelect = new EventEmitter<string>();
-    wizardMock.clusterSettingsFormViewChanged$ = new EventEmitter<
-      ClusterSettingsFormView
-    >();
-    wizardMock.clusterProviderSettingsFormChanges$ = new EventEmitter<
-      ClusterProviderSettingsForm
-    >();
+    wizardMock.clusterSettingsFormViewChanged$ = new EventEmitter<ClusterSettingsFormView>();
+    wizardMock.clusterProviderSettingsFormChanges$ = new EventEmitter<ClusterProviderSettingsForm>();
 
     providerMock.username.mockReturnValue(providerMock);
     providerMock.password.mockReturnValue(providerMock);
@@ -76,21 +62,13 @@ describe('OpenstackProviderOptionsComponent', () => {
     providerMock.networks.mockReturnValue(asyncData(openstackNetworksFake()));
 
     securityGroupsMock = wizardMock.provider.mockReturnValue(providerMock);
-    providerMock.securityGroups.mockReturnValue(
-      asyncData(openstackSecurityGroupsFake())
-    );
+    providerMock.securityGroups.mockReturnValue(asyncData(openstackSecurityGroupsFake()));
 
     subnetIdsMock = wizardMock.provider.mockReturnValue(providerMock);
     providerMock.subnets.mockReturnValue(asyncData(openstackSubnetIdsFake()));
 
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        ReactiveFormsModule,
-        SharedModule,
-        HttpClientModule,
-      ],
+      imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
       declarations: [OpenstackProviderOptionsComponent],
       providers: [{provide: WizardService, useValue: wizardMock}],
     }).compileComponents();
@@ -171,9 +149,7 @@ describe('OpenstackProviderOptionsComponent', () => {
   it('should set correct optional settings placeholder', () => {
     component.cluster.spec.cloud.openstack.tenant = '';
     fixture.detectChanges();
-    expect(component.getOptionalSettingsFormState('Security Group')).toEqual(
-      'Security Group'
-    );
+    expect(component.getSecurityGroupFormState()).toEqual('Security Group');
 
     component.cluster.spec.cloud.openstack.username = 'username';
     component.cluster.spec.cloud.openstack.password = 'password';
@@ -182,22 +158,14 @@ describe('OpenstackProviderOptionsComponent', () => {
     component.securityGroups = [];
     component.networks = [];
     fixture.detectChanges();
-    expect(component.getOptionalSettingsFormState('Security Group')).toEqual(
-      'No Security Groups available'
-    );
-    expect(component.getOptionalSettingsFormState('Network')).toEqual(
-      'No Networks available'
-    );
+    expect(component.getSecurityGroupFormState()).toEqual('No Security Groups available');
+    expect(component.getNetworkFormState()).toEqual('No Networks available');
 
     component.securityGroups = openstackSecurityGroupsFake();
     component.networks = openstackSortedNetworksFake();
     fixture.detectChanges();
-    expect(component.getOptionalSettingsFormState('Security Group')).toEqual(
-      'Security Group'
-    );
-    expect(component.getOptionalSettingsFormState('Network')).toEqual(
-      'Network'
-    );
+    expect(component.getSecurityGroupFormState()).toEqual('Security Group');
+    expect(component.getNetworkFormState()).toEqual('Network');
   });
 
   it('should set correct subnet id placeholder', fakeAsync(() => {

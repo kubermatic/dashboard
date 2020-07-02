@@ -6,21 +6,14 @@ import {BehaviorSubject, merge, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
-import {MemberEntity, UserSettings} from '../../../shared/entity/MemberEntity';
-import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import {Member} from '../../../shared/entity/member';
+import {Project} from '../../../shared/entity/project';
+import {View} from '../../../shared/entity/common';
 import {GroupConfig} from '../../../shared/model/Config';
-import {
-  CustomLink,
-  CustomLinkLocation,
-  filterCustomLinks,
-} from '../../../shared/utils/custom-link-utils/custom-link';
-import {
-  MemberUtils,
-  Permission,
-} from '../../../shared/utils/member-utils/member-utils';
+import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {ProjectService, UserService} from '../../services';
-import {View} from '../../services/auth/auth.guard';
 import {SettingsService} from '../../services/settings/settings.service';
+import {CustomLink, CustomLinkLocation, filterCustomLinks, UserSettings} from '../../../shared/entity/settings';
 
 @Component({
   selector: 'km-sidenav',
@@ -31,9 +24,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
   environment: any = environment;
   customLinks: CustomLink[] = [];
   settings: UserSettings;
-  currentUser: MemberEntity;
+  currentUser: Member;
   screenWidth = 0;
-  private _selectedProject = {} as ProjectEntity;
+  private _selectedProject = {} as Project;
   private _currentGroupConfig: GroupConfig;
   private _isSidenavCollapsed = false;
   private _screenWidth = new BehaviorSubject<number>(window.innerWidth);
@@ -52,42 +45,27 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
     this._userService.loggedInUser.subscribe(user => (this.currentUser = user));
 
-    this._settingsService.adminSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        const filtered = filterCustomLinks(
-          settings.customLinks,
-          CustomLinkLocation.Default
-        );
-        if (!_.isEqual(this.customLinks, filtered)) {
-          this.customLinks = filtered;
-        }
-      });
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      const filtered = filterCustomLinks(settings.customLinks, CustomLinkLocation.Default);
+      if (!_.isEqual(this.customLinks, filtered)) {
+        this.customLinks = filtered;
+      }
+    });
 
-    this._settingsService.userSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        this._isSidenavCollapsed = settings.collapseSidenav;
-        this.settings = settings;
-      });
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this._isSidenavCollapsed = settings.collapseSidenav;
+      this.settings = settings;
+    });
 
-    merge(
-      this._projectService.selectedProject,
-      this._projectService.onProjectChange
-    )
+    merge(this._projectService.selectedProject, this._projectService.onProjectChange)
       .pipe(takeUntil(this._unsubscribe))
       .pipe(
-        switchMap((project: ProjectEntity) => {
+        switchMap((project: Project) => {
           this._selectedProject = project;
           return this._userService.currentUserGroup(project.id);
         })
       )
-      .subscribe(
-        userGroup =>
-          (this._currentGroupConfig = this._userService.userGroupConfig(
-            userGroup
-          ))
-      );
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
   }
 
   ngOnDestroy(): void {
@@ -113,8 +91,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     const urlArray = this._router.routerState.snapshot.url.split('/');
     return (
       !!urlArray.find(x => x === selectedProjectId) &&
-      (!!urlArray.find(x => x === url) ||
-        (url === 'clusters' && !!urlArray.find(x => x === 'wizard')))
+      (!!urlArray.find(x => x === url) || (url === View.Clusters && !!urlArray.find(x => x === View.Wizard)))
     );
   }
 
@@ -146,14 +123,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (
-      !MemberUtils.hasPermission(
-        this.currentUser,
-        this._currentGroupConfig,
-        viewName,
-        Permission.View
-      )
-    ) {
+    if (!MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, viewName, Permission.View)) {
       tooltip = 'Cannot enter this view.';
       if (this._selectedProject.status !== 'Active') {
         tooltip += ' Selected project is not active.';
@@ -175,12 +145,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   getMenuItemClass(viewName: string): string {
-    return MemberUtils.hasPermission(
-      this.currentUser,
-      this._currentGroupConfig,
-      viewName,
-      Permission.View
-    )
+    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, viewName, Permission.View)
       ? ''
       : 'km-disabled';
   }

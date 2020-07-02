@@ -3,13 +3,9 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {
-  ClusterService,
-  NotificationService,
-  WizardService,
-} from '../../../core/services';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {ClusterService, NotificationService, WizardService} from '../../../core/services';
+import {Cluster} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
 import {MachineNetworkForm} from '../../../shared/model/ClusterForm';
 
 @Component({
@@ -17,8 +13,8 @@ import {MachineNetworkForm} from '../../../shared/model/ClusterForm';
   templateUrl: './add-machine-network.component.html',
 })
 export class AddMachineNetworkComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  @Input() datacenter: DataCenterEntity;
+  @Input() cluster: Cluster;
+  @Input() datacenter: Datacenter;
   @Input() projectID: string;
   machineNetworkFormData: MachineNetworkForm[] = [];
   private _unsubscribe = new Subject<void>();
@@ -66,22 +62,19 @@ export class AddMachineNetworkComponent implements OnInit, OnDestroy {
           this.machineNetworkFormData[i].gateway === ''
         ) {
           return;
-        } else {
-          this.cluster.spec.machineNetworks.push({
-            cidr: this.machineNetworkFormData[i].cidr,
-            dnsServers: this.machineNetworkFormData[i].dnsServers,
-            gateway: this.machineNetworkFormData[i].gateway,
-          });
         }
+        this.cluster.spec.machineNetworks.push({
+          cidr: this.machineNetworkFormData[i].cidr,
+          dnsServers: this.machineNetworkFormData[i].dnsServers,
+          gateway: this.machineNetworkFormData[i].gateway,
+        });
       }
     }
-    this._clusterService
-      .cluster(this.projectID, this.cluster.id, this.datacenter.metadata.name)
-      .subscribe(res => {
-        this._notificationService.success(
-          `The machine network(s) for the <strong>${this.cluster.name}</strong> cluster were added`
-        );
-        this._dialogRef.close(res);
-      });
+    this._clusterService.cluster(this.projectID, this.cluster.id, this.datacenter.metadata.name).subscribe(res => {
+      this._notificationService.success(
+        `The machine network(s) for the <strong>${this.cluster.name}</strong> cluster were added`
+      );
+      this._dialogRef.close(res);
+    });
   }
 }

@@ -1,8 +1,7 @@
-import {MachineNetwork} from '../entity/ClusterEntity';
+import {MachineNetwork} from '../entity/cluster';
 
 export function getIpCount(networks: MachineNetwork[]): number {
-  const ip4ToInt = ip =>
-    ip.split('.').reduce((int, oct) => (int << 8) + parseInt(oct, 10), 0) >>> 0;
+  const ip4ToInt = ip => ip.split('.').reduce((int, oct) => (int << 8) + parseInt(oct, 10), 0) >>> 0;
 
   const isIp4InCidr = (ip, cidr) => {
     const [range, bits = 32] = cidr.split('/');
@@ -12,7 +11,7 @@ export function getIpCount(networks: MachineNetwork[]): number {
   let ipCount = 0;
 
   for (const i in networks) {
-    if (networks.hasOwnProperty(i)) {
+    if (Object.prototype.hasOwnProperty.call(networks, i)) {
       const isInCidr = isIp4InCidr(networks[i].gateway, networks[i].cidr);
       const cidr = +networks[i].cidr.split('/')[1];
       if (isInCidr) {

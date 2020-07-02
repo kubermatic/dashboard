@@ -5,16 +5,16 @@ import {first} from 'rxjs/operators';
 
 import {NotificationService} from '../../core/services';
 import {ApiService} from '../../core/services';
-import {ProjectEntity} from '../../shared/entity/ProjectEntity';
-import {ServiceAccountEntity} from '../../shared/entity/ServiceAccountEntity';
+import {Project} from '../../shared/entity/project';
+import {ServiceAccount} from '../../shared/entity/service-account';
 
 @Component({
   selector: 'km-edit-serviceaccount',
   templateUrl: './edit-serviceaccount.component.html',
 })
 export class EditServiceAccountComponent implements OnInit {
-  @Input() project: ProjectEntity;
-  @Input() serviceaccount: ServiceAccountEntity;
+  @Input() project: Project;
+  @Input() serviceaccount: ServiceAccount;
   editServiceAccountForm: FormGroup;
 
   constructor(
@@ -26,15 +26,12 @@ export class EditServiceAccountComponent implements OnInit {
   ngOnInit(): void {
     this.editServiceAccountForm = new FormGroup({
       name: new FormControl(this.serviceaccount.name, [Validators.required]),
-      group: new FormControl(
-        this.serviceaccount.group.replace(/(-[\w\d]+$)/, ''),
-        [Validators.required]
-      ),
+      group: new FormControl(this.serviceaccount.group.replace(/(-[\w\d]+$)/, ''), [Validators.required]),
     });
   }
 
   editServiceAccount(): void {
-    const editServiceAccount: ServiceAccountEntity = {
+    const editServiceAccount: ServiceAccount = {
       id: this.serviceaccount.id,
       name: this.editServiceAccountForm.controls.name.value,
       creationTimestamp: this.serviceaccount.creationTimestamp,

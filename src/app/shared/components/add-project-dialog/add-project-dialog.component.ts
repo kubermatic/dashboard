@@ -3,9 +3,9 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 
 import {ApiService, NotificationService} from '../../../core/services';
-import {ResourceType} from '../../entity/LabelsEntity';
 import {CreateProjectModel} from '../../model/CreateProjectModel';
 import {AsyncValidators} from '../../validators/async-label-form.validator';
+import {ResourceType} from '../../entity/common';
 
 @Component({
   selector: 'km-add-project-dialog',
@@ -15,9 +15,7 @@ import {AsyncValidators} from '../../validators/async-label-form.validator';
 export class AddProjectDialogComponent implements OnInit {
   form: FormGroup;
   labels: object;
-  asyncLabelValidators = [
-    AsyncValidators.RestrictedLabelKeyName(ResourceType.Project),
-  ];
+  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Project)];
 
   constructor(
     private readonly _apiService: ApiService,
@@ -39,9 +37,7 @@ export class AddProjectDialogComponent implements OnInit {
     };
     this._apiService.createProject(createProject).subscribe(res => {
       this._matDialogRef.close(res);
-      this._notificationService.success(
-        `The <strong>${createProject.name}</strong> project was added`
-      );
+      this._notificationService.success(`The <strong>${createProject.name}</strong> project was added`);
     });
   }
 }

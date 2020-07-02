@@ -1,19 +1,9 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import {
-  ApiService,
-  NotificationService,
-  ProjectService,
-} from '../../core/services';
+import {ApiService, NotificationService, ProjectService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {Group} from '../../shared/utils/member-utils/member-utils';
 import {fakeMember} from '../../testing/fake-data/member.fake';
@@ -33,9 +23,7 @@ describe('AddProjectComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = {createMembers: jest.fn()};
-    createMembersSpy = apiMock.createMembers.mockReturnValue(
-      asyncData(fakeMember())
-    );
+    createMembersSpy = apiMock.createMembers.mockReturnValue(asyncData(fakeMember()));
 
     TestBed.configureTestingModule({
       imports: [...modules],
@@ -66,22 +54,14 @@ describe('AddProjectComponent', () => {
   it('should have required fields', () => {
     expect(component.addMemberForm.valid).toBeFalsy();
     expect(component.addMemberForm.controls.email.valid).toBeFalsy();
-    expect(
-      component.addMemberForm.controls.email.hasError('required')
-    ).toBeTruthy();
+    expect(component.addMemberForm.controls.email.hasError('required')).toBeTruthy();
     expect(component.addMemberForm.controls.group.valid).toBeFalsy();
-    expect(
-      component.addMemberForm.controls.group.hasError('required')
-    ).toBeTruthy();
+    expect(component.addMemberForm.controls.group.hasError('required')).toBeTruthy();
 
     component.addMemberForm.controls.email.patchValue('john@doe.com');
-    expect(
-      component.addMemberForm.controls.email.hasError('required')
-    ).toBeFalsy();
+    expect(component.addMemberForm.controls.email.hasError('required')).toBeFalsy();
     component.addMemberForm.controls.group.patchValue(Group.Editor);
-    expect(
-      component.addMemberForm.controls.group.hasError('required')
-    ).toBeFalsy();
+    expect(component.addMemberForm.controls.group.hasError('required')).toBeFalsy();
   });
 
   it('should call addMember method', fakeAsync(() => {

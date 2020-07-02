@@ -1,9 +1,5 @@
-import {
-  AuditLoggingSettings,
-  CloudSpec,
-  ClusterType,
-} from '../entity/ClusterEntity';
-import {DataCenterEntity} from '../entity/DatacenterEntity';
+import {AuditLoggingSettings, CloudSpec, ClusterType} from '../entity/cluster';
+import {Datacenter} from '../entity/datacenter';
 import {NodeProvider} from './NodeProviderConstants';
 
 export class ClusterSpecForm {
@@ -14,6 +10,7 @@ export class ClusterSpecForm {
   imagePullSecret?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
+  admissionPlugins?: string[];
   auditLogging?: AuditLoggingSettings;
   valid: boolean;
 }
@@ -37,7 +34,7 @@ export class ClusterProviderForm {
 }
 
 export class ClusterDatacenterForm {
-  datacenter?: DataCenterEntity;
+  datacenter?: Datacenter;
   valid: boolean;
 }
 

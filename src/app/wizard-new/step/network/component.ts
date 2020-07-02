@@ -1,12 +1,6 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {
-  ControlValueAccessor,
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validator,
-} from '@angular/forms';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {ControlValueAccessor, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator} from '@angular/forms';
+import {Cluster} from '../../../shared/entity/cluster';
 import {ClusterService} from '../../service/cluster';
 import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
@@ -34,7 +28,7 @@ enum Controls {
 })
 export class MachineNetworkStepComponent extends StepBase
   implements OnInit, ControlValueAccessor, Validator, OnDestroy {
-  cluster: ClusterEntity;
+  cluster: Cluster;
 
   readonly controls = Controls;
 

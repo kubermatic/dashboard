@@ -7,7 +7,7 @@ import {Router} from '@angular/router';
 import {MockComponent} from 'ng2-mock-component';
 
 import {AppConfigService} from '../../../../app-config.service';
-import {ProjectEntity} from '../../../../shared/entity/ProjectEntity';
+import {Project} from '../../../../shared/entity/project';
 import {SharedModule} from '../../../../shared/shared.module';
 import {fakeProjects} from '../../../../testing/fake-data/project.fake';
 import {RouterTestingModule} from '../../../../testing/router-stubs';
@@ -21,14 +21,9 @@ import {NotificationPanelComponent} from '../../notification-panel/notification-
 import {NavigationComponent} from '../navigation.component';
 
 import {ProjectSelectorComponent} from './selector.component';
+import {UserPanelComponent} from '../../user-panel/user-panel.component';
 
-const modules: any[] = [
-  BrowserModule,
-  RouterTestingModule,
-  HttpClientModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, RouterTestingModule, HttpClientModule, BrowserAnimationsModule, SharedModule];
 
 describe('SidenavComponent', () => {
   let fixture: ComponentFixture<ProjectSelectorComponent>;
@@ -41,6 +36,7 @@ describe('SidenavComponent', () => {
         NavigationComponent,
         NotificationPanelComponent,
         ProjectSelectorComponent,
+        UserPanelComponent,
         MockComponent({
           selector: 'a',
           inputs: ['routerLink', 'routerLinkActiveOptions'],
@@ -75,8 +71,8 @@ describe('SidenavComponent', () => {
   }));
 
   it('should correctly compare projects basing on their IDs', () => {
-    const a: ProjectEntity = fakeProjects()[0];
-    const b: ProjectEntity = fakeProjects()[1];
+    const a: Project = fakeProjects()[0];
+    const b: Project = fakeProjects()[1];
     expect(component.areProjectsEqual(a, b)).toBeFalsy();
     expect(component.areProjectsEqual(b, a)).toBeFalsy();
 

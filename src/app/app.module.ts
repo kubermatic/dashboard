@@ -1,14 +1,8 @@
 import {APP_INITIALIZER, NgModule} from '@angular/core';
-import {
-  MAT_FORM_FIELD_DEFAULT_OPTIONS,
-  MatFormFieldDefaultOptions,
-} from '@angular/material/form-field';
+import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions} from '@angular/material/form-field';
 import {MAT_TOOLTIP_DEFAULT_OPTIONS} from '@angular/material/tooltip';
 import {BrowserModule} from '@angular/platform-browser';
-import {
-  BrowserAnimationsModule,
-  NoopAnimationsModule,
-} from '@angular/platform-browser/animations';
+import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 import {CookieService} from 'ngx-cookie-service';
 
@@ -18,7 +12,7 @@ import {environment} from '../environments/environment';
 import {AppConfigService} from './app-config.service';
 import {AppRoutingModule} from './app-routing.module';
 import {CoreModule} from './core/core.module';
-import {ProjectService, UserService} from './core/services';
+import {DatacenterService, ProjectService, UserService} from './core/services';
 import {HistoryService} from './core/services/history/history.service';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {GoogleAnalyticsService} from './google-analytics.service';
@@ -31,13 +25,16 @@ import {AddServiceAccountTokenComponent} from './serviceaccount/serviceaccount-t
 import {EditServiceAccountTokenComponent} from './serviceaccount/serviceaccount-token/edit-serviceaccount-token/edit-serviceaccount-token.component';
 import {TokenDialogComponent} from './serviceaccount/serviceaccount-token/token-dialog/token-dialog.component';
 import {SharedModule} from './shared/shared.module';
+import {MonacoEditorModule} from 'ngx-monaco-editor';
 
 const appInitializerFn = (
   appConfigService: AppConfigService,
-  historyService: HistoryService
+  historyService: HistoryService,
+  datacenterService: DatacenterService
 ): Function => {
   return () => {
     historyService.init();
+    datacenterService.init();
     return appConfigService
       .loadAppConfig()
       .then(() => appConfigService.loadUserGroupConfig())
@@ -55,6 +52,7 @@ const appearance: MatFormFieldDefaultOptions = {
     SharedModule,
     BrowserModule,
     environment.animations ? BrowserAnimationsModule : NoopAnimationsModule,
+    MonacoEditorModule.forRoot(),
     AppRoutingModule,
     RouterModule,
   ],
@@ -65,7 +63,7 @@ const appearance: MatFormFieldDefaultOptions = {
       provide: APP_INITIALIZER,
       useFactory: appInitializerFn,
       multi: true,
-      deps: [AppConfigService, HistoryService],
+      deps: [AppConfigService, HistoryService, DatacenterService],
     },
     {
       provide: MAT_TOOLTIP_DEFAULT_OPTIONS,

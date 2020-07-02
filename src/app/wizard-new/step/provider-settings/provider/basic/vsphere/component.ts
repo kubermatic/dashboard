@@ -1,19 +1,10 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge} from 'rxjs';
-import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 import {PresetsService} from '../../../../../../core/services';
-import {VSphereCloudSpec} from '../../../../../../shared/entity/cloud/VSphereCloudSpec';
-import {
-  CloudSpec,
-  ClusterEntity,
-  ClusterSpec,
-} from '../../../../../../shared/entity/ClusterEntity';
+import {CloudSpec, Cluster, ClusterSpec, VSphereCloudSpec} from '../../../../../../shared/entity/cluster';
+import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {isObjectEmpty} from '../../../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
@@ -42,8 +33,7 @@ export enum Controls {
     },
   ],
 })
-export class VSphereProviderBasicComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class VSphereProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
   constructor(
@@ -72,34 +62,21 @@ export class VSphereProviderBasicComponent extends BaseFormValidator
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.InfraManagementUsername]: this._builder.control(
-        '',
-        Validators.required
-      ),
-      [Controls.InfraManagementPassword]: this._builder.control(
-        '',
-        Validators.required
-      ),
+      [Controls.InfraManagementUsername]: this._builder.control('', Validators.required),
+      [Controls.InfraManagementPassword]: this._builder.control('', Validators.required),
       [Controls.Username]: this._builder.control(''),
       [Controls.Password]: this._builder.control(''),
       [Controls.UseCustomCloudCredentials]: this._builder.control(false),
     });
 
     this.form.valueChanges
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.VSPHERE))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ =>
-        this._presets.enablePresets(
-          isObjectEmpty(this._clusterService.cluster.spec.cloud.vsphere)
-        )
-      );
+      .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterService.cluster.spec.cloud.vsphere)));
 
     this._presets.presetChanges
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset =>
-        Object.values(Controls).forEach(control =>
-          this._enable(!preset, control)
-        )
-      );
+      .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
     this.form
       .get(Controls.UseCustomCloudCredentials)
@@ -115,14 +92,9 @@ export class VSphereProviderBasicComponent extends BaseFormValidator
     )
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        _ => (this._clusterService.cluster = this._getClusterEntity())
-      );
+      .subscribe(_ => (this._clusterService.cluster = this._getCluster()));
 
-    merge(
-      this._clusterService.providerChanges,
-      this._clusterService.datacenterChanges
-    )
+    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
   }
@@ -155,7 +127,7 @@ export class VSphereProviderBasicComponent extends BaseFormValidator
     }
   }
 
-  private _getClusterEntity(): ClusterEntity {
+  private _getCluster(): Cluster {
     return {
       spec: {
         cloud: {
@@ -169,6 +141,6 @@ export class VSphereProviderBasicComponent extends BaseFormValidator
           } as VSphereCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
-    } as ClusterEntity;
+    } as Cluster;
   }
 }

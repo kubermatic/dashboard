@@ -3,10 +3,10 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../core/services';
-import {ClusterEntity} from '../../shared/entity/ClusterEntity';
+import {Cluster} from '../../shared/entity/cluster';
 import {MachineNetworkForm} from '../../shared/model/ClusterForm';
 import {NodeData} from '../../shared/model/NodeSpecChange';
-import {NodeUtils} from '../../shared/utils/node-utils/node-utils';
+import {getOperatingSystem} from '../../shared/entity/node';
 
 @Component({
   selector: 'km-set-machine-networks',
@@ -14,7 +14,7 @@ import {NodeUtils} from '../../shared/utils/node-utils/node-utils';
   styleUrls: ['set-machine-networks.component.scss'],
 })
 export class SetMachineNetworksComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
   @Input() nodeData: NodeData;
   setMachineNetworkForm: FormGroup;
   machineNetworkFormData: MachineNetworkForm[] = [];
@@ -27,10 +27,7 @@ export class SetMachineNetworksComponent implements OnInit, OnDestroy {
       checkMachineNetworks: new FormControl(false),
     });
 
-    if (
-      !!this.cluster.spec.machineNetworks &&
-      this.cluster.spec.machineNetworks.length > 0
-    ) {
+    if (!!this.cluster.spec.machineNetworks && this.cluster.spec.machineNetworks.length > 0) {
       this.setMachineNetworkForm.controls.checkMachineNetworks.setValue(true);
     }
 
@@ -59,7 +56,7 @@ export class SetMachineNetworksComponent implements OnInit, OnDestroy {
   }
 
   getOperatingSystem(): string {
-    return NodeUtils.getOperatingSystem(this.nodeData.spec);
+    return getOperatingSystem(this.nodeData.spec);
   }
 
   setMachineNetworks(): void {
@@ -79,8 +76,7 @@ export class SetMachineNetworksComponent implements OnInit, OnDestroy {
     }
 
     this.wizardService.changeSetMachineNetworks({
-      setMachineNetworks: this.setMachineNetworkForm.controls
-        .checkMachineNetworks.value,
+      setMachineNetworks: this.setMachineNetworkForm.controls.checkMachineNetworks.value,
       machineNetworks: this.machineNetworkFormData,
       valid: isValid,
     });

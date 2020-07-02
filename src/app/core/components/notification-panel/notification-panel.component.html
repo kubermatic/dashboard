@@ -1,4 +1,4 @@
-<div class="km-notification-panel">
+<div class="km-panel">
   <button mat-icon-button
           class="root-button"
           fxLayoutAlign="center center"
@@ -47,7 +47,8 @@
              [ngClass]="getNotificationIconClass(notification.type)"></i>
           <div fxLayout="column"
                fxFlex>
-            <span class="notification-message km-text">{{notification.message}}</span>
+            <span class="notification-message km-text"
+                  [innerHTML]="notification.message"></span>
             <div class="notification-info"
                  fxLayoutAlign=" center">
               <i class="km-icon-mask km-icon-copy-small"

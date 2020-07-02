@@ -1,29 +1,23 @@
 import {Injectable} from '@angular/core';
 import {find} from 'lodash';
 import {Observable, of} from 'rxjs';
-import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
-import {
-  fakeBringyourownSeedDatacenter,
-  fakeNodeDatacenters,
-} from '../fake-data/datacenter.fake';
+import {Datacenter} from '../../shared/entity/datacenter';
+import {fakeBringyourownSeedDatacenter, fakeNodeDatacenters} from '../fake-data/datacenter.fake';
 
 @Injectable()
 export class DatacenterMockService {
-  private datacenters: DataCenterEntity[] = fakeNodeDatacenters();
-  private seedDatacenters: DataCenterEntity[] = [
-    fakeBringyourownSeedDatacenter(),
-  ];
+  private seedDatacenters: Datacenter[] = [fakeBringyourownSeedDatacenter()];
 
-  getDataCenters(cluster: string): Observable<DataCenterEntity[]> {
-    return of(this.datacenters);
+  get datacenters(): Observable<Datacenter[]> {
+    return of(fakeNodeDatacenters());
   }
 
-  getDataCenter(dcName: string): Observable<DataCenterEntity> {
-    const dc = find(this.datacenters, ['metadata.name', dcName]);
+  getDatacenter(dcName: string): Observable<Datacenter> {
+    const dc = find(fakeNodeDatacenters(), ['metadata.name', dcName]);
     return of(dc);
   }
 
-  getSeedDataCenters(): Observable<DataCenterEntity[]> {
+  getSeedDataCenters(): Observable<Datacenter[]> {
     return of(this.seedDatacenters);
   }
 }

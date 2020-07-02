@@ -1,8 +1,8 @@
-import {PacketSize} from '../../shared/entity/packet/PacketSizeEntity';
-import {AzureSizes} from '../../shared/entity/provider/azure/AzureSizeEntity';
-import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
-import {HetznerTypes} from '../../shared/entity/provider/hetzner/TypeEntity';
-import {OpenstackFlavor} from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {OpenstackFlavor, OpenstackAvailabilityZone} from '../../shared/entity/provider/openstack';
+import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean';
+import {AzureSizes} from '../../shared/entity/provider/azure';
+import {HetznerTypes} from '../../shared/entity/provider/hetzner';
+import {PacketSize} from '../../shared/entity/provider/packet';
 
 export function fakeDigitaloceanSizes(): DigitaloceanSizes {
   return {
@@ -37,6 +37,17 @@ export function fakeOpenstackFlavors(): OpenstackFlavor[] {
   ];
 }
 
+export function fakeOpenstackAvailabilityZones(): OpenstackAvailabilityZone[] {
+  return [
+    {
+      name: 'zone_1',
+    },
+    {
+      name: 'zone_2',
+    },
+  ];
+}
+
 export function fakeAzureSizes(): AzureSizes[] {
   return [
     {
@@ -52,9 +63,7 @@ export function fakeAzureSizes(): AzureSizes[] {
 
 export function fakeHetznerTypes(): HetznerTypes {
   return {
-    standard: [
-      {id: 1, name: 'cx11', description: 'CX11', cores: 1, memory: 2, disk: 20},
-    ],
+    standard: [{id: 1, name: 'cx11', description: 'CX11', cores: 1, memory: 2, disk: 20}],
     dedicated: [],
   };
 }

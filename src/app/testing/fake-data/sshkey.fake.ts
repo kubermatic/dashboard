@@ -1,6 +1,6 @@
-import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
+import {SSHKey} from '../../shared/entity/ssh-key';
 
-export function fakeSSHKeys(): SSHKeyEntity[] {
+export function fakeSSHKeys(): SSHKey[] {
   return [
     {
       id: '12121',

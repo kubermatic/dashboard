@@ -1,23 +1,17 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge} from 'rxjs';
-import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
 import {
   AVAILABLE_PACKET_BILLING_CYCLES,
-  PacketCloudSpec,
-} from '../../../../../../shared/entity/cloud/PacketCloudSpec';
-import {
   CloudSpec,
-  ClusterEntity,
+  Cluster,
   ClusterSpec,
-} from '../../../../../../shared/entity/ClusterEntity';
+  PacketCloudSpec,
+} from '../../../../../../shared/entity/cluster';
+import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
 
@@ -43,8 +37,7 @@ export enum Controls {
     },
   ],
 })
-export class PacketProviderBasicComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class PacketProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
   constructor(
@@ -57,37 +50,24 @@ export class PacketProviderBasicComponent extends BaseFormValidator
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.APIKey]: this._builder.control('', [
+      [Controls.APIKey]: this._builder.control('', [Validators.required, Validators.maxLength(256)]),
+      [Controls.ProjectID]: this._builder.control('', [Validators.required, Validators.maxLength(256)]),
+      [Controls.BillingCycle]: this._builder.control(this.getAvailableBillingCycles()[0], [
         Validators.required,
-        Validators.maxLength(256),
+        Validators.maxLength(64),
       ]),
-      [Controls.ProjectID]: this._builder.control('', [
-        Validators.required,
-        Validators.maxLength(256),
-      ]),
-      [Controls.BillingCycle]: this._builder.control(
-        this.getAvailableBillingCycles()[0],
-        [Validators.required, Validators.maxLength(64)]
-      ),
     });
 
     this.form.valueChanges
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.PACKET))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
-        this._presets.enablePresets(
-          Object.values(Controls).every(
-            control => !this.form.get(control).value
-          )
-        )
+        this._presets.enablePresets(Object.values(Controls).every(control => !this.form.get(control).value))
       );
 
     this._presets.presetChanges
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset =>
-        Object.values(Controls).forEach(control =>
-          this._enable(!preset, control)
-        )
-      );
+      .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
     merge(
       this.form.get(Controls.APIKey).valueChanges,
@@ -96,14 +76,9 @@ export class PacketProviderBasicComponent extends BaseFormValidator
     )
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        _ => (this._clusterService.cluster = this._getClusterEntity())
-      );
+      .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
 
-    merge(
-      this._clusterService.providerChanges,
-      this._clusterService.datacenterChanges
-    )
+    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
   }
@@ -127,7 +102,7 @@ export class PacketProviderBasicComponent extends BaseFormValidator
     }
   }
 
-  private _getClusterEntity(): ClusterEntity {
+  private _getClusterEntity(): Cluster {
     return {
       spec: {
         cloud: {
@@ -138,6 +113,6 @@ export class PacketProviderBasicComponent extends BaseFormValidator
           } as PacketCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
-    } as ClusterEntity;
+    } as Cluster;
   }
 }

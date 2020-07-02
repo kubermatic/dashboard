@@ -1,9 +1,6 @@
-import {
-  ServiceAccountEntity,
-  ServiceAccountTokenEntity,
-} from '../../shared/entity/ServiceAccountEntity';
+import {ServiceAccount, ServiceAccountToken} from '../../shared/entity/service-account';
 
-export function fakeServiceAccounts(): ServiceAccountEntity[] {
+export function fakeServiceAccounts(): ServiceAccount[] {
   return [
     {
       creationTimestamp: new Date(),
@@ -22,7 +19,7 @@ export function fakeServiceAccounts(): ServiceAccountEntity[] {
   ];
 }
 
-export function fakeServiceAccount(): ServiceAccountEntity {
+export function fakeServiceAccount(): ServiceAccount {
   return {
     creationTimestamp: new Date(),
     id: '987zy6xv5u',
@@ -32,7 +29,7 @@ export function fakeServiceAccount(): ServiceAccountEntity {
   };
 }
 
-export function fakeServiceAccountTokens(): ServiceAccountTokenEntity[] {
+export function fakeServiceAccountTokens(): ServiceAccountToken[] {
   return [
     {
       creationTimestamp: new Date(),
@@ -51,7 +48,7 @@ export function fakeServiceAccountTokens(): ServiceAccountTokenEntity[] {
   ];
 }
 
-export function fakeServiceAccountToken(): ServiceAccountTokenEntity {
+export function fakeServiceAccountToken(): ServiceAccountToken {
   return {
     creationTimestamp: new Date(),
     expiry: new Date(),

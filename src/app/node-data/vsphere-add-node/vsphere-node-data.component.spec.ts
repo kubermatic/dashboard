@@ -9,12 +9,7 @@ import {fakeVSphereCluster} from '../../testing/fake-data/cluster.fake';
 import {nodeDataFake} from '../../testing/fake-data/node.fake';
 import {VSphereNodeDataComponent} from './vsphere-node-data.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  ReactiveFormsModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, ReactiveFormsModule];
 
 describe('VSphereNodeDataComponent', () => {
   let fixture: ComponentFixture<VSphereNodeDataComponent>;

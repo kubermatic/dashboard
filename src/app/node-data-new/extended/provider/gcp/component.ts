@@ -24,17 +24,13 @@ enum Controls {
     },
   ],
 })
-export class GCPExtendedNodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class GCPExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   labels: object;
   tags: string[];
 
   readonly Controls = Controls;
 
-  constructor(
-    private readonly _builder: FormBuilder,
-    private readonly _nodeDataService: NodeDataService
-  ) {
+  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
     super();
   }
 

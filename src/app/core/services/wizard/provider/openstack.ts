@@ -1,19 +1,21 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
+import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+import {Provider} from './provider';
 import {
+  OpenstackAvailabilityZone,
   OpenstackFlavor,
   OpenstackNetwork,
   OpenstackSecurityGroup,
   OpenstackSubnet,
   OpenstackTenant,
-} from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
-import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
-import {Provider} from './provider';
+} from '../../../../shared/entity/provider/openstack';
 
 export class Openstack extends Provider {
   private readonly _tenantsUrl = `${this._restRoot}/providers/openstack/tenants`;
   private readonly _securityGroupsUrl = `${this._restRoot}/providers/openstack/securitygroups`;
   private readonly _networksUrl = `${this._restRoot}/providers/openstack/networks`;
+  private readonly _availabilityZonesUrl = `${this._restRoot}/providers/openstack/availabilityzones`;
 
   constructor(http: HttpClient, provider: NodeProvider) {
     super(http, provider);
@@ -55,10 +57,7 @@ export class Openstack extends Provider {
 
   datacenter(datacenter: string): Openstack {
     if (datacenter) {
-      this._headers = this._headers.set(
-        Openstack.Header.Datacenter,
-        datacenter
-      );
+      this._headers = this._headers.set(Openstack.Header.Datacenter, datacenter);
     }
     return this;
   }
@@ -72,10 +71,7 @@ export class Openstack extends Provider {
 
   tenantID(tenantID: string): Openstack {
     if (tenantID) {
-      this._changeRequiredHeader(
-        Openstack.Header.Tenant,
-        Openstack.Header.TenantID
-      );
+      this._changeRequiredHeader(Openstack.Header.Tenant, Openstack.Header.TenantID);
       this._headers = this._headers.set(Openstack.Header.TenantID, tenantID);
     }
     return this;
@@ -115,9 +111,7 @@ export class Openstack extends Provider {
     });
   }
 
-  securityGroups(
-    onLoadingCb: () => void = null
-  ): Observable<OpenstackSecurityGroup[]> {
+  securityGroups(onLoadingCb: () => void = null): Observable<OpenstackSecurityGroup[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -145,10 +139,7 @@ export class Openstack extends Provider {
     });
   }
 
-  subnets(
-    network: string,
-    onLoadingCb: () => void = null
-  ): Observable<OpenstackSubnet[]> {
+  subnets(network: string, onLoadingCb: () => void = null): Observable<OpenstackSubnet[]> {
     if (!this._hasRequiredHeaders() || !network) {
       return EMPTY;
     }
@@ -159,6 +150,20 @@ export class Openstack extends Provider {
 
     const url = `${this._restRoot}/providers/openstack/subnets?network_id=${network}`;
     return this._http.get<OpenstackSubnet[]>(url, {headers: this._headers});
+  }
+
+  availabilityZones(onLoadingCb: () => void = null): Observable<OpenstackAvailabilityZone[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    return this._http.get<OpenstackAvailabilityZone[]>(this._availabilityZonesUrl, {
+      headers: this._headers,
+    });
   }
 }
 

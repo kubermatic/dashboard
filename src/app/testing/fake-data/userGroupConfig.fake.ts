@@ -15,7 +15,7 @@ export function fakeUserGroupConfig(): UserGroupConfig {
         delete: false,
         create: false,
       },
-      sshKeys: {
+      sshkeys: {
         view: true,
         edit: true,
         create: true,
@@ -71,7 +71,7 @@ export function fakeUserGroupConfig(): UserGroupConfig {
         delete: false,
         create: false,
       },
-      sshKeys: {
+      sshkeys: {
         view: true,
         edit: true,
         create: true,
@@ -127,7 +127,7 @@ export function fakeUserGroupConfig(): UserGroupConfig {
         delete: false,
         create: false,
       },
-      sshKeys: {
+      sshkeys: {
         view: true,
         edit: false,
         create: false,

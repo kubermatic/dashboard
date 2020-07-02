@@ -1,29 +1,19 @@
-import {
-  Component,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
-import {first, switchMap, switchMapTo, takeUntil} from 'rxjs/operators';
+import {filter, first, switchMap, switchMapTo, takeUntil} from 'rxjs/operators';
+import * as _ from 'lodash';
 
 import {AppConfigService} from '../app-config.service';
-import {
-  ApiService,
-  NotificationService,
-  ProjectService,
-  UserService,
-} from '../core/services';
+import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {ProjectEntity} from '../shared/entity/ProjectEntity';
-import {ServiceAccountEntity} from '../shared/entity/ServiceAccountEntity';
+import {Project} from '../shared/entity/project';
+import {ServiceAccount} from '../shared/entity/service-account';
 import {GroupConfig} from '../shared/model/Config';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
@@ -38,25 +28,18 @@ import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceacc
 })
 export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   isInitializing = true;
-  serviceAccounts: ServiceAccountEntity[] = [];
+  serviceAccounts: ServiceAccount[] = [];
   isShowToken = [];
   tokenList = [];
   isTokenInitializing = [];
-  displayedColumns: string[] = [
-    'stateArrow',
-    'status',
-    'name',
-    'group',
-    'creationDate',
-    'actions',
-  ];
+  displayedColumns: string[] = ['stateArrow', 'status', 'name', 'group', 'creationDate', 'actions'];
   toggledColumns: string[] = ['token'];
-  dataSource = new MatTableDataSource<ServiceAccountEntity>();
+  dataSource = new MatTableDataSource<ServiceAccount>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private _unsubscribe: Subject<any> = new Subject();
   private _serviceAccountUpdate: Subject<any> = new Subject();
-  private _selectedProject = {} as ProjectEntity;
+  private _selectedProject = {} as Project;
   private _currentGroupConfig: GroupConfig;
 
   constructor(
@@ -77,17 +60,12 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._settingsService.userSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        this.paginator.pageSize = settings.itemsPerPage;
-        this.dataSource.paginator = this.paginator; // Force refresh.
-      });
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = this.paginator; // Force refresh.
+    });
 
-    merge(
-      this._serviceAccountUpdate,
-      this._projectService.selectedProject.pipe(first())
-    )
+    merge(this._serviceAccountUpdate, this._projectService.selectedProject.pipe(first()))
       .pipe(switchMapTo(this._projectService.selectedProject))
       .pipe(
         switchMap(project => {
@@ -97,9 +75,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       )
       .pipe(
         switchMap(userGroup => {
-          this._currentGroupConfig = this._userService.userGroupConfig(
-            userGroup
-          );
+          this._currentGroupConfig = this._userService.userGroupConfig(userGroup);
           return this._apiService.getServiceAccounts(this._selectedProject.id);
         })
       )
@@ -129,13 +105,10 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isEnabled(action: string): boolean {
-    return (
-      !this._currentGroupConfig ||
-      this._currentGroupConfig.serviceaccounts[action]
-    );
+    return !this._currentGroupConfig || this._currentGroupConfig.serviceaccounts[action];
   }
 
-  toggleToken(element: ServiceAccountEntity): void {
+  toggleToken(element: ServiceAccount): void {
     this.isShowToken[element.id] = !this.isShowToken[element.id];
     if (this.isShowToken) {
       this.getTokenList(element);
@@ -143,17 +116,14 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  getTokenList(serviceaccount: ServiceAccountEntity): void {
+  getTokenList(serviceaccount: ServiceAccount): void {
     this.tokenList[serviceaccount.id] = [];
     timer(0, 10 * this._appConfig.getRefreshTimeBase())
       .pipe(takeUntil(this._unsubscribe))
       .pipe(
         switchMap(() =>
           this.tokenList[serviceaccount.id]
-            ? this._apiService.getServiceAccountTokens(
-                this._selectedProject.id,
-                serviceaccount
-              )
+            ? this._apiService.getServiceAccountTokens(this._selectedProject.id, serviceaccount)
             : EMPTY
         )
       )
@@ -177,7 +147,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  editServiceAccount(serviceAccount: ServiceAccountEntity, event: Event): void {
+  editServiceAccount(serviceAccount: ServiceAccount, event: Event): void {
     event.stopPropagation();
     const modal = this._matDialog.open(EditServiceAccountComponent);
     modal.componentInstance.project = this._selectedProject;
@@ -192,10 +162,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  deleteServiceAccount(
-    serviceAccount: ServiceAccountEntity,
-    event: Event
-  ): void {
+  deleteServiceAccount(serviceAccount: ServiceAccount, event: Event): void {
     event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
@@ -207,47 +174,25 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       },
     };
 
-    const dialogRef = this._matDialog.open(
-      ConfirmationDialogComponent,
-      dialogConfig
-    );
-    this._googleAnalyticsService.emitEvent(
-      'serviceAccountOverview',
-      'deleteServiceAccountOpened'
-    );
+    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
+    this._googleAnalyticsService.emitEvent('serviceAccountOverview', 'deleteServiceAccountOpened');
 
     dialogRef
       .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(switchMap(_ => this._apiService.deleteServiceAccount(this._selectedProject.id, serviceAccount)))
       .pipe(first())
-      .subscribe((isConfirmed: boolean) => {
-        if (isConfirmed) {
-          this._apiService
-            .deleteServiceAccount(this._selectedProject.id, serviceAccount)
-            .pipe(first())
-            .subscribe(() => {
-              delete this.tokenList[serviceAccount.id];
-              this._serviceAccountUpdate.next();
-              this._notificationService.success(
-                `The <strong>${serviceAccount.name}</strong> service account was removed from the <strong>${this._selectedProject.name}</strong> project`
-              );
-              this._googleAnalyticsService.emitEvent(
-                'serviceAccountOverview',
-                'ServiceAccountDeleted'
-              );
-            });
-        }
+      .subscribe(() => {
+        delete this.tokenList[serviceAccount.id];
+        this._serviceAccountUpdate.next();
+        this._notificationService.success(
+          `The <strong>${serviceAccount.name}</strong> service account was removed from the <strong>${this._selectedProject.name}</strong> project`
+        );
+        this._googleAnalyticsService.emitEvent('serviceAccountOverview', 'ServiceAccountDeleted');
       });
   }
 
-  hasItems(): boolean {
-    return this.serviceAccounts && this.serviceAccounts.length > 0;
-  }
-
   isPaginatorVisible(): boolean {
-    return (
-      this.hasItems() &&
-      this.paginator &&
-      this.serviceAccounts.length > this.paginator.pageSize
-    );
+    return !_.isEmpty(this.serviceAccounts) && this.paginator && this.serviceAccounts.length > this.paginator.pageSize;
   }
 }

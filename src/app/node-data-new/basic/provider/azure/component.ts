@@ -7,25 +7,16 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import {
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {filter, switchMap, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
-import {
-  AzureSizes,
-  AzureZones,
-} from '../../../../shared/entity/provider/azure/AzureSizeEntity';
-import {AzureNodeSpec} from '../../../../shared/entity/node/AzureNodeSpec';
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
+import {AzureNodeSpec, NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
+import {AzureSizes, AzureZones} from '../../../../shared/entity/provider/azure';
 
 enum Controls {
   Size = 'size',
@@ -62,8 +53,7 @@ enum ZoneState {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AzureBasicNodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class AzureBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private _sizeChanges = new EventEmitter<boolean>();
   readonly Controls = Controls;
   sizes: AzureSizes[] = [];
@@ -90,13 +80,9 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this._presets.presetChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._clearSize.bind(this));
+    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(this._clearSize.bind(this));
 
-    this._sizesObservable
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._setDefaultSize.bind(this));
+    this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
 
     this._sizeChanges
       .pipe(filter(hasValue => hasValue))
@@ -127,24 +113,16 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator
   getHint(control: Controls): string {
     switch (control) {
       case Controls.Zone:
-        return this._nodeDataService.nodeData.spec.cloud.azure.size !== ''
-          ? ''
-          : 'Please enter your Node Size first.';
+        return this._nodeDataService.nodeData.spec.cloud.azure.size !== '' ? '' : 'Please enter your Node Size first.';
     }
   }
 
   private get _sizesObservable(): Observable<AzureSizes[]> {
-    return this._nodeDataService.azure.flavors(
-      this._clearSize.bind(this),
-      this._onSizeLoading.bind(this)
-    );
+    return this._nodeDataService.azure.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
   }
 
   private get _zonesObservable(): Observable<AzureZones> {
-    return this._nodeDataService.azure.zones(
-      this._clearZone.bind(this),
-      this._onZoneLoading.bind(this)
-    );
+    return this._nodeDataService.azure.zones(this._clearZone.bind(this), this._onZoneLoading.bind(this));
   }
 
   private _onSizeLoading(): void {
@@ -186,9 +164,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator
   }
 
   private _setZones(zones: AzureZones): void {
-    this.zones = zones.zones
-      .sort((a, b) => a.localeCompare(b))
-      .map(zone => ({name: zone}));
+    this.zones = zones.zones.sort((a, b) => a.localeCompare(b)).map(zone => ({name: zone}));
     this.zoneLabel = this.zones.length > 0 ? ZoneState.Ready : ZoneState.Empty;
     this._cdr.detectChanges();
   }

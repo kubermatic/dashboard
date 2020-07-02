@@ -1,4 +1,4 @@
-import {MemberEntity} from '../../entity/MemberEntity';
+import {Member} from '../../entity/member';
 import {GroupConfig} from '../../model/Config';
 
 export enum Permission {
@@ -15,10 +15,8 @@ export enum Group {
 }
 
 export class MemberUtils {
-  static getGroupInProject(member: MemberEntity, projectID: string): string {
-    const project = member.projects.find(
-      memberProject => memberProject.id === projectID
-    );
+  static getGroupInProject(member: Member, projectID: string): string {
+    const project = member.projects.find(memberProject => memberProject.id === projectID);
     return project ? project.group : '';
   }
 
@@ -35,12 +33,7 @@ export class MemberUtils {
     }
   }
 
-  static hasPermission(
-    member: MemberEntity,
-    groupConfig: GroupConfig,
-    viewName: string,
-    permission: Permission
-  ): boolean {
+  static hasPermission(member: Member, groupConfig: GroupConfig, viewName: string, permission: Permission): boolean {
     // Deny access if the user is invalid.
     if (!member) {
       return false;

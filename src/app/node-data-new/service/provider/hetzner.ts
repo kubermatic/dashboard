@@ -2,11 +2,11 @@ import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, switchMap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../core/services';
-import {HetznerTypes} from '../../../shared/entity/provider/hetzner/TypeEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../wizard-new/service/cluster';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
+import {HetznerTypes} from '../../../shared/entity/provider/hetzner';
 
 export class NodeDataHetznerProvider {
   constructor(
@@ -15,17 +15,12 @@ export class NodeDataHetznerProvider {
     private readonly _presetService: PresetsService
   ) {}
 
-  flavors(
-    onError: () => void = undefined,
-    onLoadingCb: () => void = null
-  ): Observable<HetznerTypes> {
+  flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<HetznerTypes> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterService.clusterChanges
-          .pipe(
-            filter(_ => this._clusterService.provider === NodeProvider.HETZNER)
-          )
+          .pipe(filter(_ => this._clusterService.provider === NodeProvider.HETZNER))
           .pipe(
             switchMap(cluster =>
               this._presetService
@@ -39,9 +34,7 @@ export class NodeDataHetznerProvider {
                       onError();
                     }
 
-                    return onErrorResumeNext(
-                      of(HetznerTypes.newHetznerTypes())
-                    );
+                    return onErrorResumeNext(of(HetznerTypes.newHetznerTypes()));
                   })
                 )
             )

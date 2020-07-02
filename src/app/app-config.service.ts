@@ -5,7 +5,7 @@ import {tap} from 'rxjs/operators';
 import {environment} from '../environments/environment';
 
 import {NotificationService} from './core/services/notification/notification.service';
-import {VersionInfo} from './shared/entity/VersionInfo';
+import {VersionInfo} from './shared/entity/version-info';
 import {Config, UserGroupConfig} from './shared/model/Config';
 
 @Injectable()
@@ -30,9 +30,7 @@ export class AppConfigService {
             this._appConfig = resp as Config;
           },
           () => {
-            this._notificationService.error(
-              'Could not read configuration file'
-            );
+            this._notificationService.error('Could not read configuration file');
           }
         )
       )
@@ -52,9 +50,7 @@ export class AppConfigService {
             this._userGroupConfig = resp as UserGroupConfig;
           },
           () => {
-            this._notificationService.error(
-              'Could not read user group configuration file'
-            );
+            this._notificationService.error('Could not read user group configuration file');
           }
         )
       )

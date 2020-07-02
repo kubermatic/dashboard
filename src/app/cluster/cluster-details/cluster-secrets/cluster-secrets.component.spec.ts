@@ -5,18 +5,10 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 
 import {AppConfigService} from '../../../app-config.service';
-import {
-  ClusterService,
-  ProjectService,
-  UserService,
-} from '../../../core/services';
-import {HealthState} from '../../../shared/entity/HealthEntity';
+import {ClusterService, ProjectService, UserService} from '../../../core/services';
+import {HealthState} from '../../../shared/entity/health';
 import {SharedModule} from '../../../shared/shared.module';
-import {
-  fakeHealth,
-  fakeHealthFailed,
-  fakeHealthProvisioning,
-} from '../../../testing/fake-data/health.fake';
+import {fakeHealth, fakeHealthFailed, fakeHealthProvisioning} from '../../../testing/fake-data/health.fake';
 import {RouterStub} from '../../../testing/router-stubs';
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
@@ -70,25 +62,17 @@ describe('ClusterSecretsComponent', () => {
 
   it('should set icon class `fa fa-circle-o-notch fa-spin km-info`', () => {
     component.health = fakeHealthProvisioning();
-    expect(component.getIconClass(HealthState.provisioning)).toBe(
-      'fa fa-circle-o-notch fa-spin km-info'
-    );
+    expect(component.getIconClass(HealthState.provisioning)).toBe('fa fa-circle-o-notch fa-spin km-info');
   });
 
   it('should set correct icon for controllers', () => {
     component.health = fakeHealthProvisioning();
     expect(component.getIcon('apiserver')).toBe('km-icon-running');
     expect(component.getIcon('controller')).toBe('km-icon-running');
-    expect(component.getIcon('etcd')).toBe(
-      'fa fa-circle-o-notch fa-spin km-info'
-    );
-    expect(component.getIcon('scheduler')).toBe(
-      'fa fa-circle-o-notch fa-spin km-info'
-    );
+    expect(component.getIcon('etcd')).toBe('fa fa-circle-o-notch fa-spin km-info');
+    expect(component.getIcon('scheduler')).toBe('fa fa-circle-o-notch fa-spin km-info');
     expect(component.getIcon('machineController')).toBe('km-icon-running');
-    expect(component.getIcon('userClusterControllerManager')).toBe(
-      'fa fa-circle-o-notch fa-spin km-info'
-    );
+    expect(component.getIcon('userClusterControllerManager')).toBe('fa fa-circle-o-notch fa-spin km-info');
     expect(component.getIcon('test-controller')).toBe('');
   });
 

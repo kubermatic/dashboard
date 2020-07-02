@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../../core/services/wizard/wizard.service';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
+import {Cluster} from '../../../../shared/entity/cluster';
 import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm';
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
@@ -12,7 +12,7 @@ import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
   templateUrl: './digitalocean.component.html',
 })
 export class DigitaloceanClusterSettingsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
   form: FormGroup;
   tokenRequired = true;
 
@@ -40,26 +40,20 @@ export class DigitaloceanClusterSettingsComponent implements OnInit, OnDestroy {
           ? this._wizard.onCustomPresetsDisable.emit(false)
           : this._wizard.onCustomPresetsDisable.emit(true);
 
-        this._wizard.changeClusterProviderSettings(
-          this._clusterProviderSettingsForm(this._formHelper.isFormValid())
-        );
+        this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
       });
 
-    this._wizard.onCustomPresetSelect
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset => {
-        if (preset) {
-          this.form.disable();
-          this.tokenRequired = false;
-          this._wizard.changeClusterProviderSettings(
-            this._clusterProviderSettingsForm(true)
-          );
-          return;
-        }
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
+      if (preset) {
+        this.form.disable();
+        this.tokenRequired = false;
+        this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(true));
+        return;
+      }
 
-        this.form.enable();
-        this.tokenRequired = true;
-      });
+      this.form.enable();
+      this.tokenRequired = true;
+    });
   }
 
   ngOnDestroy(): void {
@@ -67,9 +61,7 @@ export class DigitaloceanClusterSettingsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  private _clusterProviderSettingsForm(
-    valid: boolean
-  ): ClusterProviderSettingsForm {
+  private _clusterProviderSettingsForm(valid: boolean): ClusterProviderSettingsForm {
     return {
       cloudSpec: {
         digitalocean: {

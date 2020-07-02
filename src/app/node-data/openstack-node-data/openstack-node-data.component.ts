@@ -2,19 +2,15 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {iif, Subject} from 'rxjs';
 import {debounceTime, startWith, take, takeUntil} from 'rxjs/operators';
-import {
-  ApiService,
-  DatacenterService,
-  WizardService,
-} from '../../core/services';
+import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
-import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {OperatingSystemSpec} from '../../shared/entity/NodeEntity';
-import {OpenstackFlavor} from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {CloudSpec} from '../../shared/entity/cluster';
+import {OperatingSystemSpec} from '../../shared/entity/node';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 import {filterArrayOptions} from '../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
+import {OpenstackFlavor, OpenstackAvailabilityZone} from '../../shared/entity/provider/openstack';
 
 @Component({
   selector: 'km-openstack-node-data',
@@ -32,6 +28,8 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   loadingFlavors = false;
   form: FormGroup;
   filteredFlavors: OpenstackFlavor[] = [];
+  availabilityZones: OpenstackAvailabilityZone[] = [];
+  loadingAvailabilityZones = false;
 
   private _unsubscribe = new Subject<void>();
   private _selectedPreset: string;
@@ -47,24 +45,15 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       flavor: new FormControl(this.nodeData.spec.cloud.openstack.flavor, [
         Validators.required,
-        AutocompleteFilterValidators.mustBeInArrayList(
-          this.flavors,
-          'slug',
-          true
-        ),
+        AutocompleteFilterValidators.mustBeInArrayList(this.flavors, 'slug', true),
       ]),
-      useFloatingIP: new FormControl(
-        this.nodeData.spec.cloud.openstack.useFloatingIP
-      ),
+      useFloatingIP: new FormControl(this.nodeData.spec.cloud.openstack.useFloatingIP),
       disk_size: new FormControl(
-        this.nodeData.spec.cloud.openstack.diskSize > 0
-          ? this.nodeData.spec.cloud.openstack.diskSize
-          : ''
+        this.nodeData.spec.cloud.openstack.diskSize > 0 ? this.nodeData.spec.cloud.openstack.diskSize : ''
       ),
-      customDiskSize: new FormControl(
-        this.nodeData.spec.cloud.openstack.diskSize > 0
-      ),
+      customDiskSize: new FormControl(this.nodeData.spec.cloud.openstack.diskSize > 0),
       image: new FormControl(this.nodeData.spec.cloud.openstack.image),
+      availabilityZone: new FormControl(this.nodeData.spec.cloud.openstack.availabilityZone),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -72,53 +61,44 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     });
 
     this.form.controls.flavor.valueChanges
-      .pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
+      .pipe(debounceTime(1000), startWith(''), takeUntil(this._unsubscribe))
       .subscribe(value => {
         if (value !== '' && !this.form.controls.flavor.pristine) {
-          this.filteredFlavors = filterArrayOptions(
-            value,
-            'slug',
-            this.flavors
-          );
+          this.filteredFlavors = filterArrayOptions(value, 'slug', this.flavors);
         } else {
           this.filteredFlavors = this.flavors;
         }
         this.form.controls.flavor.setValidators([
           Validators.required,
-          AutocompleteFilterValidators.mustBeInArrayList(
-            this.flavors,
-            'slug',
-            true
-          ),
+          AutocompleteFilterValidators.mustBeInArrayList(this.flavors, 'slug', true),
         ]);
       });
 
     this._loadFlavors();
+    this._loadAvailabilityZones();
     this.checkFlavorState();
+    this.checkAvailabilityZoneState();
     this._addNodeService.changeNodeProviderData(this._getNodeProviderData());
 
     if (this.nodeData.spec.cloud.openstack.image === '') {
       this.setImage(this.nodeData.spec.operatingSystem);
     }
 
-    this._addNodeService.nodeOperatingSystemDataChanges$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        if (
-          (!!this.nodeData.spec.operatingSystem.ubuntu && !data.ubuntu) ||
-          (!!this.nodeData.spec.operatingSystem.centos && !data.centos) ||
-          (!!this.nodeData.spec.operatingSystem.containerLinux &&
-            !data.containerLinux)
-        ) {
-          this.setImage(data);
-        }
-        this._addNodeService.changeNodeProviderData(
-          this._getNodeProviderData()
-        );
-      });
+    this._addNodeService.nodeOperatingSystemDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      if (
+        (!!this.nodeData.spec.operatingSystem.ubuntu && !data.ubuntu) ||
+        (!!this.nodeData.spec.operatingSystem.centos && !data.centos) ||
+        (!!this.nodeData.spec.operatingSystem.containerLinux && !data.containerLinux) ||
+        (!!this.nodeData.spec.operatingSystem.rhel && !data.rhel) ||
+        (!!this.nodeData.spec.operatingSystem.flatcar && !data.flatcar)
+      ) {
+        this.setImage(data);
+      }
+      this._addNodeService.changeNodeProviderData(this._getNodeProviderData());
+    });
 
     this._dcService
-      .getDataCenter(this.cloudSpec.dc)
+      .getDatacenter(this.cloudSpec.dc)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => {
         if (dc.spec.openstack.enforce_floating_ip) {
@@ -133,36 +113,42 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
         }
       });
 
-    this._wizard.clusterProviderSettingsFormChanges$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.cloudSpec = data.cloudSpec;
+    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      this.cloudSpec = data.cloudSpec;
+      this.form.controls.flavor.setValue('');
+      this.flavors = [];
+      this.checkFlavorState();
+      this.form.controls.availabilityZone.setValue('');
+      this.availabilityZones = [];
+      this.checkAvailabilityZoneState();
+
+      if (this._hasCredentials() || this._selectedPreset) {
+        this._loadFlavors();
+        this._loadAvailabilityZones();
+      }
+    });
+
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
+      this._selectedPreset = preset;
+      if (!preset) {
         this.form.controls.flavor.setValue('');
         this.flavors = [];
         this.checkFlavorState();
-
-        if (this._hasCredentials() || this._selectedPreset) {
-          this._loadFlavors();
-        }
-      });
-
-    this._wizard.onCustomPresetSelect
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset => {
-        this._selectedPreset = preset;
-        if (!preset) {
-          this.form.controls.flavor.setValue('');
-          this.flavors = [];
-          this.checkFlavorState();
-        }
-      });
+        this.form.controls.availabilityZone.setValue('');
+        this.availabilityZones = [];
+        this.checkFlavorState();
+        this.checkAvailabilityZoneState();
+      }
+    });
   }
 
   setImage(operatingSystem: OperatingSystemSpec): void {
-    this._dcService.getDataCenter(this.cloudSpec.dc).subscribe(res => {
+    this._dcService.getDatacenter(this.cloudSpec.dc).subscribe(res => {
       let coreosImage = '';
       let centosImage = '';
       let ubuntuImage = '';
+      let rhelImage = '';
+      let flatcarImage = '';
 
       for (const i in res.spec.openstack.images) {
         if (i === 'coreos') {
@@ -171,6 +157,10 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
           centosImage = res.spec.openstack.images[i];
         } else if (i === 'ubuntu') {
           ubuntuImage = res.spec.openstack.images[i];
+        } else if (i === 'rhel') {
+          rhelImage = res.spec.openstack.images[i];
+        } else if (i === 'flatcar') {
+          flatcarImage = res.spec.openstack.images[i];
         }
       }
 
@@ -180,6 +170,10 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
         return this.form.controls.image.setValue(centosImage);
       } else if (operatingSystem.containerLinux) {
         return this.form.controls.image.setValue(coreosImage);
+      } else if (operatingSystem.rhel) {
+        return this.form.controls.image.setValue(rhelImage);
+      } else if (operatingSystem.flatcar) {
+        return this.form.controls.image.setValue(flatcarImage);
       }
     });
   }
@@ -198,12 +192,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   }
 
   showFlavorHint(): boolean {
-    return (
-      !this.loadingFlavors &&
-      !this._hasCredentials() &&
-      !this._selectedPreset &&
-      this.isInWizard()
-    );
+    return !this.loadingFlavors && !this._hasCredentials() && !this._selectedPreset && this.isInWizard();
   }
 
   getFlavorsFormState(): string {
@@ -213,9 +202,32 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       return 'Loading flavors...';
     } else if (!this.loadingFlavors && this.flavors.length === 0) {
       return 'No Flavors available';
-    } else {
-      return 'Flavor*';
     }
+    return 'Flavor*';
+  }
+
+  checkAvailabilityZoneState(): void {
+    if (this.availabilityZones.length === 0) {
+      this.form.controls.availabilityZone.disable();
+    } else {
+      this.form.controls.availabilityZone.enable();
+    }
+    this.form.controls.availabilityZone.updateValueAndValidity();
+  }
+
+  showAvailabilityZoneHint(): boolean {
+    return !this.loadingAvailabilityZones && !this._hasCredentials() && !this._selectedPreset && this.isInWizard();
+  }
+
+  getAvailabilityZonesFormState(): string {
+    if (!this.loadingAvailabilityZones && !this._hasCredentials() && this.isInWizard()) {
+      return 'Availability Zone';
+    } else if (this.loadingAvailabilityZones) {
+      return 'Loading availabilityZones...';
+    } else if (!this.loadingAvailabilityZones && this.flavors.length === 0) {
+      return 'No Availability Zones available';
+    }
+    return 'Availability Zone';
   }
 
   isInWizard(): boolean {
@@ -237,6 +249,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
         openstack: {
           flavor: this.form.controls.flavor.value,
           image: this.form.controls.image.value,
+          availabilityZone: this.form.controls.availabilityZone.value,
           useFloatingIP: this.form.controls.useFloatingIP.value,
           tags: this.nodeData.spec.cloud.openstack.tags,
           diskSize:
@@ -259,17 +272,13 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       this.cloudSpec.openstack.password.length > 0 &&
       !!this.cloudSpec.openstack.domain &&
       this.cloudSpec.openstack.domain.length > 0 &&
-      ((!!this.cloudSpec.openstack.tenant &&
-        this.cloudSpec.openstack.tenant.length > 0) ||
-        (!!this.cloudSpec.openstack.tenantID &&
-          this.cloudSpec.openstack.tenantID.length > 0))
+      ((!!this.cloudSpec.openstack.tenant && this.cloudSpec.openstack.tenant.length > 0) ||
+        (!!this.cloudSpec.openstack.tenantID && this.cloudSpec.openstack.tenantID.length > 0))
     );
   }
 
   private _handleFlavours(flavors: OpenstackFlavor[]): void {
-    const sortedFlavors = flavors.sort((a, b) =>
-      a.memory < b.memory ? -1 : 1
-    );
+    const sortedFlavors = flavors.sort((a, b) => (a.memory < b.memory ? -1 : 1));
     this.flavors = sortedFlavors;
     if (
       sortedFlavors.length > 0 &&
@@ -286,8 +295,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.loadingFlavors =
-      !this.isInWizard() || this._hasCredentials() || !!this._selectedPreset;
+    this.loadingFlavors = !this.isInWizard() || this._hasCredentials() || !!this._selectedPreset;
 
     iif(
       () => this.isInWizard(),
@@ -301,11 +309,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
         .credential(this._selectedPreset)
         .datacenter(this.cloudSpec.dc)
         .flavors(),
-      this._api.getOpenStackFlavors(
-        this.projectId,
-        this.seedDCName,
-        this.clusterId
-      )
+      this._api.getOpenStackFlavors(this.projectId, this.seedDCName, this.clusterId)
     )
       .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))
@@ -325,5 +329,38 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
         return flavor;
       }
     }
+  }
+
+  private _loadAvailabilityZones(): void {
+    if (this.isInWizard() && !this._hasCredentials() && !this._selectedPreset) {
+      return;
+    }
+
+    this.loadingAvailabilityZones = !this.isInWizard() || this._hasCredentials() || !!this._selectedPreset;
+
+    iif(
+      () => this.isInWizard(),
+      this._wizard
+        .provider(NodeProvider.OPENSTACK)
+        .username(this.cloudSpec.openstack.username)
+        .password(this.cloudSpec.openstack.password)
+        .tenant(this.cloudSpec.openstack.tenant)
+        .tenantID(this.cloudSpec.openstack.tenantID)
+        .domain(this.cloudSpec.openstack.domain)
+        .credential(this._selectedPreset)
+        .datacenter(this.cloudSpec.dc)
+        .availabilityZones(),
+      this._api.getOpenStackAvailabilityZones(this.projectId, this.seedDCName, this.clusterId)
+    )
+      .pipe(take(1))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        availabilityZones => {
+          this.availabilityZones = availabilityZones.sort((a, b) => (a.name < b.name ? -1 : 1));
+          this.checkAvailabilityZoneState();
+          this.loadingAvailabilityZones = false;
+        },
+        () => (this.loadingAvailabilityZones = false)
+      );
   }
 }

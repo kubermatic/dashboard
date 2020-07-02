@@ -10,14 +10,9 @@ import {ClusterService} from '../../../wizard-new/service/cluster';
 import {WizardService} from '../../../wizard-new/service/wizard';
 import {SharedModule} from '../../shared.module';
 import {MachineNetworkComponent} from './component';
+import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 
-const modules: any[] = [
-  BrowserModule,
-  HttpClientModule,
-  BrowserAnimationsModule,
-  RouterTestingModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
 
 describe('MachineNetworksComponent', () => {
   let component: MachineNetworkComponent;
@@ -32,7 +27,7 @@ describe('MachineNetworksComponent', () => {
         ClusterService,
         {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
         PresetsService,
-        DatacenterService,
+        {provide: DatacenterService, useClass: DatacenterMockService},
       ],
     }).compileComponents();
   }));

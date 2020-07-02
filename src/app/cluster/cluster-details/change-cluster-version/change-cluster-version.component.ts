@@ -3,27 +3,22 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
 
-import {
-  ClusterService,
-  NotificationService,
-  ProjectService,
-} from '../../../core/services';
+import {ClusterService, NotificationService, ProjectService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import {Cluster, ClusterPatch} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
+import {Project} from '../../../shared/entity/project';
 
 @Component({
   selector: 'km-change-cluster-version',
   templateUrl: './change-cluster-version.component.html',
 })
 export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  @Input() datacenter: DataCenterEntity;
+  @Input() cluster: Cluster;
+  @Input() datacenter: Datacenter;
   controlPlaneVersions: string[] = [];
   selectedVersion: string;
-  project: ProjectEntity;
+  project: Project;
   isNodeDeploymentUpgradeEnabled = false;
   private _unsubscribe = new Subject<void>();
 
@@ -37,59 +32,39 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.controlPlaneVersions.length > 0) {
-      this.selectedVersion = this.controlPlaneVersions[
-        this.controlPlaneVersions.length - 1
-      ];
+      this.selectedVersion = this.controlPlaneVersions[this.controlPlaneVersions.length - 1];
     }
 
     this._projectService.selectedProject
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(project => (this.project = project));
-    this._googleAnalyticsService.emitEvent(
-      'clusterOverview',
-      'clusterVersionChangeDialogOpened'
-    );
+    this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChangeDialogOpened');
   }
 
   changeVersion(): void {
-    const patch: ClusterEntityPatch = {
+    const patch: ClusterPatch = {
       spec: {
         version: this.selectedVersion,
       },
     };
 
-    this._clusterService
-      .patch(
-        this.project.id,
-        this.cluster.id,
-        this.datacenter.metadata.name,
-        patch
-      )
-      .subscribe(() => {
-        this._notificationService.success(
-          `The <strong>${this.cluster.name}</strong> cluster is being updated to the ${this.selectedVersion} version`
-        );
-        this._googleAnalyticsService.emitEvent(
-          'clusterOverview',
-          'clusterVersionChanged'
-        );
+    this._clusterService.patch(this.project.id, this.cluster.id, this.datacenter.metadata.name, patch).subscribe(() => {
+      this._notificationService.success(
+        `The <strong>${this.cluster.name}</strong> cluster is being updated to the ${this.selectedVersion} version`
+      );
+      this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChanged');
 
-        if (this.isNodeDeploymentUpgradeEnabled) {
-          this.upgradeNodeDeployments();
-        }
-      });
+      if (this.isNodeDeploymentUpgradeEnabled) {
+        this.upgradeNodeDeployments();
+      }
+    });
 
     this._dialogRef.close(true);
   }
 
   upgradeNodeDeployments(): void {
     this._clusterService
-      .upgradeNodeDeployments(
-        this.project.id,
-        this.cluster.id,
-        this.datacenter.metadata.name,
-        this.selectedVersion
-      )
+      .upgradeNodeDeployments(this.project.id, this.cluster.id, this.datacenter.metadata.name, this.selectedVersion)
       .pipe(first())
       .subscribe(() => {
         this._notificationService.success(

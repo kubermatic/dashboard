@@ -1,7 +1,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {takeUntil} from 'rxjs/operators';
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/NodeEntity';
+import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
@@ -27,8 +27,7 @@ enum Controls {
     },
   ],
 })
-export class AWSExtendedNodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class AWSExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: object;
 
   readonly Controls = Controls;
@@ -37,10 +36,7 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator
     return this._nodeDataService.nodeData;
   }
 
-  constructor(
-    private readonly _builder: FormBuilder,
-    private readonly _nodeDataService: NodeDataService
-  ) {
+  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
     super();
   }
 

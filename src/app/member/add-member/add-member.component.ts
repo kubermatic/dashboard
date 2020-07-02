@@ -4,18 +4,15 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '../../core/services';
 
 import {ApiService} from '../../core/services';
-import {
-  CreateMemberEntity,
-  MemberEntity,
-} from '../../shared/entity/MemberEntity';
-import {ProjectEntity} from '../../shared/entity/ProjectEntity';
+import {CreateMember, Member} from '../../shared/entity/member';
+import {Project} from '../../shared/entity/project';
 
 @Component({
   selector: 'km-add-member',
   templateUrl: './add-member.component.html',
 })
 export class AddMemberComponent implements OnInit {
-  @Input() project: ProjectEntity;
+  @Input() project: Project;
   addMemberForm: FormGroup;
 
   constructor(
@@ -32,7 +29,7 @@ export class AddMemberComponent implements OnInit {
   }
 
   addMember(): void {
-    const createMember: CreateMemberEntity = {
+    const createMember: CreateMember = {
       email: this.addMemberForm.controls.email.value,
       projects: [
         {
@@ -42,13 +39,11 @@ export class AddMemberComponent implements OnInit {
       ],
     };
 
-    this._apiService
-      .createMembers(this.project.id, createMember)
-      .subscribe((member: MemberEntity) => {
-        this._matDialogRef.close(member);
-        this._notificationService.success(
-          `The <strong>${member.email}</strong> member was added to the <strong>${this.project.name}</strong> project`
-        );
-      });
+    this._apiService.createMembers(this.project.id, createMember).subscribe((member: Member) => {
+      this._matDialogRef.close(member);
+      this._notificationService.success(
+        `The <strong>${member.email}</strong> member was added to the <strong>${this.project.name}</strong> project`
+      );
+    });
   }
 }

@@ -1,6 +1,6 @@
 @import "../../../assets/css/variables";
 
-.mat-card:not(.km-with-table-header) {
+.mat-card {
   margin-top: $content-padding !important;
 
   .mat-card-header {
@@ -14,8 +14,15 @@
   .km-admin-settings {
     font-size: $font-size-subhead;
 
-    .km-icon-info {
+    .entry-label {
+      min-width: 32 * $baseline-grid;
+    }
+
+    .km-icon-info,
+    .km-icon-warning {
+      min-height: 2 * $baseline-grid;
       margin-left: .5 * $baseline-grid;
+      min-width: 2 * $baseline-grid;
     }
 
     .km-account-settings-toggle {
@@ -73,13 +80,4 @@
       margin-right: 6 * $baseline-grid;
     }
   }
-}
-
-.km-with-table-header .mat-card-header {
-  padding-left: 3.75 * $baseline-grid;
-}
-
-.km-admin-item-actions {
-  display: flex;
-  justify-content: flex-end;
 }

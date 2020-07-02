@@ -4,15 +4,9 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {DatacenterService, WizardService} from '../../core/services';
-import {
-  AuditLoggingSettings,
-  ClusterEntity,
-  getClusterProvider,
-} from '../../shared/entity/ClusterEntity';
-import {
-  DataCenterEntity,
-  getDatacenterProvider,
-} from '../../shared/entity/DatacenterEntity';
+import {AuditLoggingSettings, Cluster, getClusterProvider} from '../../shared/entity/cluster';
+import {Datacenter, getDatacenterProvider} from '../../shared/entity/datacenter';
+import {AdmissionPluginUtils} from '../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 
 @Component({
   selector: 'km-set-datacenter',
@@ -20,69 +14,50 @@ import {
   styleUrls: ['set-datacenter.component.scss'],
 })
 export class SetDatacenterComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
   setDatacenterForm: FormGroup;
-  datacenters: DataCenterEntity[] = [];
+  datacenters: Datacenter[] = [];
   private _unsubscribe: Subject<any> = new Subject();
 
-  constructor(
-    private readonly _dcService: DatacenterService,
-    private readonly _wizardService: WizardService
-  ) {}
+  constructor(private readonly _dcService: DatacenterService, private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.setDatacenterForm = new FormGroup({
-      datacenter: new FormControl(this.cluster.spec.cloud.dc, [
-        Validators.required,
-      ]),
+      datacenter: new FormControl(this.cluster.spec.cloud.dc, [Validators.required]),
     });
 
     // Get all datacenters for the cluster cloud provider
-    this._dcService
-      .getDataCenters()
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(datacenters => {
-        const providerDatacenters: DataCenterEntity[] = [];
-        for (const datacenter of datacenters) {
-          if (datacenter.seed) {
-            continue;
-          }
-          const provider = getDatacenterProvider(datacenter);
-          const clusterProvider = getClusterProvider(this.cluster);
-          if (provider === clusterProvider) {
-            providerDatacenters.push(datacenter);
-          }
+    this._dcService.datacenters.pipe(takeUntil(this._unsubscribe)).subscribe(datacenters => {
+      const providerDatacenters: Datacenter[] = [];
+      for (const datacenter of datacenters) {
+        if (datacenter.seed) {
+          continue;
         }
-        this.datacenters = providerDatacenters;
-      });
+        const provider = getDatacenterProvider(datacenter);
+        const clusterProvider = getClusterProvider(this.cluster);
+        if (provider === clusterProvider) {
+          providerDatacenters.push(datacenter);
+        }
+      }
+      this.datacenters = providerDatacenters;
+    });
 
-    this.setDatacenterForm.valueChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(() => {
-        this.changeClusterDatacenter();
-      });
+    this.setDatacenterForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      this.changeClusterDatacenter();
+    });
   }
 
   changeClusterDatacenter(): void {
-    let dc: DataCenterEntity = null;
+    let dc: Datacenter = null;
     for (const datacenter of this.datacenters) {
-      if (
-        this.setDatacenterForm.controls.datacenter.value ===
-        datacenter.metadata.name
-      ) {
+      if (this.setDatacenterForm.controls.datacenter.value === datacenter.metadata.name) {
         dc = datacenter;
 
-        const usePodSecurityPolicyAdmissionPlugin = dc.spec
-          .enforcePodSecurityPolicy
-          ? true
-          : this.cluster.spec.usePodSecurityPolicyAdmissionPlugin;
-        const auditLogging = dc.spec.enforceAuditLogging
-          ? {enabled: true}
-          : this.cluster.spec.auditLogging;
-        this.enforceClusterProperties(
-          auditLogging,
-          usePodSecurityPolicyAdmissionPlugin
-        );
+        const auditLogging = dc.spec.enforceAuditLogging ? {enabled: true} : this.cluster.spec.auditLogging;
+
+        const admissionPlugins = AdmissionPluginUtils.updateSelectedPluginArrayIfPSPEnforced(this.cluster, dc);
+
+        this.enforceClusterProperties(auditLogging, admissionPlugins);
       }
     }
     this._wizardService.changeClusterDatacenter({
@@ -91,27 +66,15 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
     });
   }
 
-  getLocationName(datacenter: DataCenterEntity): string {
+  getLocationName(datacenter: Datacenter): string {
     if (datacenter.spec.location.includes('(')) {
       const splitted = datacenter.spec.location.replace(')', '').split('(');
-      return (
-        '<span class="km-country-prefix">' +
-        splitted[0].trim() +
-        '</span><span>' +
-        splitted[1].trim() +
-        '</span>'
-      );
+      return '<span class="km-country-prefix">' + splitted[0].trim() + '</span><span>' + splitted[1].trim() + '</span>';
     }
 
     if (datacenter.spec.openstack && datacenter.spec.location.includes(' - ')) {
       const splitted = datacenter.spec.location.split(' - ');
-      return (
-        '<span class="km-country-prefix">' +
-        splitted[0].trim() +
-        '</span><span>' +
-        splitted[1].trim() +
-        '</span>'
-      );
+      return '<span class="km-country-prefix">' + splitted[0].trim() + '</span><span>' + splitted[1].trim() + '</span>';
     }
 
     return datacenter.spec.location.replace('Azure', '');
@@ -122,21 +85,14 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  enforceClusterProperties(
-    auditLogging: AuditLoggingSettings,
-    usePodSecurityPolicyAdmissionPlugin: boolean
-  ): void {
+  enforceClusterProperties(auditLogging: AuditLoggingSettings, admissionPlugins: string[]): void {
     this._wizardService.changeClusterSpec({
       name: this.cluster.name,
       type: this.cluster.type,
       labels: this.cluster.labels,
       version: this.cluster.spec.version,
-      imagePullSecret: this.cluster.spec.openshift
-        ? this.cluster.spec.openshift.imagePullSecret
-        : '',
-      usePodSecurityPolicyAdmissionPlugin,
-      usePodNodeSelectorAdmissionPlugin: this.cluster.spec
-        .usePodNodeSelectorAdmissionPlugin,
+      imagePullSecret: this.cluster.spec.openshift ? this.cluster.spec.openshift.imagePullSecret : '',
+      admissionPlugins,
       auditLogging,
       valid: true,
     });

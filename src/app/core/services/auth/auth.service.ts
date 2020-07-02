@@ -1,11 +1,15 @@
-import {Injectable} from '@angular/core';
-import * as moment from 'moment';
+import {Inject, Injectable} from '@angular/core';
 import {CookieService} from 'ngx-cookie-service';
+import {Observable} from 'rxjs';
+import {first, tap} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
+import {Cookie, COOKIE_DI_TOKEN} from '../../../app.config';
 import {RandomString} from '../../../shared/functions/generate-random-string';
 import {PreviousRouteService} from '../previous-route/previous-route.service';
+import {TokenService} from '../token/token.service';
+import {UserService} from '../user/user.service';
 
 @Injectable()
 export class Auth {
@@ -13,49 +17,27 @@ export class Auth {
   private readonly _responseType = 'id_token';
   private readonly _clientId = 'kubermatic';
   private readonly _defaultScope = 'openid email profile groups';
-  private readonly _redirectUri =
-    window.location.protocol + '//' + window.location.host + '/projects';
+  private readonly _redirectUri = window.location.protocol + '//' + window.location.host + '/projects';
 
   constructor(
     private readonly _cookieService: CookieService,
     private readonly _appConfigService: AppConfigService,
-    private readonly _previousRouteService: PreviousRouteService
+    private readonly _previousRouteService: PreviousRouteService,
+    private readonly _userService: UserService,
+    private readonly _tokenService: TokenService,
+    @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie
   ) {
-    const token = this.getTokenFromQuery();
+    const token = this._getTokenFromQuery();
     const nonce = this.getNonce();
     if (!!token && !!nonce) {
       if (this.compareNonceWithToken(token, nonce)) {
         // remove URL fragment with token, so that users can't accidentally copy&paste it and send it to others
-        this.removeFragment();
-        this._cookieService.set(
-          Auth.Cookie.Token,
-          token,
-          1,
-          '/',
-          null,
-          true,
-          'Lax'
-        );
+        this._removeFragment();
+        this._cookieService.set(this._cookie.token, token, 1, '/', null, true, 'Lax');
         // localhost is only served via http, though secure cookie is not possible
         // following line will only work when domain is localhost
-        this._cookieService.set(
-          Auth.Cookie.Token,
-          token,
-          1,
-          '/',
-          'localhost',
-          false,
-          'Lax'
-        );
-        this._cookieService.set(
-          Auth.Cookie.Token,
-          token,
-          1,
-          '/',
-          '127.0.0.1',
-          false,
-          'Lax'
-        );
+        this._cookieService.set(this._cookie.token, token, 1, '/', 'localhost', false, 'Lax');
+        this._cookieService.set(this._cookie.token, token, 1, '/', '127.0.0.1', false, 'Lax');
       }
       this._previousRouteService.loadRouting();
     }
@@ -63,18 +45,10 @@ export class Auth {
 
   getOIDCProviderURL(): string {
     const config = this._appConfigService.getConfig();
-    const baseUrl = config.oidc_provider_url
-      ? config.oidc_provider_url
-      : environment.oidcProviderUrl;
-    const connectorId = config.oidc_connector_id
-      ? config.oidc_connector_id
-      : environment.oidcConnectorId;
-    const scope = config.oidc_provider_scope
-      ? config.oidc_provider_scope
-      : this._defaultScope;
-    const clientId = config.oidc_provider_client_id
-      ? config.oidc_provider_client_id
-      : this._clientId;
+    const baseUrl = config.oidc_provider_url ? config.oidc_provider_url : environment.oidcProviderUrl;
+    const connectorId = config.oidc_connector_id ? config.oidc_connector_id : environment.oidcConnectorId;
+    const scope = config.oidc_provider_scope ? config.oidc_provider_scope : this._defaultScope;
+    const clientId = config.oidc_provider_client_id ? config.oidc_provider_client_id : this._clientId;
 
     let url =
       `${baseUrl}?response_type=${this._responseType}&client_id=${clientId}` +
@@ -88,35 +62,29 @@ export class Auth {
   }
 
   getBearerToken(): string {
-    return this._cookieService.get(Auth.Cookie.Token);
+    return this._cookieService.get(this._cookie.token);
   }
 
   getNonce(): string {
-    return this._cookieService.get(Auth.Cookie.Nonce);
+    return this._cookieService.get(this._cookie.nonce);
   }
 
   authenticated(): boolean {
-    // Check if there's an unexpired JWT
-    // This searches for an item in cookies with key == 'token'
-    if (this.getBearerToken()) {
-      const tokenExp = this.decodeToken(this.getBearerToken());
-      return moment().isBefore(moment(tokenExp.exp * 1000));
-    } else {
-      return false;
-    }
+    return this._tokenService.hasExpired();
   }
 
   getUsername(): string {
     if (this.getBearerToken()) {
-      const tokenExp = this.decodeToken(this.getBearerToken());
+      const tokenExp = this._tokenService.decodeToken(this.getBearerToken());
       return tokenExp.name;
     }
+
     return '';
   }
 
   compareNonceWithToken(token: string, nonce: string): boolean {
     if (!!token && !!nonce) {
-      const decodedToken = this.decodeToken(token);
+      const decodedToken = this._tokenService.decodeToken(token);
       if (decodedToken) {
         return nonce === decodedToken.nonce;
       }
@@ -125,79 +93,40 @@ export class Auth {
   }
 
   login(): void {
-    this._cookieService.set(
-      Auth.Cookie.Autoredirect,
-      'true',
-      1,
-      '/',
-      null,
-      false,
-      'Strict'
-    );
+    this._cookieService.set(this._cookie.autoredirect, 'true', 1, '/', null, false, 'Strict');
   }
 
-  logout(): void {
-    this._cookieService.delete(Auth.Cookie.Token, '/');
-    this._cookieService.delete(Auth.Cookie.Nonce, '/');
+  logout(): Observable<boolean> {
+    return this._userService
+      .logout()
+      .pipe(
+        tap(_ => {
+          this._cookieService.delete(this._cookie.token, '/');
+          this._cookieService.delete(this._cookie.nonce, '/');
+        })
+      )
+      .pipe(first());
   }
 
-  private getTokenFromQuery(): string {
-    const results = new RegExp('[?&#]id_token=([^&#]*)').exec(
-      window.location.href
-    );
+  setNonce(): void {
+    const nonceRegExp = /[?&#]nonce=([^&]+)/;
+    const nonceStr = nonceRegExp.exec(this.getOIDCProviderURL());
+    if (!!nonceStr && nonceStr.length >= 2 && !!nonceStr[1]) {
+      this._cookieService.set(this._cookie.nonce, nonceStr[1], null, '/', null, true, 'Lax');
+      // localhost is only served via http, though secure cookie is not possible
+      // following line will only work when domain is localhost
+      this._cookieService.set(this._cookie.nonce, nonceStr[1], null, '/', 'localhost', false, 'Lax');
+      this._cookieService.set(this._cookie.nonce, nonceStr[1], null, '/', '127.0.0.1', false, 'Lax');
+    }
+  }
+
+  private _getTokenFromQuery(): string {
+    const results = new RegExp('[?&#]id_token=([^&#]*)').exec(window.location.href);
     return results === null ? null : results[1] || '';
   }
 
-  private removeFragment(): void {
+  private _removeFragment(): void {
     const currentHref = window.location.href;
-    history.replaceState(
-      {},
-      '',
-      currentHref.slice(0, currentHref.indexOf('#'))
-    );
-  }
-
-  // Helper Functions for decoding JWT token:
-  decodeToken(token: string): any {
-    if (token) {
-      const parts = token.split('.');
-      if (parts.length !== 3) {
-        throw new Error('JWT must have 3 parts');
-      }
-      const decoded = this.urlBase64Decode(parts[1]);
-      if (!decoded) {
-        throw new Error('Cannot decode the token');
-      }
-      return JSON.parse(decoded);
-    }
-  }
-
-  private urlBase64Decode(str: string): string {
-    let output = str.replace(/-/g, '+').replace(/_/g, '/');
-    switch (output.length % 4) {
-      case 0: {
-        break;
-      }
-      case 2: {
-        output += '==';
-        break;
-      }
-      case 3: {
-        output += '=';
-        break;
-      }
-      default: {
-        throw new Error('Illegal base64url string!');
-      }
-    }
-    return decodeURIComponent(window.atob(output));
-  }
-}
-
-export namespace Auth {
-  export enum Cookie {
-    Autoredirect = 'autoredirect',
-    Nonce = 'nonce',
-    Token = 'token',
+    history.replaceState({}, '', currentHref.slice(0, currentHref.indexOf('#')));
   }
 }

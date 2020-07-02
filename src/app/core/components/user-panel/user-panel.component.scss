@@ -1,0 +1,38 @@
+@import "../../../../assets/css/variables";
+
+.root-button {
+  font-size: $font-size-subhead;
+  text-align: right;
+  position: fixed;
+  top: 1.25 * $baseline-grid;
+  right: 5 * $baseline-grid;
+}
+
+.panel {
+  right: 5 * $baseline-grid;
+  top: 6.25 * $baseline-grid;
+  width: $user-panel-width;
+
+  .header {
+    font-size: $font-size-subhead;
+    padding: (2.5 * $baseline-grid) (2.5 * $baseline-grid) $baseline-grid;
+
+    .mat-icon-button {
+      margin: (-$baseline-grid) (.5 * $baseline-grid) 0 0;
+      width: 4.33 * $baseline-grid !important;
+      height: 4.33 * $baseline-grid !important;
+      position: relative;
+
+      i {
+        margin-top: -.5 * $baseline-grid;
+        height: 2 * $baseline-grid;
+        width: 2 * $baseline-grid;
+      }
+    }
+  }
+
+  .menu div {
+    cursor: pointer;
+    padding: (1.5 * $baseline-grid) (2.5 * $baseline-grid);
+  }
+}

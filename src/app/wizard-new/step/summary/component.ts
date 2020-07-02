@@ -1,16 +1,19 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
+import * as _ from 'lodash';
+
 import {DatacenterService} from '../../../core/services';
 import {NodeDataService} from '../../../node-data-new/service/service';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
+import {Cluster} from '../../../shared/entity/cluster';
+import {SSHKey} from '../../../shared/entity/ssh-key';
 import {getIpCount} from '../../../shared/functions/get-ip-count';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../shared/model/NodeSpecChange';
-import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
+import {AdmissionPluginUtils} from '../../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {ClusterService} from '../../service/cluster';
+import {getOperatingSystem, getOperatingSystemLogoClass} from '../../../shared/entity/node';
 
 @Component({
   selector: 'km-wizard-summary-step',
@@ -18,9 +21,10 @@ import {ClusterService} from '../../service/cluster';
   styleUrls: ['./style.scss'],
 })
 export class SummaryStepComponent implements OnInit, OnDestroy {
-  clusterSSHKeys: SSHKeyEntity[] = [];
+  clusterSSHKeys: SSHKey[] = [];
+  clusterAdmissionPlugins: string[] = [];
   nodeData: NodeData;
-  cluster: ClusterEntity;
+  cluster: Cluster;
   noMoreIpsLeft = false;
 
   private _location: string;
@@ -56,8 +60,12 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(keys => (this.clusterSSHKeys = keys));
 
+    this._clusterService.admissionPluginsChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(plugins => (this.clusterAdmissionPlugins = plugins));
+
     this._clusterService.datacenterChanges
-      .pipe(switchMap(dc => this._datacenterService.getDataCenter(dc)))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => {
         this._location = dc.spec.location;
@@ -75,15 +83,15 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   getOperatingSystem(): string {
-    return NodeUtils.getOperatingSystem(this.nodeData.spec);
+    return getOperatingSystem(this.nodeData.spec);
   }
 
   getOperatingSystemLogoClass(): string {
-    return NodeUtils.getOperatingSystemLogoClass(this.nodeData.spec);
+    return getOperatingSystemLogoClass(this.nodeData.spec);
   }
 
   getClusterType(): string {
-    return ClusterEntity.getDisplayType(this.cluster);
+    return Cluster.getDisplayType(this.cluster);
   }
 
   displaySettings(): boolean {
@@ -91,10 +99,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   displayTags(tags: object): boolean {
-    return (
-      !!tags &&
-      Object.keys(LabelFormComponent.filterNullifiedKeys(tags)).length > 0
-    );
+    return !!tags && Object.keys(LabelFormComponent.filterNullifiedKeys(tags)).length > 0;
   }
 
   displayNoProviderTags(): boolean {
@@ -127,6 +132,14 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
     return this.clusterSSHKeys.map(key => key.name).join(', ');
   }
 
+  hasAdmissionPlugins(): boolean {
+    return !_.isEmpty(this.clusterAdmissionPlugins);
+  }
+
+  getAdmissionPlugins(): string {
+    return AdmissionPluginUtils.getJoinedPluginNames(this.clusterAdmissionPlugins);
+  }
+
   private _hasProviderOptions(provider: NodeProvider): boolean {
     return (
       this._clusterService.provider === provider &&
@@ -135,13 +148,12 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
     );
   }
 
-  private _noIpsLeft(cluster: ClusterEntity, nodeCount: number): boolean {
+  private _noIpsLeft(cluster: Cluster, nodeCount: number): boolean {
     const ipCount = getIpCount(cluster.spec.machineNetworks);
 
     if (!!ipCount && ipCount > 0) {
       return !(ipCount - nodeCount >= 0);
-    } else {
-      return false;
     }
+    return false;
   }
 }

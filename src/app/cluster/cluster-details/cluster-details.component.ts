@@ -14,34 +14,23 @@ import {
   UserService,
 } from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
-import {AddonEntity} from '../../shared/entity/AddonEntity';
-import {
-  ClusterEntity,
-  ClusterType,
-  getClusterProvider,
-  MasterVersion,
-} from '../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
-import {EventEntity} from '../../shared/entity/EventEntity';
-import {HealthEntity, HealthState} from '../../shared/entity/HealthEntity';
-import {MemberEntity} from '../../shared/entity/MemberEntity';
-import {ClusterMetrics} from '../../shared/entity/Metrics';
-import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
-import {NodeEntity} from '../../shared/entity/NodeEntity';
-import {
-  Binding,
-  ClusterBinding,
-  SimpleBinding,
-  SimpleClusterBinding,
-} from '../../shared/entity/RBACEntity';
-import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
+import {Addon} from '../../shared/entity/addon';
+import {Cluster, ClusterType, getClusterProvider, MasterVersion} from '../../shared/entity/cluster';
+import {View} from '../../shared/entity/common';
+import {Datacenter} from '../../shared/entity/datacenter';
+import {Event} from '../../shared/entity/event';
+import {Health, HealthState} from '../../shared/entity/health';
+import {Member} from '../../shared/entity/member';
+import {ClusterMetrics} from '../../shared/entity/metrics';
+import {NodeDeployment} from '../../shared/entity/node-deployment';
+import {Node} from '../../shared/entity/node';
+import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '../../shared/entity/rbac';
+import {SSHKey} from '../../shared/entity/ssh-key';
 import {Config, GroupConfig} from '../../shared/model/Config';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
+import {AdmissionPluginUtils} from '../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
-import {
-  MemberUtils,
-  Permission,
-} from '../../shared/utils/member-utils/member-utils';
+import {MemberUtils, Permission} from '../../shared/utils/member-utils/member-utils';
 import {NodeService} from '../services/node.service';
 
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/cluster-delete-confirmation.component';
@@ -56,27 +45,27 @@ import {ShareKubeconfigComponent} from './share-kubeconfig/share-kubeconfig.comp
   styleUrls: ['./cluster-details.component.scss'],
 })
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
-  cluster: ClusterEntity;
-  nodeDc: DataCenterEntity;
-  datacenter: DataCenterEntity;
-  sshKeys: SSHKeyEntity[] = [];
-  nodes: NodeEntity[] = [];
-  nodeDeployments: NodeDeploymentEntity[];
+  cluster: Cluster;
+  nodeDc: Datacenter;
+  datacenter: Datacenter;
+  sshKeys: SSHKey[] = [];
+  nodes: Node[] = [];
+  nodeDeployments: NodeDeployment[];
   isNodeDeploymentLoadFinished = false;
   isClusterRunning = false;
   isClusterAPIRunning = false;
   clusterHealthStatus: ClusterHealthStatus;
-  health: HealthEntity;
+  health: Health;
   config: Config = {share_kubeconfig: false};
   projectID: string;
   metrics: ClusterMetrics;
-  events: EventEntity[] = [];
-  addons: AddonEntity[] = [];
+  events: Event[] = [];
+  addons: Addon[] = [];
   upgrades: MasterVersion[] = [];
   clusterBindings: SimpleClusterBinding[] = [];
   bindings: SimpleBinding[] = [];
   private _unsubscribe: Subject<any> = new Subject();
-  private _user: MemberEntity;
+  private _user: Member;
   private _currentGroupConfig: GroupConfig;
 
   constructor(
@@ -100,21 +89,14 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const clusterID = this._route.snapshot.paramMap.get('clusterName');
     const seedDCName = this._route.snapshot.paramMap.get('seedDc');
 
-    this._userService.loggedInUser
-      .pipe(first())
-      .subscribe(user => (this._user = user));
+    this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
 
     this._userService
       .currentUserGroup(this.projectID)
-      .subscribe(
-        userGroup =>
-          (this._currentGroupConfig = this._userService.userGroupConfig(
-            userGroup
-          ))
-      );
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
 
     combineLatest([
-      this._datacenterService.getDataCenter(seedDCName),
+      this._datacenterService.getDatacenter(seedDCName),
       this._clusterService.cluster(this.projectID, clusterID, seedDCName),
     ])
       .pipe(
@@ -122,7 +104,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.datacenter = seedDatacenter;
           this.cluster = cluster;
 
-          return this._datacenterService.getDataCenter(cluster.spec.cloud.dc);
+          return this._datacenterService.getDatacenter(cluster.spec.cloud.dc);
         })
       )
       .pipe(
@@ -130,21 +112,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.nodeDc = datacenter;
 
           return combineLatest([
-            this._clusterService.sshKeys(
-              this.projectID,
-              this.cluster.id,
-              this.datacenter.metadata.name
-            ),
-            this._clusterService.health(
-              this.projectID,
-              this.cluster.id,
-              this.datacenter.metadata.name
-            ),
-            this._clusterService.events(
-              this.projectID,
-              this.cluster.id,
-              this.datacenter.metadata.name
-            ),
+            this._clusterService.sshKeys(this.projectID, this.cluster.id, this.datacenter.metadata.name),
+            this._clusterService.health(this.projectID, this.cluster.id, this.datacenter.metadata.name),
+            this._clusterService.events(this.projectID, this.cluster.id, this.datacenter.metadata.name),
           ]);
         })
       )
@@ -156,29 +126,16 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
           this.health = health;
           this.events = events;
-          this.isClusterAPIRunning = ClusterHealthStatus.isClusterAPIRunning(
-            this.cluster,
-            health
-          );
-          this.isClusterRunning = ClusterHealthStatus.isClusterRunning(
-            this.cluster,
-            health
-          );
-          this.clusterHealthStatus = ClusterHealthStatus.getHealthStatus(
-            this.cluster,
-            health
-          );
+          this.isClusterAPIRunning = ClusterHealthStatus.isClusterAPIRunning(this.cluster, health);
+          this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
+          this.clusterHealthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
 
           // Conditionally create an array of observables to use for 'combineLatest' operator.
           // In case real observable should not be returned, observable emitting empty array will be added to the array.
           const reload$ = []
             .concat(
               this._canReloadVersions()
-                ? this._clusterService.upgrades(
-                    this.projectID,
-                    this.cluster.id,
-                    this.datacenter.metadata.name
-                  )
+                ? this._clusterService.upgrades(this.projectID, this.cluster.id, this.datacenter.metadata.name)
                 : of([])
             )
             .concat(
@@ -189,37 +146,17 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                       this.datacenter.metadata.name,
                       this.projectID
                     ),
-                    this._rbacService.getBindings(
-                      this.cluster.id,
-                      this.datacenter.metadata.name,
-                      this.projectID
-                    ),
+                    this._rbacService.getBindings(this.cluster.id, this.datacenter.metadata.name, this.projectID),
                   ]
                 : [of([]), of([])]
             )
             .concat(
               this._canReloadNodes()
                 ? [
-                    this._clusterService.addons(
-                      this.projectID,
-                      this.cluster.id,
-                      this.datacenter.metadata.name
-                    ),
-                    this._clusterService.nodes(
-                      this.projectID,
-                      this.cluster.id,
-                      this.datacenter.metadata.name
-                    ),
-                    this._api.getNodeDeployments(
-                      this.cluster.id,
-                      this.datacenter.metadata.name,
-                      this.projectID
-                    ),
-                    this._clusterService.metrics(
-                      this.projectID,
-                      this.cluster.id,
-                      this.datacenter.metadata.name
-                    ),
+                    this._clusterService.addons(this.projectID, this.cluster.id, this.datacenter.metadata.name),
+                    this._clusterService.nodes(this.projectID, this.cluster.id, this.datacenter.metadata.name),
+                    this._api.getNodeDeployments(this.cluster.id, this.datacenter.metadata.name, this.projectID),
+                    this._clusterService.metrics(this.projectID, this.cluster.id, this.datacenter.metadata.name),
                   ]
                 : [of([]), of([]), of([]), of([])]
             );
@@ -229,21 +166,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(
-        ([
-          upgrades,
-          clusterBindings,
-          bindings,
-          addons,
-          nodes,
-          nodeDeployments,
-          metrics,
-        ]: [
+        ([upgrades, clusterBindings, bindings, addons, nodes, nodeDeployments, metrics]: [
           MasterVersion[],
           ClusterBinding[],
           Binding[],
-          AddonEntity[],
-          NodeEntity[],
-          NodeDeploymentEntity[],
+          Addon[],
+          Node[],
+          NodeDeployment[],
           ClusterMetrics
         ]) => {
           this.addons = addons;
@@ -252,9 +181,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.metrics = metrics;
           this.isNodeDeploymentLoadFinished = true;
           this.upgrades = upgrades;
-          this.clusterBindings = this.createSimpleClusterBinding(
-            clusterBindings
-          );
+          this.clusterBindings = this.createSimpleClusterBinding(clusterBindings);
           this.bindings = this.createSimpleBinding(bindings);
         },
         error => {
@@ -275,15 +202,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   private _canReloadBindings(): boolean {
-    return (
-      this.cluster &&
-      HealthEntity.allHealthy(this.health) &&
-      this.isRBACEnabled()
-    );
+    return this.cluster && Health.allHealthy(this.health) && this.isRBACEnabled();
   }
 
   private _canReloadNodes(): boolean {
-    return this.cluster && HealthEntity.allHealthy(this.health);
+    return this.cluster && Health.allHealthy(this.health);
   }
 
   getProvider(provider: string): string {
@@ -293,18 +216,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   isAddNodeDeploymentsEnabled(): boolean {
     return (
       this.isClusterRunning &&
-      MemberUtils.hasPermission(
-        this._user,
-        this._currentGroupConfig,
-        'nodeDeployments',
-        Permission.Create
-      )
+      MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'nodeDeployments', Permission.Create)
     );
   }
 
-  createSimpleClusterBinding(
-    bindings: ClusterBinding[]
-  ): SimpleClusterBinding[] {
+  createSimpleClusterBinding(bindings: ClusterBinding[]): SimpleClusterBinding[] {
     const clusterBindingArray = [];
     bindings.forEach(binding => {
       if (binding.subjects) {
@@ -339,12 +255,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   addNode(): void {
     this._node
-      .showNodeDeploymentCreateDialog(
-        this.nodes.length,
-        this.cluster,
-        this.projectID,
-        this.datacenter
-      )
+      .showNodeDeploymentCreateDialog(this.nodes.length, this.cluster, this.projectID, this.datacenter)
       .pipe(first())
       .subscribe(isConfirmed => {
         if (isConfirmed) {
@@ -354,12 +265,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isDeleteEnabled(): boolean {
-    return MemberUtils.hasPermission(
-      this._user,
-      this._currentGroupConfig,
-      'clusters',
-      Permission.Delete
-    );
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Delete);
   }
 
   deleteClusterDialog(): void {
@@ -394,22 +300,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         iif(
           () => settings.enableOIDCKubeconfig,
           this._userService.loggedInUser.pipe(
-            map((user: MemberEntity) =>
-              this._api.getShareKubeconfigURL(
-                this.projectID,
-                this.datacenter.metadata.name,
-                this.cluster.id,
-                user.id
-              )
+            map((user: Member) =>
+              this._api.getShareKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id, user.id)
             )
           ),
-          of(
-            this._api.getKubeconfigURL(
-              this.projectID,
-              this.datacenter.metadata.name,
-              this.cluster.id
-            )
-          )
+          of(this._api.getKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id))
         )
       )
     );
@@ -417,33 +312,16 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   getProxyURL(): string {
     return this.cluster.type === ClusterType.OpenShift
-      ? this._api.getOpenshiftProxyURL(
-          this.projectID,
-          this.datacenter.metadata.name,
-          this.cluster.id
-        )
-      : this._api.getDashboardProxyURL(
-          this.projectID,
-          this.datacenter.metadata.name,
-          this.cluster.id
-        );
+      ? this._api.getOpenshiftProxyURL(this.projectID, this.datacenter.metadata.name, this.cluster.id)
+      : this._api.getDashboardProxyURL(this.projectID, this.datacenter.metadata.name, this.cluster.id);
   }
 
   isLoaded(): boolean {
-    return (
-      this.cluster &&
-      (getClusterProvider(this.cluster) === NodeProvider.BRINGYOUROWN ||
-        !!this.nodeDc)
-    );
+    return this.cluster && (getClusterProvider(this.cluster) === NodeProvider.BRINGYOUROWN || !!this.nodeDc);
   }
 
   isEditEnabled(): boolean {
-    return MemberUtils.hasPermission(
-      this._user,
-      this._currentGroupConfig,
-      'clusters',
-      Permission.Edit
-    );
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Edit);
   }
 
   isOpenshiftCluster(): boolean {
@@ -458,12 +336,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isSSHKeysEditEnabled(): boolean {
-    return MemberUtils.hasPermission(
-      this._user,
-      this._currentGroupConfig,
-      'sshKeys',
-      Permission.Delete
-    );
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.SSHKeys, Permission.Delete);
   }
 
   editSSHKeys(): void {
@@ -482,12 +355,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isRevokeTokenEnabled(): boolean {
-    return MemberUtils.hasPermission(
-      this._user,
-      this._currentGroupConfig,
-      'clusters',
-      Permission.Edit
-    );
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Edit);
   }
 
   revokeToken(): void {
@@ -497,14 +365,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.projectID = this.projectID;
   }
 
-  handleAddonCreation(addon: AddonEntity): void {
+  handleAddonCreation(addon: Addon): void {
     this._clusterService
-      .createAddon(
-        addon,
-        this.projectID,
-        this.cluster.id,
-        this.datacenter.metadata.name
-      )
+      .createAddon(addon, this.projectID, this.cluster.id, this.datacenter.metadata.name)
       .pipe(first())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
@@ -515,32 +378,20 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  handleAddonEdition(addon: AddonEntity): void {
+  handleAddonEdition(addon: Addon): void {
     this._clusterService
-      .editAddon(
-        addon,
-        this.projectID,
-        this.cluster.id,
-        this.datacenter.metadata.name
-      )
+      .editAddon(addon, this.projectID, this.cluster.id, this.datacenter.metadata.name)
       .pipe(first())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this.reloadAddons();
-        this._notificationService.success(
-          `The <strong>${addon.name}</strong> addon was updated`
-        );
+        this._notificationService.success(`The <strong>${addon.name}</strong> addon was updated`);
       });
   }
 
-  handleAddonDeletion(addon: AddonEntity): void {
+  handleAddonDeletion(addon: Addon): void {
     this._clusterService
-      .deleteAddon(
-        addon.id,
-        this.projectID,
-        this.cluster.id,
-        this.datacenter.metadata.name
-      )
+      .deleteAddon(addon.id, this.projectID, this.cluster.id, this.datacenter.metadata.name)
       .pipe(first())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
@@ -563,18 +414,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   getConnectName(): string {
-    return ClusterEntity.isOpenshiftType(this.cluster)
-      ? 'Open Console'
-      : 'Open Dashboard';
+    return Cluster.isOpenshiftType(this.cluster) ? 'Open Console' : 'Open Dashboard';
   }
 
   isRBACEnabled(): boolean {
-    return MemberUtils.hasPermission(
-      this._user,
-      this._currentGroupConfig,
-      'rbac',
-      Permission.View
-    );
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'rbac', Permission.View);
   }
 
   ngOnDestroy(): void {
@@ -584,10 +428,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   isShareConfigEnabled(): Observable<boolean> {
     return this.settings.adminSettings.pipe(
-      map(
-        settings =>
-          !!this.config.share_kubeconfig && !settings.enableOIDCKubeconfig
-      )
+      map(settings => !!this.config.share_kubeconfig && !settings.enableOIDCKubeconfig)
     );
+  }
+
+  getAdmissionPlugins(): string {
+    return AdmissionPluginUtils.getJoinedPluginNames(this.cluster.spec.admissionPlugins);
   }
 }

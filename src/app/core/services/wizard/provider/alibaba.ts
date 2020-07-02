@@ -1,22 +1,16 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 
-import {
-  AlibabaInstanceType,
-  AlibabaZone,
-} from '../../../../shared/entity/provider/alibaba/Alibaba';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
+import {AlibabaInstanceType, AlibabaZone} from '../../../../shared/entity/provider/alibaba';
 
 export class Alibaba extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
     super(http, provider);
 
-    this._setRequiredHeaders(
-      Alibaba.Header.AccessKeyID,
-      Alibaba.Header.AccessKeySecret
-    );
+    this._setRequiredHeaders(Alibaba.Header.AccessKeyID, Alibaba.Header.AccessKeySecret);
   }
 
   credential(credential: string): Alibaba {
@@ -26,20 +20,14 @@ export class Alibaba extends Provider {
 
   accessKeyID(accessKeyID: string): Alibaba {
     if (accessKeyID) {
-      this._headers = this._headers.set(
-        Alibaba.Header.AccessKeyID,
-        accessKeyID
-      );
+      this._headers = this._headers.set(Alibaba.Header.AccessKeyID, accessKeyID);
     }
     return this;
   }
 
   accessKeySecret(accessKeySecret: string): Alibaba {
     if (accessKeySecret) {
-      this._headers = this._headers.set(
-        Alibaba.Header.AccessKeySecret,
-        accessKeySecret
-      );
+      this._headers = this._headers.set(Alibaba.Header.AccessKeySecret, accessKeySecret);
     }
     return this;
   }
@@ -51,14 +39,8 @@ export class Alibaba extends Provider {
     return this;
   }
 
-  instanceTypes(
-    onLoadingCb: () => void = null
-  ): Observable<AlibabaInstanceType[]> {
-    this._setRequiredHeaders(
-      Alibaba.Header.AccessKeyID,
-      Alibaba.Header.AccessKeySecret,
-      Alibaba.Header.Region
-    );
+  instanceTypes(onLoadingCb: () => void = null): Observable<AlibabaInstanceType[]> {
+    this._setRequiredHeaders(Alibaba.Header.AccessKeyID, Alibaba.Header.AccessKeySecret, Alibaba.Header.Region);
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -72,11 +54,7 @@ export class Alibaba extends Provider {
   }
 
   zones(onLoadingCb: () => void = null): Observable<AlibabaZone[]> {
-    this._setRequiredHeaders(
-      Alibaba.Header.AccessKeyID,
-      Alibaba.Header.AccessKeySecret,
-      Alibaba.Header.Region
-    );
+    this._setRequiredHeaders(Alibaba.Header.AccessKeyID, Alibaba.Header.AccessKeySecret, Alibaba.Header.Region);
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }

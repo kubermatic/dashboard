@@ -1,45 +1,25 @@
-import {
-  Component,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EMPTY, forkJoin, of, onErrorResumeNext, Subject} from 'rxjs';
-import {
-  catchError,
-  distinctUntilChanged,
-  first,
-  switchMap,
-  takeUntil,
-  tap,
-} from 'rxjs/operators';
+import {catchError, distinctUntilChanged, first, switchMap, takeUntil, tap} from 'rxjs/operators';
+import * as _ from 'lodash';
 
-import {
-  ApiService,
-  ClusterService,
-  DatacenterService,
-  ProjectService,
-  UserService,
-} from '../../core/services';
+import {ApiService, ClusterService, DatacenterService, ProjectService, UserService} from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
-import {CloudSpec, ClusterEntity} from '../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
-import {HealthEntity} from '../../shared/entity/HealthEntity';
-import {MemberEntity} from '../../shared/entity/MemberEntity';
-import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
-import {ProjectEntity} from '../../shared/entity/ProjectEntity';
+import {CloudSpec, Cluster} from '../../shared/entity/cluster';
+import {Datacenter} from '../../shared/entity/datacenter';
+import {View} from '../../shared/entity/common';
+import {Health} from '../../shared/entity/health';
+import {Member} from '../../shared/entity/member';
+import {NodeDeployment} from '../../shared/entity/node-deployment';
+import {Project} from '../../shared/entity/project';
 import {GroupConfig} from '../../shared/model/Config';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
-import {
-  MemberUtils,
-  Permission,
-} from '../../shared/utils/member-utils/member-utils';
+import {MemberUtils, Permission} from '../../shared/utils/member-utils/member-utils';
 import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
 
 @Component({
@@ -48,29 +28,20 @@ import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-del
   styleUrls: ['./cluster-list.component.scss'],
 })
 export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
-  clusters: ClusterEntity[] = [];
+  clusters: Cluster[] = [];
   isInitialized = true;
-  nodeDC: DataCenterEntity[] = [];
-  seedDC: DataCenterEntity[] = [];
-  health: HealthEntity[] = [];
-  nodeDeployments: NodeDeploymentEntity[][] = [];
+  nodeDC: Datacenter[] = [];
+  seedDC: Datacenter[] = [];
+  health: Health[] = [];
+  nodeDeployments: NodeDeployment[][] = [];
   provider = [];
-  displayedColumns: string[] = [
-    'status',
-    'name',
-    'labels',
-    'provider',
-    'region',
-    'type',
-    'created',
-    'actions',
-  ];
-  dataSource = new MatTableDataSource<ClusterEntity>();
+  displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'region', 'type', 'created', 'actions'];
+  dataSource = new MatTableDataSource<Cluster>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private _unsubscribe: Subject<any> = new Subject();
-  private _selectedProject = {} as ProjectEntity;
-  private _user: MemberEntity;
+  private _selectedProject = {} as Project;
+  private _user: Member;
   private _currentGroupConfig: GroupConfig;
 
   constructor(
@@ -86,25 +57,19 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._selectedProject.id = this._activeRoute.snapshot.paramMap.get(
-      'projectID'
-    );
+    this._selectedProject.id = this._activeRoute.snapshot.paramMap.get('projectID');
     this.dataSource.data = this.clusters;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._userService.loggedInUser
-      .pipe(first())
-      .subscribe(user => (this._user = user));
+    this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
 
-    this._settingsService.userSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        this.paginator.pageSize = settings.itemsPerPage;
-        this.dataSource.paginator = this.paginator; // Force refresh.
-      });
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = this.paginator; // Force refresh.
+    });
 
     this._projectService.selectedProject
       .pipe(
@@ -114,23 +79,14 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
         })
       )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        userGroup =>
-          (this._currentGroupConfig = this._userService.userGroupConfig(
-            userGroup
-          ))
-      );
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
 
     this._projectService.selectedProject
       // Do not allow project refresh to fire clusters refresh unless project has been changed.
-      .pipe(
-        distinctUntilChanged(
-          (p: ProjectEntity, q: ProjectEntity) => p.id === q.id
-        )
-      )
+      .pipe(distinctUntilChanged((p: Project, q: Project) => p.id === q.id))
       .pipe(switchMap(project => this._clusterService.clusters(project.id)))
       .pipe(
-        switchMap((clusters: ClusterEntity[]) => {
+        switchMap((clusters: Cluster[]) => {
           this.clusters = clusters;
           this.dataSource.data = this.clusters;
           this.isInitialized = false;
@@ -139,30 +95,13 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
             clusters.map(cluster => {
               return (
                 this._datacenterService
-                  .getDataCenter(cluster.spec.cloud.dc)
-                  .pipe(
-                    tap(datacenter => (this.nodeDC[cluster.id] = datacenter))
-                  )
-                  .pipe(
-                    switchMap(datacenter =>
-                      this._datacenterService.getDataCenter(
-                        datacenter.spec.seed
-                      )
-                    )
-                  )
-                  .pipe(
-                    tap(
-                      seedDatacenter =>
-                        (this.seedDC[cluster.id] = seedDatacenter)
-                    )
-                  )
+                  .getDatacenter(cluster.spec.cloud.dc)
+                  .pipe(tap(datacenter => (this.nodeDC[cluster.id] = datacenter)))
+                  .pipe(switchMap(datacenter => this._datacenterService.getDatacenter(datacenter.spec.seed)))
+                  .pipe(tap(seedDatacenter => (this.seedDC[cluster.id] = seedDatacenter)))
                   .pipe(
                     switchMap(seedDatacenter =>
-                      this._clusterService.health(
-                        this._selectedProject.id,
-                        cluster.id,
-                        seedDatacenter.metadata.name
-                      )
+                      this._clusterService.health(this._selectedProject.id, cluster.id, seedDatacenter.metadata.name)
                     )
                   )
                   // We need to resume on error, otherwise subscription will be canceled and clusters will stop
@@ -171,7 +110,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
                   .pipe(tap(health => (this.health[cluster.id] = health)))
                   .pipe(
                     switchMap(_ =>
-                      HealthEntity.allHealthy(this.health[cluster.id])
+                      Health.allHealthy(this.health[cluster.id])
                         ? this._apiService.getNodeDeployments(
                             cluster.id,
                             this.seedDC[cluster.id].metadata.name,
@@ -180,12 +119,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
                         : of([])
                     )
                   )
-                  .pipe(
-                    tap(
-                      nodeDeployments =>
-                        (this.nodeDeployments[cluster.id] = nodeDeployments)
-                    )
-                  )
+                  .pipe(tap(nodeDeployments => (this.nodeDeployments[cluster.id] = nodeDeployments)))
               );
             })
           );
@@ -204,48 +138,33 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getHealthStatus(cluster: ClusterEntity): ClusterHealthStatus {
-    return ClusterHealthStatus.getHealthStatus(
-      cluster,
-      this.health[cluster.id]
-    );
+  getHealthStatus(cluster: Cluster): ClusterHealthStatus {
+    return ClusterHealthStatus.getHealthStatus(cluster, this.health[cluster.id]);
   }
 
   canAdd(): boolean {
-    return MemberUtils.hasPermission(
-      this._user,
-      this._currentGroupConfig,
-      'clusters',
-      Permission.Create
-    );
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Create);
   }
 
   canDelete(): boolean {
-    return MemberUtils.hasPermission(
-      this._user,
-      this._currentGroupConfig,
-      'clusters',
-      Permission.Delete
-    );
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Delete);
   }
 
   loadWizard(): void {
     this._router.navigate([`/projects/${this._selectedProject.id}/wizard`]);
   }
 
-  navigateToCluster(cluster: ClusterEntity): void {
+  navigateToCluster(cluster: Cluster): void {
     this._router.navigate([
-      `/projects/${this._selectedProject.id}/dc/${
-        this.nodeDC[cluster.id].spec.seed
-      }/clusters/${cluster.id}`,
+      `/projects/${this._selectedProject.id}/dc/${this.nodeDC[cluster.id].spec.seed}/clusters/${cluster.id}`,
     ]);
   }
 
   getProvider(cloud: CloudSpec): string {
-    return ClusterEntity.getProvider(cloud);
+    return Cluster.getProvider(cloud);
   }
 
-  deleteClusterDialog(cluster: ClusterEntity, event: Event): void {
+  deleteClusterDialog(cluster: Cluster, event: Event): void {
     event.stopPropagation();
     const modal = this._matDialog.open(ClusterDeleteConfirmationComponent);
     modal.componentInstance.cluster = cluster;
@@ -253,24 +172,14 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     modal.componentInstance.projectID = this._selectedProject.id;
   }
 
-  hasItems(): boolean {
-    return this.clusters && this.clusters.length > 0;
-  }
-
   isPaginatorVisible(): boolean {
-    return (
-      this.hasItems() &&
-      this.paginator &&
-      this.clusters.length > this.paginator.pageSize
-    );
+    return !_.isEmpty(this.clusters) && this.paginator && this.clusters.length > this.paginator.pageSize;
   }
 
   showEOLWarning(element): boolean {
     return (
       !!this.nodeDeployments[element.id] &&
-      this.nodeDeployments[element.id].filter(
-        nd => !!nd.spec.template.operatingSystem.containerLinux
-      ).length > 0
+      this.nodeDeployments[element.id].filter(nd => !!nd.spec.template.operatingSystem.containerLinux).length > 0
     );
   }
 }

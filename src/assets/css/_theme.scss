@@ -691,6 +691,10 @@
     background-color: map-get($colors, indicator-red) !important;
   }
 
+  .km-hover-bg:hover {
+    background-color: $background-hover;
+  }
+
   .km-border {
     border: 1px solid $divider;
   }
@@ -731,6 +735,21 @@
 
     &:active {
       color: lighten(map-get($colors, primary), 0.5);
+    }
+  }
+
+  .monaco-editor {
+    box-shadow: 0 0 0 1px $divider;
+    border-radius: $border-radius;
+    overflow: hidden;
+    transition: all .2s ease;
+
+    &:hover {
+      box-shadow: 0 0 0 2px map-get($colors, secondary-hover);
+    }
+
+    &.focused {
+      box-shadow: 0 0 0 2px map-get($colors, primary-hover) !important;
     }
   }
 
@@ -841,9 +860,13 @@
     }
   }
 
-  .km-notification-panel .panel {
+  .km-panel .panel {
     background-color: $background-app-bar;
+    border-radius: $border-radius;
     box-shadow: map-get($colors, shadow-dark) !important;
+    position: fixed;
+    overflow: hidden;
+    z-index: 3;
 
     .notification-info .km-icon-mask {
       background-color: $text-secondary !important;
@@ -1501,7 +1524,7 @@
     margin-left: 2.75 * $baseline-grid !important;
   }
 
-  .km-sshkey-dropdown {
+  .km-multiple-values-dropdown {
     margin-left: 3.75 * $baseline-grid !important;
   }
 
@@ -1629,6 +1652,19 @@
   .km-user-settings-form-field {
     .mat-form-field-wrapper {
       padding-bottom: 0;
+    }
+  }
+
+  .km-admission-plugin-warning {
+    margin-bottom: 3 * $baseline-grid;
+
+    i {
+      margin: 0 $baseline-grid;
+    }
+
+    p {
+      margin: 0;
+      font-size: $font-size-body;
     }
   }
 }

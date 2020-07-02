@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {Observable, of} from 'rxjs';
 
 @Injectable()
 export class AuthMockService {
@@ -20,5 +21,9 @@ export class AuthMockService {
     return 'testUser';
   }
 
-  logout(): void {}
+  logout(): Observable<boolean> {
+    return of(true);
+  }
+
+  setNonce(): void {}
 }

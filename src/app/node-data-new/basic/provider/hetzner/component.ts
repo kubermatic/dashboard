@@ -1,25 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  forwardRef,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
-import {
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {
-  HetznerTypes,
-  Type,
-} from '../../../../shared/entity/provider/hetzner/TypeEntity';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
+import {HetznerTypes, Type} from '../../../../shared/entity/provider/hetzner';
 
 enum Controls {
   Type = 'type',
@@ -53,8 +38,7 @@ enum TypeState {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HetznerBasicNodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class HetznerBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private _types: HetznerTypes = HetznerTypes.newHetznerTypes();
 
   readonly Controls = Controls;
@@ -79,9 +63,7 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator
       [Controls.Type]: this._builder.control('', Validators.required),
     });
 
-    this._typesObservable
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._setDefaultType.bind(this));
+    this._typesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultType.bind(this));
   }
 
   ngOnDestroy(): void {
@@ -99,19 +81,12 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator
   }
 
   typeDisplayName(name: string): string {
-    const type = [...this._types.dedicated, ...this._types.standard].find(
-      type => type.name === name
-    );
-    return type
-      ? `${type.name} (${type.cores} vCPU, ${type.memory} GB RAM)`
-      : '';
+    const type = [...this._types.dedicated, ...this._types.standard].find(type => type.name === name);
+    return type ? `${type.name} (${type.cores} vCPU, ${type.memory} GB RAM)` : '';
   }
 
   private get _typesObservable(): Observable<HetznerTypes> {
-    return this._nodeDataService.hetzner.flavors(
-      this._clearType.bind(this),
-      this._onTypeLoading.bind(this)
-    );
+    return this._nodeDataService.hetzner.flavors(this._clearType.bind(this), this._onTypeLoading.bind(this));
   }
 
   private _onTypeLoading(): void {
@@ -129,11 +104,7 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator
 
   private _setDefaultType(types: HetznerTypes): void {
     this._types = types;
-    if (
-      this._types &&
-      this._types.standard &&
-      this._types.standard.length > 0
-    ) {
+    if (this._types && this._types.standard && this._types.standard.length > 0) {
       this.selectedType = this._types.standard[0].name;
       this.typeLabel = TypeState.Ready;
       this._cdr.detectChanges();

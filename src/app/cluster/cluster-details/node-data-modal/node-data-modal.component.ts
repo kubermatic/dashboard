@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Inject,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -14,28 +7,28 @@ import {takeUntil} from 'rxjs/operators';
 import {DatacenterService, WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
+import {Cluster} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
+import {NodeDeployment} from '../../../shared/entity/node-deployment';
 import {
   getEmptyNodeProviderSpec,
   getEmptyNodeVersionSpec,
   getEmptyOperatingSystemSpec,
   NodeSpec,
-} from '../../../shared/entity/NodeEntity';
+} from '../../../shared/entity/node';
 import {NodeData} from '../../../shared/model/NodeSpecChange';
 import {objectDiff} from '../../../shared/utils/common-utils';
 
 export interface NodeDataModalData {
-  cluster: ClusterEntity;
-  datacenter: DataCenterEntity;
+  cluster: Cluster;
+  datacenter: Datacenter;
   projectID: string;
   existingNodesCount: number;
 
   // Fields specific for edit mode (not required if using dialog to add new nodes).
   editMode?: boolean;
   nodeData?: NodeData;
-  nodeDeployment?: NodeDeploymentEntity;
+  nodeDeployment?: NodeDeployment;
 }
 
 @Component({
@@ -44,9 +37,9 @@ export interface NodeDataModalData {
   styleUrls: ['./node-data-modal.component.scss'],
 })
 export class NodeDataModalComponent implements OnInit, OnDestroy {
-  @Output() editNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
-  nodeDC: DataCenterEntity;
-  seedDC: DataCenterEntity;
+  @Output() editNodeDeployment = new EventEmitter<NodeDeployment>();
+  nodeDC: Datacenter;
+  seedDC: Datacenter;
   isExtended = false;
   isRecreationWarningVisible = false;
   nodeDataValid = false;
@@ -83,29 +76,22 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
     }
 
     this.dcService
-      .getDataCenter(this.data.cluster.spec.cloud.dc)
+      .getDatacenter(this.data.cluster.spec.cloud.dc)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(result => (this.nodeDC = result));
 
     if (this.data.editMode !== true) {
-      this.data.nodeData.spec.cloud[
-        this.nodeDC.spec.provider
-      ] = getEmptyNodeProviderSpec(this.nodeDC.spec.provider);
+      this.data.nodeData.spec.cloud[this.nodeDC.spec.provider] = getEmptyNodeProviderSpec(this.nodeDC.spec.provider);
       this.data.nodeData.spec.operatingSystem = getEmptyOperatingSystemSpec();
       this.data.nodeData.spec.versions = getEmptyNodeVersionSpec();
     }
 
-    this.nodeDataService.nodeDataChanges$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(async data => {
-        this.data.nodeData = await data;
-        this.isRecreationWarningVisible = this._isRecreationWarningVisible();
-      });
+    this.nodeDataService.nodeDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(async data => {
+      this.data.nodeData = await data;
+      this.isRecreationWarningVisible = this._isRecreationWarningVisible();
+    });
 
-    this.googleAnalyticsService.emitEvent(
-      'clusterOverview',
-      'addNodeDialogOpened'
-    );
+    this.googleAnalyticsService.emitEvent('clusterOverview', 'addNodeDialogOpened');
   }
 
   ngOnDestroy(): void {
@@ -119,10 +105,7 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
   }
 
   private _isRecreationWarningVisible(): boolean {
-    return (
-      this.data.editMode &&
-      !_.isEqual(objectDiff(this._initialNodeSpec, this.data.nodeData.spec), {})
-    );
+    return this.data.editMode && !_.isEqual(objectDiff(this._initialNodeSpec, this.data.nodeData.spec), {});
   }
 
   getDialogLabel(): string {

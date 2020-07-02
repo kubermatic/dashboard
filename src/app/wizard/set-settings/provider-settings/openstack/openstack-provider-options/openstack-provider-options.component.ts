@@ -3,21 +3,21 @@ import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
 import {merge, Subject} from 'rxjs';
 import {distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../../../core/services';
-import {ClusterEntity} from '../../../../../shared/entity/ClusterEntity';
+import {Cluster} from '../../../../../shared/entity/cluster';
+import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
+import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
 import {
   OpenstackNetwork,
   OpenstackSecurityGroup,
   OpenstackSubnet,
-} from '../../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
-import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
-import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
+} from '../../../../../shared/entity/provider/openstack';
 
 @Component({
   selector: 'km-openstack-provider-options',
   templateUrl: './openstack-provider-options.component.html',
 })
 export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
 
   hideOptional = true;
   form: FormGroup;
@@ -70,41 +70,31 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
         }
       });
 
-    this._wizardService.onCustomPresetSelect
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(newCredentials => {
-        this._selectedPreset = newCredentials;
-        if (newCredentials) {
-          this.form.disable();
-          this._wizardService.changeClusterProviderSettings(
-            this._clusterProviderSettingsForm(this._hasRequiredCredentials())
-          );
-          return;
-        }
+    this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+      this._selectedPreset = newCredentials;
+      if (newCredentials) {
+        this.form.disable();
+        this._wizardService.changeClusterProviderSettings(
+          this._clusterProviderSettingsForm(this._hasRequiredCredentials())
+        );
+        return;
+      }
 
-        if (this._hasRequiredCredentials()) {
-          this.form.enable();
-        }
-      });
+      if (this._hasRequiredCredentials()) {
+        this.form.enable();
+      }
+    });
 
-    this._wizardService.clusterProviderSettingsFormChanges$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.cluster.spec.cloud.openstack = data.cloudSpec.openstack;
-        if (this._hasRequiredCredentials()) {
-          this._loadOptionalSettings();
-        }
-      });
+    this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      this.cluster.spec.cloud.openstack = data.cloudSpec.openstack;
+      if (this._hasRequiredCredentials()) {
+        this._loadOptionalSettings();
+      }
+    });
 
-    this._wizardService.clusterSettingsFormViewChanged$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.hideOptional = data.hideOptional;
-      });
-  }
-
-  disableForm(): void {
-    this.form.disable();
+    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      this.hideOptional = data.hideOptional;
+    });
   }
 
   showHint(field: string): boolean {
@@ -112,58 +102,46 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
       case 'subnetId':
         return (
           !this._loadingSubnetIds &&
-          (!this._hasRequiredCredentials() ||
-            this.form.controls.network.value === '') &&
+          (!this._hasRequiredCredentials() || this.form.controls.network.value === '') &&
           !this._selectedPreset
         );
       case 'optionalSettings':
-        return (
-          !this._loadingOptionalSettings && !this._hasRequiredCredentials()
-        );
+        return !this._loadingOptionalSettings && !this._hasRequiredCredentials();
       default:
         return false;
     }
   }
 
-  getOptionalSettingsFormState(field: string): string {
+  getNetworkFormState(): string {
     if (!this._loadingOptionalSettings && !this._hasRequiredCredentials()) {
-      return field;
+      return 'Network';
     } else if (this._loadingOptionalSettings && !this._selectedPreset) {
-      return 'Loading ' + field + 's...';
-    } else {
-      switch (field) {
-        case 'Security Group':
-          return this.securityGroups.length === 0 && !this._selectedPreset
-            ? 'No Security Groups available'
-            : field;
-        case 'Network':
-          return this.networks.length === 0 && !this._selectedPreset
-            ? 'No Networks available'
-            : field;
-        default:
-          return '';
-      }
+      return 'Loading Networks...';
     }
+    return this.networks.length === 0 && !this._selectedPreset ? 'No Networks available' : 'Network';
+  }
+
+  getSecurityGroupFormState(): string {
+    if (!this._loadingOptionalSettings && !this._hasRequiredCredentials()) {
+      return 'Security Group';
+    } else if (this._loadingOptionalSettings && !this._selectedPreset) {
+      return 'Loading Security Groups...';
+    }
+
+    return this.securityGroups.length === 0 && !this._selectedPreset
+      ? 'No Security Groups available'
+      : 'Security Group';
   }
 
   getSubnetIDFormState(): string {
-    if (
-      !this._loadingSubnetIds &&
-      (!this._hasRequiredCredentials() ||
-        this.form.controls.network.value === '')
-    ) {
+    if (!this._loadingSubnetIds && (!this._hasRequiredCredentials() || this.form.controls.network.value === '')) {
       return 'Subnet ID';
     } else if (this._loadingSubnetIds && !this._selectedPreset) {
       return 'Loading Subnet IDs...';
-    } else if (
-      this.form.controls.network.value !== '' &&
-      this.subnetIds.length === 0 &&
-      !this._selectedPreset
-    ) {
+    } else if (this.form.controls.network.value !== '' && this.subnetIds.length === 0 && !this._selectedPreset) {
       return 'No Subnet IDs available';
-    } else {
-      return 'Subnet ID';
     }
+    return 'Subnet ID';
   }
 
   ngOnDestroy(): void {
@@ -213,9 +191,7 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(
         securityGroups => {
-          this.securityGroups = securityGroups.sort((a, b) =>
-            a.name.localeCompare(b.name)
-          );
+          this.securityGroups = securityGroups.sort((a, b) => a.name.localeCompare(b.name));
 
           this._enableSecurityGroup(this.securityGroups.length !== 0);
           this._loadingOptionalSettings = false;
@@ -297,8 +273,7 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
       (this.cluster.spec.cloud.openstack.username !== '' &&
         this.cluster.spec.cloud.openstack.password !== '' &&
         this.cluster.spec.cloud.openstack.domain !== '' &&
-        (this.cluster.spec.cloud.openstack.tenant !== '' ||
-          this.cluster.spec.cloud.openstack.tenantID !== '')) ||
+        (this.cluster.spec.cloud.openstack.tenant !== '' || this.cluster.spec.cloud.openstack.tenantID !== '')) ||
       !!this._selectedPreset
     );
   }
@@ -307,9 +282,7 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
     return this.form.controls.network.value.toString().length > 0;
   }
 
-  private _clusterProviderSettingsForm(
-    isValid: boolean
-  ): ClusterProviderSettingsForm {
+  private _clusterProviderSettingsForm(isValid: boolean): ClusterProviderSettingsForm {
     return {
       cloudSpec: {
         openstack: {

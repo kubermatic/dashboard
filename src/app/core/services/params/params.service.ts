@@ -1,10 +1,13 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, ParamMap, Router} from '@angular/router';
 import {Subject} from 'rxjs';
-import {filter} from 'rxjs/operators';
+import {filter, switchMap} from 'rxjs/operators';
 
 export enum PathParam {
   ProjectID = 'projectID',
+  ClusterID = 'clusterName',
+  SeedDC = 'seedDc',
+  NodeDeploymentID = 'nodeDeploymentID',
 }
 
 @Injectable()
@@ -16,16 +19,19 @@ export class ParamsService {
   constructor(private _router: Router, private _route: ActivatedRoute) {
     this._router.events
       .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
-        let active = this._route;
-        while (active.firstChild) {
-          active = active.firstChild;
-        }
+      .pipe(
+        switchMap(_ => {
+          let active = this._route;
+          while (active.firstChild) {
+            active = active.firstChild;
+          }
 
-        active.paramMap.subscribe((paramMap: ParamMap) => {
-          this._paramMap = paramMap;
-          this.onParamChange.next();
-        });
+          return active.paramMap;
+        })
+      )
+      .subscribe((paramMap: ParamMap) => {
+        this._paramMap = paramMap;
+        this.onParamChange.next();
       });
   }
 

@@ -4,7 +4,7 @@ import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../../../core/services';
-import {ClusterEntity} from '../../../../../shared/entity/ClusterEntity';
+import {Cluster} from '../../../../../shared/entity/cluster';
 import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
 
 @Component({
@@ -12,7 +12,7 @@ import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterFo
   templateUrl: './azure-provider-options.component.html',
 })
 export class AzureProviderOptionsComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
+  @Input() cluster: Cluster;
 
   hideOptional = true;
   form: FormGroup;
@@ -24,13 +24,9 @@ export class AzureProviderOptionsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      resourceGroup: new FormControl(
-        this.cluster.spec.cloud.azure.resourceGroup
-      ),
+      resourceGroup: new FormControl(this.cluster.spec.cloud.azure.resourceGroup),
       routeTable: new FormControl(this.cluster.spec.cloud.azure.routeTable),
-      securityGroup: new FormControl(
-        this.cluster.spec.cloud.azure.securityGroup
-      ),
+      securityGroup: new FormControl(this.cluster.spec.cloud.azure.securityGroup),
       subnet: new FormControl(this.cluster.spec.cloud.azure.subnet),
       vnet: new FormControl(this.cluster.spec.cloud.azure.vnet),
     });
@@ -44,29 +40,23 @@ export class AzureProviderOptionsComponent implements OnInit, OnDestroy {
         );
       });
 
-    this._wizardService.clusterProviderSettingsFormChanges$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.cluster.spec.cloud.azure = data.cloudSpec.azure;
-      });
+    this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      this.cluster.spec.cloud.azure = data.cloudSpec.azure;
+    });
 
-    this._wizardService.clusterSettingsFormViewChanged$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.hideOptional = data.hideOptional;
-      });
+    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      this.hideOptional = data.hideOptional;
+    });
 
-    this._wizardService.onCustomPresetSelect
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(newCredentials => {
-        this._selectedPreset = newCredentials;
-        if (newCredentials) {
-          this.form.disable();
-          return;
-        }
+    this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+      this._selectedPreset = newCredentials;
+      if (newCredentials) {
+        this.form.disable();
+        return;
+      }
 
-        this.form.enable();
-      });
+      this.form.enable();
+    });
   }
 
   private _hasRequiredCredentials(): boolean {
@@ -79,9 +69,7 @@ export class AzureProviderOptionsComponent implements OnInit, OnDestroy {
     );
   }
 
-  private _clusterProviderSettingsForm(
-    isValid: boolean
-  ): ClusterProviderSettingsForm {
+  private _clusterProviderSettingsForm(isValid: boolean): ClusterProviderSettingsForm {
     return {
       cloudSpec: {
         azure: {

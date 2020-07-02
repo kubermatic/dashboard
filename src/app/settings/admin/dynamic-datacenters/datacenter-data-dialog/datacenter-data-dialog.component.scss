@@ -1,0 +1,23 @@
+@import '../../../../../assets/css/variables';
+
+.mat-dialog-content {
+  overflow-y: scroll !important;
+}
+
+.domain-input {
+  margin-bottom: 2 * $baseline-grid;
+}
+
+.property-name {
+  font-size: $font-size-subhead-lg;
+  line-height: 2.5 * $line-height;
+  margin-top: 3 * $baseline-grid;
+}
+
+::ng-deep.monaco-editor {
+  margin-top: 2 * $baseline-grid;
+}
+
+.mat-hint {
+  font-size: $font-size-caption;
+}

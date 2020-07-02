@@ -1,16 +1,9 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 import {NodeDataService} from '../../../node-data-new/service/service';
 import {ClusterService} from '../../../wizard-new/service/cluster';
-import {MachineNetwork} from '../../entity/ClusterEntity';
+import {MachineNetwork} from '../../entity/cluster';
 import {BaseFormValidator} from '../../validators/base-form.validator';
 
 enum Controls {
@@ -57,8 +50,7 @@ class MachineNetworkSpec {
     },
   ],
 })
-export class MachineNetworkComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class MachineNetworkComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly controls = Controls;
 
   private _debounceTime = 250;
@@ -91,9 +83,7 @@ export class MachineNetworkComponent extends BaseFormValidator
   }
 
   add(): void {
-    this._networkArray.push(
-      this._builder.group(this._newEmptyMachineNetwork())
-    );
+    this._networkArray.push(this._builder.group(this._newEmptyMachineNetwork()));
   }
 
   delete(index: number): void {
@@ -110,8 +100,7 @@ export class MachineNetworkComponent extends BaseFormValidator
   }
 
   private _setMachineNetworks(): void {
-    this._clusterService.cluster.spec.machineNetworks = (this._networkArray
-      .value as MachineNetworkSpec[]).map(spec =>
+    this._clusterService.cluster.spec.machineNetworks = (this._networkArray.value as MachineNetworkSpec[]).map(spec =>
       new MachineNetworkSpec(spec).toMachineNetwork()
     );
   }
@@ -120,9 +109,7 @@ export class MachineNetworkComponent extends BaseFormValidator
     return {
       [Controls.CIDR]: this._builder.control('', [
         Validators.required,
-        Validators.pattern(
-          /^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/
-        ),
+        Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/),
       ]),
       [Controls.DNSServers]: this._builder.control('', [
         Validators.required,

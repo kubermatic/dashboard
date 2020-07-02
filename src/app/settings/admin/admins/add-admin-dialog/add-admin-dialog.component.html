@@ -1,0 +1,24 @@
+<km-dialog-title>Add Admin</km-dialog-title>
+<mat-dialog-content>
+  <form [formGroup]="form"
+        fxLayout="column">
+    <mat-form-field fxFlex>
+      <mat-label>Email*</mat-label>
+      <input matInput
+             formControlName="email"
+             type="text"
+             autocomplete="off"
+             cdkFocusInitial>
+      <mat-error *ngIf="form.controls.email.hasError('required')">
+        Email is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button
+          (click)="add()"
+          [disabled]="!form.valid">
+    Save
+  </button>
+</mat-dialog-actions>
