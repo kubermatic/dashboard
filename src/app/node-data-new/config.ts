@@ -12,6 +12,4 @@ export interface NodeDataConfig {
   mode: NodeDataMode;
 }
 
-export const NODE_DATA_CONFIG = new InjectionToken<NodeDataConfig>(
-  'kubermatic.node.data.config'
-);
+export const NODE_DATA_CONFIG = new InjectionToken<NodeDataConfig>('kubermatic.node.data.config');

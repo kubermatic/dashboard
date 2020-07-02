@@ -141,7 +141,6 @@
       "git add"
     ]
   },
-  "prettier": "gts/.prettierrc.json",
   "stylelint": {
     "extends": "stylelint-config-standard",
     "rules": {

@@ -9,13 +9,7 @@ import {SharedModule} from '../../../shared/shared.module';
 import {nodeDataFake} from '../../../testing/fake-data/node.fake';
 import {OpenstackNodeOptionsComponent} from './openstack-node-options.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  ReactiveFormsModule,
-  HttpClientModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, ReactiveFormsModule, HttpClientModule];
 
 describe('OpenstackNodeOptionsComponent', () => {
   let fixture: ComponentFixture<OpenstackNodeOptionsComponent>;

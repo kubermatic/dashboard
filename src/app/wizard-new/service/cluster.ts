@@ -1,10 +1,6 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import * as _ from 'lodash';
-import {
-  CloudSpec,
-  ClusterEntity,
-  ClusterType,
-} from '../../shared/entity/ClusterEntity';
+import {CloudSpec, ClusterEntity, ClusterType} from '../../shared/entity/ClusterEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 
@@ -57,14 +53,10 @@ export class ClusterService {
 
   get provider(): NodeProvider {
     const clusterProviders = Object.values(NodeProvider)
-      .map(provider =>
-        this._clusterEntity.spec.cloud[provider] ? provider : undefined
-      )
+      .map(provider => (this._clusterEntity.spec.cloud[provider] ? provider : undefined))
       .filter(p => p !== undefined);
 
-    return clusterProviders.length > 0
-      ? clusterProviders[0]
-      : NodeProvider.NONE;
+    return clusterProviders.length > 0 ? clusterProviders[0] : NodeProvider.NONE;
   }
 
   set datacenter(datacenter: string) {
@@ -121,8 +113,6 @@ export class ClusterService {
       .map(provider => (cluster.spec.cloud[provider] ? provider : undefined))
       .filter(p => p !== undefined);
 
-    return clusterProviders.length > 0
-      ? clusterProviders[0]
-      : NodeProvider.NONE;
+    return clusterProviders.length > 0 ? clusterProviders[0] : NodeProvider.NONE;
   }
 }

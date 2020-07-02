@@ -27,17 +27,8 @@ describe('AdminSettingsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        RouterTestingModule,
-        BrowserAnimationsModule,
-        SharedModule,
-      ],
-      declarations: [
-        AdminSettingsComponent,
-        AddAdminDialogComponent,
-        CustomLinksFormComponent,
-      ],
+      imports: [BrowserModule, RouterTestingModule, BrowserAnimationsModule, SharedModule],
+      declarations: [AdminSettingsComponent, AddAdminDialogComponent, CustomLinksFormComponent],
       providers: [
         {provide: UserService, useClass: UserMockService},
         {provide: SettingsService, useClass: SettingsMockService},

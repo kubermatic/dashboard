@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatButtonToggleGroup} from '@angular/material/button-toggle';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
@@ -19,11 +13,7 @@ import {UserService} from '../../core/services';
 import {HistoryService} from '../../core/services/history/history.service';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {
-  AdminEntity,
-  AdminSettings,
-  ClusterTypeOptions,
-} from '../../shared/entity/AdminSettings';
+import {AdminEntity, AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
 import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {objectDiff} from '../../shared/utils/common-utils';
 
@@ -64,52 +54,34 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._userService.loggedInUser
-      .pipe(first())
-      .subscribe(user => (this.user = user));
+    this._userService.loggedInUser.pipe(first()).subscribe(user => (this.user = user));
 
-    this._settingsService.admins
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(admins => {
-        this.admins = admins.sort((a, b) => a.email.localeCompare(b.email));
-        this.dataSource.data = this.admins;
-      });
+    this._settingsService.admins.pipe(takeUntil(this._unsubscribe)).subscribe(admins => {
+      this.admins = admins.sort((a, b) => a.email.localeCompare(b.email));
+      this.dataSource.data = this.admins;
+    });
 
-    this._settingsService.adminSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        if (!_.isEqual(settings, this.apiSettings)) {
-          if (
-            this.apiSettings &&
-            !_.isEqual(
-              this.apiSettings,
-              this._settingsService.defaultAdminSettings
-            )
-          ) {
-            this._notificationService.success(
-              'The settings update was applied'
-            );
-          }
-          this._applySettings(settings);
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      if (!_.isEqual(settings, this.apiSettings)) {
+        if (this.apiSettings && !_.isEqual(this.apiSettings, this._settingsService.defaultAdminSettings)) {
+          this._notificationService.success('The settings update was applied');
         }
-      });
+        this._applySettings(settings);
+      }
+    });
 
     this._settingsChange
       .pipe(
         debounceTime(500),
-        switchMap(() =>
-          this._settingsService.patchAdminSettings(this._getPatch())
-        ),
+        switchMap(() => this._settingsService.patchAdminSettings(this._getPatch())),
         takeUntil(this._unsubscribe)
       )
       .subscribe(_ => {});
 
-    this._settingsService.userSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        this.paginator.pageSize = settings.itemsPerPage;
-        this.dataSource.paginator = this.paginator; // Force refresh.
-      });
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = this.paginator; // Force refresh.
+    });
   }
 
   ngOnChanges(): void {
@@ -147,10 +119,8 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private _getDistro(group: MatButtonToggleGroup): ClusterTypeOptions {
-    const isKubernetesSelected =
-      group.value && group.value.indexOf(ClusterType.Kubernetes) > -1;
-    const isOpenshiftSelected =
-      group.value && group.value.indexOf(ClusterType.OpenShift) > -1;
+    const isKubernetesSelected = group.value && group.value.indexOf(ClusterType.Kubernetes) > -1;
+    const isOpenshiftSelected = group.value && group.value.indexOf(ClusterType.OpenShift) > -1;
 
     if (isKubernetesSelected && isOpenshiftSelected) {
       return ClusterTypeOptions.All;
@@ -176,9 +146,7 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isLastDistro(group: MatButtonToggleGroup, distro: string): boolean {
-    return (
-      group.value && group.value.length <= 1 && group.value.indexOf(distro) > -1
-    );
+    return group.value && group.value.length <= 1 && group.value.indexOf(distro) > -1;
   }
 
   isOpenShiftEnabled(): boolean {
@@ -200,18 +168,9 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
   isDisplayLinksEqual(): boolean {
     return (
-      this.isEqual(
-        this.settings.displayAPIDocs,
-        this.apiSettings.displayAPIDocs
-      ) &&
-      this.isEqual(
-        this.settings.displayDemoInfo,
-        this.apiSettings.displayDemoInfo
-      ) &&
-      this.isEqual(
-        this.settings.displayTermsOfService,
-        this.apiSettings.displayTermsOfService
-      )
+      this.isEqual(this.settings.displayAPIDocs, this.apiSettings.displayAPIDocs) &&
+      this.isEqual(this.settings.displayDemoInfo, this.apiSettings.displayDemoInfo) &&
+      this.isEqual(this.settings.displayTermsOfService, this.apiSettings.displayTermsOfService)
     );
   }
 
@@ -241,9 +200,7 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
             .setAdmin(admin)
             .pipe(first())
             .subscribe(() => {
-              this._notificationService.success(
-                `The <strong>${admin.name}</strong> user was deleted from admin group`
-              );
+              this._notificationService.success(`The <strong>${admin.name}</strong> user was deleted from admin group`);
               this._settingsService.refreshAdmins();
             });
         }
@@ -267,10 +224,6 @@ export class AdminSettingsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isPaginatorVisible(): boolean {
-    return (
-      this.hasItems() &&
-      this.paginator &&
-      this.admins.length > this.paginator.pageSize
-    );
+    return this.hasItems() && this.paginator && this.admins.length > this.paginator.pageSize;
   }
 }

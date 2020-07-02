@@ -8,12 +8,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge, Observable} from 'rxjs';
 import {delay, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../../../../core/services';
@@ -62,8 +57,7 @@ enum FlavorState {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpenstackBasicNodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy, AfterViewInit {
+export class OpenstackBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy, AfterViewInit {
   private _defaultImage = '';
   private _images: DatacenterOperatingSystemOptions;
 
@@ -130,9 +124,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator
   }
 
   ngAfterViewInit() {
-    this._flavorsObservable
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._setDefaultFlavor.bind(this));
+    this._flavorsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultFlavor.bind(this));
   }
 
   ngOnDestroy(): void {
@@ -151,9 +143,9 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator
   flavorDisplayName(slug: string): string {
     const flavor = this.flavors.find(flavor => flavor.slug === slug);
     return flavor
-      ? `${flavor.slug} - ${flavor.memory / 1024} GB RAM, ${flavor.vcpus} CPU${
-          flavor.vcpus !== 1 ? 's' : ''
-        }, ${flavor.disk} GB Disk`
+      ? `${flavor.slug} - ${flavor.memory / 1024} GB RAM, ${flavor.vcpus} CPU${flavor.vcpus !== 1 ? 's' : ''}, ${
+          flavor.disk
+        } GB Disk`
       : '';
   }
 
@@ -165,11 +157,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator
     return this._nodeDataService.openstack
       .flavors(this._clearFlavor.bind(this), this._onFlavorLoading.bind(this))
       .pipe(delay(3000))
-      .pipe(
-        map((flavors: OpenstackFlavor[]) =>
-          flavors.sort((a, b) => (a.memory < b.memory ? -1 : 1))
-        )
-      );
+      .pipe(map((flavors: OpenstackFlavor[]) => flavors.sort((a, b) => (a.memory < b.memory ? -1 : 1))));
   }
 
   private _clearFlavor(): void {
@@ -188,8 +176,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator
 
   private _setDefaultFlavor(flavors: OpenstackFlavor[]): void {
     this.flavors = flavors;
-    this.flavorsLabel =
-      this.flavors.length > 0 ? FlavorState.Ready : FlavorState.Empty;
+    this.flavorsLabel = this.flavors.length > 0 ? FlavorState.Ready : FlavorState.Empty;
     if (this.flavors.length > 0) {
       this.selectedFlavor = this.flavors[0].slug;
     }
@@ -233,10 +220,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator
 
   private _getCurrentFlavor(): OpenstackFlavor {
     for (const flavor of this.flavors) {
-      if (
-        flavor.slug ===
-        this._nodeDataService.nodeData.spec.cloud.openstack.flavor
-      ) {
+      if (flavor.slug === this._nodeDataService.nodeData.spec.cloud.openstack.flavor) {
         return flavor;
       }
     }

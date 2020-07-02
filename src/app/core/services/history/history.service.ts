@@ -25,10 +25,7 @@ export class HistoryService {
   }
 
   goBack(defaultState: string): Promise<boolean> {
-    if (
-      this._previousStateUrl &&
-      this._previousStateUrl !== this._currentStateUrl
-    ) {
+    if (this._previousStateUrl && this._previousStateUrl !== this._currentStateUrl) {
       return this._router.navigateByUrl(this._previousStateUrl);
     }
 

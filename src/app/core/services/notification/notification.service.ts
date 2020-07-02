@@ -1,16 +1,9 @@
 import {Injectable} from '@angular/core';
-import {
-  MatSnackBar,
-  MatSnackBarConfig,
-  MatSnackBarDismiss,
-} from '@angular/material/snack-bar';
+import {MatSnackBar, MatSnackBarConfig, MatSnackBarDismiss} from '@angular/material/snack-bar';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {delay, filter, map, take, tap} from 'rxjs/operators';
 
-import {
-  NotificationComponent,
-  NotificationType,
-} from '../../components/notification/notification.component';
+import {NotificationComponent, NotificationType} from '../../components/notification/notification.component';
 
 export interface Notification {
   message: string;
@@ -47,16 +40,11 @@ export class NotificationService {
         })
       )
       .pipe(map(queue => queue[0]))
-      .subscribe(snackBarItem =>
-        this._open(snackBarItem.message, snackBarItem.type)
-      );
+      .subscribe(snackBarItem => this._open(snackBarItem.message, snackBarItem.type));
   }
 
   private _open(message: string, type: NotificationType): void {
-    const snackBarRef = this._snackBar.openFromComponent(
-      NotificationComponent,
-      this._config
-    );
+    const snackBarRef = this._snackBar.openFromComponent(NotificationComponent, this._config);
 
     snackBarRef.instance.message = message;
     snackBarRef.instance.snackBarRef = snackBarRef;
@@ -89,9 +77,7 @@ export class NotificationService {
     if (this._isUnique(message)) {
       // Update timestamp of repeating notification.
       this._notificationHistory.next(
-        this._notificationHistory.value
-          .filter(n => n.message !== message)
-          .concat(notification)
+        this._notificationHistory.value.filter(n => n.message !== message).concat(notification)
       );
       this.snackBarQueue.next(this.snackBarQueue.value.concat([notification]));
     }

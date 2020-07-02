@@ -9,12 +9,7 @@ import {NodeData} from '../../shared/model/NodeSpecChange';
 
 @Injectable()
 export class NodeMockService {
-  createNodes(
-    nodeData: NodeData,
-    dc: DataCenterEntity,
-    cluster: ClusterEntity,
-    project: string
-  ): void {}
+  createNodes(nodeData: NodeData, dc: DataCenterEntity, cluster: ClusterEntity, project: string): void {}
 
   getOperatingSystem(spec: NodeSpec): string {
     return 'ubuntu';

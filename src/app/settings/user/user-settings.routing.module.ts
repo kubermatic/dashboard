@@ -15,9 +15,7 @@ const routes: Routes = [
       {
         path: '',
         loadChildren: () =>
-          import(`../../dynamic/${getEditionDirName()}/theming/module`).then(
-            module => module.ThemingModule
-          ),
+          import(`../../dynamic/${getEditionDirName()}/theming/module`).then(module => module.ThemingModule),
         data: {preload: true},
       },
     ],

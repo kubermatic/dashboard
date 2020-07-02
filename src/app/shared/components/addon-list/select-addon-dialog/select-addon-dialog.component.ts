@@ -23,12 +23,7 @@ export class SelectAddonDialogComponent {
 
   hasLogo(name: string): boolean {
     const addonConfig = this.addonConfigs.get(name);
-    return (
-      !!addonConfig &&
-      !!addonConfig.spec &&
-      !!addonConfig.spec.logo &&
-      !!addonConfig.spec.logoFormat
-    );
+    return !!addonConfig && !!addonConfig.spec && !!addonConfig.spec.logo && !!addonConfig.spec.logoFormat;
   }
 
   getAddonLogo(name: string): SafeUrl {
@@ -40,9 +35,7 @@ export class SelectAddonDialogComponent {
 
   getAddonShortDescription(name: string): string {
     const addonConfig = this.addonConfigs.get(name);
-    return addonConfig && addonConfig.spec
-      ? addonConfig.spec.shortDescription
-      : '';
+    return addonConfig && addonConfig.spec ? addonConfig.spec.shortDescription : '';
   }
 
   select(name: string): void {

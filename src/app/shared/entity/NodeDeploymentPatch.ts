@@ -1,9 +1,4 @@
-import {
-  NodeCloudSpec,
-  NodeVersionInfo,
-  OperatingSystemSpec,
-  Taint,
-} from './NodeEntity';
+import {NodeCloudSpec, NodeVersionInfo, OperatingSystemSpec, Taint} from './NodeEntity';
 
 export class NodeDeploymentPatch {
   spec: NodeDeploymentSpecPatch;

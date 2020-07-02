@@ -1,10 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 import {ClusterService} from '../../../../core/services';
@@ -40,18 +35,14 @@ export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(data => {
         if (
-          data.infraManagementUsername !==
-            this._formData.infraManagementUsername ||
-          data.infraManagementPassword !==
-            this._formData.infraManagementPassword ||
+          data.infraManagementUsername !== this._formData.infraManagementUsername ||
+          data.infraManagementPassword !== this._formData.infraManagementPassword ||
           data.username !== this._formData.username ||
           data.password !== this._formData.password
         ) {
           this._formData = data;
           this.setValidators();
-          this.clusterService.changeProviderSettingsPatch(
-            this.getProviderSettingsPatch()
-          );
+          this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
         }
       });
   }
@@ -65,10 +56,7 @@ export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
   }
 
   setValidators(): void {
-    if (
-      !this.infraManagementUsername.value &&
-      !this.infraManagementPassword.value
-    ) {
+    if (!this.infraManagementUsername.value && !this.infraManagementPassword.value) {
       this.infraManagementUsername.clearValidators();
       this.infraManagementPassword.clearValidators();
     } else {
@@ -81,10 +69,7 @@ export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
   }
 
   isRequiredField(): string {
-    return !this.infraManagementUsername.value &&
-      !this.infraManagementPassword.value
-      ? ''
-      : '*';
+    return !this.infraManagementUsername.value && !this.infraManagementPassword.value ? '' : '*';
   }
 
   ngOnDestroy(): void {

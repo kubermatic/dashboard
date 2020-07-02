@@ -40,16 +40,12 @@ export class WizardService {
   // Machine Networks - form data
   machineNetworksFormChanges$ = new EventEmitter<MachineNetworkForm[]>();
   // Cluster provider - form data
-  private _clusterProviderFormChanges$ = new BehaviorSubject<
-    ClusterProviderForm
-  >({} as ClusterProviderForm);
+  private _clusterProviderFormChanges$ = new BehaviorSubject<ClusterProviderForm>({} as ClusterProviderForm);
   // Cluster datacenter - form data
   private _selectedDatacenter: DataCenterEntity;
   clusterDatacenterFormChanges$ = new EventEmitter<ClusterDatacenterForm>();
   // Cluster provider settings - form data
-  clusterProviderSettingsFormChanges$ = new EventEmitter<
-    ClusterProviderSettingsForm
-  >();
+  clusterProviderSettingsFormChanges$ = new EventEmitter<ClusterProviderSettingsForm>();
   // Cluster ssh keys
   clusterSSHKeysChanges$ = new EventEmitter<SSHKeyEntity[]>();
   // Cluster settings form view (hide optional fields or not)
@@ -144,10 +140,7 @@ export class WizardService {
     }
   }
 
-  presets(
-    provider: NodeProvider,
-    datacenter: string
-  ): Observable<PresetListEntity> {
+  presets(provider: NodeProvider, datacenter: string): Observable<PresetListEntity> {
     const url = `${environment.restRoot}/providers/${provider}/presets/credentials?datacenter=${datacenter}`;
     return this._http.get<PresetListEntity>(url);
   }

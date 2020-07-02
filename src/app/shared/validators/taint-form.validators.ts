@@ -15,8 +15,6 @@ export class TaintFormValidators {
    */
   static taintValidEffect(control: FormControl): {[key: string]: object} {
     const value = control.value;
-    return value.length === 0 || Taint.getAvailableEffects().includes(value)
-      ? null
-      : {validTaintEffect: {value: true}};
+    return value.length === 0 || Taint.getAvailableEffects().includes(value) ? null : {validTaintEffect: {value: true}};
   }
 }

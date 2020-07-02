@@ -23,10 +23,7 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
   private _displayAllProjects: boolean;
   private _projects: ProjectEntity[];
 
-  constructor(
-    private readonly _projectService: ProjectService,
-    private readonly _settingsService: SettingsService
-  ) {}
+  constructor(private readonly _projectService: ProjectService, private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
     this._displayAllProjects = this._settingsService.defaultUserSettings.displayAllProjectsForAdmin;
@@ -35,27 +32,13 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
       .pipe(tap(projects => (this._projects = projects)))
       .pipe(switchMap(_ => this._projectService.myProjects))
       .pipe(tap(projects => (this.myProjects = this._sortProjects(projects))))
-      .pipe(
-        tap(
-          _ =>
-            (this.externalProjects = differenceBy(
-              this._projects,
-              this.myProjects,
-              'id'
-            ))
-        )
-      )
+      .pipe(tap(_ => (this.externalProjects = differenceBy(this._projects, this.myProjects, 'id'))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._appendProject(this.selectedProject));
 
-    merge(
-      this._projectService.selectedProject,
-      this._projectService.onProjectChange
-    )
+    merge(this._projectService.selectedProject, this._projectService.onProjectChange)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe((project: ProjectEntity) =>
-        this._appendProject((this.selectedProject = project))
-      );
+      .subscribe((project: ProjectEntity) => this._appendProject((this.selectedProject = project)));
   }
 
   onSelectionChange(event: MatSelectChange): void {
@@ -80,9 +63,7 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
   }
 
   private _sortProjects(projects: ProjectEntity[]): ProjectEntity[] {
-    return projects.sort((a, b) =>
-      (a.name + a.id).localeCompare(b.name + b.id)
-    );
+    return projects.sort((a, b) => (a.name + a.id).localeCompare(b.name + b.id));
   }
 
   private _appendProject(project: ProjectEntity): void {
@@ -91,11 +72,7 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
     }
 
     const found = this.myProjects.find(p => this.areProjectsEqual(p, project));
-    if (
-      !found &&
-      this.externalProjects.length === 0 &&
-      !this._displayAllProjects
-    ) {
+    if (!found && this.externalProjects.length === 0 && !this._displayAllProjects) {
       this.externalProjects = [project];
     }
   }

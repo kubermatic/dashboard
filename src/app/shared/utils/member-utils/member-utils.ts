@@ -16,9 +16,7 @@ export enum Group {
 
 export class MemberUtils {
   static getGroupInProject(member: MemberEntity, projectID: string): string {
-    const project = member.projects.find(
-      memberProject => memberProject.id === projectID
-    );
+    const project = member.projects.find(memberProject => memberProject.id === projectID);
     return project ? project.group : '';
   }
 

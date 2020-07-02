@@ -68,12 +68,7 @@ const components: any[] = [
 ];
 
 @NgModule({
-  imports: [
-    SharedModule,
-    WizardRoutingModule,
-    NodeDataModule,
-    MachineNetworksModule,
-  ],
+  imports: [SharedModule, WizardRoutingModule, NodeDataModule, MachineNetworksModule],
   declarations: [...components],
   exports: [...components],
   entryComponents: [],

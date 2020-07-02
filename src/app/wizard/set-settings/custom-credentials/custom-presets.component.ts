@@ -51,23 +51,15 @@ export class CustomPresetsSettingsComponent implements OnInit {
     this._wizard.clusterProviderFormChanges$
       .pipe(
         switchMap(providerForm =>
-          providerForm.provider === NodeProvider.BRINGYOUROWN ||
-          !providerForm.provider
+          providerForm.provider === NodeProvider.BRINGYOUROWN || !providerForm.provider
             ? EMPTY
-            : this._wizard.presets(
-                providerForm.provider,
-                this.cluster.spec.cloud.dc
-              )
+            : this._wizard.presets(providerForm.provider, this.cluster.spec.cloud.dc)
         )
       )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(presetList => {
-        this.presetsLoaded = presetList.names
-          ? presetList.names.length > 0
-          : false;
-        this._state = this.presetsLoaded
-          ? PresetsState.Ready
-          : PresetsState.Empty;
+        this.presetsLoaded = presetList.names ? presetList.names.length > 0 : false;
+        this._state = this.presetsLoaded ? PresetsState.Ready : PresetsState.Empty;
         this.presetList = presetList;
       });
 

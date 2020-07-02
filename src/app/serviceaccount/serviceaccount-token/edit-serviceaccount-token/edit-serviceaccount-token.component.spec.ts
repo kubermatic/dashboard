@@ -6,10 +6,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ApiService, NotificationService} from '../../../core/services';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
-import {
-  fakeServiceAccount,
-  fakeServiceAccountToken,
-} from '../../../testing/fake-data/serviceaccount.fake';
+import {fakeServiceAccount, fakeServiceAccountToken} from '../../../testing/fake-data/serviceaccount.fake';
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 
@@ -23,9 +20,7 @@ describe('EditServiceAccountTokenComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = {patchServiceAccountToken: jest.fn()};
-    apiMock.patchServiceAccountToken.mockReturnValue(
-      asyncData(fakeServiceAccountToken())
-    );
+    apiMock.patchServiceAccountToken.mockReturnValue(asyncData(fakeServiceAccountToken()));
 
     TestBed.configureTestingModule({
       imports: [...modules],

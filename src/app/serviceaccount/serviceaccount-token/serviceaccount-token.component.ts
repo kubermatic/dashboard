@@ -9,10 +9,7 @@ import {ApiService, ProjectService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
-import {
-  ServiceAccountEntity,
-  ServiceAccountTokenEntity,
-} from '../../shared/entity/ServiceAccountEntity';
+import {ServiceAccountEntity, ServiceAccountTokenEntity} from '../../shared/entity/ServiceAccountEntity';
 import {GroupConfig} from '../../shared/model/Config';
 
 import {AddServiceAccountTokenComponent} from './add-serviceaccount-token/add-serviceaccount-token.component';
@@ -56,26 +53,16 @@ export class ServiceAccountTokenComponent implements OnInit {
         })
       )
       .pipe(first())
-      .subscribe(
-        userGroup =>
-          (this._currentGroupConfig = this._userService.userGroupConfig(
-            userGroup
-          ))
-      );
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
   }
 
   getDataSource(): MatTableDataSource<ServiceAccountTokenEntity> {
-    this.dataSource.data = this.serviceaccountTokens
-      ? this.serviceaccountTokens
-      : [];
+    this.dataSource.data = this.serviceaccountTokens ? this.serviceaccountTokens : [];
     return this.dataSource;
   }
 
   isEnabled(action: string): boolean {
-    return (
-      !this._currentGroupConfig ||
-      this._currentGroupConfig.serviceaccountToken[action]
-    );
+    return !this._currentGroupConfig || this._currentGroupConfig.serviceaccountToken[action];
   }
 
   addServiceAccountToken(): void {
@@ -95,14 +82,8 @@ export class ServiceAccountTokenComponent implements OnInit {
       },
     };
 
-    const dialogRef = this._matDialog.open(
-      ConfirmationDialogComponent,
-      dialogConfig
-    );
-    this._googleAnalyticsService.emitEvent(
-      'serviceAccountTokenOverview',
-      'regenerateServiceAccountTokenOpened'
-    );
+    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
+    this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'regenerateServiceAccountTokenOpened');
 
     dialogRef
       .afterClosed()
@@ -110,21 +91,12 @@ export class ServiceAccountTokenComponent implements OnInit {
       .subscribe((isConfirmed: boolean) => {
         if (isConfirmed) {
           this._apiService
-            .regenerateServiceAccountToken(
-              this._selectedProject.id,
-              this.serviceaccount,
-              token
-            )
+            .regenerateServiceAccountToken(this._selectedProject.id, this.serviceaccount, token)
             .pipe(first())
             .subscribe(token => {
               this.openTokenDialog(token);
-              this._notificationService.success(
-                `The <strong>${token.name}</strong> was regenerated`
-              );
-              this._googleAnalyticsService.emitEvent(
-                'serviceAccountTokenOverview',
-                'ServiceAccountTokenRegenerated'
-              );
+              this._notificationService.success(`The <strong>${token.name}</strong> was regenerated`);
+              this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenRegenerated');
             });
         }
       });
@@ -148,14 +120,8 @@ export class ServiceAccountTokenComponent implements OnInit {
       },
     };
 
-    const dialogRef = this._matDialog.open(
-      ConfirmationDialogComponent,
-      dialogConfig
-    );
-    this._googleAnalyticsService.emitEvent(
-      'serviceAccountTokenOverview',
-      'deleteServiceAccountTokenOpened'
-    );
+    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
+    this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'deleteServiceAccountTokenOpened');
 
     dialogRef
       .afterClosed()
@@ -163,20 +129,13 @@ export class ServiceAccountTokenComponent implements OnInit {
       .subscribe((isConfirmed: boolean) => {
         if (isConfirmed) {
           this._apiService
-            .deleteServiceAccountToken(
-              this._selectedProject.id,
-              this.serviceaccount,
-              token
-            )
+            .deleteServiceAccountToken(this._selectedProject.id, this.serviceaccount, token)
             .pipe(first())
             .subscribe(() => {
               this._notificationService.success(
                 `The <strong>${token.name}</strong> token was removed from the <strong>${this.serviceaccount.name}</strong> service account`
               );
-              this._googleAnalyticsService.emitEvent(
-                'serviceAccountTokenOverview',
-                'ServiceAccountTokenDeleted'
-              );
+              this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenDeleted');
             });
         }
       });

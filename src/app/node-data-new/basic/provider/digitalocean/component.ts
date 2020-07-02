@@ -1,17 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  forwardRef,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
-import {
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {
@@ -54,8 +42,7 @@ enum SizeState {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private _sizes: DigitaloceanSizes = DigitaloceanSizes.newDigitalOceanSizes();
 
   readonly Controls = Controls;
@@ -80,9 +67,7 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator
       [Controls.Size]: this._builder.control('', Validators.required),
     });
 
-    this._sizesObservable
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._setDefaultSize.bind(this));
+    this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
   }
 
   ngOnDestroy(): void {
@@ -100,21 +85,16 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator
   }
 
   sizeDisplayName(slug: string): string {
-    const size = [...this._sizes.optimized, ...this._sizes.standard].find(
-      size => size.slug === slug
-    );
+    const size = [...this._sizes.optimized, ...this._sizes.standard].find(size => size.slug === slug);
     return size
-      ? `${size.slug} (${size.memory / 1024} GB RAM, ${size.vcpus} CPU${
-          size.vcpus !== 1 ? 's' : ''
-        }, $${size.price_monthly} per month)`
+      ? `${size.slug} (${size.memory / 1024} GB RAM, ${size.vcpus} CPU${size.vcpus !== 1 ? 's' : ''}, $${
+          size.price_monthly
+        } per month)`
       : '';
   }
 
   private get _sizesObservable(): Observable<DigitaloceanSizes> {
-    return this._nodeDataService.digitalOcean.flavors(
-      this._clearSize.bind(this),
-      this._onSizeLoading.bind(this)
-    );
+    return this._nodeDataService.digitalOcean.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
   }
 
   private _onSizeLoading(): void {
@@ -132,11 +112,7 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator
 
   private _setDefaultSize(sizes: DigitaloceanSizes): void {
     this._sizes = sizes;
-    if (
-      this._sizes &&
-      this._sizes.standard &&
-      this._sizes.standard.length > 0
-    ) {
+    if (this._sizes && this._sizes.standard && this._sizes.standard.length > 0) {
       this.selectedSize = this._sizes.standard[0].slug;
       this.sizeLabel = SizeState.Ready;
       this._cdr.detectChanges();

@@ -4,10 +4,7 @@ import {Subject} from 'rxjs';
 import {debounceTime, first, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../../../core/services/wizard/wizard.service';
 import {ClusterEntity} from '../../../../../shared/entity/ClusterEntity';
-import {
-  GCPNetwork,
-  GCPSubnetwork,
-} from '../../../../../shared/entity/provider/gcp/GCP';
+import {GCPNetwork, GCPSubnetwork} from '../../../../../shared/entity/provider/gcp/GCP';
 import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
 
@@ -49,10 +46,7 @@ export class GCPProviderOptionsComponent implements OnInit, OnDestroy {
       .pipe(debounceTime(1000))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
-        if (
-          this._hasRequiredCredentials &&
-          this.form.controls.network.value !== ''
-        ) {
+        if (this._hasRequiredCredentials && this.form.controls.network.value !== '') {
           this._loadSubnetworks();
           this.checkSubnetworkState();
         } else {
@@ -60,52 +54,42 @@ export class GCPProviderOptionsComponent implements OnInit, OnDestroy {
         }
       });
 
-    this._wizardService.clusterProviderSettingsFormChanges$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        if (
-          data.cloudSpec.gcp.serviceAccount !==
-            this.cluster.spec.cloud.gcp.serviceAccount ||
-          data.cloudSpec.gcp.network === ''
-        ) {
-          this.cluster.spec.cloud.gcp = data.cloudSpec.gcp;
-          if (this._hasRequiredCredentials()) {
-            this._loadNetworks();
-            this.checkNetworkState();
-          } else {
-            this.clearNetwork();
-          }
-        } else if (data.cloudSpec.gcp.serviceAccount === '') {
+    this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      if (
+        data.cloudSpec.gcp.serviceAccount !== this.cluster.spec.cloud.gcp.serviceAccount ||
+        data.cloudSpec.gcp.network === ''
+      ) {
+        this.cluster.spec.cloud.gcp = data.cloudSpec.gcp;
+        if (this._hasRequiredCredentials()) {
+          this._loadNetworks();
+          this.checkNetworkState();
+        } else {
           this.clearNetwork();
         }
+      } else if (data.cloudSpec.gcp.serviceAccount === '') {
+        this.clearNetwork();
+      }
 
-        this.cluster.spec.cloud.gcp = data.cloudSpec.gcp;
-      });
+      this.cluster.spec.cloud.gcp = data.cloudSpec.gcp;
+    });
 
-    this._wizardService.clusterSettingsFormViewChanged$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.hideOptional = data.hideOptional;
-      });
+    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      this.hideOptional = data.hideOptional;
+    });
 
-    this._wizardService.onCustomPresetSelect
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(newCredentials => {
-        this._selectedPreset = newCredentials;
-        if (newCredentials) {
-          this.form.disable();
-          return;
-        }
+    this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+      this._selectedPreset = newCredentials;
+      if (newCredentials) {
+        this.form.disable();
+        return;
+      }
 
-        this.form.enable();
-      });
+      this.form.enable();
+    });
   }
 
   private _hasRequiredCredentials(): boolean {
-    return (
-      this.cluster.spec.cloud.gcp.serviceAccount !== '' ||
-      !!this._selectedPreset
-    );
+    return this.cluster.spec.cloud.gcp.serviceAccount !== '' || !!this._selectedPreset;
   }
 
   private _loadNetworks(): void {
@@ -140,10 +124,7 @@ export class GCPProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   private _loadSubnetworks(): void {
-    if (
-      !this._hasRequiredCredentials() ||
-      this.form.controls.network.value === ''
-    ) {
+    if (!this._hasRequiredCredentials() || this.form.controls.network.value === '') {
       return;
     }
 
@@ -187,19 +168,11 @@ export class GCPProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   getSubnetworkFormState(): string {
-    if (
-      !this._loadingSubnetworks &&
-      (!this._hasRequiredCredentials() ||
-        this.form.controls.network.value === '')
-    ) {
+    if (!this._loadingSubnetworks && (!this._hasRequiredCredentials() || this.form.controls.network.value === '')) {
       return 'Subnetwork';
     } else if (this._loadingSubnetworks && !this._selectedPreset) {
       return 'Loading Subnetworks...';
-    } else if (
-      this.form.controls.network.value !== '' &&
-      this.subnetworks.length === 0 &&
-      !this._selectedPreset
-    ) {
+    } else if (this.form.controls.network.value !== '' && this.subnetworks.length === 0 && !this._selectedPreset) {
       return 'No Subnetworks available';
     } else {
       return 'Subnetwork';
@@ -212,9 +185,7 @@ export class GCPProviderOptionsComponent implements OnInit, OnDestroy {
 
   getSubnetworkHint(): string {
     if (!this._loadingSubnetworks && this.form.controls.network.value === '') {
-      return this._hasRequiredCredentials()
-        ? 'Please enter a network first.'
-        : 'Please enter valid credentials first.';
+      return this._hasRequiredCredentials() ? 'Please enter a network first.' : 'Please enter valid credentials first.';
     } else {
       return '';
     }
@@ -223,24 +194,15 @@ export class GCPProviderOptionsComponent implements OnInit, OnDestroy {
   checkNetworkState(): void {
     if (this.networks.length === 0 && this.form.controls.network.enabled) {
       this.form.controls.network.disable();
-    } else if (
-      this.networks.length > 0 &&
-      this.form.controls.network.disabled
-    ) {
+    } else if (this.networks.length > 0 && this.form.controls.network.disabled) {
       this.form.controls.network.enable();
     }
   }
 
   checkSubnetworkState(): void {
-    if (
-      this.subnetworks.length === 0 &&
-      this.form.controls.subnetwork.enabled
-    ) {
+    if (this.subnetworks.length === 0 && this.form.controls.subnetwork.enabled) {
       this.form.controls.subnetwork.disable();
-    } else if (
-      this.subnetworks.length > 0 &&
-      this.form.controls.subnetwork.disabled
-    ) {
+    } else if (this.subnetworks.length > 0 && this.form.controls.subnetwork.disabled) {
       this.form.controls.subnetwork.enable();
     }
   }
@@ -262,9 +224,7 @@ export class GCPProviderOptionsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  private _clusterProviderSettingsForm(
-    isValid: boolean
-  ): ClusterProviderSettingsForm {
+  private _clusterProviderSettingsForm(isValid: boolean): ClusterProviderSettingsForm {
     return {
       cloudSpec: {
         gcp: {

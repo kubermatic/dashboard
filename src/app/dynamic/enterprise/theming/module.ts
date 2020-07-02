@@ -6,9 +6,7 @@ import {ThemeManagerService} from './services/manager';
 import {ThemeService} from './services/theme';
 import {SharedModule} from '../../../shared/shared.module';
 
-const routes: Routes = [
-  {path: '', outlet: 'theming', component: StylePickerComponent},
-];
+const routes: Routes = [{path: '', outlet: 'theming', component: StylePickerComponent}];
 
 @NgModule({
   imports: [SharedModule, RouterModule.forChild(routes)],

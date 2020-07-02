@@ -1,9 +1,5 @@
 import {NgModule} from '@angular/core';
-import {
-  NODE_DATA_CONFIG,
-  NodeDataConfig,
-  NodeDataMode,
-} from '../node-data-new/config';
+import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../node-data-new/config';
 import {NodeDataModule} from '../node-data-new/module';
 import {SharedModule} from '../shared/shared.module';
 

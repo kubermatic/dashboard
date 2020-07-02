@@ -26,10 +26,7 @@ describe('SetDatacenterComponent', () => {
         HttpClientModule,
       ],
       declarations: [SetDatacenterComponent],
-      providers: [
-        WizardService,
-        {provide: DatacenterService, useClass: DatacenterMockService},
-      ],
+      providers: [WizardService, {provide: DatacenterService, useClass: DatacenterMockService}],
     }).compileComponents();
   }));
 

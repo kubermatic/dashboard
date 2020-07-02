@@ -13,9 +13,7 @@ export function login(email: string, password: string): void {
   // dev/cloud.
 
   DexPage.getLoginInput().type(email).should(Condition.HaveValue, email);
-  DexPage.getPasswordInput()
-    .type(password)
-    .should(Condition.HaveValue, password);
+  DexPage.getPasswordInput().type(password).should(Condition.HaveValue, password);
   DexPage.getLoginBtn().click();
 
   ProjectsPage.waitForRefresh();

@@ -21,18 +21,13 @@ export class DigitaloceanNodeOptionsComponent implements OnInit, OnDestroy {
 
   private _unsubscribe = new Subject<void>();
 
-  constructor(
-    private addNodeService: NodeDataService,
-    private readonly _wizardService: WizardService
-  ) {}
+  constructor(private addNodeService: NodeDataService, private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
       backups: new FormControl(this.nodeData.spec.cloud.digitalocean.backups),
       ipv6: new FormControl(this.nodeData.spec.cloud.digitalocean.ipv6),
-      monitoring: new FormControl(
-        this.nodeData.spec.cloud.digitalocean.monitoring
-      ),
+      monitoring: new FormControl(this.nodeData.spec.cloud.digitalocean.monitoring),
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -41,11 +36,9 @@ export class DigitaloceanNodeOptionsComponent implements OnInit, OnDestroy {
 
     this.addNodeService.changeNodeProviderData(this.getDoOptionsData());
 
-    this._wizardService.clusterSettingsFormViewChanged$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.hideOptional = data.hideOptional;
-      });
+    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      this.hideOptional = data.hideOptional;
+    });
   }
 
   ngOnDestroy(): void {

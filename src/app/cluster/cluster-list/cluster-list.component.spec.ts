@@ -1,38 +1,17 @@
 import {HttpClientModule} from '@angular/common/http';
-import {
-  async,
-  ComponentFixture,
-  discardPeriodicTasks,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {AppConfigService} from '../../app-config.service';
-import {
-  ApiService,
-  Auth,
-  ClusterService,
-  DatacenterService,
-  ProjectService,
-  UserService,
-} from '../../core/services';
+import {ApiService, Auth, ClusterService, DatacenterService, ProjectService, UserService} from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeAWSCluster} from '../../testing/fake-data/cluster.fake';
 import {fakeHealth} from '../../testing/fake-data/health.fake';
-import {
-  ActivatedRouteStub,
-  RouterStub,
-  RouterTestingModule,
-} from '../../testing/router-stubs';
-import {
-  ApiMockService,
-  asyncData,
-} from '../../testing/services/api-mock.service';
+import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../testing/router-stubs';
+import {ApiMockService, asyncData} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../testing/services/auth-mock.service';
 import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
@@ -50,19 +29,11 @@ describe('ClusterListComponent', () => {
 
   beforeEach(async(() => {
     const clusterServiceMock = {clusters: jest.fn(), health: jest.fn()};
-    getClustersSpy = clusterServiceMock.clusters.mockReturnValue(
-      asyncData([fakeAWSCluster()])
-    );
+    getClustersSpy = clusterServiceMock.clusters.mockReturnValue(asyncData([fakeAWSCluster()]));
     clusterServiceMock.health.mockReturnValue(asyncData([fakeHealth()]));
 
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        RouterTestingModule,
-        SharedModule,
-      ],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
       declarations: [ClusterListComponent],
       providers: [
         {provide: ApiService, useValue: ApiMockService},

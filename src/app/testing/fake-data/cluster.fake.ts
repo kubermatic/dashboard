@@ -1,8 +1,4 @@
-import {
-  ClusterEntity,
-  ClusterType,
-  Token,
-} from '../../shared/entity/ClusterEntity';
+import {ClusterEntity, ClusterType, Token} from '../../shared/entity/ClusterEntity';
 import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
 
 export function clusterModelFake(): CreateClusterModel {
@@ -13,8 +9,7 @@ export function clusterModelFake(): CreateClusterModel {
         cloud: {
           dc: 'do-fra1',
           digitalocean: {
-            token:
-              'd6fec6ec65cd1fe6b2e6bba7bef91395ad9e3539646ccf8ed9eeac01f629570d',
+            token: 'd6fec6ec65cd1fe6b2e6bba7bef91395ad9e3539646ccf8ed9eeac01f629570d',
           },
         },
         version: '',
@@ -103,8 +98,7 @@ export function fakeHetznerCluster(): ClusterEntity {
       cloud: {
         dc: 'do-fra1',
         hetzner: {
-          token:
-            'pixH4QgO2nbVY1Xoo8yVN0RPN2d3CBQYPKcPrfd1BWwFsWrKMsdUKyos7wYAa6hQ',
+          token: 'pixH4QgO2nbVY1Xoo8yVN0RPN2d3CBQYPKcPrfd1BWwFsWrKMsdUKyos7wYAa6hQ',
         },
       },
       version: '1.8.5',

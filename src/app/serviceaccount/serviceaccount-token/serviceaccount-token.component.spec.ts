@@ -1,11 +1,4 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  flush,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, flush, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -14,26 +7,15 @@ import {of} from 'rxjs';
 
 import {AppConfigService} from '../../app-config.service';
 import {CoreModule} from '../../core/core.module';
-import {
-  ApiService,
-  NotificationService,
-  ProjectService,
-  UserService,
-} from '../../core/services';
+import {ApiService, NotificationService, ProjectService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {
   DialogTestModule,
   NoopConfirmDialogComponent,
 } from '../../testing/components/noop-confirmation-dialog.component';
-import {
-  NoopTokenDialogComponent,
-  TokenDialogTestModule,
-} from '../../testing/components/noop-token-dialog.component';
-import {
-  fakeServiceAccount,
-  fakeServiceAccountTokens,
-} from '../../testing/fake-data/serviceaccount.fake';
+import {NoopTokenDialogComponent, TokenDialogTestModule} from '../../testing/components/noop-token-dialog.component';
+import {fakeServiceAccount, fakeServiceAccountTokens} from '../../testing/fake-data/serviceaccount.fake';
 import {RouterStub} from '../../testing/router-stubs';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../../testing/services/project-mock.service';
@@ -51,9 +33,7 @@ describe('ServiceAccountTokenComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = {deleteServiceAccountToken: jest.fn()};
-    deleteServiceAccountTokenSpy = apiMock.deleteServiceAccountToken.mockReturnValue(
-      of(null)
-    );
+    deleteServiceAccountTokenSpy = apiMock.deleteServiceAccountToken.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
       imports: [
@@ -100,9 +80,7 @@ describe('ServiceAccountTokenComponent', () => {
     tick(15000);
 
     const dialogTitle = document.body.querySelector('.mat-dialog-title');
-    const deleteButton = document.body.querySelector(
-      '#km-confirmation-dialog-confirm-btn'
-    ) as HTMLInputElement;
+    const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
 
     expect(dialogTitle.textContent).toBe('Delete Token');
     expect(deleteButton.textContent).toBe(' Delete ');

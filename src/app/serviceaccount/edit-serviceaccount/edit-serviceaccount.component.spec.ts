@@ -1,10 +1,4 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -19,12 +13,7 @@ import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
 
 import {EditServiceAccountComponent} from './edit-serviceaccount.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  CoreModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 
 describe('EditServiceAccountComponent', () => {
   let fixture: ComponentFixture<EditServiceAccountComponent>;
@@ -33,9 +22,7 @@ describe('EditServiceAccountComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = {editServiceAccount: jest.fn()};
-    editServiceAccountSpy = apiMock.editServiceAccount.mockReturnValue(
-      asyncData(fakeServiceAccount())
-    );
+    editServiceAccountSpy = apiMock.editServiceAccount.mockReturnValue(asyncData(fakeServiceAccount()));
 
     TestBed.configureTestingModule({
       imports: [...modules],
@@ -64,9 +51,7 @@ describe('EditServiceAccountComponent', () => {
   });
 
   it('should call editServiceAccount method', fakeAsync(() => {
-    component.editServiceAccountForm.controls.name.patchValue(
-      'test-service-account'
-    );
+    component.editServiceAccountForm.controls.name.patchValue('test-service-account');
     component.editServiceAccountForm.controls.group.patchValue('editors');
     component.editServiceAccount();
     tick();

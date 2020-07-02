@@ -8,15 +8,11 @@ export class StepBase extends BaseFormValidator {
   }
 
   control(name: string): AbstractControl {
-    return this.form.controls[name]
-      ? this.form.controls[name]
-      : ({} as AbstractControl);
+    return this.form.controls[name] ? this.form.controls[name] : ({} as AbstractControl);
   }
 
   controlValue(name: string): any {
-    return this.form.controls[name]
-      ? this.form.controls[name].value
-      : undefined;
+    return this.form.controls[name] ? this.form.controls[name].value : undefined;
   }
 
   next(): void {

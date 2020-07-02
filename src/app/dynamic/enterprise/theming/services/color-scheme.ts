@@ -11,17 +11,14 @@ export enum ColorScheme {
 
 @Injectable()
 export class ColorSchemeService {
-  private readonly _colorSchemeMediaQuery = colorScheme =>
-    `(prefers-color-scheme: ${colorScheme})`;
+  private readonly _colorSchemeMediaQuery = colorScheme => `(prefers-color-scheme: ${colorScheme})`;
   private _selectedColorScheme = ColorScheme.NoPreference;
   private _timerInterval = 1000;
 
   readonly onColorSchemeUpdate = new EventEmitter<ColorScheme>();
 
   constructor(private readonly _themeService: ThemeService) {
-    timer(0, this._timerInterval).subscribe(_ =>
-      this._updateColorScheme(this._getCurrentColorScheme())
-    );
+    timer(0, this._timerInterval).subscribe(_ => this._updateColorScheme(this._getCurrentColorScheme()));
   }
 
   getPreferredTheme(): Theme {

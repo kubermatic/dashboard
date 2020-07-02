@@ -49,12 +49,6 @@ export class DatacenterOperatingSystemOptions {
   flatcar?: string;
 }
 
-export function getDatacenterProvider(
-  datacenter: DataCenterEntity
-): NodeProvider {
-  return (
-    Object.values(NodeProvider).find(
-      provider => provider === datacenter.spec.provider
-    ) || NodeProvider.NONE
-  );
+export function getDatacenterProvider(datacenter: DataCenterEntity): NodeProvider {
+  return Object.values(NodeProvider).find(provider => provider === datacenter.spec.provider) || NodeProvider.NONE;
 }

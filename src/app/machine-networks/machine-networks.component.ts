@@ -30,24 +30,16 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
             new FormGroup({
               cidr: new FormControl(this.cluster.spec.machineNetworks[i].cidr, [
                 Validators.required,
-                Validators.pattern(
-                  /^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/
-                ),
+                Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/),
               ]),
-              dnsServers: new FormControl(
-                this.cluster.spec.machineNetworks[i].dnsServers,
-                [
-                  Validators.required,
-                  Validators.pattern(/^((((\d{1,3}\.){3}\d{1,3})\s*,*\s*)+)$/),
-                ]
-              ),
-              gateway: new FormControl(
-                this.cluster.spec.machineNetworks[i].gateway,
-                [
-                  Validators.required,
-                  Validators.pattern(/^((\d{1,3}\.){3}\d{1,3})$/),
-                ]
-              ),
+              dnsServers: new FormControl(this.cluster.spec.machineNetworks[i].dnsServers, [
+                Validators.required,
+                Validators.pattern(/^((((\d{1,3}\.){3}\d{1,3})\s*,*\s*)+)$/),
+              ]),
+              gateway: new FormControl(this.cluster.spec.machineNetworks[i].gateway, [
+                Validators.required,
+                Validators.pattern(/^((\d{1,3}\.){3}\d{1,3})$/),
+              ]),
             })
           );
         }
@@ -59,21 +51,13 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
         new FormGroup({
           cidr: new FormControl('', [
             Validators.required,
-            Validators.pattern(
-              /^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/
-            ),
+            Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/),
           ]),
           dnsServers: new FormControl(
             [],
-            [
-              Validators.required,
-              Validators.pattern(/^((((\d{1,3}\.){3}\d{1,3})\s*,*\s*)+)$/),
-            ]
+            [Validators.required, Validators.pattern(/^((((\d{1,3}\.){3}\d{1,3})\s*,*\s*)+)$/)]
           ),
-          gateway: new FormControl('', [
-            Validators.required,
-            Validators.pattern(/^((\d{1,3}\.){3}\d{1,3})$/),
-          ]),
+          gateway: new FormControl('', [Validators.required, Validators.pattern(/^((\d{1,3}\.){3}\d{1,3})$/)]),
         })
       );
     }
@@ -102,54 +86,37 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
   }
 
   addMachineNetwork(): void {
-    this.machineNetworks = this.machineNetworksForm.get(
-      'machineNetworks'
-    ) as FormArray;
+    this.machineNetworks = this.machineNetworksForm.get('machineNetworks') as FormArray;
     this.machineNetworks.push(
       new FormGroup({
         cidr: new FormControl('', [
           Validators.required,
-          Validators.pattern(
-            /^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/
-          ),
+          Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/),
         ]),
         dnsServers: new FormControl(
           [],
-          [
-            Validators.required,
-            Validators.pattern(/^((((\d{1,3}\.){3}\d{1,3})\s*,*\s*)+)$/),
-          ]
+          [Validators.required, Validators.pattern(/^((((\d{1,3}\.){3}\d{1,3})\s*,*\s*)+)$/)]
         ),
-        gateway: new FormControl('', [
-          Validators.required,
-          Validators.pattern(/^((\d{1,3}\.){3}\d{1,3})$/),
-        ]),
+        gateway: new FormControl('', [Validators.required, Validators.pattern(/^((\d{1,3}\.){3}\d{1,3})$/)]),
       })
     );
   }
 
   deleteMachineNetwork(index: number): void {
-    const arrayControl = this.machineNetworksForm.get(
-      'machineNetworks'
-    ) as FormArray;
+    const arrayControl = this.machineNetworksForm.get('machineNetworks') as FormArray;
     arrayControl.removeAt(index);
     this.setMachineNetworkSpec();
   }
 
   setMachineNetworkSpec(): void {
-    const machineNetworks = this.machineNetworksForm.get(
-      'machineNetworks'
-    ) as FormArray;
+    const machineNetworks = this.machineNetworksForm.get('machineNetworks') as FormArray;
     const machineNetworksMap = [];
     for (const i in machineNetworks.controls) {
       if (machineNetworks.controls.hasOwnProperty(i)) {
         machineNetworksMap.push({
           cidr: machineNetworks.value[i].cidr,
           gateway: machineNetworks.value[i].gateway,
-          dnsServers: machineNetworks.value[i].dnsServers
-            .toString()
-            .replace(/\s/g, '')
-            .split(','),
+          dnsServers: machineNetworks.value[i].dnsServers.toString().replace(/\s/g, '').split(','),
           valid: machineNetworks.controls[i].valid,
         });
       }

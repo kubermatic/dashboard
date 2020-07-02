@@ -20,10 +20,7 @@ export class SetSettingsComponent implements OnInit {
   seedDc: DataCenterEntity;
   private _unsubscribe = new Subject<void>();
 
-  constructor(
-    private wizardService: WizardService,
-    private _dc: DatacenterService
-  ) {}
+  constructor(private wizardService: WizardService, private _dc: DatacenterService) {}
 
   ngOnInit(): void {
     this._dc

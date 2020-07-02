@@ -18,13 +18,7 @@ describe('Service: UserService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        RouterTestingModule,
-        SharedModule,
-      ],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
       providers: [
         UserService,
         {provide: Auth, useClass: AuthMockService},
@@ -39,8 +33,6 @@ describe('Service: UserService', () => {
   });
 
   it('should get user user group', () => {
-    expect(userService.userGroupConfig('owners')).toEqual(
-      fakeUserGroupConfig().owners
-    );
+    expect(userService.userGroupConfig('owners')).toEqual(fakeUserGroupConfig().owners);
   });
 });
