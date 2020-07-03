@@ -1,7 +1,6 @@
 import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {first} from 'rxjs/operators';
-import {gt, lt} from 'semver';
 
 import {ClusterService} from '../../../core/services';
 import {Cluster, MasterVersion} from '../../../shared/entity/cluster';
@@ -43,8 +42,8 @@ export class VersionPickerComponent implements OnInit, OnChanges {
     this.someUpgradesRestrictedByKubeletVersion = false;
 
     this.upgrades.forEach(upgrade => {
-      const isUpgrade = lt(this.cluster.spec.version, upgrade.version);
-      const isDowngrade = gt(this.cluster.spec.version, upgrade.version);
+      const isUpgrade = false; // TODO: lt(this.cluster.spec.version, upgrade.version);
+      const isDowngrade = false; // TODO: gt(this.cluster.spec.version, upgrade.version);
 
       if (upgrade.restrictedByKubeletVersion === true) {
         this.someUpgradesRestrictedByKubeletVersion = isUpgrade;
