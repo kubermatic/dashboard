@@ -1,0 +1,27 @@
+{
+  "ignore": [
+    "*", ".git", ".github", ".idea", "docs", "vendor",
+    "src/assets/fonts", "src/assets/js", "src/assets/css/font-awesome",
+    "**/.gitignore", "**/*.json", "**/*.yaml", "**/*.svg", "**/*.txt", "**/*.md"
+  ],
+  "license": "license-header.txt",
+  "defaultFormat": {
+    "eachLine": {
+      "prepend": "# "
+    },
+    "append": ""
+  },
+  "licenseFormats": {
+    "go|ts|js|scss": {
+      "eachLine": {
+        "prepend": "// "
+      },
+      "append": ""
+    },
+    "html": {
+      "prepend": "<!--",
+      "append": "-->"
+    }
+  },
+  "trailingWhitespace": "TRIM"
+}
