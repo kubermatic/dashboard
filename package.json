@@ -59,7 +59,7 @@
     "ngx-filter-pipe": "2.1.2",
     "ngx-monaco-editor": "9.0.0",
     "rxjs": "6.6.0",
-    "rxjs-compat": "6.5.5",
+    "rxjs-compat": "6.6.0",
     "semver": "7.3.2",
     "swagger-ui": "3.27.0",
     "tslib": "1.13.0",
