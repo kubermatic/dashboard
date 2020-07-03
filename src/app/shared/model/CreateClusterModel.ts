@@ -10,11 +10,12 @@
 // limitations under the License.
 
 import {ClusterSpec} from '../entity/cluster';
-import {NodeDeployment} from '../entity/node-deployment';
+import {MachineDeployment} from '../entity/machine-deployment';
 
 export class CreateClusterModel {
   cluster: ClusterModel;
-  nodeDeployment?: NodeDeployment;
+  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
+  nodeDeployment?: MachineDeployment;
 }
 
 class ClusterModel {

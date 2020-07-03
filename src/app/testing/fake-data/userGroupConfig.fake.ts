@@ -44,7 +44,7 @@ export function fakeUserGroupConfig(): UserGroupConfig {
         create: true,
         delete: true,
       },
-      nodeDeployments: {
+      machineDeployments: {
         view: true,
         edit: true,
         create: true,
@@ -100,7 +100,7 @@ export function fakeUserGroupConfig(): UserGroupConfig {
         create: true,
         delete: true,
       },
-      nodeDeployments: {
+      machineDeployments: {
         view: true,
         edit: true,
         create: true,
@@ -156,7 +156,7 @@ export function fakeUserGroupConfig(): UserGroupConfig {
         create: false,
         delete: false,
       },
-      nodeDeployments: {
+      machineDeployments: {
         view: true,
         edit: false,
         create: false,

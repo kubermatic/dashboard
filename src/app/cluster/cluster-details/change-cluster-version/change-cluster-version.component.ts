@@ -30,7 +30,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   controlPlaneVersions: string[] = [];
   selectedVersion: string;
   project: Project;
-  isNodeDeploymentUpgradeEnabled = false;
+  isMachineDeploymentUpgradeEnabled = false;
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -65,21 +65,21 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
       );
       this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChanged');
 
-      if (this.isNodeDeploymentUpgradeEnabled) {
-        this.upgradeNodeDeployments();
+      if (this.isMachineDeploymentUpgradeEnabled) {
+        this.upgradeMachineDeployments();
       }
     });
 
     this._dialogRef.close(true);
   }
 
-  upgradeNodeDeployments(): void {
+  upgradeMachineDeployments(): void {
     this._clusterService
-      .upgradeNodeDeployments(this.project.id, this.cluster.id, this.datacenter.metadata.name, this.selectedVersion)
+      .upgradeMachineDeployments(this.project.id, this.cluster.id, this.datacenter.metadata.name, this.selectedVersion)
       .pipe(first())
       .subscribe(() => {
         this._notificationService.success(
-          `The node deployments from the <strong>${this.cluster.name}</strong> cluster are being updated to the ${this.selectedVersion} version`
+          `The machine deployments from the <strong>${this.cluster.name}</strong> cluster are being updated to the ${this.selectedVersion} version`
         );
       });
   }

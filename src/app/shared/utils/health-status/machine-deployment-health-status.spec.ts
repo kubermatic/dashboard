@@ -9,20 +9,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {nodeDeploymentsFake} from '../../../testing/fake-data/node.fake';
+import {machineDeploymentsFake} from '../../../testing/fake-data/node.fake';
 
 import {HealthStatusColor, HealthStatusMessage} from './health-status';
-import {NodeDeploymentHealthStatus} from './node-deployment-health-status';
+import {MachineDeploymentHealthStatus} from './machine-deployment-health-status';
 
-describe('NodeDeploymentHealthStatus', () => {
-  it('should return correct status for node deployments', () => {
-    const nds = nodeDeploymentsFake();
+describe('MachineDeploymentHealthStatus', () => {
+  it('should return correct status for machine deployments', () => {
+    const mds = machineDeploymentsFake();
 
-    expect(NodeDeploymentHealthStatus.getHealthStatus(nds[0])).toEqual(
-      new NodeDeploymentHealthStatus(HealthStatusMessage.Running, HealthStatusColor.Green)
+    expect(MachineDeploymentHealthStatus.getHealthStatus(mds[0])).toEqual(
+      new MachineDeploymentHealthStatus(HealthStatusMessage.Running, HealthStatusColor.Green)
     );
-    expect(NodeDeploymentHealthStatus.getHealthStatus(nds[1])).toEqual(
-      new NodeDeploymentHealthStatus(HealthStatusMessage.Provisioning, HealthStatusColor.Orange)
+    expect(MachineDeploymentHealthStatus.getHealthStatus(mds[1])).toEqual(
+      new MachineDeploymentHealthStatus(HealthStatusMessage.Provisioning, HealthStatusColor.Orange)
     );
   });
 });

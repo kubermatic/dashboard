@@ -100,7 +100,7 @@ export class ClusterMockService {
     return asyncData([]);
   }
 
-  upgradeNodeDeployments(): Observable<any[]> {
+  upgradeMachineDeployments(): Observable<any[]> {
     return of([]);
   }
 

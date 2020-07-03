@@ -28,7 +28,7 @@ export class ObjectReference {
 export enum ResourceType {
   Cluster = 'cluster',
   Project = 'project',
-  NodeDeployment = 'nodedeployment',
+  MachineDeployment = 'nodedeployment',
 }
 
 export type ResourceLabelMap = {
@@ -44,7 +44,7 @@ export enum View {
   Wizard = 'wizard',
   Account = 'account',
   Settings = 'settings',
-  NodeDeployment = 'nd',
+  MachineDeployment = 'md',
 }
 
 // IMPORTANT: names in 'ViewDisplayName' have to be in sync with names in 'View'
@@ -57,7 +57,7 @@ export enum ViewDisplayName {
   Wizard = 'Wizard',
   Account = 'User Settings',
   Settings = 'Admin Panel',
-  NodeDeployment = 'Node Deployment',
+  MachineDeployment = 'Machine Deployment',
 }
 
 export function getViewDisplayName(viewName: string): string {

@@ -44,7 +44,7 @@ export class GroupConfig {
   sshkeys?: SSHKeys;
   clusters?: Clusters;
   nodes?: Nodes;
-  nodeDeployments?: NodeDeployments;
+  machineDeployments?: MachineDeployments;
   serviceaccounts?: ServiceAccounts;
   serviceaccountToken?: ServiceAccountToken;
   rbac?: RBAC;
@@ -85,7 +85,7 @@ export class Nodes implements Viewable {
   delete?: boolean;
 }
 
-export class NodeDeployments implements Viewable {
+export class MachineDeployments implements Viewable {
   view?: boolean;
   edit?: boolean;
   create?: boolean;

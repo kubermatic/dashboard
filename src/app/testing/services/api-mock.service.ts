@@ -15,7 +15,7 @@ import {async} from 'rxjs-compat/scheduler/async';
 
 import {Cluster, MasterVersion, Token} from '../../shared/entity/cluster';
 import {CreateMember, Member} from '../../shared/entity/member';
-import {NodeDeployment} from '../../shared/entity/node-deployment';
+import {MachineDeployment} from '../../shared/entity/machine-deployment';
 import {Node} from '../../shared/entity/node';
 import {
   ServiceAccountModel,
@@ -29,7 +29,7 @@ import {fakeAlibabaInstanceTypes, fakeAlibabaZones} from '../fake-data/alibaba.f
 import {masterVersionsFake} from '../fake-data/cluster-spec.fake';
 import {fakeToken} from '../fake-data/cluster.fake';
 import {fakeMember, fakeMembers} from '../fake-data/member.fake';
-import {nodeDeploymentsFake, nodesFake} from '../fake-data/node.fake';
+import {machineDeploymentsFake, nodesFake} from '../fake-data/node.fake';
 import {fakeProject, fakeProjects} from '../fake-data/project.fake';
 import {
   fakeServiceAccount,
@@ -70,15 +70,15 @@ export class ApiMockService {
     return of([]);
   }
 
-  getNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeployment[]> {
-    return of(nodeDeploymentsFake());
+  getMachineDeployments(cluster: string, dc: string, projectID: string): Observable<MachineDeployment[]> {
+    return of(machineDeploymentsFake());
   }
 
-  deleteNodeDeployment(cluster: string, nodeDeployment: string, dc: string, project: string): Observable<any> {
+  deleteMachineDeployment(cluster: string, machineDeployment: string, dc: string, project: string): Observable<any> {
     return of({});
   }
 
-  getNodeDeploymentNodesEvents(ndId: string, cluster: string, dc: string, projectID: string): Observable<any[]> {
+  getMachineDeploymentNodesEvents(mdId: string, cluster: string, dc: string, projectID: string): Observable<any[]> {
     return of([]);
   }
 
