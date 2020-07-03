@@ -18,7 +18,7 @@ export enum PathParam {
   ProjectID = 'projectID',
   ClusterID = 'clusterName',
   SeedDC = 'seedDc',
-  NodeDeploymentID = 'nodeDeploymentID',
+  MachineDeploymentID = 'machineDeploymentID',
 }
 
 @Injectable()

@@ -9,13 +9,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class NodeDeploymentDetailsPage {
-  static getNodeDeploymentNameElement(): Cypress.Chainable<any> {
-    return cy.get('.km-node-deployment-name');
+export class MachineDeploymentDetailsPage {
+  static getMachineDeploymentNameElement(): Cypress.Chainable<any> {
+    return cy.get('.km-machine-deployment-name');
   }
 
-  static getNodeDeploymentClusterNameElement(): Cypress.Chainable<any> {
-    return cy.get('.km-node-deployment-cluster-name');
+  static getMachineDeploymentClusterNameElement(): Cypress.Chainable<any> {
+    return cy.get('.km-machine-deployment-cluster-name');
   }
 
   static getBackToClusterBtn(): Cypress.Chainable<any> {

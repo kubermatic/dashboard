@@ -34,15 +34,15 @@ describe('ChangeClusterVersionComponent', () => {
   let fixture: ComponentFixture<ChangeClusterVersionComponent>;
   let component: ChangeClusterVersionComponent;
   let patchClusterSpy;
-  let upgradeClusterNodeDeploymentsSpy;
+  let upgradeClusterMachineDeploymentsSpy;
 
   beforeEach(async(() => {
     const clusterServiceMock = {
       patch: jest.fn(),
-      upgradeNodeDeployments: jest.fn(),
+      upgradeMachineDeployments: jest.fn(),
     };
     patchClusterSpy = clusterServiceMock.patch.mockReturnValue(of(fakeDigitaloceanCluster()));
-    upgradeClusterNodeDeploymentsSpy = clusterServiceMock.upgradeNodeDeployments.mockReturnValue(of(null));
+    upgradeClusterMachineDeploymentsSpy = clusterServiceMock.upgradeMachineDeployments.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
       imports: [...modules],
@@ -81,16 +81,16 @@ describe('ChangeClusterVersionComponent', () => {
     expect(patchClusterSpy).toHaveBeenCalledTimes(1);
   }));
 
-  it('should call upgradeClusterNodeDeployments method', fakeAsync(() => {
+  it('should call upgradeClusterMachineDeployments method', fakeAsync(() => {
     component.cluster = fakeDigitaloceanCluster();
     component.datacenter = fakeDigitaloceanDatacenter();
     component.selectedVersion = 'new-version';
     component.project = fakeProject();
 
     fixture.detectChanges();
-    component.upgradeNodeDeployments();
+    component.upgradeMachineDeployments();
     tick();
 
-    expect(upgradeClusterNodeDeploymentsSpy).toHaveBeenCalled();
+    expect(upgradeClusterMachineDeploymentsSpy).toHaveBeenCalled();
   }));
 });

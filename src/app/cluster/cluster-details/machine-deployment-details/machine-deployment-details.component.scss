@@ -11,11 +11,11 @@
 
 @import "../../../../assets/css/variables";
 
-.km-node-deployment-health {
+.km-machine-deployment-health {
   text-align: center;
 }
 
-.km-node-deployment-name {
+.km-machine-deployment-name {
   font-size: $font-size-card-title !important;
   font-weight: 500 !important;
 }
@@ -24,7 +24,7 @@ mat-card-header {
   align-items: baseline;
 }
 
-.km-node-deployment-actions {
+.km-machine-deployment-actions {
   margin-right: 4 * $baseline-grid;
 
   .mat-icon-button {

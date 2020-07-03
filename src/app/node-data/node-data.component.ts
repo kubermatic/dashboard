@@ -47,7 +47,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   nodeDataForm: FormGroup;
   hideOptional = true;
   versions: string[] = [];
-  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.NodeDeployment)];
+  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.MachineDeployment)];
   private _unsubscribe = new Subject<void>();
   private providerData: NodeProviderData = {valid: false};
 

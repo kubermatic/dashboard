@@ -30,7 +30,7 @@ import {SettingsMockService} from '../../../testing/services/settings-mock.servi
 import {UserMockService} from '../../../testing/services/user-mock.service';
 import {NodeService} from '../../services/node.service';
 
-import {NodeDeploymentListComponent} from './node-deployment-list.component';
+import {MachineDeploymentListComponent} from './machine-deployment-list.component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
@@ -40,14 +40,14 @@ class MatDialogMock {
   }
 }
 
-describe('NodeDeploymentListComponent', () => {
-  let fixture: ComponentFixture<NodeDeploymentListComponent>;
-  let component: NodeDeploymentListComponent;
+describe('MachineDeploymentListComponent', () => {
+  let fixture: ComponentFixture<MachineDeploymentListComponent>;
+  let component: MachineDeploymentListComponent;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [...modules],
-      declarations: [NodeDeploymentListComponent],
+      declarations: [MachineDeploymentListComponent],
       providers: [
         {provide: ApiService, useClass: ApiMockService},
         {provide: NodeService, useClass: NodeMockService},
@@ -63,7 +63,7 @@ describe('NodeDeploymentListComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NodeDeploymentListComponent);
+    fixture = TestBed.createComponent(MachineDeploymentListComponent);
     component = fixture.componentInstance;
   });
 

@@ -33,7 +33,7 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
   constructor(private readonly _addNodeService: NodeDataService, private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
-    const isInEdit = !!this.nodeData.name; // Existing node deployment will always have assigned name.
+    const isInEdit = !!this.nodeData.name; // Existing machine deployment will always have assigned name.
     const assignPublicIP = isInEdit ? this.nodeData.spec.cloud.aws.assignPublicIP : true; // Default to true.
 
     this.form = new FormGroup({

@@ -14,7 +14,7 @@ import {Observable, of} from 'rxjs';
 
 import {Cluster} from '../../shared/entity/cluster';
 import {Datacenter} from '../../shared/entity/datacenter';
-import {NodeDeployment} from '../../shared/entity/node-deployment';
+import {MachineDeployment} from '../../shared/entity/machine-deployment';
 import {NodeSpec} from '../../shared/entity/node';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 
@@ -26,7 +26,7 @@ export class NodeMockService {
     return 'ubuntu';
   }
 
-  getHealthStatus(nd: NodeDeployment): object {
+  getHealthStatus(md: MachineDeployment): object {
     return {
       color: 'fa fa-circle orange',
       status: 'In progress',
@@ -34,22 +34,22 @@ export class NodeMockService {
     };
   }
 
-  showNodeDeploymentEditDialog(
-    nd: NodeDeployment,
+  showMachineDeploymentEditDialog(
+    md: MachineDeployment,
     cluster: Cluster,
     projectID: string,
     datacenter: Datacenter,
-    changeEventEmitter: EventEmitter<NodeDeployment>
+    changeEventEmitter: EventEmitter<MachineDeployment>
   ): Observable<boolean> {
     return of(true);
   }
 
-  showNodeDeploymentDeleteDialog(
-    nd: NodeDeployment,
+  showMachineDeploymentDeleteDialog(
+    md: MachineDeployment,
     clusterID: string,
     projectID: string,
     dcName: string,
-    changeEventEmitter: EventEmitter<NodeDeployment>
+    changeEventEmitter: EventEmitter<MachineDeployment>
   ): Observable<boolean> {
     return of(true);
   }

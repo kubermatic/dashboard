@@ -11,15 +11,15 @@
 
 @import "../../../../assets/css/variables";
 
-.km-node-deployment-spinner {
+.km-machine-deployment-spinner {
   margin: (2.5 * $baseline-grid) auto !important;
 }
 
-.km-node-deployment-health {
+.km-machine-deployment-health {
   text-align: center;
 }
 
 .km-table-actions,
-.km-node-deployment-action {
+.km-machine-deployment-action {
   vertical-align: middle !important;
 }

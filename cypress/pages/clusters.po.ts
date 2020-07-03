@@ -38,19 +38,19 @@ export class ClustersPage {
     return cy.get('tbody');
   }
 
-  static getTableRow(nodeDeploymentName: string): Cypress.Chainable<any> {
-    return this.getTableRowNodeDeploymentNameColumn(nodeDeploymentName).parent();
+  static getTableRow(machineDeploymentName: string): Cypress.Chainable<any> {
+    return this.getTableRowMachineDeploymentNameColumn(machineDeploymentName).parent();
   }
 
-  static getTableRowNodeDeploymentNameColumn(nodeDeploymentName: string): Cypress.Chainable<any> {
-    return cy.get(`td#km-node-deployment-${nodeDeploymentName}`);
+  static getTableRowMachineDeploymentNameColumn(machineDeploymentName: string): Cypress.Chainable<any> {
+    return cy.get(`td#km-machine-deployment-${machineDeploymentName}`);
   }
 
-  static getNodeDeploymentRemoveBtn(nodeDeploymentName: string): Cypress.Chainable<any> {
-    return this.getTableRow(nodeDeploymentName).find('button i.km-icon-delete');
+  static getMachineDeploymentRemoveBtn(machineDeploymentName: string): Cypress.Chainable<any> {
+    return this.getTableRow(machineDeploymentName).find('button i.km-icon-delete');
   }
 
-  static getDeleteNodeDeploymentDialogBtn(): Cypress.Chainable<any> {
+  static getDeleteMachineDeploymentDialogBtn(): Cypress.Chainable<any> {
     return cy.get('#km-confirmation-dialog-confirm-btn');
   }
 
