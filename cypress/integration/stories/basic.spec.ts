@@ -34,9 +34,7 @@ describe('Basic Story', () => {
   });
 
   it('should create a new cluster', () => {
-    WizardPage.getClusterNameInput()
-      .type(clusterName)
-      .should(Condition.HaveValue, clusterName);
+    WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn().click();
     WizardPage.getProviderBtn(Provider.BringYourOwn).click();
     WizardPage.getDatacenterBtn(Datacenter.Frankfurt).click();
@@ -57,10 +55,7 @@ describe('Basic Story', () => {
     reloadUsers();
     MembersPage.editMember(newUserEmail, Group.Viewer);
     reloadUsers();
-    MembersPage.getTableRowGroupColumn(newUserEmail).should(
-      Condition.Contain,
-      Group.Viewer
-    );
+    MembersPage.getTableRowGroupColumn(newUserEmail).should(Condition.Contain, Group.Viewer);
   });
 
   it('should delete created member', () => {
@@ -89,9 +84,7 @@ describe('Basic Story', () => {
     ProjectsPage.getEditProjectBtn(projectName).click();
 
     projectName = `${projectName}-edited`;
-    ProjectsPage.getEditDialogInput()
-      .type('-edited')
-      .should(Condition.HaveValue, projectName);
+    ProjectsPage.getEditDialogInput().type('-edited').should(Condition.HaveValue, projectName);
     ProjectsPage.getEditDialogConfirmBtn().click();
 
     ProjectsPage.waitForRefresh();

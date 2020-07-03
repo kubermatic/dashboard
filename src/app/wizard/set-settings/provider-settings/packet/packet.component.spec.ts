@@ -14,13 +14,7 @@ describe('PacketClusterSettingsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        ReactiveFormsModule,
-        SharedModule,
-        HttpClientModule,
-      ],
+      imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
       declarations: [PacketClusterSettingsComponent],
       providers: [WizardService],
     }).compileComponents();

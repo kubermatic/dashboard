@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -6,12 +7,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import {
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {PacketNodeSpec} from '../../../../shared/entity/node/PacketNodeSpec';
@@ -48,8 +44,7 @@ enum SizeState {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PacketBasicNodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class PacketBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy, AfterViewInit {
   readonly Controls = Controls;
 
   sizes: PacketSize[] = [];
@@ -68,10 +63,10 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator
     this.form = this._builder.group({
       [Controls.InstanceType]: this._builder.control('', Validators.required),
     });
+  }
 
-    this._sizesObservable
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._setDefaultSize.bind(this));
+  ngAfterViewInit() {
+    this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
   }
 
   ngOnDestroy(): void {
@@ -112,10 +107,7 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator
   }
 
   private get _sizesObservable(): Observable<PacketSize[]> {
-    return this._nodeDataService.packet.flavors(
-      this._clearSize.bind(this),
-      this._onSizeLoading.bind(this)
-    );
+    return this._nodeDataService.packet.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
   }
 
   private _onSizeLoading(): void {

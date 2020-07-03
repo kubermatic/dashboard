@@ -3,6 +3,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {Injector, NgModule, Optional, SkipSelf} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
+import {COOKIE, COOKIE_DI_TOKEN} from '../app.config';
 
 import {AddMemberComponent} from '../member/add-member/add-member.component';
 import {EditMemberComponent} from '../member/edit-member/edit-member.component';
@@ -17,12 +18,7 @@ import {NavigationComponent} from './components/navigation/navigation.component'
 import {ProjectSelectorComponent} from './components/navigation/project/selector.component';
 import {NotificationPanelComponent} from './components/notification-panel/notification-panel.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
-import {
-  AuthInterceptor,
-  CheckTokenInterceptor,
-  ErrorNotificationsInterceptor,
-  LoaderInterceptor,
-} from './interceptors';
+import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
 import {
   ApiService,
   Auth,
@@ -41,6 +37,7 @@ import {GlobalModule} from './services/global/global.module';
 import {NodeDataService} from './services/node-data/node-data.service';
 import {PreviousRouteService} from './services/previous-route/previous-route.service';
 import {SettingsService} from './services/settings/settings.service';
+import {TokenService} from './services/token/token.service';
 import {StepsService} from './services/wizard/steps.service';
 import {ClusterNameGenerator} from './util/name-generator.service';
 
@@ -85,6 +82,7 @@ const services: any[] = [
   RBACService,
   PresetsService,
   PreviousRouteService,
+  TokenService,
 ];
 
 const interceptors: any[] = [
@@ -113,19 +111,14 @@ const interceptors: any[] = [
 @NgModule({
   imports: [...modules],
   declarations: [...components],
-  providers: [...services, ...interceptors],
+  providers: [...services, ...interceptors, {provide: COOKIE_DI_TOKEN, useValue: COOKIE}],
   exports: [...components],
 })
 export class CoreModule {
   static injector: Injector;
-  constructor(
-    @Optional() @SkipSelf() parentModule: CoreModule,
-    injector: Injector
-  ) {
+  constructor(@Optional() @SkipSelf() parentModule: CoreModule, injector: Injector) {
     if (parentModule) {
-      throw new Error(
-        'CoreModule is already loaded. Import it in the AppModule only'
-      );
+      throw new Error('CoreModule is already loaded. Import it in the AppModule only');
     }
 
     CoreModule.injector = injector;

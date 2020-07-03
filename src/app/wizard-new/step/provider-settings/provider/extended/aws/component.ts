@@ -1,20 +1,12 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {filter, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
 import {AWSCloudSpec} from '../../../../../../shared/entity/cloud/AWSCloudSpec';
-import {
-  CloudSpec,
-  ClusterEntity,
-  ClusterSpec,
-} from '../../../../../../shared/entity/ClusterEntity';
+import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
+import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
 
@@ -41,8 +33,7 @@ enum Controls {
     },
   ],
 })
-export class AWSProviderExtendedComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class AWSProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
   constructor(
@@ -55,33 +46,22 @@ export class AWSProviderExtendedComponent extends BaseFormValidator
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.SecurityGroup]: this._builder.control(
-        '',
-        Validators.pattern('sg-(\\w{8}|\\w{17})')
-      ),
-      [Controls.RouteTableID]: this._builder.control(
-        '',
-        Validators.pattern('rtb-(\\w{8}|\\w{17})')
-      ),
+      [Controls.SecurityGroup]: this._builder.control('', Validators.pattern('sg-(\\w{8}|\\w{17})')),
+      [Controls.RouteTableID]: this._builder.control('', Validators.pattern('rtb-(\\w{8}|\\w{17})')),
       [Controls.InstanceProfileName]: this._builder.control(''),
       [Controls.RoleARN]: this._builder.control(''),
     });
 
     this._presets.presetChanges
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset =>
-        Object.values(Controls).forEach(control =>
-          this._enable(!preset, control)
-        )
-      );
+      .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._presets.enablePresets(
-        Object.values(this._clusterService.cluster.spec.cloud.aws).every(
-          value => !value
-        )
-      );
-    });
+    this.form.valueChanges
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AWS))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this._presets.enablePresets(Object.values(this._clusterService.cluster.spec.cloud.aws).every(value => !value));
+      });
 
     merge(
       this.form.get(Controls.SecurityGroup).valueChanges,
@@ -90,9 +70,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator
       this.form.get(Controls.RoleARN).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        _ => (this._clusterService.cluster = this._getClusterEntity())
-      );
+      .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
   }
 
   ngOnDestroy(): void {
@@ -115,8 +93,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator
       spec: {
         cloud: {
           aws: {
-            instanceProfileName: this.form.get(Controls.InstanceProfileName)
-              .value,
+            instanceProfileName: this.form.get(Controls.InstanceProfileName).value,
             roleARN: this.form.get(Controls.RoleARN).value,
             routeTableId: this.form.get(Controls.RouteTableID).value,
             securityGroupID: this.form.get(Controls.SecurityGroup).value,

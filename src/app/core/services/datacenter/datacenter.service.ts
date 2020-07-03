@@ -25,8 +25,6 @@ export class DatacenterService {
   }
 
   getDataCenter(name: string): Observable<DataCenterEntity> {
-    return this.getDataCenters().pipe(
-      map(datacenters => datacenters.find(dc => dc.metadata.name === name))
-    );
+    return this.getDataCenters().pipe(map(datacenters => datacenters.find(dc => dc.metadata.name === name)));
   }
 }

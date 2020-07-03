@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -14,22 +8,14 @@ import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
-import {
-  ApiService,
-  NotificationService,
-  ProjectService,
-  UserService,
-} from '../core/services';
+import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {MemberEntity} from '../shared/entity/MemberEntity';
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
 import {GroupConfig} from '../shared/model/Config';
-import {
-  MemberUtils,
-  Permission,
-} from '../shared/utils/member-utils/member-utils';
+import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
 
 import {AddMemberComponent} from './add-member/add-member.component';
 import {EditMemberComponent} from './edit-member/edit-member.component';
@@ -70,16 +56,12 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._settingsService.userSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        this.paginator.pageSize = settings.itemsPerPage;
-        this.dataSource.paginator = this.paginator; // Force refresh.
-      });
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = this.paginator; // Force refresh.
+    });
 
-    this._userService.loggedInUser
-      .pipe(first())
-      .subscribe(user => (this.currentUser = user));
+    this._userService.loggedInUser.pipe(first()).subscribe(user => (this.currentUser = user));
 
     this._projectService.selectedProject
       .pipe(
@@ -89,24 +71,10 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
         })
       )
       .pipe(first())
-      .subscribe(
-        userGroup =>
-          (this._currentGroupConfig = this._userService.userGroupConfig(
-            userGroup
-          ))
-      );
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
 
-    merge(
-      timer(0, 10 * this._appConfig.getRefreshTimeBase()),
-      this._membersUpdate
-    )
-      .pipe(
-        switchMap(() =>
-          this._selectedProject
-            ? this._apiService.getMembers(this._selectedProject.id)
-            : EMPTY
-        )
-      )
+    merge(timer(0, 10 * this._appConfig.getRefreshTimeBase()), this._membersUpdate)
+      .pipe(switchMap(() => (this._selectedProject ? this._apiService.getMembers(this._selectedProject.id) : EMPTY)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(members => {
         this.members = members;
@@ -126,19 +94,12 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
 
   getGroup(member: MemberEntity): string {
     return this._selectedProject
-      ? MemberUtils.getGroupDisplayName(
-          MemberUtils.getGroupInProject(member, this._selectedProject.id)
-        )
+      ? MemberUtils.getGroupDisplayName(MemberUtils.getGroupInProject(member, this._selectedProject.id))
       : '';
   }
 
   isAddEnabled(): boolean {
-    return MemberUtils.hasPermission(
-      this.currentUser,
-      this._currentGroupConfig,
-      'members',
-      Permission.Create
-    );
+    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, 'members', Permission.Create);
   }
 
   addMember(): void {
@@ -157,12 +118,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
 
   isEditEnabled(member: MemberEntity): boolean {
     return (
-      MemberUtils.hasPermission(
-        this.currentUser,
-        this._currentGroupConfig,
-        'members',
-        Permission.Edit
-      ) ||
+      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, 'members', Permission.Edit) ||
       (this.currentUser && member && this.currentUser.email !== member.email)
     );
   }
@@ -183,12 +139,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
 
   isDeleteEnabled(member: MemberEntity): boolean {
     return (
-      MemberUtils.hasPermission(
-        this.currentUser,
-        this._currentGroupConfig,
-        'members',
-        Permission.Delete
-      ) ||
+      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, 'members', Permission.Delete) ||
       (this.currentUser && member && this.currentUser.email !== member.email)
     );
   }
@@ -204,14 +155,8 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       },
     };
 
-    const dialogRef = this._matDialog.open(
-      ConfirmationDialogComponent,
-      dialogConfig
-    );
-    this._googleAnalyticsService.emitEvent(
-      'memberOverview',
-      'deleteMemberOpened'
-    );
+    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
+    this._googleAnalyticsService.emitEvent('memberOverview', 'deleteMemberOpened');
 
     dialogRef
       .afterClosed()
@@ -225,10 +170,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
               this._notificationService.success(
                 `The <strong>${member.name}</strong> member was removed from the <strong>${this._selectedProject.name}</strong> project`
               );
-              this._googleAnalyticsService.emitEvent(
-                'memberOverview',
-                'MemberDeleted'
-              );
+              this._googleAnalyticsService.emitEvent('memberOverview', 'MemberDeleted');
             });
         }
       });
@@ -239,10 +181,6 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isPaginatorVisible(): boolean {
-    return (
-      this.hasItems() &&
-      this.paginator &&
-      this.members.length > this.paginator.pageSize
-    );
+    return this.hasItems() && this.paginator && this.members.length > this.paginator.pageSize;
   }
 }

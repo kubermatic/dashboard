@@ -30,9 +30,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   };
 
   private _unsubscribe = new Subject<void>();
-  asyncLabelValidators = [
-    AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster),
-  ];
+  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
 
   constructor(
     private readonly _clusterService: ClusterService,
@@ -49,16 +47,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         Validators.minLength(3),
         Validators.pattern('[a-zA-Z0-9-]*'),
       ]),
-      auditLogging: new FormControl(
-        !!this.cluster.spec.auditLogging &&
-          this.cluster.spec.auditLogging.enabled
-      ),
-      usePodSecurityPolicyAdmissionPlugin: new FormControl(
-        this.cluster.spec.usePodSecurityPolicyAdmissionPlugin
-      ),
-      usePodNodeSelectorAdmissionPlugin: new FormControl(
-        this.cluster.spec.usePodNodeSelectorAdmissionPlugin
-      ),
+      auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
+      usePodSecurityPolicyAdmissionPlugin: new FormControl(this.cluster.spec.usePodSecurityPolicyAdmissionPlugin),
+      usePodNodeSelectorAdmissionPlugin: new FormControl(this.cluster.spec.usePodNodeSelectorAdmissionPlugin),
       labels: new FormControl(''),
     });
 
@@ -90,26 +81,17 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         auditLogging: {
           enabled: this.form.controls.auditLogging.value,
         },
-        usePodSecurityPolicyAdmissionPlugin: this.form.controls
-          .usePodSecurityPolicyAdmissionPlugin.value,
-        usePodNodeSelectorAdmissionPlugin: this.form.controls
-          .usePodNodeSelectorAdmissionPlugin.value,
+        usePodSecurityPolicyAdmissionPlugin: this.form.controls.usePodSecurityPolicyAdmissionPlugin.value,
+        usePodNodeSelectorAdmissionPlugin: this.form.controls.usePodNodeSelectorAdmissionPlugin.value,
       },
     };
 
     this._clusterService
-      .patch(
-        this.projectID,
-        this.cluster.id,
-        this.datacenter.metadata.name,
-        patch
-      )
+      .patch(this.projectID, this.cluster.id, this.datacenter.metadata.name, patch)
       .subscribe(cluster => {
         this._matDialogRef.close(cluster);
         this._clusterService.onClusterUpdate.next();
-        this._notificationService.success(
-          `The <strong>${this.cluster.name}</strong> cluster was updated`
-        );
+        this._notificationService.success(`The <strong>${this.cluster.name}</strong> cluster was updated`);
       });
   }
 

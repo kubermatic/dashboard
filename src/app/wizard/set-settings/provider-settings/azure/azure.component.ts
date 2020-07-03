@@ -23,20 +23,10 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      clientID: new FormControl(this.cluster.spec.cloud.azure.clientID, [
-        Validators.required,
-      ]),
-      clientSecret: new FormControl(
-        this.cluster.spec.cloud.azure.clientSecret,
-        [Validators.required]
-      ),
-      subscriptionID: new FormControl(
-        this.cluster.spec.cloud.azure.subscriptionID,
-        [Validators.required]
-      ),
-      tenantID: new FormControl(this.cluster.spec.cloud.azure.tenantID, [
-        Validators.required,
-      ]),
+      clientID: new FormControl(this.cluster.spec.cloud.azure.clientID, [Validators.required]),
+      clientSecret: new FormControl(this.cluster.spec.cloud.azure.clientSecret, [Validators.required]),
+      subscriptionID: new FormControl(this.cluster.spec.cloud.azure.subscriptionID, [Validators.required]),
+      tenantID: new FormControl(this.cluster.spec.cloud.azure.tenantID, [Validators.required]),
     });
 
     this._formHelper = new FormHelper(this.form);
@@ -55,32 +45,24 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
           ? this._wizard.onCustomPresetsDisable.emit(false)
           : this._wizard.onCustomPresetsDisable.emit(true);
 
-        this._wizard.changeClusterProviderSettings(
-          this._clusterProviderSettingsForm(this._formHelper.isFormValid())
-        );
+        this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
       });
 
-    this._wizard.clusterProviderSettingsFormChanges$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.cluster.spec.cloud.azure = data.cloudSpec.azure;
-      });
+    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      this.cluster.spec.cloud.azure = data.cloudSpec.azure;
+    });
 
-    this._wizard.onCustomPresetSelect
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(newCredentials => {
-        if (newCredentials) {
-          this.form.disable();
-          return;
-        }
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+      if (newCredentials) {
+        this.form.disable();
+        return;
+      }
 
-        this.form.enable();
-      });
+      this.form.enable();
+    });
   }
 
-  private _clusterProviderSettingsForm(
-    valid: boolean
-  ): ClusterProviderSettingsForm {
+  private _clusterProviderSettingsForm(valid: boolean): ClusterProviderSettingsForm {
     return {
       cloudSpec: {
         azure: {

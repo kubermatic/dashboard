@@ -4,11 +4,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import {
-  ApiService,
-  DatacenterService,
-  WizardService,
-} from '../../core/services';
+import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeAwsSubnets} from '../../testing/fake-data/aws-subnets.fake';
@@ -19,13 +15,7 @@ import {asyncData} from '../../testing/services/api-mock.service';
 
 import {AWSNodeDataComponent} from './aws-node-data.component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  ReactiveFormsModule,
-  HttpClientModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, ReactiveFormsModule, HttpClientModule];
 
 describe('AWSNodeDataComponent', () => {
   let fixture: ComponentFixture<AWSNodeDataComponent>;
@@ -37,9 +27,7 @@ describe('AWSNodeDataComponent', () => {
     apiMock = {getAWSSubnets: jest.fn()};
     apiMock.getAWSSubnets.mockReturnValue(asyncData(fakeAwsSubnets()));
     datacenterMock = {getDataCenter: jest.fn()};
-    datacenterMock.getDataCenter.mockReturnValue(
-      asyncData(fakeAWSDatacenter())
-    );
+    datacenterMock.getDataCenter.mockReturnValue(asyncData(fakeAWSDatacenter()));
 
     TestBed.configureTestingModule({
       imports: [...modules],
@@ -83,11 +71,7 @@ describe('AWSNodeDataComponent', () => {
     component.fillSubnetMap(fakeAwsSubnets());
     component.form.controls.subnetID.setValue('');
     fixture.detectChanges();
-    expect(component.subnetAZ).toEqual([
-      'eu-central-1a',
-      'eu-central-1c',
-      'eu-central-1b',
-    ]);
+    expect(component.subnetAZ).toEqual(['eu-central-1a', 'eu-central-1c', 'eu-central-1b']);
     expect(component.getSubnetToAZ('eu-central-1a')).toEqual([
       {
         name: '',

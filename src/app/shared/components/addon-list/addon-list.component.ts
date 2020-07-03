@@ -1,13 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {Subject} from 'rxjs';
@@ -57,15 +48,11 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
         this._updateInstallableAddons();
       });
 
-    this._apiService.addonConfigs
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(addonConfigs => {
-        const map = new Map();
-        addonConfigs.forEach(addonConfig =>
-          map.set(addonConfig.name, addonConfig)
-        );
-        this.addonConfigs = map;
-      });
+    this._apiService.addonConfigs.pipe(takeUntil(this._unsubscribe)).subscribe(addonConfigs => {
+      const map = new Map();
+      addonConfigs.forEach(addonConfig => map.set(addonConfig.name, addonConfig));
+      this.addonConfigs = map;
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -89,9 +76,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
 
   hasLogo(name: string): boolean {
     const addonConfig = this.addonConfigs.get(name);
-    return (
-      !!addonConfig && !!addonConfig.spec.logo && !!addonConfig.spec.logoFormat
-    );
+    return !!addonConfig && !!addonConfig.spec.logo && !!addonConfig.spec.logoFormat;
   }
 
   getAddonLogo(name: string): SafeUrl {
@@ -166,8 +151,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     };
 
     if (addon.spec.isDefault) {
-      config.data.warning =
-        'This is a default addon. It will be automatically restored after deletion.';
+      config.data.warning = 'This is a default addon. It will be automatically restored after deletion.';
     }
 
     const dialog = this._matDialog.open(ConfirmationDialogComponent, config);

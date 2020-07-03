@@ -41,25 +41,19 @@ export class VSphereNodeOptionsComponent implements OnInit, OnDestroy {
       this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
     });
 
-    this.addNodeService.nodeOperatingSystemDataChanges$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.setImage(data);
-        this.addNodeService.changeNodeProviderData(
-          this.getVSphereOptionsData()
-        );
-      });
+    this.addNodeService.nodeOperatingSystemDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      this.setImage(data);
+      this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
+    });
 
     this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
     if (this.nodeData.spec.cloud.vsphere.template === '') {
       this.setImage(this.nodeData.spec.operatingSystem);
     }
 
-    this._wizardService.clusterSettingsFormViewChanged$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.hideOptional = data.hideOptional;
-      });
+    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      this.hideOptional = data.hideOptional;
+    });
   }
 
   ngOnDestroy(): void {

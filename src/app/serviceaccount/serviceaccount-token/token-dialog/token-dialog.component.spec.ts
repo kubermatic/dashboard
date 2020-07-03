@@ -13,13 +13,7 @@ import {ProjectMockService} from '../../../testing/services/project-mock.service
 
 import {TokenDialogComponent} from './token-dialog.component';
 
-const modules: any[] = [
-  BrowserModule,
-  HttpClientModule,
-  BrowserAnimationsModule,
-  RouterTestingModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
 
 describe('TokenDialogComponent', () => {
   let component: TokenDialogComponent;

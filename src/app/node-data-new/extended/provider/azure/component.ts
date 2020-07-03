@@ -28,8 +28,7 @@ enum Controls {
     },
   ],
 })
-export class AzureExtendedNodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class AzureExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: object;
 
   readonly Controls = Controls;
@@ -38,10 +37,7 @@ export class AzureExtendedNodeDataComponent extends BaseFormValidator
     return this._nodeDataService.nodeData;
   }
 
-  constructor(
-    private readonly _builder: FormBuilder,
-    private readonly _nodeDataService: NodeDataService
-  ) {
+  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
     super();
   }
 

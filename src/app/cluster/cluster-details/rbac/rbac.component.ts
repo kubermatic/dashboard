@@ -8,10 +8,7 @@ import {NotificationService, RBACService} from '../../../core/services';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {
-  SimpleBinding,
-  SimpleClusterBinding,
-} from '../../../shared/entity/RBACEntity';
+import {SimpleBinding, SimpleClusterBinding} from '../../../shared/entity/RBACEntity';
 
 import {AddBindingComponent} from './add-binding/add-binding.component';
 
@@ -30,20 +27,9 @@ export class RBACComponent implements OnInit, OnDestroy {
 
   isShowRBAC = false;
   dataSourceCluster = new MatTableDataSource<SimpleClusterBinding>();
-  displayedColumnsCluster: string[] = [
-    'kind',
-    'name',
-    'clusterRole',
-    'actions',
-  ];
+  displayedColumnsCluster: string[] = ['kind', 'name', 'clusterRole', 'actions'];
   dataSourceNamespace = new MatTableDataSource<SimpleBinding>();
-  displayedColumnsNamespace: string[] = [
-    'kind',
-    'name',
-    'clusterRole',
-    'namespace',
-    'actions',
-  ];
+  displayedColumnsNamespace: string[] = ['kind', 'name', 'clusterRole', 'namespace', 'actions'];
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -99,10 +85,7 @@ export class RBACComponent implements OnInit, OnDestroy {
       },
     };
 
-    const dialogRef = this._matDialog.open(
-      ConfirmationDialogComponent,
-      dialogConfig
-    );
+    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
 
     dialogRef
       .afterClosed()
@@ -143,10 +126,7 @@ export class RBACComponent implements OnInit, OnDestroy {
       },
     };
 
-    const dialogRef = this._matDialog.open(
-      ConfirmationDialogComponent,
-      dialogConfig
-    );
+    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
 
     dialogRef
       .afterClosed()

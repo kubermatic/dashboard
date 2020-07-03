@@ -80,15 +80,11 @@ export class MembersPage {
 
   static addMember(email: string, group: Group): void {
     this.getAddMemberBtn().should(Condition.NotBe, 'disabled').click();
-    this.getAddMemberDialogEmailInput()
-      .type(email)
-      .should(Condition.HaveValue, email);
+    this.getAddMemberDialogEmailInput().type(email).should(Condition.HaveValue, email);
     this.getAddMemberDialogGroupCombobox().click();
     this.getMemberDialogGroup(group).click();
     this.waitForRefresh();
-    this.getAddMemberDialogSaveBtn()
-      .should(Condition.NotBe, 'disabled')
-      .click();
+    this.getAddMemberDialogSaveBtn().should(Condition.NotBe, 'disabled').click();
     this.getTable().should(Condition.Contain, email);
   }
 

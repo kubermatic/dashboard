@@ -1,10 +1,10 @@
 import {DOCUMENT} from '@angular/common';
 import {Inject, Injectable} from '@angular/core';
 import {first} from 'rxjs/operators';
-import {SettingsService} from '../../core/services/settings/settings.service';
-import {UserSettings} from '../../shared/entity/MemberEntity';
 import {ColorSchemeService} from './color-scheme';
 import {ThemeService} from './theme';
+import {SettingsService} from '../../../../core/services/settings/settings.service';
+import {UserSettings} from '../../../../shared/entity/MemberEntity';
 
 @Injectable()
 export class ThemeManagerService {
@@ -32,10 +32,7 @@ export class ThemeManagerService {
       this._removeTheme(this._selectedTheme);
     }
 
-    this._getLinkElementForTheme(themeName).setAttribute(
-      'href',
-      this._themesPath(themeName)
-    );
+    this._getLinkElementForTheme(themeName).setAttribute('href', this._themesPath(themeName));
     this._selectedTheme = themeName;
   }
 
@@ -75,9 +72,7 @@ export class ThemeManagerService {
   }
 
   private _getExistingLinkElementForTheme(styleName: string): Element {
-    return this._document.head.querySelector(
-      `link[rel="stylesheet"].${this._themeClassName(styleName)}`
-    );
+    return this._document.head.querySelector(`link[rel="stylesheet"].${this._themeClassName(styleName)}`);
   }
 
   private _createLinkElementForTheme(styleName: string): Element {

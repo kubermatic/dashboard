@@ -1,6 +1,6 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {MatAnchor} from '@angular/material/button';
 import {Router} from '@angular/router';
-import {CookieService} from 'ngx-cookie-service';
 import {Auth} from '../../core/services';
 
 @Component({
@@ -9,17 +9,14 @@ import {Auth} from '../../core/services';
   styleUrls: ['./frontpage.component.scss'],
 })
 export class FrontpageComponent implements OnInit {
-  constructor(
-    private readonly _auth: Auth,
-    private readonly _router: Router,
-    private readonly _cookieService: CookieService
-  ) {}
+  @ViewChild('loginButton') private readonly _loginButton: MatAnchor;
+
+  constructor(private readonly _auth: Auth, private readonly _router: Router) {}
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent): void {
-    // keyCode = 13 is enter
-    if (event.keyCode === 13) {
-      this.goToLogin();
+    if (event.key === 'Enter') {
+      this._loginButton._elementRef.nativeElement.click();
     }
   }
 
@@ -28,43 +25,7 @@ export class FrontpageComponent implements OnInit {
       this._router.navigate(['/projects']);
     }
 
-    const nonceRegExp = /[?&#]nonce=([^&]+)/;
-    const nonceStr = nonceRegExp.exec(this._auth.getOIDCProviderURL());
-    if (!!nonceStr && nonceStr.length >= 2 && !!nonceStr[1]) {
-      this._cookieService.set(
-        Auth.Cookie.Nonce,
-        nonceStr[1],
-        null,
-        '/',
-        null,
-        true,
-        'Lax'
-      );
-      // localhost is only served via http, though secure cookie is not possible
-      // following line will only work when domain is localhost
-      this._cookieService.set(
-        Auth.Cookie.Nonce,
-        nonceStr[1],
-        null,
-        '/',
-        'localhost',
-        false,
-        'Lax'
-      );
-      this._cookieService.set(
-        Auth.Cookie.Nonce,
-        nonceStr[1],
-        null,
-        '/',
-        '127.0.0.1',
-        false,
-        'Lax'
-      );
-    }
-  }
-
-  goToLogin(): void {
-    document.getElementById('login-button').click();
+    this._auth.setNonce();
   }
 
   getOIDCProviderURL(): string {

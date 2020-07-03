@@ -11,13 +11,7 @@ import {WizardService} from '../../../wizard-new/service/wizard';
 import {SharedModule} from '../../shared.module';
 import {MachineNetworkComponent} from './component';
 
-const modules: any[] = [
-  BrowserModule,
-  HttpClientModule,
-  BrowserAnimationsModule,
-  RouterTestingModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
 
 describe('MachineNetworksComponent', () => {
   let component: MachineNetworkComponent;

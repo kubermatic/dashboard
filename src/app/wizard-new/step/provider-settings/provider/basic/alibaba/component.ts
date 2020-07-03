@@ -1,19 +1,11 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge} from 'rxjs';
-import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 import {PresetsService} from '../../../../../../core/services';
 import {AlibabaCloudSpec} from '../../../../../../shared/entity/cloud/AlibabaCloudSpec';
-import {
-  CloudSpec,
-  ClusterEntity,
-  ClusterSpec,
-} from '../../../../../../shared/entity/ClusterEntity';
+import {CloudSpec, ClusterEntity, ClusterSpec} from '../../../../../../shared/entity/ClusterEntity';
+import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../service/cluster';
 
@@ -38,8 +30,7 @@ export enum Controls {
     },
   ],
 })
-export class AlibabaProviderBasicComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class AlibabaProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
   constructor(
@@ -53,46 +44,28 @@ export class AlibabaProviderBasicComponent extends BaseFormValidator
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.AccessKeyID]: this._builder.control('', Validators.required),
-      [Controls.AccessKeySecret]: this._builder.control(
-        '',
-        Validators.required
-      ),
+      [Controls.AccessKeySecret]: this._builder.control('', Validators.required),
     });
 
     this.form.valueChanges
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.ALIBABA))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
-        this._presets.enablePresets(
-          Object.values(Controls).every(
-            control => !this.form.get(control).value
-          )
-        )
+        this._presets.enablePresets(Object.values(Controls).every(control => !this.form.get(control).value))
       );
 
     this._presets.presetChanges
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset =>
-        Object.values(Controls).forEach(control =>
-          this._enable(!preset, control)
-        )
-      );
+      .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
-    merge(
-      this._clusterService.providerChanges,
-      this._clusterService.datacenterChanges
-    )
+    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
 
-    merge(
-      this.form.get(Controls.AccessKeyID).valueChanges,
-      this.form.get(Controls.AccessKeySecret).valueChanges
-    )
+    merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.AccessKeySecret).valueChanges)
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        _ => (this._clusterService.cluster = this._getClusterEntity())
-      );
+      .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
   }
 
   ngOnDestroy(): void {

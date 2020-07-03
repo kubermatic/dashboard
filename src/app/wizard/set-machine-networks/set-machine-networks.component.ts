@@ -27,10 +27,7 @@ export class SetMachineNetworksComponent implements OnInit, OnDestroy {
       checkMachineNetworks: new FormControl(false),
     });
 
-    if (
-      !!this.cluster.spec.machineNetworks &&
-      this.cluster.spec.machineNetworks.length > 0
-    ) {
+    if (!!this.cluster.spec.machineNetworks && this.cluster.spec.machineNetworks.length > 0) {
       this.setMachineNetworkForm.controls.checkMachineNetworks.setValue(true);
     }
 
@@ -79,8 +76,7 @@ export class SetMachineNetworksComponent implements OnInit, OnDestroy {
     }
 
     this.wizardService.changeSetMachineNetworks({
-      setMachineNetworks: this.setMachineNetworkForm.controls
-        .checkMachineNetworks.value,
+      setMachineNetworks: this.setMachineNetworkForm.controls.checkMachineNetworks.value,
       machineNetworks: this.machineNetworkFormData,
       valid: isValid,
     });

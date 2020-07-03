@@ -3,11 +3,7 @@ import {catchError, filter, switchMap, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {
-  GCPDiskType,
-  GCPMachineSize,
-  GCPZone,
-} from '../../../shared/entity/provider/gcp/GCP';
+import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../shared/entity/provider/gcp/GCP';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../wizard-new/service/cluster';
 import {NodeDataMode} from '../../config';
@@ -30,10 +26,7 @@ export class NodeDataGCPProvider {
     this._nodeDataService.nodeData.spec.cloud.gcp.tags = tags;
   }
 
-  zones(
-    onError: () => void = undefined,
-    onLoadingCb: () => void = null
-  ): Observable<GCPZone[]> {
+  zones(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<GCPZone[]> {
     let cluster: ClusterEntity;
 
     // TODO: support dialog mode
@@ -63,25 +56,17 @@ export class NodeDataGCPProvider {
     }
   }
 
-  diskTypes(
-    onError: () => void = undefined,
-    onLoadingCb: () => void = null
-  ): Observable<GCPDiskType[]> {
+  diskTypes(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<GCPDiskType[]> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return merge(
-          this._clusterService.clusterChanges,
-          this._nodeDataService.nodeDataChanges
-        )
+        return merge(this._clusterService.clusterChanges, this._nodeDataService.nodeDataChanges)
           .pipe(filter(_ => this._clusterService.provider === NodeProvider.GCP))
           .pipe(
             switchMap(_ =>
               this._presetService
                 .provider(NodeProvider.GCP)
-                .serviceAccount(
-                  this._clusterService.cluster.spec.cloud.gcp.serviceAccount
-                )
+                .serviceAccount(this._clusterService.cluster.spec.cloud.gcp.serviceAccount)
                 .zone(this._nodeDataService.nodeData.spec.cloud.gcp.zone)
                 .credential(this._presetService.preset)
                 .diskTypes(onLoadingCb)
@@ -99,25 +84,17 @@ export class NodeDataGCPProvider {
     }
   }
 
-  machineTypes(
-    onError: () => void = undefined,
-    onLoadingCb: () => void = null
-  ): Observable<GCPMachineSize[]> {
+  machineTypes(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<GCPMachineSize[]> {
     // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return merge(
-          this._clusterService.clusterChanges,
-          this._nodeDataService.nodeDataChanges
-        )
+        return merge(this._clusterService.clusterChanges, this._nodeDataService.nodeDataChanges)
           .pipe(filter(_ => this._clusterService.provider === NodeProvider.GCP))
           .pipe(
             switchMap(_ =>
               this._presetService
                 .provider(NodeProvider.GCP)
-                .serviceAccount(
-                  this._clusterService.cluster.spec.cloud.gcp.serviceAccount
-                )
+                .serviceAccount(this._clusterService.cluster.spec.cloud.gcp.serviceAccount)
                 .zone(this._nodeDataService.nodeData.spec.cloud.gcp.zone)
                 .credential(this._presetService.preset)
                 .machineTypes(onLoadingCb)

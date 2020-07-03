@@ -4,12 +4,14 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {AppConfigService} from '../../../app-config.service';
+import {COOKIE, COOKIE_DI_TOKEN} from '../../../app.config';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeUserGroupConfig} from '../../../testing/fake-data/userGroupConfig.fake';
 import {RouterTestingModule} from '../../../testing/router-stubs';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../../testing/services/auth-mock.service';
 import {Auth} from '../auth/auth.service';
+import {TokenService} from '../token/token.service';
 
 import {UserService} from './user.service';
 
@@ -18,15 +20,11 @@ describe('Service: UserService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        RouterTestingModule,
-        SharedModule,
-      ],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
       providers: [
+        {provide: COOKIE_DI_TOKEN, useValue: COOKIE},
         UserService,
+        TokenService,
         {provide: Auth, useClass: AuthMockService},
         {provide: AppConfigService, useClass: AppConfigMockService},
       ],
@@ -39,8 +37,6 @@ describe('Service: UserService', () => {
   });
 
   it('should get user user group', () => {
-    expect(userService.userGroupConfig('owners')).toEqual(
-      fakeUserGroupConfig().owners
-    );
+    expect(userService.userGroupConfig('owners')).toEqual(fakeUserGroupConfig().owners);
   });
 });

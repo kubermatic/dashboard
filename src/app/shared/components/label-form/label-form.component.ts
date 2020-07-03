@@ -1,13 +1,4 @@
-import {
-  Component,
-  DoCheck,
-  EventEmitter,
-  forwardRef,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import {Component, DoCheck, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {
   AbstractControl,
   AsyncValidator,
@@ -43,8 +34,7 @@ import {LabelFormValidators} from '../../validators/label-form.validators';
     },
   ],
 })
-export class LabelFormComponent
-  implements OnInit, OnDestroy, ControlValueAccessor, AsyncValidator, DoCheck {
+export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccessor, AsyncValidator, DoCheck {
   @Input() title = 'Labels';
   @Input() labels: object;
   @Input() inheritedLabels: object = {};
@@ -92,9 +82,7 @@ export class LabelFormComponent
     this.initialLabels = this.labels;
 
     // Setup labels form with label data.
-    const filteredLabels = Object.keys(
-      LabelFormComponent.filterNullifiedKeys(this.labels)
-    );
+    const filteredLabels = Object.keys(LabelFormComponent.filterNullifiedKeys(this.labels));
     if (filteredLabels.length > 0) {
       filteredLabels.forEach(key => {
         this._addLabel(key, this.labels[key]);
@@ -139,10 +127,7 @@ export class LabelFormComponent
   }
 
   isRemovable(index: number): boolean {
-    return (
-      index < this.labelArray.length - 1 &&
-      !this._isInherited(Object.keys(this.labels)[index])
-    );
+    return index < this.labelArray.length - 1 && !this._isInherited(Object.keys(this.labels)[index]);
   }
 
   deleteLabel(index: number): void {
@@ -182,10 +167,7 @@ export class LabelFormComponent
         ],
         value: [
           {value, disabled: this._isInherited(key)},
-          Validators.compose([
-            LabelFormValidators.labelValueLength,
-            LabelFormValidators.labelValuePattern,
-          ]),
+          Validators.compose([LabelFormValidators.labelValueLength, LabelFormValidators.labelValuePattern]),
         ],
       })
     );

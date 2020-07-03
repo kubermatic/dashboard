@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
@@ -6,6 +6,7 @@ import {switchMap, takeUntil} from 'rxjs/operators';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {Auth, UserService} from '../../services';
 import {SettingsService} from '../../services/settings/settings.service';
+import {DOCUMENT} from '@angular/common';
 
 @Component({
   selector: 'km-navigation',
@@ -23,21 +24,18 @@ export class NavigationComponent implements OnInit {
     private readonly _auth: Auth,
     private readonly _router: Router,
     private readonly _userService: UserService,
-    private _settingsService: SettingsService
+    private _settingsService: SettingsService,
+    @Inject(DOCUMENT) private readonly _document: Document
   ) {}
 
   ngOnInit(): void {
     if (this._auth.authenticated()) {
-      this._userService.loggedInUser.subscribe(
-        user => (this.currentUser = user)
-      );
+      this._userService.loggedInUser.subscribe(user => (this.currentUser = user));
     }
 
-    this._settingsService.userSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        this.showSidenav = !settings.collapseSidenav;
-      });
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.showSidenav = !settings.collapseSidenav;
+    });
 
     this._settingsChange
       .pipe(takeUntil(this._unsubscribe))
@@ -59,10 +57,12 @@ export class NavigationComponent implements OnInit {
   }
 
   logout(): void {
-    this._auth.logout();
-    this._settingsService.refreshCustomLinks();
-    this._router.navigate(['']);
-    delete this.currentUser;
+    this._auth.logout().subscribe(_ => {
+      this._settingsService.refreshCustomLinks();
+      this._router.navigate(['']);
+      this._document.defaultView.location.reload();
+      delete this.currentUser;
+    });
   }
 
   login(): void {

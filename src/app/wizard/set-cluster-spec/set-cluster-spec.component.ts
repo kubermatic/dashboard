@@ -5,15 +5,8 @@ import {debounce, first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
-import {
-  AdminSettings,
-  ClusterTypeOptions,
-} from '../../shared/entity/AdminSettings';
-import {
-  ClusterEntity,
-  ClusterType,
-  MasterVersion,
-} from '../../shared/entity/ClusterEntity';
+import {AdminSettings, ClusterTypeOptions} from '../../shared/entity/AdminSettings';
+import {ClusterEntity, ClusterType, MasterVersion} from '../../shared/entity/ClusterEntity';
 import {ResourceType} from '../../shared/entity/LabelsEntity';
 import {AsyncValidators} from '../../shared/validators/async-label-form.validator';
 
@@ -29,9 +22,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   clusterSpecForm: FormGroup;
   masterVersions: MasterVersion[] = [];
   defaultVersion: string;
-  asyncLabelValidators = [
-    AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster),
-  ];
+  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
@@ -45,23 +36,14 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       name: new FormControl(this.cluster.name, [
         Validators.required,
         Validators.minLength(5),
-        Validators.pattern(
-          '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
-        ),
+        Validators.pattern('[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'),
       ]),
       version: new FormControl(this.cluster.spec.version),
       type: new FormControl(this.cluster.type),
       imagePullSecret: new FormControl(),
-      usePodSecurityPolicyAdmissionPlugin: new FormControl(
-        this.cluster.spec.usePodSecurityPolicyAdmissionPlugin
-      ),
-      usePodNodeSelectorAdmissionPlugin: new FormControl(
-        this.cluster.spec.usePodNodeSelectorAdmissionPlugin
-      ),
-      auditLogging: new FormControl(
-        !!this.cluster.spec.auditLogging &&
-          this.cluster.spec.auditLogging.enabled
-      ),
+      usePodSecurityPolicyAdmissionPlugin: new FormControl(this.cluster.spec.usePodSecurityPolicyAdmissionPlugin),
+      usePodNodeSelectorAdmissionPlugin: new FormControl(this.cluster.spec.usePodNodeSelectorAdmissionPlugin),
+      auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
       labels: new FormControl(''),
     });
 
@@ -82,11 +64,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
 
     this.clusterSpecForm.controls.type.valueChanges
       .pipe(takeUntil(this._unsubscribe))
-      .pipe(
-        switchMap(() =>
-          this._api.getMasterVersions(this.clusterSpecForm.controls.type.value)
-        )
-      )
+      .pipe(switchMap(() => this._api.getMasterVersions(this.clusterSpecForm.controls.type.value)))
       .subscribe(this._setDefaultVersion.bind(this));
 
     this.clusterSpecForm.valueChanges
@@ -109,9 +87,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
 
   private _setClusterTypeValidators(): void {
     if (this.clusterSpecForm.controls.type.value === ClusterType.OpenShift) {
-      this.clusterSpecForm.controls.imagePullSecret.setValidators([
-        Validators.required,
-      ]);
+      this.clusterSpecForm.controls.imagePullSecret.setValidators([Validators.required]);
     } else {
       this.clusterSpecForm.controls.imagePullSecret.clearValidators();
     }
@@ -146,10 +122,8 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       labels: this.labels,
       version: this.clusterSpecForm.controls.version.value,
       imagePullSecret: this.clusterSpecForm.controls.imagePullSecret.value,
-      usePodSecurityPolicyAdmissionPlugin: this.clusterSpecForm.controls
-        .usePodSecurityPolicyAdmissionPlugin.value,
-      usePodNodeSelectorAdmissionPlugin: this.clusterSpecForm.controls
-        .usePodNodeSelectorAdmissionPlugin.value,
+      usePodSecurityPolicyAdmissionPlugin: this.clusterSpecForm.controls.usePodSecurityPolicyAdmissionPlugin.value,
+      usePodNodeSelectorAdmissionPlugin: this.clusterSpecForm.controls.usePodNodeSelectorAdmissionPlugin.value,
       auditLogging: {
         enabled: this.clusterSpecForm.controls.auditLogging.value,
       },

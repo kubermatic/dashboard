@@ -14,12 +14,7 @@ import {switchMap, takeUntil} from 'rxjs/operators';
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService, DatacenterService} from '../../../core/services';
 import {ClusterNameGenerator} from '../../../core/util/name-generator.service';
-import {
-  ClusterEntity,
-  ClusterSpec,
-  ClusterType,
-  MasterVersion,
-} from '../../../shared/entity/ClusterEntity';
+import {ClusterEntity, ClusterSpec, ClusterType, MasterVersion} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {ResourceType} from '../../../shared/entity/LabelsEntity';
 import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
@@ -55,13 +50,10 @@ enum Controls {
     },
   ],
 })
-export class ClusterStepComponent extends StepBase
-  implements OnInit, ControlValueAccessor, Validator, OnDestroy {
+export class ClusterStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   masterVersions: MasterVersion[] = [];
   labels: object;
-  asyncLabelValidators = [
-    AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster),
-  ];
+  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
 
   private _datacenterSpec: DataCenterEntity;
   readonly Controls = Controls;
@@ -83,9 +75,7 @@ export class ClusterStepComponent extends StepBase
       [Controls.Name]: new FormControl('', [
         Validators.required,
         Validators.minLength(5),
-        Validators.pattern(
-          '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
-        ),
+        Validators.pattern('[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'),
       ]),
       [Controls.Version]: new FormControl('', [Validators.required]),
       [Controls.Type]: new FormControl(''),
@@ -102,10 +92,7 @@ export class ClusterStepComponent extends StepBase
       .subscribe(dc => {
         this._datacenterSpec = dc;
         this._enforce(Controls.AuditLogging, dc.spec.enforceAuditLogging);
-        this._enforce(
-          Controls.PodSecurityPolicyAdmissionPlugin,
-          dc.spec.enforcePodSecurityPolicy
-        );
+        this._enforce(Controls.PodSecurityPolicyAdmissionPlugin, dc.spec.enforcePodSecurityPolicy);
       });
 
     this.control(Controls.Type)
@@ -117,9 +104,7 @@ export class ClusterStepComponent extends StepBase
           this._handleImagePullSecret(type);
           this._clusterService.clusterType = type;
 
-          return this._api.getMasterVersions(
-            this.controlValue(Controls.Type) as ClusterType
-          );
+          return this._api.getMasterVersions(this.controlValue(Controls.Type) as ClusterType);
         })
       )
       .subscribe(this._setDefaultVersion.bind(this));
@@ -133,9 +118,7 @@ export class ClusterStepComponent extends StepBase
       this.form.get(Controls.PodNodeSelectorAdmissionPlugin).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        _ => (this._clusterService.cluster = this._getClusterEntity())
-      );
+      .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
 
     this._setDefaultClusterType();
   }
@@ -145,9 +128,7 @@ export class ClusterStepComponent extends StepBase
   }
 
   hasMultipleTypes(): boolean {
-    return Object.values(ClusterType).every(
-      type => !this._appConfig.getConfig()[`hide_${type}`]
-    );
+    return Object.values(ClusterType).every(type => !this._appConfig.getConfig()[`hide_${type}`]);
   }
 
   isOpenshiftSelected(): boolean {
@@ -162,15 +143,9 @@ export class ClusterStepComponent extends StepBase
   isEnforced(control: Controls): boolean {
     switch (control) {
       case Controls.AuditLogging:
-        return (
-          !!this._datacenterSpec &&
-          this._datacenterSpec.spec.enforceAuditLogging
-        );
+        return !!this._datacenterSpec && this._datacenterSpec.spec.enforceAuditLogging;
       case Controls.PodSecurityPolicyAdmissionPlugin:
-        return (
-          !!this._datacenterSpec &&
-          this._datacenterSpec.spec.enforcePodSecurityPolicy
-        );
+        return !!this._datacenterSpec && this._datacenterSpec.spec.enforcePodSecurityPolicy;
       default:
         return false;
     }
@@ -184,9 +159,7 @@ export class ClusterStepComponent extends StepBase
   }
 
   private _handleImagePullSecret(type: ClusterType): void {
-    this.control(Controls.ImagePullSecret).setValidators(
-      type === ClusterType.OpenShift ? [Validators.required] : []
-    );
+    this.control(Controls.ImagePullSecret).setValidators(type === ClusterType.OpenShift ? [Validators.required] : []);
     this.control(Controls.ImagePullSecret).updateValueAndValidity();
   }
 
@@ -227,12 +200,8 @@ export class ClusterStepComponent extends StepBase
         openshift: {
           imagePullSecret: this.controlValue(Controls.ImagePullSecret),
         },
-        usePodNodeSelectorAdmissionPlugin: this.controlValue(
-          Controls.PodNodeSelectorAdmissionPlugin
-        ),
-        usePodSecurityPolicyAdmissionPlugin: this.controlValue(
-          Controls.PodSecurityPolicyAdmissionPlugin
-        ),
+        usePodNodeSelectorAdmissionPlugin: this.controlValue(Controls.PodNodeSelectorAdmissionPlugin),
+        usePodSecurityPolicyAdmissionPlugin: this.controlValue(Controls.PodSecurityPolicyAdmissionPlugin),
         auditLogging: {
           enabled: this.controlValue(Controls.AuditLogging),
         },

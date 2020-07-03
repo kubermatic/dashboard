@@ -1,21 +1,11 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {of} from 'rxjs';
 
-import {
-  ClusterService,
-  NotificationService,
-  ProjectService,
-} from '../../../core/services';
+import {ClusterService, NotificationService, ProjectService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
@@ -40,12 +30,8 @@ describe('ChangeClusterVersionComponent', () => {
       patch: jest.fn(),
       upgradeNodeDeployments: jest.fn(),
     };
-    patchClusterSpy = clusterServiceMock.patch.mockReturnValue(
-      of(fakeDigitaloceanCluster())
-    );
-    upgradeClusterNodeDeploymentsSpy = clusterServiceMock.upgradeNodeDeployments.mockReturnValue(
-      of(null)
-    );
+    patchClusterSpy = clusterServiceMock.patch.mockReturnValue(of(fakeDigitaloceanCluster()));
+    upgradeClusterNodeDeploymentsSpy = clusterServiceMock.upgradeNodeDeployments.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
       imports: [...modules],

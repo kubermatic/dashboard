@@ -1,11 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {iif, Subject} from 'rxjs';
 import {debounceTime, first, startWith, takeUntil} from 'rxjs/operators';
@@ -22,8 +15,7 @@ import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete
   selector: 'km-digitalocean-node-data',
   templateUrl: './digitalocean-node-data.component.html',
 })
-export class DigitaloceanNodeDataComponent
-  implements OnInit, OnDestroy, OnChanges {
+export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
   @Input() projectId: string;
@@ -48,41 +40,28 @@ export class DigitaloceanNodeDataComponent
     this.form = new FormGroup({
       size: new FormControl(this.nodeData.spec.cloud.digitalocean.size, [
         Validators.required,
-        AutocompleteFilterValidators.mustBeInObjectList(
-          this.sizes,
-          'slug',
-          true
-        ),
+        AutocompleteFilterValidators.mustBeInObjectList(this.sizes, 'slug', true),
       ]),
     });
 
     this.form.valueChanges
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(() =>
-        this._addNodeService.changeNodeProviderData(this.getNodeProviderData())
-      );
+      .subscribe(() => this._addNodeService.changeNodeProviderData(this.getNodeProviderData()));
 
-    this._wizardService.clusterProviderSettingsFormChanges$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.cloudSpec = data.cloudSpec;
-        this.form.controls.size.setValue('');
-        this.sizes = {optimized: [], standard: []};
-        this.checkSizeState();
+    this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe(data => {
+      this.cloudSpec = data.cloudSpec;
+      this.form.controls.size.setValue('');
+      this.sizes = {optimized: [], standard: []};
+      this.checkSizeState();
 
-        if (
-          data.cloudSpec.digitalocean.token !== '' ||
-          this._selectedCredentials
-        ) {
-          this.reloadDigitaloceanSizes();
-        }
-      });
+      if (data.cloudSpec.digitalocean.token !== '' || this._selectedCredentials) {
+        this.reloadDigitaloceanSizes();
+      }
+    });
 
-    this._wizardService.onCustomPresetSelect
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(credentials => {
-        this._selectedCredentials = credentials;
-      });
+    this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
+      this._selectedCredentials = credentials;
+    });
 
     this.form.controls.size.valueChanges
       .pipe(debounceTime(1000), takeUntil(this._unsubscribe), startWith(''))
@@ -94,11 +73,7 @@ export class DigitaloceanNodeDataComponent
         }
         this.form.controls.size.setValidators([
           Validators.required,
-          AutocompleteFilterValidators.mustBeInObjectList(
-            this.sizes,
-            'slug',
-            true
-          ),
+          AutocompleteFilterValidators.mustBeInObjectList(this.sizes, 'slug', true),
         ]);
         this.form.controls.size.updateValueAndValidity();
       });
@@ -125,18 +100,13 @@ export class DigitaloceanNodeDataComponent
   getSizesFormState(): string {
     if (
       !this.loadingSizes &&
-      (!this.cloudSpec.digitalocean.token ||
-        this.cloudSpec.digitalocean.token.length === 0) &&
+      (!this.cloudSpec.digitalocean.token || this.cloudSpec.digitalocean.token.length === 0) &&
       this.isInWizard()
     ) {
       return 'Node Size*';
     } else if (this.loadingSizes) {
       return 'Loading sizes...';
-    } else if (
-      !this.loadingSizes &&
-      this.sizes.standard.length === 0 &&
-      this.sizes.optimized.length === 0
-    ) {
+    } else if (!this.loadingSizes && this.sizes.standard.length === 0 && this.sizes.optimized.length === 0) {
       return 'No Sizes available';
     } else {
       return 'Node Size*';
@@ -144,20 +114,11 @@ export class DigitaloceanNodeDataComponent
   }
 
   showSizeHint(): boolean {
-    return (
-      !this.loadingSizes &&
-      !this.cloudSpec.digitalocean.token &&
-      !this._selectedCredentials &&
-      this.isInWizard()
-    );
+    return !this.loadingSizes && !this.cloudSpec.digitalocean.token && !this._selectedCredentials && this.isInWizard();
   }
 
   reloadDigitaloceanSizes(): void {
-    if (
-      this.cloudSpec.digitalocean.token ||
-      this._selectedCredentials ||
-      !this.isInWizard()
-    ) {
+    if (this.cloudSpec.digitalocean.token || this._selectedCredentials || !this.isInWizard()) {
       this.loadingSizes = true;
     }
 
@@ -168,11 +129,7 @@ export class DigitaloceanNodeDataComponent
         .token(this.cloudSpec.digitalocean.token)
         .credential(this._selectedCredentials)
         .flavors(),
-      this._api.getDigitaloceanSizes(
-        this.projectId,
-        this.seedDCName,
-        this.clusterId
-      )
+      this._api.getDigitaloceanSizes(this.projectId, this.seedDCName, this.clusterId)
     )
       .pipe(first())
       .pipe(takeUntil(this._unsubscribe))
@@ -199,8 +156,7 @@ export class DigitaloceanNodeDataComponent
     if (changes.cloudSpec && !changes.cloudSpec.firstChange) {
       if (
         !changes.cloudSpec.previousValue ||
-        changes.cloudSpec.currentValue.digitalocean.token !==
-          changes.cloudSpec.previousValue.digitalocean.token
+        changes.cloudSpec.currentValue.digitalocean.token !== changes.cloudSpec.previousValue.digitalocean.token
       ) {
         this.reloadDigitaloceanSizes();
       }

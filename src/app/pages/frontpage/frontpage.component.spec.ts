@@ -12,12 +12,7 @@ import {AuthMockService} from '../../testing/services/auth-mock.service';
 
 import {FrontpageComponent} from './frontpage.component';
 
-const modules: any[] = [
-  BrowserModule,
-  RouterTestingModule,
-  BrowserAnimationsModule,
-  SharedModule,
-];
+const modules: any[] = [BrowserModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];
 
 describe('FrontpageComponent', () => {
   let fixture: ComponentFixture<FrontpageComponent>;
@@ -29,11 +24,7 @@ describe('FrontpageComponent', () => {
     TestBed.configureTestingModule({
       imports: [...modules],
       declarations: [FrontpageComponent],
-      providers: [
-        {provide: Router, useClass: RouterStub},
-        {provide: Auth, useClass: AuthMockService},
-        CookieService,
-      ],
+      providers: [{provide: Router, useClass: RouterStub}, {provide: Auth, useClass: AuthMockService}, CookieService],
     }).compileComponents();
   });
 

@@ -1,8 +1,7 @@
 import {MachineNetwork} from '../entity/ClusterEntity';
 
 export function getIpCount(networks: MachineNetwork[]): number {
-  const ip4ToInt = ip =>
-    ip.split('.').reduce((int, oct) => (int << 8) + parseInt(oct, 10), 0) >>> 0;
+  const ip4ToInt = ip => ip.split('.').reduce((int, oct) => (int << 8) + parseInt(oct, 10), 0) >>> 0;
 
   const isIp4InCidr = (ip, cidr) => {
     const [range, bits = 32] = cidr.split('/');

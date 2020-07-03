@@ -26,17 +26,11 @@ export class ClusterMockService {
   private _nodes: NodeEntity[] = nodesFake();
   private _health: HealthEntity = fakeHealth();
 
-  providerSettingsPatchChanges$ = new Subject<
-    ProviderSettingsPatch
-  >().asObservable();
+  providerSettingsPatchChanges$ = new Subject<ProviderSettingsPatch>().asObservable();
 
   changeProviderSettingsPatch(): void {}
 
-  cluster(
-    clusterId: string,
-    dc: string,
-    projectID: string
-  ): Observable<ClusterEntity> {
+  cluster(clusterId: string, dc: string, projectID: string): Observable<ClusterEntity> {
     return asyncData(this._cluster);
   }
 
@@ -44,11 +38,7 @@ export class ClusterMockService {
     return asyncData(this._clusters);
   }
 
-  health(
-    cluster: string,
-    dc: string,
-    projectID: string
-  ): Observable<HealthEntity> {
+  health(cluster: string, dc: string, projectID: string): Observable<HealthEntity> {
     return asyncData(this._health);
   }
 
@@ -60,11 +50,7 @@ export class ClusterMockService {
     return asyncData(null);
   }
 
-  create(
-    createClusterModel: CreateClusterModel,
-    dc: string,
-    projectID: string
-  ): Observable<ClusterEntity> {
+  create(createClusterModel: CreateClusterModel, dc: string, projectID: string): Observable<ClusterEntity> {
     return asyncData(this._cluster);
   }
 
@@ -72,11 +58,7 @@ export class ClusterMockService {
     return asyncData(null);
   }
 
-  edit(
-    cluster: ClusterEntity,
-    dc: string,
-    projectID: string
-  ): Observable<ClusterEntity> {
+  edit(cluster: ClusterEntity, dc: string, projectID: string): Observable<ClusterEntity> {
     return asyncData(this._cluster);
   }
 
@@ -89,20 +71,11 @@ export class ClusterMockService {
     return asyncData(this._cluster);
   }
 
-  deleteNode(
-    clusterName: string,
-    nodeName: string,
-    dc: string,
-    projectID: string
-  ): Observable<any> {
+  deleteNode(clusterName: string, nodeName: string, dc: string, projectID: string): Observable<any> {
     return asyncData(null);
   }
 
-  getNodes(
-    cluster: string,
-    dc: string,
-    projectID: string
-  ): Observable<NodeEntity[]> {
+  getNodes(cluster: string, dc: string, projectID: string): Observable<NodeEntity[]> {
     return asyncData(this._nodes);
   }
 
@@ -110,26 +83,15 @@ export class ClusterMockService {
     return asyncData([]);
   }
 
-  nodes(
-    projectID: string,
-    clusterID: string,
-    datacenter: string
-  ): Observable<NodeEntity[]> {
+  nodes(projectID: string, clusterID: string, datacenter: string): Observable<NodeEntity[]> {
     return asyncData(nodesFake());
   }
 
-  metrics(
-    projectID: string,
-    clusterID: string,
-    datacenter: string
-  ): Observable<ClusterMetrics> {
+  metrics(projectID: string, clusterID: string, datacenter: string): Observable<ClusterMetrics> {
     return asyncData(null);
   }
 
-  nodeUpgrades(
-    controlPlaneVersion: string,
-    type: string
-  ): Observable<MasterVersion[]> {
+  nodeUpgrades(controlPlaneVersion: string, type: string): Observable<MasterVersion[]> {
     return asyncData([]);
   }
 
@@ -141,19 +103,11 @@ export class ClusterMockService {
     return of(null);
   }
 
-  events(
-    projectID: string,
-    clusterID: string,
-    datacenter: string
-  ): Observable<EventEntity[]> {
+  events(projectID: string, clusterID: string, datacenter: string): Observable<EventEntity[]> {
     return of(fakeEvents());
   }
 
-  addons(
-    projectID: string,
-    cluster: string,
-    dc: string
-  ): Observable<AddonEntity[]> {
+  addons(projectID: string, cluster: string, dc: string): Observable<AddonEntity[]> {
     return of([]);
   }
 

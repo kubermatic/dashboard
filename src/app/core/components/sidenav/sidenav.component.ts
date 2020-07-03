@@ -9,15 +9,8 @@ import {environment} from '../../../../environments/environment';
 import {MemberEntity, UserSettings} from '../../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {GroupConfig} from '../../../shared/model/Config';
-import {
-  CustomLink,
-  CustomLinkLocation,
-  filterCustomLinks,
-} from '../../../shared/utils/custom-link-utils/custom-link';
-import {
-  MemberUtils,
-  Permission,
-} from '../../../shared/utils/member-utils/member-utils';
+import {CustomLink, CustomLinkLocation, filterCustomLinks} from '../../../shared/utils/custom-link-utils/custom-link';
+import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {ProjectService, UserService} from '../../services';
 import {View} from '../../services/auth/auth.guard';
 import {SettingsService} from '../../services/settings/settings.service';
@@ -52,29 +45,19 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
     this._userService.loggedInUser.subscribe(user => (this.currentUser = user));
 
-    this._settingsService.adminSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        const filtered = filterCustomLinks(
-          settings.customLinks,
-          CustomLinkLocation.Default
-        );
-        if (!_.isEqual(this.customLinks, filtered)) {
-          this.customLinks = filtered;
-        }
-      });
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      const filtered = filterCustomLinks(settings.customLinks, CustomLinkLocation.Default);
+      if (!_.isEqual(this.customLinks, filtered)) {
+        this.customLinks = filtered;
+      }
+    });
 
-    this._settingsService.userSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => {
-        this._isSidenavCollapsed = settings.collapseSidenav;
-        this.settings = settings;
-      });
+    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this._isSidenavCollapsed = settings.collapseSidenav;
+      this.settings = settings;
+    });
 
-    merge(
-      this._projectService.selectedProject,
-      this._projectService.onProjectChange
-    )
+    merge(this._projectService.selectedProject, this._projectService.onProjectChange)
       .pipe(takeUntil(this._unsubscribe))
       .pipe(
         switchMap((project: ProjectEntity) => {
@@ -82,12 +65,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
           return this._userService.currentUserGroup(project.id);
         })
       )
-      .subscribe(
-        userGroup =>
-          (this._currentGroupConfig = this._userService.userGroupConfig(
-            userGroup
-          ))
-      );
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
   }
 
   ngOnDestroy(): void {
@@ -113,8 +91,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     const urlArray = this._router.routerState.snapshot.url.split('/');
     return (
       !!urlArray.find(x => x === selectedProjectId) &&
-      (!!urlArray.find(x => x === url) ||
-        (url === 'clusters' && !!urlArray.find(x => x === 'wizard')))
+      (!!urlArray.find(x => x === url) || (url === 'clusters' && !!urlArray.find(x => x === 'wizard')))
     );
   }
 
@@ -146,14 +123,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (
-      !MemberUtils.hasPermission(
-        this.currentUser,
-        this._currentGroupConfig,
-        viewName,
-        Permission.View
-      )
-    ) {
+    if (!MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, viewName, Permission.View)) {
       tooltip = 'Cannot enter this view.';
       if (this._selectedProject.status !== 'Active') {
         tooltip += ' Selected project is not active.';
@@ -175,12 +145,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   getMenuItemClass(viewName: string): string {
-    return MemberUtils.hasPermission(
-      this.currentUser,
-      this._currentGroupConfig,
-      viewName,
-      Permission.View
-    )
+    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, viewName, Permission.View)
       ? ''
       : 'km-disabled';
   }

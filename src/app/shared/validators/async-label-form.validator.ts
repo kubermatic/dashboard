@@ -1,9 +1,4 @@
-import {
-  AbstractControl,
-  AsyncValidator,
-  AsyncValidatorFn,
-  ValidationErrors,
-} from '@angular/forms';
+import {AbstractControl, AsyncValidator, AsyncValidatorFn, ValidationErrors} from '@angular/forms';
 import {Observable, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
@@ -22,9 +17,7 @@ export class RestrictedLabelKeyNameValidator implements AsyncValidator {
     const value = control.value.toString();
     return this._labelService.systemLabels.pipe(
       map((labels: ResourceLabelMap) => {
-        const isRestricted = labels[this._resourceType].find(
-          label => label === value
-        );
+        const isRestricted = labels[this._resourceType].find(label => label === value);
 
         if (isRestricted) {
           return {labelKeyNameRestricted: true};

@@ -11,13 +11,7 @@ import {ClusterService} from '../../service/cluster';
 import {WizardService} from '../../service/wizard';
 import {MachineNetworkStepComponent} from './component';
 
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  ReactiveFormsModule,
-  SharedModule,
-  HttpClientModule,
-];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule];
 
 describe('MachineNetworkStepComponent', () => {
   let fixture: ComponentFixture<MachineNetworkStepComponent>;

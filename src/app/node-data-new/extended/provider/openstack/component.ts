@@ -23,16 +23,12 @@ enum Controls {
     },
   ],
 })
-export class OpenstackExtendedNodeDataComponent extends BaseFormValidator
-  implements OnInit, OnDestroy {
+export class OpenstackExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: object;
 
   readonly Controls = Controls;
 
-  constructor(
-    private readonly _builder: FormBuilder,
-    private readonly _nodeDataService: NodeDataService
-  ) {
+  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
     super();
   }
 

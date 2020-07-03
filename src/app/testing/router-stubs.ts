@@ -1,22 +1,10 @@
 import {CommonModule} from '@angular/common';
-import {
-  Component,
-  Directive,
-  HostListener,
-  Injectable,
-  Input,
-  NgModule,
-} from '@angular/core';
+import {Component, Directive, HostListener, Injectable, Input, NgModule} from '@angular/core';
 import {convertToParamMap, NavigationExtras, ParamMap} from '@angular/router';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Subject} from 'rxjs/Subject';
 
-export {
-  ActivatedRoute,
-  Router,
-  RouterLink,
-  RouterOutlet,
-} from '@angular/router';
+export {ActivatedRoute, Router, RouterLink, RouterOutlet} from '@angular/router';
 
 @Directive({
   selector: '[routerLink]',
@@ -74,15 +62,7 @@ export class ActivatedRouteStub {
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [
-    RouterOutletStubComponent,
-    RouterLinkActiveStubDirective,
-    RouterLinkStubDirective,
-  ],
-  exports: [
-    RouterOutletStubComponent,
-    RouterLinkActiveStubDirective,
-    RouterLinkStubDirective,
-  ],
+  declarations: [RouterOutletStubComponent, RouterLinkActiveStubDirective, RouterLinkStubDirective],
+  exports: [RouterOutletStubComponent, RouterLinkActiveStubDirective, RouterLinkStubDirective],
 })
 export class RouterTestingModule {}

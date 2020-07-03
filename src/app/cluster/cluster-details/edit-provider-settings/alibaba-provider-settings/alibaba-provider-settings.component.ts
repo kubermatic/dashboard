@@ -1,10 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
@@ -38,9 +33,7 @@ export class AlibabaProviderSettingsComponent implements OnInit, OnDestroy {
         ) {
           this._formData = data;
           this.setValidators();
-          this.clusterService.changeProviderSettingsPatch(
-            this.getProviderSettingsPatch()
-          );
+          this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
         }
       });
   }

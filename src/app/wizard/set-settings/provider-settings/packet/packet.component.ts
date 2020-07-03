@@ -28,10 +28,7 @@ export class PacketClusterSettingsComponent implements OnInit, OnDestroy {
       : this.getAvailableBillingCycles()[0];
 
     this.form = new FormGroup({
-      apiKey: new FormControl(this.cluster.spec.cloud.packet.apiKey, [
-        Validators.required,
-        Validators.maxLength(256),
-      ]),
+      apiKey: new FormControl(this.cluster.spec.cloud.packet.apiKey, [Validators.required, Validators.maxLength(256)]),
       projectID: new FormControl(this.cluster.spec.cloud.packet.projectID, [
         Validators.required,
         Validators.maxLength(256),
@@ -40,10 +37,7 @@ export class PacketClusterSettingsComponent implements OnInit, OnDestroy {
     });
 
     this._formHelper = new FormHelper(this.form);
-    this._formHelper.registerFormControls(
-      this.form.controls.apiKey,
-      this.form.controls.projectID
-    );
+    this._formHelper.registerFormControls(this.form.controls.apiKey, this.form.controls.projectID);
 
     this.form.valueChanges
       .pipe(debounceTime(1000))
@@ -53,21 +47,17 @@ export class PacketClusterSettingsComponent implements OnInit, OnDestroy {
           ? this._wizard.onCustomPresetsDisable.emit(false)
           : this._wizard.onCustomPresetsDisable.emit(true);
 
-        this._wizard.changeClusterProviderSettings(
-          this._clusterProviderSettingsForm(this._formHelper.isFormValid())
-        );
+        this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
       });
 
-    this._wizard.onCustomPresetSelect
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(newCredentials => {
-        if (newCredentials) {
-          this.form.disable();
-          return;
-        }
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+      if (newCredentials) {
+        this.form.disable();
+        return;
+      }
 
-        this.form.enable();
-      });
+      this.form.enable();
+    });
   }
 
   getAvailableBillingCycles(): string[] {
@@ -79,9 +69,7 @@ export class PacketClusterSettingsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  private _clusterProviderSettingsForm(
-    valid: boolean
-  ): ClusterProviderSettingsForm {
+  private _clusterProviderSettingsForm(valid: boolean): ClusterProviderSettingsForm {
     return {
       cloudSpec: {
         packet: {

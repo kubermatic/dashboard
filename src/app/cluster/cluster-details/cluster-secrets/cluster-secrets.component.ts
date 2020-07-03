@@ -18,14 +18,8 @@ export class ClusterSecretsComponent implements OnInit {
   constructor(public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.isClusterRunning = ClusterHealthStatus.isClusterAPIRunning(
-      this.cluster,
-      this.health
-    );
-    this.healthStatus = ClusterHealthStatus.getHealthStatus(
-      this.cluster,
-      this.health
-    );
+    this.isClusterRunning = ClusterHealthStatus.isClusterAPIRunning(this.cluster, this.health);
+    this.healthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, this.health);
   }
 
   getIcon(name: string): string {

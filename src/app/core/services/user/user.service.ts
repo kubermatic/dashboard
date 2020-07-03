@@ -8,7 +8,7 @@ import {AppConfigService} from '../../../app-config.service';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils} from '../../../shared/utils/member-utils/member-utils';
-import {Auth} from '../auth/auth.service';
+import {TokenService} from '../token/token.service';
 
 @Injectable()
 export class UserService {
@@ -17,23 +17,15 @@ export class UserService {
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
 
   constructor(
-    private _http: HttpClient,
-    private _appConfig: AppConfigService,
-    private readonly _auth: Auth
+    private readonly _http: HttpClient,
+    private readonly _appConfig: AppConfigService,
+    private readonly _tokenService: TokenService
   ) {}
 
   get loggedInUser(): Observable<MemberEntity> {
     if (!this._user$) {
       this._user$ = this._refreshTimer$
-        .pipe(
-          switchMap(() =>
-            iif(
-              () => this._auth.authenticated(),
-              this._getLoggedInUser(),
-              EMPTY
-            )
-          )
-        )
+        .pipe(switchMap(() => iif(() => this._tokenService.hasExpired(), this._getLoggedInUser(), EMPTY)))
         .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
 
@@ -41,9 +33,7 @@ export class UserService {
   }
 
   currentUserGroup(projectID: string): Observable<string> {
-    return this.loggedInUser
-      .pipe(first())
-      .pipe(map(member => MemberUtils.getGroupInProject(member, projectID)));
+    return this.loggedInUser.pipe(first()).pipe(map(member => MemberUtils.getGroupInProject(member, projectID)));
   }
 
   userGroupConfig(userGroup: string): GroupConfig {
@@ -51,10 +41,17 @@ export class UserService {
     return userGroupConfig ? userGroupConfig[userGroup] : undefined;
   }
 
+  logout(): Observable<boolean> {
+    const url = `${this.restRoot}/me/logout`;
+    return this.loggedInUser
+      .pipe(switchMap(user => this._http.post(url, user)))
+      .pipe(map(_ => true))
+      .pipe(catchError(_ => of(false)))
+      .pipe(first());
+  }
+
   private _getLoggedInUser(): Observable<MemberEntity> {
     const url = `${this.restRoot}/me`;
-    return this._http
-      .get<MemberEntity>(url)
-      .pipe(catchError(() => of<MemberEntity>()));
+    return this._http.get<MemberEntity>(url).pipe(catchError(_ => of<MemberEntity>()));
   }
 }

@@ -4,9 +4,7 @@ import {MemberUtils} from './member-utils';
 
 describe('MemberUtils', () => {
   it('should get group in project', () => {
-    expect(MemberUtils.getGroupInProject(fakeMember(), fakeProject().id)).toBe(
-      'owners'
-    );
+    expect(MemberUtils.getGroupInProject(fakeMember(), fakeProject().id)).toBe('owners');
   });
 
   it('should get group display name', () => {

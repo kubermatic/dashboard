@@ -1,11 +1,5 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {
-  ControlValueAccessor,
-  FormBuilder,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validator,
-} from '@angular/forms';
+import {ControlValueAccessor, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator} from '@angular/forms';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {ClusterService} from '../../service/cluster';
 import {WizardService} from '../../service/wizard';

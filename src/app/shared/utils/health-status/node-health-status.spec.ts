@@ -8,18 +8,10 @@ describe('NodeHealthStatus', () => {
     const ns = nodesFake();
 
     expect(NodeHealthStatus.getHealthStatus(ns[0])).toEqual(
-      new NodeHealthStatus(
-        HealthStatusMessage.Running,
-        HealthStatusColor.Green,
-        HealthStatusCss.Running
-      )
+      new NodeHealthStatus(HealthStatusMessage.Running, HealthStatusColor.Green, HealthStatusCss.Running)
     );
     expect(NodeHealthStatus.getHealthStatus(ns[1])).toEqual(
-      new NodeHealthStatus(
-        HealthStatusMessage.Provisioning,
-        HealthStatusColor.Orange,
-        HealthStatusCss.Provisioning
-      )
+      new NodeHealthStatus(HealthStatusMessage.Provisioning, HealthStatusColor.Orange, HealthStatusCss.Provisioning)
     );
   });
 });
