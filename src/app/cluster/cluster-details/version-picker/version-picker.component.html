@@ -1,7 +1,8 @@
 <div class="km-version-picker-container"
      fxFlex
      fxFlexAlign="row"
-     fxLayoutAlign="center center">
+     fxLayoutAlign="center center"
+     fxLayoutGap="6px">
 
   <div class="km-version-picker"
        [ngClass]="{'km-version-picker-enabled': isEnabled(), 'km-version-picker-disabled': !isEnabled()}"
@@ -29,7 +30,7 @@
 
   </div>
 
-  <i *ngIf="someUpgradesRestrictedByKubeletVersion"
-     matTooltip="Some Kubernetes versions are not available due to incompatible nodes running in the cluster. Upgrade or recreate your nodes before you can upgrade your cluster to the latest version."
-     class="fa fa-exclamation-triangle km-warning"></i>
+  <mat-icon *ngIf="someUpgradesRestrictedByKubeletVersion"
+            matTooltip="Some Kubernetes versions are not available due to incompatible nodes running in the cluster. Upgrade or recreate your nodes before you can upgrade your cluster to the latest version."
+            class="km-warning">warning</mat-icon>
 </div>
