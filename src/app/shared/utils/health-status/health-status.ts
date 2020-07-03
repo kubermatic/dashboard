@@ -1,7 +1,7 @@
 export enum HealthStatusColor {
-  Green = 'fa fa-circle km-success',
-  Orange = 'fa fa-circle km-warning',
-  Red = 'fa fa-circle km-error',
+  Green = 'km-icon-mask km-icon-circle km-success-bg',
+  Orange = 'km-icon-mask km-icon-circle km-warning-bg',
+  Red = 'km-icon-mask km-icon-circle km-error-bg',
 }
 
 export enum HealthStatusMessage {

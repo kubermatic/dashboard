@@ -64,7 +64,7 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
       case 'Warning':
         return HealthStatusColor.Orange;
       default:
-        return 'fa fa-circle';
+        return 'km-icon-mask km-icon-circle';
     }
   }
 

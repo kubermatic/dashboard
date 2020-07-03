@@ -228,6 +228,13 @@
   cursor: pointer;
 }
 
+.km-icon-circle {
+  @include km-image-mask(1.75 * $baseline-grid);
+
+  mask-image: url("/assets/images/icons/circle.svg");
+  cursor: pointer;
+}
+
 .km-icon-add {
   @include km-image-mask(2.25 * $baseline-grid);
 
