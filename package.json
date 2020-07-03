@@ -76,7 +76,6 @@
     "@types/js-yaml": "^3.12.4",
     "@types/lodash": "4.14.157",
     "@types/node": "14.0.14",
-    "add": "^2.0.6",
     "cypress": "4.8.0",
     "eslint-plugin-rxjs": "0.0.2-beta.27",
     "gts": "2.0.2",
@@ -171,7 +170,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && npm run check:licenses"
+      "pre-commit": "lint-staged && npm run check:license && npm run check:dependency-licenses"
     }
   },
   "lint-staged": {
