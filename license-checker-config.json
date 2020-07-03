@@ -1,7 +1,8 @@
 {
   "ignore": [
-    "*", ".git", ".github", ".idea", "docs", "vendor", "src/assets/fonts", "src/assets/js",
-    "**/*.json", "**/*.yaml", "**/*.svg", "**/*.txt", "**/*.md"
+    "*", ".git", ".github", ".idea", "docs", "vendor",
+    "src/assets/fonts", "src/assets/js", "src/assets/css/font-awesome",
+    "**/.gitignore", "**/*.json", "**/*.yaml", "**/*.svg", "**/*.txt", "**/*.md"
   ],
   "license": "license-header.txt",
   "defaultFormat": {
