@@ -3,7 +3,6 @@
   "compilerOptions": {
     "strict": true,
     "baseUrl": "../node_modules",
-    "target": "esnext",
     "lib": ["esnext", "dom"],
     "types": ["cypress"]
   },
