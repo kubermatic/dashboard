@@ -17,6 +17,7 @@ import {ClusterService} from '../../../core/services';
 import {Cluster, MasterVersion} from '../../../shared/entity/cluster';
 import {Datacenter} from '../../../shared/entity/datacenter';
 import {ChangeClusterVersionComponent} from '../change-cluster-version/change-cluster-version.component';
+import {lt, gt} from 'semver';
 
 @Component({
   selector: 'km-version-picker',
@@ -53,8 +54,8 @@ export class VersionPickerComponent implements OnInit, OnChanges {
     this.someUpgradesRestrictedByKubeletVersion = false;
 
     this.upgrades.forEach(upgrade => {
-      const isUpgrade = false; // TODO: lt(this.cluster.spec.version, upgrade.version);
-      const isDowngrade = false; // TODO: gt(this.cluster.spec.version, upgrade.version);
+      const isUpgrade = lt(this.cluster.spec.version, upgrade.version);
+      const isDowngrade = gt(this.cluster.spec.version, upgrade.version);
 
       if (upgrade.restrictedByKubeletVersion === true) {
         this.someUpgradesRestrictedByKubeletVersion = isUpgrade;

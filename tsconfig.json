@@ -12,7 +12,7 @@
     "noUnusedLocals": true,
     "resolveJsonModule": true,
     "strict": false,
-    "target": "es5",
+    "target": "esnext",
     "typeRoots": [
       "node_modules/@types"
     ],
