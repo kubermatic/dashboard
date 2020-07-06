@@ -822,7 +822,7 @@
     }
 
     i {
-      filter: grayscale(1) brightness(0) invert(.75);
+      filter: grayscale(1) brightness(0) invert(.75) !important;
     }
   }
 
