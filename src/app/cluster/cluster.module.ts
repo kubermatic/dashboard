@@ -1,3 +1,14 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import {NgModule} from '@angular/core';
 
 import {MachineNetworksModule} from '../machine-networks/machine-networks.module';
@@ -25,9 +36,9 @@ import {AddClusterSSHKeysComponent} from './cluster-details/edit-sshkeys/add-clu
 import {EditSSHKeysComponent} from './cluster-details/edit-sshkeys/edit-sshkeys.component';
 import {MachineNetworksDisplayComponent} from './cluster-details/machine-networks-display/machine-networks-display.component';
 import {NodeDataModalComponent} from './cluster-details/node-data-modal/node-data-modal.component';
-import {ClusterPanelComponent} from './cluster-details/node-deployment-details/cluster-panel/cluster-panel.component';
-import {NodeDeploymentDetailsComponent} from './cluster-details/node-deployment-details/node-deployment-details.component';
-import {NodeDeploymentListComponent} from './cluster-details/node-deployment-list/node-deployment-list.component';
+import {ClusterPanelComponent} from './cluster-details/machine-deployment-details/cluster-panel/cluster-panel.component';
+import {MachineDeploymentDetailsComponent} from './cluster-details/machine-deployment-details/machine-deployment-details.component';
+import {MachineDeploymentListComponent} from './cluster-details/machine-deployment-list/machine-deployment-list.component';
 import {NodeListComponent} from './cluster-details/node-list/node-list.component';
 import {AddBindingComponent} from './cluster-details/rbac/add-binding/add-binding.component';
 import {RBACComponent} from './cluster-details/rbac/rbac.component';
@@ -41,8 +52,8 @@ import {NodeService} from './services/node.service';
 const components: any[] = [
   ClusterDetailsComponent,
   NodeListComponent,
-  NodeDeploymentListComponent,
-  NodeDeploymentDetailsComponent,
+  MachineDeploymentListComponent,
+  MachineDeploymentDetailsComponent,
   ClusterListComponent,
   MachineNetworksDisplayComponent,
   RBACComponent,

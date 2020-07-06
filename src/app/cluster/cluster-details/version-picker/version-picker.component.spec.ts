@@ -1,3 +1,14 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
@@ -24,7 +35,7 @@ import {UserMockService} from '../../../testing/services/user-mock.service';
 import {NodeService} from '../../services/node.service';
 import {ClusterSecretsComponent} from '../cluster-secrets/cluster-secrets.component';
 import {MachineNetworksDisplayComponent} from '../machine-networks-display/machine-networks-display.component';
-import {NodeDeploymentListComponent} from '../node-deployment-list/node-deployment-list.component';
+import {MachineDeploymentListComponent} from '../machine-deployment-list/machine-deployment-list.component';
 import {NodeListComponent} from '../node-list/node-list.component';
 
 import {VersionPickerComponent} from './version-picker.component';
@@ -41,7 +52,7 @@ describe('VersionPickerComponent', () => {
         VersionPickerComponent,
         ClusterSecretsComponent,
         NodeListComponent,
-        NodeDeploymentListComponent,
+        MachineDeploymentListComponent,
         MachineNetworksDisplayComponent,
       ],
       providers: [

@@ -1,3 +1,14 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
@@ -19,7 +30,7 @@ import {SettingsMockService} from '../../../testing/services/settings-mock.servi
 import {UserMockService} from '../../../testing/services/user-mock.service';
 import {NodeService} from '../../services/node.service';
 
-import {NodeDeploymentListComponent} from './node-deployment-list.component';
+import {MachineDeploymentListComponent} from './machine-deployment-list.component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
@@ -29,14 +40,14 @@ class MatDialogMock {
   }
 }
 
-describe('NodeDeploymentListComponent', () => {
-  let fixture: ComponentFixture<NodeDeploymentListComponent>;
-  let component: NodeDeploymentListComponent;
+describe('MachineDeploymentListComponent', () => {
+  let fixture: ComponentFixture<MachineDeploymentListComponent>;
+  let component: MachineDeploymentListComponent;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [...modules],
-      declarations: [NodeDeploymentListComponent],
+      declarations: [MachineDeploymentListComponent],
       providers: [
         {provide: ApiService, useClass: ApiMockService},
         {provide: NodeService, useClass: NodeMockService},
@@ -52,7 +63,7 @@ describe('NodeDeploymentListComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NodeDeploymentListComponent);
+    fixture = TestBed.createComponent(MachineDeploymentListComponent);
     component = fixture.componentInstance;
   });
 

@@ -1,3 +1,14 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 export class Metadata {
   name?: string;
   selfLink?: string;
@@ -17,7 +28,7 @@ export class ObjectReference {
 export enum ResourceType {
   Cluster = 'cluster',
   Project = 'project',
-  NodeDeployment = 'nodedeployment',
+  MachineDeployment = 'nodedeployment',
 }
 
 export type ResourceLabelMap = {
@@ -33,7 +44,7 @@ export enum View {
   Wizard = 'wizard',
   Account = 'account',
   Settings = 'settings',
-  NodeDeployment = 'nd',
+  MachineDeployment = 'md',
 }
 
 // IMPORTANT: names in 'ViewDisplayName' have to be in sync with names in 'View'
@@ -46,7 +57,7 @@ export enum ViewDisplayName {
   Wizard = 'Wizard',
   Account = 'User Settings',
   Settings = 'Admin Panel',
-  NodeDeployment = 'Node Deployment',
+  MachineDeployment = 'Machine Deployment',
 }
 
 export function getViewDisplayName(viewName: string): string {

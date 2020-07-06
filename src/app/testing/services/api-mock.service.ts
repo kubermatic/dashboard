@@ -1,10 +1,21 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import {Injectable} from '@angular/core';
 import {defer, Observable, of} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
 
 import {Cluster, MasterVersion, Token} from '../../shared/entity/cluster';
 import {CreateMember, Member} from '../../shared/entity/member';
-import {NodeDeployment} from '../../shared/entity/node-deployment';
+import {MachineDeployment} from '../../shared/entity/machine-deployment';
 import {Node} from '../../shared/entity/node';
 import {
   ServiceAccountModel,
@@ -18,7 +29,7 @@ import {fakeAlibabaInstanceTypes, fakeAlibabaZones} from '../fake-data/alibaba.f
 import {masterVersionsFake} from '../fake-data/cluster-spec.fake';
 import {fakeToken} from '../fake-data/cluster.fake';
 import {fakeMember, fakeMembers} from '../fake-data/member.fake';
-import {nodeDeploymentsFake, nodesFake} from '../fake-data/node.fake';
+import {machineDeploymentsFake, nodesFake} from '../fake-data/node.fake';
 import {fakeProject, fakeProjects} from '../fake-data/project.fake';
 import {
   fakeServiceAccount,
@@ -59,15 +70,15 @@ export class ApiMockService {
     return of([]);
   }
 
-  getNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeployment[]> {
-    return of(nodeDeploymentsFake());
+  getMachineDeployments(cluster: string, dc: string, projectID: string): Observable<MachineDeployment[]> {
+    return of(machineDeploymentsFake());
   }
 
-  deleteNodeDeployment(cluster: string, nodeDeployment: string, dc: string, project: string): Observable<any> {
+  deleteMachineDeployment(cluster: string, machineDeployment: string, dc: string, project: string): Observable<any> {
     return of({});
   }
 
-  getNodeDeploymentNodesEvents(ndId: string, cluster: string, dc: string, projectID: string): Observable<any[]> {
+  getMachineDeploymentNodesEvents(mdId: string, cluster: string, dc: string, projectID: string): Observable<any[]> {
     return of([]);
   }
 

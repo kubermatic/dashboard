@@ -1,3 +1,14 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
@@ -15,7 +26,7 @@ import {Datacenter} from '../../shared/entity/datacenter';
 import {View} from '../../shared/entity/common';
 import {Health} from '../../shared/entity/health';
 import {Member} from '../../shared/entity/member';
-import {NodeDeployment} from '../../shared/entity/node-deployment';
+import {MachineDeployment} from '../../shared/entity/machine-deployment';
 import {Project} from '../../shared/entity/project';
 import {GroupConfig} from '../../shared/model/Config';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
@@ -33,7 +44,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   nodeDC: Datacenter[] = [];
   seedDC: Datacenter[] = [];
   health: Health[] = [];
-  nodeDeployments: NodeDeployment[][] = [];
+  machineDeployments: MachineDeployment[][] = [];
   provider = [];
   displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'region', 'type', 'created', 'actions'];
   dataSource = new MatTableDataSource<Cluster>();
@@ -111,7 +122,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
                   .pipe(
                     switchMap(_ =>
                       Health.allHealthy(this.health[cluster.id])
-                        ? this._apiService.getNodeDeployments(
+                        ? this._apiService.getMachineDeployments(
                             cluster.id,
                             this.seedDC[cluster.id].metadata.name,
                             this._selectedProject.id
@@ -119,7 +130,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
                         : of([])
                     )
                   )
-                  .pipe(tap(nodeDeployments => (this.nodeDeployments[cluster.id] = nodeDeployments)))
+                  .pipe(tap(machineDeployments => (this.machineDeployments[cluster.id] = machineDeployments)))
               );
             })
           );
@@ -178,8 +189,8 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
 
   showEOLWarning(element): boolean {
     return (
-      !!this.nodeDeployments[element.id] &&
-      this.nodeDeployments[element.id].filter(nd => !!nd.spec.template.operatingSystem.containerLinux).length > 0
+      !!this.machineDeployments[element.id] &&
+      this.machineDeployments[element.id].filter(md => !!md.spec.template.operatingSystem.containerLinux).length > 0
     );
   }
 }

@@ -1,3 +1,14 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, of, timer} from 'rxjs';
@@ -12,7 +23,7 @@ import {Cluster, ClusterType, MasterVersion, Token} from '../../../shared/entity
 import {Event} from '../../../shared/entity/event';
 import {CreateMember, Member} from '../../../shared/entity/member';
 import {NodeMetrics} from '../../../shared/entity/metrics';
-import {NodeDeployment, NodeDeploymentPatch} from '../../../shared/entity/node-deployment';
+import {MachineDeployment, MachineDeploymentPatch} from '../../../shared/entity/machine-deployment';
 import {Node} from '../../../shared/entity/node';
 import {EditProject, Project} from '../../../shared/entity/project';
 import {
@@ -59,61 +70,70 @@ export class ApiService {
     return this._addonConfigs$;
   }
 
-  createNodeDeployment(
+  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
+  createMachineDeployment(
     cluster: Cluster,
-    nd: NodeDeployment,
+    md: MachineDeployment,
     dc: string,
     projectID: string
-  ): Observable<NodeDeployment> {
-    nd.spec.template.labels = LabelFormComponent.filterNullifiedKeys(nd.spec.template.labels);
-    nd.spec.template.taints = TaintFormComponent.filterNullifiedTaints(nd.spec.template.taints);
+  ): Observable<MachineDeployment> {
+    md.spec.template.labels = LabelFormComponent.filterNullifiedKeys(md.spec.template.labels);
+    md.spec.template.taints = TaintFormComponent.filterNullifiedTaints(md.spec.template.taints);
 
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/nodedeployments`;
-    return this._http.post<NodeDeployment>(url, nd);
+    return this._http.post<MachineDeployment>(url, md);
   }
 
-  getNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeployment[]> {
+  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
+  getMachineDeployments(cluster: string, dc: string, projectID: string): Observable<MachineDeployment[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments`;
-    return this._http.get<NodeDeployment[]>(url).pipe(catchError(() => of<NodeDeployment[]>()));
+    return this._http.get<MachineDeployment[]>(url).pipe(catchError(() => of<MachineDeployment[]>()));
   }
 
-  getNodeDeployment(ndId: string, cluster: string, dc: string, projectID: string): Observable<NodeDeployment> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}`;
-    return this._http.get<NodeDeployment>(url);
+  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
+  getMachineDeployment(mdId: string, cluster: string, dc: string, projectID: string): Observable<MachineDeployment> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${mdId}`;
+    return this._http.get<MachineDeployment>(url);
   }
 
-  getNodeDeploymentNodes(ndId: string, cluster: string, dc: string, projectID: string): Observable<Node[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}/nodes`;
+  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
+  getMachineDeploymentNodes(mdId: string, cluster: string, dc: string, projectID: string): Observable<Node[]> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${mdId}/nodes`;
     return this._http.get<Node[]>(url);
   }
-  getNodeDeploymentNodesMetrics(
-    ndId: string,
+
+  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
+  getMachineDeploymentNodesMetrics(
+    mdId: string,
     cluster: string,
     dc: string,
     projectID: string
   ): Observable<NodeMetrics[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}/nodes/metrics`;
+    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${mdId}/nodes/metrics`;
     return this._http.get<NodeMetrics[]>(url);
   }
 
-  getNodeDeploymentNodesEvents(ndId: string, cluster: string, dc: string, projectID: string): Observable<Event[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}/nodes/events`;
+  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
+  getMachineDeploymentNodesEvents(mdId: string, cluster: string, dc: string, projectID: string): Observable<Event[]> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${mdId}/nodes/events`;
     return this._http.get<Event[]>(url);
   }
 
-  patchNodeDeployment(
-    nd: NodeDeployment,
-    patch: NodeDeploymentPatch,
+  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
+  patchMachineDeployment(
+    md: MachineDeployment,
+    patch: MachineDeploymentPatch,
     clusterId: string,
     dc: string,
     projectID: string
-  ): Observable<NodeDeployment> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterId}/nodedeployments/${nd.id}`;
-    return this._http.patch<NodeDeployment>(url, patch);
+  ): Observable<MachineDeployment> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterId}/nodedeployments/${md.id}`;
+    return this._http.patch<MachineDeployment>(url, patch);
   }
 
-  deleteNodeDeployment(cluster: string, nd: NodeDeployment, dc: string, projectID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${nd.id}`;
+  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
+  deleteMachineDeployment(cluster: string, md: MachineDeployment, dc: string, projectID: string): Observable<any> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${md.id}`;
     return this._http.delete(url);
   }
 

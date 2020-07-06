@@ -1,3 +1,14 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
@@ -22,7 +33,7 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
   constructor(private readonly _addNodeService: NodeDataService, private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
-    const isInEdit = !!this.nodeData.name; // Existing node deployment will always have assigned name.
+    const isInEdit = !!this.nodeData.name; // Existing machine deployment will always have assigned name.
     const assignPublicIP = isInEdit ? this.nodeData.spec.cloud.aws.assignPublicIP : true; // Default to true.
 
     this.form = new FormGroup({

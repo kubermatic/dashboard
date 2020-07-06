@@ -20,14 +20,16 @@
     "cy": "cypress run --record false --browser chrome",
     "e2e": "start-server-and-test start:e2e http-get://localhost:8000 cy",
     "e2e:local": "start-server-and-test start:e2e-local http-get://localhost:8000 cy",
-    "check": "npm run check:ts && npm run check:scss && npm run check:licenses",
+    "check": "npm run check:ts && npm run check:scss && npm run check:license && npm run check:dependency-licenses",
     "check:ts": "gts check",
     "check:scss": "stylelint \"src/**/*.scss\"",
-    "check:licenses": "./hack/check-licenses.sh",
-    "fix": "npm run fix:ts && npm run fix:scss && npm run fix:html",
+    "check:license": "license-check-and-add check",
+    "check:dependency-licenses": "./hack/check-licenses.sh",
+    "fix": "npm run fix:ts && npm run fix:scss && npm run fix:html && npm run fix:license",
     "fix:ts": "gts fix",
     "fix:scss": "stylelint \"src/**/*.scss\" --fix",
     "fix:html": "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f \"src/**/*.html\"",
+    "fix:license": "license-check-and-add add",
     "clean": "gts clean",
     "vi": "node version.js",
     "postinstall": "ngcc"
@@ -82,6 +84,7 @@
     "jest": "26.1.0",
     "jest-preset-angular": "8.2.1",
     "js-beautify": "1.11.0",
+    "license-check-and-add": "^3.0.4",
     "license-compliance": "1.0.2",
     "lint-staged": "10.2.11",
     "ng2-mock-component": "0.2.0",
@@ -168,7 +171,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && npm run check:licenses"
+      "pre-commit": "lint-staged && npm run check:license && npm run check:dependency-licenses"
     }
   },
   "lint-staged": {

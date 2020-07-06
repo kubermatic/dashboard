@@ -1,3 +1,14 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import * as _ from 'lodash';
@@ -9,7 +20,7 @@ import {NodeDataService} from '../../../core/services/node-data/node-data.servic
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {Cluster} from '../../../shared/entity/cluster';
 import {Datacenter} from '../../../shared/entity/datacenter';
-import {NodeDeployment} from '../../../shared/entity/node-deployment';
+import {MachineDeployment} from '../../../shared/entity/machine-deployment';
 import {
   getEmptyNodeProviderSpec,
   getEmptyNodeVersionSpec,
@@ -28,7 +39,7 @@ export interface NodeDataModalData {
   // Fields specific for edit mode (not required if using dialog to add new nodes).
   editMode?: boolean;
   nodeData?: NodeData;
-  nodeDeployment?: NodeDeployment;
+  machineDeployment?: MachineDeployment;
 }
 
 @Component({
@@ -37,7 +48,7 @@ export interface NodeDataModalData {
   styleUrls: ['./node-data-modal.component.scss'],
 })
 export class NodeDataModalComponent implements OnInit, OnDestroy {
-  @Output() editNodeDeployment = new EventEmitter<NodeDeployment>();
+  @Output() editMachineDeployment = new EventEmitter<MachineDeployment>();
   nodeDC: Datacenter;
   seedDC: Datacenter;
   isExtended = false;
@@ -57,9 +68,9 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.seedDC = this.data.datacenter;
 
-    if (this.data.editMode && this.data.nodeDeployment) {
-      // Using data.nodeDeployment as it is not a deep copy created using JSON parse & stringify like data.NodeData.
-      this._initialNodeSpec = this.data.nodeDeployment.spec.template;
+    if (this.data.editMode && this.data.machineDeployment) {
+      // Using data.machineDeployment as it is not a deep copy created using JSON parse & stringify like data.NodeData.
+      this._initialNodeSpec = this.data.machineDeployment.spec.template;
     }
 
     if (!this.data.nodeData) {
@@ -109,6 +120,6 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
   }
 
   getDialogLabel(): string {
-    return `${this.data.editMode ? 'Edit' : 'Add'} Node Deployment`;
+    return `${this.data.editMode ? 'Edit' : 'Add'} Machine Deployment`;
   }
 }

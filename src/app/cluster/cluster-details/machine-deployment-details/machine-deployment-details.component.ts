@@ -1,3 +1,14 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subject, timer} from 'rxjs';
@@ -10,21 +21,21 @@ import {Datacenter} from '../../../shared/entity/datacenter';
 import {Event} from '../../../shared/entity/event';
 import {Member} from '../../../shared/entity/member';
 import {NodeMetrics} from '../../../shared/entity/metrics';
-import {NodeDeployment} from '../../../shared/entity/node-deployment';
+import {MachineDeployment} from '../../../shared/entity/machine-deployment';
 import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '../../../shared/entity/node';
 import {GroupConfig} from '../../../shared/model/Config';
-import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
+import {MachineDeploymentHealthStatus} from '../../../shared/utils/health-status/machine-deployment-health-status';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {NodeService} from '../../services/node.service';
 
 @Component({
-  selector: 'km-node-deployment-details',
-  templateUrl: './node-deployment-details.component.html',
-  styleUrls: ['./node-deployment-details.component.scss'],
+  selector: 'km-machine-deployment-details',
+  templateUrl: './machine-deployment-details.component.html',
+  styleUrls: ['./machine-deployment-details.component.scss'],
 })
-export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
-  nodeDeployment: NodeDeployment;
-  nodeDeploymentHealthStatus: NodeDeploymentHealthStatus;
+export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
+  machineDeployment: MachineDeployment;
+  machineDeploymentHealthStatus: MachineDeploymentHealthStatus;
   nodes: Node[] = [];
   events: Event[] = [];
   metrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
@@ -36,8 +47,8 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   systemLogoClass: string;
   dcName: string;
   projectID: string;
-  private _nodeDeploymentID: string;
-  private _isNodeDeploymentLoaded = false;
+  private _machineDeploymentID: string;
+  private _isMachineDeploymentLoaded = false;
   private _areNodesLoaded = false;
   private _areNodesEventsLoaded = false;
   private _isClusterLoaded = false;
@@ -62,7 +73,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._clusterName = this._activatedRoute.snapshot.paramMap.get('clusterName');
     this.dcName = this._activatedRoute.snapshot.paramMap.get('seedDc');
-    this._nodeDeploymentID = this._activatedRoute.snapshot.paramMap.get('nodeDeploymentID');
+    this._machineDeploymentID = this._activatedRoute.snapshot.paramMap.get('machineDeploymentID');
     this.projectID = this._activatedRoute.snapshot.paramMap.get('projectID');
 
     this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
@@ -75,7 +86,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     timer(0, 10 * this._appConfig.getRefreshTimeBase())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
-        this.loadNodeDeployment();
+        this.loadMachineDeployment();
         this.loadNodes();
         this.loadNodesEvents();
         this.loadNodesMetrics();
@@ -85,22 +96,22 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     this.loadCluster();
   }
 
-  loadNodeDeployment(): void {
+  loadMachineDeployment(): void {
     this._apiService
-      .getNodeDeployment(this._nodeDeploymentID, this._clusterName, this.dcName, this.projectID)
+      .getMachineDeployment(this._machineDeploymentID, this._clusterName, this.dcName, this.projectID)
       .pipe(first())
-      .subscribe((nd: NodeDeployment) => {
-        this.nodeDeployment = nd;
-        this.system = getOperatingSystem(this.nodeDeployment.spec.template);
-        this.systemLogoClass = getOperatingSystemLogoClass(this.nodeDeployment.spec.template);
-        this.nodeDeploymentHealthStatus = NodeDeploymentHealthStatus.getHealthStatus(this.nodeDeployment);
-        this._isNodeDeploymentLoaded = true;
+      .subscribe((md: MachineDeployment) => {
+        this.machineDeployment = md;
+        this.system = getOperatingSystem(this.machineDeployment.spec.template);
+        this.systemLogoClass = getOperatingSystemLogoClass(this.machineDeployment.spec.template);
+        this.machineDeploymentHealthStatus = MachineDeploymentHealthStatus.getHealthStatus(this.machineDeployment);
+        this._isMachineDeploymentLoaded = true;
       });
   }
 
   loadNodes(): void {
     this._apiService
-      .getNodeDeploymentNodes(this._nodeDeploymentID, this._clusterName, this.dcName, this.projectID)
+      .getMachineDeploymentNodes(this._machineDeploymentID, this._clusterName, this.dcName, this.projectID)
       .pipe(first())
       .subscribe(n => {
         this.nodes = n;
@@ -110,7 +121,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodesEvents(): void {
     this._apiService
-      .getNodeDeploymentNodesEvents(this._nodeDeploymentID, this._clusterName, this.dcName, this.projectID)
+      .getMachineDeploymentNodesEvents(this._machineDeploymentID, this._clusterName, this.dcName, this.projectID)
       .pipe(first())
       .subscribe(e => {
         this.events = e;
@@ -120,7 +131,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodesMetrics(): void {
     this._apiService
-      .getNodeDeploymentNodesMetrics(this._nodeDeploymentID, this._clusterName, this.dcName, this.projectID)
+      .getMachineDeploymentNodesMetrics(this._machineDeploymentID, this._clusterName, this.dcName, this.projectID)
       .pipe(first())
       .subscribe(metrics => {
         this.storeNodeMetrics(metrics);
@@ -171,7 +182,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
       this._isDatacenterLoaded &&
       this._isSeedDatacenterLoaded &&
       this._areNodesLoaded &&
-      this._isNodeDeploymentLoaded &&
+      this._isMachineDeploymentLoaded &&
       this._areNodesEventsLoaded
     );
   }
@@ -189,28 +200,34 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   isEditEnabled(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'nodeDeployments', Permission.Edit);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Edit);
   }
 
   showEditDialog(): void {
     this._nodeService
-      .showNodeDeploymentEditDialog(this.nodeDeployment, this.cluster, this.projectID, this.seedDatacenter, undefined)
+      .showMachineDeploymentEditDialog(
+        this.machineDeployment,
+        this.cluster,
+        this.projectID,
+        this.seedDatacenter,
+        undefined
+      )
       .subscribe(isConfirmed => {
         if (isConfirmed) {
-          this.loadNodeDeployment();
+          this.loadMachineDeployment();
           this.loadNodes();
         }
       });
   }
 
   isDeleteEnabled(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'nodeDeployments', Permission.Delete);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Delete);
   }
 
   showDeleteDialog(): void {
     this._nodeService
-      .showNodeDeploymentDeleteDialog(
-        this.nodeDeployment,
+      .showMachineDeploymentDeleteDialog(
+        this.machineDeployment,
         this.cluster.id,
         this.projectID,
         this.seedDatacenter.metadata.name,
