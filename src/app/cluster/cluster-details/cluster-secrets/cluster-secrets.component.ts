@@ -52,7 +52,7 @@ export class ClusterSecretsComponent implements OnInit {
           return '';
       }
     } else {
-      return 'fa fa-circle-o-notch fa-spin km-info';
+      return 'km-icon-pending km-info';
     }
   }
 
@@ -63,7 +63,7 @@ export class ClusterSecretsComponent implements OnInit {
       case HealthState.down:
         return 'km-icon-failed';
       case HealthState.provisioning:
-        return 'fa fa-circle-o-notch fa-spin km-info';
+        return 'km-icon-pending km-info';
       default:
         return '';
     }
