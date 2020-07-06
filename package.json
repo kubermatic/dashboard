@@ -76,7 +76,7 @@
     "@types/js-yaml": "^3.12.4",
     "@types/lodash": "4.14.157",
     "@types/node": "14.0.14",
-    "cypress": "4.8.0",
+    "cypress": "4.9.0",
     "eslint-plugin-rxjs": "0.0.2-beta.27",
     "gts": "2.0.2",
     "husky": "4.2.5",
