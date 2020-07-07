@@ -130,7 +130,14 @@ export class NodeDataService {
     this._projectService,
     this._datacenterService
   );
-  readonly hetzner = new NodeDataHetznerProvider(this, this._clusterService, this._presetService);
+  readonly hetzner = new NodeDataHetznerProvider(
+    this,
+    this._clusterService,
+    this._presetService,
+    this._apiService,
+    this._projectService,
+    this._datacenterService
+  );
   readonly packet = new NodeDataPacketProvider(this, this._clusterService, this._presetService);
   readonly gcp = new NodeDataGCPProvider(
     this,

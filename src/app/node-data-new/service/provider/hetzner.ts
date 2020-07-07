@@ -10,9 +10,9 @@
 // limitations under the License.
 
 import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, switchMap} from 'rxjs/operators';
+import {catchError, filter, switchMap, tap} from 'rxjs/operators';
 
-import {PresetsService} from '../../../core/services';
+import {ApiService, DatacenterService, PresetsService, ProjectService} from '../../../core/services';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../shared/services/cluster.service';
 import {NodeDataMode} from '../../config';
@@ -23,11 +23,13 @@ export class NodeDataHetznerProvider {
   constructor(
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterService: ClusterService,
-    private readonly _presetService: PresetsService
+    private readonly _presetService: PresetsService,
+    private readonly _apiService: ApiService,
+    private readonly _projectService: ProjectService,
+    private readonly _datacenterService: DatacenterService
   ) {}
 
   flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<HetznerTypes> {
-    // TODO: support dialog mode
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterService.clusterChanges
@@ -50,6 +52,27 @@ export class NodeDataHetznerProvider {
                 )
             )
           );
+      case NodeDataMode.Dialog: {
+        let selectedProject: string;
+        return this._projectService.selectedProject
+          .pipe(tap(project => (selectedProject = project.id)))
+          .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc)))
+          .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
+          .pipe(
+            switchMap(dc =>
+              this._apiService.getHetznerTypes(selectedProject, dc.spec.seed, this._clusterService.cluster.id)
+            )
+          )
+          .pipe(
+            catchError(_ => {
+              if (onError) {
+                onError();
+              }
+
+              return onErrorResumeNext(of(HetznerTypes.newHetznerTypes()));
+            })
+          );
+      }
     }
   }
 }
