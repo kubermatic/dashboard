@@ -1,0 +1,53 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@import "../../../../assets/css/variables";
+
+.km-machine-deployment-health {
+  text-align: center;
+}
+
+.km-machine-deployment-name {
+  font-size: $font-size-card-title !important;
+  font-weight: 500 !important;
+}
+
+mat-card-header {
+  align-items: baseline;
+}
+
+.km-machine-deployment-actions {
+  margin-right: 4 * $baseline-grid;
+
+  .mat-icon-button {
+    font-size: 2.5 * $baseline-grid;
+
+    i {
+      height: 2.5 * $baseline-grid;
+      margin-top: -.5 * $baseline-grid;
+      width: 2.5 * $baseline-grid;
+    }
+  }
+}
+
+.km-provider-logo-value {
+  display: flex;
+  align-items: center;
+}
+
+.km-provider-logo {
+  margin-top: -.5 * $baseline-grid;
+  min-width: 14 * $baseline-grid;
+
+  &.km-provider-logo-aws {
+    min-width: 5 * $baseline-grid;
+  }
+}

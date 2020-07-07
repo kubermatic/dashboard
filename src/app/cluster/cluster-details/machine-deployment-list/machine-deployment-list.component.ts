@@ -1,3 +1,14 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
@@ -10,30 +21,30 @@ import {ProjectService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {Cluster} from '../../../shared/entity/cluster';
 import {Member} from '../../../shared/entity/member';
-import {NodeDeployment} from '../../../shared/entity/node-deployment';
+import {MachineDeployment} from '../../../shared/entity/machine-deployment';
 import {GroupConfig} from '../../../shared/model/Config';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
-import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
+import {MachineDeploymentHealthStatus} from '../../../shared/utils/health-status/machine-deployment-health-status';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {NodeService} from '../../services/node.service';
 import {getOperatingSystem} from '../../../shared/entity/node';
 
 @Component({
-  selector: 'km-node-deployment-list',
-  templateUrl: 'node-deployment-list.component.html',
-  styleUrls: ['node-deployment-list.component.scss'],
+  selector: 'km-machine-deployment-list',
+  templateUrl: 'machine-deployment-list.component.html',
+  styleUrls: ['machine-deployment-list.component.scss'],
 })
-export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy {
+export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: Cluster;
   @Input() seed: string;
-  @Input() nodeDeployments: NodeDeployment[] = [];
+  @Input() machineDeployments: MachineDeployment[] = [];
   @Input() projectID: string;
   @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
-  @Input() isNodeDeploymentLoadFinished: boolean;
-  @Output() changeNodeDeployment = new EventEmitter<NodeDeployment>();
+  @Input() isMachineDeploymentLoadFinished: boolean;
+  @Output() changeMachineDeployment = new EventEmitter<MachineDeployment>();
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  dataSource = new MatTableDataSource<NodeDeployment>();
+  dataSource = new MatTableDataSource<MachineDeployment>();
   displayedColumns: string[] = ['status', 'name', 'labels', 'replicas', 'ver', 'os', 'created', 'actions'];
 
   private _unsubscribe: Subject<any> = new Subject();
@@ -49,7 +60,7 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
   ) {}
 
   ngOnInit(): void {
-    this.dataSource.data = this.nodeDeployments ? this.nodeDeployments : [];
+    this.dataSource.data = this.machineDeployments ? this.machineDeployments : [];
     this.dataSource.paginator = this.paginator;
 
     this._userService.loggedInUser.subscribe(user => (this._user = user));
@@ -70,7 +81,7 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
   }
 
   ngOnChanges(): void {
-    this.dataSource.data = this.nodeDeployments ? this.nodeDeployments : [];
+    this.dataSource.data = this.machineDeployments ? this.machineDeployments : [];
   }
 
   ngOnDestroy(): void {
@@ -78,47 +89,49 @@ export class NodeDeploymentListComponent implements OnInit, OnChanges, OnDestroy
     this._unsubscribe.complete();
   }
 
-  getHealthStatus(nd: NodeDeployment): NodeDeploymentHealthStatus {
-    return NodeDeploymentHealthStatus.getHealthStatus(nd);
+  getHealthStatus(md: MachineDeployment): MachineDeploymentHealthStatus {
+    return MachineDeploymentHealthStatus.getHealthStatus(md);
   }
 
-  getOperatingSystem(nd: NodeDeployment): string {
-    return getOperatingSystem(nd.spec.template);
+  getOperatingSystem(md: MachineDeployment): string {
+    return getOperatingSystem(md.spec.template);
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
     return Cluster.getVersionHeadline(type, isKubelet);
   }
 
-  goToDetails(nd: NodeDeployment): void {
+  goToDetails(md: MachineDeployment): void {
     this._router.navigate([
-      '/projects/' + this.projectID + '/dc/' + this.seed + '/clusters/' + this.cluster.id + /nd/ + nd.id,
+      '/projects/' + this.projectID + '/dc/' + this.seed + '/clusters/' + this.cluster.id + /md/ + md.id,
     ]);
   }
 
   isEditEnabled(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'nodeDeployments', Permission.Edit);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Edit);
   }
 
-  showEditDialog(nd: NodeDeployment, event: Event): void {
+  showEditDialog(md: MachineDeployment, event: Event): void {
     event.stopPropagation();
     this._nodeService
-      .showNodeDeploymentEditDialog(nd, this.cluster, this.projectID, this.seed, this.changeNodeDeployment)
+      .showMachineDeploymentEditDialog(md, this.cluster, this.projectID, this.seed, this.changeMachineDeployment)
       .subscribe(() => {});
   }
 
   isDeleteEnabled(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'nodeDeployments', Permission.Delete);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Delete);
   }
 
-  showDeleteDialog(nd: NodeDeployment, event: Event): void {
+  showDeleteDialog(md: MachineDeployment, event: Event): void {
     event.stopPropagation();
     this._nodeService
-      .showNodeDeploymentDeleteDialog(nd, this.cluster.id, this.projectID, this.seed, this.changeNodeDeployment)
+      .showMachineDeploymentDeleteDialog(md, this.cluster.id, this.projectID, this.seed, this.changeMachineDeployment)
       .subscribe(() => {});
   }
 
   isPaginatorVisible(): boolean {
-    return !_.isEmpty(this.nodeDeployments) && this.paginator && this.nodeDeployments.length > this.paginator.pageSize;
+    return (
+      !_.isEmpty(this.machineDeployments) && this.paginator && this.machineDeployments.length > this.paginator.pageSize
+    );
   }
 }

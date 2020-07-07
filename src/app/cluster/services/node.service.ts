@@ -1,3 +1,14 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import {EventEmitter, Injectable, Injector} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import * as _ from 'lodash';
@@ -9,7 +20,8 @@ import {ApiService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '../../shared/entity/cluster';
-import {NodeDeployment, NodeDeploymentPatch} from '../../shared/entity/node-deployment';
+import {Datacenter} from '../../shared/entity/datacenter';
+import {MachineDeployment, MachineDeploymentPatch} from '../../shared/entity/machine-deployment';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {NodeDataModalComponent, NodeDataModalData} from '../cluster-details/node-data-modal/node-data-modal.component';
 
@@ -17,7 +29,7 @@ import {NodeDataModalComponent, NodeDataModalData} from '../cluster-details/node
 export class NodeService {
   private readonly _notificationService: NotificationService;
 
-  private static _getNodeDeploymentEntity(nodeData: NodeData): NodeDeployment {
+  private static _getMachineDeploymentEntity(nodeData: NodeData): MachineDeployment {
     return {
       name: nodeData.name,
       spec: {
@@ -28,8 +40,8 @@ export class NodeService {
     };
   }
 
-  private static _createPatch(data: NodeDataModalData): NodeDeploymentPatch {
-    const patch: NodeDeploymentPatch = {
+  private static _createPatch(data: NodeDataModalData): MachineDeploymentPatch {
+    const patch: MachineDeploymentPatch = {
       spec: {
         replicas: data.nodeData.count,
         template: data.nodeData.spec,
@@ -58,19 +70,19 @@ export class NodeService {
     this._notificationService = this._inj.get(NotificationService);
   }
 
-  createNodeDeployment(nodeData: NodeData, seed: string, cluster: Cluster, project: string): void {
+  createMachineDeployment(nodeData: NodeData, seed: string, cluster: Cluster, project: string): void {
     this._apiService
-      .createNodeDeployment(cluster, NodeService._getNodeDeploymentEntity(nodeData), seed, project)
+      .createMachineDeployment(cluster, NodeService._getMachineDeploymentEntity(nodeData), seed, project)
       .pipe(first())
       .subscribe(() => {
         this._notificationService.success(
-          `A new node deployment was created in the <strong>${cluster.name}</strong> cluster`
+          `A new machine deployment was created in the <strong>${cluster.name}</strong> cluster`
         );
         this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeAdded');
       });
   }
 
-  showNodeDeploymentCreateDialog(
+  showMachineDeploymentCreateDialog(
     count: number,
     cluster: Cluster,
     projectID: string,
@@ -89,7 +101,7 @@ export class NodeService {
     return dialogRef.afterClosed().pipe<boolean>(
       map((data: NodeDataModalData) => {
         if (data) {
-          this.createNodeDeployment(data.nodeData, data.seed, data.cluster, data.projectID);
+          this.createMachineDeployment(data.nodeData, data.seed, data.cluster, data.projectID);
           return true;
         }
         return false;
@@ -97,27 +109,27 @@ export class NodeService {
     );
   }
 
-  showNodeDeploymentEditDialog(
-    nd: NodeDeployment,
+  showMachineDeploymentEditDialog(
+    md: MachineDeployment,
     cluster: Cluster,
     projectID: string,
     seed: string,
-    changeEventEmitter: EventEmitter<NodeDeployment>
+    changeEventEmitter: EventEmitter<MachineDeployment>
   ): Observable<boolean> {
     const dialogRef = this._matDialog.open(NodeDataModalComponent, {
       data: {
         cluster,
         seed,
         projectID,
-        existingNodesCount: nd.spec.replicas,
+        existingNodesCount: md.spec.replicas,
         editMode: true,
-        nodeDeployment: nd,
+        machineDeployment: md,
         nodeData: {
-          count: nd.spec.replicas,
-          name: nd.name,
-          spec: _.cloneDeep(nd.spec.template),
+          count: md.spec.replicas,
+          name: md.name,
+          spec: _.cloneDeep(md.spec.template),
           valid: true,
-          dynamicConfig: nd.spec.dynamicConfig,
+          dynamicConfig: md.spec.dynamicConfig,
         } as NodeData,
       },
     });
@@ -126,11 +138,11 @@ export class NodeService {
       .afterClosed()
       .pipe(
         flatMap(
-          (data: NodeDataModalData): Observable<NodeDeployment> => {
+          (data: NodeDataModalData): Observable<MachineDeployment> => {
             if (data) {
               return this._apiService
-                .patchNodeDeployment(
-                  data.nodeDeployment,
+                .patchMachineDeployment(
+                  data.machineDeployment,
                   NodeService._createPatch(data),
                   data.cluster.id,
                   data.seed,
@@ -140,9 +152,9 @@ export class NodeService {
                 .pipe(
                   catchError(() => {
                     this._notificationService.error(
-                      `Could not update the <strong>${data.nodeDeployment.name}</strong> node deployment `
+                      `Could not update the <strong>${data.machineDeployment.name}</strong> machine deployment `
                     );
-                    this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdateFailed');
+                    this._googleAnalyticsService.emitEvent('clusterOverview', 'machineDeploymentUpdateFailed');
                     return of(undefined);
                   })
                 );
@@ -153,12 +165,12 @@ export class NodeService {
       )
       .pipe(
         flatMap(
-          (nd: NodeDeployment): Observable<boolean> => {
-            if (nd) {
-              this._notificationService.success(`The <strong>${nd.name}</strong> node deployment was updated`);
-              this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdated');
+          (md: MachineDeployment): Observable<boolean> => {
+            if (md) {
+              this._notificationService.success(`The <strong>${md.name}</strong> machine deployment was updated`);
+              this._googleAnalyticsService.emitEvent('clusterOverview', 'machineDeploymentUpdated');
               if (changeEventEmitter) {
-                changeEventEmitter.emit(nd);
+                changeEventEmitter.emit(md);
               }
               return of(true);
             }
@@ -169,19 +181,19 @@ export class NodeService {
       .pipe(first());
   }
 
-  showNodeDeploymentDeleteDialog(
-    nd: NodeDeployment,
+  showMachineDeploymentDeleteDialog(
+    md: MachineDeployment,
     clusterID: string,
     projectID: string,
     dcName: string,
-    changeEventEmitter: EventEmitter<NodeDeployment>
+    changeEventEmitter: EventEmitter<MachineDeployment>
   ): Observable<boolean> {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
       data: {
-        title: 'Delete Node Deployment',
-        message: `Delete "<strong>${nd.name}</strong>" permanently?`,
+        title: 'Delete Machine Deployment',
+        message: `Delete "<strong>${md.name}</strong>" permanently?`,
         confirmLabel: 'Delete',
       },
     };
@@ -196,12 +208,14 @@ export class NodeService {
           (isConfirmed: boolean): Observable<boolean> => {
             if (isConfirmed) {
               return this._apiService
-                .deleteNodeDeployment(clusterID, nd, dcName, projectID)
+                .deleteMachineDeployment(clusterID, md, dcName, projectID)
                 .pipe(first())
                 .pipe(
                   catchError(() => {
-                    this._notificationService.error('Could not remove the <strong>${nd.name}</strong> node deployment');
-                    this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentDeleteFailed');
+                    this._notificationService.error(
+                      'Could not remove the <strong>${md.name}</strong> machine deployment'
+                    );
+                    this._googleAnalyticsService.emitEvent('clusterOverview', 'machineDeploymentDeleteFailed');
                     return of(false);
                   })
                 );
@@ -214,10 +228,10 @@ export class NodeService {
         flatMap(
           (data: any): Observable<boolean> => {
             if (data) {
-              this._notificationService.success(`The <strong>${nd.name}</strong> node deployment was removed`);
-              this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentDeleted');
+              this._notificationService.success(`The <strong>${md.name}</strong> machine deployment was removed`);
+              this._googleAnalyticsService.emitEvent('clusterOverview', 'machineDeploymentDeleted');
               if (changeEventEmitter) {
-                changeEventEmitter.emit(nd);
+                changeEventEmitter.emit(md);
               }
               return of(true);
             }

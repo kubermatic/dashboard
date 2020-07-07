@@ -1,3 +1,15 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
 <ng-container *ngIf="isInitialized()">
   <km-cluster-panel [cluster]="cluster"
                     [datacenter]="datacenter"
@@ -7,16 +19,16 @@
   <mat-card class="white km-cluster-details">
     <mat-card-header>
       <mat-card-title>
-        <i [matTooltip]="nodeDeploymentHealthStatus.message"
-           [ngClass]="nodeDeploymentHealthStatus.color"
-           class="km-node-deployment-health"></i>
+        <i [matTooltip]="machineDeploymentHealthStatus.message"
+           [ngClass]="machineDeploymentHealthStatus.color"
+           class="km-machine-deployment-health"></i>
         <span ngxClipboard
-              [cbContent]="nodeDeployment.name"
+              [cbContent]="machineDeployment.name"
               matTooltip="Click to copy"
-              class="km-node-deployment-name km-copy">{{nodeDeployment.name}}</span>
+              class="km-machine-deployment-name km-copy">{{machineDeployment.name}}</span>
       </mat-card-title>
 
-      <div class="km-node-deployment-actions"
+      <div class="km-machine-deployment-actions"
            fxLayout="row">
         <button mat-icon-button
                 (click)="showEditDialog()"
@@ -36,7 +48,7 @@
       <div class="km-content-wrap">
         <km-property>
           <div key>{{getVersionHeadline(cluster.type, true)}}</div>
-          <div value>{{nodeDeployment.spec.template.versions.kubelet}}</div>
+          <div value>{{machineDeployment.spec.template.versions.kubelet}}</div>
         </km-property>
         <km-property>
           <div key>Replicas</div>
@@ -44,25 +56,25 @@
                fxLayout="row"
                fxLayoutAlign=" center"
                fxLayoutGap="4px">
-            <span>{{!!nodeDeployment.status?.availableReplicas ? nodeDeployment.status.availableReplicas : 0}}/{{!!nodeDeployment.spec?.replicas ? nodeDeployment.spec.replicas : 0}}</span>
-            <div *ngIf="nodeDeployment.status?.availableReplicas > nodeDeployment.spec.replicas"
+            <span>{{!!machineDeployment.status?.availableReplicas ? machineDeployment.status.availableReplicas : 0}}/{{!!machineDeployment.spec?.replicas ? machineDeployment.spec.replicas : 0}}</span>
+            <div *ngIf="machineDeployment.status?.availableReplicas > machineDeployment.spec.replicas"
                  class="km-icon-info"
                  matTooltip="Number of available machines may be higher than number of desired machines from the template if deployment is updating."></div>
           </div>
         </km-property>
         <km-property>
           <div key>Paused</div>
-          <div value>{{nodeDeployment.spec.paused}}</div>
+          <div value>{{machineDeployment.spec.paused}}</div>
         </km-property>
 
-        <ng-container *ngIf="nodeDeployment.spec.template.cloud.aws">
+        <ng-container *ngIf="machineDeployment.spec.template.cloud.aws">
           <km-property>
             <div key>Subnet ID</div>
-            <div value>{{nodeDeployment.spec.template.cloud.aws.subnetID}}</div>
+            <div value>{{machineDeployment.spec.template.cloud.aws.subnetID}}</div>
           </km-property>
           <km-property>
             <div key>Availability Zone</div>
-            <div value>{{nodeDeployment.spec.template.cloud.aws.availabilityZone}}</div>
+            <div value>{{machineDeployment.spec.template.cloud.aws.availabilityZone}}</div>
           </km-property>
         </ng-container>
 
@@ -88,23 +100,23 @@
         <km-property>
           <div key>Created</div>
           <div value>
-            <km-relative-time [date]="nodeDeployment.creationTimestamp"></km-relative-time>
+            <km-relative-time [date]="machineDeployment.creationTimestamp"></km-relative-time>
           </div>
         </km-property>
         <div fxFlex="100%">
           <km-property fxFlex="50%"
-                       *ngIf="nodeDeployment.spec.template.labels">
+                       *ngIf="machineDeployment.spec.template.labels">
             <div key>Node Labels</div>
             <div value>
-              <km-labels [labels]="nodeDeployment.spec.template.labels"
+              <km-labels [labels]="machineDeployment.spec.template.labels"
                          emptyMessage="No assigned labels"></km-labels>
             </div>
           </km-property>
           <km-property fxFlex="50%"
-                       *ngIf="nodeDeployment.spec.template.taints">
+                       *ngIf="machineDeployment.spec.template.taints">
             <div key>Node Taints</div>
             <div value>
-              <km-taints [taints]="nodeDeployment.spec.template.taints"></km-taints>
+              <km-taints [taints]="machineDeployment.spec.template.taints"></km-taints>
             </div>
           </km-property>
         </div>
@@ -116,28 +128,28 @@
              fxFlex
              fxLayout="row wrap"
              fxLayoutAlign=" center">
-          <div *ngIf="nodeDeployment.spec.template.operatingSystem.ubuntu">
-            <span [ngClass]="nodeDeployment.spec.template.operatingSystem.ubuntu.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></span>
+          <div *ngIf="machineDeployment.spec.template.operatingSystem.ubuntu">
+            <span [ngClass]="machineDeployment.spec.template.operatingSystem.ubuntu.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></span>
             <span>Upgrade system on the first boot</span>
           </div>
-          <div *ngIf="nodeDeployment.spec.template.operatingSystem.centos">
-            <span [ngClass]="nodeDeployment.spec.template.operatingSystem.centos.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></span>
+          <div *ngIf="machineDeployment.spec.template.operatingSystem.centos">
+            <span [ngClass]="machineDeployment.spec.template.operatingSystem.centos.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></span>
             <span>Upgrade system on the first boot</span>
           </div>
-          <div *ngIf="nodeDeployment.spec.template.operatingSystem.containerLinux">
-            <span [ngClass]="nodeDeployment.spec.template.operatingSystem.containerLinux.disableAutoUpdate ? 'km-icon-running' : 'km-icon-disabled'"></span>
+          <div *ngIf="machineDeployment.spec.template.operatingSystem.containerLinux">
+            <span [ngClass]="machineDeployment.spec.template.operatingSystem.containerLinux.disableAutoUpdate ? 'km-icon-running' : 'km-icon-disabled'"></span>
             <span>Disable auto-update</span>
           </div>
-          <div *ngIf="nodeDeployment.spec.template.operatingSystem.flatcar">
-            <span [ngClass]="nodeDeployment.spec.template.operatingSystem.flatcar.disableAutoUpdate ? 'km-icon-running' : 'km-icon-disabled'"></span>
+          <div *ngIf="machineDeployment.spec.template.operatingSystem.flatcar">
+            <span [ngClass]="machineDeployment.spec.template.operatingSystem.flatcar.disableAutoUpdate ? 'km-icon-running' : 'km-icon-disabled'"></span>
             <span>Disable auto-update</span>
           </div>
-          <div *ngIf="nodeDeployment.spec.template.operatingSystem.sles">
-            <span [ngClass]="nodeDeployment.spec.template.operatingSystem.sles.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></span>
+          <div *ngIf="machineDeployment.spec.template.operatingSystem.sles">
+            <span [ngClass]="machineDeployment.spec.template.operatingSystem.sles.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></span>
             <span>Upgrade system on the first boot</span>
           </div>
-          <div *ngIf="nodeDeployment.spec.template.operatingSystem.rhel">
-            <span [ngClass]="nodeDeployment.spec.template.operatingSystem.rhel.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></span>
+          <div *ngIf="machineDeployment.spec.template.operatingSystem.rhel">
+            <span [ngClass]="machineDeployment.spec.template.operatingSystem.rhel.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></span>
             <span>Upgrade system on the first boot</span>
           </div>
         </div>

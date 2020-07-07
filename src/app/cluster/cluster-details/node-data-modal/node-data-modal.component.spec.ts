@@ -1,3 +1,14 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
@@ -34,7 +45,7 @@ import {VSphereNodeOptionsComponent} from '../../../node-data/vsphere-add-node/v
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
-import {fakeDigitaloceanCreateNode, nodeDataFake, nodeDeploymentsFake} from '../../../testing/fake-data/node.fake';
+import {fakeDigitaloceanCreateNode, nodeDataFake, machineDeploymentsFake} from '../../../testing/fake-data/node.fake';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
 import {ApiMockService} from '../../../testing/services/api-mock.service';
 import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
@@ -117,7 +128,7 @@ describe('NodeDataModalData', () => {
       valid: true,
     };
     component.data.nodeData = nodeDataFake();
-    component.data.nodeDeployment = nodeDeploymentsFake()[0];
+    component.data.machineDeployment = machineDeploymentsFake()[0];
     component.data.editMode = true;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;

@@ -1,3 +1,14 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {iif, Subject} from 'rxjs';
@@ -88,7 +99,9 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       if (
         (!!this.nodeData.spec.operatingSystem.ubuntu && !data.ubuntu) ||
         (!!this.nodeData.spec.operatingSystem.centos && !data.centos) ||
-        (!!this.nodeData.spec.operatingSystem.containerLinux && !data.containerLinux)
+        (!!this.nodeData.spec.operatingSystem.containerLinux && !data.containerLinux) ||
+        (!!this.nodeData.spec.operatingSystem.rhel && !data.rhel) ||
+        (!!this.nodeData.spec.operatingSystem.flatcar && !data.flatcar)
       ) {
         this.setImage(data);
       }
@@ -145,6 +158,8 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       let coreosImage = '';
       let centosImage = '';
       let ubuntuImage = '';
+      let rhelImage = '';
+      let flatcarImage = '';
 
       for (const i in res.spec.openstack.images) {
         if (i === 'coreos') {
@@ -153,6 +168,10 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
           centosImage = res.spec.openstack.images[i];
         } else if (i === 'ubuntu') {
           ubuntuImage = res.spec.openstack.images[i];
+        } else if (i === 'rhel') {
+          rhelImage = res.spec.openstack.images[i];
+        } else if (i === 'flatcar') {
+          flatcarImage = res.spec.openstack.images[i];
         }
       }
 
@@ -162,6 +181,10 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
         return this.form.controls.image.setValue(centosImage);
       } else if (operatingSystem.containerLinux) {
         return this.form.controls.image.setValue(coreosImage);
+      } else if (operatingSystem.rhel) {
+        return this.form.controls.image.setValue(rhelImage);
+      } else if (operatingSystem.flatcar) {
+        return this.form.controls.image.setValue(flatcarImage);
       }
     });
   }
