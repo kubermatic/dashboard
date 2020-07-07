@@ -14,7 +14,7 @@ import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/form
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 import {ClusterService} from '../../../../core/services';
-import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
+import {ProviderSettingsPatch} from '../../../../shared/entity/cluster';
 
 @Component({
   selector: 'km-vsphere-provider-settings',

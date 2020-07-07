@@ -332,6 +332,11 @@ export class AlibabaCloudSpecPatch {
   accessKeySecret?: string;
 }
 
+export class ProviderSettingsPatch {
+  cloudSpecPatch: CloudSpecPatch;
+  isValid: boolean;
+}
+
 export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
   switch (provider) {
     case NodeProvider.AWS:

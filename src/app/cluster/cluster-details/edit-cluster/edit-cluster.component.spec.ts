@@ -17,8 +17,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Subject} from 'rxjs';
 
 import {CoreModule} from '../../../core/core.module';
-import {ApiService, ClusterService, DatacenterService, UserService} from '../../../core/services';
-import {ProviderSettingsPatch} from '../../../core/services/cluster/cluster.service';
+import {ApiService, ClusterService} from '../../../core/services';
 import {SharedModule} from '../../../shared/shared.module';
 import {doPatchCloudSpecFake} from '../../../testing/fake-data/cloud-spec.fake';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
@@ -39,12 +38,7 @@ import {PacketProviderSettingsComponent} from '../edit-provider-settings/packet-
 import {VSphereProviderSettingsComponent} from '../edit-provider-settings/vsphere-provider-settings/vsphere-provider-settings.component';
 
 import {EditClusterComponent} from './edit-cluster.component';
-import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
-import {AppConfigService} from '../../../app-config.service';
-import {Router} from '@angular/router';
-import {RouterStub} from '../../../testing/router-stubs';
-import {UserMockService} from '../../../testing/services/user-mock.service';
-import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
+import {ProviderSettingsPatch} from '../../../shared/entity/cluster';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 

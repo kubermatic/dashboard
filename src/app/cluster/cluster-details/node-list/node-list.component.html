@@ -65,8 +65,8 @@ limitations under the License.
                *ngIf="showInfo(element)"></i>
           </ng-container>
           <ng-container *ngIf="element.status.errorMessage">
-            <i class="fa fa-exclamation-triangle km-error"
-               matTooltip="{{element.status.errorMessage}}"></i>
+            <mat-icon [matTooltip]="element.status.errorMessage"
+                      class="km-error">report_problem</mat-icon>
           </ng-container>
         </td>
       </ng-container>

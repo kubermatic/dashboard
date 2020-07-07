@@ -675,7 +675,7 @@
   }
 
   .km-info {
-    color: map-get($colors, primary-hover) !important;
+    background-color: map-get($colors, primary-hover) !important;
   }
 
   .km-success {
@@ -947,7 +947,7 @@
     .km-icon-failed,
     .km-icon-disabled,
     .km-icon-running,
-    .fa {
+    .km-icon-pending {
       width: $font-size-subhead;
       height: $font-size-subhead;
       font-size: $font-size-subhead;
@@ -1410,11 +1410,6 @@
         transition: all .5s ease;
         color: map-get($colors, secondary-dark) !important;
       }
-    }
-
-    .fa {
-      margin: 1.5 * $baseline-grid;
-      font-size: $font-size-card-title;
     }
   }
 

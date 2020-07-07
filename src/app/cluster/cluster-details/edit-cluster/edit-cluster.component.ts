@@ -16,9 +16,9 @@ import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {ApiService, ClusterService, DatacenterService, NotificationService} from '../../../core/services';
-import {ProviderSettingsPatch} from '../../../core/services/cluster/cluster.service';
-import {Cluster, ClusterPatch} from '../../../shared/entity/cluster';
+import {ApiService, ClusterService, NotificationService} from '../../../core/services';
+import {Cluster, ClusterPatch, ProviderSettingsPatch} from '../../../shared/entity/cluster';
+import {Datacenter} from '../../../shared/entity/datacenter';
 import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
 import {ResourceType} from '../../../shared/entity/common';
 import {
