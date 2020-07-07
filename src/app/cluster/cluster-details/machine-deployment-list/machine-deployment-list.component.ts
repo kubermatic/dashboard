@@ -20,7 +20,6 @@ import * as _ from 'lodash';
 import {ProjectService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {Cluster} from '../../../shared/entity/cluster';
-import {Datacenter} from '../../../shared/entity/datacenter';
 import {Member} from '../../../shared/entity/member';
 import {MachineDeployment} from '../../../shared/entity/machine-deployment';
 import {GroupConfig} from '../../../shared/model/Config';
@@ -37,7 +36,7 @@ import {getOperatingSystem} from '../../../shared/entity/node';
 })
 export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() datacenter: Datacenter;
+  @Input() seed: string;
   @Input() machineDeployments: MachineDeployment[] = [];
   @Input() projectID: string;
   @Input() clusterHealthStatus: ClusterHealthStatus;
@@ -90,11 +89,6 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
     this._unsubscribe.complete();
   }
 
-  getDataSource(): MatTableDataSource<MachineDeployment> {
-    this.dataSource.data = this.machineDeployments ? this.machineDeployments : [];
-    return this.dataSource;
-  }
-
   getHealthStatus(md: MachineDeployment): MachineDeploymentHealthStatus {
     return MachineDeploymentHealthStatus.getHealthStatus(md);
   }
@@ -109,14 +103,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
 
   goToDetails(md: MachineDeployment): void {
     this._router.navigate([
-      '/projects/' +
-        this.projectID +
-        '/dc/' +
-        this.datacenter.metadata.name +
-        '/clusters/' +
-        this.cluster.id +
-        /md/ +
-        md.id,
+      '/projects/' + this.projectID + '/dc/' + this.seed + '/clusters/' + this.cluster.id + /md/ + md.id,
     ]);
   }
 
@@ -127,7 +114,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
   showEditDialog(md: MachineDeployment, event: Event): void {
     event.stopPropagation();
     this._nodeService
-      .showMachineDeploymentEditDialog(md, this.cluster, this.projectID, this.datacenter, this.changeMachineDeployment)
+      .showMachineDeploymentEditDialog(md, this.cluster, this.projectID, this.seed, this.changeMachineDeployment)
       .subscribe(() => {});
   }
 
@@ -138,13 +125,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
   showDeleteDialog(md: MachineDeployment, event: Event): void {
     event.stopPropagation();
     this._nodeService
-      .showMachineDeploymentDeleteDialog(
-        md,
-        this.cluster.id,
-        this.projectID,
-        this.datacenter.metadata.name,
-        this.changeMachineDeployment
-      )
+      .showMachineDeploymentDeleteDialog(md, this.cluster.id, this.projectID, this.seed, this.changeMachineDeployment)
       .subscribe(() => {});
   }
 

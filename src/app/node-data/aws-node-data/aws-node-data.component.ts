@@ -33,7 +33,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() clusterId: string;
   @Input() projectId: string;
-  @Input() seedDCName: string;
+  @Input() seed: string;
 
   sizes: AWSSize[] = [];
   diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
@@ -207,7 +207,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
           return iif(
             () => this.isInWizard(),
             this._wizardService.provider(NodeProvider.AWS).region(dc.spec.aws.region).flavors(),
-            this._apiService.getAWSSizes(this.projectId, this.seedDCName, this.clusterId)
+            this._apiService.getAWSSizes(this.projectId, this.seed, this.clusterId)
           );
         })
       )
@@ -260,7 +260,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
         .vpc(this.cloudSpec.aws.vpcId)
         .credential(this._selectedPreset)
         .subnets(this.cloudSpec.dc),
-      this._apiService.getAWSSubnets(this.projectId, this.seedDCName, this.clusterId)
+      this._apiService.getAWSSubnets(this.projectId, this.seed, this.clusterId)
     )
       .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))

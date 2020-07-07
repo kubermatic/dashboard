@@ -76,7 +76,7 @@ export class GCP extends Provider {
     });
   }
 
-  zones(dc: string, onLoadingCb: () => void = null): Observable<GCPZone[]> {
+  zones(seed: string, onLoadingCb: () => void = null): Observable<GCPZone[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -85,7 +85,7 @@ export class GCP extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/${dc}/zones`;
+    const url = `${this._restRoot}/providers/${this._provider}/${seed}/zones`;
     return this._http.get<GCPZone[]>(url, {headers: this._headers});
   }
 
@@ -102,7 +102,7 @@ export class GCP extends Provider {
     return this._http.get<GCPNetwork[]>(url, {headers: this._headers});
   }
 
-  subnetworks(dc: string, onLoadingCb: () => void = null): Observable<GCPSubnetwork[]> {
+  subnetworks(seed: string, onLoadingCb: () => void = null): Observable<GCPSubnetwork[]> {
     this._setRequiredHeaders(GCP.Header.ServiceAccount, GCP.Header.Network);
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
@@ -112,7 +112,7 @@ export class GCP extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/${dc}/subnetworks`;
+    const url = `${this._restRoot}/providers/${this._provider}/${seed}/subnetworks`;
     return this._http.get<GCPSubnetwork[]>(url, {headers: this._headers});
   }
 }

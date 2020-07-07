@@ -18,7 +18,6 @@ import {filter, first, switchMap} from 'rxjs/operators';
 import {NotificationService, RBACService} from '../../../core/services';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '../../../shared/entity/cluster';
-import {Datacenter} from '../../../shared/entity/datacenter';
 import {SimpleBinding, SimpleClusterBinding} from '../../../shared/entity/rbac';
 
 import {AddBindingComponent} from './add-binding/add-binding.component';
@@ -30,7 +29,7 @@ import {AddBindingComponent} from './add-binding/add-binding.component';
 })
 export class RBACComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() datacenter: Datacenter;
+  @Input() seed: string;
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
   @Input() clusterBindings: SimpleClusterBinding[] = [];
@@ -63,7 +62,7 @@ export class RBACComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     const modal = this._matDialog.open(AddBindingComponent);
     modal.componentInstance.cluster = this.cluster;
-    modal.componentInstance.datacenter = this.datacenter;
+    modal.componentInstance.seed = this.seed;
     modal.componentInstance.projectID = this.projectID;
   }
 
@@ -105,7 +104,7 @@ export class RBACComponent implements OnInit, OnDestroy {
         switchMap(_ =>
           this._rbacService.deleteClusterBinding(
             this.cluster.id,
-            this.datacenter.metadata.name,
+            this.seed,
             this.projectID,
             element.role,
             element.kind,
@@ -145,7 +144,7 @@ export class RBACComponent implements OnInit, OnDestroy {
         switchMap(_ =>
           this._rbacService.deleteBinding(
             this.cluster.id,
-            this.datacenter.metadata.name,
+            this.seed,
             this.projectID,
             element.role,
             element.namespace,

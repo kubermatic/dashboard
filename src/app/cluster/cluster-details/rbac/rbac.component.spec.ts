@@ -20,12 +20,12 @@ import {NotificationService, RBACService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {fakeSimpleBindings, fakeSimpleClusterBindings} from '../../../testing/fake-data/rbac.fake';
 import {RouterStub} from '../../../testing/router-stubs';
 
 import {RBACComponent} from './rbac.component';
+import {fakeSeedDatacenter} from '../../../testing/fake-data/datacenter.fake';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
@@ -58,7 +58,7 @@ describe('RBACComponent', () => {
     fixture = TestBed.createComponent(RBACComponent);
     component = fixture.componentInstance;
     component.cluster = fakeDigitaloceanCluster();
-    component.datacenter = fakeDigitaloceanDatacenter();
+    component.seed = fakeSeedDatacenter();
     component.projectID = fakeProject().id;
     component.clusterBindings = fakeSimpleClusterBindings();
     component.bindings = fakeSimpleBindings();

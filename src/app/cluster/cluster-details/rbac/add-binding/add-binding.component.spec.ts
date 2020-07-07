@@ -18,7 +18,7 @@ import {CoreModule} from '../../../../core/core.module';
 import {RBACService} from '../../../../core/services';
 import {SharedModule} from '../../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../../testing/fake-data/cluster.fake';
-import {fakeDigitaloceanDatacenter} from '../../../../testing/fake-data/datacenter.fake';
+import {fakeSeedDatacenter} from '../../../../testing/fake-data/datacenter.fake';
 import {fakeProject} from '../../../../testing/fake-data/project.fake';
 import {
   fakeBinding,
@@ -64,7 +64,7 @@ describe('AddBindingComponent', () => {
     fixture = TestBed.createComponent(AddBindingComponent);
     component = fixture.componentInstance;
     component.cluster = fakeDigitaloceanCluster();
-    component.datacenter = fakeDigitaloceanDatacenter();
+    component.seed = fakeSeedDatacenter();
     component.projectID = fakeProject().id;
     fixture.detectChanges();
   }));

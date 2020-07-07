@@ -96,27 +96,8 @@ export function fakeOpenstackDatacenter(): Datacenter {
   };
 }
 
-export function fakeBringyourownSeedDatacenter(): Datacenter {
-  return {
-    metadata: {
-      name: 'europe-west3-c',
-      selfLink: '',
-      uid: '',
-      creationTimestamp: new Date(),
-      labels: new Map(),
-      annotations: new Map(),
-    },
-    seed: true,
-    spec: {
-      seed: 'europe-west3-c',
-      country: 'DE',
-      bringyourown: {},
-      location: 'Frankfurt',
-      provider: 'bringyourown',
-      enforceAuditLogging: false,
-      enforcePodSecurityPolicy: false,
-    },
-  };
+export function fakeSeedDatacenter(): string {
+  return 'europe-west3-c';
 }
 
 export function fakeAzureDatacenter(): Datacenter {
@@ -225,17 +206,12 @@ export function fakeAlibabaDatacenter(): Datacenter {
   };
 }
 
-export function fakeSeedDatacenters(): Datacenter[] {
-  return [fakeBringyourownSeedDatacenter()];
-}
-
 export function fakeNodeDatacenters(): Datacenter[] {
   return [
     fakeDigitaloceanDatacenter(),
     fakeAWSDatacenter(),
     fakeOpenstackDatacenter(),
     fakeAzureDatacenter(),
-    fakeBringyourownSeedDatacenter(),
     fakeVSphereDatacenter(),
   ];
 }

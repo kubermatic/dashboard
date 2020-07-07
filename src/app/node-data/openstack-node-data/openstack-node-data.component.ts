@@ -33,7 +33,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() projectId: string;
   @Input() clusterId: string;
-  @Input() seedDCName: string;
+  @Input() seed: string;
 
   flavors: OpenstackFlavor[] = [];
   loadingFlavors = false;
@@ -320,7 +320,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
         .credential(this._selectedPreset)
         .datacenter(this.cloudSpec.dc)
         .flavors(),
-      this._api.getOpenStackFlavors(this.projectId, this.seedDCName, this.clusterId)
+      this._api.getOpenStackFlavors(this.projectId, this.seed, this.clusterId)
     )
       .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))
@@ -361,7 +361,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
         .credential(this._selectedPreset)
         .datacenter(this.cloudSpec.dc)
         .availabilityZones(),
-      this._api.getOpenStackAvailabilityZones(this.projectId, this.seedDCName, this.clusterId)
+      this._api.getOpenStackAvailabilityZones(this.projectId, this.seed, this.clusterId)
     )
       .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))

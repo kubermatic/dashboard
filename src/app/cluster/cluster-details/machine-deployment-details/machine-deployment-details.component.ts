@@ -27,6 +27,7 @@ import {GroupConfig} from '../../../shared/model/Config';
 import {MachineDeploymentHealthStatus} from '../../../shared/utils/health-status/machine-deployment-health-status';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {NodeService} from '../../services/node.service';
+import {PathParam} from '../../../core/services/params/params.service';
 
 @Component({
   selector: 'km-machine-deployment-details',
@@ -42,10 +43,9 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   cluster: Cluster;
   clusterProvider: string;
   datacenter: Datacenter;
-  seedDatacenter: Datacenter;
+  seed: string;
   system: string;
   systemLogoClass: string;
-  dcName: string;
   projectID: string;
   private _machineDeploymentID: string;
   private _isMachineDeploymentLoaded = false;
@@ -53,7 +53,6 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   private _areNodesEventsLoaded = false;
   private _isClusterLoaded = false;
   private _isDatacenterLoaded = false;
-  private _isSeedDatacenterLoaded = false;
   private _unsubscribe: Subject<any> = new Subject();
   private _clusterName: string;
   private _user: Member;
@@ -72,9 +71,9 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._clusterName = this._activatedRoute.snapshot.paramMap.get('clusterName');
-    this.dcName = this._activatedRoute.snapshot.paramMap.get('seedDc');
     this._machineDeploymentID = this._activatedRoute.snapshot.paramMap.get('machineDeploymentID');
     this.projectID = this._activatedRoute.snapshot.paramMap.get('projectID');
+    this.seed = this._activatedRoute.snapshot.paramMap.get(PathParam.SeedDC);
 
     this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
 
@@ -92,13 +91,12 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
         this.loadNodesMetrics();
       });
 
-    this.loadSeedDatacenter();
     this.loadCluster();
   }
 
   loadMachineDeployment(): void {
     this._apiService
-      .getMachineDeployment(this._machineDeploymentID, this._clusterName, this.dcName, this.projectID)
+      .getMachineDeployment(this._machineDeploymentID, this._clusterName, this.seed, this.projectID)
       .pipe(first())
       .subscribe((md: MachineDeployment) => {
         this.machineDeployment = md;
@@ -111,7 +109,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodes(): void {
     this._apiService
-      .getMachineDeploymentNodes(this._machineDeploymentID, this._clusterName, this.dcName, this.projectID)
+      .getMachineDeploymentNodes(this._machineDeploymentID, this._clusterName, this.seed, this.projectID)
       .pipe(first())
       .subscribe(n => {
         this.nodes = n;
@@ -121,7 +119,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodesEvents(): void {
     this._apiService
-      .getMachineDeploymentNodesEvents(this._machineDeploymentID, this._clusterName, this.dcName, this.projectID)
+      .getMachineDeploymentNodesEvents(this._machineDeploymentID, this._clusterName, this.seed, this.projectID)
       .pipe(first())
       .subscribe(e => {
         this.events = e;
@@ -131,7 +129,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodesMetrics(): void {
     this._apiService
-      .getMachineDeploymentNodesMetrics(this._machineDeploymentID, this._clusterName, this.dcName, this.projectID)
+      .getMachineDeploymentNodesMetrics(this._machineDeploymentID, this._clusterName, this.seed, this.projectID)
       .pipe(first())
       .subscribe(metrics => {
         this.storeNodeMetrics(metrics);
@@ -146,7 +144,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadCluster(): void {
     this._clusterService
-      .cluster(this.projectID, this._clusterName, this.dcName)
+      .cluster(this.projectID, this._clusterName, this.seed)
       .pipe(first())
       .subscribe(c => {
         this.cluster = c;
@@ -166,21 +164,10 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  loadSeedDatacenter(): void {
-    this._datacenterService
-      .getDatacenter(this.dcName)
-      .pipe(first())
-      .subscribe(d => {
-        this.seedDatacenter = d;
-        this._isSeedDatacenterLoaded = true;
-      });
-  }
-
   isInitialized(): boolean {
     return (
       this._isClusterLoaded &&
       this._isDatacenterLoaded &&
-      this._isSeedDatacenterLoaded &&
       this._areNodesLoaded &&
       this._isMachineDeploymentLoaded &&
       this._areNodesEventsLoaded
@@ -196,7 +183,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   goBackToCluster(): void {
-    this._router.navigate(['/projects/' + this.projectID + '/dc/' + this.dcName + '/clusters/' + this._clusterName]);
+    this._router.navigate(['/projects/' + this.projectID + '/dc/' + this.seed + '/clusters/' + this._clusterName]);
   }
 
   isEditEnabled(): boolean {
@@ -205,13 +192,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   showEditDialog(): void {
     this._nodeService
-      .showMachineDeploymentEditDialog(
-        this.machineDeployment,
-        this.cluster,
-        this.projectID,
-        this.seedDatacenter,
-        undefined
-      )
+      .showMachineDeploymentEditDialog(this.machineDeployment, this.cluster, this.projectID, this.seed, undefined)
       .subscribe(isConfirmed => {
         if (isConfirmed) {
           this.loadMachineDeployment();
@@ -226,13 +207,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   showDeleteDialog(): void {
     this._nodeService
-      .showMachineDeploymentDeleteDialog(
-        this.machineDeployment,
-        this.cluster.id,
-        this.projectID,
-        this.seedDatacenter.metadata.name,
-        undefined
-      )
+      .showMachineDeploymentDeleteDialog(this.machineDeployment, this.cluster.id, this.projectID, this.seed, undefined)
       .subscribe(isConfirmed => {
         if (isConfirmed) {
           this.goBackToCluster();

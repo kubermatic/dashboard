@@ -103,7 +103,7 @@ limitations under the License.
     <mat-card-content class="km-row">
 
       <div class="km-content-wrap">
-        <km-version-picker [datacenter]="datacenter"
+        <km-version-picker [seed]="seed"
                            [cluster]="cluster"
                            [isClusterRunning]="isClusterAPIRunning"
                            [upgrades]="isEditEnabled() ? upgrades : []"></km-version-picker>
@@ -203,12 +203,12 @@ limitations under the License.
   </mat-card>
 
   <km-machine-networks-display [cluster]="cluster"
-                               [datacenter]="datacenter"
+                               [seed]="seed"
                                [projectID]="projectID"></km-machine-networks-display>
 
   <km-machine-deployment-list [cluster]="cluster"
                               [machineDeployments]="machineDeployments"
-                              [datacenter]="datacenter"
+                              [seed]="seed"
                               [projectID]="projectID"
                               [clusterHealthStatus]="clusterHealthStatus"
                               [isClusterRunning]="isClusterAPIRunning"
@@ -217,7 +217,7 @@ limitations under the License.
   <div *ngIf="nodes.length > 0">
     <km-node-list [cluster]="cluster"
                   [nodes]="nodes"
-                  [datacenter]="datacenter"
+                  [seed]="seed"
                   [projectID]="projectID"
                   [clusterHealthStatus]="clusterHealthStatus"
                   [isClusterRunning]="isClusterAPIRunning"></km-node-list>
@@ -225,7 +225,7 @@ limitations under the License.
 
   <km-rbac *ngIf="isRBACEnabled()"
            [cluster]="cluster"
-           [datacenter]="datacenter"
+           [seed]="seed"
            [projectID]="projectID"
            [isClusterRunning]="isClusterRunning"
            [clusterBindings]="clusterBindings"

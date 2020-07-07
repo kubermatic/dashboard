@@ -13,7 +13,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import {first} from 'rxjs/operators';
 import {ApiService, Auth, UserService} from '../../../core/services';
 import {Cluster} from '../../../shared/entity/cluster';
-import {Datacenter} from '../../../shared/entity/datacenter';
 
 @Component({
   selector: 'km-share-kubeconfig',
@@ -22,7 +21,7 @@ import {Datacenter} from '../../../shared/entity/datacenter';
 })
 export class ShareKubeconfigComponent implements OnInit {
   @Input() cluster: Cluster;
-  @Input() datacenter: Datacenter;
+  @Input() seed: string;
   @Input() projectID: string;
   private userID: string;
   kubeconfigLink: string;
@@ -37,12 +36,7 @@ export class ShareKubeconfigComponent implements OnInit {
     if (this._auth.authenticated()) {
       this._userService.loggedInUser.pipe(first()).subscribe(user => {
         this.userID = user.id;
-        this.kubeconfigLink = this._api.getShareKubeconfigURL(
-          this.projectID,
-          this.datacenter.metadata.name,
-          this.cluster.id,
-          this.userID
-        );
+        this.kubeconfigLink = this._api.getShareKubeconfigURL(this.projectID, this.seed, this.cluster.id, this.userID);
       });
     }
   }

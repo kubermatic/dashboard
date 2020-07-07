@@ -23,7 +23,7 @@ import {SettingsService} from '../../../core/services/settings/settings.service'
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
+import {fakeSeedDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
@@ -73,7 +73,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
   it('should able add button', () => {
     component.projectID = fakeProject().id;
     component.cluster = fakeDigitaloceanCluster();
-    component.datacenter = fakeDigitaloceanDatacenter();
+    component.seed = fakeSeedDatacenter();
 
     fixture.detectChanges();
 
@@ -88,7 +88,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
 
   it('should call deleteCluster method', fakeAsync(() => {
     component.cluster = fakeDigitaloceanCluster();
-    component.datacenter = fakeDigitaloceanDatacenter();
+    component.seed = fakeSeedDatacenter();
     component.inputName = fakeDigitaloceanCluster().name;
     component.projectID = fakeProject().id;
 

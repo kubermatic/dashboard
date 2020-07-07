@@ -14,7 +14,7 @@ limitations under the License.
   <km-cluster-panel [cluster]="cluster"
                     [datacenter]="datacenter"
                     [projectID]="projectID"
-                    [dcName]="dcName"></km-cluster-panel>
+                    [seed]="seed"></km-cluster-panel>
 
   <mat-card class="white km-cluster-details">
     <mat-card-header>
@@ -163,7 +163,7 @@ limitations under the License.
                 [nodes]="nodes"
                 [nodesMetrics]="metrics"
                 (deleteNode)="loadNodes()"
-                [datacenter]="seedDatacenter"
+                [seed]="seed"
                 [projectID]="getProjectID()"
                 [isClusterRunning]="true"
                 [clusterHealthStatus]="{css: 'km-status-running'}"></km-node-list>

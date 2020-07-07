@@ -37,11 +37,11 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() existingNodesCount: number;
   @Input() isInWizard = false;
-  @Input() seedDc: Datacenter;
+  @Input() seed: string;
   @Output() valid = new EventEmitter<boolean>();
   isNameDisabled: boolean;
   projectId: string;
-  seedDCName: string;
+  datacenter: Datacenter;
   form: FormGroup;
   operatingSystemForm: FormGroup;
   nodeDataForm: FormGroup;
@@ -63,9 +63,6 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   // Complexity check for the following line is disabled as we are switching to the new node data component.
   // eslint-disable-next-line complexity
   ngOnInit(): void {
-    if (this.seedDc) {
-      this.seedDCName = this.seedDc.metadata.name;
-    }
     const initialKubeletVersion = this.nodeData.spec.versions.kubelet;
     this._project.selectedProject
       .pipe(takeUntil(this._unsubscribe))
@@ -163,12 +160,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
 
     this._dc
       .getDatacenter(this.cluster.spec.cloud.dc)
-      .pipe(
-        tap(dc => {
-          this.seedDc = dc;
-          this.seedDCName = dc.spec.seed;
-        })
-      )
+      .pipe(tap(dc => (this.datacenter = dc)))
       .pipe(filter(_ => !this.isInWizard))
       .pipe(switchMap(_ => this._clusterService.nodeUpgrades(this.cluster.spec.version, this.cluster.type)))
       .pipe(first())
@@ -306,11 +298,11 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   isImageAvailableForVsphere(os: string): boolean {
     if (this.cluster.spec.cloud.vsphere) {
       return (
-        !!this.seedDc &&
-        !!this.seedDc.spec &&
-        !!this.seedDc.spec.vsphere &&
-        !!this.seedDc.spec.vsphere.templates[os] &&
-        this.seedDc.spec.vsphere.templates[os] !== ''
+        !!this.datacenter &&
+        !!this.datacenter.spec &&
+        !!this.datacenter.spec.vsphere &&
+        !!this.datacenter.spec.vsphere.templates[os] &&
+        this.datacenter.spec.vsphere.templates[os] !== ''
       );
     }
     return true;
