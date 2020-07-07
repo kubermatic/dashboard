@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {CreateDatacenterModel, Datacenter} from '../../../shared/entity/datacenter';
 import {MatTableDataSource} from '@angular/material/table';

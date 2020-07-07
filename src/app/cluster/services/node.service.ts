@@ -20,7 +20,6 @@ import {ApiService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '../../shared/entity/cluster';
-import {Datacenter} from '../../shared/entity/datacenter';
 import {MachineDeployment, MachineDeploymentPatch} from '../../shared/entity/machine-deployment';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {NodeDataModalComponent, NodeDataModalData} from '../cluster-details/node-data-modal/node-data-modal.component';

@@ -17,7 +17,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Subject} from 'rxjs';
 
 import {CoreModule} from '../../../core/core.module';
-import {ApiService, ClusterService} from '../../../core/services';
+import {ApiService, ClusterService, DatacenterService, UserService} from '../../../core/services';
 import {SharedModule} from '../../../shared/shared.module';
 import {doPatchCloudSpecFake} from '../../../testing/fake-data/cloud-spec.fake';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
@@ -39,6 +39,12 @@ import {VSphereProviderSettingsComponent} from '../edit-provider-settings/vspher
 
 import {EditClusterComponent} from './edit-cluster.component';
 import {ProviderSettingsPatch} from '../../../shared/entity/cluster';
+import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
+import {AppConfigService} from '../../../app-config.service';
+import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
+import {UserMockService} from '../../../testing/services/user-mock.service';
+import {RouterStub} from '../../../testing/router-stubs';
+import {Router} from '@angular/router';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 

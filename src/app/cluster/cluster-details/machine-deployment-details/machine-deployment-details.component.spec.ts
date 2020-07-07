@@ -31,7 +31,7 @@ import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {MachineDeploymentHealthStatus} from '../../../shared/utils/health-status/machine-deployment-health-status';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {fakeBringyourownSeedDatacenter, fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
+import {fakeDigitaloceanDatacenter, fakeSeedDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {machineDeploymentsFake, nodesFake} from '../../../testing/fake-data/node.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {ActivatedRouteStub, RouterStub} from '../../../testing/router-stubs';
