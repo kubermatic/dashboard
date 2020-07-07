@@ -193,9 +193,10 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   showEditDialog(): void {
     this._nodeService
-      .showMachineDeploymentEditDialog(this.machineDeployment, this.cluster, this.projectID, this.seed, undefined)
+      .showMachineDeploymentEditDialog(this.machineDeployment, this.cluster, this.projectID, this.seed)
       .pipe(take(1))
-      .subscribe(_ => {
+      .subscribe(
+        _ => {
           this.loadMachineDeployment();
           this.loadNodes();
           this._notificationService.success(
