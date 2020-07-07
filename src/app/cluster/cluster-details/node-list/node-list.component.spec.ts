@@ -20,7 +20,7 @@ import {SettingsService} from '../../../core/services/settings/settings.service'
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
+import {fakeSeedDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {nodeAWSFake, nodeFake} from '../../../testing/fake-data/node.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
@@ -69,7 +69,7 @@ describe('NodeComponent', () => {
 
   it('should call deleteNode', fakeAsync(() => {
     component.cluster = fakeDigitaloceanCluster();
-    component.datacenter = fakeDigitaloceanDatacenter();
+    component.seed = fakeSeedDatacenter();
     component.projectID = fakeProject().id;
     const event = new MouseEvent('click');
 

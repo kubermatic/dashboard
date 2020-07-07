@@ -44,11 +44,15 @@ limitations under the License.
 
     <mat-form-field fxFlex>
       <mat-label>Seed</mat-label>
-      <input required
-             matInput
-             [formControlName]="controls.Seed"
-             type="text"
-             autocomplete="off">
+      <mat-select required
+                  disableOptionCentering
+                  [formControlName]="controls.Seed">
+        <mat-option *ngFor="let seed of seeds"
+                    [value]="seed">
+          {{seed}}
+        </mat-option>
+      </mat-select>
+
       <mat-error *ngIf="form.get(controls.Seed).hasError('required')">
         Seed is <strong>required</strong>.
       </mat-error>

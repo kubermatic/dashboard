@@ -16,7 +16,7 @@ import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {ApiService, ClusterService, NotificationService} from '../../../core/services';
+import {ApiService, ClusterService, DatacenterService, NotificationService} from '../../../core/services';
 import {Cluster, ClusterPatch, ProviderSettingsPatch} from '../../../shared/entity/cluster';
 import {Datacenter} from '../../../shared/entity/datacenter';
 import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
@@ -25,6 +25,7 @@ import {
   AdmissionPlugin,
   AdmissionPluginUtils,
 } from '../../../shared/utils/admission-plugin-utils/admission-plugin-utils';
+
 @Component({
   selector: 'km-edit-cluster',
   templateUrl: './edit-cluster.component.html',
@@ -32,8 +33,9 @@ import {
 })
 export class EditClusterComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() datacenter: Datacenter;
+  @Input() seed: string;
   @Input() projectID: string;
+  datacenter: Datacenter;
   admissionPlugin = AdmissionPlugin;
   form: FormGroup;
   labels: object;
@@ -49,6 +51,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _clusterService: ClusterService,
     private readonly _apiService: ApiService,
+    private readonly _datacenterService: DatacenterService,
     private readonly _matDialogRef: MatDialogRef<EditClusterComponent>,
     private readonly _notificationService: NotificationService
   ) {}
@@ -70,6 +73,11 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     this._clusterService.providerSettingsPatchChanges$
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(async patch => (this.providerSettingsPatch = await patch));
+
+    this._datacenterService
+      .getDatacenter(this.cluster.spec.cloud.dc)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(datacenter => (this.datacenter = datacenter));
 
     this._apiService
       .getAdmissionPlugins(this.cluster.spec.version)
@@ -141,13 +149,11 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       },
     };
 
-    this._clusterService
-      .patch(this.projectID, this.cluster.id, this.datacenter.metadata.name, patch)
-      .subscribe(cluster => {
-        this._matDialogRef.close(cluster);
-        this._clusterService.onClusterUpdate.next();
-        this._notificationService.success(`The <strong>${this.cluster.name}</strong> cluster was updated`);
-      });
+    this._clusterService.patch(this.projectID, this.cluster.id, this.seed, patch).subscribe(cluster => {
+      this._matDialogRef.close(cluster);
+      this._clusterService.onClusterUpdate.next();
+      this._notificationService.success(`The <strong>${this.cluster.name}</strong> cluster was updated`);
+    });
   }
 
   ngOnDestroy(): void {

@@ -121,7 +121,7 @@ describe('NodeDataModalData', () => {
     fixture = TestBed.createComponent(NodeDataModalComponent);
     component = fixture.componentInstance;
     component.data.cluster = fakeDigitaloceanCluster();
-    component.data.datacenter = fakeDigitaloceanDatacenter();
+    component.data.seed = fakeDigitaloceanDatacenter().metadata.name;
     component.data.nodeData = {
       spec: fakeDigitaloceanCreateNode().spec,
       count: 1,

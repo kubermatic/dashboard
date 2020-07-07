@@ -22,7 +22,7 @@ import {ApiService, Auth, ClusterService, DatacenterService, ProjectService, Use
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
+import {fakeSeedDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {ActivatedRouteStub, RouterStub} from '../../../testing/router-stubs';
 import {ApiMockService} from '../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
@@ -77,7 +77,7 @@ describe('VersionPickerComponent', () => {
     component = fixture.componentInstance;
 
     component.cluster = fakeDigitaloceanCluster();
-    component.datacenter = fakeDigitaloceanDatacenter();
+    component.seed = fakeSeedDatacenter();
     component.isClusterRunning = true;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;

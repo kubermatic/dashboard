@@ -19,7 +19,6 @@ import {ApiService, ClusterService, NotificationService, UserService} from '../.
 import {AddSshKeyDialogComponent} from '../../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {Cluster} from '../../../../shared/entity/cluster';
 import {View} from '../../../../shared/entity/common';
-import {Datacenter} from '../../../../shared/entity/datacenter';
 import {Member} from '../../../../shared/entity/member';
 import {SSHKey} from '../../../../shared/entity/ssh-key';
 import {GroupConfig} from '../../../../shared/model/Config';
@@ -33,7 +32,7 @@ import {MemberUtils, Permission} from '../../../../shared/utils/member-utils/mem
 export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
   @Input() projectID: string;
-  @Input() datacenter: Datacenter;
+  @Input() seed: string;
   @Input() sshKeys: SSHKey[] = [];
 
   keys: SSHKey[] = [];
@@ -88,7 +87,7 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
 
   addClusterSSHKeys(): void {
     this._clusterService
-      .createSSHKey(this.projectID, this.cluster.id, this.datacenter.metadata.name, this.keysForm.controls.keys.value)
+      .createSSHKey(this.projectID, this.cluster.id, this.seed, this.keysForm.controls.keys.value)
       .subscribe(res => {
         this._notificationService.success(
           `The <strong>${this.keysForm.controls.keys.value}</strong> SSH key was added to the <strong>${this.cluster.name}</strong> cluster`

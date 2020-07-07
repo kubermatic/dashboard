@@ -109,10 +109,10 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
                   .getDatacenter(cluster.spec.cloud.dc)
                   .pipe(tap(datacenter => (this.nodeDC[cluster.id] = datacenter)))
                   .pipe(switchMap(datacenter => this._datacenterService.getDatacenter(datacenter.spec.seed)))
-                  .pipe(tap(seedDatacenter => (this.seedDC[cluster.id] = seedDatacenter)))
+                  .pipe(tap(seed => (this.seedDC[cluster.id] = seed)))
                   .pipe(
-                    switchMap(seedDatacenter =>
-                      this._clusterService.health(this._selectedProject.id, cluster.id, seedDatacenter.metadata.name)
+                    switchMap(seed =>
+                      this._clusterService.health(this._selectedProject.id, cluster.id, seed.metadata.name)
                     )
                   )
                   // We need to resume on error, otherwise subscription will be canceled and clusters will stop
@@ -179,7 +179,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     event.stopPropagation();
     const modal = this._matDialog.open(ClusterDeleteConfirmationComponent);
     modal.componentInstance.cluster = cluster;
-    modal.componentInstance.datacenter = this.seedDC[cluster.id];
+    modal.componentInstance.seed = this.seedDC[cluster.id];
     modal.componentInstance.projectID = this._selectedProject.id;
   }
 

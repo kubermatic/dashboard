@@ -23,7 +23,6 @@ import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '../../../shared/entity/cluster';
 import {View} from '../../../shared/entity/common';
-import {Datacenter} from '../../../shared/entity/datacenter';
 import {Member} from '../../../shared/entity/member';
 import {SSHKey} from '../../../shared/entity/ssh-key';
 import {GroupConfig} from '../../../shared/model/Config';
@@ -38,7 +37,7 @@ import {AddClusterSSHKeysComponent} from './add-cluster-sshkeys/add-cluster-sshk
 })
 export class EditSSHKeysComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() datacenter: Datacenter;
+  @Input() seed: string;
   @Input() projectID: string;
 
   loading = true;
@@ -74,9 +73,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     merge(timer(0, 5 * this._appConfig.getRefreshTimeBase()), this._sshKeysUpdate)
       .pipe(
         switchMap(() =>
-          this.projectID
-            ? this._clusterService.sshKeys(this.projectID, this.cluster.id, this.datacenter.metadata.name)
-            : EMPTY
+          this.projectID ? this._clusterService.sshKeys(this.projectID, this.cluster.id, this.seed) : EMPTY
         )
       )
       .pipe(takeUntil(this._unsubscribe))
@@ -108,7 +105,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     const dialogRef = this._dialog.open(AddClusterSSHKeysComponent);
     dialogRef.componentInstance.projectID = this.projectID;
     dialogRef.componentInstance.cluster = this.cluster;
-    dialogRef.componentInstance.datacenter = this.datacenter;
+    dialogRef.componentInstance.seed = this.seed;
     dialogRef.componentInstance.sshKeys = this.sshKeys;
 
     dialogRef
@@ -144,11 +141,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     dialogRef
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(
-        switchMap(_ =>
-          this._clusterService.deleteSSHKey(this.projectID, this.cluster.id, this.datacenter.metadata.name, sshKey.id)
-        )
-      )
+      .pipe(switchMap(_ => this._clusterService.deleteSSHKey(this.projectID, this.cluster.id, this.seed, sshKey.id)))
       .pipe(first())
       .subscribe(() => {
         this._notificationService.success(

@@ -65,14 +65,14 @@ limitations under the License.
                         [cloudSpec]="cluster.spec.cloud"
                         [clusterId]="cluster.id"
                         [projectId]="projectId"
-                        [seedDCName]="seedDCName"
+                        [seed]="seed"
                         [nodeData]="nodeData"></km-alibaba-node-data>
 
   <km-aws-node-data *ngIf="cluster.spec.cloud.aws"
                     [cloudSpec]="cluster.spec.cloud"
                     [clusterId]="cluster.id"
                     [projectId]="projectId"
-                    [seedDCName]="seedDCName"
+                    [seed]="seed"
                     [nodeData]="nodeData"></km-aws-node-data>
 
 
@@ -81,28 +81,28 @@ limitations under the License.
                              [nodeData]="nodeData"
                              [projectId]="projectId"
                              [clusterId]="cluster.id"
-                             [seedDCName]="seedDCName"></km-digitalocean-node-data>
+                             [seed]="seed"></km-digitalocean-node-data>
 
   <km-openstack-node-data *ngIf="cluster.spec.cloud.openstack"
                           [cloudSpec]="cluster.spec.cloud"
                           [nodeData]="nodeData"
                           [projectId]="projectId"
                           [clusterId]="cluster.id"
-                          [seedDCName]="seedDCName"></km-openstack-node-data>
+                          [seed]="seed"></km-openstack-node-data>
 
   <km-packet-node-data *ngIf="cluster.spec.cloud.packet"
                        [cloudSpec]="cluster.spec.cloud"
                        [projectId]="projectId"
                        [clusterId]="cluster.id"
                        [nodeData]="nodeData"
-                       [seedDCName]="seedDCName"></km-packet-node-data>
+                       [seed]="seed"></km-packet-node-data>
 
   <km-hetzner-node-data *ngIf="cluster.spec.cloud.hetzner"
                         [cloudSpec]="cluster.spec.cloud"
                         [nodeData]="nodeData"
                         [projectId]="projectId"
                         [clusterId]="cluster.id"
-                        [seedDCName]="seedDCName"></km-hetzner-node-data>
+                        [seed]="seed"></km-hetzner-node-data>
 
   <km-vsphere-node-data *ngIf="cluster.spec.cloud.vsphere"
                         [cloudSpec]="cluster.spec.cloud"
@@ -119,13 +119,13 @@ limitations under the License.
                       [nodeData]="nodeData"
                       [projectId]="projectId"
                       [clusterId]="cluster.id"
-                      [seedDCName]="seedDCName"></km-azure-node-data>
+                      [seed]="seed"></km-azure-node-data>
 
   <km-gcp-node-data *ngIf="cluster.spec.cloud.gcp"
                     [cloudSpec]="cluster.spec.cloud"
                     [clusterId]="cluster.id"
                     [projectId]="projectId"
-                    [seedDCName]="seedDCName"
+                    [seed]="seed"
                     [nodeData]="nodeData"></km-gcp-node-data>
 
   <mat-button-toggle-group group="operatingSystemGroup"

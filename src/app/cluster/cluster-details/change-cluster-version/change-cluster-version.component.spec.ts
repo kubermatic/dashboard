@@ -20,7 +20,7 @@ import {ClusterService, NotificationService, ProjectService} from '../../../core
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
+import {fakeSeedDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {RouterStub} from '../../../testing/router-stubs';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
@@ -72,7 +72,7 @@ describe('ChangeClusterVersionComponent', () => {
     component.selectedVersion = 'new version';
     // copy object here since this test modifies the global fake cluster object which impacts other tests otherwise
     component.cluster = JSON.parse(JSON.stringify(fakeDigitaloceanCluster()));
-    component.datacenter = fakeDigitaloceanDatacenter();
+    component.seed = fakeSeedDatacenter();
     component.controlPlaneVersions = ['1.9.5'];
 
     fixture.detectChanges();
@@ -83,7 +83,7 @@ describe('ChangeClusterVersionComponent', () => {
 
   it('should call upgradeClusterMachineDeployments method', fakeAsync(() => {
     component.cluster = fakeDigitaloceanCluster();
-    component.datacenter = fakeDigitaloceanDatacenter();
+    component.seed = fakeSeedDatacenter();
     component.selectedVersion = 'new-version';
     component.project = fakeProject();
 

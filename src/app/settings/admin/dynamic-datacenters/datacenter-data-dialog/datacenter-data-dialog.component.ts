@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {dump, load} from 'js-yaml';
@@ -21,6 +21,9 @@ import {NodeProvider, NodeProviderConstants} from '../../../../shared/model/Node
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {ThemeInformerService} from '../../../../core/services/theme-informer/theme-informer.service';
+import {takeUntil} from 'rxjs/operators';
+import {DatacenterService} from '../../../../core/services';
+import {Subject} from 'rxjs';
 
 export interface DatacenterDataDialogConfig {
   title: string;
@@ -47,11 +50,12 @@ export enum Controls {
   templateUrl: './datacenter-data-dialog.component.html',
   styleUrls: ['./datacenter-data-dialog.component.scss'],
 })
-export class DatacenterDataDialogComponent implements OnInit {
+export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
   readonly controls = Controls;
   readonly separatorKeyCodes: number[] = [ENTER, COMMA];
   readonly countryCodes: string[] = countryCodeLookup.countries.map(country => country.iso2);
   readonly providers: NodeProvider[] = Object.values(NodeProvider).filter(provider => !!provider);
+  seeds: string[] = [];
   form: FormGroup;
   requiredEmailDomains: string[] = [];
   providerConfig = '';
@@ -68,15 +72,19 @@ export class DatacenterDataDialogComponent implements OnInit {
     },
     scrollBeyondLastLine: false,
   };
+  private _unsubscribe = new Subject<void>();
 
   constructor(
     public _matDialogRef: MatDialogRef<DatacenterDataDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DatacenterDataDialogConfig,
+    private readonly _datacenterService: DatacenterService,
     private readonly _themeInformerService: ThemeInformerService
   ) {}
 
   ngOnInit(): void {
     this.editorOptions.theme = this._themeInformerService.isCurrentThemeDark ? 'vs-dark' : 'vs';
+
+    this._datacenterService.seeds.pipe(takeUntil(this._unsubscribe)).subscribe(seeds => (this.seeds = seeds));
 
     this.form = new FormGroup({
       name: new FormControl(this.data.isEditing ? this.data.datacenter.metadata.name : '', [Validators.required]),
@@ -99,6 +107,11 @@ export class DatacenterDataDialogComponent implements OnInit {
 
     this._initRequiredEmailDomainsInput();
     this._initProviderConfigEditor();
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   private _initRequiredEmailDomainsInput(): void {

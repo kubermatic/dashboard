@@ -19,7 +19,6 @@ import * as _ from 'lodash';
 
 import {NotificationService, RBACService} from '../../../../core/services';
 import {Cluster} from '../../../../shared/entity/cluster';
-import {Datacenter} from '../../../../shared/entity/datacenter';
 import {ClusterRoleName, CreateBinding, RoleName} from '../../../../shared/entity/rbac';
 
 export enum Controls {
@@ -36,7 +35,7 @@ export enum Controls {
 })
 export class AddBindingComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() datacenter: Datacenter;
+  @Input() seed: string;
   @Input() projectID: string;
   readonly controls = Controls;
   form: FormGroup;
@@ -62,7 +61,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     });
 
     this._rbacService
-      .getClusterRoleNames(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+      .getClusterRoleNames(this.cluster.id, this.seed, this.projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((clusterRoles: ClusterRoleName[]) => {
         if (!_.isEmpty(clusterRoles)) {
@@ -75,7 +74,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       });
 
     this._rbacService
-      .getRoleNames(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+      .getRoleNames(this.cluster.id, this.seed, this.projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((roles: RoleName[]) => {
         if (roles.length > 0) {
@@ -195,13 +194,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     }
 
     this._rbacService
-      .createClusterBinding(
-        this.cluster.id,
-        this.datacenter.metadata.name,
-        this.projectID,
-        this.form.controls.role.value,
-        clusterBinding
-      )
+      .createClusterBinding(this.cluster.id, this.seed, this.projectID, this.form.controls.role.value, clusterBinding)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(binding => {
         this._matDialogRef.close(binding);
@@ -224,7 +217,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     this._rbacService
       .createBinding(
         this.cluster.id,
-        this.datacenter.metadata.name,
+        this.seed,
         this.projectID,
         this.form.controls.role.value,
         this.form.controls.namespace.value,
