@@ -259,9 +259,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   addNode(): void {
     this._node
-      .showMachineDeploymentCreateDialog(this.nodes.length, this.cluster, this.projectID, this.seed)
+      .showMachineDeploymentCreateDialog(this.cluster, this.projectID, this.seed)
       .pipe(take(1))
-      .subscribe(_ => this._clusterService.onClusterUpdate.next(),
+      .subscribe(
+        _ => this._clusterService.onClusterUpdate.next(),
         _ => this._notificationService.error('There was an error during node deployment creation.')
       );
   }

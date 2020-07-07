@@ -80,11 +80,7 @@ export class NodeService {
     );
   }
 
-  showMachineDeploymentCreateDialog(
-    cluster: Cluster,
-    projectID: string,
-    seedDCName: string,
-  ): Observable<MachineDeployment> {
+  showMachineDeploymentCreateDialog(cluster: Cluster, projectID: string, seed: string): Observable<MachineDeployment> {
     const dialogRef = this._matDialog.open<NodeDataDialogComponent, DialogDataInput, DialogDataOutput>(
       NodeDataDialogComponent,
       {
@@ -97,7 +93,7 @@ export class NodeService {
     return dialogRef
       .afterClosed()
       .pipe(filter(data => !!data))
-      .pipe(switchMap(data => this.createMachineDeployment(data.nodeData, projectID, seedDCName, cluster.id)));
+      .pipe(switchMap(data => this.createMachineDeployment(data.nodeData, projectID, seed, cluster.id)));
   }
 
   showMachineDeploymentEditDialog(
@@ -107,18 +103,17 @@ export class NodeService {
     seed: string
   ): Observable<MachineDeployment> {
     const dialogRef = this._matDialog.open(NodeDataDialogComponent, {
-        data: {
-          existingNodesCount: md.spec.replicas,
-          initialClusterData: cluster,
-          initialNodeData: {
-            count: md.spec.replicas,
-            name: md.name,
-            spec: _.cloneDeep(md.spec.template),
-            dynamicConfig: md.spec.dynamicConfig,
-          } as NodeData,
-        },
+      data: {
+        existingNodesCount: md.spec.replicas,
+        initialClusterData: cluster,
+        initialNodeData: {
+          count: md.spec.replicas,
+          name: md.name,
+          spec: _.cloneDeep(md.spec.template),
+          dynamicConfig: md.spec.dynamicConfig,
+        } as NodeData,
       },
-    );
+    });
 
     return dialogRef
       .afterClosed()
@@ -128,7 +123,7 @@ export class NodeService {
           this._apiService.patchMachineDeployment(NodeService._createPatch(data), md.id, cluster.id, seed, projectID)
         )
       );
-  };
+  }
 
   showMachineDeploymentDeleteDialog(
     md: MachineDeployment,
