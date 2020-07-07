@@ -168,6 +168,26 @@ limitations under the License.
                       (change)="onSettingsChange()"></mat-checkbox>
         <km-settings-status [isSaved]="isEqual(settings.enableOIDCKubeconfig, apiSettings.enableOIDCKubeconfig)"></km-settings-status>
       </div>
+
+      <div fxLayout="row">
+        <div fxFlex="16%"
+             fxLayoutAlign=" center"
+             class="entry-label">
+          <span>User Projects Limit</span>
+          <div class="km-icon-info"
+               matTooltip="Set limit to zero to allow unlimited project creation for users."></div>
+        </div>
+        <mat-form-field class="km-admin-settings-field-md km-no-padding">
+          <mat-label>User Projects Limit</mat-label>
+          <input matInput
+                 type="number"
+                 min="0"
+                 autocomplete="off"
+                 [(ngModel)]="settings.userProjectsLimit"
+                 (change)="onSettingsChange()">
+        </mat-form-field>
+        <km-settings-status [isSaved]="isEqual(settings.userProjectsLimit, apiSettings.userProjectsLimit)"></km-settings-status>
+      </div>
     </div>
   </mat-card-content>
 </mat-card>

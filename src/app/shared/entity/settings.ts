@@ -30,6 +30,7 @@ export class AdminSettings {
   displayTermsOfService: boolean;
   enableDashboard: boolean;
   enableOIDCKubeconfig: boolean;
+  userProjectsLimit: number;
 }
 
 export class CleanupOptions {
@@ -119,6 +120,7 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
     Enabled: false,
   },
   clusterTypeOptions: ClusterTypeOptions.All,
+  userProjectsLimit: 0,
   customLinks: [],
   defaultNodeCount: 1,
   displayAPIDocs: true,
