@@ -18,7 +18,6 @@ import {Subject} from 'rxjs';
 
 import {CoreModule} from '../../../core/core.module';
 import {ApiService, ClusterService} from '../../../core/services';
-import {ProviderSettingsPatch} from '../../../core/services/cluster/cluster.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {doPatchCloudSpecFake} from '../../../testing/fake-data/cloud-spec.fake';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
@@ -39,6 +38,7 @@ import {PacketProviderSettingsComponent} from '../edit-provider-settings/packet-
 import {VSphereProviderSettingsComponent} from '../edit-provider-settings/vsphere-provider-settings/vsphere-provider-settings.component';
 
 import {EditClusterComponent} from './edit-cluster.component';
+import {ProviderSettingsPatch} from '../../../shared/entity/cluster';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 

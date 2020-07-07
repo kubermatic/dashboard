@@ -13,25 +13,20 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {merge, Observable, of, timer} from 'rxjs';
 import {catchError, shareReplay, switchMapTo} from 'rxjs/operators';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
 import {TaintFormComponent} from '../../../shared/components/taint-form/taint-form.component';
 import {Addon} from '../../../shared/entity/addon';
-import {CloudSpecPatch, Cluster, ClusterPatch, Finalizer, MasterVersion} from '../../../shared/entity/cluster';
+import {Cluster, ClusterPatch, Finalizer, MasterVersion, ProviderSettingsPatch} from '../../../shared/entity/cluster';
 import {Event} from '../../../shared/entity/event';
 import {Health} from '../../../shared/entity/health';
 import {ClusterMetrics} from '../../../shared/entity/metrics';
 import {Node} from '../../../shared/entity/node';
 import {SSHKey} from '../../../shared/entity/ssh-key';
 import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
-
-export class ProviderSettingsPatch {
-  cloudSpecPatch: CloudSpecPatch;
-  isValid: boolean;
-}
 
 @Injectable()
 export class ClusterService {

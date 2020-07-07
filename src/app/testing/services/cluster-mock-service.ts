@@ -13,9 +13,8 @@ import {Injectable} from '@angular/core';
 import {defer, Observable, of, Subject} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
 
-import {ProviderSettingsPatch} from '../../core/services/cluster/cluster.service';
 import {Addon} from '../../shared/entity/addon';
-import {Cluster, ClusterPatch, MasterVersion} from '../../shared/entity/cluster';
+import {Cluster, ClusterPatch, MasterVersion, ProviderSettingsPatch} from '../../shared/entity/cluster';
 import {Event} from '../../shared/entity/event';
 import {Health} from '../../shared/entity/health';
 import {ClusterMetrics} from '../../shared/entity/metrics';

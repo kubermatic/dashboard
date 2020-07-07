@@ -239,6 +239,13 @@
   cursor: pointer;
 }
 
+.km-icon-circle {
+  @include km-image-mask(1.75 * $baseline-grid);
+
+  mask-image: url("/assets/images/icons/circle.svg");
+  cursor: pointer;
+}
+
 .km-icon-add {
   @include km-image-mask(2.25 * $baseline-grid);
 
@@ -260,6 +267,13 @@
   margin-right: $baseline-grid;
   mask-image: url("/assets/images/icons/warning.svg");
   background-color: #eb5757;
+}
+
+.km-icon-pending {
+  @include km-image-mask(2 * $baseline-grid);
+
+  margin-right: $baseline-grid;
+  mask-image: url("/assets/images/icons/spinner.svg");
 }
 
 .km-icon-disabled {
