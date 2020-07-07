@@ -28,7 +28,7 @@ export class NodeMockService {
 
   getHealthStatus(md: MachineDeployment): object {
     return {
-      color: 'fa fa-circle orange',
+      color: 'km-icon-mask km-icon-circle km-warning-bg',
       status: 'In progress',
       class: 'km-status-waiting',
     };
