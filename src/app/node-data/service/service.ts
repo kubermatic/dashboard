@@ -138,7 +138,14 @@ export class NodeDataService {
     this._projectService,
     this._datacenterService
   );
-  readonly packet = new NodeDataPacketProvider(this, this._clusterService, this._presetService);
+  readonly packet = new NodeDataPacketProvider(
+    this,
+    this._clusterService,
+    this._presetService,
+    this._apiService,
+    this._projectService,
+    this._datacenterService
+  );
   readonly gcp = new NodeDataGCPProvider(
     this,
     this._clusterService,

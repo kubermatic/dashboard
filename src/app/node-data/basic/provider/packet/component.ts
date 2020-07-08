@@ -20,7 +20,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {first, takeUntil} from 'rxjs/operators';
 import {NodeCloudSpec, NodeSpec, PacketNodeSpec} from '../../../../shared/entity/node';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
@@ -117,7 +117,9 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
   }
 
   private get _sizesObservable(): Observable<PacketSize[]> {
-    return this._nodeDataService.packet.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
+    return this._nodeDataService.packet
+      .flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this))
+      .pipe(first());
   }
 
   private _onSizeLoading(): void {
@@ -135,10 +137,13 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
 
   private _setDefaultSize(sizes: PacketSize[]): void {
     this.sizes = sizes.filter(size => size.memory !== 'N/A');
-    if (this.sizes && this.sizes.length > 0) {
+    this.selectedSize = this._nodeDataService.nodeData.spec.cloud.packet.instanceType;
+
+    if (!this.selectedSize && this.sizes && this.sizes.length > 0) {
       this.selectedSize = this.sizes[0].name;
-      this.sizeLabel = SizeState.Ready;
-      this._cdr.detectChanges();
     }
+
+    this.sizeLabel = this.selectedSize ? SizeState.Ready : SizeState.Empty;
+    this._cdr.detectChanges();
   }
 }
