@@ -69,6 +69,7 @@ export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements
       ]),
     });
 
+    this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
     merge(
@@ -91,6 +92,19 @@ export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  private _init(): void {
+    if (this._nodeDataService.nodeData.spec.cloud.kubevirt) {
+      this.form.get(Controls.Namespace).setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.namespace);
+      this.form.get(Controls.PVCSize).setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.pvcSize);
+      this.form
+        .get(Controls.StorageClassName)
+        .setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.storageClassName);
+      this.form.get(Controls.SourceURL).setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.sourceURL);
+      this.form.get(Controls.Memory).setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.memory);
+      this.form.get(Controls.CPUs).setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.cpus);
+    }
   }
 
   private _getNodeData(): NodeData {
