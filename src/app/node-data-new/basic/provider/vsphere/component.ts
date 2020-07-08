@@ -49,9 +49,10 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.CPU]: this._builder.control(2, [Validators.required, Validators.min(1)]),
-      [Controls.Memory]: this._builder.control(512, [Validators.required, Validators.min(512)]),
+      [Controls.Memory]: this._builder.control(4096, [Validators.required, Validators.min(512)]),
     });
 
+    this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
     merge(this.form.get(Controls.Memory).valueChanges, this.form.get(Controls.CPU).valueChanges)
@@ -62,6 +63,13 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  private _init(): void {
+    if (this._nodeDataService.nodeData.spec.cloud.vsphere) {
+      this.form.get(Controls.CPU).setValue(this._nodeDataService.nodeData.spec.cloud.vsphere.cpus);
+      this.form.get(Controls.Memory).setValue(this._nodeDataService.nodeData.spec.cloud.vsphere.memory);
+    }
   }
 
   private _getNodeData(): NodeData {

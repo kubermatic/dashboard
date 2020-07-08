@@ -11,17 +11,17 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {merge} from 'rxjs';
+import {merge, of} from 'rxjs';
 import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../../../../core/services';
+import {ClusterType} from '../../../../shared/entity/cluster';
 import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/datacenter';
 import {NodeCloudSpec, NodeSpec, VSphereNodeSpec} from '../../../../shared/entity/node';
 import {OperatingSystem} from '../../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
-import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../shared/services/cluster.service';
+import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
-import {ClusterType} from '../../../../shared/entity/cluster';
 
 enum Controls {
   DiskSizeGB = 'diskSizeGB',
@@ -65,13 +65,15 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator implemen
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.DiskSizeGB]: this._builder.control(1),
+      [Controls.DiskSizeGB]: this._builder.control(10),
       [Controls.Template]: this._builder.control(''),
     });
 
+    this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this._clusterService.datacenterChanges
+    merge<string>(this._clusterService.datacenterChanges, of(this._clusterService.datacenter))
+      .pipe(filter(dc => !!dc))
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
       .pipe(tap(dc => (this._templates = dc.spec.vsphere.templates)))
       .pipe(takeUntil(this._unsubscribe))
@@ -99,6 +101,15 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator implemen
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  private _init(): void {
+    if (this._nodeDataService.nodeData.spec.cloud.vsphere) {
+      const diskSizeGB = this._nodeDataService.isInDialogEditMode()
+        ? this._nodeDataService.nodeData.spec.cloud.vsphere.diskSizeGB
+        : this.form.get(Controls.DiskSizeGB).value;
+      this.form.get(Controls.DiskSizeGB).setValue(diskSizeGB);
+    }
   }
 
   private _isOpenshiftCluster(): boolean {
