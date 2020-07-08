@@ -12,7 +12,6 @@
 import {NgModule} from '@angular/core';
 import {PreloadingStrategy, Route, RouterModule, Routes} from '@angular/router';
 import {Observable, of} from 'rxjs';
-import {environment} from '../environments/environment';
 import {DashboardComponent} from './dashboard/dashboard.component';
 
 class SelectedPreloadingStrategy implements PreloadingStrategy {
@@ -33,7 +32,7 @@ function createRouting(): Routes {
         },
         {
           path: 'projects/:projectID/wizard',
-          loadChildren: () => import('./wizard/wizard.module').then(m => m.WizardModule),
+          loadChildren: () => import('./wizard/module').then(m => m.WizardModule),
         },
         {
           path: 'projects/:projectID/sshkeys',
@@ -75,18 +74,6 @@ function createRouting(): Routes {
       redirectTo: '404',
     },
   ];
-
-  // Add new wizard routing only to dev builds
-  // TODO: Remove once it replaces the old wizard
-  if (!environment.production) {
-    routes[0].children = [
-      {
-        path: 'projects/:projectID/wizard-new',
-        loadChildren: () => import('./wizard-new/module').then(m => m.WizardModule),
-      },
-      ...routes[0].children,
-    ];
-  }
 
   return routes;
 }

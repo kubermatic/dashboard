@@ -16,7 +16,7 @@ import {Observable, of} from 'rxjs';
 import {catchError, filter, first, flatMap, switchMap} from 'rxjs/operators';
 
 import {ApiService, NotificationService} from '../../core/services';
-import {DialogDataInput, DialogDataOutput, NodeDataDialogComponent} from '../../node-data-new/dialog/component';
+import {DialogDataInput, DialogDataOutput, NodeDataDialogComponent} from '../../node-data/dialog/component';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '../../shared/entity/cluster';
 import {MachineDeployment, MachineDeploymentPatch} from '../../shared/entity/machine-deployment';

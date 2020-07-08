@@ -12,8 +12,8 @@
 import {NgModule} from '@angular/core';
 
 import {MachineNetworksModule} from '../machine-networks/machine-networks.module';
-import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../node-data-new/config';
-import {NodeDataModule} from '../node-data-new/module';
+import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../node-data/config';
+import {NodeDataModule} from '../node-data/module';
 import {SharedModule} from '../shared/shared.module';
 
 import {AddMachineNetworkComponent} from './cluster-details/add-machine-network/add-machine-network.component';

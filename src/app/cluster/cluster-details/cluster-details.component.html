@@ -112,10 +112,10 @@ limitations under the License.
           <div key>Cluster ID</div>
           <div value
                ngxClipboard
-               [cbContent]="cluster.id"
+               [cbContent]="cluster?.id"
                matTooltip="Click to copy"
                class="km-copy">
-            {{cluster.id}}
+            {{cluster?.id}}
           </div>
         </km-property>
 

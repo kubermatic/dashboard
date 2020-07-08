@@ -11,61 +11,50 @@
 
 import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {RouterTestingModule} from '@angular/router/testing';
-import {DatacenterService, PresetsService} from '../../../core/services';
+import {Auth, DatacenterService, PresetsService} from '../../../core/services';
 import {NODE_DATA_CONFIG, NodeDataMode} from '../../../node-data/config';
 import {NodeDataService} from '../../../node-data/service/service';
+import {SharedModule} from '../../../shared/shared.module';
 import {ClusterService} from '../../../shared/services/cluster.service';
-import {WizardService} from '../../../wizard/service/wizard';
-import {SharedModule} from '../../shared.module';
-import {MachineNetworkComponent} from './component';
-import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
+import {WizardService} from '../../service/wizard';
+import {MachineNetworkStepComponent} from './component';
+import {AppConfigService} from '../../../app-config.service';
+import {AuthMockService} from '../../../testing/services/auth-mock.service';
 
-const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule];
 
-describe('MachineNetworksComponent', () => {
-  let component: MachineNetworkComponent;
-  let fixture: ComponentFixture<MachineNetworkComponent>;
+describe('MachineNetworkStepComponent', () => {
+  let fixture: ComponentFixture<MachineNetworkStepComponent>;
+  let component: MachineNetworkStepComponent;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [...modules],
+      declarations: [MachineNetworkStepComponent],
       providers: [
         WizardService,
+        ClusterService,
         NodeDataService,
         ClusterService,
         {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
         PresetsService,
-        {provide: DatacenterService, useClass: DatacenterMockService},
+        DatacenterService,
+        {provide: Auth, useClass: AuthMockService},
+        AppConfigService,
       ],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MachineNetworkComponent);
+    fixture = TestBed.createComponent(MachineNetworkStepComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create the machine network component', () => {
+  it('should create the Machine Network Step cmp', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('expecting form to be valid', () => {
-    const machineNetworks = component._networkArray;
-    expect(machineNetworks.valid).toBeTruthy();
-  });
-
-  it('expecting form to be invalid', () => {
-    component.add();
-    const machineNetworks = component._networkArray;
-    machineNetworks.controls[0].setValue({
-      cidr: '192.182.0.0',
-      dnsServers: ['8.8.8.8'],
-      gateway: '192.180.0.2',
-    });
-    expect(machineNetworks.controls[0].valid).toBeFalsy();
   });
 });

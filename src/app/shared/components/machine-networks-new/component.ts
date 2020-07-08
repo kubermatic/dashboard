@@ -12,7 +12,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {debounceTime, takeUntil} from 'rxjs/operators';
-import {NodeDataService} from '../../../node-data-new/service/service';
+import {NodeDataService} from '../../../node-data/service/service';
 import {MachineNetwork} from '../../entity/cluster';
 import {ClusterService} from '../../../shared/services/cluster.service';
 import {BaseFormValidator} from '../../validators/base-form.validator';
