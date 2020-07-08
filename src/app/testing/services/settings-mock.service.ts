@@ -32,6 +32,7 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
   displayTermsOfService: false,
   enableDashboard: true,
   enableOIDCKubeconfig: false,
+  userProjectsLimit: 0,
 };
 
 @Injectable()
