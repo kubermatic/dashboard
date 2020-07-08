@@ -184,7 +184,6 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
         enforcePodSecurityPolicy: this.form.get(Controls.EnforcePodSecurityPolicy).value,
         enforceAuditLogging: this.form.get(Controls.EnforceAuditLogging).value,
       },
-      seed: false,
     };
 
     datacenter.spec[datacenter.spec.provider] = this._getProviderConfig();

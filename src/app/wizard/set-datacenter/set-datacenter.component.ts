@@ -41,9 +41,6 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
     this._dcService.datacenters.pipe(takeUntil(this._unsubscribe)).subscribe(datacenters => {
       const providerDatacenters: Datacenter[] = [];
       for (const datacenter of datacenters) {
-        if (datacenter.seed) {
-          continue;
-        }
         const provider = getDatacenterProvider(datacenter);
         const clusterProvider = getClusterProvider(this.cluster);
         if (provider === clusterProvider) {
