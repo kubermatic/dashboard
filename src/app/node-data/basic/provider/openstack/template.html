@@ -57,6 +57,7 @@ limitations under the License.
   <km-combobox #availabilityZoneCombobox
                [required]="false"
                [grouped]="false"
+               [selected]="selectedAvailabilityZone"
                [options]="availabilityZones"
                [formControlName]="Controls.AvailabilityZone"
                (changed)="onAvailabilityZoneChange($event)"
