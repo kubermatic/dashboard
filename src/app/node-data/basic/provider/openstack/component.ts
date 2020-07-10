@@ -125,7 +125,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.Flavor]: this._builder.control('', Validators.required),
-      [Controls.UseFloatingIP]: this._builder.control(''),
+      [Controls.UseFloatingIP]: this._builder.control(false),
       [Controls.DiskSize]: this._builder.control(null),
       [Controls.CustomDiskSize]: this._builder.control(''),
       [Controls.Image]: this._builder.control('', Validators.required),

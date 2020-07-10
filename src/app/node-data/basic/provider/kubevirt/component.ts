@@ -55,7 +55,7 @@ export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.CPUs]: this._builder.control(1, Validators.required),
+      [Controls.CPUs]: this._builder.control('1', Validators.required),
       [Controls.Memory]: this._builder.control('2Gi', [
         Validators.required,
         Validators.pattern(this._sizeSuffixPattern),
