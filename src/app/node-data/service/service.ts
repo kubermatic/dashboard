@@ -33,9 +33,9 @@ import {NodeDataPacketProvider} from './provider/packet';
 export class NodeDataService {
   private readonly _config: NodeDataConfig;
   private _nodeData: NodeData = NodeData.NewEmptyNodeData();
+  private _operatingSystemChanges = new ReplaySubject<OperatingSystem>();
 
   readonly nodeDataChanges = new ReplaySubject<NodeData>();
-  readonly operatingSystemChanges = new ReplaySubject<OperatingSystem>();
 
   constructor(
     @Inject(NODE_DATA_CONFIG) config: NodeDataConfig,
@@ -59,6 +59,10 @@ export class NodeDataService {
 
   get mode(): NodeDataMode {
     return this._config.mode;
+  }
+
+  get operatingSystemChanges(): ReplaySubject<OperatingSystem> {
+    return this._operatingSystemChanges;
   }
 
   set operatingSystemSpec(spec: OperatingSystemSpec) {
@@ -96,6 +100,7 @@ export class NodeDataService {
 
   reset(): void {
     this._nodeData = NodeData.NewEmptyNodeData();
+    this._operatingSystemChanges = new ReplaySubject<OperatingSystem>();
   }
 
   readonly alibaba = new NodeDataAlibabaProvider(
@@ -158,6 +163,8 @@ export class NodeDataService {
     this,
     this._clusterService,
     this._presetService,
+    this._apiService,
+    this._projectService,
     this._datacenterService
   );
 }

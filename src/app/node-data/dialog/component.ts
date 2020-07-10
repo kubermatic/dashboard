@@ -14,7 +14,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import * as _ from 'lodash';
 import {merge} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 import {Cluster} from '../../shared/entity/cluster';
 import {getEmptyNodeProviderSpec} from '../../shared/entity/node';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
@@ -93,6 +93,8 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
   }
 
   ngOnInit() {
+    this._nodeDataService.reset();
+
     this.form = this._builder.group({
       [Controls.NodeData]: this._builder.control(''),
     });
@@ -111,10 +113,6 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
   ngOnDestroy() {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-    this._dialogRef
-      .afterClosed()
-      .pipe(first())
-      .subscribe(_ => this._nodeDataService.reset());
   }
 
   hasExtendedOptions(): boolean {
@@ -129,7 +127,6 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
 
   onConfirm(): void {
     this._dialogRef.close(this._output);
-    this._nodeDataService.reset();
   }
 
   private _initNodeData(): NodeData {

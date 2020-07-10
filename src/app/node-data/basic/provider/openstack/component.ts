@@ -20,21 +20,21 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {merge, Observable} from 'rxjs';
-import {delay, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import * as _ from 'lodash';
+import {merge, Observable, of} from 'rxjs';
+import {filter, first, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
 import {ClusterType} from '../../../../shared/entity/cluster';
-import * as _ from 'lodash';
 
 import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/datacenter';
 import {NodeCloudSpec, NodeSpec, OpenstackNodeSpec} from '../../../../shared/entity/node';
+import {OpenstackAvailabilityZone, OpenstackFlavor} from '../../../../shared/entity/provider/openstack';
 import {OperatingSystem} from '../../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
-import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../shared/services/cluster.service';
+import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
-import {OpenstackFlavor, OpenstackAvailabilityZone} from '../../../../shared/entity/provider/openstack';
 
 enum Controls {
   Flavor = 'flavor',
@@ -91,7 +91,26 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   selectedFlavor = '';
   flavorsLabel = FlavorState.Empty;
   availabilityZones: OpenstackAvailabilityZone[] = [];
+  selectedAvailabilityZone = '';
   availabilityZonesLabel = AvailabilityZoneState.Empty;
+
+  private get _availabilityZonesObservable(): Observable<OpenstackAvailabilityZone[]> {
+    return this._nodeDataService.openstack
+      .availabilityZones(this._clearAvailabilityZone.bind(this), this._onAvailabilityZoneLoading.bind(this))
+      .pipe(
+        map((availabilityZones: OpenstackAvailabilityZone[]) =>
+          availabilityZones.sort((a, b) => (a.name < b.name ? -1 : 1))
+        )
+      )
+      .pipe(first());
+  }
+
+  private get _flavorsObservable(): Observable<OpenstackFlavor[]> {
+    return this._nodeDataService.openstack
+      .flavors(this._clearFlavor.bind(this), this._onFlavorLoading.bind(this))
+      .pipe(map((flavors: OpenstackFlavor[]) => flavors.sort((a, b) => (a.memory < b.memory ? -1 : 1))))
+      .pipe(first());
+  }
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -107,7 +126,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     this.form = this._builder.group({
       [Controls.Flavor]: this._builder.control('', Validators.required),
       [Controls.UseFloatingIP]: this._builder.control(''),
-      [Controls.DiskSize]: this._builder.control(''),
+      [Controls.DiskSize]: this._builder.control(null),
       [Controls.CustomDiskSize]: this._builder.control(''),
       [Controls.Image]: this._builder.control('', Validators.required),
       [Controls.AvailabilityZone]: this._builder.control(''),
@@ -115,7 +134,18 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this._clusterService.datacenterChanges
+    merge(
+      this.form.get(Controls.DiskSize).valueChanges,
+      this.form.get(Controls.Image).valueChanges,
+      this.form.get(Controls.UseFloatingIP).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this._nodeDataService.nodeData = this._getNodeData();
+      });
+
+    merge<string>(this._clusterService.datacenterChanges, of(this._clusterService.datacenter))
+      .pipe(filter(dc => !!dc))
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
       .pipe(tap(dc => (this._images = dc.spec.openstack.images)))
       .pipe(takeUntil(this._unsubscribe))
@@ -124,7 +154,8 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
         this._enforceFloatingIP(dc.spec.openstack.enforce_floating_ip);
       });
 
-    this._clusterService.clusterTypeChanges
+    merge(this._clusterService.clusterTypeChanges, of(this._clusterService.clusterType))
+      .pipe(filter(clusterType => !!clusterType))
       .pipe(filter(_ => !!this._images))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
@@ -137,14 +168,6 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       .pipe(filter(_ => !!this._images))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultImage.bind(this));
-
-    merge(
-      this.form.get(Controls.DiskSize).valueChanges,
-      this.form.get(Controls.Image).valueChanges,
-      this.form.get(Controls.UseFloatingIP).valueChanges
-    )
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
 
   ngAfterViewInit() {
@@ -170,6 +193,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
   onAvailabilityZoneChange(availabilityZone: string): void {
     this._nodeDataService.nodeData.spec.cloud.openstack.availabilityZone = availabilityZone;
+    this._nodeDataService.nodeDataChanges.next();
   }
 
   flavorDisplayName(slug: string): string {
@@ -183,13 +207,6 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
   private _isOpenshiftCluster(): boolean {
     return this._clusterService.clusterType === ClusterType.OpenShift;
-  }
-
-  private get _flavorsObservable(): Observable<OpenstackFlavor[]> {
-    return this._nodeDataService.openstack
-      .flavors(this._clearFlavor.bind(this), this._onFlavorLoading.bind(this))
-      .pipe(delay(3000))
-      .pipe(map((flavors: OpenstackFlavor[]) => flavors.sort((a, b) => (a.memory < b.memory ? -1 : 1))));
   }
 
   private _clearFlavor(): void {
@@ -208,23 +225,14 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
   private _setDefaultFlavor(flavors: OpenstackFlavor[]): void {
     this.flavors = flavors;
-    this.flavorsLabel = this.flavors.length > 0 ? FlavorState.Ready : FlavorState.Empty;
-    if (!_.isEmpty(this.flavors)) {
+    this.selectedFlavor = this._nodeDataService.nodeData.spec.cloud.openstack.flavor;
+
+    if (!this.selectedFlavor && !_.isEmpty(this.flavors)) {
       this.selectedFlavor = this.flavors[0].slug;
     }
 
+    this.flavorsLabel = this.flavors.length > 0 ? FlavorState.Ready : FlavorState.Empty;
     this._cdr.detectChanges();
-  }
-
-  private get _availabilityZonesObservable(): Observable<OpenstackAvailabilityZone[]> {
-    return this._nodeDataService.openstack
-      .availabilityZones(this._clearAvailabilityZone.bind(this), this._onAvailabilityZoneLoading.bind(this))
-      .pipe(delay(3000))
-      .pipe(
-        map((availabilityZones: OpenstackAvailabilityZone[]) =>
-          availabilityZones.sort((a, b) => (a.name < b.name ? -1 : 1))
-        )
-      );
   }
 
   private _clearAvailabilityZone(): void {
@@ -242,6 +250,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
   private _setAvailabilityZone(availabilityZones: OpenstackAvailabilityZone[]): void {
     this.availabilityZones = availabilityZones;
+    this.selectedAvailabilityZone = this._nodeDataService.nodeData.spec.cloud.openstack.availabilityZone;
     this.availabilityZonesLabel =
       this.availabilityZones.length > 0 ? AvailabilityZoneState.Ready : AvailabilityZoneState.Empty;
     this._cdr.detectChanges();
@@ -272,6 +281,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     }
 
     this.form.get(Controls.Image).setValue(this._defaultImage);
+    this._cdr.detectChanges();
   }
 
   private _enforceFloatingIP(isEnforced: boolean): void {
@@ -287,22 +297,6 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     }
   }
 
-  private _getCurrentFlavor(): OpenstackFlavor {
-    for (const flavor of this.flavors) {
-      if (flavor.slug === this._nodeDataService.nodeData.spec.cloud.openstack.flavor) {
-        return flavor;
-      }
-    }
-  }
-
-  private _setDiskSize(): number {
-    return this._getCurrentFlavor() &&
-      this.form.get(Controls.DiskSize).value > 0 &&
-      this.form.get(Controls.DiskSize).value !== this._getCurrentFlavor().disk
-      ? this.form.get(Controls.DiskSize).value
-      : null;
-  }
-
   private _getNodeData(): NodeData {
     return {
       spec: {
@@ -310,7 +304,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
           openstack: {
             image: this.form.get(Controls.Image).value,
             useFloatingIP: this.form.get(Controls.UseFloatingIP).value,
-            diskSize: this._setDiskSize(),
+            diskSize: this.form.get(Controls.DiskSize).value,
           } as OpenstackNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,
