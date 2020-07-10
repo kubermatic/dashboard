@@ -20,7 +20,6 @@ import {catchError, distinctUntilChanged, first, switchMap, takeUntil, tap} from
 import * as _ from 'lodash';
 
 import {ApiService, ClusterService, DatacenterService, ProjectService, UserService} from '../../core/services';
-import {SettingsService} from '../../core/services/settings/settings.service';
 import {CloudSpec, Cluster} from '../../shared/entity/cluster';
 import {Datacenter} from '../../shared/entity/datacenter';
 import {View} from '../../shared/entity/common';
@@ -63,7 +62,6 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _datacenterService: DatacenterService,
     private readonly _activeRoute: ActivatedRoute,
     private readonly _matDialog: MatDialog,
-    private readonly _settingsService: SettingsService,
     private readonly _apiService: ApiService
   ) {}
 
@@ -75,9 +73,9 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
+    this._userService.currentUser.pipe(first()).subscribe(user => (this._user = user));
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
@@ -86,11 +84,11 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(
         switchMap(project => {
           this._selectedProject = project;
-          return this._userService.currentUserGroup(project.id);
+          return this._userService.getCurrentUserGroup(project.id);
         })
       )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     this._projectService.selectedProject
       // Do not allow project refresh to fire clusters refresh unless project has been changed.

@@ -19,7 +19,6 @@ import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
 import * as _ from 'lodash';
 
 import {ClusterService, NotificationService, UserService} from '../../../core/services';
-import {SettingsService} from '../../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '../../../shared/entity/cluster';
@@ -72,8 +71,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _clusterService: ClusterService,
     private readonly _userService: UserService,
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
-    private readonly _notificationService: NotificationService,
-    private readonly _settingsService: SettingsService
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -83,13 +81,13 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
+    this._userService.currentUser.pipe(first()).subscribe(user => (this._user = user));
 
     this._userService
-      .currentUserGroup(this.projectID)
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
+      .getCurrentUserGroup(this.projectID)
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
       this.dataSource.paginator = this.paginator; // Force refresh.
     });

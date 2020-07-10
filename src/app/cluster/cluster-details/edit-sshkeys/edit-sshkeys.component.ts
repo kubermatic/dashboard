@@ -60,11 +60,11 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
+    this._userService.currentUser.pipe(first()).subscribe(user => (this._user = user));
 
     this._userService
-      .currentUserGroup(this.projectID)
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
+      .getCurrentUserGroup(this.projectID)
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';

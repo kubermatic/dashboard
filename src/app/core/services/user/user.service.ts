@@ -11,8 +11,8 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, EMPTY, iif, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, delay, first, map, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
+import {BehaviorSubject, EMPTY, iif, Observable, of} from 'rxjs';
+import {catchError, delay, filter, first, map, retryWhen, switchMap, tap} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
@@ -20,26 +20,20 @@ import {Member} from '../../../shared/entity/member';
 import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils} from '../../../shared/utils/member-utils/member-utils';
 import {TokenService} from '../token/token.service';
-import {
-  AdminSettings,
-  DEFAULT_ADMIN_SETTINGS,
-  DEFAULT_USER_SETTINGS,
-  UserSettings,
-} from '../../../shared/entity/settings';
+import {DEFAULT_USER_SETTINGS, UserSettings} from '../../../shared/entity/settings';
 import {webSocket} from 'rxjs/webSocket';
-import {Datacenter} from '../../../shared/entity/datacenter';
 
 @Injectable()
 export class UserService {
   private readonly restRoot = environment.restRoot;
   private readonly wsRoot = environment.wsRoot;
-  private readonly _currentUser$ = new Subject<Member>();
+  private readonly _currentUser$ = new BehaviorSubject<Member>(undefined);
   private readonly _currentUserSettings$ = new BehaviorSubject<UserSettings>(DEFAULT_USER_SETTINGS);
   private _currentUserWatch$: Observable<Member>;
 
   constructor(
-    private readonly _http: HttpClient,
-    private readonly _appConfig: AppConfigService,
+    private readonly _httpClient: HttpClient,
+    private readonly _appConfigService: AppConfigService,
     private readonly _tokenService: TokenService
   ) {}
 
@@ -55,15 +49,18 @@ export class UserService {
           )
         )
       );
-    this._currentUserWatch$ = iif(() => this._tokenService.hasExpired(), webSocket$, EMPTY); // TODO: EMPTY?
+    this._currentUserWatch$ = iif(() => this._tokenService.hasExpired(), webSocket$, EMPTY);
     this._currentUserWatch$.subscribe(user => {
+      // eslint-disable-next-line no-console
+      console.log(user); // TODO
+
       this._currentUser$.next(user);
       this._currentUserSettings$.next(this._defaultUserSettings(user.settings));
     });
   }
 
   get currentUser(): Observable<Member> {
-    return this._user$.pipe(shareReplay({bufferSize: 1}));
+    return this._currentUser$.pipe(filter(user => !!user));
   }
 
   get currentUserSettings(): Observable<UserSettings> {
@@ -96,14 +93,14 @@ export class UserService {
   }
 
   getCurrentUserGroupConfig(userGroup: string): GroupConfig {
-    const userGroupConfig = this._appConfig.getUserGroupConfig();
+    const userGroupConfig = this._appConfigService.getUserGroupConfig();
     return userGroupConfig ? userGroupConfig[userGroup] : undefined;
   }
 
   logout(): Observable<boolean> {
     const url = `${this.restRoot}/me/logout`;
-    return this.loggedInUser
-      .pipe(switchMap(user => this._http.post(url, user)))
+    return this.currentUser
+      .pipe(switchMap(user => this._httpClient.post(url, user)))
       .pipe(map(_ => true))
       .pipe(catchError(_ => of(false)))
       .pipe(first());

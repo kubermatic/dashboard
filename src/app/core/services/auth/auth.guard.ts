@@ -43,11 +43,11 @@ export class AuthzGuard implements CanActivate {
     const projectID = this._getProjectID(state.url);
     const view = this._getView(state.url);
     let currentUser: Member;
-    this._userService.loggedInUser.subscribe(user => (currentUser = user));
+    this._userService.currentUser.subscribe(user => (currentUser = user));
 
     return this._userService
-      .currentUserGroup(projectID)
-      .pipe(map(userGroup => this._userService.userGroupConfig(userGroup)))
+      .getCurrentUserGroup(projectID)
+      .pipe(map(userGroup => this._userService.getCurrentUserGroupConfig(userGroup)))
       .pipe(
         map(groupConfig => {
           if (!MemberUtils.hasPermission(currentUser, groupConfig, view, Permission.View)) {

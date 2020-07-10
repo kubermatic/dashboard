@@ -24,7 +24,6 @@ import {AppConfigService} from '../app-config.service';
 import {Cookie, COOKIE_DI_TOKEN} from '../app.config';
 import {NotificationService, ProjectService, UserService} from '../core/services';
 import {PreviousRouteService} from '../core/services/previous-route/previous-route.service';
-import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -89,7 +88,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
     private readonly _router: Router,
     private readonly _cookieService: CookieService,
-    private readonly _settingsService: SettingsService,
     private readonly _notificationService: NotificationService,
     private readonly _previousRouteService: PreviousRouteService,
     private readonly _appConfig: AppConfigService,
@@ -99,9 +97,9 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.dataSource.data = this.projects;
 
-    this._userService.loggedInUser.subscribe(user => (this.currentUser = user));
+    this._userService.currentUser.subscribe(user => (this.currentUser = user));
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (this.settings) {
         return;
       }
@@ -115,7 +113,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .pipe(
         switchMap(() =>
-          this._settingsService.patchUserSettings({
+          this._userService.patchCurrentUserSettings({
             selectProjectTableView: !this.showCards,
           } as UserSettings)
         )
@@ -164,7 +162,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     const ownProjects: Project[] = [];
     const externalProjects: Project[] = [];
     projects.forEach(project => {
-      this._userService.currentUserGroup(project.id).subscribe(group => {
+      this._userService.getCurrentUserGroup(project.id).subscribe(group => {
         this.role[project.id] = MemberUtils.getGroupDisplayName(group);
         this.rawRole[project.id] = group;
         if (MemberUtils.getGroupDisplayName(group) !== '') {
@@ -307,7 +305,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   isEditEnabled(project: Project): boolean {
     return MemberUtils.hasPermission(
       this.currentUser,
-      this._userService.userGroupConfig(this.rawRole[project.id]),
+      this._userService.getCurrentUserGroupConfig(this.rawRole[project.id]),
       View.Projects,
       Permission.Edit
     );
@@ -330,7 +328,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   isDeleteEnabled(project: Project): boolean {
     return MemberUtils.hasPermission(
       this.currentUser,
-      this._userService.userGroupConfig(this.rawRole[project.id]),
+      this._userService.getCurrentUserGroupConfig(this.rawRole[project.id]),
       View.Projects,
       Permission.Delete
     );

@@ -20,7 +20,6 @@ import * as _ from 'lodash';
 
 import {AppConfigService} from '../app-config.service';
 import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
-import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Project} from '../shared/entity/project';
@@ -60,8 +59,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
     private readonly _matDialog: MatDialog,
     private readonly _appConfig: AppConfigService,
-    private readonly _notificationService: NotificationService,
-    private readonly _settingsService: SettingsService
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -71,7 +69,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
@@ -81,12 +79,12 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(
         switchMap(project => {
           this._selectedProject = project;
-          return this._userService.currentUserGroup(project.id);
+          return this._userService.getCurrentUserGroup(project.id);
         })
       )
       .pipe(
         switchMap(userGroup => {
-          this._currentGroupConfig = this._userService.userGroupConfig(userGroup);
+          this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup);
           return this._apiService.getServiceAccounts(this._selectedProject.id);
         })
       )

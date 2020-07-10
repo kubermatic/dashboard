@@ -46,7 +46,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._userService.loggedInUser.pipe(first()).subscribe(user => (this.user = user));
+    this._userService.currentUser.pipe(first()).subscribe(user => (this.user = user));
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(settings, this.apiSettings)) {

@@ -12,7 +12,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, iif, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, delay, map, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
+import {catchError, delay, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
 import {webSocket} from 'rxjs/webSocket';
 
 import {environment} from '../../../../environments/environment';

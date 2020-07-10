@@ -20,7 +20,7 @@ import {fakeUserGroupConfig} from '../fake-data/userGroupConfig.fake';
 export class UserMockService {
   private user: Observable<Member>;
 
-  get loggedInUser(): Observable<Member> {
+  get currentUser(): Observable<Member> {
     this.user = of(fakeMember());
     return this.user;
   }

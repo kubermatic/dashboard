@@ -16,9 +16,9 @@ import {MatTableDataSource} from '@angular/material/table';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {SettingsService} from '../../../core/services/settings/settings.service';
 import {Event} from '../../entity/event';
 import {HealthStatusColor} from '../../utils/health-status/health-status';
+import {UserService} from '../../../core/services';
 
 @Component({
   selector: 'km-event-list',
@@ -43,7 +43,7 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
   ];
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _settingsService: SettingsService) {}
+  constructor(private readonly _userService: UserService) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.events;
@@ -53,7 +53,7 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
     this.sort.active = 'lastTimestamp';
     this.sort.direction = 'desc';
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
       this.dataSource.paginator = this.paginator; // Force refresh.
     });

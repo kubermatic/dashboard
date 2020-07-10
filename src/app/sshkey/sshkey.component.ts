@@ -20,7 +20,6 @@ import * as _ from 'lodash';
 
 import {AppConfigService} from '../app-config.service';
 import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
-import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddSshKeyDialogComponent} from '../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -57,8 +56,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
     public dialog: MatDialog,
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
     private readonly _projectService: ProjectService,
-    private readonly _notificationService: NotificationService,
-    private readonly _settingsService: SettingsService
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -67,13 +65,13 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
+    this._userService.currentUser.pipe(first()).subscribe(user => (this._user = user));
 
     this._userService
-      .currentUserGroup(this.projectID)
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
+      .getCurrentUserGroup(this.projectID)
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
@@ -82,7 +80,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(
         switchMap(project => {
           this.projectID = project.id;
-          return this._userService.currentUserGroup(this.projectID);
+          return this._userService.getCurrentUserGroup(this.projectID);
         })
       )
       .pipe(

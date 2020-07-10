@@ -55,12 +55,12 @@ export class AdminsComponent implements OnInit, OnChanges {
       this.dataSource.data = this.admins;
     });
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
 
-    this._userService.loggedInUser.pipe(take(1)).subscribe(user => (this.user = user));
+    this._userService.currentUser.pipe(take(1)).subscribe(user => (this.user = user));
   }
 
   ngOnChanges(): void {

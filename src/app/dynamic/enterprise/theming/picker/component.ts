@@ -18,8 +18,7 @@ import {ThemeManagerService} from '../services/manager';
 import {ThemeService} from '../services/theme';
 import {UserSettings} from '../../../../shared/entity/settings';
 import {Theme} from '../../../../shared/model/Config';
-import {SettingsService} from '../../../../core/services/settings/settings.service';
-import {NotificationService} from '../../../../core/services';
+import {NotificationService, UserService} from '../../../../core/services';
 import {objectDiff} from '../../../../shared/utils/common-utils';
 
 @Component({
@@ -64,7 +63,7 @@ export class StylePickerComponent implements OnInit {
   constructor(
     private readonly _themeManageService: ThemeManagerService,
     private readonly _themeService: ThemeService,
-    private readonly _settingsService: SettingsService,
+    private readonly _userService: UserService,
     private readonly _colorSchemeService: ColorSchemeService,
     private readonly _notificationService: NotificationService,
     private readonly _cdr: ChangeDetectorRef
@@ -73,15 +72,17 @@ export class StylePickerComponent implements OnInit {
   ngOnInit(): void {
     this.themes = this._themeService.themes;
 
-    this._settingsService.userSettings.pipe(first()).subscribe(this._selectDefaultTheme.bind(this));
+    this._userService.currentUserSettings.pipe(first()).subscribe(this._selectDefaultTheme.bind(this));
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(this._onSettingsUpdate.bind(this));
+    this._userService.currentUserSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._onSettingsUpdate.bind(this));
 
     this._settingsChange
       .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
-      .pipe(switchMap(() => this._settingsService.patchUserSettings(objectDiff(this.settings, this.apiSettings))))
-      .subscribe(_ => this._settingsService.refreshUserSettings());
+      .pipe(switchMap(() => this._userService.patchCurrentUserSettings(objectDiff(this.settings, this.apiSettings))))
+      .subscribe(_ => {});
 
     this._colorSchemeService.onColorSchemeUpdate.pipe(takeUntil(this._unsubscribe)).subscribe(theme => {
       if (this.settings && !this.settings.selectedTheme && this.hasPreferredTheme) {
