@@ -21,7 +21,6 @@ export function fakeDigitaloceanDatacenter(): Datacenter {
       labels: new Map(),
       annotations: new Map(),
     },
-    seed: false,
     spec: {
       seed: 'europe-west3-c',
       country: 'DE',
@@ -46,7 +45,6 @@ export function fakeAWSDatacenter(): Datacenter {
       labels: new Map(),
       annotations: new Map(),
     },
-    seed: false,
     spec: {
       seed: 'europe-west3-c',
       country: 'DE',
@@ -71,7 +69,6 @@ export function fakeOpenstackDatacenter(): Datacenter {
       labels: new Map(),
       annotations: new Map(),
     },
-    seed: false,
     spec: {
       seed: 'europe-west3-c',
       country: 'DE',
@@ -110,7 +107,6 @@ export function fakeAzureDatacenter(): Datacenter {
       labels: new Map(),
       annotations: new Map(),
     },
-    seed: false,
     spec: {
       azure: {
         location: 'westeurope',
@@ -135,7 +131,6 @@ export function fakeGCPDatacenter(): Datacenter {
       labels: new Map(),
       annotations: new Map(),
     },
-    seed: false,
     spec: {
       gcp: {
         region: 'europe-west3',
@@ -157,7 +152,6 @@ export function fakeVSphereDatacenter(): Datacenter {
     metadata: {
       name: 'vsphere-hetzner',
     },
-    seed: false,
     spec: {
       seed: 'europe-west3-c',
       country: 'DE',
@@ -191,7 +185,6 @@ export function fakeAlibabaDatacenter(): Datacenter {
       labels: new Map(),
       annotations: new Map(),
     },
-    seed: false,
     spec: {
       seed: 'europe-west3-c',
       country: 'DE',

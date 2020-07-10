@@ -20,7 +20,6 @@ export class CreateDatacenterModel {
 export class Datacenter {
   metadata: Metadata;
   spec: DatacenterSpec;
-  seed?: boolean;
 }
 
 export class DatacenterSpec {
