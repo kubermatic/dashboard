@@ -74,10 +74,6 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
     this._dcService.datacenters.pipe(takeUntil(this._unsubscribe)).subscribe(datacenters => {
       const providers: NodeProvider[] = [];
       for (const datacenter of datacenters) {
-        if (datacenter.seed) {
-          continue;
-        }
-
         const provider = getDatacenterProvider(datacenter);
         if (!providers.includes(provider)) {
           providers.push(provider);
