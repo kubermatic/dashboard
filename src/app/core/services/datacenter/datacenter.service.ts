@@ -37,9 +37,7 @@ export class DatacenterService {
     this._datacenters$ = merge(this._datacentersRefresh$, this._refreshTimer$)
       .pipe(switchMap(() => iif(() => this._auth.authenticated(), this._getDatacenters(), of([]))))
       .pipe(
-        map((datacenters: Datacenter[]) =>
-          datacenters.filter(d => !d.seed).sort((a, b) => a.metadata.name.localeCompare(b.metadata.name))
-        )
+        map((datacenters: Datacenter[]) => datacenters.sort((a, b) => a.metadata.name.localeCompare(b.metadata.name)))
       )
       .pipe(shareReplay(1));
     this._datacenters$.pipe(first()).subscribe(_ => {});

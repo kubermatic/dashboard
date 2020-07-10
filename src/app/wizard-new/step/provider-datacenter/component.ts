@@ -91,10 +91,6 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
       .subscribe(datacenters => {
         const providers: NodeProvider[] = [];
         for (const datacenter of datacenters) {
-          if (datacenter.seed) {
-            continue;
-          }
-
           const provider = getDatacenterProvider(datacenter);
           if (!providers.includes(provider)) {
             providers.push(provider);
@@ -117,10 +113,6 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
       .subscribe(datacenters => {
         const providerDatacenters: Datacenter[] = [];
         for (const datacenter of datacenters) {
-          if (datacenter.seed) {
-            continue;
-          }
-
           const provider = getDatacenterProvider(datacenter);
           const clusterProvider = this._clusterService.provider;
           if (provider === clusterProvider) {
