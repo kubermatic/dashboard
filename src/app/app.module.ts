@@ -41,10 +41,12 @@ import {MonacoEditorModule} from 'ngx-monaco-editor';
 const appInitializerFn = (
   appConfigService: AppConfigService,
   historyService: HistoryService,
+  userServuce: UserService,
   datacenterService: DatacenterService
 ): Function => {
   return () => {
     historyService.init();
+    userServuce.init();
     datacenterService.init();
     return appConfigService
       .loadAppConfig()
@@ -74,7 +76,7 @@ const appearance: MatFormFieldDefaultOptions = {
       provide: APP_INITIALIZER,
       useFactory: appInitializerFn,
       multi: true,
-      deps: [AppConfigService, HistoryService, DatacenterService],
+      deps: [AppConfigService, HistoryService, UserService, DatacenterService],
     },
     {
       provide: MAT_TOOLTIP_DEFAULT_OPTIONS,

@@ -18,13 +18,7 @@ import {webSocket} from 'rxjs/webSocket';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {Auth} from '../auth/auth.service';
-import {
-  AdminSettings,
-  CustomLink,
-  DEFAULT_ADMIN_SETTINGS,
-  DEFAULT_USER_SETTINGS,
-  UserSettings,
-} from '../../../shared/entity/settings';
+import {AdminSettings, CustomLink, DEFAULT_ADMIN_SETTINGS} from '../../../shared/entity/settings';
 import {Settings} from 'http2';
 import {Admin} from '../../../shared/entity/member';
 
@@ -34,8 +28,6 @@ import {Admin} from '../../../shared/entity/member';
 export class SettingsService {
   private readonly restRoot = environment.restRoot;
   private readonly wsRoot = environment.wsRoot;
-  private _userSettings$: Observable<UserSettings>;
-  private _userSettingsRefresh$ = new Subject();
   private readonly _adminSettings$ = new BehaviorSubject(DEFAULT_ADMIN_SETTINGS);
   private _adminSettingsWatch$: Observable<AdminSettings>;
   private _admins$: Observable<Admin[]>;
@@ -49,49 +41,6 @@ export class SettingsService {
     private readonly _appConfigService: AppConfigService,
     private readonly _auth: Auth
   ) {}
-
-  get defaultUserSettings(): UserSettings {
-    return DEFAULT_USER_SETTINGS;
-  }
-
-  get userSettings(): Observable<UserSettings> {
-    if (!this._userSettings$) {
-      this._userSettings$ = merge(this._refreshTimer$, this._userSettingsRefresh$)
-        .pipe(
-          switchMap(() => iif(() => this._auth.authenticated(), this._getUserSettings(true), of(DEFAULT_USER_SETTINGS)))
-        )
-        .pipe(map(settings => this._defaultUserSettings(settings)))
-        .pipe(shareReplay({refCount: true, bufferSize: 1}));
-    }
-    return this._userSettings$;
-  }
-
-  private _getUserSettings(defaultOnError = false): Observable<UserSettings> {
-    const url = `${this.restRoot}/me/settings`;
-    const observable = this._httpClient.get<UserSettings>(url);
-    return defaultOnError ? observable.pipe(catchError(() => of(DEFAULT_USER_SETTINGS))) : observable;
-  }
-
-  private _defaultUserSettings(settings: UserSettings): UserSettings {
-    if (!settings) {
-      return DEFAULT_USER_SETTINGS;
-    }
-
-    Object.keys(DEFAULT_USER_SETTINGS).forEach(key => {
-      settings[key] = settings[key] || DEFAULT_USER_SETTINGS[key];
-    });
-
-    return settings;
-  }
-
-  refreshUserSettings(): void {
-    this._userSettingsRefresh$.next();
-  }
-
-  patchUserSettings(patch: UserSettings): Observable<UserSettings> {
-    const url = `${this.restRoot}/me/settings`;
-    return this._httpClient.patch<UserSettings>(url, patch);
-  }
 
   get adminSettings(): Observable<AdminSettings> {
     // Subscribe to websocket and proxy all the settings updates coming from the API to the subject that is
