@@ -224,7 +224,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
       } as AWSNodeSpec;
     case NodeProvider.DIGITALOCEAN:
       return {
-        size: '25',
+        size: '',
         backups: false,
         ipv6: false,
         monitoring: false,
