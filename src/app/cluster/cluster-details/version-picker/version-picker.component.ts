@@ -52,24 +52,22 @@ export class VersionPickerComponent implements OnInit, OnChanges {
     this.downgradesAvailable = false;
     this.someUpgradesRestrictedByKubeletVersion = false;
 
-    if (this.upgrades) {
-      this.upgrades.forEach(upgrade => {
-        const isUpgrade = lt(this.cluster.spec.version, upgrade.version);
-        const isDowngrade = gt(this.cluster.spec.version, upgrade.version);
+    this.upgrades.forEach(upgrade => {
+      const isUpgrade = lt(this.cluster.spec.version, upgrade.version);
+      const isDowngrade = gt(this.cluster.spec.version, upgrade.version);
 
-        if (upgrade.restrictedByKubeletVersion === true) {
-          this.someUpgradesRestrictedByKubeletVersion = isUpgrade;
-          return; // Skip all restricted versions.
-        }
+      if (upgrade.restrictedByKubeletVersion === true) {
+        this.someUpgradesRestrictedByKubeletVersion = isUpgrade;
+        return; // Skip all restricted versions.
+      }
 
-        this.updatesAvailable = this.updatesAvailable ? true : isUpgrade;
-        this.downgradesAvailable = this.downgradesAvailable ? true : isDowngrade;
+      this.updatesAvailable = this.updatesAvailable ? true : isUpgrade;
+      this.downgradesAvailable = this.downgradesAvailable ? true : isDowngrade;
 
-        if (this.versionsList.indexOf(upgrade.version) < 0) {
-          this.versionsList.push(upgrade.version);
-        }
-      });
-    }
+      if (this.versionsList.indexOf(upgrade.version) < 0) {
+        this.versionsList.push(upgrade.version);
+      }
+    });
 
     this._changeDetectorRef.detectChanges();
   }
