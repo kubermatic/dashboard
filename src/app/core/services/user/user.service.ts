@@ -51,11 +51,8 @@ export class UserService {
       );
     this._currentUserWatch$ = iif(() => this._tokenService.hasExpired(), webSocket$, EMPTY);
     this._currentUserWatch$.subscribe(user => {
-      // eslint-disable-next-line no-console
-      console.log(user); // TODO
-
       this._currentUser$.next(user);
-      this._currentUserSettings$.next(this._defaultUserSettings(user.settings));
+      this._currentUserSettings$.next(this._defaultUserSettings(user.userSettings));
     });
   }
 

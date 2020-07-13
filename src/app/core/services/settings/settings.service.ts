@@ -43,22 +43,16 @@ export class SettingsService {
   ) {}
 
   get adminSettings(): Observable<AdminSettings> {
-    // Subscribe to websocket and proxy all the settings updates coming from the API to the subject that is
-    // exposed in this method. Thanks to that it is possible to have default value and retry mechanism that
-    // will run in the background if connection will fail. Subscription to the API should happen only once.
-    // Behavior subject is used internally to always emit last value when subscription happens.
     if (!this._adminSettingsWatch$) {
       const webSocket$ = webSocket<AdminSettings>(`${this.wsRoot}/admin/settings`)
         .asObservable()
         .pipe(
-          retryWhen(
-            // Display error in the console for debugging purposes, otherwise it would be ignored.
-            errors =>
-              errors.pipe(
-                // eslint-disable-next-line no-console
-                tap(console.debug),
-                delay(this._appConfigService.getRefreshTimeBase() * 3)
-              )
+          retryWhen(errors =>
+            errors.pipe(
+              // eslint-disable-next-line no-console
+              tap(console.debug),
+              delay(this._appConfigService.getRefreshTimeBase() * 3)
+            )
           )
         );
       this._adminSettingsWatch$ = iif(() => this._auth.authenticated(), webSocket$, of(DEFAULT_ADMIN_SETTINGS));
