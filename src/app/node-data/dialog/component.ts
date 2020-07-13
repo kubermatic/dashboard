@@ -149,11 +149,6 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
   }
 
   private _isRecreationWarningVisible(): boolean {
-    // console.log('Initial data');
-    // console.log(this._data.initialNodeData);
-    // console.log('Output');
-    // console.log(this._output.nodeData);
-
     return this.mode === Mode.Edit && !_.isEqual(objectDiff(this._data.initialNodeData, this._output.nodeData), {});
   }
 }

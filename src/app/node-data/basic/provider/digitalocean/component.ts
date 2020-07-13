@@ -76,8 +76,6 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
   }
 
   ngOnInit(): void {
-    this._init();
-
     this.form = this._builder.group({
       [Controls.Size]: this._builder.control('', Validators.required),
     });
@@ -109,14 +107,6 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
       : '';
   }
 
-  private _init(): void {
-    if (this._nodeDataService.nodeData.spec.cloud.digitalocean) {
-      this.selectedSize = this._nodeDataService.nodeData.spec.cloud.digitalocean.size;
-
-      this._cdr.detectChanges();
-    }
-  }
-
   private _onSizeLoading(): void {
     this._clearSize();
     this.sizeLabel = SizeState.Loading;
@@ -132,6 +122,7 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
 
   private _setDefaultSize(sizes: DigitaloceanSizes): void {
     this._sizes = sizes;
+    this.selectedSize = this._nodeDataService.nodeData.spec.cloud.digitalocean.size;
 
     if (!this.selectedSize && this._sizes && this._sizes.standard && this._sizes.standard.length > 0) {
       this.selectedSize = this._sizes.standard[0].slug;

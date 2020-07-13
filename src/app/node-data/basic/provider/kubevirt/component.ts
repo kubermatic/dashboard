@@ -112,7 +112,7 @@ export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements
       spec: {
         cloud: {
           kubevirt: {
-            cpus: this.form.get(Controls.CPUs).value,
+            cpus: `${this.form.get(Controls.CPUs).value}`,
             memory: this.form.get(Controls.Memory).value,
             namespace: this.form.get(Controls.Namespace).value,
             sourceURL: this.form.get(Controls.SourceURL).value,
