@@ -42,7 +42,6 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   clusters: Cluster[] = [];
   isInitialized = true;
   nodeDC: Datacenter[] = [];
-  seedDC: Datacenter[] = [];
   health: Health[] = [];
   machineDeployments: MachineDeployment[][] = [];
   provider = [];
@@ -108,11 +107,9 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
                 this._datacenterService
                   .getDatacenter(cluster.spec.cloud.dc)
                   .pipe(tap(datacenter => (this.nodeDC[cluster.id] = datacenter)))
-                  .pipe(switchMap(datacenter => this._datacenterService.getDatacenter(datacenter.spec.seed)))
-                  .pipe(tap(seed => (this.seedDC[cluster.id] = seed)))
                   .pipe(
-                    switchMap(seed =>
-                      this._clusterService.health(this._selectedProject.id, cluster.id, seed.metadata.name)
+                    switchMap(datacenter =>
+                      this._clusterService.health(this._selectedProject.id, cluster.id, datacenter.spec.seed)
                     )
                   )
                   // We need to resume on error, otherwise subscription will be canceled and clusters will stop
@@ -124,7 +121,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
                       Health.allHealthy(this.health[cluster.id])
                         ? this._apiService.getMachineDeployments(
                             cluster.id,
-                            this.seedDC[cluster.id].metadata.name,
+                            this.nodeDC[cluster.id].spec.seed,
                             this._selectedProject.id
                           )
                         : of([])
@@ -179,7 +176,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     event.stopPropagation();
     const modal = this._matDialog.open(ClusterDeleteConfirmationComponent);
     modal.componentInstance.cluster = cluster;
-    modal.componentInstance.seed = this.seedDC[cluster.id];
+    modal.componentInstance.seed = this.nodeDC[cluster.id].spec.seed;
     modal.componentInstance.projectID = this._selectedProject.id;
   }
 
