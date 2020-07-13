@@ -37,14 +37,6 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
 
 @Injectable()
 export class SettingsMockService {
-  get userSettings(): Observable<UserSettings> {
-    return of(DEFAULT_USER_SETTINGS_MOCK);
-  }
-
-  get defaultUserSettings(): UserSettings {
-    return DEFAULT_USER_SETTINGS_MOCK;
-  }
-
   get adminSettings(): Observable<AdminSettings> {
     return of(DEFAULT_ADMIN_SETTINGS_MOCK);
   }
