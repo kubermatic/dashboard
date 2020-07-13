@@ -94,6 +94,7 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
 
   ngOnInit() {
     this._nodeDataService.reset();
+    this._clusterService.reset();
 
     this.form = this._builder.group({
       [Controls.NodeData]: this._builder.control(''),

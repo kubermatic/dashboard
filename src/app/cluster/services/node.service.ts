@@ -109,7 +109,7 @@ export class NodeService {
         initialNodeData: {
           count: md.spec.replicas,
           name: md.name,
-          spec: _.cloneDeep(md.spec.template),
+          spec: md.spec.template,
           dynamicConfig: md.spec.dynamicConfig,
         } as NodeData,
       },

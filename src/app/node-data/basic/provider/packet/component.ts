@@ -20,12 +20,12 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 import {NodeCloudSpec, NodeSpec, PacketNodeSpec} from '../../../../shared/entity/node';
+import {PacketSize} from '../../../../shared/entity/provider/packet';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
-import {PacketSize} from '../../../../shared/entity/provider/packet';
 
 enum Controls {
   InstanceType = 'instanceType',
@@ -67,6 +67,10 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
     private readonly _cdr: ChangeDetectorRef
   ) {
     super();
+  }
+
+  private get _sizesObservable(): Observable<PacketSize[]> {
+    return this._nodeDataService.packet.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
   }
 
   ngOnInit(): void {
@@ -116,12 +120,6 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
     return description ? `(${description})` : '';
   }
 
-  private get _sizesObservable(): Observable<PacketSize[]> {
-    return this._nodeDataService.packet
-      .flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this))
-      .pipe(first());
-  }
-
   private _onSizeLoading(): void {
     this._clearSize();
     this.sizeLabel = SizeState.Loading;
@@ -137,7 +135,9 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
 
   private _setDefaultSize(sizes: PacketSize[]): void {
     this.sizes = sizes.filter(size => size.memory !== 'N/A');
-    this.selectedSize = this._nodeDataService.nodeData.spec.cloud.packet.instanceType;
+    this.selectedSize = this._nodeDataService.nodeData.spec.cloud.packet
+      ? this._nodeDataService.nodeData.spec.cloud.packet.instanceType
+      : '';
 
     if (!this.selectedSize && this.sizes && this.sizes.length > 0) {
       this.selectedSize = this.sizes[0].name;

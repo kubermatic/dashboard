@@ -116,7 +116,9 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
 
   private _setDefaultType(types: HetznerTypes): void {
     this._types = types;
-    this.selectedType = this._nodeDataService.nodeData.spec.cloud.hetzner.type;
+    this.selectedType = this._nodeDataService.nodeData.spec.cloud.hetzner
+      ? this._nodeDataService.nodeData.spec.cloud.hetzner.type
+      : '';
 
     if (!this.selectedType && this._types && this._types.standard && this._types.standard.length > 0) {
       this.selectedType = this._types.standard[0].name;
