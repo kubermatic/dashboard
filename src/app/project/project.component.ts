@@ -77,6 +77,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   settings: UserSettings;
+  isInitialized = false;
   private _settingsChange = new Subject<void>();
   private _unsubscribe: Subject<any> = new Subject();
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
@@ -100,28 +101,24 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     this._userService.currentUser.subscribe(user => (this.currentUser = user));
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      if (this.settings) {
-        return;
-      }
       this.settings = settings;
       this.showCards = !settings.selectProjectTableView;
-      this.selectDefaultProject();
+
+      if (!this.isInitialized) {
+        this.selectDefaultProject();
+        this.isInitialized = true;
+      }
     });
 
     this._settingsChange
-      .pipe(debounceTime(1000))
+      .pipe(debounceTime(500))
       .pipe(takeUntil(this._unsubscribe))
       .pipe(
         switchMap(() =>
-          this._userService.patchCurrentUserSettings({
-            selectProjectTableView: !this.showCards,
-          } as UserSettings)
+          this._userService.patchCurrentUserSettings({selectProjectTableView: !this.showCards} as UserSettings)
         )
       )
-      .subscribe(settings => {
-        this.settings = settings;
-        this.showCards = !settings.selectProjectTableView;
-      });
+      .subscribe(_ => {});
 
     this._refreshTimer$
       .pipe(takeUntil(this._unsubscribe))
