@@ -41,12 +41,12 @@ import {MonacoEditorModule} from 'ngx-monaco-editor';
 const appInitializerFn = (
   appConfigService: AppConfigService,
   historyService: HistoryService,
-  userServuce: UserService,
+  userService: UserService,
   datacenterService: DatacenterService
 ): Function => {
   return () => {
     historyService.init();
-    userServuce.init();
+    userService.init();
     datacenterService.init();
     return appConfigService
       .loadAppConfig()
