@@ -132,6 +132,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       [Controls.AvailabilityZone]: this._builder.control(''),
     });
 
+    this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
     merge(
@@ -203,6 +204,14 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
           flavor.disk
         } GB Disk`
       : '';
+  }
+
+  private _init(): void {
+    if (this._nodeDataService.nodeData.spec.cloud.openstack) {
+      this.form.get(Controls.UseFloatingIP).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.useFloatingIP);
+      this.form.get(Controls.Image).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.image);
+      this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.diskSize);
+    }
   }
 
   private _isOpenshiftCluster(): boolean {
@@ -291,7 +300,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       return;
     }
 
-    if (!this._clusterService.cluster.spec.cloud.openstack.floatingIpPool) {
+    if (!this._nodeDataService.isInWizardMode() && !this._clusterService.cluster.spec.cloud.openstack.floatingIpPool) {
       this.form.get(Controls.UseFloatingIP).setValue(false);
       this.form.get(Controls.UseFloatingIP).disable();
     }
