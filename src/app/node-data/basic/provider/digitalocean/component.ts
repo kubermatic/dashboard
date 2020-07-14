@@ -62,9 +62,7 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
   }
 
   private get _sizesObservable(): Observable<DigitaloceanSizes> {
-    return this._nodeDataService.digitalOcean
-      .flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this))
-      .pipe(first());
+    return this._nodeDataService.digitalOcean.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
   }
 
   constructor(

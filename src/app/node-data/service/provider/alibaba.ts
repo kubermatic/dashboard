@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, switchMap, tap} from 'rxjs/operators';
+import {catchError, filter, first, switchMap, tap} from 'rxjs/operators';
 
 import {ApiService, DatacenterService, PresetsService, ProjectService} from '../../../core/services';
 import {Cluster} from '../../../shared/entity/cluster';
@@ -91,7 +91,8 @@ export class NodeDataAlibabaProvider {
 
               return onErrorResumeNext(of([]));
             })
-          );
+          )
+          .pipe(first());
       }
     }
   }
@@ -151,7 +152,8 @@ export class NodeDataAlibabaProvider {
 
               return onErrorResumeNext(of([]));
             })
-          );
+          )
+          .pipe(first());
       }
     }
   }

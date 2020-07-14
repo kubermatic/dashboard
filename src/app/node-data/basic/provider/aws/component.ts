@@ -91,14 +91,11 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   private get _sizesObservable(): Observable<AWSSize[]> {
     return this._nodeDataService.aws
       .flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this))
-      .pipe(map(sizes => sizes.sort((a, b) => a.name.localeCompare(b.name))))
-      .pipe(first());
+      .pipe(map(sizes => sizes.sort((a, b) => a.name.localeCompare(b.name))));
   }
 
   private get _subnetIdsObservable(): Observable<AWSSubnet[]> {
-    return this._nodeDataService.aws
-      .subnets(this._clearSubnet.bind(this), this._onSubnetLoading.bind(this))
-      .pipe(first());
+    return this._nodeDataService.aws.subnets(this._clearSubnet.bind(this), this._onSubnetLoading.bind(this));
   }
 
   get subnetAZ(): string[] {

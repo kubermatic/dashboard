@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, switchMap, tap} from 'rxjs/operators';
+import {catchError, filter, first, switchMap, tap} from 'rxjs/operators';
 
 import {ApiService, DatacenterService, PresetsService, ProjectService} from '../../../core/services';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
@@ -71,7 +71,8 @@ export class NodeDataHetznerProvider {
 
               return onErrorResumeNext(of(HetznerTypes.newHetznerTypes()));
             })
-          );
+          )
+          .pipe(first());
       }
     }
   }

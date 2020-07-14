@@ -101,15 +101,13 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
         map((availabilityZones: OpenstackAvailabilityZone[]) =>
           availabilityZones.sort((a, b) => (a.name < b.name ? -1 : 1))
         )
-      )
-      .pipe(first());
+      );
   }
 
   private get _flavorsObservable(): Observable<OpenstackFlavor[]> {
     return this._nodeDataService.openstack
       .flavors(this._clearFlavor.bind(this), this._onFlavorLoading.bind(this))
-      .pipe(map((flavors: OpenstackFlavor[]) => flavors.sort((a, b) => (a.memory < b.memory ? -1 : 1))))
-      .pipe(first());
+      .pipe(map((flavors: OpenstackFlavor[]) => flavors.sort((a, b) => (a.memory < b.memory ? -1 : 1))));
   }
 
   constructor(

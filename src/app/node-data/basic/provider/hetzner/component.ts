@@ -61,6 +61,10 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
     return Object.values(GroupTypes);
   }
 
+  private get _typesObservable(): Observable<HetznerTypes> {
+    return this._nodeDataService.hetzner.flavors(this._clearType.bind(this), this._onTypeLoading.bind(this));
+  }
+
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
@@ -95,10 +99,6 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
   typeDisplayName(name: string): string {
     const type = [...this._types.dedicated, ...this._types.standard].find(type => type.name === name);
     return type ? `${type.name} (${type.cores} vCPU, ${type.memory} GB RAM)` : '';
-  }
-
-  private get _typesObservable(): Observable<HetznerTypes> {
-    return this._nodeDataService.hetzner.flavors(this._clearType.bind(this), this._onTypeLoading.bind(this));
   }
 
   private _onTypeLoading(): void {

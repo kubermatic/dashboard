@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, switchMap, tap} from 'rxjs/operators';
+import {catchError, filter, first, switchMap, tap} from 'rxjs/operators';
 import {ApiService, DatacenterService, PresetsService, ProjectService} from '../../../core/services';
 import {Cluster} from '../../../shared/entity/cluster';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
@@ -86,7 +86,8 @@ export class NodeDataAzureProvider {
 
               return onErrorResumeNext(of([]));
             })
-          );
+          )
+          .pipe(first());
       }
     }
   }
@@ -147,7 +148,8 @@ export class NodeDataAzureProvider {
 
               return onErrorResumeNext(of({} as AzureZones));
             })
-          );
+          )
+          .pipe(first());
       }
     }
   }

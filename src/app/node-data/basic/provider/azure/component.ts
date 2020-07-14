@@ -77,13 +77,11 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   selectedZone = '';
 
   private get _sizesObservable(): Observable<AzureSizes[]> {
-    return this._nodeDataService.azure
-      .flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this))
-      .pipe(first());
+    return this._nodeDataService.azure.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
   }
 
   private get _zonesObservable(): Observable<AzureZones> {
-    return this._nodeDataService.azure.zones(this._clearZone.bind(this), this._onZoneLoading.bind(this)).pipe(first());
+    return this._nodeDataService.azure.zones(this._clearZone.bind(this), this._onZoneLoading.bind(this));
   }
 
   constructor(

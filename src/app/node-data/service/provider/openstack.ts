@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {merge, Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, debounceTime, filter, switchMap, tap} from 'rxjs/operators';
+import {catchError, debounceTime, filter, first, switchMap, tap} from 'rxjs/operators';
 
 import {ApiService, DatacenterService, PresetsService, ProjectService} from '../../../core/services';
 import {Datacenter} from '../../../shared/entity/datacenter';
@@ -86,7 +86,8 @@ export class NodeDataOpenstackProvider {
 
               return onErrorResumeNext(of([]));
             })
-          );
+          )
+          .pipe(first());
       }
     }
   }
@@ -155,7 +156,8 @@ export class NodeDataOpenstackProvider {
 
               return onErrorResumeNext(of([]));
             })
-          );
+          )
+          .pipe(first());
       }
     }
   }

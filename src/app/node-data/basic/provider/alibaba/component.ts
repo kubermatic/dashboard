@@ -90,15 +90,14 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   private _zoneCombobox: FilteredComboboxComponent;
 
   private get _instanceTypesObservable(): Observable<AlibabaInstanceType[]> {
-    return this._nodeDataService.alibaba
-      .instanceTypes(this._clearInstanceType.bind(this), this._onInstanceTypeLoading.bind(this))
-      .pipe(first());
+    return this._nodeDataService.alibaba.instanceTypes(
+      this._clearInstanceType.bind(this),
+      this._onInstanceTypeLoading.bind(this)
+    );
   }
 
   private get _zoneIdsObservable(): Observable<AlibabaZone[]> {
-    return this._nodeDataService.alibaba
-      .zones(this._clearZone.bind(this), this._onZoneLoading.bind(this))
-      .pipe(first());
+    return this._nodeDataService.alibaba.zones(this._clearZone.bind(this), this._onZoneLoading.bind(this));
   }
 
   constructor(
