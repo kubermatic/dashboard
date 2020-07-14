@@ -166,9 +166,6 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
 
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.alibaba) {
-      this.selectedInstanceType = this._nodeDataService.nodeData.spec.cloud.alibaba.instanceType;
-      this.selectedZone = this._nodeDataService.nodeData.spec.cloud.alibaba.zoneID;
-
       this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.alibaba.diskSize);
       this.form.get(Controls.VSwitchID).setValue(this._nodeDataService.nodeData.spec.cloud.alibaba.vSwitchID);
       this.form
@@ -209,6 +206,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
 
   private _setDefaultInstanceType(instanceTypes: AlibabaInstanceType[]): void {
     this.instanceTypes = instanceTypes.sort((a, b) => a.id.localeCompare(b.id));
+    this.selectedInstanceType = this._nodeDataService.nodeData.spec.cloud.alibaba.instanceType;
 
     if (!this.selectedInstanceType && this.instanceTypes.length > 0) {
       this.selectedInstanceType = this.instanceTypes[0].id;
@@ -220,6 +218,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
 
   private _setDefaultZone(zones: AlibabaZone[]): void {
     this.zones = zones.sort((a, b) => a.id.localeCompare(b.id));
+    this.selectedZone = this._nodeDataService.nodeData.spec.cloud.alibaba.zoneID;
 
     if (!this.selectedZone && this.zones.length > 0) {
       this.selectedZone = this.zones[0].id;

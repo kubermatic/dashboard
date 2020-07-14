@@ -211,6 +211,8 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       this.form.get(Controls.UseFloatingIP).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.useFloatingIP);
       this.form.get(Controls.Image).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.image);
       this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.diskSize);
+
+      this._cdr.detectChanges();
     }
   }
 

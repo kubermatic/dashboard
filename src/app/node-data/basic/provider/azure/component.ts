@@ -146,7 +146,6 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.azure) {
-      this.selectedSize = this._nodeDataService.nodeData.spec.cloud.azure.size;
       this.selectedZone = this._nodeDataService.nodeData.spec.cloud.azure.zone;
 
       this.form.get(Controls.ImageID).setValue(this._nodeDataService.nodeData.spec.cloud.azure.imageID);
@@ -182,6 +181,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
   private _setDefaultSize(sizes: AzureSizes[]): void {
     this.sizes = sizes;
+    this.selectedSize = this._nodeDataService.nodeData.spec.cloud.azure.size;
 
     if (!this.selectedSize && this.sizes.length > 0) {
       this.selectedSize = this.sizes[0].name;

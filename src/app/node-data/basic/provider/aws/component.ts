@@ -158,10 +158,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     return subnet.name !== '' ? subnet.name + ' (' + subnet.id + ')' : subnet.id;
   }
 
-  isInWizard(): boolean {
-    return this._nodeDataService.isInWizardMode();
-  }
-
   onSizeChange(size: string): void {
     this._nodeDataService.nodeData.spec.cloud.aws.instanceType = size;
     this._nodeDataService.nodeDataChanges.next();
@@ -180,9 +176,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.aws) {
-      this.selectedSize = this._nodeDataService.nodeData.spec.cloud.aws.instanceType;
-      this.selectedSubnet = this._nodeDataService.nodeData.spec.cloud.aws.subnetID;
-
       this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.aws.diskSize);
       this.form.get(Controls.DiskType).setValue(this._nodeDataService.nodeData.spec.cloud.aws.volumeType);
 
@@ -197,6 +190,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   private _setDefaultSize(sizes: AWSSize[]): void {
     this.sizes = sizes;
+    this.selectedSize = this._nodeDataService.nodeData.spec.cloud.aws.instanceType;
 
     if (!this.selectedSize && this.sizes.length > 0) {
       const cheapestInstance = this.sizes.reduce((prev, curr) => (prev.price < curr.price ? prev : curr));
@@ -214,6 +208,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
     this._subnets = subnets;
     this._subnetMap = {};
+    this.selectedSubnet = this._nodeDataService.nodeData.spec.cloud.aws.subnetID;
 
     if (!this.selectedSubnet && this._subnets.length > 0) {
       const defaultSubnet = this._subnets.find(s => s.isDefaultSubnet);
