@@ -150,6 +150,8 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
   }
 
   private _isRecreationWarningVisible(): boolean {
+    // Add and initialize with default values all properties that are missing in initial node data
+    _.defaultsDeep(this._data.initialNodeData, this._output.nodeData);
     return this.mode === Mode.Edit && !_.isEqual(objectDiff(this._data.initialNodeData, this._output.nodeData), {});
   }
 }

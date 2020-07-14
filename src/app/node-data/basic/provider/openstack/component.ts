@@ -298,7 +298,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   }
 
   private _getNodeData(): NodeData {
-    const nodeData = {
+    return {
       spec: {
         cloud: {
           openstack: {
@@ -309,13 +309,5 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
-
-    // As API omit useFloatingIP field if it is false, we have to do it too
-    if (!this.form.get(Controls.UseFloatingIP).value) {
-      delete nodeData.spec.cloud.openstack.useFloatingIP;
-      delete this._nodeDataService.nodeData.spec.cloud.openstack.useFloatingIP;
-    }
-
-    return nodeData;
   }
 }
