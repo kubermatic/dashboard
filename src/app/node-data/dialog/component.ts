@@ -13,8 +13,8 @@ import {ChangeDetectionStrategy, Component, forwardRef, Inject, OnDestroy, OnIni
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import * as _ from 'lodash';
-import {merge} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {merge, of} from 'rxjs';
+import {delay, takeUntil} from 'rxjs/operators';
 import {Cluster} from '../../shared/entity/cluster';
 import {getEmptyNodeProviderSpec} from '../../shared/entity/node';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
@@ -69,6 +69,7 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
   readonly Control = Controls;
 
   private _output: DialogDataOutput = {nodeData: NodeData.NewEmptyNodeData()} as DialogDataOutput;
+  private readonly _initDelay = 250;
 
   get provider(): NodeProvider {
     return this._clusterService.provider;
@@ -105,8 +106,13 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
 
     merge(this._nodeDataService.nodeDataChanges, this._nodeDataService.operatingSystemChanges)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
-        this._output.nodeData = this._nodeDataService.nodeData;
+      .subscribe(this._updateNodeData.bind(this));
+
+    of(true)
+      .pipe(delay(this._initDelay))
+      .subscribe(() => {
+        // Add and initialize with default values all properties that are missing in initial node data
+        _.defaultsDeep(this._data.initialNodeData, this._nodeDataService.nodeData);
         this.isRecreationWarningVisible = this._isRecreationWarningVisible();
       });
   }
@@ -130,6 +136,11 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
     this._dialogRef.close(this._output);
   }
 
+  private _updateNodeData(): void {
+    this._output.nodeData = this._nodeDataService.nodeData;
+    this.isRecreationWarningVisible = this._isRecreationWarningVisible();
+  }
+
   private _initNodeData(): NodeData {
     if (this._data.initialNodeData) {
       this._nodeDataService.operatingSystemSpec = this._data.initialNodeData.spec.operatingSystem;
@@ -150,8 +161,6 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
   }
 
   private _isRecreationWarningVisible(): boolean {
-    // Add and initialize with default values all properties that are missing in initial node data
-    _.defaultsDeep(this._data.initialNodeData, this._output.nodeData);
     return this.mode === Mode.Edit && !_.isEqual(objectDiff(this._data.initialNodeData, this._output.nodeData), {});
   }
 }

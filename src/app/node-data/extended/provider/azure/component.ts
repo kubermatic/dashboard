@@ -67,15 +67,20 @@ export class AzureExtendedNodeDataComponent extends BaseFormValidator implements
   }
 
   onTagsChange(tags: object): void {
+    this.tags = tags;
     this._nodeDataService.azure.tags = tags;
   }
 
-  private _init(): void {
-    let assignPublicIP = false;
-    if (this._nodeDataService.nodeData.spec.cloud.azure) {
-      this.tags = this.nodeData.spec.cloud.azure.tags;
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
 
-      assignPublicIP = this._nodeDataService.isInDialogEditMode()
+  private _init(): void {
+    if (this._nodeDataService.nodeData.spec.cloud.azure) {
+      this.onTagsChange(this.nodeData.spec.cloud.azure.tags);
+
+      const assignPublicIP = this._nodeDataService.isInDialogEditMode()
         ? this.nodeData.spec.cloud.azure.assignPublicIP
         : true;
       this.form.get(Controls.AssignPublicIP).setValue(assignPublicIP);
@@ -92,10 +97,5 @@ export class AzureExtendedNodeDataComponent extends BaseFormValidator implements
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
-  }
-
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
   }
 }

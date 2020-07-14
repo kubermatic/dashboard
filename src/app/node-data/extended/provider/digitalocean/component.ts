@@ -56,25 +56,14 @@ export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator imp
   }
 
   ngOnInit(): void {
-    let backups,
-      ipv6,
-      monitoring = false;
-
-    // Try to fill form fields with preexisting data if available
-    if (this.nodeData.spec.cloud.digitalocean) {
-      backups = !!this.nodeData.spec.cloud.digitalocean.backups;
-      ipv6 = !!this.nodeData.spec.cloud.digitalocean.ipv6;
-      monitoring = !!this.nodeData.spec.cloud.digitalocean.monitoring;
-      this.tags = this.nodeData.spec.cloud.digitalocean.tags;
-    }
-
     this.form = this._builder.group({
-      [Controls.Backups]: this._builder.control(backups),
-      [Controls.IPv6]: this._builder.control(ipv6),
-      [Controls.Monitoring]: this._builder.control(monitoring),
+      [Controls.Backups]: this._builder.control(false),
+      [Controls.IPv6]: this._builder.control(false),
+      [Controls.Monitoring]: this._builder.control(false),
       [Controls.Tags]: this._builder.control(''),
     });
 
+    this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
     merge(
@@ -87,6 +76,7 @@ export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator imp
   }
 
   onTagsChange(tags: string[]): void {
+    this.tags = tags;
     this._nodeDataService.digitalOcean.tags = tags;
   }
 
@@ -107,5 +97,15 @@ export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator imp
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  private _init(): void {
+    if (this._nodeDataService.nodeData.spec.cloud.digitalocean) {
+      this.onTagsChange(this._nodeDataService.nodeData.spec.cloud.digitalocean.tags);
+
+      this.form.get(Controls.Backups).setValue(this.nodeData.spec.cloud.digitalocean.backups);
+      this.form.get(Controls.IPv6).setValue(this.nodeData.spec.cloud.digitalocean.ipv6);
+      this.form.get(Controls.Monitoring).setValue(this.nodeData.spec.cloud.digitalocean.monitoring);
+    }
   }
 }

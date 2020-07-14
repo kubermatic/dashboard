@@ -22,7 +22,7 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import * as _ from 'lodash';
 import {merge, Observable, of} from 'rxjs';
-import {filter, first, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
 import {ClusterType} from '../../../../shared/entity/cluster';

@@ -67,15 +67,17 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
   }
 
   onTagsChange(tags: object): void {
+    this.tags = tags;
     this._nodeDataService.aws.tags = tags;
   }
 
   private _init(): void {
-    let assignPublicIP = false;
     if (this.nodeData.spec.cloud.aws) {
-      this.tags = this.nodeData.spec.cloud.aws.tags;
+      this.onTagsChange(this.nodeData.spec.cloud.aws.tags);
 
-      assignPublicIP = this._nodeDataService.isInDialogEditMode() ? this.nodeData.spec.cloud.aws.assignPublicIP : true;
+      const assignPublicIP = this._nodeDataService.isInDialogEditMode()
+        ? this.nodeData.spec.cloud.aws.assignPublicIP
+        : true;
       this.form.get(Controls.AssignPublicIP).setValue(assignPublicIP);
     }
   }

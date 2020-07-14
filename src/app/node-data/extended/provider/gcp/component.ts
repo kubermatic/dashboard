@@ -50,18 +50,29 @@ export class GCPExtendedNodeDataComponent extends BaseFormValidator implements O
       [Controls.Labels]: this._builder.control(''),
       [Controls.Tags]: this._builder.control(''),
     });
+
+    this._init();
   }
 
   onLabelsChange(labels: object): void {
+    this.labels = labels;
     this._nodeDataService.gcp.labels = labels;
   }
 
   onTagsChange(tags: string[]): void {
+    this.tags = tags;
     this._nodeDataService.gcp.tags = tags;
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  private _init(): void {
+    if (this._nodeDataService.nodeData.spec.cloud.gcp) {
+      this.onTagsChange(this._nodeDataService.nodeData.spec.cloud.gcp.tags);
+      this.onLabelsChange(this._nodeDataService.nodeData.spec.cloud.gcp.labels);
+    }
   }
 }

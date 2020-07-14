@@ -52,14 +52,23 @@ export class PacketExtendedNodeDataComponent extends BaseFormValidator implement
     this.form = this._builder.group({
       [Controls.Tags]: this._builder.control(''),
     });
+
+    this._init();
   }
 
   onTagsChange(tags: string[]): void {
+    this.tags = tags;
     this._nodeDataService.packet.tags = tags;
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  private _init(): void {
+    if (this._nodeDataService.nodeData.spec.cloud.packet) {
+      this.onTagsChange(this._nodeDataService.nodeData.spec.cloud.packet.tags);
+    }
   }
 }

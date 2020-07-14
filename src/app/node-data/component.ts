@@ -9,7 +9,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectionStrategy, Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge, of} from 'rxjs';
 import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
@@ -83,7 +91,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     private readonly _nameGenerator: ClusterNameGenerator,
     private readonly _clusterService: ClusterService,
     private readonly _datacenterService: DatacenterService,
-    private readonly _nodeDataService: NodeDataService
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _cdr: ChangeDetectorRef
   ) {
     super();
   }
@@ -122,8 +131,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
-    this.labels = this._nodeDataService.nodeData.spec.labels;
-    this.taints = this._nodeDataService.nodeData.spec.taints;
 
     merge(this._clusterService.clusterTypeChanges, this._clusterService.providerChanges)
       .pipe(takeUntil(this._unsubscribe))
@@ -262,8 +269,13 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     const disableAutoUpdate = this._nodeDataService.operatingSystemSpec[this._nodeDataService.operatingSystem]
       .disableAutoUpdate;
 
+    this.onLabelsChange(this._nodeDataService.nodeData.spec.labels);
+    this.onTaintsChange(this._nodeDataService.nodeData.spec.taints);
+
     this.form.get(Controls.UpgradeOnBoot).setValue(!!upgradeOnBoot);
     this.form.get(Controls.DisableAutoUpdate).setValue(!!disableAutoUpdate);
+
+    this._cdr.detectChanges();
   }
 
   private _getOperatingSystemSpec(): OperatingSystemSpec {

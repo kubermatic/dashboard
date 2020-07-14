@@ -47,14 +47,23 @@ export class OpenstackExtendedNodeDataComponent extends BaseFormValidator implem
     this.form = this._builder.group({
       [Controls.Tags]: this._builder.control(''),
     });
+
+    this._init();
   }
 
   onTagsChange(tags: object): void {
+    this.tags = tags;
     this._nodeDataService.openstack.tags = tags;
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  private _init(): void {
+    if (this._nodeDataService.nodeData.spec.cloud.openstack) {
+      this.onTagsChange(this._nodeDataService.nodeData.spec.cloud.openstack.tags);
+    }
   }
 }

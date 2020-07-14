@@ -47,14 +47,23 @@ export class AlibabaExtendedNodeDataComponent extends BaseFormValidator implemen
     this.form = this._builder.group({
       [Controls.Labels]: this._builder.control(''),
     });
+
+    this._init();
   }
 
   onLabelsChange(labels: object): void {
+    this.labels = labels;
     this._nodeDataService.alibaba.labels = labels;
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  private _init(): void {
+    if (this._nodeDataService.nodeData.spec.cloud.openstack) {
+      this.onLabelsChange(this._nodeDataService.nodeData.spec.cloud.alibaba.labels);
+    }
   }
 }
