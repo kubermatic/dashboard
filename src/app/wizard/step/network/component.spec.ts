@@ -14,11 +14,13 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {Auth, DatacenterService, PresetsService} from '../../../core/services';
+import {ApiService, Auth, DatacenterService, PresetsService, ProjectService} from '../../../core/services';
 import {NODE_DATA_CONFIG, NodeDataMode} from '../../../node-data/config';
 import {NodeDataService} from '../../../node-data/service/service';
 import {SharedModule} from '../../../shared/shared.module';
 import {ClusterService} from '../../../shared/services/cluster.service';
+import {ApiMockService} from '../../../testing/services/api-mock.service';
+import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {WizardService} from '../../service/wizard';
 import {MachineNetworkStepComponent} from './component';
 import {AppConfigService} from '../../../app-config.service';
@@ -39,11 +41,13 @@ describe('MachineNetworkStepComponent', () => {
         ClusterService,
         NodeDataService,
         ClusterService,
-        {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
         PresetsService,
         DatacenterService,
-        {provide: Auth, useClass: AuthMockService},
         AppConfigService,
+        {provide: ProjectService, useValue: ProjectMockService},
+        {provide: ApiService, useValue: ApiMockService},
+        {provide: Auth, useClass: AuthMockService},
+        {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
       ],
     }).compileComponents();
   }));
