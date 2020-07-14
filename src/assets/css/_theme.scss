@@ -589,17 +589,17 @@
   }
 
   .mat-optgroup-label {
+    background-color: map-get($colors, option-background) !important;
     font-size: $font-size-caption !important;
     line-height: 3.5 * $line-height !important;
     height: 3.5 * $line-height !important;
     padding-left: 1.25 * $baseline-grid !important;
-    border-top: 1px solid $divider !important;
   }
 
   .mat-option {
     padding: 0 0 0 (1.25 * $baseline-grid) !important;
     color: $text !important;
-    background-color: map-get($colors, option-background);
+    background-color: map-get($colors, option-background) !important;
 
     &:hover {
       background-color: map-get($colors, option-background-hover) !important;
