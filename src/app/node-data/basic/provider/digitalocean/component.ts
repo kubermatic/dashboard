@@ -12,10 +12,10 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
+import {DigitaloceanSizes, Optimized, Standard} from '../../../../shared/entity/provider/digitalocean';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
-import {DigitaloceanSizes, Optimized, Standard} from '../../../../shared/entity/provider/digitalocean';
 
 enum Controls {
   Size = 'size',

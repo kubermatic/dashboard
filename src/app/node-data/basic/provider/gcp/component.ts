@@ -21,15 +21,15 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import * as _ from 'lodash';
 import {merge, Observable} from 'rxjs';
-import {filter, first, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
 import {GCPNodeSpec, NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
+import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../../shared/entity/provider/gcp';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
-import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../../shared/entity/provider/gcp';
-import * as _ from 'lodash';
 
 enum Controls {
   DiskSize = 'diskSize',

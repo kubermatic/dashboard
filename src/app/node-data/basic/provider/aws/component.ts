@@ -21,15 +21,15 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge, Observable} from 'rxjs';
-import {first, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
+import {AWSSize, AWSSubnet} from '../../../../shared/entity/provider/aws';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
-import {AWSSize, AWSSubnet} from '../../../../shared/entity/provider/aws';
 
 enum Controls {
   Size = 'size',

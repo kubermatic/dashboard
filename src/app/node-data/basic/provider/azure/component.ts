@@ -20,14 +20,14 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
+import {filter, switchMap, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
 import {AzureNodeSpec, NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
+import {AzureSizes, AzureZones} from '../../../../shared/entity/provider/azure';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
-import {AzureSizes, AzureZones} from '../../../../shared/entity/provider/azure';
 
 enum Controls {
   Size = 'size',

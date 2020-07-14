@@ -21,16 +21,15 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge, Observable} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
-import * as _ from 'lodash';
+import {takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
+import {AlibabaInstanceType, AlibabaZone} from '../../../../shared/entity/provider/alibaba';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
-import {AlibabaInstanceType, AlibabaZone} from '../../../../shared/entity/provider/alibaba';
 
 enum Controls {
   InstanceType = 'instanceType',
