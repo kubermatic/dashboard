@@ -875,6 +875,7 @@
     background-color: $background-app-bar;
     border-radius: $border-radius;
     box-shadow: map-get($colors, shadow-dark) !important;
+    color: $text;
     position: fixed;
     overflow: hidden;
     z-index: 3;
