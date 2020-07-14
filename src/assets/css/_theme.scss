@@ -1356,6 +1356,10 @@
         font-size: $font-size-subhead;
         margin-top: 2.5 * $baseline-grid;
 
+        .mat-select-value-text {
+          color: $text !important;
+        }
+
         div.mat-form-field-flex label {
           color: $text-secondary;
         }
