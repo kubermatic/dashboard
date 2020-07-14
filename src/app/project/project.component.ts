@@ -18,7 +18,7 @@ import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
 import {Subject, timer} from 'rxjs';
-import {debounceTime, filter, first, switchMap, takeUntil} from 'rxjs/operators';
+import {debounceTime, filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
 import {Cookie, COOKIE_DI_TOKEN} from '../app.config';
@@ -77,7 +77,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   settings: UserSettings;
-  isInitialized = false;
   private _settingsChange = new Subject<void>();
   private _unsubscribe: Subject<any> = new Subject();
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
@@ -100,15 +99,16 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
     this._userService.currentUser.subscribe(user => (this.currentUser = user));
 
-    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      this.settings = settings;
-      this.showCards = !settings.selectProjectTableView;
-
-      if (!this.isInitialized) {
-        this.selectDefaultProject();
-        this.isInitialized = true;
-      }
-    });
+    this._userService.currentUserSettings
+      .pipe(
+        tap(settings => {
+          this.settings = settings;
+          this.showCards = !settings.selectProjectTableView;
+        })
+      )
+      .pipe(filter(_ => !this.settings))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this.selectDefaultProject());
 
     this._settingsChange
       .pipe(debounceTime(500))
@@ -118,7 +118,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
           this._userService.patchCurrentUserSettings({selectProjectTableView: !this.showCards} as UserSettings)
         )
       )
-      .subscribe(_ => {});
+      .subscribe();
 
     this._refreshTimer$
       .pipe(takeUntil(this._unsubscribe))
