@@ -13,7 +13,8 @@ limitations under the License.
 <mat-card [ngClass]="isShowEvents ? 'km-with-table-header' : 'km-with-table-header km-toggled-events'">
   <mat-card-header (click)="toggleEvents()">
     <mat-card-title>
-      <i [ngClass]="isShowEvents ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
+      <i class="km-icon-mask"
+         [ngClass]="isShowEvents ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
       Events
       <span class="km-events-title">
         <i [ngClass]="getTypeIconForEvents()"></i>
