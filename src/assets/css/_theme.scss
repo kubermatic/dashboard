@@ -1169,8 +1169,14 @@
     }
   }
 
-  .km-projects-container:hover {
-    background-color: map-get($colors, project-selector-hover);
+  .km-projects-container {
+    i {
+      background-color: $text;
+    }
+
+    &:hover {
+      background-color: map-get($colors, project-selector-hover);
+    }
   }
 
   .km-cluster-spec-type {
