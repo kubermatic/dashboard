@@ -70,9 +70,9 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 .km-icon-randomize,
 .km-cluster-spec-type mat-button-toggle .km-icon-openshift,
 .km-sidenav a:not(.active) i,
-footer i,
+.km-footer i,
 *[class*="km-os-image-"] {
-  filter: invert(.25) brightness(100) contrast(100);
+  filter: invert(.25) brightness(100) contrast(100) !important;
 }
 
 // Swap some of the images.

@@ -588,23 +588,18 @@
     }
   }
 
-  span.mat-select-value-text {
-    font-size: $font-size-subhead;
-    color: $text;
-  }
-
   .mat-optgroup-label {
+    background-color: map-get($colors, option-background) !important;
     font-size: $font-size-caption !important;
     line-height: 3.5 * $line-height !important;
     height: 3.5 * $line-height !important;
     padding-left: 1.25 * $baseline-grid !important;
-    border-top: 1px solid $divider !important;
   }
 
   .mat-option {
     padding: 0 0 0 (1.25 * $baseline-grid) !important;
     color: $text !important;
-    background-color: map-get($colors, option-background);
+    background-color: map-get($colors, option-background) !important;
 
     &:hover {
       background-color: map-get($colors, option-background-hover) !important;
@@ -875,6 +870,7 @@
     background-color: $background-app-bar;
     border-radius: $border-radius;
     box-shadow: map-get($colors, shadow-dark) !important;
+    color: $text;
     position: fixed;
     overflow: hidden;
     z-index: 3;
@@ -1173,8 +1169,14 @@
     }
   }
 
-  .km-projects-container:hover {
-    background-color: map-get($colors, project-selector-hover);
+  .km-projects-container {
+    i {
+      background-color: $text;
+    }
+
+    &:hover {
+      background-color: map-get($colors, project-selector-hover);
+    }
   }
 
   .km-cluster-spec-type {
@@ -1353,6 +1355,10 @@
       .mat-form-field {
         font-size: $font-size-subhead;
         margin-top: 2.5 * $baseline-grid;
+
+        .mat-select-value-text {
+          color: $text !important;
+        }
 
         div.mat-form-field-flex label {
           color: $text-secondary;

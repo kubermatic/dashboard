@@ -13,7 +13,8 @@ limitations under the License.
 <mat-card [ngClass]="isShowRBAC ? 'km-with-table-header' : 'km-with-table-header km-toggled-rbac'">
   <mat-card-header (click)="toggleRBAC()">
     <mat-card-title>
-      <i [ngClass]="isShowRBAC ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
+      <i class="km-icon-mask"
+         [ngClass]="isShowRBAC ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
       RBAC
     </mat-card-title>
     <div fxFlex></div>
