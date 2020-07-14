@@ -27,6 +27,10 @@ export enum Group {
 
 export class MemberUtils {
   static getGroupInProject(member: Member, projectID: string): string {
+    if (!member || !member.projects) {
+      return '';
+    }
+
     const project = member.projects.find(memberProject => memberProject.id === projectID);
     return project ? project.group : '';
   }

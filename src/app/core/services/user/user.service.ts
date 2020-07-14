@@ -86,7 +86,7 @@ export class UserService {
   }
 
   getCurrentUserGroup(projectID: string): Observable<string> {
-    return this.currentUser.pipe(first()).pipe(map(member => MemberUtils.getGroupInProject(member, projectID)));
+    return this.currentUser.pipe(map(member => MemberUtils.getGroupInProject(member, projectID)));
   }
 
   getCurrentUserGroupConfig(userGroup: string): GroupConfig {

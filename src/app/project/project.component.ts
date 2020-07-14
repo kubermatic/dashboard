@@ -121,8 +121,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe();
 
     this._refreshTimer$
-      .pipe(takeUntil(this._unsubscribe))
       .pipe(switchMap(() => this._projectService.projects))
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(projects => {
         this.projects = this._loadCurrentUserRolesAndSortProjects(projects);
         this.dataSource.data = this.projects;
