@@ -50,9 +50,12 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   dataSource = new MatTableDataSource<Project>();
   isPaginatorVisible = false;
   showCards = true;
+  settings: UserSettings;
+  private _settingsChange = new Subject<void>();
+  private _unsubscribe: Subject<any> = new Subject();
+  private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
 
   paginator: MatPaginator;
-
   @ViewChild(MatPaginator)
   set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
@@ -68,17 +71,11 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   sort: MatSort;
-
   @ViewChild(MatSort)
   set matSort(ms: MatSort) {
     this.sort = ms;
     this.setDataSourceAttributes();
   }
-
-  settings: UserSettings;
-  private _settingsChange = new Subject<void>();
-  private _unsubscribe: Subject<any> = new Subject();
-  private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
 
   constructor(
     private readonly _projectService: ProjectService,
