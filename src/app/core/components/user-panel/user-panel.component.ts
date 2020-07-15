@@ -29,7 +29,7 @@ import {Member} from '../../../shared/entity/member';
 export class UserPanelComponent implements OnInit, OnDestroy {
   user: Member;
   private _isOpen = false;
-  private _unsubscribe: Subject<any> = new Subject();
+  private _unsubscribe: Subject<void> = new Subject();
 
   constructor(
     private readonly _elementRef: ElementRef,
@@ -41,9 +41,7 @@ export class UserPanelComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    if (this._auth.authenticated()) {
-      this._userService.loggedInUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => (this.user = user));
-    }
+    this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => (this.user = user));
   }
 
   ngOnDestroy(): void {

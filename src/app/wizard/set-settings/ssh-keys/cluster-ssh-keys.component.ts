@@ -58,21 +58,21 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.project.id = this._activeRoute.snapshot.paramMap.get('projectID');
 
-    this._userService.loggedInUser.pipe(first()).subscribe(user => (this._currentUser = user));
+    this._userService.currentUser.pipe(first()).subscribe(user => (this._currentUser = user));
 
     this._userService
-      .currentUserGroup(this.project.id)
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
+      .getCurrentUserGroup(this.project.id)
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     this._projectService.selectedProject
       .pipe(takeUntil(this._unsubscribe))
       .pipe(
         switchMap(project => {
           this.project = project;
-          return this._userService.currentUserGroup(this.project.id);
+          return this._userService.getCurrentUserGroup(this.project.id);
         })
       )
-      .subscribe(group => (this.groupConfig = this._userService.userGroupConfig(group)));
+      .subscribe(group => (this.groupConfig = this._userService.getCurrentUserGroupConfig(group)));
 
     this._projectService.onProjectChange.subscribe(project => {
       this.project = project;

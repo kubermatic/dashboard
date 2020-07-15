@@ -42,10 +42,10 @@ export class RevokeTokenComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
+    this._userService.currentUser.pipe(first()).subscribe(user => (this._user = user));
 
-    this._userService.currentUserGroup(this.projectID).subscribe(userGroup => {
-      this._currentGroupConfig = this._userService.userGroupConfig(userGroup);
+    this._userService.getCurrentUserGroup(this.projectID).subscribe(userGroup => {
+      this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup);
     });
   }
 

@@ -101,11 +101,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const clusterID = this._route.snapshot.paramMap.get(PathParam.ClusterID);
     this.seed = this._route.snapshot.paramMap.get(PathParam.SeedDC);
 
-    this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
+    this._userService.currentUser.pipe(first()).subscribe(user => (this._user = user));
 
     this._userService
-      .currentUserGroup(this.projectID)
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
+      .getCurrentUserGroup(this.projectID)
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     this._clusterService
       .cluster(this.projectID, clusterID, this.seed)
@@ -303,7 +303,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       switchMap(settings =>
         iif(
           () => settings.enableOIDCKubeconfig,
-          this._userService.loggedInUser.pipe(
+          this._userService.currentUser.pipe(
             map((user: Member) => this._api.getShareKubeconfigURL(this.projectID, this.seed, this.cluster.id, user.id))
           ),
           of(this._api.getKubeconfigURL(this.projectID, this.seed, this.cluster.id))

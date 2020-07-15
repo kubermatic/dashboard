@@ -59,11 +59,11 @@ export class ServiceAccountTokenComponent implements OnInit {
       .pipe(
         switchMap(project => {
           this._selectedProject = project;
-          return this._userService.currentUserGroup(project.id);
+          return this._userService.getCurrentUserGroup(project.id);
         })
       )
       .pipe(first())
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
   }
 
   getDataSource(): MatTableDataSource<ServiceAccountToken> {

@@ -15,21 +15,31 @@ import {Member} from '../../shared/entity/member';
 import {GroupConfig} from '../../shared/model/Config';
 import {fakeMember} from '../fake-data/member.fake';
 import {fakeUserGroupConfig} from '../fake-data/userGroupConfig.fake';
+import {UserSettings} from '../../shared/entity/settings';
+import {DEFAULT_USER_SETTINGS_MOCK} from './settings-mock.service';
 
 @Injectable()
 export class UserMockService {
   private user: Observable<Member>;
 
-  get loggedInUser(): Observable<Member> {
+  get currentUser(): Observable<Member> {
     this.user = of(fakeMember());
     return this.user;
   }
 
-  currentUserGroup(projectID: string): Observable<string> {
+  get currentUserSettings(): Observable<UserSettings> {
+    return of(DEFAULT_USER_SETTINGS_MOCK);
+  }
+
+  get defaultUserSettings(): UserSettings {
+    return DEFAULT_USER_SETTINGS_MOCK;
+  }
+
+  getCurrentUserGroup(projectID: string): Observable<string> {
     return of(fakeMember().projects[0].group);
   }
 
-  userGroupConfig(userGroup: string): GroupConfig {
+  getCurrentUserGroupConfig(userGroup: string): GroupConfig {
     return fakeUserGroupConfig()[userGroup];
   }
 }

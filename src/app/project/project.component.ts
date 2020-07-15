@@ -17,14 +17,13 @@ import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
-import {Subject, timer} from 'rxjs';
-import {debounceTime, filter, first, switchMap, takeUntil} from 'rxjs/operators';
+import {merge, Subject, timer} from 'rxjs';
+import {debounceTime, filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
 import {Cookie, COOKIE_DI_TOKEN} from '../app.config';
 import {NotificationService, ProjectService, UserService} from '../core/services';
 import {PreviousRouteService} from '../core/services/previous-route/previous-route.service';
-import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -46,15 +45,17 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   projects: Project[] = [];
   currentUser: Member;
   isInitializing = true;
-  role = [];
-  rawRole = [];
+  role = new Map<string, string>();
   displayedColumns: string[] = ['status', 'name', 'labels', 'id', 'role', 'clusters', 'owners', 'actions'];
   dataSource = new MatTableDataSource<Project>();
   isPaginatorVisible = false;
   showCards = true;
+  settings: UserSettings;
+  private _settingsChange = new Subject<void>();
+  private _unsubscribe: Subject<any> = new Subject();
+  private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
 
   paginator: MatPaginator;
-
   @ViewChild(MatPaginator)
   set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
@@ -70,17 +71,11 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   sort: MatSort;
-
   @ViewChild(MatSort)
   set matSort(ms: MatSort) {
     this.sort = ms;
     this.setDataSourceAttributes();
   }
-
-  settings: UserSettings;
-  private _settingsChange = new Subject<void>();
-  private _unsubscribe: Subject<any> = new Subject();
-  private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
 
   constructor(
     private readonly _projectService: ProjectService,
@@ -89,7 +84,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
     private readonly _router: Router,
     private readonly _cookieService: CookieService,
-    private readonly _settingsService: SettingsService,
     private readonly _notificationService: NotificationService,
     private readonly _previousRouteService: PreviousRouteService,
     private readonly _appConfig: AppConfigService,
@@ -99,37 +93,38 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.dataSource.data = this.projects;
 
-    this._userService.loggedInUser.subscribe(user => (this.currentUser = user));
-
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      if (this.settings) {
-        return;
-      }
-      this.settings = settings;
-      this.showCards = !settings.selectProjectTableView;
-      this.selectDefaultProject();
+    this._userService.currentUser.subscribe(user => {
+      this.currentUser = user;
+      this._loadCurrentUserRoles();
     });
 
+    this._userService.currentUserSettings
+      .pipe(
+        tap(settings => {
+          this.settings = settings;
+          this.showCards = !settings.selectProjectTableView;
+        })
+      )
+      .pipe(filter(_ => !this.settings))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this.selectDefaultProject());
+
     this._settingsChange
-      .pipe(debounceTime(1000))
+      .pipe(debounceTime(500))
       .pipe(takeUntil(this._unsubscribe))
       .pipe(
         switchMap(() =>
-          this._settingsService.patchUserSettings({
-            selectProjectTableView: !this.showCards,
-          } as UserSettings)
+          this._userService.patchCurrentUserSettings({selectProjectTableView: !this.showCards} as UserSettings)
         )
       )
-      .subscribe(settings => {
-        this.settings = settings;
-        this.showCards = !settings.selectProjectTableView;
-      });
+      .subscribe();
 
-    this._refreshTimer$
-      .pipe(takeUntil(this._unsubscribe))
+    merge(this._refreshTimer$, this._projectService.onProjectsUpdate)
       .pipe(switchMap(() => this._projectService.projects))
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(projects => {
-        this.projects = this._loadCurrentUserRolesAndSortProjects(projects);
+        this.projects = this._sortProjects(projects);
+        this._loadCurrentUserRoles();
         this.dataSource.data = this.projects;
         this._sortProjectOwners();
 
@@ -150,8 +145,24 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     this.dataSource.data = this.projects;
   }
 
+  private _loadCurrentUserRoles(): void {
+    if (!!this.currentUser && !!this.currentUser.projects) {
+      this.currentUser.projects.forEach(mp => this.role.set(mp.id, MemberUtils.getGroupDisplayName(mp.group)));
+    }
+
+    if (this.projects) {
+      this.projects
+        .filter(p => p.owners.map(o => o.email).includes(this.currentUser.email))
+        .forEach(p => this.role.set(p.id, 'Owner'));
+    }
+  }
+
   setDataSourceAttributes(): void {
     this.dataSource.sort = this.sort;
+  }
+
+  getRole(project: string): string {
+    return this.role.get(project);
   }
 
   private _sortProjectOwners(): void {
@@ -160,20 +171,11 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  private _loadCurrentUserRolesAndSortProjects(projects): Project[] {
-    const ownProjects: Project[] = [];
-    const externalProjects: Project[] = [];
-    projects.forEach(project => {
-      this._userService.currentUserGroup(project.id).subscribe(group => {
-        this.role[project.id] = MemberUtils.getGroupDisplayName(group);
-        this.rawRole[project.id] = group;
-        if (MemberUtils.getGroupDisplayName(group) !== '') {
-          ownProjects.push(project);
-        } else {
-          externalProjects.push(project);
-        }
-      });
-    });
+  private _sortProjects(projects): Project[] {
+    const ownProjectIds =
+      !!this.currentUser && !!this.currentUser.projects ? this.currentUser.projects.map(mp => mp.id) : [];
+    const ownProjects = projects.filter(p => ownProjectIds.includes(p.id));
+    const externalProjects = projects.filter(p => !ownProjectIds.includes(p.id));
 
     return ownProjects
       .sort((a, b) => (a.name + a.id).localeCompare(b.name + b.id))
@@ -307,7 +309,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   isEditEnabled(project: Project): boolean {
     return MemberUtils.hasPermission(
       this.currentUser,
-      this._userService.userGroupConfig(this.rawRole[project.id]),
+      this._userService.getCurrentUserGroupConfig(MemberUtils.getGroupInProject(this.currentUser, project.id)),
       View.Projects,
       Permission.Edit
     );
@@ -330,7 +332,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   isDeleteEnabled(project: Project): boolean {
     return MemberUtils.hasPermission(
       this.currentUser,
-      this._userService.userGroupConfig(this.rawRole[project.id]),
+      this._userService.getCurrentUserGroupConfig(MemberUtils.getGroupInProject(this.currentUser, project.id)),
       View.Projects,
       Permission.Delete
     );

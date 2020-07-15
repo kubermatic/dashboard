@@ -13,12 +13,12 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import {SettingsService} from '../../../core/services/settings/settings.service';
-import {SettingsMockService} from '../../../testing/services/settings-mock.service';
 import {Event} from '../../entity/event';
 import {SharedModule} from '../../shared.module';
 
 import {EventListComponent} from './event-list.component';
+import {UserService} from '../../../core/services';
+import {UserMockService} from '../../../testing/services/user-mock.service';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
@@ -29,7 +29,7 @@ describe('EventListComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [...modules],
-      providers: [{provide: SettingsService, useClass: SettingsMockService}],
+      providers: [{provide: UserService, useClass: UserMockService}],
     }).compileComponents();
   });
 

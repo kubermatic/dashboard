@@ -9,7 +9,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {wait} from '../utils/wait';
 import {Condition} from '../utils/condition';
 import {UserPanel} from './user-panel.po';
 
@@ -24,13 +23,8 @@ export class UserSettingsPage {
     cy.url().should(Condition.Include, 'account');
   }
 
-  static waitForRefresh(): void {
-    wait('**/me/settings', 'GET', 'get user settings');
-  }
-
   static visit(): void {
     UserPanel.openUserSettings();
-    this.waitForRefresh();
     this.verifyUrl();
   }
 }
