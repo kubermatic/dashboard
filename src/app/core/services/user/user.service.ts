@@ -29,7 +29,6 @@ export class UserService {
   private readonly wsRoot = environment.wsRoot;
   private readonly _currentUser$ = new BehaviorSubject<Member>(undefined);
   private readonly _currentUserSettings$ = new BehaviorSubject<UserSettings>(DEFAULT_USER_SETTINGS);
-  private _currentUserWatch$: Observable<Member>;
 
   constructor(
     private readonly _httpClient: HttpClient,
@@ -49,11 +48,13 @@ export class UserService {
           )
         )
       );
-    this._currentUserWatch$ = iif(() => this._tokenService.hasExpired(), webSocket$, EMPTY);
-    this._currentUserWatch$.subscribe(user => {
-      this._currentUser$.next(user);
-      this._currentUserSettings$.next(this._defaultUserSettings(user.userSettings));
-    });
+
+    iif(() => this._tokenService.hasExpired(), webSocket$, EMPTY)
+      .pipe(filter(user => !!user))
+      .subscribe(user => {
+        this._currentUser$.next(user);
+        this._currentUserSettings$.next(this._defaultUserSettings(user.userSettings));
+      });
   }
 
   get currentUser(): Observable<Member> {

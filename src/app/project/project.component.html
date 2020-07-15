@@ -90,8 +90,8 @@ limitations under the License.
               class="km-header-cell">Role</th>
           <td mat-cell
               *matCellDef="let element">
-            <span *ngIf="!!role[element.id]">{{role[element.id]}}</span>
-            <span *ngIf="!role[element.id]"
+            <span *ngIf="!!getRole(element.id)">{{getRole(element.id)}}</span>
+            <span *ngIf="!getRole(element.id)"
                   class="km-projects-external">
               <p>External Project</p>
             </span>
@@ -245,11 +245,11 @@ limitations under the License.
                                      [owners]="project.owners"
                                      [limit]="2"></km-short-name-in-circle>
           </span>
-          <span *ngIf="!!role[project.id]">
+          <span *ngIf="!!getRole(project.id)">
             <i class="km-icon-mask km-icon-role"></i>
-            {{role[project.id]}}
+            {{getRole(project.id)}}
           </span>
-          <span *ngIf="!role[project.id]"
+          <span *ngIf="!getRole(project.id)"
                 class="km-projects-external km-projects-external-right">
             <p>External Project</p>
           </span>

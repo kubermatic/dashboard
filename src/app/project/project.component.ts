@@ -17,7 +17,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
-import {Subject, timer} from 'rxjs';
+import {merge, Subject, timer} from 'rxjs';
 import {debounceTime, filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
@@ -45,8 +45,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   projects: Project[] = [];
   currentUser: Member;
   isInitializing = true;
-  role = [];
-  rawRole = [];
+  role = new Map<string, string>();
   displayedColumns: string[] = ['status', 'name', 'labels', 'id', 'role', 'clusters', 'owners', 'actions'];
   dataSource = new MatTableDataSource<Project>();
   isPaginatorVisible = false;
@@ -97,7 +96,10 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.dataSource.data = this.projects;
 
-    this._userService.currentUser.subscribe(user => (this.currentUser = user));
+    this._userService.currentUser.subscribe(user => {
+      this.currentUser = user;
+      this._loadCurrentUserRoles();
+    });
 
     this._userService.currentUserSettings
       .pipe(
@@ -120,11 +122,12 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       )
       .subscribe();
 
-    this._refreshTimer$
+    merge(this._refreshTimer$, this._projectService.onProjectsUpdate)
       .pipe(switchMap(() => this._projectService.projects))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(projects => {
-        this.projects = this._loadCurrentUserRolesAndSortProjects(projects);
+        this.projects = this._sortProjects(projects);
+        this._loadCurrentUserRoles();
         this.dataSource.data = this.projects;
         this._sortProjectOwners();
 
@@ -145,8 +148,24 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     this.dataSource.data = this.projects;
   }
 
+  private _loadCurrentUserRoles(): void {
+    if (!!this.currentUser && !!this.currentUser.projects) {
+      this.currentUser.projects.forEach(mp => this.role.set(mp.id, MemberUtils.getGroupDisplayName(mp.group)));
+    }
+
+    if (this.projects) {
+      this.projects
+        .filter(p => p.owners.map(o => o.email).includes(this.currentUser.email))
+        .forEach(p => this.role.set(p.id, 'Owner'));
+    }
+  }
+
   setDataSourceAttributes(): void {
     this.dataSource.sort = this.sort;
+  }
+
+  getRole(project: string): string {
+    return this.role.get(project);
   }
 
   private _sortProjectOwners(): void {
@@ -155,20 +174,11 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  private _loadCurrentUserRolesAndSortProjects(projects): Project[] {
-    const ownProjects: Project[] = [];
-    const externalProjects: Project[] = [];
-    projects.forEach(project => {
-      this._userService.getCurrentUserGroup(project.id).subscribe(group => {
-        this.role[project.id] = MemberUtils.getGroupDisplayName(group);
-        this.rawRole[project.id] = group;
-        if (MemberUtils.getGroupDisplayName(group) !== '') {
-          ownProjects.push(project);
-        } else {
-          externalProjects.push(project);
-        }
-      });
-    });
+  private _sortProjects(projects): Project[] {
+    const ownProjectIds =
+      !!this.currentUser && !!this.currentUser.projects ? this.currentUser.projects.map(mp => mp.id) : [];
+    const ownProjects = projects.filter(p => ownProjectIds.includes(p.id));
+    const externalProjects = projects.filter(p => !ownProjectIds.includes(p.id));
 
     return ownProjects
       .sort((a, b) => (a.name + a.id).localeCompare(b.name + b.id))
@@ -302,7 +312,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   isEditEnabled(project: Project): boolean {
     return MemberUtils.hasPermission(
       this.currentUser,
-      this._userService.getCurrentUserGroupConfig(this.rawRole[project.id]),
+      this._userService.getCurrentUserGroupConfig(MemberUtils.getGroupInProject(this.currentUser, project.id)),
       View.Projects,
       Permission.Edit
     );
@@ -325,7 +335,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   isDeleteEnabled(project: Project): boolean {
     return MemberUtils.hasPermission(
       this.currentUser,
-      this._userService.getCurrentUserGroupConfig(this.rawRole[project.id]),
+      this._userService.getCurrentUserGroupConfig(MemberUtils.getGroupInProject(this.currentUser, project.id)),
       View.Projects,
       Permission.Delete
     );
