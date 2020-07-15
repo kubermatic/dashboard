@@ -13,7 +13,8 @@ limitations under the License.
 <form [formGroup]="form">
   <mat-form-field fxFlex>
     <mat-label>{{ label }}</mat-label>
-    <mat-select [formControlName]="Controls.Preset"
+    <mat-select id="km-wizard-select-preset"
+                [formControlName]="Controls.Preset"
                 panelClass="km-preset-dropdown"
                 required>
       <mat-option *ngFor="let presetName of presetList.names"

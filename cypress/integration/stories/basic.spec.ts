@@ -45,11 +45,11 @@ describe('Basic Story', () => {
   });
 
   it('should create a new cluster', () => {
-    WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
-    WizardPage.getNextBtn().click();
     WizardPage.getProviderBtn(Provider.BringYourOwn).click();
     WizardPage.getDatacenterBtn(Datacenter.Frankfurt).click();
-    WizardPage.getCreateBtn().click();
+    WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
+    WizardPage.getNextBtn().click({force: true});
+    WizardPage.getCreateBtn().click({force: true});
 
     ClustersPage.verifyUrl();
   });

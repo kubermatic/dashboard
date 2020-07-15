@@ -50,6 +50,10 @@ export class ProjectsPage {
     return cy.get('#km-edit-project-dialog-edit-btn');
   }
 
+  static getAppEdition(): Cypress.Chainable {
+    return cy.get('#km-edition');
+  }
+
   // Utils.
 
   static waitForRefresh(): void {

@@ -9,15 +9,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export enum Condition {
-  HaveValue = 'have.value',
-  Contain = 'contain',
-  NotContain = 'not.contain',
-  Include = 'include',
-  Exist = 'exist',
-  NotExist = 'not.exist',
-  HaveClass = 'have.class',
-  HaveLength = 'have.length',
-  NotBe = 'not.be',
-  BeEnabled = 'be.enabled',
+export enum Preset {
+  Digitalocean = 'e2e-digitalocean',
 }

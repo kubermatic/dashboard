@@ -9,9 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {ProjectsPage} from '../../pages/projects.po';
+import {UserSettingsPage} from '../../pages/user-settings.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
-import {UserSettingsPage} from '../../pages/user-settings.po';
 
 describe('Edition Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
@@ -27,7 +28,7 @@ describe('Edition Story', () => {
   });
 
   it('should check if footer contains correct edition', () => {
-    cy.get('#km-edition').should(Condition.Contain, editionName);
+    ProjectsPage.getAppEdition().should(Condition.Contain, editionName);
   });
 
   it('should go to the user settings', () => {

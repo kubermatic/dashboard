@@ -65,12 +65,14 @@ limitations under the License.
                   matStepperPrevious
                   *ngIf="!first">Back
           </button>
-          <button mat-flat-button
+          <button id="km-create-cluster-next-btn"
+                  mat-flat-button
                   matStepperNext
                   [disabled]="invalid"
                   *ngIf="!last">Next
           </button>
-          <button mat-flat-button
+          <button id="km-create-cluster-create-btn"
+                  mat-flat-button
                   [disabled]="creating"
                   *ngIf="last"
                   (click)="create()">Create
