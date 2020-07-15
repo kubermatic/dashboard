@@ -11,8 +11,8 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {EMPTY, iif, Observable, of, timer} from 'rxjs';
-import {catchError, first, map, shareReplay, switchMap} from 'rxjs/operators';
+import {BehaviorSubject, EMPTY, iif, Observable, of} from 'rxjs';
+import {catchError, delay, filter, first, map, retryWhen, switchMap, tap} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
@@ -20,49 +20,87 @@ import {Member} from '../../../shared/entity/member';
 import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils} from '../../../shared/utils/member-utils/member-utils';
 import {TokenService} from '../token/token.service';
+import {DEFAULT_USER_SETTINGS, UserSettings} from '../../../shared/entity/settings';
+import {webSocket} from 'rxjs/webSocket';
 
 @Injectable()
 export class UserService {
-  private readonly restRoot: string = environment.restRoot;
-  private _user$: Observable<Member>;
-  private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
+  private readonly restRoot = environment.restRoot;
+  private readonly wsRoot = environment.wsRoot;
+  private readonly _currentUser$ = new BehaviorSubject<Member>(undefined);
+  private readonly _currentUserSettings$ = new BehaviorSubject<UserSettings>(DEFAULT_USER_SETTINGS);
 
   constructor(
-    private readonly _http: HttpClient,
-    private readonly _appConfig: AppConfigService,
+    private readonly _httpClient: HttpClient,
+    private readonly _appConfigService: AppConfigService,
     private readonly _tokenService: TokenService
   ) {}
 
-  get loggedInUser(): Observable<Member> {
-    if (!this._user$) {
-      this._user$ = this._refreshTimer$
-        .pipe(switchMap(() => iif(() => this._tokenService.hasExpired(), this._getLoggedInUser(), EMPTY)))
-        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+  init(): void {
+    const webSocket$ = webSocket<Member>(`${this.wsRoot}/me`)
+      .asObservable()
+      .pipe(
+        retryWhen(errors =>
+          errors.pipe(
+            // eslint-disable-next-line no-console
+            tap(console.debug),
+            delay(this._appConfigService.getRefreshTimeBase() * 3)
+          )
+        )
+      );
+
+    iif(() => this._tokenService.hasExpired(), webSocket$, EMPTY)
+      .pipe(filter(user => !!user))
+      .subscribe(user => {
+        this._currentUser$.next(user);
+        this._currentUserSettings$.next(this._defaultUserSettings(user.userSettings));
+      });
+  }
+
+  get currentUser(): Observable<Member> {
+    return this._currentUser$.pipe(filter(user => !!user));
+  }
+
+  get currentUserSettings(): Observable<UserSettings> {
+    return this._currentUserSettings$;
+  }
+
+  private _defaultUserSettings(settings: UserSettings): UserSettings {
+    if (!settings) {
+      return DEFAULT_USER_SETTINGS;
     }
 
-    return this._user$;
+    Object.keys(DEFAULT_USER_SETTINGS).forEach(key => {
+      settings[key] = settings[key] || DEFAULT_USER_SETTINGS[key];
+    });
+
+    return settings;
   }
 
-  currentUserGroup(projectID: string): Observable<string> {
-    return this.loggedInUser.pipe(first()).pipe(map(member => MemberUtils.getGroupInProject(member, projectID)));
+  get defaultUserSettings(): UserSettings {
+    return DEFAULT_USER_SETTINGS;
   }
 
-  userGroupConfig(userGroup: string): GroupConfig {
-    const userGroupConfig = this._appConfig.getUserGroupConfig();
+  patchCurrentUserSettings(patch: UserSettings): Observable<UserSettings> {
+    const url = `${this.restRoot}/me/settings`;
+    return this._httpClient.patch<UserSettings>(url, patch);
+  }
+
+  getCurrentUserGroup(projectID: string): Observable<string> {
+    return this.currentUser.pipe(map(member => MemberUtils.getGroupInProject(member, projectID)));
+  }
+
+  getCurrentUserGroupConfig(userGroup: string): GroupConfig {
+    const userGroupConfig = this._appConfigService.getUserGroupConfig();
     return userGroupConfig ? userGroupConfig[userGroup] : undefined;
   }
 
   logout(): Observable<boolean> {
     const url = `${this.restRoot}/me/logout`;
-    return this.loggedInUser
-      .pipe(switchMap(user => this._http.post(url, user)))
+    return this.currentUser
+      .pipe(switchMap(user => this._httpClient.post(url, user)))
       .pipe(map(_ => true))
       .pipe(catchError(_ => of(false)))
       .pipe(first());
-  }
-
-  private _getLoggedInUser(): Observable<Member> {
-    const url = `${this.restRoot}/me`;
-    return this._http.get<Member>(url).pipe(catchError(_ => of<Member>()));
   }
 }

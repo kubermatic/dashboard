@@ -34,7 +34,7 @@ export class ShareKubeconfigComponent implements OnInit {
 
   ngOnInit(): void {
     if (this._auth.authenticated()) {
-      this._userService.loggedInUser.pipe(first()).subscribe(user => {
+      this._userService.currentUser.pipe(first()).subscribe(user => {
         this.userID = user.id;
         this.kubeconfigLink = this._api.getShareKubeconfigURL(this.projectID, this.seed, this.cluster.id, this.userID);
       });

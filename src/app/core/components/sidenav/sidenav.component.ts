@@ -54,7 +54,12 @@ export class SidenavComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._screenWidth.subscribe(width => (this.screenWidth = width));
 
-    this._userService.loggedInUser.subscribe(user => (this.currentUser = user));
+    this._userService.currentUser.subscribe(user => (this.currentUser = user));
+
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this._isSidenavCollapsed = settings.collapseSidenav;
+      this.settings = settings;
+    });
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       const filtered = filterCustomLinks(settings.customLinks, CustomLinkLocation.Default);
@@ -63,20 +68,15 @@ export class SidenavComponent implements OnInit, OnDestroy {
       }
     });
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      this._isSidenavCollapsed = settings.collapseSidenav;
-      this.settings = settings;
-    });
-
     merge(this._projectService.selectedProject, this._projectService.onProjectChange)
       .pipe(takeUntil(this._unsubscribe))
       .pipe(
         switchMap((project: Project) => {
           this._selectedProject = project;
-          return this._userService.currentUserGroup(project.id);
+          return this._userService.getCurrentUserGroup(project.id);
         })
       )
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
   }
 
   ngOnDestroy(): void {

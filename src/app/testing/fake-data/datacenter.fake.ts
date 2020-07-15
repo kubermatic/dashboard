@@ -121,32 +121,6 @@ export function fakeAzureDatacenter(): Datacenter {
   };
 }
 
-export function fakeGCPDatacenter(): Datacenter {
-  return {
-    metadata: {
-      name: 'gcp-westeurope',
-      selfLink: '',
-      uid: '',
-      creationTimestamp: new Date(),
-      labels: new Map(),
-      annotations: new Map(),
-    },
-    spec: {
-      gcp: {
-        region: 'europe-west3',
-        regional: false,
-        zone_suffixes: ['c'],
-      },
-      country: 'DE',
-      location: 'Europe West (Germany)',
-      provider: 'google',
-      seed: 'europe-west3-c',
-      enforceAuditLogging: false,
-      enforcePodSecurityPolicy: false,
-    },
-  };
-}
-
 export function fakeVSphereDatacenter(): Datacenter {
   return {
     metadata: {

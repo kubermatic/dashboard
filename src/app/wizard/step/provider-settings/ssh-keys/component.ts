@@ -79,12 +79,12 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
       [Controls.Keys]: this._builder.control([]),
     });
 
-    this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
+    this._userService.currentUser.pipe(first()).subscribe(user => (this._user = user));
 
     this._projectService.selectedProject
       .pipe(tap(project => (this._project = project)))
-      .pipe(switchMap(_ => this._userService.currentUserGroup(this._project.id)))
-      .pipe(tap(group => (this._groupConfig = this._userService.userGroupConfig(group))))
+      .pipe(switchMap(_ => this._userService.getCurrentUserGroup(this._project.id)))
+      .pipe(tap(group => (this._groupConfig = this._userService.getCurrentUserGroupConfig(group))))
       .pipe(switchMap(_ => this._apiService.getSSHKeys(this._project.id)))
       .pipe(first())
       .pipe(takeUntil(this._unsubscribe))

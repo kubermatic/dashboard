@@ -16,8 +16,7 @@ import {merge, Subject} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {Project} from '../../../../shared/entity/project';
-import {ProjectService} from '../../../services';
-import {SettingsService} from '../../../services/settings/settings.service';
+import {ProjectService, UserService} from '../../../services';
 
 @Component({
   selector: 'km-project-selector',
@@ -34,10 +33,10 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
   private _displayAllProjects: boolean;
   private _projects: Project[];
 
-  constructor(private readonly _projectService: ProjectService, private readonly _settingsService: SettingsService) {}
+  constructor(private readonly _projectService: ProjectService, private readonly _userService: UserService) {}
 
   ngOnInit(): void {
-    this._displayAllProjects = this._settingsService.defaultUserSettings.displayAllProjectsForAdmin;
+    this._displayAllProjects = this._userService.defaultUserSettings.displayAllProjectsForAdmin;
 
     this._projectService.projects
       .pipe(tap(projects => (this._projects = projects)))

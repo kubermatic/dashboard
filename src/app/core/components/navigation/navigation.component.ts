@@ -13,8 +13,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
-import {Auth} from '../../services';
-import {SettingsService} from '../../services/settings/settings.service';
+import {Auth, UserService} from '../../services';
 
 @Component({
   selector: 'km-navigation',
@@ -27,10 +26,10 @@ export class NavigationComponent implements OnInit {
   private _settingsChange = new Subject<void>();
   private _unsubscribe: Subject<any> = new Subject();
 
-  constructor(private readonly _auth: Auth, private _settingsService: SettingsService) {}
+  constructor(private readonly _auth: Auth, private readonly _userService: UserService) {}
 
   ngOnInit(): void {
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.showSidenav = !settings.collapseSidenav;
     });
 
@@ -38,13 +37,12 @@ export class NavigationComponent implements OnInit {
       .pipe(takeUntil(this._unsubscribe))
       .pipe(
         switchMap(() =>
-          this._settingsService.patchUserSettings({
+          this._userService.patchCurrentUserSettings({
             collapseSidenav: !this.showSidenav,
           })
         )
       )
       .subscribe(settings => {
-        this._settingsService.refreshUserSettings();
         this.showSidenav = !settings.collapseSidenav;
       });
   }

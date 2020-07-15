@@ -76,12 +76,12 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
     this.projectID = this._activatedRoute.snapshot.paramMap.get('projectID');
     this.seed = this._activatedRoute.snapshot.paramMap.get(PathParam.SeedDC);
 
-    this._userService.loggedInUser.pipe(first()).subscribe(user => (this._user = user));
+    this._userService.currentUser.pipe(first()).subscribe(user => (this._user = user));
 
     this._userService
-      .currentUserGroup(this.projectID)
+      .getCurrentUserGroup(this.projectID)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     timer(0, 10 * this._appConfig.getRefreshTimeBase())
       .pipe(takeUntil(this._unsubscribe))

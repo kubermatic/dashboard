@@ -20,7 +20,7 @@ import {AppConfigService} from '../../../app-config.service';
 import {Project} from '../../../shared/entity/project';
 import {ProjectUtils} from '../../../shared/utils/project-utils/project-utils';
 import {ParamsService, PathParam} from '../params/params.service';
-import {SettingsService} from '../settings/settings.service';
+import {UserService} from '../user/user.service';
 
 @Injectable()
 export class ProjectService {
@@ -40,10 +40,10 @@ export class ProjectService {
     private readonly _router: Router,
     private readonly _params: ParamsService,
     private readonly _appConfig: AppConfigService,
-    private readonly _settingsService: SettingsService,
+    private readonly _userService: UserService,
     private readonly _http: HttpClient
   ) {
-    this._displayAll = this._settingsService.defaultUserSettings.displayAllProjectsForAdmin;
+    this._displayAll = this._userService.defaultUserSettings.displayAllProjectsForAdmin;
   }
 
   get projects(): Observable<Project[]> {
@@ -95,7 +95,7 @@ export class ProjectService {
   }
 
   private _initProjectsObservable(): void {
-    this._settingsService.userSettings.subscribe(settings =>
+    this._userService.currentUserSettings.subscribe(settings =>
       this._displayAll !== settings.displayAllProjectsForAdmin
         ? this._displayAllChanged.next((this._displayAll = settings.displayAllProjectsForAdmin))
         : null

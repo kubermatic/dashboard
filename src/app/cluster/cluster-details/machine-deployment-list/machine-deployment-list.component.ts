@@ -18,7 +18,6 @@ import {switchMap, takeUntil, take} from 'rxjs/operators';
 import * as _ from 'lodash';
 
 import {NotificationService, ProjectService, UserService} from '../../../core/services';
-import {SettingsService} from '../../../core/services/settings/settings.service';
 import {Cluster} from '../../../shared/entity/cluster';
 import {Member} from '../../../shared/entity/member';
 import {MachineDeployment} from '../../../shared/entity/machine-deployment';
@@ -56,7 +55,6 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
     private readonly _nodeService: NodeService,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
-    private readonly _settingsService: SettingsService,
     private readonly _notificationService: NotificationService
   ) {}
 
@@ -64,17 +62,17 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
     this.dataSource.data = this.machineDeployments ? this.machineDeployments : [];
     this.dataSource.paginator = this.paginator;
 
-    this._userService.loggedInUser.subscribe(user => (this._user = user));
+    this._userService.currentUser.subscribe(user => (this._user = user));
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
 
     this._projectService.selectedProject
       .pipe(takeUntil(this._unsubscribe))
-      .pipe(switchMap(project => this._userService.currentUserGroup(project.id)))
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
+      .pipe(switchMap(project => this._userService.getCurrentUserGroup(project.id)))
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     if (this.cluster.spec.cloud.aws) {
       this.displayedColumns = ['status', 'name', 'replicas', 'ver', 'availabilityZone', 'os', 'created', 'actions'];

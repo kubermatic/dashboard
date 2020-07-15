@@ -18,7 +18,7 @@ export class Member {
   isAdmin?: boolean;
   id: string;
   name: string;
-  settings?: UserSettings;
+  userSettings?: UserSettings;
   projects: MemberProject[];
 }
 
