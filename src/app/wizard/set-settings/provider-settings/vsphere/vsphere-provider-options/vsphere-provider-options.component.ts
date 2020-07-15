@@ -21,6 +21,7 @@ import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
 import {filterArrayOptions, filterObjectOptions} from '../../../../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../../../../shared/validators/autocomplete-filter.validator';
 import {VSphereFolder, VSphereNetwork} from '../../../../../shared/entity/provider/vsphere';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'km-vsphere-provider-options',
@@ -215,9 +216,7 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   get networkTypes(): string[] {
-    return Object.keys(this._networkMap).sort((a, b) => {
-      return a.localeCompare(b);
-    });
+    return _.sortBy(Object.keys(this._networkMap), k => k.toLowerCase());
   }
 
   getNetworks(type: string): VSphereNetwork[] {
@@ -272,12 +271,8 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
       .subscribe(
         folders => {
           if (folders.length > 0) {
-            const sortedFolders = folders.sort((a, b) => {
-              return a.path.localeCompare(b.path);
-            });
-
-            this.folders = sortedFolders;
-            if (sortedFolders.length > 0 && this.form.controls.folder.value !== '0') {
+            this.folders = _.sortBy(folders, f => f.path.toLowerCase());
+            if (this.folders.length > 0 && this.form.controls.folder.value !== '0') {
               this.form.controls.folder.setValue(this.cluster.spec.cloud.vsphere.folder);
             }
           } else {

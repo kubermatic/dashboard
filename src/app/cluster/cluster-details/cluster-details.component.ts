@@ -50,6 +50,7 @@ import {EditSSHKeysComponent} from './edit-sshkeys/edit-sshkeys.component';
 import {RevokeTokenComponent} from './revoke-token/revoke-token.component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/share-kubeconfig.component';
 import {PathParam} from '../../core/services/params/params.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'km-cluster-details',
@@ -128,10 +129,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       )
       .pipe(
         switchMap(([keys, health, events]) => {
-          this.sshKeys = keys.sort((a, b) => {
-            return a.name.localeCompare(b.name);
-          });
-
+          this.sshKeys = _.sortBy(keys, k => k.name.toLowerCase());
           this.health = health;
           this.events = events;
           this.isClusterAPIRunning = ClusterHealthStatus.isClusterAPIRunning(this.cluster, health);

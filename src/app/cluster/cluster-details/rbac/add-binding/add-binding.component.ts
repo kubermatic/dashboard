@@ -65,9 +65,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((clusterRoles: ClusterRoleName[]) => {
         if (!_.isEmpty(clusterRoles)) {
-          this.clusterRoles = clusterRoles.sort((a, b) => {
-            return a.name.localeCompare(b.name);
-          });
+          this.clusterRoles = _.sortBy(clusterRoles, cr => cr.name.toLowerCase());
         } else {
           this.clusterRoles = [];
         }
@@ -78,9 +76,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((roles: RoleName[]) => {
         if (roles.length > 0) {
-          this.roles = roles.sort((a, b) => {
-            return a.name.localeCompare(b.name);
-          });
+          this.roles = _.sortBy(roles, r => r.name.toLowerCase());
         } else {
           this.roles = [];
         }

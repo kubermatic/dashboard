@@ -18,6 +18,7 @@ import {Cluster} from '../../../../../shared/entity/cluster';
 import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
 import {GCPNetwork, GCPSubnetwork} from '../../../../../shared/entity/provider/gcp';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'km-gcp-provider-options',
@@ -117,10 +118,7 @@ export class GCPProviderOptionsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(
         networks => {
-          this.networks = networks.sort((a, b) => {
-            return a.name.localeCompare(b.name);
-          });
-
+          this.networks = _.sortBy(networks, n => n.name.toLowerCase());
           if (this.networks.length === 0) {
             this.form.controls.network.setValue('');
           }
@@ -149,10 +147,7 @@ export class GCPProviderOptionsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(
         subnetworks => {
-          this.subnetworks = subnetworks.sort((a, b) => {
-            return a.name.localeCompare(b.name);
-          });
-
+          this.subnetworks = _.sortBy(subnetworks, s => s.name.toLowerCase());
           if (this.subnetworks.length === 0) {
             this.form.controls.subnetwork.setValue('');
           }

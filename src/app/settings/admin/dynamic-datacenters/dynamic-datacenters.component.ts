@@ -23,6 +23,7 @@ import {DatacenterService, NotificationService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
 import {Subject} from 'rxjs';
 import {DatacenterDataDialogComponent} from './datacenter-data-dialog/datacenter-data-dialog.component';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'km-dynamic-datacenters',
@@ -111,9 +112,8 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
   }
 
   private _setCountries(datacenters: Datacenter[]) {
-    this.countries = Array.from(new Set(datacenters.map(datacenter => datacenter.spec.country))).sort((a, b) =>
-      a.localeCompare(b)
-    );
+    const uniqueCountries = Array.from(new Set(datacenters.map(datacenter => datacenter.spec.country)));
+    this.countries = _.sortBy(uniqueCountries, c => c.toLowerCase());
   }
 
   filter(): void {

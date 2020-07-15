@@ -19,6 +19,7 @@ import {Cluster} from '../../../../../shared/entity/cluster';
 import {ClusterProviderSettingsForm} from '../../../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
 import {AWSVPC} from '../../../../../shared/entity/provider/aws';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'km-aws-provider-options',
@@ -136,10 +137,7 @@ export class AWSProviderOptionsComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(
         vpcs => {
-          this.vpcIds = vpcs.sort((a, b) => {
-            return a.name.localeCompare(b.name);
-          });
-
+          this.vpcIds = _.sortBy(vpcs, v => v.name.toLowerCase());
           if (this.vpcIds.length === 0) {
             this.form.controls.vpcId.setValue('');
           } else {

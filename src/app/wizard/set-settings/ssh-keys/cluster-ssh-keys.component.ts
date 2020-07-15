@@ -26,6 +26,7 @@ import {Project} from '../../../shared/entity/project';
 import {SSHKey} from '../../../shared/entity/ssh-key';
 import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'km-cluster-ssh-keys',
@@ -92,10 +93,8 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
     this._api
       .getSSHKeys(this.project.id)
       .pipe(first())
-      .subscribe(sshKeys => {
-        this.keys = sshKeys.sort((a, b) => {
-          return a.name.localeCompare(b.name);
-        });
+      .subscribe(keys => {
+        this.keys = _.sortBy(keys, k => k.name.toLowerCase());
         this.setClusterSSHKeysSpec();
       });
   }

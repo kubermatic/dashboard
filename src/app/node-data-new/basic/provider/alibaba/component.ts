@@ -187,7 +187,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   private _setDefaultInstanceType(instanceTypes: AlibabaInstanceType[]): void {
-    this.instanceTypes = instanceTypes.sort((a, b) => a.id.localeCompare(b.id));
+    this.instanceTypes = _.sortBy(instanceTypes, it => it.id.toLowerCase());
     if (!_.isEmpty(this.instanceTypes)) {
       this.instanceTypeLabel = InstanceTypeState.Ready;
       this.selectedInstanceType = this.instanceTypes[0].id;
@@ -196,7 +196,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   private _setDefaultZone(zones: AlibabaZone[]): void {
-    this.zones = zones.sort((a, b) => a.id.localeCompare(b.id));
+    this.zones = _.sortBy(zones, z => z.id.toLowerCase());
     if (!_.isEmpty(this.zones)) {
       this.zoneLabel = ZoneState.Ready;
       this.selectedZone = this.zones[0].id;

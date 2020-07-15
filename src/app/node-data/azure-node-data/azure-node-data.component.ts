@@ -23,6 +23,7 @@ import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 import {filterArrayOptions} from '../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 import {AzureSizes, AzureZones} from '../../shared/entity/provider/azure';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'km-azure-node-data',
@@ -280,8 +281,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(
         (data: AzureZones) => {
-          this.zones = data.zones.sort((a, b) => a.localeCompare(b));
-
+          this.zones = _.sortBy(data.zones, z => z.toLowerCase());
           this.loadingZones = false;
           this.checkZoneState();
         },

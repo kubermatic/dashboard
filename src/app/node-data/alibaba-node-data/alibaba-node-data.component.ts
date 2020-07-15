@@ -23,6 +23,7 @@ import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 import {filterArrayOptions} from '../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 import {AlibabaInstanceType, AlibabaZone} from '../../shared/entity/provider/alibaba';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'km-alibaba-node-data',
@@ -181,8 +182,7 @@ export class AlibabaNodeDataComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(
         instanceTypes => {
-          this.instanceTypes = instanceTypes.sort((a, b) => a.id.localeCompare(b.id));
-
+          this.instanceTypes = _.sortBy(instanceTypes, it => it.id.toLowerCase());
           if (this.instanceTypes.length === 0) {
             this.form.controls.instanceType.setValue('');
           } else {

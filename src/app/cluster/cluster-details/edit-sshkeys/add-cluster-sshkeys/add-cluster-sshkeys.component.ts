@@ -23,6 +23,7 @@ import {Member} from '../../../../shared/entity/member';
 import {SSHKey} from '../../../../shared/entity/ssh-key';
 import {GroupConfig} from '../../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../../shared/utils/member-utils/member-utils';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'km-add-cluster-sshkeys',
@@ -75,9 +76,7 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
           newKeys.push(sshKeysRes[i]);
         }
       }
-      this.keys = newKeys.sort((a, b) => {
-        return a.name.localeCompare(b.name);
-      });
+      this.keys = _.sortBy(newKeys, k => k.name.toLowerCase());
     });
   }
 

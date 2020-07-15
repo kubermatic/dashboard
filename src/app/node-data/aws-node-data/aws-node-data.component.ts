@@ -23,6 +23,7 @@ import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 import {filterArrayOptions, filterObjectOptions} from '../../shared/utils/common-utils';
 import {AutocompleteFilterValidators} from '../../shared/validators/autocomplete-filter.validator';
 import {AWSSize, AWSSubnet} from '../../shared/entity/provider/aws';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'km-aws-node-data',
@@ -231,8 +232,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   private _enableSizes(data: AWSSize[]): void {
     this._loadingSizes = false;
     this.form.controls.size.enable();
-    this.sizes = data.sort((a, b) => a.name.localeCompare(b.name));
-
+    this.sizes = _.sortBy(data, s => s.name.toLowerCase());
     if (this.sizes.length > 0) {
       if (
         this.nodeData.spec.cloud.aws.instanceType !== '' &&
@@ -310,9 +310,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   }
 
   sortSubnets(subnets: AWSSubnet[]): void {
-    this.subnetIds = subnets.sort((a, b) => {
-      return a.name.localeCompare(b.name);
-    });
+    this.subnetIds = _.sortBy(subnets, s => s.name.toLowerCase());
   }
 
   fillSubnetsMapWithAZ(subnet: AWSSubnet): void {

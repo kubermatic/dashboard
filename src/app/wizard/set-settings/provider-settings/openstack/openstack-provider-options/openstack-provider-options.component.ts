@@ -22,6 +22,7 @@ import {
   OpenstackSecurityGroup,
   OpenstackSubnet,
 } from '../../../../../shared/entity/provider/openstack';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'km-openstack-provider-options',
@@ -174,10 +175,8 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(
         (networks: OpenstackNetwork[]) => {
-          this.networks = networks
-            .filter(network => network.external !== true)
-            .sort((a, b) => a.name.localeCompare(b.name));
-
+          const filteredNerworks = networks.filter(network => network.external !== true);
+          this.networks = _.sortBy(filteredNerworks, n => n.name.toLowerCase());
           this._enableNetwork(this.networks.length !== 0);
           this._loadingOptionalSettings = false;
         },

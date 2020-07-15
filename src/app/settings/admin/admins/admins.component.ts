@@ -21,6 +21,7 @@ import {SettingsService} from '../../../core/services/settings/settings.service'
 import {Subject} from 'rxjs';
 import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.component';
 import {Admin, Member} from '../../../shared/entity/member';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'km-admins',
@@ -51,7 +52,7 @@ export class AdminsComponent implements OnInit, OnChanges {
     this.sort.direction = 'asc';
 
     this._settingsService.admins.pipe(takeUntil(this._unsubscribe)).subscribe(admins => {
-      this.admins = admins.sort((a, b) => a.email.localeCompare(b.email));
+      this.admins = admins;
       this.dataSource.data = this.admins;
     });
 
