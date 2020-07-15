@@ -14,11 +14,14 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
-import {DatacenterService, PresetsService} from '../../../core/services';
-import {NODE_DATA_CONFIG, NodeDataMode} from '../../../node-data-new/config';
-import {NodeDataService} from '../../../node-data-new/service/service';
-import {ClusterService} from '../../../wizard-new/service/cluster';
-import {WizardService} from '../../../wizard-new/service/wizard';
+import {AppConfigService} from '../../../app-config.service';
+import {ApiService, DatacenterService, ParamsService, PresetsService, ProjectService} from '../../../core/services';
+import {NODE_DATA_CONFIG, NodeDataMode} from '../../../node-data/config';
+import {NodeDataService} from '../../../node-data/service/service';
+import {ClusterService} from '../../../shared/services/cluster.service';
+import {ApiMockService} from '../../../testing/services/api-mock.service';
+import {ProjectMockService} from '../../../testing/services/project-mock.service';
+import {WizardService} from '../../../wizard/service/wizard';
 import {SharedModule} from '../../shared.module';
 import {MachineNetworkComponent} from './component';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
@@ -33,11 +36,15 @@ describe('MachineNetworksComponent', () => {
     TestBed.configureTestingModule({
       imports: [...modules],
       providers: [
-        WizardService,
-        NodeDataService,
+        AppConfigService,
         ClusterService,
-        {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
+        NodeDataService,
+        ParamsService,
         PresetsService,
+        WizardService,
+        {provide: ProjectService, useValue: ProjectMockService},
+        {provide: ApiService, useValue: ApiMockService},
+        {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
         {provide: DatacenterService, useClass: DatacenterMockService},
       ],
     }).compileComponents();

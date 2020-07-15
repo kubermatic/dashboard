@@ -10,6 +10,7 @@
 // limitations under the License.
 
 import {Condition} from '../utils/condition';
+import {Preset} from '../utils/preset';
 
 export class WizardPage {
   static getNextBtn(): Cypress.Chainable<any> {
@@ -33,11 +34,18 @@ export class WizardPage {
   }
 
   static getCustomPresetsCombobox(): Cypress.Chainable<any> {
-    return cy.get('.km-custom-credentials-select');
+    return cy.get('#km-wizard-select-preset');
   }
 
-  static getCustomPresetsValue(presetName: string): Cypress.Chainable<any> {
-    return cy.get('mat-option').contains('span', presetName);
+  static getPreset(preset: Preset): Cypress.Chainable<any> {
+    return cy.get('mat-option').then(option => {
+      if (option.find('span').text(preset).length > 0) {
+        return cy.get('mat-option').contains('span', preset);
+      }
+
+      // Fallback to the first option if preset not found
+      return cy.get('mat-option');
+    });
   }
 
   static getNodeNameInput(): Cypress.Chainable<any> {

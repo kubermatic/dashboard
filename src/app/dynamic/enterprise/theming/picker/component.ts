@@ -13,13 +13,13 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@an
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
+import {UserService} from '../../../../core/services';
+import {UserSettings} from '../../../../shared/entity/settings';
+import {Theme} from '../../../../shared/model/Config';
+import {objectDiff} from '../../../../shared/utils/common-utils';
 import {ColorSchemeService} from '../services/color-scheme';
 import {ThemeManagerService} from '../services/manager';
 import {ThemeService} from '../services/theme';
-import {UserSettings} from '../../../../shared/entity/settings';
-import {Theme} from '../../../../shared/model/Config';
-import {NotificationService, UserService} from '../../../../core/services';
-import {objectDiff} from '../../../../shared/utils/common-utils';
 
 @Component({
   templateUrl: 'template.html',
@@ -65,7 +65,6 @@ export class StylePickerComponent implements OnInit {
     private readonly _themeService: ThemeService,
     private readonly _userService: UserService,
     private readonly _colorSchemeService: ColorSchemeService,
-    private readonly _notificationService: NotificationService,
     private readonly _cdr: ChangeDetectorRef
   ) {}
 
@@ -123,10 +122,6 @@ export class StylePickerComponent implements OnInit {
 
   private _onSettingsUpdate(settings: UserSettings): void {
     if (!_.isEqual(settings, this.apiSettings)) {
-      if (this.apiSettings) {
-        this._notificationService.success('Successfully applied external settings update');
-      }
-
       this.apiSettings = settings;
       this.settings = _.cloneDeep(this.apiSettings);
       this._selectTheme(this.settings.selectedTheme);

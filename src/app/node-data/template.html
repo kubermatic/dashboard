@@ -1,0 +1,198 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<form [formGroup]="form"
+      [fxLayout]="isDialogView() ? 'column' : 'row'"
+      fxLayoutGap="30px"
+      fxLayout.md="column"
+      fxLayoutGap.md="30px"
+      fxLayout.sm="column"
+      fxLayoutGap.sm="30px"
+      fxLayout.xs="column"
+      fxLayoutGap.xs="30px">
+  <div [fxFlex]="isDialogView() ? '100%' : '50%'"
+       fxLayout="column"
+       fxLayoutGap="16px">
+    <mat-card-title *ngIf="!isDialogView()">Basic</mat-card-title>
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input [formControlName]="Controls.Name"
+             id="km-node-name-input"
+             matInput
+             type="text"
+             autocomplete="off">
+      <button *ngIf="!dialogEditMode"
+              mat-icon-button
+              type="button"
+              class="km-randomize-btn"
+              matTooltip="Generate name"
+              (click)="generateName()">
+        <i class="km-icon-randomize"></i>
+      </button>
+      <mat-hint>Leave it empty to use server-side generation.</mat-hint>
+      <mat-error *ngIf="form.get(Controls.Name).hasError( 'pattern')">
+        Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Replicas</mat-label>
+      <input [formControlName]="Controls.Count"
+             id="km-node-count-input"
+             matInput
+             type="number"
+             min="0"
+             autocomplete="off"
+             required>
+      <mat-error *ngIf="form.get(Controls.Count).hasError('required')">Number of replicas is required.</mat-error>
+      <mat-error *ngIf="form.get(Controls.Count).hasError('ipsMissing')">
+        Not enough IPs left. Reduce number of replicas or add more machine networks.
+      </mat-error>
+    </mat-form-field>
+
+    <km-node-data-kubelet-version *ngIf="isDialogView()"
+                                  [formControl]="form.get(Controls.Kubelet)"></km-node-data-kubelet-version>
+
+    <ng-container *ngIf="isDialogView()">
+      <km-basic-node-data [provider]="provider"
+                          [formControlName]="Controls.ProviderBasic">
+      </km-basic-node-data>
+    </ng-container>
+
+    <div fxLayout="column">
+      <mat-button-toggle-group group="operatingSystemGroup"
+                               [formControlName]="Controls.OperatingSystem">
+        <mat-button-toggle [value]="OperatingSystem.Ubuntu"
+                           *ngIf="isOperatingSystemSupported(OperatingSystem.Ubuntu)">
+          <i class="km-os-image-ubuntu"></i>
+          Ubuntu
+        </mat-button-toggle>
+        <mat-button-toggle [value]="OperatingSystem.CentOS"
+                           *ngIf="isOperatingSystemSupported(OperatingSystem.CentOS)">
+          <i class="km-os-image-centos"></i>
+          CentOS
+        </mat-button-toggle>
+        <mat-button-toggle [value]="OperatingSystem.ContainerLinux"
+                           *ngIf="isOperatingSystemSupported(OperatingSystem.ContainerLinux)">
+          <i class="km-os-image-container-linux"></i>
+          Container Linux
+        </mat-button-toggle>
+        <mat-button-toggle [value]="OperatingSystem.Flatcar"
+                           *ngIf="isOperatingSystemSupported(OperatingSystem.Flatcar)">
+          <i class="km-os-image-flatcar"></i>
+          Flatcar
+        </mat-button-toggle>
+        <mat-button-toggle [value]="OperatingSystem.SLES"
+                           *ngIf="isOperatingSystemSupported(OperatingSystem.SLES)">
+          <i class="km-os-image-sles"></i>
+          SLES
+        </mat-button-toggle>
+        <mat-button-toggle [value]="OperatingSystem.RHEL"
+                           *ngIf="isOperatingSystemSupported(OperatingSystem.RHEL)">
+          <i class="km-os-image-rhel"></i>
+          RHEL
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+
+      <span *ngIf="isOperatingSystemSelected(OperatingSystem.ContainerLinux)"
+            class="km-eol-warning with-margin">
+        <i class="km-icon-warning"></i>
+        Container Linux is going end-of-life on May 26, 2020
+      </span>
+
+      <!-- Options for RHEL -->
+      <div *ngIf="isOperatingSystemSelected(OperatingSystem.RHEL)"
+           class="km-os-options">
+        <mat-form-field>
+          <mat-label>RHEL Subscription Manager User</mat-label>
+          <input [formControlName]="Controls.RhelSubscriptionManagerUser"
+                 matInput
+                 type="text"
+                 autocomplete="off"
+                 required>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>RHEL Subscription Manager Password</mat-label>
+          <input [formControlName]="Controls.RhelSubscriptionManagerPassword"
+                 matInput
+                 type="password"
+                 autocomplete="off"
+                 required>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>RHEL Subscription Manager Offline Token</mat-label>
+          <input [formControlName]="Controls.RhsmOfflineToken"
+                 matInput
+                 type="password"
+                 autocomplete="off">
+          <mat-hint>Offline token is required to remove subscriptions.</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row"
+           fxLayoutGap="16px">
+        <!-- Options for Ubuntu, CenOS, SLES and RHEL -->
+        <div *ngIf="isOperatingSystemSelected(OperatingSystem.Ubuntu, OperatingSystem.CentOS, OperatingSystem.SLES, OperatingSystem.RHEL)"
+             class="km-os-options">
+          <mat-checkbox [id]="Controls.UpgradeOnBoot"
+                        [formControlName]="Controls.UpgradeOnBoot">Upgrade system on first boot
+          </mat-checkbox>
+        </div>
+
+        <!-- Options for Container Linux -->
+        <div *ngIf="isOperatingSystemSelected(OperatingSystem.ContainerLinux, OperatingSystem.Flatcar)"
+             class="km-os-options">
+          <mat-checkbox [id]="Controls.DisableAutoUpdate"
+                        [formControlName]="Controls.DisableAutoUpdate">Disable auto-update
+          </mat-checkbox>
+        </div>
+
+        <div class="km-os-options">
+          <mat-checkbox [id]="Controls.DynamicConfig"
+                        [formControlName]="Controls.DynamicConfig">Dynamic kubelet config
+          </mat-checkbox>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="isDialogView() && showExtended">
+      <mat-card-title class="km-provider-options">{{ providerDisplayName }} Options</mat-card-title>
+      <km-extended-node-data [provider]="provider"
+                             [visible]="true"
+                             [formControlName]="Controls.ProviderExtended"></km-extended-node-data>
+    </div>
+
+    <km-label-form title="Node Labels"
+                   [labels]="labels"
+                   (labelsChange)="onLabelsChange($event)"></km-label-form>
+
+    <km-taint-form title="Node Taints"
+                   [taints]="taints"
+                   (taintsChange)="onTaintsChange($event)"></km-taint-form>
+  </div>
+
+  <div *ngIf="!isDialogView()"
+       fxFlex="50%"
+       fxLayout="column"
+       fxLayoutGap="16px">
+    <mat-card-title>{{ providerDisplayName }}</mat-card-title>
+    <km-basic-node-data [provider]="provider"
+                        [formControlName]="Controls.ProviderBasic">
+    </km-basic-node-data>
+
+    <km-extended-node-data [provider]="provider"
+                           [visible]="true"
+                           [formControlName]="Controls.ProviderExtended"></km-extended-node-data>
+  </div>
+</form>

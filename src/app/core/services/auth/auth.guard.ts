@@ -65,9 +65,7 @@ export class AuthzGuard implements CanActivate {
     const view = url
       .split('/')
       .reverse()
-      .find(partial => {
-        return Object.values(View).find(view => view === partial);
-      });
+      .find(partial => Object.values(View).find(view => view === partial));
 
     return view !== undefined ? (view as View) : View.Projects;
   }

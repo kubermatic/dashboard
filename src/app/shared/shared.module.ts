@@ -77,6 +77,7 @@ import {TaintsComponent} from './components/taints/taints.component';
 import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
 import {MonacoEditorModule} from 'ngx-monaco-editor';
+import {ClusterService} from './services/cluster.service';
 
 const modules: any[] = [
   CommonModule,
@@ -155,12 +156,15 @@ const entryComponents: any[] = [
   NotificationComponent,
 ];
 
+const services: any[] = [ClusterService];
+
 const directives: any[] = [AutofocusDirective, OptionDirective];
 
 @NgModule({
   imports: [...modules],
   declarations: [...components, ...entryComponents, ...directives],
   exports: [...modules, ...components, ...entryComponents, ...directives],
+  providers: [...services],
   entryComponents: [...entryComponents],
 })
 export class SharedModule {}

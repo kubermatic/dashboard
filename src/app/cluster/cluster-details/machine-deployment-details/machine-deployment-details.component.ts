@@ -12,10 +12,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subject, timer} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {first, take, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../../app-config.service';
-import {ApiService, ClusterService, DatacenterService, UserService} from '../../../core/services';
+import {ApiService, ClusterService, DatacenterService, NotificationService, UserService} from '../../../core/services';
 import {Cluster} from '../../../shared/entity/cluster';
 import {Datacenter} from '../../../shared/entity/datacenter';
 import {Event} from '../../../shared/entity/event';
@@ -66,7 +66,8 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
     private readonly _nodeService: NodeService,
     private readonly _appConfig: AppConfigService,
     private readonly _userService: UserService,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterService: ClusterService,
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -192,13 +193,18 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   showEditDialog(): void {
     this._nodeService
-      .showMachineDeploymentEditDialog(this.machineDeployment, this.cluster, this.projectID, this.seed, undefined)
-      .subscribe(isConfirmed => {
-        if (isConfirmed) {
+      .showMachineDeploymentEditDialog(this.machineDeployment, this.cluster, this.projectID, this.seed)
+      .pipe(take(1))
+      .subscribe(
+        _ => {
           this.loadMachineDeployment();
           this.loadNodes();
-        }
-      });
+          this._notificationService.success(
+            `The <strong>${this.machineDeployment.name}</strong> node deployment was updated`
+          );
+        },
+        _ => this._notificationService.error('There was an error during node deployment edition.')
+      );
   }
 
   isDeleteEnabled(): boolean {
