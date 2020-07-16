@@ -174,14 +174,18 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.aws) {
       this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.aws.diskSize);
-      this.form.get(Controls.DiskType).setValue(this._nodeDataService.nodeData.spec.cloud.aws.volumeType);
 
       this._cdr.detectChanges();
     }
   }
 
   private _setDefaultDiskType(): void {
-    this.selectedDiskType = this._diskTypes[0];
+    this.selectedDiskType = this._nodeDataService.nodeData.spec.cloud.aws.volumeType;
+
+    if (!this.selectedDiskType) {
+      this.selectedDiskType = this._diskTypes[0];
+    }
+
     this._cdr.detectChanges();
   }
 
