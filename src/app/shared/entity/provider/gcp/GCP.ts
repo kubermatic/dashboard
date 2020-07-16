@@ -33,4 +33,5 @@ export class GCPSubnetwork {
   selfLink: string;
   privateIpGoogleAccess: boolean;
   kind: string;
+  path: string;
 }

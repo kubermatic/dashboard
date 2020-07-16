@@ -27,7 +27,7 @@
            [matAutocomplete]="autoSubnetwork">
     <mat-autocomplete #autoSubnetwork="matAutocomplete">
       <mat-option *ngFor="let subnetwork of subnetworks"
-                  [value]="subnetwork.name">
+                  [value]="subnetwork.path">
         {{subnetwork.name}}
       </mat-option>
     </mat-autocomplete>
