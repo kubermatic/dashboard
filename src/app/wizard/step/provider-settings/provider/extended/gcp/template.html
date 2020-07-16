@@ -38,7 +38,8 @@ limitations under the License.
                (changed)="onSubNetworkChange($event)"
                [label]="subNetworkLabel"
                inputLabel="Select subnetwork..."
-               filterBy="name">
+               filterBy="name"
+               selectBy="path">
     <div *option="let subnet">
       {{subnet.name}}
     </div>
