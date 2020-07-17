@@ -41,8 +41,8 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   form: FormGroup;
   bindingType = 'cluster';
   subjectType = 'user';
-  clusterRoles: ClusterRoleName[];
-  roles: RoleName[];
+  clusterRoles: ClusterRoleName[] = [];
+  roles: RoleName[] = [];
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -63,24 +63,12 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     this._rbacService
       .getClusterRoleNames(this.cluster.id, this.seed, this.projectID)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe((clusterRoles: ClusterRoleName[]) => {
-        if (!_.isEmpty(clusterRoles)) {
-          this.clusterRoles = _.sortBy(clusterRoles, cr => cr.name.toLowerCase());
-        } else {
-          this.clusterRoles = [];
-        }
-      });
+      .subscribe(clusterRoles => (this.clusterRoles = _.sortBy(clusterRoles, cr => cr.name.toLowerCase())));
 
     this._rbacService
       .getRoleNames(this.cluster.id, this.seed, this.projectID)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe((roles: RoleName[]) => {
-        if (roles.length > 0) {
-          this.roles = _.sortBy(roles, r => r.name.toLowerCase());
-        } else {
-          this.roles = [];
-        }
-      });
+      .subscribe(roles => (this.roles = _.sortBy(roles, r => r.name.toLowerCase())));
 
     this.form.controls.role.valueChanges
       .pipe(debounceTime(1000))
