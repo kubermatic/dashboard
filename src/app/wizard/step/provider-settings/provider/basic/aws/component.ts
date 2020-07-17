@@ -28,6 +28,7 @@ import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {AWSVPC} from '../../../../../../shared/entity/provider/aws';
 import {ClusterService} from '../../../../../../shared/services/cluster.service';
+import * as _ from 'lodash';
 
 export enum Controls {
   AccessKeyID = 'accessKeyID',
@@ -157,7 +158,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
       .accessKeyID(this.form.get(Controls.AccessKeyID).value)
       .secretAccessKey(this.form.get(Controls.AccessKeySecret).value)
       .vpcs(this._clusterService.datacenter, this._onVPCLoading.bind(this))
-      .pipe(map(vpcs => vpcs.sort((a, b) => a.name.localeCompare(b.name))))
+      .pipe(map(vpcs => _.sortBy(vpcs, v => v.name.toLowerCase())))
       .pipe(
         catchError(() => {
           this._clearVPC();

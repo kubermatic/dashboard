@@ -24,6 +24,7 @@ import {GroupConfig} from '../../../../shared/model/Config';
 import {MemberUtils, Permission} from '../../../../shared/utils/member-utils/member-utils';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../shared/services/cluster.service';
+import * as _ from 'lodash';
 
 enum Controls {
   Keys = 'keys',
@@ -67,7 +68,7 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
   }
 
   set keys(keys: SSHKey[]) {
-    this._keys = keys.sort((a, b) => a.name.localeCompare(b.name));
+    this._keys = _.sortBy(keys, k => k.name.toLowerCase());
   }
 
   get keys(): SSHKey[] {

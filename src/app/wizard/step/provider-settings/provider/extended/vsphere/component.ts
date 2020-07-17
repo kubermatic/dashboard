@@ -31,6 +31,7 @@ import {isObjectEmpty} from '../../../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {VSphereFolder, VSphereNetwork} from '../../../../../../shared/entity/provider/vsphere';
 import {ClusterService} from '../../../../../../shared/services/cluster.service';
+import * as _ from 'lodash';
 
 enum Controls {
   VMNetName = 'vmNetName',
@@ -212,7 +213,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .password(this._clusterService.cluster.spec.cloud.vsphere.password)
       .datacenter(this._clusterService.datacenter)
       .networks(this._onNetworksLoading.bind(this))
-      .pipe(map(networks => networks.sort((a, b) => a.name.localeCompare(b.name))))
+      .pipe(map(networks => _.sortBy(networks, n => n.name.toLowerCase())))
       .pipe(
         catchError(() => {
           this._clearNetworks();

@@ -29,6 +29,7 @@ import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {GCPNetwork, GCPSubnetwork} from '../../../../../../shared/entity/provider/gcp';
 import {ClusterService} from '../../../../../../shared/services/cluster.service';
+import * as _ from 'lodash';
 
 enum Controls {
   Network = 'network',
@@ -173,7 +174,7 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
       .provider(NodeProvider.GCP)
       .serviceAccount(this._clusterService.cluster.spec.cloud.gcp.serviceAccount)
       .networks(this._onNetworkLoading.bind(this))
-      .pipe(map(networks => networks.sort((a, b) => a.name.localeCompare(b.name))))
+      .pipe(map(networks => _.sortBy(networks, n => n.name.toLowerCase())))
       .pipe(
         catchError(() => {
           this._clearNetwork();
@@ -196,7 +197,7 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
       .serviceAccount(this._clusterService.cluster.spec.cloud.gcp.serviceAccount)
       .network(this._clusterService.cluster.spec.cloud.gcp.network)
       .subnetworks(this._clusterService.datacenter, this._onSubNetworkLoading.bind(this))
-      .pipe(map(networks => networks.sort((a, b) => a.name.localeCompare(b.name))))
+      .pipe(map(networks => _.sortBy(networks, n => n.name.toLowerCase())))
       .pipe(
         catchError(() => {
           this._clearSubNetwork();

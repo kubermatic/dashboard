@@ -28,6 +28,7 @@ import {AzureSizes, AzureZones} from '../../../../shared/entity/provider/azure';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
+import * as _ from 'lodash';
 
 enum Controls {
   Size = 'size',
@@ -191,7 +192,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
   private _setZones(zones: AzureZones): void {
     if (zones && zones.zones) {
-      this.zones = zones.zones.sort((a, b) => a.localeCompare(b)).map(zone => ({name: zone}));
+      this.zones = _.sortBy(zones.zones, s => s.toLowerCase()).map(zone => ({name: zone}));
     }
 
     if (this.selectedZone) {

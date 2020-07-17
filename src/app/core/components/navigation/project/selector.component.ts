@@ -17,6 +17,7 @@ import {switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {Project} from '../../../../shared/entity/project';
 import {ProjectService, UserService} from '../../../services';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'km-project-selector',
@@ -73,7 +74,11 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
   }
 
   private _sortProjects(projects: Project[]): Project[] {
-    return projects.sort((a, b) => (a.name + a.id).localeCompare(b.name + b.id));
+    return _.sortBy(
+      projects,
+      p => p.name.toLowerCase(),
+      p => p.id.toLowerCase()
+    );
   }
 
   private _appendProject(project: Project): void {
