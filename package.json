@@ -64,7 +64,7 @@
     "rxjs": "6.6.0",
     "rxjs-compat": "6.6.0",
     "semver": "7.3.2",
-    "swagger-ui": "3.28.0",
+    "swagger-ui": "3.29.0",
     "tslib": "2.0.0",
     "zone.js": "0.10.3"
   },
