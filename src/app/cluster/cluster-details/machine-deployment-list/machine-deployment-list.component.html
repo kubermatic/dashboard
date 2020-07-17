@@ -137,7 +137,7 @@ limitations under the License.
                 <button mat-icon-button
                         class="km-machine-deployment-action"
                         matTooltip="Edit Machine Deployment"
-                        (click)="showEditDialog(element, $event)"
+                        (click)="showEditDialog(element); $event.stopPropagation()"
                         [disabled]="!isEditEnabled()">
                   <i class="km-icon-edit"></i>
                 </button>
@@ -145,7 +145,7 @@ limitations under the License.
                 <button mat-icon-button
                         class="km-machine-deployment-action"
                         matTooltip="Delete Machine Deployment"
-                        (click)="showDeleteDialog(element, $event)"
+                        (click)="showDeleteDialog(element); $event.stopPropagation()"
                         [disabled]="!isDeleteEnabled()">
                   <i class="km-icon-delete"
                      aria-hidden="true"></i>

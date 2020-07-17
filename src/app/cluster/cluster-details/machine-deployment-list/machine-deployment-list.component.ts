@@ -14,11 +14,10 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
-import {switchMap, takeUntil} from 'rxjs/operators';
+import {switchMap, takeUntil, take} from 'rxjs/operators';
 import * as _ from 'lodash';
 
-import {ProjectService, UserService} from '../../../core/services';
-import {SettingsService} from '../../../core/services/settings/settings.service';
+import {NotificationService, ProjectService, UserService} from '../../../core/services';
 import {Cluster} from '../../../shared/entity/cluster';
 import {Member} from '../../../shared/entity/member';
 import {MachineDeployment} from '../../../shared/entity/machine-deployment';
@@ -56,24 +55,24 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
     private readonly _nodeService: NodeService,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
-    private readonly _settingsService: SettingsService
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.machineDeployments ? this.machineDeployments : [];
     this.dataSource.paginator = this.paginator;
 
-    this._userService.loggedInUser.subscribe(user => (this._user = user));
+    this._userService.currentUser.subscribe(user => (this._user = user));
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
 
     this._projectService.selectedProject
       .pipe(takeUntil(this._unsubscribe))
-      .pipe(switchMap(project => this._userService.currentUserGroup(project.id)))
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
+      .pipe(switchMap(project => this._userService.getCurrentUserGroup(project.id)))
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     if (this.cluster.spec.cloud.aws) {
       this.displayedColumns = ['status', 'name', 'replicas', 'ver', 'availabilityZone', 'os', 'created', 'actions'];
@@ -111,19 +110,24 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Edit);
   }
 
-  showEditDialog(md: MachineDeployment, event: Event): void {
-    event.stopPropagation();
+  showEditDialog(md: MachineDeployment): void {
     this._nodeService
-      .showMachineDeploymentEditDialog(md, this.cluster, this.projectID, this.seed, this.changeMachineDeployment)
-      .subscribe(() => {});
+      .showMachineDeploymentEditDialog(md, this.cluster, this.projectID, this.seed)
+      .pipe(take(1))
+      .subscribe(
+        _ => {
+          this._notificationService.success(`The <strong>${md.name}</strong> node deployment was updated`);
+          this.changeMachineDeployment.emit(md);
+        },
+        _ => this._notificationService.error('There was an error during node deployment edition.')
+      );
   }
 
   isDeleteEnabled(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Delete);
   }
 
-  showDeleteDialog(md: MachineDeployment, event: Event): void {
-    event.stopPropagation();
+  showDeleteDialog(md: MachineDeployment): void {
     this._nodeService
       .showMachineDeploymentDeleteDialog(md, this.cluster.id, this.projectID, this.seed, this.changeMachineDeployment)
       .subscribe(() => {});

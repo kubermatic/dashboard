@@ -19,4 +19,5 @@ export enum Condition {
   HaveClass = 'have.class',
   HaveLength = 'have.length',
   NotBe = 'not.be',
+  BeEnabled = 'be.enabled',
 }

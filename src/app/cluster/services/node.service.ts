@@ -13,16 +13,14 @@ import {EventEmitter, Injectable, Injector} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import * as _ from 'lodash';
 import {Observable, of} from 'rxjs';
-import {catchError, first, flatMap, map} from 'rxjs/operators';
+import {catchError, filter, first, flatMap, switchMap} from 'rxjs/operators';
 
-import {NotificationService} from '../../core/services';
-import {ApiService} from '../../core/services';
-import {GoogleAnalyticsService} from '../../google-analytics.service';
+import {ApiService, NotificationService} from '../../core/services';
+import {DialogDataInput, DialogDataOutput, NodeDataDialogComponent} from '../../node-data/dialog/component';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '../../shared/entity/cluster';
 import {MachineDeployment, MachineDeploymentPatch} from '../../shared/entity/machine-deployment';
 import {NodeData} from '../../shared/model/NodeSpecChange';
-import {NodeDataModalComponent, NodeDataModalData} from '../cluster-details/node-data-modal/node-data-modal.component';
 
 @Injectable()
 export class NodeService {
@@ -39,7 +37,7 @@ export class NodeService {
     };
   }
 
-  private static _createPatch(data: NodeDataModalData): MachineDeploymentPatch {
+  private static _createPatch(data: DialogDataOutput): MachineDeploymentPatch {
     const patch: MachineDeploymentPatch = {
       spec: {
         replicas: data.nodeData.count,
@@ -62,72 +60,56 @@ export class NodeService {
 
   constructor(
     private readonly _apiService: ApiService,
-    private readonly _googleAnalyticsService: GoogleAnalyticsService,
     private readonly _matDialog: MatDialog,
     private readonly _inj: Injector
   ) {
     this._notificationService = this._inj.get(NotificationService);
   }
 
-  createMachineDeployment(nodeData: NodeData, seed: string, cluster: Cluster, project: string): void {
-    this._apiService
-      .createMachineDeployment(cluster, NodeService._getMachineDeploymentEntity(nodeData), seed, project)
-      .pipe(first())
-      .subscribe(() => {
-        this._notificationService.success(
-          `A new machine deployment was created in the <strong>${cluster.name}</strong> cluster`
-        );
-        this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeAdded');
-      });
+  createMachineDeployment(
+    nodeData: NodeData,
+    projectID: string,
+    seedDCName: string,
+    clusterID: string
+  ): Observable<MachineDeployment> {
+    return this._apiService.createMachineDeployment(
+      NodeService._getMachineDeploymentEntity(nodeData),
+      clusterID,
+      seedDCName,
+      projectID
+    );
   }
 
-  showMachineDeploymentCreateDialog(
-    count: number,
-    cluster: Cluster,
-    projectID: string,
-    seed: string
-  ): Observable<boolean> {
-    const dialogRef = this._matDialog.open(NodeDataModalComponent, {
-      data: {
-        cluster,
-        seed,
-        projectID,
-        existingNodesCount: count,
-        editMode: false,
-      },
-    });
-
-    return dialogRef.afterClosed().pipe<boolean>(
-      map((data: NodeDataModalData) => {
-        if (data) {
-          this.createMachineDeployment(data.nodeData, data.seed, data.cluster, data.projectID);
-          return true;
-        }
-        return false;
-      })
+  showMachineDeploymentCreateDialog(cluster: Cluster, projectID: string, seed: string): Observable<MachineDeployment> {
+    const dialogRef = this._matDialog.open<NodeDataDialogComponent, DialogDataInput, DialogDataOutput>(
+      NodeDataDialogComponent,
+      {
+        data: {
+          initialClusterData: cluster,
+        } as DialogDataInput,
+      }
     );
+
+    return dialogRef
+      .afterClosed()
+      .pipe(filter(data => !!data))
+      .pipe(switchMap(data => this.createMachineDeployment(data.nodeData, projectID, seed, cluster.id)));
   }
 
   showMachineDeploymentEditDialog(
     md: MachineDeployment,
     cluster: Cluster,
     projectID: string,
-    seed: string,
-    changeEventEmitter: EventEmitter<MachineDeployment>
-  ): Observable<boolean> {
-    const dialogRef = this._matDialog.open(NodeDataModalComponent, {
+    seed: string
+  ): Observable<MachineDeployment> {
+    const dialogRef = this._matDialog.open(NodeDataDialogComponent, {
       data: {
-        cluster,
-        seed,
-        projectID,
         existingNodesCount: md.spec.replicas,
-        editMode: true,
-        machineDeployment: md,
-        nodeData: {
+        initialClusterData: cluster,
+        initialNodeData: {
           count: md.spec.replicas,
           name: md.name,
-          spec: _.cloneDeep(md.spec.template),
-          valid: true,
+          spec: md.spec.template,
           dynamicConfig: md.spec.dynamicConfig,
         } as NodeData,
       },
@@ -135,49 +117,12 @@ export class NodeService {
 
     return dialogRef
       .afterClosed()
+      .pipe(filter(data => !!data))
       .pipe(
-        flatMap(
-          (data: NodeDataModalData): Observable<MachineDeployment> => {
-            if (data) {
-              return this._apiService
-                .patchMachineDeployment(
-                  data.machineDeployment,
-                  NodeService._createPatch(data),
-                  data.cluster.id,
-                  data.seed,
-                  data.projectID
-                )
-                .pipe(first())
-                .pipe(
-                  catchError(() => {
-                    this._notificationService.error(
-                      `Could not update the <strong>${data.machineDeployment.name}</strong> machine deployment `
-                    );
-                    this._googleAnalyticsService.emitEvent('clusterOverview', 'machineDeploymentUpdateFailed');
-                    return of(undefined);
-                  })
-                );
-            }
-            return of(undefined);
-          }
+        switchMap(data =>
+          this._apiService.patchMachineDeployment(NodeService._createPatch(data), md.id, cluster.id, seed, projectID)
         )
-      )
-      .pipe(
-        flatMap(
-          (md: MachineDeployment): Observable<boolean> => {
-            if (md) {
-              this._notificationService.success(`The <strong>${md.name}</strong> machine deployment was updated`);
-              this._googleAnalyticsService.emitEvent('clusterOverview', 'machineDeploymentUpdated');
-              if (changeEventEmitter) {
-                changeEventEmitter.emit(md);
-              }
-              return of(true);
-            }
-            return of(false);
-          }
-        )
-      )
-      .pipe(first());
+      );
   }
 
   showMachineDeploymentDeleteDialog(
@@ -198,7 +143,6 @@ export class NodeService {
     };
 
     const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
-    this._googleAnalyticsService.emitEvent('clusterOverview', 'deleteNodeDialogOpened');
 
     return dialogRef
       .afterClosed()
@@ -211,10 +155,7 @@ export class NodeService {
                 .pipe(first())
                 .pipe(
                   catchError(() => {
-                    this._notificationService.error(
-                      'Could not remove the <strong>${md.name}</strong> machine deployment'
-                    );
-                    this._googleAnalyticsService.emitEvent('clusterOverview', 'machineDeploymentDeleteFailed');
+                    this._notificationService.error('Could not remove the <strong>${md.name}</strong> node deployment');
                     return of(false);
                   })
                 );
@@ -227,8 +168,7 @@ export class NodeService {
         flatMap(
           (data: any): Observable<boolean> => {
             if (data) {
-              this._notificationService.success(`The <strong>${md.name}</strong> machine deployment was removed`);
-              this._googleAnalyticsService.emitEvent('clusterOverview', 'machineDeploymentDeleted');
+              this._notificationService.success(`The <strong>${md.name}</strong> node deployment was removed`);
               if (changeEventEmitter) {
                 changeEventEmitter.emit(md);
               }

@@ -25,7 +25,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {MatSelect} from '@angular/material/select';
-import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, skipWhile, takeUntil} from 'rxjs/operators';
 import {BaseFormValidator} from '../../validators/base-form.validator';
 import {OptionDirective} from './directive';
 
@@ -60,7 +60,7 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   @Input() filterBy: string;
   @Input() selectBy: string;
   @Input('optionsGetter') getOptions: (group: string) => object[];
-  @Input() selected: string;
+  @Input() selected = '';
   @Input() hint: string;
   @Input() valueFormatter: (selected: string) => string;
 
@@ -89,7 +89,8 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
 
     this.form
       .get(Controls.Select)
-      .valueChanges.pipe(distinctUntilChanged())
+      .valueChanges.pipe(skipWhile(value => !value))
+      .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.changed.emit(this.form.get(Controls.Select).value));
   }

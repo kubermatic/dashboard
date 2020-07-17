@@ -15,6 +15,8 @@ import {ProjectsPage} from '../../pages/projects.po';
 import {WizardPage} from '../../pages/wizard.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
+import {Endpoint} from '../../utils/endpoint';
+import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
 import {prefixedString} from '../../utils/random';
 import {wait} from '../../utils/wait';
@@ -45,13 +47,13 @@ describe('Machine Deployments Story', () => {
   });
 
   it('should create a new cluster', () => {
-    WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
-    WizardPage.getNextBtn().click();
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
     WizardPage.getDatacenterBtn(Datacenter.Frankfurt).click();
+    WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
+    WizardPage.getNextBtn().click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
-    WizardPage.getCustomPresetsValue('e2e-digitalocean').click();
-    wait('**/providers/digitalocean/sizes');
+    WizardPage.getPreset(Preset.Digitalocean).click();
+    WizardPage.getNextBtn().click({force: true});
     WizardPage.getNodeNameInput()
       .type(initialMachineDeploymentName)
       .should(Condition.HaveValue, initialMachineDeploymentName);
@@ -59,10 +61,10 @@ describe('Machine Deployments Story', () => {
       .clear()
       .type(initialMachineDeploymentReplicas)
       .should(Condition.HaveValue, initialMachineDeploymentReplicas);
-    WizardPage.getNextBtn().click();
-    WizardPage.getCreateBtn().click();
+    WizardPage.getNextBtn().should(Condition.BeEnabled).click({force: true});
+    WizardPage.getCreateBtn().click({force: true});
 
-    cy.url().should(Condition.Contain, '/clusters');
+    cy.url().should(Condition.Contain, Endpoint.Clusters);
   });
 
   it('should check if cluster was created', () => {
@@ -75,8 +77,8 @@ describe('Machine Deployments Story', () => {
   });
 
   it('should wait for initial machine deployment to be created', () => {
-    wait('**/nodedeployments', 'GET', 'getMachineDeployments', 900000);
-    cy.get('km-machine-deployment-list', {timeout: 900000}).should(Condition.Contain, initialMachineDeploymentName);
+    wait(Endpoint.NodeDeployments, 'GET', 'getMachineDeployments', 900000);
+    ClustersPage.getMachineDeploymentList(900000).should(Condition.Contain, initialMachineDeploymentName);
   });
 
   it('should go to machine deployment details', () => {
@@ -96,9 +98,10 @@ describe('Machine Deployments Story', () => {
 
   it('should go back to cluster details page and remove initial machine deployment', () => {
     MachineDeploymentDetailsPage.getBackToClusterBtn().click();
-    cy.url().should(Condition.Contain, '/clusters');
-    cy.get('mat-card-title').should(Condition.Contain, clusterName);
-    cy.get('km-machine-deployment-list').should(Condition.Contain, initialMachineDeploymentName);
+    cy.url().should(Condition.Contain, Endpoint.Clusters);
+    ClustersPage.getClusterName().should(Condition.Contain, clusterName);
+
+    ClustersPage.getMachineDeploymentList().should(Condition.Contain, initialMachineDeploymentName);
 
     ClustersPage.getMachineDeploymentRemoveBtn(initialMachineDeploymentName).click();
     ClustersPage.getDeleteMachineDeploymentDialogBtn().click();

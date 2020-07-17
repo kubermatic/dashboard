@@ -16,9 +16,7 @@ import {merge, Subject} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {Project} from '../../../../shared/entity/project';
-import {ProjectService} from '../../../services';
-import {SettingsService} from '../../../services/settings/settings.service';
-import * as _ from 'lodash';
+import {ProjectService, UserService} from '../../../services';
 
 @Component({
   selector: 'km-project-selector',
@@ -35,10 +33,10 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
   private _displayAllProjects: boolean;
   private _projects: Project[];
 
-  constructor(private readonly _projectService: ProjectService, private readonly _settingsService: SettingsService) {}
+  constructor(private readonly _projectService: ProjectService, private readonly _userService: UserService) {}
 
   ngOnInit(): void {
-    this._displayAllProjects = this._settingsService.defaultUserSettings.displayAllProjectsForAdmin;
+    this._displayAllProjects = this._userService.defaultUserSettings.displayAllProjectsForAdmin;
 
     this._projectService.projects
       .pipe(tap(projects => (this._projects = projects)))
@@ -75,11 +73,7 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
   }
 
   private _sortProjects(projects: Project[]): Project[] {
-    return _.sortBy(
-      projects,
-      p => p.name.toLowerCase(),
-      p => p.id.toLowerCase()
-    );
+    return projects.sort((a, b) => (a.name + a.id).localeCompare(b.name + b.id));
   }
 
   private _appendProject(project: Project): void {

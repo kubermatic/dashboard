@@ -54,6 +54,14 @@ export class ClustersPage {
     return cy.get('#km-confirmation-dialog-confirm-btn');
   }
 
+  static getMachineDeploymentList(timeout = 5000): Cypress.Chainable {
+    return cy.get('km-machine-deployment-list', {timeout: timeout});
+  }
+
+  static getClusterName(): Cypress.Chainable {
+    return cy.get('mat-card-title');
+  }
+
   // Utils.
 
   static waitForRefresh(): void {

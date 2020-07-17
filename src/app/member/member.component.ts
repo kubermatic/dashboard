@@ -20,7 +20,6 @@ import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
 import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
-import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Member} from '../shared/entity/member';
@@ -57,8 +56,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _userService: UserService,
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
     private readonly _appConfig: AppConfigService,
-    private readonly _notificationService: NotificationService,
-    private readonly _settingsService: SettingsService
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -68,22 +66,22 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
 
-    this._userService.loggedInUser.pipe(first()).subscribe(user => (this.currentUser = user));
+    this._userService.currentUser.pipe(first()).subscribe(user => (this.currentUser = user));
 
     this._projectService.selectedProject
       .pipe(
         switchMap(project => {
           this._selectedProject = project;
-          return this._userService.currentUserGroup(project.id);
+          return this._userService.getCurrentUserGroup(project.id);
         })
       )
       .pipe(first())
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.userGroupConfig(userGroup)));
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     merge(timer(0, 10 * this._appConfig.getRefreshTimeBase()), this._membersUpdate)
       .pipe(switchMap(() => (this._selectedProject ? this._apiService.getMembers(this._selectedProject.id) : EMPTY)))

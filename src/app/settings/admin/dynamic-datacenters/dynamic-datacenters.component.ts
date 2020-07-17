@@ -19,8 +19,7 @@ import {NodeProvider, NodeProviderConstants} from '../../../shared/model/NodePro
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import * as countryCodeLookup from 'country-code-lookup';
-import {DatacenterService, NotificationService} from '../../../core/services';
-import {SettingsService} from '../../../core/services/settings/settings.service';
+import {DatacenterService, NotificationService, UserService} from '../../../core/services';
 import {Subject} from 'rxjs';
 import {DatacenterDataDialogComponent} from './datacenter-data-dialog/datacenter-data-dialog.component';
 import * as _ from 'lodash';
@@ -46,7 +45,7 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
 
   constructor(
     private readonly _datacenterService: DatacenterService,
-    private readonly _settingsService: SettingsService,
+    private readonly _userService: UserService,
     private readonly _notificationService: NotificationService,
     private readonly _matDialog: MatDialog
   ) {}
@@ -83,7 +82,7 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
 
     this._datacenterService.seeds.pipe(takeUntil(this._unsubscribe)).subscribe(seeds => (this.seeds = seeds));
 
-    this._settingsService.userSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
