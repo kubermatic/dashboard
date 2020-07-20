@@ -9,8 +9,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {wait} from '../utils/wait';
 import {Condition} from '../utils/condition';
+import {Endpoint} from '../utils/endpoint';
+import {RequestType, TrafficMonitor} from '../utils/monitor';
 import {WizardPage} from './wizard.po';
 
 export class ClustersPage {
@@ -65,7 +66,7 @@ export class ClustersPage {
   // Utils.
 
   static waitForRefresh(): void {
-    wait('**/clusters', 'GET', 'list clusters');
+    TrafficMonitor.newTrafficMonitor().url(Endpoint.Clusters).method(RequestType.GET).alias('list clusters').wait();
   }
 
   static verifyUrl(): void {

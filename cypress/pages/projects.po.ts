@@ -10,7 +10,8 @@
 // limitations under the License.
 
 import {Condition} from '../utils/condition';
-import {wait} from '../utils/wait';
+import {Endpoint} from '../utils/endpoint';
+import {Property, RequestType, Response, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {ClustersPage} from './clusters.po';
 
 export class ProjectsPage {
@@ -57,7 +58,16 @@ export class ProjectsPage {
   // Utils.
 
   static waitForRefresh(): void {
-    wait('**/projects?displayAll=false', 'GET', 'list projects');
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.Projects).alias('listProjects').wait();
+  }
+
+  static waitForProject(projectName: string): void {
+    TrafficMonitor.newTrafficMonitor()
+      .method(RequestType.GET)
+      .url(Endpoint.Projects)
+      .alias('listProjects')
+      .retry(5)
+      .expect(Response.newResponse(ResponseType.LIST).elements(1).property(Property.newProperty('name', projectName)));
   }
 
   static verifyUrl(): void {
@@ -92,7 +102,7 @@ export class ProjectsPage {
       .should(Condition.NotBe, 'disabled')
       .click()
       .then(() => {
-        this.waitForRefresh();
+        this.waitForProject(projectName);
         this.getProjectItem(projectName).should(Condition.HaveLength, 1);
       });
   }

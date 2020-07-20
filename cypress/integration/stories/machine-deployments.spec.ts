@@ -16,10 +16,10 @@ import {WizardPage} from '../../pages/wizard.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {Endpoint} from '../../utils/endpoint';
+import {RequestType, TrafficMonitor} from '../../utils/monitor';
 import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
 import {prefixedString} from '../../utils/random';
-import {wait} from '../../utils/wait';
 
 describe('Machine Deployments Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
@@ -77,7 +77,12 @@ describe('Machine Deployments Story', () => {
   });
 
   it('should wait for initial machine deployment to be created', () => {
-    wait(Endpoint.NodeDeployments, 'GET', 'getMachineDeployments', 900000);
+    TrafficMonitor.newTrafficMonitor()
+      .method(RequestType.GET)
+      .url(Endpoint.NodeDeployments)
+      .alias('getMachineDeployments')
+      .timeout(900000)
+      .wait();
     ClustersPage.getMachineDeploymentList(900000).should(Condition.Contain, initialMachineDeploymentName);
   });
 

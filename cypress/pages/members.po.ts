@@ -9,9 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Group} from '../utils/member';
-import {wait} from '../utils/wait';
 import {Condition} from '../utils/condition';
+import {Endpoint} from '../utils/endpoint';
+import {Group} from '../utils/member';
+import {RequestType, TrafficMonitor} from '../utils/monitor';
 
 export class MembersPage {
   static getAddMemberBtn(): Cypress.Chainable<any> {
@@ -73,7 +74,7 @@ export class MembersPage {
   // Utils.
 
   static waitForRefresh(): void {
-    wait('**/users', 'GET', 'list members');
+    TrafficMonitor.newTrafficMonitor().url(Endpoint.Users).method(RequestType.GET).alias('list members').wait();
   }
 
   static verifyUrl(): void {
