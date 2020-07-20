@@ -16,7 +16,7 @@ import {ClustersPage} from './clusters.po';
 
 export class ProjectsPage {
   static getProjectItem(projectName: string): Cypress.Chainable<any> {
-    return cy.get(`#km-project-name-${projectName}`, {timeout: 15000});
+    return cy.get(`#km-project-name-${projectName}`);
   }
 
   static getActiveProjects(): Cypress.Chainable<any> {
