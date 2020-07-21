@@ -64,7 +64,7 @@ describe('Machine Deployments Story', () => {
     WizardPage.getNextBtn().should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
-    cy.url().should(Condition.Contain, Endpoint.Clusters);
+    cy.url().should(Condition.Contain, 'clusters');
   });
 
   it('should check if cluster was created', () => {
@@ -103,7 +103,7 @@ describe('Machine Deployments Story', () => {
 
   it('should go back to cluster details page and remove initial machine deployment', () => {
     MachineDeploymentDetailsPage.getBackToClusterBtn().click();
-    cy.url().should(Condition.Contain, Endpoint.Clusters);
+    cy.url().should(Condition.Contain, 'clusters');
     ClustersPage.getClusterName().should(Condition.Contain, clusterName);
 
     ClustersPage.getMachineDeploymentList().should(Condition.Contain, initialMachineDeploymentName);
