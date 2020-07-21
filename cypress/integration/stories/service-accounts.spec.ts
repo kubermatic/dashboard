@@ -15,6 +15,7 @@ import {Condition} from '../../utils/condition';
 import {prefixedString} from '../../utils/random';
 import {ServiceAccountsPage} from '../../pages/service-accounts.po';
 import {Group} from '../../utils/member';
+import {View} from '../../utils/view';
 
 describe('Service Accounts Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
@@ -25,7 +26,7 @@ describe('Service Accounts Story', () => {
 
   it('should login', () => {
     login(email, password);
-    cy.url().should(Condition.Include, 'projects');
+    cy.url().should(Condition.Include, View.Projects);
   });
 
   it('should create a new project', () => {

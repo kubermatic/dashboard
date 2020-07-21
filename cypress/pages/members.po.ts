@@ -13,6 +13,7 @@ import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
 import {Group} from '../utils/member';
 import {RequestType, TrafficMonitor} from '../utils/monitor';
+import {View} from '../utils/view';
 
 export class MembersPage {
   static getAddMemberBtn(): Cypress.Chainable<any> {
@@ -78,7 +79,7 @@ export class MembersPage {
   }
 
   static verifyUrl(): void {
-    cy.url().should(Condition.Include, 'members');
+    cy.url().should(Condition.Include, View.Members);
   }
 
   static visit(): void {

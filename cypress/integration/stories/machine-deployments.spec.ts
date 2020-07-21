@@ -20,6 +20,7 @@ import {RequestType, TrafficMonitor} from '../../utils/monitor';
 import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
 import {prefixedString} from '../../utils/random';
+import {View} from '../../utils/view';
 
 describe('Machine Deployments Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
@@ -31,7 +32,7 @@ describe('Machine Deployments Story', () => {
 
   it('should login', () => {
     login(email, password);
-    cy.url().should(Condition.Include, 'projects');
+    cy.url().should(Condition.Include, View.Projects);
   });
 
   it('should create a new project', () => {
@@ -64,7 +65,7 @@ describe('Machine Deployments Story', () => {
     WizardPage.getNextBtn().should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
-    cy.url().should(Condition.Contain, 'clusters');
+    cy.url().should(Condition.Contain, View.Clusters);
   });
 
   it('should check if cluster was created', () => {
@@ -103,7 +104,7 @@ describe('Machine Deployments Story', () => {
 
   it('should go back to cluster details page and remove initial machine deployment', () => {
     MachineDeploymentDetailsPage.getBackToClusterBtn().click();
-    cy.url().should(Condition.Contain, 'clusters');
+    cy.url().should(Condition.Contain, View.Clusters);
     ClustersPage.getClusterName().should(Condition.Contain, clusterName);
 
     ClustersPage.getMachineDeploymentList().should(Condition.Contain, initialMachineDeploymentName);

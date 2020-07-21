@@ -18,6 +18,7 @@ import {Condition} from '../../utils/condition';
 import {Group, reloadUsers} from '../../utils/member';
 import {Datacenter, Provider} from '../../utils/provider';
 import {prefixedString} from '../../utils/random';
+import {View} from '../../utils/view';
 
 describe('Basic Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
@@ -29,7 +30,7 @@ describe('Basic Story', () => {
   it('should login', () => {
     login(email, password);
 
-    cy.url().should(Condition.Include, 'projects');
+    cy.url().should(Condition.Include, View.Projects);
   });
 
   it('should create a new project', () => {

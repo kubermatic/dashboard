@@ -9,23 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Condition} from '../utils/condition';
-import {View} from '../utils/view';
-import {UserPanel} from './user-panel.po';
-
-export class UserSettingsPage {
-  static getThemePicker(): Cypress.Chainable<any> {
-    return cy.get('#km-theme-picker');
-  }
-
-  // Utils.
-
-  static verifyUrl(): void {
-    cy.url().should(Condition.Include, View.Account);
-  }
-
-  static visit(): void {
-    UserPanel.openUserSettings();
-    this.verifyUrl();
-  }
+export enum View {
+  Clusters = 'clusters',
+  Projects = 'projects',
+  Account = 'account',
+  Members = 'members',
+  ServiceAccounts = 'serviceaccounts',
+  Wizard = 'wizard',
 }

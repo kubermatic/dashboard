@@ -12,6 +12,7 @@
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
 import {RequestType, TrafficMonitor} from '../utils/monitor';
+import {View} from '../utils/view';
 import {WizardPage} from './wizard.po';
 
 export class ClustersPage {
@@ -70,7 +71,7 @@ export class ClustersPage {
   }
 
   static verifyUrl(): void {
-    cy.url().should(Condition.Include, 'clusters');
+    cy.url().should(Condition.Include, View.Clusters);
   }
 
   static visit(): void {
