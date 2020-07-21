@@ -276,6 +276,7 @@ retry 3 helm upgrade --install --force --wait --timeout 300 \
   --set-string=kubermatic.controller.addons.openshift.image.tag="$KUBERMATIC_VERSION" \
   --set-string=kubermatic.api.image.tag="$KUBERMATIC_VERSION" \
   --set=kubermatic.controller.datacenterName=${SEED_NAME} \
+  --set=kubermatic.controller.workerCount=1 \
   --set=kubermatic.api.replicas=1 \
   --set-string=kubermatic.masterController.image.tag="$KUBERMATIC_VERSION" \
   --set-string=kubermatic.ui.image.tag=latest \
