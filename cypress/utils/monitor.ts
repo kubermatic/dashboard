@@ -68,7 +68,7 @@ export class TrafficMonitor {
       throw new Error('Expected conditions not met within retry limit');
     }
 
-    if (_.isEmpty(response.properties)) {
+    if (_.isEmpty(response.properties) && response.limit > 0) {
       throw new Error('Missing expected properties');
     }
 
@@ -97,8 +97,11 @@ export class TrafficMonitor {
       expect(objArr.length).to.eq(response.limit);
     }
 
-    // TODO: Right now only first object properties are checked
-    expect(response.properties.every(property => property.compare(objArr[0])));
+    if (response.limit > 0) {
+      // TODO: Right now only first object properties are checked
+      expect(response.properties.every(property => property.compare(objArr[0]))).to.be.true;
+    }
+
     return this;
   }
 

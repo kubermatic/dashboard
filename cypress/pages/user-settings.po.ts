@@ -1,5 +1,6 @@
-import {wait} from '../utils/wait';
 import {Condition} from '../utils/condition';
+import {Endpoint} from '../utils/endpoint';
+import {RequestType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 import {UserPanel} from './user-panel.po';
 
@@ -15,7 +16,7 @@ export class UserSettingsPage {
   }
 
   static waitForRefresh(): void {
-    wait('**/me/settings', 'GET', 'get user settings');
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.Settings).alias('get user settings').wait();
   }
 
   static visit(): void {

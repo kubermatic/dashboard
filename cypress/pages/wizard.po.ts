@@ -1,5 +1,4 @@
 import {Condition} from '../utils/condition';
-import {Preset} from '../utils/preset';
 import {View} from '../utils/view';
 
 export class WizardPage {

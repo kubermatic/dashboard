@@ -87,6 +87,7 @@ export class ClustersPage {
   }
 
   static deleteCluster(name: string): void {
+    cy.reload();
     this.getDeleteClusterBtn().click();
     this.getDeleteDialogInput().type(name).should(Condition.HaveValue, name);
     this.getDeleteDialogBtn().should(Condition.NotBe, 'disabled').click();
