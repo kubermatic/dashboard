@@ -1,5 +1,6 @@
 import {wait} from '../utils/wait';
 import {Condition} from '../utils/condition';
+import {View} from '../utils/view';
 import {UserPanel} from './user-panel.po';
 
 export class UserSettingsPage {
@@ -10,7 +11,7 @@ export class UserSettingsPage {
   // Utils.
 
   static verifyUrl(): void {
-    cy.url().should(Condition.Include, 'account');
+    cy.url().should(Condition.Include, View.Account);
   }
 
   static waitForRefresh(): void {
