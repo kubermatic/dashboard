@@ -16,10 +16,11 @@ import {WizardPage} from '../../pages/wizard.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {Endpoint} from '../../utils/endpoint';
+import {RequestType, TrafficMonitor} from '../../utils/monitor';
 import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
 import {prefixedString} from '../../utils/random';
-import {wait} from '../../utils/wait';
+import {View} from '../../utils/view';
 
 describe('Machine Deployments Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
@@ -31,7 +32,7 @@ describe('Machine Deployments Story', () => {
 
   it('should login', () => {
     login(email, password);
-    cy.url().should(Condition.Include, 'projects');
+    cy.url().should(Condition.Include, View.Projects);
   });
 
   it('should create a new project', () => {
@@ -64,7 +65,7 @@ describe('Machine Deployments Story', () => {
     WizardPage.getNextBtn().should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
-    cy.url().should(Condition.Contain, Endpoint.Clusters);
+    cy.url().should(Condition.Contain, View.Clusters);
   });
 
   it('should check if cluster was created', () => {
@@ -77,7 +78,12 @@ describe('Machine Deployments Story', () => {
   });
 
   it('should wait for initial machine deployment to be created', () => {
-    wait(Endpoint.NodeDeployments, 'GET', 'getMachineDeployments', 900000);
+    TrafficMonitor.newTrafficMonitor()
+      .method(RequestType.GET)
+      .url(Endpoint.NodeDeployments)
+      .alias('getMachineDeployments')
+      .timeout(900000)
+      .wait();
     ClustersPage.getMachineDeploymentList(900000).should(Condition.Contain, initialMachineDeploymentName);
   });
 
@@ -98,7 +104,7 @@ describe('Machine Deployments Story', () => {
 
   it('should go back to cluster details page and remove initial machine deployment', () => {
     MachineDeploymentDetailsPage.getBackToClusterBtn().click();
-    cy.url().should(Condition.Contain, Endpoint.Clusters);
+    cy.url().should(Condition.Contain, View.Clusters);
     ClustersPage.getClusterName().should(Condition.Contain, clusterName);
 
     ClustersPage.getMachineDeploymentList().should(Condition.Contain, initialMachineDeploymentName);

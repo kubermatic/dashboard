@@ -11,6 +11,7 @@
 
 import {Condition} from '../utils/condition';
 import {Preset} from '../utils/preset';
+import {View} from '../utils/view';
 
 export class WizardPage {
   static getNextBtn(): Cypress.Chainable<any> {
@@ -59,6 +60,6 @@ export class WizardPage {
   // Utils.
 
   static verifyUrl(): void {
-    cy.url().should(Condition.Include, 'wizard');
+    cy.url().should(Condition.Include, View.Wizard);
   }
 }

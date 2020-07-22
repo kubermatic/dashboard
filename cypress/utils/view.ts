@@ -9,7 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export function wait(apiURL: string, method = 'GET', alias = 'wait', timeout?: number): Cypress.Chainable<any> {
-  cy.route(method, apiURL).as(alias);
-  return timeout ? cy.wait(`@${alias}`, {timeout}) : cy.wait(`@${alias}`);
+export enum View {
+  Clusters = 'clusters',
+  Projects = 'projects',
+  Account = 'account',
+  Members = 'members',
+  ServiceAccounts = 'serviceaccounts',
+  Wizard = 'wizard',
 }

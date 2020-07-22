@@ -13,6 +13,7 @@ import {ProjectsPage} from '../../pages/projects.po';
 import {UserSettingsPage} from '../../pages/user-settings.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
+import {View} from '../../utils/view';
 
 describe('Edition Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
@@ -24,7 +25,7 @@ describe('Edition Story', () => {
   it('should login', () => {
     login(email, password);
 
-    cy.url().should(Condition.Include, 'projects');
+    cy.url().should(Condition.Include, View.Projects);
   });
 
   it('should check if footer contains correct edition', () => {

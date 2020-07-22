@@ -14,6 +14,10 @@ export namespace Endpoint {
     Sizes = '**/providers/digitalocean/sizes',
   }
 
-  export const Clusters = '/clusters';
+  export const Clusters = '**/clusters';
   export const NodeDeployments = '**/nodedeployments';
+  export const Users = '**/users';
+  export const Projects = '**/projects?displayAll=false';
+  export const Tokens = '**/tokens';
+  export const ServiceAccounts = '**/serviceaccounts';
 }
