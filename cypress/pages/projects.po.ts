@@ -85,6 +85,7 @@ export class ProjectsPage {
   }
 
   static selectProject(projectName: string): void {
+    cy.reload();
     this.getProjectItem(projectName).should(Condition.HaveLength, 1);
     this.getActiveProjects()
       .should(Condition.HaveLength, 1)
