@@ -8,9 +8,12 @@ export function login(email: string, password: string): void {
   LoginPage.visit();
   LoginPage.getLoginBtn().click();
 
-  // The Dex created for e2e tests has only one connector (static passwords),
-  // so there is no need to click on a "Log-in via e-Mail" button, as opposed to
-  // dev/cloud.
+  // Conditionally click on the login with email btn if it exists
+  DexPage.getLoginPanel().then(element => {
+    if (DexPage.hasLoginWithEmailBtn(element)) {
+      DexPage.getLoginWithEmailBtn().click();
+    }
+  });
 
   DexPage.getLoginInput().type(email).should(Condition.HaveValue, email);
   DexPage.getPasswordInput().type(password).should(Condition.HaveValue, password);
