@@ -70,7 +70,7 @@
     "@types/jest": "25.2.3",
     "@types/lodash": "4.14.153",
     "@types/node": "14.0.5",
-    "cypress": "4.6.0",
+    "cypress": "^4.11.0",
     "gts": "2.0.2",
     "husky": "4.2.5",
     "jest": "25.5.4",
@@ -110,7 +110,9 @@
     },
     "overrides": [
       {
-        "files": ["**/*.spec.ts"],
+        "files": [
+          "**/*.spec.ts"
+        ],
         "env": {
           "browser": true,
           "jest": true
@@ -149,9 +151,14 @@
       "no-descending-specificity": null,
       "number-leading-zero": null,
       "selector-type-no-unknown": null,
-      "selector-pseudo-element-no-unknown": [true, {
-        "ignorePseudoElements": ["ng-deep"]
-      }]
+      "selector-pseudo-element-no-unknown": [
+        true,
+        {
+          "ignorePseudoElements": [
+            "ng-deep"
+          ]
+        }
+      ]
     }
   }
 }

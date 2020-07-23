@@ -12,6 +12,7 @@
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
 import {RequestType, TrafficMonitor} from '../utils/monitor';
+import {randomString} from '../utils/random';
 import {View} from '../utils/view';
 import {WizardPage} from './wizard.po';
 
@@ -59,7 +60,11 @@ export class ClustersPage {
   // Utils.
 
   static waitForRefresh(): void {
-    TrafficMonitor.newTrafficMonitor().url(Endpoint.Clusters).method(RequestType.GET).alias('list clusters').wait();
+    TrafficMonitor.newTrafficMonitor()
+      .url(Endpoint.Clusters)
+      .method(RequestType.GET)
+      .alias(`listClusters-${randomString()}`)
+      .wait();
   }
 
   static verifyUrl(): void {
@@ -87,7 +92,6 @@ export class ClustersPage {
   }
 
   static deleteCluster(name: string): void {
-    cy.reload();
     this.getDeleteClusterBtn().click();
     this.getDeleteDialogInput().type(name).should(Condition.HaveValue, name);
     this.getDeleteDialogBtn().should(Condition.NotBe, 'disabled').click();
