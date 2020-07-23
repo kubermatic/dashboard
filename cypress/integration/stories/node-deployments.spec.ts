@@ -41,7 +41,11 @@ describe('Node Deployments Story', () => {
     WizardPage.getDatacenterBtn(Datacenter.Frankfurt).click();
     WizardPage.getCustomPresetsCombobox().click();
     WizardPage.getCustomPresetsValue('e2e-digitalocean').click();
-    TrafficMonitor.newTrafficMonitor().url(Endpoint.Digitalocean.Sizes).method(RequestType.GET).wait();
+    TrafficMonitor.newTrafficMonitor()
+      .url(Endpoint.Digitalocean.Sizes)
+      .method(RequestType.GET)
+      .alias('digitaloceanSizes')
+      .wait();
     WizardPage.getNodeNameInput()
       .type(initialNodeDeploymentName)
       .should(Condition.HaveValue, initialNodeDeploymentName);

@@ -10,6 +10,7 @@
 // limitations under the License.
 
 import * as _ from 'lodash';
+import {randomString} from './random';
 
 export class TrafficMonitor {
   private _timeout = -1;
@@ -19,7 +20,7 @@ export class TrafficMonitor {
   private _alias = '';
   private _retry = 1;
 
-  private readonly _defaultAlias = '@default';
+  private readonly _defaultAlias = 'default';
 
   static newTrafficMonitor(): TrafficMonitor {
     return new TrafficMonitor();
@@ -112,7 +113,9 @@ export class TrafficMonitor {
   }
 
   private _setDefaults(): void {
-    this._alias = this._alias ? this._alias : this._defaultAlias;
+    const suffix = randomString();
+    this._alias = this._alias ? this._alias : `@${this._defaultAlias}-${suffix}`;
+    this._asAlias = this._asAlias ? this._asAlias : `${this._defaultAlias}-${suffix}`;
   }
 }
 
