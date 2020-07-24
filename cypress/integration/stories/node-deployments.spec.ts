@@ -4,9 +4,10 @@ import {ProjectsPage} from '../../pages/projects.po';
 import {WizardPage} from '../../pages/wizard.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
+import {Endpoint} from '../../utils/endpoint';
+import {RequestType, TrafficMonitor} from '../../utils/monitor';
 import {Datacenter, Provider} from '../../utils/provider';
 import {prefixedString} from '../../utils/random';
-import {wait} from '../../utils/wait';
 
 describe('Node Deployments Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
@@ -40,7 +41,11 @@ describe('Node Deployments Story', () => {
     WizardPage.getDatacenterBtn(Datacenter.Frankfurt).click();
     WizardPage.getCustomPresetsCombobox().click();
     WizardPage.getCustomPresetsValue('e2e-digitalocean').click();
-    wait('**/providers/digitalocean/sizes');
+    TrafficMonitor.newTrafficMonitor()
+      .url(Endpoint.Digitalocean.Sizes)
+      .method(RequestType.GET)
+      .alias('digitaloceanSizes')
+      .wait();
     WizardPage.getNodeNameInput()
       .type(initialNodeDeploymentName)
       .should(Condition.HaveValue, initialNodeDeploymentName);
@@ -64,7 +69,7 @@ describe('Node Deployments Story', () => {
   });
 
   it('should wait for initial node deployment to be created', () => {
-    wait('**/nodedeployments', 'GET', 'getNodeDeployments', 900000);
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.NodeDeployments).timeout(900000).wait();
     cy.get('km-node-deployment-list', {timeout: 900000}).should(Condition.Contain, initialNodeDeploymentName);
   });
 

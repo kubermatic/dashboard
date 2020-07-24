@@ -1,5 +1,6 @@
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
+import {View} from '../../utils/view';
 import {UserSettingsPage} from '../../pages/user-settings.po';
 
 describe.skip('Edition Story', () => {
@@ -12,7 +13,7 @@ describe.skip('Edition Story', () => {
   it('should login', () => {
     login(email, password);
 
-    cy.url().should(Condition.Include, 'projects');
+    cy.url().should(Condition.Include, View.Projects);
   });
 
   it('should check if footer contains correct edition', () => {

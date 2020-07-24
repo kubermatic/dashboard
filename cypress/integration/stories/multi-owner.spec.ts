@@ -5,6 +5,7 @@ import {Condition} from '../../utils/condition';
 import {Group, reloadUsers} from '../../utils/member';
 import {prefixedString} from '../../utils/random';
 import {ClustersPage} from '../../pages/clusters.po';
+import {View} from '../../utils/view';
 
 describe('Multi owner Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
@@ -14,7 +15,7 @@ describe('Multi owner Story', () => {
 
   it('should login as a first owner', () => {
     login(email, password);
-    cy.url().should(Condition.Include, 'projects');
+    cy.url().should(Condition.Include, View.Projects);
   });
 
   it('should create a new project', () => {
@@ -39,7 +40,7 @@ describe('Multi owner Story', () => {
 
   it('should login as a second owner', () => {
     login(newUserEmail, password);
-    cy.url().should(Condition.Include, 'projects');
+    cy.url().should(Condition.Include, View.Projects);
   });
 
   it('should wait for autoredirect and go back to projects', () => {

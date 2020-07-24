@@ -1,6 +1,7 @@
 export KUBERMATIC_VERSION=latest
 export PATH=$PATH:/usr/local/go/bin
 export SEED_NAME=prow-build-cluster
+export TARGET_BRANCH=${PULL_BASE_REF:-master}
 
 if [[ -z ${JOB_NAME} ]]; then
 	echo "This script should only be running in a CI environment."
@@ -14,6 +15,12 @@ fi
 
 cd "${GOPATH}/src/github.com/kubermatic/kubermatic"
 source hack/lib.sh
+
+if [[ ${TARGET_BRANCH} == release* ]]; then
+  VERSION=${TARGET_BRANCH#release/}
+  TAG_VERSION=$(git tag | egrep "${VERSION}" | tail -n 1)
+  export KUBERMATIC_VERSION=${TAG_VERSION}
+fi
 
 TEST_NAME="Get Vault token"
 echodate "Getting secrets from Vault"
@@ -249,7 +256,7 @@ echodate "Deploying cert-manager CRDs"
 retry 5 kubectl apply -f charts/cert-manager/crd/
 
 TEST_NAME="Deploy Kubermatic"
-echodate "Deploying Kubermatic using Helm..."
+echodate "Deploying Kubermatic [${KUBERMATIC_VERSION}] using Helm..."
 
 OLD_HEAD="$(git rev-parse HEAD)"
 if [[ -n ${CHARTS_VERSION:-} ]]; then
@@ -266,6 +273,7 @@ retry 3 helm upgrade --install --force --wait --timeout 300 \
   --set-string=kubermatic.controller.addons.openshift.image.tag="$KUBERMATIC_VERSION" \
   --set-string=kubermatic.api.image.tag="$KUBERMATIC_VERSION" \
   --set=kubermatic.controller.datacenterName=${SEED_NAME} \
+  --set=kubermatic.controller.workerCount=100 \
   --set=kubermatic.api.replicas=1 \
   --set-string=kubermatic.masterController.image.tag="$KUBERMATIC_VERSION" \
   --set-string=kubermatic.ui.image.tag=latest \
