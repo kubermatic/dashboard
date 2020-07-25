@@ -57,7 +57,7 @@
     "lodash": "4.17.19",
     "moment": "2.27.0",
     "ngx-clipboard": "13.0.1",
-    "ngx-cookie-service": "3.0.4",
+    "ngx-cookie-service": "10.0.0",
     "ngx-custom-validators": "8.0.0",
     "ngx-filter-pipe": "2.1.2",
     "ngx-monaco-editor": "9.0.0",
