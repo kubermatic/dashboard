@@ -112,6 +112,16 @@ export class ProjectsPage {
   static deleteProject(projectName: string): void {
     this.getDeleteProjectBtn(projectName).should(Condition.NotBe, 'disabled').click();
     cy.get('#km-confirmation-dialog-input').type(projectName).should(Condition.HaveValue, projectName);
-    cy.get('#km-confirmation-dialog-confirm-btn').should(Condition.NotBe, 'disabled').click();
+    cy.get('#km-confirmation-dialog-confirm-btn')
+      .should(Condition.NotBe, 'disabled')
+      .click()
+      .then(() => {
+        TrafficMonitor.newTrafficMonitor()
+          .method(RequestType.GET)
+          .url(Endpoint.Projects)
+          .alias('listProjects')
+          .retry(5)
+          .expect(Response.newResponse(ResponseType.LIST).elements(0));
+      });
   }
 }

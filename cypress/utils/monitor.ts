@@ -10,6 +10,7 @@
 // limitations under the License.
 
 import * as _ from 'lodash';
+import {randomString} from './random';
 
 export class TrafficMonitor {
   private _timeout = -1;
@@ -19,7 +20,7 @@ export class TrafficMonitor {
   private _alias = '';
   private _retry = 1;
 
-  private readonly _defaultAlias = '@default';
+  private readonly _defaultAlias = 'default';
 
   static newTrafficMonitor(): TrafficMonitor {
     return new TrafficMonitor();
@@ -68,7 +69,7 @@ export class TrafficMonitor {
       throw new Error('Expected conditions not met within retry limit');
     }
 
-    if (_.isEmpty(response.properties)) {
+    if (_.isEmpty(response.properties) && response.limit > 0) {
       throw new Error('Missing expected properties');
     }
 
@@ -97,8 +98,11 @@ export class TrafficMonitor {
       expect(objArr.length).to.eq(response.limit);
     }
 
-    // TODO: Right now only first object properties are checked
-    expect(response.properties.every(property => property.compare(objArr[0])));
+    if (response.limit > 0) {
+      // TODO: Right now only first object properties are checked
+      expect(response.properties.every(property => property.compare(objArr[0]))).to.be.true;
+    }
+
     return this;
   }
 
@@ -109,7 +113,9 @@ export class TrafficMonitor {
   }
 
   private _setDefaults(): void {
-    this._alias = this._alias ? this._alias : this._defaultAlias;
+    const suffix = randomString();
+    this._alias = this._alias ? this._alias : `@${this._defaultAlias}-${suffix}`;
+    this._asAlias = this._asAlias ? this._asAlias : `${this._defaultAlias}-${suffix}`;
   }
 }
 
