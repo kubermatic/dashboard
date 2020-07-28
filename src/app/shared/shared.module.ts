@@ -60,6 +60,7 @@ import {FilteredComboboxComponent} from './components/combobox/component';
 import {OptionDirective} from './components/combobox/directive';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 import {DialogTitleComponent} from './components/dialog-title/dialog-title.component';
+import {EndOfLifeInformationComponent} from './components/eol-information/component';
 import {EventListComponent} from './components/event-list/event-list.component';
 import {LabelFormComponent} from './components/label-form/label-form.component';
 import {LabelsComponent} from './components/labels/labels.component';
@@ -143,6 +144,7 @@ const components: any[] = [
   PropertyUsageComponent,
   FilteredComboboxComponent,
   MachineNetworkComponent,
+  EndOfLifeInformationComponent,
 ];
 
 const entryComponents: any[] = [

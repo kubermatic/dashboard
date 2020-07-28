@@ -29,7 +29,8 @@ limitations under the License.
     <table class="km-table"
            mat-table
            matSort
-           [dataSource]="dataSource">
+           [dataSource]="dataSource"
+           [trackBy]="trackByClusterID">
       <ng-container matColumnDef="status">
         <th mat-header-cell
             *matHeaderCellDef
@@ -53,6 +54,7 @@ limitations under the License.
           <div fxLayoutAlign=" center"
                fxLayoutGap="4px">
             <span>{{element.name}}</span>
+            <km-eol-information [version]="element.spec?.version"></km-eol-information>
             <i *ngIf="showEOLWarning(element)"
                class="km-icon-warning with-margin"
                matTooltip="Container Linux is going end-of-life on May 26, 2020."></i>

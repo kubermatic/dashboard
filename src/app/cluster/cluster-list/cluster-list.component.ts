@@ -182,10 +182,14 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     return !_.isEmpty(this.clusters) && this.paginator && this.clusters.length > this.paginator.pageSize;
   }
 
-  showEOLWarning(element): boolean {
+  showEOLWarning(element: Cluster): boolean {
     return (
       !!this.machineDeployments[element.id] &&
       this.machineDeployments[element.id].filter(md => !!md.spec.template.operatingSystem.containerLinux).length > 0
     );
+  }
+
+  trackByClusterID(cluster: Cluster): string {
+    return cluster.id;
   }
 }
