@@ -60,14 +60,4 @@ export class ProviderExtendedComponent extends BaseFormValidator implements OnIn
         this.form.addControl(Controls.ProviderExtended, this._builder.control(''));
       });
   }
-
-  hasExtendedSection(provider: NodeProvider): boolean {
-    return [
-      NodeProvider.VSPHERE,
-      NodeProvider.AWS,
-      NodeProvider.AZURE,
-      NodeProvider.GCP,
-      NodeProvider.OPENSTACK,
-    ].includes(provider);
-  }
 }

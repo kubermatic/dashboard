@@ -23,15 +23,17 @@
     margin-bottom: 2 * $baseline-grid;
 
     &::before {
+      align-items: center;
       border: 1px solid;
       border-radius: 50%;
       counter-increment: section-number;
       content: counter(section-number);
-      display: inline-block;
-      height: 3 * $baseline-grid;
-      text-align: center;
+      display: inline-flex;
+      font-size: $font-size-body;
+      height: (3 * $baseline-grid) - 2;
+      justify-content: center;
       margin-right: 1.5 * $baseline-grid;
-      width: 3 * $baseline-grid;
+      width: (3 * $baseline-grid) - 2;
     }
   }
 

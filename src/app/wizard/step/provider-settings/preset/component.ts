@@ -24,9 +24,9 @@ export enum Controls {
 }
 
 export enum PresetsState {
-  Ready = 'Preset',
+  Ready = 'Provider Preset',
   Loading = 'Loading...',
-  Empty = 'No Presets available',
+  Empty = 'No Provider Presets available',
 }
 
 @Component({

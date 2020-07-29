@@ -32,3 +32,8 @@
     line-height: 1.4 * $line-height;
   }
 }
+
+mat-button-toggle-group[group='providerGroup'] {
+  padding-bottom: 45px;
+  margin-bottom: 0 !important;
+}

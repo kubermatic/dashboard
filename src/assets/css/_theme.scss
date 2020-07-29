@@ -187,6 +187,12 @@
     }
   }
 
+  km-wizard {
+    .mat-card-title {
+      padding-top: 0 !important;
+    }
+  }
+
   .mat-card-header-text {
     margin: 0 !important;
   }
@@ -421,7 +427,14 @@
       height: 100%;
 
       .km-provider-logo {
-        max-width: 90px !important;
+        max-width: 95px !important;
+      }
+
+      .km-provider-logo-aws,
+      .km-provider-logo-azure,
+      .km-provider-logo-vsphere,
+      .km-provider-logo-packet {
+        min-height: 3 * $baseline-grid;
       }
     }
 
@@ -1252,6 +1265,15 @@
     }
   }
 
+  km-wizard-summary-step {
+    .header {
+      &::before {
+        border-color: map-get($colors, primary) !important;
+        color: $text-secondary;
+      }
+    }
+  }
+
   .km-card-progress-bar {
     box-shadow: none !important;
     border-radius: $border-radius $border-radius 0 0 !important;
@@ -1617,7 +1639,7 @@
   }
 
   .mat-horizontal-stepper-header {
-    padding: 0 0 (2.5 * $baseline-grid) 0 !important;
+    padding: 0 !important;
   }
 
   .km-select-input {

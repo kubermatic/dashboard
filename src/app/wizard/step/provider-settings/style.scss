@@ -9,35 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../assets/css/variables";
+@import '../../assets/css/variables';
 
-.mat-card {
-  padding: 0 $baseline-grid;
-}
-
-.km-button-navigation {
-  margin-top: 2 * $baseline-grid;
-}
-
-::ng-deep.mat-horizontal-stepper-content[aria-expanded="false"] {
-  width: 0 !important;
-}
-
-@include km-breakpoint('small') {
-  ::ng-deep.mat-horizontal-stepper-header-container {
-    display: none !important;
-  }
-}
-
-.km-wizard-step {
-  padding-top: 45px;
-}
-
-::ng-deep.mat-card-header {
-  margin-bottom: 0 !important;
-}
-
-::ng-deep.mat-card-title {
-  margin-bottom: 0 !important;
-  padding-bottom: 20px !important;
+.km-provider-settings {
+  padding-bottom: 1.25 * $baseline-grid;
 }
