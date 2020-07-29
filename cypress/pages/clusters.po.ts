@@ -67,7 +67,7 @@ export class ClustersPage {
   // Utils.
 
   static waitForRefresh(): void {
-    TrafficMonitor.newTrafficMonitor().url(Endpoint.Clusters).method(RequestType.GET).alias('list clusters').wait();
+    TrafficMonitor.newTrafficMonitor().url(Endpoint.Clusters).method(RequestType.GET).alias('listClusters').wait();
   }
 
   static verifyUrl(): void {

@@ -20,4 +20,5 @@ export namespace Endpoint {
   export const Projects = '**/projects?displayAll=false';
   export const Tokens = '**/tokens';
   export const ServiceAccounts = '**/serviceaccounts';
+  export const Settings = '**/me/settings';
 }
