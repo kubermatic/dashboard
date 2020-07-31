@@ -11,7 +11,7 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
-import {switchMap, takeUntil} from 'rxjs/operators';
+import {first, switchMap, takeUntil} from 'rxjs/operators';
 import * as _ from 'lodash';
 
 import {DatacenterService} from '../../../core/services';
@@ -76,7 +76,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
       .subscribe(plugins => (this.clusterAdmissionPlugins = plugins));
 
     this._clusterService.datacenterChanges
-      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(first())))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => {
         this._location = dc.spec.location;
