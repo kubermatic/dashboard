@@ -34,7 +34,7 @@ limitations under the License.
       <mat-button-toggle-group group="datacenterGroup"
                                [formControlName]="controls.Datacenter"
                                fxLayout="row wrap">
-        <mat-button-toggle *ngFor="let datacenter of datacenters;"
+        <mat-button-toggle *ngFor="let datacenter of datacenters; trackBy: trackByDatacenter"
                            value="{{datacenter.metadata.name}}"
                            (click)="next()">
           <span class="flag-icon flag-icon-{{ datacenter.spec.country.toLowerCase() }}">

@@ -22,7 +22,7 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import * as _ from 'lodash';
 import {merge, Observable, of} from 'rxjs';
-import {filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {filter, first, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
 import {ClusterType} from '../../../../shared/entity/cluster';
@@ -145,7 +145,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
     merge<string>(this._clusterService.datacenterChanges, of(this._clusterService.datacenter))
       .pipe(filter(dc => !!dc))
-      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(first())))
       .pipe(tap(dc => (this._images = dc.spec.openstack.images)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => {

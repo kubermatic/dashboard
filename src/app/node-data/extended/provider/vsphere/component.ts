@@ -12,7 +12,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {merge, of} from 'rxjs';
-import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../../../../core/services';
 import {ClusterType} from '../../../../shared/entity/cluster';
 import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/datacenter';
@@ -74,7 +74,7 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator implemen
 
     merge<string>(this._clusterService.datacenterChanges, of(this._clusterService.datacenter))
       .pipe(filter(dc => !!dc))
-      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(first())))
       .pipe(tap(dc => (this._templates = dc.spec.vsphere.templates)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._setDefaultTemplate(OperatingSystem.Ubuntu));

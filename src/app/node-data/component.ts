@@ -20,7 +20,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge, of} from 'rxjs';
-import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../core/services';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {ClusterType} from '../shared/entity/cluster';
@@ -138,7 +138,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     merge<string>(this._clusterService.datacenterChanges, of(this._clusterService.datacenter))
       .pipe(filter(dc => !!dc))
-      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(first())))
       .pipe(takeUntil(this._unsubscribe))
       .pipe(tap(dc => (this._datacenterSpec = dc)))
       .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));

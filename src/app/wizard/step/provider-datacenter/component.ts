@@ -137,4 +137,8 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
 
     return location === datacenter.spec.location ? '' : location.trim();
   }
+
+  trackByDatacenter(_: number, datacenter: Datacenter): string {
+    return datacenter.metadata.name;
+  }
 }

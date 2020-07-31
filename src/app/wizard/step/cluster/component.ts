@@ -20,7 +20,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {merge} from 'rxjs';
-import {switchMap, takeUntil, filter} from 'rxjs/operators';
+import {switchMap, takeUntil, filter, first} from 'rxjs/operators';
 
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService, DatacenterService} from '../../../core/services';
@@ -102,7 +102,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     });
 
     this._clusterService.datacenterChanges
-      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(first())))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => {
         this._datacenterSpec = dc;

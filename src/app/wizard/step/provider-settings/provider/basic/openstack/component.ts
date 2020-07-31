@@ -20,7 +20,17 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  first,
+  map,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
 
 import {PresetsService, DatacenterService} from '../../../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
@@ -119,7 +129,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
 
     merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
       .pipe(filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK))
-      .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.datacenter)))
+      .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.datacenter).pipe(first())))
       .pipe(tap(dc => (this._isFloatingPoolIPEnforced = dc.spec.openstack.enforce_floating_ip)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
