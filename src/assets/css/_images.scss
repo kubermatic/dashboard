@@ -463,6 +463,12 @@
   background-image: url("/assets/images/os/rhel.svg");
 }
 
+.km-os-image-rhel-gray {
+  @include km-image(3 * $baseline-grid);
+
+  background-image: url("/assets/images/os/rhel-gray.svg");
+}
+
 .km-os-image-flatcar {
   @include km-image(3 * $baseline-grid);
 

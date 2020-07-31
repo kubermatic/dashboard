@@ -15,7 +15,7 @@ import {View} from '../utils/view';
 
 export class WizardPage {
   static getNextBtn(): Cypress.Chainable<any> {
-    return cy.get('#km-create-cluster-next-btn');
+    return cy.get('.km-create-cluster-next-btn');
   }
 
   static getClusterNameInput(): Cypress.Chainable<any> {

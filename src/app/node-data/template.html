@@ -99,8 +99,9 @@ limitations under the License.
           SLES
         </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.RHEL"
-                           *ngIf="isOperatingSystemSupported(OperatingSystem.RHEL)">
-          <i class="km-os-image-rhel"></i>
+                           *ngIf="isOperatingSystemSupported(OperatingSystem.RHEL)"
+                           #rhelToggle>
+          <i [ngClass]="rhelToggle.checked ? 'km-os-image-rhel' : 'km-os-image-rhel-gray'"></i>
           RHEL
         </mat-button-toggle>
       </mat-button-toggle-group>
