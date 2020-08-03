@@ -21,6 +21,7 @@ import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
 import {prefixedString} from '../../utils/random';
 import {View} from '../../utils/view';
+import {WizardStep} from '../../utils/wizard';
 
 describe('Machine Deployments Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
@@ -51,10 +52,10 @@ describe('Machine Deployments Story', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
     WizardPage.getDatacenterBtn(Datacenter.Frankfurt).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
-    WizardPage.getNextBtn().click({force: true});
+    WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
     WizardPage.getPreset(Preset.Digitalocean).click();
-    WizardPage.getNextBtn().click({force: true});
+    WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
     WizardPage.getNodeNameInput()
       .type(initialMachineDeploymentName)
       .should(Condition.HaveValue, initialMachineDeploymentName);
@@ -62,7 +63,7 @@ describe('Machine Deployments Story', () => {
       .clear()
       .type(initialMachineDeploymentReplicas)
       .should(Condition.HaveValue, initialMachineDeploymentReplicas);
-    WizardPage.getNextBtn().should(Condition.BeEnabled).click({force: true});
+    WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
     cy.url().should(Condition.Contain, View.Clusters);

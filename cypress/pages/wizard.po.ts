@@ -12,18 +12,19 @@
 import {Condition} from '../utils/condition';
 import {Preset} from '../utils/preset';
 import {View} from '../utils/view';
+import {WizardStep} from '../utils/wizard';
 
 export class WizardPage {
-  static getNextBtn(): Cypress.Chainable<any> {
-    return cy.get('.km-create-cluster-next-btn');
+  static getNextBtn(stepName: WizardStep): Cypress.Chainable<any> {
+    return cy.get(`#km-wizard-${stepName}-next-btn`);
   }
 
   static getClusterNameInput(): Cypress.Chainable<any> {
-    return cy.get('#km-create-cluster-name-input');
+    return cy.get('#km-wizard-cluster-name-input');
   }
 
   static getCreateBtn(): Cypress.Chainable<any> {
-    return cy.get('#km-create-cluster-create-btn');
+    return cy.get('#km-wizard-create-btn');
   }
 
   static getProviderBtn(providerName: string): Cypress.Chainable<any> {
