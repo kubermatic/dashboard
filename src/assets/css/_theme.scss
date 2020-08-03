@@ -146,6 +146,7 @@
   }
 
   .mat-horizontal-content-container {
+    overflow: initial !important;
     padding: 0 !important;
   }
 
@@ -1726,4 +1727,8 @@
   .mat-form-field-wrapper {
     padding-bottom: 0 !important;
   }
+}
+
+.mat-form-field-wrapper {
+  padding-bottom: 2.75 * $baseline-grid;
 }

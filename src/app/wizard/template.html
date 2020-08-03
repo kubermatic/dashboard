@@ -26,6 +26,7 @@ limitations under the License.
                 fxFlex="100%">
         <ng-template matStepLabel>{{step.name}}</ng-template>
         <div [ngSwitch]="step.name"
+             id="{{step.name.toLowerCase()}}-step"
              class="km-wizard-step">
           <ng-container *ngSwitchCase="stepRegistry.Provider">
             <km-wizard-provider-step [formControl]="form.get(stepRegistry.Provider)"></km-wizard-provider-step>
@@ -52,7 +53,8 @@ limitations under the License.
           </ng-container>
         </div>
 
-        <div class="km-button-navigation">
+        <div class="km-button-navigation"
+             id="{{step.name.toLowerCase()}}-nav">
           <a mat-flat-button
              color="tertiary"
              routerLink="/projects/{{project?.id}}/clusters">Cancel</a>

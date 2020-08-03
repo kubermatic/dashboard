@@ -16,7 +16,7 @@
 }
 
 .section {
-  margin: (2 * $baseline-grid) 0 (5 * $baseline-grid);
+  margin: (5.625 * $baseline-grid) 0 0;
 
   .header {
     font-size: $font-size-subhead-lg;
@@ -61,7 +61,7 @@
 .km-provider-logo {
   background-position: left !important;
   max-width: 100px !important;
-  margin: (1.25 * $baseline-grid) 0;
+  margin: (.75 * $baseline-grid) 0;
 }
 
 .km-os-image {

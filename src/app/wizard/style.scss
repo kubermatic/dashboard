@@ -17,6 +17,10 @@
 
 .km-button-navigation {
   margin-top: 2 * $baseline-grid;
+
+  &:not(#summary-nav) {
+    margin-top: .5 * $baseline-grid;
+  }
 }
 
 ::ng-deep.mat-horizontal-stepper-content[aria-expanded="false"] {
@@ -29,7 +33,7 @@
   }
 }
 
-.km-wizard-step {
+.km-wizard-step:not(#summary-step) {
   padding-top: 45px;
 }
 
