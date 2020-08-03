@@ -161,6 +161,10 @@ export class WizardComponent implements OnInit, OnDestroy {
       );
   }
 
+  toStepID(step: WizardStep): string {
+    return step.name.toLowerCase().replace(' ', '-');
+  }
+
   private _getCreateClusterModel(cluster: Cluster, nodeData: NodeData): CreateClusterModel {
     return {
       cluster: {

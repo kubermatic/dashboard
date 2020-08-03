@@ -25,6 +25,7 @@ enum Controls {
 @Component({
   selector: 'km-aws-extended-node-data',
   templateUrl: './template.html',
+  styleUrls: ['style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

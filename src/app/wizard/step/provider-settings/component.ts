@@ -28,6 +28,7 @@ enum Controls {
 @Component({
   selector: 'km-wizard-provider-settings-step',
   templateUrl: './template.html',
+  styleUrls: ['style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -62,7 +63,17 @@ export class ProviderSettingsStepComponent extends StepBase implements OnInit, O
       .subscribe(provider => (this.provider = provider));
   }
 
-  _init(): void {
+  hasExtendedSection(provider: NodeProvider): boolean {
+    return [
+      NodeProvider.VSPHERE,
+      NodeProvider.AWS,
+      NodeProvider.AZURE,
+      NodeProvider.GCP,
+      NodeProvider.OPENSTACK,
+    ].includes(provider);
+  }
+
+  private _init(): void {
     this.form = this._builder.group({
       [Controls.Preset]: this._builder.control(''),
       [Controls.ProviderBasic]: this._builder.control(''),

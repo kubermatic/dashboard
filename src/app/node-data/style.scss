@@ -32,7 +32,10 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
       margin-right: 1.25 * $baseline-grid;
       min-width: 28px;
       min-height: 28px;
-      filter: grayscale(100%);
+
+      &:not(.km-os-image-rhel) {
+        filter: grayscale(100%);
+      }
     }
 
     &.mat-button-toggle-checked {

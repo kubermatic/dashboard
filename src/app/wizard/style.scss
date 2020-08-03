@@ -16,7 +16,11 @@
 }
 
 .km-button-navigation {
-  margin-top: 5 * $baseline-grid;
+  margin-top: 2 * $baseline-grid;
+
+  &:not(#summary-nav) {
+    margin-top: .5 * $baseline-grid;
+  }
 }
 
 ::ng-deep.mat-horizontal-stepper-content[aria-expanded="false"] {
@@ -27,8 +31,17 @@
   ::ng-deep.mat-horizontal-stepper-header-container {
     display: none !important;
   }
+}
 
-  ::ng-deep.mat-card-title {
-    margin-top: 2.5 * $baseline-grid !important;
-  }
+.km-wizard-step:not(#summary-step) {
+  padding-top: 45px;
+}
+
+::ng-deep.mat-card-header {
+  margin-bottom: 0 !important;
+}
+
+::ng-deep.mat-card-title {
+  margin-bottom: 0 !important;
+  padding-bottom: 20px !important;
 }

@@ -17,11 +17,14 @@ limitations under the License.
        fxLayout.xs="column"
        fxLayoutGap="30px">
     <div fxFlex>
-      <div class="km-header">Cluster</div>
+      <mat-card-header>
+        <mat-card-title>Cluster</mat-card-title>
+      </mat-card-header>
+
       <div>
         <mat-form-field fxFlex>
           <mat-label>Name</mat-label>
-          <input id="km-create-cluster-name-input"
+          <input id="km-wizard-cluster-name-input"
                  matInput
                  [formControlName]="Controls.Name"
                  type="text"
@@ -49,33 +52,40 @@ limitations under the License.
     </div>
 
     <div fxFlex>
-      <div class="km-header">Specification</div>
-      <div>
-        <mat-button-toggle-group group="clusterSpecTypeGroup"
-                                 class="km-cluster-spec-type"
-                                 [formControlName]="Controls.Type"
-                                 *ngIf="hasMultipleTypes()">
-          <mat-button-toggle value="kubernetes">
-            <i class="km-icon-kubernetes"></i>
-            Kubernetes
-          </mat-button-toggle>
-          <mat-button-toggle value="openshift">
-            <i class="km-icon-openshift"></i>
-            OpenShift
-          </mat-button-toggle>
-        </mat-button-toggle-group>
+      <mat-card-header>
+        <mat-card-title>Specification</mat-card-title>
+      </mat-card-header>
 
-        <mat-form-field class="km-version-inline">
-          <mat-label>Version</mat-label>
-          <mat-select [formControlName]="Controls.Version"
-                      disableOptionCentering
-                      required>
-            <mat-option *ngFor="let version of masterVersions"
-                        [value]="version.version">
-              {{ version.version }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+      <div fxLayout="column">
+        <div fxFlex
+             fxFlexAlign=" start"
+             fxLayout="row">
+          <mat-button-toggle-group group="clusterSpecTypeGroup"
+                                   class="km-cluster-spec-type"
+                                   [formControlName]="Controls.Type"
+                                   *ngIf="hasMultipleTypes()">
+            <mat-button-toggle value="kubernetes">
+              <i class="km-icon-kubernetes"></i>
+              Kubernetes
+            </mat-button-toggle>
+            <mat-button-toggle value="openshift">
+              <i class="km-icon-openshift"></i>
+              OpenShift
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+
+          <mat-form-field class="km-version-inline">
+            <mat-label>Version</mat-label>
+            <mat-select [formControlName]="Controls.Version"
+                        disableOptionCentering
+                        required>
+              <mat-option *ngFor="let version of masterVersions"
+                          [value]="version.version">
+                {{ version.version }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
         <div fxLayout="column"
              fxLayoutGap="16px">
@@ -119,7 +129,7 @@ limitations under the License.
                   class="km-admission-plugin-warning"
                   fxLayout="row">
               <i class="km-icon-warning km-warning"></i>
-              <p fxFlex="95">Activating Pod Security Policy will mean that a lot of Pod specifications, Operators and Helm charts will not work out of the box. Make sure that you know the consequences of activating this feature.</p>
+              <p fxFlex="95">An active Pod Security Policy entails that a lot of Pod specifications, Operators and Helm charts will not work out of the box.</p>
             </span>
             <span *ngIf="isPodSecurityPolicyEnforced()"
                   class="km-admission-plugin-warning"
