@@ -1,5 +1,5 @@
 presubmits:
-- name: validate-prow
+- name: pre-dashboard-validate-prow
   always_run: true
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -19,7 +19,7 @@ presubmits:
           - --job-config-path=/home/prow/go/src/github.com/kubermatic/infra/prow/jobs
           - --prow-yaml-repo-name=$(REPO_OWNER)/$(REPO_NAME)
 
-- name: check-godep
+- name: pre-dashboard-check-godep
   always_run: true
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -34,7 +34,7 @@ presubmits:
           requests:
             cpu: 100m
 
-- name: check-static
+- name: pre-dashboard-check-static
   always_run: true
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -53,7 +53,7 @@ presubmits:
             cpu: 1
             memory: 1Gi
 
-- name: test-unit
+- name: pre-dashboard-test-unit
   always_run: true
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -78,7 +78,7 @@ presubmits:
                 name: kubermatic-codecov
                 key: token
 
-- name: test-e2e
+- name: pre-dashboard-test-e2e
   always_run: true
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -119,7 +119,7 @@ presubmits:
             name: e2e-ci
             key: serviceAccountSigningKey
 
-- name: test-e2e-ce
+- name: pre-dashboard-test-e2e-ce
   always_run: true
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -164,7 +164,7 @@ presubmits:
                 name: e2e-ci
                 key: serviceAccountSigningKey
 
-- name: build-image
+- name: pre-dashboard-build-image
   always_run: true
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
