@@ -11,6 +11,7 @@
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../core/services';
@@ -25,8 +26,11 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
   @Input() width: number;
   @Input() isWizard: boolean;
+
   machineNetworksForm: FormGroup;
   machineNetworks: FormArray;
+
+  private readonly _debounceTime = 1000;
   private _unsubscribe = new Subject<void>();
 
   constructor(private wizardService: WizardService) {}
@@ -57,7 +61,7 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (machineNetworksList.length === 0) {
+    if (_.isEmpty(machineNetworksList)) {
       machineNetworksList.push(
         new FormGroup({
           cidr: new FormControl('', [
@@ -78,7 +82,7 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
     });
 
     this.machineNetworksForm.valueChanges
-      .pipe(debounceTime(1000))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this.setMachineNetworkSpec();

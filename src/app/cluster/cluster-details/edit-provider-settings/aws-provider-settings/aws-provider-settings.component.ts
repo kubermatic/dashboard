@@ -23,6 +23,8 @@ import {ProviderSettingsPatch} from '../../../../shared/entity/cluster';
 })
 export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
   form: FormGroup;
+
+  private readonly _debounceTime = 1000;
   private _formData = {accessKeyId: '', secretAccessKey: ''};
   private _unsubscribe = new Subject<void>();
 
@@ -35,7 +37,7 @@ export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
     });
 
     this.form.valueChanges
-      .pipe(debounceTime(1000))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(data => {
         if (

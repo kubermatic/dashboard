@@ -23,6 +23,7 @@ import {ProviderSettingsPatch} from '../../../../shared/entity/cluster';
 export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
   form: FormGroup;
 
+  private readonly _debounceTime = 1000;
   private _formData = {
     infraManagementUsername: '',
     infraManagementPassword: '',
@@ -42,7 +43,7 @@ export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
     });
 
     this.form.valueChanges
-      .pipe(debounceTime(1000))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(data => {
         if (

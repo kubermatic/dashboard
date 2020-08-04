@@ -23,8 +23,8 @@ export enum ColorScheme {
 @Injectable()
 export class ColorSchemeService {
   private readonly _colorSchemeMediaQuery = colorScheme => `(prefers-color-scheme: ${colorScheme})`;
+  private readonly _timerInterval = 1000;
   private _selectedColorScheme = ColorScheme.NoPreference;
-  private _timerInterval = 1000;
 
   readonly onColorSchemeUpdate = new EventEmitter<ColorScheme>();
 

@@ -63,11 +63,12 @@ export class ProjectsPage {
   }
 
   static waitForProject(projectName: string): void {
+    const retries = 5;
     TrafficMonitor.newTrafficMonitor()
       .method(RequestType.GET)
       .url(Endpoint.Projects)
       .alias('listProjects')
-      .retry(5)
+      .retry(retries)
       .expect(Response.newResponse(ResponseType.LIST).elements(1).property(Property.newProperty('name', projectName)));
   }
 
@@ -85,11 +86,12 @@ export class ProjectsPage {
   }
 
   static selectProject(projectName: string): void {
+    const waitTime = 500;
     cy.reload();
     this.getProjectItem(projectName).should(Condition.HaveLength, 1);
     this.getActiveProjects()
       .should(Condition.HaveLength, 1)
-      .wait(500)
+      .wait(waitTime)
       .click()
       .then(() => {
         ClustersPage.waitForRefresh();
@@ -110,6 +112,7 @@ export class ProjectsPage {
   }
 
   static deleteProject(projectName: string): void {
+    const retries = 5;
     this.getDeleteProjectBtn(projectName).should(Condition.NotBe, 'disabled').click();
     cy.get('#km-confirmation-dialog-input').type(projectName).should(Condition.HaveValue, projectName);
     cy.get('#km-confirmation-dialog-confirm-btn')
@@ -120,7 +123,7 @@ export class ProjectsPage {
           .method(RequestType.GET)
           .url(Endpoint.Projects)
           .alias('listProjects')
-          .retry(5)
+          .retry(retries)
           .expect(Response.newResponse(ResponseType.LIST).elements(0));
       });
   }

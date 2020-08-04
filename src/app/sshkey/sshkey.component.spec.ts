@@ -88,6 +88,7 @@ describe('SSHKeyComponent', () => {
   });
 
   it('should open delete ssh key confirmation dialog & call deleteSshKey()', fakeAsync(() => {
+    const waitTime = 15000;
     component.projectID = fakeProject().id;
     component.sshKeys = fakeSSHKeys();
     const event = new MouseEvent('click');
@@ -96,7 +97,7 @@ describe('SSHKeyComponent', () => {
 
     fixture.detectChanges();
     noop.detectChanges();
-    tick(15000);
+    tick(waitTime);
 
     const dialogTitle = document.body.querySelector('.mat-dialog-title');
     const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
@@ -108,7 +109,7 @@ describe('SSHKeyComponent', () => {
 
     noop.detectChanges();
     fixture.detectChanges();
-    tick(15000);
+    tick(waitTime);
 
     expect(deleteSSHKeySpy).toHaveBeenCalled();
     fixture.destroy();

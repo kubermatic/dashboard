@@ -81,9 +81,10 @@ describe('MemberComponent', () => {
   });
 
   it('should open delete member confirmation dialog & call deleteMembers()', fakeAsync(() => {
+    const waitTime = 15000;
     component.deleteMember(fakeMembers()[0]);
     noop.detectChanges();
-    tick(15000);
+    tick(waitTime);
 
     const dialogTitle = document.body.querySelector('.mat-dialog-title');
     const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
@@ -95,7 +96,7 @@ describe('MemberComponent', () => {
 
     noop.detectChanges();
     fixture.detectChanges();
-    tick(15000);
+    tick(waitTime);
 
     expect(deleteMembersSpy).toHaveBeenCalled();
     fixture.destroy();

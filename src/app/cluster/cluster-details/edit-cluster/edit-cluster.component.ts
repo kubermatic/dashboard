@@ -44,9 +44,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     isValid: true,
     cloudSpecPatch: {},
   };
-
-  private _unsubscribe = new Subject<void>();
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
+
+  private readonly _nameMinLen = 3;
+  private _unsubscribe = new Subject<void>();
 
   constructor(
     private readonly _clusterService: ClusterService,
@@ -62,7 +63,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       name: new FormControl(this.cluster.name, [
         Validators.required,
-        Validators.minLength(3),
+        Validators.minLength(this._nameMinLen),
         Validators.pattern('[a-zA-Z0-9-]*'),
       ]),
       auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),

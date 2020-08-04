@@ -37,6 +37,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   settings: UserSettings;
   currentUser: Member;
   screenWidth = 0;
+
   private _selectedProject = {} as Project;
   private _currentGroupConfig: GroupConfig;
   private _isSidenavCollapsed = false;
@@ -90,7 +91,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   isSidenavCollapsed(): boolean {
-    return this._isSidenavCollapsed || this.screenWidth < 767;
+    const maxScreenWidth = 767;
+    return this._isSidenavCollapsed || this.screenWidth < maxScreenWidth;
   }
 
   getLinkClass(url: string): string {

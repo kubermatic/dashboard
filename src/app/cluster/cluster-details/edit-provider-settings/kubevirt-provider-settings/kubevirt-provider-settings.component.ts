@@ -23,6 +23,8 @@ import {ProviderSettingsPatch} from '../../../../shared/entity/cluster';
 })
 export class KubevirtProviderSettingsComponent implements OnInit, OnDestroy {
   form: FormGroup;
+
+  private readonly _debounceTime = 1000;
   private _formData = {kubeconfig: ''};
   private _unsubscribe = new Subject<void>();
 
@@ -34,7 +36,7 @@ export class KubevirtProviderSettingsComponent implements OnInit, OnDestroy {
     });
 
     this.form.valueChanges
-      .pipe(debounceTime(1000))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(data => {
         if (data.kubeconfig !== this._formData.kubeconfig) {

@@ -69,6 +69,8 @@ enum SubnetState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewChecked, OnDestroy {
+  private readonly _defaultDiskSize = 25;
+
   private _diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
   private _subnets: AWSSubnet[] = [];
   private _subnetMap: {[type: string]: AWSSubnet[]} = {};
@@ -114,7 +116,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.Size]: this._builder.control(''),
-      [Controls.DiskSize]: this._builder.control(25, Validators.required),
+      [Controls.DiskSize]: this._builder.control(this._defaultDiskSize, Validators.required),
       [Controls.DiskType]: this._builder.control('', Validators.required),
       [Controls.SubnetID]: this._builder.control(''),
       [Controls.AMI]: this._builder.control(''),

@@ -18,8 +18,10 @@ import {FormControl, ValidatorFn} from '@angular/forms';
 export function SSHKeyFormValidator(): ValidatorFn {
   return (control: FormControl): any => {
     const splitForm = control.value.toString().trim().split(' ');
+    const rangeStart = 2;
+    const rangeEnd = 3;
 
-    if (splitForm.length < 2 || splitForm.length > 3) {
+    if (splitForm.length < rangeStart || splitForm.length > rangeEnd) {
       return {validSSHKey: true}; // Key type and encoded data are required. Comment part is optional.
     }
 

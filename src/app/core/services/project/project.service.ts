@@ -28,7 +28,8 @@ export class ProjectService {
   onProjectsUpdate = new Subject<void>();
 
   private readonly _restRoot: string = environment.restRoot;
-  private readonly _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
+  private readonly _refreshTime = 10; // in seconds
+  private readonly _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
 
   private _projects$: Observable<Project[]>;
   private _myProjects$: Observable<Project[]>;

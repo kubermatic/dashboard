@@ -76,13 +76,14 @@ describe('ProjectComponent', () => {
   });
 
   it('should open delete project confirmation dialog & call deleteProject()', fakeAsync(() => {
+    const waitTime = 15000;
     const project = fakeProject();
     const event = new MouseEvent('click');
 
     component.deleteProject(project, event);
     noop.detectChanges();
     fixture.detectChanges();
-    tick(15000);
+    tick(waitTime);
 
     const dialogTitle = document.body.querySelector('.mat-dialog-title');
     const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;

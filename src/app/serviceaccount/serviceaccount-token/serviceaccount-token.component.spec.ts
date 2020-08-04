@@ -86,9 +86,10 @@ describe('ServiceAccountTokenComponent', () => {
   });
 
   it('should open delete service account token dialog & call deleteServiceAccountToken()', fakeAsync(() => {
+    const waitTime = 15000;
     component.deleteServiceAccountToken(fakeServiceAccountTokens()[0]);
     noop.detectChanges();
-    tick(15000);
+    tick(waitTime);
 
     const dialogTitle = document.body.querySelector('.mat-dialog-title');
     const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
@@ -101,7 +102,7 @@ describe('ServiceAccountTokenComponent', () => {
     noop.detectChanges();
     noopToken.detectChanges();
     fixture.detectChanges();
-    tick(15000);
+    tick(waitTime);
 
     expect(deleteServiceAccountTokenSpy).toHaveBeenCalled();
     fixture.destroy();

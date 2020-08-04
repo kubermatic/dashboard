@@ -16,6 +16,8 @@ import {View} from '../utils/view';
 import {WizardPage} from './wizard.po';
 
 export class ClustersPage {
+  private static readonly _defaultTimeout = 5000;
+
   static getAddClusterBtn(): Cypress.Chainable<any> {
     return cy.get('#km-add-cluster-top-btn');
   }
@@ -56,7 +58,7 @@ export class ClustersPage {
     return cy.get('#km-confirmation-dialog-confirm-btn');
   }
 
-  static getMachineDeploymentList(timeout = 5000): Cypress.Chainable {
+  static getMachineDeploymentList(timeout = this._defaultTimeout): Cypress.Chainable {
     return cy.get('km-machine-deployment-list', {timeout: timeout});
   }
 

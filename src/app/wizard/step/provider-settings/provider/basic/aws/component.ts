@@ -19,15 +19,16 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import * as _ from 'lodash';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {PresetsService} from '../../../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
 import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '../../../../../../shared/entity/cluster';
-import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
-import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {AWSVPC} from '../../../../../../shared/entity/provider/aws';
+import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../../../../shared/services/cluster.service';
+import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 
 export enum Controls {
   AccessKeyID = 'accessKeyID',
@@ -184,7 +185,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
     this.vpcIds = vpcs;
     const defaultVPC = this.vpcIds.find(vpc => vpc.isDefault);
     this.selectedVPC = defaultVPC ? defaultVPC.vpcId : undefined;
-    this.vpcLabel = this.vpcIds.length > 0 ? VPCState.Ready : VPCState.Empty;
+    this.vpcLabel = !_.isEmpty(this.vpcIds) ? VPCState.Ready : VPCState.Empty;
     this._cdr.detectChanges();
   }
 

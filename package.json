@@ -114,6 +114,14 @@
       "@typescript-eslint/no-namespace": "off",
       "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-magic-numbers": [
+        "error", {
+          "ignore": [-1, 0, 1],
+          "ignoreArrayIndexes": true,
+          "ignoreReadonlyClassProperties": true,
+          "ignoreEnums": true
+        }
+      ],
       "node/no-unpublished-import": "off",
       "node/no-extraneous-require": "error",
       "node/no-unpublished-require": "error",
@@ -124,6 +132,7 @@
       "no-undef": "off",
       "no-inner-declarations": "off",
       "no-redeclare": "off",
+      "no-magic-numbers": "off",
       "eol-last": "error",
       "no-console": "error",
       "no-prototype-builtins": "error",

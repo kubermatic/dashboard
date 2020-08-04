@@ -10,7 +10,10 @@
 // limitations under the License.
 
 export function randomString(): string {
-  return Math.random().toString(36).substring(2, 15);
+  const radix = 36,
+    rangeStart = 2,
+    rangeEnd = 15;
+  return Math.random().toString(radix).substring(rangeStart, rangeEnd);
 }
 
 export function prefixedString(prefix: string): string {

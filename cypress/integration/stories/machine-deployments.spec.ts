@@ -79,13 +79,14 @@ describe('Machine Deployments Story', () => {
   });
 
   it('should wait for initial machine deployment to be created', () => {
+    const timeout = 900000;
     TrafficMonitor.newTrafficMonitor()
       .method(RequestType.GET)
       .url(Endpoint.NodeDeployments)
       .alias('getMachineDeployments')
-      .timeout(900000)
+      .timeout(timeout)
       .wait();
-    ClustersPage.getMachineDeploymentList(900000).should(Condition.Contain, initialMachineDeploymentName);
+    ClustersPage.getMachineDeploymentList(timeout).should(Condition.Contain, initialMachineDeploymentName);
   });
 
   it('should go to machine deployment details', () => {

@@ -72,6 +72,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
 
   private _datacenterSpec: Datacenter;
+  private readonly _minNameLength = 5;
   readonly Controls = Controls;
 
   constructor(
@@ -90,7 +91,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     this.form = this._builder.group({
       [Controls.Name]: new FormControl('', [
         Validators.required,
-        Validators.minLength(5),
+        Validators.minLength(this._minNameLength),
         Validators.pattern('[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'),
       ]),
       [Controls.Version]: new FormControl('', [Validators.required]),

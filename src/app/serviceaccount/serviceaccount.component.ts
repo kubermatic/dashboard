@@ -45,8 +45,11 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   displayedColumns: string[] = ['stateArrow', 'status', 'name', 'group', 'creationDate', 'actions'];
   toggledColumns: string[] = ['token'];
   dataSource = new MatTableDataSource<ServiceAccount>();
+
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+
+  private readonly _refreshTime = 10; // in seconds
   private _unsubscribe: Subject<any> = new Subject();
   private _serviceAccountUpdate: Subject<any> = new Subject();
   private _selectedProject = {} as Project;
@@ -127,7 +130,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
 
   getTokenList(serviceaccount: ServiceAccount): void {
     this.tokenList[serviceaccount.id] = [];
-    timer(0, 10 * this._appConfig.getRefreshTimeBase())
+    timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase())
       .pipe(takeUntil(this._unsubscribe))
       .pipe(
         switchMap(() =>

@@ -41,6 +41,9 @@ export enum Controls {
   ],
 })
 export class HetznerProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  private readonly _minTokenLength = 64;
+  private readonly _maxTokenLength = 64;
+
   readonly Controls = Controls;
 
   constructor(
@@ -55,8 +58,8 @@ export class HetznerProviderBasicComponent extends BaseFormValidator implements 
     this.form = this._builder.group({
       [Controls.Token]: this._builder.control('', [
         Validators.required,
-        Validators.minLength(64),
-        Validators.maxLength(64),
+        Validators.minLength(this._minTokenLength),
+        Validators.maxLength(this._maxTokenLength),
       ]),
     });
 

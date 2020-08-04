@@ -17,6 +17,8 @@ import {Component, Input} from '@angular/core';
   styleUrls: ['./property-usage.component.scss'],
 })
 export class PropertyUsageComponent {
+  private readonly _maxUsage = 100;
+
   @Input() name: string;
   @Input() used: number;
   @Input() total: number;
@@ -24,7 +26,7 @@ export class PropertyUsageComponent {
 
   getPercentage(): number | undefined {
     return this.used && this.total
-      ? Math.round(((this.used / this.total) * 100 + Number.EPSILON) * 100) / 100
+      ? Math.round(((this.used / this.total) * this._maxUsage + Number.EPSILON) * this._maxUsage) / this._maxUsage
       : undefined;
   }
 

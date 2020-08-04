@@ -64,7 +64,7 @@ class MachineNetworkSpec {
 export class MachineNetworkComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly controls = Controls;
 
-  private _debounceTime = 250;
+  private readonly _debounceTime = 250;
 
   get networkControls(): AbstractControl[] {
     return this._networkArray.controls;

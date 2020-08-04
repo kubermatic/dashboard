@@ -44,6 +44,10 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   @Output() deleteNode = new EventEmitter<Node>();
   @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
+
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+
   config: MatDialogConfig = {
     disableClose: false,
     hasBackdrop: true,
@@ -60,8 +64,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   ];
   toggledColumns: string[] = ['nodeDetails'];
   dataSource = new MatTableDataSource<Node>();
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _unsubscribe = new Subject<void>();
@@ -146,18 +149,21 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   getFormattedNodeMemory(memory: string): string {
     const memRE = /([0-9]+)([a-zA-Z])i/;
     const resRE = memory.match(memRE);
+    const base = 1024;
+    const radix = 10;
+    const fractionDigits = 2;
 
     let nodeCapacity;
     const prefixes = ['Ki', 'Mi', 'Gi', 'Ti'];
     let i = 0;
 
     if (resRE) {
-      let ki = parseInt(resRE[1], 10);
+      let ki = parseInt(resRE[1], radix);
       do {
-        ki /= 1024;
+        ki /= base;
         i++;
       } while (ki > 1);
-      nodeCapacity = (ki * 1024).toFixed(2);
+      nodeCapacity = (ki * base).toFixed(fractionDigits);
     }
 
     return nodeCapacity ? `${nodeCapacity} ${prefixes[i - 1]}` : 'unknown';

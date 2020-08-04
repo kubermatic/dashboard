@@ -11,6 +11,7 @@
 
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import * as _ from 'lodash';
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {HetznerTypes, Type} from '../../../../shared/entity/provider/hetzner';
@@ -120,7 +121,7 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
       ? this._nodeDataService.nodeData.spec.cloud.hetzner.type
       : '';
 
-    if (!this.selectedType && this._types && this._types.standard && this._types.standard.length > 0) {
+    if (!this.selectedType && this._types && this._types.standard && !_.isEmpty(this._types.standard)) {
       this.selectedType = this._types.standard[0].name;
     }
 

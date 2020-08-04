@@ -26,7 +26,6 @@ import {filter, first, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterService} from '../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
 import {ClusterType} from '../../../../shared/entity/cluster';
-
 import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/datacenter';
 import {NodeCloudSpec, NodeSpec, OpenstackNodeSpec} from '../../../../shared/entity/node';
 import {OpenstackAvailabilityZone, OpenstackFlavor} from '../../../../shared/entity/provider/openstack';
@@ -197,8 +196,9 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
   flavorDisplayName(slug: string): string {
     const flavor = this.flavors.find(flavor => flavor.slug === slug);
+    const base = 1024;
     return flavor
-      ? `${flavor.slug} - ${flavor.memory / 1024} GB RAM, ${flavor.vcpus} CPU${flavor.vcpus !== 1 ? 's' : ''}, ${
+      ? `${flavor.slug} - ${flavor.memory / base} GB RAM, ${flavor.vcpus} CPU${flavor.vcpus !== 1 ? 's' : ''}, ${
           flavor.disk
         } GB Disk`
       : '';
@@ -240,7 +240,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       this.selectedFlavor = this.flavors[0].slug;
     }
 
-    this.flavorsLabel = this.flavors.length > 0 ? FlavorState.Ready : FlavorState.Empty;
+    this.flavorsLabel = !_.isEmpty(this.flavors) ? FlavorState.Ready : FlavorState.Empty;
     this._cdr.detectChanges();
   }
 
@@ -260,8 +260,9 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   private _setAvailabilityZone(availabilityZones: OpenstackAvailabilityZone[]): void {
     this.availabilityZones = availabilityZones;
     this.selectedAvailabilityZone = this._nodeDataService.nodeData.spec.cloud.openstack.availabilityZone;
-    this.availabilityZonesLabel =
-      this.availabilityZones.length > 0 ? AvailabilityZoneState.Ready : AvailabilityZoneState.Empty;
+    this.availabilityZonesLabel = !_.isEmpty(this.availabilityZones)
+      ? AvailabilityZoneState.Ready
+      : AvailabilityZoneState.Empty;
     this._cdr.detectChanges();
   }
 

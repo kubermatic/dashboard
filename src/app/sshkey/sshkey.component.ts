@@ -43,8 +43,12 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   displayedColumns: string[] = ['stateArrow', 'name', 'fingerprint', 'creationTimestamp', 'actions'];
   toggledColumns: string[] = ['publickey'];
   dataSource = new MatTableDataSource<SSHKey>();
+
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+
+  private readonly _refreshTime = 10; // in seconds
+
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _unsubscribe: Subject<any> = new Subject();
@@ -86,7 +90,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(
         switchMap(group => {
           this.userGroup = group;
-          return timer(0, 10 * this._appConfigService.getRefreshTimeBase());
+          return timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase());
         })
       )
       .pipe(takeUntil(this._unsubscribe))
@@ -111,9 +115,10 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   refreshSSHKeys(): void {
+    const retries = 3;
     this._api
       .getSSHKeys(this.projectID)
-      .pipe(retry(3))
+      .pipe(retry(retries))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(res => {
         this.sshKeys = res;
