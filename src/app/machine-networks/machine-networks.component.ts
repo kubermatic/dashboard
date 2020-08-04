@@ -61,7 +61,7 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (_.isEmpty(machineNetworksList)) {
+    if (machineNetworksList.length === 0) {
       machineNetworksList.push(
         new FormGroup({
           cidr: new FormControl('', [
