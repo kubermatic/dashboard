@@ -160,6 +160,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   private _noIpsLeft(cluster: Cluster, nodeCount: number): boolean {
-    return getIpCount(cluster.spec.machineNetworks) >= nodeCount;
+    const ipCount = getIpCount(cluster.spec.machineNetworks);
+    return ipCount > 0 ? ipCount < nodeCount : false;
   }
 }
