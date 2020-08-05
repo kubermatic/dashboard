@@ -46,7 +46,7 @@ RUN apt update && \
 
 FROM cypress/browsers:node12.18.0-chrome83-ff77
 
-COPY --from=download /usr/local/bin/helm2 /usr/local/bin/helm
+COPY --from=download /usr/local/bin/helm2 /usr/local/bin/helm2
 COPY --from=download /usr/local/bin/helm3 /usr/local/bin/helm3
 COPY --from=download /usr/local/bin/kubectl /usr/local/bin/kubectl
 COPY --from=download /usr/local/bin/yq /usr/local/bin/yq
@@ -63,7 +63,8 @@ RUN apt-get update -qq && \
     git && \
     rm -rf /var/lib/apt/lists/* && \
     curl --fail -L https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz|tar -C /usr/local -xvz && \
-    echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
+    echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc && \
+    ln -s /usr/local/bin/helm2 /usr/local/bin/helm
 
 # Install Docker from Docker Inc. repositories.
 RUN curl -sSL https://get.docker.com/ | sh
