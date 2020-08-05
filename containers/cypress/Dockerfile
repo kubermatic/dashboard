@@ -46,7 +46,7 @@ RUN apt update && \
 
 FROM cypress/browsers:node12.18.0-chrome83-ff77
 
-COPY --from=download /usr/local/bin/helm2 /usr/local/bin/helm2
+COPY --from=download /usr/local/bin/helm2 /usr/local/bin/helm
 COPY --from=download /usr/local/bin/helm3 /usr/local/bin/helm3
 COPY --from=download /usr/local/bin/kubectl /usr/local/bin/kubectl
 COPY --from=download /usr/local/bin/yq /usr/local/bin/yq
