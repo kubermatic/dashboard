@@ -99,7 +99,7 @@ presubmits:
     preset-vault: "true"
   spec:
     containers:
-    - image: quay.io/kubermatic/e2e-kind-cypress:v1.1.1
+    - image: quay.io/kubermatic/e2e-kind-cypress:v1.1.3
       command:
       - make
       - run-e2e-ci
@@ -140,7 +140,7 @@ presubmits:
     preset-vault: "true"
   spec:
     containers:
-      - image: quay.io/kubermatic/e2e-kind-cypress:v1.1.1
+      - image: quay.io/kubermatic/e2e-kind-cypress:v1.1.3
         command:
           - /bin/bash
           - -c
