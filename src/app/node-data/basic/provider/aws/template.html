@@ -19,6 +19,7 @@ limitations under the License.
                [selected]="selectedSize"
                [options]="sizes"
                [formControlName]="Controls.Size"
+               [valueFormatter]="sizeDisplayName.bind(this)"
                (changed)="onSizeChange($event)"
                [label]="sizeLabel"
                inputLabel="Select size..."

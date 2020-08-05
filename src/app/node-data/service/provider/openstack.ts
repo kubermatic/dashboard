@@ -71,7 +71,11 @@ export class NodeDataOpenstackProvider {
         let selectedProject: string;
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
-          .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc)))
+          .pipe(
+            switchMap(_ =>
+              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(first())
+            )
+          )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(dc =>
@@ -97,7 +101,11 @@ export class NodeDataOpenstackProvider {
       case NodeDataMode.Wizard:
         return merge(this._nodeDataService.operatingSystemChanges, this._clusterService.datacenterChanges)
           .pipe(filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK))
-          .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc)));
+          .pipe(
+            switchMap(_ =>
+              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(first())
+            )
+          );
     }
   }
 
@@ -137,7 +145,11 @@ export class NodeDataOpenstackProvider {
         let selectedProject: string;
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
-          .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc)))
+          .pipe(
+            switchMap(_ =>
+              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(first())
+            )
+          )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(dc =>

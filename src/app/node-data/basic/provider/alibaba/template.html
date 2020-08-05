@@ -19,6 +19,7 @@ limitations under the License.
                [selected]="selectedInstanceType"
                [options]="instanceTypes"
                [formControlName]="Controls.InstanceType"
+               [valueFormatter]="instanceDisplayName.bind(this)"
                (changed)="onInstanceTypeChange($event)"
                [label]="instanceTypeLabel"
                inputLabel="Select instance type..."
