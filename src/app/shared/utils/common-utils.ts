@@ -34,3 +34,7 @@ export function isObjectEmpty(obj: object): boolean {
 
   return !obj;
 }
+
+export function compare(a: number, b: number): -1 | 0 | 1 {
+  return a < b ? -1 : a !== b ? 1 : 0;
+}

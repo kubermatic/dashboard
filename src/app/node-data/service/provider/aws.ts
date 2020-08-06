@@ -37,7 +37,7 @@ export class NodeDataAWSProvider {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterService.datacenterChanges
-          .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc)))
+          .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(first())))
           .pipe(
             switchMap(dc =>
               this._presetService
@@ -59,7 +59,11 @@ export class NodeDataAWSProvider {
         let selectedProject: string;
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
-          .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc)))
+          .pipe(
+            switchMap(_ =>
+              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(first())
+            )
+          )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(dc =>
@@ -109,7 +113,11 @@ export class NodeDataAWSProvider {
         let selectedProject: string;
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
-          .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc)))
+          .pipe(
+            switchMap(_ =>
+              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(first())
+            )
+          )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(dc =>

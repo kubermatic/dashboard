@@ -58,6 +58,7 @@ limitations under the License.
                [selected]="selectedMachineType"
                [options]="machineTypes"
                [formControlName]="Controls.MachineType"
+               [valueFormatter]="sizeDisplayName.bind(this)"
                (changed)="onMachineTypeChange($event)"
                [label]="machineTypeLabel"
                inputLabel="Select machine type..."
