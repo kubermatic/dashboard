@@ -1,6 +1,6 @@
-module github.com/kubermatic/dashboard
+module k8c.io/dashboard/v2
 
-go 1.12
+go 1.14
 
 require (
 	github.com/beorn7/perks v0.0.0-20180321164747-3a771d992973
