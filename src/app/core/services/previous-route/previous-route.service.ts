@@ -24,7 +24,8 @@ export class PreviousRouteService {
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((urlAfterRedirects: NavigationEnd) => {
         this.history = [...this.history, urlAfterRedirects];
-        if (this.history.length > 10) {
+        const maxHistoryLen = 10;
+        if (this.history.length > maxHistoryLen) {
           this.history.splice(0, 1);
         }
       });
@@ -35,6 +36,7 @@ export class PreviousRouteService {
   }
 
   getPreviousUrl(): string {
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     return this.history[this.history.length - 2] || '/';
   }
 }

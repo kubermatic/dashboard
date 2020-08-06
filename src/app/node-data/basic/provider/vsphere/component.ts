@@ -40,6 +40,9 @@ enum Controls {
   ],
 })
 export class VSphereBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  private readonly _defaultCPUCount = 2;
+  private readonly _defaultMemory = 4096;
+  private readonly _minMemory = 512;
   readonly Controls = Controls;
 
   constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
@@ -48,8 +51,11 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.CPU]: this._builder.control(2, [Validators.required, Validators.min(1)]),
-      [Controls.Memory]: this._builder.control(4096, [Validators.required, Validators.min(512)]),
+      [Controls.CPU]: this._builder.control(this._defaultCPUCount, [Validators.required, Validators.min(1)]),
+      [Controls.Memory]: this._builder.control(this._defaultMemory, [
+        Validators.required,
+        Validators.min(this._minMemory),
+      ]),
     });
 
     this._init();

@@ -17,8 +17,8 @@ import {NotificationService, ProjectService, UserService} from '../../core/servi
 import {HistoryService} from '../../core/services/history/history.service';
 import {Member} from '../../shared/entity/member';
 import {Project} from '../../shared/entity/project';
-import {objectDiff} from '../../shared/utils/common-utils';
 import {UserSettings} from '../../shared/entity/settings';
+import {objectDiff} from '../../shared/utils/common-utils';
 
 @Component({
   selector: 'km-user-settings',
@@ -26,11 +26,14 @@ import {UserSettings} from '../../shared/entity/settings';
   styleUrls: ['user-settings.component.scss'],
 })
 export class UserSettingsComponent implements OnInit, OnDestroy {
-  itemsPerPageOptions = [5, 10, 15, 20, 25];
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+  readonly itemsPerPageOptions = [5, 10, 15, 20, 25];
   projects: Project[] = [];
   user: Member;
   settings: UserSettings; // Local settings copy. User can edit it.
   apiSettings: UserSettings; // Original settings from the API. Cannot be edited by the user.
+
+  private readonly _debounceTime = 1000;
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 
@@ -55,7 +58,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     });
 
     this._settingsChange
-      .pipe(debounceTime(1000))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .pipe(switchMap(() => this._userService.patchCurrentUserSettings(objectDiff(this.settings, this.apiSettings))))
       .subscribe(settings => {

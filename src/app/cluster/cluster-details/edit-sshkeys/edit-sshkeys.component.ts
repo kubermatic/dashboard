@@ -40,11 +40,14 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   @Input() seed: string;
   @Input() projectID: string;
 
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+
   loading = true;
   sshKeys: SSHKey[] = [];
   displayedColumns: string[] = ['name', 'actions'];
   dataSource = new MatTableDataSource<SSHKey>();
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+
+  private readonly _refreshTime = 5; // in seconds
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _unsubscribe: Subject<any> = new Subject();
@@ -70,7 +73,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    merge(timer(0, 5 * this._appConfig.getRefreshTimeBase()), this._sshKeysUpdate)
+    merge(timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase()), this._sshKeysUpdate)
       .pipe(
         switchMap(() =>
           this.projectID ? this._clusterService.sshKeys(this.projectID, this.cluster.id, this.seed) : EMPTY

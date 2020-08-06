@@ -189,7 +189,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.bindings = this.createSimpleBinding(bindings);
         },
         error => {
-          if (error.status === 404) {
+          const errorCodeNotFound = 404;
+          if (error.status === errorCodeNotFound) {
             this._router.navigate(['404']);
           }
         }

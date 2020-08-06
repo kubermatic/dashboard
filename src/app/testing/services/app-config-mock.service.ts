@@ -20,6 +20,8 @@ import {CustomLink} from '../../shared/entity/settings';
 
 @Injectable()
 export class AppConfigMockService {
+  private readonly _refreshTimeBase = 1000;
+
   getConfig(): Config {
     return fakeAppConfig();
   }
@@ -37,6 +39,6 @@ export class AppConfigMockService {
   }
 
   getRefreshTimeBase(): number {
-    return 1000;
+    return this._refreshTimeBase;
   }
 }

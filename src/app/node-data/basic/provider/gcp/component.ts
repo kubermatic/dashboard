@@ -75,6 +75,7 @@ enum MachineTypeState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewInit, OnDestroy {
+  private readonly _defaultDiskSize = 25;
   private _zoneChanges = new EventEmitter<boolean>();
 
   @ViewChild('zonesCombobox')
@@ -124,7 +125,7 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.DiskSize]: this._builder.control(25, Validators.required),
+      [Controls.DiskSize]: this._builder.control(this._defaultDiskSize, Validators.required),
       [Controls.DiskType]: this._builder.control('', Validators.required),
       [Controls.Zone]: this._builder.control('', Validators.required),
       [Controls.MachineType]: this._builder.control('', Validators.required),

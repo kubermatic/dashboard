@@ -19,8 +19,11 @@ import {fadeInOut} from '../../animations/fade';
   animations: [fadeInOut],
 })
 export class SettingsStatusComponent implements OnChanges {
+  private readonly _defaultTimeout = 3000;
+
   @Input() isSaved = true;
-  @Input() confirmationTimeout = 3000;
+  @Input() confirmationTimeout = this._defaultTimeout;
+
   isSaveConfirmationVisible = false;
 
   ngOnChanges(changes: SimpleChanges): void {

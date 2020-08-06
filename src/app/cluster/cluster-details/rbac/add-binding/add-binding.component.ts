@@ -37,12 +37,15 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
   @Input() seed: string;
   @Input() projectID: string;
+
   readonly controls = Controls;
   form: FormGroup;
   bindingType = 'cluster';
   subjectType = 'user';
   clusterRoles: ClusterRoleName[];
   roles: RoleName[];
+
+  private readonly _debounceTime = 1000;
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -87,7 +90,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       });
 
     this.form.controls.role.valueChanges
-      .pipe(debounceTime(1000))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(data => {
         if (this.bindingType === 'namespace') {

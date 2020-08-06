@@ -98,8 +98,9 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
 
   sizeDisplayName(slug: string): string {
     const size = [...this._sizes.optimized, ...this._sizes.standard].find(size => size.slug === slug);
+    const memoryBase = 1024;
     return size
-      ? `${size.slug} (${size.memory / 1024} GB RAM, ${size.vcpus} CPU${size.vcpus !== 1 ? 's' : ''}, $${
+      ? `${size.slug} (${size.memory / memoryBase} GB RAM, ${size.vcpus} CPU${size.vcpus !== 1 ? 's' : ''}, $${
           size.price_monthly
         } per month)`
       : '';

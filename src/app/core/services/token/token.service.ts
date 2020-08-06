@@ -16,6 +16,8 @@ import {Cookie, COOKIE_DI_TOKEN} from '../../../app.config';
 
 @Injectable()
 export class TokenService {
+  private readonly _baseTime = 1000; // in ms
+
   constructor(
     private readonly _cookieService: CookieService,
     @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie
@@ -25,7 +27,7 @@ export class TokenService {
     const token = this._cookieService.get(this._cookie.token);
     if (token) {
       const tokenExp = this.decodeToken(token);
-      return moment().isBefore(moment(tokenExp.exp * 1000));
+      return moment().isBefore(moment(tokenExp.exp * this._baseTime));
     }
     return false;
   }
@@ -33,7 +35,8 @@ export class TokenService {
   decodeToken(token: string): any {
     if (token) {
       const parts = token.split('.');
-      if (parts.length !== 3) {
+      const expectedParts = 3;
+      if (parts.length !== expectedParts) {
         throw new Error('JWT must have 3 parts');
       }
       const decoded = this._urlBase64Decode(parts[1]);
@@ -44,6 +47,7 @@ export class TokenService {
     }
   }
 
+  /* eslint-disable @typescript-eslint/no-magic-numbers */
   private _urlBase64Decode(str: string): string {
     let output = str.replace(/-/g, '+').replace(/_/g, '/');
     switch (output.length % 4) {

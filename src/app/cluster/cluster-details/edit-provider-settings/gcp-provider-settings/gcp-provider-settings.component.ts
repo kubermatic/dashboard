@@ -22,6 +22,8 @@ import {ProviderSettingsPatch} from '../../../../shared/entity/cluster';
 })
 export class GCPProviderSettingsComponent implements OnInit, OnDestroy {
   form: FormGroup;
+
+  private readonly _debounceTime = 1000;
   private _formData = {serviceAccount: ''};
   private _unsubscribe: Subject<any> = new Subject();
 
@@ -33,7 +35,7 @@ export class GCPProviderSettingsComponent implements OnInit, OnDestroy {
     });
 
     this.form.valueChanges
-      .pipe(debounceTime(1000))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(data => {
         if (data.serviceAccount !== this._formData.serviceAccount) {

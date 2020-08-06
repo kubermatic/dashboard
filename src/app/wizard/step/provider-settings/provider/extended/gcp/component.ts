@@ -20,15 +20,16 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import * as _ from 'lodash';
 import {EMPTY, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
-import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
-import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {GCPNetwork, GCPSubnetwork} from '../../../../../../shared/entity/provider/gcp';
+import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../../../../shared/services/cluster.service';
+import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 
 enum Controls {
   Network = 'network',
@@ -157,7 +158,7 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
   }
 
   private _loadNetworks(networks: GCPNetwork[]): void {
-    this.networkLabel = networks.length > 0 ? NetworkState.Ready : NetworkState.Empty;
+    this.networkLabel = !_.isEmpty(networks) ? NetworkState.Ready : NetworkState.Empty;
     this.networks = networks;
     this._cdr.detectChanges();
   }
@@ -219,7 +220,7 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
   }
 
   private _loadSubNetworks(subNetworks: GCPSubnetwork[]): void {
-    this.subNetworkLabel = subNetworks.length > 0 ? SubNetworkState.Ready : SubNetworkState.Empty;
+    this.subNetworkLabel = !_.isEmpty(subNetworks) ? SubNetworkState.Ready : SubNetworkState.Empty;
     this.subNetworks = subNetworks;
     this._cdr.detectChanges();
   }

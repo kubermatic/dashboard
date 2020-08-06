@@ -16,4 +16,5 @@ import 'jest-preset-angular';
 import './test.base.mocks';
 
 // Async operations timeout
+// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 jest.setTimeout(15000);

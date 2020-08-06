@@ -47,11 +47,12 @@ import {AzureSizes, AzureZones} from '../../../shared/entity/provider/azure';
 
 @Injectable()
 export class ApiService {
+  private readonly _token: string;
+  private readonly _refreshTime = 30; // in seconds
   private _location: string = window.location.protocol + '//' + window.location.host;
   private _restRoot: string = environment.restRoot;
-  private readonly _token: string;
   private _addonConfigs$: Observable<any>;
-  private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 30);
+  private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
 
   constructor(
     private readonly _http: HttpClient,

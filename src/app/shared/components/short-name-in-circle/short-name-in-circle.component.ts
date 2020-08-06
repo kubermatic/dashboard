@@ -20,6 +20,7 @@ import {ProjectOwners} from '../../entity/project';
 export class ShortNameInCircleComponent implements OnInit, OnChanges {
   @Input() owners: ProjectOwners[];
   @Input() limit: number;
+
   shortNames: string[] = [];
 
   ngOnInit(): void {
@@ -45,8 +46,9 @@ export class ShortNameInCircleComponent implements OnInit, OnChanges {
 
     for (const owner in this.owners) {
       if (Object.prototype.hasOwnProperty.call(this.owners, owner)) {
+        const maxLength = 3;
         const capitalLetters = this.owners[owner].name.match(/\b(\w)/g);
-        const short = capitalLetters.slice(0, 3).join('').toUpperCase();
+        const short = capitalLetters.slice(0, maxLength).join('').toUpperCase();
         this.shortNames.push(short);
       }
     }

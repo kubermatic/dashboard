@@ -26,6 +26,7 @@ Object.defineProperty(document.body.style, 'transform', {
 
 Object.defineProperties(window, {
   crypto: {
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     value: {getRandomValues: () => [2, 4, 8, 16]},
   },
   URL: {value: {createObjectURL: () => {}}},

@@ -45,6 +45,8 @@ enum Controls {
   ],
 })
 export class VSphereExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  private readonly _defaultDiskSize = 10;
+
   private _defaultTemplate = '';
   private _templates: DatacenterOperatingSystemOptions;
 
@@ -65,7 +67,7 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator implemen
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.DiskSizeGB]: this._builder.control(10),
+      [Controls.DiskSizeGB]: this._builder.control(this._defaultDiskSize),
       [Controls.Template]: this._builder.control(''),
     });
 

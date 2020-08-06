@@ -11,16 +11,16 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {Settings} from 'http2';
 import {BehaviorSubject, iif, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, delay, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
 import {webSocket} from 'rxjs/webSocket';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
-import {Auth} from '../auth/auth.service';
-import {AdminSettings, CustomLink, DEFAULT_ADMIN_SETTINGS} from '../../../shared/entity/settings';
-import {Settings} from 'http2';
 import {Admin} from '../../../shared/entity/member';
+import {AdminSettings, CustomLink, DEFAULT_ADMIN_SETTINGS} from '../../../shared/entity/settings';
+import {Auth} from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -29,12 +29,14 @@ export class SettingsService {
   private readonly restRoot = environment.restRoot;
   private readonly wsRoot = environment.wsRoot;
   private readonly _adminSettings$ = new BehaviorSubject(DEFAULT_ADMIN_SETTINGS);
+  private readonly _refreshTime = 5; // in seconds
+  private readonly _retryDelayTime = 3; // in seconds
   private _adminSettingsWatch$: Observable<AdminSettings>;
   private _admins$: Observable<Admin[]>;
   private _adminsRefresh$ = new Subject();
   private _customLinks$: Observable<CustomLink[]>;
   private _customLinksRefresh$ = new Subject();
-  private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * 5);
+  private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
   constructor(
     private readonly _httpClient: HttpClient,
@@ -51,7 +53,7 @@ export class SettingsService {
             errors.pipe(
               // eslint-disable-next-line no-console
               tap(console.debug),
-              delay(this._appConfigService.getRefreshTimeBase() * 3)
+              delay(this._appConfigService.getRefreshTimeBase() * this._retryDelayTime)
             )
           )
         );

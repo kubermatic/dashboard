@@ -12,6 +12,7 @@
 import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
+import * as _ from 'lodash';
 import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {ApiService, ProjectService, UserService} from '../../../../core/services';
@@ -21,9 +22,9 @@ import {Member} from '../../../../shared/entity/member';
 import {Project} from '../../../../shared/entity/project';
 import {SSHKey} from '../../../../shared/entity/ssh-key';
 import {GroupConfig} from '../../../../shared/model/Config';
+import {ClusterService} from '../../../../shared/services/cluster.service';
 import {MemberUtils, Permission} from '../../../../shared/utils/member-utils/member-utils';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../../shared/services/cluster.service';
 
 enum Controls {
   Keys = 'keys',
@@ -125,7 +126,7 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
   }
 
   hasKeys(): boolean {
-    return this._keys.length > 0;
+    return !_.isEmpty(this.keys);
   }
 
   private _getSelectedKeys(): SSHKey[] {

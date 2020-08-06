@@ -110,7 +110,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   displayTags(tags: object): boolean {
-    return !!tags && Object.keys(LabelFormComponent.filterNullifiedKeys(tags)).length > 0;
+    return !!tags && !_.isEmpty(Object.keys(LabelFormComponent.filterNullifiedKeys(tags)));
   }
 
   displayNoProviderTags(): boolean {
@@ -128,7 +128,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
         return (
           this.nodeData.spec.cloud[provider] &&
           this.nodeData.spec.cloud[provider].tags &&
-          this.nodeData.spec.cloud[provider].tags.length === 0
+          _.isEmpty(this.nodeData.spec.cloud[provider].tags)
         );
     }
 
@@ -161,10 +161,6 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
 
   private _noIpsLeft(cluster: Cluster, nodeCount: number): boolean {
     const ipCount = getIpCount(cluster.spec.machineNetworks);
-
-    if (!!ipCount && ipCount > 0) {
-      return !(ipCount - nodeCount >= 0);
-    }
-    return false;
+    return ipCount > 0 ? ipCount < nodeCount : false;
   }
 }

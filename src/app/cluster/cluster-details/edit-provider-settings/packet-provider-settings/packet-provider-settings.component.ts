@@ -23,7 +23,13 @@ import {AVAILABLE_PACKET_BILLING_CYCLES, Cluster, ProviderSettingsPatch} from '.
 })
 export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
+
   form: FormGroup;
+
+  private readonly _billingCycleMaxLen = 64;
+  private readonly _apiKeyMaxLen = 64;
+  private readonly _projectIDMaxLen = 64;
+  private readonly _debounceTime = 1000;
   private _formData = {apiKey: '', projectID: '', billingCycle: ''};
   private _unsubscribe: Subject<any> = new Subject();
 
@@ -40,11 +46,11 @@ export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       apiKey: new FormControl(''),
       projectID: new FormControl(''),
-      billingCycle: new FormControl(billingCycle, [Validators.maxLength(64)]),
+      billingCycle: new FormControl(billingCycle, [Validators.maxLength(this._billingCycleMaxLen)]),
     });
 
     this.form.valueChanges
-      .pipe(debounceTime(1000))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(data => {
         if (
@@ -72,8 +78,8 @@ export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
       this.apiKey.clearValidators();
       this.projectID.clearValidators();
     } else {
-      this.apiKey.setValidators([Validators.required, Validators.maxLength(256)]);
-      this.projectID.setValidators([Validators.required, Validators.maxLength(256)]);
+      this.apiKey.setValidators([Validators.required, Validators.maxLength(this._apiKeyMaxLen)]);
+      this.projectID.setValidators([Validators.required, Validators.maxLength(this._projectIDMaxLen)]);
     }
 
     this.apiKey.updateValueAndValidity();

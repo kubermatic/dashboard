@@ -14,7 +14,8 @@ export function RandomString(length): string {
   let result = '';
 
   while (length > 0) {
-    const bytes = new Uint8Array(16);
+    const arrLength = 16;
+    const bytes = new Uint8Array(arrLength);
     const random = window.crypto.getRandomValues(bytes);
 
     random.forEach(c => {

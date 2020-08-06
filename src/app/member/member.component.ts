@@ -42,8 +42,11 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   currentUser: Member;
   displayedColumns: string[] = ['name', 'email', 'group', 'actions'];
   dataSource = new MatTableDataSource<Member>();
+
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+
+  private readonly _refreshTime = 10; // in seconds
   private _unsubscribe: Subject<any> = new Subject();
   private _membersUpdate: Subject<any> = new Subject();
   private _currentGroupConfig: GroupConfig;
@@ -83,7 +86,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(first())
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
-    merge(timer(0, 10 * this._appConfig.getRefreshTimeBase()), this._membersUpdate)
+    merge(timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase()), this._membersUpdate)
       .pipe(switchMap(() => (this._selectedProject ? this._apiService.getMembers(this._selectedProject.id) : EMPTY)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(members => {

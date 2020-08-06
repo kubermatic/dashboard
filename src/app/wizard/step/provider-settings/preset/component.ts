@@ -11,13 +11,14 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import * as _ from 'lodash';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
 import {Cluster} from '../../../../shared/entity/cluster';
-import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {PresetList} from '../../../../shared/entity/preset';
 import {ClusterService} from '../../../../shared/services/cluster.service';
+import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 
 export enum Controls {
   Preset = 'name',
@@ -88,7 +89,7 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(presetList => {
         this.reset();
-        this.presetsLoaded = presetList.names ? presetList.names.length > 0 : false;
+        this.presetsLoaded = presetList.names ? !_.isEmpty(presetList.names) : false;
         this._state = this.presetsLoaded ? PresetsState.Ready : PresetsState.Empty;
         this.presetList = presetList;
         this._enable(this._state !== PresetsState.Empty, Controls.Preset);
