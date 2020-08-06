@@ -135,7 +135,6 @@ if ls /var/log/clusterexposer.log &>/dev/null; then
   echodate "Cluster-Exposer already running"
 else
   echodate "Starting clusterexposer"
-  make download-gocache
   CGO_ENABLED=0 go build --tags "$KUBERMATIC_EDITION" -v -o /tmp/clusterexposer ./pkg/test/clusterexposer/cmd
   CGO_ENABLED=0 /tmp/clusterexposer \
     --kubeconfig-inner "$KUBECONFIG" \
