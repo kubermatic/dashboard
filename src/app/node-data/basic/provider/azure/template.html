@@ -51,4 +51,22 @@ limitations under the License.
            autocomplete="off">
     <mat-hint>Please note that snapshots are not supported.</mat-hint>
   </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>OS Disk Size in GB</mat-label>
+    <input [formControlName]="Controls.OSDiskSize"
+           matInput
+           type="number"
+           autocomplete="off">
+    <mat-hint>Leave 0 to use default value.</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Data Disk Size in GB</mat-label>
+    <input [formControlName]="Controls.DataDiskSize"
+           matInput
+           type="number"
+           autocomplete="off">
+    <mat-hint>Leave 0 to use default value.</mat-hint>
+  </mat-form-field>
 </form>

@@ -19,8 +19,8 @@ import {
   OnInit,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {Observable} from 'rxjs';
-import {filter, switchMap, takeUntil} from 'rxjs/operators';
+import {merge, Observable} from 'rxjs';
+import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../core/services';
 import {AzureNodeSpec, NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
@@ -35,6 +35,8 @@ enum Controls {
   Size = 'size',
   Zone = 'zone',
   ImageID = 'imageID',
+  OSDiskSize = 'osDiskSize',
+  DataDiskSize = 'dataDiskSize',
 }
 
 enum SizeState {
@@ -100,6 +102,8 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
       [Controls.Size]: this._builder.control('', Validators.required),
       [Controls.Zone]: this._builder.control(''),
       [Controls.ImageID]: this._builder.control(''),
+      [Controls.OSDiskSize]: this._builder.control(0),
+      [Controls.DataDiskSize]: this._builder.control(0),
     });
 
     this._init();
@@ -110,14 +114,18 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(this._clearSize.bind(this));
 
     this._sizeChanges
+      .pipe(tap(_ => this._clearZone()))
       .pipe(filter(hasValue => hasValue))
       .pipe(switchMap(_ => this._zonesObservable))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setZones.bind(this));
 
-    this.form
-      .get(Controls.ImageID)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+    merge(
+      this.form.get(Controls.ImageID).valueChanges,
+      this.form.get(Controls.OSDiskSize).valueChanges,
+      this.form.get(Controls.DataDiskSize).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
 
@@ -140,7 +148,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   getHint(control: Controls): string {
     switch (control) {
       case Controls.Zone:
-        return this._nodeDataService.nodeData.spec.cloud.azure.size !== '' ? '' : 'Please enter your Node Size first.';
+        return this._nodeDataService.nodeData.spec.cloud.azure.size !== '' ? '' : 'Please select Node Size first.';
     }
   }
 
@@ -226,6 +234,8 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
         cloud: {
           azure: {
             imageID: this.form.get(Controls.ImageID).value,
+            osDiskSize: this.form.get(Controls.OSDiskSize).value,
+            dataDiskSize: this.form.get(Controls.DataDiskSize).value,
           } as AzureNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,

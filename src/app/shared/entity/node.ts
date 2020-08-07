@@ -155,6 +155,8 @@ export class AzureNodeSpec {
   tags: object;
   imageID?: string;
   zone: string;
+  osDiskSize: number;
+  dataDiskSize: number;
 }
 
 export class DigitaloceanNodeSpec {

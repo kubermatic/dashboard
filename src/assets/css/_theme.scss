@@ -626,6 +626,10 @@
     line-height: 4.2 * $line-height !important;
     height: 42px;
 
+    &:disabled {
+      color: $text-disabled;
+    }
+
     .mat-icon {
       margin-right: 0 !important;
     }
