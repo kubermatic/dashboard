@@ -27,7 +27,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
-import {merge, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {Cookie, COOKIE_DI_TOKEN} from '../app.config';
@@ -128,25 +128,23 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       )
       .subscribe();
 
-    merge(this._projectService.projects)
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe((projects: Project[]) => {
-        if (projects) {
-          this.projects = projects;
-        }
+    this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe((projects: Project[]) => {
+      if (projects) {
+        this.projects = projects;
+      }
 
-        this.projects = this._sortProjects(this.projects);
-        this._loadCurrentUserRoles();
-        this.dataSource.data = this.projects;
-        this._sortProjectOwners();
+      this.projects = this._sortProjects(this.projects);
+      this._loadCurrentUserRoles();
+      this.dataSource.data = this.projects;
+      this._sortProjectOwners();
 
-        if (this._shouldRedirectToCluster()) {
-          this._redirectToCluster();
-        }
-        this.isInitializing = false;
-        this.selectDefaultProject();
-        this._cdr.detectChanges();
-      });
+      if (this._shouldRedirectToCluster()) {
+        this._redirectToCluster();
+      }
+      this.isInitializing = false;
+      this.selectDefaultProject();
+      this._cdr.detectChanges();
+    });
   }
 
   ngOnDestroy(): void {
