@@ -89,11 +89,6 @@ export class NodeDataService {
     this._nodeData.spec.taints = taints;
   }
 
-  isInDialogEditMode(): boolean {
-    // In dialog edit mode node will always have a name
-    return this.mode === NodeDataMode.Dialog && !!this._nodeData.name;
-  }
-
   isInWizardMode(): boolean {
     return this.mode === NodeDataMode.Wizard;
   }

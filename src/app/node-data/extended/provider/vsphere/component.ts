@@ -21,6 +21,7 @@ import {OperatingSystem} from '../../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {ClusterService} from '../../../../shared/services/cluster.service';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
+import {NodeDataMode} from '../../../config';
 import {NodeDataService} from '../../../service/service';
 
 enum Controls {
@@ -107,9 +108,10 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator implemen
 
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.vsphere) {
-      const diskSizeGB = this._nodeDataService.isInDialogEditMode()
-        ? this._nodeDataService.nodeData.spec.cloud.vsphere.diskSizeGB
-        : this.form.get(Controls.DiskSizeGB).value;
+      const diskSizeGB =
+        this._nodeDataService.mode === NodeDataMode.Dialog && !!this._nodeDataService.nodeData.name
+          ? this._nodeDataService.nodeData.spec.cloud.vsphere.diskSizeGB
+          : this.form.get(Controls.DiskSizeGB).value;
       this.form.get(Controls.DiskSizeGB).setValue(diskSizeGB);
     }
   }

@@ -22,6 +22,7 @@ import {NodeData} from '../../shared/model/NodeSpecChange';
 import {ClusterService} from '../../shared/services/cluster.service';
 import {objectDiff} from '../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../shared/validators/base-form.validator';
+import {NodeDataMode} from '../config';
 import {NodeDataService} from '../service/service';
 
 enum Mode {
@@ -65,6 +66,7 @@ export interface DialogDataOutput {
 export class NodeDataDialogComponent extends BaseFormValidator implements OnInit, OnDestroy {
   isRecreationWarningVisible = false;
   isExtended = false;
+  mode = Mode.Add;
 
   readonly Control = Controls;
 
@@ -73,10 +75,6 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
 
   get provider(): NodeProvider {
     return this._clusterService.provider;
-  }
-
-  get mode(): Mode {
-    return this._nodeDataService.isInDialogEditMode() ? Mode.Edit : Mode.Add;
   }
 
   get existingNodesCount(): number {
@@ -103,6 +101,10 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
 
     this._clusterService.cluster = this._data.initialClusterData;
     this._nodeDataService.nodeData = this._initNodeData();
+    this.mode =
+      this._nodeDataService.mode === NodeDataMode.Dialog && !!this._nodeDataService.nodeData.name
+        ? Mode.Edit
+        : Mode.Add;
 
     merge(this._nodeDataService.nodeDataChanges, this._nodeDataService.operatingSystemChanges)
       .pipe(takeUntil(this._unsubscribe))

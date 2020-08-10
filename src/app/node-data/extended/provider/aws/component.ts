@@ -15,6 +15,7 @@ import {takeUntil} from 'rxjs/operators';
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
+import {NodeDataMode} from '../../../config';
 import {NodeDataService} from '../../../service/service';
 
 enum Controls {
@@ -76,9 +77,10 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
     if (this.nodeData.spec.cloud.aws) {
       this.onTagsChange(this.nodeData.spec.cloud.aws.tags);
 
-      const assignPublicIP = this._nodeDataService.isInDialogEditMode()
-        ? this.nodeData.spec.cloud.aws.assignPublicIP
-        : true;
+      const assignPublicIP =
+        this._nodeDataService.mode === NodeDataMode.Dialog && !!this.nodeData.name
+          ? this.nodeData.spec.cloud.aws.assignPublicIP
+          : true;
       this.form.get(Controls.AssignPublicIP).setValue(assignPublicIP);
     }
   }
