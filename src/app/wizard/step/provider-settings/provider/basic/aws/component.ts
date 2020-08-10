@@ -158,7 +158,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
       .accessKeyID(this.form.get(Controls.AccessKeyID).value)
       .secretAccessKey(this.form.get(Controls.AccessKeySecret).value)
       .vpcs(this._clusterService.datacenter, this._onVPCLoading.bind(this))
-      .pipe(map(vpcs => vpcs.sort((a, b) => a.name.localeCompare(b.name))))
+      .pipe(map(vpcs => _.sortBy(vpcs, v => v.name.toLowerCase())))
       .pipe(
         catchError(() => {
           this._clearVPC();

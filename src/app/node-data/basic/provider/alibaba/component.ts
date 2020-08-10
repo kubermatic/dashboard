@@ -31,6 +31,7 @@ import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {compare} from '../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
+import * as _ from 'lodash';
 
 enum Controls {
   InstanceType = 'instanceType',
@@ -213,7 +214,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   private _setDefaultInstanceType(instanceTypes: AlibabaInstanceType[]): void {
-    this.instanceTypes = instanceTypes.sort((a, b) => a.id.localeCompare(b.id));
+    this.instanceTypes = _.sortBy(instanceTypes, it => it.id.toLowerCase());
     this.selectedInstanceType = this._nodeDataService.nodeData.spec.cloud.alibaba.instanceType;
 
     if (!this.selectedInstanceType && this.instanceTypes.length > 0) {
@@ -225,7 +226,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   private _setDefaultZone(zones: AlibabaZone[]): void {
-    this.zones = zones.sort((a, b) => a.id.localeCompare(b.id));
+    this.zones = _.sortBy(zones, z => z.id.toLowerCase());
     this.selectedZone = this._nodeDataService.nodeData.spec.cloud.alibaba.zoneID;
 
     if (!this.selectedZone && this.zones.length > 0) {

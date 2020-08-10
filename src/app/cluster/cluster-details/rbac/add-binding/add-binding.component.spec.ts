@@ -45,10 +45,10 @@ describe('AddBindingComponent', () => {
       createBinding: jest.fn(),
     };
 
-    rbacMock.getClusterRoleNames.mockReturnValue(asyncData([fakeClusterRoleNames()]));
-    rbacMock.getRoleNames.mockReturnValue(asyncData([fakeRoleNames()]));
-    rbacMock.createClusterBinding.mockReturnValue(asyncData([fakeClusterBinding()]));
-    rbacMock.createBinding.mockReturnValue(asyncData([fakeBinding()]));
+    rbacMock.getClusterRoleNames.mockReturnValue(asyncData(fakeClusterRoleNames()));
+    rbacMock.getRoleNames.mockReturnValue(asyncData(fakeRoleNames()));
+    rbacMock.createClusterBinding.mockReturnValue(asyncData(fakeClusterBinding()));
+    rbacMock.createBinding.mockReturnValue(asyncData(fakeBinding()));
 
     TestBed.configureTestingModule({
       imports: [...modules],

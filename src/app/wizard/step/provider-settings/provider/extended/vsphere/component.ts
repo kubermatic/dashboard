@@ -214,7 +214,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .password(this._clusterService.cluster.spec.cloud.vsphere.password)
       .datacenter(this._clusterService.datacenter)
       .networks(this._onNetworksLoading.bind(this))
-      .pipe(map(networks => networks.sort((a, b) => a.name.localeCompare(b.name))))
+      .pipe(map(networks => _.sortBy(networks, n => n.name.toLowerCase())))
       .pipe(
         catchError(() => {
           this._clearNetworks();

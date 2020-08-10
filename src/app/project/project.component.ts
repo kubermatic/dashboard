@@ -170,9 +170,14 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private _sortProjectOwners(): void {
-    this.projects.forEach(project => {
-      project.owners = project.owners.sort((a, b) => a.name.localeCompare(b.name));
-    });
+    this.projects.forEach(
+      project =>
+        (project.owners = _.sortBy(
+          project.owners,
+          o => o.name.toLowerCase(),
+          o => o.email.toLowerCase()
+        ))
+    );
   }
 
   private _sortProjects(projects): Project[] {
@@ -181,9 +186,17 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     const ownProjects = projects.filter(p => ownProjectIds.includes(p.id));
     const externalProjects = projects.filter(p => !ownProjectIds.includes(p.id));
 
-    return ownProjects
-      .sort((a, b) => (a.name + a.id).localeCompare(b.name + b.id))
-      .concat(externalProjects.sort((a, b) => (a.name + a.id).localeCompare(b.name + b.id)));
+    return _.sortBy(
+      ownProjects,
+      p => p.name.toLowerCase(),
+      p => p.id.toLowerCase()
+    ).concat(
+      _.sortBy(
+        externalProjects,
+        p => p.name.toLowerCase(),
+        p => p.id.toLowerCase()
+      )
+    );
   }
 
   changeView(): void {

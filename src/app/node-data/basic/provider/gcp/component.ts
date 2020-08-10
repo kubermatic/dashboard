@@ -101,19 +101,19 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   private get _zonesObservable(): Observable<GCPZone[]> {
     return this._nodeDataService.gcp
       .zones(this._clearZone.bind(this), this._onZoneLoading.bind(this))
-      .pipe(map((zones: GCPZone[]) => zones.sort((a, b) => a.name.localeCompare(b.name))));
+      .pipe(map(zones => _.sortBy(zones, z => z.name.toLowerCase())));
   }
 
   private get _diskTypesObservable(): Observable<GCPDiskType[]> {
     return this._nodeDataService.gcp
       .diskTypes(this._clearDiskTypes.bind(this), this._onDiskTypeLoading.bind(this))
-      .pipe(map((types: GCPDiskType[]) => types.sort((a, b) => a.name.localeCompare(b.name))));
+      .pipe(map(types => _.sortBy(types, t => t.name.toLowerCase())));
   }
 
   private get _machineTypesObservable(): Observable<GCPMachineSize[]> {
     return this._nodeDataService.gcp
       .machineTypes(this._clearMachineType.bind(this), this._onMachineTypeLoading.bind(this))
-      .pipe(map((sizes: GCPMachineSize[]) => sizes.sort((a, b) => a.name.localeCompare(b.name))));
+      .pipe(map(sizes => _.sortBy(sizes, s => s.name.toLowerCase())));
   }
 
   constructor(

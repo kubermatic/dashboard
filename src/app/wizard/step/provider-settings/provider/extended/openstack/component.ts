@@ -223,7 +223,7 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
       .tenantID(this._clusterService.cluster.spec.cloud.openstack.tenantID)
       .datacenter(this._clusterService.cluster.spec.cloud.dc)
       .securityGroups(this._onSecurityGroupLoading.bind(this))
-      .pipe(map(securityGroups => securityGroups.sort((a, b) => a.name.localeCompare(b.name))))
+      .pipe(map(securityGroups => _.sortBy(securityGroups, sg => sg.name.toLowerCase())))
       .pipe(
         catchError(() => {
           this._clearSecurityGroup();
@@ -255,7 +255,7 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
       .tenantID(this._clusterService.cluster.spec.cloud.openstack.tenantID)
       .datacenter(this._clusterService.cluster.spec.cloud.dc)
       .networks(this._onNetworkLoading.bind(this))
-      .pipe(map(networks => networks.sort((a, b) => a.name.localeCompare(b.name))))
+      .pipe(map(networks => _.sortBy(networks, n => n.name.toLowerCase())))
       .pipe(
         catchError(() => {
           this._clearNetwork();
@@ -287,7 +287,7 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
       .tenantID(this._clusterService.cluster.spec.cloud.openstack.tenantID)
       .datacenter(this._clusterService.cluster.spec.cloud.dc)
       .subnets(this._clusterService.cluster.spec.cloud.openstack.network, this._onSubnetIDLoading.bind(this))
-      .pipe(map(subnetIDs => subnetIDs.sort((a, b) => a.name.localeCompare(b.name))))
+      .pipe(map(subnetIDs => _.sortBy(subnetIDs, s => s.name.toLowerCase())))
       .pipe(
         catchError(() => {
           this._clearSubnetID();

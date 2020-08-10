@@ -259,7 +259,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       .password(this.form.get(Controls.Password).value)
       .datacenter(this._clusterService.cluster.spec.cloud.dc)
       .tenants(this._onProjectLoading.bind(this))
-      .pipe(map(projects => projects.sort((a, b) => a.name.localeCompare(b.name))))
+      .pipe(map(projects => _.sortBy(projects, p => p.name.toLowerCase())))
       .pipe(
         catchError(() => {
           this._clearProject();
@@ -293,9 +293,10 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       .datacenter(this._clusterService.cluster.spec.cloud.dc)
       .networks(this._onFloatingIPPoolLoading.bind(this))
       .pipe(
-        map(networks =>
-          networks.filter(network => network.external === true).sort((a, b) => a.name.localeCompare(b.name))
-        )
+        map(networks => {
+          const filteredNetworks = networks.filter(network => network.external === true);
+          return _.sortBy(filteredNetworks, n => n.name.toLowerCase());
+        })
       )
       .pipe(
         catchError(() => {

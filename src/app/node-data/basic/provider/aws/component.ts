@@ -30,6 +30,7 @@ import {AWSSize, AWSSubnet} from '../../../../shared/entity/provider/aws';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
+import * as _ from 'lodash';
 
 enum Controls {
   Size = 'size',
@@ -93,7 +94,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   private get _sizesObservable(): Observable<AWSSize[]> {
     return this._nodeDataService.aws
       .flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this))
-      .pipe(map(sizes => sizes.sort((a, b) => a.name.localeCompare(b.name))));
+      .pipe(map(sizes => _.sortBy(sizes, s => s.name.toLowerCase())));
   }
 
   private get _subnetIdsObservable(): Observable<AWSSubnet[]> {
@@ -263,7 +264,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   private _initSubnetMap(): void {
-    this._subnets = this._subnets.sort((a, b) => a.name.localeCompare(b.name));
+    this._subnets = _.sortBy(this._subnets, s => s.name.toLowerCase());
     this._subnets.forEach(subnet => {
       const found = this.subnetAZ.find(s => s === subnet.availability_zone);
       if (!found) {

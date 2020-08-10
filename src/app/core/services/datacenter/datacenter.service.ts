@@ -17,6 +17,7 @@ import {environment} from '../../../../environments/environment';
 import {CreateDatacenterModel, Datacenter} from '../../../shared/entity/datacenter';
 import {AppConfigService} from '../../../app-config.service';
 import {Auth} from '../auth/auth.service';
+import * as _ from 'lodash';
 
 @Injectable()
 export class DatacenterService {
@@ -37,15 +38,13 @@ export class DatacenterService {
   init(): void {
     this._datacenters$ = merge(this._datacentersRefresh$, this._refreshTimer$)
       .pipe(switchMap(() => iif(() => this._auth.authenticated(), this._getDatacenters(), of([]))))
-      .pipe(
-        map((datacenters: Datacenter[]) => datacenters.sort((a, b) => a.metadata.name.localeCompare(b.metadata.name)))
-      )
+      .pipe(map(datacenters => _.sortBy(datacenters, d => d.metadata.name.toLowerCase())))
       .pipe(shareReplay(1));
     this._datacenters$.pipe(first()).subscribe(_ => {});
 
     this._seeds$ = merge(this._seedsRefresh$, this._refreshTimer$)
       .pipe(switchMap(() => iif(() => this._auth.authenticated(), this._getSeeds(), of([]))))
-      .pipe(map((seeds: string[]) => seeds.sort((a, b) => a.localeCompare(b))))
+      .pipe(map((seeds: string[]) => _.sortBy(seeds, s => s.toLowerCase())))
       .pipe(shareReplay(1));
     this._seeds$.pipe(first()).subscribe(_ => {});
   }
