@@ -9,7 +9,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Inject,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -17,18 +27,17 @@ import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
-import {merge, Subject, timer} from 'rxjs';
-import {debounceTime, filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
 
-import {AppConfigService} from '../app-config.service';
 import {Cookie, COOKIE_DI_TOKEN} from '../app.config';
 import {NotificationService, ProjectService, UserService} from '../core/services';
 import {PreviousRouteService} from '../core/services/previous-route/previous-route.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {Member} from '../shared/entity/member';
 import {View} from '../shared/entity/common';
+import {Member} from '../shared/entity/member';
 import {Project, ProjectOwners} from '../shared/entity/project';
 import {UserSettings} from '../shared/entity/settings';
 import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
@@ -40,6 +49,7 @@ import {EditProjectComponent} from './edit-project/edit-project.component';
   selector: 'km-project',
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   projects: Project[] = [];
@@ -50,28 +60,24 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   dataSource = new MatTableDataSource<Project>();
   isPaginatorVisible = false;
   showCards = true;
-  settings: UserSettings;
 
-  private readonly _refreshTime = 10; // in seconds
-  private readonly _debounceTime = 500;
   private readonly _maxOwnersLen = 30;
-  private _settingsChange = new Subject<void>();
+  private _settings: UserSettings;
+  private _settingsChange = new EventEmitter<void>();
   private _unsubscribe: Subject<any> = new Subject();
-  private _refreshTimer$ = timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase());
 
   paginator: MatPaginator;
   @ViewChild(MatPaginator)
   set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
 
-    setTimeout(_ => {
-      if (this.paginator && this.settings) {
-        this.paginator.pageSize = this.settings.itemsPerPage;
-        this.isPaginatorVisible = this._isPaginatorVisible();
-      }
-    });
+    if (this.paginator && this._settings) {
+      this.paginator.pageSize = this._settings.itemsPerPage;
+      this.isPaginatorVisible = this._isPaginatorVisible();
+    }
 
     this.dataSource.paginator = this.paginator;
+    this._cdr.detectChanges();
   }
 
   sort: MatSort;
@@ -90,7 +96,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _cookieService: CookieService,
     private readonly _notificationService: NotificationService,
     private readonly _previousRouteService: PreviousRouteService,
-    private readonly _appConfig: AppConfigService,
+    private readonly _cdr: ChangeDetectorRef,
     @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie
   ) {}
 
@@ -105,16 +111,15 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     this._userService.currentUserSettings
       .pipe(
         tap(settings => {
-          this.settings = settings;
+          this._settings = settings;
           this.showCards = !settings.selectProjectTableView;
         })
       )
-      .pipe(filter(_ => !this.settings))
+      .pipe(filter(_ => !this._settings))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.selectDefaultProject());
 
     this._settingsChange
-      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .pipe(
         switchMap(() =>
@@ -123,21 +128,23 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       )
       .subscribe();
 
-    merge(this._refreshTimer$, this._projectService.onProjectsUpdate)
-      .pipe(switchMap(() => this._projectService.projects))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(projects => {
-        this.projects = this._sortProjects(projects);
-        this._loadCurrentUserRoles();
-        this.dataSource.data = this.projects;
-        this._sortProjectOwners();
+    this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe((projects: Project[]) => {
+      if (projects) {
+        this.projects = projects;
+      }
 
-        if (this._shouldRedirectToCluster()) {
-          this._redirectToCluster();
-        }
-        this.isInitializing = false;
-        this.selectDefaultProject();
-      });
+      this.projects = this._sortProjects(this.projects);
+      this._loadCurrentUserRoles();
+      this.dataSource.data = this.projects;
+      this._sortProjectOwners();
+
+      if (this._shouldRedirectToCluster()) {
+        this._redirectToCluster();
+      }
+      this.isInitializing = false;
+      this.selectDefaultProject();
+      this._cdr.detectChanges();
+    });
   }
 
   ngOnDestroy(): void {
@@ -147,6 +154,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(): void {
     this.dataSource.data = this.projects;
+    this._cdr.detectChanges();
   }
 
   private _loadCurrentUserRoles(): void {
@@ -201,8 +209,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   changeView(): void {
     this.showCards = !this.showCards;
-    this.settings.selectProjectTableView = !this.settings.selectProjectTableView;
-    this._settingsChange.next();
+    this._settings.selectProjectTableView = !this._settings.selectProjectTableView;
+    this._settingsChange.emit();
   }
 
   selectProject(project: Project): void {
@@ -211,13 +219,13 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   selectDefaultProject(): void {
     if (
-      !!this.settings &&
+      !!this._settings &&
       !!this.projects &&
-      !!this.settings.selectedProjectId &&
+      !!this._settings.selectedProjectId &&
       this._previousRouteService.getPreviousUrl() === '/' &&
       this._previousRouteService.getHistory().length === 1
     ) {
-      const defaultProject = this.projects.find(x => x.id === this.settings.selectedProjectId);
+      const defaultProject = this.projects.find(x => x.id === this._settings.selectedProjectId);
       this.selectProject(defaultProject);
     }
   }
