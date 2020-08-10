@@ -47,6 +47,8 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   system: string;
   systemLogoClass: string;
   projectID: string;
+
+  private readonly _refreshTime = 10; // in seconds
   private _machineDeploymentID: string;
   private _isMachineDeploymentLoaded = false;
   private _areNodesLoaded = false;
@@ -83,7 +85,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
-    timer(0, 10 * this._appConfig.getRefreshTimeBase())
+    timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this.loadMachineDeployment();

@@ -28,6 +28,7 @@ import {FilteredComboboxComponent} from '../../../../shared/components/combobox/
 import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
 import {AlibabaInstanceType, AlibabaZone} from '../../../../shared/entity/provider/alibaba';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
+import {compare} from '../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
 import * as _ from 'lodash';
@@ -163,6 +164,15 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     this._nodeDataService.nodeDataChanges.next();
   }
 
+  instanceDisplayName(instanceID: string): string {
+    const instance = this.instanceTypes.find(instance => instance.id === instanceID);
+    if (!instance) {
+      return instanceID;
+    }
+
+    return `${instance.id} (${instance.cpuCoreCount} CPU, ${instance.memorySize} GB RAM)`;
+  }
+
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.alibaba) {
       this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.alibaba.diskSize);
@@ -208,7 +218,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     this.selectedInstanceType = this._nodeDataService.nodeData.spec.cloud.alibaba.instanceType;
 
     if (!this.selectedInstanceType && this.instanceTypes.length > 0) {
-      this.selectedInstanceType = this.instanceTypes[0].id;
+      this.selectedInstanceType = this._findCheapestInstance(instanceTypes).id;
     }
 
     this.instanceTypeLabel = this.selectedInstanceType ? InstanceTypeState.Ready : InstanceTypeState.Empty;
@@ -235,6 +245,13 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     }
 
     this._cdr.detectChanges();
+  }
+
+  private _findCheapestInstance(instanceTypes: AlibabaInstanceType[]): AlibabaInstanceType {
+    // Avoid mutating original array
+    return [...instanceTypes]
+      .sort((a, b) => compare(a.memorySize, b.memorySize))
+      .sort((a, b) => compare(a.cpuCoreCount, b.cpuCoreCount))[0];
   }
 
   private _getNodeData(): NodeData {

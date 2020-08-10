@@ -9,16 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export namespace Endpoint {
-  export enum Digitalocean {
-    Sizes = '**/providers/digitalocean/sizes',
-  }
-
-  export const Clusters = '**/clusters';
-  export const NodeDeployments = '**/nodedeployments';
-  export const Users = '**/users';
-  export const Projects = '**/projects?displayAll=false';
-  export const Tokens = '**/tokens';
-  export const ServiceAccounts = '**/serviceaccounts';
-  export const Settings = '**/me/settings';
+export enum WizardStep {
+  Provider = 'provider',
+  Cluster = 'cluster',
+  ProviderSettings = 'settings',
+  NodeSettings = 'initial-nodes',
+  MachineNetwork = 'machine-network',
+  Summary = 'summary',
 }

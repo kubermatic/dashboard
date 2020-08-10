@@ -35,6 +35,8 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   selectedDistro = [];
   settings: AdminSettings; // Local settings copy. User can edit it.
   apiSettings: AdminSettings; // Original settings from the API. Cannot be edited by the user.
+
+  private readonly _debounceTime = 500;
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 
@@ -59,7 +61,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
     this._settingsChange
       .pipe(
-        debounceTime(500),
+        debounceTime(this._debounceTime),
         switchMap(() => this._settingsService.patchAdminSettings(this._getPatch())),
         takeUntil(this._unsubscribe)
       )

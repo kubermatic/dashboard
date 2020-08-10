@@ -24,7 +24,8 @@ import {UserService} from '../user/user.service';
 
 @Injectable()
 export class Auth {
-  private readonly _nonce = RandomString(32);
+  private readonly _nonceLen = 32;
+  private readonly _nonce = RandomString(this._nonceLen);
   private readonly _responseType = 'id_token';
   private readonly _clientId = 'kubermatic';
   private readonly _defaultScope = 'openid email profile groups';
@@ -122,7 +123,8 @@ export class Auth {
   setNonce(): void {
     const nonceRegExp = /[?&#]nonce=([^&]+)/;
     const nonceStr = nonceRegExp.exec(this.getOIDCProviderURL());
-    if (!!nonceStr && nonceStr.length >= 2 && !!nonceStr[1]) {
+    const minLen = 2;
+    if (!!nonceStr && nonceStr.length >= minLen && !!nonceStr[1]) {
       this._cookieService.set(this._cookie.nonce, nonceStr[1], null, '/', null, true, 'Lax');
       // localhost is only served via http, though secure cookie is not possible
       // following line will only work when domain is localhost

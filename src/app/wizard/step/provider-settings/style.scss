@@ -9,16 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export namespace Endpoint {
-  export enum Digitalocean {
-    Sizes = '**/providers/digitalocean/sizes',
-  }
+@import '../../assets/css/variables';
 
-  export const Clusters = '**/clusters';
-  export const NodeDeployments = '**/nodedeployments';
-  export const Users = '**/users';
-  export const Projects = '**/projects?displayAll=false';
-  export const Tokens = '**/tokens';
-  export const ServiceAccounts = '**/serviceaccounts';
-  export const Settings = '**/me/settings';
+.km-provider-settings {
+  padding-bottom: 3.25 * $baseline-grid;
 }

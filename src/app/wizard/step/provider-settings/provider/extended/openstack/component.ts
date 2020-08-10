@@ -19,6 +19,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import * as _ from 'lodash';
 import {EMPTY, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
@@ -30,9 +31,9 @@ import {
   OpenstackSubnet,
 } from '../../../../../../shared/entity/provider/openstack';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
-import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {ClusterService} from '../../../../../../shared/services/cluster.service';
 import * as _ from 'lodash';
+import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 
 enum Controls {
   SecurityGroup = 'securityGroup',
@@ -178,19 +179,19 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
 
   private _loadSecurityGroups(securityGroups: OpenstackSecurityGroup[]): void {
     this.securityGroups = securityGroups;
-    this.securityGroupsLabel = this.securityGroups.length > 0 ? SecurityGroupState.Ready : SecurityGroupState.Empty;
+    this.securityGroupsLabel = !_.isEmpty(this.securityGroups) ? SecurityGroupState.Ready : SecurityGroupState.Empty;
     this._cdr.detectChanges();
   }
 
   private _loadNetworks(networks: OpenstackNetwork[]): void {
     this.networks = networks;
-    this.networksLabel = this.networks.length > 0 ? NetworkState.Ready : NetworkState.Empty;
+    this.networksLabel = !_.isEmpty(this.networks) ? NetworkState.Ready : NetworkState.Empty;
     this._cdr.detectChanges();
   }
 
   private _loadSubnetIDs(subnetIDs: OpenstackSubnet[]): void {
     this.subnetIDs = subnetIDs;
-    this.subnetIDsLabel = this.subnetIDs.length > 0 ? SubnetIDState.Ready : SubnetIDState.Empty;
+    this.subnetIDsLabel = !_.isEmpty(this.subnetIDs) ? SubnetIDState.Ready : SubnetIDState.Empty;
     this._cdr.detectChanges();
   }
 

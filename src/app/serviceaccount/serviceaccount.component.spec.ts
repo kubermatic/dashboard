@@ -87,10 +87,11 @@ describe('ServiceAccountComponent', () => {
   });
 
   it('should open delete service account confirmation dialog & call deleteServiceAccount()', fakeAsync(() => {
+    const waitTime = 15000;
     const event = new MouseEvent('click');
     component.deleteServiceAccount(fakeServiceAccounts()[0], event);
     noop.detectChanges();
-    tick(15000);
+    tick(waitTime);
 
     const dialogTitle = document.body.querySelector('.mat-dialog-title');
     const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
@@ -102,7 +103,7 @@ describe('ServiceAccountComponent', () => {
 
     noop.detectChanges();
     fixture.detectChanges();
-    tick(15000);
+    tick(waitTime);
 
     expect(deleteServiceAccountSpy).toHaveBeenCalled();
     fixture.destroy();

@@ -49,6 +49,10 @@ export enum Controls {
   ],
 })
 export class PacketProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  private readonly _apiKeyLength = 256;
+  private readonly _projectIDLength = 256;
+  private readonly _billingCycleLength = 64;
+
   readonly Controls = Controls;
 
   constructor(
@@ -61,11 +65,14 @@ export class PacketProviderBasicComponent extends BaseFormValidator implements O
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.APIKey]: this._builder.control('', [Validators.required, Validators.maxLength(256)]),
-      [Controls.ProjectID]: this._builder.control('', [Validators.required, Validators.maxLength(256)]),
+      [Controls.APIKey]: this._builder.control('', [Validators.required, Validators.maxLength(this._apiKeyLength)]),
+      [Controls.ProjectID]: this._builder.control('', [
+        Validators.required,
+        Validators.maxLength(this._projectIDLength),
+      ]),
       [Controls.BillingCycle]: this._builder.control(this.getAvailableBillingCycles()[0], [
         Validators.required,
-        Validators.maxLength(64),
+        Validators.maxLength(this._billingCycleLength),
       ]),
     });
 

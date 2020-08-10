@@ -23,6 +23,8 @@ import {ProviderSettingsPatch} from '../../../../shared/entity/cluster';
 })
 export class HetznerProviderSettingsComponent implements OnInit, OnDestroy {
   form: FormGroup;
+
+  private readonly _debounceTime = 1000;
   private _formData = {token: ''};
   private _unsubscribe = new Subject<void>();
 
@@ -34,7 +36,7 @@ export class HetznerProviderSettingsComponent implements OnInit, OnDestroy {
     });
 
     this.form.valueChanges
-      .pipe(debounceTime(1000))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(data => {
         if (data.token !== this._formData.token) {
@@ -53,7 +55,8 @@ export class HetznerProviderSettingsComponent implements OnInit, OnDestroy {
     if (!this.token.value) {
       this.token.clearValidators();
     } else {
-      this.token.setValidators([Validators.required, Validators.minLength(64), Validators.maxLength(64)]);
+      const tokenLen = 64;
+      this.token.setValidators([Validators.required, Validators.minLength(tokenLen), Validators.maxLength(tokenLen)]);
     }
 
     this.token.updateValueAndValidity();

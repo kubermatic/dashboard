@@ -9,11 +9,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {wait} from '../utils/wait';
 import {Condition} from '../utils/condition';
+import {Endpoint} from '../utils/endpoint';
+import {RequestType, TrafficMonitor} from '../utils/monitor';
+import {View} from '../utils/view';
 import {WizardPage} from './wizard.po';
 
 export class ClustersPage {
+  private static readonly _defaultTimeout = 5000;
+
   static getAddClusterBtn(): Cypress.Chainable<any> {
     return cy.get('#km-add-cluster-top-btn');
   }
@@ -54,7 +58,7 @@ export class ClustersPage {
     return cy.get('#km-confirmation-dialog-confirm-btn');
   }
 
-  static getMachineDeploymentList(timeout = 5000): Cypress.Chainable {
+  static getMachineDeploymentList(timeout = this._defaultTimeout): Cypress.Chainable {
     return cy.get('km-machine-deployment-list', {timeout: timeout});
   }
 
@@ -65,11 +69,11 @@ export class ClustersPage {
   // Utils.
 
   static waitForRefresh(): void {
-    wait('**/clusters', 'GET', 'list clusters');
+    TrafficMonitor.newTrafficMonitor().url(Endpoint.Clusters).method(RequestType.GET).alias('listClusters').wait();
   }
 
   static verifyUrl(): void {
-    cy.url().should(Condition.Include, 'clusters');
+    cy.url().should(Condition.Include, View.Clusters);
   }
 
   static visit(): void {

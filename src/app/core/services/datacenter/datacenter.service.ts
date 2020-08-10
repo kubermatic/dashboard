@@ -21,12 +21,13 @@ import * as _ from 'lodash';
 
 @Injectable()
 export class DatacenterService {
+  private readonly _refreshTime = 60;
   private _restRoot: string = environment.restRoot;
   private _datacenters$: Observable<Datacenter[]>;
   private _datacentersRefresh$ = new Subject();
   private _seeds$: Observable<string[]>;
   private _seedsRefresh$ = new Subject();
-  private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * 60);
+  private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
   constructor(
     private readonly _httpClient: HttpClient,

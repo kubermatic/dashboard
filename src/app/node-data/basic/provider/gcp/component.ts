@@ -28,6 +28,7 @@ import {FilteredComboboxComponent} from '../../../../shared/components/combobox/
 import {GCPNodeSpec, NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../../shared/entity/provider/gcp';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
+import {compare} from '../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
 
@@ -75,6 +76,7 @@ enum MachineTypeState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewInit, OnDestroy {
+  private readonly _defaultDiskSize = 25;
   private _zoneChanges = new EventEmitter<boolean>();
 
   @ViewChild('zonesCombobox')
@@ -124,7 +126,7 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.DiskSize]: this._builder.control(25, Validators.required),
+      [Controls.DiskSize]: this._builder.control(this._defaultDiskSize, Validators.required),
       [Controls.DiskType]: this._builder.control('', Validators.required),
       [Controls.Zone]: this._builder.control('', Validators.required),
       [Controls.MachineType]: this._builder.control('', Validators.required),
@@ -172,6 +174,15 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   onMachineTypeChange(machineType: string): void {
     this._nodeDataService.nodeData.spec.cloud.gcp.machineType = machineType;
     this._nodeDataService.nodeDataChanges.next();
+  }
+
+  sizeDisplayName(machineName: string): string {
+    const machine = this.machineTypes.find(size => size.name === machineName);
+    if (!machine) {
+      return machineName;
+    }
+
+    return `${machine.name} (${machine.description})`;
   }
 
   private _init(): void {
@@ -253,11 +264,16 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
     this.selectedMachineType = this._nodeDataService.nodeData.spec.cloud.gcp.machineType;
 
     if (!this.selectedMachineType && !_.isEmpty(this.machineTypes)) {
-      this.selectedMachineType = this.machineTypes[0].name;
+      this.selectedMachineType = this._findCheapestInstance(machineTypes).name;
     }
 
     this.machineTypeLabel = this.selectedMachineType ? MachineTypeState.Ready : MachineTypeState.Empty;
     this._cdr.detectChanges();
+  }
+
+  private _findCheapestInstance(instanceTypes: GCPMachineSize[]): GCPMachineSize {
+    // Avoid mutating original array
+    return [...instanceTypes].sort((a, b) => compare(a.memory, b.memory)).sort((a, b) => compare(a.vcpus, b.vcpus))[0];
   }
 
   private _getNodeData(): NodeData {

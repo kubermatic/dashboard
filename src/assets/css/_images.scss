@@ -287,6 +287,7 @@
 .km-icon-labels {
   @include km-image-mask(3 * $baseline-grid);
 
+  transform: rotate(180deg);
   mask-image: url("/assets/images/icons/labels.svg");
 }
 
@@ -461,6 +462,12 @@
   @include km-image(3 * $baseline-grid);
 
   background-image: url("/assets/images/os/rhel.svg");
+}
+
+.km-os-image-rhel-gray {
+  @include km-image(3 * $baseline-grid);
+
+  background-image: url("/assets/images/os/rhel-gray.svg");
 }
 
 .km-os-image-flatcar {

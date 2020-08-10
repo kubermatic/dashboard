@@ -30,11 +30,12 @@ import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
 
 @Injectable()
 export class ClusterService {
+  private readonly _refreshTime = 10; // in seconds
   private _providerSettingsPatch = new Subject<ProviderSettingsPatch>();
   private _restRoot: string = environment.restRoot;
   private _headers: HttpHeaders = new HttpHeaders();
   private _clusters$ = new Map<string, Observable<Cluster[]>>();
-  private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
+  private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
   private _onClustersUpdate = new Subject<void>();
 
   providerSettingsPatchChanges$ = this._providerSettingsPatch.asObservable();

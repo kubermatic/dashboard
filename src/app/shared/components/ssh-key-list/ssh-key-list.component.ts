@@ -18,8 +18,10 @@ import {SSHKey} from '../../entity/ssh-key';
   styleUrls: ['./ssh-key-list.component.scss'],
 })
 export class SSHKeyListComponent {
+  private readonly _defaultMaxDisplayed = 3;
+
   @Input() sshKeys: SSHKey[] = [];
-  @Input() maxDisplayed = 3;
+  @Input() maxDisplayed = this._defaultMaxDisplayed;
 
   getDisplayed(): string {
     return this.sshKeys

@@ -15,7 +15,10 @@ limitations under the License.
      [ngSwitch]="provider"
      fxLayout="column"
      fxLayoutGap="16px">
-  <mat-card-title *ngIf="hasExtendedSection(provider)">Advanced</mat-card-title>
+  <mat-card-header>
+    <mat-card-title>Advanced</mat-card-title>
+  </mat-card-header>
+
   <km-wizard-aws-provider-extended *ngSwitchCase="Providers.AWS"
                                    [formControl]="form.get(Controls.ProviderExtended)">
   </km-wizard-aws-provider-extended>

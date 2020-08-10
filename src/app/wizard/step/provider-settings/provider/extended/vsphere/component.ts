@@ -20,17 +20,19 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+
+import * as _ from 'lodash';
 import {EMPTY, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {PresetsService} from '../../../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
 import {Cluster} from '../../../../../../shared/entity/cluster';
+import {VSphereFolder, VSphereNetwork} from '../../../../../../shared/entity/provider/vsphere';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
+import {ClusterService} from '../../../../../../shared/services/cluster.service';
 import {isObjectEmpty} from '../../../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
-import {VSphereFolder, VSphereNetwork} from '../../../../../../shared/entity/provider/vsphere';
-import {ClusterService} from '../../../../../../shared/services/cluster.service';
 import * as _ from 'lodash';
 
 enum Controls {
@@ -183,7 +185,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       this._networkMap[network.type].push(network);
     });
 
-    if (networks.length > 0) {
+    if (!_.isEmpty(networks)) {
       this.networkLabel = NetworkState.Ready;
       this._cdr.detectChanges();
     }
@@ -192,7 +194,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   private _loadFolders(folders: VSphereFolder[]): void {
     this.folders = folders;
 
-    if (this.folders.length > 0) {
+    if (!_.isEmpty(this.folders)) {
       this.folderLabel = FolderState.Ready;
       this._cdr.detectChanges();
     }

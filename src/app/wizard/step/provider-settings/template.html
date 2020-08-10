@@ -11,7 +11,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <div fxLayout="column"
-     [formGroup]="form">
+     [formGroup]="form"
+     class="km-provider-settings">
   <div fxLayout="row"
        fxLayout.md="column"
        fxLayout.sm="column"
@@ -20,7 +21,9 @@ limitations under the License.
     <div fxFlex="50"
          fxLayout="column"
          fxLayoutGap="16px">
-      <mat-card-title>Basic</mat-card-title>
+      <mat-card-header *ngIf="hasExtendedSection(provider)">
+        <mat-card-title>Basic</mat-card-title>
+      </mat-card-header>
       <km-wizard-presets [formControl]="form.get(Control.Preset)"></km-wizard-presets>
       <km-wizard-provider-basic [provider]="provider"
                                 [formControl]="form.get(Control.ProviderBasic)"></km-wizard-provider-basic>
@@ -30,7 +33,7 @@ limitations under the License.
     <div fxFlex="50"
          fxLayout="column">
       <km-wizard-provider-extended [provider]="provider"
-                                   [visible]="true"
+                                   [visible]="hasExtendedSection(provider)"
                                    [formControl]="form.get(Control.ProviderExtended)">
       </km-wizard-provider-extended>
     </div>

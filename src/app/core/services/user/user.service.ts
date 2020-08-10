@@ -29,6 +29,7 @@ export class UserService {
   private readonly wsRoot = environment.wsRoot;
   private readonly _currentUser$ = new BehaviorSubject<Member>(undefined);
   private readonly _currentUserSettings$ = new BehaviorSubject<UserSettings>(DEFAULT_USER_SETTINGS);
+  private readonly _refreshTime = 3; // in seconds
 
   constructor(
     private readonly _httpClient: HttpClient,
@@ -44,7 +45,7 @@ export class UserService {
           errors.pipe(
             // eslint-disable-next-line no-console
             tap(console.debug),
-            delay(this._appConfigService.getRefreshTimeBase() * 3)
+            delay(this._appConfigService.getRefreshTimeBase() * this._refreshTime)
           )
         )
       );

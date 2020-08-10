@@ -23,7 +23,8 @@ export class LabelFormValidators {
     const value = control.value;
     const slashPosition = value.indexOf('/');
     const labelKeyName = slashPosition > -1 ? value.substring(slashPosition + 1) : value;
-    return labelKeyName.length <= 63 ? null : {validLabelKeyPrefixLength: {value: true}};
+    const maxLength = 63;
+    return labelKeyName.length <= maxLength ? null : {validLabelKeyPrefixLength: {value: true}};
   }
 
   /**
@@ -33,7 +34,8 @@ export class LabelFormValidators {
     const value = control.value;
     const slashPosition = value.indexOf('/');
     const labelKeyPrefix = slashPosition > -1 ? value.substring(0, slashPosition) : '';
-    return labelKeyPrefix.length <= 253 ? null : {validLabelKeyPrefixLength: {value: true}};
+    const maxLength = 253;
+    return labelKeyPrefix.length <= maxLength ? null : {validLabelKeyPrefixLength: {value: true}};
   }
 
   /**
@@ -63,7 +65,8 @@ export class LabelFormValidators {
    */
   static labelValueLength(control: FormControl): {[key: string]: object} {
     const value = control.value;
-    return value.length <= 63 ? null : {validLabelValueLength: {value: true}};
+    const maxLength = 63;
+    return value.length <= maxLength ? null : {validLabelValueLength: {value: true}};
   }
 
   /**

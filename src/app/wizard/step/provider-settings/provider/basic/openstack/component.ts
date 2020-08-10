@@ -19,17 +19,27 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import * as _ from 'lodash';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
-
-import {PresetsService, DatacenterService} from '../../../../../../core/services';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  first,
+  map,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
+import {DatacenterService, PresetsService} from '../../../../../../core/services';
 import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
 import {CloudSpec, Cluster, ClusterSpec, OpenstackCloudSpec} from '../../../../../../shared/entity/cluster';
-import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
-import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 import {OpenstackFloatingIpPool, OpenstackTenant} from '../../../../../../shared/entity/provider/openstack';
+import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../../../../shared/services/cluster.service';
 import * as _ from 'lodash';
+import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 
 enum Controls {
   Domain = 'domain',
@@ -70,9 +80,10 @@ enum ProjectState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpenstackProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private _isFloatingPoolIPEnforced = false;
   private readonly _debounceTime = 250;
   private readonly _domains: string[] = ['Default'];
+
+  private _isFloatingPoolIPEnforced = false;
 
   @ViewChild('floatingIPPoolCombobox')
   private readonly _floatingIPPoolCombobox: FilteredComboboxComponent;
@@ -120,7 +131,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
 
     merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
       .pipe(filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK))
-      .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.datacenter)))
+      .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.datacenter).pipe(first())))
       .pipe(tap(dc => (this._isFloatingPoolIPEnforced = dc.spec.openstack.enforce_floating_ip)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
@@ -147,7 +158,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       .subscribe((projects: OpenstackTenant[]) => {
         this.projects = projects;
 
-        if (this.projects.length > 0) {
+        if (!_.isEmpty(this.projects)) {
           this.projectsLabel = ProjectState.Ready;
           this._cdr.detectChanges();
         }
@@ -160,7 +171,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       .subscribe((floatingIPPools: OpenstackFloatingIpPool[]) => {
         this.floatingIPPools = floatingIPPools;
 
-        if (this.floatingIPPools.length > 0) {
+        if (!_.isEmpty(this.floatingIPPools)) {
           this.floatingIPPoolsLabel = FloatingIPPoolState.Ready;
           this._cdr.detectChanges();
         }

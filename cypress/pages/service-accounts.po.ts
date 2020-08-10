@@ -9,9 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Group} from '../utils/member';
-import {wait} from '../utils/wait';
 import {Condition} from '../utils/condition';
+import {Endpoint} from '../utils/endpoint';
+import {Group} from '../utils/member';
+import {RequestType, TrafficMonitor} from '../utils/monitor';
+import {View} from '../utils/view';
 
 export class ServiceAccountsPage {
   static getAddServiceAccountBtn(): Cypress.Chainable<any> {
@@ -59,7 +61,7 @@ export class ServiceAccountsPage {
   }
 
   static _waitForTokenRefresh(): void {
-    wait('**/tokens', 'GET', 'list service account tokens');
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.Tokens).alias('list tokens').wait();
   }
 
   static getTableRow(name: string): Cypress.Chainable<any> {
@@ -69,11 +71,11 @@ export class ServiceAccountsPage {
   // Utils.
 
   static waitForRefresh(): void {
-    wait('**/serviceaccounts', 'GET', 'list service accounts');
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.ServiceAccounts).alias('list sa').wait();
   }
 
   static verifyUrl(): void {
-    cy.url().should(Condition.Include, 'serviceaccounts');
+    cy.url().should(Condition.Include, View.ServiceAccounts);
   }
 
   static visit(): void {

@@ -18,7 +18,8 @@ export class TaintFormValidators {
    */
   static taintValueLength(control: FormControl): {[key: string]: object} {
     const value = control.value;
-    return value.length <= 63 ? null : {validLabelValueLength: {value: true}};
+    const maxLength = 63;
+    return value.length <= maxLength ? null : {validLabelValueLength: {value: true}};
   }
 
   /**

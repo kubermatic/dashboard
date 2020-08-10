@@ -70,6 +70,8 @@ enum SubnetState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewChecked, OnDestroy {
+  private readonly _defaultDiskSize = 25;
+
   private _diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
   private _subnets: AWSSubnet[] = [];
   private _subnetMap: {[type: string]: AWSSubnet[]} = {};
@@ -115,7 +117,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.Size]: this._builder.control(''),
-      [Controls.DiskSize]: this._builder.control(25, Validators.required),
+      [Controls.DiskSize]: this._builder.control(this._defaultDiskSize, Validators.required),
       [Controls.DiskType]: this._builder.control('', Validators.required),
       [Controls.SubnetID]: this._builder.control(''),
       [Controls.AMI]: this._builder.control(''),
@@ -170,6 +172,15 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   onDiskTypeChange(diskType: string): void {
     this._nodeDataService.nodeData.spec.cloud.aws.volumeType = diskType;
     this._nodeDataService.nodeDataChanges.next();
+  }
+
+  sizeDisplayName(sizeName: string): string {
+    const size = this.sizes.find(size => size.name === sizeName);
+    if (!size) {
+      return sizeName;
+    }
+
+    return `${size.name} (${size.vcpus} vCPU, ${size.memory} GB RAM, ${size.price} USD per hour)`;
   }
 
   private _init(): void {

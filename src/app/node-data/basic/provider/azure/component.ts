@@ -26,6 +26,7 @@ import {PresetsService} from '../../../../core/services';
 import {AzureNodeSpec, NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
 import {AzureSizes, AzureZones} from '../../../../shared/entity/provider/azure';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
+import {compare} from '../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
 import * as _ from 'lodash';
@@ -143,6 +144,15 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     }
   }
 
+  sizeDisplayName(sizeName: string): string {
+    const size = this.sizes.find(size => size.name === sizeName);
+    if (!size) {
+      return sizeName;
+    }
+
+    return `${size.name} (${size.numberOfCores} vCPU, ${size.memoryInMB} MB RAM)`;
+  }
+
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.azure) {
       this.selectedZone = this._nodeDataService.nodeData.spec.cloud.azure.zone;
@@ -183,7 +193,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     this.selectedSize = this._nodeDataService.nodeData.spec.cloud.azure.size;
 
     if (!this.selectedSize && this.sizes.length > 0) {
-      this.selectedSize = this.sizes[0].name;
+      this.selectedSize = this._findCheapestInstance(sizes).name;
     }
 
     this.sizeLabel = this.selectedSize ? SizeState.Ready : SizeState.Empty;
@@ -201,6 +211,13 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
     this.zoneLabel = this.zones && this.zones.length > 0 ? ZoneState.Ready : ZoneState.Empty;
     this._cdr.detectChanges();
+  }
+
+  private _findCheapestInstance(instanceTypes: AzureSizes[]): AzureSizes {
+    // Avoid mutating original array
+    return [...instanceTypes]
+      .sort((a, b) => compare(a.memoryInMB, b.memoryInMB))
+      .sort((a, b) => compare(a.numberOfCores, b.numberOfCores))[0];
   }
 
   private _getNodeData(): NodeData {

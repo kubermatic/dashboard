@@ -17,11 +17,8 @@ install:
 check: install
 	@$(CC) run check
 
-dep:
-	dep ensure -v
-
-godep-check:
-	dep check
+verify-go:
+	go mod verify
 
 run:
 	@$(CC) start

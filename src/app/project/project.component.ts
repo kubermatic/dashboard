@@ -51,9 +51,13 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   isPaginatorVisible = false;
   showCards = true;
   settings: UserSettings;
+
+  private readonly _refreshTime = 10; // in seconds
+  private readonly _debounceTime = 500;
+  private readonly _maxOwnersLen = 30;
   private _settingsChange = new Subject<void>();
   private _unsubscribe: Subject<any> = new Subject();
-  private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
+  private _refreshTimer$ = timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase());
 
   paginator: MatPaginator;
   @ViewChild(MatPaginator)
@@ -110,7 +114,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(_ => this.selectDefaultProject());
 
     this._settingsChange
-      .pipe(debounceTime(500))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .pipe(
         switchMap(() =>
@@ -233,30 +237,33 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getOwners(owners: ProjectOwners[]): string {
-    return this.isMoreOwners(owners) ? this.getOwnerString(owners).substring(0, 30) : this.getOwnerString(owners);
+    return this.isMoreOwners(owners)
+      ? this.getOwnerString(owners).substring(0, this._maxOwnersLen)
+      : this.getOwnerString(owners);
   }
 
   isMoreOwners(owners: ProjectOwners[]): boolean {
-    return this.getOwnerString(owners).length > 30;
+    return this.getOwnerString(owners).length > this._maxOwnersLen;
   }
 
   getMoreOwnersCount(owners: ProjectOwners[]): number {
     return this.isMoreOwners(owners)
-      ? owners.length - this.getOwnerString(owners).substring(0, 30).split(', ').length
+      ? owners.length - this.getOwnerString(owners).substring(0, this._maxOwnersLen).split(', ').length
       : 0;
   }
 
   getMoreOwners(owners: ProjectOwners[]): string {
     // truncatedLength = number of displayed owner names
-    const truncatedLength = this.getOwnerString(owners).substring(0, 30).split(', ').length;
+    const truncatedLength = this.getOwnerString(owners).substring(0, this._maxOwnersLen).split(', ').length;
     // count = length of original owner names that are displayed
-    // (truncatedLength - 1) * 2 = additional number of seperators (', ' = 2)
-    let count: number = (truncatedLength - 1) * 2;
+    // (truncatedLength - 1) * 2 = additional number of separators (', ' = 2)
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    let count = (truncatedLength - 1) * 2;
     for (let i = 0; i < truncatedLength; i++) {
       count += owners[i].name.length;
     }
     // if last displayed name is not complete, show it in tooltip
-    return count > 30
+    return count > this._maxOwnersLen
       ? this.getOwnerNameArray(owners)
           .slice(truncatedLength - 1, owners.length)
           .join(', ')
@@ -292,11 +299,14 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getName(name: string): string {
-    return name.length > 18 ? `${name.substring(0, 15)}...` : `${name}`;
+    const maxNameLen = 18;
+    const truncatedNameLen = 15;
+    return name.length > maxNameLen ? `${name.substring(0, truncatedNameLen)}...` : `${name}`;
   }
 
   getProjectTooltip(name: string): string {
-    return name.length > 18 ? name : '';
+    const maxNameLen = 18;
+    return name.length > maxNameLen ? name : '';
   }
 
   isProjectActive(project: Project): boolean {

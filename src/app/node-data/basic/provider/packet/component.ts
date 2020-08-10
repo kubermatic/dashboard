@@ -19,11 +19,13 @@ import {
   OnInit,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import * as _ from 'lodash';
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {NodeCloudSpec, NodeSpec, PacketNodeSpec} from '../../../../shared/entity/node';
 import {PacketSize} from '../../../../shared/entity/provider/packet';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
+import {compare} from '../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
 
@@ -120,6 +122,15 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
     return description ? `(${description})` : '';
   }
 
+  sizeDisplayName(sizeName: string): string {
+    const size = this.sizes.find(size => size.name === sizeName);
+    if (!size) {
+      return sizeName;
+    }
+
+    return `${size.name} ${this.getPlanDetails(size)}`;
+  }
+
   private _onSizeLoading(): void {
     this._clearSize();
     this.sizeLabel = SizeState.Loading;
@@ -139,11 +150,26 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
       ? this._nodeDataService.nodeData.spec.cloud.packet.instanceType
       : '';
 
-    if (!this.selectedSize && this.sizes && this.sizes.length > 0) {
-      this.selectedSize = this.sizes[0].name;
+    if (!this.selectedSize && !_.isEmpty(this.sizes)) {
+      this.selectedSize = this._findCheapestInstance(this.sizes).name;
     }
 
     this.sizeLabel = this.selectedSize ? SizeState.Ready : SizeState.Empty;
     this._cdr.detectChanges();
+  }
+
+  private _findCheapestInstance(sizes: PacketSize[]): PacketSize {
+    // Avoid mutating original array
+    return [...sizes]
+      .sort((a, b) => compare(this._getMemory(a), this._getMemory(b)))
+      .sort((a, b) => compare(this._getCPUCount(a), this._getCPUCount(b)))[0];
+  }
+
+  private _getMemory(size: PacketSize): number {
+    return Number.parseInt(size.memory);
+  }
+
+  private _getCPUCount(size: PacketSize): number {
+    return size.cpus ? size.cpus.map(s => s.count).reduce((a, b) => a + b) : -1;
   }
 }
