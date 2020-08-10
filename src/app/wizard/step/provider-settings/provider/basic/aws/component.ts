@@ -29,7 +29,6 @@ import {AWSVPC} from '../../../../../../shared/entity/provider/aws';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../../../../shared/services/cluster.service';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
-import * as _ from 'lodash';
 
 export enum Controls {
   AccessKeyID = 'accessKeyID',

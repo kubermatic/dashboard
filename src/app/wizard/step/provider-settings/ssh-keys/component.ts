@@ -12,7 +12,6 @@
 import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
-import * as _ from 'lodash';
 import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {ApiService, ProjectService, UserService} from '../../../../core/services';

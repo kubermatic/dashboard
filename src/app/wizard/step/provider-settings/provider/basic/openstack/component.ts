@@ -38,7 +38,6 @@ import {CloudSpec, Cluster, ClusterSpec, OpenstackCloudSpec} from '../../../../.
 import {OpenstackFloatingIpPool, OpenstackTenant} from '../../../../../../shared/entity/provider/openstack';
 import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../../../../shared/services/cluster.service';
-import * as _ from 'lodash';
 import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 
 enum Controls {
