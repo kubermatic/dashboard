@@ -391,13 +391,6 @@
       .km-provider-logo {
         max-width: 95px !important;
       }
-
-      .km-provider-logo-aws,
-      .km-provider-logo-azure,
-      .km-provider-logo-vsphere,
-      .km-provider-logo-packet {
-        min-height: 24px;
-      }
     }
 
     .mat-button-toggle-button {
@@ -492,6 +485,16 @@
 
     div.km-chip-accent {
       background: transparent !important;
+    }
+  }
+
+  km-chip {
+    .mat-chip {
+      &.mat-standard-chip {
+        font-weight: bold;
+        font-size: $font-size-body;
+        color: white;
+      }
     }
   }
 

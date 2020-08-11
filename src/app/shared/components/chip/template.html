@@ -10,12 +10,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div fxLayoutAlign=" center">
-  <i *ngIf="isAfterEOL()"
-     class="km-icon-warning"
-     matTooltip="Kubernetes versions up to {{eolVersion}} end-of-life has passed on {{eolDate | date:'MMM d, y'}}"></i>
-
-  <i *ngIf="isBeforeEOL()"
-     class="km-icon-warning"
-     matTooltip="Kubernetes versions up to {{eolVersion}} are going end-of-life on {{eolDate | date:'MMM d, y'}}."></i>
-</div>
+<mat-chip-list>
+  <mat-chip [class]="typeClass">{{text}}</mat-chip>
+</mat-chip-list>

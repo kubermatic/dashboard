@@ -62,7 +62,9 @@ limitations under the License.
 
   <mat-card>
     <mat-card-header>
-      <mat-card-title class="km-no-margin km-no-padding">
+      <mat-card-title fxFlex
+                      fxLayout="row"
+                      class="km-no-margin km-no-padding">
         <i [matTooltip]="!!clusterHealthStatus ? clusterHealthStatus.message : ''"
            [ngClass]="!!clusterHealthStatus ? clusterHealthStatus.color : ''"
            class="km-cluster-health"></i>
@@ -70,6 +72,7 @@ limitations under the License.
               [cbContent]="cluster.name"
               matTooltip="Click to copy"
               class="km-cluster-name km-copy">{{cluster.name}}</span>
+        <km-cluster-type-eol [version]="cluster.spec.version"></km-cluster-type-eol>
       </mat-card-title>
       <div fxFlex></div>
       <div class="km-provider-menu">

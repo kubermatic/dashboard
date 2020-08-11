@@ -52,9 +52,8 @@ limitations under the License.
             *matCellDef="let element"
             [attr.id]="'km-clusters-' + element.name">
           <div fxLayoutAlign=" center"
-               fxLayoutGap="4px">
+               fxLayoutGap="8px">
             <span>{{element.name}}</span>
-            <km-eol-information [version]="element.spec?.version"></km-eol-information>
             <i *ngIf="showEOLWarning(element)"
                class="km-icon-warning with-margin"
                matTooltip="Container Linux is going end-of-life on May 26, 2020."></i>
@@ -113,6 +112,7 @@ limitations under the License.
             <span class="km-cluster-type"
                   [matTooltip]="element.type">
               <i class="km-icon-{{element.type}}"></i>
+              <km-cluster-type-eol [version]="element.spec?.version"></km-cluster-type-eol>
             </span>
           </ng-container>
         </td>

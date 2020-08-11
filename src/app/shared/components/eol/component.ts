@@ -15,10 +15,10 @@ import {EndOfLife} from '../../model/Config';
 import {lte, compare} from 'semver';
 
 @Component({
-  selector: 'km-eol-information',
+  selector: 'km-cluster-type-eol',
   templateUrl: 'template.html',
 })
-export class EndOfLifeInformationComponent implements OnInit {
+export class ClusterTypeEOLComponent implements OnInit {
   @Input() version: string;
 
   private _eolConfig: EndOfLife;

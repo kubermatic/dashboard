@@ -214,11 +214,11 @@
 }
 
 .km-provider-logo-aws {
-  @include background-image("/assets/images/clouds/aws.svg", 30px);
+  @include background-image("/assets/images/clouds/aws.svg", 24px);
 }
 
 .km-provider-logo-azure {
-  @include background-image("/assets/images/clouds/azure.png", 30px);
+  @include background-image("/assets/images/clouds/azure.png", 24px);
 }
 
 .km-provider-logo-baremetal {
@@ -250,7 +250,7 @@
 }
 
 .km-provider-logo-packet {
-  @include background-image("/assets/images/clouds/packet.svg", 30px);
+  @include background-image("/assets/images/clouds/packet.svg", 24px);
 }
 
 .km-provider-logo-kubevirt {
@@ -258,7 +258,7 @@
 }
 
 .km-provider-logo-vsphere {
-  @include background-image("/assets/images/clouds/vsphere.png", 30px);
+  @include background-image("/assets/images/clouds/vsphere.png", 24px);
 }
 
 .km-os-image-centos {
