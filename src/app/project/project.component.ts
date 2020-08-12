@@ -40,6 +40,7 @@ import {View} from '../shared/entity/common';
 import {Member} from '../shared/entity/member';
 import {Project, ProjectOwners} from '../shared/entity/project';
 import {UserSettings} from '../shared/entity/settings';
+import {objectDiff} from '../shared/utils/common-utils';
 import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 
@@ -60,19 +61,24 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   dataSource = new MatTableDataSource<Project>();
   isPaginatorVisible = false;
   showCards = true;
+  settings: UserSettings;
 
   private readonly _maxOwnersLen = 30;
-  private _settings: UserSettings;
+  private _apiSettings: UserSettings;
   private _settingsChange = new EventEmitter<void>();
   private _unsubscribe: Subject<any> = new Subject();
+
+  get isAdmin(): boolean {
+    return !!this.currentUser && this.currentUser.isAdmin;
+  }
 
   paginator: MatPaginator;
   @ViewChild(MatPaginator)
   set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
 
-    if (this.paginator && this._settings) {
-      this.paginator.pageSize = this._settings.itemsPerPage;
+    if (this.paginator && this.settings) {
+      this.paginator.pageSize = this.settings.itemsPerPage;
       this.isPaginatorVisible = this._isPaginatorVisible();
     }
 
@@ -111,28 +117,25 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     this._userService.currentUserSettings
       .pipe(
         tap(settings => {
-          this._settings = settings;
+          this._apiSettings = settings;
+          this.settings = _.cloneDeep(this._apiSettings);
           this.showCards = !settings.selectProjectTableView;
         })
       )
-      .pipe(filter(_ => !this._settings))
+      .pipe(filter(_ => !this.settings))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.selectDefaultProject());
 
     this._settingsChange
       .pipe(takeUntil(this._unsubscribe))
-      .pipe(
-        switchMap(() =>
-          this._userService.patchCurrentUserSettings({selectProjectTableView: !this.showCards} as UserSettings)
-        )
-      )
-      .subscribe();
+      .pipe(switchMap(() => this._userService.patchCurrentUserSettings(objectDiff(this.settings, this._apiSettings))))
+      .subscribe(settings => {
+        this._apiSettings = settings;
+        this.settings = _.cloneDeep(this._apiSettings);
+      });
 
     this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe((projects: Project[]) => {
-      if (projects) {
-        this.projects = projects;
-      }
-
+      this.projects = projects;
       this.projects = this._sortProjects(this.projects);
       this._loadCurrentUserRoles();
       this.dataSource.data = this.projects;
@@ -209,7 +212,12 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   changeView(): void {
     this.showCards = !this.showCards;
-    this._settings.selectProjectTableView = !this._settings.selectProjectTableView;
+    this.settings.selectProjectTableView = !this.settings.selectProjectTableView;
+    this._settingsChange.emit();
+  }
+
+  changeProjectVisibility(): void {
+    this.settings.displayAllProjectsForAdmin = !this.settings.displayAllProjectsForAdmin;
     this._settingsChange.emit();
   }
 
@@ -219,13 +227,13 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   selectDefaultProject(): void {
     if (
-      !!this._settings &&
+      !!this.settings &&
       !!this.projects &&
-      !!this._settings.selectedProjectId &&
+      !!this.settings.selectedProjectId &&
       this._previousRouteService.getPreviousUrl() === '/' &&
       this._previousRouteService.getHistory().length === 1
     ) {
-      const defaultProject = this.projects.find(x => x.id === this._settings.selectedProjectId);
+      const defaultProject = this.projects.find(x => x.id === this.settings.selectedProjectId);
       this.selectProject(defaultProject);
     }
   }

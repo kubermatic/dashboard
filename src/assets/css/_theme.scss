@@ -1538,29 +1538,29 @@
   .mat-slide-toggle-bar {
     @include size(50px, 24 px);
 
-    background-color: $divider;
-    border-radius: 50px;
+    background-color: $divider !important;
+    border-radius: 50px !important;
   }
 
   .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
-    background-color: map-get($colors, primary);
+    background-color: map-get($colors, primary) !important;
   }
 
   .mat-slide-toggle-thumb-container {
-    left: 2px;
-    top: 2px;
+    left: 2px !important;
+    top: 2px !important;
   }
 
   .mat-slide-toggle-thumb {
-    box-shadow: none;
+    box-shadow: none !important;
   }
 
   .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
-    background-color: #fafafa;
+    background-color: #fafafa !important;
   }
 
   .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container {
-    transform: translate3d(26px, 0, 0);
+    transform: translate3d(26px, 0, 0) !important;
   }
 
   .km-user-settings-form-field {
@@ -1607,4 +1607,8 @@
 
 .km-icon-info {
   cursor: pointer;
+}
+
+.mat-form-field-wrapper {
+  padding-bottom: 22px !important;
 }
