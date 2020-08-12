@@ -19,7 +19,7 @@ $button-size: 44px;
   .mat-icon-button {
     @include size($button-size);
 
-    margin: (-1.125 * $baseline-grid) (.75 * $baseline-grid) 0;
+    margin: -9px 6px 0;
 
     i {
       @include size(2 * $baseline-grid);
@@ -28,7 +28,7 @@ $button-size: 44px;
 
   .cluster-type-icon {
     filter: grayscale(100%);
-    margin: (-1.625 * $baseline-grid) (3 * $baseline-grid) 0 0;
+    margin: -13px 24px 0 0;
 
     @include size(3.5 * $baseline-grid);
   }

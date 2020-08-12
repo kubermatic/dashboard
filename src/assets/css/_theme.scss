@@ -133,7 +133,7 @@
   .mat-tooltip {
     background-color: map-get($colors, tooltip-background) !important;
     font-size: $font-size-caption !important;
-    margin-top: 0.625 * $baseline-grid !important;
+    margin-top: 5px !important;
   }
 
   .mat-header-cell,
@@ -214,7 +214,7 @@
     p {
       color: $text-secondary;
       font-size: $font-size-caption;
-      margin: 0 0 (1.875 * $baseline-grid);
+      margin: 0 0 15px;
     }
 
     button {
@@ -241,7 +241,7 @@
     width: 100%;
 
     &.km-with-hint {
-      margin-bottom: 1.875 * $baseline-grid;
+      margin-bottom: 15px;
     }
   }
 
@@ -449,7 +449,7 @@
     }
 
     .mat-button-toggle-label-content {
-      padding: 0 (0.625 * $baseline-grid);
+      padding: 0 5px;
       width: 100%;
       display: flex;
       justify-content: flex-start;
@@ -524,7 +524,7 @@
       display: flex;
       height: 100%;
       justify-content: center;
-      padding: (0.375 * $baseline-grid) (1.25 * $baseline-grid);
+      padding: 3px (1.25 * $baseline-grid);
     }
 
     div.km-chip-accent {
@@ -1013,7 +1013,7 @@
 
     .km-table-actions button {
       opacity: 0;
-      margin-left: 0.625 * $baseline-grid;
+      margin-left: 5px;
       transition: visibility 0s 0s, opacity 0s ease-out;
     }
 
@@ -1107,7 +1107,7 @@
     .mat-tab-label {
       background-color: map-get($colors, wizard-step-background-active) !important;
       opacity: 1;
-      margin-right: 0.375 * $baseline-grid;
+      margin-right: 3px;
       padding: 0;
 
       &.mat-tab-disabled {
@@ -1264,7 +1264,7 @@
       padding-top: $baseline-grid;
       margin-bottom: 0;
       margin-top: 0;
-      padding-right: 1.875 * $baseline-grid;
+      padding-right: 15px;
       text-align: center;
       user-select: none;
 
@@ -1492,16 +1492,16 @@
       }
 
       &:hover {
-        border: (0.125 * $baseline-grid) solid map-get($colors, primary);
+        border: 1px solid map-get($colors, primary);
       }
     }
 
     .mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle-checked {
-      border-left: (0.125 * $baseline-grid) solid map-get($colors, primary);
+      border-left: 1px solid map-get($colors, primary);
     }
 
     .mat-button-toggle-checked {
-      border: (0.125 * $baseline-grid) solid map-get($colors, primary);
+      border: 1px solid map-get($colors, primary);
       background-color: $background-hover;
     }
   }

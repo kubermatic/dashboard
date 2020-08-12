@@ -101,12 +101,12 @@ $project-card-width: 330px;
 
   .mat-card-subtitle {
     margin: 0;
-    padding: (0.625 * $baseline-grid) 0 0 0;
+    padding: 5px 0 0 0;
     line-height: 1.6 * $line-height;
 
     strong {
       font-family: $font-primary-mono;
-      margin-right: 0.625 * $baseline-grid;
+      margin-right: 5px;
     }
   }
 
@@ -114,7 +114,7 @@ $project-card-width: 330px;
     display: flex;
     align-items: center;
 
-    @include size(4.375 * $baseline-grid, auto);
+    @include size(27px, auto);
   }
 
   .mat-card-content {

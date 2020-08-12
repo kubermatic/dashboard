@@ -22,7 +22,7 @@
 }
 
 i.km-icon-info {
-  margin-left: 0.625 * $baseline-grid;
+  margin-left: 5px;
 }
 
 .mat-column-name,
@@ -37,10 +37,10 @@ i.km-icon-info {
 
 .km-node-details {
   box-shadow: $border-box-shadow-inset;
-  padding: (1.875 * $baseline-grid) (3.75 * $baseline-grid) (2.5 * $baseline-grid) (7.5 * $baseline-grid);
+  padding: 15px (3.75 * $baseline-grid) (2.5 * $baseline-grid) (7.5 * $baseline-grid);
 
   mat-card-content {
-    margin-top: 1.875 * $baseline-grid;
+    margin-top: 15px;
     border: none !important;
   }
 }
