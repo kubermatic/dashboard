@@ -15,6 +15,11 @@ $breakpoints: (
   'large':  1200px
 ) !default;
 
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
 @mixin km-breakpoint($breakpoint) {
   @if map-has-key($breakpoints, $breakpoint) {
     @media (max-width: map-get($breakpoints, $breakpoint)) {

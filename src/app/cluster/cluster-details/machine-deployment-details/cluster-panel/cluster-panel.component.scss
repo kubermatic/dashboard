@@ -9,16 +9,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class MachineDeploymentDetailsPage {
-  static getMachineDeploymentNameElement(): Cypress.Chainable<any> {
-    return cy.get('.km-machine-deployment-name');
+@import "../../../../../assets/css/variables";
+
+$button-size: 44px;
+
+.km-cluster-panel {
+  height: $toolbar-height;
+
+  .mat-icon-button {
+    @include size($button-size);
+
+    margin: (-1.125 * $baseline-grid) (.75 * $baseline-grid) 0;
+
+    i {
+      @include size(2 * $baseline-grid);
+    }
   }
 
-  static getMachineDeploymentClusterNameElement(): Cypress.Chainable<any> {
-    return cy.get('#km-cluster-panel-name');
-  }
+  .cluster-type-icon {
+    filter: grayscale(100%);
+    margin: (-1.625 * $baseline-grid) (3 * $baseline-grid) 0 0;
 
-  static getBackToClusterBtn(): Cypress.Chainable<any> {
-    return cy.get('.km-cluster-panel-icon');
+    @include size(3.5 * $baseline-grid);
   }
 }

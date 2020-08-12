@@ -1420,41 +1420,17 @@
     }
   }
 
-  .km-cluster-panel-container {
+  .km-cluster-panel {
     color: $text;
-    height: $toolbar-height;
 
-    .km-cluster-panel-icon {
-      cursor: pointer;
-      height: 6.25 * $baseline-grid;
-      width: 7 * $baseline-grid;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: -1.125 * $baseline-grid;
-
-      .mat-icon-button {
-        width: 5.5 * $baseline-grid;
-        height: 5.5 * $baseline-grid;
-
-        &:hover:not([disabled]) {
-          background-color: rgba($text, .1);
-        }
+    .mat-icon-button {
+      &:hover {
+        background-color: rgba($text, .1);
       }
-    }
 
-    .km-icon-arrow-left {
-      background-color: $text;
-      height: 2 * $baseline-grid;
-      width: 2 * $baseline-grid;
-    }
-
-    .km-cluster-type {
-      filter: grayscale(100%);
-      height: 3.5 * $baseline-grid;
-      margin-right: 3 * $baseline-grid;
-      margin-top: -1.625 * $baseline-grid;
-      width: 3.5 * $baseline-grid;
+      i {
+        background-color: $text;
+      }
     }
   }
 
