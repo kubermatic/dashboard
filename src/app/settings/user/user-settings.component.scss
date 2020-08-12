@@ -12,8 +12,6 @@
 @import "../../../assets/css/variables";
 
 .mat-card {
-  margin-top: $content-padding !important;
-
   .mat-card-header {
     padding: 0 (3.75 * $baseline-grid);
   }

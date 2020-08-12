@@ -54,7 +54,7 @@ i {
   background-repeat: no-repeat;
   background-size: contain;
   cursor: pointer;
-  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
 
   &:hover {
     opacity: .75;
