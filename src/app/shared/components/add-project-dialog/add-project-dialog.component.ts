@@ -21,7 +21,6 @@ import {ResourceType} from '../../entity/common';
 @Component({
   selector: 'km-add-project-dialog',
   templateUrl: './add-project-dialog.component.html',
-  styleUrls: ['./add-project-dialog.component.scss'],
 })
 export class AddProjectDialogComponent implements OnInit {
   form: FormGroup;
