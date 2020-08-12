@@ -12,7 +12,7 @@
     "start:local": "npm run vi && ng serve --configuration=local",
     "start:e2e": "npm run vi && ng serve --configuration=e2e",
     "start:e2e-local": "npm run vi && ng serve --configuration=e2e-local",
-    "build": "npm run vi && ng build --prod",
+    "build": "npm run vi && ng build --prod --tsConfig=src/tsconfig.\"${KUBERMATIC_EDITION:=ee}\".json",
     "build:themes": "npm run build && ./hack/extract-themes.sh",
     "test": "jest",
     "test:ci": "jest --coverage -i",
