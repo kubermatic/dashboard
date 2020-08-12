@@ -15,10 +15,8 @@ $breakpoints: (
   'large':  1200px
 ) !default;
 
-@mixin size($width, $height: $width) {
-  width: $width;
-  height: $height;
-}
+$default-mask-color: #4d555c;
+$default-disabled-mask-color: #d4d4d4;
 
 @mixin km-breakpoint($breakpoint) {
   @if map-has-key($breakpoints, $breakpoint) {

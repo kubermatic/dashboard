@@ -10,6 +10,7 @@
 // limitations under the License.
 
 @import "variables";
+@import "mixins";
 @import "~@angular/material/theming";
 
 @include mat-core();

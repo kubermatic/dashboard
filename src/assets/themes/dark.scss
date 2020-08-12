@@ -11,6 +11,7 @@
 
 @import "~@angular/material/theming";
 @import "theme";
+@import "mixins";
 @import "variables";
 @import "images";
 
@@ -85,34 +86,30 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 }
 
 .km-provider-logo-bringyourown {
-  @include km-image(3.75 * $baseline-grid);
-
-  background-image: url("/assets/images/clouds/bringyourown-dark.svg") !important;
   filter: none;
   min-height: 3.75 * $baseline-grid;
+
+  @include background-image("/assets/images/clouds/bringyourown-dark.svg", 3.75 * $baseline-grid);
 }
 
 .km-provider-logo-kubevirt {
-  @include km-image(3.75 * $baseline-grid);
-
-  background-image: url("/assets/images/clouds/kubevirt-dark.svg") !important;
   filter: none;
   min-height: 3.75 * $baseline-grid;
+
+  @include background-image("/assets/images/clouds/kubevirt-dark.svg", 3.75 * $baseline-grid);
 }
 
 .km-provider-logo-vsphere {
-  @include km-image(3.75 * $baseline-grid);
-
-  background-image: url("/assets/images/clouds/vsphere-dark.svg") !important;
   filter: none;
   min-height: 3.75 * $baseline-grid;
+
+  @include background-image("/assets/images/clouds/vsphere-dark.svg", 3.75 * $baseline-grid);
 }
 
 .km-icon-info {
-  @include km-image(2 * $baseline-grid);
-
-  background-image: url("/assets/images/icons/info-dark.svg") !important;
   cursor: pointer;
+
+  @include background-image("/assets/images/icons/info-dark.svg", 2 * $baseline-grid);
 }
 
 // Make checkbox marks white.
