@@ -11,6 +11,11 @@
 
 @import "../../assets/css/variables";
 
+$view-switch-height: 40px;
+$view-switch-width: 50px;
+$project-card-height: 200px;
+$project-card-width: 330px;
+
 .km-projects-spinner {
   margin: (2.5 * $baseline-grid) auto !important;
 }
@@ -30,21 +35,15 @@
   font-size: $font-size-subhead !important;
 }
 
-.km-project-top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
 .km-project-view-switch {
   border-radius: $border-radius;
 
-  mat-button-toggle {
+  .mat-button-toggle {
     margin: 0;
-    min-height: 5 * $baseline-grid;
-    max-height: 5 * $baseline-grid;
-    min-width: 6.25 * $baseline-grid;
-    max-width: 6.25 * $baseline-grid;
+    min-height: $view-switch-height;
+    max-height: $view-switch-height;
+    min-width: $view-switch-width;
+    max-width: $view-switch-width;
 
     &:first-child {
       border-top-left-radius: $border-radius;
@@ -56,10 +55,6 @@
       border-bottom-right-radius: $border-radius;
     }
   }
-}
-
-mat-slide-toggle {
-  margin-right: 2.5 * $baseline-grid;
 }
 
 .km-project-cards-view {
@@ -75,11 +70,11 @@ mat-slide-toggle {
     height: 3 * $baseline-grid;
   }
 
-  mat-card {
-    min-width: 41.25 * $baseline-grid;
-    max-width: 41.25 * $baseline-grid;
-    min-height: 25.5 * $baseline-grid;
-    max-height: 25.5 * $baseline-grid;
+  .mat-card {
+    min-width: $project-card-width;
+    max-width: $project-card-width;
+    min-height: $project-card-height;
+    max-height: $project-card-height;
     margin-top: 2.5 * $baseline-grid;
     padding: 0 !important;
     cursor: pointer;
@@ -95,19 +90,17 @@ mat-slide-toggle {
     }
   }
 
-  mat-card-header {
+  .mat-card-header {
     padding: 2.5 * $baseline-grid;
   }
 
-  mat-card-title {
+  .mat-card-title {
     margin: 0;
     padding: 0;
     line-height: 2.3 * $line-height;
-    max-width: 23.75 * $baseline-grid;
-    min-width: 23.75 * $baseline-grid;
   }
 
-  mat-card-subtitle {
+  .mat-card-subtitle {
     margin: 0;
     padding: (0.625 * $baseline-grid) 0 0 0;
     line-height: 1.6 * $line-height;
@@ -125,7 +118,7 @@ mat-slide-toggle {
     width: 4.375 * $baseline-grid;
   }
 
-  mat-card-content {
+  .mat-card-content {
     padding: 2.5 * $baseline-grid;
   }
 

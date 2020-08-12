@@ -10,9 +10,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+
 <div fxLayout>
   <div fxFlex
-       class="km-project-top-bar">
+       fxLayoutAlign="end center"
+       fxLayoutGap="20px">
     <mat-button-toggle-group class="km-project-view-switch"
                              group="projectsView"
                              (change)="changeView()">
@@ -204,11 +206,13 @@ limitations under the License.
              [ngClass]="getProjectStateIconClass(project)"
              class="km-health-state"></i>
         </div>
-        <mat-card-title [matTooltip]="getProjectTooltip(project.name)"
-                        [attr.id]="'km-project-name-' + project.name">{{getName(project.name)}}</mat-card-title>
-        <mat-card-subtitle>
-          <strong>ID</strong> {{project.id}}
-        </mat-card-subtitle>
+        <div fxFlex>
+          <mat-card-title [matTooltip]="getProjectTooltip(project.name)"
+                          [attr.id]="'km-project-name-' + project.name">{{getName(project.name)}}</mat-card-title>
+          <mat-card-subtitle>
+            <strong>ID</strong> {{project.id}}
+          </mat-card-subtitle>
+        </div>
         <div class="km-project-item-actions">
           <button mat-icon-button
                   [attr.id]="'km-edit-project-' + project.name"
