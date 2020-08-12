@@ -15,17 +15,9 @@
   padding: 0 (7 * $baseline-grid);
 }
 
-.km-cluster-detail-actions {
-  padding-bottom: 2.5 * $baseline-grid;
-
-  .mat-button {
-    margin-left: 0.625 * $baseline-grid;
-  }
-
-  .mat-icon-button i {
-    height: 3 * $baseline-grid;
-    width: 3 * $baseline-grid;
-  }
+.km-cluster-detail-actions .mat-icon-button i {
+  height: 3 * $baseline-grid;
+  width: 3 * $baseline-grid;
 }
 
 .km-cluster-name {

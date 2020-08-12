@@ -13,8 +13,8 @@ limitations under the License.
 <ng-container *ngIf="isLoaded()">
   <div fxLayout
        class="km-cluster-detail-actions">
-    <div fxFlex="100%"
-         align="right">
+    <div fxFlex
+         fxLayoutAlign="end center">
       <button id="km-delete-cluster-btn"
               mat-flat-button
               color="tertiary"
@@ -60,9 +60,9 @@ limitations under the License.
     </div>
   </div>
 
-  <mat-card class="white km-cluster-details">
+  <mat-card>
     <mat-card-header>
-      <mat-card-title>
+      <mat-card-title class="km-no-margin km-no-padding">
         <i [matTooltip]="!!clusterHealthStatus ? clusterHealthStatus.message : ''"
            [ngClass]="!!clusterHealthStatus ? clusterHealthStatus.color : ''"
            class="km-cluster-health"></i>
