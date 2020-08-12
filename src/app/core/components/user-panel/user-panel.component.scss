@@ -30,14 +30,14 @@
 
     .mat-icon-button {
       margin: (-$baseline-grid) (.5 * $baseline-grid) 0 0;
-      width: 4.33 * $baseline-grid !important;
-      height: 4.33 * $baseline-grid !important;
       position: relative;
+
+      @include size(4.33 * $baseline-grid !important);
 
       i {
         margin-top: -.5 * $baseline-grid;
-        height: 2 * $baseline-grid;
-        width: 2 * $baseline-grid;
+
+        @include size(2 * $baseline-grid);
       }
     }
   }

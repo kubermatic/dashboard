@@ -36,7 +36,7 @@
 
 .km-icon-close {
   cursor: pointer;
-  width: 2 * $baseline-grid;
-  height: 2 * $baseline-grid;
   float: right;
+
+  @include size(2 * $baseline-grid);
 }

@@ -20,10 +20,10 @@
 }
 
 .panel {
-  height: $notification-panel-height;
   right: 12 * $baseline-grid;
   top: 6.25 * $baseline-grid;
-  width: $notification-panel-width;
+
+  @include size($notification-panel-width);
 
   .header {
     font-size: $font-size-subhead;
@@ -31,28 +31,27 @@
 
     .mat-icon-button {
       margin: (-$baseline-grid) (.5 * $baseline-grid) 0 0;
-      width: 4.33 * $baseline-grid !important;
-      height: 4.33 * $baseline-grid !important;
       position: relative;
+
+      @include size(4.33 * $baseline-grid !important);
 
       i {
         margin-top: -.5 * $baseline-grid;
-        height: 2 * $baseline-grid;
-        width: 2 * $baseline-grid;
+
+        @include size(2 *$baseline-grid);
       }
 
       .km-icon-clear {
-        height: 2.25 * $baseline-grid;
-        width: 2.25 * $baseline-grid;
+        @include size(2.25 * $baseline-grid);
       }
 
       .filter-indicator {
         border-radius: 50%;
         bottom: 1.25 * $baseline-grid;
-        height: $baseline-grid;
         position: absolute;
         right: $baseline-grid;
-        width: $baseline-grid;
+
+        @include size($baseline-grid);
       }
     }
   }
@@ -82,9 +81,9 @@
 
         .km-icon-copy-small {
           cursor: pointer;
-          height: 1.75 * $baseline-grid;
-          width: 1.75 * $baseline-grid;
           margin-right: $baseline-grid;
+
+          @include size(1.75 * $baseline-grid);
         }
       }
 

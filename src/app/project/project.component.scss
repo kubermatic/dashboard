@@ -66,8 +66,7 @@ $project-card-width: 330px;
   }
 
   .km-icon-cluster {
-    width: 3 * $baseline-grid;
-    height: 3 * $baseline-grid;
+    @include size(3 * $baseline-grid);
   }
 
   .mat-card {
@@ -114,8 +113,8 @@ $project-card-width: 330px;
   .km-project-cards-status {
     display: flex;
     align-items: center;
-    height: auto;
-    width: 4.375 * $baseline-grid;
+
+    @include size(4.375 * $baseline-grid, auto);
   }
 
   .mat-card-content {

@@ -30,10 +30,10 @@
       content: counter(section-number);
       display: inline-flex;
       font-size: $font-size-body;
-      height: (3 * $baseline-grid) - 2;
       justify-content: center;
       margin-right: 1.5 * $baseline-grid;
-      width: (3 * $baseline-grid) - 2;
+
+      @include size((3 * $baseline-grid) - 2);
     }
   }
 
@@ -66,8 +66,8 @@
 
 .km-os-image {
   display: inline-block;
-  height: 28px;
-  width: 28px;
+
+  @include size(28px);
 }
 
 .km-icon-key {

@@ -31,9 +31,9 @@ mat-card-header {
     font-size: 2.5 * $baseline-grid;
 
     i {
-      height: 2.5 * $baseline-grid;
       margin-top: -.5 * $baseline-grid;
-      width: 2.5 * $baseline-grid;
+
+      @include size(2.5 * $baseline-grid);
     }
   }
 }

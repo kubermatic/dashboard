@@ -384,8 +384,7 @@
     }
 
     .mat-button-toggle-label {
-      width: 100%;
-      height: 100%;
+      @include size(100%);
     }
 
     .mat-button-toggle-label-content {
@@ -437,10 +436,10 @@
     }
 
     .mat-button-toggle-button {
-      height: 100%;
-      width: 150px;
       text-align: left;
       padding: 0 (1.25 * $baseline-grid);
+
+      @include size(150px, 100%);
     }
   }
 
@@ -555,11 +554,11 @@
     background-color: $text;
     color: transparent !important;
     display: inline-block;
-    width: 8px !important;
-    height: 8px !important;
     mask: url("/assets/images/icons/arrow-down.svg");
     mask-repeat: no-repeat;
     mask-size: contain;
+
+    @include size(8px !important);
   }
 
   .mat-form-field.mat-focused.mat-primary .mat-select-arrow-wrapper {
@@ -624,8 +623,7 @@
 
   // Application component styles (it's basically every class that starts with "km-" prefix).
   ::-webkit-scrollbar {
-    width: $scrollbar-size;
-    height: $scrollbar-size;
+    @include size($scrollbar-size);
   }
 
   ::-webkit-scrollbar-thumb {
@@ -784,11 +782,11 @@
 
   .km-provider-logo {
     display: block;
-    height: 100% !important;
-    width: 100% !important;
     min-height: 3 * $baseline-grid;
     max-height: 3 * $baseline-grid !important;
     max-width: 70px !important;
+
+    @include size(100% !important);
   }
 
   .km-main,
@@ -936,9 +934,9 @@
     .km-icon-disabled,
     .km-icon-running,
     .km-icon-pending {
-      width: $font-size-subhead;
-      height: $font-size-subhead;
       font-size: $font-size-subhead;
+
+      @include size($font-size-subhead);
     }
   }
 
@@ -1120,9 +1118,9 @@
         opacity: 1;
 
         .mat-tab-label-content {
-          width: 100%;
-          height: 100%;
           background-color: map-get($colors, primary);
+
+          @include size(100%);
         }
       }
 
@@ -1277,10 +1275,10 @@
         display: inline-flex;
         font-size: $font-size-body;
         font-weight: normal;
-        height: 3 * $baseline-grid;
         justify-content: center;
         margin-right: 1.75 * $baseline-grid;
-        width: 3 * $baseline-grid;
+
+        @include size(3 * $baseline-grid);
       }
 
       &.active {
@@ -1332,24 +1330,24 @@
         border-style: solid;
         border-color: $divider;
         border-radius: $border-radius 0 0 $border-radius;
-        height: 51px;
         margin-top: -1px;
         padding: $baseline-grid;
         position: relative;
-        width: 50px;
+
+        @include size(50px, 51px);
 
         i {
-          height: 30px;
-          width: 30px;
           margin: 0 !important;
+
+          @include size(30px);
         }
 
         .km-icon-update-available {
-          height: 2 * $baseline-grid;
           position: absolute;
           right: .5 * $baseline-grid;
           top: .75 * $baseline-grid;
-          width: 2 * $baseline-grid;
+
+          @include size(2 * $baseline-grid);
         }
       }
 
@@ -1610,10 +1608,10 @@
   }
 
   .mat-slide-toggle-bar {
-    width: 50px;
-    height: 24px;
     border-radius: 50px;
     background-color: $divider;
+
+    @include size(50px, 24 px);
   }
 
   .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {

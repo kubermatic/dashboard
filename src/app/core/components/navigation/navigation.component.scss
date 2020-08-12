@@ -20,11 +20,11 @@ header {
 
 .km-navbar {
   padding-left: 10px;
-  height: $toolbar-height;
   position: fixed;
-  width: 100%;
   z-index: 2;
   top: 0;
+
+  @include size(100%, $toolbar-height);
 
   * {
     z-index: 2;
@@ -32,18 +32,17 @@ header {
 
   .km-header-logo {
     display: block;
-    width: $logo-width + $logo-margin-top;
-    height: $toolbar-height;
     background-size: $logo-width;
     background-position: $logo-margin-top $logo-margin-top;
+
+    @include size($logo-width + $logo-margin-top, $toolbar-height);
   }
 }
 
 .km-icon-arrow-up {
-  height: 1.75 * $baseline-grid;
-  margin-left: 3 * $baseline-grid;
-  margin-right: $baseline-grid;
-  width: 1.75 * $baseline-grid;
+  margin: 0 $baseline-grid 0 (3 * $baseline-grid);
+
+  @include size(1.75 * $baseline-grid);
 }
 
 @include km-breakpoint('small') {

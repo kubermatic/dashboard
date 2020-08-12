@@ -12,9 +12,9 @@
 @import "../../../../assets/css/variables";
 
 .km-sidenav {
-  height: 100%;
   padding-top: $content-padding;
-  width: $sidenav-width;
+
+  @include size($sidenav-width, 100%);
 
   .menu-item {
     height: $sidenav-item-height !important;
