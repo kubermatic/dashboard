@@ -263,79 +263,53 @@
 
 .km-provider-logo-alibaba {
   @include background-image("/assets/images/clouds/alibaba.svg", 3.75 * $baseline-grid);
-
-  min-height: 3.75 * $baseline-grid;
 }
 
 .km-provider-logo-aws {
-  min-height: 3.75 * $baseline-grid;
-
   @include background-image("/assets/images/clouds/aws.svg", 3.75 * $baseline-grid);
 }
 
 .km-provider-logo-azure {
-  min-height: 3.75 * $baseline-grid;
-
   @include background-image("/assets/images/clouds/azure.png", 3.75 * $baseline-grid);
 }
 
 .km-provider-logo-baremetal {
-  min-height: 3.75 * $baseline-grid;
-
   @include background-image("/assets/images/clouds/baremetal.png", 3.75 * $baseline-grid);
 }
 
 .km-provider-logo-bringyourown {
-  min-height: 3.75 * $baseline-grid;
-
   @include background-image("/assets/images/clouds/bringyourown.svg", 3.75 * $baseline-grid);
 }
 
 .km-provider-logo-digitalocean {
-  min-height: 3.75 * $baseline-grid;
-
   @include background-image("/assets/images/clouds/digitalocean.png", 3.75 * $baseline-grid);
 }
 
 .km-provider-logo-fake {
-  min-height: 3.75 * $baseline-grid;
-
   @include background-image("/assets/images/clouds/fake.png", 3.75 * $baseline-grid);
 }
 
 .km-provider-logo-gcp {
-  min-height: 3.75 * $baseline-grid;
-
   @include background-image("/assets/images/clouds/gcp.svg", 3.75 * $baseline-grid);
 }
 
 .km-provider-logo-hetzner {
-  min-height: 3.75 * $baseline-grid;
-
   @include background-image("/assets/images/clouds/hetzner.png", 3.75 * $baseline-grid);
 }
 
 .km-provider-logo-openstack {
-  min-height: 3.75 * $baseline-grid;
-
   @include background-image("/assets/images/clouds/openstack.png", 3.75 * $baseline-grid);
 }
 
 .km-provider-logo-packet {
-  min-height: 3.75 * $baseline-grid;
-
   @include background-image("/assets/images/clouds/packet.svg", 3.75 * $baseline-grid);
 }
 
 .km-provider-logo-kubevirt {
-  min-height: 3.75 * $baseline-grid;
-
   @include background-image("/assets/images/clouds/kubevirt.svg", 3.75 * $baseline-grid);
 }
 
 .km-provider-logo-vsphere {
-  min-height: 3.75 * $baseline-grid;
-
   @include background-image("/assets/images/clouds/vsphere.png", 3.75 * $baseline-grid);
 }
 

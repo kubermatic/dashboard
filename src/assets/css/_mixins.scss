@@ -11,9 +11,16 @@
 
 @import "variables";
 
-@mixin size($width, $height: $width) {
-  width: $width;
-  height: $height;
+@mixin size($width, $height: $width, $force: false) {
+  @if $force == false {
+    height: $height;
+    width: $width;
+  } @else { /* stylelint-disable-line */
+    max-height: $height;
+    max-width: $width;
+    min-height: $height;
+    min-width: $width;
+  }
 }
 
 @mixin background-image($url, $width, $height: $width) {
@@ -23,18 +30,18 @@
   background-size: contain !important;
   display: inline-block;
 
-  @include size($width, $height);
+  @include size($width, $height, true);
 }
 
 @mixin mask-image($url, $width, $height: $width) {
   background-color: $default-mask-color;
   display: inline-block;
-  mask-image: url($url);
+  mask-image: url($url) !important;
   mask-position: center !important;
   mask-repeat: no-repeat !important;
   mask-size: contain !important;
 
-  @include size($width, $height);
+  @include size($width, $height, true);
 
   &:disabled {
     background-color: $default-disabled-mask-color;
