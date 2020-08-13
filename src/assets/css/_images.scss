@@ -85,26 +85,22 @@
 }
 
 .km-icon-download {
-  background-color: #fff;
-
   @include mask-image("/assets/images/icons/download.svg", 2.5 * $baseline-grid);
+
+  background-color: #fff;
 }
 
 .km-icon-share {
-  background-color: #fff;
-
   @include mask-image("/assets/images/icons/share.svg", 2.5 * $baseline-grid);
 }
 
 .km-icon-copy {
-  background-color: #fff;
-
   @include mask-image("/assets/images/icons/copy.svg", 2.5 * $baseline-grid);
+
+  background-color: #fff;
 }
 
 .km-icon-copy-small {
-  background-color: #fff;
-
   @include mask-image("/assets/images/icons/copy-small.svg", 1.75 * $baseline-grid);
 }
 
