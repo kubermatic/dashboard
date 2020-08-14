@@ -13,11 +13,11 @@
 @import 'mixins';
 
 .km-addon-container {
-  border-radius: 5px;
+  @include size(250px, 64px);
+
+  border-radius: $border-radius;
   font-size: $font-size-subhead;
   outline: none;
-
-  @include size(250px, 64px);
 
   .km-addon-menu {
     border-radius: 0 5px 5px 0;

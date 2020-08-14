@@ -36,8 +36,8 @@
 }
 
 .km-icon-close {
+  @include size(16px);
+
   cursor: pointer;
   float: right;
-
-  @include size(16px);
 }

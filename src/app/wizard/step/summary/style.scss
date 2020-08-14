@@ -24,6 +24,8 @@
     margin-bottom: 16px;
 
     &::before {
+      @include size(22px);
+
       align-items: center;
       border: 1px solid;
       border-radius: 50%;
@@ -33,8 +35,6 @@
       font-size: $font-size-body;
       justify-content: center;
       margin-right: 12px;
-
-      @include size(22px);
     }
   }
 
@@ -66,8 +66,6 @@
 }
 
 .km-os-image {
-  display: inline-block;
-
   @include size(28px);
 }
 

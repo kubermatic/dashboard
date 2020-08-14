@@ -47,21 +47,17 @@ $breakpoints: (
 }
 
 @mixin background-image($url, $width, $height: $width) {
+  @include size($width, $height, true);
+
   background-image: url($url) !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
   background-size: contain !important;
   display: inline-block;
-
-  @include size($width, $height, true);
 }
 
 @mixin mask-image($url, $width, $height: $width, $color: null) {
-  @if $color {
-    background-color: $color;
-  } @else { /* stylelint-disable-line */
-    background-color: #4d555c;
-  }
+  @include size($width, $height, true);
 
   display: inline-block;
   mask-image: url($url) !important;
@@ -69,7 +65,11 @@ $breakpoints: (
   mask-repeat: no-repeat !important;
   mask-size: contain !important;
 
-  @include size($width, $height, true);
+  @if $color {
+    background-color: $color;
+  } @else { /* stylelint-disable-line */
+    background-color: #4d555c;
+  }
 
   &:disabled {
     background-color: #d4d4d4;

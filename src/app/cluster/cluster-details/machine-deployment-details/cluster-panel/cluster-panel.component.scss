@@ -26,9 +26,9 @@
   }
 
   .cluster-type-icon {
+    @include size(28px);
+
     filter: grayscale(100%);
     margin: -13px 24px 0 0;
-
-    @include size(28px);
   }
 }

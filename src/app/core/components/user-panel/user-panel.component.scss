@@ -26,15 +26,15 @@
     padding: 20px 20px 8px;
 
     .mat-icon-button {
+      @include size(35px !important);
+
       margin: -8px 4px 0 0;
       position: relative;
 
-      @include size(35px !important);
-
       i {
-        margin-top: -4px;
-
         @include size(16px);
+
+        margin-top: -4px;
       }
     }
   }

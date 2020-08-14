@@ -108,10 +108,10 @@ $project-card-width: 330px;
   }
 
   .km-project-cards-status {
+    @include size(27px, auto);
+
     display: flex;
     align-items: center;
-
-    @include size(27px, auto);
   }
 
   .mat-card-content {

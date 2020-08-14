@@ -17,25 +17,25 @@
 }
 
 .panel {
+  @include size($notification-panel-width);
+
   right: 96px;
   top: $toolbar-height - 5px;
-
-  @include size($notification-panel-width);
 
   .header {
     font-size: $font-size-subhead;
     padding: 20px 20px 8px;
 
     .mat-icon-button {
+      @include size(35px !important);
+
       margin: -8px 4px 0 0;
       position: relative;
 
-      @include size(35px !important);
-
       i {
-        margin-top: -4px;
-
         @include size(16px);
+
+        margin-top: -4px;
       }
 
       .km-icon-clear {
@@ -43,12 +43,12 @@
       }
 
       .filter-indicator {
+        @include size(8px);
+
         border-radius: 50%;
         bottom: 10px;
         position: absolute;
         right: 8px;
-
-        @include size(8px);
       }
     }
   }
@@ -77,10 +77,10 @@
         padding: 0 20px 8px 0;
 
         .km-icon-copy-small {
+          @include size(14px);
+
           cursor: pointer;
           margin-right: 8px;
-
-          @include size(14px);
         }
       }
 

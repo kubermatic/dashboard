@@ -18,9 +18,9 @@ $sidenav-item-height: 40px;
 $sidenav-item-margin: 10px;
 
 .km-sidenav {
-  padding-top: $content-padding;
-
   @include size($sidenav-width, 100%);
+
+  padding-top: $content-padding;
 
   .menu-item {
     height: $sidenav-item-height !important;
@@ -35,9 +35,9 @@ $sidenav-item-margin: 10px;
       text-decoration: none;
 
       i {
-        margin-right: 20px;
-
         @include size(24px);
+
+        margin-right: 20px;
 
         &.km-icon-arrow-left {
           @include size(16px);

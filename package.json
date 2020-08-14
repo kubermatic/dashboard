@@ -64,6 +64,7 @@
     "rxjs": "6.6.2",
     "rxjs-compat": "6.6.2",
     "semver": "7.3.2",
+    "stylelint-declaration-block-order": "0.2.0",
     "swagger-ui": "3.31.1",
     "tslib": "2.0.0",
     "zone.js": "0.10.3"
@@ -115,8 +116,13 @@
       "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-magic-numbers": [
-        "error", {
-          "ignore": [-1, 0, 1],
+        "error",
+        {
+          "ignore": [
+            -1,
+            0,
+            1
+          ],
           "ignoreArrayIndexes": true,
           "ignoreReadonlyClassProperties": true,
           "ignoreEnums": true
@@ -199,6 +205,9 @@
   },
   "stylelint": {
     "extends": "stylelint-config-standard",
+    "plugins": [
+      "stylelint-declaration-block-order"
+    ],
     "rules": {
       "at-rule-no-unknown": null,
       "font-family-no-missing-generic-family-keyword": null,
@@ -212,6 +221,25 @@
             "ng-deep"
           ]
         }
+      ],
+      "plugin/declaration-block-order": [
+        "dollar-variables",
+        {
+          "type": "at-rule",
+          "name": "extend"
+        },
+        {
+          "type": "at-rule",
+          "name": "include"
+        },
+        "declarations",
+        {
+          "type": "at-rule",
+          "name": "include",
+          "hasBlock": true
+        },
+        "at-rules",
+        "rules"
       ]
     }
   }

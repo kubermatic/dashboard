@@ -20,30 +20,30 @@ header {
 }
 
 .km-navbar {
+  @include size(100%, $toolbar-height);
+
   padding-left: 10px;
   position: fixed;
   z-index: 2;
   top: 0;
-
-  @include size(100%, $toolbar-height);
 
   * {
     z-index: 2;
   }
 
   .km-header-logo {
+    @include size($logo-width + $logo-margin-top, $toolbar-height);
+
     display: block;
     background-size: $logo-width;
     background-position: $logo-margin-top $logo-margin-top;
-
-    @include size($logo-width + $logo-margin-top, $toolbar-height);
   }
 }
 
 .km-icon-arrow-up {
-  margin: 0 8px 0 24px;
-
   @include size(14px);
+
+  margin: 0 8px 0 24px;
 }
 
 @include breakpoint('small') {

@@ -32,9 +32,9 @@ mat-card-header {
     font-size: 20px;
 
     i {
-      margin-top: -4px;
-
       @include size(20px);
+
+      margin-top: -4px;
     }
   }
 }

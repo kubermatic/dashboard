@@ -437,10 +437,10 @@
     }
 
     .mat-button-toggle-button {
+      @include size(150px, 100%);
+
       text-align: left;
       padding: 0 10px;
-
-      @include size(150px, 100%);
     }
   }
 
@@ -552,14 +552,14 @@
   }
 
   .mat-select-arrow {
+    @include size(8px !important);
+
     background-color: $text;
     color: transparent !important;
     display: inline-block;
     mask: url("/assets/images/icons/arrow-down.svg");
     mask-repeat: no-repeat;
     mask-size: contain;
-
-    @include size(8px !important);
   }
 
   .mat-form-field.mat-focused.mat-primary .mat-select-arrow-wrapper {
@@ -782,12 +782,12 @@
   }
 
   .km-provider-logo {
+    @include size(100% !important);
+
     display: block;
     min-height: 24px;
     max-height: 24px !important;
     max-width: 70px !important;
-
-    @include size(100% !important);
   }
 
   .km-main,
@@ -935,9 +935,9 @@
     .km-icon-disabled,
     .km-icon-running,
     .km-icon-pending {
-      font-size: $font-size-subhead;
-
       @include size($font-size-subhead);
+
+      font-size: $font-size-subhead;
     }
   }
 
@@ -1028,14 +1028,13 @@
   }
 
   .km-table-dropdown {
+    background-color: transparent;
     margin: 0;
     padding: 0 !important;
 
     *:not(i) {
       background-color: transparent;
     }
-
-    background-color: transparent;
 
     tr:first-child td:first-child {
       border-top-left-radius: $border-radius;
@@ -1118,9 +1117,9 @@
         opacity: 1;
 
         .mat-tab-label-content {
-          background-color: map-get($colors, primary);
-
           @include size(100%);
+
+          background-color: map-get($colors, primary);
         }
       }
 
@@ -1267,6 +1266,8 @@
       user-select: none;
 
       .km-wizard-step-number {
+        @include size(24px);
+
         align-items: center;
         border-radius: 50%;
         background: $divider;
@@ -1275,8 +1276,6 @@
         font-weight: normal;
         justify-content: center;
         margin-right: 14px;
-
-        @include size(24px);
       }
 
       &.active {
@@ -1320,6 +1319,8 @@
       }
 
       .km-version-picker-type {
+        @include size(50px, 51px);
+
         background: $divider;
         border-bottom: 1px;
         border-left: 1px;
@@ -1332,20 +1333,18 @@
         padding: 8px;
         position: relative;
 
-        @include size(50px, 51px);
-
         i {
-          margin: 0 !important;
-
           @include size(30px);
+
+          margin: 0 !important;
         }
 
         .km-icon-update-available {
+          @include size(16px);
+
           position: absolute;
           right: 4px;
           top: 6px;
-
-          @include size(16px);
         }
       }
 
@@ -1606,10 +1605,10 @@
   }
 
   .mat-slide-toggle-bar {
+    @include size(50px, 24 px);
+
     border-radius: 50px;
     background-color: $divider;
-
-    @include size(50px, 24 px);
   }
 
   .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {

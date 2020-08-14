@@ -17,10 +17,10 @@
 }
 
 .km-frontpage-background {
+  @include background-image("/assets/images/branding/bg.svg", 100%);
+
   background-size: cover !important;
   background-attachment: fixed;
-
-  @include background-image("/assets/images/branding/bg.svg", 100%);
 }
 
 .km-error-background {
@@ -60,21 +60,21 @@
 }
 
 .km-icon-warning {
+  @include background-image("/assets/images/icons/warning.svg", 16px);
+
   background-color: #eb5757 !important;
   background-size: 12px !important;
   border-radius: 50%;
   margin: 4px 14px 4px 0;
-
-  @include background-image("/assets/images/icons/warning.svg", 16px);
 }
 
 .km-icon-tick {
+  @include background-image("/assets/images/icons/tick.svg", 16px);
+
   background-color: #1dc67f !important;
   background-size: 12px !important;
   border-radius: 50%;
   margin: 4px 14px 4px 0;
-
-  @include background-image("/assets/images/icons/tick.svg", 16px);
 }
 
 .km-icon-tick-blue {
@@ -122,9 +122,9 @@
 }
 
 .km-icon-randomize {
-  position: absolute;
-
   @include background-image("/assets/images/icons/randomize.svg", 16px);
+
+  position: absolute;
 }
 
 .km-icon-arrow-down {
@@ -132,18 +132,18 @@
 }
 
 .km-icon-arrow-up {
-  transform: rotate(180deg);
-
   @include mask-image("/assets/images/icons/arrow-down.svg", 12px);
+
+  transform: rotate(180deg);
 }
 
 .km-icon-arrow-left {
+  @include mask-image("/assets/images/icons/arrow-down.svg", 16px);
+
   cursor: pointer;
   margin: 0;
   padding: 0;
   transform: rotate(90deg);
-
-  @include mask-image("/assets/images/icons/arrow-down.svg", 16px);
 }
 
 .km-icon-close {
@@ -159,9 +159,9 @@
 }
 
 .km-icon-add {
-  transform: rotate(45deg);
-
   @include mask-image("/assets/images/icons/close.svg", 18px);
+
+  transform: rotate(45deg);
 }
 
 .km-icon-running {
@@ -181,9 +181,9 @@
 }
 
 .km-icon-labels {
-  transform: rotate(180deg);
-
   @include mask-image("/assets/images/icons/labels.svg", 24px);
+
+  transform: rotate(180deg);
 }
 
 .km-icon-owner {
