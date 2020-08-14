@@ -106,19 +106,19 @@
 }
 
 .km-icon-cluster {
-  @include km-mask-image("/assets/images/icons/clusters.svg", 22px);
+  @include km-mask-image("/assets/images/icons/clusters.svg", 24px);
 }
 
 .km-icon-key {
-  @include km-mask-image("/assets/images/icons/ssh-keys.svg", 22px);
+  @include km-mask-image("/assets/images/icons/ssh-keys.svg", 24px);
 }
 
 .km-icon-member {
-  @include km-mask-image("/assets/images/icons/members.svg", 22px);
+  @include km-mask-image("/assets/images/icons/members.svg", 24px);
 }
 
 .km-icon-serviceaccount {
-  @include km-mask-image("/assets/images/icons/service-accounts.svg", 22px);
+  @include km-mask-image("/assets/images/icons/service-accounts.svg", 24px);
 }
 
 .km-icon-randomize {
@@ -138,13 +138,12 @@
 }
 
 .km-icon-arrow-left {
-  mask-size: 16px;
   cursor: pointer;
   margin: 0;
   padding: 0;
   transform: rotate(90deg);
 
-  @include km-mask-image("/assets/images/icons/arrow-down.svg", 22px);
+  @include km-mask-image("/assets/images/icons/arrow-down.svg", 16px);
 }
 
 .km-icon-close {
@@ -156,7 +155,7 @@
 }
 
 .km-icon-circle {
-  @include km-mask-image("/assets/images/icons/circle.svg", 22px);
+  @include km-mask-image("/assets/images/icons/circle.svg", 14px);
 }
 
 .km-icon-add {
