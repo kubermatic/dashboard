@@ -34,7 +34,7 @@ mat-card-header {
     i {
       margin-top: -4px;
 
-      @include km-size(20px);
+      @include size(20px);
     }
   }
 }

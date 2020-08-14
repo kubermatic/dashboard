@@ -17,7 +17,7 @@
 }
 
 .km-cluster-detail-actions .mat-icon-button i {
-  @include km-size(24px);
+  @include size(24px);
 }
 
 .km-cluster-name {
@@ -37,7 +37,7 @@
 }
 
 .mat-icon.km-icon-edit {
-  @include km-size(18px !important);
+  @include size(18px !important);
 }
 
 .km-provider-logo-value {

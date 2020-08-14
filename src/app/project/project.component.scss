@@ -40,7 +40,7 @@ $project-card-width: 330px;
   border-radius: $border-radius;
 
   .mat-button-toggle {
-    @include km-size($view-switch-width, $view-switch-height, true);
+    @include size($view-switch-width, $view-switch-height, true);
 
     margin: 0;
 
@@ -65,11 +65,11 @@ $project-card-width: 330px;
   }
 
   .km-icon-cluster {
-    @include km-size(24px);
+    @include size(24px);
   }
 
   .mat-card {
-    @include km-size($project-card-width, $project-card-height, true);
+    @include size($project-card-width, $project-card-height, true);
 
     margin-top: 20px;
     padding: 0 !important;
@@ -111,7 +111,7 @@ $project-card-width: 330px;
     display: flex;
     align-items: center;
 
-    @include km-size(27px, auto);
+    @include size(27px, auto);
   }
 
   .mat-card-content {

@@ -25,7 +25,7 @@ header {
   z-index: 2;
   top: 0;
 
-  @include km-size(100%, $toolbar-height);
+  @include size(100%, $toolbar-height);
 
   * {
     z-index: 2;
@@ -36,17 +36,17 @@ header {
     background-size: $logo-width;
     background-position: $logo-margin-top $logo-margin-top;
 
-    @include km-size($logo-width + $logo-margin-top, $toolbar-height);
+    @include size($logo-width + $logo-margin-top, $toolbar-height);
   }
 }
 
 .km-icon-arrow-up {
   margin: 0 8px 0 24px;
 
-  @include km-size(14px);
+  @include size(14px);
 }
 
-@include km-breakpoint('small') {
+@include breakpoint('small') {
   .collapse-button {
     display: none !important;
   }

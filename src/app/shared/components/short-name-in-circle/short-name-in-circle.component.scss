@@ -20,7 +20,7 @@
 }
 
 .km-short-name-circle {
-  @include km-size(32px);
+  @include size(32px);
 
   display: flex;
   line-height: 30px;

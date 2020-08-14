@@ -15,7 +15,7 @@ $breakpoints: (
   'large':  1200px
 ) !default;
 
-@mixin km-breakpoint($breakpoint) {
+@mixin breakpoint($breakpoint) {
   @if map-has-key($breakpoints, $breakpoint) {
     @media (max-width: map-get($breakpoints, $breakpoint)) {
       @content;
@@ -23,29 +23,40 @@ $breakpoints: (
   }
 }
 
-@mixin km-size($width, $height: $width, $force: false) {
+@mixin height($height, $force: false) {
   @if $force == false {
     height: $height;
-    width: $width;
   } @else { /* stylelint-disable-line */
     max-height: $height;
-    max-width: $width;
     min-height: $height;
+  }
+}
+
+@mixin width($width, $force: false) {
+  @if $force == false {
+    width: $width;
+  } @else { /* stylelint-disable-line */
+    max-width: $width;
     min-width: $width;
   }
 }
 
-@mixin km-background-image($url, $width, $height: $width) {
+@mixin size($width, $height: $width, $force: false) {
+  @include height($height, $force);
+  @include width($width, $force);
+}
+
+@mixin background-image($url, $width, $height: $width) {
   background-image: url($url) !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
   background-size: contain !important;
   display: inline-block;
 
-  @include km-size($width, $height, true);
+  @include size($width, $height, true);
 }
 
-@mixin km-mask-image($url, $width, $height: $width, $color: null) {
+@mixin mask-image($url, $width, $height: $width, $color: null) {
   @if $color {
     background-color: $color;
   } @else { /* stylelint-disable-line */
@@ -58,14 +69,14 @@ $breakpoints: (
   mask-repeat: no-repeat !important;
   mask-size: contain !important;
 
-  @include km-size($width, $height, true);
+  @include size($width, $height, true);
 
   &:disabled {
     background-color: #d4d4d4;
   }
 }
 
-@mixin km-toolbar-button($position: 1) {
+@mixin toolbar-button($position: 1) {
   position: fixed;
   top: 11px;
   right: ($position * 40px) + (16px * ($position - 1));

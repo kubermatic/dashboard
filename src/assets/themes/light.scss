@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "~@angular/material/theming";
-@import "theme";
+@import '~@angular/material/theming';
+@import 'theme';
 
 $colors-light: (
   primary: #00a3d9,
@@ -57,4 +57,4 @@ $theme-light: map_merge($theme-light, (foreground: $foreground));
 // sass-lint:enable function-name-format
 
 @include angular-material-theme($theme-light);
-@include km-theme($theme-light, $colors-light);
+@include theme($theme-light, $colors-light);

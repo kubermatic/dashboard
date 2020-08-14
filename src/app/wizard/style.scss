@@ -28,7 +28,7 @@
   width: 0 !important;
 }
 
-@include km-breakpoint('small') {
+@include breakpoint('small') {
   ::ng-deep.mat-horizontal-stepper-header-container {
     display: none !important;
   }

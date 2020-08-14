@@ -16,12 +16,12 @@
   height: $toolbar-height;
 
   .mat-icon-button {
-    @include km-size(44px);
+    @include size(44px);
 
     margin: -9px 6px 0;
 
     i {
-      @include km-size(16px, $force: true);
+      @include size(16px, $force: true);
     }
   }
 
@@ -29,6 +29,6 @@
     filter: grayscale(100%);
     margin: -13px 24px 0 0;
 
-    @include km-size(28px);
+    @include size(28px);
   }
 }

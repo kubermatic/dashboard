@@ -13,7 +13,7 @@
 @import 'mixins';
 
 .root-button {
-  @include km-toolbar-button(1);
+  @include toolbar-button(1);
 }
 
 .panel {
@@ -29,12 +29,12 @@
       margin: -8px 4px 0 0;
       position: relative;
 
-      @include km-size(35px !important);
+      @include size(35px !important);
 
       i {
         margin-top: -4px;
 
-        @include km-size(16px);
+        @include size(16px);
       }
     }
   }

@@ -9,11 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "~@angular/material/theming";
-@import "theme";
+@import '~@angular/material/theming';
+@import 'theme';
 @import 'mixins';
 @import 'variables';
-@import "images";
+@import 'images';
 
 $colors-dark: (
   primary: #00a3d9,
@@ -63,7 +63,7 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 // sass-lint:enable function-name-format
 
 @include angular-material-theme($theme-dark);
-@include km-theme($theme-dark, $colors-dark);
+@include theme($theme-dark, $colors-dark);
 
 // Make icons and logos white.
 .km-provider-logo,
@@ -89,27 +89,27 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
   filter: none;
   min-height: 30px;
 
-  @include km-background-image("/assets/images/clouds/bringyourown-dark.svg", 30px);
+  @include background-image("/assets/images/clouds/bringyourown-dark.svg", 30px);
 }
 
 .km-provider-logo-kubevirt {
   filter: none;
   min-height: 30px;
 
-  @include km-background-image("/assets/images/clouds/kubevirt-dark.svg", 30px);
+  @include background-image("/assets/images/clouds/kubevirt-dark.svg", 30px);
 }
 
 .km-provider-logo-vsphere {
   filter: none;
   min-height: 30px;
 
-  @include km-background-image("/assets/images/clouds/vsphere-dark.svg", 30px);
+  @include background-image("/assets/images/clouds/vsphere-dark.svg", 30px);
 }
 
 .km-icon-info {
   cursor: pointer;
 
-  @include km-background-image("/assets/images/icons/info-dark.svg", 16px);
+  @include background-image("/assets/images/icons/info-dark.svg", 16px);
 }
 
 // Make checkbox marks white.

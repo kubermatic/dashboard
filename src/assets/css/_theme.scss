@@ -15,7 +15,7 @@
 
 @include mat-core();
 
-@mixin km-theme($theme, $colors) {
+@mixin theme($theme, $colors) {
   $palette-foreground: map-get($theme, foreground);
   $palette-background: map-get($theme, background);
 
@@ -385,7 +385,7 @@
     }
 
     .mat-button-toggle-label {
-      @include km-size(100%);
+      @include size(100%);
     }
 
     .mat-button-toggle-label-content {
@@ -440,7 +440,7 @@
       text-align: left;
       padding: 0 10px;
 
-      @include km-size(150px, 100%);
+      @include size(150px, 100%);
     }
   }
 
@@ -559,7 +559,7 @@
     mask-repeat: no-repeat;
     mask-size: contain;
 
-    @include km-size(8px !important);
+    @include size(8px !important);
   }
 
   .mat-form-field.mat-focused.mat-primary .mat-select-arrow-wrapper {
@@ -624,7 +624,7 @@
 
   // Application component styles (it's basically every class that starts with "km-" prefix).
   ::-webkit-scrollbar {
-    @include km-size($scrollbar-size);
+    @include size($scrollbar-size);
   }
 
   ::-webkit-scrollbar-thumb {
@@ -787,7 +787,7 @@
     max-height: 24px !important;
     max-width: 70px !important;
 
-    @include km-size(100% !important);
+    @include size(100% !important);
   }
 
   .km-main,
@@ -937,7 +937,7 @@
     .km-icon-pending {
       font-size: $font-size-subhead;
 
-      @include km-size($font-size-subhead);
+      @include size($font-size-subhead);
     }
   }
 
@@ -1120,7 +1120,7 @@
         .mat-tab-label-content {
           background-color: map-get($colors, primary);
 
-          @include km-size(100%);
+          @include size(100%);
         }
       }
 
@@ -1175,7 +1175,7 @@
     max-width: $type-toggle-width * 2 + 8px;
 
     mat-button-toggle {
-      @include km-size($type-toggle-width, $type-toggle-height, true);
+      @include size($type-toggle-width, $type-toggle-height, true);
 
       margin: 4px 0 0 0;
       border-width: 2px !important;
@@ -1276,7 +1276,7 @@
         justify-content: center;
         margin-right: 14px;
 
-        @include km-size(24px);
+        @include size(24px);
       }
 
       &.active {
@@ -1332,12 +1332,12 @@
         padding: 8px;
         position: relative;
 
-        @include km-size(50px, 51px);
+        @include size(50px, 51px);
 
         i {
           margin: 0 !important;
 
-          @include km-size(30px);
+          @include size(30px);
         }
 
         .km-icon-update-available {
@@ -1345,7 +1345,7 @@
           right: 4px;
           top: 6px;
 
-          @include km-size(16px);
+          @include size(16px);
         }
       }
 
@@ -1609,7 +1609,7 @@
     border-radius: 50px;
     background-color: $divider;
 
-    @include km-size(50px, 24 px);
+    @include size(50px, 24 px);
   }
 
   .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {

@@ -25,7 +25,7 @@
 
 .km-account-settings-toggle {
   mat-button-toggle {
-    @include km-size(140px, 50px, true);
+    @include size(140px, 50px, true);
 
     border-radius: $border-radius;
 

@@ -13,14 +13,14 @@
 @import 'variables';
 
 .root-button {
-  @include km-toolbar-button(2);
+  @include toolbar-button(2);
 }
 
 .panel {
   right: 96px;
   top: $toolbar-height - 5px;
 
-  @include km-size($notification-panel-width);
+  @include size($notification-panel-width);
 
   .header {
     font-size: $font-size-subhead;
@@ -30,16 +30,16 @@
       margin: -8px 4px 0 0;
       position: relative;
 
-      @include km-size(35px !important);
+      @include size(35px !important);
 
       i {
         margin-top: -4px;
 
-        @include km-size(16px);
+        @include size(16px);
       }
 
       .km-icon-clear {
-        @include km-size(18px);
+        @include size(18px);
       }
 
       .filter-indicator {
@@ -48,7 +48,7 @@
         position: absolute;
         right: 8px;
 
-        @include km-size(8px);
+        @include size(8px);
       }
     }
   }
@@ -80,7 +80,7 @@
           cursor: pointer;
           margin-right: 8px;
 
-          @include km-size(14px);
+          @include size(14px);
         }
       }
 
