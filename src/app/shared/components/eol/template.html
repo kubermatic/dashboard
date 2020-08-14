@@ -10,14 +10,34 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div fxLayoutAlign=" center">
-  <km-chip *ngIf="isAfterEOL()"
-           text="EOL"
-           type="error"
-           matTooltip="Kubernetes version {{eolVersion}} end-of-life has passed on {{eolDate | date:'MMM d, y'}}"></km-chip>
 
-  <km-chip *ngIf="isBeforeEOL()"
-           text="EOL"
-           type="warning"
-           matTooltip="Kubernetes version {{eolVersion}} is going end-of-life on {{eolDate | date:'MMM d, y'}}."></km-chip>
-</div>
+<ng-container *ngIf="isBefore() || isAfter()">
+  <div *ngIf="type === 'chip'"
+       fxLayoutAlign=" center">
+    <km-chip *ngIf="isAfter()"
+             text="EOL"
+             type="error"
+             matTooltip="Kubernetes version {{eolVersion}} end-of-life has passed on {{date | date:'MMM d, y'}}"></km-chip>
+
+    <km-chip *ngIf="isBefore()"
+             text="EOL"
+             type="warning"
+             matTooltip="Kubernetes version {{eolVersion}} is going end-of-life on {{date | date:'MMM d, y'}}."></km-chip>
+  </div>
+
+  <div *ngIf="type === 'badge'"
+       class="km-update-available-badge"
+       [ngClass]="isBefore() ? 'km-warning-border' : 'km-error-border'">
+    <i class="km-badge-icon"
+       [ngClass]="isBefore() ? 'km-icon-failed km-warning-bg' : 'km-icon-failed'"></i>
+    <span *ngIf="isAfter()"
+          matTooltip="Kubernetes version {{eolVersion}} end-of-life has passed on {{date | date:'MMM d, y'}}">
+      End of Life
+    </span>
+
+    <span *ngIf="isBefore()"
+          matTooltip="Kubernetes version {{eolVersion}} is going end-of-life on {{date | date:'MMM d, y'}}.">
+      End of Life
+    </span>
+  </div>
+</ng-container>

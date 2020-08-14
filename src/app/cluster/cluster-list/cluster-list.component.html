@@ -54,9 +54,11 @@ limitations under the License.
           <div fxLayoutAlign=" center"
                fxLayoutGap="8px">
             <span>{{element.name}}</span>
-            <i *ngIf="showEOLWarning(element)"
-               class="km-icon-warning with-margin"
-               matTooltip="Container Linux is going end-of-life on May 26, 2020."></i>
+            <km-chip *ngIf="showEOLWarning(element)"
+                     text="EOL"
+                     type="error"
+                     matTooltip="Container Linux is going end-of-life on May 26, 2020.">
+            </km-chip>
           </div>
         </td>
       </ng-container>

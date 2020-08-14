@@ -18,6 +18,7 @@ import {ClusterService, NotificationService, ProjectService} from '../../../core
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {Cluster, ClusterPatch} from '../../../shared/entity/cluster';
 import {Project} from '../../../shared/entity/project';
+import {EndOfLifeService} from '../../../shared/services/eol.service';
 
 @Component({
   selector: 'km-change-cluster-version',
@@ -33,11 +34,12 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(
-    private _clusterService: ClusterService,
-    private _projectService: ProjectService,
-    private _dialogRef: MatDialogRef<ChangeClusterVersionComponent>,
-    public _googleAnalyticsService: GoogleAnalyticsService,
-    private readonly _notificationService: NotificationService
+    private readonly _clusterService: ClusterService,
+    private readonly _projectService: ProjectService,
+    private readonly _dialogRef: MatDialogRef<ChangeClusterVersionComponent>,
+    private readonly _notificationService: NotificationService,
+    private readonly _eolService: EndOfLifeService,
+    private readonly _googleAnalyticsService: GoogleAnalyticsService
   ) {}
 
   ngOnInit(): void {
@@ -81,6 +83,13 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
           `The machine deployments from the <strong>${this.cluster.name}</strong> cluster are being updated to the ${this.selectedVersion} version`
         );
       });
+  }
+
+  isClusterDeprecated(): boolean {
+    return (
+      this._eolService.cluster.isAfter(this.cluster.spec.version) ||
+      this._eolService.cluster.isBefore(this.cluster.spec.version)
+    );
   }
 
   ngOnDestroy(): void {

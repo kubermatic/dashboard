@@ -203,11 +203,11 @@ limitations under the License.
                    fxLayoutGap="10px">
                 <div class="km-os-image-{{getSystemLogoClass(element)}}"></div>
                 <span>{{getSystem(element)}}</span>
-                <span class="km-eol-warning"
-                      *ngIf="getSystem(element) === 'Container Linux'">
-                  <i class="km-icon-warning"
-                     matTooltip="Container Linux is going end-of-life on May 26, 2020."></i>
-                </span>
+                <km-chip *ngIf="getSystem(element) === 'Container Linux'"
+                         text="EOL"
+                         type="error"
+                         matTooltip="Container Linux is going end-of-life on May 26, 2020.">
+                </km-chip>
               </div>
             </km-property>
 

@@ -25,9 +25,13 @@ limitations under the License.
     <div class="km-version-picker-type"
          fxLayoutAlign="center center">
       <i class="km-icon-{{cluster.type}}"></i>
-      <i *ngIf="updatesAvailable"
+      <i *ngIf="hasAvailableUpdates()"
          matTooltip="Updates available."
          class="km-icon-update-available"></i>
+      <i *ngIf="isClusterBeforeEOL()"
+         class="km-icon-warning"></i>
+      <i *ngIf="isClusterAfterEOL()"
+         class="km-icon-error"></i>
     </div>
 
     <mat-form-field>

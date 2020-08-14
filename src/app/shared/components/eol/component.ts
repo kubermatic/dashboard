@@ -9,49 +9,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnInit} from '@angular/core';
-import {AppConfigService} from '../../../app-config.service';
-import {EndOfLife} from '../../model/Config';
-import {lte, compare} from 'semver';
+import {Component, Input} from '@angular/core';
+import {EndOfLifeService} from '../../services/eol.service';
+
+export enum Type {
+  Badge = 'badge',
+  Chip = 'chip',
+}
 
 @Component({
   selector: 'km-cluster-type-eol',
   templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
 })
-export class ClusterTypeEOLComponent implements OnInit {
+export class ClusterTypeEOLComponent {
   @Input() version: string;
+  @Input() type: 'badge' | 'chip' = Type.Chip;
 
-  private _eolConfig: EndOfLife;
-
-  constructor(private readonly _appConfigService: AppConfigService) {}
+  constructor(private readonly _eolService: EndOfLifeService) {}
 
   get eolVersion(): string {
-    return Object.keys(this._eolConfig)
-      .sort((v1, v2) => compare(v1, v2))
-      .find(version => lte(this.version, version));
+    return this._eolService.cluster.findVersion(this.version);
   }
 
-  get eolDate(): Date {
-    const version = this.eolVersion;
-    const date = this._eolConfig[version];
-    return date ? new Date(date) : undefined;
+  get date(): Date {
+    return this._eolService.cluster.getDate(this.version);
   }
 
-  ngOnInit() {
-    this._eolConfig = this._appConfigService.getConfig().end_of_life;
+  isAfter(): boolean {
+    return this._eolService.cluster.isAfter(this.version);
   }
 
-  isAfterEOL(): boolean {
-    const eol = this.eolDate;
-    const now = new Date();
-
-    return eol ? now > eol : false;
-  }
-
-  isBeforeEOL(): boolean {
-    const eol = this.eolDate;
-    const now = new Date();
-
-    return eol ? now <= eol : false;
+  isBefore(): boolean {
+    return this._eolService.cluster.isBefore(this.version);
   }
 }

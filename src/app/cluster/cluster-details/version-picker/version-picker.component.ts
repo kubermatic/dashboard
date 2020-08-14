@@ -15,6 +15,7 @@ import {first} from 'rxjs/operators';
 
 import {ClusterService} from '../../../core/services';
 import {Cluster, MasterVersion} from '../../../shared/entity/cluster';
+import {EndOfLifeService} from '../../../shared/services/eol.service';
 import {ChangeClusterVersionComponent} from '../change-cluster-version/change-cluster-version.component';
 import {lt, gt} from 'semver';
 
@@ -35,7 +36,8 @@ export class VersionPickerComponent implements OnInit, OnChanges {
   constructor(
     private readonly _clusterService: ClusterService,
     private readonly _matDialog: MatDialog,
-    private _changeDetectorRef: ChangeDetectorRef
+    private readonly _changeDetectorRef: ChangeDetectorRef,
+    private readonly _eolService: EndOfLifeService
   ) {}
 
   ngOnInit(): void {
@@ -72,6 +74,18 @@ export class VersionPickerComponent implements OnInit, OnChanges {
     this._changeDetectorRef.detectChanges();
   }
 
+  hasAvailableUpdates(): boolean {
+    return this.updatesAvailable && !this._isClusterDeprecated();
+  }
+
+  isClusterBeforeEOL(): boolean {
+    return this._eolService.cluster.isBefore(this.cluster.spec.version);
+  }
+
+  isClusterAfterEOL(): boolean {
+    return this._eolService.cluster.isAfter(this.cluster.spec.version);
+  }
+
   getVersionHeadline(type: string, isKubelet: boolean): string {
     return Cluster.getVersionHeadline(type, isKubelet);
   }
@@ -95,5 +109,12 @@ export class VersionPickerComponent implements OnInit, OnChanges {
           }
         });
     }
+  }
+
+  private _isClusterDeprecated(): boolean {
+    return (
+      this._eolService.cluster.isAfter(this.cluster.spec.version) ||
+      this._eolService.cluster.isBefore(this.cluster.spec.version)
+    );
   }
 }

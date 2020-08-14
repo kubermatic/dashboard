@@ -80,6 +80,7 @@ import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
 import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {ClusterService} from './services/cluster.service';
+import {EndOfLifeService} from './services/eol.service';
 
 const modules: any[] = [
   CommonModule,
@@ -160,7 +161,7 @@ const entryComponents: any[] = [
   NotificationComponent,
 ];
 
-const services: any[] = [ClusterService];
+const services: any[] = [ClusterService, EndOfLifeService];
 
 const directives: any[] = [AutofocusDirective, OptionDirective];
 

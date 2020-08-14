@@ -489,11 +489,14 @@
   }
 
   km-chip {
+    align-self: center;
+
     .mat-chip {
       &.mat-standard-chip {
-        font-weight: bold;
-        font-size: $font-size-body;
         color: white;
+        font-size: $font-size-body;
+        font-weight: bold;
+        vertical-align: middle;
       }
     }
   }
@@ -636,12 +639,20 @@
     background-color: map-get($colors, indicator-orange) !important;
   }
 
+  .km-warning-border {
+    border-color: map-get($colors, indicator-orange) !important;
+  }
+
   .km-error {
     color: map-get($colors, indicator-red) !important;
   }
 
   .km-error-bg {
     background-color: map-get($colors, indicator-red) !important;
+  }
+
+  .km-error-border {
+    border-color: map-get($colors, indicator-red) !important;
   }
 
   .km-hover-bg:hover {
@@ -1273,7 +1284,9 @@
           margin: 0 !important;
         }
 
-        .km-icon-update-available {
+        .km-icon-update-available,
+        .km-icon-error,
+        .km-icon-warning {
           @include size(16px);
 
           position: absolute;

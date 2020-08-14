@@ -59,10 +59,19 @@
   @include mask-image("/assets/images/icons/regenerate.svg", 18px);
 }
 
+.km-icon-error {
+  @include km-image($baseline-grid * 2);
+
+  background: #eb5757 url("/assets/images/icons/warning.svg");
+  background-size: $baseline-grid * 1.5 !important;
+  border-radius: 50%;
+  margin: ($baseline-grid / 2) ($baseline-grid * 1.8) ($baseline-grid / 2) 0;
+}
+
 .km-icon-warning {
   @include background-image("/assets/images/icons/warning.svg", 16px);
 
-  background-color: #eb5757 !important;
+  background-color: #f7b500 !important;
   background-size: 12px !important;
   border-radius: 50%;
   margin: 4px 14px 4px 0;

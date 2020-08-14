@@ -9,20 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@import '../../assets/css/variables';
 
-.km-delete-cluster-checkbox {
-  margin-bottom: 8px;
-
-  ::ng-deep .mat-checkbox-inner-container {
-    margin-right: 16px;
-  }
-}
-
-.mat-form-field {
-  margin-top: 8px;
-}
-
-.km-icon-error {
-  margin: 0 14.4px 0 0;
+.km-badge-icon {
+  bottom: .125 * $baseline-grid;
+  margin-right: 0;
+  position: relative;
+  vertical-align: middle;
 }
