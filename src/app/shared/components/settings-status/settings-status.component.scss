@@ -9,18 +9,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/variables";
+@import 'variables';
 
 .km-settings-status-container {
-  left: 3 * $baseline-grid;
+  left: 24px;
   position: relative;
   top: 0;
 
   mat-spinner {
     position: absolute;
-    top: -.5 * $baseline-grid;
-    left: -.5 * $baseline-grid;
-    height: 3 * $baseline-grid;
+    top: -4px;
+    left: -4px;
+    height: 24px;
   }
 }
 

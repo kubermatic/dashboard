@@ -9,8 +9,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/mixins";
-@import "../../../../assets/css/variables";
+@import 'mixins';
+@import 'variables';
+
+$sidenav-width: 240px;
+$sidenav-width-collapsed: 54px;
+$sidenav-item-height: 40px;
+$sidenav-item-margin: 10px;
 
 .km-sidenav {
   padding-top: $content-padding;
@@ -30,13 +35,12 @@
       text-decoration: none;
 
       i {
-        width: 3 * $baseline-grid;
-        height: 3 * $baseline-grid;
         margin-right: 20px;
 
+        @include km-size(24px);
+
         &.km-icon-arrow-left {
-          width: 2 * $baseline-grid;
-          height: 2 * $baseline-grid;
+          @include km-size(16px);
         }
       }
     }

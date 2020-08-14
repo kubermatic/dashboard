@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/variables";
-@import "../../../../assets/css/mixins";
+@import 'variables';
+@import 'mixins';
 
 .root-button {
   @include km-toolbar-button(1);
@@ -23,24 +23,24 @@
 
   .header {
     font-size: $font-size-subhead;
-    padding: (2.5 * $baseline-grid) (2.5 * $baseline-grid) $baseline-grid;
+    padding: 20px 20px 8px;
 
     .mat-icon-button {
-      margin: (-$baseline-grid) (.5 * $baseline-grid) 0 0;
+      margin: -8px 4px 0 0;
       position: relative;
 
-      @include km-size(4.33 * $baseline-grid !important);
+      @include km-size(35px !important);
 
       i {
-        margin-top: -.5 * $baseline-grid;
+        margin-top: -4px;
 
-        @include km-size(2 * $baseline-grid);
+        @include km-size(16px);
       }
     }
   }
 
   .menu div {
     cursor: pointer;
-    padding: (1.5 * $baseline-grid) (2.5 * $baseline-grid);
+    padding: 12px 20px;
   }
 }

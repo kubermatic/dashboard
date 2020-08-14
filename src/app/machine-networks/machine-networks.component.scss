@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import '../../assets/css/variables';
-@import '../../assets/css/mixins';
+@import 'variables';
+@import 'mixins';
 
 h2 {
   font-weight: 400;
@@ -46,10 +46,10 @@ h3 {
 }
 
 .km-machine-networks-form-inner {
-  margin-bottom: 3.75 * $baseline-grid;
+  margin-bottom: 30px;
 
   &.withPadding {
-    padding-right: 3.75 * $baseline-grid;
+    padding-right: 30px;
 
     &:nth-child(2n+2) {
       padding-right: 0;
@@ -68,5 +68,5 @@ h3 {
 .km-icon-close {
   cursor: pointer;
 
-  @include km-size(2 * $baseline-grid);
+  @include km-size(16px);
 }

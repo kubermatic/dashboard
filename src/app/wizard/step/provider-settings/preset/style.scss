@@ -9,15 +9,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import '../../../../../assets/css/variables';
+@import 'variables';
 
 .mat-icon-button {
-  line-height: 2 * $line-height;
+  line-height: 20px;
   margin-right: 5px !important;
-  right: 3 * $baseline-grid;
+  right: 24px;
   top: -0.5 * $baseline-grid;
-  max-height: 2.5 * $baseline-grid;
-  max-width: 2.5 * $baseline-grid;
+  max-height: 20px;
+  max-width: 20px;
   position: absolute;
 }
 

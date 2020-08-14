@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../assets/css/variables";
-@import "../../assets/css/mixins";
+@import 'variables';
+@import 'mixins';
 
 $view-switch-height: 40px;
 $view-switch-width: 50px;
@@ -18,7 +18,7 @@ $project-card-height: 200px;
 $project-card-width: 330px;
 
 .km-projects-spinner {
-  margin: (2.5 * $baseline-grid) auto !important;
+  margin: 20px auto !important;
 }
 
 .km-health-status {
@@ -40,11 +40,9 @@ $project-card-width: 330px;
   border-radius: $border-radius;
 
   .mat-button-toggle {
+    @include km-size($view-switch-width, $view-switch-height, true);
+
     margin: 0;
-    min-height: $view-switch-height;
-    max-height: $view-switch-height;
-    min-width: $view-switch-width;
-    max-width: $view-switch-width;
 
     &:first-child {
       border-top-left-radius: $border-radius;
@@ -67,15 +65,13 @@ $project-card-width: 330px;
   }
 
   .km-icon-cluster {
-    @include km-size(3 * $baseline-grid);
+    @include km-size(24px);
   }
 
   .mat-card {
-    min-width: $project-card-width;
-    max-width: $project-card-width;
-    min-height: $project-card-height;
-    max-height: $project-card-height;
-    margin-top: 2.5 * $baseline-grid;
+    @include km-size($project-card-width, $project-card-height, true);
+
+    margin-top: 20px;
     padding: 0 !important;
     cursor: pointer;
     box-shadow: $border-box-shadow !important;
@@ -91,7 +87,7 @@ $project-card-width: 330px;
   }
 
   .mat-card-header {
-    padding: 2.5 * $baseline-grid;
+    padding: 20px;
   }
 
   .mat-card-title {
@@ -119,7 +115,7 @@ $project-card-width: 330px;
   }
 
   .mat-card-content {
-    padding: 2.5 * $baseline-grid;
+    padding: 20px;
   }
 
   .km-project-cards-content-row {
@@ -129,7 +125,7 @@ $project-card-width: 330px;
     line-height: 4 * $line-height;
 
     i {
-      padding-right: 1.25 * $baseline-grid;
+      padding-right: 10px;
     }
 
     span {
@@ -137,7 +133,7 @@ $project-card-width: 330px;
       align-items: center;
 
       &:first-child {
-        padding-right: 3.75 * $baseline-grid;
+        padding-right: 30px;
       }
 
       &.km-projects-less-space {

@@ -14,12 +14,12 @@ $flag-icon-square-path: '/4x3';
 $flag-icon-css-path: '../../../node_modules/flag-icon-css/flags';
 
 @import '../../../node_modules/flag-icon-css/sass/flag-icon';
-@import "~fontsource-ubuntu/index.css";
+@import '~fontsource-ubuntu/index.css';
 
 // Application styles.
-@import "variables";
-@import "images";
-@import "theme";
+@import 'variables';
+@import 'images';
+@import 'theme';
 
 html,
 body {

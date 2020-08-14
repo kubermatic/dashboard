@@ -9,15 +9,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../assets/css/variables";
+@import 'variables';
 
 .mat-card {
   .mat-card-header {
-    padding: 0 (3.75 * $baseline-grid);
+    padding: 0 30px;
   }
 
   .mat-card-content {
-    padding: 3.75 * $baseline-grid;
+    padding: 30px;
   }
 
   .km-admin-settings {

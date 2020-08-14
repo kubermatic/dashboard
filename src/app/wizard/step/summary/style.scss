@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/variables";
-@import "../../../../assets/css/mixins";
+@import 'variables';
+@import 'mixins';
 
 :host {
   counter-reset: section-number;
@@ -32,9 +32,9 @@
       display: inline-flex;
       font-size: $font-size-body;
       justify-content: center;
-      margin-right: 1.5 * $baseline-grid;
+      margin-right: 12px;
 
-      @include km-size((3 * $baseline-grid) - 2);
+      @include km-size((24px) - 2);
     }
   }
 
@@ -51,7 +51,7 @@
   }
 
   i {
-    margin-right: 1.5 * $baseline-grid !important;
+    margin-right: 12px !important;
   }
 }
 
@@ -62,7 +62,7 @@
 .km-provider-logo {
   background-position: left !important;
   max-width: 100px !important;
-  margin: (.75 * $baseline-grid) 0;
+  margin: 6px 0;
 }
 
 .km-os-image {

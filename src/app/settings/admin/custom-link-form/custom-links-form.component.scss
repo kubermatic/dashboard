@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import '../../../../assets/css/variables';
+@import 'variables';
 
 km-settings-status {
   margin-bottom: 21px;
@@ -17,5 +17,5 @@ km-settings-status {
 
 .km-custom-links-form-delete-button {
   font-size: 21px;
-  margin-top: 1.75 * $baseline-grid;
+  margin-top: 14px;
 }

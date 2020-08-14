@@ -10,11 +10,12 @@
 // limitations under the License.
 
 @import 'variables';
+@import 'mixins';
 
 .km-account-settings-entry-label {
   align-items: center;
   display: flex;
-  min-width: 23 * $baseline-grid;
+  min-width: 224px;
   line-height: 8 * $baseline-grid;
 
   span {
@@ -24,10 +25,8 @@
 
 .km-account-settings-toggle {
   mat-button-toggle {
-    min-height: 50px;
-    max-height: 50px;
-    min-width: 140px;
-    max-width: 140px;
+    @include km-size(140px, 50px, true);
+
     border-radius: $border-radius;
 
     ::ng-deep.mat-button-toggle-label-content {

@@ -9,10 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/variables";
+@import 'variables';
 
 mat-card-header {
-  padding: 0 (1.25 * $baseline-grid) 0 (7 * $baseline-grid) !important;
+  padding: 0 10px 0 (7 * $baseline-grid) !important;
 }
 
 td:first-child,

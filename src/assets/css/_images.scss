@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "mixins";
+@import 'mixins';
 
 .km-header-logo {
   background-image: url("/assets/images/branding/logo.svg");
@@ -94,7 +94,7 @@
 }
 
 .km-icon-copy-small {
-  @include km-mask-image("/assets/images/icons/copy-small.svg", 22px);
+  @include km-mask-image("/assets/images/icons/copy-small.svg", 12px);
 }
 
 .km-icon-update-available {

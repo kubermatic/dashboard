@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../assets/css/variables";
+@import 'variables';
 
 $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 
@@ -38,13 +38,13 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
   background-position: left !important;
   max-width: 18.75 * $baseline-grid !important;
   min-width: 8.75 * $baseline-grid !important;
-  margin-right: $baseline-grid;
+  margin: 8px 8px 0 0;
 }
 
 .km-provider-logo-digitalocean,
 .km-provider-logo-openstack {
-  min-height: 2.5 * $baseline-grid !important;
-  max-height: 2.5 * $baseline-grid !important;
+  min-height: 20px !important;
+  max-height: 20px !important;
 }
 
 .km-provider-logo-hetzner {

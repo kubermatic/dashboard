@@ -9,12 +9,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../../assets/css/variables";
+@import 'variables';
 
 .km-select-addon-dialog-option-container {
   border-radius: $border-radius;
   cursor: pointer;
-  padding: 3 * $baseline-grid;
+  padding: 24px;
   margin: $baseline-grid 0;
 
   .km-select-addon-dialog-option-desc {

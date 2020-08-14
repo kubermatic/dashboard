@@ -9,23 +9,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../assets/css/variables";
+@import 'variables';
+@import 'mixins';
 
 .mat-card {
   .mat-card-header {
-    padding: 0 (3.75 * $baseline-grid);
+    padding: 0 30px;
   }
 
   .mat-card-content {
-    padding: 3.75 * $baseline-grid;
+    padding: 30px;
   }
 
   .km-user {
     align-items: center;
     display: flex;
-    min-height: 3 * $baseline-grid;
-    margin-right: 3.75 * $baseline-grid;
-    min-width: 3 * $baseline-grid;
+    min-height: 24px;
+    margin-right: 30px;
+    min-width: 24px;
   }
 
   .km-account-info-name {
@@ -44,13 +45,13 @@
     .km-account-settings-header {
       font-size: $font-size-subhead-lg;
       line-height: initial;
-      margin-bottom: 3 * $baseline-grid;
+      margin-bottom: 24px;
     }
 
     .km-account-settings-entry-label {
       align-items: center;
       display: flex;
-      min-width: 23 * $baseline-grid;
+      min-width: 224px;
       line-height: 8 * $baseline-grid;
 
       span {
@@ -60,10 +61,8 @@
 
     .km-account-settings-toggle {
       mat-button-toggle {
-        min-height: 50px;
-        max-height: 50px;
-        min-width: 140px;
-        max-width: 140px;
+        @include km-size(140px, 50px, true);
+
         border-radius: $border-radius;
 
         ::ng-deep.mat-button-toggle-label-content {

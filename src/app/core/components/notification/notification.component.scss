@@ -9,17 +9,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/variables";
+@import 'variables';
 
 .km-notification-type {
   border-radius: $border-radius 0 0 $border-radius !important;
-  padding-left: 1.5 * $baseline-grid !important;
+  padding-left: 12px !important;
 }
 
 .km-notification-content {
   font-size: $font-size-subhead !important;
   max-height: 100% !important;
-  padding: $baseline-grid (2.5 * $baseline-grid) !important;
+  padding: $baseline-grid 20px !important;
   word-break: break-word !important;
 }
 
@@ -29,7 +29,7 @@
 }
 
 .km-notification-close-container {
-  padding: 0 (2 * $baseline-grid) !important;
+  padding: 0 16px !important;
 }
 
 :host {

@@ -9,11 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/variables";
+@import 'variables';
 
 .km-node-ip-addresses {
   display: block;
-  line-height: 2 * $line-height;
+  line-height: 20px;
 }
 
 .km-node-item-actions {
@@ -37,7 +37,7 @@ i.km-icon-info {
 
 .km-node-details {
   box-shadow: $border-box-shadow-inset;
-  padding: 15px (3.75 * $baseline-grid) (2.5 * $baseline-grid) (7.5 * $baseline-grid);
+  padding: 15px 30px 20px 60px;
 
   mat-card-content {
     margin-top: 15px;
@@ -46,5 +46,5 @@ i.km-icon-info {
 }
 
 .km-mat-card-code-block {
-  margin-top: 2.5 * $baseline-grid;
+  margin-top: 20px;
 }

@@ -9,12 +9,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import '../../assets/css/variables';
+@import 'variables';
 
 div.km-os-options {
-  line-height: 3 * $line-height;
+  line-height: 30px;
   font-size: $font-size-body;
-  margin: 0 0 (1.25 * $baseline-grid);
+  margin: 0 0 10px;
 }
 
 mat-button-toggle-group[group='operatingSystemGroup'] {
@@ -29,7 +29,7 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
     outline: none;
 
     i {
-      margin-right: 1.25 * $baseline-grid;
+      margin-right: 10px;
       min-width: 28px;
       min-height: 28px;
 

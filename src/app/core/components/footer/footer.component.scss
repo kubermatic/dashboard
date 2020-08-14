@@ -9,10 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import '../../../../assets/css/variables';
+@import 'variables';
 
 footer {
-  padding: $baseline-grid (3.5 * $baseline-grid) (2.5 * $baseline-grid);
+  padding: $baseline-grid (3.5 * $baseline-grid) 20px;
   width: 100%;
   height: $toolbar-height;
   z-index: 999;
@@ -48,8 +48,8 @@ footer {
 i {
   background-color: transparent;
   display: inline-block;
-  width: 2.5 * $baseline-grid;
-  height: 2.5 * $baseline-grid;
+  width: 20px;
+  height: 20px;
   margin-left: 2 * $baseline-grid;
   background-repeat: no-repeat;
   background-size: contain;

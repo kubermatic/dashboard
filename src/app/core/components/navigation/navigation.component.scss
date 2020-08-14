@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/mixins";
-@import "../../../../assets/css/variables";
+@import 'mixins';
+@import 'variables';
 
 $logo-width: 160px;
 $logo-margin-top: 13px;
@@ -41,9 +41,9 @@ header {
 }
 
 .km-icon-arrow-up {
-  margin: 0 $baseline-grid 0 (3 * $baseline-grid);
+  margin: 0 $baseline-grid 0 (24px);
 
-  @include km-size(1.75 * $baseline-grid);
+  @include km-size(14px);
 }
 
 @include km-breakpoint('small') {

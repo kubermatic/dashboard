@@ -9,10 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/variables";
+@import 'variables';
 
 .km-machine-deployment-spinner {
-  margin: (2.5 * $baseline-grid) auto !important;
+  margin: 20px auto !important;
 }
 
 .km-machine-deployment-health {

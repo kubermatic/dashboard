@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/mixins";
-@import "../../../../assets/css/variables";
+@import 'mixins';
+@import 'variables';
 
 .km-machine-deployment-health {
   text-align: center;
@@ -29,12 +29,12 @@ mat-card-header {
   margin-right: 4 * $baseline-grid;
 
   .mat-icon-button {
-    font-size: 2.5 * $baseline-grid;
+    font-size: 20px;
 
     i {
-      margin-top: -.5 * $baseline-grid;
+      margin-top: -4px;
 
-      @include km-size(2.5 * $baseline-grid);
+      @include km-size(20px);
     }
   }
 }
@@ -45,7 +45,7 @@ mat-card-header {
 }
 
 .km-provider-logo {
-  margin-top: -.5 * $baseline-grid;
+  margin-top: -4px;
   min-width: 14 * $baseline-grid;
 
   &.km-provider-logo-aws {

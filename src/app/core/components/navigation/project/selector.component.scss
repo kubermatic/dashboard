@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import '../../../../../assets/css/variables';
+@import 'variables';
 
 .km-project-selector {
   height: $toolbar-height - $baseline-grid / 4;
@@ -41,12 +41,12 @@
 
   .mat-select-value-text {
     font-size: $font-size-subhead !important;
-    line-height: $font-size-subhead + $baseline-grid / 2 !important;
+    line-height: $font-size-subhead + 4px !important;
   }
 
   .mat-select-placeholder {
     opacity: 0.7;
     font-size: $font-size-subhead !important;
-    line-height: $font-size-subhead + $baseline-grid / 2 !important;
+    line-height: $font-size-subhead + 4px !important;
   }
 }

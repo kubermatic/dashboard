@@ -9,12 +9,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../assets/css/variables";
+@import 'variables';
 
 .km-terms {
   font-size: 14px;
   padding: (5 * $baseline-grid) (7 * $baseline-grid);
-  margin-top: 2.5 * $baseline-grid;
+  margin-top: 20px;
 
   p {
     font-size: 14px;
