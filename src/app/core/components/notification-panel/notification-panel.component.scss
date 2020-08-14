@@ -13,16 +13,12 @@
 @import "../../../../assets/css/variables";
 
 .root-button {
-  font-size: $font-size-subhead;
-  text-align: right;
-  position: fixed;
-  top: 1.25 * $baseline-grid;
-  right: 12 * $baseline-grid;
+  @include km-toolbar-button(2);
 }
 
 .panel {
-  right: 12 * $baseline-grid;
-  top: 6.25 * $baseline-grid;
+  right: 96px;
+  top: $toolbar-height - 5px;
 
   @include km-size($notification-panel-width);
 

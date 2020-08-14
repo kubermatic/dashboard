@@ -9,23 +9,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-$breakpoints: (
-  'small':  767px,
-  'medium': 992px,
-  'large':  1200px
-) !default;
-
-$default-mask-color: #4d555c;
-$default-disabled-mask-color: #d4d4d4;
-
-@mixin km-breakpoint($breakpoint) {
-  @if map-has-key($breakpoints, $breakpoint) {
-    @media (max-width: map-get($breakpoints, $breakpoint)) {
-      @content;
-    }
-  }
-}
-
 $font-primary: 'Roboto', helvetica, arial, sans-serif;
 $font-primary-mono: 'Roboto Mono', monospace;
 $font-secondary: 'Ubuntu', sans-serif;

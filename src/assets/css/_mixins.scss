@@ -9,7 +9,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "variables";
+$breakpoints: (
+  'small':  767px,
+  'medium': 992px,
+  'large':  1200px
+) !default;
+
+@mixin km-breakpoint($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (max-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  }
+}
 
 @mixin km-size($width, $height: $width, $force: false) {
   @if $force == false {
@@ -37,7 +49,7 @@
   @if $color {
     background-color: $color;
   } @else { /* stylelint-disable-line */
-    background-color: $default-mask-color;
+    background-color: #4d555c;
   }
 
   display: inline-block;
@@ -49,6 +61,12 @@
   @include km-size($width, $height, true);
 
   &:disabled {
-    background-color: $default-disabled-mask-color;
+    background-color: #d4d4d4;
   }
+}
+
+@mixin km-toolbar-button($position: 1) {
+  position: fixed;
+  top: 11px;
+  right: ($position * 40px) + (16px * ($position - 1));
 }
