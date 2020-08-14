@@ -21,7 +21,7 @@
 
   .header {
     font-size: $font-size-subhead-lg;
-    margin-bottom: 2 * $baseline-grid;
+    margin-bottom: 16px;
 
     &::before {
       align-items: center;
@@ -34,13 +34,13 @@
       justify-content: center;
       margin-right: 12px;
 
-      @include km-size((24px) - 2);
+      @include km-size(22px);
     }
   }
 
   .properties {
     .network-id {
-      margin-bottom: 2 * $baseline-grid;
+      margin-bottom: 16px;
     }
   }
 }
@@ -56,7 +56,7 @@
 }
 
 ::ng-deep .km-property-container {
-  margin: 0 0 (0.6 * $baseline-grid) !important;
+  margin: 0 0 5px !important;
 }
 
 .km-provider-logo {
@@ -73,6 +73,6 @@
 
 .km-icon-key {
   cursor: default;
-  margin-right: 2 * $baseline-grid;
+  margin-right: 16px;
   user-select: none;
 }

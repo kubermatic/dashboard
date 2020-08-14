@@ -12,7 +12,7 @@
 @import 'variables';
 
 footer {
-  padding: $baseline-grid (3.5 * $baseline-grid) 20px;
+  padding: 8px 28px 20px;
   width: 100%;
   height: $toolbar-height;
   z-index: 999;
@@ -50,7 +50,7 @@ i {
   display: inline-block;
   width: 20px;
   height: 20px;
-  margin-left: 2 * $baseline-grid;
+  margin-left: 16px;
   background-repeat: no-repeat;
   background-size: contain;
   cursor: pointer;

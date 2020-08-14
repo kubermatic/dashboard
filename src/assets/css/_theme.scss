@@ -41,7 +41,7 @@
 
   // Angular Material and other overrides.
   mat-card-header > div > mat-card-title > div {
-    margin: $baseline-grid 0;
+    margin: 8px 0;
     font-size: $font-size-body;
   }
 
@@ -58,15 +58,15 @@
 
     &.km-with-table-header {
       .mat-card-header {
-        padding: 0 7 * $baseline-grid !important;
+        padding: 0 56px !important;
         margin: 0 !important;
-        line-height: 1.6 * $line-height !important;
+        line-height: 16px !important;
         border-radius: $border-radius $border-radius 0 0;
       }
 
       &.km-small .mat-card-header {
         font-size: $font-size-small !important;
-        line-height: 1.6 * $line-height;
+        line-height: 16px;
       }
 
       .mat-card-content {
@@ -79,7 +79,7 @@
           border-top: 1px solid $divider;
 
           &.km-small {
-            padding: 10px (24px);
+            padding: 10px 24px;
             margin: 0;
             line-height: 20px;
           }
@@ -128,7 +128,7 @@
   }
 
   .mat-tooltip-panel {
-    height: 4 * $baseline-grid;
+    height: 32px;
   }
 
   .mat-tooltip {
@@ -147,7 +147,7 @@
   }
 
   .mat-card-header .mat-card-title {
-    padding: $baseline-grid 0 16px;
+    padding: 8px 0 16px;
     font-size: 20px;
     font-weight: normal !important;
 
@@ -169,11 +169,11 @@
 
   .mat-column-status,
   .mat-column-stateArrow {
-    width: $baseline-grid;
+    width: 8px;
   }
 
   .mat-sort-header-arrow {
-    margin: auto 0 auto (0.75 * $baseline-grid) !important;
+    margin: auto 0 auto 6px !important;
 
     .mat-sort-header-stem,
     .mat-sort-header-pointer-left,
@@ -190,8 +190,8 @@
       mask: url("/assets/images/icons/arrow-up.svg");
       mask-repeat: no-repeat;
       mask-position: center;
-      min-height: $baseline-grid;
-      min-width: $baseline-grid;
+      min-height: 8px;
+      min-width: 8px;
       position: absolute;
       top: 1px;
     }
@@ -204,10 +204,10 @@
       mask: url("/assets/images/icons/arrow-down.svg");
       mask-repeat: no-repeat;
       mask-position: center;
-      min-height: $baseline-grid;
-      min-width: $baseline-grid;
+      min-height: 8px;
+      min-width: 8px;
       position: absolute;
-      top: -$baseline-grid;
+      top: -8px;
     }
   }
 
@@ -273,7 +273,7 @@
   .mat-flat-button,
   .mat-raised-button {
     font-size: $font-size-subhead !important;
-    line-height: 5 * $baseline-grid !important;
+    line-height: 40px !important;
     background-color: map-get($colors, primary);
     color: #fff;
 
@@ -317,7 +317,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 5 * $baseline-grid;
+      height: 40px;
       min-width: unset;
     }
   }
@@ -483,12 +483,12 @@
       }
 
       p {
-        margin: 0 0 $baseline-grid;
+        margin: 0 0 8px;
       }
 
       .km-dialog-warning {
         display: flex;
-        margin: 2 * $baseline-grid 0;
+        margin: 16px 0;
       }
     }
 
@@ -535,7 +535,7 @@
 
   .mat-select-panel {
     margin-top: 30px !important;
-    margin-left: 0.75 * $baseline-grid !important;
+    margin-left: 6px !important;
     min-width: calc(100% + 20px) !important;
     max-width: calc(100% + 20px) !important;
     transform-origin: 50% 0 0 !important;
@@ -614,7 +614,7 @@
   }
 
   mat-list-item.disabled i {
-    opacity: 0.3;
+    opacity: .3;
   }
 
   .mat-progress-spinner circle,
@@ -638,7 +638,7 @@
   .km-header {
     color: $text;
     font-size: $font-size-card-title;
-    padding: $baseline-grid 0 16px;
+    padding: 8px 0 16px;
     margin: 12px 0;
     line-height: 16px;
   }
@@ -701,7 +701,7 @@
 
   .km-menu-header {
     color: $text !important;
-    height: 6 * $baseline-grid;
+    height: 48px;
   }
 
   .km-hidden {
@@ -730,7 +730,7 @@
     }
 
     &:active {
-      color: lighten(map-get($colors, primary), 0.5);
+      color: lighten(map-get($colors, primary), .5);
     }
   }
 
@@ -751,9 +751,9 @@
 
   .km-code-block {
     background-color: $divider;
-    border-radius: $baseline-grid / 1.5;
-    margin: ($baseline-grid * 2) 0;
-    padding: ($baseline-grid * 1.5) ($baseline-grid * 2);
+    border-radius: $border-radius;
+    margin: 16px 0;
+    padding: 12px 16px;
     font-size: $font-size-body;
     line-height: 20px;
     font-family: $font-primary-mono;
@@ -763,7 +763,7 @@
   .km-content-wrap {
     display: flex;
     flex-flow: row wrap;
-    padding: $baseline-grid (7 * $baseline-grid) 0 !important;
+    padding: 8px 56px 0 !important;
   }
 
   .km-no-item {
@@ -822,11 +822,11 @@
     font-size: $font-size-body;
     line-height: 18px;
     margin-left: 12px;
-    padding: 0 (.5 * $baseline-grid);
+    padding: 0 4px;
     user-select: none;
 
     .km-icon-update-available-arrow {
-      margin: 0 6px (-.25 * $baseline-grid) (.25 * $baseline-grid);
+      margin: 0 6px -2px 2px;
       background-color: map-get($colors, secondary);
     }
   }
@@ -882,7 +882,7 @@
     line-height: 12px;
     margin-bottom: 0;
     max-width: 100px;
-    padding: .5 * $baseline-grid;
+    padding: .4px;
   }
 
   .km-sidenav {
@@ -917,17 +917,17 @@
 
   .km-card-expansion-panel {
     font-size: $font-size-subhead;
-    line-height: 6 * $baseline-grid;
-    margin: 0 (7 * $baseline-grid);
-    padding: (1 * $baseline-grid) 0;
+    line-height: 48px;
+    margin: 0 56px;
+    padding: 8px 0;
 
     & > div {
       cursor: default;
-      margin-right: 6 * $baseline-grid;
+      margin-right: 48px;
 
       & > span {
-        margin-right: 2 * $baseline-grid;
-        margin-top: $baseline-grid / 4;
+        margin-right: 16px;
+        margin-top: 2px;
       }
     }
 
@@ -976,7 +976,7 @@
       border-bottom: none;
       padding: 0;
       line-height: 25px;
-      height: 5 * $baseline-grid;
+      height: 40px;
     }
 
     .km-header-cell:last-of-type {
@@ -995,20 +995,19 @@
     td.mat-cell {
       border-bottom-width: 0;
       line-height: 25px;
-      padding-right: 2 * $baseline-grid;
+      padding-right: 16px;
       font-size: $font-size-subhead;
 
       &:last-of-type {
-        padding-right: 2 * $baseline-grid;
+        padding-right: 16px;
       }
 
       &:first-of-type {
-        padding-left: 2 * $baseline-grid;
+        padding-left: 16px;
       }
 
       &.mat-column-provider {
-        padding-top: .5 * $baseline-grid;
-        padding-bottom: .5 * $baseline-grid;
+        padding: 4px 0;
       }
     }
 
@@ -1020,7 +1019,7 @@
 
     tr:hover button {
       opacity: 1;
-      transition: opacity 0.1s ease-out;
+      transition: opacity .1s ease-out;
     }
   }
 
@@ -1079,7 +1078,7 @@
     button {
       background-color: transparent;
       width: 100%;
-      line-height: 5 * $baseline-grid;
+      line-height: 40px;
       color: $text-secondary !important;
       font-weight: normal;
       font-size: $font-size-subhead;
@@ -1172,14 +1171,14 @@
 
   .km-cluster-spec-type {
     margin-right: 20px;
-    min-width: $type-toggle-width * 2 + $baseline-grid;
-    max-width: $type-toggle-width * 2 + $baseline-grid;
+    min-width: $type-toggle-width * 2 + 8px;
+    max-width: $type-toggle-width * 2 + 8px;
 
     mat-button-toggle {
       @include km-size($type-toggle-width, $type-toggle-height, true);
 
-      margin: (.5 * $baseline-grid) 0 0 0;
-      border-width: 0.25 * $baseline-grid !important;
+      margin: 4px 0 0 0;
+      border-width: 2px !important;
       background-color: $background-hover;
 
       i {
@@ -1188,7 +1187,7 @@
 
       &:hover {
         background-color: transparent;
-        border: (0.25 * $baseline-grid) solid map-get($colors, secondary) !important;
+        border: 2px solid map-get($colors, secondary) !important;
         transition: all .5s ease;
       }
 
@@ -1204,7 +1203,7 @@
 
       &.mat-button-toggle-checked {
         background-color: transparent;
-        border: (0.25 * $baseline-grid) solid map-get($colors, primary) !important;
+        border: 2px solid map-get($colors, primary) !important;
 
         i {
           filter: none;
@@ -1220,7 +1219,7 @@
   }
 
   .km-wizard-settings-extended-wrapper {
-    margin: (4 * $baseline-grid) 0 20px 0;
+    margin: 32px 0 20px 0;
 
     .km-wizard-settings-extended-divider {
       height: 1px;
@@ -1231,7 +1230,7 @@
     .km-wizard-settings-extended-btn {
       color: $text-secondary;
       cursor: pointer;
-      margin: $baseline-grid;
+      margin: 8px;
       user-select: none;
 
       .km-icon-arrow-down,
@@ -1260,7 +1259,7 @@
       cursor: default;
       font-size: $font-size-subhead;
       font-weight: 400;
-      padding-top: $baseline-grid;
+      padding-top: 8px;
       margin-bottom: 0;
       margin-top: 0;
       padding-right: 15px;
@@ -1302,12 +1301,12 @@
     .km-wizard-step-divider {
       height: 1px;
       background: $divider;
-      margin: 20px 20px 0 $baseline-grid;
+      margin: 20px 20px 0 8px;
     }
   }
 
   .km-version-picker-container {
-    margin: 6px (8 * $baseline-grid) 6px 0;
+    margin: 6px 64px 6px 0;
 
     .km-version-picker {
       height: 50px;
@@ -1330,7 +1329,7 @@
         border-color: $divider;
         border-radius: $border-radius 0 0 $border-radius;
         margin-top: -1px;
-        padding: $baseline-grid;
+        padding: 8px;
         position: relative;
 
         @include km-size(50px, 51px);
@@ -1343,8 +1342,8 @@
 
         .km-icon-update-available {
           position: absolute;
-          right: .5 * $baseline-grid;
-          top: .75 * $baseline-grid;
+          right: 4px;
+          top: 6px;
 
           @include km-size(16px);
         }
@@ -1400,7 +1399,7 @@
       }
 
       .km-icon-update-available {
-        top: .75 * $baseline-grid - 1px;
+        top: 5px;
         transition: all .5s ease;
       }
 
@@ -1471,21 +1470,21 @@
   .km-add-binding-dialog {
     mat-button-toggle {
       margin-right: 0;
-      min-height: 5 * $baseline-grid;
-      max-height: 5 * $baseline-grid;
+      min-height: 40px;
+      max-height: 40px;
       border-color: $divider;
       background-color: $divider;
 
       &:first-child {
-        min-width: 10.25 * $baseline-grid;
-        max-width: 10.25 * $baseline-grid;
+        min-width: 82px;
+        max-width: 82px;
         border-top-left-radius: $border-radius;
         border-bottom-left-radius: $border-radius;
       }
 
       &:last-child {
-        min-width: 14.25 * $baseline-grid;
-        max-width: 14.25 * $baseline-grid;
+        min-width: 114px;
+        max-width: 114px;
         border-top-right-radius: $border-radius;
         border-bottom-right-radius: $border-radius;
       }
@@ -1506,7 +1505,7 @@
   }
 
   .km-optgroup-dropdown {
-    margin-left: 2.75 * $baseline-grid !important;
+    margin-left: 22px !important;
   }
 
   .km-multiple-values-dropdown {
@@ -1514,7 +1513,7 @@
   }
 
   .km-add-dialog-dropdown {
-    margin-top: 4.25 * $baseline-grid !important;
+    margin-top: 34px !important;
   }
 
   .km-confirmation-dialog .mat-dialog-content,
@@ -1550,7 +1549,7 @@
   }
 
   .mat-step-header {
-    max-height: 4 * $baseline-grid;
+    max-height: 32px;
     pointer-events: none !important;
 
     .mat-step-icon {
@@ -1644,7 +1643,7 @@
     margin-bottom: 24px;
 
     i {
-      margin: 0 $baseline-grid;
+      margin: 0 8px;
     }
 
     p {
@@ -1664,10 +1663,10 @@
   }
 
   i {
-    margin: 0 $baseline-grid 0 0;
+    margin: 0 8px 0 0;
 
     &.with-margin {
-      margin-left: $baseline-grid;
+      margin-left: 8px;
     }
   }
 }
@@ -1679,7 +1678,7 @@
 }
 
 .mat-form-field-wrapper {
-  padding-bottom: 2.75 * $baseline-grid;
+  padding-bottom: 22px;
 }
 
 .km-icon-kubernetes,
@@ -1692,7 +1691,7 @@
 .km-icon-running .km-icon-pending,
 .km-icon-disabled,
 .km-icon-failed {
-  margin-right: $baseline-grid;
+  margin-right: 8px;
 }
 
 .km-icon-info {

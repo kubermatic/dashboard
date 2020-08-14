@@ -12,7 +12,7 @@
 @import 'variables';
 
 .km-project-selector {
-  height: $toolbar-height - $baseline-grid / 4;
+  height: $toolbar-height - 8px / 4;
 }
 
 ::ng-deep.km-projects-container {
@@ -45,7 +45,7 @@
   }
 
   .mat-select-placeholder {
-    opacity: 0.7;
+    opacity: .7;
     font-size: $font-size-subhead !important;
     line-height: $font-size-subhead + 4px !important;
   }

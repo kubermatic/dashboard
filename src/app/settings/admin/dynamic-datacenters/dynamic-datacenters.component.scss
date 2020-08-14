@@ -12,21 +12,21 @@
 @import 'variables';
 
 .filters {
-  margin-top: -2 * $baseline-grid;
+  margin-top: -16px;
 
   .filter-title {
-    margin: -20px $baseline-grid 0 0;
+    margin: -20px 8px 0 0;
   }
 
   .mat-form-field {
-    width: 35 * $baseline-grid;
+    width: 280px;
   }
 
   .clear-filter {
-    line-height: 2.5 * $line-height;
+    line-height: 25px;
     margin-right: 5px !important;
     right: 30px;
-    top: -0.25 * $baseline-grid;
+    top: -2px;
     max-height: 24px;
     max-width: 24px;
     position: absolute;
@@ -47,9 +47,9 @@
 
 .km-provider-logo {
   background-position: left !important;
-  max-height: 3.5 * $baseline-grid;
-  max-width: 14 * $baseline-grid !important;
-  min-height: 3.5 * $baseline-grid;
-  min-width: 5 * $baseline-grid !important;
+  max-height: 28px;
+  max-width: 132px !important;
+  min-height: 28px;
+  min-width: 40px !important;
   margin: 8px 8px 0 0;
 }

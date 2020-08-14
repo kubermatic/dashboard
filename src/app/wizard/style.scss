@@ -13,14 +13,14 @@
 @import 'mixins';
 
 .mat-card {
-  padding: 0 $baseline-grid;
+  padding: 0 8px;
 }
 
 .km-button-navigation {
-  margin-top: 2 * $baseline-grid;
+  margin-top: 16px;
 
   &:not(#summary-nav) {
-    margin-top: .5 * $baseline-grid;
+    margin-top: 4px;
   }
 }
 

@@ -24,7 +24,7 @@ $colors-light: (
   indicator-red: #eb5757,
   footer-text: #a5aeb8,
   sidenav-background-hover: #dce0e3,
-  sidenav-background-active: rgba(#4dc3ea, 0.18),
+  sidenav-background-active: rgba(#4dc3ea, .18),
   sidenav-divider: #cad1d9,
   project-selector-hover: #edeff0,
   tooltip-background: #31586f,
@@ -35,7 +35,7 @@ $colors-light: (
   scrollbar: #e0e3e5,
   scrollbar-background: #fff,
   shadow: 0 4px 4px rgba(#000, .08),
-  shadow-dark: (0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12)),
+  shadow-dark: (0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12)),
 );
 
 $theme-light: mat-light-theme(mat-palette($mat-blue), mat-palette($mat-light-blue), mat-palette($mat-pink));

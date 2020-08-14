@@ -16,17 +16,17 @@
 }
 
 .domain-input {
-  margin-bottom: 2 * $baseline-grid;
+  margin-bottom: 16px;
 }
 
 .property-name {
   font-size: $font-size-subhead-lg;
-  line-height: 2.5 * $line-height;
+  line-height: 25px;
   margin-top: 24px;
 }
 
 ::ng-deep.monaco-editor {
-  margin-top: 2 * $baseline-grid;
+  margin-top: 16px;
 }
 
 .mat-hint {

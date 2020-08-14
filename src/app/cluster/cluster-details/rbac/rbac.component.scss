@@ -17,7 +17,7 @@
 }
 
 .km-toggled-rbac {
-  padding-bottom: $baseline-grid;
+  padding-bottom: 8px;
 
   mat-card-header {
     border-radius: $border-radius;
@@ -27,18 +27,18 @@
 h2 {
   font-weight: normal;
   font-size: $font-size-card-title;
-  padding: 0 (7 * $baseline-grid);
+  padding: 0 56px;
   margin-bottom: 0;
 }
 
 tr th:first-child,
 tr td:first-child {
-  padding-left: 7 * $baseline-grid !important;
+  padding-left: 56px !important;
 }
 
 tr:last-child th:last-child,
 .km-table td:last-child {
-  padding-right: 7 * $baseline-grid;
+  padding-right: 56px;
 }
 
 .km-table-actions {

@@ -36,8 +36,8 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 
 .km-provider-logo {
   background-position: left !important;
-  max-width: 18.75 * $baseline-grid !important;
-  min-width: 8.75 * $baseline-grid !important;
+  max-width: 150px !important;
+  min-width: 70px !important;
   margin: 8px 8px 0 0;
 }
 
@@ -48,6 +48,6 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 }
 
 .km-provider-logo-hetzner {
-  min-height: 2 * $baseline-grid !important;
-  max-height: 2 * $baseline-grid !important;
+  min-height: 16px !important;
+  max-height: 16px !important;
 }

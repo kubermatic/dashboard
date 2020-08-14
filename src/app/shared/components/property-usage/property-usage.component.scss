@@ -20,7 +20,7 @@
   border-radius: .324px;
   cursor: pointer;
   margin: 10px 0;
-  min-height: .75 * $baseline-grid;
+  min-height: 6px;
   min-width: $property-usage-bar-min-width;
 }
 
@@ -34,7 +34,7 @@
 .value {
   font-size: $font-size-subhead;
   line-height: 24px;
-  margin-bottom: $baseline-grid;
+  margin-bottom: 8px;
   min-height: 24px;
   word-break: break-all;
 }

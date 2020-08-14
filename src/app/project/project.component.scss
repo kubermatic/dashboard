@@ -81,7 +81,7 @@ $project-card-width: 330px;
 
       button {
         opacity: 1;
-        transition: opacity 0.1s ease-out;
+        transition: opacity .1s ease-out;
       }
     }
   }
@@ -93,13 +93,13 @@ $project-card-width: 330px;
   .mat-card-title {
     margin: 0;
     padding: 0;
-    line-height: 2.3 * $line-height;
+    line-height: 23px;
   }
 
   .mat-card-subtitle {
     margin: 0;
     padding: 5px 0 0 0;
-    line-height: 1.6 * $line-height;
+    line-height: 16px;
 
     strong {
       font-family: $font-primary-mono;
@@ -122,7 +122,7 @@ $project-card-width: 330px;
     display: flex;
     width: 100%;
     align-items: center;
-    line-height: 4 * $line-height;
+    line-height: 40px;
 
     i {
       padding-right: 10px;
@@ -137,7 +137,7 @@ $project-card-width: 330px;
       }
 
       &.km-projects-less-space {
-        padding-right: 2 * $baseline-grid;
+        padding-right: 16px;
       }
     }
   }

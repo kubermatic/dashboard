@@ -15,16 +15,16 @@
   line-height: 20px;
   margin-right: 5px !important;
   right: 24px;
-  top: -0.5 * $baseline-grid;
+  top: -4px;
   max-height: 20px;
   max-width: 20px;
   position: absolute;
 }
 
 ::ng-deep .km-preset-dropdown {
-  margin-top: 5.25 * $baseline-grid !important;
+  margin-top: 42px !important;
 }
 
 :host {
-  margin-bottom: $baseline-grid * 3.75;
+  margin-bottom: 30px;
 }

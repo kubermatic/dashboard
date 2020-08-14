@@ -52,7 +52,7 @@
       align-items: center;
       display: flex;
       min-width: 224px;
-      line-height: 8 * $baseline-grid;
+      line-height: 64px;
 
       span {
         margin-right: 5px;
@@ -75,7 +75,7 @@
 }
 
 .km-icon-info {
-  margin-left: $baseline-grid;
+  margin-left: 8px;
 }
 
 ::ng-deep.mat-slide-toggle-label {

@@ -18,7 +18,7 @@
 .km-location {
   font-weight: normal;
   font-size: $font-size-subhead;
-  line-height: 1.6 * $line-height;
+  line-height: 16px;
   padding: 0 0 0 15px;
   word-break: break-word;
   white-space: normal;
@@ -29,7 +29,7 @@
   ::ng-deep .km-country-prefix {
     display: block;
     font-size: $font-size-caption;
-    line-height: 1.4 * $line-height;
+    line-height: 14px;
   }
 }
 

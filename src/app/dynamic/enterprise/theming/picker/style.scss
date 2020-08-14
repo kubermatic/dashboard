@@ -16,7 +16,7 @@
   align-items: center;
   display: flex;
   min-width: 224px;
-  line-height: 8 * $baseline-grid;
+  line-height: 64px;
 
   span {
     margin-right: 5px;
@@ -37,5 +37,5 @@
 }
 
 .km-settings-status-margin {
-  margin-bottom: $baseline-grid;
+  margin-bottom: 8px;
 }

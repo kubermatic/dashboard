@@ -39,16 +39,16 @@
       }
 
       .km-icon-clear {
-        @include km-size(2.25 * $baseline-grid);
+        @include km-size(18px);
       }
 
       .filter-indicator {
         border-radius: 50%;
         bottom: 10px;
         position: absolute;
-        right: $baseline-grid;
+        right: 8px;
 
-        @include km-size($baseline-grid);
+        @include km-size(8px);
       }
     }
   }
@@ -58,27 +58,27 @@
     overflow-x: hidden;
 
     .notification {
-      margin: $baseline-grid 20px 20px $baseline-grid;
+      margin: 8px 20px 20px 8px;
 
       .notification-icon {
-        margin: 0 16px 0 $baseline-grid;
-        min-height: 2.25 * $baseline-grid;
-        min-width: 2.25 * $baseline-grid;
+        margin: 0 16px 0 8px;
+        min-height: 18px;
+        min-width: 18px;
       }
 
       .notification-message {
         word-break: break-word;
         font-size: $font-size-body;
-        line-height: 1.6 * $line-height;
-        margin-bottom: $baseline-grid;
+        line-height: 16px;
+        margin-bottom: 8px;
       }
 
       .notification-info {
-        padding: 0 20px $baseline-grid 0;
+        padding: 0 20px 8px 0;
 
         .km-icon-copy-small {
           cursor: pointer;
-          margin-right: $baseline-grid;
+          margin-right: 8px;
 
           @include km-size(14px);
         }
@@ -87,7 +87,7 @@
       .notification-timestamp {
         cursor: pointer;
         font-size: $font-size-caption;
-        line-height: 1.4 * $line-height;
+        line-height: 14px;
       }
     }
   }

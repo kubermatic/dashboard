@@ -12,12 +12,12 @@
 @import 'variables';
 
 mat-card-header {
-  padding: 0 10px 0 (7 * $baseline-grid) !important;
+  padding: 0 10px 0 56px !important;
 }
 
 td:first-child,
 th:first-child {
-  padding-left: 7 * $baseline-grid !important;
+  padding-left: 56px !important;
 }
 
 ::ng-deep mat-dialog-content {

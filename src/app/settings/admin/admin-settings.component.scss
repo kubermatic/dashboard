@@ -24,14 +24,14 @@
     font-size: $font-size-subhead;
 
     .entry-label {
-      min-width: 32 * $baseline-grid;
+      min-width: 316px;
     }
 
     .km-icon-info,
     .km-icon-warning {
-      min-height: 2 * $baseline-grid;
-      margin-left: .5 * $baseline-grid;
-      min-width: 2 * $baseline-grid;
+      min-height: 16px;
+      margin-left: 4px;
+      min-width: 16px;
     }
 
     .km-account-settings-toggle {
@@ -44,13 +44,13 @@
         margin-bottom: 0;
 
         .tech-preview-name {
-          line-height: 2.2 * $line-height;
+          line-height: 22px;
         }
 
         .tech-preview-tag {
           border-radius: 4px;
           font-size: $font-size-small;
-          line-height: 1.2 * $line-height;
+          line-height: 12px;
         }
 
         i {
@@ -80,11 +80,11 @@
     }
 
     .km-admin-settings-field-md {
-      width: 25.5 * $baseline-grid;
+      width: 204px;
     }
 
     mat-checkbox {
-      margin-right: 6 * $baseline-grid;
+      margin-right: 48px;
     }
   }
 }

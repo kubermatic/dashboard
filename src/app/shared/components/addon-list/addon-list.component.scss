@@ -17,13 +17,13 @@
   font-size: $font-size-subhead;
   outline: none;
 
-  @include km-size(250px, 8 * $baseline-grid);
+  @include km-size(250px, 64px);
 
   .km-addon-menu {
     border-radius: 0 5px 5px 0;
     cursor: pointer;
-    height: 8 * $baseline-grid - 2px;
-    min-width: 4.5 * $baseline-grid;
+    height: 62px;
+    min-width: 36px;
   }
 }
 

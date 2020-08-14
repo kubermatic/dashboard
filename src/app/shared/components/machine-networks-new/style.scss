@@ -13,7 +13,7 @@
 @import 'mixins';
 
 .km-machine-network:nth-child(odd) {
-  margin-right: 2 * $baseline-grid;
+  margin-right: 16px;
 }
 
 .km-add-machine-network {
@@ -22,12 +22,12 @@
   font-weight: 400;
 
   &.dialog {
-    height: 6.25 * $baseline-grid;
+    height: 50px;
   }
 
   &.wizard {
-    height: 28.75 * $baseline-grid;
-    margin-top: 2.75 * $baseline-grid;
+    height: 230px;
+    margin-top: 22px;
   }
 }
 
