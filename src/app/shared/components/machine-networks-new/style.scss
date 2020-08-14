@@ -39,5 +39,5 @@
   cursor: pointer;
   float: right;
 
-  @include size(2 * $baseline-grid);
+  @include km-size(2 * $baseline-grid);
 }

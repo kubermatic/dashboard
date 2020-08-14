@@ -68,5 +68,5 @@ h3 {
 .km-icon-close {
   cursor: pointer;
 
-  @include size(2 * $baseline-grid);
+  @include km-size(2 * $baseline-grid);
 }

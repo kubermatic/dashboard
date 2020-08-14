@@ -33,12 +33,12 @@
       margin: (-$baseline-grid) (.5 * $baseline-grid) 0 0;
       position: relative;
 
-      @include size(4.33 * $baseline-grid !important);
+      @include km-size(4.33 * $baseline-grid !important);
 
       i {
         margin-top: -.5 * $baseline-grid;
 
-        @include size(2 * $baseline-grid);
+        @include km-size(2 * $baseline-grid);
       }
     }
   }

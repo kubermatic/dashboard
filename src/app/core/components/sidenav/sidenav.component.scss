@@ -15,7 +15,7 @@
 .km-sidenav {
   padding-top: $content-padding;
 
-  @include size($sidenav-width, 100%);
+  @include km-size($sidenav-width, 100%);
 
   .menu-item {
     height: $sidenav-item-height !important;

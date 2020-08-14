@@ -34,7 +34,7 @@
       justify-content: center;
       margin-right: 1.5 * $baseline-grid;
 
-      @include size((3 * $baseline-grid) - 2);
+      @include km-size((3 * $baseline-grid) - 2);
     }
   }
 
@@ -68,7 +68,7 @@
 .km-os-image {
   display: inline-block;
 
-  @include size(28px);
+  @include km-size(28px);
 }
 
 .km-icon-key {

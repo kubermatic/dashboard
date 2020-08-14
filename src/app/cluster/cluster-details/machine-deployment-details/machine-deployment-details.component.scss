@@ -34,7 +34,7 @@ mat-card-header {
     i {
       margin-top: -.5 * $baseline-grid;
 
-      @include size(2.5 * $baseline-grid);
+      @include km-size(2.5 * $baseline-grid);
     }
   }
 }

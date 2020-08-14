@@ -89,27 +89,27 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
   filter: none;
   min-height: 3.75 * $baseline-grid;
 
-  @include background-image("/assets/images/clouds/bringyourown-dark.svg", 3.75 * $baseline-grid);
+  @include km-background-image("/assets/images/clouds/bringyourown-dark.svg", 3.75 * $baseline-grid);
 }
 
 .km-provider-logo-kubevirt {
   filter: none;
   min-height: 3.75 * $baseline-grid;
 
-  @include background-image("/assets/images/clouds/kubevirt-dark.svg", 3.75 * $baseline-grid);
+  @include km-background-image("/assets/images/clouds/kubevirt-dark.svg", 3.75 * $baseline-grid);
 }
 
 .km-provider-logo-vsphere {
   filter: none;
   min-height: 3.75 * $baseline-grid;
 
-  @include background-image("/assets/images/clouds/vsphere-dark.svg", 3.75 * $baseline-grid);
+  @include km-background-image("/assets/images/clouds/vsphere-dark.svg", 3.75 * $baseline-grid);
 }
 
 .km-icon-info {
   cursor: pointer;
 
-  @include background-image("/assets/images/icons/info-dark.svg", 2 * $baseline-grid);
+  @include km-background-image("/assets/images/icons/info-dark.svg", 2 * $baseline-grid);
 }
 
 // Make checkbox marks white.

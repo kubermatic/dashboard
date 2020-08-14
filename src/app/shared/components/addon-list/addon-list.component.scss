@@ -17,7 +17,7 @@
   font-size: $font-size-subhead;
   outline: none;
 
-  @include size(250px, 8 * $baseline-grid);
+  @include km-size(250px, 8 * $baseline-grid);
 
   .km-addon-menu {
     border-radius: 0 5px 5px 0;

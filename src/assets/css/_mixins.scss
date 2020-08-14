@@ -11,7 +11,7 @@
 
 @import "variables";
 
-@mixin size($width, $height: $width, $force: false) {
+@mixin km-size($width, $height: $width, $force: false) {
   @if $force == false {
     height: $height;
     width: $width;
@@ -23,17 +23,17 @@
   }
 }
 
-@mixin background-image($url, $width, $height: $width) {
+@mixin km-background-image($url, $width, $height: $width) {
   background-image: url($url) !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
   background-size: contain !important;
   display: inline-block;
 
-  @include size($width, $height, true);
+  @include km-size($width, $height, true);
 }
 
-@mixin mask-image($url, $width, $height: $width, $color: null) {
+@mixin km-mask-image($url, $width, $height: $width, $color: null) {
   @if $color {
     background-color: $color;
   } @else { /* stylelint-disable-line */
@@ -46,7 +46,7 @@
   mask-repeat: no-repeat !important;
   mask-size: contain !important;
 
-  @include size($width, $height, true);
+  @include km-size($width, $height, true);
 
   &:disabled {
     background-color: $default-disabled-mask-color;

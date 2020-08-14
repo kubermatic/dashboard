@@ -24,7 +24,7 @@
   right: 12 * $baseline-grid;
   top: 6.25 * $baseline-grid;
 
-  @include size($notification-panel-width);
+  @include km-size($notification-panel-width);
 
   .header {
     font-size: $font-size-subhead;
@@ -34,16 +34,16 @@
       margin: (-$baseline-grid) (.5 * $baseline-grid) 0 0;
       position: relative;
 
-      @include size(4.33 * $baseline-grid !important);
+      @include km-size(4.33 * $baseline-grid !important);
 
       i {
         margin-top: -.5 * $baseline-grid;
 
-        @include size(2 *$baseline-grid);
+        @include km-size(2 *$baseline-grid);
       }
 
       .km-icon-clear {
-        @include size(2.25 * $baseline-grid);
+        @include km-size(2.25 * $baseline-grid);
       }
 
       .filter-indicator {
@@ -52,7 +52,7 @@
         position: absolute;
         right: $baseline-grid;
 
-        @include size($baseline-grid);
+        @include km-size($baseline-grid);
       }
     }
   }
@@ -84,7 +84,7 @@
           cursor: pointer;
           margin-right: $baseline-grid;
 
-          @include size(1.75 * $baseline-grid);
+          @include km-size(1.75 * $baseline-grid);
         }
       }
 

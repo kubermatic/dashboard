@@ -18,7 +18,7 @@
   top: 0;
   left: 0;
 
-  @include size(100%);
+  @include km-size(100%);
 }
 
 .km-frontpage-content {
@@ -46,6 +46,6 @@
     font-weight: 500 !important;
     line-height: 50px !important;
 
-    @include size(200px, 50px);
+    @include km-size(200px, 50px);
   }
 }

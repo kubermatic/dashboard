@@ -18,12 +18,12 @@ $button-size: 44px;
   height: $toolbar-height;
 
   .mat-icon-button {
-    @include size($button-size);
+    @include km-size($button-size);
 
     margin: -9px 6px 0;
 
     i {
-      @include size(2 * $baseline-grid);
+      @include km-size(2 * $baseline-grid);
     }
   }
 
@@ -31,6 +31,6 @@ $button-size: 44px;
     filter: grayscale(100%);
     margin: -13px 24px 0 0;
 
-    @include size(3.5 * $baseline-grid);
+    @include km-size(3.5 * $baseline-grid);
   }
 }

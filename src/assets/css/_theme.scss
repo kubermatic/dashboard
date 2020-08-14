@@ -385,7 +385,7 @@
     }
 
     .mat-button-toggle-label {
-      @include size(100%);
+      @include km-size(100%);
     }
 
     .mat-button-toggle-label-content {
@@ -440,7 +440,7 @@
       text-align: left;
       padding: 0 (1.25 * $baseline-grid);
 
-      @include size(150px, 100%);
+      @include km-size(150px, 100%);
     }
   }
 
@@ -559,7 +559,7 @@
     mask-repeat: no-repeat;
     mask-size: contain;
 
-    @include size(8px !important);
+    @include km-size(8px !important);
   }
 
   .mat-form-field.mat-focused.mat-primary .mat-select-arrow-wrapper {
@@ -624,7 +624,7 @@
 
   // Application component styles (it's basically every class that starts with "km-" prefix).
   ::-webkit-scrollbar {
-    @include size($scrollbar-size);
+    @include km-size($scrollbar-size);
   }
 
   ::-webkit-scrollbar-thumb {
@@ -787,7 +787,7 @@
     max-height: 3 * $baseline-grid !important;
     max-width: 70px !important;
 
-    @include size(100% !important);
+    @include km-size(100% !important);
   }
 
   .km-main,
@@ -937,7 +937,7 @@
     .km-icon-pending {
       font-size: $font-size-subhead;
 
-      @include size($font-size-subhead);
+      @include km-size($font-size-subhead);
     }
   }
 
@@ -1121,7 +1121,7 @@
         .mat-tab-label-content {
           background-color: map-get($colors, primary);
 
-          @include size(100%);
+          @include km-size(100%);
         }
       }
 
@@ -1279,7 +1279,7 @@
         justify-content: center;
         margin-right: 1.75 * $baseline-grid;
 
-        @include size(3 * $baseline-grid);
+        @include km-size(3 * $baseline-grid);
       }
 
       &.active {
@@ -1335,12 +1335,12 @@
         padding: $baseline-grid;
         position: relative;
 
-        @include size(50px, 51px);
+        @include km-size(50px, 51px);
 
         i {
           margin: 0 !important;
 
-          @include size(30px);
+          @include km-size(30px);
         }
 
         .km-icon-update-available {
@@ -1348,7 +1348,7 @@
           right: .5 * $baseline-grid;
           top: .75 * $baseline-grid;
 
-          @include size(2 * $baseline-grid);
+          @include km-size(2 * $baseline-grid);
         }
       }
 
@@ -1612,7 +1612,7 @@
     border-radius: 50px;
     background-color: $divider;
 
-    @include size(50px, 24 px);
+    @include km-size(50px, 24 px);
   }
 
   .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
