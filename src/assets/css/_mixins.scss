@@ -33,8 +33,13 @@
   @include size($width, $height, true);
 }
 
-@mixin mask-image($url, $width, $height: $width) {
-  background-color: $default-mask-color;
+@mixin mask-image($url, $width, $height: $width, $color: null) {
+  @if $color {
+    background-color: $color;
+  } @else { /* stylelint-disable-line */
+    background-color: $default-mask-color;
+  }
+
   display: inline-block;
   mask-image: url($url) !important;
   mask-position: center !important;

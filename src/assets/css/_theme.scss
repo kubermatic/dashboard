@@ -1683,3 +1683,20 @@
 .mat-form-field-wrapper {
   padding-bottom: 2.75 * $baseline-grid;
 }
+
+.km-icon-kubernetes,
+.km-icon-openshift,
+.km-icon-sun,
+.km-icon-moon {
+  margin-right: 1.25 * $baseline-grid;
+}
+
+.km-icon-running .km-icon-pending,
+.km-icon-disabled,
+.km-icon-failed {
+  margin-right: $baseline-grid;
+}
+
+.km-icon-info {
+  cursor: pointer;
+}
