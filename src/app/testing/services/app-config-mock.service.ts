@@ -12,7 +12,7 @@
 import {Injectable} from '@angular/core';
 
 import {VersionInfo} from '../../shared/entity/version-info';
-import {Config, UserGroupConfig} from '../../shared/model/Config';
+import {Config, EndOfLife, UserGroupConfig} from '../../shared/model/Config';
 import {fakeAppConfig} from '../fake-data/appConfig.fake';
 import {fakeUserGroupConfig} from '../fake-data/userGroupConfig.fake';
 import {fakeVersionInfo} from '../fake-data/versionInfo.fake';
@@ -40,5 +40,9 @@ export class AppConfigMockService {
 
   getRefreshTimeBase(): number {
     return this._refreshTimeBase;
+  }
+
+  getEndOfLifeConfig(): EndOfLife {
+    return {};
   }
 }

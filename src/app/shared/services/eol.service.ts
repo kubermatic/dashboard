@@ -16,7 +16,7 @@ import {lte, compare} from 'semver';
 
 @Injectable()
 export class EndOfLifeService {
-  readonly cluster = new ClusterTypeEndOfLife(this._appConfigService.getConfig().end_of_life);
+  readonly cluster = new ClusterTypeEndOfLife(this._appConfigService.getEndOfLifeConfig());
 
   constructor(private readonly _appConfigService: AppConfigService) {}
 }
