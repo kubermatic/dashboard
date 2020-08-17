@@ -87,7 +87,6 @@ export class ProjectsPage {
 
   static selectProject(projectName: string): void {
     const waitTime = 500;
-    cy.reload();
     this.getProjectItem(projectName).should(Condition.HaveLength, 1);
     this.getActiveProjects()
       .should(Condition.HaveLength, 1)
@@ -106,6 +105,7 @@ export class ProjectsPage {
       .should(Condition.NotBe, 'disabled')
       .click()
       .then(() => {
+        cy.reload();
         this.waitForProject(projectName);
         this.getProjectItem(projectName).should(Condition.HaveLength, 1);
       });
