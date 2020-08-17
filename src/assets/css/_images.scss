@@ -77,10 +77,6 @@
   margin: 4px 14px 4px 0;
 }
 
-.km-icon-tick-blue {
-  @include mask-image("/assets/images/icons/tick.svg", 12px, $color: #0081ae);
-}
-
 .km-icon-download {
   @include mask-image("/assets/images/icons/download.svg", 20px, $color: #fff);
 }
@@ -123,8 +119,6 @@
 
 .km-icon-randomize {
   @include background-image("/assets/images/icons/randomize.svg", 16px);
-
-  position: absolute;
 }
 
 .km-icon-arrow-down {
@@ -140,9 +134,6 @@
 .km-icon-arrow-left {
   @include mask-image("/assets/images/icons/arrow-down.svg", 16px);
 
-  cursor: pointer;
-  margin: 0;
-  padding: 0;
   transform: rotate(90deg);
 }
 
