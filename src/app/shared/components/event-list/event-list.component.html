@@ -16,11 +16,12 @@ limitations under the License.
       <i class="km-icon-mask"
          [ngClass]="isShowEvents ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
       Events
-      <span class="km-events-title">
-        <i [ngClass]="getTypeIconForEvents()"></i>
-        {{events.length}} event<ng-container *ngIf="events.length != 1">s</ng-container>
-      </span>
     </mat-card-title>
+    <div fxFlex></div>
+    <span class="km-events-title">
+      <i [ngClass]="getTypeIconForEvents()"></i>
+      {{events.length}} event<ng-container *ngIf="events.length != 1">s</ng-container>
+    </span>
   </mat-card-header>
   <mat-card-content>
     <table class="km-table"
@@ -43,7 +44,8 @@ limitations under the License.
         <th mat-header-cell
             mat-sort-header
             *matHeaderCellDef
-            class="km-header-cell">Message</th>
+            class="km-header-cell">Message
+        </th>
         <td mat-cell
             class="km-events-long-text"
             *matCellDef="let element">{{element.message}}</td>
@@ -53,7 +55,8 @@ limitations under the License.
         <th mat-header-cell
             mat-sort-header
             *matHeaderCellDef
-            class="km-header-cell">Name</th>
+            class="km-header-cell">Name
+        </th>
         <td mat-cell
             class="km-events-long-text"
             *matCellDef="let element">{{element.involvedObject.name}}</td>
@@ -63,7 +66,8 @@ limitations under the License.
         <th mat-header-cell
             mat-sort-header
             *matHeaderCellDef
-            class="km-header-cell">Type</th>
+            class="km-header-cell">Type
+        </th>
         <td mat-cell
             class="km-events-long-text"
             *matCellDef="let element">{{element.involvedObject.type}}</td>
@@ -73,7 +77,8 @@ limitations under the License.
         <th mat-header-cell
             mat-sort-header
             *matHeaderCellDef
-            class="km-header-cell">Count</th>
+            class="km-header-cell">Count
+        </th>
         <td mat-cell
             *matCellDef="let element">{{element.count}}</td>
       </ng-container>
@@ -82,7 +87,8 @@ limitations under the License.
         <th mat-header-cell
             mat-sort-header
             *matHeaderCellDef
-            class="km-header-cell">Occurred</th>
+            class="km-header-cell">Occurred
+        </th>
         <td mat-cell
             class="km-events-long-text km-events-timestamp"
             *matCellDef="let element">

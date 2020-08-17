@@ -38,11 +38,10 @@
   padding-top: 45px;
 }
 
-::ng-deep.mat-card-header {
+::ng-deep .mat-card-header {
   margin-bottom: 0 !important;
 }
 
-::ng-deep.mat-card-title {
-  margin-bottom: 0 !important;
-  padding-bottom: 20px !important;
+::ng-deep .mat-card-header .mat-card-title {
+  padding: 8px 0 8px;
 }

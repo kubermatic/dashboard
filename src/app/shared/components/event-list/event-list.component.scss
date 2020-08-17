@@ -39,17 +39,12 @@ mat-card-header {
 }
 
 .km-events-title {
-  float: right;
   padding-right: 30px;
   font-size: $font-size-subhead;
 
   i {
     margin-right: 10px;
   }
-}
-
-::ng-deep .mat-card-header-text {
-  width: 100%;
 }
 
 .km-icon-arrow-down {

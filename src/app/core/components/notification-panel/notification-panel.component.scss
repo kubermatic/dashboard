@@ -12,12 +12,14 @@
 @import 'mixins';
 @import 'variables';
 
+$panel-width: 350px;
+
 .root-button {
   @include toolbar-button(2);
 }
 
 .panel {
-  @include size($notification-panel-width);
+  @include size($panel-width);
 
   right: 96px;
   top: $toolbar-height - 5px;

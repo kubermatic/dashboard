@@ -11,6 +11,25 @@
 
 @import 'variables';
 
+$popup-width: 300px;
+$popup-min-height: 60px;
+$popup-max-height: 160px;
+$popup-margin: 0 24px 80px 0;
+$popup-shadow: 0 5px 5px rgba(0, 0, 0, .2), 0 8px 10px rgba(0, 0, 0, .14), 0 3px 14px rgba(0, 0, 0, .12);
+
+::ng-deep .km-notification {
+  border-radius: $border-radius !important;
+  box-shadow: $popup-shadow !important;
+  display: flex !important;
+  flex: 1 1 auto !important;
+  margin: $popup-margin !important;
+  min-height: $popup-min-height !important;
+  max-height: $popup-max-height !important;
+  min-width: $popup-width !important;
+  max-width: $popup-width !important;
+  padding: 0 !important;
+}
+
 .km-notification-type {
   border-radius: $border-radius 0 0 $border-radius !important;
   padding-left: 12px !important;

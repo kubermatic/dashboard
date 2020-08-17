@@ -161,7 +161,7 @@ limitations under the License.
           *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row
           *matRowDef="let row; columns: displayedColumns"
-          class="km-mat-row km-clickable"
+          class="km-mat-row km-pointer"
           [attr.id]="row.id"
           (click)="goToDetails(row)"></tr>
     </table>

@@ -12,6 +12,8 @@
 @import 'variables';
 @import 'mixins';
 
+$panel-width: 250px;
+
 .root-button {
   @include toolbar-button(1);
 }
@@ -19,7 +21,7 @@
 .panel {
   right: 40px;
   top: $toolbar-height - 5px;
-  width: $user-panel-width;
+  width: $panel-width;
 
   .header {
     font-size: $font-size-subhead;

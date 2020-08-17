@@ -9,6 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@import 'mixins';
 @import 'variables';
 
 .filters {
@@ -47,9 +48,9 @@
 
 .km-provider-logo {
   background-position: left !important;
-  max-height: 28px;
-  max-width: 132px !important;
-  min-height: 28px;
+  max-width: 120px !important;
   min-width: 40px !important;
+  max-height: 28px !important;
+  min-height: 28px !important;
   margin: 8px 8px 0 0;
 }

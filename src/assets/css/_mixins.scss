@@ -23,27 +23,16 @@ $breakpoints: (
   }
 }
 
-@mixin height($height, $force: false) {
+@mixin size($width, $height: $width, $force: false) {
   @if $force == false {
     height: $height;
+    width: $width;
   } @else { /* stylelint-disable-line */
     max-height: $height;
     min-height: $height;
-  }
-}
-
-@mixin width($width, $force: false) {
-  @if $force == false {
-    width: $width;
-  } @else { /* stylelint-disable-line */
     max-width: $width;
     min-width: $width;
   }
-}
-
-@mixin size($width, $height: $width, $force: false) {
-  @include height($height, $force);
-  @include width($width, $force);
 }
 
 @mixin background-image($url, $width, $height: $width) {

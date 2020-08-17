@@ -24,8 +24,7 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
   align-items: center;
 
   i {
-    max-width: 25px;
-    max-height: 25px;
+    width: 25px;
   }
 }
 
@@ -43,11 +42,11 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 
 .km-provider-logo-digitalocean,
 .km-provider-logo-openstack {
-  min-height: 20px !important;
   max-height: 20px !important;
+  min-height: 20px !important;
 }
 
 .km-provider-logo-hetzner {
-  min-height: 16px !important;
   max-height: 16px !important;
+  min-height: 16px !important;
 }

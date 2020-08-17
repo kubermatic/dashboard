@@ -164,7 +164,7 @@ limitations under the License.
         <tr mat-row
             *matRowDef="let row; columns: displayedColumns"
             class="km-mat-row"
-            [ngClass]="{'km-clickable': isProjectActive(row)}"
+            [ngClass]="{'km-pointer': isProjectActive(row)}"
             (click)="selectProject(row)"></tr>
       </table>
 

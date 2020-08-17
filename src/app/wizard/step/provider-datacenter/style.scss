@@ -10,6 +10,7 @@
 // limitations under the License.
 
 @import 'variables';
+@import 'mixins';
 
 .km-provider-logo {
   background-position: center;
@@ -33,7 +34,15 @@
   }
 }
 
-mat-button-toggle-group[group='providerGroup'] {
-  padding-bottom: 45px;
+.mat-button-toggle {
+  border-radius: $border-radius;
+
+  .mat-button-toggle-button {
+    @include size(150px, 100%);
+  }
+}
+
+.mat-button-toggle-group[group='providerGroup'] {
+  padding-bottom: $content-padding;
   margin-bottom: 0 !important;
 }

@@ -9,7 +9,56 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@import 'mixins';
 @import 'variables';
+
+$toggle-width: 150px;
+$toggle-height: 56px;
+
+.km-cluster-spec-type {
+  margin-right: 20px;
+  max-width: $toggle-width * 2 + 8px;
+  min-width: $toggle-width * 2 + 8px;
+
+  .mat-button-toggle {
+    @include size($toggle-width, $toggle-height, true);
+
+    margin: 4px 0 0 0;
+    border-width: 2px !important;
+
+    i {
+      filter: grayscale(100%);
+    }
+
+    &:hover {
+      background-color: transparent;
+      transition: all .5s ease;
+    }
+
+    &[value='kubernetes'] {
+      border-top-left-radius: $border-radius;
+      border-bottom-left-radius: $border-radius;
+    }
+
+    &[value='openshift'] {
+      border-top-right-radius: $border-radius;
+      border-bottom-right-radius: $border-radius;
+    }
+
+    &.mat-button-toggle-checked {
+      background-color: transparent;
+
+      i {
+        filter: none;
+      }
+    }
+  }
+
+  .mat-button-toggle-label-content {
+    font-weight: normal;
+    font-size: $font-size-subhead;
+  }
+}
 
 .km-icon-warning {
   cursor: pointer;

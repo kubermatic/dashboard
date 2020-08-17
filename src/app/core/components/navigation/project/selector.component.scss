@@ -41,12 +41,12 @@
 
   .mat-select-value-text {
     font-size: $font-size-subhead !important;
-    line-height: $font-size-subhead + 4px !important;
+    line-height: 20px !important;
   }
 
   .mat-select-placeholder {
     opacity: .7;
     font-size: $font-size-subhead !important;
-    line-height: $font-size-subhead + 4px !important;
+    line-height: 20px !important;
   }
 }

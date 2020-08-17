@@ -40,11 +40,6 @@
   $transition: all .5s ease;
 
   // Angular Material and other overrides.
-  mat-card-header > div > mat-card-title > div {
-    margin: 8px 0;
-    font-size: $font-size-body;
-  }
-
   .mat-card {
     border-radius: $border-radius !important;
     box-shadow: $border-box-shadow !important;
@@ -368,20 +363,18 @@
     border-radius: $border-radius;
   }
 
-  mat-button-toggle-group {
+  .mat-button-toggle-group {
     background-color: transparent;
     box-shadow: none !important;
 
-    mat-button-toggle {
+    .mat-button-toggle {
+      @include size(150px, 60px, true);
+
       margin: 0 10px 10px 0;
       display: flex;
       align-items: center;
       border: 1px solid $divider;
       cursor: pointer;
-      max-width: 150px;
-      min-width: 150px;
-      min-height: 60px;
-      max-height: 60px;
     }
 
     .mat-button-toggle-label {
@@ -430,42 +423,10 @@
     }
   }
 
-  mat-button-toggle-group[group='datacenterGroup'],
-  mat-button-toggle-group[group='providerGroup'] {
-    .mat-button-toggle {
-      border-radius: $border-radius;
-    }
-
-    .mat-button-toggle-button {
-      @include size(150px, 100%);
-
-      text-align: left;
-      padding: 0 10px;
-    }
-  }
-
-  mat-button-toggle-group[group='datacenterGroup'] {
-    .mat-button-toggle-button {
-      display: flex;
-    }
-
-    .mat-button-toggle-label-content {
-      padding: 0 5px;
-      width: 100%;
-      display: flex;
-      justify-content: flex-start;
-    }
-  }
-
-  mat-button-toggle-group[group='providerGroup'] .mat-button-toggle-label-content {
-    height: 100%;
-    padding: 0 10px;
-  }
-
   .mat-dialog-container {
+    color: $text;
     min-width: $dialog-width !important;
     max-width: $dialog-width !important;
-    color: $text;
 
     .mat-dialog-title {
       font-weight: normal;
@@ -474,8 +435,9 @@
     .mat-dialog-content {
       font-size: $font-size-subhead;
       font-weight: 400;
-      max-height: $dialog-max-height;
-      overflow: unset;
+      max-height: $dialog-content-max-height;
+      overflow-x: unset;
+      overflow-y: scroll;
 
       a {
         text-decoration: none;
@@ -514,7 +476,7 @@
     border-radius: $border-radius;
     font-size: $font-size-body;
     font-weight: normal;
-    line-height: $font-size-subhead;
+    line-height: 16px;
     max-height: 22px;
     min-height: 22px;
     padding: 3px 0;
@@ -704,23 +666,6 @@
     height: 48px;
   }
 
-  .km-hidden {
-    visibility: hidden !important;
-  }
-
-  .km-no-margin {
-    margin: 0 !important;
-  }
-
-  .km-no-padding {
-    padding: 0 !important;
-  }
-
-  .km-clickable {
-    cursor: pointer;
-    outline: none;
-  }
-
   .km-copy {
     cursor: pointer;
     outline: none;
@@ -760,14 +705,35 @@
     color: $text;
   }
 
+  .km-no-item {
+    border-color: $divider !important;
+  }
+
+  .km-pointer {
+    cursor: pointer;
+    outline: none;
+  }
+
+  .km-hidden {
+    visibility: hidden !important;
+  }
+
+  .km-no-margin {
+    margin: 0 !important;
+  }
+
+  .km-no-padding {
+    padding: 0 !important;
+
+    .mat-form-field-wrapper {
+      padding-bottom: 0 !important;
+    }
+  }
+
   .km-content-wrap {
     display: flex;
     flex-flow: row wrap;
     padding: 8px 56px 0 !important;
-  }
-
-  .km-no-item {
-    border-color: $divider !important;
   }
 
   .km-spinner {
@@ -781,13 +747,22 @@
     }
   }
 
+  .km-icon-running,
+  .km-icon-pending,
+  .km-icon-disabled,
+  .km-icon-failed,
+  .km-icon-kubernetes,
+  .km-icon-openshift,
+  .km-icon-sun,
+  .km-icon-moon {
+    margin-right: 8px;
+  }
+
   .km-provider-logo {
+    @include size(70px, 24px, true);
     @include size(100% !important);
 
     display: block;
-    min-height: 24px;
-    max-height: 24px !important;
-    max-width: 70px !important;
   }
 
   .km-main,
@@ -833,17 +808,7 @@
 
   .km-notification {
     background: $background-card !important;
-    border-radius: $border-radius !important;
-    box-shadow: $notification-border-box-shadow !important;
     color: $text !important;
-    display: flex !important;
-    flex: 1 1 auto !important;
-    margin: $notification-margin !important;
-    min-height: $notification-min-height !important;
-    max-height: $notification-height !important;
-    max-width: $notification-width !important;
-    min-width: $notification-width !important;
-    padding: 0 !important;
   }
 
   .km-notification-type {
@@ -1057,7 +1022,7 @@
     }
   }
 
-  .km-mat-row.km-clickable:hover {
+  .km-mat-row.km-pointer:hover {
     background-color: $background-hover;
   }
 
@@ -1169,51 +1134,20 @@
   }
 
   .km-cluster-spec-type {
-    margin-right: 20px;
-    min-width: $type-toggle-width * 2 + 8px;
-    max-width: $type-toggle-width * 2 + 8px;
-
     mat-button-toggle {
-      @include size($type-toggle-width, $type-toggle-height, true);
-
-      margin: 4px 0 0 0;
-      border-width: 2px !important;
       background-color: $background-hover;
 
-      i {
-        filter: grayscale(100%);
-      }
-
       &:hover {
-        background-color: transparent;
         border: 2px solid map-get($colors, secondary) !important;
-        transition: all .5s ease;
-      }
-
-      &[value='kubernetes'] {
-        border-top-left-radius: $border-radius;
-        border-bottom-left-radius: $border-radius;
-      }
-
-      &[value='openshift'] {
-        border-top-right-radius: $border-radius;
-        border-bottom-right-radius: $border-radius;
       }
 
       &.mat-button-toggle-checked {
-        background-color: transparent;
         border: 2px solid map-get($colors, primary) !important;
-
-        i {
-          filter: none;
-        }
       }
     }
 
     .mat-button-toggle-label-content {
       color: $text;
-      font-weight: normal;
-      font-size: $font-size-subhead;
     }
   }
 
@@ -1319,17 +1253,14 @@
       }
 
       .km-version-picker-type {
-        @include size(50px, 51px);
+        @include size(50px, 52px);
 
         background: $divider;
-        border-bottom: 1px;
-        border-left: 1px;
-        border-right: 0;
-        border-top: 1px;
-        border-style: solid;
         border-color: $divider;
+        border-width: 1px 0 1px 1px;
+        border-style: solid;
         border-radius: $border-radius 0 0 $border-radius;
-        margin-top: -1px;
+        margin-top: -2px;
         padding: 8px;
         position: relative;
 
@@ -1475,17 +1406,17 @@
       background-color: $divider;
 
       &:first-child {
-        min-width: 82px;
-        max-width: 82px;
         border-top-left-radius: $border-radius;
         border-bottom-left-radius: $border-radius;
+        min-width: 82px;
+        max-width: 82px;
       }
 
       &:last-child {
-        min-width: 114px;
-        max-width: 114px;
         border-top-right-radius: $border-radius;
         border-bottom-right-radius: $border-radius;
+        min-width: 115px;
+        max-width: 115px;
       }
 
       &:hover {
@@ -1670,27 +1601,8 @@
   }
 }
 
-.km-no-padding {
-  .mat-form-field-wrapper {
-    padding-bottom: 0 !important;
-  }
-}
-
 .mat-form-field-wrapper {
   padding-bottom: 22px;
-}
-
-.km-icon-kubernetes,
-.km-icon-openshift,
-.km-icon-sun,
-.km-icon-moon {
-  margin-right: 10px;
-}
-
-.km-icon-running .km-icon-pending,
-.km-icon-disabled,
-.km-icon-failed {
-  margin-right: 8px;
 }
 
 .km-icon-info {

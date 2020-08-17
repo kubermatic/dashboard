@@ -64,7 +64,6 @@
     "rxjs": "6.6.2",
     "rxjs-compat": "6.6.2",
     "semver": "7.3.2",
-    "stylelint-declaration-block-order": "0.2.0",
     "swagger-ui": "3.31.1",
     "tslib": "2.0.0",
     "zone.js": "0.10.3"
@@ -92,6 +91,7 @@
     "start-server-and-test": "1.11.3",
     "stylelint": "13.6.1",
     "stylelint-config-standard": "20.0.0",
+    "stylelint-declaration-block-order": "0.2.0",
     "ts-jest": "26.2.0",
     "ts-node": "8.10.2",
     "tslint": "6.1.3",
