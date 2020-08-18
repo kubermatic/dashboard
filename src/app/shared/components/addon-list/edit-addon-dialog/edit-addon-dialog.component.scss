@@ -9,23 +9,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../../assets/css/variables";
-
-.mat-dialog-container {
-  width: 25 * $baseline-grid;
-  padding: 0;
-}
+@import 'variables';
 
 .km-install-addon-dialog-option-desc {
   font-size: $font-size-subhead;
-  line-height: $font-size-head;
-  margin-top: 2.5 * $baseline-grid;
+  line-height: 24px;
+  margin-top: 20px;
 }
 
 form {
-  margin: (2 * $baseline-grid) 0;
+  margin: 16px 0;
 
   .km-install-addon-boolean-container {
-    margin-bottom: (2 * $baseline-grid);
+    margin-bottom: 16px;
   }
 }

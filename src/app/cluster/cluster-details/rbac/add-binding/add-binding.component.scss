@@ -9,13 +9,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../../assets/css/variables";
+@import 'variables';
 
 mat-button-toggle-group {
   border-radius: $border-radius;
-  margin-bottom: 3.75 * $baseline-grid;
+  margin-bottom: 30px;
 
   &.km-toggle-subject-type {
-    margin-left: 3.75 * $baseline-grid;
+    margin-left: 30px;
   }
 }

@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/variables";
+@import 'variables';
 
 .km-content-edit-sshkeys {
   overflow-y: hidden;
@@ -24,12 +24,12 @@
 .km-mat-footer-row button {
   border: none;
   font-weight: normal;
-  line-height: 5 * $line-height;
+  line-height: 50px;
 }
 
 .km-mat-footer-row.km-no-sshkeys {
-  border-style: dashed;
   border-radius: $border-radius;
+  border-style: dashed;
 }
 
 .km-sshkey-item-actions {

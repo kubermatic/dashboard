@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../assets/css/variables";
+@import 'variables';
 
 $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 
@@ -20,12 +20,11 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 }
 
 .km-cluster-type {
-  display: flex;
   align-items: center;
+  display: flex;
 
   i {
-    max-width: 3.125 * $baseline-grid;
-    max-height: 3.125 * $baseline-grid;
+    width: 25px;
   }
 }
 
@@ -36,18 +35,18 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 
 .km-provider-logo {
   background-position: left !important;
-  max-width: 18.75 * $baseline-grid !important;
-  min-width: 8.75 * $baseline-grid !important;
-  margin-right: $baseline-grid;
+  margin: 8px 8px 0 0;
+  max-width: 150px !important;
+  min-width: 70px !important;
 }
 
 .km-provider-logo-digitalocean,
 .km-provider-logo-openstack {
-  min-height: 2.5 * $baseline-grid !important;
-  max-height: 2.5 * $baseline-grid !important;
+  max-height: 20px !important;
+  min-height: 20px !important;
 }
 
 .km-provider-logo-hetzner {
-  min-height: 2 * $baseline-grid !important;
-  max-height: 2 * $baseline-grid !important;
+  max-height: 16px !important;
+  min-height: 16px !important;
 }

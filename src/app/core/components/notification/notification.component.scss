@@ -9,17 +9,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/variables";
+@import 'variables';
+
+$popup-width: 300px;
+$popup-min-height: 60px;
+$popup-max-height: 160px;
+$popup-margin: 0 24px 80px 0;
+$popup-shadow: 0 5px 5px rgba(0, 0, 0, .2), 0 8px 10px rgba(0, 0, 0, .14), 0 3px 14px rgba(0, 0, 0, .12);
+
+::ng-deep .km-notification {
+  border-radius: $border-radius !important;
+  box-shadow: $popup-shadow !important;
+  display: flex !important;
+  flex: 1 1 auto !important;
+  margin: $popup-margin !important;
+  max-height: $popup-max-height !important;
+  max-width: $popup-width !important;
+  min-height: $popup-min-height !important;
+  min-width: $popup-width !important;
+  padding: 0 !important;
+}
 
 .km-notification-type {
   border-radius: $border-radius 0 0 $border-radius !important;
-  padding-left: 1.5 * $baseline-grid !important;
+  padding-left: 12px !important;
 }
 
 .km-notification-content {
   font-size: $font-size-subhead !important;
   max-height: 100% !important;
-  padding: $baseline-grid (2.5 * $baseline-grid) !important;
+  padding: 8px 20px !important;
   word-break: break-word !important;
 }
 
@@ -29,7 +48,7 @@
 }
 
 .km-notification-close-container {
-  padding: 0 (2 * $baseline-grid) !important;
+  padding: 0 16px !important;
 }
 
 :host {

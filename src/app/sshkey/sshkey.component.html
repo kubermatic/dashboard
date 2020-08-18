@@ -12,7 +12,7 @@ limitations under the License.
 -->
 <div fxLayout>
   <div fxFlex
-       align="right">
+       fxLayoutAlign="end center">
     <button id="km-add-ssh-key-top-btn"
             mat-flat-button
             type="button"
@@ -123,7 +123,7 @@ limitations under the License.
           *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row
           *matRowDef="let row; columns: displayedColumns;"
-          class="km-mat-row km-clickable"
+          class="km-mat-row km-pointer"
           (click)="togglePublicKey(row)"></tr>
       <tr mat-row
           *matRowDef="let row; let i=index; columns: toggledColumns;"

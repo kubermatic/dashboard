@@ -9,11 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import '../../../../assets/css/variables';
+@import 'variables';
 
 .km-icon-key {
   cursor: default;
-  margin-right: $baseline-grid;
+  margin-right: 8px;
   user-select: none;
 }
 

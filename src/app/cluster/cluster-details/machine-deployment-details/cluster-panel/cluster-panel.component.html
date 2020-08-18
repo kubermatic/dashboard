@@ -10,26 +10,25 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div class="km-cluster-panel-container"
+<div class="km-cluster-panel"
      fxFlex
      fxLayout="row"
      fxLayoutAlign=" center">
-  <div class="km-cluster-panel-icon"
-       (click)="navigate()"
-       matTooltip="Go back to the cluster">
-    <button mat-icon-button>
-      <i class="km-icon-arrow-left"></i>
-    </button>
-  </div>
+  <button mat-icon-button
+          (click)="navigate()"
+          fxLayoutAlign="center center"
+          matTooltip="Go back to the cluster">
+    <i class="km-icon-arrow-left"></i>
+  </button>
 
-  <span class="km-cluster-type">
+  <span class="cluster-type-icon">
     <i class="km-icon-{{cluster.type}}"></i>
   </span>
 
   <km-property>
     <div key>Cluster</div>
     <div value
-         class="km-machine-deployment-cluster-name">{{cluster.name}}</div>
+         id="km-cluster-panel-name">{{cluster.name}}</div>
   </km-property>
 
   <km-property>

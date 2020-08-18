@@ -9,34 +9,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'src/assets/css/variables';
+@import 'variables';
+@import 'mixins';
 
 .km-machine-network:nth-child(odd) {
-  margin-right: 2 * $baseline-grid;
+  margin-right: 16px;
 }
 
 .km-add-machine-network {
-  cursor: pointer;
   border-radius: 5px;
+  cursor: pointer;
   font-weight: 400;
 
   &.dialog {
-    height: 6.25 * $baseline-grid;
+    height: 50px;
   }
 
   &.wizard {
-    height: 28.75 * $baseline-grid;
-    margin-top: 2.75 * $baseline-grid;
+    height: 230px;
+    margin-top: 22px;
   }
 }
 
 .km-single-machine-network {
-  margin-bottom: 0.625 * $baseline-grid;
+  margin-bottom: 5px;
 }
 
 .km-icon-close {
+  @include size(16px);
+
   cursor: pointer;
-  width: 2 * $baseline-grid;
-  height: 2 * $baseline-grid;
   float: right;
 }

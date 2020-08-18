@@ -16,9 +16,9 @@ limitations under the License.
                     [projectID]="projectID"
                     [seed]="seed"></km-cluster-panel>
 
-  <mat-card class="white km-cluster-details">
+  <mat-card>
     <mat-card-header>
-      <mat-card-title>
+      <mat-card-title class="km-no-margin km-no-padding">
         <i [matTooltip]="machineDeploymentHealthStatus.message"
            [ngClass]="machineDeploymentHealthStatus.color"
            class="km-machine-deployment-health"></i>

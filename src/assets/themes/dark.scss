@@ -9,10 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "~@angular/material/theming";
-@import "theme";
-@import "variables";
-@import "images";
+@import '~@angular/material/theming';
+@import 'theme';
+@import 'mixins';
+@import 'variables';
+@import 'images';
 
 $colors-dark: (
   primary: #00a3d9,
@@ -26,7 +27,7 @@ $colors-dark: (
   indicator-red: #eb5757,
   footer-text: #fff,
   sidenav-background-hover: #202021,
-  sidenav-background-active: rgba(#4dc3ea, 0.18),
+  sidenav-background-active: rgba(#4dc3ea, .18),
   sidenav-divider: #373738,
   project-selector-hover: #313132,
   tooltip-background: #373738,
@@ -37,7 +38,7 @@ $colors-dark: (
   scrollbar: #464647,
   scrollbar-background: #202021,
   shadow: 0 4px 4px rgba(#000, .08),
-  shadow-dark: (0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12)),
+  shadow-dark: (0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12)),
 );
 
 $theme-dark: mat-dark-theme(mat-palette($mat-blue), mat-palette($mat-light-blue), mat-palette($mat-pink));
@@ -62,7 +63,7 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 // sass-lint:enable function-name-format
 
 @include angular-material-theme($theme-dark);
-@include km-theme($theme-dark, $colors-dark);
+@include theme($theme-dark, $colors-dark);
 
 // Make icons and logos white.
 .km-provider-logo,
@@ -85,34 +86,28 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 }
 
 .km-provider-logo-bringyourown {
-  @include km-image(3.75 * $baseline-grid);
+  @include background-image("/assets/images/clouds/bringyourown-dark.svg", 30px);
 
-  background-image: url("/assets/images/clouds/bringyourown-dark.svg") !important;
   filter: none;
-  min-height: 3.75 * $baseline-grid;
+  min-height: 30px;
 }
 
 .km-provider-logo-kubevirt {
-  @include km-image(3.75 * $baseline-grid);
+  @include background-image("/assets/images/clouds/kubevirt-dark.svg", 30px);
 
-  background-image: url("/assets/images/clouds/kubevirt-dark.svg") !important;
   filter: none;
-  min-height: 3.75 * $baseline-grid;
+  min-height: 30px;
 }
 
 .km-provider-logo-vsphere {
-  @include km-image(3.75 * $baseline-grid);
+  @include background-image("/assets/images/clouds/vsphere-dark.svg", 30px);
 
-  background-image: url("/assets/images/clouds/vsphere-dark.svg") !important;
   filter: none;
-  min-height: 3.75 * $baseline-grid;
+  min-height: 30px;
 }
 
 .km-icon-info {
-  @include km-image(2 * $baseline-grid);
-
-  background-image: url("/assets/images/icons/info-dark.svg") !important;
-  cursor: pointer;
+  @include background-image("/assets/images/icons/info-dark.svg", 16px);
 }
 
 // Make checkbox marks white.

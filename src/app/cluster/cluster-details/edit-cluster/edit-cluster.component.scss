@@ -9,12 +9,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/variables";
+@import 'variables';
 
 .km-edit-cluster-form {
   margin-bottom: 30px;
 }
 
 km-label-form {
-  margin-top: 3.75 * $baseline-grid;
+  margin-top: 30px;
 }

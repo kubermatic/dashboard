@@ -9,41 +9,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/variables";
+@import 'variables';
+@import 'mixins';
+
+$panel-width: 250px;
 
 .root-button {
-  font-size: $font-size-subhead;
-  text-align: right;
-  position: fixed;
-  top: 1.25 * $baseline-grid;
-  right: 5 * $baseline-grid;
+  @include toolbar-button(1);
 }
 
 .panel {
-  right: 5 * $baseline-grid;
-  top: 6.25 * $baseline-grid;
-  width: $user-panel-width;
+  right: 40px;
+  top: $toolbar-height - 5px;
+  width: $panel-width;
 
   .header {
     font-size: $font-size-subhead;
-    padding: (2.5 * $baseline-grid) (2.5 * $baseline-grid) $baseline-grid;
+    padding: 20px 20px 8px;
 
     .mat-icon-button {
-      margin: (-$baseline-grid) (.5 * $baseline-grid) 0 0;
-      width: 4.33 * $baseline-grid !important;
-      height: 4.33 * $baseline-grid !important;
+      @include size(35px !important);
+
+      margin: -8px 4px 0 0;
       position: relative;
 
       i {
-        margin-top: -.5 * $baseline-grid;
-        height: 2 * $baseline-grid;
-        width: 2 * $baseline-grid;
+        @include size(16px);
+
+        margin-top: -4px;
       }
     }
   }
 
   .menu div {
     cursor: pointer;
-    padding: (1.5 * $baseline-grid) (2.5 * $baseline-grid);
+    padding: 12px 20px;
   }
 }

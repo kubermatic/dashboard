@@ -91,6 +91,8 @@
     "start-server-and-test": "1.11.3",
     "stylelint": "13.6.1",
     "stylelint-config-standard": "20.0.0",
+    "stylelint-declaration-block-order": "0.2.0",
+    "stylelint-order": "^4.1.0",
     "ts-jest": "26.2.0",
     "ts-node": "8.10.2",
     "tslint": "6.1.3",
@@ -115,8 +117,13 @@
       "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-magic-numbers": [
-        "error", {
-          "ignore": [-1, 0, 1],
+        "error",
+        {
+          "ignore": [
+            -1,
+            0,
+            1
+          ],
           "ignoreArrayIndexes": true,
           "ignoreReadonlyClassProperties": true,
           "ignoreEnums": true
@@ -199,6 +206,10 @@
   },
   "stylelint": {
     "extends": "stylelint-config-standard",
+    "plugins": [
+      "stylelint-declaration-block-order",
+      "stylelint-order"
+    ],
     "rules": {
       "at-rule-no-unknown": null,
       "font-family-no-missing-generic-family-keyword": null,
@@ -212,7 +223,27 @@
             "ng-deep"
           ]
         }
-      ]
+      ],
+      "plugin/declaration-block-order": [
+        "dollar-variables",
+        {
+          "type": "at-rule",
+          "name": "extend"
+        },
+        {
+          "type": "at-rule",
+          "name": "include"
+        },
+        "declarations",
+        {
+          "type": "at-rule",
+          "name": "include",
+          "hasBlock": true
+        },
+        "at-rules",
+        "rules"
+      ],
+      "order/properties-alphabetical-order": true
     }
   }
 }

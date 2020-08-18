@@ -9,11 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/variables";
+@import 'variables';
 
 .km-node-ip-addresses {
   display: block;
-  line-height: 2 * $line-height;
+  line-height: 20px;
 }
 
 .km-node-item-actions {
@@ -22,29 +22,29 @@
 }
 
 i.km-icon-info {
-  margin-left: 0.625 * $baseline-grid;
+  margin-left: 5px;
 }
 
 .mat-column-name,
 .km-node-info {
-  display: flex;
   align-items: center;
+  display: flex;
 }
 
 .mat-column-name {
-  height: 6.25 * $baseline-grid;
+  height: 50px;
 }
 
 .km-node-details {
   box-shadow: $border-box-shadow-inset;
-  padding: (1.875 * $baseline-grid) (3.75 * $baseline-grid) (2.5 * $baseline-grid) (7.5 * $baseline-grid);
+  padding: 15px 30px 20px 60px;
 
   mat-card-content {
-    margin-top: 1.875 * $baseline-grid;
     border: none !important;
+    margin-top: 15px;
   }
 }
 
 .km-mat-card-code-block {
-  margin-top: 2.5 * $baseline-grid;
+  margin-top: 20px;
 }

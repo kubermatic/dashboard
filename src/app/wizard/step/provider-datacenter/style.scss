@@ -9,31 +9,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import '../../../../assets/css/variables';
+@import 'variables';
+@import 'mixins';
 
 .km-provider-logo {
   background-position: center;
 }
 
 .km-location {
-  font-weight: normal;
-  font-size: $font-size-subhead;
-  line-height: 1.6 * $line-height;
-  padding: 0 0 0 (1.875 * $baseline-grid);
-  word-break: break-word;
-  white-space: normal;
-  text-align: left;
-  max-width: 105px;
   display: inline-block;
+  font-size: $font-size-subhead;
+  font-weight: normal;
+  line-height: 16px;
+  max-width: 105px;
+  padding: 0 0 0 15px;
+  text-align: left;
+  white-space: normal;
+  word-break: break-word;
 
   ::ng-deep .km-country-prefix {
     display: block;
     font-size: $font-size-caption;
-    line-height: 1.4 * $line-height;
+    line-height: 14px;
   }
 }
 
-mat-button-toggle-group[group='providerGroup'] {
-  padding-bottom: 45px;
+.mat-button-toggle {
+  border-radius: $border-radius;
+
+  .mat-button-toggle-button {
+    @include size(150px, 100%);
+  }
+}
+
+.mat-button-toggle-group[group='providerGroup'] {
   margin-bottom: 0 !important;
+  padding-bottom: $content-padding;
 }

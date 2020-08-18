@@ -9,12 +9,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import '../../assets/css/variables';
+@import 'variables';
 
 div.km-os-options {
-  line-height: 3 * $line-height;
   font-size: $font-size-body;
-  margin: 0 0 (1.25 * $baseline-grid);
+  line-height: 30px;
+  margin: 0 0 10px;
 }
 
 mat-button-toggle-group[group='operatingSystemGroup'] {
@@ -22,16 +22,16 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
 
   .mat-button-toggle {
     border-radius: $border-radius;
-    max-width: 170px;
-    min-width: 120px;
-    min-height: 60px;
     max-height: 60px;
+    max-width: 170px;
+    min-height: 60px;
+    min-width: 120px;
     outline: none;
 
     i {
-      margin-right: 1.25 * $baseline-grid;
-      min-width: 28px;
+      margin-right: 10px;
       min-height: 28px;
+      min-width: 28px;
 
       &:not(.km-os-image-rhel) {
         filter: grayscale(100%);
@@ -53,13 +53,13 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
 
 .km-randomize-btn {
   position: absolute;
-  right: -0.625 * $baseline-grid;
+  right: -5px;
   top: 0;
 }
 
 .km-randomize-btn ::ng-deep .mat-button-wrapper {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: center;
 }
 
@@ -70,5 +70,5 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
 .km-provider-options {
   font-size: $font-size-card-title;
   font-weight: normal;
-  margin-bottom: 2 * $baseline-grid;
+  margin-bottom: 16px;
 }

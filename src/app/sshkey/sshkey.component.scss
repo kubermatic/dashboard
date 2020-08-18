@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../assets/css/variables";
+@import 'variables';
 
 .km-key-publickey {
   padding: 0 !important;
@@ -22,17 +22,17 @@
 
 .km-publickey-wrapper {
   box-shadow: $border-box-shadow-inset;
-  padding: (1.875 * $baseline-grid) (3.75 * $baseline-grid) (2.5 * $baseline-grid) (7.5 * $baseline-grid);
+  padding: 15px 30px 20px 60px;
 
   .km-publickey-content {
     .km-publickey-name {
+      line-height: 30px;
       text-transform: uppercase;
-      line-height: 3 * $line-height;
     }
 
     .km-publickey {
       font-size: $font-size-caption;
-      line-height: 1.8 * $line-height;
+      line-height: 18px;
       word-break: break-all;
     }
   }

@@ -9,25 +9,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/variables";
+@import 'mixins';
 
 .km-short-name-box {
   display: flex;
 }
 
 .km-short-name-circle-wrapper {
-  margin-left: -0.625 * $baseline-grid;
+  margin-left: -5px;
 }
 
 .km-short-name-circle {
-  display: flex;
-  width: 4 * $baseline-grid;
-  height: 4 * $baseline-grid;
-  line-height: 3 * $line-height;
-  text-align: center;
-  border-radius: 50%;
+  @include size(32px);
+
   align-items: center;
+  border-radius: 50%;
+  display: flex;
   justify-content: center;
+  line-height: 30px;
+  text-align: center;
 
   &:first-child {
     margin-left: 0;

@@ -9,10 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../../assets/css/variables";
+@import 'variables';
 
 .mat-flat-button {
-  margin-left: 0 !important;
-  padding: 0 $baseline-grid !important;
   font-weight: normal !important;
+  margin-left: 0 !important;
+  padding: 0 8px !important;
 }

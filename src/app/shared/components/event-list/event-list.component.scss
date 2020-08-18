@@ -9,10 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import '../../../../assets/css/variables';
+@import 'variables';
 
 .km-events-long-text {
-  line-height: 2 * $line-height !important;
+  line-height: 20px !important;
 }
 
 .km-events-timestamp {
@@ -20,18 +20,18 @@
 }
 
 .km-mat-row td {
-  padding-top: 1.25 * $baseline-grid;
-  padding-bottom: 1.25 * $baseline-grid;
-  line-height: 2 * $line-height;
+  line-height: 20px;
+  padding-bottom: 10px;
+  padding-top: 10px;
 }
 
 mat-card-header {
-  padding: 0 !important;
   cursor: pointer;
+  padding: 0 !important;
 }
 
 .km-toggled-events {
-  padding-bottom: $baseline-grid;
+  padding-bottom: 8px;
 
   mat-card-header {
     border-radius: $border-radius;
@@ -39,17 +39,12 @@ mat-card-header {
 }
 
 .km-events-title {
-  float: right;
-  padding-right: 3.75 * $baseline-grid;
   font-size: $font-size-subhead;
+  padding-right: 30px;
 
   i {
-    margin-right: 1.25 * $baseline-grid;
+    margin-right: 10px;
   }
-}
-
-::ng-deep .mat-card-header-text {
-  width: 100%;
 }
 
 .km-icon-arrow-down {

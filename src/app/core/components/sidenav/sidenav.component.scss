@@ -9,12 +9,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/variables";
+@import 'mixins';
+@import 'variables';
+
+$sidenav-width: 240px;
+$sidenav-width-collapsed: 54px;
+$sidenav-item-height: 40px;
+$sidenav-item-margin: 10px;
 
 .km-sidenav {
-  height: 100%;
+  @include size($sidenav-width, 100%);
+
   padding-top: $content-padding;
-  width: $sidenav-width;
 
   .menu-item {
     height: $sidenav-item-height !important;
@@ -22,20 +28,19 @@
 
     a {
       border-radius: $border-radius;
+      display: flex;
       font-size: $font-size-subhead;
       height: $sidenav-item-height;
       padding: $sidenav-item-margin !important;
-      display: flex;
       text-decoration: none;
 
       i {
-        width: 3 * $baseline-grid;
-        height: 3 * $baseline-grid;
+        @include size(24px);
+
         margin-right: 20px;
 
         &.km-icon-arrow-left {
-          width: 2 * $baseline-grid;
-          height: 2 * $baseline-grid;
+          @include size(16px);
         }
       }
     }
@@ -47,14 +52,14 @@
 
   .km-disabled {
     cursor: default;
-    opacity: 0.4;
+    opacity: .4;
     pointer-events: none;
   }
 }
 
 .km-collapse-sidenav {
-  width: $sidenav-width-collapsed;
   overflow-x: hidden;
+  width: $sidenav-width-collapsed;
 
   .menu-item a i {
     margin-right: 0;

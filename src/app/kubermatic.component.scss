@@ -9,22 +9,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../assets/css/variables";
+@import 'variables';
 
 km-root {
-  margin: 0;
-  width: 100%;
-  top: 0;
   bottom: 0;
+  margin: 0;
   position: absolute;
+  top: 0;
+  width: 100%;
 }
 
 mat-sidenav-container {
-  top: $toolbar-height;
-  margin: 0;
-  width: 100%;
   bottom: 0;
+  margin: 0;
   position: absolute;
+  top: $toolbar-height;
+  width: 100%;
 }
 
 .mat-input-wrapper {

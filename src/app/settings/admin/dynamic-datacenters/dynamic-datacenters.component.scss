@@ -9,47 +9,48 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import '../../../../assets/css/variables';
+@import 'mixins';
+@import 'variables';
 
 .filters {
-  margin-top: -2 * $baseline-grid;
+  margin-top: -16px;
 
   .filter-title {
-    margin: -2.5 * $baseline-grid $baseline-grid 0 0;
+    margin: -20px 8px 0 0;
   }
 
   .mat-form-field {
-    width: 35 * $baseline-grid;
+    width: 280px;
   }
 
   .clear-filter {
-    line-height: 2.5 * $line-height;
-    margin-right: 0.625 * $baseline-grid !important;
-    right: 3.75 * $baseline-grid;
-    top: -0.25 * $baseline-grid;
-    max-height: 3 * $baseline-grid;
-    max-width: 3 * $baseline-grid;
+    line-height: 25px;
+    margin-right: 5px !important;
+    max-height: 24px;
+    max-width: 24px;
     position: absolute;
+    right: 30px;
+    top: -2px;
 
     .km-icon {
-      margin-top: -.5 * $baseline-grid !important;
+      margin-top: -4px !important;
     }
   }
 }
 
 .km-with-table-header .mat-card-header {
-  padding: 0 (3.75 * $baseline-grid) !important;
+  padding: 0 30px !important;
 
   .mat-icon-button {
-    margin-top: -.33 * $baseline-grid;
+    margin-top: -.324px;
   }
 }
 
 .km-provider-logo {
   background-position: left !important;
-  max-height: 3.5 * $baseline-grid;
-  max-width: 14 * $baseline-grid !important;
-  min-height: 3.5 * $baseline-grid;
-  min-width: 5 * $baseline-grid !important;
-  margin: $baseline-grid $baseline-grid 0 0;
+  margin: 8px 8px 0 0;
+  max-height: 28px !important;
+  max-width: 120px !important;
+  min-height: 28px !important;
+  min-width: 40px !important;
 }

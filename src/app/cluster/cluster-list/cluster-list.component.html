@@ -10,9 +10,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+
 <div fxLayout>
   <div fxFlex
-       align="right">
+       fxLayoutAlign="end center">
     <button id="km-add-cluster-top-btn"
             mat-flat-button
             type="button"
@@ -158,7 +159,7 @@ limitations under the License.
           *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row
           *matRowDef="let row; columns: displayedColumns"
-          class="km-mat-row km-clickable"
+          class="km-mat-row km-pointer"
           (click)="navigateToCluster(row)"></tr>
     </table>
 

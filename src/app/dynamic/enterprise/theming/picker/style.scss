@@ -10,33 +10,32 @@
 // limitations under the License.
 
 @import 'variables';
+@import 'mixins';
 
 .km-account-settings-entry-label {
   align-items: center;
   display: flex;
-  min-width: 23 * $baseline-grid;
-  line-height: 8 * $baseline-grid;
+  line-height: 64px;
+  min-width: 224px;
 
   span {
-    margin-right: .625 * $baseline-grid;
+    margin-right: 5px;
   }
 }
 
 .km-account-settings-toggle {
   mat-button-toggle {
-    min-height: 50px;
-    max-height: 50px;
-    min-width: 140px;
-    max-width: 140px;
+    @include size(140px, 50px, true);
+
     border-radius: $border-radius;
 
     ::ng-deep.mat-button-toggle-label-content {
-      font-weight: normal;
       font-size: $font-size-subhead;
+      font-weight: normal;
     }
   }
 }
 
 .km-settings-status-margin {
-  margin-bottom: $baseline-grid;
+  margin-bottom: 8px;
 }

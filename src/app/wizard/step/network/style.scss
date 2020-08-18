@@ -9,14 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import '../../../../assets/css/variables';
+@import 'variables';
 
 .km-set-machine-networks {
   padding: 0;
 
   h4 {
-    margin-top: 0;
     font-weight: 400;
+    margin-top: 0;
   }
 }
 

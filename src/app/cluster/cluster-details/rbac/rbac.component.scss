@@ -9,15 +9,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/variables";
+@import 'variables';
 
 .mat-card.km-with-table-header .mat-card-header {
-  padding-left: 0;
   cursor: pointer;
+  padding-left: 0;
 }
 
 .km-toggled-rbac {
-  padding-bottom: $baseline-grid;
+  padding-bottom: 8px;
 
   mat-card-header {
     border-radius: $border-radius;
@@ -25,24 +25,20 @@
 }
 
 h2 {
-  font-weight: normal;
   font-size: $font-size-card-title;
-  padding: 0 (7 * $baseline-grid);
+  font-weight: normal;
   margin-bottom: 0;
+  padding: 0 56px;
 }
 
 tr th:first-child,
 tr td:first-child {
-  padding-left: 7 * $baseline-grid !important;
+  padding-left: 56px !important;
 }
 
 tr:last-child th:last-child,
 .km-table td:last-child {
-  padding-right: 7 * $baseline-grid;
-}
-
-.km-table-actions {
-  float: right;
+  padding-right: 56px;
 }
 
 .km-icon-arrow-down {

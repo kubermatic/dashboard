@@ -9,22 +9,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import '../../../../../assets/css/variables';
+@import 'variables';
 
 .mat-icon-button {
-  line-height: 2 * $line-height;
-  margin-right: 0.625 * $baseline-grid !important;
-  right: 3 * $baseline-grid;
-  top: -0.5 * $baseline-grid;
-  max-height: 2.5 * $baseline-grid;
-  max-width: 2.5 * $baseline-grid;
+  line-height: 20px;
+  margin-right: 5px !important;
+  max-height: 20px;
+  max-width: 20px;
   position: absolute;
+  right: 24px;
+  top: -4px;
 }
 
 ::ng-deep .km-preset-dropdown {
-  margin-top: 5.25 * $baseline-grid !important;
+  margin-top: 42px !important;
 }
 
 :host {
-  margin-bottom: $baseline-grid * 3.75;
+  margin-bottom: 30px;
 }

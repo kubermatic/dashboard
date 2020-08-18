@@ -18,6 +18,7 @@ import {Datacenter} from '../../../../shared/entity/datacenter';
 @Component({
   selector: 'km-cluster-panel',
   templateUrl: './cluster-panel.component.html',
+  styleUrls: ['./cluster-panel.component.scss'],
 })
 export class ClusterPanelComponent {
   @Input() cluster: Cluster;

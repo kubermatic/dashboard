@@ -9,17 +9,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../assets/css/variables";
+@import 'variables';
+@import 'mixins';
 
 .mat-card {
-  padding: 0 $baseline-grid;
+  padding: 0 8px;
 }
 
 .km-button-navigation {
-  margin-top: 2 * $baseline-grid;
+  margin-top: 16px;
 
   &:not(#summary-nav) {
-    margin-top: .5 * $baseline-grid;
+    margin-top: 4px;
   }
 }
 
@@ -27,7 +28,7 @@
   width: 0 !important;
 }
 
-@include km-breakpoint('small') {
+@include breakpoint('small') {
   ::ng-deep.mat-horizontal-stepper-header-container {
     display: none !important;
   }
@@ -37,11 +38,10 @@
   padding-top: 45px;
 }
 
-::ng-deep.mat-card-header {
+::ng-deep .mat-card-header {
   margin-bottom: 0 !important;
 }
 
-::ng-deep.mat-card-title {
-  margin-bottom: 0 !important;
-  padding-bottom: 20px !important;
+::ng-deep .mat-card-header .mat-card-title {
+  padding: 8px 0 8px;
 }

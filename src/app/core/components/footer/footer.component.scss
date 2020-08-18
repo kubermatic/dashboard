@@ -9,17 +9,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import '../../../../assets/css/variables';
+@import 'variables';
 
 footer {
-  padding: $baseline-grid (3.5 * $baseline-grid) (2.5 * $baseline-grid);
-  width: 100%;
   height: $toolbar-height;
+  padding: 8px 28px 20px;
+  width: 100%;
   z-index: 999;
 
   * {
-    text-decoration: none;
     font-size: $font-size-body;
+    text-decoration: none;
   }
 }
 
@@ -28,7 +28,7 @@ footer {
 }
 
 .content {
-  line-height: $font-size-card-title;
+  line-height: 20px;
   overflow: hidden;
   white-space: nowrap;
 
@@ -40,21 +40,21 @@ footer {
   & > div::before {
     content: '–';
     display: inline-block;
-    width: 15px;
     margin-left: -15px;
+    width: 15px;
   }
 }
 
 i {
   background-color: transparent;
-  display: inline-block;
-  width: 2.5 * $baseline-grid;
-  height: 2.5 * $baseline-grid;
-  margin-left: 2 * $baseline-grid;
   background-repeat: no-repeat;
   background-size: contain;
   cursor: pointer;
-  -webkit-filter: grayscale(100%);
+  display: inline-block;
+  filter: grayscale(100%);
+  height: 20px;
+  margin-left: 16px;
+  width: 20px;
 
   &:hover {
     opacity: .75;

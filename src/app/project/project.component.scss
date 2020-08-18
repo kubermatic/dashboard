@@ -9,10 +9,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../assets/css/variables";
+@import 'variables';
+@import 'mixins';
+
+$view-switch-height: 40px;
+$view-switch-width: 50px;
+$project-card-height: 200px;
+$project-card-width: 330px;
 
 .km-projects-spinner {
-  margin: (2.5 * $baseline-grid) auto !important;
+  margin: 20px auto !important;
 }
 
 .km-health-status {
@@ -26,40 +32,28 @@
 
 .km-project-more-owner {
   display: inline-block;
-  margin: 0 !important;
   font-size: $font-size-subhead !important;
-}
-
-.km-project-top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  margin: 0 !important;
 }
 
 .km-project-view-switch {
   border-radius: $border-radius;
 
-  mat-button-toggle {
+  .mat-button-toggle {
+    @include size($view-switch-width, $view-switch-height, true);
+
     margin: 0;
-    min-height: 5 * $baseline-grid;
-    max-height: 5 * $baseline-grid;
-    min-width: 6.25 * $baseline-grid;
-    max-width: 6.25 * $baseline-grid;
 
     &:first-child {
-      border-top-left-radius: $border-radius;
       border-bottom-left-radius: $border-radius;
+      border-top-left-radius: $border-radius;
     }
 
     &:last-child {
-      border-top-right-radius: $border-radius;
       border-bottom-right-radius: $border-radius;
+      border-top-right-radius: $border-radius;
     }
   }
-}
-
-mat-slide-toggle {
-  margin-right: 2.5 * $baseline-grid;
 }
 
 .km-project-cards-view {
@@ -71,84 +65,79 @@ mat-slide-toggle {
   }
 
   .km-icon-cluster {
-    width: 3 * $baseline-grid;
-    height: 3 * $baseline-grid;
+    @include size(24px);
   }
 
-  mat-card {
-    min-width: 41.25 * $baseline-grid;
-    max-width: 41.25 * $baseline-grid;
-    min-height: 25.5 * $baseline-grid;
-    max-height: 25.5 * $baseline-grid;
-    margin-top: 2.5 * $baseline-grid;
-    padding: 0 !important;
-    cursor: pointer;
+  .mat-card {
+    @include size($project-card-width, $project-card-height, true);
+
     box-shadow: $border-box-shadow !important;
+    cursor: pointer;
+    margin-top: 20px;
+    padding: 0 !important;
 
     &:hover {
       box-shadow: $border-box-shadow-hover !important;
 
       button {
         opacity: 1;
-        transition: opacity 0.1s ease-out;
+        transition: opacity .1s ease-out;
       }
     }
   }
 
-  mat-card-header {
-    padding: 2.5 * $baseline-grid;
+  .mat-card-header {
+    padding: 20px;
   }
 
-  mat-card-title {
+  .mat-card-title {
+    line-height: 23px;
     margin: 0;
     padding: 0;
-    line-height: 2.3 * $line-height;
-    max-width: 23.75 * $baseline-grid;
-    min-width: 23.75 * $baseline-grid;
   }
 
-  mat-card-subtitle {
+  .mat-card-subtitle {
+    line-height: 16px;
     margin: 0;
-    padding: (0.625 * $baseline-grid) 0 0 0;
-    line-height: 1.6 * $line-height;
+    padding: 5px 0 0 0;
 
     strong {
       font-family: $font-primary-mono;
-      margin-right: 0.625 * $baseline-grid;
+      margin-right: 5px;
     }
   }
 
   .km-project-cards-status {
-    display: flex;
+    @include size(27px, auto);
+
     align-items: center;
-    height: auto;
-    width: 4.375 * $baseline-grid;
+    display: flex;
   }
 
-  mat-card-content {
-    padding: 2.5 * $baseline-grid;
+  .mat-card-content {
+    padding: 20px;
   }
 
   .km-project-cards-content-row {
-    display: flex;
-    width: 100%;
     align-items: center;
-    line-height: 4 * $line-height;
+    display: flex;
+    line-height: 40px;
+    width: 100%;
 
     i {
-      padding-right: 1.25 * $baseline-grid;
+      padding-right: 10px;
     }
 
     span {
-      display: flex;
       align-items: center;
+      display: flex;
 
       &:first-child {
-        padding-right: 3.75 * $baseline-grid;
+        padding-right: 30px;
       }
 
       &.km-projects-less-space {
-        padding-right: 2 * $baseline-grid;
+        padding-right: 16px;
       }
     }
   }

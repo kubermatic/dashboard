@@ -9,7 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/variables";
+@import 'mixins';
+@import 'variables';
 
 $logo-width: 160px;
 $logo-margin-top: 13px;
@@ -19,34 +20,33 @@ header {
 }
 
 .km-navbar {
+  @include size(100%, $toolbar-height);
+
   padding-left: 10px;
-  height: $toolbar-height;
   position: fixed;
-  width: 100%;
-  z-index: 2;
   top: 0;
+  z-index: 2;
 
   * {
     z-index: 2;
   }
 
   .km-header-logo {
-    display: block;
-    width: $logo-width + $logo-margin-top;
-    height: $toolbar-height;
-    background-size: $logo-width;
+    @include size($logo-width + $logo-margin-top, $toolbar-height);
+
     background-position: $logo-margin-top $logo-margin-top;
+    background-size: $logo-width;
+    display: block;
   }
 }
 
 .km-icon-arrow-up {
-  height: 1.75 * $baseline-grid;
-  margin-left: 3 * $baseline-grid;
-  margin-right: $baseline-grid;
-  width: 1.75 * $baseline-grid;
+  @include size(14px);
+
+  margin: 0 8px 0 24px;
 }
 
-@include km-breakpoint('small') {
+@include breakpoint('small') {
   .collapse-button {
     display: none !important;
   }

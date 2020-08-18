@@ -9,37 +9,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/variables";
+@import 'variables';
+@import 'mixins';
 
 :host {
   counter-reset: section-number;
 }
 
 .section {
-  margin: (5.625 * $baseline-grid) 0 0;
+  margin: 45px 0 0;
 
   .header {
     font-size: $font-size-subhead-lg;
-    margin-bottom: 2 * $baseline-grid;
+    margin-bottom: 16px;
 
     &::before {
+      @include size(22px);
+
       align-items: center;
       border: 1px solid;
       border-radius: 50%;
-      counter-increment: section-number;
       content: counter(section-number);
+      counter-increment: section-number;
       display: inline-flex;
       font-size: $font-size-body;
-      height: (3 * $baseline-grid) - 2;
       justify-content: center;
-      margin-right: 1.5 * $baseline-grid;
-      width: (3 * $baseline-grid) - 2;
+      margin-right: 12px;
     }
   }
 
   .properties {
     .network-id {
-      margin-bottom: 2 * $baseline-grid;
+      margin-bottom: 16px;
     }
   }
 }
@@ -50,28 +51,26 @@
   }
 
   i {
-    margin-right: 1.5 * $baseline-grid !important;
+    margin-right: 12px !important;
   }
 }
 
 ::ng-deep .km-property-container {
-  margin: 0 0 (0.6 * $baseline-grid) !important;
+  margin: 0 0 5px !important;
 }
 
 .km-provider-logo {
   background-position: left !important;
+  margin: 6px 0;
   max-width: 100px !important;
-  margin: (.75 * $baseline-grid) 0;
 }
 
 .km-os-image {
-  display: inline-block;
-  height: 28px;
-  width: 28px;
+  @include size(28px);
 }
 
 .km-icon-key {
   cursor: default;
-  margin-right: 2 * $baseline-grid;
+  margin-right: 16px;
   user-select: none;
 }
