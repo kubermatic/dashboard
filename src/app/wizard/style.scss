@@ -24,13 +24,13 @@
   }
 }
 
-::ng-deep.mat-horizontal-stepper-content[aria-expanded="false"] {
-  width: 0 !important;
+.mat-horizontal-stepper-content[aria-expanded="false"] {
+  width: 0;
 }
 
 @include breakpoint('small') {
-  ::ng-deep.mat-horizontal-stepper-header-container {
-    display: none !important;
+  .mat-horizontal-stepper-header-container {
+    display: none;
   }
 }
 
@@ -38,10 +38,10 @@
   padding-top: 45px;
 }
 
-::ng-deep .mat-card-header {
-  margin-bottom: 0 !important;
+.mat-card-header {
+  margin-bottom: 0;
 }
 
-::ng-deep .mat-card-header .mat-card-title {
+.mat-card-header .mat-card-title {
   padding: 8px 0 8px;
 }

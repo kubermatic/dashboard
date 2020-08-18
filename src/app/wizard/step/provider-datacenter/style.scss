@@ -27,7 +27,7 @@
   white-space: normal;
   word-break: break-word;
 
-  ::ng-deep .km-country-prefix {
+  .km-country-prefix {
     display: block;
     font-size: $font-size-caption;
     line-height: 14px;
@@ -43,6 +43,6 @@
 }
 
 .mat-button-toggle-group[group='providerGroup'] {
-  margin-bottom: 0 !important;
+  margin-bottom: 0;
   padding-bottom: $content-padding;
 }

@@ -20,7 +20,7 @@
   @include background-image("/assets/images/branding/bg.svg", 100%);
 
   background-attachment: fixed;
-  background-size: cover !important;
+  background-size: cover;
 }
 
 .km-error-background {
@@ -62,8 +62,8 @@
 .km-icon-error {
   @include background-image("/assets/images/icons/warning.svg", 16px);
 
-  background-color: #eb5757 !important;
-  background-size: 12px !important;
+  background-color: #eb5757;
+  background-size: 12px;
   border-radius: 50%;
   margin: 4px 14px 4px 0;
 }
@@ -80,8 +80,8 @@
 .km-icon-tick {
   @include background-image("/assets/images/icons/tick.svg", 16px);
 
-  background-color: #1dc67f !important;
-  background-size: 12px !important;
+  background-color: #1dc67f;
+  background-size: 12px;
   border-radius: 50%;
   margin: 4px 14px 4px 0;
 }

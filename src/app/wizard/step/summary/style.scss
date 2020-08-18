@@ -45,24 +45,24 @@
   }
 }
 
-::ng-deep km-property-boolean {
+km-property-boolean {
   .km-property-label {
-    display: none !important;
+    display: none;
   }
 
   i {
-    margin-right: 12px !important;
+    margin-right: 12px;
   }
 }
 
-::ng-deep .km-property-container {
-  margin: 0 0 5px !important;
+.km-property-container {
+  margin: 0 0 5px;
 }
 
 .km-provider-logo {
-  background-position: left !important;
+  background-position: left;
   margin: 6px 0;
-  max-width: 100px !important;
+  max-width: 100px;
 }
 
 .km-os-image {

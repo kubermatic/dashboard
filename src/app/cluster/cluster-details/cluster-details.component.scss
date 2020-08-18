@@ -21,7 +21,7 @@
 }
 
 .km-cluster-name {
-  font-weight: 500 !important;
+  font-weight: 500;
   padding-right: 8px;
 }
 
@@ -43,7 +43,7 @@
 }
 
 .mat-icon.km-icon-edit {
-  @include size(18px !important);
+  @include size(18px);
 }
 
 .km-provider-logo-value {

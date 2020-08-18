@@ -23,7 +23,7 @@ $toggle-height: 56px;
   .mat-button-toggle {
     @include size($toggle-width, $toggle-height, true);
 
-    border-width: 2px !important;
+    border-width: 2px;
     margin: 4px 0 0 0;
 
     i {
@@ -70,7 +70,7 @@ $toggle-height: 56px;
   top: 0;
 }
 
-.km-randomize-btn ::ng-deep .mat-button-wrapper {
+.km-randomize-btn .mat-button-wrapper {
   align-items: center;
   display: flex;
   justify-content: center;

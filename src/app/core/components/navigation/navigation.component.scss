@@ -48,10 +48,10 @@ header {
 
 @include breakpoint('small') {
   .collapse-button {
-    display: none !important;
+    display: none;
   }
 
   .project-selector {
-    display: none !important;
+    display: none;
   }
 }

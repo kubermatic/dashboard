@@ -18,7 +18,7 @@ $project-card-height: 200px;
 $project-card-width: 330px;
 
 .km-projects-spinner {
-  margin: 20px auto !important;
+  margin: 20px auto;
 }
 
 .km-health-status {
@@ -32,8 +32,8 @@ $project-card-width: 330px;
 
 .km-project-more-owner {
   display: inline-block;
-  font-size: $font-size-subhead !important;
-  margin: 0 !important;
+  font-size: $font-size-subhead;
+  margin: 0;
 }
 
 .km-project-view-switch {
@@ -71,13 +71,13 @@ $project-card-width: 330px;
   .mat-card {
     @include size($project-card-width, $project-card-height, true);
 
-    box-shadow: $border-box-shadow !important;
+    box-shadow: $border-box-shadow;
     cursor: pointer;
     margin-top: 20px;
-    padding: 0 !important;
+    padding: 0;
 
     &:hover {
-      box-shadow: $border-box-shadow-hover !important;
+      box-shadow: $border-box-shadow-hover;
 
       button {
         opacity: 1;
@@ -88,6 +88,10 @@ $project-card-width: 330px;
 
   .mat-card-header {
     padding: 20px;
+  }
+
+  .mat-card-header-text {
+    margin: 0;
   }
 
   .mat-card-title {

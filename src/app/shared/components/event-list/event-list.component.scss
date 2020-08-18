@@ -12,7 +12,7 @@
 @import 'variables';
 
 .km-events-long-text {
-  line-height: 20px !important;
+  line-height: 20px;
 }
 
 .km-events-timestamp {
@@ -27,7 +27,7 @@
 
 mat-card-header {
   cursor: pointer;
-  padding: 0 !important;
+  padding: 0;
 }
 
 .km-toggled-events {
@@ -48,5 +48,5 @@ mat-card-header {
 }
 
 .km-icon-arrow-down {
-  margin-left: 0 !important;
+  margin-left: 0;
 }

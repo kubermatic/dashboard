@@ -12,11 +12,11 @@
 import {DOCUMENT} from '@angular/common';
 import {Inject, Injectable} from '@angular/core';
 import {filter} from 'rxjs/operators';
+import {UserService} from '../../../../core/services';
 import {ThemeInformerService} from '../../../../core/services/theme-informer/theme-informer.service';
 import {UserSettings} from '../../../../shared/entity/settings';
 import {ColorSchemeService} from './color-scheme';
 import {ThemeService} from './theme';
-import {UserService} from '../../../../core/services';
 
 @Injectable()
 export class ThemeManagerService {
@@ -99,6 +99,13 @@ export class ThemeManagerService {
     const linkEl: HTMLLinkElement = this._document.createElement('link');
     linkEl.setAttribute('rel', 'stylesheet');
     linkEl.classList.add(this._themeClassName(styleName));
+
+    const positionElement = this._document.head.querySelector('link[rel="stylesheet"][href="styles.css"]');
+    if (positionElement) {
+      positionElement.after(linkEl);
+      return linkEl;
+    }
+
     this._document.head.appendChild(linkEl);
     return linkEl;
   }

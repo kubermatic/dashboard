@@ -33,7 +33,7 @@ h2 {
 
 tr th:first-child,
 tr td:first-child {
-  padding-left: 56px !important;
+  padding-left: 56px;
 }
 
 tr:last-child th:last-child,
@@ -42,5 +42,5 @@ tr:last-child th:last-child,
 }
 
 .km-icon-arrow-down {
-  margin-left: 0 !important;
+  margin-left: 0;
 }

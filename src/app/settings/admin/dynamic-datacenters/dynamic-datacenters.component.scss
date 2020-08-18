@@ -25,7 +25,7 @@
 
   .clear-filter {
     line-height: 25px;
-    margin-right: 5px !important;
+    margin-right: 5px;
     max-height: 24px;
     max-width: 24px;
     position: absolute;
@@ -33,13 +33,13 @@
     top: -2px;
 
     .km-icon {
-      margin-top: -4px !important;
+      margin-top: -4px;
     }
   }
 }
 
 .km-with-table-header .mat-card-header {
-  padding: 0 30px !important;
+  padding: 0 30px;
 
   .mat-icon-button {
     margin-top: -.324px;
@@ -47,10 +47,10 @@
 }
 
 .km-provider-logo {
-  background-position: left !important;
+  background-position: left;
   margin: 8px 8px 0 0;
-  max-height: 28px !important;
-  max-width: 120px !important;
-  min-height: 28px !important;
-  min-width: 40px !important;
+  max-height: 28px;
+  max-width: 120px;
+  min-height: 28px;
+  min-width: 40px;
 }

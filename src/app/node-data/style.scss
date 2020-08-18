@@ -45,7 +45,7 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
     }
   }
 
-  ::ng-deep .mat-button-toggle-label-content {
+  .mat-button-toggle-label-content {
     font-size: $font-size-subhead;
     font-weight: normal;
   }
@@ -57,7 +57,7 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
   top: 0;
 }
 
-.km-randomize-btn ::ng-deep .mat-button-wrapper {
+.km-randomize-btn .mat-button-wrapper {
   align-items: center;
   display: flex;
   justify-content: center;

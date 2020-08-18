@@ -31,7 +31,8 @@ limitations under the License.
         <i class="km-icon-mask km-icon-projects-table"></i>
       </mat-button-toggle>
     </mat-button-toggle-group>
-    <button id="km-add-project-top-btn"
+    <button class="km-raised-button"
+            id="km-add-project-top-btn"
             mat-flat-button
             type="button"
             (click)="addProject()">
@@ -204,19 +205,16 @@ limitations under the License.
     <mat-card *ngFor="let project of projects"
               (click)="selectProject(project)">
       <mat-card-header>
-        <div mat-card-avatar
-             class="km-project-cards-status">
-          <i [matTooltip]="project.status"
-             [ngClass]="getProjectStateIconClass(project)"
-             class="km-health-state"></i>
-        </div>
-        <div fxFlex>
-          <mat-card-title [matTooltip]="getProjectTooltip(project.name)"
-                          [attr.id]="'km-project-name-' + project.name">{{getName(project.name)}}</mat-card-title>
-          <mat-card-subtitle>
-            <strong>ID</strong> {{project.id}}
-          </mat-card-subtitle>
-        </div>
+        <i mat-card-avatar
+           [matTooltip]="project.status"
+           [ngClass]="getProjectStateIconClass(project)"
+           class="km-health-state km-project-cards-status"
+           fxFlexAlign=" center"></i>
+        <mat-card-title [matTooltip]="getProjectTooltip(project.name)"
+                        [attr.id]="'km-project-name-' + project.name">{{getName(project.name)}}</mat-card-title>
+        <mat-card-subtitle>
+          <strong>ID</strong> {{project.id}}
+        </mat-card-subtitle>
         <div class="km-project-item-actions">
           <button mat-icon-button
                   [attr.id]="'km-edit-project-' + project.name"

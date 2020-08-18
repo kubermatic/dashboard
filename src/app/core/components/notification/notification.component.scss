@@ -17,40 +17,40 @@ $popup-max-height: 160px;
 $popup-margin: 0 24px 80px 0;
 $popup-shadow: 0 5px 5px rgba(0, 0, 0, .2), 0 8px 10px rgba(0, 0, 0, .14), 0 3px 14px rgba(0, 0, 0, .12);
 
-::ng-deep .km-notification {
-  border-radius: $border-radius !important;
-  box-shadow: $popup-shadow !important;
-  display: flex !important;
-  flex: 1 1 auto !important;
-  margin: $popup-margin !important;
-  max-height: $popup-max-height !important;
-  max-width: $popup-width !important;
-  min-height: $popup-min-height !important;
-  min-width: $popup-width !important;
-  padding: 0 !important;
+.km-notification {
+  border-radius: $border-radius;
+  box-shadow: $popup-shadow;
+  display: flex;
+  flex: 1 1 auto;
+  margin: $popup-margin;
+  max-height: $popup-max-height;
+  max-width: $popup-width;
+  min-height: $popup-min-height;
+  min-width: $popup-width;
+  padding: 0;
 }
 
 .km-notification-type {
-  border-radius: $border-radius 0 0 $border-radius !important;
-  padding-left: 12px !important;
+  border-radius: $border-radius 0 0 $border-radius;
+  padding-left: 12px;
 }
 
 .km-notification-content {
-  font-size: $font-size-subhead !important;
-  max-height: 100% !important;
-  padding: 8px 20px !important;
-  word-break: break-word !important;
+  font-size: $font-size-subhead;
+  max-height: 100%;
+  padding: 8px 20px;
+  word-break: break-word;
 }
 
 .km-notification-copy-action,
 .km-notification-close-action {
-  cursor: pointer !important;
+  cursor: pointer;
 }
 
 .km-notification-close-container {
-  padding: 0 16px !important;
+  padding: 0 16px;
 }
 
 :host {
-  flex: 1 1 auto !important;
+  flex: 1 1 auto;
 }
