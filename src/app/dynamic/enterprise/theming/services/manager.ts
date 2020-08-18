@@ -46,11 +46,9 @@ export class ThemeManagerService {
   }
 
   setTheme(themeName: string) {
-    if (this._selectedTheme) {
-      this._removeTheme(this._selectedTheme);
-    }
-
-    this._getLinkElementForTheme(themeName).setAttribute('href', this._themesPath(themeName));
+    const element = this._getLinkElementForTheme(this._selectedTheme);
+    element.setAttribute('href', this._themesPath(themeName));
+    element.setAttribute('class', this._themeClassName(themeName));
     this._selectedTheme = themeName;
 
     this._themeInformerService.isCurrentThemeDark$.next(this._isThemeDark(themeName));
@@ -86,13 +84,6 @@ export class ThemeManagerService {
     }
 
     return this._defaultTheme;
-  }
-
-  private _removeTheme(styleName: string) {
-    const existingLinkElement = this._getExistingLinkElementForTheme(styleName);
-    if (existingLinkElement) {
-      this._document.head.removeChild(existingLinkElement);
-    }
   }
 
   private _getLinkElementForTheme(styleName: string): Element {

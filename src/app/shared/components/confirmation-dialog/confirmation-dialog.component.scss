@@ -9,32 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Third party styles.
-$flag-icon-square-path: '/4x3';
-$flag-icon-css-path: '../../../node_modules/flag-icon-css/flags';
-
-// External packages styles
-@import '~swagger-ui/dist/swagger-ui.css';
-@import '~flag-icon-css/sass/flag-icon';
-@import "~fontsource-ubuntu/index.css";
-
-// Application styles.
 @import 'variables';
-@import 'images';
-@import 'theme';
 
-html,
-body {
-  background-color: #edeff0;
-  color: #4d555c;
-  font-family: $font-primary;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  position: absolute;
-  width: 100%;
-}
-
-.km-cluster-list-health {
-  vertical-align: middle;
+.km-confirm-dialog-copy-icon {
+  margin-left: .5 * $baseline-grid;
 }

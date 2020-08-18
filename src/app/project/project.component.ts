@@ -28,14 +28,17 @@ import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
-import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {filter, first, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 import {Cookie, COOKIE_DI_TOKEN} from '../app.config';
 import {NotificationService, ProjectService, UserService} from '../core/services';
 import {PreviousRouteService} from '../core/services/previous-route/previous-route.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
-import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {
+  ConfirmationDialogComponent,
+  ConfirmationDialogConfig,
+} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {View} from '../shared/entity/common';
 import {Member} from '../shared/entity/member';
 import {Project, ProjectOwners} from '../shared/entity/project';
@@ -341,6 +344,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(isAdded => {
         if (isAdded) {
           this._projectService.onProjectsUpdate.next();
+          this.projects.push(isAdded);
         }
       });
   }
@@ -384,12 +388,13 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Project',
-        message: `Are you sure you want to permanently delete project "<strong>${project.name}</strong>"?`,
+        message: `Are you sure you want to permanently delete project <strong>${project.name}</strong>?`,
         confirmLabel: 'Delete',
         compareName: project.name,
         inputPlaceholder: 'Project Name',
         inputTitle: 'Project Name',
-      },
+        copyEnabled: true,
+      } as ConfirmationDialogConfig,
     };
 
     const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
@@ -399,7 +404,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
       .pipe(switchMap(_ => this._projectService.delete(project.id)))
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(`The <strong>${project.name}</strong> project is being deleted`);
         this._googleAnalyticsService.emitEvent('projectOverview', 'ProjectDeleted');

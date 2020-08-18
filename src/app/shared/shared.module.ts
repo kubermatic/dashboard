@@ -46,6 +46,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {ClipboardModule} from 'ngx-clipboard';
 import {CustomFormsModule} from 'ngx-custom-validators';
 import {FilterPipeModule} from 'ngx-filter-pipe';
+import {MonacoEditorModule} from 'ngx-monaco-editor';
 
 import {NotificationComponent} from '../core/components/notification/notification.component';
 import {TokenDialogComponent} from '../serviceaccount/serviceaccount-token/token-dialog/token-dialog.component';
@@ -78,7 +79,6 @@ import {TaintFormComponent} from './components/taint-form/taint-form.component';
 import {TaintsComponent} from './components/taints/taints.component';
 import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
-import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {ClusterService} from './services/cluster.service';
 import {EndOfLifeService} from './services/eol.service';
 

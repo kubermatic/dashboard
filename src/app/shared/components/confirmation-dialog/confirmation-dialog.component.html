@@ -13,7 +13,14 @@ limitations under the License.
 <div id="km-confirmation-dialog"
      class="km-confirmation-dialog km-confirmation"
      (keydown.enter)="onEnterKeyDown()">
-  <km-dialog-title>{{data.title}}</km-dialog-title>
+  <km-dialog-title>
+    <div>{{data.title}}</div>
+    <i *ngIf="!!data.compareName && data.copyEnabled"
+       class="km-icon-copy-small km-icon-mask km-copy"
+       ngxClipboard
+       [cbContent]="data.compareName"
+       matTooltip="Click to copy name"></i>
+  </km-dialog-title>
   <mat-dialog-content>
     <p [innerHTML]="data.message"></p>
     <div *ngIf="!!data.warning"

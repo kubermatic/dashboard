@@ -22,11 +22,14 @@ export interface ConfirmationDialogConfig {
   compareName?: string;
   inputPlaceholder?: string;
   inputTitle?: string;
+  // Defines whether click to copy option should be enabled
+  copyEnabled?: boolean;
 }
 
 @Component({
   selector: 'km-confirmation-dialog',
   templateUrl: './confirmation-dialog.component.html',
+  styleUrls: ['confirmation-dialog.component.scss'],
 })
 export class ConfirmationDialogComponent {
   inputName = '';
@@ -35,10 +38,6 @@ export class ConfirmationDialogComponent {
     public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ConfirmationDialogConfig
   ) {}
-
-  onNoClick(): void {
-    this.dialogRef.close(false);
-  }
 
   onEnterKeyDown(): void {
     if (!this.inputNameMatches()) {

@@ -30,7 +30,6 @@
               ]
             },
             "styles": [
-              "node_modules/swagger-ui/dist/swagger-ui.css",
               "src/assets/css/main.scss",
               {
                 "input": "src/assets/themes/light.scss",
