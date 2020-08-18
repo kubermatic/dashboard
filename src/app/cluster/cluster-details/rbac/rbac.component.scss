@@ -12,8 +12,8 @@
 @import 'variables';
 
 .mat-card.km-with-table-header .mat-card-header {
-  padding-left: 0;
   cursor: pointer;
+  padding-left: 0;
 }
 
 .km-toggled-rbac {
@@ -25,10 +25,10 @@
 }
 
 h2 {
-  font-weight: normal;
   font-size: $font-size-card-title;
-  padding: 0 56px;
+  font-weight: normal;
   margin-bottom: 0;
+  padding: 0 56px;
 }
 
 tr th:first-child,

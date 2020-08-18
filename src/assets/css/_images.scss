@@ -19,8 +19,8 @@
 .km-frontpage-background {
   @include background-image("/assets/images/branding/bg.svg", 100%);
 
-  background-size: cover !important;
   background-attachment: fixed;
+  background-size: cover !important;
 }
 
 .km-error-background {

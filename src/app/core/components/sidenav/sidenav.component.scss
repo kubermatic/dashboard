@@ -28,10 +28,10 @@ $sidenav-item-margin: 10px;
 
     a {
       border-radius: $border-radius;
+      display: flex;
       font-size: $font-size-subhead;
       height: $sidenav-item-height;
       padding: $sidenav-item-margin !important;
-      display: flex;
       text-decoration: none;
 
       i {
@@ -58,8 +58,8 @@ $sidenav-item-margin: 10px;
 }
 
 .km-collapse-sidenav {
-  width: $sidenav-width-collapsed;
   overflow-x: hidden;
+  width: $sidenav-width-collapsed;
 
   .menu-item a i {
     margin-right: 0;

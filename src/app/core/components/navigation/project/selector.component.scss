@@ -16,16 +16,16 @@
 }
 
 ::ng-deep.km-projects-container {
-  position: relative;
+  border-radius: $border-radius;
   margin: 0 20px;
   padding: 10px 15px;
+  position: relative;
   width: fit-content !important;
-  border-radius: $border-radius;
 
   .mat-select-value {
-    width: fit-content;
-    min-width: 2ch;
     max-width: 25ch;
+    min-width: 2ch;
+    width: fit-content;
   }
 
   .mat-select-arrow {
@@ -33,10 +33,10 @@
   }
 
   .km-projects-icon {
+    pointer-events: none;
     position: absolute;
     right: 16px;
     top: 14px;
-    pointer-events: none;
   }
 
   .mat-select-value-text {
@@ -45,8 +45,8 @@
   }
 
   .mat-select-placeholder {
-    opacity: .7;
     font-size: $font-size-subhead !important;
     line-height: 20px !important;
+    opacity: .7;
   }
 }

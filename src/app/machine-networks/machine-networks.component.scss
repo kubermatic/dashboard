@@ -28,13 +28,13 @@ h3 {
 }
 
 .km-add-machine-network {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
   border-radius: 5px;
-  height: 50px;
+  cursor: pointer;
+  display: flex;
   font-weight: 400;
+  height: 50px;
+  justify-content: center;
 }
 
 .km-single-machine-network {

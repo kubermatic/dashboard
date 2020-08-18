@@ -12,8 +12,8 @@
 @import 'variables';
 
 div.km-os-options {
-  line-height: 30px;
   font-size: $font-size-body;
+  line-height: 30px;
   margin: 0 0 10px;
 }
 
@@ -22,16 +22,16 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
 
   .mat-button-toggle {
     border-radius: $border-radius;
-    max-width: 170px;
-    min-width: 120px;
     max-height: 60px;
+    max-width: 170px;
     min-height: 60px;
+    min-width: 120px;
     outline: none;
 
     i {
       margin-right: 10px;
-      min-width: 28px;
       min-height: 28px;
+      min-width: 28px;
 
       &:not(.km-os-image-rhel) {
         filter: grayscale(100%);
@@ -58,8 +58,8 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
 }
 
 .km-randomize-btn ::ng-deep .mat-button-wrapper {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: center;
 }
 

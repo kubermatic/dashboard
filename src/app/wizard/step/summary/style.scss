@@ -29,8 +29,8 @@
       align-items: center;
       border: 1px solid;
       border-radius: 50%;
-      counter-increment: section-number;
       content: counter(section-number);
+      counter-increment: section-number;
       display: inline-flex;
       font-size: $font-size-body;
       justify-content: center;
@@ -61,8 +61,8 @@
 
 .km-provider-logo {
   background-position: left !important;
-  max-width: 100px !important;
   margin: 6px 0;
+  max-width: 100px !important;
 }
 
 .km-os-image {

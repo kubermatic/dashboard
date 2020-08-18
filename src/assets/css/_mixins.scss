@@ -29,8 +29,8 @@ $breakpoints: (
     width: $width;
   } @else { /* stylelint-disable-line */
     max-height: $height;
-    min-height: $height;
     max-width: $width;
+    min-height: $height;
     min-width: $width;
   }
 }
@@ -67,6 +67,6 @@ $breakpoints: (
 
 @mixin toolbar-button($position: 1) {
   position: fixed;
-  top: 11px;
   right: ($position * 40px) + (16px * ($position - 1));
+  top: 11px;
 }

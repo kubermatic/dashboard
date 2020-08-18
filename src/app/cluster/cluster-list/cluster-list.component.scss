@@ -20,8 +20,8 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 }
 
 .km-cluster-type {
-  display: flex;
   align-items: center;
+  display: flex;
 
   i {
     width: 25px;
@@ -35,9 +35,9 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 
 .km-provider-logo {
   background-position: left !important;
+  margin: 8px 8px 0 0;
   max-width: 150px !important;
   min-width: 70px !important;
-  margin: 8px 8px 0 0;
 }
 
 .km-provider-logo-digitalocean,

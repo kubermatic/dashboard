@@ -23,10 +23,10 @@ $popup-shadow: 0 5px 5px rgba(0, 0, 0, .2), 0 8px 10px rgba(0, 0, 0, .14), 0 3px
   display: flex !important;
   flex: 1 1 auto !important;
   margin: $popup-margin !important;
-  min-height: $popup-min-height !important;
   max-height: $popup-max-height !important;
-  min-width: $popup-width !important;
   max-width: $popup-width !important;
+  min-height: $popup-min-height !important;
+  min-width: $popup-width !important;
   padding: 0 !important;
 }
 

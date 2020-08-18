@@ -92,6 +92,7 @@
     "stylelint": "13.6.1",
     "stylelint-config-standard": "20.0.0",
     "stylelint-declaration-block-order": "0.2.0",
+    "stylelint-order": "^4.1.0",
     "ts-jest": "26.2.0",
     "ts-node": "8.10.2",
     "tslint": "6.1.3",
@@ -206,7 +207,8 @@
   "stylelint": {
     "extends": "stylelint-config-standard",
     "plugins": [
-      "stylelint-declaration-block-order"
+      "stylelint-declaration-block-order",
+      "stylelint-order"
     ],
     "rules": {
       "at-rule-no-unknown": null,
@@ -240,7 +242,8 @@
         },
         "at-rules",
         "rules"
-      ]
+      ],
+      "order/properties-alphabetical-order": true
     }
   }
 }

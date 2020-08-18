@@ -27,8 +27,8 @@ i.km-icon-info {
 
 .mat-column-name,
 .km-node-info {
-  display: flex;
   align-items: center;
+  display: flex;
 }
 
 .mat-column-name {
@@ -40,8 +40,8 @@ i.km-icon-info {
   padding: 15px 30px 20px 60px;
 
   mat-card-content {
-    margin-top: 15px;
     border: none !important;
+    margin-top: 15px;
   }
 }
 

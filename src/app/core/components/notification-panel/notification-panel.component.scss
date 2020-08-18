@@ -56,8 +56,8 @@ $panel-width: 350px;
   }
 
   .notification-list {
-    overflow-y: auto;
     overflow-x: hidden;
+    overflow-y: auto;
 
     .notification {
       margin: 8px 20px 20px 8px;
@@ -69,10 +69,10 @@ $panel-width: 350px;
       }
 
       .notification-message {
-        word-break: break-word;
         font-size: $font-size-body;
         line-height: 16px;
         margin-bottom: 8px;
+        word-break: break-word;
       }
 
       .notification-info {

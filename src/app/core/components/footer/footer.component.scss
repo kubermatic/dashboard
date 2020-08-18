@@ -12,14 +12,14 @@
 @import 'variables';
 
 footer {
+  height: $toolbar-height;
   padding: 8px 28px 20px;
   width: 100%;
-  height: $toolbar-height;
   z-index: 999;
 
   * {
-    text-decoration: none;
     font-size: $font-size-body;
+    text-decoration: none;
   }
 }
 
@@ -40,21 +40,21 @@ footer {
   & > div::before {
     content: '–';
     display: inline-block;
-    width: 15px;
     margin-left: -15px;
+    width: 15px;
   }
 }
 
 i {
   background-color: transparent;
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  margin-left: 16px;
   background-repeat: no-repeat;
   background-size: contain;
   cursor: pointer;
+  display: inline-block;
   filter: grayscale(100%);
+  height: 20px;
+  margin-left: 16px;
+  width: 20px;
 
   &:hover {
     opacity: .75;

@@ -23,8 +23,8 @@ $toggle-height: 56px;
   .mat-button-toggle {
     @include size($toggle-width, $toggle-height, true);
 
-    margin: 4px 0 0 0;
     border-width: 2px !important;
+    margin: 4px 0 0 0;
 
     i {
       filter: grayscale(100%);
@@ -36,13 +36,13 @@ $toggle-height: 56px;
     }
 
     &[value='kubernetes'] {
-      border-top-left-radius: $border-radius;
       border-bottom-left-radius: $border-radius;
+      border-top-left-radius: $border-radius;
     }
 
     &[value='openshift'] {
-      border-top-right-radius: $border-radius;
       border-bottom-right-radius: $border-radius;
+      border-top-right-radius: $border-radius;
     }
 
     &.mat-button-toggle-checked {
@@ -55,8 +55,8 @@ $toggle-height: 56px;
   }
 
   .mat-button-toggle-label-content {
-    font-weight: normal;
     font-size: $font-size-subhead;
+    font-weight: normal;
   }
 }
 
@@ -71,8 +71,8 @@ $toggle-height: 56px;
 }
 
 .km-randomize-btn ::ng-deep .mat-button-wrapper {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: center;
 }
 
@@ -81,8 +81,8 @@ $toggle-height: 56px;
 }
 
 .km-version-inline {
-  width: auto;
   max-width: 150px;
+  width: auto;
 }
 
 km-label-form {

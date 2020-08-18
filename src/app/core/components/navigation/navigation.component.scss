@@ -24,8 +24,8 @@ header {
 
   padding-left: 10px;
   position: fixed;
-  z-index: 2;
   top: 0;
+  z-index: 2;
 
   * {
     z-index: 2;
@@ -34,9 +34,9 @@ header {
   .km-header-logo {
     @include size($logo-width + $logo-margin-top, $toolbar-height);
 
-    display: block;
-    background-size: $logo-width;
     background-position: $logo-margin-top $logo-margin-top;
+    background-size: $logo-width;
+    display: block;
   }
 }
 

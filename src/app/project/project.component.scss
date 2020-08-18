@@ -32,8 +32,8 @@ $project-card-width: 330px;
 
 .km-project-more-owner {
   display: inline-block;
-  margin: 0 !important;
   font-size: $font-size-subhead !important;
+  margin: 0 !important;
 }
 
 .km-project-view-switch {
@@ -45,13 +45,13 @@ $project-card-width: 330px;
     margin: 0;
 
     &:first-child {
-      border-top-left-radius: $border-radius;
       border-bottom-left-radius: $border-radius;
+      border-top-left-radius: $border-radius;
     }
 
     &:last-child {
-      border-top-right-radius: $border-radius;
       border-bottom-right-radius: $border-radius;
+      border-top-right-radius: $border-radius;
     }
   }
 }
@@ -71,10 +71,10 @@ $project-card-width: 330px;
   .mat-card {
     @include size($project-card-width, $project-card-height, true);
 
+    box-shadow: $border-box-shadow !important;
+    cursor: pointer;
     margin-top: 20px;
     padding: 0 !important;
-    cursor: pointer;
-    box-shadow: $border-box-shadow !important;
 
     &:hover {
       box-shadow: $border-box-shadow-hover !important;
@@ -91,15 +91,15 @@ $project-card-width: 330px;
   }
 
   .mat-card-title {
+    line-height: 23px;
     margin: 0;
     padding: 0;
-    line-height: 23px;
   }
 
   .mat-card-subtitle {
+    line-height: 16px;
     margin: 0;
     padding: 5px 0 0 0;
-    line-height: 16px;
 
     strong {
       font-family: $font-primary-mono;
@@ -110,8 +110,8 @@ $project-card-width: 330px;
   .km-project-cards-status {
     @include size(27px, auto);
 
-    display: flex;
     align-items: center;
+    display: flex;
   }
 
   .mat-card-content {
@@ -119,18 +119,18 @@ $project-card-width: 330px;
   }
 
   .km-project-cards-content-row {
-    display: flex;
-    width: 100%;
     align-items: center;
+    display: flex;
     line-height: 40px;
+    width: 100%;
 
     i {
       padding-right: 10px;
     }
 
     span {
-      display: flex;
       align-items: center;
+      display: flex;
 
       &:first-child {
         padding-right: 30px;

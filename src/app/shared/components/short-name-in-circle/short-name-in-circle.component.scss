@@ -22,12 +22,12 @@
 .km-short-name-circle {
   @include size(32px);
 
+  align-items: center;
+  border-radius: 50%;
   display: flex;
+  justify-content: center;
   line-height: 30px;
   text-align: center;
-  border-radius: 50%;
-  align-items: center;
-  justify-content: center;
 
   &:first-child {
     margin-left: 0;

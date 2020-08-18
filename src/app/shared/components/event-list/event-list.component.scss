@@ -20,14 +20,14 @@
 }
 
 .km-mat-row td {
-  padding-top: 10px;
-  padding-bottom: 10px;
   line-height: 20px;
+  padding-bottom: 10px;
+  padding-top: 10px;
 }
 
 mat-card-header {
-  padding: 0 !important;
   cursor: pointer;
+  padding: 0 !important;
 }
 
 .km-toggled-events {
@@ -39,8 +39,8 @@ mat-card-header {
 }
 
 .km-events-title {
-  padding-right: 30px;
   font-size: $font-size-subhead;
+  padding-right: 30px;
 
   i {
     margin-right: 10px;
