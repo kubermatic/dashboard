@@ -847,7 +847,7 @@
     line-height: 12px;
     margin-bottom: 0;
     max-width: 100px;
-    padding: .4px;
+    padding: 4px;
   }
 
   .km-sidenav {
@@ -1536,7 +1536,7 @@
   }
 
   .mat-slide-toggle-bar {
-    @include size(50px, 24 px);
+    @include size(50px, 24px, true);
 
     background-color: $divider !important;
     border-radius: 50px !important;
@@ -1602,13 +1602,9 @@
 }
 
 .mat-form-field-wrapper {
-  padding-bottom: 22px;
+  padding-bottom: 22px !important;
 }
 
 .km-icon-info {
   cursor: pointer;
-}
-
-.mat-form-field-wrapper {
-  padding-bottom: 22px !important;
 }
