@@ -964,7 +964,6 @@ mat-card {
     margin: 20px 0 0 0;
     padding: 30px 0;
 
-    //&.km-with-table-header {
     .mat-card-header {
       border-radius: $border-radius $border-radius 0 0;
       line-height: 16px;
@@ -987,11 +986,6 @@ mat-card {
       }
     }
 
-    //&.km-small .mat-card-header {
-    //  font-size: $font-size-small;
-    //  line-height: 16px;
-    //}
-
     .mat-card-content {
       line-height: 50px;
 
@@ -1003,48 +997,9 @@ mat-card {
       button {
         cursor: pointer;
         font-size: $font-size-body;
-        font-weight: 600;
         outline: none;
         padding: 0;
       }
-
-      //&.km-row,
-      //.km-row {
-      //  line-height: 50px;
-      //  padding: 0 30px;
-      //
-      //  &.km-small {
-      //    line-height: 20px;
-      //    margin: 0;
-      //    padding: 10px 24px;
-      //  }
-      //
-      //  div {
-      //    outline: none;
-      //  }
-      //
-      //  &.km-no-item,
-      //  .km-no-item {
-      //    font-size: $font-size-body;
-      //    text-align: center;
-      //  }
-      //
-      //  p {
-      //    font-size: $font-size-body;
-      //    line-height: normal;
-      //    margin: 0;
-      //  }
-      //
-      //  .km-region {
-      //    align-items: center;
-      //
-      //    .flag-icon {
-      //      font-size: $font-size-head;
-      //      margin-right: 10px;
-      //    }
-      //  }
-      //}
-      //}
     }
   }
 }
@@ -1074,7 +1029,7 @@ mat-card {
   }
 }
 
-/* ========== Kubermatic global styles ========== */
+/* ==================== Kubermatic global styles ==================== */
 
 /*
  * Aligns text to the center of the available space.

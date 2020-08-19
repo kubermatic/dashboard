@@ -23,6 +23,8 @@ header {
   @include size(100%, $toolbar-height);
 
   padding-left: 10px;
+  position: relative;
+  z-index: 999;
 
   .km-header-logo {
     @include size($logo-width + $logo-margin-top, $toolbar-height);
