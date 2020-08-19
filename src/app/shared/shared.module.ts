@@ -56,10 +56,12 @@ import {AddonsListComponent} from './components/addon-list/addon-list.component'
 import {EditAddonDialogComponent} from './components/addon-list/edit-addon-dialog/edit-addon-dialog.component';
 import {InstallAddonDialogComponent} from './components/addon-list/install-addon-dialog/install-addon-dialog.component';
 import {SelectAddonDialogComponent} from './components/addon-list/select-addon-dialog/select-addon-dialog.component';
+import {ChipComponent} from './components/chip/component';
 import {FilteredComboboxComponent} from './components/combobox/component';
 import {OptionDirective} from './components/combobox/directive';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 import {DialogTitleComponent} from './components/dialog-title/dialog-title.component';
+import {ClusterTypeEOLComponent} from './components/eol/component';
 import {EventListComponent} from './components/event-list/event-list.component';
 import {LabelFormComponent} from './components/label-form/label-form.component';
 import {LabelsComponent} from './components/labels/labels.component';
@@ -78,6 +80,7 @@ import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
 import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {ClusterService} from './services/cluster.service';
+import {EndOfLifeService} from './services/eol.service';
 
 const modules: any[] = [
   CommonModule,
@@ -143,6 +146,8 @@ const components: any[] = [
   PropertyUsageComponent,
   FilteredComboboxComponent,
   MachineNetworkComponent,
+  ClusterTypeEOLComponent,
+  ChipComponent,
 ];
 
 const entryComponents: any[] = [
@@ -156,7 +161,7 @@ const entryComponents: any[] = [
   NotificationComponent,
 ];
 
-const services: any[] = [ClusterService];
+const services: any[] = [ClusterService, EndOfLifeService];
 
 const directives: any[] = [AutofocusDirective, OptionDirective];
 

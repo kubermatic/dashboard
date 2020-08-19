@@ -10,13 +10,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<form [formGroup]="form"
-      fxLayout="column">
-  <h4 class="km-error"
-      fxFlex
-      fxLayoutAlign=" center">
-    <i class="km-icon-error"></i>
-    <span>Adding a machine network will disable DHCP usage.</span>
-  </h4>
-  <km-machine-networks-new [formControlName]="controls.MachineNetwork"></km-machine-networks-new>
-</form>
+<mat-chip-list>
+  <mat-chip [class]="typeClass">{{text}}</mat-chip>
+</mat-chip-list>

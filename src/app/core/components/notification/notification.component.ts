@@ -47,7 +47,7 @@ export class NotificationComponent {
         break;
       case NotificationType.error:
         this.typeIconBackground = 'error';
-        this.typeIconClassName = 'km-icon-warning';
+        this.typeIconClassName = 'km-icon-error';
     }
   }
 

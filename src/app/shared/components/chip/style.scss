@@ -9,18 +9,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@import '../../assets/css/variables';
 
-.km-machine-deployment-spinner {
-  margin: 20px auto !important;
-}
-
-.km-machine-deployment-health {
-  text-align: center;
-  vertical-align: middle;
-}
-
-.km-table-actions,
-.km-machine-deployment-action {
-  vertical-align: middle !important;
+.mat-chip {
+  &.mat-standard-chip {
+    border: none;
+    border-radius: 12px;
+    min-height: 18px;
+    padding: 0 12px;
+  }
 }

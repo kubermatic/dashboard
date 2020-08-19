@@ -28,6 +28,8 @@ limitations under the License.
               class="km-machine-deployment-name km-copy">{{machineDeployment.name}}</span>
       </mat-card-title>
 
+      <div fxFlex></div>
+
       <div class="km-machine-deployment-actions"
            fxLayout="row">
         <button mat-icon-button
@@ -90,11 +92,11 @@ limitations under the License.
                fxLayoutGap="10px">
             <div class="km-os-image-{{systemLogoClass}}"></div>
             <span>{{system}}</span>
-            <span class="km-eol-warning"
-                  *ngIf="system === 'Container Linux'">
-              <i class="km-icon-warning"
-                 matTooltip="Container Linux is going end-of-life on May 26, 2020."></i>
-            </span>
+            <km-chip *ngIf="system === 'Container Linux'"
+                     text="EOL"
+                     type="error"
+                     matTooltip="Container Linux is going end-of-life on May 26, 2020.">
+            </km-chip>
           </div>
         </km-property>
         <km-property>

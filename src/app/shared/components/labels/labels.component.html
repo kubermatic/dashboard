@@ -13,6 +13,7 @@ limitations under the License.
 <div fxLayout="row"
      fxLayoutAlign=" center"
      fxLayoutGap="8px">
+  <span *ngIf="labelKeys.length === 0">-</span>
   <mat-chip-list *ngIf="labelKeys.length > 0">
     <div *ngFor="let labelKey of labelKeys; let i = index">
       <mat-chip *ngIf="!limit || i < limit">

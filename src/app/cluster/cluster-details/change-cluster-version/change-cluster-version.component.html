@@ -12,10 +12,14 @@ limitations under the License.
 -->
 <km-dialog-title>
   <span>Change Version</span>
-  <div class="km-update-available-badge">
+  <div *ngIf="!isClusterDeprecated()"
+       class="km-update-available-badge">
     <i class="km-icon-update-available-arrow"></i>
     <span>Update Available</span>
   </div>
+
+  <km-cluster-type-eol [version]="cluster.spec?.version"
+                       type="badge"></km-cluster-type-eol>
 </km-dialog-title>
 <mat-dialog-content>
   <mat-form-field>

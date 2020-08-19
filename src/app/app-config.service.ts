@@ -17,7 +17,7 @@ import {environment} from '../environments/environment';
 
 import {NotificationService} from './core/services/notification/notification.service';
 import {VersionInfo} from './shared/entity/version-info';
-import {Config, UserGroupConfig} from './shared/model/Config';
+import {Config, EndOfLife, UserGroupConfig} from './shared/model/Config';
 
 @Injectable()
 export class AppConfigService {
@@ -94,5 +94,9 @@ export class AppConfigService {
 
   getRefreshTimeBase(): number {
     return environment.refreshTimeBase;
+  }
+
+  getEndOfLifeConfig(): EndOfLife {
+    return this._appConfig.end_of_life ? this._appConfig.end_of_life : {};
   }
 }

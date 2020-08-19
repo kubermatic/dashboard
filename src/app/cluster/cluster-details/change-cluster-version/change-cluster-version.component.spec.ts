@@ -15,6 +15,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {of} from 'rxjs';
+import {AppConfigService} from '../../../app-config.service';
 
 import {ClusterService, NotificationService, ProjectService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
@@ -23,6 +24,7 @@ import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeSeedDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {RouterStub} from '../../../testing/router-stubs';
+import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 
@@ -53,6 +55,7 @@ describe('ChangeClusterVersionComponent', () => {
         {provide: ClusterService, useValue: clusterServiceMock},
         {provide: ProjectService, useClass: ProjectMockService},
         {provide: Router, useClass: RouterStub},
+        {provide: AppConfigService, useClass: AppConfigMockService},
         GoogleAnalyticsService,
         NotificationService,
       ],

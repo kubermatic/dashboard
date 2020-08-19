@@ -59,10 +59,19 @@
   @include mask-image("/assets/images/icons/regenerate.svg", 18px);
 }
 
-.km-icon-warning {
+.km-icon-error {
   @include background-image("/assets/images/icons/warning.svg", 16px);
 
   background-color: #eb5757 !important;
+  background-size: 12px !important;
+  border-radius: 50%;
+  margin: 4px 14px 4px 0;
+}
+
+.km-icon-warning {
+  @include background-image("/assets/images/icons/warning.svg", 16px);
+
+  background-color: #f7b500 !important;
   background-size: 12px !important;
   border-radius: 50%;
   margin: 4px 14px 4px 0;
@@ -214,11 +223,11 @@
 }
 
 .km-provider-logo-aws {
-  @include background-image("/assets/images/clouds/aws.svg", 30px);
+  @include background-image("/assets/images/clouds/aws.svg", 24px);
 }
 
 .km-provider-logo-azure {
-  @include background-image("/assets/images/clouds/azure.png", 30px);
+  @include background-image("/assets/images/clouds/azure.png", 24px);
 }
 
 .km-provider-logo-baremetal {
@@ -250,7 +259,7 @@
 }
 
 .km-provider-logo-packet {
-  @include background-image("/assets/images/clouds/packet.svg", 30px);
+  @include background-image("/assets/images/clouds/packet.svg", 24px);
 }
 
 .km-provider-logo-kubevirt {
@@ -258,7 +267,7 @@
 }
 
 .km-provider-logo-vsphere {
-  @include background-image("/assets/images/clouds/vsphere.png", 30px);
+  @include background-image("/assets/images/clouds/vsphere.png", 24px);
 }
 
 .km-os-image-centos {

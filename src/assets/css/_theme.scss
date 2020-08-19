@@ -391,13 +391,6 @@
       .km-provider-logo {
         max-width: 95px !important;
       }
-
-      .km-provider-logo-aws,
-      .km-provider-logo-azure,
-      .km-provider-logo-vsphere,
-      .km-provider-logo-packet {
-        min-height: 24px;
-      }
     }
 
     .mat-button-toggle-button {
@@ -492,6 +485,19 @@
 
     div.km-chip-accent {
       background: transparent !important;
+    }
+  }
+
+  km-chip {
+    align-self: center;
+
+    .mat-chip {
+      &.mat-standard-chip {
+        color: white;
+        font-size: $font-size-body;
+        font-weight: bold;
+        vertical-align: middle;
+      }
     }
   }
 
@@ -633,12 +639,20 @@
     background-color: map-get($colors, indicator-orange) !important;
   }
 
+  .km-warning-border {
+    border-color: map-get($colors, indicator-orange) !important;
+  }
+
   .km-error {
     color: map-get($colors, indicator-red) !important;
   }
 
   .km-error-bg {
     background-color: map-get($colors, indicator-red) !important;
+  }
+
+  .km-error-border {
+    border-color: map-get($colors, indicator-red) !important;
   }
 
   .km-hover-bg:hover {
@@ -1242,7 +1256,7 @@
     margin: 6px 64px 6px 0;
 
     .km-version-picker {
-      height: 50px;
+      height: 52px;
 
       * {
         cursor: default;
@@ -1253,14 +1267,13 @@
       }
 
       .km-version-picker-type {
-        @include size(50px, 52px);
+        @include size(52px, 52px);
 
         background: $divider;
         border-color: $divider;
         border-radius: $border-radius 0 0 $border-radius;
         border-style: solid;
-        border-width: 1px 0 1px 1px;
-        margin-top: -2px;
+        bottom: 1px;
         padding: 8px;
         position: relative;
 
@@ -1270,7 +1283,9 @@
           margin: 0 !important;
         }
 
-        .km-icon-update-available {
+        .km-icon-update-available,
+        .km-icon-error,
+        .km-icon-warning {
           @include size(16px);
 
           position: absolute;
@@ -1307,7 +1322,7 @@
     }
 
     .km-version-picker-disabled {
-      ::ng-deep .mat-select-arrow {
+      .mat-select-arrow {
         visibility: hidden;
       }
     }
@@ -1318,29 +1333,14 @@
       }
 
       .km-version-picker-type {
-        border-bottom: 2px;
-        border-color: map-get($colors, secondary);
-        border-left: 2px;
-        border-style: solid;
-        border-top: 2px;
-        margin-left: -1px;
-        transition: all .5s ease;
-        width: 51px;
-      }
-
-      .km-icon-update-available {
-        top: 5px;
+        border: 2px solid map-get($colors, secondary);
+        border-right: 0;
         transition: all .5s ease;
       }
 
-      .mat-form-field-outline-thick {
+      .mat-form-field-outline {
         color: map-get($colors, secondary) !important;
         opacity: 1 !important;
-        transition: all .5s ease;
-      }
-
-      div.mat-form-field-flex label {
-        color: map-get($colors, secondary-dark) !important;
         transition: all .5s ease;
       }
     }

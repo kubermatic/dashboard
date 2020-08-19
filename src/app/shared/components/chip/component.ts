@@ -9,18 +9,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+import {Component, Input} from '@angular/core';
 
-.km-machine-deployment-spinner {
-  margin: 20px auto !important;
+export enum ChipType {
+  Warning = 'warning',
+  Error = 'error',
+  Info = 'info',
 }
 
-.km-machine-deployment-health {
-  text-align: center;
-  vertical-align: middle;
-}
+@Component({
+  selector: 'km-chip',
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
+})
+export class ChipComponent {
+  @Input() text: string;
+  @Input() type: 'info' | 'warning' | 'error' = ChipType.Info;
 
-.km-table-actions,
-.km-machine-deployment-action {
-  vertical-align: middle !important;
+  get typeClass(): string {
+    return `km-${this.type}-bg`;
+  }
 }

@@ -56,7 +56,7 @@ limitations under the License.
         <span *ngIf="isPluginEnabled(admissionPlugin.PodSecurityPolicy)"
               class="km-admission-plugin-warning"
               fxLayout="row">
-          <i class="km-icon-warning km-warning"></i>
+          <i class="km-icon-error km-warning"></i>
           <p fxFlex="95">Activating Pod Security Policy will mean that a lot of Pod specifications, Operators and Helm charts will not work out of the box. Make sure that you know the consequences of activating this feature.</p>
         </span>
         <span *ngIf="isPodSecurityPolicyEnforced()"
@@ -74,7 +74,7 @@ limitations under the License.
              fxLayoutAlign=" center">
           <mat-checkbox formControlName="auditLogging">Audit Logging</mat-checkbox>
           <i *ngIf="!!datacenter.spec.enforceAuditLogging"
-             class="km-icon-warning km-warning"
+             class="km-icon-error km-warning"
              matTooltip="Audit Logging is enforced by your admin in the chosen datacenter.">
           </i>
         </div>
