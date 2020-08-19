@@ -22,7 +22,7 @@
 
 .km-cluster-name {
   font-weight: 500 !important;
-  padding-right: $baseline-grid;
+  padding-right: 8px;
 }
 
 .km-provider-menu {
@@ -31,10 +31,15 @@
   margin-right: 10px;
 }
 
-.km-cluster-health {
-  font-size: $font-size-subhead;
-  margin-right: 20px;
-  vertical-align: middle;
+.mat-card-title {
+  padding-bottom: 0;
+  padding-top: 0;
+
+  .km-cluster-health {
+    font-size: $font-size-subhead;
+    margin-right: 20px;
+    margin-top: 2px;
+  }
 }
 
 .mat-icon.km-icon-edit {

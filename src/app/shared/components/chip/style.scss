@@ -13,9 +13,9 @@
 
 .mat-chip {
   &.mat-standard-chip {
-    padding: 0 (1.5 * $baseline-grid);
-    border-radius: 1.5 * $baseline-grid;
     border: none;
-    min-height: 2.25 * $baseline-grid;
+    border-radius: 12px;
+    min-height: 18px;
+    padding: 0 12px;
   }
 }
