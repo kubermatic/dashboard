@@ -832,13 +832,6 @@ mat-chip-list {
   }
 }
 
-.km-raised-button {
-  &.mat-flat-button {
-    font-size: $font-size-subhead;
-    line-height: 40px;
-  }
-}
-
 mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) div.mat-form-field-flex:hover label {
   transition: all .2s ease;
 }
@@ -991,7 +984,6 @@ mat-card {
 
       p {
         font-size: $font-size-caption;
-        margin: 0 0 15px;
       }
 
       button {
@@ -1041,7 +1033,8 @@ mat-card {
 }
 
 /*
- * Adds a left/right padding to the mat-card header to align title with the content
+ * Adds a left/right padding to the mat-card header to align title with the content.
+ *
  * Usage:
  * <mat-card class="km-with-table-header">
  *   <mat-card-header>
@@ -1057,5 +1050,26 @@ mat-card {
 .km-with-table-header {
   .mat-card-header-text {
     padding: 0 56px;
+  }
+}
+
+/*
+ * Overrides default material button styling to match Kubermatic styling.
+ *
+ * Usage:
+ * <button class="km-raised-button"
+ *         mat-flat-button
+ *         type="button">
+ *   Add Project
+ * </button>
+ */
+.km-raised-button,
+.km-flat-button,
+.km-button {
+  &.mat-button,
+  &.mat-flat-button,
+  &.mat-raised-button {
+    font-size: $font-size-subhead;
+    line-height: 40px;
   }
 }
