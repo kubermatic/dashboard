@@ -70,23 +70,10 @@ km-dashboard {
   }
 }
 
-.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container {
-  transform: translate3d(26px, 0, 0);
-}
-
 .km-user-settings-form-field {
   .mat-form-field-wrapper {
     padding-bottom: 0;
   }
-}
-
-.mat-slide-toggle-thumb-container {
-  left: 2px;
-  top: 2px;
-}
-
-.mat-slide-toggle-thumb {
-  box-shadow: none;
 }
 
 .mat-stepper-horizontal-line {
@@ -125,12 +112,6 @@ km-dashboard {
   line-height: 16px;
   margin: 12px 0;
   padding: 8px 0 16px;
-}
-
-.mat-slide-toggle-bar {
-  @include size(50px, 24px);
-
-  border-radius: 50px;
 }
 
 .mat-step-header {
@@ -446,8 +427,7 @@ km-dashboard {
     line-height: 40px;
   }
 
-  .km-header-cell,
-  .mat-sort-header-button {
+  .km-header-cell {
     border-bottom: none;
     font-size: $font-size-body;
     font-weight: normal;
@@ -871,75 +851,9 @@ mat-form-field.mat-form-field {
   }
 }
 
-.mat-card-content {
-  p {
-    font-size: $font-size-caption;
-    margin: 0 0 15px;
-  }
-
-  button {
-    cursor: pointer;
-    font-size: $font-size-body;
-    font-weight: 600;
-    outline: none;
-    padding: 0;
-  }
-}
-
-[aria-sort='descending'] .mat-sort-header-arrow .mat-sort-header-indicator {
-  &::before {
-    content: "";
-    mask: url("/assets/images/icons/arrow-down.svg");
-    mask-position: center;
-    mask-repeat: no-repeat;
-    min-height: 8px;
-    min-width: 8px;
-    position: absolute;
-    top: -8px;
-  }
-}
-
-[aria-sort='ascending'] .mat-sort-header-arrow .mat-sort-header-indicator {
-  &::before {
-    content: "";
-    mask: url("/assets/images/icons/arrow-up.svg");
-    mask-position: center;
-    mask-repeat: no-repeat;
-    min-height: 8px;
-    min-width: 8px;
-    position: absolute;
-    top: 1px;
-  }
-}
-
-.mat-sort-header-arrow {
-  margin: auto 0 auto 6px;
-}
-
-km-wizard {
-  .mat-card-title {
-    padding-top: 0;
-  }
-}
-
-.mat-card-header-text {
-  margin: 0;
-}
-
 .mat-column-status,
 .mat-column-stateArrow {
   width: 8px;
-}
-
-.mat-card-header .mat-card-title {
-  font-size: 20px;
-  font-weight: normal;
-  padding: 8px 0 16px;
-
-  i {
-    font-size: $font-size-subhead-lg;
-    margin: 0 20px;
-  }
 }
 
 .mat-tooltip {
@@ -956,72 +870,237 @@ km-wizard {
   padding: 0;
 }
 
-.mat-card {
-  border-radius: $border-radius;
-  box-shadow: $border-box-shadow;
-  margin: 20px 0 0 0;
-  padding: 30px 0;
+.km-cluster-list-health {
+  vertical-align: middle;
+}
 
-  &.km-with-padding {
-    padding: 16px 30px 30px 30px;
+/* ==================== Angular Material Overrides ==================== */
+
+/* ========== mat-slide-toggle ========== */
+.mat-slide-toggle {
+  .mat-slide-toggle-label {
+    .mat-slide-toggle-bar {
+      @include size(50px, 24px);
+
+      border-radius: 50px;
+    }
+
+    .mat-slide-toggle-thumb {
+      box-shadow: none;
+    }
+
+    .mat-slide-toggle-thumb-container {
+      left: 2px;
+      top: 2px;
+    }
   }
 
-  &.km-with-table-header {
-    .mat-card-header {
-      border-radius: $border-radius $border-radius 0 0;
-      line-height: 16px;
-      margin: 0;
-      padding: 0 56px;
-    }
-
-    &.km-small .mat-card-header {
-      font-size: $font-size-small;
-      line-height: 16px;
-    }
-
-    .mat-card-content {
-      line-height: 50px;
-
-      &.km-row,
-      .km-row {
-        line-height: 50px;
-        padding: 0 30px;
-
-        &.km-small {
-          line-height: 20px;
-          margin: 0;
-          padding: 10px 24px;
-        }
-
-        div {
-          outline: none;
-        }
-
-        &.km-no-item,
-        .km-no-item {
-          font-size: $font-size-body;
-          text-align: center;
-        }
-
-        p {
-          font-size: $font-size-body;
-          line-height: normal;
-          margin: 0;
-        }
-
-        .km-region {
-          align-items: center;
-
-          .flag-icon {
-            font-size: $font-size-head;
-            margin-right: 10px;
-          }
-        }
+  &.mat-checked {
+    .mat-slide-toggle-label {
+      .mat-slide-toggle-thumb-container {
+        transform: translate3d(26px, 0, 0);
       }
     }
   }
 }
 
-.km-cluster-list-health {
-  vertical-align: middle;
+/* ========== mat-table ========== */
+.mat-table {
+  .mat-sort-header-container {
+    &.mat-sort-header-button {
+      border-bottom: none;
+      font-size: $font-size-body;
+      font-weight: normal;
+      height: 40px;
+      line-height: 25px;
+      padding: 0;
+    }
+  }
+
+  [aria-sort='descending'] {
+    .mat-sort-header-arrow {
+      .mat-sort-header-indicator {
+        &::before {
+          content: "";
+          mask: url("/assets/images/icons/arrow-down.svg");
+          mask-position: center;
+          mask-repeat: no-repeat;
+          min-height: 8px;
+          min-width: 8px;
+          position: absolute;
+          top: -8px;
+        }
+      }
+    }
+  }
+
+  [aria-sort='ascending'] {
+    .mat-sort-header-arrow {
+      .mat-sort-header-indicator {
+        &::before {
+          content: "";
+          mask: url("/assets/images/icons/arrow-up.svg");
+          mask-position: center;
+          mask-repeat: no-repeat;
+          min-height: 8px;
+          min-width: 8px;
+          position: absolute;
+          top: 1px;
+        }
+      }
+    }
+  }
+
+  .mat-sort-header-arrow {
+    margin: auto 0 auto 6px;
+  }
+}
+
+/* ========== mat-card ========== */
+mat-card {
+  &.mat-card {
+    border-radius: $border-radius;
+    box-shadow: $border-box-shadow;
+    margin: 20px 0 0 0;
+    padding: 30px 0;
+
+    //&.km-with-table-header {
+    .mat-card-header {
+      border-radius: $border-radius $border-radius 0 0;
+      line-height: 16px;
+      margin: 0;
+      padding: 0;
+
+      .mat-card-header-text {
+        margin: 0;
+      }
+
+      .mat-card-title {
+        font-size: $font-size-card-title;
+        font-weight: normal;
+        padding: 8px 0 16px;
+
+        i {
+          font-size: $font-size-subhead-lg;
+          margin: 0 20px;
+        }
+      }
+    }
+
+    //&.km-small .mat-card-header {
+    //  font-size: $font-size-small;
+    //  line-height: 16px;
+    //}
+
+    .mat-card-content {
+      line-height: 50px;
+
+      p {
+        font-size: $font-size-caption;
+        margin: 0 0 15px;
+      }
+
+      button {
+        cursor: pointer;
+        font-size: $font-size-body;
+        font-weight: 600;
+        outline: none;
+        padding: 0;
+      }
+
+      //&.km-row,
+      //.km-row {
+      //  line-height: 50px;
+      //  padding: 0 30px;
+      //
+      //  &.km-small {
+      //    line-height: 20px;
+      //    margin: 0;
+      //    padding: 10px 24px;
+      //  }
+      //
+      //  div {
+      //    outline: none;
+      //  }
+      //
+      //  &.km-no-item,
+      //  .km-no-item {
+      //    font-size: $font-size-body;
+      //    text-align: center;
+      //  }
+      //
+      //  p {
+      //    font-size: $font-size-body;
+      //    line-height: normal;
+      //    margin: 0;
+      //  }
+      //
+      //  .km-region {
+      //    align-items: center;
+      //
+      //    .flag-icon {
+      //      font-size: $font-size-head;
+      //      margin-right: 10px;
+      //    }
+      //  }
+      //}
+      //}
+    }
+  }
+}
+
+/* ========== mat-select ========== */
+.mat-select {
+  width: fit-content;
+
+  .mat-select-value {
+    max-width: 25ch;
+    min-width: 2ch;
+  }
+
+  .mat-select-arrow {
+    display: none;
+  }
+
+  .mat-select-value-text {
+    font-size: $font-size-subhead;
+    line-height: 20px;
+  }
+
+  .mat-select-placeholder {
+    font-size: $font-size-subhead;
+    line-height: 20px;
+    opacity: .7;
+  }
+}
+
+/* ========== Kubermatic global styles ========== */
+
+/*
+ * Aligns text to the center of the available space.
+ *
+ * TODO: Update name to better reflect the behavior
+ */
+.km-no-item {
+  text-align: center;
+}
+
+/*
+ * Adds a left/right padding to the mat-card header to align title with the content
+ * Usage:
+ * <mat-card class="km-with-table-header">
+ *   <mat-card-header>
+ *     <mat-card-title>Addons</mat-card-title>
+ *   </mat-card-header>
+ *   <mat-card-content class="km-addon-card-content">
+ *   ...
+ *   </mat-card-content>
+ * </mat-card>
+ *
+ * TODO: Update name to better reflect the behavior
+ */
+.km-with-table-header {
+  .mat-card-header-text {
+    padding: 0 56px;
+  }
 }

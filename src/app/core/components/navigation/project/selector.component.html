@@ -12,7 +12,10 @@ limitations under the License.
 -->
 <mat-list-item class="km-project-selector"
                (click)="openDropdown(select)">
-  <div class="km-projects-container">
+  <div class="km-projects-container"
+       fxFlex
+       fxLayout="row"
+       fxLayoutAlign=" center">
     <mat-select #select
                 placeholder="None"
                 (selectionChange)="onSelectionChange($event)"

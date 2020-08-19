@@ -41,6 +41,9 @@ tr:last-child th:last-child,
   padding-right: 56px;
 }
 
-.km-icon-arrow-down {
-  margin-left: 0;
+.mat-card-title {
+  .km-icon-arrow-down,
+  .km-icon-arrow-up {
+    margin-left: 0;
+  }
 }

@@ -32,7 +32,6 @@ $panel-width: 350px;
       @include size(35px);
 
       margin: -8px 4px 0 0;
-      position: relative;
 
       i {
         @include size(16px);
@@ -49,7 +48,6 @@ $panel-width: 350px;
 
         border-radius: 50%;
         bottom: 10px;
-        position: absolute;
         right: 8px;
       }
     }

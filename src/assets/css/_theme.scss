@@ -39,24 +39,6 @@
 
   $transition: all .5s ease;
 
-  // ==================== Overrides of third-party styles ==================== //
-  .mat-card {
-    color: $text;
-
-    &.km-with-table-header {
-      .mat-card-content {
-        &.km-row,
-        .km-row {
-          border-top: 1px solid $divider;
-
-          p {
-            color: $text;
-          }
-        }
-      }
-    }
-  }
-
   .mat-drawer-container {
     background-color: map-get($colors, background);
   }
@@ -67,36 +49,6 @@
 
   .mat-tooltip {
     background-color: map-get($colors, tooltip-background);
-  }
-
-  .mat-header-cell,
-  .mat-sort-header-button {
-    color: $text;
-  }
-
-  td.mat-cell {
-    border-top: 1px solid $divider;
-  }
-
-  .mat-sort-header-arrow {
-    .mat-sort-header-stem,
-    .mat-sort-header-pointer-left,
-    .mat-sort-header-pointer-right,
-    .mat-sort-header-pointer-middle {
-      background: none;
-    }
-  }
-
-  [aria-sort='ascending'] .mat-sort-header-arrow .mat-sort-header-indicator {
-    &::before {
-      background-color: $text;
-    }
-  }
-
-  [aria-sort='descending'] .mat-sort-header-arrow .mat-sort-header-indicator {
-    &::before {
-      background-color: $text;
-    }
   }
 
   .mat-card-content {
@@ -665,18 +617,6 @@
     }
   }
 
-  .mat-slide-toggle-bar {
-    background-color: $divider;
-  }
-
-  .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
-    background-color: map-get($colors, primary) !important;
-  }
-
-  .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
-    background-color: #fafafa !important;
-  }
-
   // ==================== Kubermatic global styles ==================== //
 
   // ==================== Globally usable styles ==================== //
@@ -794,6 +734,88 @@
 
         &.mat-button-toggle-checked {
           border: 2px solid map-get($colors, primary);
+        }
+      }
+    }
+  }
+
+  /* ==================== Angular Material Overrides ==================== */
+
+  /* ========== mat-slide-toggle ========== */
+  .mat-slide-toggle {
+    .mat-slide-toggle-label {
+      .mat-slide-toggle-bar {
+        background-color: $divider;
+      }
+    }
+
+    &.mat-checked {
+      .mat-slide-toggle-bar {
+        background-color: map-get($colors, primary);
+      }
+
+      .mat-slide-toggle-thumb {
+        background-color: #fafafa;
+      }
+    }
+  }
+
+  /* ========== mat-table ========== */
+  .mat-table {
+    .mat-header-cell,
+    .mat-sort-header-button {
+      color: $text;
+    }
+
+    td {
+      &.mat-cell {
+        border-top: 1px solid $divider;
+      }
+    }
+
+    .mat-sort-header-arrow {
+      .mat-sort-header-stem,
+      .mat-sort-header-pointer-left,
+      .mat-sort-header-pointer-right,
+      .mat-sort-header-pointer-middle {
+        background: none;
+      }
+    }
+
+    [aria-sort='ascending'] {
+      .mat-sort-header-arrow {
+        .mat-sort-header-indicator {
+          &::before {
+            background-color: $text;
+          }
+        }
+      }
+    }
+
+    [aria-sort='descending'] {
+      .mat-sort-header-arrow {
+        .mat-sort-header-indicator {
+          &::before {
+            background-color: $text;
+          }
+        }
+      }
+    }
+  }
+
+  /* ========== mat-card ========== */
+  .mat-card {
+    color: $text;
+
+    &.km-with-table-header {
+      .mat-card-content {
+        &.km-row,
+        .km-row {
+          border-top: 1px solid $divider;
+
+          p {
+            color: $text;
+          }
         }
       }
     }
