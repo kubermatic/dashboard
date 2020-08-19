@@ -2,8 +2,5 @@
   "openstack": {
     "wizard_use_default_user": false
   },
-  "share_kubeconfig": false,
-  "end_of_life": {
-    "1.17.9": "2020-08-18"
-  }
+  "share_kubeconfig": false
 }
