@@ -14,6 +14,11 @@ limitations under the License.
 <div fxLayout>
   <div fxFlex
        fxLayoutAlign="end center">
+    <mat-slide-toggle *ngIf="isAdmin"
+                      class="km-all-projects-toggle"
+                      labelPosition="before"
+                      [ngModel]="settings.displayAllProjectsForAdmin"
+                      (toggleChange)="changeProjectVisibility()">Show All Projects</mat-slide-toggle>
     <mat-button-toggle-group class="km-project-view-switch"
                              group="projectsView"
                              (change)="changeView()">
