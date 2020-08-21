@@ -41,13 +41,8 @@ export class EditorComponent implements OnInit {
   options: any = {
     contextmenu: false,
     lineNumbersMinChars: 4,
-    minimap: {
-      enabled: false,
-    },
-    scrollbar: {
-      verticalScrollbarSize: 5,
-      useShadows: false,
-    },
+    minimap: {enabled: false},
+    scrollbar: {vertical: 'hidden'},
     hideCursorInOverviewRuler: true,
     renderLineHighlight: 'none',
   };
@@ -71,5 +66,4 @@ export class EditorComponent implements OnInit {
 
 // TODO: passing modelChange
 // TODO: remove !important
-// TODO: slider position
 // TODO: font
