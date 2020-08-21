@@ -32,6 +32,7 @@ export class EditorComponent implements OnInit {
   @Input() language = 'yaml';
   @Input() model: string;
   @Output() modelChange = new EventEmitter<string>();
+  isFocused = false;
 
   /**
    * All configuration options can be found at:
@@ -53,13 +54,21 @@ export class EditorComponent implements OnInit {
 
   constructor(private readonly _themeInformerService: ThemeInformerService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.options.theme = this._themeInformerService.isCurrentThemeDark ? 'vs-dark' : 'vs';
     this.options.language = this.language.toLowerCase();
   }
+
+  onInit(editor: any): void {
+    editor.onDidFocusEditorText(() => (this.isFocused = true));
+    editor.onDidBlurEditorText(() => (this.isFocused = false));
+  }
+
+  getHeaderClasses(): string {
+    return this.isFocused ? `${this.headerClass} focused` : this.headerClass;
+  }
 }
 
-// TODO: focused header color
 // TODO: passing modelChange
 // TODO: remove !important
 // TODO: slider position

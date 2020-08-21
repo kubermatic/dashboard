@@ -13,7 +13,8 @@ limitations under the License.
 
 <div class="km-editor">
   <div class="header"
-       [ngClass]="headerClass">{{language}}</div>
+       [ngClass]="getHeaderClasses()">{{language}}</div>
   <ngx-monaco-editor [options]="options"
-                     [(ngModel)]="model"></ngx-monaco-editor>
+                     [(ngModel)]="model"
+                     (onInit)="onInit($event)"></ngx-monaco-editor>
 </div>

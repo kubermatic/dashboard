@@ -232,6 +232,10 @@
       &.dialog {
         background-color: $background-dialog;
       }
+
+      &.focused {
+        color: map-get($colors, primary-dark);
+      }
     }
 
     .monaco-editor {
