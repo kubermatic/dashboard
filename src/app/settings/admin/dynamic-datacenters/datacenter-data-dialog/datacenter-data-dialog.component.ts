@@ -20,7 +20,6 @@ import {Datacenter} from '../../../../shared/entity/datacenter';
 import {NodeProvider, NodeProviderConstants} from '../../../../shared/model/NodeProviderConstants';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material/chips';
-import {ThemeInformerService} from '../../../../core/services/theme-informer/theme-informer.service';
 import {takeUntil} from 'rxjs/operators';
 import {DatacenterService} from '../../../../core/services';
 import {Subject} from 'rxjs';
@@ -59,31 +58,15 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
   form: FormGroup;
   requiredEmailDomains: string[] = [];
   providerConfig = '';
-  editorOptions: any = {
-    contextmenu: false,
-    language: 'yaml',
-    lineNumbersMinChars: 4,
-    minimap: {
-      enabled: false,
-    },
-    scrollbar: {
-      verticalScrollbarSize: 10,
-      useShadows: false,
-    },
-    scrollBeyondLastLine: false,
-  };
   private _unsubscribe = new Subject<void>();
 
   constructor(
     public _matDialogRef: MatDialogRef<DatacenterDataDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DatacenterDataDialogConfig,
-    private readonly _datacenterService: DatacenterService,
-    private readonly _themeInformerService: ThemeInformerService
+    private readonly _datacenterService: DatacenterService
   ) {}
 
   ngOnInit(): void {
-    this.editorOptions.theme = this._themeInformerService.isCurrentThemeDark ? 'vs-dark' : 'vs';
-
     this._datacenterService.seeds.pipe(takeUntil(this._unsubscribe)).subscribe(seeds => (this.seeds = seeds));
 
     this.form = new FormGroup({

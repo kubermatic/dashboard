@@ -11,11 +11,8 @@
 
 @import 'variables';
 
-.mat-chip {
-  &.mat-standard-chip {
-    border: none;
-    border-radius: 12px;
-    min-height: 18px;
-    padding: 0 12px;
-  }
+.monaco-editor {
+  border-radius: $border-radius;
+  overflow: hidden !important;
+  transition: all .2s ease;
 }
