@@ -11,5 +11,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ngx-monaco-editor [options]="options"
-                   [(ngModel)]="model"></ngx-monaco-editor>
+<div class="km-editor">
+  <div class="header"
+       [ngClass]="headerClass">{{language}}</div>
+  <ngx-monaco-editor [options]="options"
+                     [(ngModel)]="model"></ngx-monaco-editor>
+</div>

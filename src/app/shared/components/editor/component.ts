@@ -9,40 +9,58 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import {ThemeInformerService} from '../../../core/services/theme-informer/theme-informer.service';
 
-enum EditorTheme {
-  Dark = 'vs-dark',
-  Default = 'vs',
+/**
+ * Used to apply correct styling for the editor header.
+ * It's required as the background color changes across various components.
+ */
+export enum EditorHeaderClass {
+  Card = 'card',
+  Dialog = 'dialog',
 }
 
 @Component({
   selector: 'km-editor',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class EditorComponent implements OnInit {
+  @Input() headerClass: EditorHeaderClass = EditorHeaderClass.Dialog;
+  @Input() language = 'yaml';
   @Input() model: string;
   @Output() modelChange = new EventEmitter<string>();
 
+  /**
+   * All configuration options can be found at:
+   * https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditoroptions.html
+   */
   options: any = {
     contextmenu: false,
-    language: 'yaml',
     lineNumbersMinChars: 4,
     minimap: {
       enabled: false,
     },
     scrollbar: {
-      verticalScrollbarSize: 10,
+      verticalScrollbarSize: 5,
       useShadows: false,
     },
-    scrollBeyondLastLine: false,
+    hideCursorInOverviewRuler: true,
+    renderLineHighlight: 'none',
   };
 
   constructor(private readonly _themeInformerService: ThemeInformerService) {}
 
   ngOnInit() {
-    this.options.theme = this._themeInformerService.isCurrentThemeDark ? EditorTheme.Dark : EditorTheme.Default;
+    this.options.theme = this._themeInformerService.isCurrentThemeDark ? 'vs-dark' : 'vs';
+    this.options.language = this.language.toLowerCase();
   }
 }
+
+// TODO: focused header color
+// TODO: passing modelChange
+// TODO: remove !important
+// TODO: slider position
+// TODO: font

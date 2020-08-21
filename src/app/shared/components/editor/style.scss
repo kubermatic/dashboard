@@ -11,8 +11,46 @@
 
 @import 'variables';
 
-.monaco-editor {
-  border-radius: $border-radius;
-  overflow: hidden !important;
-  transition: all .2s ease;
+$numbers-column-width: 35px;
+$content-left-margin: 10px;
+$content-top-margin: 7px;
+
+.km-editor {
+  margin-top: 12px;
+  position: relative;
+
+  .monaco-editor {
+    background-color: transparent;
+    border-radius: $border-radius;
+    overflow: hidden !important;
+
+    .margin {
+      padding-top: $content-top-margin;
+      width: $numbers-column-width !important;
+    }
+
+    .monaco-scrollable-element {
+      left: $numbers-column-width + $content-left-margin !important;
+      top: $content-top-margin;
+
+      .decorationsOverviewRuler {
+        visibility: hidden;
+      }
+    }
+
+    .monaco-editor-background {
+      background-color: transparent;
+    }
+  }
+
+  .header {
+    font-size: $font-size-caption;
+    left: $numbers-column-width + $content-left-margin;
+    line-height: 14px;
+    padding: 0 4px;
+    position: absolute;
+    text-transform: uppercase;
+    top: -8px;
+    z-index: 999;
+  }
 }

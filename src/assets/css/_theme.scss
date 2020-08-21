@@ -27,6 +27,7 @@
   $background: mat-color($palette-background, background);
   $background-hover: mat-color($palette-background, hover);
   $background-card: mat-color($palette-background, card);
+  $background-dialog: mat-color($palette-background, dialog);
   $background-disabled-button: mat-color($palette-background, disabled-button);
   $background-app-bar: mat-color($palette-background, app-bar);
 
@@ -220,15 +221,43 @@
     background: map-get($colors, scrollbar-background);
   }
 
-  .monaco-editor {
-    box-shadow: 0 0 0 1px $divider;
+  .km-editor {
+    .header {
+      color: $text-secondary;
 
-    &:hover {
-      box-shadow: 0 0 0 2px map-get($colors, secondary-hover);
+      &.card {
+        background-color: $background-card;
+      }
+
+      &.dialog {
+        background-color: $background-dialog;
+      }
     }
 
-    &.focused {
-      box-shadow: 0 0 0 2px map-get($colors, primary-hover);
+    .monaco-editor {
+      box-shadow: 0 0 0 1px $divider;
+
+      .margin {
+        background-color: $divider;
+
+        .line-numbers {
+          color: $text;
+        }
+      }
+
+      &.focused {
+        box-shadow: 0 0 0 2px map-get($colors, primary-hover);
+      }
+    }
+
+    &:hover {
+      .header {
+        color: map-get($colors, secondary-dark);
+      }
+
+      .monaco-editor {
+        box-shadow: 0 0 0 2px map-get($colors, secondary-hover);
+      }
     }
   }
 
