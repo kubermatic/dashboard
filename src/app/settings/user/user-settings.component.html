@@ -27,14 +27,14 @@ limitations under the License.
   </mat-card-header>
   <mat-divider></mat-divider>
   <mat-card-content fxLayout="row wrap"
-                    fxLayoutGap="24px grid">
+                    fxLayoutGap="20px grid">
     <div *ngIf="!!user"
          fxLayout="row"
          fxFlex="50">
       <div class="km-icon-mask km-user"></div>
       <div>
-        <div class="km-account-info-name">{{user.name}}</div>
-        <div class="km-account-info-email">{{user.email}}</div>
+        <div class="user-name">{{user.name}}</div>
+        <div class="user-email">{{user.email}}</div>
       </div>
     </div>
 

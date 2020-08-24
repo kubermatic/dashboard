@@ -28,7 +28,7 @@ export interface Notification {
 })
 export class NotificationService {
   private readonly _config: MatSnackBarConfig = {
-    duration: 9999999999,
+    duration: 5000,
     horizontalPosition: 'end',
     verticalPosition: 'bottom',
     panelClass: 'km-notification',
