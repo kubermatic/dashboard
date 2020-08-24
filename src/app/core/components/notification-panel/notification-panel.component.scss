@@ -44,10 +44,6 @@ $panel-width: 350px;
       }
 
       .filter-indicator {
-        @include size(8px);
-
-        border-radius: 50%;
-        bottom: 10px;
         right: 8px;
       }
     }
