@@ -11,8 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <form [formGroup]="form">
-  <mat-card fxFlex="100%"
-            class="km-with-padding km-no-margin">
+  <mat-card fxFlex="100%">
     <mat-horizontal-stepper linear
                             disableRipple
                             [@.disabled]="true"
@@ -56,6 +55,7 @@ limitations under the License.
         <div class="km-button-navigation"
              id="{{toStepID(step)}}-nav">
           <a mat-flat-button
+             class="km-flat-button"
              color="tertiary"
              routerLink="/projects/{{project?.id}}/clusters">Cancel</a>
           <div fxFlex></div>
@@ -64,18 +64,21 @@ limitations under the License.
                        color="accent"
                        *ngIf="creating"></mat-spinner>
           <button mat-flat-button
+                  class="km-flat-button"
                   color="tertiary"
                   matStepperPrevious
                   *ngIf="!first">Back
           </button>
           <button id="km-wizard-{{toStepID(step)}}-next-btn"
                   mat-flat-button
+                  class="km-flat-button"
                   matStepperNext
                   [disabled]="invalid"
                   *ngIf="!last">Next
           </button>
           <button id="km-wizard-create-btn"
                   mat-flat-button
+                  class="km-flat-button"
                   [disabled]="creating"
                   *ngIf="last"
                   (click)="create()">Create

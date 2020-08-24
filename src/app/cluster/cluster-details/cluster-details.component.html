@@ -66,7 +66,8 @@ limitations under the License.
     <mat-card-header>
       <mat-card-title fxFlex
                       fxLayout="row"
-                      fxLayoutAlign=" center">
+                      fxLayoutAlign=" center"
+                      class="km-mat-card-title">
         <i [matTooltip]="!!clusterHealthStatus ? clusterHealthStatus.message : ''"
            [ngClass]="!!clusterHealthStatus ? clusterHealthStatus.color : ''"
            class="km-cluster-health"></i>

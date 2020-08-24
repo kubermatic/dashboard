@@ -12,10 +12,6 @@
 @import 'variables';
 @import 'mixins';
 
-.mat-card {
-  padding: 0 8px;
-}
-
 .km-button-navigation {
   margin-top: 16px;
 
@@ -38,10 +34,45 @@
   padding-top: 45px;
 }
 
-.mat-card-header {
+.km-wizard-step {
+  cursor: default;
+  font-size: $font-size-subhead;
+  font-weight: 400;
   margin-bottom: 0;
+  margin-top: 0;
+  padding-top: 8px;
+  text-align: center;
+  user-select: none;
+
+  .km-wizard-step-number {
+    @include size(24px);
+
+    align-items: center;
+    border-radius: 50%;
+    display: inline-flex;
+    font-size: $font-size-body;
+    font-weight: normal;
+    justify-content: center;
+    margin-right: 14px;
+  }
+
+  &.active {
+    font-weight: 500;
+  }
+
+  &.completed {
+    cursor: pointer;
+  }
 }
 
-.mat-card-header .mat-card-title {
-  padding: 8px 0 8px;
+.km-wizard-step-divider {
+  height: 1px;
+  margin: 20px 20px 0 8px;
+}
+
+mat-card {
+  &.mat-card {
+    margin: 0;
+    padding: 16px 30px 30px;
+  }
 }

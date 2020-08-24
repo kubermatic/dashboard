@@ -619,6 +619,7 @@
   .mat-step-header {
     .mat-step-icon {
       background: $divider;
+      color: $text-secondary;
 
       &.mat-step-icon-selected,
       &.mat-step-icon-state-edit {
@@ -629,6 +630,10 @@
 
     .mat-step-label {
       color: $text-secondary;
+
+      &.mat-step-label-active {
+        color: $text-secondary;
+      }
 
       &.mat-step-label-selected {
         color: map-get($colors, primary);

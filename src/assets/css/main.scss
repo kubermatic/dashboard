@@ -77,14 +77,6 @@ km-dashboard {
   }
 }
 
-.mat-stepper-horizontal-line {
-  margin: 0 20px 20px;
-}
-
-.mat-horizontal-stepper-header {
-  padding: 0;
-}
-
 .km-select-input {
   height: 24px;
   outline: none;
@@ -273,49 +265,6 @@ km-dashboard {
     div.mat-form-field-flex label {
       transition: all .5s ease;
     }
-  }
-}
-
-.km-card-progress-bar {
-  border-radius: $border-radius $border-radius 0 0;
-  box-shadow: none;
-  padding-bottom: 20px;
-
-  .km-wizard-step {
-    cursor: default;
-    font-size: $font-size-subhead;
-    font-weight: 400;
-    margin-bottom: 0;
-    margin-top: 0;
-    padding-right: 15px;
-    padding-top: 8px;
-    text-align: center;
-    user-select: none;
-
-    .km-wizard-step-number {
-      @include size(24px);
-
-      align-items: center;
-      border-radius: 50%;
-      display: inline-flex;
-      font-size: $font-size-body;
-      font-weight: normal;
-      justify-content: center;
-      margin-right: 14px;
-    }
-
-    &.active {
-      font-weight: 500;
-    }
-
-    &.completed {
-      cursor: pointer;
-    }
-  }
-
-  .km-wizard-step-divider {
-    height: 1px;
-    margin: 20px 20px 0 8px;
   }
 }
 
@@ -559,19 +508,6 @@ km-dashboard {
   display: flex;
   flex-flow: row wrap;
   padding: 8px 56px 0;
-}
-
-.km-no-margin {
-  margin: 0;
-}
-
-.km-pointer {
-  cursor: pointer;
-  outline: none;
-}
-
-.km-hidden {
-  visibility: hidden;
 }
 
 .km-no-padding {
@@ -838,11 +774,6 @@ mat-form-field.mat-form-field {
   height: 32px;
 }
 
-.mat-horizontal-content-container {
-  overflow: initial;
-  padding: 0;
-}
-
 .km-cluster-list-health {
   vertical-align: middle;
 }
@@ -929,6 +860,12 @@ mat-form-field.mat-form-field {
   }
 }
 
+km-property-boolean {
+  .km-property-label {
+    display: none;
+  }
+}
+
 /* ========== mat-card ========== */
 mat-card {
   &.mat-card {
@@ -998,6 +935,22 @@ mat-card {
     font-size: $font-size-subhead;
     line-height: 20px;
     opacity: .7;
+  }
+}
+
+/* ========== mat-horizontal-stepper ========== */
+.mat-stepper-horizontal {
+  .mat-horizontal-content-container {
+    overflow: initial;
+    padding: 0;
+  }
+
+  .mat-horizontal-stepper-header {
+    padding: 0;
+  }
+
+  .mat-stepper-horizontal-line {
+    margin: 0 20px;
   }
 }
 
@@ -1085,4 +1038,13 @@ mat-card {
       }
     }
   }
+}
+
+.km-pointer {
+  cursor: pointer;
+  outline: none;
+}
+
+.km-hidden {
+  visibility: hidden;
 }

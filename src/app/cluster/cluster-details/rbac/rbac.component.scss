@@ -31,14 +31,19 @@ h2 {
   padding: 0 56px;
 }
 
-tr th:first-child,
-tr td:first-child {
-  padding-left: 56px;
-}
+tr {
+  &.mat-row,
+  &.mat-header-row {
+    padding-left: 56px;
 
-tr:last-child th:last-child,
-.km-table td:last-child {
-  padding-right: 56px;
+    td:first-child,
+    th:first-child {
+      &.mat-cell,
+      &.mat-header-cell {
+        padding-left: 56px;
+      }
+    }
+  }
 }
 
 .mat-card-title {
@@ -46,4 +51,8 @@ tr:last-child th:last-child,
   .km-icon-arrow-up {
     margin-left: 0;
   }
+}
+
+.km-add-button {
+  margin-right: 8px;
 }

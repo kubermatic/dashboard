@@ -48,3 +48,10 @@ i.km-icon-info {
 .km-mat-card-code-block {
   margin-top: 20px;
 }
+
+.mat-card-content {
+  .km-row {
+    border-top: none;
+    padding: 0 30px;
+  }
+}

@@ -17,9 +17,14 @@ limitations under the License.
      fxLayoutGap="20px"
      fxLayoutGap.md="0"
      fxLayoutGap.sm="0"
-     fxLayoutGap.xs="0">
-  <div fxFlex="50%">
-    <div class="section">
+     fxLayoutGap.xs="0"
+     fxLayoutAlign="start start">
+  <div fxFlex="50%"
+       fxLayout="column"
+       fxLayoutAlign="start start">
+    <div class="section"
+         fxLayout="column"
+         fxLayoutAlign="start start">
       <div class="header">Provider</div>
       <div class="properties">
         <km-property>
@@ -33,7 +38,9 @@ limitations under the License.
       </div>
     </div>
 
-    <div class="section">
+    <div class="section"
+         fxLayout="column"
+         fxLayoutAlign="start start">
       <div class="header">Cluster</div>
       <div class="properties">
         <km-property>
@@ -120,7 +127,9 @@ limitations under the License.
     </div>
 
     <div *ngIf="cluster.credential || displaySettings()"
-         class="section">
+         class="section"
+         fxLayout="column"
+         fxLayoutAlign="start start">
       <div class="header">Settings</div>
       <div class="properties">
         <ng-container *ngIf="cluster.credential">
@@ -269,8 +278,12 @@ limitations under the License.
     </div>
   </div>
 
-  <div fxFlex="50%">
+  <div fxFlex="50%"
+       fxLayout="column"
+       fxLayoutAlign="start start">
     <div class="section"
+         fxLayout="column"
+         fxLayoutAlign="start start"
          *ngIf="!cluster.spec.cloud.bringyourown">
       <div class="header">Initial Nodes</div>
       <div class="properties">
@@ -632,6 +645,8 @@ limitations under the License.
 
 
     <div class="section"
+         fxLayout="column"
+         fxLayoutAlign="start start"
          *ngIf="cluster.spec.cloud.vsphere && cluster.spec.machineNetworks && cluster.spec.machineNetworks?.length > 0">
       <div class="header">Machine Networks</div>
       <div class="properties"
