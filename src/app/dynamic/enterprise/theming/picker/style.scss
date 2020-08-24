@@ -12,27 +12,20 @@
 @import 'variables';
 @import 'mixins';
 
-.km-account-settings-entry-label {
+.entry-label {
   align-items: center;
   display: flex;
   line-height: 64px;
-  min-width: 224px;
+  min-width: 200px;
 
   span {
     margin-right: 5px;
   }
 }
 
-.km-account-settings-toggle {
-  mat-button-toggle {
+.toggle-button {
+  .mat-button-toggle {
     @include size(140px, 50px, true);
-
-    border-radius: $border-radius;
-
-    .mat-button-toggle-label-content {
-      font-size: $font-size-subhead;
-      font-weight: normal;
-    }
   }
 }
 

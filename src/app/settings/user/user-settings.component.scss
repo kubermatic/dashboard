@@ -21,21 +21,14 @@
     padding: 30px;
   }
 
-  .km-user {
-    align-items: center;
-    display: flex;
-    margin-right: 30px;
-    min-height: 24px;
-    min-width: 24px;
-  }
-
-  .km-account-info-name {
+  .user-name {
     font-size: $font-size-subhead-lg;
-    line-height: 21px;
+    line-height: normal;
   }
 
-  .km-account-info-email {
+  .user-email {
     font-size: $font-size-subhead;
+    margin-top: -5px;
   }
 
   .km-account-settings {
@@ -48,27 +41,14 @@
       margin-bottom: 24px;
     }
 
-    .km-account-settings-entry-label {
+    .entry-label {
       align-items: center;
       display: flex;
       line-height: 64px;
-      min-width: 224px;
+      min-width: 200px;
 
       span {
         margin-right: 5px;
-      }
-    }
-
-    .km-account-settings-toggle {
-      mat-button-toggle {
-        @include size(140px, 50px, true);
-
-        border-radius: $border-radius;
-
-        .mat-button-toggle-label-content {
-          font-size: $font-size-subhead;
-          font-weight: normal;
-        }
       }
     }
   }

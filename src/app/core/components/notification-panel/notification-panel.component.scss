@@ -29,21 +29,26 @@ $panel-width: 350px;
     padding: 20px 20px 8px;
 
     .mat-icon-button {
-      @include size(35px);
+      @include size(35px, $force: true);
 
       margin: -8px 4px 0 0;
 
       i {
-        @include size(16px);
+        @include size(16px, $force: true);
 
         margin-top: -4px;
       }
 
       .km-icon-clear {
-        @include size(18px);
+        @include size(18px, $force: true);
       }
 
       .filter-indicator {
+        @include size(8px);
+
+        border-radius: 50%;
+        bottom: 10px;
+        position: absolute;
         right: 8px;
       }
     }

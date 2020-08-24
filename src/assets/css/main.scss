@@ -688,6 +688,8 @@ mat-chip-list {
   .mat-button-toggle-label-content {
     align-items: center;
     display: flex;
+    font-size: $font-size-subhead;
+    font-weight: normal;
     height: 100%;
     justify-content: center;
 
@@ -1037,6 +1039,24 @@ mat-card {
         width: 100%;
       }
     }
+  }
+}
+
+/*
+ * Overrides default snack bar styling to display the notifications.
+ */
+.km-notification {
+  &.mat-snack-bar-container {
+    border-radius: $border-radius;
+    box-shadow: $notification-shadow;
+    display: flex;
+    flex: 1 1 auto;
+    margin: $notification-margin;
+    max-height: $notification-max-height;
+    max-width: $notification-width;
+    min-height: $notification-min-height;
+    min-width: $notification-width;
+    padding: 0;
   }
 }
 

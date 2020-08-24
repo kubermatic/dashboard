@@ -313,7 +313,7 @@
     color: $text;
   }
 
-  .km-notification-type {
+  .type {
     &.success {
       background: map-get($colors, indicator-green);
     }
@@ -744,6 +744,7 @@
 
     .mat-button-toggle {
       border: 1px solid $divider;
+      border-radius: $border-radius;
     }
 
     .mat-button-toggle-label-content {
