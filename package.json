@@ -83,7 +83,7 @@
     "husky": "4.2.5",
     "jest": "26.4.0",
     "jest-preset-angular": "8.2.1",
-    "js-beautify": "1.12.0",
+    "js-beautify": "1.13.0",
     "license-check-and-add": "^3.0.4",
     "license-compliance": "1.0.2",
     "lint-staged": "10.2.11",
