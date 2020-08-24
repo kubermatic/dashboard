@@ -22,7 +22,7 @@ $content-top-margin: 7px;
   .monaco-editor {
     background-color: transparent;
     border-radius: $border-radius;
-    overflow: hidden !important;
+    overflow: hidden;
 
     .margin {
       padding-top: $content-top-margin;

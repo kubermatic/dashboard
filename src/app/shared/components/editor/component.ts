@@ -67,6 +67,3 @@ export class EditorComponent implements OnInit {
     return this.isFocused ? `${this.headerClass} focused` : this.headerClass;
   }
 }
-
-// TODO: remove !important
-// TODO: font
