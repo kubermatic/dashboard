@@ -33,7 +33,6 @@ import {SettingsService} from '../../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
-import {nodesFake} from '../../testing/fake-data/node.fake';
 import {
   fakeBindings,
   fakeClusterBindings,
@@ -137,17 +136,6 @@ describe('ClusterDetailsComponent', () => {
 
     tick();
     expect(component.cluster).toEqual(expectedCluster);
-  }));
-
-  it('should get nodes', fakeAsync(() => {
-    fixture.detectChanges();
-
-    const expectedNodes = nodesFake();
-    expectedNodes[0].creationTimestamp = expect.any(Date);
-    expectedNodes[1].creationTimestamp = expect.any(Date);
-
-    tick();
-    expect(component.nodes).toEqual(expectedNodes);
   }));
 
   it('should create simple cluster binding for rbac', () => {
