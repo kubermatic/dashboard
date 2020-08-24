@@ -752,6 +752,8 @@ mat-chip-list {
   .mat-button-toggle-label-content {
     align-items: center;
     display: flex;
+    font-size: $font-size-subhead;
+    font-weight: normal;
     height: 100%;
     justify-content: center;
 

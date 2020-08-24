@@ -24,15 +24,10 @@
 }
 
 .km-account-settings-toggle {
-  mat-button-toggle {
+  .mat-button-toggle {
     @include size(140px, 50px, true);
 
     border-radius: $border-radius;
-
-    .mat-button-toggle-label-content {
-      font-size: $font-size-subhead;
-      font-weight: normal;
-    }
   }
 }
 
