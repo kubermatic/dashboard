@@ -34,7 +34,6 @@ import {Health, HealthState} from '../../shared/entity/health';
 import {Member} from '../../shared/entity/member';
 import {ClusterMetrics} from '../../shared/entity/metrics';
 import {MachineDeployment} from '../../shared/entity/machine-deployment';
-import {Node} from '../../shared/entity/node';
 import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '../../shared/entity/rbac';
 import {SSHKey} from '../../shared/entity/ssh-key';
 import {Config, GroupConfig} from '../../shared/model/Config';
@@ -62,7 +61,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   nodeDc: Datacenter;
   seed: string;
   sshKeys: SSHKey[] = [];
-  nodes: Node[] = [];
   machineDeployments: MachineDeployment[];
   isMachineDeploymentLoadFinished = false;
   isClusterRunning = false;
@@ -156,7 +154,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               this._canReloadNodes()
                 ? [
                     this._clusterService.addons(this.projectID, this.cluster.id, this.seed),
-                    this._clusterService.nodes(this.projectID, this.cluster.id, this.seed),
                     this._api.getMachineDeployments(this.cluster.id, this.seed, this.projectID),
                     this._clusterService.metrics(this.projectID, this.cluster.id, this.seed),
                   ]
@@ -168,17 +165,15 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(
-        ([upgrades, clusterBindings, bindings, addons, nodes, machineDeployments, metrics]: [
+        ([upgrades, clusterBindings, bindings, addons, machineDeployments, metrics]: [
           MasterVersion[],
           ClusterBinding[],
           Binding[],
           Addon[],
-          Node[],
           MachineDeployment[],
           ClusterMetrics
         ]) => {
           this.addons = addons;
-          this.nodes = nodes;
           this.machineDeployments = machineDeployments;
           this.metrics = metrics;
           this.isMachineDeploymentLoadFinished = true;

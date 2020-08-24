@@ -216,15 +216,6 @@ limitations under the License.
                               [isClusterRunning]="isClusterAPIRunning"
                               [isMachineDeploymentLoadFinished]="isMachineDeploymentLoadFinished"></km-machine-deployment-list>
 
-  <div *ngIf="nodes.length > 0">
-    <km-node-list [cluster]="cluster"
-                  [nodes]="nodes"
-                  [seed]="seed"
-                  [projectID]="projectID"
-                  [clusterHealthStatus]="clusterHealthStatus"
-                  [isClusterRunning]="isClusterAPIRunning"></km-node-list>
-  </div>
-
   <km-rbac *ngIf="isRBACEnabled()"
            [cluster]="cluster"
            [seed]="seed"
