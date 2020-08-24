@@ -35,8 +35,6 @@
 }
 
 .mat-button-toggle {
-  border-radius: $border-radius;
-
   .mat-button-toggle-button {
     @include size(150px, 100%);
   }
