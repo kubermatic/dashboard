@@ -46,7 +46,6 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {ClipboardModule} from 'ngx-clipboard';
 import {CustomFormsModule} from 'ngx-custom-validators';
 import {FilterPipeModule} from 'ngx-filter-pipe';
-import {MonacoEditorModule} from 'ngx-monaco-editor';
 
 import {NotificationComponent} from '../core/components/notification/notification.component';
 import {TokenDialogComponent} from '../serviceaccount/serviceaccount-token/token-dialog/token-dialog.component';
@@ -81,6 +80,8 @@ import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
 import {ClusterService} from './services/cluster.service';
 import {EndOfLifeService} from './services/eol.service';
+import {EditorComponent} from './components/editor/component';
+import {MonacoEditorModule} from 'ngx-monaco-editor';
 
 const modules: any[] = [
   CommonModule,
@@ -148,6 +149,7 @@ const components: any[] = [
   MachineNetworkComponent,
   ClusterTypeEOLComponent,
   ChipComponent,
+  EditorComponent,
 ];
 
 const entryComponents: any[] = [

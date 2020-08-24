@@ -124,9 +124,8 @@ limitations under the License.
   </form>
 
   <div class="property-name">Provider Configuration</div>
-  <ngx-monaco-editor [options]="editorOptions"
-                     [(ngModel)]="providerConfig"></ngx-monaco-editor>
-  <mat-hint>Use YAML format. If not specified default configuration will be used.</mat-hint>
+  <km-editor [(model)]="providerConfig"></km-editor>
+  <mat-hint>If not specified default configuration will be used.</mat-hint>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
