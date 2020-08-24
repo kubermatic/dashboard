@@ -59,11 +59,14 @@ export class EditorComponent implements OnInit {
     editor.onDidBlurEditorText(() => (this.isFocused = false));
   }
 
+  onChange(): void {
+    this.modelChange.emit(this.model);
+  }
+
   getHeaderClasses(): string {
     return this.isFocused ? `${this.headerClass} focused` : this.headerClass;
   }
 }
 
-// TODO: passing modelChange
 // TODO: remove !important
 // TODO: font

@@ -16,5 +16,6 @@ limitations under the License.
        [ngClass]="getHeaderClasses()">{{language}}</div>
   <ngx-monaco-editor [options]="options"
                      [(ngModel)]="model"
+                     (ngModelChange)="onChange()"
                      (onInit)="onInit($event)"></ngx-monaco-editor>
 </div>
