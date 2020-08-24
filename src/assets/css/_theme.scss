@@ -313,7 +313,7 @@
     color: $text;
   }
 
-  .km-notification-type {
+  .type {
     &.success {
       background: map-get($colors, indicator-green);
     }
