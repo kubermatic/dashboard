@@ -32,7 +32,7 @@ i.km-icon-info {
 
 .km-node-details {
   box-shadow: $border-box-shadow-inset;
-  padding: 15px 30px 20px 60px;
+  padding: $item-details-padding;
 
   mat-card-content {
     border: none;
