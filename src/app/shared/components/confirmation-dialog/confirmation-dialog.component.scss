@@ -12,3 +12,10 @@
 .km-confirm-dialog-copy-icon {
   margin-left: 4px;
 }
+
+#km-confirmation-dialog {
+  .mat-dialog-content {
+    line-height: 24px;
+    margin-bottom: 30px;
+  }
+}

@@ -54,13 +54,13 @@ limitations under the License.
             *matCellDef="let element">
           <ng-container *ngIf="!element.spec.cloud.aws">
             {{element.name}}
-            <i class="km-icon-info"
+            <i class="km-pointer"
                matTooltip="{{getInfo(element)}}"
                *ngIf="showInfo(element)"></i>
           </ng-container>
           <ng-container *ngIf="element.spec.cloud.aws">
             {{getNodeName(element)}}
-            <i class="km-icon-info"
+            <i class="km-pointer"
                matTooltip="{{getInfo(element)}}"
                *ngIf="showInfo(element)"></i>
           </ng-container>
@@ -216,7 +216,7 @@ limitations under the License.
                    class="km-node-info"
                    matTooltip="Use this username if you need to connect to your nodes via SSH.">
                 SSH Key Username
-                <i class="km-icon-info"></i>
+                <i class="km-pointer"></i>
               </div>
               <div value>{{element.spec.sshUserName}}</div>
             </km-property>
@@ -395,7 +395,7 @@ limitations under the License.
           (click)="toggleNodeItem(row)"></tr>
       <tr mat-row
           *matRowDef="let row; let i=index; columns: toggledColumns;"
-          [ngClass]="isShowNodeItem[row.id] ? '' : 'km-table-collapse'"
+          [ngClass]="isShowNodeItem[row.id] ? '' : 'km-hidden'"
           class="km-mat-row"></tr>
     </table>
 

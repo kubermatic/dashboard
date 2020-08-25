@@ -1,0 +1,79 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@mixin theme-material-override($colors) {
+  /* ========== mat-slide-toggle ========== */
+  .mat-slide-toggle {
+    .mat-slide-toggle-label {
+      .mat-slide-toggle-bar {
+        background-color: map-get($colors, divider);
+      }
+    }
+
+    &.mat-checked {
+      .mat-slide-toggle-bar {
+        background-color: map-get($colors, background-primary);
+      }
+
+      .mat-slide-toggle-thumb {
+        background-color: #fafafa;
+      }
+    }
+  }
+
+  /* ========== mat-table ========== */
+  .mat-table {
+    .mat-header-cell,
+    .mat-sort-header-button {
+      color: map-get($colors, text);
+    }
+
+    td {
+      &.mat-cell {
+        border-top: 1px solid map-get($colors, divider);
+      }
+    }
+
+    .mat-sort-header-arrow {
+      .mat-sort-header-stem,
+      .mat-sort-header-pointer-left,
+      .mat-sort-header-pointer-right,
+      .mat-sort-header-pointer-middle {
+        background: none;
+      }
+    }
+
+    [aria-sort='ascending'] {
+      .mat-sort-header-arrow {
+        .mat-sort-header-indicator {
+          &::before {
+            background-color: map-get($colors, text);
+          }
+        }
+      }
+    }
+
+    [aria-sort='descending'] {
+      .mat-sort-header-arrow {
+        .mat-sort-header-indicator {
+          &::before {
+            background-color: map-get($colors, text);
+          }
+        }
+      }
+    }
+  }
+
+  /* ========== mat-card ========== */
+  .mat-card {
+    color: map-get($colors, text);
+  }
+}

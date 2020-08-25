@@ -1,0 +1,198 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@import 'variables';
+@import 'mixins';
+
+/*
+ * Aligns text to the center of the available space.
+ *
+ * TODO: Update name to better reflect the behavior
+ */
+.km-no-item {
+  font-size: 14px;
+  line-height: 50px;
+  padding: 0 30px;
+  text-align: center;
+}
+
+/*
+ * Adds a left/right padding to the mat-card header to align title with the content.
+ *
+ * Usage:
+ * <mat-card class="km-with-table-header">
+ *   <mat-card-header>
+ *     <mat-card-title>Addons</mat-card-title>
+ *   </mat-card-header>
+ *   <mat-card-content class="km-addon-card-content">
+ *   ...
+ *   </mat-card-content>
+ * </mat-card>
+ *
+ * TODO: Update name to better reflect the behavior
+ */
+.km-with-table-header {
+  .mat-card-header-text {
+    padding: 0 56px;
+  }
+}
+
+/*
+ * Overrides default material button styling to match Kubermatic styling.
+ *
+ * Usage:
+ * <button class="km-raised-button"
+ *         mat-flat-button
+ *         type="button">
+ *   Add Project
+ * </button>
+ */
+.km-raised-button,
+.km-flat-button,
+.km-button {
+  &.mat-button,
+  &.mat-flat-button,
+  &.mat-raised-button {
+    font-size: $font-size-subhead;
+    line-height: 40px;
+  }
+}
+
+/**
+ * Custom styles of the mat-card
+ */
+.mat-card {
+  /**
+   * Style for the footer row inside the mat-card
+   *
+   * Usage:
+   * <div class="km-mat-row km-mat-footer-row">
+   *   <button>
+   *   ...
+   *   </button>
+   * </div>
+   *
+   */
+  .km-mat-row {
+    .km-mat-footer-row {
+      border-bottom-left-radius: $border-radius;
+      border-bottom-right-radius: $border-radius;
+      border-style: solid dashed dashed dashed;
+      border-width: 1px;
+      padding: 0;
+
+      button {
+        font-size: $font-size-subhead;
+        font-weight: normal;
+        line-height: 40px;
+        width: 100%;
+      }
+    }
+  }
+
+  /**
+   * Style of the table header inside the mat-card
+   *
+   * Usage:
+   * <mat-card class="km-with-table-header">
+   *   <mat-card-content>
+   *     <table class="km-table"
+   *            mat-table>
+   *       ...
+   *     </table>
+   *   </mat-card-content>
+   * </mat-card>
+   *
+   */
+  &.km-with-table-header {
+    .mat-card-content {
+      &.km-row,
+      .km-row {
+        border-top-style: solid;
+        border-top-width: 1px;
+      }
+    }
+  }
+}
+
+.km-pointer {
+  cursor: pointer;
+  outline: none;
+}
+
+.km-hidden {
+  display: none;
+}
+
+.km-copy {
+  cursor: pointer;
+  outline: none;
+}
+
+.km-multiple-values-dropdown {
+  margin-left: 30px;
+}
+
+.km-add-dialog-dropdown {
+  margin-top: 34px;
+}
+
+.km-paginator {
+  border-radius: 0 0 $border-radius $border-radius;
+}
+
+.km-table-dropdown {
+  margin: 0;
+  padding: 0;
+
+  tr:first-child td:first-child {
+    border-top-left-radius: $border-radius;
+  }
+
+  tr:first-child td:last-child {
+    border-top-right-radius: $border-radius;
+  }
+}
+
+.km-card-expansion-panel {
+  font-size: $font-size-subhead;
+  line-height: 48px;
+  margin: 0 56px;
+  padding: 8px 0;
+
+  & > div {
+    cursor: default;
+    margin-right: 48px;
+
+    & > span {
+      margin-right: 16px;
+      margin-top: 2px;
+    }
+  }
+
+  .km-icon-failed,
+  .km-icon-disabled,
+  .km-icon-running,
+  .km-icon-pending {
+    @include size($font-size-subhead);
+
+    font-size: $font-size-subhead;
+  }
+}
+
+.km-panel {
+  .panel {
+    border-radius: $border-radius;
+    overflow: hidden;
+    position: fixed;
+    z-index: 3;
+  }
+}

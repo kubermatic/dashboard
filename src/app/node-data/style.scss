@@ -67,3 +67,21 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
   font-weight: normal;
   margin-bottom: 16px;
 }
+
+.eol-warning {
+  align-items: center;
+  display: flex;
+  font-size: $font-size-body;
+
+  &.with-margin {
+    margin-bottom: 10px;
+  }
+
+  i {
+    margin: 0 8px 0 0;
+
+    &.with-margin {
+      margin-left: 8px;
+    }
+  }
+}

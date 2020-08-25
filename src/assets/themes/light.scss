@@ -10,6 +10,7 @@
 // limitations under the License.
 
 @import '~@angular/material/theming';
+@import 'theme/main';
 @import 'theme';
 
 $colors-light: (
@@ -58,3 +59,4 @@ $theme-light: map_merge($theme-light, (foreground: $foreground));
 
 @include angular-material-theme($theme-light);
 @include theme($theme-light, $colors-light);
+@include theme-new($theme-light, $colors-light);

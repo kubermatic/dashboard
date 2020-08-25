@@ -60,7 +60,7 @@ limitations under the License.
                fxLayoutGap="4px">
             <span>{{!!machineDeployment.status?.availableReplicas ? machineDeployment.status.availableReplicas : 0}}/{{!!machineDeployment.spec?.replicas ? machineDeployment.spec.replicas : 0}}</span>
             <div *ngIf="machineDeployment.status?.availableReplicas > machineDeployment.spec.replicas"
-                 class="km-icon-info"
+                 class="km-pointer"
                  matTooltip="Number of available machines may be higher than number of desired machines from the template if deployment is updating."></div>
           </div>
         </km-property>

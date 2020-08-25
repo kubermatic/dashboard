@@ -11,11 +11,33 @@
 
 @import 'variables';
 
-.mat-button-toggle-group {
-  border-radius: $border-radius;
-  margin-bottom: 30px;
+#km-add-binding-dialog {
+  .mat-button-toggle-group {
+    border-radius: $border-radius;
+    margin-bottom: 30px;
 
-  &.km-toggle-subject-type {
-    margin-left: 30px;
+    &.km-toggle-subject-type {
+      margin-left: 30px;
+    }
+
+    .mat-button-toggle {
+      margin-right: 0;
+      max-height: 40px;
+      min-height: 40px;
+
+      &:first-child {
+        border-bottom-left-radius: $border-radius;
+        border-top-left-radius: $border-radius;
+        max-width: 82px;
+        min-width: 82px;
+      }
+
+      &:last-child {
+        border-bottom-right-radius: $border-radius;
+        border-top-right-radius: $border-radius;
+        max-width: 115px;
+        min-width: 115px;
+      }
+    }
   }
 }

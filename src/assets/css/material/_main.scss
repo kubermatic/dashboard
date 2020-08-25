@@ -1,0 +1,210 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@import '../variables';
+@import '../mixins';
+@import '../images';
+
+/* ==================== mat-slide-toggle ==================== */
+.mat-slide-toggle {
+  .mat-slide-toggle-label {
+    .mat-slide-toggle-bar {
+      @include size(50px, 24px);
+
+      border-radius: 50px;
+    }
+
+    .mat-slide-toggle-thumb {
+      box-shadow: none;
+    }
+
+    .mat-slide-toggle-thumb-container {
+      left: 2px;
+      top: 2px;
+    }
+  }
+
+  &.mat-checked {
+    .mat-slide-toggle-label {
+      .mat-slide-toggle-thumb-container {
+        transform: translate3d(26px, 0, 0);
+      }
+    }
+  }
+}
+
+/* ==================== mat-table ==================== */
+.mat-table {
+  .mat-sort-header-container {
+    &.mat-sort-header-button {
+      border-bottom: none;
+      font-size: $font-size-body;
+      font-weight: normal;
+      height: 40px;
+      line-height: 25px;
+      padding: 0;
+    }
+  }
+
+  [aria-sort='descending'] {
+    .mat-sort-header-arrow {
+      .mat-sort-header-indicator {
+        &::before {
+          content: "";
+          mask: url("/assets/images/icons/arrow-down.svg");
+          mask-position: center;
+          mask-repeat: no-repeat;
+          min-height: 8px;
+          min-width: 8px;
+          position: absolute;
+          top: -8px;
+        }
+      }
+    }
+  }
+
+  [aria-sort='ascending'] {
+    .mat-sort-header-arrow {
+      .mat-sort-header-indicator {
+        &::before {
+          content: "";
+          mask: url("/assets/images/icons/arrow-up.svg");
+          mask-position: center;
+          mask-repeat: no-repeat;
+          min-height: 8px;
+          min-width: 8px;
+          position: absolute;
+          top: 1px;
+        }
+      }
+    }
+  }
+
+  .mat-sort-header-arrow {
+    margin: auto 0 auto 6px;
+  }
+}
+
+/* ==================== mat-select ==================== */
+.mat-select {
+  width: fit-content;
+
+  .mat-select-value {
+    max-width: 25ch;
+    min-width: 2ch;
+  }
+
+  .mat-select-arrow {
+    display: none;
+  }
+
+  .mat-select-value-text {
+    font-size: $font-size-subhead;
+    line-height: 20px;
+  }
+
+  .mat-select-placeholder {
+    font-size: $font-size-subhead;
+    line-height: 20px;
+    opacity: .7;
+  }
+}
+
+/* ==================== mat-horizontal-stepper ==================== */
+.mat-stepper-horizontal {
+  .mat-horizontal-content-container {
+    overflow: initial;
+    padding: 0;
+  }
+
+  .mat-horizontal-stepper-header {
+    padding: 0;
+  }
+
+  .mat-stepper-horizontal-line {
+    margin: 0 20px;
+  }
+}
+
+/* ==================== mat-card ==================== */
+mat-card {
+  &.mat-card {
+    border-radius: $border-radius;
+    box-shadow: $border-box-shadow;
+    margin: 20px 0 0 0;
+    padding: 30px 0;
+
+    .mat-card-header {
+      border-radius: $border-radius $border-radius 0 0;
+      line-height: 16px;
+      margin: 0;
+      padding: 0;
+
+      .mat-card-header-text {
+        margin: 0;
+      }
+
+      .mat-card-title {
+        font-size: $font-size-card-title;
+        font-weight: normal;
+        padding: 8px 0 16px;
+
+        i {
+          font-size: $font-size-subhead-lg;
+          margin: 0 20px;
+        }
+      }
+    }
+
+    .mat-card-content {
+      line-height: 50px;
+
+      p {
+        font-size: $font-size-caption;
+      }
+
+      button {
+        cursor: pointer;
+        font-size: $font-size-body;
+        outline: none;
+        padding: 0;
+      }
+    }
+  }
+}
+
+/* ==================== mat-form-field ==================== */
+.mat-form-field-wrapper {
+  padding-bottom: 22px;
+}
+
+/* ==================== mat-step ==================== */
+.mat-step-header {
+  max-height: 32px;
+  pointer-events: none;
+
+  .mat-step-icon {
+    margin-right: 14px;
+  }
+
+  .mat-step-icon-content {
+    font-size: $font-size-body;
+  }
+
+  .mat-step-label {
+    font-size: $font-size-subhead;
+    font-weight: 400;
+
+    &.mat-step-label-selected {
+      font-weight: 500;
+    }
+  }
+}

@@ -49,8 +49,7 @@ limitations under the License.
       <div>
         <div class="entry-label"
              fxLayoutAlign=" center">Items per page</div>
-        <mat-form-field fxFlex="23"
-                        class="km-user-settings-form-field">
+        <mat-form-field fxFlex="23">
           <mat-select disableOptionCentering
                       [(ngModel)]="settings.itemsPerPage"
                       (selectionChange)="onSettingsChange()">
@@ -71,11 +70,10 @@ limitations under the License.
         <div class="entry-label"
              fxLayoutAlign=" center">
           <span>Default Project</span>
-          <div class="km-icon-info"
+          <div class="km-pointer"
                matTooltip="Select a project to be redirected to after login."></div>
         </div>
-        <mat-form-field fxFlex="35"
-                        class="km-user-settings-form-field">
+        <mat-form-field fxFlex="35">
           <mat-select disableOptionCentering
                       [(ngModel)]="settings.selectedProjectId"
                       (selectionChange)="onSettingsChange()"

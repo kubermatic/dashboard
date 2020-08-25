@@ -151,3 +151,18 @@ $project-card-width: 330px;
 .km-all-projects-toggle {
   padding-right: 16px;
 }
+
+.km-projects-external {
+  p {
+    border-radius: $border-radius;
+    font-size: $font-size-body;
+    line-height: 12px;
+    margin-bottom: 0;
+    max-width: 100px;
+    padding: 4px;
+  }
+}
+
+.km-projects-external-right {
+  margin-left: auto;
+}
