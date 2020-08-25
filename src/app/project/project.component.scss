@@ -32,11 +32,10 @@ $project-card-width: 330px;
 }
 
 .km-project-view-switch {
-  border-radius: $border-radius;
-
   .mat-button-toggle {
     @include size($view-switch-width, $view-switch-height, true);
 
+    border-radius: unset;
     margin: 0;
 
     &:first-child {
