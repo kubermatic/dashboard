@@ -10,7 +10,7 @@
 // limitations under the License.
 
 @mixin theme-material-override($colors) {
-  /* ========== mat-slide-toggle ========== */
+  /* ==================== mat-slide-toggle ==================== */
   .mat-slide-toggle {
     .mat-slide-toggle-label {
       .mat-slide-toggle-bar {
@@ -29,7 +29,7 @@
     }
   }
 
-  /* ========== mat-table ========== */
+  /* ==================== mat-table ==================== */
   .mat-table {
     .mat-header-cell,
     .mat-sort-header-button {
@@ -72,8 +72,79 @@
     }
   }
 
-  /* ========== mat-card ========== */
+  /* ==================== mat-card ==================== */
   .mat-card {
     color: map-get($colors, text);
+  }
+
+  .mat-card-content {
+    p {
+      color: map-get($colors, text-secondary);
+    }
+
+    button {
+      border: none;
+      color: map-get($colors, primary);
+    }
+  }
+
+  /* ==================== mat-drawer ==================== */
+  .mat-drawer-container {
+    background-color: map-get($colors, background);
+  }
+
+  .mat-drawer-side {
+    border: none;
+  }
+
+  /* ==================== mat-tooltip ==================== */
+  .mat-tooltip {
+    background-color: map-get($colors, tooltip-background);
+  }
+
+  /* ==================== mat-form-field ==================== */
+  mat-form-field {
+    &.mat-form-field {
+      color: map-get($colors, text);
+    }
+
+    &.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) {
+      div.mat-form-field-flex:hover {
+        label {
+          color: map-get($colors, secondary-dark);
+        }
+      }
+    }
+
+    &.mat-focused {
+      &:not(.ng-invalid),
+      &.ng-pristine:not(.ng-touched) {
+        label.mat-form-field-label {
+          color: map-get($colors, primary-dark);
+        }
+      }
+    }
+  }
+
+  .mat-form-field-appearance-outline {
+    .mat-form-field-outline {
+      color: map-get($colors, divider);
+    }
+  }
+
+  .mat-form-field-appearance-outline.mat-focused {
+    .mat-form-field-outline-thick {
+      color: map-get($colors, primary);
+    }
+  }
+
+  div.mat-form-field-outline.mat-form-field-outline-thick {
+    color: map-get($colors, secondary);
+  }
+
+  .mat-form-field-disabled {
+    .mat-form-field-outline {
+      color: map-get($colors, divider-disabled);
+    }
   }
 }

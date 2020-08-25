@@ -22,6 +22,7 @@ import {lt, gt} from 'semver';
 @Component({
   selector: 'km-version-picker',
   templateUrl: './version-picker.component.html',
+  styleUrls: ['./version-picker.component.scss'],
 })
 export class VersionPickerComponent implements OnInit, OnChanges {
   @Input() seed: string;

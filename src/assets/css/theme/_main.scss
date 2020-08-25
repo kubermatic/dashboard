@@ -24,6 +24,12 @@
     // Palette colors
     palette-foreground: map-get($theme, foreground),
     palette-background: map-get($theme, background),
+    // Primary colors
+    primary: map-get($colors, primary),
+    primary-dark: map-get($colors, primary-dark),
+    // Secondary colors
+    secondary: map-get($colors, secondary),
+    secondary-dark: map-get($colors, secondary-dark),
     // Text colors
     text: mat-color($palette-foreground, text),
     text-secondary: mat-color($palette-foreground, secondary-text),

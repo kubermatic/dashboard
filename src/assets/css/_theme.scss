@@ -40,58 +40,6 @@
 
   $transition: all .5s ease;
 
-  .mat-drawer-container {
-    background-color: map-get($colors, background);
-  }
-
-  .mat-drawer-side {
-    border: none;
-  }
-
-  .mat-tooltip {
-    background-color: map-get($colors, tooltip-background);
-  }
-
-  .mat-card-content {
-    p {
-      color: $text-secondary;
-    }
-
-    button {
-      border: none;
-      color: map-get($colors, primary);
-    }
-  }
-
-  .mat-form-field-appearance-outline .mat-form-field-outline {
-    color: $divider;
-  }
-
-  .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
-    color: map-get($colors, primary);
-  }
-
-  mat-form-field.mat-form-field {
-    color: $text;
-  }
-
-  div.mat-form-field-outline.mat-form-field-outline-thick {
-    color: map-get($colors, secondary);
-  }
-
-  mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) div.mat-form-field-flex:hover label {
-    color: map-get($colors, secondary-dark);
-  }
-
-  mat-form-field.mat-focused:not(.ng-invalid) label.mat-form-field-label,
-  mat-form-field.mat-focused.ng-pristine:not(.ng-touched) label.mat-form-field-label {
-    color: map-get($colors, primary-dark);
-  }
-
-  .mat-form-field-disabled .mat-form-field-outline {
-    color: $divider-disabled;
-  }
-
   mat-hint a {
     color: map-get($colors, primary);
     text-decoration: none;

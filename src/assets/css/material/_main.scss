@@ -118,6 +118,18 @@
   }
 }
 
+.mat-select-panel {
+  margin-left: 6px;
+  margin-top: 30px;
+  max-width: calc(100% + 20px);
+  min-width: calc(100% + 20px);
+  transform-origin: 50% 0 0;
+
+  &.ng-animating {
+    visibility: hidden;
+  }
+}
+
 /* ==================== mat-horizontal-stepper ==================== */
 .mat-stepper-horizontal {
   .mat-horizontal-content-container {
@@ -182,8 +194,53 @@ mat-card {
 }
 
 /* ==================== mat-form-field ==================== */
-.mat-form-field-wrapper {
-  padding-bottom: 22px;
+mat-form-field {
+  &.mat-form-field {
+    width: 100%;
+
+    &.km-with-hint {
+      margin-bottom: 15px;
+    }
+
+    .mat-form-field-wrapper {
+      padding-bottom: 22px;
+    }
+
+    &.mat-focused {
+      &.mat-primary {
+        .mat-select-arrow-wrapper {
+          right: 5px;
+
+          .mat-select-arrow {
+            @include size(8px);
+
+            -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+  }
+}
+
+mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) div.mat-form-field-flex:hover label {
+  transition: all .2s ease;
+}
+
+.mat-select-arrow {
+  @include size(8px);
+
+  color: transparent;
+  display: inline-block;
+  mask: url("/assets/images/icons/arrow-down.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
+.mat-select-arrow-wrapper {
+  position: relative;
+  right: 0;
+  top: 3px;
 }
 
 /* ==================== mat-step ==================== */
@@ -207,4 +264,220 @@ mat-card {
       font-weight: 500;
     }
   }
+}
+
+/* ==================== mat-menu ==================== */
+.mat-menu-item {
+  height: 42px;
+  line-height: 42px;
+  padding: 0 10px;
+
+  .mat-icon {
+    margin-right: 0;
+  }
+}
+
+.mat-menu-content {
+  padding: 0;
+}
+
+.mat-menu-panel {
+  min-height: auto;
+}
+
+/* ==================== mat-nav ==================== */
+.mat-nav-list {
+  .mat-list-item-content {
+    padding: 0;
+  }
+}
+
+/* ==================== mat-list ==================== */
+mat-list-item {
+  &.disabled {
+    i {
+      opacity: .3;
+    }
+  }
+}
+
+/* ==================== mat-option ==================== */
+.mat-option {
+  padding: 0 0 0 10px;
+}
+
+.mat-optgroup-label {
+  font-size: $font-size-caption;
+  height: 35px;
+  line-height: 35px;
+  padding-left: 10px;
+}
+
+/* ==================== mat-chip ==================== */
+.mat-chip {
+  &.mat-standard-chip {
+    border-radius: $border-radius;
+    font-size: $font-size-body;
+    font-weight: normal;
+    line-height: 16px;
+    max-height: 22px;
+    min-height: 22px;
+    padding: 3px 0;
+
+    div:not(.mat-chip-ripple) {
+      align-items: center;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      padding: 3px 10px;
+    }
+  }
+}
+
+mat-chip-list {
+  cursor: default;
+
+  &:not(.km-chip-list-with-input) {
+    pointer-events: none;
+  }
+}
+
+/* ==================== mat-tooltip ==================== */
+.mat-tooltip {
+  font-size: $font-size-caption;
+  margin-top: 5px;
+}
+
+.mat-tooltip-panel {
+  height: 32px;
+}
+
+/* ==================== mat-icon ==================== */
+.mat-icon-button {
+  &[disabled] {
+    * {
+      cursor: auto;
+    }
+  }
+
+  a {
+    display: flex;
+    justify-content: center;
+  }
+
+  &:disabled a {
+    cursor: default;
+    pointer-events: none;
+    text-decoration: none;
+  }
+}
+
+/* ==================== mat-button-toggle ==================== */
+.mat-button-toggle-group {
+  box-shadow: none;
+
+  .mat-button-toggle {
+    @include size(150px, 60px, true);
+
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    margin: 0 10px 10px 0;
+  }
+
+  .mat-button-toggle-label {
+    @include size(100%);
+  }
+
+  .mat-button-toggle-label-content {
+    align-items: center;
+    display: flex;
+    font-size: $font-size-subhead;
+    font-weight: normal;
+    height: 100%;
+    justify-content: center;
+
+    .km-provider-logo {
+      max-width: 95px;
+    }
+
+    .km-provider-logo-aws,
+    .km-provider-logo-azure,
+    .km-provider-logo-vsphere,
+    .km-provider-logo-packet {
+      min-height: 24px;
+    }
+  }
+
+  .mat-button-toggle-button {
+    height: 100%;
+  }
+}
+
+/* ==================== mat-checkbox ==================== */
+.mat-checkbox-frame {
+  border-radius: $border-radius;
+}
+
+/* ==================== mat-dialog ==================== */
+.mat-dialog-container {
+  max-width: $dialog-width;
+  min-width: $dialog-width;
+
+  .mat-dialog-title {
+    font-weight: normal;
+  }
+
+  .mat-dialog-content {
+    font-size: $font-size-subhead;
+    font-weight: 400;
+    max-height: $dialog-content-max-height;
+    overflow-x: unset;
+    overflow-y: scroll;
+
+    a {
+      text-decoration: none;
+    }
+
+    p {
+      margin: 0 0 8px;
+    }
+
+    .km-dialog-warning {
+      display: flex;
+      margin: 16px 0;
+    }
+  }
+
+  .mat-dialog-actions {
+    justify-content: flex-end;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* ==================== mat-button ==================== */
+.mat-button,
+.mat-flat-button,
+.mat-raised-button {
+  font-size: $font-size-subhead;
+  line-height: 40px;
+
+  &:not(:first-child) {
+    margin-left: 10px;
+  }
+
+  &.km-small-button {
+    align-items: center;
+    display: flex;
+    height: 40px;
+    justify-content: center;
+    min-width: unset;
+  }
+}
+
+/* ==================== mat-column ==================== */
+.mat-column-status,
+.mat-column-stateArrow {
+  width: 8px;
 }

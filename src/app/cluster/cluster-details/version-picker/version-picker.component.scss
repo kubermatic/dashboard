@@ -10,6 +10,7 @@
 // limitations under the License.
 
 @import 'variables';
+@import 'mixins';
 
 .km-version-picker-container {
   margin: 6px 64px 6px 0;
@@ -22,14 +23,14 @@
     }
 
     .km-version-picker-type {
-      @include size(50px, 52px);
+      @include size(52px, 50px);
 
       border-radius: $border-radius 0 0 $border-radius;
       border-style: solid;
-      border-width: 1px 0 1px 1px;
-      margin-top: -2px;
+      //border-width: 1px 0 1px 1px;
       padding: 8px;
       position: relative;
+      top: -1px;
 
       i {
         @include size(30px);
@@ -49,55 +50,15 @@
     .mat-form-field {
       font-size: $font-size-subhead;
       margin-top: 20px;
-
-      .mat-form-field-infix {
-        padding: 12px 0 12px 0;
-        width: 120px;
-      }
-
-      .mat-form-field-outline-end {
-        border-radius: 0 $border-radius $border-radius 0;
-      }
-
-      .mat-form-field-outline-start {
-        border-radius: 0;
-      }
     }
   }
 
-  .km-version-picker-disabled {
-    .mat-select-arrow {
-      visibility: hidden;
-    }
-  }
-
-  .km-version-picker-enabled:hover {
-    * {
-      cursor: pointer;
-    }
-
-    .km-version-picker-type {
-      border-bottom: 2px;
-      border-left: 2px;
-      border-style: solid;
-      border-top: 2px;
-      margin-left: -1px;
-      transition: all .5s ease;
-      width: 51px;
-    }
-
-    .km-icon-update-available {
-      top: 5px;
-      transition: all .5s ease;
-    }
-
-    .mat-form-field-outline-thick {
-      opacity: 1;
-      transition: all .5s ease;
-    }
-
-    div.mat-form-field-flex label {
-      transition: all .5s ease;
+  .km-version-picker-enabled {
+    &:hover {
+      .km-version-picker-type {
+        border-style: solid;
+        transition: all .5s ease;
+      }
     }
   }
 }
