@@ -25,11 +25,6 @@ $project-card-width: 330px;
   text-align: center;
 }
 
-.km-project-item-actions {
-  display: flex;
-  justify-content: flex-end;
-}
-
 .km-project-more-owner {
   display: inline-block;
   font-size: $font-size-subhead;
@@ -37,11 +32,10 @@ $project-card-width: 330px;
 }
 
 .km-project-view-switch {
-  border-radius: $border-radius;
-
   .mat-button-toggle {
     @include size($view-switch-width, $view-switch-height, true);
 
+    border-radius: unset;
     margin: 0;
 
     &:first-child {
@@ -59,9 +53,8 @@ $project-card-width: 330px;
 .km-project-cards-view {
   flex-wrap: wrap;
 
-  .km-project-item-actions button {
+  button {
     opacity: 0;
-    transition: visibility 0s 0s, opacity 0s ease-out;
   }
 
   .km-icon-cluster {

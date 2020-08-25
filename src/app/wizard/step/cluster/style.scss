@@ -23,6 +23,7 @@ $toggle-height: 56px;
   .mat-button-toggle {
     @include size($toggle-width, $toggle-height, true);
 
+    border-radius: unset;
     border-width: 2px;
     margin: 4px 0 0 0;
 

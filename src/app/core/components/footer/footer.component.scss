@@ -9,12 +9,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@import 'mixins';
 @import 'variables';
 
 footer {
-  height: $toolbar-height;
+  @include size(100%, $toolbar-height);
+
   padding: 8px 28px 20px;
-  width: 100%;
   z-index: 999;
 
   * {
@@ -42,14 +43,11 @@ footer {
 }
 
 i {
-  background-color: transparent;
-  background-repeat: no-repeat;
+  @include size(20px);
+
   background-size: contain;
-  cursor: pointer;
   display: inline-block;
-  height: 20px;
   margin-left: 16px;
-  width: 20px;
 
   &:hover {
     opacity: .75;
