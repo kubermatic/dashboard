@@ -42,24 +42,13 @@
     }
 
     .entry-label {
-      align-items: center;
-      display: flex;
-      line-height: 64px;
       min-width: 200px;
-
-      span {
-        margin-right: 5px;
-      }
     }
   }
 }
 
 .km-pointer {
   margin-left: 8px;
-}
-
-.mat-slide-toggle {
-  margin-left: -8px;
 }
 
 mat-form-field {

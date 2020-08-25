@@ -17,7 +17,7 @@
 
 .km-publickey-wrapper {
   box-shadow: $border-box-shadow-inset;
-  padding: 15px 30px 20px 60px;
+  padding: $item-details-padding;
 
   .km-publickey-content {
     .km-publickey-name {
