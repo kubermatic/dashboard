@@ -11,19 +11,15 @@
 
 @import 'variables';
 
-.km-settings-status-container {
-  left: 24px;
-  position: relative;
-  top: 0;
-
-  mat-spinner {
-    height: 24px;
-    left: -4px;
-    position: absolute;
-    top: -4px;
-  }
-}
-
 :host {
   align-self: center;
+  left: 22px;
+  position: relative;
+}
+
+.km-spinner {
+  height: 22px;
+  left: -4px;
+  position: absolute;
+  top: -4px;
 }
