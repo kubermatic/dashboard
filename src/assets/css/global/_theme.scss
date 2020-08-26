@@ -10,7 +10,101 @@
 // limitations under the License.
 
 @mixin theme-global($colors) {
-  /* ========== mat-card ========== */
+  /* ==================== Reusable rules ==================== */
+  .km-header {
+    color: map-get($colors, text);
+  }
+
+  .km-text {
+    color: map-get($colors, text);
+  }
+
+  .km-text-muted {
+    color: map-get($colors, text-secondary);
+  }
+
+  .km-info {
+    background-color: map-get($colors, primary-hover);
+  }
+
+  .km-success {
+    color: map-get($colors, indicator-green);
+  }
+
+  .km-success-bg {
+    background-color: map-get($colors, indicator-green);
+  }
+
+  .km-warning {
+    color: map-get($colors, indicator-orange);
+  }
+
+  .km-warning-bg {
+    background-color: map-get($colors, indicator-orange);
+  }
+
+  .km-error {
+    color: map-get($colors, indicator-red);
+  }
+
+  .km-error-bg {
+    background-color: map-get($colors, indicator-red);
+  }
+
+  .km-hover-bg:hover {
+    background-color: map-get($colors, background-hover);
+  }
+
+  .km-border {
+    border: 1px solid map-get($colors, divider);
+  }
+
+  .km-border-dashed {
+    border: 1px dashed map-get($colors, divider);
+  }
+
+  .km-icon {
+    color: map-get($colors, text);
+  }
+
+  .km-icon-mask {
+    background-color: map-get($colors, text);
+  }
+
+  .km-menu-header {
+    color: map-get($colors, text);
+  }
+
+  .km-copy {
+    &:hover {
+      color: map-get($colors, primary);
+    }
+
+    &:active {
+      color: lighten(map-get($colors, primary), .5);
+    }
+  }
+
+  .km-login-footer {
+    * {
+      color: #fff;
+    }
+  }
+
+  /* ==================== Material-based reusable rules ====================
+   *
+   * See '_main.scss' file for documentation about usage.
+   *
+   * =======================================================================
+   */
+
+  /* ==================== mat-card ====================
+   *
+   * Reusable rules:
+   *   - .km-with-table-header
+   *   - .km-row
+   *
+   */
   .mat-card {
     &.km-with-table-header {
       .mat-card-content {

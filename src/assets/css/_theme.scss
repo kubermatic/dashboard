@@ -40,105 +40,6 @@
 
   $transition: all .5s ease;
 
-  mat-hint a {
-    color: map-get($colors, primary);
-    text-decoration: none;
-  }
-
-  .mat-button,
-  .mat-flat-button,
-  .mat-raised-button {
-    background-color: map-get($colors, primary);
-    // TODO: Use variable
-    color: #fff;
-
-    &:hover:not([disabled]) {
-      background-color: map-get($colors, primary-hover);
-    }
-
-    &.mat-alternative:not([disabled]) {
-      background-color: map-get($colors, secondary);
-
-      &:hover {
-        background-color: map-get($colors, secondary-hover);
-      }
-    }
-
-    &.mat-tertiary:not([disabled]) {
-      background-color: transparent;
-      border: 1px solid $project-switch;
-      color: $text-secondary;
-
-      &:hover {
-        background-color: $background-hover;
-      }
-    }
-
-    &.mat-pure:not([disabled]) {
-      background-color: transparent;
-      border: none;
-      color: $text-secondary;
-
-      &:hover {
-        background-color: $background-hover;
-      }
-    }
-  }
-
-  .mat-icon-button {
-    i {
-      background-color: $text;
-    }
-
-    &:hover:not([disabled]) {
-      background-color: $divider;
-    }
-
-    &:disabled i {
-      background-color: $background-disabled-button;
-    }
-  }
-
-  .mat-button-focus-overlay {
-    background-color: transparent;
-  }
-
-  .mat-checkbox-checked .mat-checkbox-background {
-    background-color: map-get($colors, primary);
-  }
-
-  .mat-checkbox-disabled .mat-checkbox-background {
-    background-color: $checkbox-disabled;
-  }
-
-  .mat-checkbox-frame {
-    border: 2px solid $divider;
-  }
-
-  .mat-dialog-container {
-    color: $text;
-
-    .mat-dialog-content {
-      a {
-        color: map-get($colors, primary);
-      }
-    }
-  }
-
-  .mat-chip.mat-standard-chip {
-    background: transparent;
-    border: 1px solid $divider;
-    color: $text;
-
-    div:not(.mat-chip-ripple) {
-      background: $divider;
-    }
-
-    div.km-chip-accent {
-      background: transparent;
-    }
-  }
-
   .mat-select-arrow {
     background-color: $text;
   }
@@ -261,16 +162,6 @@
     color: $text;
   }
 
-  .type {
-    &.success {
-      background: map-get($colors, indicator-green);
-    }
-
-    &.error {
-      background: map-get($colors, indicator-red);
-    }
-  }
-
   .km-panel .panel {
     background-color: $background-app-bar;
     box-shadow: map-get($colors, shadow-dark);
@@ -279,11 +170,6 @@
     .notification-info .km-icon-mask {
       background-color: $text-secondary;
     }
-  }
-
-  .km-projects-external p {
-    border: 1px solid map-get($colors, primary);
-    color: $text;
   }
 
   .km-sidenav {
@@ -564,35 +450,6 @@
     }
   }
 
-  .mat-step-header {
-    .mat-step-icon {
-      background: $divider;
-      color: $text-secondary;
-
-      &.mat-step-icon-selected,
-      &.mat-step-icon-state-edit {
-        background: map-get($colors, wizard-step-background);
-        color: map-get($colors, primary);
-      }
-    }
-
-    .mat-step-label {
-      color: $text-secondary;
-
-      &.mat-step-label-active {
-        color: $text-secondary;
-      }
-
-      &.mat-step-label-selected {
-        color: map-get($colors, primary);
-      }
-    }
-
-    &.cdk-program-focused {
-      background-color: unset;
-    }
-  }
-
   .km-select-input {
     border-bottom: 1px solid $divider;
   }
@@ -601,87 +458,6 @@
     &:hover {
       background-color: $background-hover;
     }
-  }
-
-  // ==================== Kubermatic global styles ==================== //
-
-  // ==================== Globally usable styles ==================== //
-  .km-header {
-    color: $text;
-  }
-
-  .km-text {
-    color: $text;
-  }
-
-  .km-text-muted {
-    color: $text-secondary;
-  }
-
-  .km-info {
-    background-color: map-get($colors, primary-hover);
-  }
-
-  .km-success {
-    color: map-get($colors, indicator-green);
-  }
-
-  .km-success-bg {
-    background-color: map-get($colors, indicator-green);
-  }
-
-  .km-warning {
-    color: map-get($colors, indicator-orange);
-  }
-
-  .km-warning-bg {
-    background-color: map-get($colors, indicator-orange);
-  }
-
-  .km-error {
-    color: map-get($colors, indicator-red);
-  }
-
-  .km-error-bg {
-    background-color: map-get($colors, indicator-red);
-  }
-
-  .km-hover-bg:hover {
-    background-color: $background-hover;
-  }
-
-  .km-border {
-    border: 1px solid $divider;
-  }
-
-  .km-border-dashed {
-    border: 1px dashed $divider;
-  }
-
-  .km-icon {
-    color: $text;
-  }
-
-  .km-icon-mask {
-    background-color: $text;
-  }
-
-  .km-menu-header {
-    color: $text;
-  }
-
-  .km-copy {
-    &:hover {
-      color: map-get($colors, primary);
-    }
-
-    &:active {
-      color: lighten(map-get($colors, primary), .5);
-    }
-  }
-
-  .km-login-footer * {
-    color: #fff;
   }
 
   // ==================== MAT-BUTTON-TOGGLE ==================== //
