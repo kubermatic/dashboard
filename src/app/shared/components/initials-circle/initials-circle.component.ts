@@ -13,11 +13,11 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core'
 import {ProjectOwners} from '../../entity/project';
 
 @Component({
-  selector: 'km-short-name-in-circle',
-  templateUrl: './short-name-in-circle.component.html',
-  styleUrls: ['./short-name-in-circle.component.scss'],
+  selector: 'km-initials-circle',
+  templateUrl: './initials-circle.component.html',
+  styleUrls: ['./initials-circle.component.scss'],
 })
-export class ShortNameInCircleComponent implements OnInit, OnChanges {
+export class InitialsCircleComponent implements OnInit, OnChanges {
   @Input() owners: ProjectOwners[];
   @Input() limit: number;
 

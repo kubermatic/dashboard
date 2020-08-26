@@ -12,18 +12,20 @@ limitations under the License.
 -->
 <div fxLayout="row"
      [matTooltip]="getHiddenOwners()">
-  <span *ngIf="shortNames.length > 0"
-        class="km-short-name-box">
-    <span class="km-short-name-circle-wrapper"
-          *ngFor="let shortName of shortNames; let i = index">
-      <span class="km-short-name-circle"
-            *ngIf="!limit || i < limit">
+  <ng-container *ngIf="shortNames.length > 0">
+    <ng-container *ngFor="let shortName of shortNames; let i = index">
+      <span *ngIf="!limit || i < limit"
+            fxFlex
+            fxLayoutAlign="center center"
+            class="km-initials-circle">
         {{shortName}}
       </span>
-    </span>
-  </span>
+    </ng-container>
+  </ng-container>
   <span *ngIf="limit && shortNames.length > limit"
-        class="km-short-name-circle km-hidden-owners">
+        class="km-initials-circle accent"
+        fxFlex
+        fxLayoutAlign="center center">
     +{{shortNames.length - limit}}
   </span>
 </div>
