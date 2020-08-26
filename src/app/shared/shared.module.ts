@@ -71,7 +71,7 @@ import {PropertyUsageComponent} from './components/property-usage/property-usage
 import {PropertyComponent} from './components/property/property.component';
 import {RelativeTimeComponent} from './components/relativetime/relative-time.component';
 import {SettingsStatusComponent} from './components/settings-status/settings-status.component';
-import {ShortNameInCircleComponent} from './components/short-name-in-circle/short-name-in-circle.component';
+import {InitialsCircleComponent} from './components/initials-circle/initials-circle.component';
 import {SSHKeyListComponent} from './components/ssh-key-list/ssh-key-list.component';
 import {TagListComponent} from './components/tag-list/tag-list.component';
 import {TaintFormComponent} from './components/taint-form/taint-form.component';
@@ -140,7 +140,7 @@ const components: any[] = [
   SSHKeyListComponent,
   AddonsListComponent,
   SettingsStatusComponent,
-  ShortNameInCircleComponent,
+  InitialsCircleComponent,
   TagListComponent,
   TokenDialogComponent,
   NotificationComponent,

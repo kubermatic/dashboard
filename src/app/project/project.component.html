@@ -249,9 +249,9 @@ limitations under the License.
             <i class="km-icon-mask km-icon-owner"></i>
             <span *ngIf="project.owners.length === 1"
                   [matTooltip]="getOwners(project.owners)">{{getName(project.owners[0].name)}}</span>
-            <km-short-name-in-circle *ngIf="project.owners.length > 1"
-                                     [owners]="project.owners"
-                                     [limit]="2"></km-short-name-in-circle>
+            <km-initials-circle *ngIf="project.owners.length > 1"
+                                [owners]="project.owners"
+                                [limit]="2"></km-initials-circle>
           </span>
           <span *ngIf="!!getRole(project.id)">
             <i class="km-icon-mask km-icon-role"></i>

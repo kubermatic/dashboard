@@ -9,15 +9,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@import 'mixins';
 
-.km-icon-key {
-  cursor: default;
-  margin-right: 8px;
-  user-select: none;
-}
+.km-initials-circle {
+  @include size(32px);
 
-.km-ssh-keys-list-more {
-  cursor: default;
-  user-select: none;
+  border-radius: 50%;
+  margin-left: -5px;
+
+  &:first-child {
+    margin-left: 0;
+  }
 }

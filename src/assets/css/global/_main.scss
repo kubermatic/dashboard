@@ -127,6 +127,7 @@
 .km-pointer {
   cursor: pointer;
   outline: none;
+  user-select: none;
 }
 
 .km-hidden {
@@ -177,15 +178,6 @@
       margin-right: 16px;
       margin-top: 2px;
     }
-  }
-
-  .km-icon-failed,
-  .km-icon-disabled,
-  .km-icon-running,
-  .km-icon-pending {
-    @include size($font-size-subhead);
-
-    font-size: $font-size-subhead;
   }
 }
 

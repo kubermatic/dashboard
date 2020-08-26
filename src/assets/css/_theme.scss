@@ -264,11 +264,11 @@
     }
   }
 
-  .km-short-name-circle {
+  .km-initials-circle {
     background-color: $background-card;
     border: 2px solid $divider;
 
-    &.km-hidden-owners {
+    &.accent {
       background-color: $divider;
     }
   }
