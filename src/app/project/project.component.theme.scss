@@ -9,10 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'src/app/project/project.component.theme';
-@import 'src/app/core/components/notification/notification.component.theme';
-
-@mixin theme-register-components($colors) {
-  @include theme-project-component($colors);
-  @include theme-notification-component($colors);
+@mixin theme-project-component($colors) {
+  .km-projects-external {
+    p {
+      border-color: map-get($colors, primary);
+      color: map-get($colors, text);
+    }
+  }
 }

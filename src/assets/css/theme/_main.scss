@@ -10,8 +10,8 @@
 // limitations under the License.
 
 @import '~@angular/material/theming';
-@import '../material/theme';
-@import '../global/theme';
+@import 'material/theme';
+@import 'global/theme';
 @import 'component';
 
 @include mat-core();
@@ -27,6 +27,7 @@
     // Primary colors
     primary: map-get($colors, primary),
     primary-dark: map-get($colors, primary-dark),
+    primary-hover: map-get($colors, primary-hover),
     // Secondary colors
     secondary: map-get($colors, secondary),
     secondary-dark: map-get($colors, secondary-dark),
@@ -45,9 +46,14 @@
     // Divider colors
     divider: mat-color($palette-foreground, divider),
     divider-disabled: mat-color($palette-foreground, disabled),
+    // Indicator colors
+    indicator-green: mat-color($colors, indicator-green),
+    indicator-red: mat-color($colors, indicator-red),
+    indicator-orange: mat-color($colors, indicator-orange),
     // Other colors
     project-switch: rgba(mat-color($palette-foreground, secondary-text), .7),
     checkbox-disabled: mat-color($palette-foreground, disabled-checkbox),
+    wizard-step-background: map-get($colors, wizard-step-background),
   );
 
   // Override default material themes

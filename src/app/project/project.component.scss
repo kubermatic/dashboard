@@ -126,13 +126,15 @@ $project-card-width: 330px;
       padding-right: 10px;
     }
 
+    &:first-child {
+      span {
+        padding-right: 30px;
+      }
+    }
+
     span {
       align-items: center;
       display: flex;
-
-      &:first-child {
-        padding-right: 30px;
-      }
 
       &.km-projects-less-space {
         padding-right: 16px;
@@ -148,9 +150,11 @@ $project-card-width: 330px;
 .km-projects-external {
   p {
     border-radius: $border-radius;
+    border-style: solid;
+    border-width: 1px;
     font-size: $font-size-body;
     line-height: 12px;
-    margin-bottom: 0;
+    margin: 4px 0;
     max-width: 100px;
     padding: 4px;
   }
@@ -158,4 +162,13 @@ $project-card-width: 330px;
 
 .km-projects-external-right {
   margin-left: auto;
+}
+
+@mixin theme-project-component($colors) {
+  .km-projects-external {
+    p {
+      border-color: map-get($colors, primary);
+      color: map-get($colors, text);
+    }
+  }
 }
