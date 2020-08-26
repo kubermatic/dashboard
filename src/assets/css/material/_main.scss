@@ -374,8 +374,10 @@ mat-chip-list {
 
 /* ==================== mat-button-toggle ==================== */
 .mat-button-toggle-group {
-  border: none;
-  box-shadow: none;
+  &.mat-button-toggle-group-appearance-standard {
+    border: none;
+    box-shadow: none;
+  }
 
   &:hover {
     border: none;
