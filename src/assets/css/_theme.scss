@@ -38,82 +38,6 @@
 
   $project-switch: rgba(mat-color($palette-foreground, secondary-text), .7);
 
-  $transition: all .5s ease;
-
-  .mat-select-arrow {
-    background-color: $text;
-  }
-
-  .mat-optgroup-label {
-    background-color: map-get($colors, option-background);
-  }
-
-  .mat-option {
-    background-color: map-get($colors, option-background);
-    color: $text;
-
-    &:hover {
-      background-color: map-get($colors, option-background-hover);
-    }
-  }
-
-  .mat-progress-spinner circle,
-  .mat-spinner circle {
-    stroke: map-get($colors, primary-hover);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: map-get($colors, scrollbar);
-  }
-
-  ::-webkit-scrollbar-track {
-    background: map-get($colors, scrollbar-background);
-  }
-
-  .km-editor {
-    .header {
-      color: $text-secondary;
-
-      &.card {
-        background-color: $background-card;
-      }
-
-      &.dialog {
-        background-color: $background-dialog;
-      }
-
-      &.focused {
-        color: map-get($colors, primary-dark);
-      }
-    }
-
-    .monaco-editor {
-      box-shadow: 0 0 0 1px $divider;
-
-      .margin {
-        background-color: $divider;
-
-        .line-numbers {
-          color: $text;
-        }
-      }
-
-      &.focused {
-        box-shadow: 0 0 0 2px map-get($colors, primary-hover);
-      }
-    }
-
-    &:hover {
-      .header {
-        color: map-get($colors, secondary-dark);
-      }
-
-      .monaco-editor {
-        box-shadow: 0 0 0 2px map-get($colors, secondary-hover);
-      }
-    }
-  }
-
   .km-code-block {
     background-color: $divider;
     color: $text;
@@ -457,32 +381,6 @@
   .km-add-machine-network {
     &:hover {
       background-color: $background-hover;
-    }
-  }
-
-  // ==================== MAT-BUTTON-TOGGLE ==================== //
-
-  .mat-button-toggle-group {
-    background-color: transparent;
-    border: none;
-
-    .mat-button-toggle {
-      border: 1px solid $divider;
-      border-radius: $border-radius;
-    }
-
-    .mat-button-toggle-label-content {
-      color: $text;
-    }
-
-    &.mat-button-toggle-checked {
-      background-color: transparent;
-      border: 1px solid map-get($colors, primary);
-    }
-
-    &:hover {
-      border: none;
-      transition: $transition;
     }
   }
 

@@ -130,11 +130,17 @@
     .mat-form-field-outline {
       color: map-get($colors, divider);
     }
-  }
 
-  .mat-form-field-appearance-outline.mat-focused {
-    .mat-form-field-outline-thick {
-      color: map-get($colors, primary);
+    &.mat-focused {
+      .mat-form-field-outline-thick {
+        color: map-get($colors, primary);
+      }
+    }
+
+    &.mat-form-field-disabled {
+      .mat-form-field-outline {
+        color: map-get($colors, divider-disabled);
+      }
     }
   }
 
@@ -142,13 +148,7 @@
     color: map-get($colors, secondary);
   }
 
-  .mat-form-field-disabled {
-    .mat-form-field-outline {
-      color: map-get($colors, divider-disabled);
-    }
-  }
-
-  /* ==================== mat-step-header ==================== */
+  /* ==================== mat-step ==================== */
   .mat-step-header {
     .mat-step-icon {
       background: map-get($colors, divider);
@@ -288,6 +288,49 @@
       div.km-chip-accent {
         background: transparent;
       }
+    }
+  }
+
+  /* ==================== mat-select ==================== */
+  .mat-select-arrow {
+    background-color: map-get($colors, text);
+  }
+
+  /* ==================== mat-option ==================== */
+  .mat-optgroup-label {
+    background-color: map-get($colors, option-background);
+  }
+
+  .mat-option {
+    background-color: map-get($colors, option-background);
+    color: map-get($colors, text);
+
+    &:hover {
+      background-color: map-get($colors, option-background-hover);
+    }
+  }
+
+  /* ==================== mat-spinner ==================== */
+  .mat-progress-spinner circle,
+  .mat-spinner circle {
+    stroke: map-get($colors, primary-hover);
+  }
+
+  /* ==================== mat-button-toggle ==================== */
+  .mat-button-toggle-group {
+    background-color: transparent;
+
+    .mat-button-toggle {
+      border-color: map-get($colors, divider);
+    }
+
+    .mat-button-toggle-label-content {
+      color: map-get($colors, text);
+    }
+
+    &.mat-button-toggle-checked {
+      background-color: transparent;
+      border-color: map-get($colors, primary);
     }
   }
 }

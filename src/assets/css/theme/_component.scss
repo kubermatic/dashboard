@@ -11,8 +11,10 @@
 
 @import 'src/app/project/project.component.theme';
 @import 'src/app/core/components/notification/notification.component.theme';
+@import 'src/app/shared/components/editor/theme';
 
 @mixin theme-register-components($colors) {
   @include theme-project-component($colors);
   @include theme-notification-component($colors);
+  @include theme-editor-component($colors);
 }

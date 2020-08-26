@@ -31,6 +31,7 @@
     // Secondary colors
     secondary: map-get($colors, secondary),
     secondary-dark: map-get($colors, secondary-dark),
+    secondary-hover: map-get($colors, secondary-hover),
     // Text colors
     text: mat-color($palette-foreground, text),
     text-secondary: mat-color($palette-foreground, secondary-text),
@@ -50,6 +51,9 @@
     indicator-green: mat-color($colors, indicator-green),
     indicator-red: mat-color($colors, indicator-red),
     indicator-orange: mat-color($colors, indicator-orange),
+    // Option colors
+    option-background: map-get($colors, option-background),
+    option-background-hover: map-get($colors, option-background-hover),
     // Other colors
     project-switch: rgba(mat-color($palette-foreground, secondary-text), .7),
     checkbox-disabled: mat-color($palette-foreground, disabled-checkbox),
@@ -64,4 +68,13 @@
 
   // Register component-level themes
   @include theme-register-components($color-map);
+
+  // Global rules
+  ::-webkit-scrollbar-thumb {
+    background: map-get($colors, scrollbar);
+  }
+
+  ::-webkit-scrollbar-track {
+    background: map-get($colors, scrollbar-background);
+  }
 }

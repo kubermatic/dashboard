@@ -10,7 +10,7 @@
 // limitations under the License.
 
 @mixin theme-global($colors) {
-  /* ==================== Reusable rules ==================== */
+  /* ==================== Reusable global rules ==================== */
   .km-header {
     color: map-get($colors, text);
   }
