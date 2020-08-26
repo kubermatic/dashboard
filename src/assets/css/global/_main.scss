@@ -126,6 +126,7 @@
 .km-pointer {
   cursor: pointer;
   outline: none;
+  user-select: none;
 }
 
 .km-hidden {
