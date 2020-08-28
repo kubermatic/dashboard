@@ -24,7 +24,6 @@ import {Cluster, ClusterPatch, Finalizer, MasterVersion, ProviderSettingsPatch} 
 import {Event} from '../../../shared/entity/event';
 import {Health} from '../../../shared/entity/health';
 import {ClusterMetrics} from '../../../shared/entity/metrics';
-import {Node} from '../../../shared/entity/node';
 import {SSHKey} from '../../../shared/entity/ssh-key';
 import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
 
@@ -129,11 +128,6 @@ export class ClusterService {
   upgradeMachineDeployments(projectID: string, clusterID: string, seed: string, version: string): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/nodes/upgrades`;
     return this._http.put(url, {version} as MasterVersion);
-  }
-
-  nodes(projectID: string, clusterID: string, seed: string): Observable<Node[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/nodes?hideInitialConditions=true`;
-    return this._http.get<Node[]>(url).pipe(catchError(() => of<Node[]>()));
   }
 
   deleteNode(projectID: string, clusterID: string, seed: string, nodeID: string): Observable<any> {
