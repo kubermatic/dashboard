@@ -10,27 +10,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div id="km-confirmation-dialog"
-     (keydown.enter)="onEnterKeyDown()">
-  <km-dialog-title>
-    <div>{{data.title}}</div>
-  </km-dialog-title>
+<div id="km-delete-project-dialog">
+  <km-dialog-title>Delete Project</km-dialog-title>
   <mat-dialog-content>
-    <p [innerHTML]="data.message"></p>
-    <div *ngIf="!!data.warning"
-         class="km-dialog-warning"
-         fxLayoutAlign=" center">
-      <i class="km-icon-error"></i>
-      <span [innerHTML]="data.warning"></span>
-    </div>
-    <mat-form-field *ngIf="!!data.compareName && data.compareName.length > 0">
-      <mat-label>{{data.inputPlaceholder}}</mat-label>
+    <p>
+      Are you sure you want to permanently delete the
+      <strong ngxClipboard
+              [cbContent]="project.name"
+              matTooltip="Click to copy"
+              class="km-copy">{{project.name}}</strong>
+      project?
+    </p>
+    <mat-form-field>
+      <mat-label>Project Name</mat-label>
       <input id="km-confirmation-dialog-input"
              matInput
              type="text"
-             title={{data.inputTitle}}
-             (blur)="onChange($event)"
-             (keyup)="onChange($event)"
+             title="Project Name"
+             [(ngModel)]="verificationInput"
              cdkFocusInitial>
     </mat-form-field>
   </mat-dialog-content>
@@ -38,9 +35,9 @@ limitations under the License.
     <button mat-flat-button
             class="km-flat-button"
             [mat-dialog-close]="true"
-            id="km-confirmation-dialog-confirm-btn"
-            [disabled]="!inputNameMatches()">
-      {{data.confirmLabel}}
+            id="km-delete-project-dialog-confirm-btn"
+            [disabled]="!isNameVerified()">
+      Delete
     </button>
   </mat-dialog-actions>
 </div>

@@ -20,7 +20,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -35,10 +35,6 @@ import {NotificationService, ProjectService, UserService} from '../core/services
 import {PreviousRouteService} from '../core/services/previous-route/previous-route.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
-import {
-  ConfirmationDialogComponent,
-  ConfirmationDialogConfig,
-} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {View} from '../shared/entity/common';
 import {Member} from '../shared/entity/member';
 import {Project, ProjectOwners} from '../shared/entity/project';
@@ -48,6 +44,7 @@ import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 
 import {EditProjectComponent} from './edit-project/edit-project.component';
+import {DeleteProjectConfirmationComponent} from './delete-project/delete-project.component';
 
 @Component({
   selector: 'km-project',
@@ -383,21 +380,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   deleteProject(project: Project, event: Event): void {
     event.stopPropagation();
-    const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
-      data: {
-        title: 'Delete Project',
-        message: `Are you sure you want to permanently delete project <strong>${project.name}</strong>?`,
-        confirmLabel: 'Delete',
-        compareName: project.name,
-        inputPlaceholder: 'Project Name',
-        inputTitle: 'Project Name',
-        copyEnabled: true,
-      } as ConfirmationDialogConfig,
-    };
-
-    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
+    const dialogRef = this._matDialog.open(DeleteProjectConfirmationComponent);
+    dialogRef.componentInstance.project = project;
     this._googleAnalyticsService.emitEvent('projectOverview', 'deleteProjectOpened');
 
     dialogRef

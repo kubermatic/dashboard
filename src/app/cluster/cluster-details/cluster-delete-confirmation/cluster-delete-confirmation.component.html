@@ -14,13 +14,13 @@ limitations under the License.
       id="km-delete-cluster-dialog"
       (keydown.enter)="deleteCluster()">
   <km-dialog-title>Delete Cluster</km-dialog-title>
-
   <mat-dialog-content>
-    <p>Delete cluster "<strong ngxClipboard
+
+    <p>Are you sure you want to permanently delete the <strong ngxClipboard
               [cbContent]="cluster.name"
               matTooltip="Click to copy"
-              class="km-copy">{{cluster.name}}</strong>" permanently?</p>
-
+              class="km-copy">{{cluster.name}}</strong> cluster?
+    </p>
     <mat-form-field>
       <mat-label>Cluster Name*</mat-label>
       <input id="km-delete-cluster-dialog-input"
