@@ -322,15 +322,15 @@
 
     .mat-button-toggle {
       border-color: map-get($colors, divider);
-    }
 
-    .mat-button-toggle-label-content {
-      color: map-get($colors, text);
-    }
+      &.mat-button-toggle-checked {
+        background-color: transparent;
+        border-color: map-get($colors, primary) !important;
+      }
 
-    &.mat-button-toggle-checked {
-      background-color: transparent;
-      border-color: map-get($colors, primary);
+      .mat-button-toggle-label-content {
+        color: map-get($colors, text);
+      }
     }
   }
 }
