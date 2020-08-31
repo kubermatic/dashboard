@@ -165,6 +165,14 @@
     }
   }
 
+  ::-webkit-scrollbar-thumb {
+    background: map-get($colors, scrollbar);
+  }
+
+  ::-webkit-scrollbar-track {
+    background: map-get($colors, scrollbar-background);
+  }
+
   /* ==================== Material-based reusable rules ====================
    *
    * See '_main.scss' file for documentation about usage.

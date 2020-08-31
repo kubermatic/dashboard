@@ -9,25 +9,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'src/app/project/project.component.theme';
-@import 'src/app/core/components/notification/notification.component.theme';
-@import 'src/app/core/components/sidenav/sidenav.component.theme';
-@import 'src/app/core/components/navigation/navigation.component.theme';
+@import 'src/app/cluster/cluster-details/machine-deployment-details/cluster-panel/theme';
+@import 'src/app/cluster/cluster-details/version-picker/theme';
 @import 'src/app/core/components/footer/theme';
-@import 'src/app/shared/components/editor/theme';
-@import 'src/app/shared/components/addon-list/addon-list.component.theme';
+@import 'src/app/core/components/navigation/project/theme';
+@import 'src/app/core/components/navigation/theme';
+@import 'src/app/core/components/notification/theme';
+@import 'src/app/core/components/sidenav/theme';
+@import 'src/app/pages/api-docs/theme';
+@import 'src/app/project/theme';
 @import 'src/app/shared/components/addon-list/select-addon-dialog/theme';
-@import 'src/app/cluster/cluster-details/machine-deployment-details/cluster-panel/cluster-panel.component.theme';
+@import 'src/app/shared/components/addon-list/theme';
+@import 'src/app/shared/components/editor/theme';
+@import 'src/app/shared/components/property-usage/theme';
+@import 'src/app/theme';
 @import 'src/app/wizard/step/cluster/theme';
 @import 'src/app/wizard/step/summary/theme';
-@import 'src/app/cluster/cluster-details/version-picker/theme';
-@import 'src/app/shared/components/property-usage/theme';
-@import 'src/app/core/components/navigation/project/theme';
-@import 'src/app/pages/api-docs/theme';
-@import 'src/app/theme';
 
-@mixin theme-register-components($colors) {
-  @include theme-select-addon-dialog-component($colors);
+@mixin theme-components($colors) {
   @include theme-addon-list-component($colors);
   @include theme-api-docs-component($colors);
   @include theme-cluster-panel-component($colors);
@@ -39,6 +38,7 @@
   @include theme-project-component($colors);
   @include theme-project-selector-component($colors);
   @include theme-property-usage-component($colors);
+  @include theme-select-addon-dialog-component($colors);
   @include theme-sidenav-component($colors);
   @include theme-version-picker-component($colors);
   @include theme-wizard-cluster-step-component($colors);

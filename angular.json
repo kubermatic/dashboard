@@ -30,7 +30,7 @@
               ]
             },
             "styles": [
-              "src/assets/css/main.scss",
+              "src/assets/css/_root.scss",
               {
                 "input": "src/assets/themes/light.scss",
                 "bundleName": "assets/themes/light",
@@ -170,7 +170,7 @@
               "node_modules/jquery/dist/jquery.js"
             ],
             "styles": [
-              "src/assets/css/main.scss"
+              "src/assets/css/_root.scss"
             ],
             "assets": [
               "src/assets",

@@ -89,21 +89,18 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
   @include background-image("/assets/images/clouds/bringyourown-dark.svg", 30px);
 
   filter: none;
-  min-height: 30px;
 }
 
 .km-provider-logo-kubevirt {
   @include background-image("/assets/images/clouds/kubevirt-dark.svg", 30px);
 
   filter: none;
-  min-height: 30px;
 }
 
 .km-provider-logo-vsphere {
   @include background-image("/assets/images/clouds/vsphere-dark.svg", 30px);
 
   filter: none;
-  min-height: 30px;
 }
 
 .km-icon-info {

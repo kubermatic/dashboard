@@ -19,44 +19,35 @@
 @include mat-core();
 
 @mixin theme($theme, $colors) {
-  $palette-foreground: map-get($theme, foreground);
   $palette-background: map-get($theme, background);
+  $palette-foreground: map-get($theme, foreground);
 
   $theme-colors: (
-    text: mat-color($palette-foreground, text),
-    text-secondary: mat-color($palette-foreground, secondary-text),
-    text-disabled: mat-color($palette-foreground, disabled-text),
-    background: mat-color($palette-background, background),
-    background-hover: mat-color($palette-background, hover),
+    background-app-bar: mat-color($palette-background, app-bar),
     background-card: mat-color($palette-background, card),
     background-dialog: mat-color($palette-background, dialog),
     background-disabled-button: mat-color($palette-background, disabled-button),
-    background-app-bar: mat-color($palette-background, app-bar),
-    divider: mat-color($palette-foreground, divider),
-    divider-disabled: mat-color($palette-foreground, disabled),
+    background-hover: mat-color($palette-background, hover),
+    background: mat-color($palette-background, background),
     checkbox-disabled: mat-color($palette-foreground, disabled-checkbox),
+    divider-disabled: mat-color($palette-foreground, disabled),
+    divider: mat-color($palette-foreground, divider),
     project-switch: rgba(mat-color($palette-foreground, secondary-text), .7),
+    text-disabled: mat-color($palette-foreground, disabled-text),
+    text-secondary: mat-color($palette-foreground, secondary-text),
+    text: mat-color($palette-foreground, text),
   );
 
   // Create merged colors map from custom and theme colors
-  // that can be accessed from components' theme files
+  // that can be accessed from components' theme files.
   $merged-colors: map.merge($colors, $theme-colors);
 
-  // Override default material themes
-  @include theme-material-override($merged-colors);
+  // Override default material themes.
+  @include theme-material($merged-colors);
 
-  // Register global theming rules
+  // Register global theming rules.
   @include theme-global($merged-colors);
 
-  // Register component-level themes
-  @include theme-register-components($merged-colors);
-
-  // Other rules
-  ::-webkit-scrollbar-thumb {
-    background: map-get($colors, scrollbar);
-  }
-
-  ::-webkit-scrollbar-track {
-    background: map-get($colors, scrollbar-background);
-  }
+  // Register component-level themes.
+  @include theme-components($merged-colors);
 }

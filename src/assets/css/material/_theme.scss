@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@mixin theme-material-override($colors) {
+@mixin theme-material($colors) {
   /* ==================== mat-slide-toggle ==================== */
   .mat-slide-toggle {
     .mat-slide-toggle-label {

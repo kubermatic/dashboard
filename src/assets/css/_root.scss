@@ -9,13 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Third party styles.
+@import '~swagger-ui/dist/swagger-ui.css';
+@import '~flag-icon-css/sass/flag-icon';
+@import "~fontsource-ubuntu/index.css";
+@import "~fontsource-inconsolata/index.css";
+
+// Application styles.
 @import 'variables';
-
-:host {
-  display: flex;
-
-  & > *:not(router-outlet) {
-    flex: 1 1 auto;
-    padding: $content-padding;
-  }
-}
+@import 'images';
+@import 'global/main';
+@import 'material/main';

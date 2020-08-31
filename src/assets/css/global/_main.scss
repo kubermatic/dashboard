@@ -12,6 +12,22 @@
 @import 'variables';
 @import 'mixins';
 
+html,
+body {
+  background-color: #edeff0;
+  color: #4d555c;
+  font-family: $font-primary;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  width: 100%;
+}
+
+::-webkit-scrollbar {
+  @include size($scrollbar-size);
+}
+
 /*
  * Used to display empty list message.
  */
@@ -390,5 +406,47 @@
         transition: all .5s ease;
       }
     }
+  }
+}
+
+km-dashboard {
+  display: flex;
+
+  & > *:not(router-outlet) {
+    flex: 1 1 auto;
+    padding: $content-padding;
+  }
+}
+
+.km-update-available-badge {
+  border-radius: $border-radius;
+  cursor: default;
+  font-size: $font-size-body;
+  line-height: 18px;
+  margin-left: 12px;
+  padding: 0 4px;
+  user-select: none;
+
+  .km-icon-update-available-arrow {
+    margin: 0 6px -2px 2px;
+  }
+}
+
+.km-admission-plugin-warning {
+  margin-bottom: 24px;
+
+  i {
+    margin: 0 8px;
+  }
+
+  p {
+    font-size: $font-size-body;
+    margin: 0;
+  }
+}
+
+km-property-boolean {
+  .label {
+    display: none;
   }
 }
