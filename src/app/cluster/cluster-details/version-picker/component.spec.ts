@@ -38,7 +38,7 @@ import {MachineNetworksDisplayComponent} from '../machine-networks-display/machi
 import {MachineDeploymentListComponent} from '../machine-deployment-list/machine-deployment-list.component';
 import {NodeListComponent} from '../node-list/node-list.component';
 
-import {VersionPickerComponent} from './version-picker.component';
+import {VersionPickerComponent} from './component';
 
 describe('VersionPickerComponent', () => {
   let fixture: ComponentFixture<VersionPickerComponent>;

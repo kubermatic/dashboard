@@ -26,23 +26,8 @@
   $divider: mat-color($palette-foreground, divider);
 
   .km-main,
-  .km-main > div,
-  .km-footer {
+  .km-main > div {
     background-color: $background;
-  }
-
-  .km-footer {
-    * {
-      color: map-get($colors, footer-text);
-    }
-
-    i {
-      filter: grayscale(1) brightness(0) invert(.75);
-    }
-  }
-
-  .km-terms * {
-    color: $text;
   }
 
   .km-update-available-badge {
@@ -60,26 +45,6 @@
 
     .notification-info .km-icon-mask {
       background-color: $text-secondary;
-    }
-  }
-
-  .km-table-dropdown {
-    background-color: transparent;
-
-    *:not(i) {
-      background-color: transparent;
-    }
-
-    td.mat-cell {
-      border-top: 1px solid $divider;
-    }
-
-    td:first-child {
-      border-left: 1px solid $divider;
-    }
-
-    td:last-child {
-      border-right: 1px solid $divider;
     }
   }
 
@@ -173,43 +138,6 @@
     }
   }
 
-  .km-version-picker-container {
-    .km-version-picker {
-      .mat-form-field-outline {
-        color: $divider;
-      }
-
-      .km-version-picker-type {
-        background: $divider;
-        border-color: $divider;
-      }
-
-      .mat-form-field {
-        .mat-select-value-text {
-          color: $text;
-        }
-
-        div.mat-form-field-flex label {
-          color: $text-secondary;
-        }
-      }
-    }
-
-    .km-version-picker-enabled:hover {
-      .km-version-picker-type {
-        border-color: map-get($colors, secondary);
-      }
-
-      .mat-form-field-outline-thick {
-        color: map-get($colors, secondary);
-      }
-
-      div.mat-form-field-flex label {
-        color: map-get($colors, secondary-dark);
-      }
-    }
-  }
-
   .km-select-addon-dialog-option-container {
     box-shadow: 0 0 0 1px $divider;
 
@@ -255,22 +183,6 @@
   .km-add-machine-network {
     &:hover {
       background-color: $background-hover;
-    }
-  }
-
-  .km-cluster-spec-type {
-    &.mat-button-toggle-group {
-      .mat-button-toggle {
-        background-color: $background-hover;
-
-        &:hover {
-          border: 2px solid map-get($colors, secondary);
-        }
-
-        &.mat-button-toggle-checked {
-          border: 2px solid map-get($colors, primary);
-        }
-      }
     }
   }
 }

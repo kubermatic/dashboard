@@ -79,7 +79,7 @@
 
   .mat-card-content {
     p {
-      color: map-get($colors, text-secondary);
+      color: map-get($colors, text);
     }
 
     button {

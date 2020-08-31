@@ -24,7 +24,7 @@ import {AddServiceAccountTokenComponent} from '../serviceaccount/serviceaccount-
 import {EditServiceAccountTokenComponent} from '../serviceaccount/serviceaccount-token/edit-serviceaccount-token/edit-serviceaccount-token.component';
 import {SharedModule} from '../shared/shared.module';
 
-import {FooterComponent} from './components/footer/footer.component';
+import {FooterComponent} from './components/footer/component';
 import {NavigationComponent} from './components/navigation/navigation.component';
 import {ProjectSelectorComponent} from './components/navigation/project/selector.component';
 import {NotificationPanelComponent} from './components/notification-panel/notification-panel.component';

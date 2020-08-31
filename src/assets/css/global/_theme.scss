@@ -10,7 +10,6 @@
 // limitations under the License.
 
 @mixin theme-global($colors) {
-  /* ==================== Reusable global rules ==================== */
   .km-header {
     color: map-get($colors, text);
   }
@@ -93,6 +92,26 @@
   .km-login-footer {
     * {
       color: #fff;
+    }
+  }
+
+  .km-table-dropdown {
+    background-color: transparent;
+
+    *:not(i) {
+      background-color: transparent;
+    }
+
+    td.mat-cell {
+      border-top: 1px solid map-get($colors, divider);
+    }
+
+    td:first-child {
+      border-left: 1px solid map-get($colors, divider);
+    }
+
+    td:last-child {
+      border-right: 1px solid map-get($colors, divider);
     }
   }
 
