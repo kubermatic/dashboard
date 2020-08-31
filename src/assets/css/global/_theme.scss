@@ -155,14 +155,6 @@
       background-color: transparent;
       color: map-get($colors, text-secondary);
     }
-
-    .km-paginator {
-      border-top: 1px solid map-get($colors, divider);
-
-      .mat-paginator-range-actions button:not([disabled]) {
-        color: map-get($colors, text-secondary);
-      }
-    }
   }
 
   ::-webkit-scrollbar-thumb {

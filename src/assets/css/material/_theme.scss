@@ -29,6 +29,22 @@
     }
   }
 
+  /* ==================== mat-card ==================== */
+  .mat-card {
+    color: map-get($colors, text);
+  }
+
+  .mat-card-content {
+    p {
+      color: map-get($colors, text);
+    }
+
+    button {
+      border: none;
+      color: map-get($colors, primary);
+    }
+  }
+
   /* ==================== mat-table ==================== */
   .mat-table {
     .mat-header-cell,
@@ -72,20 +88,8 @@
     }
   }
 
-  /* ==================== mat-card ==================== */
-  .mat-card {
-    color: map-get($colors, text);
-  }
-
-  .mat-card-content {
-    p {
-      color: map-get($colors, text);
-    }
-
-    button {
-      border: none;
-      color: map-get($colors, primary);
-    }
+  .mat-paginator-range-actions > .mat-icon-button:not([disabled]) {
+    color: map-get($colors, text-secondary);
   }
 
   /* ==================== mat-drawer ==================== */

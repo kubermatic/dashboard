@@ -204,6 +204,24 @@ mat-form-field {
       padding-bottom: 22px;
     }
 
+    &.mat-primary {
+      .mat-select-arrow-wrapper {
+        position: relative;
+        right: 0;
+        top: 3px;
+
+        .mat-select-arrow {
+          @include size(8px);
+
+          color: transparent;
+          display: inline-block;
+          mask: url("/assets/images/icons/arrow-down.svg");
+          mask-repeat: no-repeat;
+          mask-size: contain;
+        }
+      }
+    }
+
     &.mat-focused {
       &.mat-primary {
         .mat-select-arrow-wrapper {
@@ -225,21 +243,8 @@ mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):no
   transition: all .2s ease;
 }
 
-.mat-select-arrow {
-  @include size(8px);
 
-  color: transparent;
-  display: inline-block;
-  mask: url("/assets/images/icons/arrow-down.svg");
-  mask-repeat: no-repeat;
-  mask-size: contain;
-}
 
-.mat-select-arrow-wrapper {
-  position: relative;
-  right: 0;
-  top: 3px;
-}
 
 /* ==================== mat-step ==================== */
 .mat-step-header {
