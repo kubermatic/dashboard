@@ -9,18 +9,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@mixin theme-notification-component($colors) {
-  km-notification {
-    background: map-get($colors, background-card);
-    color: map-get($colors, text);
+@mixin theme-sidenav-component($colors) {
+  .km-sidenav {
+    background-color: map-get($colors, background);
 
-    .type {
-      &.success {
-        background: map-get($colors, indicator-green);
+    span {
+      color: map-get($colors, text);
+    }
+
+    .mat-divider {
+      border-top-color: map-get($colors, sidenav-divider);
+    }
+
+    .menu-item a {
+      &:hover {
+        background-color: map-get($colors, sidenav-background-hover);
       }
 
-      &.error {
-        background: map-get($colors, indicator-red);
+      &.active {
+        background-color: map-get($colors, sidenav-background-active);
+
+        i {
+          background-color: map-get($colors, primary-hover);
+        }
+
+        span {
+          color: map-get($colors, primary-hover);
+        }
       }
     }
   }

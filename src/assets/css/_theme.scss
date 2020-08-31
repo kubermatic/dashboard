@@ -81,11 +81,6 @@
     }
   }
 
-  .km-notification {
-    background: $background-card;
-    color: $text;
-  }
-
   .km-panel .panel {
     background-color: $background-app-bar;
     box-shadow: map-get($colors, shadow-dark);
@@ -93,36 +88,6 @@
 
     .notification-info .km-icon-mask {
       background-color: $text-secondary;
-    }
-  }
-
-  .km-sidenav {
-    background-color: $background;
-
-    span {
-      color: $text;
-    }
-
-    .mat-divider {
-      border-top-color: map-get($colors, sidenav-divider);
-    }
-
-    .menu-item a {
-      &:hover {
-        background-color: map-get($colors, sidenav-background-hover);
-      }
-
-      &.active {
-        background-color: map-get($colors, sidenav-background-active);
-
-        i {
-          background-color: map-get($colors, primary-hover);
-        }
-
-        span {
-          color: map-get($colors, primary-hover);
-        }
-      }
     }
   }
 
@@ -169,31 +134,6 @@
 
     .mat-paginator-range-actions button:not([disabled]) {
       color: $text-secondary;
-    }
-  }
-
-  .km-project-toggle {
-    .mat-tab-label {
-      background-color: map-get($colors, wizard-step-background-active);
-
-      &.mat-tab-disabled {
-        background-color: $background-disabled-button;
-      }
-
-      &.mat-tab-label-active {
-        .mat-tab-label-content {
-          background-color: map-get($colors, primary);
-        }
-      }
-    }
-  }
-
-  .km-initials-circle {
-    background-color: $background-card;
-    border: 2px solid $divider;
-
-    &.accent {
-      background-color: $divider;
     }
   }
 
@@ -298,20 +238,6 @@
     }
   }
 
-  .km-cluster-panel {
-    color: $text;
-
-    .mat-icon-button {
-      &:hover {
-        background-color: rgba($text, .1);
-      }
-
-      i {
-        background-color: $text;
-      }
-    }
-  }
-
   .km-addon-container {
     .km-addon-menu {
       border-left: 1px solid $divider;
@@ -319,20 +245,6 @@
       &:hover {
         background-color: $background-hover;
       }
-    }
-  }
-
-  .km-new-addon-container {
-    color: map-get($colors, footer-text);
-
-    &.disabled {
-      border: 1px dashed $background-hover;
-      color: $text-secondary;
-    }
-
-    &:hover:not(.disabled) {
-      background-color: $background-hover;
-      border: 1px solid $divider;
     }
   }
 

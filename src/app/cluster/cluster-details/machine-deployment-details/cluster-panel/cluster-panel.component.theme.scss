@@ -9,18 +9,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@mixin theme-notification-component($colors) {
-  km-notification {
-    background: map-get($colors, background-card);
+@mixin theme-cluster-panel-component($colors) {
+  .km-cluster-panel {
     color: map-get($colors, text);
 
-    .type {
-      &.success {
-        background: map-get($colors, indicator-green);
+    .mat-icon-button {
+      &:hover {
+        background-color: rgba(map-get($colors, text), .1);
       }
 
-      &.error {
-        background: map-get($colors, indicator-red);
+      i {
+        background-color: map-get($colors, text);
       }
     }
   }

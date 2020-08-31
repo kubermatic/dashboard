@@ -9,6 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
+
 @import '~@angular/material/theming';
 @import 'material/theme';
 @import 'global/theme';
@@ -20,54 +22,34 @@
   $palette-foreground: map-get($theme, foreground);
   $palette-background: map-get($theme, background);
 
-  $color-map: (
-    // Palette colors
-    palette-foreground: map-get($theme, foreground),
-    palette-background: map-get($theme, background),
-    // Primary colors
-    primary: map-get($colors, primary),
-    primary-dark: map-get($colors, primary-dark),
-    primary-hover: map-get($colors, primary-hover),
-    // Secondary colors
-    secondary: map-get($colors, secondary),
-    secondary-dark: map-get($colors, secondary-dark),
-    secondary-hover: map-get($colors, secondary-hover),
-    // Text colors
+  $theme-colors: (
     text: mat-color($palette-foreground, text),
     text-secondary: mat-color($palette-foreground, secondary-text),
     text-disabled: mat-color($palette-foreground, disabled-text),
-    // Background colors
     background: mat-color($palette-background, background),
-    background-primary: map-get($colors, primary),
     background-hover: mat-color($palette-background, hover),
     background-card: mat-color($palette-background, card),
     background-dialog: mat-color($palette-background, dialog),
     background-disabled-button: mat-color($palette-background, disabled-button),
     background-app-bar: mat-color($palette-background, app-bar),
-    // Divider colors
     divider: mat-color($palette-foreground, divider),
     divider-disabled: mat-color($palette-foreground, disabled),
-    // Indicator colors
-    indicator-green: mat-color($colors, indicator-green),
-    indicator-red: mat-color($colors, indicator-red),
-    indicator-orange: mat-color($colors, indicator-orange),
-    // Option colors
-    option-background: map-get($colors, option-background),
-    option-background-hover: map-get($colors, option-background-hover),
-    // Other colors
-    project-switch: rgba(mat-color($palette-foreground, secondary-text), .7),
     checkbox-disabled: mat-color($palette-foreground, disabled-checkbox),
-    wizard-step-background: map-get($colors, wizard-step-background),
+    project-switch: rgba(mat-color($palette-foreground, secondary-text), .7),
   );
 
+  // Create merged colors map from custom and theme colors
+  // that can be accessed from components' theme files.
+  $merged-colors: map.merge($colors, $theme-colors);
+
   // Override default material themes
-  @include theme-material-override($color-map);
+  @include theme-material-override($merged-colors);
 
   // Register global theming rules
-  @include theme-global($color-map);
+  @include theme-global($merged-colors);
 
   // Register component-level themes
-  @include theme-register-components($color-map);
+  @include theme-register-components($merged-colors);
 
   // Other rules
   ::-webkit-scrollbar-thumb {

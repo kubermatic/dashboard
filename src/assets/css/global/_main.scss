@@ -266,6 +266,7 @@
     max-width: $notification-width;
     min-height: $notification-min-height;
     min-width: $notification-width;
+    overflow: hidden;
     padding: 0;
   }
 }
