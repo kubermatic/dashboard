@@ -120,12 +120,12 @@ limitations under the License.
           <td mat-cell
               *matCellDef="let element"
               class="km-project-item-owner">
-            {{getOwners(element.owners)}}
-            <p class="km-project-more-owner"
-               *ngIf="isMoreOwners(element.owners)"
-               [matTooltip]="getMoreOwners(element.owners)">&nbsp;...
-              <span *ngIf="getMoreOwnersCount(element.owners) > 0">+{{getMoreOwnersCount(element.owners)}}</span>
-            </p>
+            <span>{{getOwners(element.owners)}}</span>
+            <span *ngIf="isMoreOwners(element.owners)"
+                  [matTooltip]="getMoreOwners(element.owners)">...
+              <span *ngIf="getMoreOwnersCount(element.owners) > 0"
+                    class="km-text-muted">+{{getMoreOwnersCount(element.owners)}}</span>
+            </span>
           </td>
         </ng-container>
 

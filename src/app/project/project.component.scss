@@ -25,12 +25,6 @@ $project-card-width: 330px;
   text-align: center;
 }
 
-.km-project-more-owner {
-  display: inline-block;
-  font-size: $font-size-subhead;
-  margin: 0;
-}
-
 .km-project-view-switch {
   .mat-button-toggle {
     @include size($view-switch-width, $view-switch-height, true);
