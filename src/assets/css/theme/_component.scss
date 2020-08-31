@@ -12,6 +12,7 @@
 @import 'src/app/project/project.component.theme';
 @import 'src/app/core/components/notification/notification.component.theme';
 @import 'src/app/core/components/sidenav/sidenav.component.theme';
+@import 'src/app/core/components/navigation/navigation.component.theme';
 @import 'src/app/shared/components/editor/theme';
 @import 'src/app/shared/components/addon-list/addon-list.component.theme';
 @import 'src/app/cluster/cluster-details/machine-deployment-details/cluster-panel/cluster-panel.component.theme';
@@ -23,4 +24,5 @@
   @include theme-sidenav-component($colors);
   @include theme-cluster-panel-component($colors);
   @include theme-addon-list-component($colors);
+  @include theme-navigation-component($colors);
 }

@@ -75,6 +75,11 @@
     color: map-get($colors, text);
   }
 
+  .km-code-block {
+    background-color: map-get($colors, divider);
+    color: map-get($colors, text);
+  }
+
   .km-copy {
     &:hover {
       color: map-get($colors, primary);

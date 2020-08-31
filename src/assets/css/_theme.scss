@@ -18,45 +18,17 @@
 @mixin theme($theme, $colors) {
   $palette-foreground: map-get($theme, foreground);
   $palette-background: map-get($theme, background);
-
   $text: mat-color($palette-foreground, text);
   $text-secondary: mat-color($palette-foreground, secondary-text);
-  $text-disabled: mat-color($palette-foreground, disabled-text);
-  $checkbox-disabled: mat-color($palette-foreground, disabled-checkbox);
-
   $background: mat-color($palette-background, background);
   $background-hover: mat-color($palette-background, hover);
-  $background-card: mat-color($palette-background, card);
-  $background-dialog: mat-color($palette-background, dialog);
-  $background-disabled-button: mat-color($palette-background, disabled-button);
   $background-app-bar: mat-color($palette-background, app-bar);
-
   $divider: mat-color($palette-foreground, divider);
-  $divider-disabled: mat-color($palette-foreground, disabled);
-
-  $chip-background: $divider;
-
-  $project-switch: rgba(mat-color($palette-foreground, secondary-text), .7);
-
-  .km-code-block {
-    background-color: $divider;
-    color: $text;
-  }
-
-  // TODO: check this?
-  .km-no-item {
-    border-color: $divider;
-  }
 
   .km-main,
   .km-main > div,
   .km-footer {
     background-color: $background;
-  }
-
-  .km-navbar {
-    background-color: $background-app-bar;
-    box-shadow: map-get($colors, shadow);
   }
 
   .km-footer {
@@ -234,16 +206,6 @@
 
       div.mat-form-field-flex label {
         color: map-get($colors, secondary-dark);
-      }
-    }
-  }
-
-  .km-addon-container {
-    .km-addon-menu {
-      border-left: 1px solid $divider;
-
-      &:hover {
-        background-color: $background-hover;
       }
     }
   }
