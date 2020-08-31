@@ -169,7 +169,7 @@ limitations under the License.
     </table>
 
     <ng-container *ngIf="!machineDeployments || machineDeployments.length === 0">
-      <div class="km-row km-no-item"
+      <div class="km-row km-empty-list-msg"
            *ngIf="isMachineDeploymentLoadFinished && clusterHealthStatus && clusterHealthStatus.css === 'km-status-running' || cluster.spec.cloud.bringyourown">
         No machine deployments available.
       </div>

@@ -99,7 +99,7 @@ limitations under the License.
     </table>
 
     <ng-container *ngIf="!clusterBindings || clusterBindings.length === 0">
-      <div class="km-row km-no-item"
+      <div class="km-row km-empty-list-msg"
            *ngIf="isClusterRunning">
         No bindings available.
       </div>
@@ -189,7 +189,7 @@ limitations under the License.
     </table>
 
     <ng-container *ngIf="!bindings || bindings.length === 0">
-      <div class="km-row km-no-item"
+      <div class="km-row km-empty-list-msg"
            *ngIf="isClusterRunning">
         No bindings available.
       </div>

@@ -18,11 +18,11 @@
 @import 'src/app/cluster/cluster-details/machine-deployment-details/cluster-panel/cluster-panel.component.theme';
 
 @mixin theme-register-components($colors) {
-  @include theme-project-component($colors);
-  @include theme-notification-component($colors);
-  @include theme-editor-component($colors);
-  @include theme-sidenav-component($colors);
-  @include theme-cluster-panel-component($colors);
   @include theme-addon-list-component($colors);
+  @include theme-cluster-panel-component($colors);
+  @include theme-editor-component($colors);
   @include theme-navigation-component($colors);
+  @include theme-notification-component($colors);
+  @include theme-project-component($colors);
+  @include theme-sidenav-component($colors);
 }

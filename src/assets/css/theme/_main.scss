@@ -39,7 +39,7 @@
   );
 
   // Create merged colors map from custom and theme colors
-  // that can be accessed from components' theme files.
+  // that can be accessed from components' theme files
   $merged-colors: map.merge($colors, $theme-colors);
 
   // Override default material themes

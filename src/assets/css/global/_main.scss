@@ -12,16 +12,12 @@
 @import 'variables';
 @import 'mixins';
 
-
 /*
  * Aligns text to the center of the available space.
- *
- * TODO: Update name to better reflect the behavior
  */
-.km-no-item {
-  font-size: 14px;
-  line-height: 50px;
-  padding: 0 30px;
+.km-empty-list-msg {
+  font-size: $font-size-body;
+  padding: 15px 30px 0;
   text-align: center;
 }
 
