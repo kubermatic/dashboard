@@ -115,6 +115,56 @@
     }
   }
 
+  .km-panel .panel {
+    background-color: map-get($colors, background-app-bar);
+    box-shadow: map-get($colors, shadow-dark);
+    color: map-get($colors, text);
+
+    .notification-info .km-icon-mask {
+      background-color: map-get($colors, text-secondary);
+    }
+  }
+
+  .km-update-available-badge {
+    border: 1px solid map-get($colors, secondary);
+
+    .km-icon-update-available-arrow {
+      background-color: map-get($colors, secondary);
+    }
+  }
+
+  .km-add-machine-network {
+    &:hover {
+      background-color: map-get($colors, background-hover);
+    }
+  }
+
+  .km-mat-row.km-pointer:hover {
+    background-color: map-get($colors, background-hover);
+  }
+
+  .km-mat-footer-row {
+    border-color: map-get($colors, divider);
+    color: map-get($colors, text-secondary);
+
+    &:hover {
+      background-color: map-get($colors, background-hover);
+    }
+
+    button {
+      background-color: transparent;
+      color: map-get($colors, text-secondary);
+    }
+
+    .km-paginator {
+      border-top: 1px solid map-get($colors, divider);
+
+      .mat-paginator-range-actions button:not([disabled]) {
+        color: map-get($colors, text-secondary);
+      }
+    }
+  }
+
   /* ==================== Material-based reusable rules ====================
    *
    * See '_main.scss' file for documentation about usage.

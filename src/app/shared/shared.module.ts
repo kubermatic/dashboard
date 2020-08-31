@@ -67,7 +67,7 @@ import {LabelFormComponent} from './components/label-form/label-form.component';
 import {LabelsComponent} from './components/labels/labels.component';
 import {MachineNetworkComponent} from './components/machine-networks-new/component';
 import {PropertyBooleanComponent} from './components/property-boolean/property-boolean.component';
-import {PropertyUsageComponent} from './components/property-usage/property-usage.component';
+import {PropertyUsageComponent} from './components/property-usage/component';
 import {PropertyComponent} from './components/property/property.component';
 import {RelativeTimeComponent} from './components/relativetime/relative-time.component';
 import {SettingsStatusComponent} from './components/settings-status/settings-status.component';

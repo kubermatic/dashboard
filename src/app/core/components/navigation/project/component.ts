@@ -21,8 +21,8 @@ import * as _ from 'lodash';
 
 @Component({
   selector: 'km-project-selector',
-  templateUrl: './selector.component.html',
-  styleUrls: ['./selector.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class ProjectSelectorComponent implements OnInit, OnDestroy {
   @Input() showSidenav: boolean;

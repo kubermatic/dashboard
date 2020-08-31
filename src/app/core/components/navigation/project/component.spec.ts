@@ -31,12 +31,12 @@ import {ApiService, Auth, ProjectService, UserService} from '../../../services';
 import {NotificationPanelComponent} from '../../notification-panel/notification-panel.component';
 import {NavigationComponent} from '../navigation.component';
 
-import {ProjectSelectorComponent} from './selector.component';
+import {ProjectSelectorComponent} from './component';
 import {UserPanelComponent} from '../../user-panel/user-panel.component';
 
 const modules: any[] = [BrowserModule, RouterTestingModule, HttpClientModule, BrowserAnimationsModule, SharedModule];
 
-describe('SidenavComponent', () => {
+describe('ProjectSelectorComponent', () => {
   let fixture: ComponentFixture<ProjectSelectorComponent>;
   let component: ProjectSelectorComponent;
 

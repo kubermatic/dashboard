@@ -13,8 +13,8 @@ import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'km-property-usage',
-  templateUrl: './property-usage.component.html',
-  styleUrls: ['./property-usage.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class PropertyUsageComponent {
   private readonly _maxUsage = 100;

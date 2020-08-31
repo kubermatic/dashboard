@@ -26,7 +26,7 @@ import {SharedModule} from '../shared/shared.module';
 
 import {FooterComponent} from './components/footer/component';
 import {NavigationComponent} from './components/navigation/navigation.component';
-import {ProjectSelectorComponent} from './components/navigation/project/selector.component';
+import {ProjectSelectorComponent} from './components/navigation/project/component';
 import {NotificationPanelComponent} from './components/notification-panel/notification-panel.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';

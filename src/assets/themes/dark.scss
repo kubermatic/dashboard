@@ -11,7 +11,6 @@
 
 @import '~@angular/material/theming';
 @import 'theme/main';
-@import 'theme';
 @import 'mixins';
 @import 'variables';
 @import 'images';
@@ -65,7 +64,6 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 
 @include angular-material-theme($theme-dark);
 @include theme($theme-dark, $colors-dark);
-@include theme-new($theme-dark, $colors-dark);
 
 // Make icons and logos white.
 .km-provider-logo,

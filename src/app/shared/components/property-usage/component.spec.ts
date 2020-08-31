@@ -17,7 +17,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {SharedModule} from '../../shared.module';
 
-import {PropertyUsageComponent} from './property-usage.component';
+import {PropertyUsageComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 

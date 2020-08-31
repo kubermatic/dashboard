@@ -18,7 +18,7 @@
 
 @include mat-core();
 
-@mixin theme-new($theme, $colors) {
+@mixin theme($theme, $colors) {
   $palette-foreground: map-get($theme, foreground);
   $palette-background: map-get($theme, background);
 
