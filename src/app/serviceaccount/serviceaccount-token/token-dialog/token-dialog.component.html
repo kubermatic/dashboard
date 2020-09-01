@@ -22,14 +22,14 @@ limitations under the License.
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <a class="km-small-button"
-     mat-flat-button
-     color="alternative"
-     [href]="downloadUrl"
+  <a [href]="downloadUrl"
      [download]="downloadTitle"
      target="_blank"
      rel="noopener">
-    <i class="km-icon-download"></i>
+    <button mat-flat-button
+            color="alternative">
+      <i class="km-icon-download"></i>
+    </button>
   </a>
   <button id="km-token-dialog-confirm-btn"
           mat-dialog-close

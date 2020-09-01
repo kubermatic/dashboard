@@ -15,8 +15,7 @@ limitations under the License.
        class="km-cluster-detail-actions">
     <div fxFlex
          fxLayoutAlign="end center">
-      <button class="km-flat-button"
-              id="km-delete-cluster-btn"
+      <button id="km-delete-cluster-btn"
               mat-flat-button
               color="tertiary"
               (click)="deleteClusterDialog()"
@@ -42,8 +41,7 @@ limitations under the License.
           <i class="km-icon-mask km-icon-download"></i>
         </a>
       </button>
-      <button class="km-flat-button"
-              mat-flat-button
+      <button mat-flat-button
               color="alternative"
               (click)="addNode()"
               [fxHide]="nodeDc?.spec?.provider === 'bringyourown'"
@@ -51,7 +49,7 @@ limitations under the License.
 
         Add Machine Deployment
       </button>
-      <a class="km-flat-button km-connect-kubeconfig-btn"
+      <a class="km-connect-kubeconfig-btn"
          [href]="getProxyURL()"
          target="_blank"
          mat-flat-button

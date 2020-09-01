@@ -474,22 +474,17 @@ mat-chip-list {
 }
 
 /* ==================== mat-button ==================== */
-.mat-button,
-.mat-flat-button,
-.mat-raised-button {
-  font-size: $font-size-subhead;
-  line-height: 40px;
-
-  &:not(:first-child) {
-    margin-left: 10px;
-  }
-
-  &.km-small-button {
-    align-items: center;
-    display: flex;
-    height: 40px;
-    justify-content: center;
+button {
+  &.mat-button,
+  &.mat-flat-button,
+  &.mat-raised-button {
+    font-size: $font-size-subhead;
+    line-height: 40px;
     min-width: unset;
+
+    &:not(:first-child) {
+      margin-left: 10px;
+    }
   }
 }
 

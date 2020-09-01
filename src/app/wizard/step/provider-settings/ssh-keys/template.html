@@ -26,7 +26,6 @@ limitations under the License.
     </mat-select>
   </mat-form-field>
   <button *ngIf="hasKeys()"
-          class="km-flat-button"
           (click)="addSSHKeyDialog()"
           mat-flat-button
           [disabled]="!canAdd()">Add SSH key
@@ -36,7 +35,6 @@ limitations under the License.
        fxLayout="column">
     <p>You have no SSH keys</p>
     <button (click)="addSSHKeyDialog()"
-            class="km-flat-button"
             mat-flat-button
             [disabled]="!canAdd()">Add SSH key
     </button>

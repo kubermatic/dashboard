@@ -30,7 +30,6 @@ limitations under the License.
 
 <mat-dialog-actions>
   <button mat-flat-button
-          class="km-flat-button"
           color="alternative"
           (click)="addProjectSSHKeys()"
           [disabled]="!canAdd()">
@@ -38,7 +37,6 @@ limitations under the License.
   </button>
 
   <button mat-flat-button
-          class="km-flat-button"
           (click)="addClusterSSHKeys()"
           [disabled]="!keysForm.valid"
           *ngIf="keys.length > 0">

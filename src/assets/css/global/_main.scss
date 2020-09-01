@@ -58,27 +58,6 @@ body {
   }
 }
 
-/*
- * Overrides default material button styling to match Kubermatic styling.
- *
- * Usage:
- * <button class="km-raised-button"
- *         mat-flat-button
- *         type="button">
- *   Add Project
- * </button>
- */
-.km-raised-button,
-.km-flat-button,
-.km-button {
-  &.mat-button,
-  &.mat-flat-button,
-  &.mat-raised-button {
-    font-size: $font-size-subhead;
-    line-height: 40px;
-  }
-}
-
 /**
  * Custom styles of the mat-card
  */
