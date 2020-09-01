@@ -58,6 +58,44 @@ mat-card {
   }
 }
 
+// Dialogs.
+.mat-dialog-container {
+  max-width: $dialog-width;
+  min-width: $dialog-width;
+
+  .mat-dialog-title {
+    font-weight: normal;
+  }
+
+  .mat-dialog-content {
+    font-size: $font-size-subhead;
+    font-weight: 400;
+    line-height: 24px;
+    max-height: $dialog-content-max-height;
+    overflow-x: unset;
+    overflow-y: scroll;
+
+    a {
+      text-decoration: none;
+    }
+
+    p {
+      margin: 0 0 8px;
+    }
+
+    .km-dialog-warning {
+      display: flex;
+      margin: 16px 0;
+    }
+  }
+
+  .mat-dialog-actions {
+    justify-content: flex-end;
+    margin: 0;
+    padding: 0;
+  }
+}
+
 // Tables.
 .mat-table {
   .mat-sort-header-container {
@@ -183,44 +221,6 @@ mat-list-item {
     i {
       opacity: .3;
     }
-  }
-}
-
-// Dialogs.
-.mat-dialog-container {
-  max-width: $dialog-width;
-  min-width: $dialog-width;
-
-  .mat-dialog-title {
-    font-weight: normal;
-  }
-
-  .mat-dialog-content {
-    font-size: $font-size-subhead;
-    font-weight: 400;
-    line-height: 24px;
-    max-height: $dialog-content-max-height;
-    overflow-x: unset;
-    overflow-y: scroll;
-
-    a {
-      text-decoration: none;
-    }
-
-    p {
-      margin: 0 0 8px;
-    }
-
-    .km-dialog-warning {
-      display: flex;
-      margin: 16px 0;
-    }
-  }
-
-  .mat-dialog-actions {
-    justify-content: flex-end;
-    margin: 0;
-    padding: 0;
   }
 }
 

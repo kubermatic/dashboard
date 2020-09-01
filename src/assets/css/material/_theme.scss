@@ -10,26 +10,7 @@
 // limitations under the License.
 
 @mixin theme-material($colors) {
-  /* ==================== mat-slide-toggle ==================== */
-  .mat-slide-toggle {
-    .mat-slide-toggle-label {
-      .mat-slide-toggle-bar {
-        background-color: map-get($colors, divider);
-      }
-    }
-
-    &.mat-checked {
-      .mat-slide-toggle-bar {
-        background-color: map-get($colors, background-primary);
-      }
-
-      .mat-slide-toggle-thumb {
-        background-color: #fafafa;
-      }
-    }
-  }
-
-  /* ==================== mat-card ==================== */
+  // Cards.
   .mat-card {
     color: map-get($colors, text);
   }
@@ -45,7 +26,18 @@
     }
   }
 
-  /* ==================== mat-table ==================== */
+  // Dialogs.
+  .mat-dialog-container {
+    color: map-get($colors, text);
+
+    .mat-dialog-content {
+      a {
+        color: map-get($colors, primary);
+      }
+    }
+  }
+
+  // Tables.
   .mat-table {
     .mat-header-cell,
     .mat-sort-header-button {
@@ -92,7 +84,37 @@
     color: map-get($colors, text-secondary);
   }
 
-  /* ==================== mat-drawer ==================== */
+  // Steppers.
+  .mat-step-header {
+    .mat-step-icon {
+      background: map-get($colors, divider);
+      color: map-get($colors, text-secondary);
+
+      &.mat-step-icon-selected,
+      &.mat-step-icon-state-edit {
+        background: map-get($colors, wizard-step-background);
+        color: map-get($colors, primary);
+      }
+    }
+
+    .mat-step-label {
+      color: map-get($colors, text-secondary);
+
+      &.mat-step-label-active {
+        color: map-get($colors, text-secondary);
+      }
+
+      &.mat-step-label-selected {
+        color: map-get($colors, primary);
+      }
+    }
+
+    &.cdk-program-focused {
+      background-color: unset;
+    }
+  }
+
+  // Menus.
   .mat-drawer-container {
     background-color: map-get($colors, background);
   }
@@ -101,12 +123,7 @@
     border: none;
   }
 
-  /* ==================== mat-tooltip ==================== */
-  .mat-tooltip {
-    background-color: map-get($colors, tooltip-background);
-  }
-
-  /* ==================== mat-form-field ==================== */
+  // Forms.
   mat-form-field {
     &.mat-form-field {
       color: map-get($colors, text);
@@ -152,37 +169,23 @@
     color: map-get($colors, secondary);
   }
 
-  /* ==================== mat-step ==================== */
-  .mat-step-header {
-    .mat-step-icon {
-      background: map-get($colors, divider);
-      color: map-get($colors, text-secondary);
+  .mat-select-arrow {
+    background-color: map-get($colors, text);
+  }
 
-      &.mat-step-icon-selected,
-      &.mat-step-icon-state-edit {
-        background: map-get($colors, wizard-step-background);
-        color: map-get($colors, primary);
-      }
-    }
+  .mat-optgroup-label {
+    background-color: map-get($colors, option-background);
+  }
 
-    .mat-step-label {
-      color: map-get($colors, text-secondary);
+  .mat-option {
+    background-color: map-get($colors, option-background);
+    color: map-get($colors, text);
 
-      &.mat-step-label-active {
-        color: map-get($colors, text-secondary);
-      }
-
-      &.mat-step-label-selected {
-        color: map-get($colors, primary);
-      }
-    }
-
-    &.cdk-program-focused {
-      background-color: unset;
+    &:hover {
+      background-color: map-get($colors, option-background-hover);
     }
   }
 
-  /* ==================== mat-hint ==================== */
   mat-hint {
     a {
       color: map-get($colors, primary);
@@ -190,12 +193,11 @@
     }
   }
 
-  /* ==================== mat-button ==================== */
+  // Buttons, sliders and checkboxes.
   .mat-button,
   .mat-flat-button,
   .mat-raised-button {
     background-color: map-get($colors, primary);
-    // TODO: Use variable
     color: #fff;
 
     &:hover:not([disabled]) {
@@ -235,7 +237,6 @@
     background-color: transparent;
   }
 
-  /* ==================== mat-icon-button ==================== */
   .mat-icon-button {
     i {
       background-color: map-get($colors, text);
@@ -250,7 +251,41 @@
     }
   }
 
-  /* ==================== mat-checkbox ==================== */
+  .mat-slide-toggle {
+    .mat-slide-toggle-label {
+      .mat-slide-toggle-bar {
+        background-color: map-get($colors, divider);
+      }
+    }
+
+    &.mat-checked {
+      .mat-slide-toggle-bar {
+        background-color: map-get($colors, background-primary);
+      }
+
+      .mat-slide-toggle-thumb {
+        background-color: #fafafa;
+      }
+    }
+  }
+
+  .mat-button-toggle-group {
+    background-color: transparent;
+
+    .mat-button-toggle {
+      border-color: map-get($colors, divider);
+
+      &.mat-button-toggle-checked {
+        background-color: transparent;
+        border-color: map-get($colors, primary) !important;
+      }
+
+      .mat-button-toggle-label-content {
+        color: map-get($colors, text);
+      }
+    }
+  }
+
   .mat-checkbox-checked {
     .mat-checkbox-background {
       background-color: map-get($colors, primary);
@@ -267,18 +302,7 @@
     border: 2px solid map-get($colors, divider);
   }
 
-  /* ==================== mat-dialog ==================== */
-  .mat-dialog-container {
-    color: map-get($colors, text);
-
-    .mat-dialog-content {
-      a {
-        color: map-get($colors, primary);
-      }
-    }
-  }
-
-  /* ==================== mat-chip ==================== */
+  // Chips.
   .mat-chip {
     &.mat-standard-chip {
       background: transparent;
@@ -295,46 +319,14 @@
     }
   }
 
-  /* ==================== mat-select ==================== */
-  .mat-select-arrow {
-    background-color: map-get($colors, text);
+  // Tooltips.
+  .mat-tooltip {
+    background-color: map-get($colors, tooltip-background);
   }
 
-  /* ==================== mat-option ==================== */
-  .mat-optgroup-label {
-    background-color: map-get($colors, option-background);
-  }
-
-  .mat-option {
-    background-color: map-get($colors, option-background);
-    color: map-get($colors, text);
-
-    &:hover {
-      background-color: map-get($colors, option-background-hover);
-    }
-  }
-
-  /* ==================== mat-spinner ==================== */
+  // Spinners.
   .mat-progress-spinner circle,
   .mat-spinner circle {
     stroke: map-get($colors, primary-hover);
-  }
-
-  /* ==================== mat-button-toggle ==================== */
-  .mat-button-toggle-group {
-    background-color: transparent;
-
-    .mat-button-toggle {
-      border-color: map-get($colors, divider);
-
-      &.mat-button-toggle-checked {
-        background-color: transparent;
-        border-color: map-get($colors, primary) !important;
-      }
-
-      .mat-button-toggle-label-content {
-        color: map-get($colors, text);
-      }
-    }
   }
 }
