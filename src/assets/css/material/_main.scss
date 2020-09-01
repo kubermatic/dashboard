@@ -13,35 +13,52 @@
 @import 'mixins';
 @import 'images';
 
-/* ==================== mat-slide-toggle ==================== */
-.mat-slide-toggle {
-  .mat-slide-toggle-label {
-    .mat-slide-toggle-bar {
-      @include size(50px, 24px);
+// Cards.
+mat-card {
+  &.mat-card {
+    border-radius: $border-radius;
+    box-shadow: $border-box-shadow;
+    margin: 20px 0 0 0;
+    padding: 30px 0;
 
-      border-radius: 50px;
+    .mat-card-header {
+      border-radius: $border-radius $border-radius 0 0;
+      line-height: 16px;
+      margin: 0;
+      padding: 0;
+
+      .mat-card-header-text {
+        margin: 0;
+      }
+
+      .mat-card-title {
+        font-size: $font-size-card-title;
+        font-weight: normal;
+        padding: 8px 0 16px;
+
+        i {
+          font-size: $font-size-subhead-lg;
+          margin: 0 20px;
+        }
+      }
     }
 
-    .mat-slide-toggle-thumb {
-      box-shadow: none;
-    }
+    .mat-card-content {
+      p {
+        font-size: $font-size-caption;
+      }
 
-    .mat-slide-toggle-thumb-container {
-      left: 2px;
-      top: 2px;
-    }
-  }
-
-  &.mat-checked {
-    .mat-slide-toggle-label {
-      .mat-slide-toggle-thumb-container {
-        transform: translate3d(26px, 0, 0);
+      button {
+        cursor: pointer;
+        font-size: $font-size-body;
+        outline: none;
+        padding: 0;
       }
     }
   }
 }
 
-/* ==================== mat-table ==================== */
+// Tables.
 .mat-table {
   .mat-sort-header-container {
     &.mat-sort-header-button {
@@ -93,44 +110,12 @@
   }
 }
 
-/* ==================== mat-select ==================== */
-.mat-select {
-  width: fit-content;
-
-  .mat-select-value {
-    max-width: 25ch;
-    min-width: 2ch;
-  }
-
-  .mat-select-arrow {
-    display: none;
-  }
-
-  .mat-select-value-text {
-    font-size: $font-size-subhead;
-    line-height: 20px;
-  }
-
-  .mat-select-placeholder {
-    font-size: $font-size-subhead;
-    line-height: 20px;
-    opacity: .7;
-  }
+.mat-column-status,
+.mat-column-stateArrow {
+  width: 8px;
 }
 
-.mat-select-panel {
-  margin-left: 6px;
-  margin-top: 30px;
-  max-width: calc(100% + 20px);
-  min-width: calc(100% + 20px);
-  transform-origin: 50% 0 0;
-
-  &.ng-animating {
-    visibility: hidden;
-  }
-}
-
-/* ==================== mat-stepper-horizontal ==================== */
+// Steppers.
 .mat-stepper-horizontal {
   .mat-horizontal-content-container {
     overflow: initial;
@@ -146,52 +131,100 @@
   }
 }
 
-/* ==================== mat-card ==================== */
-mat-card {
-  &.mat-card {
-    border-radius: $border-radius;
-    box-shadow: $border-box-shadow;
-    margin: 20px 0 0 0;
-    padding: 30px 0;
+.mat-step-header {
+  max-height: 32px;
+  pointer-events: none;
 
-    .mat-card-header {
-      border-radius: $border-radius $border-radius 0 0;
-      line-height: 16px;
-      margin: 0;
-      padding: 0;
+  .mat-step-icon {
+    margin-right: 14px;
+  }
 
-      .mat-card-header-text {
-        margin: 0;
-      }
+  .mat-step-icon-content {
+    font-size: $font-size-body;
+  }
 
-      .mat-card-title {
-        font-size: $font-size-card-title;
-        font-weight: normal;
-        padding: 8px 0 16px;
+  .mat-step-label {
+    font-size: $font-size-subhead;
+    font-weight: 400;
 
-        i {
-          font-size: $font-size-subhead-lg;
-          margin: 0 20px;
-        }
-      }
-    }
-
-    .mat-card-content {
-      p {
-        font-size: $font-size-caption;
-      }
-
-      button {
-        cursor: pointer;
-        font-size: $font-size-body;
-        outline: none;
-        padding: 0;
-      }
+    &.mat-step-label-selected {
+      font-weight: 500;
     }
   }
 }
 
-/* ==================== mat-form-field ==================== */
+// Menus.
+.mat-menu-item {
+  height: 42px;
+  line-height: 42px;
+  padding: 0 10px;
+
+  .mat-icon {
+    margin-right: 0;
+  }
+}
+
+.mat-menu-content {
+  padding: 0;
+}
+
+.mat-menu-panel {
+  min-height: auto;
+}
+
+.mat-nav-list {
+  .mat-list-item-content {
+    padding: 0;
+  }
+}
+
+mat-list-item {
+  &.disabled {
+    i {
+      opacity: .3;
+    }
+  }
+}
+
+// Dialogs.
+.mat-dialog-container {
+  max-width: $dialog-width;
+  min-width: $dialog-width;
+
+  .mat-dialog-title {
+    font-weight: normal;
+  }
+
+  .mat-dialog-content {
+    font-size: $font-size-subhead;
+    font-weight: 400;
+    line-height: 24px;
+    max-height: $dialog-content-max-height;
+    overflow-x: unset;
+    overflow-y: scroll;
+
+    a {
+      text-decoration: none;
+    }
+
+    p {
+      margin: 0 0 8px;
+    }
+
+    .km-dialog-warning {
+      display: flex;
+      margin: 16px 0;
+    }
+  }
+
+  .mat-dialog-actions {
+    justify-content: flex-end;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+// Forms.
 mat-form-field {
   &.mat-form-field {
     width: 100%;
@@ -243,65 +276,42 @@ mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):no
   transition: all .2s ease;
 }
 
-/* ==================== mat-step ==================== */
-.mat-step-header {
-  max-height: 32px;
-  pointer-events: none;
+.mat-select {
+  width: fit-content;
 
-  .mat-step-icon {
-    margin-right: 14px;
+  .mat-select-value {
+    max-width: 25ch;
+    min-width: 2ch;
   }
 
-  .mat-step-icon-content {
-    font-size: $font-size-body;
+  .mat-select-arrow {
+    display: none;
   }
 
-  .mat-step-label {
+  .mat-select-value-text {
     font-size: $font-size-subhead;
-    font-weight: 400;
+    line-height: 20px;
+  }
 
-    &.mat-step-label-selected {
-      font-weight: 500;
-    }
+  .mat-select-placeholder {
+    font-size: $font-size-subhead;
+    line-height: 20px;
+    opacity: .7;
   }
 }
 
-/* ==================== mat-menu ==================== */
-.mat-menu-item {
-  height: 42px;
-  line-height: 42px;
-  padding: 0 10px;
+.mat-select-panel {
+  margin-left: 6px;
+  margin-top: 30px;
+  max-width: calc(100% + 20px);
+  min-width: calc(100% + 20px);
+  transform-origin: 50% 0 0;
 
-  .mat-icon {
-    margin-right: 0;
+  &.ng-animating {
+    visibility: hidden;
   }
 }
 
-.mat-menu-content {
-  padding: 0;
-}
-
-.mat-menu-panel {
-  min-height: auto;
-}
-
-/* ==================== mat-nav ==================== */
-.mat-nav-list {
-  .mat-list-item-content {
-    padding: 0;
-  }
-}
-
-/* ==================== mat-list ==================== */
-mat-list-item {
-  &.disabled {
-    i {
-      opacity: .3;
-    }
-  }
-}
-
-/* ==================== mat-option ==================== */
 .mat-option {
   padding: 0 0 0 10px;
 }
@@ -313,46 +323,22 @@ mat-list-item {
   padding-left: 10px;
 }
 
-/* ==================== mat-chip ==================== */
-.mat-chip {
-  &.mat-standard-chip {
-    border-radius: $border-radius;
-    font-size: $font-size-body;
-    font-weight: normal;
-    line-height: 16px;
-    max-height: 22px;
-    min-height: 22px;
-    padding: 3px 0;
+// Buttons, sliders and checkboxes.
+a,
+button {
+  &.mat-button,
+  &.mat-flat-button,
+  &.mat-raised-button {
+    font-size: $font-size-subhead;
+    line-height: 40px;
+    min-width: unset;
 
-    div:not(.mat-chip-ripple) {
-      align-items: center;
-      display: flex;
-      height: 100%;
-      justify-content: center;
-      padding: 3px 10px;
+    &:not(:first-child) {
+      margin-left: 10px;
     }
   }
 }
 
-mat-chip-list {
-  cursor: default;
-
-  &:not(.km-chip-list-with-input) {
-    pointer-events: none;
-  }
-}
-
-/* ==================== mat-tooltip ==================== */
-.mat-tooltip {
-  font-size: $font-size-caption;
-  margin-top: 5px;
-}
-
-.mat-tooltip-panel {
-  height: 32px;
-}
-
-/* ==================== mat-icon ==================== */
 .mat-icon-button {
   &[disabled] {
     * {
@@ -372,7 +358,6 @@ mat-chip-list {
   }
 }
 
-/* ==================== mat-button-toggle ==================== */
 .mat-button-toggle-group {
   &.mat-button-toggle-group-appearance-standard {
     border: none;
@@ -430,66 +415,72 @@ mat-chip-list {
   }
 }
 
-/* ==================== mat-checkbox ==================== */
+.mat-slide-toggle {
+  .mat-slide-toggle-label {
+    .mat-slide-toggle-bar {
+      @include size(50px, 24px);
+
+      border-radius: 50px;
+    }
+
+    .mat-slide-toggle-thumb {
+      box-shadow: none;
+    }
+
+    .mat-slide-toggle-thumb-container {
+      left: 2px;
+      top: 2px;
+    }
+  }
+
+  &.mat-checked {
+    .mat-slide-toggle-label {
+      .mat-slide-toggle-thumb-container {
+        transform: translate3d(26px, 0, 0);
+      }
+    }
+  }
+}
+
 .mat-checkbox-frame {
   border-radius: $border-radius;
 }
 
-/* ==================== mat-dialog ==================== */
-.mat-dialog-container {
-  max-width: $dialog-width;
-  min-width: $dialog-width;
-
-  .mat-dialog-title {
+// Chips.
+.mat-chip {
+  &.mat-standard-chip {
+    border-radius: $border-radius;
+    font-size: $font-size-body;
     font-weight: normal;
-  }
+    line-height: 16px;
+    max-height: 22px;
+    min-height: 22px;
+    padding: 3px 0;
 
-  .mat-dialog-content {
-    font-size: $font-size-subhead;
-    font-weight: 400;
-    line-height: 24px;
-    max-height: $dialog-content-max-height;
-    overflow-x: unset;
-    overflow-y: scroll;
-
-    a {
-      text-decoration: none;
-    }
-
-    p {
-      margin: 0 0 8px;
-    }
-
-    .km-dialog-warning {
+    div:not(.mat-chip-ripple) {
+      align-items: center;
       display: flex;
-      margin: 16px 0;
-    }
-  }
-
-  .mat-dialog-actions {
-    justify-content: flex-end;
-    margin: 0;
-    padding: 0;
-  }
-}
-
-/* ==================== mat-button ==================== */
-button {
-  &.mat-button,
-  &.mat-flat-button,
-  &.mat-raised-button {
-    font-size: $font-size-subhead;
-    line-height: 40px;
-    min-width: unset;
-
-    &:not(:first-child) {
-      margin-left: 10px;
+      height: 100%;
+      justify-content: center;
+      padding: 3px 10px;
     }
   }
 }
 
-/* ==================== mat-column ==================== */
-.mat-column-status,
-.mat-column-stateArrow {
-  width: 8px;
+mat-chip-list {
+  cursor: default;
+
+  &:not(.km-chip-list-with-input) {
+    pointer-events: none;
+  }
+}
+
+// Tooltips.
+.mat-tooltip {
+  font-size: $font-size-caption;
+  margin-top: 5px;
+}
+
+.mat-tooltip-panel {
+  height: 32px;
 }
