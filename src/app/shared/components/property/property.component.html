@@ -10,12 +10,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div fxLayout="column"
-     fxLayoutAlign="end start">
-  <div class="label km-text-muted">
-    <ng-content select="[key]"></ng-content>
-  </div>
-  <div class="value km-text">
-    <ng-content select="[value]"></ng-content>
+
+<div class="container">
+  <div fxLayout="column"
+       fxLayoutAlign="end start">
+    <div class="label km-text-muted">
+      <ng-content select="[key]"></ng-content>
+    </div>
+    <div class="value km-text">
+      <ng-content select="[value]"></ng-content>
+    </div>
   </div>
 </div>

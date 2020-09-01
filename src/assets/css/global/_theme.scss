@@ -10,6 +10,14 @@
 // limitations under the License.
 
 @mixin theme-global($colors) {
+  ::-webkit-scrollbar-thumb {
+    background: map-get($colors, scrollbar);
+  }
+
+  ::-webkit-scrollbar-track {
+    background: map-get($colors, scrollbar-background);
+  }
+
   .km-header {
     color: map-get($colors, text);
   }
@@ -95,6 +103,10 @@
     }
   }
 
+  .km-empty-list-msg {
+    border-top: 1px solid map-get($colors, divider);
+  }
+
   .km-table-dropdown {
     background-color: transparent;
 
@@ -154,43 +166,6 @@
     button {
       background-color: transparent;
       color: map-get($colors, text-secondary);
-    }
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: map-get($colors, scrollbar);
-  }
-
-  ::-webkit-scrollbar-track {
-    background: map-get($colors, scrollbar-background);
-  }
-
-  /* ==================== Material-based reusable rules ====================
-   *
-   * See '_main.scss' file for documentation about usage.
-   *
-   * =======================================================================
-   */
-
-  /* ==================== mat-card ====================
-   *
-   * Reusable rules:
-   *   - .km-with-table-header
-   *   - .km-row
-   *
-   */
-  .mat-card {
-    &.km-with-table-header {
-      .mat-card-content {
-        &.km-row,
-        .km-row {
-          border-top-color: map-get($colors, divider);
-
-          p {
-            color: map-get($colors, text);
-          }
-        }
-      }
     }
   }
 }

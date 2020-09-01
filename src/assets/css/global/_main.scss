@@ -28,51 +28,19 @@ body {
   @include size($scrollbar-size);
 }
 
-/*
- * Used alongside km-row to display empty list message.
- */
 .km-empty-list-msg {
   font-size: $font-size-body;
   padding: 15px 30px 0;
   text-align: center;
 }
 
-/*
- * Adds a left/right padding to the mat-card header to align title with the content.
- *
- * Usage:
- * <mat-card class="km-with-table-header">
- *   <mat-card-header>
- *     <mat-card-title>Addons</mat-card-title>
- *   </mat-card-header>
- *   <mat-card-content class="km-addon-card-content">
- *   ...
- *   </mat-card-content>
- * </mat-card>
- *
- * TODO: Update name to better reflect the behavior
- */
 .km-with-table-header {
   .mat-card-header-text {
     padding: 0 56px;
   }
 }
 
-/**
- * Custom styles of the mat-card
- */
 .mat-card {
-  /**
-   * Style for the footer row inside the mat-card
-   *
-   * Usage:
-   * <div class="km-mat-row km-mat-footer-row">
-   *   <button>
-   *   ...
-   *   </button>
-   * </div>
-   *
-   */
   .km-mat-row {
     .km-mat-footer-row {
       border-bottom-left-radius: $border-radius;
@@ -86,30 +54,6 @@ body {
         font-weight: normal;
         line-height: 40px;
         width: 100%;
-      }
-    }
-  }
-
-  /**
-   * Style of the table header inside the mat-card
-   *
-   * Usage:
-   * <mat-card class="km-with-table-header">
-   *   <mat-card-content>
-   *     <table class="km-table"
-   *            mat-table>
-   *       ...
-   *     </table>
-   *   </mat-card-content>
-   * </mat-card>
-   *
-   */
-  &.km-with-table-header {
-    .mat-card-content {
-      &.km-row,
-      .km-row {
-        border-top-style: solid;
-        border-top-width: 1px;
       }
     }
   }
@@ -233,15 +177,6 @@ body {
   vertical-align: middle;
 }
 
-/*
- * Overrides default snack bar styling to display the notifications.
- *
- * Usage:
- *  private readonly _config: MatSnackBarConfig = {
- *    ...
- *    panelClass: 'km-notification',
- *  };
- */
 .km-notification {
   &.mat-snack-bar-container {
     border-radius: $border-radius;
@@ -258,17 +193,6 @@ body {
   }
 }
 
-/*
- * Overrides table styling
- *
- * Usage:
- *  <table class="km-table"
- *         mat-table
- *         matSort
- *         [dataSource]="dataSource">
- *    ...
- *  </table>
- */
 .km-table {
   border-collapse: separate;
   border-radius: $border-radius;
@@ -417,11 +341,5 @@ km-dashboard {
   p {
     font-size: $font-size-body;
     margin: 0;
-  }
-}
-
-km-property-boolean {
-  .label {
-    display: none;
   }
 }
