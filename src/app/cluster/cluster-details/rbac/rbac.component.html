@@ -11,7 +11,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <mat-card [ngClass]="isShowRBAC ? 'km-with-table-header' : 'km-with-table-header km-toggled-rbac'">
-  <mat-card-header (click)="toggleRBAC()">
+  <mat-card-header class="km-pointer"
+                   (click)="toggleRBAC()">
     <mat-card-title>
       <i class="km-icon-mask"
          [ngClass]="isShowRBAC ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>

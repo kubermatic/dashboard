@@ -10,7 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<mat-card class="km-with-table-header">
+<mat-card>
   <mat-card-header fxLayoutGap="24px">
     <mat-card-title>Dynamic Datacenters</mat-card-title>
     <div fxFlex></div>
@@ -201,8 +201,7 @@ limitations under the License.
     </ng-container>
 
     <div [hidden]="!isPaginatorVisible()">
-      <mat-paginator showFirstLastButtons
-                     class="km-paginator"></mat-paginator>
+      <mat-paginator showFirstLastButtons></mat-paginator>
     </div>
 
   </mat-card-content>

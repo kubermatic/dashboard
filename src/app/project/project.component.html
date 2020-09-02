@@ -42,7 +42,7 @@ limitations under the License.
 
 <!-- Table View -->
 <div *ngIf="!showCards">
-  <mat-card class="km-with-table-header km-project-view">
+  <mat-card class="km-project-view">
     <mat-card-content>
       <table class="km-table"
              mat-table
@@ -188,8 +188,7 @@ limitations under the License.
       </ng-container>
 
       <div [hidden]="!isPaginatorVisible || showCards">
-        <mat-paginator showFirstLastButtons
-                       class="km-paginator"></mat-paginator>
+        <mat-paginator showFirstLastButtons></mat-paginator>
       </div>
     </mat-card-content>
   </mat-card>
