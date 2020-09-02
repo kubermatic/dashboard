@@ -192,18 +192,21 @@ mat-card {
 }
 
 // Menus.
-.mat-menu-item {
-  height: 42px;
-  line-height: 42px;
-  padding: 0 10px;
-
-  .mat-icon {
-    margin-right: 0;
-  }
-}
-
 .mat-menu-content {
   padding: 0;
+
+  button {
+    &.mat-menu-item {
+      font-size: $font-size-body;
+      height: 48px;
+      line-height: 48px;
+      padding: 0 10px;
+
+      .mat-icon {
+        margin-right: 0;
+      }
+    }
+  }
 }
 
 .mat-menu-panel {
