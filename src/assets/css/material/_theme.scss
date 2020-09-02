@@ -264,7 +264,7 @@
 
     &.mat-checked {
       .mat-slide-toggle-bar {
-        background-color: map-get($colors, background-primary);
+        background-color: map-get($colors, primary);
       }
 
       .mat-slide-toggle-thumb {
