@@ -72,7 +72,8 @@ limitations under the License.
     <div class="km-mat-row km-mat-footer-row"
          [ngClass]="isTableVisible() ? '' : 'km-no-sshkeys'">
       <button id="km-add-sshkey-to-cluster"
-              class="km-text-muted"
+              class="km-text-muted km-pointer"
+              fxFlex
               (click)="addSshKey()"
               [disabled]="!canAdd()">+ Add SSH key
       </button>
