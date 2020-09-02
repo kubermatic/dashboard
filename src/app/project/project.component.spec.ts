@@ -32,6 +32,7 @@ import {SettingsMockService} from '../testing/services/settings-mock.service';
 import {UserMockService} from '../testing/services/user-mock.service';
 
 import {ProjectComponent} from './project.component';
+import {DeleteProjectConfirmationComponent} from './delete-project/delete-project.component';
 
 describe('ProjectComponent', () => {
   let fixture: ComponentFixture<ProjectComponent>;
@@ -48,7 +49,7 @@ describe('ProjectComponent', () => {
         DialogTestModule,
         CoreModule,
       ],
-      declarations: [ProjectComponent],
+      declarations: [ProjectComponent, DeleteProjectConfirmationComponent],
       providers: [
         {provide: Router, useClass: RouterStub},
         {provide: ProjectService, useClass: ProjectMockService},
@@ -86,8 +87,8 @@ describe('ProjectComponent', () => {
     tick(waitTime);
 
     const dialogTitle = document.body.querySelector('.mat-dialog-title');
-    const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
-    const dialogInput = document.querySelector('#km-confirmation-dialog-input');
+    const deleteButton = document.body.querySelector('#km-delete-project-dialog-confirm-btn') as HTMLInputElement;
+    const dialogInput = document.querySelector('#km-delete-project-dialog-input');
 
     dialogInput.setAttribute('value', project.name);
     deleteButton.disabled = false;
@@ -96,6 +97,6 @@ describe('ProjectComponent', () => {
     fixture.detectChanges();
 
     expect(dialogTitle.textContent).toBe('Delete Project');
-    expect(document.querySelector('#km-confirmation-dialog-input').getAttribute('value')).toBe(project.name);
+    expect(document.querySelector('#km-delete-project-dialog-input').getAttribute('value')).toBe(project.name);
   }));
 });
