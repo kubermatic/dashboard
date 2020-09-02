@@ -91,7 +91,7 @@ describe('ClusterListComponent', () => {
     component.isInitialized = true;
     fixture.detectChanges();
 
-    const de = fixture.debugElement.query(By.css('.km-with-table-header'));
+    const de = fixture.debugElement.query(By.css('.mat-card'));
 
     expect(de).not.toBeNull();
     discardPeriodicTasks();
