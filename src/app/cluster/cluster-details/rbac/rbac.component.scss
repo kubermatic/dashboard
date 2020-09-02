@@ -23,19 +23,19 @@ h2 {
   font-size: $font-size-card-title;
   font-weight: normal;
   margin-bottom: 0;
-  padding: 0 56px;
+  padding: 0 60px;
 }
 
 tr {
   &.mat-row,
   &.mat-header-row {
-    padding-left: 56px;
+    padding-left: 60px;
 
     td:first-child,
     th:first-child {
       &.mat-cell,
       &.mat-header-cell {
-        padding-left: 56px;
+        padding-left: 60px;
       }
     }
   }
@@ -45,6 +45,7 @@ tr {
   .km-icon-arrow-down,
   .km-icon-arrow-up {
     margin-left: 0;
+    margin-right: 18px;
   }
 }
 

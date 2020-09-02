@@ -13,7 +13,7 @@
 @import 'mixins';
 
 .km-addon-card-content {
-  padding: 0 56px;
+  padding: 0 60px;
 }
 
 .km-cluster-detail-actions .mat-icon-button i {
@@ -33,15 +33,18 @@
 
 .mat-card-header {
   .mat-card-title {
-    &.km-mat-card-title {
+    &.km-cluster-name {
       padding-bottom: 0;
       padding-top: 0;
 
       .km-cluster-health {
         font-size: $font-size-subhead;
-        margin-right: 20px;
-        margin-top: 2px;
+        margin: 2px 20px 0 -5px;
       }
+    }
+
+    &.additional-margin {
+      padding-left: 30px;
     }
   }
 }

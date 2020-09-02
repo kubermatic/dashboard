@@ -10,13 +10,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<mat-card [ngClass]="isShowRBAC ? 'km-with-table-header' : 'km-with-table-header km-toggled-rbac'">
+<mat-card [ngClass]="{'km-toggled-rbac': isShowRBAC}">
   <mat-card-header class="km-pointer"
                    (click)="toggleRBAC()">
     <mat-card-title>
       <i class="km-icon-mask"
          [ngClass]="isShowRBAC ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
-      RBAC
+      <span>RBAC</span>
     </mat-card-title>
     <div fxFlex></div>
     <button mat-icon-button

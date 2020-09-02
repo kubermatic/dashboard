@@ -12,18 +12,25 @@
 @import 'mixins';
 @import 'variables';
 
-.km-machine-deployment-health {
-  text-align: center;
-  vertical-align: middle;
-}
+.mat-card {
+  .mat-card-header {
+    align-items: baseline;
 
-.km-machine-deployment-name {
-  font-size: $font-size-card-title;
-  font-weight: 500;
-}
+    .mat-card-title {
+      &.km-machine-deployment-name {
+        font-size: $font-size-card-title;
+        font-weight: 500;
+        margin: 2px 20px 0 -22px;
 
-mat-card-header {
-  align-items: baseline;
+        i {
+          &.km-machine-deployment-health {
+            text-align: center;
+            vertical-align: middle;
+          }
+        }
+      }
+    }
+  }
 }
 
 .km-machine-deployment-actions {
