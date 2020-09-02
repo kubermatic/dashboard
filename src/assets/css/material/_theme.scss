@@ -281,7 +281,7 @@
 
       &.mat-button-toggle-checked {
         background-color: transparent;
-        border-color: map-get($colors, primary) !important;
+        border-color: map-get($colors, primary);
       }
 
       .mat-button-toggle-label-content {

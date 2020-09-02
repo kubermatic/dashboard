@@ -10,6 +10,17 @@
 // limitations under the License.
 
 @mixin theme-project-component($colors) {
+  .mat-button-toggle-group {
+    &.km-project-view-switch {
+      .mat-button-toggle {
+        &.mat-button-toggle-checked {
+          background-color: map-get($colors, divider);
+          border-color: map-get($colors, divider);
+        }
+      }
+    }
+  }
+
   .km-projects-external {
     p {
       border-color: map-get($colors, primary);
