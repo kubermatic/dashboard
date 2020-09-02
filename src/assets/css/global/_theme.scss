@@ -104,7 +104,7 @@
   }
 
   .km-empty-list-msg {
-    border-top: 1px solid map-get($colors, divider);
+    border-color: map-get($colors, divider);
   }
 
   .km-table-dropdown {
