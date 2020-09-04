@@ -22,7 +22,8 @@ limitations under the License.
   <div [fxFlex]="isDialogView() ? '100%' : '50%'"
        fxLayout="column"
        fxLayoutGap="16px">
-    <mat-card-header *ngIf="!isDialogView()">
+    <mat-card-header *ngIf="!isDialogView()"
+                     class="km-no-padding">
       <mat-card-title>Basic</mat-card-title>
     </mat-card-header>
     <mat-form-field>
@@ -189,7 +190,7 @@ limitations under the License.
        fxFlex="50%"
        fxLayout="column"
        fxLayoutGap="16px">
-    <mat-card-header>
+    <mat-card-header class="km-no-padding">
       <mat-card-title>{{ providerDisplayName }}</mat-card-title>
     </mat-card-header>
 

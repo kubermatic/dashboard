@@ -152,11 +152,7 @@ body {
 }
 
 .km-no-padding {
-  padding: 0;
-
-  .mat-form-field-wrapper {
-    padding-bottom: 0;
-  }
+  padding: 0 !important;
 }
 
 .km-code-block {
