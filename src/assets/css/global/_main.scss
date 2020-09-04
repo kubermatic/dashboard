@@ -334,3 +334,15 @@ km-dashboard {
     margin: 0;
   }
 }
+
+.km-wizard-summary {
+  km-property-boolean {
+    km-property {
+      .container {
+        .label {
+          display: none;
+        }
+      }
+    }
+  }
+}
