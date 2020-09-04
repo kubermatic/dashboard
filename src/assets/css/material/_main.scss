@@ -155,6 +155,12 @@ mat-card {
 
 // Steppers.
 .mat-stepper-horizontal {
+  @include breakpoint('small') {
+    .mat-horizontal-stepper-header-container {
+      display: none;
+    }
+  }
+
   .mat-horizontal-content-container {
     overflow: initial;
     padding: 0;
@@ -166,6 +172,10 @@ mat-card {
 
   .mat-stepper-horizontal-line {
     margin: 0 20px;
+  }
+
+  .mat-horizontal-stepper-content[aria-expanded="false"] {
+    width: 0;
   }
 }
 
