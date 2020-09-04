@@ -25,15 +25,8 @@ limitations under the License.
                   [value]="key">{{key.name}}</mat-option>
     </mat-select>
   </mat-form-field>
-  <button *ngIf="hasKeys()"
-          (click)="addSSHKeyDialog()"
-          mat-flat-button
-          [disabled]="!canAdd()">Add SSH key
-  </button>
-  <div *ngIf="!hasKeys()"
-       fxLayoutAlign="start start"
-       fxLayout="column">
-    <p>You have no SSH keys</p>
+  <p *ngIf="!hasKeys()">You have no SSH keys</p>
+  <div>
     <button (click)="addSSHKeyDialog()"
             mat-flat-button
             [disabled]="!canAdd()">Add SSH key
