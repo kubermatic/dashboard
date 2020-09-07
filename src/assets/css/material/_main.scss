@@ -63,8 +63,13 @@ mat-card {
   max-width: $dialog-width;
   min-width: $dialog-width;
 
-  .mat-dialog-title {
-    font-weight: normal;
+  .mat-card-header-text {
+    margin: 0;
+    padding: 0;
+
+    .mat-dialog-title {
+      font-weight: normal;
+    }
   }
 
   .mat-dialog-content {
@@ -73,7 +78,7 @@ mat-card {
     line-height: 24px;
     max-height: $dialog-content-max-height;
     overflow-x: unset;
-    overflow-y: scroll;
+    overflow-y: auto;
 
     a {
       text-decoration: none;
