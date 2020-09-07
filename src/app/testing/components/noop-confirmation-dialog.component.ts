@@ -24,7 +24,7 @@ export class NoopConfirmDialogComponent {}
 @NgModule({
   imports: [MatDialogModule, NoopAnimationsModule, SharedModule],
   exports: [NoopConfirmDialogComponent],
-  declarations: [NoopConfirmDialogComponent, DeleteProjectConfirmationComponent],
+  declarations: [NoopConfirmDialogComponent],
   entryComponents: [ConfirmationDialogComponent, DeleteProjectConfirmationComponent],
 })
 export class DialogTestModule {}
