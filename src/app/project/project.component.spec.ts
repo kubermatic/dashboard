@@ -22,7 +22,6 @@ import {DatacenterService, ProjectService, UserService} from '../core/services';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {SharedModule} from '../shared/shared.module';
-import {DialogTestModule} from '../testing/components/noop-confirmation-dialog.component';
 import {fakeProject} from '../testing/fake-data/project.fake';
 import {RouterStub, RouterTestingModule} from '../testing/router-stubs';
 import {AppConfigMockService} from '../testing/services/app-config-mock.service';
@@ -33,7 +32,10 @@ import {UserMockService} from '../testing/services/user-mock.service';
 
 import {ProjectComponent} from './project.component';
 import {DeleteProjectConfirmationComponent} from './delete-project/delete-project.component';
-import {NoopProjectDeleteDialogComponent} from '../testing/components/noop-project-delete-dialog.component';
+import {
+  DialogTestModule,
+  NoopProjectDeleteDialogComponent,
+} from '../testing/components/noop-project-delete-dialog.component';
 
 describe('ProjectComponent', () => {
   let fixture: ComponentFixture<ProjectComponent>;
@@ -47,8 +49,8 @@ describe('ProjectComponent', () => {
         BrowserAnimationsModule,
         RouterTestingModule,
         SharedModule,
-        DialogTestModule,
         CoreModule,
+        DialogTestModule,
       ],
       declarations: [ProjectComponent, DeleteProjectConfirmationComponent],
       providers: [
