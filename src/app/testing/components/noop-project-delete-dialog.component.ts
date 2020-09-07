@@ -13,17 +13,17 @@ import {Component, NgModule} from '@angular/core';
 import {MatDialogModule} from '@angular/material/dialog';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
-import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {SharedModule} from '../../shared/shared.module';
+import {DeleteProjectConfirmationComponent} from '../../project/delete-project/delete-project.component';
 
 // NoopConfirmDialogComponent is only a workaround to trigger change detection
 @Component({template: ''})
-export class NoopConfirmDialogComponent {}
+export class NoopProjectDeleteDialogComponent {}
 
 @NgModule({
   imports: [MatDialogModule, NoopAnimationsModule, SharedModule],
-  exports: [NoopConfirmDialogComponent],
-  declarations: [NoopConfirmDialogComponent],
-  entryComponents: [ConfirmationDialogComponent],
+  exports: [NoopProjectDeleteDialogComponent],
+  declarations: [NoopProjectDeleteDialogComponent],
+  entryComponents: [DeleteProjectConfirmationComponent],
 })
 export class DialogTestModule {}
