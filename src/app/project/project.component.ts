@@ -165,7 +165,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       this.currentUser.projects.forEach(mp => this.role.set(mp.id, MemberUtils.getGroupDisplayName(mp.group)));
     }
 
-    if (this.projects) {
+    if (!!this.projects && !!this.currentUser) {
       this.projects
         .filter(p => p.owners.map(o => o.email).includes(this.currentUser.email))
         .forEach(p => this.role.set(p.id, 'Owner'));

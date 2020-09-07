@@ -100,7 +100,7 @@ export class ThemeManagerService {
     linkEl.setAttribute('rel', 'stylesheet');
     linkEl.classList.add(this._themeClassName(styleName));
 
-    const positionElement = this._document.head.querySelector('link[rel="stylesheet"][href="styles.css"]');
+    const positionElement = this._document.head.querySelector('link[rel="stylesheet"]:last-of-type');
     if (positionElement) {
       positionElement.after(linkEl);
       return linkEl;
