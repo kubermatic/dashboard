@@ -14,6 +14,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {DeleteProjectConfirmationComponent} from '../../project/delete-project/delete-project.component';
 
 // NoopConfirmDialogComponent is only a workaround to trigger change detection
 @Component({template: ''})
@@ -25,6 +26,6 @@ const TEST_DIRECTIVES = [NoopConfirmDialogComponent];
   imports: [MatDialogModule, NoopAnimationsModule],
   exports: TEST_DIRECTIVES,
   declarations: TEST_DIRECTIVES,
-  entryComponents: [ConfirmationDialogComponent],
+  entryComponents: [ConfirmationDialogComponent, DeleteProjectConfirmationComponent],
 })
 export class DialogTestModule {}
