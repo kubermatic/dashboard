@@ -20,12 +20,10 @@ import {DeleteProjectConfirmationComponent} from '../../project/delete-project/d
 @Component({template: ''})
 export class NoopConfirmDialogComponent {}
 
-const TEST_DIRECTIVES = [NoopConfirmDialogComponent];
-
 @NgModule({
   imports: [MatDialogModule, NoopAnimationsModule],
-  exports: TEST_DIRECTIVES,
-  declarations: TEST_DIRECTIVES,
+  exports: [NoopConfirmDialogComponent],
+  declarations: [NoopConfirmDialogComponent, DeleteProjectConfirmationComponent],
   entryComponents: [ConfirmationDialogComponent, DeleteProjectConfirmationComponent],
 })
 export class DialogTestModule {}
