@@ -11,8 +11,8 @@
 
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {merge, Observable, of, timer} from 'rxjs';
-import {catchError, shareReplay, switchMapTo} from 'rxjs/operators';
+import {combineLatest, merge, Observable, of, timer} from 'rxjs';
+import {catchError, map, shareReplay, switchMapTo} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 
 import {environment} from '../../../../environments/environment';
@@ -32,6 +32,7 @@ export class ClusterService {
   private readonly _refreshTime = 10; // in seconds
   private _providerSettingsPatch = new Subject<ProviderSettingsPatch>();
   private _restRoot: string = environment.restRoot;
+  private _newRestRoot: string = environment.newRestRoot;
   private _headers: HttpHeaders = new HttpHeaders();
   private _clusters$ = new Map<string, Observable<Cluster[]>>();
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
@@ -49,7 +50,8 @@ export class ClusterService {
   clusters(projectID: string): Observable<Cluster[]> {
     if (!this._clusters$.get(projectID)) {
       const clusters$ = merge(this._onClustersUpdate, this._refreshTimer$)
-        .pipe(switchMapTo(this._getClusters(projectID)))
+        .pipe(switchMapTo(combineLatest([this._getClusters(projectID), this._getExternalClusters(projectID)])))
+        .pipe(map(([clusters, externalClusters]) => [...clusters, ...externalClusters]))
         .pipe(shareReplay({refCount: true, bufferSize: 1}));
       this._clusters$.set(projectID, clusters$);
     }
@@ -181,6 +183,11 @@ export class ClusterService {
 
   private _getClusters(projectID: string): Observable<Cluster[]> {
     const url = `${this._restRoot}/projects/${projectID}/clusters`;
+    return this._http.get<Cluster[]>(url).pipe(catchError(() => of<Cluster[]>()));
+  }
+
+  private _getExternalClusters(projectID: string): Observable<Cluster[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters`;
     return this._http.get<Cluster[]>(url).pipe(catchError(() => of<Cluster[]>()));
   }
 
