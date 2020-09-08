@@ -21,7 +21,7 @@ export class ProjectsPage {
   }
 
   static getActiveProjects(): Cypress.Chainable<any> {
-    return cy.get('i.km-health-state.km-icon-mask.km-icon-circle.km-success-bg', {timeout: 300000});
+    return cy.get('i.km-health-state.km-icon-circle.km-success-bg', {timeout: 300000});
   }
 
   static getAddProjectBtn(): Cypress.Chainable<any> {
