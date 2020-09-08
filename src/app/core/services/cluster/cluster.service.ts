@@ -26,6 +26,7 @@ import {Health} from '../../../shared/entity/health';
 import {ClusterMetrics} from '../../../shared/entity/metrics';
 import {SSHKey} from '../../../shared/entity/ssh-key';
 import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
+import {AddExternalClusterModel} from '../../../shared/model/AddExternalClusterModel';
 
 @Injectable()
 export class ClusterService {
@@ -79,6 +80,11 @@ export class ClusterService {
     );
 
     const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters`;
+    return this._http.post<Cluster>(url, createClusterModel);
+  }
+
+  addExternalCluster(projectID: string, model: AddExternalClusterModel): Observable<Cluster> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters`;
     return this._http.post<Cluster>(url, createClusterModel);
   }
 
