@@ -12,7 +12,7 @@
 import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
-import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {filter, first, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 import {ApiService, ProjectService, UserService} from '../../../../core/services';
 import {AddSshKeyDialogComponent} from '../../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
@@ -108,7 +108,7 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
     dialogRef
       .afterClosed()
       .pipe(filter(result => result))
-      .pipe(first())
+      .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(result => {
         this._keys.push(result);

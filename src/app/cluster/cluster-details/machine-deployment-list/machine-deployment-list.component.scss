@@ -11,8 +11,16 @@
 
 @import 'variables';
 
+.mat-card {
+  .mat-card-header {
+    .mat-card-title {
+      padding-left: 30px;
+    }
+  }
+}
+
 .km-machine-deployment-spinner {
-  margin: 20px auto !important;
+  margin: 20px auto;
 }
 
 .km-machine-deployment-health {
@@ -22,5 +30,5 @@
 
 .km-table-actions,
 .km-machine-deployment-action {
-  vertical-align: middle !important;
+  vertical-align: middle;
 }

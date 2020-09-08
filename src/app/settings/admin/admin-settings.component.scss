@@ -9,6 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@import 'mixins';
 @import 'variables';
 
 .mat-card {
@@ -27,7 +28,7 @@
       min-width: 316px;
     }
 
-    .km-icon-info,
+    .km-pointer,
     .km-icon-error {
       margin-left: 4px;
       min-height: 16px;
@@ -36,12 +37,10 @@
 
     .km-account-settings-toggle {
       mat-button-toggle {
+        @include size(150px, 50px, true);
+
         border-radius: $border-radius;
         margin-bottom: 0;
-        max-height: 50px;
-        max-width: 150px;
-        min-height: 50px;
-        min-width: 150px;
 
         .tech-preview-name {
           line-height: 22px;
@@ -66,15 +65,8 @@
           background-color: transparent;
 
           i {
-            -webkit-filter: none;
-            -ms-filter: none;
             filter: none;
           }
-        }
-
-        ::ng-deep.mat-button-toggle-label-content {
-          font-size: $font-size-subhead;
-          font-weight: normal;
         }
       }
     }

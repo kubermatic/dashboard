@@ -10,16 +10,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+
 <div fxFlex
      fxFlexAlign="row"
-     fxLayoutAlign="center">
+     fxLayoutAlign="center"
+     fxLayoutGap="8px">
   <i class="km-icon-mask km-icon-key"></i>
-  <span> {{getDisplayed()}}</span>
-  <ng-container *ngIf="sshKeys.length > maxDisplayed">
-    <span>...&nbsp;</span>
-    <span [matTooltip]="getTruncatedSSHKeys()"
-          class="km-ssh-keys-list-more">+{{sshKeys.length - maxDisplayed}}
-    </span>
-  </ng-container>
-  <span *ngIf="sshKeys.length < 1">No assigned keys</span>
+  <div>
+    <span>&nbsp;{{getDisplayed()}}</span>
+    <ng-container *ngIf="sshKeys.length > maxDisplayed">
+      <span>...&nbsp;</span>
+      <span [matTooltip]="getTruncatedSSHKeys()">+{{sshKeys.length - maxDisplayed}}
+      </span>
+    </ng-container>
+    <span *ngIf="sshKeys.length < 1">No assigned keys</span>
+  </div>
 </div>

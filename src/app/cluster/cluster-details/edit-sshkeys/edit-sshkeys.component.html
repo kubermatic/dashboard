@@ -38,7 +38,8 @@ limitations under the License.
           class="km-header-cell"></th>
       <td mat-cell
           *matCellDef="let element">
-        <div class="km-table-actions km-sshkey-item-actions">
+        <div fxLayoutAlign="end"
+             class="km-table-actions">
           <ng-container [ngSwitch]="!!element.deletionTimestamp">
             <ng-container *ngSwitchCase="true">
               <mat-spinner [diameter]="25"
@@ -71,7 +72,8 @@ limitations under the License.
     <div class="km-mat-row km-mat-footer-row"
          [ngClass]="isTableVisible() ? '' : 'km-no-sshkeys'">
       <button id="km-add-sshkey-to-cluster"
-              class="km-text-muted"
+              class="km-text-muted km-pointer"
+              fxFlex
               (click)="addSshKey()"
               [disabled]="!canAdd()">+ Add SSH key
       </button>

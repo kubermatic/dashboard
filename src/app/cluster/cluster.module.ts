@@ -44,7 +44,7 @@ import {AddBindingComponent} from './cluster-details/rbac/add-binding/add-bindin
 import {RBACComponent} from './cluster-details/rbac/rbac.component';
 import {RevokeTokenComponent} from './cluster-details/revoke-token/revoke-token.component';
 import {ShareKubeconfigComponent} from './cluster-details/share-kubeconfig/share-kubeconfig.component';
-import {VersionPickerComponent} from './cluster-details/version-picker/version-picker.component';
+import {VersionPickerComponent} from './cluster-details/version-picker/component';
 import {ClusterListComponent} from './cluster-list/cluster-list.component';
 import {ClusterRoutingModule} from './cluster-routing.module';
 import {NodeService} from './services/node.service';

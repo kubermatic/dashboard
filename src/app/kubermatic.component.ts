@@ -9,7 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {DOCUMENT} from '@angular/common';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
 import {NavigationEnd, Router} from '@angular/router';
 import * as _ from 'lodash';
@@ -43,13 +44,15 @@ export class KubermaticComponent implements OnInit, OnDestroy {
 
   constructor(
     public auth: Auth,
-    private appConfigService: AppConfigService,
-    private readonly _settingsService: SettingsService,
     public router: Router,
     public googleAnalyticsService: GoogleAnalyticsService,
-    private readonly _pageTitleService: PageTitleService
+    private readonly appConfigService: AppConfigService,
+    private readonly _settingsService: SettingsService,
+    private readonly _pageTitleService: PageTitleService,
+    @Inject(DOCUMENT) private readonly _document: Document
   ) {
     this._registerRouterWatch();
+    this._loadDefaultTheme();
   }
 
   ngOnInit(): void {
@@ -99,5 +102,24 @@ export class KubermaticComponent implements OnInit, OnDestroy {
         this.showMenuSwitchAndProjectSelector = true;
       }
     }
+  }
+
+  private _loadDefaultTheme(): void {
+    const retryDelay = 500;
+    const defaultThemeName = 'light';
+    const defaultThemeClass = `km-style-${defaultThemeName}`;
+    const defaultThemePath = `assets/themes/${defaultThemeName}.css`;
+    const positionElement = this._document.head.querySelector('link[rel="stylesheet"]:last-of-type');
+    const themeElement: HTMLLinkElement = this._document.createElement('link');
+    themeElement.setAttribute('rel', 'stylesheet');
+    themeElement.setAttribute('href', defaultThemePath);
+    themeElement.classList.add(defaultThemeClass);
+
+    if (!positionElement) {
+      setTimeout(this._loadDefaultTheme.bind(this), retryDelay);
+      return;
+    }
+
+    positionElement.after(themeElement);
   }
 }

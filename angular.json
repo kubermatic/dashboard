@@ -30,8 +30,7 @@
               ]
             },
             "styles": [
-              "node_modules/swagger-ui/dist/swagger-ui.css",
-              "src/assets/css/main.scss",
+              "src/assets/css/root.scss",
               {
                 "input": "src/assets/themes/light.scss",
                 "bundleName": "assets/themes/light",
@@ -171,7 +170,7 @@
               "node_modules/jquery/dist/jquery.js"
             ],
             "styles": [
-              "src/assets/css/main.scss"
+              "src/assets/css/root.scss"
             ],
             "assets": [
               "src/assets",

@@ -120,7 +120,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Node',
-        message: `Are you sure you want to permanently delete node "<strong>${node.name}</strong>"?`,
+        message: `Are you sure you want to permanently delete node <strong>${node.name}</strong>?`,
         confirmLabel: 'Delete',
       },
     };

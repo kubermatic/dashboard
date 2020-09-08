@@ -11,7 +11,7 @@
 
 export class SSHKey {
   creationTimestamp: Date;
-  deletionTimestamp: Date;
+  deletionTimestamp?: Date;
   id: string;
   name: string;
   spec: SSHKeySpec;

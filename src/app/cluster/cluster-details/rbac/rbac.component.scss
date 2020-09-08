@@ -11,11 +11,6 @@
 
 @import 'variables';
 
-.mat-card.km-with-table-header .mat-card-header {
-  cursor: pointer;
-  padding-left: 0;
-}
-
 .km-toggled-rbac {
   padding-bottom: 8px;
 
@@ -28,19 +23,32 @@ h2 {
   font-size: $font-size-card-title;
   font-weight: normal;
   margin-bottom: 0;
-  padding: 0 56px;
+  padding: 0 60px;
 }
 
-tr th:first-child,
-tr td:first-child {
-  padding-left: 56px !important;
+tr {
+  &.mat-row,
+  &.mat-header-row {
+    padding-left: 60px;
+
+    td:first-child,
+    th:first-child {
+      &.mat-cell,
+      &.mat-header-cell {
+        padding-left: 60px;
+      }
+    }
+  }
 }
 
-tr:last-child th:last-child,
-.km-table td:last-child {
-  padding-right: 56px;
+.mat-card-title {
+  .km-icon-arrow-down,
+  .km-icon-arrow-up {
+    margin-left: 0;
+    margin-right: 18px;
+  }
 }
 
-.km-icon-arrow-down {
-  margin-left: 0 !important;
+.km-add-button {
+  margin-right: 8px;
 }

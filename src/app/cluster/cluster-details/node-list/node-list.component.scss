@@ -11,14 +11,17 @@
 
 @import 'variables';
 
+.mat-card {
+  .mat-card-header {
+    .mat-card-title {
+      padding-left: 30px;
+    }
+  }
+}
+
 .km-node-ip-addresses {
   display: block;
   line-height: 20px;
-}
-
-.km-node-item-actions {
-  display: flex;
-  justify-content: flex-end;
 }
 
 i.km-icon-info {
@@ -37,14 +40,21 @@ i.km-icon-info {
 
 .km-node-details {
   box-shadow: $border-box-shadow-inset;
-  padding: 15px 30px 20px 60px;
+  padding: $item-details-padding;
 
   mat-card-content {
-    border: none !important;
+    border: none;
     margin-top: 15px;
   }
 }
 
 .km-mat-card-code-block {
   margin-top: 20px;
+}
+
+.mat-card-content {
+  .km-row {
+    border-top: none;
+    padding: 0 30px;
+  }
 }

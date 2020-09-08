@@ -23,7 +23,7 @@ $sidenav-item-margin: 10px;
   padding-top: $content-padding;
 
   .menu-item {
-    height: $sidenav-item-height !important;
+    height: $sidenav-item-height;
     margin: 0 0 (1.5 * $sidenav-item-margin) $sidenav-item-margin;
 
     a {
@@ -31,7 +31,7 @@ $sidenav-item-margin: 10px;
       display: flex;
       font-size: $font-size-subhead;
       height: $sidenav-item-height;
-      padding: $sidenav-item-margin !important;
+      padding: $sidenav-item-margin;
       text-decoration: none;
 
       i {

@@ -36,7 +36,7 @@ limitations under the License.
     <mat-checkbox [formControlName]="Controls.CustomDiskSize"
                   class="km-custom-disk-size">
       Custom Disk
-      <i class="km-icon-info km-custom-disk-size-info-icon"
+      <i class="km-pointer km-custom-disk-size-info-icon"
          matTooltip="If you enable custom disk, an additional network storage volume will be created and used as the disk for the VM."></i>
     </mat-checkbox>
   </div>
@@ -82,7 +82,7 @@ limitations under the License.
                 fxFlex>
     Allocate Floating IP
     <i *ngIf="isFloatingIPEnforced()"
-       class="km-icon-info"
+       class="km-pointer"
        matTooltip="Floating IP usage is enforced by selected datacenter"></i>
   </mat-checkbox>
 </form>

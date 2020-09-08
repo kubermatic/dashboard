@@ -22,7 +22,6 @@ import {DatacenterService, ProjectService, UserService} from '../core/services';
 import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {SharedModule} from '../shared/shared.module';
-import {DialogTestModule, NoopConfirmDialogComponent} from '../testing/components/noop-confirmation-dialog.component';
 import {fakeProject} from '../testing/fake-data/project.fake';
 import {RouterStub, RouterTestingModule} from '../testing/router-stubs';
 import {AppConfigMockService} from '../testing/services/app-config-mock.service';
@@ -32,11 +31,16 @@ import {SettingsMockService} from '../testing/services/settings-mock.service';
 import {UserMockService} from '../testing/services/user-mock.service';
 
 import {ProjectComponent} from './project.component';
+import {DeleteProjectConfirmationComponent} from './delete-project/delete-project.component';
+import {
+  DialogTestModule,
+  NoopProjectDeleteDialogComponent,
+} from '../testing/components/noop-project-delete-dialog.component';
 
 describe('ProjectComponent', () => {
   let fixture: ComponentFixture<ProjectComponent>;
   let component: ProjectComponent;
-  let noop: ComponentFixture<NoopConfirmDialogComponent>;
+  let noop: ComponentFixture<NoopProjectDeleteDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -45,10 +49,10 @@ describe('ProjectComponent', () => {
         BrowserAnimationsModule,
         RouterTestingModule,
         SharedModule,
-        DialogTestModule,
         CoreModule,
+        DialogTestModule,
       ],
-      declarations: [ProjectComponent],
+      declarations: [ProjectComponent, DeleteProjectConfirmationComponent],
       providers: [
         {provide: Router, useClass: RouterStub},
         {provide: ProjectService, useClass: ProjectMockService},
@@ -66,7 +70,7 @@ describe('ProjectComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ProjectComponent);
     component = fixture.componentInstance;
-    noop = TestBed.createComponent(NoopConfirmDialogComponent);
+    noop = TestBed.createComponent(NoopProjectDeleteDialogComponent);
     fixture.detectChanges();
     fixture.debugElement.injector.get(Router);
   });
@@ -86,8 +90,8 @@ describe('ProjectComponent', () => {
     tick(waitTime);
 
     const dialogTitle = document.body.querySelector('.mat-dialog-title');
-    const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
-    const dialogInput = document.querySelector('#km-confirmation-dialog-input');
+    const deleteButton = document.body.querySelector('#km-delete-project-dialog-confirm-btn') as HTMLInputElement;
+    const dialogInput = document.querySelector('#km-delete-project-dialog-input');
 
     dialogInput.setAttribute('value', project.name);
     deleteButton.disabled = false;
@@ -96,6 +100,6 @@ describe('ProjectComponent', () => {
     fixture.detectChanges();
 
     expect(dialogTitle.textContent).toBe('Delete Project');
-    expect(document.querySelector('#km-confirmation-dialog-input').getAttribute('value')).toBe(project.name);
+    expect(document.querySelector('#km-delete-project-dialog-input').getAttribute('value')).toBe(project.name);
   }));
 });

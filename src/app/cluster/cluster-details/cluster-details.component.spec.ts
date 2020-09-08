@@ -59,7 +59,7 @@ import {MachineNetworksDisplayComponent} from './machine-networks-display/machin
 import {MachineDeploymentListComponent} from './machine-deployment-list/machine-deployment-list.component';
 import {NodeListComponent} from './node-list/node-list.component';
 import {RBACComponent} from './rbac/rbac.component';
-import {VersionPickerComponent} from './version-picker/version-picker.component';
+import {VersionPickerComponent} from './version-picker/component';
 
 describe('ClusterDetailsComponent', () => {
   let fixture: ComponentFixture<ClusterDetailsComponent>;

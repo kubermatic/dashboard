@@ -132,8 +132,8 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete SSH Key',
-        message: `Are you sure you want to permanently delete SSH key"<strong>${sshKey.name}</strong>"
-          from cluster "<strong>${this.cluster.name}</strong>"?`,
+        message: `Are you sure you want to permanently delete the <strong>${sshKey.name}</strong>
+          SSH key from the <strong>${this.cluster.name}</strong> cluster?`,
         confirmLabel: 'Delete',
       },
     };

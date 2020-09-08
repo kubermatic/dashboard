@@ -10,7 +10,7 @@
 // limitations under the License.
 
 @import '~@angular/material/theming';
-@import 'theme';
+@import 'theme/main';
 @import 'mixins';
 @import 'variables';
 @import 'images';
@@ -69,41 +69,38 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 .km-provider-logo,
 .km-addon-logo,
 .km-icon-randomize,
-.km-cluster-spec-type mat-button-toggle .km-icon-openshift,
+.km-cluster-spec-type .mat-button-toggle .km-icon-openshift,
 .km-sidenav a:not(.active) i,
 .km-footer i,
 *[class*="km-os-image-"] {
-  filter: invert(.25) brightness(100) contrast(100) !important;
+  filter: invert(.25) brightness(100) contrast(100);
 }
 
 // Swap some of the images.
 .km-header-logo {
-  background-image: url("/assets/images/branding/logo-dark.svg") !important;
+  background-image: url("/assets/images/branding/logo-dark.svg");
 }
 
 .km-error-background {
-  background-image: url("/assets/images/branding/404-illustration-dark.svg") !important;
+  background-image: url("/assets/images/branding/404-illustration-dark.svg");
 }
 
 .km-provider-logo-bringyourown {
   @include background-image("/assets/images/clouds/bringyourown-dark.svg", 30px);
 
   filter: none;
-  min-height: 30px;
 }
 
 .km-provider-logo-kubevirt {
   @include background-image("/assets/images/clouds/kubevirt-dark.svg", 30px);
 
   filter: none;
-  min-height: 30px;
 }
 
 .km-provider-logo-vsphere {
   @include background-image("/assets/images/clouds/vsphere-dark.svg", 30px);
 
   filter: none;
-  min-height: 30px;
 }
 
 .km-icon-info {
@@ -112,5 +109,5 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 
 // Make checkbox marks white.
 .mat-checkbox-checkmark-path {
-  stroke: #fff !important;
+  stroke: #fff;
 }

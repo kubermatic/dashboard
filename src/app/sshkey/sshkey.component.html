@@ -23,7 +23,7 @@ limitations under the License.
   </div>
 </div>
 
-<mat-card class="km-with-table-header km-sshkey-view">
+<mat-card class="km-sshkey-view">
   <mat-card-content>
     <table class="km-table"
            mat-table
@@ -78,7 +78,8 @@ limitations under the License.
             class="km-header-cell"></th>
         <td mat-cell
             *matCellDef="let element">
-          <div class="km-table-actions km-sshkey-item-actions">
+          <div fxLayoutAlign="end"
+               class="km-table-actions">
             <ng-container [ngSwitch]="!!element.deletionTimestamp">
               <ng-container *ngSwitchCase="true">
                 <mat-spinner [diameter]="25"
@@ -127,12 +128,12 @@ limitations under the License.
           (click)="togglePublicKey(row)"></tr>
       <tr mat-row
           *matRowDef="let row; let i=index; columns: toggledColumns;"
-          [ngClass]="isShowPublicKey[row.id] ? '' : 'km-table-collapse'"
+          [ngClass]="isShowPublicKey[row.id] ? '' : 'km-hidden'"
           class="km-mat-row"></tr>
     </table>
 
     <ng-container *ngIf="!sshKeys || sshKeys.length === 0">
-      <div class="km-row km-no-item"
+      <div class="km-row km-empty-list-msg"
            *ngIf="!loading">
         No SSH keys available.
       </div>
@@ -145,8 +146,7 @@ limitations under the License.
     </ng-container>
 
     <div [hidden]="!isPaginatorVisible()">
-      <mat-paginator showFirstLastButtons
-                     class="km-paginator"></mat-paginator>
+      <mat-paginator showFirstLastButtons></mat-paginator>
     </div>
   </mat-card-content>
 </mat-card>
