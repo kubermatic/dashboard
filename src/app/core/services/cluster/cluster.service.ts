@@ -85,7 +85,7 @@ export class ClusterService {
 
   addExternalCluster(projectID: string, model: AddExternalClusterModel): Observable<Cluster> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters`;
-    return this._http.post<Cluster>(url, createClusterModel);
+    return this._http.post<Cluster>(url, model);
   }
 
   patch(projectID: string, clusterID: string, seed: string, patch: ClusterPatch): Observable<Cluster> {
