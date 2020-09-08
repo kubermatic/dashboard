@@ -13,8 +13,8 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ApiService} from '@core/services/api/service';
-import {NotificationService} from '@core/services/notification/service';
-import {ResourceType} from '@shared/entity/common';
+import {GuidedTourService, GuidedTourItemsService} from '@core/services/guided-tour';
+import {NotificationService} from '@core/services/notification/service';import {ResourceType} from '@shared/entity/common';
 import {CreateProjectModel} from '@shared/model/CreateProjectModel';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 
@@ -30,7 +30,9 @@ export class AddProjectDialogComponent implements OnInit {
   constructor(
     private readonly _apiService: ApiService,
     private readonly _matDialogRef: MatDialogRef<AddProjectDialogComponent>,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private readonly _guidedTourService: GuidedTourService,
+    private readonly _guidedTourItemsService: GuidedTourItemsService
   ) {}
 
   ngOnInit(): void {
@@ -38,9 +40,17 @@ export class AddProjectDialogComponent implements OnInit {
       name: new FormControl('', [Validators.required]),
       labels: new FormControl(''),
     });
+
+    if (this._guidedTourService.isTourInProgress()) {
+      this.form.controls.name.setValue(this._guidedTourItemsService.guidedTourProject().name);
+    }
   }
 
   addProject(): void {
+    if (this._guidedTourService.isTourInProgress()) {
+      return this._matDialogRef.close();
+    }
+
     const createProject: CreateProjectModel = {
       name: this.form.controls.name.value,
       labels: this.labels,
@@ -49,5 +59,9 @@ export class AddProjectDialogComponent implements OnInit {
       this._matDialogRef.close(res);
       this._notificationService.success(`The <strong>${createProject.name}</strong> project was added`);
     });
+  }
+
+  closeDialog(): void {
+    this._matDialogRef.close();
   }
 }

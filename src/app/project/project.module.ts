@@ -17,7 +17,6 @@ import {ProjectComponent} from './project.component';
 import {DeleteProjectConfirmationComponent} from './delete-project/delete-project.component';
 
 const components: any[] = [ProjectComponent, EditProjectComponent, DeleteProjectConfirmationComponent];
-
 @NgModule({
   imports: [SharedModule, ProjectRoutingModule],
   declarations: [...components],

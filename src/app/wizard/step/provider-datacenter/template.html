@@ -13,7 +13,9 @@ limitations under the License.
 <form [formGroup]="form"
       fxFlex="100%"
       fxLayout="column">
-  <mat-card-header class="km-no-padding">
+  <mat-card-header class="km-no-padding"
+                   kmGuidedTour="km-gt-wizard-step-provider"
+                   (next)="selectProvider()">
     <mat-card-title class="km-color-primary">Provider</mat-card-title>
   </mat-card-header>
   <mat-button-toggle-group group="providerGroup"
@@ -26,7 +28,9 @@ limitations under the License.
   </mat-button-toggle-group>
 
   <ng-container *ngIf="datacenters.length > 0">
-    <mat-card-header class="km-no-padding">
+    <mat-card-header class="km-no-padding"
+                     kmGuidedTour="km-gt-wizard-step-datacenter"
+                     (next)="selectDatacenter()">
       <mat-card-title class="km-color-primary">Datacenter</mat-card-title>
     </mat-card-header>
     <mat-card-content>

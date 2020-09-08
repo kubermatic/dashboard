@@ -16,12 +16,12 @@ import {AppConfigService} from '@app/config.service';
 import {ApiService} from '@core/services/api/service';
 import {ClusterService} from '@core/services/cluster/service';
 import {DatacenterService} from '@core/services/datacenter/service';
+import {GuidedTourService, GuidedTourItemsService} from '@core/services/guided-tour';
 import {NotificationService} from '@core/services/notification/service';
 import {PathParam} from '@core/services/params/service';
 import {RBACService} from '@core/services/rbac/service';
 import {SettingsService} from '@core/services/settings/service';
-import {UserService} from '@core/services/user/service';
-import {Addon} from '@shared/entity/addon';
+import {UserService} from '@core/services/user/service';import {Addon} from '@shared/entity/addon';
 import {Cluster, ClusterType, getClusterProvider, MasterVersion} from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
 import {Datacenter} from '@shared/entity/datacenter';
@@ -39,8 +39,7 @@ import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-st
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import * as _ from 'lodash';
 import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
-import {filter, first, map, switchMap, take, takeUntil} from 'rxjs/operators';
-import {NodeService} from '../services/node.service';
+import {filter, first, map, switchMap, take, takeUntil} from 'rxjs/operators';import {NodeService} from '../services/node.service';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/component';
 import {EditClusterComponent} from './edit-cluster/component';
 import {EditSSHKeysComponent} from './edit-sshkeys/component';
@@ -87,7 +86,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _api: ApiService,
     private readonly _rbacService: RBACService,
     private readonly _notificationService: NotificationService,
-    readonly settings: SettingsService
+    readonly settings: SettingsService,
+    private readonly _guidedTourService: GuidedTourService,
+    private readonly _guidedTourItemsService: GuidedTourItemsService
   ) {}
 
   ngOnInit(): void {
@@ -101,6 +102,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this._userService
       .getCurrentUserGroup(this.projectID)
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
+
+    if (this._guidedTourService.isTourInProgress()) {
+      this._currentGroupConfig = this._userService.getCurrentUserGroupConfig('owner');
+    }
 
     this._clusterService
       .cluster(this.projectID, clusterID)
@@ -182,6 +187,15 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           }
         }
       );
+
+    if (this._guidedTourService.isTourInProgress()) {
+      this.addons = [];
+      this.machineDeployments = [this._guidedTourItemsService.guidedTourDOMachineDeployment()];
+      this.isMachineDeploymentLoadFinished = true;
+      this.upgrades = [];
+      this.clusterBindings = [];
+      this.bindings = [];
+    }
   }
 
   private _canReloadVersions(): boolean {

@@ -13,6 +13,7 @@ import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
+import {GuidedTourService, GuidedTourItemsService} from '@core/services/guided-tour';
 import {ParamsService, PathParam} from '@core/services/params/service';
 import {UserService} from '@core/services/user/service';
 import {environment} from '@environments/environment';
@@ -41,12 +42,18 @@ export class ProjectService {
     private readonly _params: ParamsService,
     private readonly _appConfig: AppConfigService,
     private readonly _userService: UserService,
-    private readonly _http: HttpClient
+    private readonly _http: HttpClient,
+    private readonly _guidedTourService: GuidedTourService,
+    private readonly _guidedTourItemsService: GuidedTourItemsService
   ) {
     this._displayAll = this._userService.defaultUserSettings.displayAllProjectsForAdmin;
   }
 
   get projects(): Observable<Project[]> {
+    if (this._guidedTourService.isTourInProgress()) {
+      return of([this._guidedTourItemsService.guidedTourProject()]);
+    }
+
     if (!this._projects$) {
       this._initProjectsObservable();
     }
@@ -55,6 +62,10 @@ export class ProjectService {
   }
 
   get myProjects(): Observable<Project[]> {
+    if (this._guidedTourService.isTourInProgress()) {
+      return of([this._guidedTourItemsService.guidedTourProject()]);
+    }
+
     if (!this._myProjects$) {
       this._myProjects$ = merge(this.onProjectsUpdate, this._refreshTimer$)
         .pipe(switchMap(_ => this._getProjects(false)))
@@ -65,6 +76,10 @@ export class ProjectService {
   }
 
   get selectedProject(): Observable<Project> {
+    if (this._guidedTourService.isTourInProgress()) {
+      return of(this._guidedTourItemsService.guidedTourProject());
+    }
+
     if (!this._project$) {
       this._project$ = merge(this._params.onParamChange, this.projects.pipe(first()))
         .pipe(switchMapTo(this.projects))
@@ -77,6 +92,10 @@ export class ProjectService {
   }
 
   delete(projectID: string): Observable<Project> {
+    if (this._guidedTourService.isTourInProgress()) {
+      return of();
+    }
+
     const url = `${this._restRoot}/projects/${projectID}`;
     return this._http.delete<Project>(url);
   }
@@ -107,11 +126,19 @@ export class ProjectService {
   }
 
   private _getProjects(displayAll: boolean): Observable<Project[]> {
+    if (this._guidedTourService.isTourInProgress()) {
+      return of([this._guidedTourItemsService.guidedTourProject()]);
+    }
+
     const url = `${this._restRoot}/projects?displayAll=${displayAll}`;
     return this._http.get<Project[]>(url).pipe(catchError(() => of<Project[]>()));
   }
 
   private _getProject(projectID: string): Observable<Project> {
+    if (this._guidedTourService.isTourInProgress()) {
+      return of(this._guidedTourItemsService.guidedTourProject());
+    }
+
     if (!projectID) {
       return EMPTY;
     }

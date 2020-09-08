@@ -22,16 +22,15 @@ import {
 import {AppConfigService} from '@app/config.service';
 import {ApiService} from '@core/services/api/service';
 import {DatacenterService} from '@core/services/datacenter/service';
-import {NameGeneratorService} from '@core/services/name-generator/service';
-import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '@shared/entity/cluster';
+import {GuidedTourService, GuidedTourItemsService} from '@core/services/guided-tour';
+import {NameGeneratorService} from '@core/services/name-generator/service';import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter} from '@shared/entity/datacenter';
 import {ClusterService} from '@shared/services/cluster.service';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import {merge} from 'rxjs';
-import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
-import {WizardService} from '../../service/wizard';
+import {filter, first, switchMap, takeUntil} from 'rxjs/operators';import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
 
 enum Controls {
@@ -80,6 +79,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     private readonly _nameGenerator: NameGeneratorService,
     private readonly _clusterService: ClusterService,
     private readonly _datacenterService: DatacenterService,
+    private readonly _guidedTourService: GuidedTourService,
+    private readonly _guidedTourItemsService: GuidedTourItemsService,
     wizard: WizardService
   ) {
     super(wizard);
@@ -144,6 +145,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
 
     this._setDefaultClusterType();
+
+    if (this._guidedTourService.isTourInProgress()) {
+      this.form.get(Controls.Name).setValue(this._guidedTourItemsService.guidedTourDOCluster().name);
+    }
   }
 
   generateName(): void {

@@ -11,10 +11,12 @@
 
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
-import {EMPTY, Observable} from 'rxjs';
+import {EMPTY, Observable, of} from 'rxjs';
 import {environment} from '@environments/environment';
 import {PresetList} from '@shared/entity/preset';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {PresetList} from '../../../shared/entity/preset';
+import {GuidedTourService} from '../../../core/services/guided-tour';
 import {Alibaba} from './provider/alibaba';
 import {AWS} from './provider/aws';
 import {Azure} from './provider/azure';
@@ -34,7 +36,7 @@ export class PresetsService {
 
   private _preset: string;
 
-  constructor(private readonly _http: HttpClient) {}
+  constructor(private readonly _http: HttpClient, private readonly _guidedTourService: GuidedTourService) {}
 
   set preset(preset: string) {
     this._preset = preset;
@@ -84,6 +86,10 @@ export class PresetsService {
   }
 
   presets(provider: NodeProvider, datacenter: string): Observable<PresetList> {
+    if (this._guidedTourService.isTourInProgress()) {
+      return of();
+    }
+
     if (!provider || !datacenter) {
       return EMPTY;
     }

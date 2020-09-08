@@ -21,7 +21,8 @@ limitations under the License.
                 (selectionChange)="onSelectionChange($event)"
                 [(value)]="selectedProject"
                 [compareWith]="areProjectsEqual"
-                disableOptionCentering>
+                disableOptionCentering
+                kmGuidedTour="km-gt-project-dropdown">
       <mat-optgroup *ngIf="externalProjects.length > 0">
         <div>External projects</div>
         <mat-option *ngFor="let project of externalProjects; trackBy: trackByProject"

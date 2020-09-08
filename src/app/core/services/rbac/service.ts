@@ -11,8 +11,8 @@
 
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-
+import {Observable, of} from 'rxjs';
+import {GuidedTourService} from '../../../core/services/guided-tour';
 import {environment} from '../../../../environments/environment';
 import {
   Binding,
@@ -28,14 +28,22 @@ import {
 export class RBACService {
   private _restRoot: string = environment.restRoot;
 
-  constructor(private readonly _http: HttpClient) {}
+  constructor(private readonly _http: HttpClient, private readonly _guidedTourService: GuidedTourService) {}
 
   getClusterRoleNames(clusterID: string, seed: string, projectID: string): Observable<ClusterRoleName[]> {
+    if (this._guidedTourService.isTourInProgress()) {
+      return of([]);
+    }
+
     const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/clusterrolenames`;
     return this._http.get<ClusterRoleName[]>(url);
   }
 
   getClusterBindings(clusterID: string, seed: string, projectID: string): Observable<ClusterBinding[]> {
+    if (this._guidedTourService.isTourInProgress()) {
+      return of([]);
+    }
+
     const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/clusterbindings`;
     return this._http.get<ClusterBinding[]>(url);
   }
@@ -47,6 +55,10 @@ export class RBACService {
     roleID: string,
     createClusterRole: CreateBinding
   ): Observable<ClusterBinding> {
+    if (this._guidedTourService.isTourInProgress()) {
+      return of();
+    }
+
     const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/clusterroles/${roleID}/clusterbindings`;
     return this._http.post<ClusterBinding>(url, createClusterRole);
   }
@@ -59,6 +71,10 @@ export class RBACService {
     kind: string,
     name: string
   ): Observable<any> {
+    if (this._guidedTourService.isTourInProgress()) {
+      return of();
+    }
+
     const options = {
       headers: new HttpHeaders(),
       body: this._getDeleteBindingBody(kind, name),
@@ -68,11 +84,19 @@ export class RBACService {
   }
 
   getRoleNames(clusterID: string, seed: string, projectID: string): Observable<RoleName[]> {
+    if (this._guidedTourService.isTourInProgress()) {
+      return of([]);
+    }
+
     const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/rolenames`;
     return this._http.get<RoleName[]>(url);
   }
 
   getBindings(clusterID: string, seed: string, projectID: string): Observable<Binding[]> {
+    if (this._guidedTourService.isTourInProgress()) {
+      return of([]);
+    }
+
     const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/bindings`;
     return this._http.get<Binding[]>(url);
   }
@@ -85,6 +109,10 @@ export class RBACService {
     namespace: string,
     createRole: CreateBinding
   ): Observable<Binding> {
+    if (this._guidedTourService.isTourInProgress()) {
+      return of();
+    }
+
     const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/roles/${namespace}/${roleID}/bindings`;
     return this._http.post<Binding>(url, createRole);
   }
@@ -98,6 +126,10 @@ export class RBACService {
     kind: string,
     name: string
   ): Observable<any> {
+    if (this._guidedTourService.isTourInProgress()) {
+      return of();
+    }
+
     const options = {
       headers: new HttpHeaders(),
       body: this._getDeleteBindingBody(kind, name),

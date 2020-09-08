@@ -76,7 +76,10 @@ import {SSHKeyListComponent} from './components/ssh-key-list/ssh-key-list.compon
 import {TagListComponent} from './components/tag-list/tag-list.component';
 import {TaintFormComponent} from './components/taint-form/taint-form.component';
 import {TaintsComponent} from './components/taints/taints.component';
+import {GuidedTourStepComponent} from './components/guided-tour/step/step.component';
+import {GuidedTourArrowComponent} from './components/guided-tour/arrow/arrow.component';
 import {AutofocusDirective} from './directives/autofocus/directive';
+import {GuidedTourDirective} from './directives/guided-tour/guided-tour.directive';
 import {RelativeTimePipe} from './pipes/relativetime';
 import {ClusterService} from './services/cluster.service';
 import {EndOfLifeService} from './services/eol.service';
@@ -153,7 +156,7 @@ const components: any[] = [
   ClusterTypeEOLComponent,
   ChipComponent,
   EditorComponent,
-  AddProjectDialogComponent,
+const entryComponents: any[] = [  AddProjectDialogComponent,
   AddSshKeyDialogComponent,
   ConfirmationDialogComponent,
   SelectAddonDialogComponent,
@@ -164,11 +167,13 @@ const components: any[] = [
   ExternalClusterDataDialogComponent,
   LoaderComponent,
   SearchFieldComponent,
+  GuidedTourArrowComponent,
+  GuidedTourStepComponent,
 ];
 
 const services: any[] = [ClusterService, EndOfLifeService];
 
-const directives: any[] = [AutofocusDirective, OptionDirective];
+const directives: any[] = [AutofocusDirective, OptionDirective, GuidedTourDirective];
 
 @NgModule({
   imports: [...modules],

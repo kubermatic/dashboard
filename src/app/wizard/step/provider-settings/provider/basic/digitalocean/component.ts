@@ -12,6 +12,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetsService} from '@core/services/wizard/presets.service';
+import {GuidedTourService} from '@core/services/guided-tour';
 import {CloudSpec, Cluster, ClusterSpec, DigitaloceanCloudSpec} from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
@@ -45,7 +46,8 @@ export class DigitalOceanProviderBasicComponent extends BaseFormValidator implem
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterService: ClusterService,
+    private readonly _guidedTourService: GuidedTourService
   ) {
     super('DigitalOcean Provider Basic');
   }
@@ -74,7 +76,12 @@ export class DigitalOceanProviderBasicComponent extends BaseFormValidator implem
 
     merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this.form.reset());
+      .subscribe(_ => {
+        this.form.reset();
+        if (this._guidedTourService.isTourInProgress()) {
+          this.form.get(Controls.Token).setValue('token');
+        }
+      });
   }
 
   ngOnDestroy(): void {

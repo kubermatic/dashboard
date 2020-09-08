@@ -1,0 +1,45 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<div class="km-panel">
+  <button mat-icon-button
+          class="root-button"
+          id="km-navbar-help-menu"
+          fxLayoutAlign="center center"
+          (click)="toggle()">
+    <i class="km-icon-mask km-help"></i>
+  </button>
+  <div class="panel"
+       fxLayout="column"
+       *ngIf="isOpen()">
+    <div class="header"
+         fxLayout="row">
+      <span fxFlex>Help & Support</span>
+      <button mat-icon-button
+              fxLayoutAlign="center center"
+              (click)="close()"
+              matTooltip="Close panel">
+        <i class="km-icon-mask km-icon-arrow-up"></i>
+      </button>
+    </div>
+    <div class="menu"
+         fxLayout="column">
+      <div class="km-hover-bg"
+           id="km-navbar-guided-tour-btn"
+           matRipple
+           (click)="goToGuidedTour()"
+           kmGuidedTour="km-gt-start-tour">
+        Guided Tour
+      </div>
+    </div>
+  </div>
+</div>

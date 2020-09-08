@@ -48,6 +48,15 @@ import {SettingsService} from './services/settings/service';
 import {ThemeInformerService} from './services/theme-informer/service';
 import {TokenService} from './services/token/service';
 import {StepsService} from './services/wizard/steps.service';
+import {HelpPanelComponent} from './components/help-panel/help-panel.component';
+import {
+  EventListenerService,
+  GuidedTourItemsService,
+  GuidedTourOptionsService,
+  GuidedTourStepService,
+  GuidedTourStepsContainerService,
+  GuidedTourService,
+} from './services/guided-tour';
 
 const modules: any[] = [
   CommonModule,
@@ -71,6 +80,7 @@ const components: any[] = [
   FooterComponent,
   NotificationPanelComponent,
   UserPanelComponent,
+  HelpPanelComponent,
 ];
 
 const services: any[] = [
@@ -93,6 +103,12 @@ const services: any[] = [
   ThemeInformerService,
   TokenService,
   PageTitleService,
+  EventListenerService,
+  GuidedTourItemsService,
+  GuidedTourOptionsService,
+  GuidedTourStepService,
+  GuidedTourStepsContainerService,
+  GuidedTourService,
 ];
 
 const interceptors: any[] = [

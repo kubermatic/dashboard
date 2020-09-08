@@ -17,9 +17,9 @@ import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {NodeDataService} from '@app/node-data/service/service';
 import {ClusterService} from '@core/services/cluster/service';
 import {DatacenterService} from '@core/services/datacenter/service';
+import {GuidedTourService} from '@core/services/guided-tour';
 import {NotificationService} from '@core/services/notification/service';
-import {ProjectService} from '@core/services/project/service';
-import {Cluster} from '@shared/entity/cluster';
+import {ProjectService} from '@core/services/project/service';import {Cluster} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {Project} from '@shared/entity/project';
 import {SSHKey} from '@shared/entity/ssh-key';
@@ -57,7 +57,8 @@ export class WizardComponent implements OnInit, OnDestroy {
     private readonly _nodeDataService: NodeDataService,
     private readonly _router: Router,
     private readonly _datacenterService: DatacenterService,
-    private readonly _googleAnalyticsService: GoogleAnalyticsService
+    private readonly _googleAnalyticsService: GoogleAnalyticsService,
+    private readonly _guidedTourService: GuidedTourService
   ) {}
 
   get steps(): WizardStep[] {
@@ -105,6 +106,10 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   create(): void {
+    if (this._guidedTourService.isTourInProgress()) {
+      return;
+    }
+
     this.creating = true;
     let createdCluster: Cluster;
     let datacenter: Datacenter;
@@ -190,5 +195,13 @@ export class WizardComponent implements OnInit, OnDestroy {
     const controls = {};
     steps.forEach(step => (controls[step.name] = this._formBuilder.control('')));
     this.form = this._formBuilder.group(controls);
+  }
+
+  nextStep(): void {
+    this._wizard.stepper.next();
+  }
+
+  prevStep(): void {
+    this._wizard.stepper.previous();
   }
 }

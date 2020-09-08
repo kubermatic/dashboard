@@ -11,11 +11,12 @@
 
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {DigitaloceanSizes, Optimized, Standard} from '../../../../shared/entity/provider/digitalocean';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
+import {GuidedTourService, GuidedTourItemsService} from '../../../../core/services/guided-tour';
 
 enum Controls {
   Size = 'size',
@@ -62,13 +63,19 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
   }
 
   private get _sizesObservable(): Observable<DigitaloceanSizes> {
+    if (this._guidedTourService.isTourInProgress()) {
+      return of(this._guidedTourItemsService.guidedTourDOSizes());
+    }
+
     return this._nodeDataService.digitalOcean.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
   }
 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _guidedTourItemsService: GuidedTourItemsService,
+    private readonly _guidedTourService: GuidedTourService
   ) {
     super();
   }
@@ -121,7 +128,12 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
 
   private _setDefaultSize(sizes: DigitaloceanSizes): void {
     this._sizes = sizes;
-    this.selectedSize = this._nodeDataService.nodeData.spec.cloud.digitalocean.size;
+
+    if (this._guidedTourService.isTourInProgress()) {
+      this.selectedSize = this._guidedTourItemsService.guidedTourDOSizes().standard[0].slug;
+    } else {
+      this.selectedSize = this._nodeDataService.nodeData.spec.cloud.digitalocean.size;
+    }
 
     if (!this.selectedSize && this._sizes && this._sizes.standard && this._sizes.standard.length > 0) {
       this.selectedSize = this._sizes.standard[0].slug;

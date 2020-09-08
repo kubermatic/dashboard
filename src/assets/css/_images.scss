@@ -31,6 +31,10 @@
   @include mask-image("/assets/images/icons/user.svg", 24px);
 }
 
+.km-help {
+  @include mask-image("/assets/images/icons/help.svg", 24px);
+}
+
 .km-icon-bell {
   @include mask-image("/assets/images/icons/bell.svg", 24px);
 }
