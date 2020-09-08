@@ -35,7 +35,6 @@ import {
 } from '../../../shared/entity/service-account';
 import {SSHKey} from '../../../shared/entity/ssh-key';
 import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
-import {Auth} from '../auth/auth.service';
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean';
 import {HetznerTypes} from '../../../shared/entity/provider/hetzner';
 import {PacketSize} from '../../../shared/entity/provider/packet';
@@ -47,20 +46,13 @@ import {AzureSizes, AzureZones} from '../../../shared/entity/provider/azure';
 
 @Injectable()
 export class ApiService {
-  private readonly _token: string;
   private readonly _refreshTime = 30; // in seconds
   private _location: string = window.location.protocol + '//' + window.location.host;
   private _restRoot: string = environment.restRoot;
   private _addonConfigs$: Observable<any>;
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
 
-  constructor(
-    private readonly _http: HttpClient,
-    private readonly _auth: Auth,
-    private readonly _appConfig: AppConfigService
-  ) {
-    this._token = this._auth.getBearerToken();
-  }
+  constructor(private readonly _http: HttpClient, private readonly _appConfig: AppConfigService) {}
 
   get addonConfigs(): Observable<AddonConfig[]> {
     if (!this._addonConfigs$) {
@@ -247,7 +239,7 @@ export class ApiService {
   }
 
   getKubeconfigURL(projectID: string, seed: string, clusterID: string): string {
-    return `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/kubeconfig?token=${this._token}`;
+    return `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/kubeconfig`;
   }
 
   getDashboardProxyURL(projectID: string, seed: string, clusterID: string): string {
