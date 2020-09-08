@@ -31,6 +31,7 @@ import {GroupConfig} from '../../shared/model/Config';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
 import {MemberUtils, Permission} from '../../shared/utils/member-utils/member-utils';
 import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
+import {AddExternalClusterDialogComponent} from './add-external-cluster-dialog/component';
 
 @Component({
   selector: 'km-cluster-list',
@@ -158,6 +159,10 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
 
   loadWizard(): void {
     this._router.navigate([`/projects/${this._selectedProject.id}/wizard`]);
+  }
+
+  addExternalCluster(): void {
+    this._matDialog.open(AddExternalClusterDialogComponent);
   }
 
   navigateToCluster(cluster: Cluster): void {

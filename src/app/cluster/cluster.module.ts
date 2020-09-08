@@ -48,6 +48,7 @@ import {VersionPickerComponent} from './cluster-details/version-picker/version-p
 import {ClusterListComponent} from './cluster-list/cluster-list.component';
 import {ClusterRoutingModule} from './cluster-routing.module';
 import {NodeService} from './services/node.service';
+import {AddExternalClusterDialogComponent} from './cluster-list/add-external-cluster-dialog/component';
 
 const components: any[] = [
   ClusterDetailsComponent,
@@ -82,6 +83,7 @@ const entryComponents: any[] = [
   ShareKubeconfigComponent,
   ClusterPanelComponent,
   AddBindingComponent,
+  AddExternalClusterDialogComponent,
 ];
 
 @NgModule({

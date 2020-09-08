@@ -16,7 +16,8 @@ limitations under the License.
        fxLayoutAlign="end center">
     <button mat-flat-button
             color="alternative"
-            [disabled]="!canAdd()">
+            [disabled]="!canAdd()"
+            (click)="addExternalCluster()">
       Add External Cluster
     </button>
     <button id="km-add-cluster-top-btn"
