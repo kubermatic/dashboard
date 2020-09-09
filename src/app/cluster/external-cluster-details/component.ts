@@ -73,7 +73,15 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'cluster', Permission.Edit);
   }
 
+  edit(): void {
+    // TODO
+  }
+
   isDeleteEnabled(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'cluster', Permission.Delete);
+  }
+
+  delete(): void {
+    // TODO
   }
 }

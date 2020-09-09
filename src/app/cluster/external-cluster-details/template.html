@@ -40,10 +40,12 @@ limitations under the License.
       <div fxFlex></div>
       <div fxLayout="row">
         <button mat-icon-button
+                (click)="edit()"
                 [disabled]="!isEditEnabled()">
           <i class="km-icon-edit"></i>
         </button>
         <button mat-icon-button
+                (click)="delete()"
                 [disabled]="!isDeleteEnabled()">
           <i class="km-icon-delete"></i>
         </button>

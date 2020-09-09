@@ -184,10 +184,15 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
 
   deleteClusterDialog(cluster: Cluster, event: Event): void {
     event.stopPropagation();
-    const modal = this._matDialog.open(ClusterDeleteConfirmationComponent);
-    modal.componentInstance.cluster = cluster;
-    modal.componentInstance.seed = this.nodeDC[cluster.id].spec.seed;
-    modal.componentInstance.projectID = this._selectedProject.id;
+
+    if (!cluster.isExternal) {
+      const modal = this._matDialog.open(ClusterDeleteConfirmationComponent);
+      modal.componentInstance.cluster = cluster;
+      modal.componentInstance.seed = this.nodeDC[cluster.id].spec.seed;
+      modal.componentInstance.projectID = this._selectedProject.id;
+    } else {
+      // TODO
+    }
   }
 
   isPaginatorVisible(): boolean {
