@@ -31,7 +31,6 @@ import {GroupConfig} from '../../shared/model/Config';
 })
 export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   cluster: Cluster;
-  projectId: string;
   metrics: ClusterMetrics;
   events: Event[] = [];
   private _user: Member;
@@ -45,22 +44,22 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.projectId = this._activatedRoute.snapshot.paramMap.get(PathParam.ProjectID);
+    const projectId = this._activatedRoute.snapshot.paramMap.get(PathParam.ProjectID);
     const clusterId = this._activatedRoute.snapshot.paramMap.get(PathParam.ClusterID);
 
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 
     this._userService
-      .getCurrentUserGroup(this.projectId)
+      .getCurrentUserGroup(projectId)
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     this._clusterService
-      .externalCluster(this.projectId, clusterId)
+      .externalCluster(projectId, clusterId)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(cluster => (this.cluster = cluster));
 
     this._clusterService
-      .externalClusterEvents(this.projectId, clusterId)
+      .externalClusterEvents(projectId, clusterId)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(events => (this.events = events));
   }
