@@ -25,7 +25,7 @@ import {lt, gt} from 'semver';
   styleUrls: ['./style.scss'],
 })
 export class VersionPickerComponent implements OnInit, OnChanges {
-  @Input() seed: string;
+  @Input() seed = '';
   @Input() cluster: Cluster;
   @Input() isClusterRunning = false;
   @Input() upgrades: MasterVersion[] = [];

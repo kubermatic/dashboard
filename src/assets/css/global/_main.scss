@@ -297,6 +297,16 @@ body {
       }
     }
   }
+
+  &.km-version-picker-disabled {
+    mat-form-field.mat-primary {
+      .mat-select-arrow-wrapper {
+        .mat-select-arrow {
+          display: none;
+        }
+      }
+    }
+  }
 }
 
 km-dashboard {

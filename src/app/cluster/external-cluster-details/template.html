@@ -51,18 +51,8 @@ limitations under the License.
 
     <mat-card-content class="km-row">
       <div class="km-content-wrap">
-        <div fxLayout="row"
-             fxLayoutAlign=" center"
-             fxLayoutGap="4px">
-          <div class="km-cluster-type"
-               [matTooltip]="cluster.type">
-            <i class="km-icon-{{cluster.type}}"></i>
-          </div>
-          <km-property>
-            <div key>Master Version</div>
-            <div value>{{cluster?.spec.version}}</div>
-          </km-property>
-        </div>
+        <km-version-picker class="readonly"
+                           [cluster]="cluster"></km-version-picker>
         <km-property>
           <div key>Cluster ID</div>
           <div value
