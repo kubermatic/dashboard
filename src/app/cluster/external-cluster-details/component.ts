@@ -30,7 +30,7 @@ import {GroupConfig} from '../../shared/model/Config';
   styleUrls: ['./style.scss'],
 })
 export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
-  externalCluster: Cluster;
+  cluster: Cluster;
   projectId: string;
   metrics: ClusterMetrics;
   events: Event[] = [];
@@ -57,7 +57,12 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     this._clusterService
       .externalCluster(this.projectId, clusterId)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(externalCluster => (this.externalCluster = externalCluster));
+      .subscribe(cluster => (this.cluster = cluster));
+
+    this._clusterService
+      .externalClusterEvents(this.projectId, clusterId)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(events => (this.events = events));
   }
 
   ngOnDestroy(): void {

@@ -10,7 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<ng-container *ngIf="externalCluster">
+<ng-container *ngIf="cluster">
   <div fxLayout
        class="km-cluster-detail-actions">
     <div fxFlex
@@ -32,9 +32,9 @@ limitations under the License.
                       fxLayoutAlign=" center"
                       class="km-cluster-name">
         <span ngxClipboard
-              [cbContent]="externalCluster.name"
+              [cbContent]="cluster.name"
               matTooltip="Click to copy"
-              class="km-cluster-name km-copy">{{externalCluster.name}}</span>
+              class="km-cluster-name km-copy">{{cluster.name}}</span>
       </mat-card-title>
       <div fxFlex></div>
       <div fxLayout="row">
@@ -55,34 +55,34 @@ limitations under the License.
              fxLayoutAlign=" center"
              fxLayoutGap="4px">
           <div class="km-cluster-type"
-               [matTooltip]="externalCluster.type">
-            <i class="km-icon-{{externalCluster.type}}"></i>
+               [matTooltip]="cluster.type">
+            <i class="km-icon-{{cluster.type}}"></i>
           </div>
           <km-property>
             <div key>Master Version</div>
-            <div value>{{externalCluster?.spec.version}}</div>
+            <div value>{{cluster?.spec.version}}</div>
           </km-property>
         </div>
         <km-property>
           <div key>Cluster ID</div>
           <div value
                ngxClipboard
-               [cbContent]="externalCluster?.id"
+               [cbContent]="cluster?.id"
                matTooltip="Click to copy"
                class="km-copy">
-            {{externalCluster?.id}}
+            {{cluster?.id}}
           </div>
         </km-property>
         <km-property>
           <div key>Created</div>
           <div value>
-            <km-relative-time [date]="externalCluster.creationTimestamp"></km-relative-time>
+            <km-relative-time [date]="cluster.creationTimestamp"></km-relative-time>
           </div>
         </km-property>
-        <km-property *ngIf="externalCluster.labels">
+        <km-property *ngIf="cluster.labels">
           <div key>Labels</div>
           <div value>
-            <km-labels [labels]="externalCluster.labels"
+            <km-labels [labels]="cluster.labels"
                        emptyMessage="No assigned labels"></km-labels>
           </div>
         </km-property>
@@ -117,7 +117,7 @@ limitations under the License.
 
 </ng-container>
 
-<div *ngIf="!externalCluster">
+<div *ngIf="!cluster">
   <mat-spinner [diameter]="25"
                color="accent"
                class="km-spinner"></mat-spinner>

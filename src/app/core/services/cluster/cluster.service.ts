@@ -139,6 +139,11 @@ export class ClusterService {
     return this._http.get<Event[]>(url).pipe(catchError(() => of<Event[]>()));
   }
 
+  externalClusterEvents(projectID: string, clusterID: string): Observable<Event[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/events`;
+    return this._http.get<Event[]>(url).pipe(catchError(() => of<Event[]>()));
+  }
+
   health(projectID: string, clusterID: string, seed: string): Observable<Health> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/health`;
     return this._http.get<Health>(url).pipe(catchError(() => of<Health>()));
