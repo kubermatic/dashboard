@@ -18,7 +18,8 @@ limitations under the License.
       <button id="km-delete-cluster-btn"
               mat-flat-button
               color="tertiary"
-              [disabled]="false">
+              (click)="delete()"
+              [disabled]="!isDeleteEnabled()">
         Delete
       </button>
       <div fxFlex></div>
@@ -43,11 +44,6 @@ limitations under the License.
                 (click)="edit()"
                 [disabled]="!isEditEnabled()">
           <i class="km-icon-edit"></i>
-        </button>
-        <button mat-icon-button
-                (click)="delete()"
-                [disabled]="!isDeleteEnabled()">
-          <i class="km-icon-delete"></i>
         </button>
       </div>
     </mat-card-header>
