@@ -52,7 +52,12 @@ export class ClusterService {
     if (!this._clusters$.get(projectID)) {
       const clusters$ = merge(this._onClustersUpdate, this._refreshTimer$)
         .pipe(switchMapTo(combineLatest([this._getClusters(projectID), this._getExternalClusters(projectID)])))
-        .pipe(map(([clusters, externalClusters]) => [...clusters, ...externalClusters]))
+        .pipe(
+          map(([clusters, externalClusters]) => {
+            externalClusters.forEach(c => (c.isExternal = true));
+            return [...clusters, ...externalClusters];
+          })
+        )
         .pipe(shareReplay({refCount: true, bufferSize: 1}));
       this._clusters$.set(projectID, clusters$);
     }
@@ -68,6 +73,12 @@ export class ClusterService {
   cluster(projectID: string, clusterID: string, datacenter: string): Observable<Cluster> {
     return merge(this.onClusterUpdate, this._refreshTimer$)
       .pipe(switchMapTo(this._getCluster(projectID, clusterID, datacenter)))
+      .pipe(shareReplay({refCount: true, bufferSize: 1}));
+  }
+
+  externalCluster(projectID: string, clusterID: string): Observable<Cluster> {
+    return merge(this.onClusterUpdate, this._refreshTimer$)
+      .pipe(switchMapTo(this._getExternalCluster(projectID, clusterID)))
       .pipe(shareReplay({refCount: true, bufferSize: 1}));
   }
 
@@ -199,6 +210,11 @@ export class ClusterService {
 
   private _getCluster(projectID: string, clusterID: string, seed: string): Observable<Cluster> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}`;
+    return this._http.get<Cluster>(url).pipe(catchError(() => of<Cluster>()));
+  }
+
+  private _getExternalCluster(projectID: string, clusterID: string): Observable<Cluster> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
     return this._http.get<Cluster>(url).pipe(catchError(() => of<Cluster>()));
   }
 }

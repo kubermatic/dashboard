@@ -43,7 +43,8 @@ limitations under the License.
             class="km-header-cell"></th>
         <td mat-cell
             *matCellDef="let element">
-          <i [matTooltip]="getHealthStatus(element).message"
+          <i *ngIf="!element.isExternal"
+             [matTooltip]="getHealthStatus(element).message"
              [ngClass]="getHealthStatus(element).color"
              class="km-vertical-center"></i>
         </td>
@@ -86,14 +87,11 @@ limitations under the License.
             class="km-header-cell">Provider</th>
         <td mat-cell
             *matCellDef="let element">
-          <ng-container [ngSwitch]="!!element.spec.cloud">
-            <ng-container *ngSwitchCase="true">
-              <span class="km-provider-logo km-provider-logo-{{getProvider(element.spec.cloud)}}"></span>
-            </ng-container>
-            <p *ngSwitchCase="false"
-               class="text-muted">
-              No provider
-            </p>
+          <ng-container [ngSwitch]="!element.isExternal && !!element.spec.cloud">
+            <span *ngSwitchCase="true"
+                  class="km-provider-logo km-provider-logo-{{getProvider(element.spec.cloud)}}"></span>
+            <span *ngSwitchCase="false"
+                  class="text-muted">-</span>
           </ng-container>
         </td>
       </ng-container>
@@ -104,8 +102,12 @@ limitations under the License.
             class="km-header-cell">Region</th>
         <td mat-cell
             *matCellDef="let element">
-          <ng-container *ngIf="!!nodeDC[element.id]">
-            {{nodeDC[element.id].spec.country}} ({{nodeDC[element.id].spec.location}})
+          <ng-container [ngSwitch]="!element.isExternal && !!nodeDC[element.id]">
+            <ng-container *ngSwitchCase="true">
+              {{nodeDC[element.id].spec.country}} ({{nodeDC[element.id].spec.location}})
+            </ng-container>
+            <span *ngSwitchCase="false"
+                  class="text-muted">-</span>
           </ng-container>
         </td>
       </ng-container>

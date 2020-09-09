@@ -49,9 +49,11 @@ import {ClusterListComponent} from './cluster-list/cluster-list.component';
 import {ClusterRoutingModule} from './cluster-routing.module';
 import {NodeService} from './services/node.service';
 import {AddExternalClusterDialogComponent} from './cluster-list/add-external-cluster-dialog/component';
+import {ExternalClusterDetailsComponent} from './external-cluster-details/component';
 
 const components: any[] = [
   ClusterDetailsComponent,
+  ExternalClusterDetailsComponent,
   NodeListComponent,
   MachineDeploymentListComponent,
   MachineDeploymentDetailsComponent,

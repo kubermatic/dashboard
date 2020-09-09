@@ -1,0 +1,124 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<ng-container *ngIf="externalCluster">
+  <div fxLayout
+       class="km-cluster-detail-actions">
+    <div fxFlex
+         fxLayoutAlign="end center">
+      <button id="km-delete-cluster-btn"
+              mat-flat-button
+              color="tertiary"
+              [disabled]="false">
+        Delete
+      </button>
+      <div fxFlex></div>
+    </div>
+  </div>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title fxFlex
+                      fxLayout="row"
+                      fxLayoutAlign=" center"
+                      class="km-cluster-name">
+        <span ngxClipboard
+              [cbContent]="externalCluster.name"
+              matTooltip="Click to copy"
+              class="km-cluster-name km-copy">{{externalCluster.name}}</span>
+      </mat-card-title>
+      <div fxFlex></div>
+      <div fxLayout="row">
+        <button mat-icon-button
+                [disabled]="!isEditEnabled()">
+          <i class="km-icon-edit"></i>
+        </button>
+        <button mat-icon-button
+                [disabled]="!isDeleteEnabled()">
+          <i class="km-icon-delete"></i>
+        </button>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content class="km-row">
+      <div class="km-content-wrap">
+        <div fxLayout="row"
+             fxLayoutAlign=" center"
+             fxLayoutGap="4px">
+          <div class="km-cluster-type"
+               [matTooltip]="externalCluster.type">
+            <i class="km-icon-{{externalCluster.type}}"></i>
+          </div>
+          <km-property>
+            <div key>Master Version</div>
+            <div value>{{externalCluster?.spec.version}}</div>
+          </km-property>
+        </div>
+        <km-property>
+          <div key>Cluster ID</div>
+          <div value
+               ngxClipboard
+               [cbContent]="externalCluster?.id"
+               matTooltip="Click to copy"
+               class="km-copy">
+            {{externalCluster?.id}}
+          </div>
+        </km-property>
+        <km-property>
+          <div key>Created</div>
+          <div value>
+            <km-relative-time [date]="externalCluster.creationTimestamp"></km-relative-time>
+          </div>
+        </km-property>
+        <km-property *ngIf="externalCluster.labels">
+          <div key>Labels</div>
+          <div value>
+            <km-labels [labels]="externalCluster.labels"
+                       emptyMessage="No assigned labels"></km-labels>
+          </div>
+        </km-property>
+      </div>
+
+      <div class="km-content-wrap"
+           *ngIf="metrics">
+        <km-property-usage name="Nodes CPU Usage"
+                           unit="millicores"
+                           [used]="metrics?.nodes?.cpuTotalMillicores"
+                           [total]="metrics?.nodes?.cpuAvailableMillicores"></km-property-usage>
+
+        <km-property-usage name="Nodes Memory Usage"
+                           unit="MiB"
+                           [used]="metrics?.nodes?.memoryTotalBytes"
+                           [total]="metrics?.nodes?.memoryAvailableBytes"></km-property-usage>
+
+        <km-property-usage name="Control Plane CPU Usage"
+                           unit="millicores"
+                           [used]="metrics?.controlPlane?.cpuTotalMillicores"></km-property-usage>
+
+        <km-property-usage name="Control Plane Memory Usage"
+                           unit="MiB"
+                           [used]="metrics?.controlPlane?.memoryTotalBytes"></km-property-usage>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- nodes -->
+
+  <km-event-list [events]="events"></km-event-list>
+
+</ng-container>
+
+<div *ngIf="!externalCluster">
+  <mat-spinner [diameter]="25"
+               color="accent"
+               class="km-spinner"></mat-spinner>
+</div>

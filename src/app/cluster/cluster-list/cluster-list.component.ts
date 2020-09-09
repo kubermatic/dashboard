@@ -101,34 +101,36 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
           this.isInitialized = false;
 
           return forkJoin(
-            clusters.map(cluster => {
-              return (
-                this._datacenterService
-                  .getDatacenter(cluster.spec.cloud.dc)
-                  .pipe(tap(datacenter => (this.nodeDC[cluster.id] = datacenter)))
-                  .pipe(
-                    switchMap(datacenter =>
-                      this._clusterService.health(this._selectedProject.id, cluster.id, datacenter.spec.seed)
+            clusters
+              .filter(cluster => !cluster.isExternal)
+              .map(cluster => {
+                return (
+                  this._datacenterService
+                    .getDatacenter(cluster.spec.cloud.dc)
+                    .pipe(tap(datacenter => (this.nodeDC[cluster.id] = datacenter)))
+                    .pipe(
+                      switchMap(datacenter =>
+                        this._clusterService.health(this._selectedProject.id, cluster.id, datacenter.spec.seed)
+                      )
                     )
-                  )
-                  // We need to resume on error, otherwise subscription will be canceled and clusters will stop
-                  // refreshing.
-                  .pipe(catchError(() => onErrorResumeNext(EMPTY)))
-                  .pipe(tap(health => (this.health[cluster.id] = health)))
-                  .pipe(
-                    switchMap(_ =>
-                      Health.allHealthy(this.health[cluster.id])
-                        ? this._apiService.getMachineDeployments(
-                            cluster.id,
-                            this.nodeDC[cluster.id].spec.seed,
-                            this._selectedProject.id
-                          )
-                        : of([])
+                    // We need to resume on error, otherwise subscription will be canceled and clusters will stop
+                    // refreshing.
+                    .pipe(catchError(() => onErrorResumeNext(EMPTY)))
+                    .pipe(tap(health => (this.health[cluster.id] = health)))
+                    .pipe(
+                      switchMap(_ =>
+                        Health.allHealthy(this.health[cluster.id])
+                          ? this._apiService.getMachineDeployments(
+                              cluster.id,
+                              this.nodeDC[cluster.id].spec.seed,
+                              this._selectedProject.id
+                            )
+                          : of([])
+                      )
                     )
-                  )
-                  .pipe(tap(machineDeployments => (this.machineDeployments[cluster.id] = machineDeployments)))
-              );
-            })
+                    .pipe(tap(machineDeployments => (this.machineDeployments[cluster.id] = machineDeployments)))
+                );
+              })
           );
         })
       )
@@ -167,9 +169,13 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   navigateToCluster(cluster: Cluster): void {
-    this._router.navigate([
-      `/projects/${this._selectedProject.id}/dc/${this.nodeDC[cluster.id].spec.seed}/clusters/${cluster.id}`,
-    ]);
+    if (cluster.isExternal) {
+      this._router.navigate([`/projects/${this._selectedProject.id}/clusters/external/${cluster.id}`]);
+    } else {
+      this._router.navigate([
+        `/projects/${this._selectedProject.id}/dc/${this.nodeDC[cluster.id].spec.seed}/clusters/${cluster.id}`,
+      ]);
+    }
   }
 
   getProvider(cloud: CloudSpec): string {
