@@ -162,7 +162,8 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   addExternalCluster(): void {
-    this._matDialog.open(AddExternalClusterDialogComponent);
+    const dialog = this._matDialog.open(AddExternalClusterDialogComponent);
+    dialog.componentInstance.projectId = this._selectedProject.id;
   }
 
   navigateToCluster(cluster: Cluster): void {

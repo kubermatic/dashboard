@@ -12,7 +12,9 @@ limitations under the License.
 -->
 <km-dialog-title>Add External Cluster</km-dialog-title>
 <mat-dialog-content>
-  <div class="km-dialog-warning">
+  <div class="km-dialog-warning"
+       fxLayoutAlign=" center"
+       fxLayoutGap="12px">
     <i class="km-icon-info"></i>
     <div>External clusters can only be viewed, not edited.</div>
   </div>
@@ -31,13 +33,13 @@ limitations under the License.
       </mat-error>
     </mat-form-field>
   </form>
-  <ngx-monaco-editor [options]="editorOptions"
-                     [(ngModel)]="providerConfig"></ngx-monaco-editor>
+  <km-editor [(model)]="kubeconfig"
+             header="Kubeconfig *"></km-editor>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
-          (click)="save()"
-          [disabled]="!form.valid">
+          (click)="add()"
+          [disabled]="!form.valid || !kubeconfig">
     Add External Cluster
   </button>
 </mat-dialog-actions>

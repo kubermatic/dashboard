@@ -28,6 +28,7 @@ export enum EditorHeaderClass {
   encapsulation: ViewEncapsulation.None,
 })
 export class EditorComponent implements OnInit {
+  @Input() header = '';
   @Input() headerClass: EditorHeaderClass = EditorHeaderClass.Dialog;
   @Input() language = 'yaml';
   @Input() model: string;
