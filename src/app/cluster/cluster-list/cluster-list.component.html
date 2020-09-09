@@ -66,6 +66,8 @@ limitations under the License.
                      type="error"
                      matTooltip="Container Linux is going end-of-life on May 26, 2020.">
             </km-chip>
+            <span *ngIf="element.isExternal"
+                  class="km-label-primary">External</span>
           </div>
         </td>
       </ng-container>

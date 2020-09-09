@@ -136,29 +136,3 @@ $project-card-width: 330px;
 .km-all-projects-toggle {
   padding-right: 16px;
 }
-
-.km-projects-external {
-  p {
-    border-radius: $border-radius;
-    border-style: solid;
-    border-width: 1px;
-    font-size: $font-size-body;
-    line-height: 12px;
-    margin: 4px 0;
-    max-width: 100px;
-    padding: 4px;
-  }
-}
-
-.km-projects-external-right {
-  margin-left: auto;
-}
-
-@mixin theme-project-component($colors) {
-  .km-projects-external {
-    p {
-      border-color: map-get($colors, primary);
-      color: map-get($colors, text);
-    }
-  }
-}

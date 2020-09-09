@@ -21,13 +21,6 @@
     }
   }
 
-  .km-projects-external {
-    p {
-      border-color: map-get($colors, primary);
-      color: map-get($colors, text);
-    }
-  }
-
   .km-initials-circle {
     background-color: map-get($colors, background-card);
     border: 2px solid map-get($colors, divider);
