@@ -20,7 +20,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -28,14 +28,13 @@ import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
-import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {filter, first, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 import {Cookie, COOKIE_DI_TOKEN} from '../app.config';
 import {NotificationService, ProjectService, UserService} from '../core/services';
 import {PreviousRouteService} from '../core/services/previous-route/previous-route.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
-import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {View} from '../shared/entity/common';
 import {Member} from '../shared/entity/member';
 import {Project, ProjectOwners} from '../shared/entity/project';
@@ -45,6 +44,7 @@ import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 
 import {EditProjectComponent} from './edit-project/edit-project.component';
+import {DeleteProjectConfirmationComponent} from './delete-project/delete-project.component';
 
 @Component({
   selector: 'km-project',
@@ -165,7 +165,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       this.currentUser.projects.forEach(mp => this.role.set(mp.id, MemberUtils.getGroupDisplayName(mp.group)));
     }
 
-    if (this.projects) {
+    if (!!this.projects && !!this.currentUser) {
       this.projects
         .filter(p => p.owners.map(o => o.email).includes(this.currentUser.email))
         .forEach(p => this.role.set(p.id, 'Owner'));
@@ -341,6 +341,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(isAdded => {
         if (isAdded) {
           this._projectService.onProjectsUpdate.next();
+          this.projects.push(isAdded);
         }
       });
   }
@@ -379,27 +380,15 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   deleteProject(project: Project, event: Event): void {
     event.stopPropagation();
-    const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
-      data: {
-        title: 'Delete Project',
-        message: `Are you sure you want to permanently delete project "<strong>${project.name}</strong>"?`,
-        confirmLabel: 'Delete',
-        compareName: project.name,
-        inputPlaceholder: 'Project Name',
-        inputTitle: 'Project Name',
-      },
-    };
-
-    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
+    const dialogRef = this._matDialog.open(DeleteProjectConfirmationComponent);
+    dialogRef.componentInstance.project = project;
     this._googleAnalyticsService.emitEvent('projectOverview', 'deleteProjectOpened');
 
     dialogRef
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
       .pipe(switchMap(_ => this._projectService.delete(project.id)))
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(`The <strong>${project.name}</strong> project is being deleted`);
         this._googleAnalyticsService.emitEvent('projectOverview', 'ProjectDeleted');

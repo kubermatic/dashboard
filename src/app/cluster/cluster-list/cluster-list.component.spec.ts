@@ -91,7 +91,7 @@ describe('ClusterListComponent', () => {
     component.isInitialized = true;
     fixture.detectChanges();
 
-    const de = fixture.debugElement.query(By.css('.km-with-table-header'));
+    const de = fixture.debugElement.query(By.css('.mat-card'));
 
     expect(de).not.toBeNull();
     discardPeriodicTasks();
@@ -100,7 +100,7 @@ describe('ClusterListComponent', () => {
   it('should not render cluster list', fakeAsync(() => {
     fixture.detectChanges();
 
-    const de = fixture.debugElement.query(By.css('.km-no-item'));
+    const de = fixture.debugElement.query(By.css('.km-empty-list-msg'));
 
     expect(de).toBeNull();
     discardPeriodicTasks();

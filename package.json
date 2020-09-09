@@ -50,6 +50,7 @@
     "core-js": "3.6.5",
     "country-code-lookup": "0.0.17",
     "flag-icon-css": "3.5.0",
+    "fontsource-inconsolata": "3.0.5",
     "fontsource-ubuntu": "3.0.3",
     "git-describe": "4.0.4",
     "jquery": "3.5.1",
@@ -216,14 +217,7 @@
       "no-descending-specificity": null,
       "number-leading-zero": null,
       "selector-type-no-unknown": null,
-      "selector-pseudo-element-no-unknown": [
-        true,
-        {
-          "ignorePseudoElements": [
-            "ng-deep"
-          ]
-        }
-      ],
+      "selector-pseudo-element-no-unknown": true,
       "plugin/declaration-block-order": [
         "dollar-variables",
         {

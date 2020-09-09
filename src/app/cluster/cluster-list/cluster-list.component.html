@@ -30,7 +30,7 @@ limitations under the License.
   </div>
 </div>
 
-<mat-card class="km-with-table-header km-cluster-view">
+<mat-card class="km-cluster-view">
   <mat-card-content>
     <table class="km-table"
            mat-table
@@ -45,7 +45,7 @@ limitations under the License.
             *matCellDef="let element">
           <i [matTooltip]="getHealthStatus(element).message"
              [ngClass]="getHealthStatus(element).color"
-             class="km-cluster-list-health"></i>
+             class="km-vertical-center"></i>
         </td>
       </ng-container>
 
@@ -142,7 +142,8 @@ limitations under the License.
             class="km-header-cell"></th>
         <td mat-cell
             *matCellDef="let element">
-          <div class="km-table-actions km-cluster-item-actions">
+          <div fxLayoutAlign="end"
+               class="km-table-actions">
             <ng-container [ngSwitch]="!!element.deletionTimestamp">
               <ng-container *ngSwitchCase="true">
                 <mat-spinner [diameter]="25"
@@ -174,7 +175,7 @@ limitations under the License.
     </table>
 
     <ng-container *ngIf="!clusters || clusters.length === 0">
-      <div class="km-row km-no-item"
+      <div class="km-row km-empty-list-msg"
            *ngIf="!isInitialized">
         No clusters available.
       </div>
@@ -187,8 +188,7 @@ limitations under the License.
     </ng-container>
 
     <div [hidden]="!isPaginatorVisible()">
-      <mat-paginator showFirstLastButtons
-                     class="km-paginator"></mat-paginator>
+      <mat-paginator showFirstLastButtons></mat-paginator>
     </div>
 
   </mat-card-content>

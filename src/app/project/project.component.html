@@ -42,7 +42,7 @@ limitations under the License.
 
 <!-- Table View -->
 <div *ngIf="!showCards">
-  <mat-card class="km-with-table-header km-project-view">
+  <mat-card class="km-project-view">
     <mat-card-content>
       <table class="km-table"
              mat-table
@@ -119,12 +119,12 @@ limitations under the License.
           <td mat-cell
               *matCellDef="let element"
               class="km-project-item-owner">
-            {{getOwners(element.owners)}}
-            <p class="km-project-more-owner"
-               *ngIf="isMoreOwners(element.owners)"
-               [matTooltip]="getMoreOwners(element.owners)">&nbsp;...
-              <span *ngIf="getMoreOwnersCount(element.owners) > 0">+{{getMoreOwnersCount(element.owners)}}</span>
-            </p>
+            <span>{{getOwners(element.owners)}}</span>
+            <span *ngIf="isMoreOwners(element.owners)"
+                  [matTooltip]="getMoreOwners(element.owners)">...
+              <span *ngIf="getMoreOwnersCount(element.owners) > 0"
+                    class="km-text-muted">+{{getMoreOwnersCount(element.owners)}}</span>
+            </span>
           </td>
         </ng-container>
 
@@ -134,7 +134,8 @@ limitations under the License.
               class="km-header-cell"></th>
           <td mat-cell
               *matCellDef="let element">
-            <div class="km-table-actions km-project-item-actions">
+            <div fxLayoutAlign="end"
+                 class="km-table-actions">
               <ng-container [ngSwitch]="!!element.deletionTimestamp">
                 <ng-container *ngSwitchCase="true">
                   <mat-spinner [diameter]="25"
@@ -174,7 +175,7 @@ limitations under the License.
       </table>
 
       <ng-container *ngIf="!projects || projects.length === 0">
-        <div class="km-row km-no-item"
+        <div class="km-row km-empty-list-msg"
              *ngIf="!isInitializing">
           No projects available.
         </div>
@@ -187,8 +188,7 @@ limitations under the License.
       </ng-container>
 
       <div [hidden]="!isPaginatorVisible || showCards">
-        <mat-paginator showFirstLastButtons
-                       class="km-paginator"></mat-paginator>
+        <mat-paginator showFirstLastButtons></mat-paginator>
       </div>
     </mat-card-content>
   </mat-card>
@@ -204,20 +204,18 @@ limitations under the License.
     <mat-card *ngFor="let project of projects"
               (click)="selectProject(project)">
       <mat-card-header>
-        <div mat-card-avatar
-             class="km-project-cards-status">
-          <i [matTooltip]="project.status"
-             [ngClass]="getProjectStateIconClass(project)"
-             class="km-health-state"></i>
-        </div>
-        <div fxFlex>
-          <mat-card-title [matTooltip]="getProjectTooltip(project.name)"
-                          [attr.id]="'km-project-name-' + project.name">{{getName(project.name)}}</mat-card-title>
-          <mat-card-subtitle>
-            <strong>ID</strong> {{project.id}}
-          </mat-card-subtitle>
-        </div>
-        <div class="km-project-item-actions">
+        <i mat-card-avatar
+           [matTooltip]="project.status"
+           [ngClass]="getProjectStateIconClass(project)"
+           class="km-health-state km-project-cards-status"
+           fxFlexAlign=" center"></i>
+        <mat-card-title [matTooltip]="getProjectTooltip(project.name)"
+                        [attr.id]="'km-project-name-' + project.name">{{getName(project.name)}}</mat-card-title>
+        <mat-card-subtitle>
+          <strong>ID</strong> {{project.id}}
+        </mat-card-subtitle>
+        <div fxFlex
+             fxLayoutAlign="end">
           <button mat-icon-button
                   [attr.id]="'km-edit-project-' + project.name"
                   matTooltip="Edit Project"
@@ -249,9 +247,9 @@ limitations under the License.
             <i class="km-icon-mask km-icon-owner"></i>
             <span *ngIf="project.owners.length === 1"
                   [matTooltip]="getOwners(project.owners)">{{getName(project.owners[0].name)}}</span>
-            <km-short-name-in-circle *ngIf="project.owners.length > 1"
-                                     [owners]="project.owners"
-                                     [limit]="2"></km-short-name-in-circle>
+            <km-initials-circle *ngIf="project.owners.length > 1"
+                                [owners]="project.owners"
+                                [limit]="2"></km-initials-circle>
           </span>
           <span *ngIf="!!getRole(project.id)">
             <i class="km-icon-mask km-icon-role"></i>

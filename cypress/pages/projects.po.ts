@@ -21,7 +21,7 @@ export class ProjectsPage {
   }
 
   static getActiveProjects(): Cypress.Chainable<any> {
-    return cy.get('i.km-health-state.km-icon-mask.km-icon-circle.km-success-bg', {timeout: 300000});
+    return cy.get('i.km-health-state.km-icon-circle.km-success-bg', {timeout: 300000});
   }
 
   static getAddProjectBtn(): Cypress.Chainable<any> {
@@ -114,8 +114,8 @@ export class ProjectsPage {
   static deleteProject(projectName: string): void {
     const retries = 5;
     this.getDeleteProjectBtn(projectName).should(Condition.NotBe, 'disabled').click();
-    cy.get('#km-confirmation-dialog-input').type(projectName).should(Condition.HaveValue, projectName);
-    cy.get('#km-confirmation-dialog-confirm-btn')
+    cy.get('#km-delete-project-dialog-input').type(projectName).should(Condition.HaveValue, projectName);
+    cy.get('#km-delete-project-dialog-confirm-btn')
       .should(Condition.NotBe, 'disabled')
       .click()
       .then(() => {

@@ -14,7 +14,7 @@ limitations under the License.
       fxFlex="100%"
       fxLayout="column"
       fxLayoutGap="16px">
-  <mat-card-header>
+  <mat-card-header class="km-no-padding">
     <mat-card-title class="km-color-primary">Provider</mat-card-title>
   </mat-card-header>
   <mat-button-toggle-group group="providerGroup"
@@ -27,7 +27,7 @@ limitations under the License.
   </mat-button-toggle-group>
 
   <ng-container *ngIf="datacenters.length > 0">
-    <mat-card-header>
+    <mat-card-header class="km-no-padding">
       <mat-card-title class="km-color-primary">Datacenter</mat-card-title>
     </mat-card-header>
     <mat-card-content>

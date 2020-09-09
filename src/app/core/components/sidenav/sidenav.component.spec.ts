@@ -29,7 +29,7 @@ import {UserMockService} from '../../../testing/services/user-mock.service';
 import {click} from '../../../testing/utils/click-handler';
 import {ProjectService, UserService} from '../../services';
 import {SettingsService} from '../../services/settings/settings.service';
-import {ProjectSelectorComponent} from '../navigation/project/selector.component';
+import {ProjectSelectorComponent} from '../navigation/project/component';
 
 import {SidenavComponent} from './sidenav.component';
 

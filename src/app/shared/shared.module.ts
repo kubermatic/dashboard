@@ -67,20 +67,21 @@ import {LabelFormComponent} from './components/label-form/label-form.component';
 import {LabelsComponent} from './components/labels/labels.component';
 import {MachineNetworkComponent} from './components/machine-networks-new/component';
 import {PropertyBooleanComponent} from './components/property-boolean/property-boolean.component';
-import {PropertyUsageComponent} from './components/property-usage/property-usage.component';
+import {PropertyUsageComponent} from './components/property-usage/component';
 import {PropertyComponent} from './components/property/property.component';
 import {RelativeTimeComponent} from './components/relativetime/relative-time.component';
 import {SettingsStatusComponent} from './components/settings-status/settings-status.component';
-import {ShortNameInCircleComponent} from './components/short-name-in-circle/short-name-in-circle.component';
+import {InitialsCircleComponent} from './components/initials-circle/initials-circle.component';
 import {SSHKeyListComponent} from './components/ssh-key-list/ssh-key-list.component';
 import {TagListComponent} from './components/tag-list/tag-list.component';
 import {TaintFormComponent} from './components/taint-form/taint-form.component';
 import {TaintsComponent} from './components/taints/taints.component';
 import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
-import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {ClusterService} from './services/cluster.service';
 import {EndOfLifeService} from './services/eol.service';
+import {EditorComponent} from './components/editor/component';
+import {MonacoEditorModule} from 'ngx-monaco-editor';
 
 const modules: any[] = [
   CommonModule,
@@ -139,7 +140,7 @@ const components: any[] = [
   SSHKeyListComponent,
   AddonsListComponent,
   SettingsStatusComponent,
-  ShortNameInCircleComponent,
+  InitialsCircleComponent,
   TagListComponent,
   TokenDialogComponent,
   NotificationComponent,
@@ -148,6 +149,7 @@ const components: any[] = [
   MachineNetworkComponent,
   ClusterTypeEOLComponent,
   ChipComponent,
+  EditorComponent,
 ];
 
 const entryComponents: any[] = [

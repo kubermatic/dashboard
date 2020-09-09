@@ -19,6 +19,7 @@ import {takeUntil} from 'rxjs/operators';
 @Component({
   selector: 'km-tag-list',
   templateUrl: './tag-list.component.html',
+  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

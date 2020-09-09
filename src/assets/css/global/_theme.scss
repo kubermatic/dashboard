@@ -1,0 +1,171 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@mixin theme-global($colors) {
+  ::-webkit-scrollbar-thumb {
+    background: map-get($colors, scrollbar);
+  }
+
+  ::-webkit-scrollbar-track {
+    background: map-get($colors, scrollbar-background);
+  }
+
+  .km-header {
+    color: map-get($colors, text);
+  }
+
+  .km-text {
+    color: map-get($colors, text);
+  }
+
+  .km-text-muted {
+    color: map-get($colors, text-secondary);
+  }
+
+  .km-info {
+    background-color: map-get($colors, primary-hover);
+  }
+
+  .km-success {
+    color: map-get($colors, indicator-green);
+  }
+
+  .km-success-bg {
+    background-color: map-get($colors, indicator-green);
+  }
+
+  .km-warning {
+    color: map-get($colors, indicator-orange);
+  }
+
+  .km-warning-bg {
+    background-color: map-get($colors, indicator-orange);
+  }
+
+  .km-error {
+    color: map-get($colors, indicator-red);
+  }
+
+  .km-error-bg {
+    background-color: map-get($colors, indicator-red);
+  }
+
+  .km-hover-bg:hover {
+    background-color: map-get($colors, background-hover);
+  }
+
+  .km-border {
+    border: 1px solid map-get($colors, divider);
+  }
+
+  .km-border-dashed {
+    border: 1px dashed map-get($colors, divider);
+  }
+
+  .km-icon {
+    color: map-get($colors, text);
+  }
+
+  .km-icon-mask {
+    background-color: map-get($colors, text);
+  }
+
+  .km-menu-header {
+    color: map-get($colors, text);
+  }
+
+  .km-code-block {
+    background-color: map-get($colors, divider);
+    color: map-get($colors, text);
+  }
+
+  .km-copy {
+    &:hover {
+      color: map-get($colors, primary);
+    }
+
+    &:active {
+      color: lighten(map-get($colors, primary), .5);
+    }
+  }
+
+  .km-login-footer {
+    * {
+      color: #fff;
+    }
+  }
+
+  .km-empty-list-msg {
+    border-color: map-get($colors, divider);
+  }
+
+  .km-table-dropdown {
+    background-color: transparent;
+
+    *:not(i) {
+      background-color: transparent;
+    }
+
+    td.mat-cell {
+      border-top: 1px solid map-get($colors, divider);
+    }
+
+    td:first-child {
+      border-left: 1px solid map-get($colors, divider);
+    }
+
+    td:last-child {
+      border-right: 1px solid map-get($colors, divider);
+    }
+  }
+
+  .km-panel .panel {
+    background-color: map-get($colors, background-app-bar);
+    box-shadow: map-get($colors, shadow-dark);
+    color: map-get($colors, text);
+
+    .notification-info .km-icon-mask {
+      background-color: map-get($colors, text-secondary);
+    }
+  }
+
+  .km-update-available-badge {
+    border: 1px solid map-get($colors, secondary);
+
+    .km-icon-update-available-arrow {
+      background-color: map-get($colors, secondary);
+    }
+  }
+
+  .km-add-machine-network {
+    &:hover {
+      background-color: map-get($colors, background-hover);
+    }
+  }
+
+  .km-mat-row.km-pointer:hover {
+    background-color: map-get($colors, background-hover);
+  }
+
+  .km-mat-footer-row {
+    border-color: map-get($colors, divider);
+    color: map-get($colors, text-secondary);
+
+    &:hover {
+      background-color: map-get($colors, background-hover);
+    }
+
+    button {
+      background-color: transparent;
+      color: map-get($colors, text-secondary);
+    }
+  }
+}

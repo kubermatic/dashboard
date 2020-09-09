@@ -19,7 +19,6 @@ import {ApiService, Auth} from '../../core/services';
 @Component({
   selector: 'km-api-docs',
   templateUrl: './api-docs.component.html',
-  styleUrls: ['./api-docs.component.scss'],
 })
 export class ApiDocsComponent implements OnInit {
   constructor(

@@ -13,7 +13,7 @@ import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {EMPTY, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, delay, first, map, shareReplay, switchMap, switchMapTo} from 'rxjs/operators';
+import {catchError, first, map, shareReplay, switchMap, switchMapTo} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
@@ -30,7 +30,6 @@ export class ProjectService {
   private readonly _restRoot: string = environment.restRoot;
   private readonly _refreshTime = 10; // in seconds
   private readonly _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
-  private readonly _projectUpdateRefreshDelay = 500;
 
   private _projects$: Observable<Project[]>;
   private _myProjects$: Observable<Project[]>;
@@ -103,11 +102,7 @@ export class ProjectService {
         : null
     );
 
-    this._projects$ = merge(
-      this.onProjectsUpdate.pipe(delay(this._projectUpdateRefreshDelay)),
-      this._refreshTimer$,
-      this._displayAllChanged
-    )
+    this._projects$ = merge(this.onProjectsUpdate, this._refreshTimer$, this._displayAllChanged)
       .pipe(switchMap(_ => this._getProjects(this._displayAll)))
       .pipe(shareReplay({refCount: true, bufferSize: 1}));
   }

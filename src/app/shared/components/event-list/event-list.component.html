@@ -10,12 +10,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<mat-card [ngClass]="isShowEvents ? 'km-with-table-header' : 'km-with-table-header km-toggled-events'">
+<mat-card [ngClass]="{'km-toggled-events': isShowEvents}">
   <mat-card-header (click)="toggleEvents()">
     <mat-card-title>
       <i class="km-icon-mask"
          [ngClass]="isShowEvents ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
-      Events
+      <span>Events</span>
     </mat-card-title>
     <div fxFlex></div>
     <span class="km-events-title">
@@ -106,13 +106,12 @@ limitations under the License.
 
 
     <div *ngIf="!hasEvents() && isShowEvents"
-         class="km-row km-no-item">
+         class="km-row km-empty-list-msg">
       No events available.
     </div>
 
     <div [hidden]="!isPaginatorVisible()">
-      <mat-paginator showFirstLastButtons
-                     class="km-paginator"></mat-paginator>
+      <mat-paginator showFirstLastButtons></mat-paginator>
     </div>
   </mat-card-content>
 </mat-card>

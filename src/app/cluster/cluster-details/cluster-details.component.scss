@@ -13,7 +13,7 @@
 @import 'mixins';
 
 .km-addon-card-content {
-  padding: 0 56px;
+  padding: 0 60px;
 }
 
 .km-cluster-detail-actions .mat-icon-button i {
@@ -21,7 +21,7 @@
 }
 
 .km-cluster-name {
-  font-weight: 500 !important;
+  font-weight: 500;
   padding-right: 8px;
 }
 
@@ -31,24 +31,32 @@
   margin-right: 10px;
 }
 
-.mat-card-title {
-  padding-bottom: 0;
-  padding-top: 0;
+.mat-card-header {
+  .mat-card-title {
+    &.km-cluster-name {
+      padding-bottom: 0;
+      padding-top: 0;
 
-  .km-cluster-health {
-    font-size: $font-size-subhead;
-    margin-right: 20px;
-    margin-top: 2px;
+      .km-cluster-health {
+        font-size: $font-size-subhead;
+        margin: 2px 20px 0 -5px;
+      }
+    }
+
+    &.additional-margin {
+      padding-left: 30px;
+    }
   }
 }
 
 .mat-icon.km-icon-edit {
-  @include size(18px !important);
+  @include size(18px);
 }
 
 .km-provider-logo-value {
   align-items: center;
   display: flex;
+  height: 24px;
 }
 
 .km-provider-logo {

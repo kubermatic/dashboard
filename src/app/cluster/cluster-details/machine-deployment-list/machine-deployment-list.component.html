@@ -10,11 +10,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<mat-card class="km-with-table-header">
+<mat-card>
   <mat-card-header>
-    <mat-card-title>
-      Machine Deployments
-    </mat-card-title>
+    <mat-card-title>Machine Deployments</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <table class="km-table"
@@ -74,7 +72,7 @@ limitations under the License.
             fxLayoutAlign=" center"
             fxLayoutGap="4px">
           <span>Replicas</span>
-          <div class="km-icon-info"
+          <div class="km-pointer"
                matTooltip="Number of running machines/Number of desired machines."></div>
         </th>
         <td mat-cell
@@ -82,7 +80,7 @@ limitations under the License.
             fxLayoutGap="4px">
           <span>{{!!element.status?.availableReplicas ? element.status.availableReplicas : 0}}/{{!!element.spec?.replicas ? element.spec.replicas : 0}}</span>
           <div *ngIf="element.status?.availableReplicas > element.spec.replicas"
-               class="km-icon-info"
+               class="km-pointer"
                matTooltip="Number of available machines may be higher than number of desired machines from the template if deployment is updating."></div>
         </td>
       </ng-container>
@@ -169,7 +167,7 @@ limitations under the License.
     </table>
 
     <ng-container *ngIf="!machineDeployments || machineDeployments.length === 0">
-      <div class="km-row km-no-item"
+      <div class="km-row km-empty-list-msg"
            *ngIf="isMachineDeploymentLoadFinished && clusterHealthStatus && clusterHealthStatus.css === 'km-status-running' || cluster.spec.cloud.bringyourown">
         No machine deployments available.
       </div>
@@ -183,8 +181,7 @@ limitations under the License.
     </ng-container>
 
     <div [hidden]="!isPaginatorVisible()">
-      <mat-paginator showFirstLastButtons
-                     class="km-paginator"></mat-paginator>
+      <mat-paginator showFirstLastButtons></mat-paginator>
     </div>
 
     <mat-card [fxShow]="!!cluster.spec.cloud.bringyourown"

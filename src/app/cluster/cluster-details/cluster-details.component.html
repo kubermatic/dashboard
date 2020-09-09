@@ -64,7 +64,8 @@ limitations under the License.
     <mat-card-header>
       <mat-card-title fxFlex
                       fxLayout="row"
-                      fxLayoutAlign=" center">
+                      fxLayoutAlign=" center"
+                      class="km-cluster-name">
         <i [matTooltip]="!!clusterHealthStatus ? clusterHealthStatus.message : ''"
            [ngClass]="!!clusterHealthStatus ? clusterHealthStatus.color : ''"
            class="km-cluster-health"></i>
@@ -224,9 +225,9 @@ limitations under the License.
            [clusterBindings]="clusterBindings"
            [bindings]="bindings"></km-rbac>
 
-  <mat-card class="km-with-table-header">
+  <mat-card>
     <mat-card-header>
-      <mat-card-title>Addons</mat-card-title>
+      <mat-card-title class="additional-margin">Addons</mat-card-title>
     </mat-card-header>
     <mat-card-content class="km-addon-card-content">
       <km-addon-list [addons]="addons"

@@ -10,7 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<mat-card-header>
+<mat-card-header class="km-no-padding">
   <mat-card-title>{{title}}</mat-card-title>
 </mat-card-header>
 <form [formGroup]="form"
@@ -81,7 +81,7 @@ limitations under the License.
         </mat-select>
       </mat-form-field>
       <button mat-icon-button
-              class="km-label-form-delete-button"
+              class="delete-button"
               *ngIf="isRemovable()"
               (click)="deleteTaint(i)">
         <i class="km-icon-delete"></i>

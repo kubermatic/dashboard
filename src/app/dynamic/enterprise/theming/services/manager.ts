@@ -12,11 +12,11 @@
 import {DOCUMENT} from '@angular/common';
 import {Inject, Injectable} from '@angular/core';
 import {filter} from 'rxjs/operators';
+import {UserService} from '../../../../core/services';
 import {ThemeInformerService} from '../../../../core/services/theme-informer/theme-informer.service';
 import {UserSettings} from '../../../../shared/entity/settings';
 import {ColorSchemeService} from './color-scheme';
 import {ThemeService} from './theme';
-import {UserService} from '../../../../core/services';
 
 @Injectable()
 export class ThemeManagerService {
@@ -46,11 +46,9 @@ export class ThemeManagerService {
   }
 
   setTheme(themeName: string) {
-    if (this._selectedTheme) {
-      this._removeTheme(this._selectedTheme);
-    }
-
-    this._getLinkElementForTheme(themeName).setAttribute('href', this._themesPath(themeName));
+    const element = this._getLinkElementForTheme(this._selectedTheme);
+    element.setAttribute('href', this._themesPath(themeName));
+    element.setAttribute('class', this._themeClassName(themeName));
     this._selectedTheme = themeName;
 
     this._themeInformerService.isCurrentThemeDark$.next(this._isThemeDark(themeName));
@@ -88,13 +86,6 @@ export class ThemeManagerService {
     return this._defaultTheme;
   }
 
-  private _removeTheme(styleName: string) {
-    const existingLinkElement = this._getExistingLinkElementForTheme(styleName);
-    if (existingLinkElement) {
-      this._document.head.removeChild(existingLinkElement);
-    }
-  }
-
   private _getLinkElementForTheme(styleName: string): Element {
     const linkEl = this._getExistingLinkElementForTheme(styleName);
     return linkEl ? linkEl : this._createLinkElementForTheme(styleName);
@@ -108,6 +99,13 @@ export class ThemeManagerService {
     const linkEl: HTMLLinkElement = this._document.createElement('link');
     linkEl.setAttribute('rel', 'stylesheet');
     linkEl.classList.add(this._themeClassName(styleName));
+
+    const positionElement = this._document.head.querySelector('link[rel="stylesheet"]:last-of-type');
+    if (positionElement) {
+      positionElement.after(linkEl);
+      return linkEl;
+    }
+
     this._document.head.appendChild(linkEl);
     return linkEl;
   }

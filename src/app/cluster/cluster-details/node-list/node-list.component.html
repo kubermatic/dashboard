@@ -10,11 +10,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<mat-card class="km-with-table-header">
+<mat-card>
   <mat-card-header>
-    <mat-card-title>
-      Nodes
-    </mat-card-title>
+    <mat-card-title>Nodes</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <table class="km-table"
@@ -54,13 +52,13 @@ limitations under the License.
             *matCellDef="let element">
           <ng-container *ngIf="!element.spec.cloud.aws">
             {{element.name}}
-            <i class="km-icon-info"
+            <i class="km-pointer"
                matTooltip="{{getInfo(element)}}"
                *ngIf="showInfo(element)"></i>
           </ng-container>
           <ng-container *ngIf="element.spec.cloud.aws">
             {{getNodeName(element)}}
-            <i class="km-icon-info"
+            <i class="km-pointer"
                matTooltip="{{getInfo(element)}}"
                *ngIf="showInfo(element)"></i>
           </ng-container>
@@ -122,7 +120,8 @@ limitations under the License.
             class="km-header-cell"></th>
         <td mat-cell
             *matCellDef="let element">
-          <div class="km-table-actions km-node-item-actions">
+          <div fxLayoutAlign="end"
+               class="km-table-actions">
             <ng-container [ngSwitch]="!!element.deletionTimestamp">
               <ng-container *ngSwitchCase="true">
                 <mat-spinner [diameter]="25"
@@ -216,7 +215,7 @@ limitations under the License.
                    class="km-node-info"
                    matTooltip="Use this username if you need to connect to your nodes via SSH.">
                 SSH Key Username
-                <i class="km-icon-info"></i>
+                <i class="km-pointer"></i>
               </div>
               <div value>{{element.spec.sshUserName}}</div>
             </km-property>
@@ -395,18 +394,17 @@ limitations under the License.
           (click)="toggleNodeItem(row)"></tr>
       <tr mat-row
           *matRowDef="let row; let i=index; columns: toggledColumns;"
-          [ngClass]="isShowNodeItem[row.id] ? '' : 'km-table-collapse'"
+          [ngClass]="isShowNodeItem[row.id] ? '' : 'km-hidden'"
           class="km-mat-row"></tr>
     </table>
 
-    <div class="km-row km-no-item"
+    <div class="km-row km-empty-list-msg"
          *ngIf="!nodes || nodes.length === 0">
       No nodes available.
     </div>
 
     <div [hidden]="!isPaginatorVisible()">
-      <mat-paginator showFirstLastButtons
-                     class="km-paginator"></mat-paginator>
+      <mat-paginator showFirstLastButtons></mat-paginator>
     </div>
 
     <mat-card [fxShow]="!!cluster.spec.cloud.bringyourown"

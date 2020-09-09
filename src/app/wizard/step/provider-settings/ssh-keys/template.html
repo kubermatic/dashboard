@@ -10,7 +10,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<form [formGroup]="form">
+<form [formGroup]="form"
+      fxLayoutAlign="start start"
+      fxLayout="column">
   <div class="km-header">SSH Keys</div>
   <mat-form-field *ngIf="hasKeys()">
     <mat-label>SSH Keys</mat-label>
@@ -23,13 +25,8 @@ limitations under the License.
                   [value]="key">{{key.name}}</mat-option>
     </mat-select>
   </mat-form-field>
-  <button *ngIf="hasKeys()"
-          (click)="addSSHKeyDialog()"
-          mat-flat-button
-          [disabled]="!canAdd()">Add SSH key
-  </button>
-  <div *ngIf="!hasKeys()">
-    <p>You have no SSH keys</p>
+  <p *ngIf="!hasKeys()">You have no SSH keys</p>
+  <div>
     <button (click)="addSSHKeyDialog()"
             mat-flat-button
             [disabled]="!canAdd()">Add SSH key

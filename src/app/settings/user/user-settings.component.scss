@@ -21,21 +21,14 @@
     padding: 30px;
   }
 
-  .km-user {
-    align-items: center;
-    display: flex;
-    margin-right: 30px;
-    min-height: 24px;
-    min-width: 24px;
-  }
-
-  .km-account-info-name {
+  .user-name {
     font-size: $font-size-subhead-lg;
-    line-height: 21px;
+    line-height: normal;
   }
 
-  .km-account-info-email {
+  .user-email {
     font-size: $font-size-subhead;
+    margin-top: -5px;
   }
 
   .km-account-settings {
@@ -48,36 +41,18 @@
       margin-bottom: 24px;
     }
 
-    .km-account-settings-entry-label {
-      align-items: center;
-      display: flex;
-      line-height: 64px;
-      min-width: 224px;
-
-      span {
-        margin-right: 5px;
-      }
-    }
-
-    .km-account-settings-toggle {
-      mat-button-toggle {
-        @include size(140px, 50px, true);
-
-        border-radius: $border-radius;
-
-        ::ng-deep.mat-button-toggle-label-content {
-          font-size: $font-size-subhead;
-          font-weight: normal;
-        }
-      }
+    .entry-label {
+      min-width: 200px;
     }
   }
 }
 
-.km-icon-info {
+.km-pointer {
   margin-left: 8px;
 }
 
-.mat-slide-toggle {
-  margin-left: -8px;
+mat-form-field {
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
 }

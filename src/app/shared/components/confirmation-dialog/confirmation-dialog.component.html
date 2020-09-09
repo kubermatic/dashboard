@@ -11,9 +11,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <div id="km-confirmation-dialog"
-     class="km-confirmation-dialog km-confirmation"
      (keydown.enter)="onEnterKeyDown()">
-  <km-dialog-title>{{data.title}}</km-dialog-title>
+  <km-dialog-title>
+    <div>{{data.title}}</div>
+  </km-dialog-title>
   <mat-dialog-content>
     <p [innerHTML]="data.message"></p>
     <div *ngIf="!!data.warning"

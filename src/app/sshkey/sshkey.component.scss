@@ -12,17 +12,12 @@
 @import 'variables';
 
 .km-key-publickey {
-  padding: 0 !important;
-}
-
-.km-sshkey-item-actions {
-  display: flex;
-  justify-content: flex-end;
+  padding: 0;
 }
 
 .km-publickey-wrapper {
   box-shadow: $border-box-shadow-inset;
-  padding: 15px 30px 20px 60px;
+  padding: $item-details-padding;
 
   .km-publickey-content {
     .km-publickey-name {

@@ -10,7 +10,7 @@
 // limitations under the License.
 
 .km-error-background {
-  background-position: center top !important;
+  background-position: center top;
   display: flex;
   left: 0;
   place-content: center;
@@ -43,7 +43,7 @@
 
 @media screen and (max-height: 504px), screen and (max-width: 504px) {
   .km-error-background {
-    height: 90% !important;
+    height: 90%;
   }
 
   .km-page-not-found p {
@@ -63,6 +63,6 @@
 
 @media screen and (max-width: 504px) {
   .km-error-background {
-    background-size: cover !important;
+    background-size: cover;
   }
 }

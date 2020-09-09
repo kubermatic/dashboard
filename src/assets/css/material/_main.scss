@@ -1,0 +1,504 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@import 'variables';
+@import 'mixins';
+@import 'images';
+
+// Cards.
+mat-card {
+  &.mat-card {
+    border-radius: $border-radius;
+    box-shadow: $border-box-shadow;
+    margin: 20px 0 0 0;
+    padding: 30px 0;
+
+    .mat-card-header {
+      border-radius: $border-radius $border-radius 0 0;
+      line-height: 16px;
+      margin: 0;
+      padding: 0 30px;
+
+      .mat-card-header-text {
+        margin: 0;
+      }
+
+      .mat-card-title {
+        font-size: $font-size-card-title;
+        font-weight: normal;
+        padding: 8px 0 16px;
+
+        i {
+          font-size: $font-size-subhead-lg;
+          margin: 0 20px;
+        }
+      }
+    }
+
+    .mat-card-content {
+      p {
+        font-size: $font-size-caption;
+      }
+
+      button {
+        cursor: pointer;
+        font-size: $font-size-body;
+        outline: none;
+        padding: 0;
+      }
+    }
+  }
+}
+
+// Dialogs.
+.mat-dialog-container {
+  max-width: $dialog-width;
+  min-width: $dialog-width;
+
+  .mat-card-header-text {
+    margin: 0;
+    padding: 0;
+
+    .mat-dialog-title {
+      font-weight: normal;
+    }
+  }
+
+  .mat-dialog-content {
+    font-size: $font-size-subhead;
+    font-weight: 400;
+    line-height: 24px;
+    max-height: $dialog-content-max-height;
+    overflow-x: unset;
+    overflow-y: auto;
+
+    a {
+      text-decoration: none;
+    }
+
+    p {
+      margin: 0 0 8px;
+    }
+
+    .km-dialog-warning {
+      display: flex;
+      margin: 16px 0;
+    }
+  }
+
+  .mat-dialog-actions {
+    justify-content: flex-end;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+// Tables.
+.mat-table {
+  .mat-sort-header-container {
+    &.mat-sort-header-button {
+      border-bottom: none;
+      font-size: $font-size-body;
+      font-weight: normal;
+      height: 40px;
+      line-height: 25px;
+      padding: 0;
+    }
+  }
+
+  [aria-sort='descending'] {
+    .mat-sort-header-arrow {
+      .mat-sort-header-indicator {
+        &::before {
+          content: "";
+          mask: url("/assets/images/icons/arrow-down.svg");
+          mask-position: center;
+          mask-repeat: no-repeat;
+          min-height: 8px;
+          min-width: 8px;
+          position: absolute;
+          top: -8px;
+        }
+      }
+    }
+  }
+
+  [aria-sort='ascending'] {
+    .mat-sort-header-arrow {
+      .mat-sort-header-indicator {
+        &::before {
+          content: "";
+          mask: url("/assets/images/icons/arrow-up.svg");
+          mask-position: center;
+          mask-repeat: no-repeat;
+          min-height: 8px;
+          min-width: 8px;
+          position: absolute;
+          top: 1px;
+        }
+      }
+    }
+  }
+
+  .mat-sort-header-arrow {
+    margin: auto 0 auto 6px;
+  }
+}
+
+.mat-column-status,
+.mat-column-stateArrow {
+  width: 8px;
+}
+
+// Steppers.
+.mat-stepper-horizontal {
+  @include breakpoint('small') {
+    .mat-horizontal-stepper-header-container {
+      display: none;
+    }
+  }
+
+  .mat-horizontal-content-container {
+    overflow: initial;
+    padding: 0;
+  }
+
+  .mat-horizontal-stepper-header {
+    padding: 0;
+  }
+
+  .mat-stepper-horizontal-line {
+    margin: 0 20px;
+  }
+
+  .mat-horizontal-stepper-content[aria-expanded="false"] {
+    width: 0;
+  }
+}
+
+.mat-step-header {
+  max-height: 32px;
+  pointer-events: none;
+
+  .mat-step-icon {
+    margin-right: 14px;
+  }
+
+  .mat-step-icon-content {
+    font-size: $font-size-body;
+  }
+
+  .mat-step-label {
+    font-size: $font-size-subhead;
+    font-weight: 400;
+
+    &.mat-step-label-selected {
+      font-weight: 500;
+    }
+  }
+}
+
+// Menus.
+.mat-menu-content {
+  padding: 0;
+
+  button {
+    &.mat-menu-item {
+      font-size: $font-size-body;
+      height: 48px;
+      line-height: 48px;
+      padding: 0 10px;
+
+      .mat-icon {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+.mat-menu-panel {
+  min-height: auto;
+}
+
+.mat-nav-list {
+  .mat-list-item-content {
+    padding: 0;
+  }
+}
+
+mat-list-item {
+  &.disabled {
+    i {
+      opacity: .3;
+    }
+  }
+}
+
+// Forms.
+mat-form-field {
+  &.mat-form-field {
+    width: 100%;
+
+    &.km-with-hint {
+      margin-bottom: 15px;
+    }
+
+    .mat-form-field-wrapper {
+      padding-bottom: 22px;
+    }
+
+    &.mat-primary {
+      .mat-select-arrow-wrapper {
+        position: relative;
+        right: 0;
+        top: 3px;
+
+        .mat-select-arrow {
+          @include size(8px);
+
+          color: transparent;
+          display: inline-block;
+          mask: url("/assets/images/icons/arrow-down.svg");
+          mask-repeat: no-repeat;
+          mask-size: contain;
+        }
+      }
+    }
+
+    &.mat-focused {
+      &.mat-primary {
+        .mat-select-arrow-wrapper {
+          right: 5px;
+
+          .mat-select-arrow {
+            @include size(8px);
+
+            -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+  }
+}
+
+mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) div.mat-form-field-flex:hover label {
+  transition: all .2s ease;
+}
+
+.mat-select {
+  width: fit-content;
+
+  .mat-select-value {
+    max-width: 25ch;
+    min-width: 2ch;
+  }
+
+  .mat-select-arrow {
+    display: none;
+  }
+
+  .mat-select-value-text {
+    font-size: $font-size-subhead;
+    line-height: 20px;
+  }
+
+  .mat-select-placeholder {
+    font-size: $font-size-subhead;
+    line-height: 20px;
+    opacity: .7;
+  }
+}
+
+.mat-select-panel {
+  margin-left: 6px;
+  margin-top: 30px;
+  max-width: calc(100% + 20px);
+  min-width: calc(100% + 20px);
+  transform-origin: 50% 0 0;
+
+  &.ng-animating {
+    visibility: hidden;
+  }
+}
+
+.mat-option {
+  padding: 0 0 0 10px;
+}
+
+.mat-optgroup-label {
+  font-size: $font-size-caption;
+  height: 35px;
+  line-height: 35px;
+  padding-left: 10px;
+}
+
+// Buttons, sliders and checkboxes.
+a,
+button {
+  &.mat-button,
+  &.mat-flat-button,
+  &.mat-raised-button {
+    font-size: $font-size-subhead;
+    line-height: 40px;
+    min-width: unset;
+
+    &:not(:first-child) {
+      margin-left: 10px;
+    }
+  }
+}
+
+.mat-icon-button {
+  &[disabled] {
+    * {
+      cursor: auto;
+    }
+  }
+
+  a {
+    display: flex;
+    justify-content: center;
+  }
+
+  &:disabled a {
+    cursor: default;
+    pointer-events: none;
+    text-decoration: none;
+  }
+}
+
+.mat-button-toggle-group {
+  &.mat-button-toggle-group-appearance-standard {
+    border: none;
+    box-shadow: none;
+  }
+
+  &:hover {
+    border: none;
+    transition: $transition-all;
+  }
+
+  .mat-button-toggle {
+    @include size(150px, 60px, true);
+
+    align-items: center;
+    border-radius: $border-radius;
+    border-style: solid;
+    border-width: 1px;
+    cursor: pointer;
+    display: flex;
+    margin: 0 10px 10px 0;
+  }
+
+  .mat-button-toggle-label {
+    @include size(100%);
+  }
+
+  .mat-button-toggle-label-content {
+    align-items: center;
+    display: flex;
+    font-size: $font-size-subhead;
+    font-weight: normal;
+    height: 100%;
+    justify-content: center;
+
+    .km-provider-logo {
+      max-width: 95px;
+    }
+
+    .km-provider-logo-aws,
+    .km-provider-logo-azure,
+    .km-provider-logo-vsphere,
+    .km-provider-logo-packet {
+      min-height: 24px;
+    }
+  }
+
+  .mat-button-toggle-button {
+    height: 100%;
+  }
+
+  &.mat-button-toggle-checked {
+    border-style: solid;
+    border-width: 1px;
+  }
+}
+
+.mat-slide-toggle {
+  .mat-slide-toggle-label {
+    .mat-slide-toggle-bar {
+      @include size(50px, 24px);
+
+      border-radius: 50px;
+    }
+
+    .mat-slide-toggle-thumb {
+      box-shadow: none;
+    }
+
+    .mat-slide-toggle-thumb-container {
+      left: 2px;
+      top: 2px;
+    }
+  }
+
+  &.mat-checked {
+    .mat-slide-toggle-label {
+      .mat-slide-toggle-thumb-container {
+        transform: translate3d(26px, 0, 0);
+      }
+    }
+  }
+}
+
+.mat-checkbox-frame {
+  border-radius: $border-radius;
+}
+
+// Chips.
+.mat-chip {
+  &.mat-standard-chip {
+    border-radius: $border-radius;
+    font-size: $font-size-body;
+    font-weight: normal;
+    line-height: 16px;
+    max-height: 22px;
+    min-height: 22px;
+    padding: 3px 0;
+
+    div:not(.mat-chip-ripple) {
+      align-items: center;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      padding: 3px 10px;
+    }
+  }
+}
+
+mat-chip-list {
+  cursor: default;
+
+  &:not(.km-chip-list-with-input) {
+    pointer-events: none;
+  }
+}
+
+// Tooltips.
+.mat-tooltip {
+  font-size: $font-size-caption;
+  margin-top: 5px;
+}
+
+.mat-tooltip-panel {
+  height: 32px;
+}

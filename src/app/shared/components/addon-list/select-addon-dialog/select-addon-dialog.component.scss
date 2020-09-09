@@ -17,6 +17,10 @@
   margin: 8px 0;
   padding: 24px;
 
+  &:hover {
+    transition: all .5s ease;
+  }
+
   .km-select-addon-dialog-option-desc {
     font-size: $font-size-body;
     line-height: 16px;

@@ -34,7 +34,6 @@ import {EditMemberComponent} from './edit-member/edit-member.component';
 @Component({
   selector: 'km-member',
   templateUrl: './member.component.html',
-  styleUrls: ['./member.component.scss'],
 })
 export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   members: Member[] = [];
@@ -131,8 +130,10 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
 
   isEditEnabled(member: Member): boolean {
     return (
-      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Members, Permission.Edit) ||
-      (this.currentUser && member && this.currentUser.email !== member.email)
+      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Members, Permission.Edit) &&
+      this.currentUser &&
+      member &&
+      this.currentUser.email !== member.email
     );
   }
 
@@ -152,8 +153,10 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
 
   isDeleteEnabled(member: Member): boolean {
     return (
-      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Members, Permission.Delete) ||
-      (this.currentUser && member && this.currentUser.email !== member.email)
+      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Members, Permission.Delete) &&
+      this.currentUser &&
+      member &&
+      this.currentUser.email !== member.email
     );
   }
 

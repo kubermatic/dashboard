@@ -89,7 +89,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   }
 
   hasDefaultProject(): string {
-    return this.settings.selectedProjectId ? '' : '-- None --';
+    return this.settings.selectedProjectId ? '' : 'None';
   }
 
   isAdmin(): boolean {
