@@ -23,6 +23,7 @@ import {take, takeUntil} from 'rxjs/operators';
 import {Member} from '../../shared/entity/member';
 import {MemberUtils, Permission} from '../../shared/utils/member-utils/member-utils';
 import {GroupConfig} from '../../shared/model/Config';
+import {Node} from '../../shared/entity/node';
 
 @Component({
   selector: 'km-cluster-details',
@@ -31,6 +32,7 @@ import {GroupConfig} from '../../shared/model/Config';
 })
 export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   cluster: Cluster;
+  nodes: Node[] = [];
   metrics: ClusterMetrics;
   events: Event[] = [];
   private _user: Member;
@@ -59,14 +61,19 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       .subscribe(cluster => (this.cluster = cluster));
 
     this._clusterService
-      .externalClusterEvents(projectId, clusterId)
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(events => (this.events = events));
-
-    this._clusterService
       .externalClusterMetrics(projectId, clusterId)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(metrics => (this.metrics = metrics));
+
+    this._clusterService
+      .externalClusterNodes(projectId, clusterId)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(nodes => (this.nodes = nodes));
+
+    this._clusterService
+      .externalClusterEvents(projectId, clusterId)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(events => (this.events = events));
   }
 
   ngOnDestroy(): void {

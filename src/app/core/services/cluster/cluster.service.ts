@@ -25,6 +25,7 @@ import {Event} from '../../../shared/entity/event';
 import {Health} from '../../../shared/entity/health';
 import {ClusterMetrics} from '../../../shared/entity/metrics';
 import {SSHKey} from '../../../shared/entity/ssh-key';
+import {Node} from '../../../shared/entity/node';
 import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
 import {AddExternalClusterModel} from '../../../shared/model/AddExternalClusterModel';
 
@@ -147,6 +148,11 @@ export class ClusterService {
   externalClusterEvents(projectID: string, clusterID: string): Observable<Event[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/events`;
     return this._http.get<Event[]>(url).pipe(catchError(() => of<Event[]>()));
+  }
+
+  externalClusterNodes(projectID: string, clusterID: string): Observable<Node[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/nodes`;
+    return this._http.get<Node[]>(url).pipe(catchError(() => of<Node[]>()));
   }
 
   health(projectID: string, clusterID: string, seed: string): Observable<Health> {
