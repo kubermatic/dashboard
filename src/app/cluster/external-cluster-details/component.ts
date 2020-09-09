@@ -62,6 +62,11 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       .externalClusterEvents(projectId, clusterId)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(events => (this.events = events));
+
+    this._clusterService
+      .externalClusterMetrics(projectId, clusterId)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(metrics => (this.metrics = metrics));
   }
 
   ngOnDestroy(): void {

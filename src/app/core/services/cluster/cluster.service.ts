@@ -134,6 +134,11 @@ export class ClusterService {
     return this._http.get<ClusterMetrics>(url).pipe(catchError(() => of<ClusterMetrics>(undefined)));
   }
 
+  externalClusterMetrics(projectID: string, clusterID: string): Observable<ClusterMetrics> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/metrics`;
+    return this._http.get<ClusterMetrics>(url).pipe(catchError(() => of<ClusterMetrics>(undefined)));
+  }
+
   events(projectID: string, clusterID: string, seed: string): Observable<Event[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/events`;
     return this._http.get<Event[]>(url).pipe(catchError(() => of<Event[]>()));
