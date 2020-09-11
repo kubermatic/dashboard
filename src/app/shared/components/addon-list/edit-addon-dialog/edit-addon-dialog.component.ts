@@ -41,6 +41,7 @@ export class EditAddonDialogComponent implements OnInit {
     }
 
     this.form = new FormGroup(group);
+    this.form.addControl('continuouslyReconcile', new FormControl(this.addon.spec.continuouslyReconcile));
   }
 
   hasLogo(): boolean {
@@ -55,10 +56,16 @@ export class EditAddonDialogComponent implements OnInit {
     const variables = {};
 
     Object.keys(this.form.controls).forEach(key => {
+      if (key === 'continuouslyReconcile') {
+        return;
+      }
       variables[key] = this.form.controls[key].value;
     });
 
-    return {name: this.addon.name, spec: {variables}};
+    return {
+      name: this.addon.name,
+      spec: {variables, continuouslyReconcile: this.form.controls.continuouslyReconcile.value},
+    };
   }
 
   edit(): void {
