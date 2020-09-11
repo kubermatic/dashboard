@@ -35,7 +35,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   cluster: Cluster;
   nodes: Node[] = [];
   metrics: ClusterMetrics;
-  nodesMetrics: Map<string, NodeMetrics>;
+  nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   events: Event[] = [];
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
