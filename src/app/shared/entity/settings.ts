@@ -31,6 +31,7 @@ export class AdminSettings {
   enableDashboard: boolean;
   enableOIDCKubeconfig: boolean;
   userProjectsLimit: number;
+  restrictProjectCreation: boolean;
 }
 
 export class CleanupOptions {
@@ -128,4 +129,5 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   displayTermsOfService: false,
   enableDashboard: true,
   enableOIDCKubeconfig: false,
+  restrictProjectCreation: false,
 };

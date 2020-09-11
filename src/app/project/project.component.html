@@ -34,6 +34,7 @@ limitations under the License.
     <button id="km-add-project-top-btn"
             mat-flat-button
             type="button"
+            [disabled]="isProjectCreationRestricted()"
             (click)="addProject()">
       Add Project
     </button>
