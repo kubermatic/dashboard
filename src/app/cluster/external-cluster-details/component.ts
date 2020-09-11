@@ -15,7 +15,7 @@ import {Subject} from 'rxjs';
 
 import {Cluster} from '../../shared/entity/cluster';
 import {Event} from '../../shared/entity/event';
-import {ClusterMetrics} from '../../shared/entity/metrics';
+import {ClusterMetrics, NodeMetrics} from '../../shared/entity/metrics';
 
 import {PathParam} from '../../core/services/params/params.service';
 import {ClusterService, UserService} from '../../core/services';
@@ -31,9 +31,11 @@ import {Node} from '../../shared/entity/node';
   styleUrls: ['./style.scss'],
 })
 export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
+  projectId: string;
   cluster: Cluster;
   nodes: Node[] = [];
   metrics: ClusterMetrics;
+  nodesMetrics: Map<string, NodeMetrics>;
   events: Event[] = [];
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
@@ -46,32 +48,41 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const projectId = this._activatedRoute.snapshot.paramMap.get(PathParam.ProjectID);
+    this.projectId = this._activatedRoute.snapshot.paramMap.get(PathParam.ProjectID);
     const clusterId = this._activatedRoute.snapshot.paramMap.get(PathParam.ClusterID);
 
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 
     this._userService
-      .getCurrentUserGroup(projectId)
+      .getCurrentUserGroup(this.projectId)
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     this._clusterService
-      .externalCluster(projectId, clusterId)
+      .externalCluster(this.projectId, clusterId)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(cluster => (this.cluster = cluster));
 
     this._clusterService
-      .externalClusterMetrics(projectId, clusterId)
+      .externalClusterMetrics(this.projectId, clusterId)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(metrics => (this.metrics = metrics));
 
     this._clusterService
-      .externalClusterNodes(projectId, clusterId)
+      .externalClusterNodesMetrics(this.projectId, clusterId)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(metrics => {
+        const map = new Map<string, NodeMetrics>();
+        metrics.forEach(m => map.set(m.name, m));
+        this.nodesMetrics = map;
+      });
+
+    this._clusterService
+      .externalClusterNodes(this.projectId, clusterId)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(nodes => (this.nodes = nodes));
 
     this._clusterService
-      .externalClusterEvents(projectId, clusterId)
+      .externalClusterEvents(this.projectId, clusterId)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(events => (this.events = events));
   }

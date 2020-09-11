@@ -99,13 +99,9 @@ limitations under the License.
     </mat-card-content>
   </mat-card>
 
-  <mat-card>
-    <div fxLayoutGap="20px grid">
-      <div *ngFor="let node of nodes">
-        {{node | json}} <!-- TODO -->
-      </div>
-    </div>
-  </mat-card>
+  <km-external-node-list [nodes]="nodes"
+                         [nodesMetrics]="nodesMetrics"
+                         [projectId]="projectId"></km-external-node-list>
 
   <km-event-list [events]="events"></km-event-list>
 

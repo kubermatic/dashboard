@@ -23,7 +23,7 @@ import {Addon} from '../../../shared/entity/addon';
 import {Cluster, ClusterPatch, Finalizer, MasterVersion, ProviderSettingsPatch} from '../../../shared/entity/cluster';
 import {Event} from '../../../shared/entity/event';
 import {Health} from '../../../shared/entity/health';
-import {ClusterMetrics} from '../../../shared/entity/metrics';
+import {ClusterMetrics, NodeMetrics} from '../../../shared/entity/metrics';
 import {SSHKey} from '../../../shared/entity/ssh-key';
 import {Node} from '../../../shared/entity/node';
 import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
@@ -138,6 +138,11 @@ export class ClusterService {
   externalClusterMetrics(projectID: string, clusterID: string): Observable<ClusterMetrics> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/metrics`;
     return this._http.get<ClusterMetrics>(url).pipe(catchError(() => of<ClusterMetrics>(undefined)));
+  }
+
+  externalClusterNodesMetrics(projectID: string, clusterID: string): Observable<NodeMetrics[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/nodesmetrics`;
+    return this._http.get<NodeMetrics[]>(url).pipe(catchError(() => of<NodeMetrics[]>(undefined)));
   }
 
   events(projectID: string, clusterID: string, seed: string): Observable<Event[]> {

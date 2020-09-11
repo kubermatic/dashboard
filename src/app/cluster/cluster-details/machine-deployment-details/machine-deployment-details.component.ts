@@ -135,11 +135,11 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
       .getMachineDeploymentNodesMetrics(this._machineDeploymentID, this._clusterName, this.seed, this.projectID)
       .pipe(first())
       .subscribe(metrics => {
-        this.storeNodeMetrics(metrics);
+        this._storeNodeMetrics(metrics);
       });
   }
 
-  private storeNodeMetrics(metrics: NodeMetrics[]): void {
+  private _storeNodeMetrics(metrics: NodeMetrics[]): void {
     const map = new Map<string, NodeMetrics>();
     metrics.forEach(m => map.set(m.name, m));
     this.metrics = map;
