@@ -146,6 +146,13 @@ limitations under the License.
                                  [total]="getMetrics(element.name).memoryAvailableBytes"></km-property-usage>
             </div>
 
+            <km-property *ngIf="element.spec.labels">
+              <div key>Labels</div>
+              <div value>
+                <km-labels [labels]="element.spec.labels"></km-labels>
+              </div>
+            </km-property>
+
           </mat-card-content>
         </td>
       </ng-container>
