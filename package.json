@@ -71,7 +71,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.1000.8",
-    "@angular/cli": "10.0.7",
+    "@angular/cli": "10.1.1",
     "@angular/compiler-cli": "10.0.2",
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
     "@types/jest": "26.0.10",
