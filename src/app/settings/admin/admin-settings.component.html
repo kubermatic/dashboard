@@ -178,6 +178,9 @@ limitations under the License.
           <div class="km-pointer"
                matTooltip="Set limit to zero to allow unlimited project creation for users. It does not affect administrators."></div>
         </div>
+        <mat-checkbox fxLayoutAlign=" center"
+                      [(ngModel)]="settings.restrictProjectCreation"
+                      (change)="onSettingsChange()">Restrict Project Creation to Adminstrators</mat-checkbox>
         <mat-form-field class="km-admin-settings-field-md km-no-padding">
           <mat-label>User Projects Limit</mat-label>
           <input matInput
@@ -185,6 +188,7 @@ limitations under the License.
                  type="number"
                  min="0"
                  autocomplete="off"
+                 [disabled]="settings.restrictProjectCreation"
                  [(ngModel)]="settings.userProjectsLimit"
                  (change)="onSettingsChange()">
         </mat-form-field>
