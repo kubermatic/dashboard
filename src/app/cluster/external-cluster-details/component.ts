@@ -19,11 +19,13 @@ import {ClusterMetrics, NodeMetrics} from '../../shared/entity/metrics';
 
 import {PathParam} from '../../core/services/params/params.service';
 import {ClusterService, NotificationService, UserService} from '../../core/services';
-import {take, takeUntil} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {Member} from '../../shared/entity/member';
 import {MemberUtils, Permission} from '../../shared/utils/member-utils/member-utils';
 import {GroupConfig} from '../../shared/model/Config';
 import {Node} from '../../shared/entity/node';
+import {ExternalClusterDataDialogComponent} from '../../shared/components/external-cluster-data-dialog/component';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'km-cluster-details',
@@ -43,6 +45,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly _activatedRoute: ActivatedRoute,
+    private readonly _matDialog: MatDialog,
     private readonly _clusterService: ClusterService,
     private readonly _userService: UserService,
     private readonly _notificationService: NotificationService,
@@ -99,7 +102,19 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   edit(): void {
-    // TODO
+    const dialog = this._matDialog.open(ExternalClusterDataDialogComponent);
+    dialog.componentInstance.projectId = this.projectId;
+    dialog.componentInstance.name = this.cluster.name;
+    dialog.componentInstance.editMode = true;
+
+    dialog
+      .afterClosed()
+      .pipe(filter(model => !!model))
+      .pipe(switchMap(model => this._clusterService.updateExternalCluster(this.projectId, this.cluster.id, model)))
+      .pipe(take(1))
+      .subscribe(_ =>
+        this._notificationService.success(`The <strong>${this.cluster.name}</strong> cluster was updated`)
+      );
   }
 
   isDeleteEnabled(): boolean {

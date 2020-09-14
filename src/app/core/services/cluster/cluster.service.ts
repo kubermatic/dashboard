@@ -30,6 +30,7 @@ import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
 import {ExternalClusterModel} from '../../../shared/model/ExternalClusterModel';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {ExternalClusterDataDialogComponent} from '../../../shared/components/external-cluster-data-dialog/component';
 
 @Injectable()
 export class ClusterService {
@@ -109,6 +110,11 @@ export class ClusterService {
   patch(projectID: string, clusterID: string, seed: string, patch: ClusterPatch): Observable<Cluster> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}`;
     return this._http.patch<Cluster>(url, patch);
+  }
+
+  updateExternalCluster(projectID: string, clusterID: string, model: ExternalClusterModel): Observable<Cluster> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
+    return this._http.put<Cluster>(url, model);
   }
 
   delete(
