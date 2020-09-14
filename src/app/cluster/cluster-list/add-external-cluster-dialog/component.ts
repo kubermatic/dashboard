@@ -14,6 +14,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {AddExternalClusterModel} from '../../../shared/model/AddExternalClusterModel';
 import {ClusterService} from '../../../core/services';
+import {Router} from '@angular/router';
 
 export enum Controls {
   Name = 'name',
@@ -30,6 +31,7 @@ export class AddExternalClusterDialogComponent implements OnInit {
 
   constructor(
     private readonly _matDialogRef: MatDialogRef<AddExternalClusterDialogComponent>,
+    private readonly _router: Router,
     private readonly _clusterService: ClusterService
   ) {}
 
@@ -45,8 +47,8 @@ export class AddExternalClusterDialogComponent implements OnInit {
       kubeconfig: btoa(this.kubeconfig),
     };
 
-    this._clusterService.addExternalCluster(this.projectId, model).subscribe(_ => {
-      this._clusterService.onClusterUpdate.next();
+    this._clusterService.addExternalCluster(this.projectId, model).subscribe(createdCluster => {
+      this._router.navigate([`/projects/${this.projectId}/clusters/external/${createdCluster.id}`]);
     });
 
     this._matDialogRef.close(model);
