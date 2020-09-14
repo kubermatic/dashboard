@@ -37,6 +37,10 @@ export class ExternalClusterDataDialogComponent implements OnInit {
     });
   }
 
+  getLabel(): string {
+    return this.editMode ? 'Edit External Cluster' : 'Add External Cluster';
+  }
+
   handler(): void {
     const model: ExternalClusterModel = {
       name: this.form.get(Controls.Name).value,

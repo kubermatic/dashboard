@@ -10,11 +10,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<km-dialog-title>Add External Cluster</km-dialog-title>
+<km-dialog-title>{{getLabel()}}</km-dialog-title>
 <mat-dialog-content>
   <div class="km-dialog-warning"
        fxLayoutAlign=" center"
-       fxLayoutGap="12px">
+       fxLayoutGap="12px"
+       *ngIf="!editMode">
     <i class="km-icon-info"></i>
     <div>External clusters can only be viewed, not edited.</div>
   </div>
@@ -40,6 +41,6 @@ limitations under the License.
   <button mat-flat-button
           (click)="handler()"
           [disabled]="!form.valid || !kubeconfig">
-    Add External Cluster
+    {{getLabel()}}
   </button>
 </mat-dialog-actions>
