@@ -48,7 +48,7 @@ limitations under the License.
                         [disabled]="admissionPlugin === admissionPlugin.PodSecurityPolicy && !!isPodSecurityPolicyEnforced()">
               {{getPluginName(admissionPlugin)}}
               <i *ngIf="admissionPlugin === admissionPlugin.PodSecurityPolicy"
-                 class="km-pointer"
+                 class="km-icon-info km-pointer"
                  matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
             </mat-option>
           </mat-select>
@@ -62,7 +62,7 @@ limitations under the License.
         <span *ngIf="isPodSecurityPolicyEnforced()"
               class="km-admission-plugin-warning"
               fxLayout="row">
-          <i class="km-pointer"></i>
+          <i class="km-icon-info km-pointer"></i>
           <p fxFlex="95">Pod Security Policy is enforced by your admin in the chosen datacenter.</p>
         </span>
       </div>

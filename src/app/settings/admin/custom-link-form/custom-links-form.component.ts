@@ -9,9 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as _ from 'lodash';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {CustomLink, CustomLinkLocation} from '../../../shared/entity/settings';
 
 @Component({
@@ -19,11 +21,24 @@ import {CustomLink, CustomLinkLocation} from '../../../shared/entity/settings';
   templateUrl: './custom-links-form.component.html',
   styleUrls: ['./custom-links-form.component.scss'],
 })
-export class CustomLinksFormComponent implements OnInit, OnChanges {
-  @Input() customLinks: CustomLink[] = [];
+export class CustomLinksFormComponent implements OnInit, OnDestroy {
+  @Input()
+  set customLinks(links: CustomLink[]) {
+    if (_.isEqual(links, this._customLinks)) {
+      return;
+    }
+
+    this._customLinks = links;
+    this._customLinksUpdated.emit();
+  }
+
   @Output() customLinksChange = new EventEmitter<CustomLink[]>();
   @Input() apiCustomLinks: CustomLink[] = [];
   form: FormGroup;
+
+  private _customLinks: CustomLink[] = [];
+  private _customLinksUpdated = new EventEmitter<void>();
+  private _unsubscribe = new Subject<void>();
 
   constructor(private readonly _formBuilder: FormBuilder) {}
 
@@ -32,23 +47,17 @@ export class CustomLinksFormComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this._buildForm();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.customLinks.currentValue !== changes.customLinks.previousValue) {
-      this._buildForm();
-    }
-  }
-
-  private _buildForm(): void {
     this.form = this._formBuilder.group({
       customLinks: this._formBuilder.array([]),
     });
-    this.customLinks.forEach(customLink =>
-      this._addCustomLink(customLink.label, customLink.url, customLink.icon, customLink.location)
-    );
+
     this._addCustomLink();
+    this._customLinksUpdated.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._rebuildLinks());
+  }
+
+  ngOnDestroy() {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   isRemovable(index: number): boolean {
@@ -88,15 +97,30 @@ export class CustomLinksFormComponent implements OnInit, OnChanges {
     }
   }
 
-  private _addCustomLink(label = '', url = '', icon = '', location = CustomLinkLocation.Default): void {
-    this.customLinksArray.push(
+  private _rebuildLinks(): void {
+    const linksGroups = this._customLinks.map(link =>
       this._formBuilder.group({
-        label: [{value: label, disabled: false}, Validators.required],
-        url: [{value: url, disabled: false}, Validators.required],
-        icon: [{value: icon, disabled: false}],
-        location: [{value: location, disabled: false}],
+        label: [{value: link.label, disabled: false}, Validators.required],
+        url: [{value: link.url, disabled: false}, Validators.required],
+        icon: [{value: link.icon, disabled: false}],
+        location: [{value: link.location, disabled: false}],
       })
     );
+
+    this.customLinksArray.clear();
+    this.customLinksArray.controls = linksGroups;
+    this._addCustomLink();
+  }
+
+  private _addCustomLink(label = '', url = '', icon = '', location = CustomLinkLocation.Default): void {
+    const link = this._formBuilder.group({
+      label: [{value: label, disabled: false}, Validators.required],
+      url: [{value: url, disabled: false}, Validators.required],
+      icon: [{value: icon, disabled: false}],
+      location: [{value: location, disabled: false}],
+    });
+
+    this.customLinksArray.push(link);
   }
 
   private _updateLabelsObject(): void {
@@ -107,7 +131,7 @@ export class CustomLinksFormComponent implements OnInit, OnChanges {
       }
     });
 
-    this.customLinks = customLinks;
-    this.customLinksChange.emit(this.customLinks);
+    this._customLinks = customLinks;
+    this.customLinksChange.emit(this._customLinks);
   }
 }
