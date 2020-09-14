@@ -27,7 +27,7 @@ import {ClusterMetrics, NodeMetrics} from '../../../shared/entity/metrics';
 import {SSHKey} from '../../../shared/entity/ssh-key';
 import {Node} from '../../../shared/entity/node';
 import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
-import {AddExternalClusterModel} from '../../../shared/model/AddExternalClusterModel';
+import {ExternalClusterModel} from '../../../shared/model/ExternalClusterModel';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
@@ -101,7 +101,7 @@ export class ClusterService {
     return this._http.post<Cluster>(url, createClusterModel);
   }
 
-  addExternalCluster(projectID: string, model: AddExternalClusterModel): Observable<Cluster> {
+  addExternalCluster(projectID: string, model: ExternalClusterModel): Observable<Cluster> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters`;
     return this._http.post<Cluster>(url, model);
   }

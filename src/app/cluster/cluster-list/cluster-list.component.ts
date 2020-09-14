@@ -16,7 +16,7 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EMPTY, forkJoin, of, onErrorResumeNext, Subject} from 'rxjs';
-import {catchError, distinctUntilChanged, first, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {catchError, distinctUntilChanged, filter, first, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as _ from 'lodash';
 
 import {
@@ -38,7 +38,7 @@ import {GroupConfig} from '../../shared/model/Config';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
 import {MemberUtils, Permission} from '../../shared/utils/member-utils/member-utils';
 import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
-import {AddExternalClusterDialogComponent} from './add-external-cluster-dialog/component';
+import {ExternalClusterDataDialogComponent} from '../../shared/components/external-cluster-data-dialog/component';
 
 @Component({
   selector: 'km-cluster-list',
@@ -172,8 +172,18 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   addExternalCluster(): void {
-    const dialog = this._matDialog.open(AddExternalClusterDialogComponent);
+    const dialog = this._matDialog.open(ExternalClusterDataDialogComponent);
     dialog.componentInstance.projectId = this._selectedProject.id;
+
+    dialog
+      .afterClosed()
+      .pipe(filter(model => !!model))
+      .pipe(switchMap(model => this._clusterService.addExternalCluster(this._selectedProject.id, model)))
+      .pipe(take(1))
+      .subscribe(addedCluster => {
+        this._router.navigate([`/projects/${this._selectedProject.id}/clusters/external/${addedCluster.id}`]);
+        this._notificationService.success(`The <strong>${addedCluster.name}</strong> cluster was added`);
+      });
   }
 
   navigateToCluster(cluster: Cluster): void {

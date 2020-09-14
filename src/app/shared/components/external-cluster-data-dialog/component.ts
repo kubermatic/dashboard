@@ -12,8 +12,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {AddExternalClusterModel} from '../../../shared/model/AddExternalClusterModel';
-import {ClusterService} from '../../../core/services';
+import {ExternalClusterModel} from '../../model/ExternalClusterModel';
 import {Router} from '@angular/router';
 
 export enum Controls {
@@ -23,33 +22,30 @@ export enum Controls {
 @Component({
   templateUrl: './template.html',
 })
-export class AddExternalClusterDialogComponent implements OnInit {
+export class ExternalClusterDataDialogComponent implements OnInit {
+  @Input() editMode = false;
+  @Input() name = '';
   @Input() projectId: string;
   controls = Controls;
   form: FormGroup;
   kubeconfig = '';
 
   constructor(
-    private readonly _matDialogRef: MatDialogRef<AddExternalClusterDialogComponent>,
-    private readonly _router: Router,
-    private readonly _clusterService: ClusterService
+    private readonly _matDialogRef: MatDialogRef<ExternalClusterDataDialogComponent>,
+    private readonly _router: Router
   ) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      name: new FormControl('', [Validators.required]),
+      name: new FormControl(this.name, [Validators.required]),
     });
   }
 
-  add(): void {
-    const model: AddExternalClusterModel = {
+  handler(): void {
+    const model: ExternalClusterModel = {
       name: this.form.get(Controls.Name).value,
       kubeconfig: btoa(this.kubeconfig),
     };
-
-    this._clusterService.addExternalCluster(this.projectId, model).subscribe(createdCluster => {
-      this._router.navigate([`/projects/${this.projectId}/clusters/external/${createdCluster.id}`]);
-    });
 
     this._matDialogRef.close(model);
   }

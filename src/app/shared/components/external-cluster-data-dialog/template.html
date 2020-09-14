@@ -38,7 +38,7 @@ limitations under the License.
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
-          (click)="add()"
+          (click)="handler()"
           [disabled]="!form.valid || !kubeconfig">
     Add External Cluster
   </button>
