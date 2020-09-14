@@ -33,6 +33,7 @@ import {filter, first, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {Cookie, COOKIE_DI_TOKEN} from '../app.config';
 import {NotificationService, ProjectService, UserService} from '../core/services';
 import {PreviousRouteService} from '../core/services/previous-route/previous-route.service';
+import {SettingsService} from '../core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
 import {View} from '../shared/entity/common';
@@ -62,6 +63,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   isPaginatorVisible = false;
   showCards = true;
   settings: UserSettings;
+  restrictProjectCreation = false;
 
   private readonly _maxOwnersLen = 30;
   private _apiSettings: UserSettings;
@@ -103,6 +105,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _notificationService: NotificationService,
     private readonly _previousRouteService: PreviousRouteService,
     private readonly _cdr: ChangeDetectorRef,
+    private readonly _settingsService: SettingsService,
     @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie
   ) {}
 
@@ -133,6 +136,10 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
         this._apiSettings = settings;
         this.settings = _.cloneDeep(this._apiSettings);
       });
+
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.restrictProjectCreation = settings.restrictProjectCreation;
+    });
 
     this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe((projects: Project[]) => {
       this.projects = projects;
@@ -331,6 +338,10 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   getProjectStateIconClass(project: Project): string {
     return ProjectUtils.getStateIconClass(project.status);
+  }
+
+  isProjectCreationRestricted(): boolean {
+    return !this.isAdmin && !!this.restrictProjectCreation;
   }
 
   addProject(): void {
