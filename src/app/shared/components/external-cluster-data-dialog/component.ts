@@ -13,7 +13,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ExternalClusterModel} from '../../model/ExternalClusterModel';
-import {Router} from '@angular/router';
 
 export enum Controls {
   Name = 'name',
@@ -30,10 +29,7 @@ export class ExternalClusterDataDialogComponent implements OnInit {
   form: FormGroup;
   kubeconfig = '';
 
-  constructor(
-    private readonly _matDialogRef: MatDialogRef<ExternalClusterDataDialogComponent>,
-    private readonly _router: Router
-  ) {}
+  constructor(private readonly _matDialogRef: MatDialogRef<ExternalClusterDataDialogComponent>) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
