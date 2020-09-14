@@ -12,7 +12,7 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {combineLatest, merge, Observable, of, timer} from 'rxjs';
-import {catchError, map, shareReplay, switchMapTo} from 'rxjs/operators';
+import {catchError, filter, map, shareReplay, switchMap, switchMapTo, take} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 
 import {environment} from '../../../../environments/environment';
@@ -28,6 +28,8 @@ import {SSHKey} from '../../../shared/entity/ssh-key';
 import {Node} from '../../../shared/entity/node';
 import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
 import {AddExternalClusterModel} from '../../../shared/model/AddExternalClusterModel';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Injectable()
 export class ClusterService {
@@ -43,7 +45,11 @@ export class ClusterService {
   providerSettingsPatchChanges$ = this._providerSettingsPatch.asObservable();
   onClusterUpdate = new Subject<void>();
 
-  constructor(private readonly _http: HttpClient, private readonly _appConfig: AppConfigService) {}
+  constructor(
+    private readonly _matDialog: MatDialog,
+    private readonly _http: HttpClient,
+    private readonly _appConfig: AppConfigService
+  ) {}
 
   changeProviderSettingsPatch(patch: ProviderSettingsPatch): void {
     this._providerSettingsPatch.next(patch);
@@ -119,6 +125,30 @@ export class ClusterService {
     }
 
     return this._http.delete(url, {headers: this._headers});
+  }
+
+  showDeleteExternalClusterDialog(cluster: Cluster, projectID: string): Observable<any> {
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        title: 'Delete External Cluster',
+        message: `Are you sure you want to delete <strong>${cluster.name}</strong> cluster?`,
+        confirmLabel: 'Delete',
+      },
+    };
+
+    return this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(switchMap(_ => this._deleteExternalCluster(projectID, cluster.id)))
+      .pipe(take(1));
+  }
+
+  private _deleteExternalCluster(projectID: string, clusterID: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
+    return this._http.delete(url);
   }
 
   upgrades(projectID: string, clusterID: string, seed: string): Observable<MasterVersion[]> {

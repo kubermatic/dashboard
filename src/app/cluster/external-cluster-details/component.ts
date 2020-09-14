@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Subject} from 'rxjs';
 
 import {Cluster} from '../../shared/entity/cluster';
@@ -18,7 +18,7 @@ import {Event} from '../../shared/entity/event';
 import {ClusterMetrics, NodeMetrics} from '../../shared/entity/metrics';
 
 import {PathParam} from '../../core/services/params/params.service';
-import {ClusterService, UserService} from '../../core/services';
+import {ClusterService, NotificationService, UserService} from '../../core/services';
 import {take, takeUntil} from 'rxjs/operators';
 import {Member} from '../../shared/entity/member';
 import {MemberUtils, Permission} from '../../shared/utils/member-utils/member-utils';
@@ -44,7 +44,9 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _clusterService: ClusterService,
-    private readonly _userService: UserService
+    private readonly _userService: UserService,
+    private readonly _notificationService: NotificationService,
+    private readonly _router: Router
   ) {}
 
   ngOnInit(): void {
@@ -105,6 +107,9 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   delete(): void {
-    // TODO
+    this._clusterService.showDeleteExternalClusterDialog(this.cluster, this.projectId).subscribe(_ => {
+      this._router.navigate(['/projects/' + this.projectId + '/clusters']);
+      this._notificationService.success(`The <strong>${this.cluster.name}</strong> cluster was removed`);
+    });
   }
 }

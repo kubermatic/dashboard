@@ -19,7 +19,14 @@ import {EMPTY, forkJoin, of, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, distinctUntilChanged, first, switchMap, takeUntil, tap} from 'rxjs/operators';
 import * as _ from 'lodash';
 
-import {ApiService, ClusterService, DatacenterService, ProjectService, UserService} from '../../core/services';
+import {
+  ApiService,
+  ClusterService,
+  DatacenterService,
+  NotificationService,
+  ProjectService,
+  UserService,
+} from '../../core/services';
 import {CloudSpec, Cluster} from '../../shared/entity/cluster';
 import {Datacenter} from '../../shared/entity/datacenter';
 import {View} from '../../shared/entity/common';
@@ -62,7 +69,8 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _datacenterService: DatacenterService,
     private readonly _activeRoute: ActivatedRoute,
     private readonly _matDialog: MatDialog,
-    private readonly _apiService: ApiService
+    private readonly _apiService: ApiService,
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -191,7 +199,9 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
       modal.componentInstance.seed = this.nodeDC[cluster.id].spec.seed;
       modal.componentInstance.projectID = this._selectedProject.id;
     } else {
-      // TODO
+      this._clusterService.showDeleteExternalClusterDialog(cluster, this._selectedProject.id).subscribe(_ => {
+        this._notificationService.success(`The <strong>${cluster.name}</strong> cluster was removed`);
+      });
     }
   }
 
