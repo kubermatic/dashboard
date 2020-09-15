@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -21,7 +21,7 @@ import {CustomLink, CustomLinkLocation} from '../../../shared/entity/settings';
   templateUrl: './custom-links-form.component.html',
   styleUrls: ['./custom-links-form.component.scss'],
 })
-export class CustomLinksFormComponent implements OnInit, OnDestroy {
+export class CustomLinksFormComponent implements OnDestroy {
   @Input()
   set customLinks(links: CustomLink[]) {
     if (_.isEqual(links, this._customLinks)) {
@@ -32,27 +32,37 @@ export class CustomLinksFormComponent implements OnInit, OnDestroy {
     this._customLinksUpdated.emit();
   }
 
+  @Input() set apiCustomLinks(links: CustomLink[]) {
+    this._apiCustomLinks = links;
+  }
+
   @Output() customLinksChange = new EventEmitter<CustomLink[]>();
-  @Input() apiCustomLinks: CustomLink[] = [];
   form: FormGroup;
 
+  private _apiCustomLinks: CustomLink[] = [];
   private _customLinks: CustomLink[] = [];
   private _customLinksUpdated = new EventEmitter<void>();
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _formBuilder: FormBuilder) {}
+  constructor(private readonly _formBuilder: FormBuilder) {
+    this.form = this._formBuilder.group({
+      customLinks: this._formBuilder.array([
+        this._formBuilder.group({
+          label: [{value: '', disabled: false}, Validators.required],
+          url: [{value: '', disabled: false}, Validators.required],
+          icon: [{value: '', disabled: false}],
+          location: [{value: CustomLinkLocation.Default, disabled: false}],
+        }),
+      ]),
+    });
+
+    this._customLinksUpdated.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._rebuildLinks());
+  }
+
+  ngOnInit() {}
 
   get customLinksArray(): FormArray {
     return this.form.get('customLinks') as FormArray;
-  }
-
-  ngOnInit(): void {
-    this.form = this._formBuilder.group({
-      customLinks: this._formBuilder.array([]),
-    });
-
-    this._addCustomLink();
-    this._customLinksUpdated.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._rebuildLinks());
   }
 
   ngOnDestroy() {
@@ -83,7 +93,7 @@ export class CustomLinksFormComponent implements OnInit, OnDestroy {
     }
 
     // Check if link is already part of links returned from the API.
-    return this.apiCustomLinks && this.apiCustomLinks.filter(cl => _.isEqual(cl, customLink)).length > 0;
+    return this._apiCustomLinks && this._apiCustomLinks.filter(cl => _.isEqual(cl, customLink)).length > 0;
   }
 
   private static _isFilled(customLink: AbstractControl): boolean {
