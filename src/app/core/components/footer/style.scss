@@ -24,6 +24,8 @@ footer {
   }
 
   a {
+    color: inherit;
+
     &:hover {
       color: inherit;
       opacity: .75;
