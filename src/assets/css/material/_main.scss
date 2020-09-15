@@ -456,8 +456,14 @@ button {
   }
 }
 
-.mat-checkbox-frame {
-  border-radius: $border-radius;
+.mat-checkbox {
+  .mat-checkbox-inner-container {
+    margin-right: 15px;
+
+    .mat-checkbox-frame {
+      border-radius: $border-radius;
+    }
+  }
 }
 
 // Chips.
