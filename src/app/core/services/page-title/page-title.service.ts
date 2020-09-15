@@ -24,6 +24,7 @@ import {MachineDeployment} from '../../../shared/entity/machine-deployment';
 export class PageTitleService {
   projectName: string;
   clusterName: string;
+  externalClusterName: string;
   mdName: string;
   private readonly _unsubscribe = new Subject<void>();
 
@@ -43,6 +44,8 @@ export class PageTitleService {
       .pipe(tap(project => (this.projectName = project ? project.name : '')))
       .pipe(switchMap(_ => this._clusterObservable()))
       .pipe(tap(cluster => (this.clusterName = cluster ? cluster.name : '')))
+      .pipe(switchMap(_ => this._externalClusterObservable()))
+      .pipe(tap(cluster => (this.externalClusterName = cluster ? cluster.name : '')))
       .pipe(switchMap(_ => this._machineDeploymentObservable()))
       .pipe(tap(md => (this.mdName = md ? md.name : '')))
       .pipe(takeUntil(this._unsubscribe))
@@ -63,7 +66,7 @@ export class PageTitleService {
       ? `${ViewDisplayName.Projects.slice(0, -1)} '${this.projectName}'`
       : '';
     const cluster = this._params.get(PathParam.ClusterID)
-      ? `${ViewDisplayName.Clusters.slice(0, -1)} '${this.clusterName}' in `
+      ? `${ViewDisplayName.Clusters.slice(0, -1)} '${this.clusterName || this.externalClusterName}' in `
       : '';
     const md = this._params.get(PathParam.MachineDeploymentID)
       ? `${ViewDisplayName.MachineDeployment} '${this.mdName}' in `
@@ -91,6 +94,17 @@ export class PageTitleService {
           this._params.get(PathParam.ProjectID),
           this._params.get(PathParam.ClusterID),
           this._params.get(PathParam.SeedDC)
+        )
+      : of(null);
+  }
+
+  private _externalClusterObservable(): Observable<Cluster> {
+    return this._params.get(PathParam.ProjectID) &&
+      this._params.get(PathParam.ClusterID) &&
+      !this._params.get(PathParam.SeedDC)
+      ? this._clusterService.externalCluster(
+          this._params.get(PathParam.ProjectID),
+          this._params.get(PathParam.ClusterID)
         )
       : of(null);
   }

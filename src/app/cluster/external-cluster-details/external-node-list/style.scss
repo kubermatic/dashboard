@@ -9,24 +9,48 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@mixin theme-project-component($colors) {
-  .mat-button-toggle-group {
-    &.km-project-view-switch {
-      .mat-button-toggle {
-        &.mat-button-toggle-checked {
-          background-color: map-get($colors, divider);
-          border-color: map-get($colors, divider);
-        }
-      }
+@import 'variables';
+
+.mat-card {
+  .mat-card-header {
+    .mat-card-title {
+      padding-left: 30px;
     }
   }
+}
 
-  .km-initials-circle {
-    background-color: map-get($colors, background-card);
-    border: 2px solid map-get($colors, divider);
+.km-node-ip-addresses {
+  display: block;
+  line-height: 20px;
+}
 
-    &.accent {
-      background-color: map-get($colors, divider);
-    }
+i.km-icon-info {
+  margin-left: 5px;
+}
+
+.mat-column-name,
+.km-node-info {
+  align-items: center;
+  display: flex;
+}
+
+.mat-column-name {
+  height: 50px;
+}
+
+.km-node-details {
+  box-shadow: $border-box-shadow-inset;
+  padding: $item-details-padding;
+
+  mat-card-content {
+    border: none;
+    margin-top: 15px;
+  }
+}
+
+.mat-card-content {
+  .km-row {
+    border-top: none;
+    padding: 0 30px;
   }
 }

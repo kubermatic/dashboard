@@ -9,24 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@mixin theme-project-component($colors) {
-  .mat-button-toggle-group {
-    &.km-project-view-switch {
-      .mat-button-toggle {
-        &.mat-button-toggle-checked {
-          background-color: map-get($colors, divider);
-          border-color: map-get($colors, divider);
-        }
-      }
-    }
-  }
-
-  .km-initials-circle {
-    background-color: map-get($colors, background-card);
-    border: 2px solid map-get($colors, divider);
-
-    &.accent {
-      background-color: map-get($colors, divider);
-    }
-  }
+export class ExternalClusterModel {
+  name: string;
+  kubeconfig: string;
 }

@@ -297,6 +297,16 @@ body {
       }
     }
   }
+
+  &.km-version-picker-disabled {
+    mat-form-field.mat-primary {
+      .mat-select-arrow-wrapper {
+        .mat-select-arrow {
+          display: none;
+        }
+      }
+    }
+  }
 }
 
 km-dashboard {
@@ -345,4 +355,15 @@ km-dashboard {
       }
     }
   }
+}
+
+.km-label-primary {
+  border-radius: $border-radius;
+  border-style: solid;
+  border-width: 1px;
+  font-size: $font-size-body;
+  line-height: 12px;
+  margin: 4px 0;
+  max-width: 100px;
+  padding: 4px;
 }
