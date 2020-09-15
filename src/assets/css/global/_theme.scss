@@ -10,6 +10,14 @@
 // limitations under the License.
 
 @mixin theme-global($colors) {
+  a {
+    color: map-get($colors, primary);
+
+    &:hover {
+      color: map-get($colors, primary-hover);
+    }
+  }
+
   ::-webkit-scrollbar-thumb {
     background: map-get($colors, scrollbar);
   }

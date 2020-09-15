@@ -24,6 +24,11 @@ body {
   width: 100%;
 }
 
+a {
+  outline: none;
+  text-decoration: none;
+}
+
 ::-webkit-scrollbar {
   @include size($scrollbar-size);
 }
