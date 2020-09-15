@@ -11,7 +11,7 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Subject} from 'rxjs';
+import {merge, Subject, timer} from 'rxjs';
 
 import {Cluster} from '../../shared/entity/cluster';
 import {Event} from '../../shared/entity/event';
@@ -26,6 +26,7 @@ import {GroupConfig} from '../../shared/model/Config';
 import {Node} from '../../shared/entity/node';
 import {ExternalClusterDataDialogComponent} from '../../shared/components/external-cluster-data-dialog/component';
 import {MatDialog} from '@angular/material/dialog';
+import {AppConfigService} from '../../app-config.service';
 
 @Component({
   selector: 'km-cluster-details',
@@ -33,6 +34,8 @@ import {MatDialog} from '@angular/material/dialog';
   styleUrls: ['./style.scss'],
 })
 export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
+  private readonly _refreshTime = 10;
+  private readonly _metricsRefreshTime = 5;
   projectId: string;
   cluster: Cluster;
   nodes: Node[] = [];
@@ -41,15 +44,19 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   events: Event[] = [];
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
+  private _clusterRefresh: Subject<any> = new Subject();
+  private _metricsRefreshTimer = timer(0, this._appConfigService.getRefreshTimeBase() * this._metricsRefreshTime);
+  private _refreshTimer = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
     private readonly _activatedRoute: ActivatedRoute,
+    private readonly _router: Router,
     private readonly _matDialog: MatDialog,
     private readonly _clusterService: ClusterService,
     private readonly _userService: UserService,
     private readonly _notificationService: NotificationService,
-    private readonly _router: Router
+    private readonly _appConfigService: AppConfigService
   ) {}
 
   ngOnInit(): void {
@@ -62,18 +69,18 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       .getCurrentUserGroup(this.projectId)
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
-    this._clusterService
-      .externalCluster(this.projectId, clusterId)
+    merge(this._refreshTimer, this._clusterRefresh)
+      .pipe(switchMap(_ => this._clusterService.externalCluster(this.projectId, clusterId)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(cluster => (this.cluster = cluster));
 
-    this._clusterService
-      .externalClusterMetrics(this.projectId, clusterId)
+    this._metricsRefreshTimer
+      .pipe(switchMap(_ => this._clusterService.externalClusterMetrics(this.projectId, clusterId)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(metrics => (this.metrics = metrics));
 
-    this._clusterService
-      .externalClusterNodesMetrics(this.projectId, clusterId)
+    this._metricsRefreshTimer
+      .pipe(switchMap(_ => this._clusterService.externalClusterNodesMetrics(this.projectId, clusterId)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(metrics => {
         const map = new Map<string, NodeMetrics>();
@@ -81,13 +88,13 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
         this.nodesMetrics = map;
       });
 
-    this._clusterService
-      .externalClusterNodes(this.projectId, clusterId)
+    this._refreshTimer
+      .pipe(switchMap(_ => this._clusterService.externalClusterNodes(this.projectId, clusterId)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(nodes => (this.nodes = nodes));
 
-    this._clusterService
-      .externalClusterEvents(this.projectId, clusterId)
+    this._refreshTimer
+      .pipe(switchMap(_ => this._clusterService.externalClusterEvents(this.projectId, clusterId)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(events => (this.events = events));
   }
@@ -112,9 +119,10 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(filter(model => !!model))
       .pipe(switchMap(model => this._clusterService.updateExternalCluster(this.projectId, this.cluster.id, model)))
       .pipe(take(1))
-      .subscribe(_ =>
-        this._notificationService.success(`The <strong>${this.cluster.name}</strong> cluster was updated`)
-      );
+      .subscribe(_ => {
+        this._clusterRefresh.next();
+        this._notificationService.success(`The <strong>${this.cluster.name}</strong> cluster was updated`);
+      });
   }
 
   isDeleteEnabled(): boolean {
