@@ -45,7 +45,7 @@ limitations under the License.
              fxLayoutAlign=" center"
              class="entry-label">
           <span>Custom Links</span>
-          <div class="km-pointer"
+          <div class="km-icon-info km-pointer"
                matTooltip="Customize your theme or improve the workflow by adding links in the sidebar or footer."></div>
         </div>
         <div fxFlex
@@ -73,7 +73,7 @@ limitations under the License.
              fxLayoutAlign=" center"
              class="entry-label">
           <span>Cleanup on Cluster Deletion</span>
-          <div class="km-pointer"
+          <div class="km-icon-info km-pointer"
                matTooltip="Set &quot;clean up connected load balancers&quot; and &quot;clean up connected volumes (PVs and PVCS)&quot; checkboxes on Cluster Deletion to enabled by default. Enable &quot;Enforce&quot; to make users unable to edit the checkboxes."></div>
         </div>
         <div fxFlexAlign=" center"
@@ -96,7 +96,7 @@ limitations under the License.
              fxLayoutAlign=" center"
              class="entry-label">
           <span>Displayed Distributions</span>
-          <div class="km-pointer"
+          <div class="km-icon-info km-pointer"
                matTooltip="Deactivate the distributions you want to hide from the users. At least one distribution has to be enabled."></div>
           <div *ngIf="isOpenShiftEnabled()"
                class="km-icon-error km-warning-bg"
@@ -149,7 +149,7 @@ limitations under the License.
              fxLayoutAlign=" center"
              class="entry-label">
           <span>Enable Kubernetes Dashboard</span>
-          <div class="km-pointer"
+          <div class="km-icon-info km-pointer"
                matTooltip="Show/Hide &quot;Open Dashboard&quot; button on cluster details and allow/block Kubernetes Dashboard access through the API."></div>
         </div>
         <mat-checkbox [(ngModel)]="settings.enableDashboard"
@@ -162,7 +162,7 @@ limitations under the License.
              fxLayoutAlign=" center"
              class="entry-label">
           <span>Enable OIDC Kubeconfig</span>
-          <div class="km-pointer"
+          <div class="km-icon-info km-pointer"
                matTooltip="Use OIDC provider as a proxy for kubeconfig download."></div>
         </div>
         <mat-checkbox [(ngModel)]="settings.enableOIDCKubeconfig"
@@ -175,7 +175,7 @@ limitations under the License.
              fxLayoutAlign=" center"
              class="entry-label">
           <span>User Projects Limit</span>
-          <div class="km-pointer"
+          <div class="km-icon-info km-pointer"
                matTooltip="Set limit to zero to allow unlimited project creation for users. It does not affect administrators."></div>
         </div>
         <mat-checkbox fxLayoutAlign=" center"

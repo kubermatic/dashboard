@@ -72,7 +72,7 @@ limitations under the License.
             fxLayoutAlign=" center"
             fxLayoutGap="4px">
           <span>Replicas</span>
-          <div class="km-pointer"
+          <div class="km-icon-info km-pointer"
                matTooltip="Number of running machines/Number of desired machines."></div>
         </th>
         <td mat-cell
@@ -80,7 +80,7 @@ limitations under the License.
             fxLayoutGap="4px">
           <span>{{!!element.status?.availableReplicas ? element.status.availableReplicas : 0}}/{{!!element.spec?.replicas ? element.spec.replicas : 0}}</span>
           <div *ngIf="element.status?.availableReplicas > element.spec.replicas"
-               class="km-pointer"
+               class="km-icon-info km-pointer"
                matTooltip="Number of available machines may be higher than number of desired machines from the template if deployment is updating."></div>
         </td>
       </ng-container>
