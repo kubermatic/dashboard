@@ -89,6 +89,7 @@ limitations under the License.
             Int.IP:
             <span class="km-copy"
                   [cbContent]="getAddresses(element).InternalIP"
+                  (click)="$event.stopPropagation()"
                   ngxClipboard
                   matTooltip="click to copy">{{getAddresses(element).InternalIP}}</span>
           </span>
@@ -97,6 +98,7 @@ limitations under the License.
             Ext.IP:
             <span class="km-copy"
                   [cbContent]="getAddresses(element).ExternalIP"
+                  (click)="$event.stopPropagation()"
                   ngxClipboard
                   matTooltip="click to copy">{{getAddresses(element).ExternalIP}}</span>
           </span>
