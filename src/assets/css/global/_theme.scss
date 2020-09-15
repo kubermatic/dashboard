@@ -11,10 +11,12 @@
 
 @mixin theme-global($colors) {
   a {
-    color: map-get($colors, primary);
+    &:not(.mat-button-base) {
+      color: map-get($colors, primary);
 
-    &:hover {
-      color: map-get($colors, primary-hover);
+      &:hover {
+        color: map-get($colors, primary-hover);
+      }
     }
   }
 
