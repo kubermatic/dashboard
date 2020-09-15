@@ -89,7 +89,9 @@ limitations under the License.
           <mat-select-trigger fxFlex
                               fxLayout="row">
             <div fxFlex
-                 fxLayoutAlign="start">{{getProviderName(providerFilter)}}</div>
+                 fxLayoutAlign="start">
+              <span class="km-provider-logo km-provider-logo-{{providerFilter}} provider-logo-small"></span>
+            </div>
             <div fxFlex
                  fxLayoutAlign="end">
               <button *ngIf="providerFilter"
@@ -104,7 +106,7 @@ limitations under the License.
           </mat-select-trigger>
           <mat-option *ngFor="let provider of providers"
                       [value]="provider">
-            {{getProviderName(provider)}}
+            <span class="km-provider-logo km-provider-logo-{{provider}} provider-logo-medium"></span>
           </mat-option>
         </mat-select>
       </mat-form-field>
