@@ -10,22 +10,18 @@
 // limitations under the License.
 
 import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Subject} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 import * as _ from 'lodash';
 
 import {UserService} from '../../../core/services';
 import {Cluster} from '../../../shared/entity/cluster';
-import {Member} from '../../../shared/entity/member';
 import {NodeMetrics} from '../../../shared/entity/metrics';
 import {Node} from '../../../shared/entity/node';
-import {GroupConfig} from '../../../shared/model/Config';
 import {NodeHealthStatus} from '../../../shared/utils/health-status/node-health-status';
-import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 
 @Component({
@@ -38,21 +34,13 @@ export class ExternalNodeListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() nodes: Node[] = [];
   @Input() nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   @Input() projectID: string;
-
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-
-  config: MatDialogConfig = {
-    disableClose: false,
-    hasBackdrop: true,
-  };
   isShowNodeItem = [];
   displayedColumns: string[] = ['stateArrow', 'status', 'name', 'kubeletVersion', 'ipAddresses', 'creationDate'];
   toggledColumns: string[] = ['nodeDetails'];
   dataSource = new MatTableDataSource<Node>();
 
-  private _user: Member;
-  private _currentGroupConfig: GroupConfig;
   private _unsubscribe = new Subject<void>();
 
   constructor(private readonly _userService: UserService) {}
@@ -63,12 +51,6 @@ export class ExternalNodeListComponent implements OnInit, OnChanges, OnDestroy {
     this.dataSource.paginator = this.paginator;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
-
-    this._userService.currentUser.pipe(first()).subscribe(user => (this._user = user));
-
-    this._userService
-      .getCurrentUserGroup(this.projectID)
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
@@ -85,15 +67,7 @@ export class ExternalNodeListComponent implements OnInit, OnChanges, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getVersionHeadline(type: string, isKubelet: boolean): string {
-    return Cluster.getVersionHeadline(type, isKubelet);
-  }
-
-  canDelete(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'nodes', Permission.Delete);
-  }
-
-  getNodeHealthStatus(n: Node, i: number): object {
+  getNodeHealthStatus(n: Node): object {
     return NodeHealthStatus.getHealthStatus(n);
   }
 

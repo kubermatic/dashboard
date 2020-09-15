@@ -143,7 +143,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  getNodeHealthStatus(n: Node, i: number): object {
+  getNodeHealthStatus(n: Node): object {
     return NodeHealthStatus.getHealthStatus(n);
   }
 
