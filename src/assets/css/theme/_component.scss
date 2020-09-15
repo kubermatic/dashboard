@@ -22,7 +22,6 @@
 @import 'src/app/shared/components/addon-list/theme';
 @import 'src/app/shared/components/editor/theme';
 @import 'src/app/shared/components/property-usage/theme';
-@import 'src/app/theme';
 @import 'src/app/wizard/step/cluster/theme';
 @import 'src/app/wizard/step/summary/theme';
 
@@ -32,7 +31,6 @@
   @include theme-cluster-panel-component($colors);
   @include theme-editor-component($colors);
   @include theme-footer-component($colors);
-  @include theme-kubermatic-component($colors);
   @include theme-navigation-component($colors);
   @include theme-notification-component($colors);
   @include theme-project-component($colors);
