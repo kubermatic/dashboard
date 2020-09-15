@@ -351,3 +351,11 @@ km-dashboard {
     }
   }
 }
+
+.km-clear-input-btn {
+  &.mat-icon-button {
+    position: absolute;
+    right: 30px;
+    top: -13px;
+  }
+}

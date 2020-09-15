@@ -32,10 +32,9 @@ limitations under the License.
               <button *ngIf="seedFilter"
                       (click)="seedFilter = undefined; filter(); $event.stopPropagation()"
                       mat-icon-button
-                      aria-label="Clear"
-                      class="clear-filter">
-                <mat-icon class="km-icon"
-                          inline="true">close</mat-icon>
+                      class="km-clear-input-btn"
+                      aria-label="Clear">
+                <mat-icon inline="true">close</mat-icon>
               </button>
             </div>
           </mat-select-trigger>
@@ -65,10 +64,9 @@ limitations under the License.
               <button *ngIf="countryFilter"
                       (click)="countryFilter = undefined; filter(); $event.stopPropagation()"
                       mat-icon-button
-                      aria-label="Clear"
-                      class="clear-filter">
-                <mat-icon class="km-icon"
-                          inline="true">close</mat-icon>
+                      class="km-clear-input-btn"
+                      aria-label="Clear">
+                <mat-icon inline="true">close</mat-icon>
               </button>
             </div>
           </mat-select-trigger>
@@ -97,10 +95,9 @@ limitations under the License.
               <button *ngIf="providerFilter"
                       (click)="providerFilter = undefined; filter(); $event.stopPropagation()"
                       mat-icon-button
-                      aria-label="Clear"
-                      class="clear-filter">
-                <mat-icon class="km-icon"
-                          inline="true">close</mat-icon>
+                      class="km-clear-input-btn"
+                      aria-label="Clear">
+                <mat-icon inline="true">close</mat-icon>
               </button>
             </div>
           </mat-select-trigger>
