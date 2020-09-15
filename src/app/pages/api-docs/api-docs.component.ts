@@ -30,11 +30,9 @@ export class ApiDocsComponent implements OnInit {
 
   ngOnInit(): void {
     this._api.getSwaggerJson().subscribe(swaggerSpec => {
-      swaggerSpec.host = this._document.location.host;
-      swaggerSpec.schemes = [this._document.location.protocol.replace(':', '')];
       SwaggerUI({
         dom_id: '#km-swagger-container',
-        spec: swaggerSpec,
+        url: `${this._document.location.origin}/api/swagger.json`,
         requestInterceptor: req => {
           const token = this._auth.getBearerToken();
           req.headers.authorization = 'Bearer ' + token;
