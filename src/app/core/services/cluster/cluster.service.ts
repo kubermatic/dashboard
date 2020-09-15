@@ -30,7 +30,6 @@ import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
 import {ExternalClusterModel} from '../../../shared/model/ExternalClusterModel';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {ExternalClusterDataDialogComponent} from '../../../shared/components/external-cluster-data-dialog/component';
 
 @Injectable()
 export class ClusterService {

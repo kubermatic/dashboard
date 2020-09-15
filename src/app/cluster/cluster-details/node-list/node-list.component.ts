@@ -29,6 +29,7 @@ import {GroupConfig} from '../../../shared/model/Config';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeHealthStatus} from '../../../shared/utils/health-status/node-health-status';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
+import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 
 @Component({
   selector: 'km-node-list',
@@ -147,38 +148,11 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getFormattedNodeMemory(memory: string): string {
-    const memRE = /([0-9]+)([a-zA-Z])i/;
-    const resRE = memory.match(memRE);
-    const base = 1024;
-    const radix = 10;
-    const fractionDigits = 2;
-
-    let nodeCapacity;
-    const prefixes = ['Ki', 'Mi', 'Gi', 'Ti'];
-    let i = 0;
-
-    if (resRE) {
-      let ki = parseInt(resRE[1], radix);
-      do {
-        ki /= base;
-        i++;
-      } while (ki > 1);
-      nodeCapacity = (ki * base).toFixed(fractionDigits);
-    }
-
-    return nodeCapacity ? `${nodeCapacity} ${prefixes[i - 1]}` : 'unknown';
+    return NodeUtils.getFormattedNodeMemory(memory);
   }
 
   getAddresses(node: Node): object {
-    const addresses = {};
-    for (const i in node.status.addresses) {
-      if (node.status.addresses[i].type === 'InternalIP') {
-        addresses['InternalIP'] = node.status.addresses[i].address;
-      } else if (node.status.addresses[i].type === 'ExternalIP') {
-        addresses['ExternalIP'] = node.status.addresses[i].address;
-      }
-    }
-    return addresses;
+    return NodeUtils.getAddresses(node);
   }
 
   showInfo(node: Node): boolean {
