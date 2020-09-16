@@ -99,9 +99,7 @@ limitations under the License.
               *matCellDef="let element">
             <span *ngIf="!!getRole(element.id)">{{getRole(element.id)}}</span>
             <span *ngIf="!getRole(element.id)"
-                  class="km-projects-external">
-              <p>External Project</p>
-            </span>
+                  class="km-label-primary">External Project</span>
           </td>
         </ng-container>
 
@@ -256,10 +254,9 @@ limitations under the License.
             <i class="km-icon-mask km-icon-role"></i>
             {{getRole(project.id)}}
           </span>
+          <div fxFlex></div>
           <span *ngIf="!getRole(project.id)"
-                class="km-projects-external km-projects-external-right">
-            <p>External Project</p>
-          </span>
+                class="km-label-primary">External Project</span>
         </div>
       </mat-card-content>
     </mat-card>

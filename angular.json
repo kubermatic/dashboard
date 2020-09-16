@@ -34,19 +34,16 @@
               {
                 "input": "src/assets/themes/light.scss",
                 "bundleName": "assets/themes/light",
-                "lazy": true,
                 "inject": false
               },
               {
                 "input": "src/assets/themes/dark.scss",
                 "bundleName": "assets/themes/dark",
-                "lazy": true,
                 "inject": false
               },
               {
                 "input": "src/assets/themes/custom.scss",
                 "bundleName": "assets/themes/custom",
-                "lazy": true,
                 "inject": false
               }
             ],

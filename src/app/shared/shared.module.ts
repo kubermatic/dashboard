@@ -82,6 +82,7 @@ import {ClusterService} from './services/cluster.service';
 import {EndOfLifeService} from './services/eol.service';
 import {EditorComponent} from './components/editor/component';
 import {MonacoEditorModule} from 'ngx-monaco-editor';
+import {ExternalClusterDataDialogComponent} from './components/external-cluster-data-dialog/component';
 
 const modules: any[] = [
   CommonModule,
@@ -161,6 +162,7 @@ const entryComponents: any[] = [
   EditAddonDialogComponent,
   TokenDialogComponent,
   NotificationComponent,
+  ExternalClusterDataDialogComponent,
 ];
 
 const services: any[] = [ClusterService, EndOfLifeService];

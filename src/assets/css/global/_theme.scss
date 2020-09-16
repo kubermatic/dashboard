@@ -178,4 +178,9 @@
       color: map-get($colors, text-secondary);
     }
   }
+
+  .km-label-primary {
+    border-color: map-get($colors, primary);
+    color: map-get($colors, text);
+  }
 }

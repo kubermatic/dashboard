@@ -48,9 +48,13 @@ import {VersionPickerComponent} from './cluster-details/version-picker/component
 import {ClusterListComponent} from './cluster-list/cluster-list.component';
 import {ClusterRoutingModule} from './cluster-routing.module';
 import {NodeService} from './services/node.service';
+import {ExternalClusterDetailsComponent} from './external-cluster-details/component';
+import {ExternalNodeListComponent} from './external-cluster-details/external-node-list/component';
 
 const components: any[] = [
   ClusterDetailsComponent,
+  ExternalClusterDetailsComponent,
+  ExternalNodeListComponent,
   NodeListComponent,
   MachineDeploymentListComponent,
   MachineDeploymentDetailsComponent,
