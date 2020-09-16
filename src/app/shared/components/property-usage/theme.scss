@@ -16,7 +16,7 @@
     }
 
     .mat-progress-bar-fill::after {
-      background-color: map-get($colors, primary-hover);
+      background-color: map-get($colors, primary);
     }
   }
 }

@@ -24,6 +24,11 @@ body {
   width: 100%;
 }
 
+a {
+  outline: none;
+  text-decoration: none;
+}
+
 ::-webkit-scrollbar {
   @include size($scrollbar-size);
 }
@@ -366,4 +371,12 @@ km-dashboard {
   margin: 4px 0;
   max-width: 100px;
   padding: 4px;
+}
+
+.km-clear-input-btn {
+  &.mat-icon-button {
+    position: absolute;
+    right: 30px;
+    top: -13px;
+  }
 }
