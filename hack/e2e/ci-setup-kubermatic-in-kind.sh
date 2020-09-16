@@ -32,6 +32,11 @@ if [[ ${TARGET_BRANCH} == release* ]]; then
   export KUBERMATIC_VERSION=${TAG_VERSION}
 fi
 
+echodate $KUBERMATIC_VERSION
+echodate $TARGET_BRANCH
+echodate $VERSION
+echodate $TAG_VERSION
+
 TEST_NAME="Get Vault token"
 echodate "Getting secrets from Vault"
 export VAULT_ADDR=https://vault.loodse.com/
