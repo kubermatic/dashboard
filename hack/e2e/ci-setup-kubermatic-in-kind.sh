@@ -32,10 +32,9 @@ if [[ ${TARGET_BRANCH} == release* ]]; then
   export KUBERMATIC_VERSION=${TAG_VERSION}
 fi
 
-echodate $KUBERMATIC_VERSION
-echodate $TARGET_BRANCH
-echodate $VERSION
-echodate $TAG_VERSION
+if [ -z "${TAG_VERSION}" ]; then
+  TAG_VERSION=latest
+fi
 
 TEST_NAME="Get Vault token"
 echodate "Getting secrets from Vault"
