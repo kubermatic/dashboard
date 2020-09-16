@@ -43,7 +43,7 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
       .pipe(tap(projects => (this._projects = projects)))
       .pipe(switchMap(_ => this._projectService.myProjects))
       .pipe(tap(projects => (this.myProjects = this._sortProjects(projects))))
-      .pipe(tap(_ => (this.externalProjects = differenceBy(this._projects, this.myProjects, 'id'))))
+      .pipe(tap(_ => (this.externalProjects = this._sortProjects(differenceBy(this._projects, this.myProjects, 'id')))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._appendProject(this.selectedProject));
 

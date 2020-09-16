@@ -28,3 +28,19 @@
 .mat-hint {
   font-size: $font-size-caption;
 }
+
+.km-provider-logo {
+  background-position: left;
+
+  &.provider-logo-medium {
+    max-height: 22px;
+    max-width: 80px;
+    min-height: 22px;
+  }
+
+  &.provider-logo-small {
+    max-height: 18px;
+    max-width: 80px;
+    min-height: 18px;
+  }
+}

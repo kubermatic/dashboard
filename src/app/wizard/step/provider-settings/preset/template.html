@@ -31,6 +31,7 @@ limitations under the License.
           <button *ngIf="selectedPreset"
                   (click)="reset(); $event.stopPropagation()"
                   mat-icon-button
+                  class="km-clear-input-btn"
                   aria-label="Clear">
             <mat-icon inline="true">close</mat-icon>
           </button>

@@ -22,20 +22,6 @@
   .mat-form-field {
     width: 280px;
   }
-
-  .clear-filter {
-    line-height: 25px;
-    margin-right: 5px;
-    max-height: 24px;
-    max-width: 24px;
-    position: absolute;
-    right: 30px;
-    top: -2px;
-
-    .km-icon {
-      margin-top: -4px;
-    }
-  }
 }
 
 .km-provider-logo {
@@ -45,4 +31,18 @@
   max-width: 120px;
   min-height: 28px;
   min-width: 40px;
+
+  &.provider-logo-medium {
+    margin: unset;
+    max-height: 22px;
+    max-width: 80px;
+    min-height: 22px;
+  }
+
+  &.provider-logo-small {
+    margin: unset;
+    max-height: 18px;
+    max-width: 80px;
+    min-height: 18px;
+  }
 }

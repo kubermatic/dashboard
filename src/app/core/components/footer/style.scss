@@ -22,6 +22,15 @@ footer {
     font-size: $font-size-body;
     text-decoration: none;
   }
+
+  a {
+    color: inherit;
+
+    &:hover {
+      color: inherit;
+      opacity: .75;
+    }
+  }
 }
 
 .content {

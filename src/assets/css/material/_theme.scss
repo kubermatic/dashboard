@@ -29,12 +29,6 @@
   // Dialogs.
   .mat-dialog-container {
     color: map-get($colors, text);
-
-    .mat-dialog-content {
-      a {
-        color: map-get($colors, primary);
-      }
-    }
   }
 
   // Tables.
@@ -187,13 +181,6 @@
 
     &:hover {
       background-color: map-get($colors, option-background-hover);
-    }
-  }
-
-  mat-hint {
-    a {
-      color: map-get($colors, primary);
-      text-decoration: none;
     }
   }
 
