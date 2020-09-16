@@ -70,7 +70,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe(projects => {
       this.projects = projects;
       this.projectIds = this.projects.map(p => p.id);
-      this._checkProject();
+      this._checkDefaultProject();
     });
   }
 
@@ -99,7 +99,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     return !!this.user && this.user.isAdmin;
   }
 
-  private _checkProject(): void {
+  private _checkDefaultProject(): void {
     if (!!this.settings.selectedProjectId && !this.projectIds.includes(this.settings.selectedProjectId)) {
       this.settings.selectedProjectId = '';
       this.onSettingsChange();
