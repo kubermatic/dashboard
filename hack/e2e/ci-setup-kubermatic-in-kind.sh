@@ -28,7 +28,7 @@ source hack/lib.sh
 
 if [[ ${TARGET_BRANCH} == release* ]]; then
   VERSION=${TARGET_BRANCH#release/}
-  TAG_VERSION=$(git tag | egrep "${VERSION}" | tail -n 1)
+  TAG_VERSION=$(git tag | egrep "${VERSION}" | tail -n 1 || true)
   if [ -z "${TAG_VERSION}" ]; then
     TAG_VERSION=latest
   fi
