@@ -29,11 +29,10 @@ source hack/lib.sh
 if [[ ${TARGET_BRANCH} == release* ]]; then
   VERSION=${TARGET_BRANCH#release/}
   TAG_VERSION=$(git tag | egrep "${VERSION}" | tail -n 1)
+  if [ -z "${TAG_VERSION}" ]; then
+    TAG_VERSION=latest
+  fi
   export KUBERMATIC_VERSION=${TAG_VERSION}
-fi
-
-if [ -z "${TAG_VERSION}" ]; then
-  TAG_VERSION=latest
 fi
 
 TEST_NAME="Get Vault token"
