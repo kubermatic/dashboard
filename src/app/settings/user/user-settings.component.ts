@@ -29,6 +29,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   readonly itemsPerPageOptions = [5, 10, 15, 20, 25];
   projects: Project[] = [];
+  projectIds: string[] = [];
   user: Member;
   settings: UserSettings; // Local settings copy. User can edit it.
   apiSettings: UserSettings; // Original settings from the API. Cannot be edited by the user.
@@ -68,6 +69,8 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
 
     this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe(projects => {
       this.projects = projects;
+      this.projectIds = this.projects.map(p => p.id);
+      this._checkDefaultProject();
     });
   }
 
@@ -94,5 +97,12 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
 
   isAdmin(): boolean {
     return !!this.user && this.user.isAdmin;
+  }
+
+  private _checkDefaultProject(): void {
+    if (!!this.settings.selectedProjectId && !this.projectIds.includes(this.settings.selectedProjectId)) {
+      this.settings.selectedProjectId = '';
+      this.onSettingsChange();
+    }
   }
 }
