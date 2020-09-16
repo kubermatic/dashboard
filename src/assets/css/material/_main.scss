@@ -80,10 +80,6 @@ mat-card {
     overflow-x: unset;
     overflow-y: auto;
 
-    a {
-      text-decoration: none;
-    }
-
     p {
       margin: 0 0 8px;
     }
@@ -459,8 +455,14 @@ button {
   }
 }
 
-.mat-checkbox-frame {
-  border-radius: $border-radius;
+.mat-checkbox {
+  .mat-checkbox-inner-container {
+    margin-right: 15px;
+
+    .mat-checkbox-frame {
+      border-radius: $border-radius;
+    }
+  }
 }
 
 // Chips.
