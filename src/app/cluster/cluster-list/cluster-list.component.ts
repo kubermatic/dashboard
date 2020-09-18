@@ -171,7 +171,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     this._router.navigate([`/projects/${this._selectedProject.id}/wizard`]);
   }
 
-  addExternalCluster(): void {
+  connectCluster(): void {
     const dialog = this._matDialog.open(ExternalClusterDataDialogComponent);
     dialog.componentInstance.projectId = this._selectedProject.id;
 
@@ -203,16 +203,18 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   deleteClusterDialog(cluster: Cluster, event: Event): void {
     event.stopPropagation();
 
-    if (!cluster.isExternal) {
-      const modal = this._matDialog.open(ClusterDeleteConfirmationComponent);
-      modal.componentInstance.cluster = cluster;
-      modal.componentInstance.seed = this.nodeDC[cluster.id].spec.seed;
-      modal.componentInstance.projectID = this._selectedProject.id;
-    } else {
-      this._clusterService.showDeleteExternalClusterDialog(cluster, this._selectedProject.id).subscribe(_ => {
-        this._notificationService.success(`The <strong>${cluster.name}</strong> cluster was removed`);
-      });
-    }
+    const modal = this._matDialog.open(ClusterDeleteConfirmationComponent);
+    modal.componentInstance.cluster = cluster;
+    modal.componentInstance.seed = this.nodeDC[cluster.id].spec.seed;
+    modal.componentInstance.projectID = this._selectedProject.id;
+  }
+
+  disconnectClusterDialog(cluster: Cluster, event: Event): void {
+    event.stopPropagation();
+
+    this._clusterService.showDisconnectClusterDialog(cluster, this._selectedProject.id).subscribe(_ => {
+      this._notificationService.success(`The <strong>${cluster.name}</strong> cluster was disconnected`);
+    });
   }
 
   isPaginatorVisible(): boolean {

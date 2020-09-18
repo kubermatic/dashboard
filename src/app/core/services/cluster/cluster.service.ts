@@ -132,14 +132,14 @@ export class ClusterService {
     return this._http.delete(url, {headers: this._headers});
   }
 
-  showDeleteExternalClusterDialog(cluster: Cluster, projectID: string): Observable<any> {
+  showDisconnectClusterDialog(cluster: Cluster, projectID: string): Observable<any> {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
       data: {
-        title: 'Delete External Cluster',
-        message: `Are you sure you want to delete <strong>${cluster.name}</strong> cluster?`,
-        confirmLabel: 'Delete',
+        title: 'Disconnect Cluster',
+        message: `Are you sure you want to disconnect <strong>${cluster.name}</strong> cluster?`,
+        confirmLabel: 'Disconnect',
       },
     };
 
