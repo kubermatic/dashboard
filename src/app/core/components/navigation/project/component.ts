@@ -68,6 +68,10 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
     return !!a && !!b && a.id === b.id;
   }
 
+  trackByProject(_: number, project: Project): string {
+    return project.id;
+  }
+
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
