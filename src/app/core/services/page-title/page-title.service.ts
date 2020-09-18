@@ -86,22 +86,15 @@ export class PageTitleService {
     return titleString;
   }
 
+  // TODO: Find difference between cluster and external cluster.
   private _clusterObservable(): Observable<Cluster> {
-    return this._params.get(PathParam.ProjectID) &&
-      this._params.get(PathParam.ClusterID) &&
-      this._params.get(PathParam.SeedDC)
-      ? this._clusterService.cluster(
-          this._params.get(PathParam.ProjectID),
-          this._params.get(PathParam.ClusterID),
-          this._params.get(PathParam.SeedDC)
-        )
+    return this._params.get(PathParam.ProjectID) && this._params.get(PathParam.ClusterID)
+      ? this._clusterService.cluster(this._params.get(PathParam.ProjectID), this._params.get(PathParam.ClusterID))
       : of(null);
   }
 
   private _externalClusterObservable(): Observable<Cluster> {
-    return this._params.get(PathParam.ProjectID) &&
-      this._params.get(PathParam.ClusterID) &&
-      !this._params.get(PathParam.SeedDC)
+    return this._params.get(PathParam.ProjectID) && this._params.get(PathParam.ClusterID)
       ? this._clusterService.externalCluster(
           this._params.get(PathParam.ProjectID),
           this._params.get(PathParam.ClusterID)

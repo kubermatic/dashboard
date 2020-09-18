@@ -115,7 +115,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     this._datacenterService
       .getDatacenter(this._clusterModelService.datacenter)
       .pipe(tap(dc => (datacenter = dc)))
-      .pipe(switchMap(_ => this._clusterService.create(this.project.id, datacenter.spec.seed, createCluster)))
+      .pipe(switchMap(_ => this._clusterService.create(this.project.id, createCluster)))
       .pipe(
         tap(cluster => {
           this._notificationService.success(`The <strong>${createCluster.cluster.name}</strong> cluster was created`);
@@ -123,7 +123,7 @@ export class WizardComponent implements OnInit, OnDestroy {
           createdCluster = cluster;
         })
       )
-      .pipe(switchMap(_ => this._clusterService.cluster(this.project.id, createdCluster.id, datacenter.spec.seed)))
+      .pipe(switchMap(_ => this._clusterService.cluster(this.project.id, createdCluster.id)))
       .pipe(
         switchMap(() => {
           this.creating = false;

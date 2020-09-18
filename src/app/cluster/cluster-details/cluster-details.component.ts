@@ -107,7 +107,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     this._clusterService
-      .cluster(this.projectID, clusterID, this.seed)
+      .cluster(this.projectID, clusterID)
       .pipe(
         switchMap(cluster => {
           this.cluster = cluster;
@@ -120,8 +120,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
           return combineLatest([
             this._clusterService.sshKeys(this.projectID, this.cluster.id, this.seed),
-            this._clusterService.health(this.projectID, this.cluster.id, this.seed),
-            this._clusterService.events(this.projectID, this.cluster.id, this.seed),
+            this._clusterService.health(this.projectID, this.cluster.id),
+            this._clusterService.events(this.projectID, this.cluster.id),
           ]);
         })
       )

@@ -44,7 +44,6 @@ export class MachineNetworksDisplayComponent {
   addMachineNetwork(): void {
     const dialogRef = this.dialog.open(AddMachineNetworkComponent);
     dialogRef.componentInstance.cluster = this.cluster;
-    dialogRef.componentInstance.seed = this.seed;
     dialogRef.componentInstance.projectID = this.projectID;
   }
 }
