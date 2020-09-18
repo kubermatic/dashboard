@@ -38,7 +38,7 @@ export class ExternalClusterDataDialogComponent implements OnInit {
   }
 
   getLabel(): string {
-    return this.editMode ? 'Edit External Cluster' : 'Add External Cluster';
+    return this.editMode ? 'Edit Cluster Connection' : 'Connect Cluster';
   }
 
   handler(): void {

@@ -125,14 +125,14 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  isDeleteEnabled(): boolean {
+  isDisconnectEnabled(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'cluster', Permission.Delete);
   }
 
-  delete(): void {
-    this._clusterService.showDeleteExternalClusterDialog(this.cluster, this.projectId).subscribe(_ => {
+  disconnect(): void {
+    this._clusterService.showDisconnectClusterDialog(this.cluster, this.projectId).subscribe(_ => {
       this._router.navigate(['/projects/' + this.projectId + '/clusters']);
-      this._notificationService.success(`The <strong>${this.cluster.name}</strong> cluster was removed`);
+      this._notificationService.success(`The <strong>${this.cluster.name}</strong> cluster was disconnected`);
     });
   }
 }

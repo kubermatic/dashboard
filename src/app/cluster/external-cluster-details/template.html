@@ -18,9 +18,9 @@ limitations under the License.
       <button id="km-delete-cluster-btn"
               mat-flat-button
               color="tertiary"
-              (click)="delete()"
-              [disabled]="!isDeleteEnabled()">
-        Delete
+              (click)="disconnect()"
+              [disabled]="!isDisconnectEnabled()">
+        Disconnect
       </button>
       <div fxFlex></div>
     </div>
@@ -100,7 +100,7 @@ limitations under the License.
 
   <km-external-node-list [nodes]="nodes"
                          [nodesMetrics]="nodesMetrics"
-                         [projectId]="projectId"></km-external-node-list>
+                         [projectID]="projectId"></km-external-node-list>
 
   <km-event-list [events]="events"></km-event-list>
 
