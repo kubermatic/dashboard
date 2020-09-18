@@ -17,8 +17,8 @@ limitations under the License.
     <button mat-flat-button
             color="alternative"
             [disabled]="!canAdd()"
-            (click)="addExternalCluster()">
-      Add External Cluster
+            (click)="connectCluster()">
+      Connect Cluster
     </button>
     <button id="km-add-cluster-top-btn"
             mat-flat-button
@@ -156,12 +156,20 @@ limitations under the License.
               </ng-container>
 
               <ng-container *ngSwitchCase="false">
-                <button mat-icon-button
+                <button *ngIf="!element.isExternal"
+                        mat-icon-button
                         [attr.id]="'km-delete-cluster-' + element.name"
                         matTooltip="Delete Cluster"
                         (click)="deleteClusterDialog(element, $event)"
                         [disabled]="!canDelete()">
                   <i class="km-icon-delete"></i>
+                </button>
+                <button *ngIf="element.isExternal"
+                        mat-icon-button
+                        matTooltip="Disconnect Cluster"
+                        (click)="disconnectClusterDialog(element, $event)"
+                        [disabled]="!canDelete()">
+                  <i class="km-icon-disconnect"></i>
                 </button>
               </ng-container>
             </ng-container>
