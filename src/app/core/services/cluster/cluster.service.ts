@@ -107,7 +107,7 @@ export class ClusterService {
   }
 
   patch(projectID: string, clusterID: string, patch: ClusterPatch): Observable<Cluster> {
-    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}`;
     return this._http.patch<Cluster>(url, patch);
   }
 
@@ -176,7 +176,7 @@ export class ClusterService {
   }
 
   events(projectID: string, clusterID: string): Observable<Event[]> {
-    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/events`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/events`;
     return this._http.get<Event[]>(url).pipe(catchError(() => of<Event[]>()));
   }
 
@@ -191,7 +191,7 @@ export class ClusterService {
   }
 
   health(projectID: string, clusterID: string): Observable<Health> {
-    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/health`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/health`;
     return this._http.get<Health>(url).pipe(catchError(() => of<Health>()));
   }
 
