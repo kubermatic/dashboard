@@ -21,6 +21,7 @@ limitations under the License.
       <mat-form-field fxFlex>
         <mat-label>Seed</mat-label>
         <mat-select disableOptionCentering
+                    class="km-select-ellipsis"
                     [(ngModel)]="seedFilter"
                     (selectionChange)="filter()">
           <mat-select-trigger fxFlex
@@ -47,6 +48,7 @@ limitations under the License.
       <mat-form-field fxFlex>
         <mat-label>Country</mat-label>
         <mat-select disableOptionCentering
+                    class="km-select-ellipsis"
                     [(ngModel)]="countryFilter"
                     (selectionChange)="filter()">
           <mat-select-trigger fxFlex
@@ -82,6 +84,7 @@ limitations under the License.
       <mat-form-field fxFlex>
         <mat-label>Provider</mat-label>
         <mat-select disableOptionCentering
+                    class="km-select-ellipsis"
                     [(ngModel)]="providerFilter"
                     (selectionChange)="filter()">
           <mat-select-trigger fxFlex

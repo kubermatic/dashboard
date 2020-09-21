@@ -14,6 +14,7 @@ limitations under the License.
   <mat-form-field fxFlex>
     <mat-label>{{label}}</mat-label>
     <mat-select #select
+                class="km-select-ellipsis"
                 [formControlName]="controls.Select"
                 (openedChange)="onOpen($event)"
                 [required]="required"
