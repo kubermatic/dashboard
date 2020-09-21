@@ -380,3 +380,16 @@ km-dashboard {
     top: -13px;
   }
 }
+
+.km-select-ellipsis {
+  mat-select-trigger {
+    div {
+      // Required to override style added programmatically by the Angular Material on the div element
+      display: block !important;
+      flex: none !important;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 90%;
+    }
+  }
+}
