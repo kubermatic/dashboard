@@ -37,7 +37,8 @@ limitations under the License.
     <mat-form-field>
       <mat-label>{{getVersionHeadline(cluster.type, false)}}</mat-label>
       <mat-select [ngModel]="cluster.spec.version"
-                  disabled>
+                  disabled
+                  disableOptionCentering>
         <mat-option [value]="cluster.spec.version">
           {{cluster.spec.version}}
         </mat-option>

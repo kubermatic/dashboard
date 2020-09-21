@@ -315,9 +315,9 @@ mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):no
 
 .mat-select-panel {
   margin-left: 6px;
-  margin-top: 30px;
-  max-width: calc(100% + 20px);
-  min-width: calc(100% + 20px);
+  margin-top: 38px;
+  max-width: calc(100% + 20px) !important;
+  min-width: calc(100% + 20px) !important;
   transform-origin: 50% 0 0;
 
   &.ng-animating {
