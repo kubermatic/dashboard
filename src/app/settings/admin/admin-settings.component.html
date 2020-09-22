@@ -174,13 +174,26 @@ limitations under the License.
         <div fxFlex="16%"
              fxLayoutAlign=" center"
              class="entry-label">
+          <span>Enable External Cluster Import</span>
+          <div class="km-icon-info km-pointer"
+               matTooltip="Enable/Disable &quot;Connect Cluster&quot; button on the cluster list and allow/block access to the import cluster feature through the API."></div>
+        </div>
+        <mat-checkbox [(ngModel)]="settings.enableExternalClusterImport"
+                      (change)="onSettingsChange()"></mat-checkbox>
+        <km-settings-status [isSaved]="isEqual(settings.enableExternalClusterImport, apiSettings.enableExternalClusterImport)"></km-settings-status>
+      </div>
+
+      <div fxLayout="row">
+        <div fxFlex="16%"
+             fxLayoutAlign=" center"
+             class="entry-label">
           <span>User Projects Limit</span>
           <div class="km-icon-info km-pointer"
                matTooltip="Set limit to zero to allow unlimited project creation for users. It does not affect administrators."></div>
         </div>
         <mat-checkbox fxLayoutAlign=" center"
                       [(ngModel)]="settings.restrictProjectCreation"
-                      (change)="onSettingsChange()">Restrict Project Creation to Adminstrators</mat-checkbox>
+                      (change)="onSettingsChange()">Restrict Project Creation to Administrators</mat-checkbox>
         <mat-form-field class="km-admin-settings-field-md km-no-padding">
           <mat-label>User Projects Limit</mat-label>
           <input matInput
