@@ -15,7 +15,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Subject, timer} from 'rxjs';
-import {filter, first, retry, switchMap, takeUntil} from 'rxjs/operators';
+import {filter, retry, switchMap, take, takeUntil} from 'rxjs/operators';
 import * as _ from 'lodash';
 
 import {AppConfigService} from '../app-config.service';
@@ -69,11 +69,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._userService.currentUser.pipe(first()).subscribe(user => (this._user = user));
-
-    this._userService
-      .getCurrentUserGroup(this.projectID)
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
+    this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
@@ -90,6 +86,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(
         switchMap(group => {
           this.userGroup = group;
+          this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(group);
           return timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase());
         })
       )
@@ -165,7 +162,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
       .pipe(switchMap(_ => this._api.deleteSSHKey(sshKey.id, this.projectID)))
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(
           `The <strong>${sshKey.name}</strong> SSH key was removed from the <strong>${this.projectID}</strong> project`
