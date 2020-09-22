@@ -19,7 +19,7 @@ import {NotificationService} from '../../services';
 export class ErrorNotificationsInterceptor implements HttpInterceptor {
   private readonly _notificationService: NotificationService;
   // Array of partial error messages that should be silenced in the UI.
-  private readonly _silenceErrArr = ['external cluster'];
+  private readonly _silenceErrArr = ['external cluster functionality'];
 
   constructor(private readonly _inj: Injector) {
     this._notificationService = this._inj.get(NotificationService);
