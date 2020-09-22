@@ -17,6 +17,7 @@ limitations under the License.
                 class="km-select-ellipsis"
                 [formControlName]="Controls.Preset"
                 panelClass="km-preset-dropdown"
+                disableOptionCentering
                 required>
       <mat-option *ngFor="let presetName of presetList.names"
                   [value]="presetName">{{presetName}}</mat-option>
