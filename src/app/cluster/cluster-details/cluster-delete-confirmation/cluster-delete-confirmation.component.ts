@@ -100,7 +100,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
       return;
     }
     this._clusterService
-      .delete(this.projectID, this.cluster.id, this.seed, {
+      .delete(this.projectID, this.cluster.id, {
         [Finalizer.DeleteLoadBalancers]: !!this.deleteForm.controls.clusterLBCleanupCheckbox.value,
         [Finalizer.DeleteVolumes]: !!this.deleteForm.controls.clusterVolumeCleanupCheckbox.value,
       })

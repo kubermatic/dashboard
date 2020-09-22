@@ -12,19 +12,18 @@
 import {Injectable} from '@angular/core';
 import {Title} from '@angular/platform-browser';
 import {Subject, of, Observable} from 'rxjs';
-import {takeUntil, switchMap, tap} from 'rxjs/operators';
 
 import {ProjectService, ClusterService, ApiService} from '../../services';
 import {ParamsService, PathParam} from '../../services/params/params.service';
 import {Cluster} from '../../../shared/entity/cluster';
 import {View, getViewDisplayName, ViewDisplayName} from '../../../shared/entity/common';
 import {MachineDeployment} from '../../../shared/entity/machine-deployment';
+import {switchMap, takeUntil, tap} from 'rxjs/operators';
 
 @Injectable()
 export class PageTitleService {
   projectName: string;
   clusterName: string;
-  externalClusterName: string;
   mdName: string;
   private readonly _unsubscribe = new Subject<void>();
 
@@ -44,8 +43,6 @@ export class PageTitleService {
       .pipe(tap(project => (this.projectName = project ? project.name : '')))
       .pipe(switchMap(_ => this._clusterObservable()))
       .pipe(tap(cluster => (this.clusterName = cluster ? cluster.name : '')))
-      .pipe(switchMap(_ => this._externalClusterObservable()))
-      .pipe(tap(cluster => (this.externalClusterName = cluster ? cluster.name : '')))
       .pipe(switchMap(_ => this._machineDeploymentObservable()))
       .pipe(tap(md => (this.mdName = md ? md.name : '')))
       .pipe(takeUntil(this._unsubscribe))
@@ -66,7 +63,7 @@ export class PageTitleService {
       ? `${ViewDisplayName.Projects.slice(0, -1)} '${this.projectName}'`
       : '';
     const cluster = this._params.get(PathParam.ClusterID)
-      ? `${ViewDisplayName.Clusters.slice(0, -1)} '${this.clusterName || this.externalClusterName}' in `
+      ? `${ViewDisplayName.Clusters.slice(0, -1)} '${this.clusterName}' in `
       : '';
     const md = this._params.get(PathParam.MachineDeploymentID)
       ? `${ViewDisplayName.MachineDeployment} '${this.mdName}' in `
@@ -87,39 +84,26 @@ export class PageTitleService {
   }
 
   private _clusterObservable(): Observable<Cluster> {
-    return this._params.get(PathParam.ProjectID) &&
-      this._params.get(PathParam.ClusterID) &&
-      this._params.get(PathParam.SeedDC)
-      ? this._clusterService.cluster(
-          this._params.get(PathParam.ProjectID),
-          this._params.get(PathParam.ClusterID),
-          this._params.get(PathParam.SeedDC)
-        )
-      : of(null);
-  }
+    const projectId = this._params.get(PathParam.ProjectID);
+    const clusterId = this._params.get(PathParam.ClusterID);
+    const isExternal = this._params.getCurrentUrl().includes('/external/');
 
-  private _externalClusterObservable(): Observable<Cluster> {
-    return this._params.get(PathParam.ProjectID) &&
-      this._params.get(PathParam.ClusterID) &&
-      !this._params.get(PathParam.SeedDC)
-      ? this._clusterService.externalCluster(
-          this._params.get(PathParam.ProjectID),
-          this._params.get(PathParam.ClusterID)
-        )
-      : of(null);
+    if (projectId && clusterId && !isExternal) {
+      return this._clusterService.cluster(projectId, clusterId);
+    } else if (projectId && clusterId && isExternal) {
+      return this._clusterService.externalCluster(projectId, clusterId);
+    }
+    return of(null);
   }
 
   private _machineDeploymentObservable(): Observable<MachineDeployment> {
-    return this._params.get(PathParam.ProjectID) &&
-      this._params.get(PathParam.ClusterID) &&
-      this._params.get(PathParam.MachineDeploymentID) &&
-      this._params.get(PathParam.SeedDC)
-      ? this._apiService.getMachineDeployment(
-          this._params.get(PathParam.MachineDeploymentID),
-          this._params.get(PathParam.ClusterID),
-          this._params.get(PathParam.SeedDC),
-          this._params.get(PathParam.ProjectID)
-        )
+    const projectId = this._params.get(PathParam.ProjectID);
+    const clusterId = this._params.get(PathParam.ClusterID);
+    const machineDeploymentId = this._params.get(PathParam.MachineDeploymentID);
+    const seed = this._params.get(PathParam.SeedDC);
+
+    return projectId && clusterId && machineDeploymentId && seed
+      ? this._apiService.getMachineDeployment(machineDeploymentId, clusterId, seed, projectId)
       : of(null);
   }
 }

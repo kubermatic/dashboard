@@ -18,7 +18,6 @@ import {ClusterService, NotificationService, WizardService} from '../../../core/
 import {MachineNetworksComponent} from '../../../machine-networks/machine-networks.component';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeClusterWithMachineNetwork} from '../../../testing/fake-data/clusterWithMachineNetworks.fake';
-import {fakeSeedDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {RouterTestingModule} from '../../../testing/router-stubs';
 import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
@@ -49,7 +48,6 @@ describe('AddMachineNetworkComponent', () => {
     component = fixture.componentInstance;
     component.cluster = fakeClusterWithMachineNetwork();
     component.projectID = fakeProject().id;
-    component.seed = fakeSeedDatacenter();
 
     fixture.detectChanges();
   });

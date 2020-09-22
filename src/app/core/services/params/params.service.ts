@@ -26,12 +26,15 @@ export class ParamsService {
   onParamChange = new Subject<void>();
 
   private _paramMap: ParamMap;
+  private _currentUrl = '';
 
   constructor(private _router: Router, private _route: ActivatedRoute) {
     this._router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .pipe(
-        switchMap(_ => {
+        switchMap((event: NavigationEnd) => {
+          this._currentUrl = event.url;
+
           let active = this._route;
           while (active.firstChild) {
             active = active.firstChild;
@@ -48,5 +51,9 @@ export class ParamsService {
 
   get(name: string): string | undefined {
     return this._paramMap ? this._paramMap.get(name) : undefined;
+  }
+
+  getCurrentUrl(): string {
+    return this._currentUrl;
   }
 }

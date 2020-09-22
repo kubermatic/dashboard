@@ -60,7 +60,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
       },
     };
 
-    this._clusterService.patch(this.project.id, this.cluster.id, this.seed, patch).subscribe(() => {
+    this._clusterService.patch(this.project.id, this.cluster.id, patch).subscribe(() => {
       this._notificationService.success(
         `The <strong>${this.cluster.name}</strong> cluster is being updated to the ${this.selectedVersion} version`
       );

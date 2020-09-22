@@ -147,7 +147,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadCluster(): void {
     this._clusterService
-      .cluster(this.projectID, this._clusterName, this.seed)
+      .cluster(this.projectID, this._clusterName)
       .pipe(first())
       .subscribe(c => {
         this.cluster = c;

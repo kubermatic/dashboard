@@ -24,7 +24,6 @@ import {MachineNetworkForm} from '../../../shared/model/ClusterForm';
 })
 export class AddMachineNetworkComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() seed: string;
   @Input() projectID: string;
   machineNetworkFormData: MachineNetworkForm[] = [];
   private _unsubscribe = new Subject<void>();
@@ -80,7 +79,7 @@ export class AddMachineNetworkComponent implements OnInit, OnDestroy {
         });
       }
     }
-    this._clusterService.cluster(this.projectID, this.cluster.id, this.seed).subscribe(res => {
+    this._clusterService.cluster(this.projectID, this.cluster.id).subscribe(res => {
       this._notificationService.success(
         `The machine network(s) for the <strong>${this.cluster.name}</strong> cluster were added`
       );

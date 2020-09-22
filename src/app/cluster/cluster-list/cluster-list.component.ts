@@ -116,11 +116,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
                   this._datacenterService
                     .getDatacenter(cluster.spec.cloud.dc)
                     .pipe(tap(datacenter => (this.nodeDC[cluster.id] = datacenter)))
-                    .pipe(
-                      switchMap(datacenter =>
-                        this._clusterService.health(this._selectedProject.id, cluster.id, datacenter.spec.seed)
-                      )
-                    )
+                    .pipe(switchMap(_ => this._clusterService.health(this._selectedProject.id, cluster.id)))
                     // We need to resume on error, otherwise subscription will be canceled and clusters will stop
                     // refreshing.
                     .pipe(catchError(() => onErrorResumeNext(EMPTY)))
