@@ -20,6 +20,7 @@ export class Addon {
 export class AddonSpec {
   isDefault?: boolean;
   variables?: object;
+  continuouslyReconcile?: boolean;
 }
 
 export class AddonConfig {
