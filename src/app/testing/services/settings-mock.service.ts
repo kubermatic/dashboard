@@ -34,6 +34,7 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
   enableOIDCKubeconfig: false,
   userProjectsLimit: 0,
   restrictProjectCreation: false,
+  enableExternalClusterImport: true,
 };
 
 @Injectable()
