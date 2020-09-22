@@ -11,12 +11,13 @@
 
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {combineLatest, merge, Observable, of, timer} from 'rxjs';
-import {catchError, filter, map, shareReplay, switchMap, switchMapTo, take} from 'rxjs/operators';
-import {Subject} from 'rxjs';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {combineLatest, merge, Observable, of, Subject, timer} from 'rxjs';
+import {catchError, filter, map, shareReplay, startWith, switchMap, switchMapTo, take} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
+import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
 import {TaintFormComponent} from '../../../shared/components/taint-form/taint-form.component';
 import {Addon} from '../../../shared/entity/addon';
@@ -24,12 +25,10 @@ import {Cluster, ClusterPatch, Finalizer, MasterVersion, ProviderSettingsPatch} 
 import {Event} from '../../../shared/entity/event';
 import {Health} from '../../../shared/entity/health';
 import {ClusterMetrics, NodeMetrics} from '../../../shared/entity/metrics';
-import {SSHKey} from '../../../shared/entity/ssh-key';
 import {Node} from '../../../shared/entity/node';
+import {SSHKey} from '../../../shared/entity/ssh-key';
 import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
 import {ExternalClusterModel} from '../../../shared/model/ExternalClusterModel';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Injectable()
 export class ClusterService {
@@ -256,7 +255,10 @@ export class ClusterService {
 
   private _getExternalClusters(projectID: string): Observable<Cluster[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters`;
-    return this._http.get<Cluster[]>(url).pipe(catchError(() => of<Cluster[]>()));
+    return this._http
+      .get<Cluster[]>(url)
+      .pipe(catchError(() => of<Cluster[]>()))
+      .pipe(startWith([]));
   }
 
   private _getCluster(projectID: string, clusterID: string): Observable<Cluster> {

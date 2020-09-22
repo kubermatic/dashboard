@@ -39,7 +39,7 @@ describe('ClusterListComponent', () => {
   let activatedRoute: ActivatedRouteStub;
 
   beforeEach(async(() => {
-    const clusterServiceMock = {clusters: jest.fn(), health: jest.fn()};
+    const clusterServiceMock = {clusters: jest.fn(), health: jest.fn(), refreshClusters: () => {}};
     getClustersSpy = clusterServiceMock.clusters.mockReturnValue(asyncData([fakeAWSCluster()]));
     clusterServiceMock.health.mockReturnValue(asyncData([fakeHealth()]));
 

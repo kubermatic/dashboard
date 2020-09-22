@@ -16,6 +16,7 @@ limitations under the License.
        fxLayoutAlign="end center">
     <button mat-flat-button
             color="alternative"
+            *ngIf="(adminSettings$ | async).enableExternalClusterImport"
             [disabled]="!canAdd()"
             (click)="connectCluster()">
       Connect Cluster

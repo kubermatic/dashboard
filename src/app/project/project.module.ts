@@ -22,6 +22,5 @@ const components: any[] = [ProjectComponent, EditProjectComponent, DeleteProject
   imports: [SharedModule, ProjectRoutingModule],
   declarations: [...components],
   exports: [...components],
-  entryComponents: [EditProjectComponent, DeleteProjectConfirmationComponent],
 })
 export class ProjectModule {}

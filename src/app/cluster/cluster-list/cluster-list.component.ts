@@ -15,7 +15,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
-import {EMPTY, forkJoin, of, onErrorResumeNext, Subject} from 'rxjs';
+import {EMPTY, forkJoin, Observable, of, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, distinctUntilChanged, filter, first, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as _ from 'lodash';
 
@@ -27,6 +27,7 @@ import {
   ProjectService,
   UserService,
 } from '../../core/services';
+import {SettingsService} from '../../core/services/settings/settings.service';
 import {CloudSpec, Cluster} from '../../shared/entity/cluster';
 import {Datacenter} from '../../shared/entity/datacenter';
 import {View} from '../../shared/entity/common';
@@ -34,6 +35,7 @@ import {Health} from '../../shared/entity/health';
 import {Member} from '../../shared/entity/member';
 import {MachineDeployment} from '../../shared/entity/machine-deployment';
 import {Project} from '../../shared/entity/project';
+import {AdminSettings} from '../../shared/entity/settings';
 import {GroupConfig} from '../../shared/model/Config';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
 import {MemberUtils, Permission} from '../../shared/utils/member-utils/member-utils';
@@ -61,6 +63,10 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
 
+  get adminSettings$(): Observable<AdminSettings> {
+    return this._settingsService.adminSettings;
+  }
+
   constructor(
     private readonly _clusterService: ClusterService,
     private readonly _projectService: ProjectService,
@@ -70,7 +76,8 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _activeRoute: ActivatedRoute,
     private readonly _matDialog: MatDialog,
     private readonly _apiService: ApiService,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private readonly _settingsService: SettingsService
   ) {}
 
   ngOnInit(): void {
@@ -87,6 +94,10 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
       this.paginator.pageSize = settings.itemsPerPage;
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
+
+    this._settingsService.adminSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this._clusterService.refreshClusters());
 
     this._projectService.selectedProject
       .pipe(
