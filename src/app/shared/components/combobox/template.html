@@ -15,6 +15,7 @@ limitations under the License.
     <mat-label>{{label}}</mat-label>
     <mat-select #select
                 class="km-select-ellipsis"
+                panelClass="km-combobox-panel"
                 disableOptionCentering
                 [formControlName]="controls.Select"
                 (openedChange)="onOpen($event)"
