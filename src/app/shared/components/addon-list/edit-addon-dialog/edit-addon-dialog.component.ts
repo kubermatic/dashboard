@@ -10,12 +10,16 @@
 // limitations under the License.
 
 import {Component, Input, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 import {AddonConfig, Addon, getAddonLogoData, hasAddonLogoData} from '../../../entity/addon';
 import {InstallAddonDialogComponent} from '../install-addon-dialog/install-addon-dialog.component';
+
+export enum Controls {
+  ContinuouslyReconcile = 'continuouslyReconcile',
+}
 
 @Component({
   selector: 'km-edit-addon-dialog',
@@ -23,11 +27,18 @@ import {InstallAddonDialogComponent} from '../install-addon-dialog/install-addon
   styleUrls: ['./edit-addon-dialog.component.scss'],
 })
 export class EditAddonDialogComponent implements OnInit {
+  readonly Controls = Controls;
+
   @Input() addon: Addon;
   @Input() addonConfig: AddonConfig;
   form: FormGroup;
+  formBasic: FormGroup;
 
-  constructor(public dialogRef: MatDialogRef<EditAddonDialogComponent>, private readonly _domSanitizer: DomSanitizer) {}
+  constructor(
+    public dialogRef: MatDialogRef<EditAddonDialogComponent>,
+    private readonly _domSanitizer: DomSanitizer,
+    private readonly _builder: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     const group = {};
@@ -41,6 +52,10 @@ export class EditAddonDialogComponent implements OnInit {
     }
 
     this.form = new FormGroup(group);
+
+    this.formBasic = this._builder.group({
+      [Controls.ContinuouslyReconcile]: this._builder.control(this.addon.spec.continuouslyReconcile),
+    });
   }
 
   hasLogo(): boolean {
@@ -58,7 +73,10 @@ export class EditAddonDialogComponent implements OnInit {
       variables[key] = this.form.controls[key].value;
     });
 
-    return {name: this.addon.name, spec: {variables}};
+    return {
+      name: this.addon.name,
+      spec: {variables, continuouslyReconcile: this.formBasic.controls.continuouslyReconcile.value},
+    };
   }
 
   edit(): void {
