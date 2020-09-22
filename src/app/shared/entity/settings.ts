@@ -32,6 +32,7 @@ export class AdminSettings {
   enableOIDCKubeconfig: boolean;
   userProjectsLimit: number;
   restrictProjectCreation: boolean;
+  enableExternalClusterImport: boolean;
 }
 
 export class CleanupOptions {
@@ -130,4 +131,5 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   enableDashboard: true,
   enableOIDCKubeconfig: false,
   restrictProjectCreation: false,
+  enableExternalClusterImport: true,
 };

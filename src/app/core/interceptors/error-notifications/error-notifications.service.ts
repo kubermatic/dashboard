@@ -19,7 +19,7 @@ import {NotificationService} from '../../services';
 export class ErrorNotificationsInterceptor implements HttpInterceptor {
   private readonly _notificationService: NotificationService;
   // Array of partial error messages that should be silenced in the UI.
-  private readonly _silenceErrArr = [];
+  private readonly _silenceErrArr = ['external cluster functionality'];
 
   constructor(private readonly _inj: Injector) {
     this._notificationService = this._inj.get(NotificationService);
@@ -34,20 +34,32 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
             return;
           }
 
-          if (!!errorInstance.error && !!errorInstance.error.error) {
-            this._notificationService.error(
-              `Error ${errorInstance.status}: ${
-                errorInstance.error.error.message || errorInstance.message || errorInstance.statusText
-              }`
-            );
-          } else if (
-            errorInstance.message &&
-            this._silenceErrArr.every(partial => !errorInstance.message.includes(partial))
-          ) {
-            this._notificationService.error(`${errorInstance.message}`);
+          if (this._shouldSilenceError(errorInstance)) {
+            return;
           }
+
+          let errorMsg = '';
+
+          if (errorInstance.status) {
+            errorMsg += `Error ${errorInstance.status}`;
+          }
+
+          errorMsg += errorInstance.error.error.message || errorInstance.message || errorInstance.statusText;
+          this._notificationService.error(errorMsg);
         }
       )
+    );
+  }
+
+  private _isAPIError(instance: any): boolean {
+    return !!instance.error && !!instance.error.error;
+  }
+
+  private _shouldSilenceError(instance: any): boolean {
+    return (
+      (this._isAPIError(instance) &&
+        this._silenceErrArr.some(partial => instance.error.error.message.includes(partial))) ||
+      this._silenceErrArr.some(partial => instance.message.includes(partial))
     );
   }
 }
