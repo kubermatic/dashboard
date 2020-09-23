@@ -195,7 +195,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     if (this._guidedTourService.isTourInProgress()) {
       this.addons = [];
       this.machineDeployments = [this._guidedTourItemsService.guidedTourDOMachineDeployment()];
-      this.isMachineDeploymentLoadFinished = true;
       this.upgrades = [];
       this.clusterBindings = [];
       this.bindings = [];

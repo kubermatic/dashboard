@@ -20,8 +20,7 @@ import {GuidedTourItemsService} from './guided-tour-items.service';
 export class GuidedTourStepsContainerService {
   private _steps: Step[];
   private _tempSteps: GuidedTourStep[] = [];
-  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-  private _currentStepIndex = -2;
+  private _currentStepIndex = 0;
   stepHasBeenModified: Subject<GuidedTourStep> = new Subject<GuidedTourStep>();
 
   constructor(

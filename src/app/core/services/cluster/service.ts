@@ -121,12 +121,12 @@ export class ClusterService {
     return this._http.post<Cluster>(url, model);
   }
 
-  patch(projectID: string, clusterID: string, seed: string, patch: ClusterPatch): Observable<Cluster> {
+  patch(projectID: string, clusterID: string, patch: ClusterPatch): Observable<Cluster> {
     if (this._guidedTourService.isTourInProgress()) {
       return of(this._guidedTourItemsService.guidedTourDOCluster());
     }
 
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}`;
     return this._http.patch<Cluster>(url, patch);
   }
 
@@ -135,17 +135,12 @@ export class ClusterService {
     return this._http.put<Cluster>(url, model);
   }
 
-  delete(
-    projectID: string,
-    clusterID: string,
-    seed: string,
-    finalizers?: {[key in Finalizer]: boolean}
-  ): Observable<any> {
+  delete(projectID: string, clusterID: string, finalizers?: {[key in Finalizer]: boolean}): Observable<any> {
     if (this._guidedTourService.isTourInProgress()) {
       return of();
     }
 
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}`;
     if (finalizers !== undefined) {
       for (const key of Object.keys(finalizers)) {
         this._headers = this._headers.set(key, finalizers[key].toString());
@@ -209,12 +204,12 @@ export class ClusterService {
     return this._http.get<NodeMetrics[]>(url).pipe(catchError(() => of<NodeMetrics[]>(undefined)));
   }
 
-  events(projectID: string, clusterID: string, seed: string): Observable<Event[]> {
+  events(projectID: string, clusterID: string): Observable<Event[]> {
     if (this._guidedTourService.isTourInProgress()) {
       return of([]);
     }
 
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/events`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/events`;
     return this._http.get<Event[]>(url).pipe(catchError(() => of<Event[]>()));
   }
 
@@ -228,12 +223,12 @@ export class ClusterService {
     return this._http.get<Node[]>(url).pipe(catchError(() => of<Node[]>()));
   }
 
-  health(projectID: string, clusterID: string, seed: string): Observable<Health> {
+  health(projectID: string, clusterID: string): Observable<Health> {
     if (this._guidedTourService.isTourInProgress()) {
       return of(this._guidedTourItemsService.guidedTourHealth());
     }
 
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/health`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/health`;
     return this._http.get<Health>(url).pipe(catchError(() => of<Health>()));
   }
 
