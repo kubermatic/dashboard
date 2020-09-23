@@ -13,6 +13,7 @@ import {Component, ElementRef, HostListener, OnDestroy} from '@angular/core';
 import {Subject} from 'rxjs';
 
 import {slideOut} from '../../../shared/animations/slide';
+import {GuidedTourID} from '../../../shared/utils/guided-tour-utils/guided-tour-utils';
 import {GuidedTourService} from '../../../core/services/guided-tour';
 import {Auth} from '../../services';
 
@@ -23,6 +24,8 @@ import {Auth} from '../../services';
   animations: [slideOut],
 })
 export class HelpPanelComponent implements OnDestroy {
+  readonly GuidedTourID = GuidedTourID;
+
   private _isOpen = false;
   private _unsubscribe: Subject<void> = new Subject();
 

@@ -14,6 +14,7 @@ import {MatSelect, MatSelectChange} from '@angular/material/select';
 import {ProjectService} from '@core/services/project/service';
 import {UserService} from '@core/services/user/service';
 import {Project} from '@shared/entity/project';
+import {GuidedTourID} from '@shared/utils/guided-tour-utils/guided-tour-utils';
 import * as _ from 'lodash';
 import {differenceBy} from 'lodash';
 import {merge, Subject} from 'rxjs';
@@ -25,6 +26,8 @@ import {switchMap, takeUntil, tap} from 'rxjs/operators';
   styleUrls: ['./style.scss'],
 })
 export class ProjectSelectorComponent implements OnInit, OnDestroy {
+  readonly GuidedTourID = GuidedTourID;
+
   @Input() showSidenav: boolean;
   myProjects: Project[] = [];
   externalProjects: Project[] = [];

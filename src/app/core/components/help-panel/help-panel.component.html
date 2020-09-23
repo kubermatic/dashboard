@@ -37,7 +37,7 @@ limitations under the License.
            id="km-navbar-guided-tour-btn"
            matRipple
            (click)="goToGuidedTour()"
-           kmGuidedTour="km-gt-start-tour">
+           [kmGuidedTour]="GuidedTourID.StartTour">
         Guided Tour
       </div>
     </div>

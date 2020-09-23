@@ -25,6 +25,7 @@ import {Project} from '@shared/entity/project';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {CreateClusterModel} from '@shared/model/CreateClusterModel';
 import {NodeData} from '@shared/model/NodeSpecChange';
+import {GuidedTourID} from '@shared/utils/guided-tour-utils/guided-tour-utils';
 import {ClusterService as ClusterModelService} from '@shared/services/cluster.service';
 import {forkJoin, of, Subject} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
@@ -38,6 +39,8 @@ import {WizardService} from './service/wizard';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WizardComponent implements OnInit, OnDestroy {
+  readonly GuidedTourID = GuidedTourID;
+
   form: FormGroup;
   project = {} as Project;
   creating = false;

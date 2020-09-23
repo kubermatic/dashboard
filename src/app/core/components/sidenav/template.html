@@ -20,7 +20,7 @@ limitations under the License.
        fxLayoutAlign=" center"
        [routerLink]="getRouterLink('clusters')"
        [ngClass]="getLinkClass('clusters')"
-       kmGuidedTour="km-gt-cluster-menu">
+       [kmGuidedTour]="GuidedTourID.ClusterMenu">
       <i class="km-icon-cluster"></i>
       <span *ngIf="!isSidenavCollapsed()">Clusters</span>
     </a>
@@ -33,7 +33,7 @@ limitations under the License.
        fxLayoutAlign=" center"
        [routerLink]="getRouterLink('sshkeys')"
        [ngClass]="getLinkClass('sshkeys')"
-       kmGuidedTour="km-gt-sshkey-menu">
+       [kmGuidedTour]="GuidedTourID.SSHKeyMenu">
       <i class="km-icon-key"></i>
       <span *ngIf="!isSidenavCollapsed()">SSH Keys</span>
     </a>
@@ -46,7 +46,7 @@ limitations under the License.
        fxLayoutAlign=" center"
        [routerLink]="getRouterLink('members')"
        [ngClass]="getLinkClass('members')"
-       kmGuidedTour="km-gt-members-menu">
+       [kmGuidedTour]="GuidedTourID.MembersMenu">
       <i class="km-icon-member"></i>
       <span *ngIf="!isSidenavCollapsed()">Members</span>
     </a>
@@ -59,7 +59,7 @@ limitations under the License.
        fxLayoutAlign=" center"
        [routerLink]="getRouterLink('serviceaccounts')"
        [ngClass]="getLinkClass('serviceaccounts')"
-       kmGuidedTour="km-gt-serviceaccount-menu">
+       [kmGuidedTour]="GuidedTourID.ServiceaccountMenu">
       <i class="km-icon-serviceaccount"></i>
       <span *ngIf="!isSidenavCollapsed()">Service Accounts</span></a>
   </div>

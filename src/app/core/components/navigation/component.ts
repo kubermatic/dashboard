@@ -12,6 +12,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user/service';
+import {GuidedTourID} from '@shared/utils/guided-tour-utils/guided-tour-utils';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
@@ -21,6 +22,8 @@ import {switchMap, takeUntil} from 'rxjs/operators';
   styleUrls: ['./style.scss'],
 })
 export class NavigationComponent implements OnInit {
+  readonly GuidedTourID = GuidedTourID;
+
   @Input() showMenuSwitchAndProjectSelector: boolean;
   showSidenav = true;
   private _settingsChange = new Subject<void>();

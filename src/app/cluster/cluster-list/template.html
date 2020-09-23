@@ -27,7 +27,7 @@ limitations under the License.
           type="button"
           [disabled]="!canAdd()"
           (click)="loadWizard()"
-          kmGuidedTour="km-gt-add-cluster-btn">
+          [kmGuidedTour]="GuidedTourID.AddClusterBtn">
     Create Cluster
   </button>
 </div>
@@ -61,7 +61,7 @@ limitations under the License.
         <td mat-cell
             *matCellDef="let element"
             [attr.id]="'km-clusters-' + element.name"
-            kmGuidedTour="km-gt-cluster-list">
+            [kmGuidedTour]="GuidedTourID.ClusterList">
           <div fxLayoutAlign=" center"
                fxLayoutGap="8px">
             <span>{{element.name}}</span>

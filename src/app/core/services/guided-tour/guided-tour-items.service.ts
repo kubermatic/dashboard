@@ -17,13 +17,14 @@ import {Node} from '../../../shared/entity/node';
 import {MachineDeployment} from '../../../shared/entity/machine-deployment';
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean';
 import {Health} from '../../../shared/entity/health';
+import {GuidedTourID} from '../../../shared/utils/guided-tour-utils/guided-tour-utils';
 
 @Injectable()
 export class GuidedTourItemsService {
   getGuidedTourItems(): GuidedTourItem[] {
     return [
       {
-        id: 'km-gt-start-tour',
+        id: GuidedTourID.StartTour,
         route: 'projects',
         title: 'Getting Started',
         text:
@@ -31,14 +32,14 @@ export class GuidedTourItemsService {
         stepPosition: 'center',
       },
       {
-        id: 'km-gt-add-project-btn',
+        id: GuidedTourID.AddProjectBtn,
         route: 'projects',
         title: 'Get started by adding a project',
         text: 'A project groups your clusters together for ease of management.',
         stepPosition: 'bottom',
       },
       {
-        id: 'km-gt-add-project-dialog',
+        id: GuidedTourID.AddProjectDialog,
         route: 'projects',
         title: 'Your first project',
         text:
@@ -46,70 +47,70 @@ export class GuidedTourItemsService {
         stepPosition: 'right',
       },
       {
-        id: 'km-gt-project-item',
+        id: GuidedTourID.ProjectItem,
         route: 'projects',
         title: 'Project created',
         text: 'Click on the project. We will start creating clusters shortly.',
         stepPosition: 'right',
       },
       {
-        id: 'km-gt-project-dropdown',
+        id: GuidedTourID.ProjectDropdown,
         route: 'projects/123ab4cd5e/clusters',
         title: 'Project Dropdown',
         text: 'Switch to a different project on the fly.',
         stepPosition: 'bottom',
       },
       {
-        id: 'km-gt-cluster-menu',
+        id: GuidedTourID.ClusterMenu,
         route: 'projects/123ab4cd5e/clusters',
         title: 'Cluster Overview',
         text: 'View all the clusters of the project.',
         stepPosition: 'right',
       },
       {
-        id: 'km-gt-sshkey-menu',
+        id: GuidedTourID.SSHKeyMenu,
         route: 'projects/123ab4cd5e/clusters',
         title: 'SSH keys',
         text: 'Manage the SSH keys of the project.',
         stepPosition: 'right',
       },
       {
-        id: 'km-gt-members-menu',
+        id: GuidedTourID.MembersMenu,
         route: 'projects/123ab4cd5e/clusters',
         title: 'Members',
         text: 'Add admins, editors or viewers.',
         stepPosition: 'right',
       },
       {
-        id: 'km-gt-serviceaccount-menu',
+        id: GuidedTourID.ServiceaccountMenu,
         route: 'projects/123ab4cd5e/clusters',
         title: 'Service Accounts',
         text: 'Manage the service accounts of the project.',
         stepPosition: 'right',
       },
       {
-        id: 'km-gt-add-cluster-btn',
+        id: GuidedTourID.AddClusterBtn,
         route: 'projects/123ab4cd5e/clusters',
         title: 'Create a Cluster',
         text: "It's time to create your first cluster.",
         stepPosition: 'bottom',
       },
       {
-        id: 'km-gt-wizard-step-provider',
+        id: GuidedTourID.WizardStepProvider,
         route: 'projects/123ab4cd5e/wizard',
         title: 'Pick a Provider',
         text: 'Your nodes will be created by the selected provider, after adding credentials later.',
         stepPosition: 'top',
       },
       {
-        id: 'km-gt-wizard-step-datacenter',
+        id: GuidedTourID.WizardStepDatacenter,
         route: 'projects/123ab4cd5e/wizard',
         title: 'Pick a Datacenter',
         text: 'Available datacenters are influenced by the provider you picked.',
         stepPosition: 'top',
       },
       {
-        id: 'km-gt-wizard-step-cluster',
+        id: GuidedTourID.WizardStepCluster,
         route: 'projects/123ab4cd5e/wizard',
         title: 'Specify Cluster Details',
         text:
@@ -117,49 +118,49 @@ export class GuidedTourItemsService {
         stepPosition: 'top',
       },
       {
-        id: 'km-gt-wizard-step-settings',
+        id: GuidedTourID.WizardStepSettings,
         route: 'projects/123ab4cd5e/wizard',
         title: 'Detailed Provider Settings',
         text: 'Enter your credentials or pick a predefined preset.',
         stepPosition: 'top',
       },
       {
-        id: 'km-gt-wizard-step-nodes',
+        id: GuidedTourID.WizardStepNodes,
         route: 'projects/123ab4cd5e/wizard',
         title: 'Detailed Node Settings',
         text: "Don't be overwhelmed! Put in only what's needed or set every detail. Your choice.",
         stepPosition: 'top',
       },
       {
-        id: 'km-gt-wizard-step-summary',
+        id: GuidedTourID.WizardStepSummary,
         route: 'projects/123ab4cd5e/wizard',
         title: 'At a Glance',
         text: "A final overview of the settings you picked. Confirm by clicking 'Create'.",
         stepPosition: 'bottom',
       },
       {
-        id: 'km-gt-cluster-list',
+        id: GuidedTourID.ClusterList,
         route: 'projects/123ab4cd5e/clusters',
         title: 'Up and Running',
         text: 'Click on your cluster to get a more detailed overview.',
         stepPosition: 'bottom',
       },
       {
-        id: 'km-gt-cluster-details-connect',
+        id: GuidedTourID.ClusterDetailsConnect,
         route: 'projects/123ab4cd5e/dc/europe-west3-c/clusters/4k6txp5sq',
         title: 'Time to Connect',
         text: 'To connect directly to the cluster, download the kubeconfig file.',
         stepPosition: 'bottom',
       },
       {
-        id: 'km-gt-cluster-details-edit',
+        id: GuidedTourID.ClusterDetailsEdit,
         route: 'projects/123ab4cd5e/dc/europe-west3-c/clusters/4k6txp5sq',
         title: 'Edit your Cluster',
         text: 'Change settings, add SSH keys and revoke tokens with this dropdown.',
         stepPosition: 'bottom',
       },
       {
-        id: 'km-gt-cluster-details-events',
+        id: GuidedTourID.ClusterDetailsEvents,
         route: 'projects/123ab4cd5e/dc/europe-west3-c/clusters/4k6txp5sq',
         title: 'How Eventful',
         text:
@@ -167,14 +168,14 @@ export class GuidedTourItemsService {
         stepPosition: 'bottom',
       },
       {
-        id: 'km-gt-cluster-details-machine-deployments',
+        id: GuidedTourID.ClusterDetailsMachineDeployments,
         route: 'projects/123ab4cd5e/dc/europe-west3-c/clusters/4k6txp5sq',
         title: 'Even More Data',
         text: 'Click on the machine deployment to view the details of the underlying nodes.',
         stepPosition: 'bottom',
       },
       {
-        id: 'km-gt-md-details-nodes',
+        id: GuidedTourID.MDDetailsNodes,
         route: 'projects/123ab4cd5e/dc/europe-west3-c/clusters/4k6txp5sq/md/first-machine-deployment',
         title: 'The Last Layer',
         text:
@@ -182,7 +183,7 @@ export class GuidedTourItemsService {
         stepPosition: 'bottom',
       },
       {
-        id: 'km-gt-md-details-edit',
+        id: GuidedTourID.MDDetailsEdit,
         route: 'projects/123ab4cd5e/dc/europe-west3-c/clusters/4k6txp5sq/md/first-machine-deployment',
         title: 'Change the Settings',
         text:
@@ -190,7 +191,7 @@ export class GuidedTourItemsService {
         stepPosition: 'bottom',
       },
       {
-        id: 'km-gt-md-details-back-to-cluster',
+        id: GuidedTourID.MDDetailsBackToCluster,
         route: 'projects/123ab4cd5e/dc/europe-west3-c/clusters/4k6txp5sq/md/first-machine-deployment',
         title: 'A Step Back',
         text:
@@ -198,7 +199,7 @@ export class GuidedTourItemsService {
         stepPosition: 'bottom',
       },
       {
-        id: 'km-gt-help-menu',
+        id: GuidedTourID.HelpMenu,
         title: "You're All Set!",
         text:
           'You can revisit the tour here. You can also find a link to the Docs, an FAQ and our support in this menu.',

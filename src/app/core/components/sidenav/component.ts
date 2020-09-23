@@ -21,6 +21,7 @@ import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {CustomLink, CustomLinkLocation, filterCustomLinks, UserSettings} from '@shared/entity/settings';
 import {GroupConfig} from '@shared/model/Config';
+import {GuidedTourID} from '@shared/utils/guided-tour-utils/guided-tour-utils';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import * as _ from 'lodash';
 import {BehaviorSubject, merge, Subject} from 'rxjs';
@@ -32,6 +33,8 @@ import {switchMap, takeUntil} from 'rxjs/operators';
   styleUrls: ['./style.scss'],
 })
 export class SidenavComponent implements OnInit, OnDestroy {
+  readonly GuidedTourID = GuidedTourID;
+
   environment: any = environment;
   customLinks: CustomLink[] = [];
   settings: UserSettings;

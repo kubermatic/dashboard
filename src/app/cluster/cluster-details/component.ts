@@ -35,11 +35,13 @@ import {SSHKey} from '@shared/entity/ssh-key';
 import {Config, GroupConfig} from '@shared/model/Config';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
+import {GuidedTourID} from '@shared/utils/guided-tour-utils/guided-tour-utils';
 import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import * as _ from 'lodash';
 import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
-import {filter, first, map, switchMap, take, takeUntil} from 'rxjs/operators';import {NodeService} from '../services/node.service';
+import {filter, first, map, switchMap, take, takeUntil} from 'rxjs/operators';
+import {NodeService} from '../services/node.service';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/component';
 import {EditClusterComponent} from './edit-cluster/component';
 import {EditSSHKeysComponent} from './edit-sshkeys/component';
@@ -52,6 +54,8 @@ import {ShareKubeconfigComponent} from './share-kubeconfig/component';
   styleUrls: ['./style.scss'],
 })
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
+  readonly GuidedTourID = GuidedTourID;
+
   cluster: Cluster;
   nodeDc: Datacenter;
   seed: string;

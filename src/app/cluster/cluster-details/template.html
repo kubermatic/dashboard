@@ -35,7 +35,7 @@ limitations under the License.
               mat-icon-button
               [disabled]="!isClusterRunning"
               matTooltip="Download config"
-              kmGuidedTour="km-gt-cluster-details-connect">
+              [kmGuidedTour]="GuidedTourID.ClusterDetailsConnect">
         <a href="{{getDownloadURL() | async}}"
            target="_blank"
            rel="noopener">
@@ -80,7 +80,7 @@ limitations under the License.
         <button mat-icon-button
                 class="km-provider-menu-btn"
                 [matMenuTriggerFor]="menu"
-                kmGuidedTour="km-gt-cluster-details-edit">
+                [kmGuidedTour]="GuidedTourID.ClusterDetailsEdit">
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu"
@@ -216,7 +216,7 @@ limitations under the License.
                               [seed]="seed"
                               [projectID]="projectID"
                               [isClusterRunning]="isClusterRunning"
-                              kmGuidedTour="km-gt-cluster-details-machine-deployments"></km-machine-deployment-list>
+                              [kmGuidedTour]="GuidedTourID.ClusterDetailsMachineDeployments"></km-machine-deployment-list>
 
   <div *ngIf="nodes.length > 0">
     <km-node-list [cluster]="cluster"
@@ -250,7 +250,7 @@ limitations under the License.
   </mat-card>
 
   <km-event-list [events]="events"
-                 kmGuidedTour="km-gt-cluster-details-events"></km-event-list>
+                 [kmGuidedTour]="GuidedTourID.ClusterDetailsEvents"></km-event-list>
 
 </ng-container>
 

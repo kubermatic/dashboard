@@ -13,6 +13,7 @@ import {Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
+import {GuidedTourID} from '@shared/utils/guided-tour-utils/guided-tour-utils';
 
 @Component({
   selector: 'km-cluster-panel',
@@ -20,6 +21,8 @@ import {Datacenter} from '@shared/entity/datacenter';
   styleUrls: ['./style.scss'],
 })
 export class ClusterPanelComponent {
+  readonly GuidedTourID = GuidedTourID;
+
   @Input() cluster: Cluster;
   @Input() datacenter: Datacenter;
   @Input() seed: string;

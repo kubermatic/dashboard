@@ -34,7 +34,7 @@ limitations under the License.
 
           <ng-container *ngSwitchCase="stepRegistry.Cluster">
             <km-wizard-cluster-step [formControl]="form.get(stepRegistry.Cluster)"
-                                    kmGuidedTour="km-gt-wizard-step-cluster"
+                                    [kmGuidedTour]="GuidedTourID.WizardStepCluster"
                                     (prev)="prevStep()"
                                     (next)="nextStep()">
             </km-wizard-cluster-step>
@@ -42,7 +42,7 @@ limitations under the License.
 
           <ng-container *ngSwitchCase="stepRegistry.ProviderSettings">
             <km-wizard-provider-settings-step [formControl]="form.get(stepRegistry.ProviderSettings)"
-                                              kmGuidedTour="km-gt-wizard-step-settings"
+                                              [kmGuidedTour]="GuidedTourID.WizardStepSettings"
                                               (prev)="prevStep()"
                                               (next)="nextStep()">
             </km-wizard-provider-settings-step>
@@ -50,7 +50,7 @@ limitations under the License.
 
           <ng-container *ngSwitchCase="stepRegistry.NodeSettings">
             <km-wizard-node-settings-step [formControl]="form.get(stepRegistry.NodeSettings)"
-                                          kmGuidedTour="km-gt-wizard-step-nodes"
+                                          [kmGuidedTour]="GuidedTourID.WizardStepNodes"
                                           (prev)="prevStep()"
                                           (next)="nextStep()">
             </km-wizard-node-settings-step>
@@ -62,7 +62,7 @@ limitations under the License.
           </ng-container>
 
           <ng-container *ngSwitchCase="stepRegistry.Summary">
-            <km-wizard-summary-step kmGuidedTour="km-gt-wizard-step-summary"
+            <km-wizard-summary-step [kmGuidedTour]="GuidedTourID.WizardStepSummary"
                                     (prev)="prevStep()"></km-wizard-summary-step>
           </ng-container>
         </div>

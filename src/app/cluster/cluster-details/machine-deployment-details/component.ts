@@ -27,6 +27,7 @@ import {Member} from '@shared/entity/member';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
+import {GuidedTourID} from '@shared/utils/guided-tour-utils/guided-tour-utils';
 import {MachineDeploymentHealthStatus} from '@shared/utils/health-status/machine-deployment-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {Subject, timer} from 'rxjs';
@@ -38,6 +39,8 @@ import {first, take, takeUntil} from 'rxjs/operators';
   styleUrls: ['./style.scss'],
 })
 export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
+  readonly GuidedTourID = GuidedTourID;
+
   machineDeployment: MachineDeployment;
   machineDeploymentHealthStatus: MachineDeploymentHealthStatus;
   nodes: Node[] = [];

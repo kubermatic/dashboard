@@ -14,6 +14,7 @@ import {Observable} from 'rxjs';
 import {finalize} from 'rxjs/operators';
 
 import {GuidedTourOptions, GuidedTourStepInfo} from '../../../shared/entity/guided-tour';
+import {GuidedTourID} from '../../../shared/utils/guided-tour-utils/guided-tour-utils';
 import {GuidedTourStepService} from './guided-tour-step.service';
 import {GuidedTourOptionsService} from './guided-tour-options.service';
 
@@ -57,31 +58,31 @@ export class GuidedTourService {
 
   getGuidedTourOrder(): string[] {
     return [
-      'km-gt-start-tour',
-      'km-gt-add-project-btn',
-      'km-gt-add-project-dialog',
-      'km-gt-project-item',
-      'km-gt-project-dropdown',
-      'km-gt-cluster-menu',
-      'km-gt-sshkey-menu',
-      'km-gt-members-menu',
-      'km-gt-serviceaccount-menu',
-      'km-gt-add-cluster-btn',
-      'km-gt-wizard-step-provider',
-      'km-gt-wizard-step-datacenter',
-      'km-gt-wizard-step-cluster',
-      'km-gt-wizard-step-settings',
-      'km-gt-wizard-step-nodes',
-      'km-gt-wizard-step-summary',
-      'km-gt-cluster-list',
-      'km-gt-cluster-details-connect',
-      'km-gt-cluster-details-edit',
-      'km-gt-cluster-details-events',
-      'km-gt-cluster-details-machine-deployments',
-      'km-gt-md-details-nodes',
-      'km-gt-md-details-edit',
-      'km-gt-md-details-back-to-cluster',
-      'km-gt-help-menu',
+      GuidedTourID.StartTour,
+      GuidedTourID.AddProjectBtn,
+      GuidedTourID.AddProjectDialog,
+      GuidedTourID.ProjectItem,
+      GuidedTourID.ProjectDropdown,
+      GuidedTourID.ClusterMenu,
+      GuidedTourID.SSHKeyMenu,
+      GuidedTourID.MembersMenu,
+      GuidedTourID.ServiceaccountMenu,
+      GuidedTourID.AddClusterBtn,
+      GuidedTourID.WizardStepProvider,
+      GuidedTourID.WizardStepDatacenter,
+      GuidedTourID.WizardStepCluster,
+      GuidedTourID.WizardStepSettings,
+      GuidedTourID.WizardStepNodes,
+      GuidedTourID.WizardStepSummary,
+      GuidedTourID.ClusterList,
+      GuidedTourID.ClusterDetailsConnect,
+      GuidedTourID.ClusterDetailsEdit,
+      GuidedTourID.ClusterDetailsEvents,
+      GuidedTourID.ClusterDetailsMachineDeployments,
+      GuidedTourID.MDDetailsNodes,
+      GuidedTourID.MDDetailsEdit,
+      GuidedTourID.MDDetailsBackToCluster,
+      GuidedTourID.HelpMenu,
     ];
   }
 }

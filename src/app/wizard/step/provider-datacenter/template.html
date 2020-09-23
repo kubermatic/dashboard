@@ -14,7 +14,7 @@ limitations under the License.
       fxFlex="100%"
       fxLayout="column">
   <mat-card-header class="km-no-padding"
-                   kmGuidedTour="km-gt-wizard-step-provider"
+                   [kmGuidedTour]="GuidedTourID.WizardStepProvider"
                    (next)="selectProvider()">
     <mat-card-title class="km-color-primary">Provider</mat-card-title>
   </mat-card-header>
@@ -29,7 +29,7 @@ limitations under the License.
 
   <ng-container *ngIf="datacenters.length > 0">
     <mat-card-header class="km-no-padding"
-                     kmGuidedTour="km-gt-wizard-step-datacenter"
+                     [kmGuidedTour]="GuidedTourID.WizardStepDatacenter"
                      (next)="selectDatacenter()">
       <mat-card-title class="km-color-primary">Datacenter</mat-card-title>
     </mat-card-header>

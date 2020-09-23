@@ -36,7 +36,7 @@ limitations under the License.
             type="button"
             [disabled]="isProjectCreationRestricted()"
             (click)="addProject()"
-            kmGuidedTour="km-gt-add-project-btn"
+            [kmGuidedTour]="GuidedTourID.AddProjectBtn"
             (next)="addProject()">
       Add Project
     </button>
@@ -204,7 +204,7 @@ limitations under the License.
 
     <mat-card *ngFor="let project of projects"
               (click)="selectProject(project)"
-              kmGuidedTour="km-gt-project-item"
+              [kmGuidedTour]="GuidedTourID.ProjectItem"
               (next)="selectProject(project)">
       <mat-card-header>
         <i mat-card-avatar

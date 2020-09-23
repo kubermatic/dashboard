@@ -32,6 +32,7 @@ import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {AdminSettings} from '@shared/entity/settings';
 import {GroupConfig} from '@shared/model/Config';
+import {GuidedTourID} from '@shared/utils/guided-tour-utils/guided-tour-utils';
 import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import * as _ from 'lodash';
@@ -45,6 +46,8 @@ import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-del
   styleUrls: ['./style.scss'],
 })
 export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
+  readonly GuidedTourID = GuidedTourID;
+
   clusters: Cluster[] = [];
   isInitialized = false;
   nodeDC: Datacenter[] = [];

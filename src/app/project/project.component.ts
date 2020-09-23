@@ -38,13 +38,13 @@ import {Member} from '@shared/entity/member';
 import {Project, ProjectOwners} from '@shared/entity/project';
 import {UserSettings} from '@shared/entity/settings';
 import {objectDiff} from '@shared/utils/common-utils';
+import {GuidedTourID} from '@shared/utils/guided-tour-utils/guided-tour-utils';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '@shared/utils/project-utils/project-utils';
 import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
 import {filter, first, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {DeleteProjectConfirmationComponent} from './delete-project/delete-project.component';
 import {EditProjectComponent} from './edit-project/edit-project.component';
 
 @Component({
@@ -54,6 +54,8 @@ import {EditProjectComponent} from './edit-project/edit-project.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
+  readonly GuidedTourID = GuidedTourID;
+
   projects: Project[] = [];
   currentUser: Member;
   isInitializing = true;

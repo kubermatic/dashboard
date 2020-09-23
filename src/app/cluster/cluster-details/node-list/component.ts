@@ -25,6 +25,7 @@ import {NodeMetrics} from '@shared/entity/metrics';
 import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
 import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
+import {GuidedTourID} from '@shared/utils/guided-tour-utils/guided-tour-utils';
 import {NodeHealthStatus} from '@shared/utils/health-status/node-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {NodeUtils} from '@shared/utils/node-utils/node-utils';
@@ -38,6 +39,8 @@ import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
   styleUrls: ['style.scss'],
 })
 export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
+  readonly GuidedTourID = GuidedTourID;
+
   @Input() cluster: Cluster;
   @Input() seed: string;
   @Input() nodes: Node[] = [];
