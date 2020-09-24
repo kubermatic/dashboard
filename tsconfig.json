@@ -5,19 +5,20 @@
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
+    "module": "CommonJS",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "noImplicitReturns": false,
     "noUnusedLocals": true,
     "resolveJsonModule": true,
     "strict": false,
-    "target": "esnext",
+    "target": "es2020",
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
-      "esnext",
+      "es2020",
       "dom"
     ]
   },
