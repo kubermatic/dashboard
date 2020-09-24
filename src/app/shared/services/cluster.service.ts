@@ -106,6 +106,7 @@ export class ClusterService {
 
   set admissionPlugins(plugins: string[]) {
     this._admissionPluginsEntity = plugins;
+    this._cluster.spec.admissionPlugins = plugins;
     this.admissionPluginsChanges.emit(this._admissionPluginsEntity);
   }
 
