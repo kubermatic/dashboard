@@ -67,7 +67,7 @@ enum Controls {
 export class ClusterStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   admissionPlugin = AdmissionPlugin;
   masterVersions: MasterVersion[] = [];
-  admissionPlugins: string[] = [];
+  admissionPlugins: AdmissionPlugin[] = [];
   labels: object;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
 
@@ -105,7 +105,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     this._clusterService.datacenterChanges
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(first())))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(dc => {
+      .subscribe((dc: Datacenter) => {
         this._datacenterSpec = dc;
         this._enforce(Controls.AuditLogging, dc.spec.enforceAuditLogging);
         this._enforcePodSecurityPolicy(dc.spec.enforcePodSecurityPolicy);
@@ -129,7 +129,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .valueChanges.pipe(filter(value => !!value))
       .pipe(switchMap(() => this._api.getAdmissionPlugins(this.form.get(Controls.Version).value)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(plugins => (this.admissionPlugins = plugins));
+      .subscribe(plugins => (this.admissionPlugins = plugins.map(p => AdmissionPlugin[p]).filter(p => !!p)));
 
     this.control(Controls.AdmissionPlugins)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
