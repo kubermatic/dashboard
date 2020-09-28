@@ -80,6 +80,7 @@
     "@types/node": "14.10.0",
     "browserlist": "1.0.1",
     "cypress": "5.2.0",
+    "eslint-plugin-compat": "^3.8.0",
     "eslint-plugin-rxjs": "0.0.2-beta.29",
     "gts": "2.0.2",
     "husky": "4.3.0",
@@ -120,7 +121,10 @@
       "project": "./tsconfig.json",
       "sourceType": "module"
     },
-    "extends": "./node_modules/gts/",
+    "extends": [
+      "./node_modules/gts/",
+      "plugin:compat/recommended"
+    ],
     "plugins": [
       "rxjs"
     ],
