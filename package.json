@@ -56,6 +56,7 @@
     "jquery": "3.5.1",
     "js-yaml": "3.14.0",
     "lodash": "4.17.20",
+    "modern-normalize": "^1.0.0",
     "moment": "2.27.0",
     "ngx-clipboard": "13.0.1",
     "ngx-cookie-service": "10.0.1",
@@ -258,9 +259,12 @@
         "at-rules",
         "rules"
       ],
-      "plugin/no-unsupported-browser-features": [true, {
-        "severity": "warning"
-      }],
+      "plugin/no-unsupported-browser-features": [
+        true,
+        {
+          "severity": "warning"
+        }
+      ],
       "order/properties-alphabetical-order": true
     }
   }
