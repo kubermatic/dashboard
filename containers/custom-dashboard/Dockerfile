@@ -9,7 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM quay.io/kubermatic/go-node:1.12.9-12
+FROM quay.io/kubermatic/go-node:1.15.2-14
 
 LABEL maintainer="sebastian@loodse.com"
 

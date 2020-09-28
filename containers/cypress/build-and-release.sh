@@ -14,10 +14,10 @@ set -e
 
 IMG_REPO="quay.io/kubermatic"
 IMG_NAME="e2e-kind-cypress"
-IMG_VERSION="v1.1.3"
+IMG_VERSION="v1.2.0"
 
 # Preloaded images
-IMG_KIND="kindest/node:v1.15.6"
+IMG_KIND="kindest/node:v1.19.1"
 IMG_KIND_NAME="kindest.tar"
 
 docker pull ${IMG_KIND}
