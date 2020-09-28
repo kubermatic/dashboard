@@ -369,8 +369,9 @@ km-dashboard {
   font-size: $font-size-body;
   line-height: 12px;
   margin: 4px 0;
-  max-width: 100px;
+  max-width: 120px;
   padding: 4px;
+  white-space: nowrap;
 }
 
 .km-clear-input-btn {
