@@ -18,8 +18,11 @@ limitations under the License.
        class="km-addon-container km-border">
     <div fxFlex
          fxLayoutAlign="center center">
-      <span *ngIf="!hasLogo(addon.name)">{{addon.name}}</span>
+      <span *ngIf="!hasLogo(addon.name)"
+            [ngClass]="{'km-text-muted' : !!addon.deletionTimestamp}">{{addon.name}}</span>
       <img class="km-addon-logo"
+           [ngClass]="{'km-addon-logo-disabled' : !!addon.deletionTimestamp}"
+           [matTooltip]="getTooltip(addon)"
            *ngIf="hasLogo(addon.name)"
            [src]="getAddonLogo(addon.name)">
     </div>
@@ -30,12 +33,12 @@ limitations under the License.
     </div>
     <mat-menu #menu="matMenu">
       <button mat-menu-item
-              [disabled]="!canEdit"
+              [disabled]="!canEdit || !!addon.deletionTimestamp"
               (click)="edit(addon)">
         <span>Edit</span>
       </button>
       <button mat-menu-item
-              [disabled]="!canEdit"
+              [disabled]="!canEdit || !!addon.deletionTimestamp"
               (click)="delete(addon)">
         <span>Delete</span>
       </button>
