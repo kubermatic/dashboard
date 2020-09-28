@@ -475,9 +475,11 @@ button {
     border-radius: $border-radius;
     font-size: $font-size-body;
     font-weight: normal;
+    height: 100%;
     line-height: 16px;
     max-height: 22px;
     min-height: 22px;
+    overflow: hidden;
     padding: 3px 0;
 
     div:not(.mat-chip-ripple) {
