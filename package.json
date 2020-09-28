@@ -56,6 +56,7 @@
     "jquery": "3.5.1",
     "js-yaml": "3.14.0",
     "lodash": "4.17.20",
+    "modern-normalize": "1.0.0",
     "moment": "2.27.0",
     "ngx-clipboard": "13.0.1",
     "ngx-cookie-service": "10.0.1",
@@ -78,14 +79,16 @@
     "@types/js-yaml": "3.12.5",
     "@types/lodash": "4.14.161",
     "@types/node": "14.11.2",
+    "browserlist": "1.0.1",
     "cypress": "5.2.0",
+    "eslint-plugin-compat": "3.8.0",
     "eslint-plugin-rxjs": "0.0.2-beta.29",
     "gts": "2.0.2",
     "husky": "4.3.0",
     "jest": "26.4.2",
     "jest-preset-angular": "8.3.1",
     "js-beautify": "1.13.0",
-    "license-check-and-add": "^3.0.4",
+    "license-check-and-add": "3.0.4",
     "license-compliance": "1.0.2",
     "lint-staged": "10.3.0",
     "ng2-mock-component": "0.2.0",
@@ -93,7 +96,8 @@
     "stylelint": "13.7.0",
     "stylelint-config-standard": "20.0.0",
     "stylelint-declaration-block-order": "0.2.0",
-    "stylelint-order": "^4.1.0",
+    "stylelint-no-unsupported-browser-features": "4.0.0",
+    "stylelint-order": "4.1.0",
     "ts-jest": "26.3.0",
     "ts-node": "9.0.0",
     "tslint": "6.1.3",
@@ -102,6 +106,17 @@
   "engines": {
     "node": ">=12.0.0"
   },
+  "browserslist": [
+    "last 2 chrome versions",
+    "last 2 and_chr versions",
+    "last 2 edge versions",
+    "last 2 firefox versions",
+    "last 2 and_ff versions",
+    "last 2 safari versions",
+    "last 2 ios_saf versions",
+    "last 2 android versions",
+    "not dead"
+  ],
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -109,7 +124,13 @@
       "project": "./tsconfig.json",
       "sourceType": "module"
     },
-    "extends": "./node_modules/gts/",
+    "extends": [
+      "./node_modules/gts/",
+      "plugin:compat/recommended"
+    ],
+    "env": {
+      "browser": true
+    },
     "plugins": [
       "rxjs"
     ],
@@ -209,6 +230,7 @@
     "extends": "stylelint-config-standard",
     "plugins": [
       "stylelint-declaration-block-order",
+      "stylelint-no-unsupported-browser-features",
       "stylelint-order"
     ],
     "rules": {
@@ -236,6 +258,12 @@
         },
         "at-rules",
         "rules"
+      ],
+      "plugin/no-unsupported-browser-features": [
+        true,
+        {
+          "severity": "warning"
+        }
       ],
       "order/properties-alphabetical-order": true
     }
