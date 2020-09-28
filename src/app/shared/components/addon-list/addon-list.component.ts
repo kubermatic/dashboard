@@ -119,7 +119,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getTooltip(addon: Addon): string {
-    return addon.deletionTimestamp ? 'Addon is being deleted' : '';
+    return !!addon.deletionTimestamp ? 'Addon is being deleted' : '';
   }
 
   add(): void {
