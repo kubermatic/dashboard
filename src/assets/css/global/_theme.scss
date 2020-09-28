@@ -33,11 +33,11 @@
   }
 
   .km-text {
-    color: map-get($colors, text) !important;
+    color: map-get($colors, text);
   }
 
   .km-text-muted {
-    color: map-get($colors, text-secondary) !important;
+    color: map-get($colors, text-secondary);
   }
 
   .km-info {
