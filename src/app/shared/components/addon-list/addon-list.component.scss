@@ -19,6 +19,11 @@
   font-size: $font-size-subhead;
   outline: none;
 
+  .km-addon-logo-disabled {
+    filter: grayscale(1);
+    opacity: .8;
+  }
+
   .km-addon-menu {
     border-radius: 0 5px 5px 0;
     cursor: pointer;

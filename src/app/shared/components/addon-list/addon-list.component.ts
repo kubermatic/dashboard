@@ -118,6 +118,10 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     return '';
   }
 
+  getTooltip(addon: Addon): string {
+    return addon.deletionTimestamp ? 'Addon is being deleted' : '';
+  }
+
   add(): void {
     if (this.canAdd()) {
       const dialog = this._matDialog.open(SelectAddonDialogComponent);
