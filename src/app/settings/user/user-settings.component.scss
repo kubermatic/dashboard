@@ -51,8 +51,11 @@
   margin-left: 8px;
 }
 
-mat-form-field {
-  .mat-form-field-wrapper {
-    padding-bottom: 0;
+.input {
+  margin: 0 1em -1.25em 0;
+  width: 290px;
+
+  &.sm {
+    width: 140px;
   }
 }
