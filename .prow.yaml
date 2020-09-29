@@ -102,7 +102,7 @@ presubmits:
     preset-goproxy: "true"
   spec:
     containers:
-    - image: quay.io/kubermatic/e2e-kind-cypress:v1.2.0
+    - image: quay.io/kubermatic/e2e-kind-cypress:v1.2.1
       command:
       - make
       - run-e2e-ci
@@ -144,7 +144,7 @@ presubmits:
     preset-goproxy: "true"
   spec:
     containers:
-      - image: quay.io/kubermatic/e2e-kind-cypress:v1.2.0
+      - image: quay.io/kubermatic/e2e-kind-cypress:v1.2.1
         command:
           - /bin/bash
           - -c
