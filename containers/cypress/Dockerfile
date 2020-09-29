@@ -44,7 +44,7 @@ RUN apt update && \
     kubectl version --short --client && \
     yq --version
 
-FROM cypress/browsers:node12.18.0-chrome83-ff77
+FROM cypress/browsers:node14.7.0-chrome84
 
 COPY --from=download /usr/local/bin/helm2 /usr/local/bin/helm2
 COPY --from=download /usr/local/bin/helm3 /usr/local/bin/helm3
@@ -53,7 +53,7 @@ COPY --from=download /usr/local/bin/yq /usr/local/bin/yq
 COPY --from=download /usr/local/bin/kind /usr/local/bin/kind
 COPY --from=download /usr/local/bin/vault /usr/local/bin/vault
 
-ENV GO_VERSION=1.14.6
+ENV GO_VERSION=1.15.2
 
 RUN apt-get update -qq && \
     apt-get install -y \

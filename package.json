@@ -35,20 +35,20 @@
     "postinstall": "ngcc"
   },
   "dependencies": {
-    "@angular/animations": "10.0.2",
-    "@angular/cdk": "10.0.1",
-    "@angular/common": "10.0.2",
-    "@angular/compiler": "10.0.2",
-    "@angular/core": "10.0.2",
+    "@angular/animations": "10.1.3",
+    "@angular/cdk": "10.2.2",
+    "@angular/common": "10.1.3",
+    "@angular/compiler": "10.1.3",
+    "@angular/core": "10.1.3",
     "@angular/flex-layout": "10.0.0-beta.32",
-    "@angular/forms": "10.0.2",
-    "@angular/localize": "10.0.2",
-    "@angular/material": "10.0.1",
-    "@angular/platform-browser": "10.0.2",
-    "@angular/platform-browser-dynamic": "10.0.2",
-    "@angular/router": "10.0.2",
+    "@angular/forms": "10.1.3",
+    "@angular/localize": "10.1.3",
+    "@angular/material": "10.2.2",
+    "@angular/platform-browser": "10.1.3",
+    "@angular/platform-browser-dynamic": "10.1.3",
+    "@angular/router": "10.1.3",
     "core-js": "3.6.5",
-    "country-code-lookup": "0.0.17",
+    "country-code-lookup": "0.0.18",
     "flag-icon-css": "3.5.0",
     "fontsource-inconsolata": "3.0.5",
     "fontsource-ubuntu": "3.0.9",
@@ -66,14 +66,13 @@
     "rxjs": "6.6.2",
     "rxjs-compat": "6.6.3",
     "semver": "7.3.2",
-    "swagger-ui": "3.33.0",
-    "tslib": "2.0.1",
+    "swagger-ui": "3.34.0",
     "zone.js": "0.10.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.1001.3",
     "@angular/cli": "10.1.3",
-    "@angular/compiler-cli": "10.0.2",
+    "@angular/compiler-cli": "10.1.3",
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
     "@types/jest": "26.0.14",
     "@types/js-yaml": "3.12.5",
@@ -95,16 +94,15 @@
     "start-server-and-test": "1.11.4",
     "stylelint": "13.7.0",
     "stylelint-config-standard": "20.0.0",
-    "stylelint-declaration-block-order": "0.2.0",
     "stylelint-no-unsupported-browser-features": "4.0.0",
     "stylelint-order": "4.1.0",
     "ts-jest": "26.4.0",
     "ts-node": "9.0.0",
-    "tslint": "6.1.3",
+    "tslib": "1.13.0",
     "typescript": "3.9.7"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=14.11.0"
   },
   "browserslist": [
     "last 2 chrome versions",
@@ -229,7 +227,6 @@
   "stylelint": {
     "extends": "stylelint-config-standard",
     "plugins": [
-      "stylelint-declaration-block-order",
       "stylelint-no-unsupported-browser-features",
       "stylelint-order"
     ],
@@ -240,7 +237,7 @@
       "number-leading-zero": null,
       "selector-type-no-unknown": null,
       "selector-pseudo-element-no-unknown": true,
-      "plugin/declaration-block-order": [
+      "order/order": [
         "dollar-variables",
         {
           "type": "at-rule",

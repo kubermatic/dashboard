@@ -73,7 +73,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
     this._clusterService.providerSettingsPatchChanges$
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(async patch => (this.providerSettingsPatch = await patch));
+      .subscribe(patch => (this.providerSettingsPatch = patch));
 
     this._datacenterService
       .getDatacenter(this.cluster.spec.cloud.dc)
