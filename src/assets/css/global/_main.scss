@@ -385,7 +385,6 @@ km-dashboard {
 .km-select-ellipsis {
   mat-select-trigger {
     div {
-      // Required to override style added programmatically by the Angular Material on the div element
       display: block !important;
       flex: none !important;
       overflow: hidden;
