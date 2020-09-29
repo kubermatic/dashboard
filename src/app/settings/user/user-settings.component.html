@@ -45,10 +45,10 @@ limitations under the License.
          fxLayout="column">
       <div class="km-account-settings-header">User Settings</div>
 
-      <div>
+      <div fxLayout="row">
         <div class="entry-label"
              fxLayoutAlign=" center">Items per page</div>
-        <mat-form-field fxFlex="23">
+        <mat-form-field class="input sm">
           <mat-select disableOptionCentering
                       [(ngModel)]="settings.itemsPerPage"
                       (selectionChange)="onSettingsChange()">
@@ -65,14 +65,14 @@ limitations under the License.
       <!-- Load the theming module -->
       <router-outlet name="theming"></router-outlet>
 
-      <div>
+      <div fxLayout="row">
         <div class="entry-label"
              fxLayoutAlign=" center">
           <span>Default Project</span>
           <div class="km-icon-info km-pointer"
                matTooltip="Select a project to be redirected to after login."></div>
         </div>
-        <mat-form-field fxFlex="30">
+        <mat-form-field class="input">
           <mat-select disableOptionCentering
                       [(ngModel)]="settings.selectedProjectId"
                       (selectionChange)="onSettingsChange()"
