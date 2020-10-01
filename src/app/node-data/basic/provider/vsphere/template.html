@@ -44,4 +44,13 @@ limitations under the License.
       Memory have to be at least 512.
     </mat-error>
   </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>VM Template</mat-label>
+    <input matInput
+           [formControlName]="Controls.Template"
+           type="text"
+           autocomplete="off"
+           required>
+  </mat-form-field>
 </form>
