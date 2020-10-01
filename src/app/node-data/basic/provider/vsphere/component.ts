@@ -11,16 +11,22 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {merge} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {merge, of} from 'rxjs';
+import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {DatacenterService} from '../../../../core/services';
+import {ClusterType} from '../../../../shared/entity/cluster';
+import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/datacenter';
 import {NodeCloudSpec, NodeSpec, VSphereNodeSpec} from '../../../../shared/entity/node';
+import {OperatingSystem} from '../../../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
+import {ClusterService} from '../../../../shared/services/cluster.service';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
 
 enum Controls {
   CPU = 'cpu',
   Memory = 'memory',
+  Template = 'template',
 }
 
 @Component({
@@ -43,9 +49,22 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
   private readonly _defaultCPUCount = 2;
   private readonly _defaultMemory = 4096;
   private readonly _minMemory = 512;
+
+  private _defaultTemplate = '';
+  private _templates: DatacenterOperatingSystemOptions;
+
   readonly Controls = Controls;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
+  get template(): string {
+    return this.form.get(Controls.Template).value ? this.form.get(Controls.Template).value : this._defaultTemplate;
+  }
+
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _clusterService: ClusterService,
+    private readonly _datacenterService: DatacenterService
+  ) {
     super();
   }
 
@@ -56,14 +75,40 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
         Validators.required,
         Validators.min(this._minMemory),
       ]),
+      [Controls.Template]: this._builder.control(''),
     });
 
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
-    merge(this.form.get(Controls.Memory).valueChanges, this.form.get(Controls.CPU).valueChanges)
+    merge(
+      this.form.get(Controls.Memory).valueChanges,
+      this.form.get(Controls.CPU).valueChanges,
+      this.form.get(Controls.Template).valueChanges
+    )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+
+    merge<string>(this._clusterService.datacenterChanges, of(this._clusterService.datacenter))
+      .pipe(filter(dc => !!dc))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(first())))
+      .pipe(tap(dc => (this._templates = dc.spec.vsphere.templates)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this._setDefaultTemplate(OperatingSystem.Ubuntu));
+
+    this._clusterService.clusterTypeChanges
+      .pipe(filter(_ => !!this._templates))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ =>
+        this._isOpenshiftCluster()
+          ? this._setDefaultTemplate(OperatingSystem.CentOS)
+          : this._setDefaultTemplate(OperatingSystem.Ubuntu)
+      );
+
+    this._nodeDataService.operatingSystemChanges
+      .pipe(filter(_ => !!this._templates))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._setDefaultTemplate.bind(this));
   }
 
   ngOnDestroy(): void {
@@ -78,11 +123,40 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
     }
   }
 
+  private _isOpenshiftCluster(): boolean {
+    return this._clusterService.clusterType === ClusterType.OpenShift;
+  }
+
+  private _setDefaultTemplate(os: OperatingSystem): void {
+    switch (os) {
+      case OperatingSystem.CentOS:
+        this._defaultTemplate = this._templates.centos;
+        break;
+      case OperatingSystem.Ubuntu:
+        this._defaultTemplate = this._templates.ubuntu;
+        break;
+      case OperatingSystem.SLES:
+        this._defaultTemplate = this._templates.sles;
+        break;
+      case OperatingSystem.ContainerLinux:
+        this._defaultTemplate = this._templates.coreos;
+        break;
+      case OperatingSystem.Flatcar:
+        this._defaultTemplate = this._templates.flatcar;
+        break;
+      default:
+        this._defaultTemplate = this._templates.ubuntu;
+    }
+
+    this.form.get(Controls.Template).setValue(this._defaultTemplate);
+  }
+
   private _getNodeData(): NodeData {
     return {
       spec: {
         cloud: {
           vsphere: {
+            template: this.template,
             cpus: this.form.get(Controls.CPU).value,
             memory: this.form.get(Controls.Memory).value,
           } as VSphereNodeSpec,
