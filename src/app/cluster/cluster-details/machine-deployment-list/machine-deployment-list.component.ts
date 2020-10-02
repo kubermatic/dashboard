@@ -138,7 +138,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
   }
 
   private _isClusterHealthy(): boolean {
-    return this.isClusterHealthy || this.cluster.spec.cloud.bringyourown;
+    return this.isClusterHealthy || !!this.cluster.spec.cloud.bringyourown;
   }
 
   isLoadingData(): boolean {

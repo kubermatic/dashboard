@@ -190,6 +190,10 @@
   transform: rotate(180deg);
 }
 
+.km-icon-loading {
+  @include mask-image("/assets/images/icons/sandlock.svg", 24px);
+}
+
 .km-icon-owner {
   @include mask-image("/assets/images/icons/owner.svg", 24px);
 }

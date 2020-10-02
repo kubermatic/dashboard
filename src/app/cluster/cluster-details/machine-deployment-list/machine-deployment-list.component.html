@@ -179,11 +179,11 @@ limitations under the License.
     </div>
 
     <div class="km-row"
+         fxLayout="column"
+         fxLayoutAlign="center center"
          *ngIf="isLoadingData()">
-      <mat-spinner color="accent"
-                   class="km-machine-deployment-spinner"
-                   *ngIf="!cluster.spec.cloud.bringyourown"
-                   [diameter]="25"></mat-spinner>
+      <i class="km-icon-loading"></i>
+      <div>Loading...</div>
     </div>
 
     <div [hidden]="!isPaginatorVisible()">
