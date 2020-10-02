@@ -22,7 +22,6 @@ import {Cluster} from '../../../shared/entity/cluster';
 import {Member} from '../../../shared/entity/member';
 import {MachineDeployment} from '../../../shared/entity/machine-deployment';
 import {GroupConfig} from '../../../shared/model/Config';
-import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {MachineDeploymentHealthStatus} from '../../../shared/utils/health-status/machine-deployment-health-status';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {NodeService} from '../../services/node.service';
