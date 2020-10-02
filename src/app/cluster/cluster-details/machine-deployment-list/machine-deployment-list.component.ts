@@ -40,7 +40,6 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
   @Input() projectID: string;
   @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
-  @Input() isMachineDeploymentLoadFinished: boolean;
   @Output() changeMachineDeployment = new EventEmitter<MachineDeployment>();
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   dataSource = new MatTableDataSource<MachineDeployment>();
@@ -137,5 +136,21 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
     return (
       !_.isEmpty(this.machineDeployments) && this.paginator && this.machineDeployments.length > this.paginator.pageSize
     );
+  }
+
+  private _isClusterReady(): boolean {
+    if (this.cluster.spec.cloud.bringyourown) {
+      return true;
+    }
+
+    return this.isClusterRunning && !!this.clusterHealthStatus && this.clusterHealthStatus.css === 'km-status-running';
+  }
+
+  isLoadingData(): boolean {
+    return _.isEmpty(this.machineDeployments) && !this._isClusterReady();
+  }
+
+  hasNoData(): boolean {
+    return _.isEmpty(this.machineDeployments) && this._isClusterReady();
   }
 }

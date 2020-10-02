@@ -20,7 +20,8 @@ limitations under the License.
            matSort
            matSortActive="name"
            matSortDirection="asc"
-           [dataSource]="dataSource">
+           [dataSource]="dataSource"
+           [hidden]="isLoadingData()">
       <ng-container matColumnDef="status">
         <th mat-header-cell
             *matHeaderCellDef
@@ -172,19 +173,18 @@ limitations under the License.
           (click)="goToDetails(row)"></tr>
     </table>
 
-    <ng-container *ngIf="!machineDeployments || machineDeployments.length === 0">
-      <div class="km-row km-empty-list-msg"
-           *ngIf="isMachineDeploymentLoadFinished && clusterHealthStatus && clusterHealthStatus.css === 'km-status-running' || cluster.spec.cloud.bringyourown">
-        No machine deployments available.
-      </div>
-      <div class="km-row"
-           *ngIf="!isMachineDeploymentLoadFinished || !clusterHealthStatus || clusterHealthStatus.css !== 'km-status-running' || !isClusterRunning && !!!cluster.spec.cloud.bringyourown">
-        <mat-spinner color="accent"
-                     class="km-machine-deployment-spinner"
-                     *ngIf="!cluster.spec.cloud.bringyourown"
-                     [diameter]="25"></mat-spinner>
-      </div>
-    </ng-container>
+    <div class="km-row km-empty-list-msg"
+         *ngIf="hasNoData()">
+      No machine deployments available.
+    </div>
+
+    <div class="km-row"
+         *ngIf="isLoadingData()">
+      <mat-spinner color="accent"
+                   class="km-machine-deployment-spinner"
+                   *ngIf="!cluster.spec.cloud.bringyourown"
+                   [diameter]="25"></mat-spinner>
+    </div>
 
     <div [hidden]="!isPaginatorVisible()">
       <mat-paginator showFirstLastButtons></mat-paginator>
