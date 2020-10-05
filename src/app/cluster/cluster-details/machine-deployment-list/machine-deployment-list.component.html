@@ -178,14 +178,7 @@ limitations under the License.
       No machine deployments available.
     </div>
 
-    <div class="km-row"
-         fxLayout="column"
-         fxLayoutAlign="center center"
-         fxLayoutGap="10px"
-         *ngIf="isLoadingData()">
-      <i class="km-icon-loading"></i>
-      <div>Loading...</div>
-    </div>
+    <km-loader [isVisible]="isLoadingData()"></km-loader>
 
     <div [hidden]="!isPaginatorVisible()">
       <mat-paginator showFirstLastButtons></mat-paginator>

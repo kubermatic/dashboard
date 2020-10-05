@@ -83,6 +83,7 @@ import {EndOfLifeService} from './services/eol.service';
 import {EditorComponent} from './components/editor/component';
 import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {ExternalClusterDataDialogComponent} from './components/external-cluster-data-dialog/component';
+import {LoaderComponent} from './components/loader/component';
 
 const modules: any[] = [
   CommonModule,
@@ -151,6 +152,7 @@ const components: any[] = [
   ClusterTypeEOLComponent,
   ChipComponent,
   EditorComponent,
+  LoaderComponent,
 ];
 
 const entryComponents: any[] = [
