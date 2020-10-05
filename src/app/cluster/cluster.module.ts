@@ -66,6 +66,7 @@ const components: any[] = [
   ClusterSecretsComponent,
   EditClusterComponent,
   RevokeTokenComponent,
+  AddMachineNetworkComponent,
   EditProviderSettingsComponent,
   AWSProviderSettingsComponent,
   DigitaloceanProviderSettingsComponent,
@@ -85,11 +86,9 @@ const components: any[] = [
   VersionPickerComponent,
 ];
 
-const dialogs: any[] = [AddMachineNetworkComponent];
-
 @NgModule({
   imports: [SharedModule, ClusterRoutingModule, MachineNetworksModule, NodeDataModule],
-  declarations: [...components, ...dialogs],
+  declarations: [...components],
   exports: [...components],
   providers: [
     NodeService,
