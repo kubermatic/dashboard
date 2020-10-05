@@ -10,6 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+
 <div *ngIf="isClusterReady"
      fxLayout="row wrap"
      fxLayoutGap="10px">
@@ -52,8 +53,5 @@ limitations under the License.
     + Addon
   </div>
 </div>
-<mat-spinner *ngIf="!isClusterReady"
-             matTooltip="The cluster is not ready."
-             [diameter]="25"
-             color="accent"
-             class="km-spinner"></mat-spinner>
+
+<km-loader [isVisible]="!isClusterReady"></km-loader>
