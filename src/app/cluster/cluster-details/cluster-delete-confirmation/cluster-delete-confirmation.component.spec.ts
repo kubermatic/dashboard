@@ -10,28 +10,28 @@
 // limitations under the License.
 
 import {HttpClientModule} from '@angular/common/http';
-import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {AppConfigService} from '@app/config.service';
-import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
-import {fakeProject} from '@app/testing/fake-data/project.fake';
-import {RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
-import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
-import {DatacenterMockService} from '@app/testing/services/datacenter-mock.service';
-import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
-import {SettingsMockService} from '@app/testing/services/settings-mock.service';
-import {ClusterService} from '@core/services/cluster/cluster.service';
-import {DatacenterService} from '@core/services/datacenter/datacenter.service';
-import {NotificationService} from '@core/services/notification/notification.service';
-import {SettingsService} from '@core/services/settings/settings.service';
-import {SharedModule} from '@shared/shared.module';
 import {of} from 'rxjs';
+
+import {AppConfigService} from '../../../config.service';
+import {ClusterService, DatacenterService, NotificationService} from '../../../core/services';
+import {SettingsService} from '../../../core/services/settings/settings.service';
+import {GoogleAnalyticsService} from '../../../google-analytics.service';
+import {SharedModule} from '../../../shared/shared.module';
+import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
+import {fakeSeedDatacenter} from '../../../testing/fake-data/datacenter.fake';
+import {fakeProject} from '../../../testing/fake-data/project.fake';
+import {RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
+import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
+import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
+import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
+import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
+import {SettingsMockService} from '../../../testing/services/settings-mock.service';
+
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation.component';
 
 const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
@@ -66,12 +66,9 @@ describe('ClusterDeleteConfirmationComponent', () => {
     fixture.debugElement.injector.get(Router);
   });
 
-  it(
-    'should initialize',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should initialize', async(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should able add button', () => {
     component.projectID = fakeProject().id;

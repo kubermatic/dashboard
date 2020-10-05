@@ -13,21 +13,21 @@ import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {AppConfigService} from '@app/config.service';
-import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {ClusterService} from '@core/services/cluster/cluster.service';
-import {NotificationService} from '@core/services/notification/notification.service';
-import {UserService} from '@core/services/user/user.service';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
-import {Cluster} from '@shared/entity/cluster';
-import {View} from '@shared/entity/common';
-import {Member} from '@shared/entity/member';
-import {SSHKey} from '@shared/entity/ssh-key';
-import {GroupConfig} from '@shared/model/Config';
-import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import * as _ from 'lodash';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
+
+import {AppConfigService} from '../../../config.service';
+import {ClusterService, NotificationService, UserService} from '../../../core/services';
+import {GoogleAnalyticsService} from '../../../google-analytics.service';
+import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {Cluster} from '../../../shared/entity/cluster';
+import {View} from '../../../shared/entity/common';
+import {Member} from '../../../shared/entity/member';
+import {SSHKey} from '../../../shared/entity/ssh-key';
+import {GroupConfig} from '../../../shared/model/Config';
+import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
+
 import {AddClusterSSHKeysComponent} from './add-cluster-sshkeys/add-cluster-sshkeys.component';
 
 @Component({

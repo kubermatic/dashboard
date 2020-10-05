@@ -9,25 +9,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {AppConfigService} from '@app/config.service';
-import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
-import {fakeProject} from '@app/testing/fake-data/project.fake';
-import {RouterStub} from '@app/testing/router-stubs';
-import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
-import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
-import {ProjectMockService} from '@app/testing/services/project-mock.service';
-import {ClusterService} from '@core/services/cluster/cluster.service';
-import {NotificationService} from '@core/services/notification/notification.service';
-import {ProjectService} from '@core/services/project/project.service';
-import {SharedModule} from '@shared/shared.module';
 import {of} from 'rxjs';
+import {AppConfigService} from '../../../config.service';
+
+import {ClusterService, NotificationService, ProjectService} from '../../../core/services';
+import {GoogleAnalyticsService} from '../../../google-analytics.service';
+import {SharedModule} from '../../../shared/shared.module';
+import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
+import {fakeSeedDatacenter} from '../../../testing/fake-data/datacenter.fake';
+import {fakeProject} from '../../../testing/fake-data/project.fake';
+import {RouterStub} from '../../../testing/router-stubs';
+import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
+import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
+import {ProjectMockService} from '../../../testing/services/project-mock.service';
 
 import {ChangeClusterVersionComponent} from './change-cluster-version.component';
 
@@ -39,45 +38,38 @@ describe('ChangeClusterVersionComponent', () => {
   let patchClusterSpy;
   let upgradeClusterMachineDeploymentsSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      const clusterServiceMock = {
-        patch: jest.fn(),
-        upgradeMachineDeployments: jest.fn(),
-      };
-      patchClusterSpy = clusterServiceMock.patch.mockReturnValue(of(fakeDigitaloceanCluster()));
-      upgradeClusterMachineDeploymentsSpy = clusterServiceMock.upgradeMachineDeployments.mockReturnValue(of(null));
+  beforeEach(async(() => {
+    const clusterServiceMock = {
+      patch: jest.fn(),
+      upgradeMachineDeployments: jest.fn(),
+    };
+    patchClusterSpy = clusterServiceMock.patch.mockReturnValue(of(fakeDigitaloceanCluster()));
+    upgradeClusterMachineDeploymentsSpy = clusterServiceMock.upgradeMachineDeployments.mockReturnValue(of(null));
 
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [ChangeClusterVersionComponent],
-        providers: [
-          {provide: MAT_DIALOG_DATA, useValue: {clusterName: 'clustername'}},
-          {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: ClusterService, useValue: clusterServiceMock},
-          {provide: ProjectService, useClass: ProjectMockService},
-          {provide: Router, useClass: RouterStub},
-          {provide: AppConfigService, useClass: AppConfigMockService},
-          GoogleAnalyticsService,
-          NotificationService,
-        ],
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      declarations: [ChangeClusterVersionComponent],
+      providers: [
+        {provide: MAT_DIALOG_DATA, useValue: {clusterName: 'clustername'}},
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: ClusterService, useValue: clusterServiceMock},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: Router, useClass: RouterStub},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        GoogleAnalyticsService,
+        NotificationService,
+      ],
+    }).compileComponents();
+  }));
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(ChangeClusterVersionComponent);
-      component = fixture.componentInstance;
-    })
-  );
+  beforeEach(async(() => {
+    fixture = TestBed.createComponent(ChangeClusterVersionComponent);
+    component = fixture.componentInstance;
+  }));
 
-  it(
-    'should create the change cluster version component',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the change cluster version component', async(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should call patchCluster method from api', fakeAsync(() => {
     component.selectedVersion = 'new version';

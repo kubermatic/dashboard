@@ -10,48 +10,53 @@
 // limitations under the License.
 
 import {HttpClientModule} from '@angular/common/http';
-import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {MatDialog} from '@angular/material/dialog';
+import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AppConfigService} from '@app/config.service';
-import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
+import {of} from 'rxjs';
+
+import {AppConfigService} from '../../config.service';
+import {
+  ApiService,
+  Auth,
+  ClusterService,
+  DatacenterService,
+  NotificationService,
+  ProjectService,
+  RBACService,
+  UserService,
+} from '../../core/services';
+import {SettingsService} from '../../core/services/settings/settings.service';
+import {GoogleAnalyticsService} from '../../google-analytics.service';
+import {SharedModule} from '../../shared/shared.module';
+import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
 import {
   fakeBindings,
   fakeClusterBindings,
   fakeSimpleBindings,
   fakeSimpleClusterBindings,
-} from '@app/testing/fake-data/rbac.fake';
-import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {ApiMockService, asyncData} from '@app/testing/services/api-mock.service';
-import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
-import {AuthMockService} from '@app/testing/services/auth-mock.service';
-import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
-import {DatacenterMockService} from '@app/testing/services/datacenter-mock.service';
-import {MatDialogMock} from '@app/testing/services/mat-dialog-mock';
-import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
-import {NodeMockService} from '@app/testing/services/node-mock.service';
-import {ProjectMockService} from '@app/testing/services/project-mock.service';
-import {SettingsMockService} from '@app/testing/services/settings-mock.service';
-import {UserMockService} from '@app/testing/services/user-mock.service';
-import {ApiService} from '@core/services/api/api.service';
-import {Auth} from '@core/services/auth/auth.service';
-import {ClusterService} from '@core/services/cluster/cluster.service';
-import {DatacenterService} from '@core/services/datacenter/datacenter.service';
-import {NotificationService} from '@core/services/notification/notification.service';
-import {ProjectService} from '@core/services/project/project.service';
-import {RBACService} from '@core/services/rbac/rbac.service';
-import {SettingsService} from '@core/services/settings/settings.service';
-import {UserService} from '@core/services/user/user.service';
-import {SharedModule} from '@shared/shared.module';
-import {of} from 'rxjs';
+} from '../../testing/fake-data/rbac.fake';
+import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../testing/router-stubs';
+import {ApiMockService, asyncData} from '../../testing/services/api-mock.service';
+import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
+import {AuthMockService} from '../../testing/services/auth-mock.service';
+import {ClusterMockService} from '../../testing/services/cluster-mock-service';
+import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
+import {MatDialogMock} from '../../testing/services/mat-dialog-mock';
+import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
+import {NodeMockService} from '../../testing/services/node-mock.service';
+import {ProjectMockService} from '../../testing/services/project-mock.service';
+import {SettingsMockService} from '../../testing/services/settings-mock.service';
+import {UserMockService} from '../../testing/services/user-mock.service';
 import {NodeService} from '../services/node.service';
+
 import {ClusterDetailsComponent} from './cluster-details.component';
 import {ClusterSecretsComponent} from './cluster-secrets/cluster-secrets.component';
-import {MachineDeploymentListComponent} from './machine-deployment-list/machine-deployment-list.component';
 import {MachineNetworksDisplayComponent} from './machine-networks-display/machine-networks-display.component';
+import {MachineDeploymentListComponent} from './machine-deployment-list/machine-deployment-list.component';
 import {NodeListComponent} from './node-list/node-list.component';
 import {RBACComponent} from './rbac/rbac.component';
 import {VersionPickerComponent} from './version-picker/component';
@@ -61,51 +66,49 @@ describe('ClusterDetailsComponent', () => {
   let component: ClusterDetailsComponent;
   let activatedRoute: ActivatedRouteStub;
 
-  beforeEach(
-    waitForAsync(() => {
-      const rbacMock = {
-        getClusterBindings: jest.fn(),
-        getBindings: jest.fn(),
-        deleteClusterBinding: jest.fn(),
-        deleteBinding: jest.fn(),
-      };
-      rbacMock.getClusterBindings.mockReturnValue(asyncData([fakeClusterBindings()]));
-      rbacMock.getBindings.mockReturnValue(asyncData([fakeBindings()]));
-      rbacMock.deleteClusterBinding.mockReturnValue(of(null));
-      rbacMock.deleteBinding.mockReturnValue(of(null));
+  beforeEach(async(() => {
+    const rbacMock = {
+      getClusterBindings: jest.fn(),
+      getBindings: jest.fn(),
+      deleteClusterBinding: jest.fn(),
+      deleteBinding: jest.fn(),
+    };
+    rbacMock.getClusterBindings.mockReturnValue(asyncData([fakeClusterBindings()]));
+    rbacMock.getBindings.mockReturnValue(asyncData([fakeBindings()]));
+    rbacMock.deleteClusterBinding.mockReturnValue(of(null));
+    rbacMock.deleteBinding.mockReturnValue(of(null));
 
-      TestBed.configureTestingModule({
-        imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
-        declarations: [
-          ClusterDetailsComponent,
-          ClusterSecretsComponent,
-          NodeListComponent,
-          MachineDeploymentListComponent,
-          MachineNetworksDisplayComponent,
-          VersionPickerComponent,
-          RBACComponent,
-        ],
-        providers: [
-          {provide: ApiService, useClass: ApiMockService},
-          {provide: ClusterService, useClass: ClusterMockService},
-          {provide: DatacenterService, useClass: DatacenterMockService},
-          {provide: Auth, useClass: AuthMockService},
-          {provide: Router, useClass: RouterStub},
-          {provide: ActivatedRoute, useClass: ActivatedRouteStub},
-          {provide: UserService, useClass: UserMockService},
-          {provide: AppConfigService, useClass: AppConfigMockService},
-          {provide: NodeService, useClass: NodeMockService},
-          {provide: ProjectService, useClass: ProjectMockService},
-          {provide: SettingsService, useClass: SettingsMockService},
-          {provide: RBACService, useValue: rbacMock},
-          {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: MatDialog, useClass: MatDialogMock},
-          GoogleAnalyticsService,
-          NotificationService,
-        ],
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
+      declarations: [
+        ClusterDetailsComponent,
+        ClusterSecretsComponent,
+        NodeListComponent,
+        MachineDeploymentListComponent,
+        MachineNetworksDisplayComponent,
+        VersionPickerComponent,
+        RBACComponent,
+      ],
+      providers: [
+        {provide: ApiService, useClass: ApiMockService},
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: DatacenterService, useClass: DatacenterMockService},
+        {provide: Auth, useClass: AuthMockService},
+        {provide: Router, useClass: RouterStub},
+        {provide: ActivatedRoute, useClass: ActivatedRouteStub},
+        {provide: UserService, useClass: UserMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: NodeService, useClass: NodeMockService},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: SettingsService, useClass: SettingsMockService},
+        {provide: RBACService, useValue: rbacMock},
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: MatDialog, useClass: MatDialogMock},
+        GoogleAnalyticsService,
+        NotificationService,
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterDetailsComponent);

@@ -10,29 +10,26 @@
 // limitations under the License.
 
 import {HttpClientModule} from '@angular/common/http';
-import {ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
+import {async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AppConfigService} from '@app/config.service';
-import {fakeAWSCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeHealth} from '@app/testing/fake-data/health.fake';
-import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {ApiMockService, asyncData} from '@app/testing/services/api-mock.service';
-import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
-import {AuthMockService} from '@app/testing/services/auth-mock.service';
-import {DatacenterMockService} from '@app/testing/services/datacenter-mock.service';
-import {ProjectMockService} from '@app/testing/services/project-mock.service';
-import {SettingsMockService} from '@app/testing/services/settings-mock.service';
-import {UserMockService} from '@app/testing/services/user-mock.service';
-import {ApiService} from '@core/services/api/api.service';
-import {Auth} from '@core/services/auth/auth.service';
-import {ClusterService} from '@core/services/cluster/cluster.service';
-import {DatacenterService} from '@core/services/datacenter/datacenter.service';
-import {ProjectService} from '@core/services/project/project.service';
-import {SettingsService} from '@core/services/settings/settings.service';
-import {UserService} from '@core/services/user/user.service';
-import {SharedModule} from '@shared/shared.module';
+
+import {AppConfigService} from '../../config.service';
+import {ApiService, Auth, ClusterService, DatacenterService, ProjectService, UserService} from '../../core/services';
+import {SettingsService} from '../../core/services/settings/settings.service';
+import {SharedModule} from '../../shared/shared.module';
+import {fakeAWSCluster} from '../../testing/fake-data/cluster.fake';
+import {fakeHealth} from '../../testing/fake-data/health.fake';
+import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../testing/router-stubs';
+import {ApiMockService, asyncData} from '../../testing/services/api-mock.service';
+import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
+import {AuthMockService} from '../../testing/services/auth-mock.service';
+import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
+import {ProjectMockService} from '../../testing/services/project-mock.service';
+import {SettingsMockService} from '../../testing/services/settings-mock.service';
+import {UserMockService} from '../../testing/services/user-mock.service';
+
 import {ClusterListComponent} from './cluster-list.component';
 
 describe('ClusterListComponent', () => {
@@ -41,34 +38,28 @@ describe('ClusterListComponent', () => {
   let getClustersSpy;
   let activatedRoute: ActivatedRouteStub;
 
-  beforeEach(
-    waitForAsync(() => {
-      const clusterServiceMock = {
-        clusters: jest.fn(),
-        health: jest.fn(),
-        refreshClusters: () => {},
-      };
-      getClustersSpy = clusterServiceMock.clusters.mockReturnValue(asyncData([fakeAWSCluster()]));
-      clusterServiceMock.health.mockReturnValue(asyncData([fakeHealth()]));
+  beforeEach(async(() => {
+    const clusterServiceMock = {clusters: jest.fn(), health: jest.fn(), refreshClusters: () => {}};
+    getClustersSpy = clusterServiceMock.clusters.mockReturnValue(asyncData([fakeAWSCluster()]));
+    clusterServiceMock.health.mockReturnValue(asyncData([fakeHealth()]));
 
-      TestBed.configureTestingModule({
-        imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
-        declarations: [ClusterListComponent],
-        providers: [
-          {provide: ApiService, useValue: ApiMockService},
-          {provide: ClusterService, useValue: clusterServiceMock},
-          {provide: Auth, useClass: AuthMockService},
-          {provide: ActivatedRoute, useClass: ActivatedRouteStub},
-          {provide: UserService, useClass: UserMockService},
-          {provide: Router, useClass: RouterStub},
-          {provide: AppConfigService, useClass: AppConfigMockService},
-          {provide: DatacenterService, useClass: DatacenterMockService},
-          {provide: ProjectService, useClass: ProjectMockService},
-          {provide: SettingsService, useClass: SettingsMockService},
-        ],
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
+      declarations: [ClusterListComponent],
+      providers: [
+        {provide: ApiService, useValue: ApiMockService},
+        {provide: ClusterService, useValue: clusterServiceMock},
+        {provide: Auth, useClass: AuthMockService},
+        {provide: ActivatedRoute, useClass: ActivatedRouteStub},
+        {provide: UserService, useClass: UserMockService},
+        {provide: Router, useClass: RouterStub},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: DatacenterService, useClass: DatacenterMockService},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: SettingsService, useClass: SettingsMockService},
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterListComponent);
