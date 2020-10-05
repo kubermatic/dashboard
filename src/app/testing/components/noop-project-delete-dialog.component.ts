@@ -14,7 +14,6 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 import {SharedModule} from '../../shared/shared.module';
-import {DeleteProjectConfirmationComponent} from '../../project/delete-project/delete-project.component';
 
 // NoopConfirmDialogComponent is only a workaround to trigger change detection
 @Component({template: ''})
@@ -24,6 +23,5 @@ export class NoopProjectDeleteDialogComponent {}
   imports: [MatDialogModule, NoopAnimationsModule, SharedModule],
   exports: [NoopProjectDeleteDialogComponent],
   declarations: [NoopProjectDeleteDialogComponent],
-  entryComponents: [DeleteProjectConfirmationComponent],
 })
 export class DialogTestModule {}
