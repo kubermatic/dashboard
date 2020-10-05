@@ -21,6 +21,7 @@ import {Cluster} from '../../../shared/entity/cluster';
 import {SimpleBinding, SimpleClusterBinding} from '../../../shared/entity/rbac';
 
 import {AddBindingComponent} from './add-binding/add-binding.component';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'km-rbac',
@@ -78,6 +79,14 @@ export class RBACComponent implements OnInit, OnDestroy {
 
   toggleRBAC(): void {
     this.isShowRBAC = !this.isShowRBAC;
+  }
+
+  isLoadingData(data: SimpleBinding[] | SimpleClusterBinding[]): boolean {
+    return _.isEmpty(data) && !this.isClusterRunning;
+  }
+
+  hasNoData(data: SimpleBinding[] | SimpleClusterBinding[]): boolean {
+    return _.isEmpty(data) && this.isClusterRunning;
   }
 
   deleteClusterBinding(element: SimpleClusterBinding, event: Event): void {

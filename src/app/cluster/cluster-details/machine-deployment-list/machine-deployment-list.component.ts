@@ -37,7 +37,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
   @Input() seed: string;
   @Input() machineDeployments: MachineDeployment[] = [];
   @Input() projectID: string;
-  @Input() isClusterHealthy: boolean;
+  @Input() isClusterRunning: boolean;
   @Output() changeMachineDeployment = new EventEmitter<MachineDeployment>();
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   dataSource = new MatTableDataSource<MachineDeployment>();
@@ -136,15 +136,11 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
     );
   }
 
-  private _isClusterHealthy(): boolean {
-    return this.isClusterHealthy || !!this.cluster.spec.cloud.bringyourown;
-  }
-
   isLoadingData(): boolean {
-    return _.isEmpty(this.machineDeployments) && !this._isClusterHealthy();
+    return _.isEmpty(this.machineDeployments) && !this.isClusterRunning;
   }
 
   hasNoData(): boolean {
-    return _.isEmpty(this.machineDeployments) && this._isClusterHealthy();
+    return _.isEmpty(this.machineDeployments) && this.isClusterRunning;
   }
 }

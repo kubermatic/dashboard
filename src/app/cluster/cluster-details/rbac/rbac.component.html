@@ -22,8 +22,7 @@ limitations under the License.
     <button mat-icon-button
             class="km-add-button"
             matTooltip="Add Binding"
-            *ngIf="isShowRBAC"
-            [disabled]="!isClusterRunning"
+            *ngIf="isShowRBAC && isClusterRunning"
             (click)="addBinding($event)">
       <i class="km-icon-add"></i>
     </button>
@@ -35,7 +34,8 @@ limitations under the License.
            matSort
            matSortActive="name"
            matSortDirection="asc"
-           [dataSource]="getDataSourceCluster()">
+           [dataSource]="getDataSourceCluster()"
+           [hidden]="isLoadingData(clusterBindings)">>
       <ng-container matColumnDef="kind">
         <th mat-header-cell
             *matHeaderCellDef
@@ -99,18 +99,12 @@ limitations under the License.
           [attr.id]="row.id"></tr>
     </table>
 
-    <ng-container *ngIf="!clusterBindings || clusterBindings.length === 0">
-      <div class="km-row km-empty-list-msg"
-           *ngIf="isClusterRunning">
-        No bindings available.
-      </div>
-      <div class="km-row"
-           *ngIf="!isClusterRunning">
-        <mat-spinner color="accent"
-                     class="km-spinner"
-                     [diameter]="25"></mat-spinner>
-      </div>
-    </ng-container>
+    <div class="km-row km-empty-list-msg"
+         *ngIf="hasNoData(clusterBindings)">
+      No machine deployments available.
+    </div>
+
+    <km-loader [isVisible]="isLoadingData(clusterBindings)"></km-loader>
 
     <h2>Namespace</h2>
     <table class="km-table"
@@ -118,7 +112,8 @@ limitations under the License.
            matSort
            matSortActive="name"
            matSortDirection="asc"
-           [dataSource]="getDataSourceNamespace()">
+           [dataSource]="getDataSourceNamespace()"
+           [hidden]="isLoadingData(bindings)">
       <ng-container matColumnDef="kind">
         <th mat-header-cell
             *matHeaderCellDef
@@ -189,17 +184,12 @@ limitations under the License.
           [attr.id]="row.id"></tr>
     </table>
 
-    <ng-container *ngIf="!bindings || bindings.length === 0">
-      <div class="km-row km-empty-list-msg"
-           *ngIf="isClusterRunning">
-        No bindings available.
-      </div>
-      <div class="km-row"
-           *ngIf="!isClusterRunning">
-        <mat-spinner color="accent"
-                     class="km-spinner"
-                     [diameter]="25"></mat-spinner>
-      </div>
-    </ng-container>
+    <div class="km-row km-empty-list-msg"
+         *ngIf="hasNoData(bindings)">
+      No machine deployments available.
+    </div>
+
+    <km-loader [isVisible]="isLoadingData(bindings)"></km-loader>
+
   </mat-card-content>
 </mat-card>
