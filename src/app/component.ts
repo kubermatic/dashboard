@@ -17,10 +17,10 @@ import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {AppConfigService} from './app-config.service';
+import {AppConfigService} from './config.service';
 import {Auth} from './core/services';
-import {SettingsService} from './core/services/settings/settings.service';
 import {PageTitleService} from './core/services/page-title/page-title.service';
+import {SettingsService} from './core/services/settings/settings.service';
 import {GoogleAnalyticsService} from './google-analytics.service';
 import {AdminSettings, CustomLink} from './shared/entity/settings';
 import {VersionInfo} from './shared/entity/version-info';
@@ -30,8 +30,8 @@ const PAGES_WITHOUT_MENU = ['/projects', '/account', '/settings', '/rest-api', '
 
 @Component({
   selector: 'km-root',
-  templateUrl: './kubermatic.component.html',
-  styleUrls: ['./kubermatic.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class KubermaticComponent implements OnInit, OnDestroy {
   @ViewChild('sidenav') sidenav: MatSidenav;

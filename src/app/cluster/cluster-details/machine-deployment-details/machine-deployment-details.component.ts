@@ -14,7 +14,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Subject, timer} from 'rxjs';
 import {first, take, takeUntil} from 'rxjs/operators';
 
-import {AppConfigService} from '../../../app-config.service';
+import {AppConfigService} from '../../../config.service';
 import {ApiService, ClusterService, DatacenterService, NotificationService, UserService} from '../../../core/services';
 import {Cluster} from '../../../shared/entity/cluster';
 import {Datacenter} from '../../../shared/entity/datacenter';

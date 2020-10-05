@@ -9,20 +9,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
 
-import {ClusterService, NotificationService, WizardService} from '../../../core/services';
-import {Cluster} from '../../../shared/entity/cluster';
-import {MachineNetworkForm} from '../../../shared/model/ClusterForm';
+import {ClusterService, NotificationService} from '../../../core/services';
+import {Cluster} from '@shared/entity/cluster';
+import {MachineNetworkForm} from '@shared/model/ClusterForm';
 
 @Component({
   selector: 'km-add-machine-network',
   templateUrl: './add-machine-network.component.html',
 })
-export class AddMachineNetworkComponent implements OnInit, OnDestroy {
+export class AddMachineNetworkComponent implements OnDestroy {
   @Input() cluster: Cluster;
   @Input() projectID: string;
   machineNetworkFormData: MachineNetworkForm[] = [];
@@ -30,18 +29,9 @@ export class AddMachineNetworkComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly _clusterService: ClusterService,
-    private readonly _wizardService: WizardService,
     private readonly _dialogRef: MatDialogRef<AddMachineNetworkComponent>,
     private readonly _notificationService: NotificationService
   ) {}
-
-  ngOnInit(): void {
-    this._wizardService.machineNetworksFormChanges$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe((res: MachineNetworkForm[]) => {
-        this.machineNetworkFormData = res;
-      });
-  }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();

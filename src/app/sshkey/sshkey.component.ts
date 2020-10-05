@@ -18,7 +18,7 @@ import {Subject, timer} from 'rxjs';
 import {filter, retry, switchMap, take, takeUntil} from 'rxjs/operators';
 import * as _ from 'lodash';
 
-import {AppConfigService} from '../app-config.service';
+import {AppConfigService} from '../config.service';
 import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {AddSshKeyDialogComponent} from '../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';

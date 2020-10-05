@@ -17,10 +17,10 @@ import {catchError, delay, retryWhen, shareReplay, switchMap, tap} from 'rxjs/op
 import {webSocket} from 'rxjs/webSocket';
 
 import {environment} from '../../../../environments/environment';
-import {AppConfigService} from '../../../app-config.service';
-import {Admin} from '../../../shared/entity/member';
-import {AdminSettings, CustomLink, DEFAULT_ADMIN_SETTINGS} from '../../../shared/entity/settings';
-import {Auth} from '../auth/auth.service';
+import {AppConfigService} from '../../../config.service';
+import {Admin} from '@shared/entity/member';
+import {AdminSettings, CustomLink, DEFAULT_ADMIN_SETTINGS} from '@shared/entity/settings';
+import {Auth} from '@core/services';
 
 @Injectable({
   providedIn: 'root',

@@ -76,7 +76,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     this.form.controls.role.valueChanges
       .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
+      .subscribe(_ => {
         if (this.bindingType === 'namespace') {
           this.checkNamespaceState();
         }
@@ -162,6 +162,8 @@ export class AddBindingComponent implements OnInit, OnDestroy {
         return this.roles[i].namespace;
       }
     }
+
+    return [];
   }
 
   addBinding(): void {

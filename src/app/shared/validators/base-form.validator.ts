@@ -20,7 +20,7 @@ export class BaseFormValidator implements ControlValueAccessor, Validator {
   constructor(private _formName = 'Form') {}
 
   // Validator interface implementation
-  validate(control: AbstractControl): ValidationErrors | null {
+  validate(_: AbstractControl): ValidationErrors | null {
     return this.form.valid || this.form.disabled
       ? null
       : {

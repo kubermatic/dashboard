@@ -67,7 +67,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(_: SimpleChanges): void {
     this._updateInstallableAddons();
   }
 

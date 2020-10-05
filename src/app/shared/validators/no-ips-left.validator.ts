@@ -27,8 +27,8 @@ export function NoIpsLeftValidator(networks: MachineNetwork[], existingNodes: nu
         }
         return {ipsMissing: true};
       }
-    } else {
-      return null;
     }
+
+    return null;
   };
 }

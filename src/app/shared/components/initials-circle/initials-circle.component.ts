@@ -27,7 +27,7 @@ export class InitialsCircleComponent implements OnInit, OnChanges {
     this._updateLabelKeys();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(_: SimpleChanges): void {
     this._updateLabelKeys();
   }
 

@@ -29,7 +29,7 @@ export class ApiDocsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this._api.getSwaggerJson().subscribe(swaggerSpec => {
+    this._api.getSwaggerJson().subscribe(_ => {
       SwaggerUI({
         dom_id: '#km-swagger-container',
         url: `${this._document.location.origin}/api/swagger.json`,

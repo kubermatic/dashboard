@@ -14,7 +14,7 @@ import {RouterModule, Routes} from '@angular/router';
 
 import {AuthGuard} from '../../core/services';
 
-import {AdminSettingsComponent} from './admin-settings.component';
+import {AdminSettingsComponent} from './component';
 
 const routes: Routes = [
   {

@@ -45,7 +45,7 @@ export class VersionPickerComponent implements OnInit, OnChanges {
     this.processData();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(_: SimpleChanges): void {
     this.processData();
   }
 

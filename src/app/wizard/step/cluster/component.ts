@@ -22,7 +22,7 @@ import {
 import {merge} from 'rxjs';
 import {switchMap, takeUntil, filter, first} from 'rxjs/operators';
 
-import {AppConfigService} from '../../../app-config.service';
+import {AppConfigService} from '../../../config.service';
 import {ApiService, DatacenterService} from '../../../core/services';
 import {ClusterNameGenerator} from '../../../core/util/name-generator.service';
 import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '../../../shared/entity/cluster';

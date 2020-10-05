@@ -15,7 +15,7 @@ import {BehaviorSubject, EMPTY, iif, Observable, of} from 'rxjs';
 import {catchError, delay, filter, first, map, retryWhen, switchMap, tap} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
-import {AppConfigService} from '../../../app-config.service';
+import {AppConfigService} from '../../../config.service';
 import {Member} from '../../../shared/entity/member';
 import {GroupConfig} from '../../../shared/model/Config';
 import {MemberUtils} from '../../../shared/utils/member-utils/member-utils';

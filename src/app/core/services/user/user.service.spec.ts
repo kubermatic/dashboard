@@ -14,8 +14,8 @@ import {TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import {AppConfigService} from '../../../app-config.service';
-import {COOKIE, COOKIE_DI_TOKEN} from '../../../app.config';
+import {AppConfigService} from '../../../config.service';
+import {COOKIE, COOKIE_DI_TOKEN} from '../../../config';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeUserGroupConfig} from '../../../testing/fake-data/userGroupConfig.fake';
 import {RouterTestingModule} from '../../../testing/router-stubs';

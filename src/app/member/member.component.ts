@@ -18,7 +18,7 @@ import * as _ from 'lodash';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
 
-import {AppConfigService} from '../app-config.service';
+import {AppConfigService} from '../config.service';
 import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';

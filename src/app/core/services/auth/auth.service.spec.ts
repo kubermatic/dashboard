@@ -15,8 +15,8 @@ import {BrowserModule} from '@angular/platform-browser';
 import {RouterTestingModule} from '@angular/router/testing';
 import {CookieService} from 'ngx-cookie-service';
 
-import {AppConfigService} from '../../../app-config.service';
-import {COOKIE, COOKIE_DI_TOKEN} from '../../../app.config';
+import {AppConfigService} from '../../../config.service';
+import {COOKIE, COOKIE_DI_TOKEN} from '../../../config';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {UserService} from '../index';
 import {PreviousRouteService} from '../previous-route/previous-route.service';

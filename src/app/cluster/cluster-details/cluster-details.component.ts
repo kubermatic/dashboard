@@ -15,7 +15,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
 import {filter, first, map, switchMap, takeUntil, take} from 'rxjs/operators';
 
-import {AppConfigService} from '../../app-config.service';
+import {AppConfigService} from '../../config.service';
 import {
   ApiService,
   ClusterService,

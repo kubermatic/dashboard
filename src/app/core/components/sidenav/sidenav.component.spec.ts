@@ -18,7 +18,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {MockComponent} from 'ng2-mock-component';
 
-import {AppConfigService} from '../../../app-config.service';
+import {AppConfigService} from '../../../config.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeProjects} from '../../../testing/fake-data/project.fake';
 import {RouterLinkStubDirective, RouterTestingModule} from '../../../testing/router-stubs';

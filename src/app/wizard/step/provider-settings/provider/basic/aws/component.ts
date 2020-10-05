@@ -123,6 +123,8 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
           ? 'When specified, all worker nodes will be attached to this VPC. If not specified, the default VPC will be used.'
           : 'Please enter your credentials first.';
     }
+
+    return '';
   }
 
   onVPCChange(vpcId: string): void {

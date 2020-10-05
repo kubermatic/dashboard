@@ -10,18 +10,17 @@
 // limitations under the License.
 
 import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
-import {filter, take, takeUntil} from 'rxjs/operators';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatSort} from '@angular/material/sort';
-import {MatPaginator} from '@angular/material/paginator';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {Subject} from 'rxjs';
+import {filter, take, takeUntil} from 'rxjs/operators';
 import {NotificationService, UserService} from '../../../core/services';
 import {SettingsService} from '../../../core/services/settings/settings.service';
-import {Subject} from 'rxjs';
-import {AddAdminDialogComponent} from './add-admin-dialog/add-admin-dialog.component';
+import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Admin, Member} from '../../../shared/entity/member';
-import * as _ from 'lodash';
+import {AddAdminDialogComponent} from './add-admin-dialog/component';
 
 @Component({
   selector: 'km-admins',

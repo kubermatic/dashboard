@@ -22,7 +22,6 @@ import {ProjectService} from './project/project.service';
 import {RBACService} from './rbac/rbac.service';
 import {UserService} from './user/user.service';
 import {PresetsService} from './wizard/presets.service';
-import {WizardService} from './wizard/wizard.service';
 
 export {
   ApiService,
@@ -39,5 +38,4 @@ export {
   ProjectService,
   RBACService,
   UserService,
-  WizardService,
 };

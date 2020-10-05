@@ -209,6 +209,8 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       case Controls.FloatingIPPool:
         return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first & project/project ID.';
     }
+
+    return '';
   }
 
   isRequired(control: Controls): boolean {

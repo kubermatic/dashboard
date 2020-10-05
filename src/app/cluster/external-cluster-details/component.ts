@@ -26,7 +26,7 @@ import {GroupConfig} from '../../shared/model/Config';
 import {Node} from '../../shared/entity/node';
 import {ExternalClusterDataDialogComponent} from '../../shared/components/external-cluster-data-dialog/component';
 import {MatDialog} from '@angular/material/dialog';
-import {AppConfigService} from '../../app-config.service';
+import {AppConfigService} from '../../config.service';
 
 @Component({
   selector: 'km-cluster-details',

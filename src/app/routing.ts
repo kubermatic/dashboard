@@ -61,7 +61,7 @@ function createRouting(): Routes {
         },
         {
           path: 'settings',
-          loadChildren: () => import('./settings/admin/admin-settings.module').then(m => m.AdminSettingsModule),
+          loadChildren: () => import('./settings/admin/module').then(m => m.AdminSettingsModule),
         },
         {
           path: '',

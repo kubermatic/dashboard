@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
-import {AppConfigService} from '../../app-config.service';
+import {AppConfigService} from '../../config.service';
 import {EndOfLife} from '../model/Config';
 import {lte, compare} from 'semver';
 

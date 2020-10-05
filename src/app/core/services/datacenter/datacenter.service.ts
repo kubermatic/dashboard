@@ -15,7 +15,7 @@ import {iif, merge, Observable, of, Subject, timer} from 'rxjs';
 import {first, map, shareReplay, switchMap} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {CreateDatacenterModel, Datacenter} from '../../../shared/entity/datacenter';
-import {AppConfigService} from '../../../app-config.service';
+import {AppConfigService} from '../../../config.service';
 import {Auth} from '../auth/auth.service';
 import * as _ from 'lodash';
 

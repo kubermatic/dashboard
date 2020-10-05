@@ -40,7 +40,7 @@ import {VSphereProviderSettingsComponent} from '../edit-provider-settings/vspher
 import {EditClusterComponent} from './edit-cluster.component';
 import {ProviderSettingsPatch} from '../../../shared/entity/cluster';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
-import {AppConfigService} from '../../../app-config.service';
+import {AppConfigService} from '../../../config.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
 import {RouterStub} from '../../../testing/router-stubs';

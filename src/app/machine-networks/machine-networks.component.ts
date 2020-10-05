@@ -10,11 +10,9 @@
 // limitations under the License.
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
-import * as _ from 'lodash';
+import {AbstractControl, FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
-import {WizardService} from '../core/services';
 import {Cluster} from '../shared/entity/cluster';
 
 @Component({
@@ -33,7 +31,7 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
   private readonly _debounceTime = 1000;
   private _unsubscribe = new Subject<void>();
 
-  constructor(private wizardService: WizardService) {}
+  constructor() {}
 
   ngOnInit(): void {
     const machineNetworksList = new FormArray([]);
@@ -96,8 +94,8 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getMachineNetworksForm(form): void {
-    return form.get('machineNetworks').controls;
+  getMachineNetworksForm(form: FormGroup): AbstractControl[] {
+    return (form.get('machineNetworks') as FormArray).controls;
   }
 
   addMachineNetwork(): void {
@@ -136,7 +134,5 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
         });
       }
     }
-
-    this.wizardService.changeMachineNetwork(machineNetworksMap);
   }
 }

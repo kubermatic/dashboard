@@ -12,7 +12,7 @@
 import {Inject, Injectable} from '@angular/core';
 import * as moment from 'moment';
 import {CookieService} from 'ngx-cookie-service';
-import {Cookie, COOKIE_DI_TOKEN} from '../../../app.config';
+import {Cookie, COOKIE_DI_TOKEN} from '../../../config';
 
 @Injectable()
 export class TokenService {

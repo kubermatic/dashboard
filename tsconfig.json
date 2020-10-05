@@ -1,15 +1,23 @@
 {
   "extends": "./node_modules/gts/tsconfig-google.json",
+  "angularCompilerOptions": {
+    "annotationsAs": "static fields",
+    "annotateForClosureCompiler": true
+  },
   "compilerOptions": {
-    "rootDir": ".",
-    "outDir": "./dist/out-tsc",
+    "outDir": "dist/out-tsc/app",
+    "baseUrl": "src/app/",
+    "paths": {
+      "@shared/*": ["app/shared/*"],
+      "@core/*": ["app/core/*"]
+    },
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "Node",
     "module": "CommonJS",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "noImplicitReturns": false,
+    "noUnusedParameters": true,
     "noUnusedLocals": true,
     "resolveJsonModule": true,
     "strict": false,

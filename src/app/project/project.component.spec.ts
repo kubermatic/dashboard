@@ -16,7 +16,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {CookieService} from 'ngx-cookie-service';
 
-import {AppConfigService} from '../app-config.service';
+import {AppConfigService} from '../config.service';
 import {CoreModule} from '../core/core.module';
 import {DatacenterService, ProjectService, UserService} from '../core/services';
 import {SettingsService} from '../core/services/settings/settings.service';

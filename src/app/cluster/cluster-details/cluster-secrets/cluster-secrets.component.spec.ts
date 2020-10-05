@@ -15,7 +15,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 
-import {AppConfigService} from '../../../app-config.service';
+import {AppConfigService} from '../../../config.service';
 import {ClusterService, ProjectService, UserService} from '../../../core/services';
 import {HealthState} from '../../../shared/entity/health';
 import {SharedModule} from '../../../shared/shared.module';

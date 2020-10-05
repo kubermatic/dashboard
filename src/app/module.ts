@@ -20,15 +20,14 @@ import {MonacoEditorModule} from 'ngx-monaco-editor';
 
 import {kmTooltipDefaultOptions} from '../app-config';
 import {environment} from '../environments/environment';
-
-import {AppConfigService} from './app-config.service';
-import {AppRoutingModule} from './app-routing.module';
+import {KubermaticComponent} from './component';
 import {CoreModule} from './core/core.module';
 import {DatacenterService, ProjectService, UserService} from './core/services';
 import {HistoryService} from './core/services/history/history.service';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {GoogleAnalyticsService} from './google-analytics.service';
-import {KubermaticComponent} from './kubermatic.component';
+import {AppRoutingModule} from './routing';
+import {AppConfigService} from './config.service';
 import {SharedModule} from './shared/shared.module';
 
 const appInitializerFn = (

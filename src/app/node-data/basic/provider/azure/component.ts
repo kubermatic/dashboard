@@ -142,6 +142,8 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
       case Controls.Zone:
         return this._nodeDataService.nodeData.spec.cloud.azure.size !== '' ? '' : 'Please enter your Node Size first.';
     }
+
+    return '';
   }
 
   sizeDisplayName(sizeName: string): string {

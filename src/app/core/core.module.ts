@@ -14,7 +14,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {Injector, NgModule, Optional, SkipSelf} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
-import {COOKIE, COOKIE_DI_TOKEN} from '../app.config';
+import {COOKIE, COOKIE_DI_TOKEN} from '../config';
 
 import {AddMemberComponent} from '../member/add-member/add-member.component';
 import {EditMemberComponent} from '../member/edit-member/edit-member.component';
@@ -29,6 +29,7 @@ import {NavigationComponent} from './components/navigation/navigation.component'
 import {ProjectSelectorComponent} from './components/navigation/project/component';
 import {NotificationPanelComponent} from './components/notification-panel/notification-panel.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
+import {UserPanelComponent} from './components/user-panel/user-panel.component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
 import {
   ApiService,
@@ -42,18 +43,16 @@ import {
   ParamsService,
   PresetsService,
   RBACService,
-  WizardService,
 } from './services';
 import {GlobalModule} from './services/global/global.module';
 import {NodeDataService} from './services/node-data/node-data.service';
-import {PreviousRouteService} from './services/previous-route/previous-route.service';
 import {PageTitleService} from './services/page-title/page-title.service';
+import {PreviousRouteService} from './services/previous-route/previous-route.service';
 import {SettingsService} from './services/settings/settings.service';
+import {ThemeInformerService} from './services/theme-informer/theme-informer.service';
 import {TokenService} from './services/token/token.service';
 import {StepsService} from './services/wizard/steps.service';
 import {ClusterNameGenerator} from './util/name-generator.service';
-import {ThemeInformerService} from './services/theme-informer/theme-informer.service';
-import {UserPanelComponent} from './components/user-panel/user-panel.component';
 
 const modules: any[] = [
   CommonModule,
@@ -85,7 +84,6 @@ const services: any[] = [
   AuthzGuard,
   DatacenterService,
   NodeDataService,
-  WizardService,
   StepsService,
   ClusterNameGenerator,
   ApiService,

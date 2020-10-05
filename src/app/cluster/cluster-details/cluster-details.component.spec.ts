@@ -18,7 +18,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {of} from 'rxjs';
 
-import {AppConfigService} from '../../app-config.service';
+import {AppConfigService} from '../../config.service';
 import {
   ApiService,
   Auth,

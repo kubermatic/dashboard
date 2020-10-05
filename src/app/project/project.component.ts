@@ -30,7 +30,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
 import {filter, first, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
-import {Cookie, COOKIE_DI_TOKEN} from '../app.config';
+import {Cookie, COOKIE_DI_TOKEN} from '../config';
 import {NotificationService, ProjectService, UserService} from '../core/services';
 import {PreviousRouteService} from '../core/services/previous-route/previous-route.service';
 import {SettingsService} from '../core/services/settings/settings.service';
