@@ -19,7 +19,7 @@ import {Admin} from '../../../../shared/entity/member';
 
 @Component({
   selector: 'km-add-admin-dialog',
-  templateUrl: './add-admin-dialog.component.html',
+  templateUrl: './template.html',
 })
 export class AddAdminDialogComponent implements OnInit {
   form: FormGroup;

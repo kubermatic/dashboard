@@ -46,8 +46,8 @@ export enum Controls {
 
 @Component({
   selector: 'km-add-admin-dialog',
-  templateUrl: './datacenter-data-dialog.component.html',
-  styleUrls: ['./datacenter-data-dialog.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
   readonly controls = Controls;

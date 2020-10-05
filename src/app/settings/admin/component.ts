@@ -15,19 +15,18 @@ import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
 
-import {NotificationService} from '../../core/services';
-import {UserService, HistoryService} from '../../core/services';
+import {HistoryService, NotificationService, UserService} from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
-import {AdminSettings, ClusterTypeOptions} from '../../shared/entity/settings';
-import {Member} from '../../shared/entity/member';
-import {objectDiff} from '../../shared/utils/common-utils';
 
 import {ClusterType} from '../../shared/entity/cluster';
+import {Member} from '../../shared/entity/member';
+import {AdminSettings, ClusterTypeOptions} from '../../shared/entity/settings';
+import {objectDiff} from '../../shared/utils/common-utils';
 
 @Component({
   selector: 'km-admin-settings',
-  templateUrl: 'admin-settings.component.html',
-  styleUrls: ['admin-settings.component.scss'],
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
 })
 export class AdminSettingsComponent implements OnInit, OnDestroy {
   clusterType = ClusterType;

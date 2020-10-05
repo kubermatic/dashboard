@@ -25,7 +25,7 @@ import * as _ from 'lodash';
 
 @Component({
   selector: 'km-admins',
-  templateUrl: './admins.component.html',
+  templateUrl: './template.html',
 })
 export class AdminsComponent implements OnInit, OnChanges {
   user: Member;

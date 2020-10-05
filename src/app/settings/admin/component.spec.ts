@@ -9,28 +9,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatButtonToggleGroup} from '@angular/material/button-toggle';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
 
-import {DatacenterService, NotificationService, UserService, HistoryService} from '../../core/services';
+import {DatacenterService, HistoryService, NotificationService, UserService} from '../../core/services';
 import {SettingsService} from '../../core/services/settings/settings.service';
+import {ClusterType} from '../../shared/entity/cluster';
 import {SharedModule} from '../../shared/shared.module';
+import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
 import {MatDialogMock} from '../../testing/services/mat-dialog-mock';
 import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
 import {SettingsMockService} from '../../testing/services/settings-mock.service';
 import {UserMockService} from '../../testing/services/user-mock.service';
+import {AddAdminDialogComponent} from './admins/add-admin-dialog/component';
+import {AdminsComponent} from './admins/component';
 
-import {AdminSettingsComponent} from './admin-settings.component';
-import {CustomLinksFormComponent} from './custom-link-form/custom-links-form.component';
-import {ClusterType} from '../../shared/entity/cluster';
-import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
-import {AddAdminDialogComponent} from './admins/add-admin-dialog/add-admin-dialog.component';
-import {DynamicDatacentersComponent} from './dynamic-datacenters/dynamic-datacenters.component';
-import {AdminsComponent} from './admins/admins.component';
+import {AdminSettingsComponent} from './component';
+import {CustomLinksFormComponent} from './custom-link-form/component';
+import {DynamicDatacentersComponent} from './dynamic-datacenters/component';
 
 describe('AdminSettingsComponent', () => {
   let fixture: ComponentFixture<AdminSettingsComponent>;
@@ -63,9 +63,12 @@ describe('AdminSettingsComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should initialize', async(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should initialize',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should correctly check if the last one distribution is selected', () => {
     const group = {} as MatButtonToggleGroup;
