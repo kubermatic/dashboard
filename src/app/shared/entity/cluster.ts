@@ -398,6 +398,8 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
         accessKeyID: '',
         accessKeySecret: '',
       } as AlibabaCloudSpec;
+    case NodeProvider.ANEXIA:
+      return {};
   }
   return {};
 }

@@ -282,6 +282,10 @@
   @include background-image("/assets/images/clouds/vsphere.svg", 24px);
 }
 
+.km-provider-logo-anexia {
+  @include background-image("/assets/images/clouds/anexia.jpg", 30px);
+}
+
 .km-os-image-centos {
   @include background-image("/assets/images/os/centos.svg", 24px);
 }
