@@ -11,7 +11,7 @@
 
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
-import {EMPTY, Observable} from 'rxjs';
+import {EMPTY, Observable, of} from 'rxjs';
 
 import {environment} from '../../../../environments/environment';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
@@ -88,6 +88,11 @@ export class PresetsService {
   presets(provider: NodeProvider, datacenter: string): Observable<PresetList> {
     if (!provider || !datacenter) {
       return EMPTY;
+    }
+
+    // TODO: Remove this.
+    if (datacenter === 'anexia-dc') {
+      return of(new PresetList('anexia-preset'));
     }
 
     const url = `${environment.restRoot}/providers/${provider}/presets/credentials?datacenter=${datacenter}`;
