@@ -240,6 +240,7 @@ export class ClusterSpecPatch {
   admissionPlugins?: string[];
   auditLogging?: AuditLoggingSettings;
   openshift?: OpenShiftPatch;
+  machineNetworks?: MachineNetwork[];
 }
 
 export class OpenShiftPatch {

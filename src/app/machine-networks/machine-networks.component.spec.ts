@@ -49,7 +49,7 @@ describe('MachineNetworksComponent', () => {
   });
 
   it('expecting form to be valid', () => {
-    const machineNetworks = component.machineNetworksForm.get('machineNetworks') as FormArray;
+    const machineNetworks = component.form.get('machineNetworks') as FormArray;
     machineNetworks.controls[0].setValue({
       cidr: '192.182.0.0/29',
       dnsServers: ['8.8.8.8'],
@@ -59,7 +59,7 @@ describe('MachineNetworksComponent', () => {
   });
 
   it('expecting form to be invalid', () => {
-    const machineNetworks = component.machineNetworksForm.get('machineNetworks') as FormArray;
+    const machineNetworks = component.form.get('machineNetworks') as FormArray;
     machineNetworks.controls[0].setValue({
       cidr: '192.182.0.0',
       dnsServers: ['8.8.8.8'],

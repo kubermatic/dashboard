@@ -14,13 +14,13 @@ limitations under the License.
 
 <mat-dialog-content>
   <km-machine-networks [cluster]="cluster"
-                       [width]="100"
-                       [isWizard]="false"></km-machine-networks>
+                       (machineNetworks)="machineNetworks = $event"
+                       (valid)="valid = $event"></km-machine-networks>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button (click)="addMachineNetworks()"
           mat-flat-button
-          [disabled]="!isValid()">
+          [disabled]="!valid">
     Add
   </button>
 </mat-dialog-actions>

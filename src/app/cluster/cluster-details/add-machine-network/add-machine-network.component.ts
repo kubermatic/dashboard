@@ -9,23 +9,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import {Subject} from 'rxjs';
+import {Cluster, ClusterPatch, MachineNetwork} from '@shared/entity/cluster';
+import * as _ from 'lodash';
+import {first} from 'rxjs/operators';
 
 import {ClusterService, NotificationService} from '../../../core/services';
-import {Cluster} from '@shared/entity/cluster';
-import {MachineNetworkForm} from '@shared/model/ClusterForm';
 
 @Component({
   selector: 'km-add-machine-network',
   templateUrl: './add-machine-network.component.html',
 })
-export class AddMachineNetworkComponent implements OnDestroy {
+export class AddMachineNetworkComponent {
   @Input() cluster: Cluster;
   @Input() projectID: string;
-  machineNetworkFormData: MachineNetworkForm[] = [];
-  private _unsubscribe = new Subject<void>();
+
+  machineNetworks: MachineNetwork[] = [];
+  valid = false;
 
   constructor(
     private readonly _clusterService: ClusterService,
@@ -33,47 +34,23 @@ export class AddMachineNetworkComponent implements OnDestroy {
     private readonly _notificationService: NotificationService
   ) {}
 
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
-  }
-
-  isValid(): boolean {
-    let isValid = false;
-    if (this.machineNetworkFormData.length > 0) {
-      for (const i in this.machineNetworkFormData) {
-        if (i === '0') {
-          isValid = this.machineNetworkFormData[i].valid;
-        } else {
-          isValid = isValid && this.machineNetworkFormData[i].valid;
-        }
-      }
-    }
-    return isValid;
-  }
-
   addMachineNetworks(): void {
-    if (this.machineNetworkFormData.length > 0) {
-      for (const i in this.machineNetworkFormData) {
-        if (
-          this.machineNetworkFormData[i].cidr === '' ||
-          this.machineNetworkFormData[i].dnsServers.length === 0 ||
-          this.machineNetworkFormData[i].gateway === ''
-        ) {
-          return;
-        }
-        this.cluster.spec.machineNetworks.push({
-          cidr: this.machineNetworkFormData[i].cidr,
-          dnsServers: this.machineNetworkFormData[i].dnsServers,
-          gateway: this.machineNetworkFormData[i].gateway,
-        });
-      }
+    if (_.isEmpty(this.machineNetworks)) {
+      return;
     }
-    this._clusterService.cluster(this.projectID, this.cluster.id).subscribe(res => {
-      this._notificationService.success(
-        `The machine network(s) for the <strong>${this.cluster.name}</strong> cluster were added`
-      );
-      this._dialogRef.close(res);
-    });
+
+    this._clusterService
+      .patch(this.projectID, this.cluster.id, {
+        spec: {
+          machineNetworks: this.machineNetworks,
+        },
+      } as ClusterPatch)
+      .pipe(first())
+      .subscribe(res => {
+        this._notificationService.success(
+          `The machine network(s) for the <strong>${this.cluster.name}</strong> cluster were added`
+        );
+        this._dialogRef.close(res);
+      });
   }
 }

@@ -175,7 +175,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.addons = addons;
           this.machineDeployments = machineDeployments;
           this.metrics = metrics;
-          this.upgrades = upgrades || [];
+          this.upgrades = _.isEmpty(upgrades) ? [] : upgrades;
           this.clusterBindings = this.createSimpleClusterBinding(clusterBindings);
           this.bindings = this.createSimpleBinding(bindings);
         },
