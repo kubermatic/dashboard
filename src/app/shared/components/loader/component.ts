@@ -9,26 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+import {Component, Input} from '@angular/core';
 
-.mat-card {
-  .mat-card-header {
-    .mat-card-title {
-      padding-left: 30px;
-    }
-  }
-}
-
-.km-machine-deployment-health {
-  text-align: center;
-  vertical-align: middle;
-}
-
-.km-table-actions,
-.km-machine-deployment-action {
-  vertical-align: middle;
-}
-
-.km-code-block {
-  margin: $content-padding;
+@Component({
+  selector: 'km-loader',
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
+})
+export class LoaderComponent {
+  @Input() text = 'Loading...';
+  @Input() isVisible = true;
 }

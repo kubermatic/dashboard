@@ -22,7 +22,6 @@ import {Cluster} from '../../../shared/entity/cluster';
 import {Member} from '../../../shared/entity/member';
 import {MachineDeployment} from '../../../shared/entity/machine-deployment';
 import {GroupConfig} from '../../../shared/model/Config';
-import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {MachineDeploymentHealthStatus} from '../../../shared/utils/health-status/machine-deployment-health-status';
 import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 import {NodeService} from '../../services/node.service';
@@ -38,9 +37,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
   @Input() seed: string;
   @Input() machineDeployments: MachineDeployment[] = [];
   @Input() projectID: string;
-  @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
-  @Input() isMachineDeploymentLoadFinished: boolean;
   @Output() changeMachineDeployment = new EventEmitter<MachineDeployment>();
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   dataSource = new MatTableDataSource<MachineDeployment>();
@@ -137,5 +134,13 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
     return (
       !_.isEmpty(this.machineDeployments) && this.paginator && this.machineDeployments.length > this.paginator.pageSize
     );
+  }
+
+  isLoadingData(): boolean {
+    return _.isEmpty(this.machineDeployments) && !this.isClusterRunning;
+  }
+
+  hasNoData(): boolean {
+    return _.isEmpty(this.machineDeployments) && this.isClusterRunning;
   }
 }

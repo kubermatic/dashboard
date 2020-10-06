@@ -213,9 +213,7 @@ limitations under the License.
                               [machineDeployments]="machineDeployments"
                               [seed]="seed"
                               [projectID]="projectID"
-                              [clusterHealthStatus]="clusterHealthStatus"
-                              [isClusterRunning]="isClusterAPIRunning"
-                              [isMachineDeploymentLoadFinished]="isMachineDeploymentLoadFinished"></km-machine-deployment-list>
+                              [isClusterRunning]="isClusterRunning"></km-machine-deployment-list>
 
   <km-rbac *ngIf="isRBACEnabled()"
            [cluster]="cluster"
