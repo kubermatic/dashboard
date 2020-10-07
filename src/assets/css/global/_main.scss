@@ -393,3 +393,20 @@ km-dashboard {
     }
   }
 }
+
+.km-search-input {
+  &.mat-form-field {
+    margin: -10px 0 -30px 0;
+    max-height: 30px;
+    width: 260px;
+
+    .mat-form-field-wrapper {
+      margin: unset;
+      padding: unset;
+
+      .mat-form-field-infix {
+        padding: 2px 12px 12px;
+      }
+    }
+  }
+}
