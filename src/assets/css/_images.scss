@@ -35,6 +35,10 @@
   @include mask-image("/assets/images/icons/bell.svg", 24px);
 }
 
+.km-icon-search {
+  @include mask-image("/assets/images/icons/search.svg", 20px);
+}
+
 .km-icon-filter {
   @include mask-image("/assets/images/icons/filter.svg", 24px);
 }
