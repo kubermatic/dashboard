@@ -14,10 +14,19 @@ limitations under the License.
   <mat-form-field class="km-search-input">
     <i matPrefix
        class="km-icon-search"></i>
-    <input matInput
+    <input (ngModelChange)="onChange($event)"
+           matInput
            placeholder="Search"
-           formControlName="search"
+           formControlName="query"
            type="text"
            autocomplete="off">
+    <button *ngIf="!isEmpty()"
+            (click)="clear()"
+            matSuffix
+            mat-icon-button
+            matTooltip="Clear"
+            aria-label="Clear">
+      <mat-icon inline="true">close</mat-icon>
+    </button>
   </mat-form-field>
 </form>

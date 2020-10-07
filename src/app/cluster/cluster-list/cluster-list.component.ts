@@ -56,6 +56,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   provider = [];
   displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'region', 'type', 'created', 'actions'];
   dataSource = new MatTableDataSource<Cluster>();
+  searchQuery: string;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private _unsubscribe: Subject<any> = new Subject();
@@ -160,6 +161,10 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  onSearch(query: string): void {
+    this.searchQuery = query;
   }
 
   getHealthStatus(cluster: Cluster): ClusterHealthStatus {

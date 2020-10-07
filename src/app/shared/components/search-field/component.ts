@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 
 @Component({
@@ -17,11 +17,24 @@ import {FormControl, FormGroup} from '@angular/forms';
   templateUrl: 'template.html',
 })
 export class SearchFieldComponent implements OnInit {
+  @Output() queryChange = new EventEmitter<string>();
   formGroup: FormGroup;
 
   ngOnInit() {
     this.formGroup = new FormGroup({
-      search: new FormControl(''),
+      query: new FormControl(''),
     });
+  }
+
+  onChange(query: string) {
+    this.queryChange.emit(query);
+  }
+
+  isEmpty(): boolean {
+    return !this.formGroup.controls.query.value;
+  }
+
+  clear(): void {
+    this.formGroup.controls.query.setValue('');
   }
 }
