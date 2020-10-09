@@ -12,15 +12,14 @@
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
 import {Router} from '@angular/router';
+import {AppConfigService} from '@app/config.service';
+import {ParamsService, PathParam} from '@core/services/params/params.service';
+import {UserService} from '@core/services/user/user.service';
+import {environment} from '@environments/environment';
+import {Project} from '@shared/entity/project';
+import {ProjectUtils} from '@shared/utils/project-utils/project-utils';
 import {EMPTY, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, first, map, shareReplay, switchMap, switchMapTo} from 'rxjs/operators';
-
-import {environment} from '../../../../environments/environment';
-import {AppConfigService} from '../../../config.service';
-import {Project} from '../../../shared/entity/project';
-import {ProjectUtils} from '../../../shared/utils/project-utils/project-utils';
-import {ParamsService, PathParam} from '../params/params.service';
-import {UserService} from '../user/user.service';
 
 @Injectable()
 export class ProjectService {

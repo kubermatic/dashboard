@@ -6,10 +6,13 @@
   },
   "compilerOptions": {
     "outDir": "dist/out-tsc/app",
-    "baseUrl": "src/app/",
+    "baseUrl": "src",
     "paths": {
       "@shared/*": ["app/shared/*"],
-      "@core/*": ["app/core/*"]
+      "@core/*": ["app/core/*"],
+      "@app/*": ["app/*"],
+      "@assets/*": ["assets/*"],
+      "@environments/*": ["environments/*"]
     },
     "sourceMap": true,
     "declaration": false,

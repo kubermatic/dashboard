@@ -11,9 +11,8 @@
 
 import {Component, Input, SecurityContext} from '@angular/core';
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
-import {AdminSettings, CustomLink, CustomLinkLocation, filterCustomLinks} from '../../../shared/entity/settings';
-
-import {VersionInfo} from '../../../shared/entity/version-info';
+import {AdminSettings, CustomLink, CustomLinkLocation, filterCustomLinks} from '@shared/entity/settings';
+import {VersionInfo} from '@shared/entity/version-info';
 
 @Component({
   selector: 'km-footer',

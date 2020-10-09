@@ -18,7 +18,7 @@ import {of} from 'rxjs';
 
 import {NotificationService, RBACService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {SharedModule} from '../../../shared/shared.module';
+import {SharedModule} from '@shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {fakeSimpleBindings, fakeSimpleClusterBindings} from '../../../testing/fake-data/rbac.fake';

@@ -14,12 +14,12 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import {CoreModule} from '../../../../core/core.module';
-import {RBACService} from '../../../../core/services';
-import {SharedModule} from '../../../../shared/shared.module';
-import {fakeDigitaloceanCluster} from '../../../../testing/fake-data/cluster.fake';
-import {fakeSeedDatacenter} from '../../../../testing/fake-data/datacenter.fake';
-import {fakeProject} from '../../../../testing/fake-data/project.fake';
+import {CoreModule} from '@core/core.module';
+import {RBACService} from '@core/services';
+import {SharedModule} from '@shared/shared.module';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
+import {fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
+import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {
   fakeBinding,
   fakeClusterBinding,

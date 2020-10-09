@@ -15,32 +15,29 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
+import {ApiService} from '@core/services/api/api.service';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {SettingsService} from '@core/services/settings/settings.service';
+import {UserService} from '@core/services/user/user.service';
+import {ExternalClusterDataDialogComponent} from '@shared/components/external-cluster-data-dialog/component';
+import {CloudSpec, Cluster} from '@shared/entity/cluster';
+import {View} from '@shared/entity/common';
+import {Datacenter} from '@shared/entity/datacenter';
+import {Health} from '@shared/entity/health';
+import {MachineDeployment} from '@shared/entity/machine-deployment';
+import {Member} from '@shared/entity/member';
+import {Project} from '@shared/entity/project';
+import {AdminSettings} from '@shared/entity/settings';
+import {GroupConfig} from '@shared/model/Config';
+import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
+import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
+import * as _ from 'lodash';
 import {EMPTY, forkJoin, Observable, of, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, distinctUntilChanged, filter, first, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import * as _ from 'lodash';
-
-import {
-  ApiService,
-  ClusterService,
-  DatacenterService,
-  NotificationService,
-  ProjectService,
-  UserService,
-} from '../../core/services';
-import {SettingsService} from '../../core/services/settings/settings.service';
-import {CloudSpec, Cluster} from '../../shared/entity/cluster';
-import {Datacenter} from '../../shared/entity/datacenter';
-import {View} from '../../shared/entity/common';
-import {Health} from '../../shared/entity/health';
-import {Member} from '../../shared/entity/member';
-import {MachineDeployment} from '../../shared/entity/machine-deployment';
-import {Project} from '../../shared/entity/project';
-import {AdminSettings} from '../../shared/entity/settings';
-import {GroupConfig} from '../../shared/model/Config';
-import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
-import {MemberUtils, Permission} from '../../shared/utils/member-utils/member-utils';
 import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
-import {ExternalClusterDataDialogComponent} from '../../shared/components/external-cluster-data-dialog/component';
 
 @Component({
   selector: 'km-cluster-list',

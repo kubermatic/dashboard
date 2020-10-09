@@ -12,11 +12,12 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {first} from 'rxjs/operators';
+import {ApiService} from '@core/services/api/api.service';
+import {NotificationService} from '@core/services/notification/notification.service';
 
-import {ApiService, NotificationService} from '../../../core/services';
-import {Project} from '../../../shared/entity/project';
-import {CreateTokenEntity, ServiceAccount, ServiceAccountToken} from '../../../shared/entity/service-account';
+import {Project} from '@shared/entity/project';
+import {CreateTokenEntity, ServiceAccount, ServiceAccountToken} from '@shared/entity/service-account';
+import {first} from 'rxjs/operators';
 import {TokenDialogComponent} from '../token-dialog/token-dialog.component';
 
 @Component({

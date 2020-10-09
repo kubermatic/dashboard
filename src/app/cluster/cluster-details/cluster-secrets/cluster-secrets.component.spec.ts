@@ -17,8 +17,8 @@ import {Router} from '@angular/router';
 
 import {AppConfigService} from '../../../config.service';
 import {ClusterService, ProjectService, UserService} from '../../../core/services';
-import {HealthState} from '../../../shared/entity/health';
-import {SharedModule} from '../../../shared/shared.module';
+import {HealthState} from '@shared/entity/health';
+import {SharedModule} from '@shared/shared.module';
 import {fakeHealth, fakeHealthFailed, fakeHealthProvisioning} from '../../../testing/fake-data/health.fake';
 import {RouterStub} from '../../../testing/router-stubs';
 import {asyncData} from '../../../testing/services/api-mock.service';

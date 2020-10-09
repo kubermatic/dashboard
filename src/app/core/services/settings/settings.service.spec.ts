@@ -13,14 +13,12 @@ import {HttpClientModule} from '@angular/common/http';
 import {TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
-import {AppConfigService} from '../../../config.service';
-import {SharedModule} from '../../../shared/shared.module';
-import {RouterTestingModule} from '../../../testing/router-stubs';
-import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
-import {AuthMockService} from '../../../testing/services/auth-mock.service';
-import {Auth} from '../auth/auth.service';
-
+import {AppConfigService} from '@app/config.service';
+import {RouterTestingModule} from '@app/testing/router-stubs';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
+import {AuthMockService} from '@app/testing/services/auth-mock.service';
+import {Auth} from '@core/services/auth/auth.service';
+import {SharedModule} from '@shared/shared.module';
 import {SettingsService} from './settings.service';
 
 describe('SettingsService', () => {

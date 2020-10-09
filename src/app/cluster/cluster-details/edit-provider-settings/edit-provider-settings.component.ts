@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {Component, Input} from '@angular/core';
-import {Cluster} from '../../../shared/entity/cluster';
+import {Cluster} from '@shared/entity/cluster';
 
 @Component({
   selector: 'km-edit-provider-settings',

@@ -11,13 +11,12 @@
 
 import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
+import {NotificationType} from '@core/components/notification/notification.component';
+import {Notification, NotificationService} from '@core/services/notification/notification.service';
+
+import {slideOut} from '@shared/animations/slide';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-
-import {slideOut} from '../../../shared/animations/slide';
-import {NotificationService} from '../../services';
-import {Notification} from '../../services/notification/notification.service';
-import {NotificationType} from '../notification/notification.component';
 
 @Component({
   selector: 'km-notification-panel',
