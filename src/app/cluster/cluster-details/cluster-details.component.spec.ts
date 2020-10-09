@@ -29,9 +29,9 @@ import {
   RBACService,
   UserService,
 } from '../../core/services';
-import {SettingsService} from '../../core/services/settings/settings.service';
+import {SettingsService} from '@core/services/settings/settings.service';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
-import {SharedModule} from '../../shared/shared.module';
+import {SharedModule} from '@shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
 import {
   fakeBindings,

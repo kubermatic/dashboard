@@ -11,7 +11,9 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {AuthGuard, AuthzGuard} from '@core/services/auth/auth.guard';
+
+import {AuthGuard, AuthzGuard} from '@core/services';
+
 import {ClusterDetailsComponent} from './cluster-details/cluster-details.component';
 import {MachineDeploymentDetailsComponent} from './cluster-details/machine-deployment-details/machine-deployment-details.component';
 import {ClusterListComponent} from './cluster-list/cluster-list.component';
