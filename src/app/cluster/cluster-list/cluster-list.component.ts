@@ -86,6 +86,8 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     this.dataSource.data = this.clusters;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    this.dataSource.filterPredicate = this._filter.bind(this);
+    this.dataSource.filter = '';
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
@@ -164,7 +166,46 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onSearch(query: string): void {
-    this.searchQuery = query;
+    this.dataSource.filter = query;
+  }
+
+  private _filter(cluster: Cluster, query: string): boolean {
+    query = query.toLowerCase();
+
+    // Check name.
+    if (cluster.name.toLowerCase().includes(query)) {
+      return true;
+    }
+
+    // Check labels.
+    let hasMatchingLabel = false;
+    Object.keys(cluster.labels).forEach(key => {
+      const value = cluster.labels[key];
+      if (key.toLowerCase().includes(query) || value.toLowerCase().includes(query)) {
+        hasMatchingLabel = true;
+        return;
+      }
+    });
+    if (hasMatchingLabel) {
+      return true;
+    }
+
+    // Following checks are only for internal clusters.
+    if (cluster.isExternal) {
+      return false;
+    }
+
+    // Check provider.
+    if (Cluster.getProvider(cluster.spec.cloud).includes(query)) {
+      return true;
+    }
+
+    // Check region.
+    const datacenter = this.nodeDC[cluster.id];
+    return (
+      !!datacenter &&
+      (datacenter.spec.country.toLowerCase().includes(query) || datacenter.spec.location.toLowerCase().includes(query))
+    );
   }
 
   getHealthStatus(cluster: Cluster): ClusterHealthStatus {
