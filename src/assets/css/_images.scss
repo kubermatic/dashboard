@@ -235,7 +235,7 @@
 }
 
 .km-provider-logo-azure {
-  @include background-image("/assets/images/clouds/azure.png", 24px);
+  @include background-image("/assets/images/clouds/azure.svg", 24px);
 }
 
 .km-provider-logo-baremetal {
@@ -247,7 +247,7 @@
 }
 
 .km-provider-logo-digitalocean {
-  @include background-image("/assets/images/clouds/digitalocean.png", 30px);
+  @include background-image("/assets/images/clouds/digitalocean.svg", 30px);
 }
 
 .km-provider-logo-fake {
@@ -259,11 +259,11 @@
 }
 
 .km-provider-logo-hetzner {
-  @include background-image("/assets/images/clouds/hetzner.png", 30px);
+  @include background-image("/assets/images/clouds/hetzner.svg", 30px);
 }
 
 .km-provider-logo-openstack {
-  @include background-image("/assets/images/clouds/openstack.png", 30px);
+  @include background-image("/assets/images/clouds/openstack.svg", 30px);
 }
 
 .km-provider-logo-packet {
@@ -275,7 +275,7 @@
 }
 
 .km-provider-logo-vsphere {
-  @include background-image("/assets/images/clouds/vsphere.png", 24px);
+  @include background-image("/assets/images/clouds/vsphere.svg", 24px);
 }
 
 .km-os-image-centos {
