@@ -46,6 +46,7 @@ export class EditorComponent implements OnInit {
     scrollbar: {vertical: 'hidden'},
     hideCursorInOverviewRuler: true,
     renderLineHighlight: 'none',
+    wordWrap: 'on',
   };
 
   constructor(private readonly _themeInformerService: ThemeInformerService) {}
