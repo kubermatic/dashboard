@@ -137,6 +137,12 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
+  getEditTooltip(member: Member): string {
+    return this.currentUser && member && this.currentUser.email !== member.email
+      ? 'You cannot edit your own data and permissions'
+      : 'Edit member';
+  }
+
   editMember(member: Member): void {
     const modal = this._matDialog.open(EditMemberComponent);
     modal.componentInstance.project = this._selectedProject;
@@ -158,6 +164,12 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       member &&
       this.currentUser.email !== member.email
     );
+  }
+
+  getDeleteTooltip(member: Member): string {
+    return this.currentUser && member && this.currentUser.email !== member.email
+      ? 'You cannot edit your own data and permissions'
+      : 'Delete member';
   }
 
   deleteMember(member: Member): void {

@@ -76,7 +76,7 @@ limitations under the License.
               <ng-container *ngSwitchCase="false">
                 <button mat-icon-button
                         [attr.id]="'km-edit-member-' + element?.email"
-                        matTooltip="Edit Member"
+                        [matTooltip]="getEditTooltip(element)"
                         (click)="editMember(element)"
                         [disabled]="!isEditEnabled(element)">
                   <i class="km-icon-edit"></i>
@@ -84,7 +84,7 @@ limitations under the License.
 
                 <button mat-icon-button
                         [attr.id]="'km-delete-member-' + element?.email"
-                        matTooltip="Delete Member"
+                        [matTooltip]="getDeleteTooltip(element)"
                         (click)="deleteMember(element)"
                         [disabled]="!isDeleteEnabled(element)">
                   <i class="km-icon-delete"></i>
