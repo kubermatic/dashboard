@@ -58,7 +58,8 @@ limitations under the License.
                fxLayout="row"
                fxLayoutAlign=" center"
                fxLayoutGap="4px">
-            <span>{{!!machineDeployment.status?.availableReplicas ? machineDeployment.status.availableReplicas : 0}}/{{!!machineDeployment.spec?.replicas ? machineDeployment.spec.replicas : 0}}</span>
+            <span>{{!!machineDeployment.status?.availableReplicas ? machineDeployment.status.availableReplicas : 0}}
+              /{{!!machineDeployment.spec?.replicas ? machineDeployment.spec.replicas : 0}}</span>
             <div *ngIf="machineDeployment.status?.availableReplicas > machineDeployment.spec.replicas"
                  class="km-icon-info km-pointer"
                  matTooltip="Number of available machines may be higher than number of desired machines from the template if deployment is updating."></div>
@@ -130,33 +131,26 @@ limitations under the License.
              fxFlex
              fxLayout="row wrap"
              fxLayoutAlign=" center">
-          <div *ngIf="machineDeployment.spec.template.operatingSystem.ubuntu">
-            <span [ngClass]="machineDeployment.spec.template.operatingSystem.ubuntu.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></span>
-            <span>Upgrade system on the first boot</span>
-          </div>
-          <div *ngIf="machineDeployment.spec.template.operatingSystem.centos">
-            <span [ngClass]="machineDeployment.spec.template.operatingSystem.centos.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></span>
-            <span>Upgrade system on the first boot</span>
-          </div>
-          <div *ngIf="machineDeployment.spec.template.operatingSystem.containerLinux">
-            <span [ngClass]="machineDeployment.spec.template.operatingSystem.containerLinux.disableAutoUpdate ? 'km-icon-running' : 'km-icon-disabled'"></span>
-            <span>Disable auto-update</span>
-          </div>
-          <div *ngIf="machineDeployment.spec.template.operatingSystem.flatcar">
-            <span [ngClass]="machineDeployment.spec.template.operatingSystem.flatcar.disableAutoUpdate ? 'km-icon-running' : 'km-icon-disabled'"></span>
-            <span>Disable auto-update</span>
-          </div>
-          <div *ngIf="machineDeployment.spec.template.operatingSystem.sles">
-            <span [ngClass]="machineDeployment.spec.template.operatingSystem.sles.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></span>
-            <span>Upgrade system on the first boot</span>
-          </div>
-          <div *ngIf="machineDeployment.spec.template.operatingSystem.rhel">
-            <span [ngClass]="machineDeployment.spec.template.operatingSystem.rhel.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></span>
-            <span>Upgrade system on the first boot</span>
-          </div>
+          <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.ubuntu"
+                               [value]="machineDeployment.spec.template.operatingSystem.ubuntu.distUpgradeOnBoot"
+                               label="Upgrade system on the first boot"></km-property-boolean>
+          <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.centos"
+                               [value]="machineDeployment.spec.template.operatingSystem.centos.distUpgradeOnBoot"
+                               label="Upgrade system on the first boot"></km-property-boolean>
+          <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.sles"
+                               [value]="machineDeployment.spec.template.operatingSystem.sles.distUpgradeOnBoot"
+                               label="Upgrade system on the first boot"></km-property-boolean>
+          <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.rhel"
+                               [value]="machineDeployment.spec.template.operatingSystem.rhel.distUpgradeOnBoot"
+                               label="Upgrade system on the first boot"></km-property-boolean>
+          <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.containerLinux"
+                               [value]="machineDeployment.spec.template.operatingSystem.containerLinux.disableAutoUpdate"
+                               label="Disable auto-update"></km-property-boolean>
+          <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.flatcar"
+                               [value]="machineDeployment.spec.template.operatingSystem.flatcar.disableAutoUpdate"
+                               label="Disable auto-update"></km-property-boolean>
         </div>
       </div>
-
 
     </mat-card-content>
   </mat-card>
