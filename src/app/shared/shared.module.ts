@@ -84,6 +84,7 @@ import {EditorComponent} from './components/editor/component';
 import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {ExternalClusterDataDialogComponent} from './components/external-cluster-data-dialog/component';
 import {LoaderComponent} from './components/loader/component';
+import {SearchFieldComponent} from './components/search-field/component';
 
 const modules: any[] = [
   CommonModule,
@@ -153,6 +154,7 @@ const components: any[] = [
   ChipComponent,
   EditorComponent,
   LoaderComponent,
+  SearchFieldComponent,
 ];
 
 const entryComponents: any[] = [
