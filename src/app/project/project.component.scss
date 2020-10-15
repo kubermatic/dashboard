@@ -103,33 +103,7 @@ $project-card-width: 330px;
   }
 
   .mat-card-content {
-    padding: 20px;
-  }
-
-  .km-project-cards-content-row {
-    align-items: center;
-    display: flex;
-    line-height: 40px;
-    width: 100%;
-
-    i {
-      padding-right: 10px;
-    }
-
-    &:first-child {
-      span {
-        padding-right: 30px;
-      }
-    }
-
-    span {
-      align-items: center;
-      display: flex;
-
-      &.km-projects-less-space {
-        padding-right: 16px;
-      }
-    }
+    padding: 30px 20px 20px;
   }
 }
 

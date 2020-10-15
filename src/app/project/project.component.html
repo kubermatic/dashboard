@@ -232,28 +232,46 @@ limitations under the License.
         </div>
       </mat-card-header>
       <mat-divider></mat-divider>
-      <mat-card-content>
-        <div class="km-project-cards-content-row">
-          <span><i class="km-icon-mask km-icon-cluster"></i> {{project.clustersNumber ? project.clustersNumber : 0}}</span>
-          <span [matTooltip]="getLabelsTooltip(project)">
+      <mat-card-content fxLayout="column"
+                        fxLayoutGap="15px">
+        <div fxLayout="row"
+             fxLayoutGap="30px"
+             fxFlex>
+          <div fxLayout="row"
+               fxLayoutAlign=" center"
+               fxLayoutGap="8px">
+            <i class="km-icon-mask km-icon-cluster"></i>
+            <div>{{project.clustersNumber ? project.clustersNumber : 0}}</div>
+          </div>
+          <div fxLayout="row"
+               fxLayoutAlign=" center"
+               fxLayoutGap="8px"
+               [matTooltip]="getLabelsTooltip(project)">
             <i class="km-icon-mask km-icon-labels"></i>
-            {{getLabelsLength(project)}}
-          </span>
+            <div>{{getLabelsLength(project)}}</div>
+          </div>
         </div>
 
-        <div class="km-project-cards-content-row">
-          <span class="km-projects-less-space">
+        <div fxLayout="row"
+             fxLayoutGap="15px"
+             fxFlex>
+          <div fxLayout="row"
+               fxLayoutAlign=" center"
+               fxLayoutGap="8px">
             <i class="km-icon-mask km-icon-owner"></i>
             <span *ngIf="project.owners.length === 1"
                   [matTooltip]="getOwners(project.owners)">{{getName(project.owners[0].name)}}</span>
             <km-initials-circle *ngIf="project.owners.length > 1"
                                 [owners]="project.owners"
                                 [limit]="2"></km-initials-circle>
-          </span>
-          <span *ngIf="!!getRole(project.id)">
+          </div>
+          <div fxLayout="row"
+               fxLayoutAlign=" center"
+               fxLayoutGap="8px"
+               *ngIf="!!getRole(project.id)">
             <i class="km-icon-mask km-icon-role"></i>
             {{getRole(project.id)}}
-          </span>
+          </div>
           <div fxFlex></div>
           <span *ngIf="!getRole(project.id)"
                 class="km-label-primary">External Project</span>
