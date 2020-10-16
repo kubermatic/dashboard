@@ -21,7 +21,7 @@
     "e2e": "start-server-and-test start:e2e http-get://localhost:8000 cy",
     "e2e:local": "start-server-and-test start:e2e-local http-get://localhost:8000 cy",
     "check": "npm run check:ts && npm run check:scss && npm run check:license && npm run check:dependency-licenses",
-    "check:ts": "gts check",
+    "check:ts": "gts lint",
     "check:scss": "stylelint \"src/**/*.scss\"",
     "check:license": "license-check-and-add check",
     "check:dependency-licenses": "./hack/check-licenses.sh",
@@ -212,16 +212,13 @@
   },
   "lint-staged": {
     "src/**/*.ts": [
-      "gts fix",
-      "git add"
+      "gts fix"
     ],
     "src/**/*.scss": [
-      "stylelint --fix",
-      "git add"
+      "stylelint --fix"
     ],
     "src/**/*.html": [
-      "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f ",
-      "git add"
+      "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f "
     ]
   },
   "stylelint": {
