@@ -76,7 +76,7 @@
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
     "@types/jest": "26.0.14",
     "@types/js-yaml": "3.12.5",
-    "@types/lodash": "4.14.161",
+    "@types/lodash": "4.14.162",
     "@types/node": "14.11.2",
     "browserlist": "1.0.1",
     "cypress": "5.3.0",
