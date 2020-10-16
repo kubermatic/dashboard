@@ -59,6 +59,7 @@ export class Cluster {
     } else if (cloud.alibaba) {
       return 'alibaba';
     }
+    return '';
   }
 
   static isOpenshiftType(cluster: Cluster): boolean {
