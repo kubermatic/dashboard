@@ -98,7 +98,7 @@
     "stylelint-order": "4.1.0",
     "ts-jest": "26.4.1",
     "ts-node": "9.0.0",
-    "tslib": "1.13.0",
+    "tslib": "1.14.1",
     "typescript": "3.9.7"
   },
   "engines": {
