@@ -138,7 +138,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getEditTooltip(member: Member): string {
-    return this.currentUser && member && this.currentUser.email !== member.email
+    return this.currentUser && member && this.currentUser.email === member.email
       ? 'You cannot edit your own data and permissions'
       : 'Edit member';
   }
@@ -167,7 +167,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getDeleteTooltip(member: Member): string {
-    return this.currentUser && member && this.currentUser.email !== member.email
+    return this.currentUser && member && this.currentUser.email === member.email
       ? 'You cannot edit your own data and permissions'
       : 'Delete member';
   }
