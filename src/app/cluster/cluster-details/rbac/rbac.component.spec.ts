@@ -9,23 +9,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {of} from 'rxjs';
-
-import {NotificationService, RBACService} from '../../../core/services';
-import {GoogleAnalyticsService} from '../../../google-analytics.service';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
+import {fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
+import {fakeProject} from '@app/testing/fake-data/project.fake';
+import {fakeSimpleBindings, fakeSimpleClusterBindings} from '@app/testing/fake-data/rbac.fake';
+import {RouterStub} from '@app/testing/router-stubs';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {RBACService} from '@core/services/rbac/rbac.service';
 import {SharedModule} from '@shared/shared.module';
-import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {fakeProject} from '../../../testing/fake-data/project.fake';
-import {fakeSimpleBindings, fakeSimpleClusterBindings} from '../../../testing/fake-data/rbac.fake';
-import {RouterStub} from '../../../testing/router-stubs';
-
+import {of} from 'rxjs';
 import {RBACComponent} from './rbac.component';
-import {fakeSeedDatacenter} from '../../../testing/fake-data/datacenter.fake';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
@@ -33,26 +32,28 @@ describe('RBACComponent', () => {
   let fixture: ComponentFixture<RBACComponent>;
   let component: RBACComponent;
 
-  beforeEach(async(() => {
-    const rbacMock = {
-      deleteClusterBinding: jest.fn(),
-      deleteBinding: jest.fn(),
-    };
-    rbacMock.deleteClusterBinding.mockReturnValue(of(null));
-    rbacMock.deleteBinding.mockReturnValue(of(null));
+  beforeEach(
+    waitForAsync(() => {
+      const rbacMock = {
+        deleteClusterBinding: jest.fn(),
+        deleteBinding: jest.fn(),
+      };
+      rbacMock.deleteClusterBinding.mockReturnValue(of(null));
+      rbacMock.deleteBinding.mockReturnValue(of(null));
 
-    TestBed.configureTestingModule({
-      imports: [...modules],
-      declarations: [RBACComponent],
-      providers: [
-        {provide: RBACService, useValue: rbacMock},
-        {provide: Router, useClass: RouterStub},
-        MatDialog,
-        GoogleAnalyticsService,
-        NotificationService,
-      ],
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        declarations: [RBACComponent],
+        providers: [
+          {provide: RBACService, useValue: rbacMock},
+          {provide: Router, useClass: RouterStub},
+          MatDialog,
+          GoogleAnalyticsService,
+          NotificationService,
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RBACComponent);
@@ -65,7 +66,10 @@ describe('RBACComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create the rbac cmp', async(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the rbac cmp',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 });

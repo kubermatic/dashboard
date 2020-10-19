@@ -9,24 +9,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-
-import {AppConfigService} from '../../../config.service';
-import {ClusterService, ProjectService, UserService} from '../../../core/services';
+import {AppConfigService} from '@app/config.service';
+import {fakeHealth, fakeHealthFailed, fakeHealthProvisioning} from '@app/testing/fake-data/health.fake';
+import {RouterStub} from '@app/testing/router-stubs';
+import {asyncData} from '@app/testing/services/api-mock.service';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
+import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
+import {ProjectMockService} from '@app/testing/services/project-mock.service';
+import {UserMockService} from '@app/testing/services/user-mock.service';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {UserService} from '@core/services/user/user.service';
 import {HealthState} from '@shared/entity/health';
 import {SharedModule} from '@shared/shared.module';
-import {fakeHealth, fakeHealthFailed, fakeHealthProvisioning} from '../../../testing/fake-data/health.fake';
-import {RouterStub} from '../../../testing/router-stubs';
-import {asyncData} from '../../../testing/services/api-mock.service';
-import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
-import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
-import {ProjectMockService} from '../../../testing/services/project-mock.service';
-import {UserMockService} from '../../../testing/services/user-mock.service';
-
 import {ClusterSecretsComponent} from './cluster-secrets.component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
@@ -35,32 +35,37 @@ describe('ClusterSecretsComponent', () => {
   let fixture: ComponentFixture<ClusterSecretsComponent>;
   let component: ClusterSecretsComponent;
 
-  beforeEach(async(() => {
-    const apiMock = {getClusterHealth: jest.fn()};
-    apiMock.getClusterHealth.mockReturnValue(asyncData([fakeHealth()]));
+  beforeEach(
+    waitForAsync(() => {
+      const apiMock = {getClusterHealth: jest.fn()};
+      apiMock.getClusterHealth.mockReturnValue(asyncData([fakeHealth()]));
 
-    TestBed.configureTestingModule({
-      imports: [...modules],
-      declarations: [ClusterSecretsComponent],
-      providers: [
-        {provide: ClusterService, useClass: ClusterMockService},
-        {provide: AppConfigService, useClass: AppConfigMockService},
-        {provide: ProjectService, useClass: ProjectMockService},
-        {provide: Router, useClass: RouterStub},
-        {provide: UserService, useClass: UserMockService},
-        MatDialog,
-      ],
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        declarations: [ClusterSecretsComponent],
+        providers: [
+          {provide: ClusterService, useClass: ClusterMockService},
+          {provide: AppConfigService, useClass: AppConfigMockService},
+          {provide: ProjectService, useClass: ProjectMockService},
+          {provide: Router, useClass: RouterStub},
+          {provide: UserService, useClass: UserMockService},
+          MatDialog,
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterSecretsComponent);
     component = fixture.componentInstance;
   });
 
-  it('should initialize', async(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should initialize',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should set icon class `km-icon-running`', () => {
     expect(component.getIconClass(HealthState.up)).toBe('km-icon-running');

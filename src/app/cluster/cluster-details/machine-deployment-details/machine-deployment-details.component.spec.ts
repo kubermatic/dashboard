@@ -10,42 +10,38 @@
 // limitations under the License.
 
 import {HttpClientModule} from '@angular/common/http';
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-
-import {AppConfigService} from '../../../config.service';
-import {
-  ApiService,
-  Auth,
-  ClusterService,
-  DatacenterService,
-  NotificationService,
-  ProjectService,
-  UserService,
-} from '../../../core/services';
-import {SettingsService} from '../../../core/services/settings/settings.service';
-import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {SharedModule} from '../../../shared/shared.module';
-import {MachineDeploymentHealthStatus} from '../../../shared/utils/health-status/machine-deployment-health-status';
-import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {fakeDigitaloceanDatacenter, fakeSeedDatacenter} from '../../../testing/fake-data/datacenter.fake';
-import {machineDeploymentsFake, nodesFake} from '../../../testing/fake-data/node.fake';
-import {fakeProject} from '../../../testing/fake-data/project.fake';
-import {ActivatedRouteStub, RouterStub} from '../../../testing/router-stubs';
-import {asyncData} from '../../../testing/services/api-mock.service';
-import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
-import {AuthMockService} from '../../../testing/services/auth-mock.service';
-import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
-import {NodeMockService} from '../../../testing/services/node-mock.service';
-import {ProjectMockService} from '../../../testing/services/project-mock.service';
-import {SettingsMockService} from '../../../testing/services/settings-mock.service';
-import {UserMockService} from '../../../testing/services/user-mock.service';
-import {NodeService} from '../../services/node.service';
+import {NodeService} from '@app/cluster/services/node.service';
+import {AppConfigService} from '@app/config.service';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
+import {fakeDigitaloceanDatacenter, fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
+import {machineDeploymentsFake, nodesFake} from '@app/testing/fake-data/node.fake';
+import {fakeProject} from '@app/testing/fake-data/project.fake';
+import {ActivatedRouteStub, RouterStub} from '@app/testing/router-stubs';
+import {asyncData} from '@app/testing/services/api-mock.service';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
+import {AuthMockService} from '@app/testing/services/auth-mock.service';
+import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
+import {NodeMockService} from '@app/testing/services/node-mock.service';
+import {ProjectMockService} from '@app/testing/services/project-mock.service';
+import {SettingsMockService} from '@app/testing/services/settings-mock.service';
+import {UserMockService} from '@app/testing/services/user-mock.service';
+import {ApiService} from '@core/services/api/api.service';
+import {Auth} from '@core/services/auth/auth.service';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {SettingsService} from '@core/services/settings/settings.service';
+import {UserService} from '@core/services/user/user.service';
+import {SharedModule} from '@shared/shared.module';
+import {MachineDeploymentHealthStatus} from '@shared/utils/health-status/machine-deployment-health-status';
 import {NodeListComponent} from '../node-list/node-list.component';
-
 import {ClusterPanelComponent} from './cluster-panel/cluster-panel.component';
 import {MachineDeploymentDetailsComponent} from './machine-deployment-details.component';
 
@@ -57,38 +53,40 @@ describe('MachineDeploymentDetailsComponent', () => {
   let apiMock;
   let dcMock;
 
-  beforeEach(async(() => {
-    apiMock = {
-      getMachineDeploymentNodes: jest.fn(),
-      getMachineDeployment: jest.fn(),
-      getMachineDeploymentNodesEvents: jest.fn(),
-    };
-    apiMock.getMachineDeployment.mockReturnValue(asyncData(machineDeploymentsFake()[0]));
-    apiMock.getMachineDeploymentNodes.mockReturnValue(asyncData(nodesFake()));
-    apiMock.getMachineDeploymentNodesEvents.mockReturnValue(asyncData([]));
-    dcMock = {getDatacenter: jest.fn()};
-    dcMock.getDatacenter.mockReturnValue(asyncData(fakeDigitaloceanDatacenter()));
+  beforeEach(
+    waitForAsync(() => {
+      apiMock = {
+        getMachineDeploymentNodes: jest.fn(),
+        getMachineDeployment: jest.fn(),
+        getMachineDeploymentNodesEvents: jest.fn(),
+      };
+      apiMock.getMachineDeployment.mockReturnValue(asyncData(machineDeploymentsFake()[0]));
+      apiMock.getMachineDeploymentNodes.mockReturnValue(asyncData(nodesFake()));
+      apiMock.getMachineDeploymentNodesEvents.mockReturnValue(asyncData([]));
+      dcMock = {getDatacenter: jest.fn()};
+      dcMock.getDatacenter.mockReturnValue(asyncData(fakeDigitaloceanDatacenter()));
 
-    TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
-      declarations: [MachineDeploymentDetailsComponent, NodeListComponent, ClusterPanelComponent],
-      providers: [
-        {provide: ApiService, useValue: apiMock},
-        {provide: ClusterService, useClass: ClusterMockService},
-        {provide: DatacenterService, useValue: dcMock},
-        {provide: ProjectService, useClass: ProjectMockService},
-        {provide: Auth, useClass: AuthMockService},
-        {provide: Router, useClass: RouterStub},
-        {provide: ActivatedRoute, useClass: ActivatedRouteStub},
-        {provide: UserService, useClass: UserMockService},
-        {provide: AppConfigService, useClass: AppConfigMockService},
-        {provide: NodeService, useClass: NodeMockService},
-        {provide: SettingsService, useClass: SettingsMockService},
-        GoogleAnalyticsService,
-        NotificationService,
-      ],
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
+        declarations: [MachineDeploymentDetailsComponent, NodeListComponent, ClusterPanelComponent],
+        providers: [
+          {provide: ApiService, useValue: apiMock},
+          {provide: ClusterService, useClass: ClusterMockService},
+          {provide: DatacenterService, useValue: dcMock},
+          {provide: ProjectService, useClass: ProjectMockService},
+          {provide: Auth, useClass: AuthMockService},
+          {provide: Router, useClass: RouterStub},
+          {provide: ActivatedRoute, useClass: ActivatedRouteStub},
+          {provide: UserService, useClass: UserMockService},
+          {provide: AppConfigService, useClass: AppConfigMockService},
+          {provide: NodeService, useClass: NodeMockService},
+          {provide: SettingsService, useClass: SettingsMockService},
+          GoogleAnalyticsService,
+          NotificationService,
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MachineDeploymentDetailsComponent);

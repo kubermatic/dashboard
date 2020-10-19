@@ -11,11 +11,11 @@
 
 import {Component, Input} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {NotificationService} from '@core/services/notification/notification.service';
 import {Cluster, ClusterPatch, MachineNetwork} from '@shared/entity/cluster';
 import * as _ from 'lodash';
 import {first} from 'rxjs/operators';
-
-import {ClusterService, NotificationService} from '../../../core/services';
 
 @Component({
   selector: 'km-add-machine-network',
