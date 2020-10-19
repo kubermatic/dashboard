@@ -13,13 +13,13 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {MatDialogRef} from '@angular/material/dialog';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {RBACService} from '@core/services/rbac/rbac.service';
+import {Cluster} from '@shared/entity/cluster';
+import {ClusterRoleName, CreateBinding, RoleName} from '@shared/entity/rbac';
+import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
-import * as _ from 'lodash';
-
-import {NotificationService, RBACService} from '../../../../core/services';
-import {Cluster} from '../../../../shared/entity/cluster';
-import {ClusterRoleName, CreateBinding, RoleName} from '../../../../shared/entity/rbac';
 
 export enum Controls {
   Email = 'email',

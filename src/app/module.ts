@@ -15,20 +15,21 @@ import {MAT_TOOLTIP_DEFAULT_OPTIONS} from '@angular/material/tooltip';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
+import {CoreModule} from '@core/core.module';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {HistoryService} from '@core/services/history/history.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {UserService} from '@core/services/user/user.service';
+import {SharedModule} from '@shared/shared.module';
+import {environment} from 'environments/environment';
 import {CookieService} from 'ngx-cookie-service';
 import {MonacoEditorModule} from 'ngx-monaco-editor';
-
 import {kmTooltipDefaultOptions} from '../app-config';
-import {environment} from 'environments/environment';
 import {KubermaticComponent} from './component';
-import {CoreModule} from '@core/core.module';
-import {DatacenterService, ProjectService, UserService} from './core/services';
-import {HistoryService} from '@core/services';
+import {AppConfigService} from './config.service';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {GoogleAnalyticsService} from './google-analytics.service';
 import {AppRoutingModule} from './routing';
-import {AppConfigService} from './config.service';
-import {SharedModule} from '@shared/shared.module';
 
 const appInitializerFn = (
   appConfigService: AppConfigService,

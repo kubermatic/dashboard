@@ -11,38 +11,37 @@
 
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable, of, timer} from 'rxjs';
-import {catchError, shareReplay, switchMap} from 'rxjs/operators';
-
-import {environment} from '../../../../environments/environment';
-import {AppConfigService} from '../../../config.service';
-import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
-import {TaintFormComponent} from '../../../shared/components/taint-form/taint-form.component';
-import {AddonConfig} from '../../../shared/entity/addon';
-import {Cluster, ClusterType, MasterVersion, Token} from '../../../shared/entity/cluster';
-import {Event} from '../../../shared/entity/event';
-import {CreateMember, Member} from '../../../shared/entity/member';
-import {NodeMetrics} from '../../../shared/entity/metrics';
-import {MachineDeployment, MachineDeploymentPatch} from '../../../shared/entity/machine-deployment';
-import {Node} from '../../../shared/entity/node';
-import {EditProject, Project} from '../../../shared/entity/project';
+import {AppConfigService} from '@app/config.service';
+import {environment} from '@environments/environment';
+import {LabelFormComponent} from '@shared/components/label-form/label-form.component';
+import {TaintFormComponent} from '@shared/components/taint-form/taint-form.component';
+import {AddonConfig} from '@shared/entity/addon';
+import {Cluster, ClusterType, MasterVersion, Token} from '@shared/entity/cluster';
+import {Event} from '@shared/entity/event';
+import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-deployment';
+import {CreateMember, Member} from '@shared/entity/member';
+import {NodeMetrics} from '@shared/entity/metrics';
+import {Node} from '@shared/entity/node';
+import {EditProject, Project} from '@shared/entity/project';
+import {AlibabaInstanceType, AlibabaZone} from '@shared/entity/provider/alibaba';
+import {AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
+import {AzureSizes, AzureZones} from '@shared/entity/provider/azure';
+import {DigitaloceanSizes} from '@shared/entity/provider/digitalocean';
+import {GCPDiskType, GCPMachineSize, GCPZone} from '@shared/entity/provider/gcp';
+import {HetznerTypes} from '@shared/entity/provider/hetzner';
+import {OpenstackAvailabilityZone, OpenstackFlavor} from '@shared/entity/provider/openstack';
+import {PacketSize} from '@shared/entity/provider/packet';
 import {
-  ServiceAccountModel,
   CreateTokenEntity,
   ServiceAccount,
+  ServiceAccountModel,
   ServiceAccountToken,
   ServiceAccountTokenPatch,
-} from '../../../shared/entity/service-account';
-import {SSHKey} from '../../../shared/entity/ssh-key';
-import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
-import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean';
-import {HetznerTypes} from '../../../shared/entity/provider/hetzner';
-import {PacketSize} from '../../../shared/entity/provider/packet';
-import {AlibabaInstanceType, AlibabaZone} from '../../../shared/entity/provider/alibaba';
-import {AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws';
-import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../shared/entity/provider/gcp';
-import {OpenstackFlavor, OpenstackAvailabilityZone} from '../../../shared/entity/provider/openstack';
-import {AzureSizes, AzureZones} from '../../../shared/entity/provider/azure';
+} from '@shared/entity/service-account';
+import {SSHKey} from '@shared/entity/ssh-key';
+import {CreateProjectModel} from '@shared/model/CreateProjectModel';
+import {Observable, of, timer} from 'rxjs';
+import {catchError, shareReplay, switchMap} from 'rxjs/operators';
 
 @Injectable()
 export class ApiService {

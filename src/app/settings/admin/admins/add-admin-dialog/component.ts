@@ -12,10 +12,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-
-import {NotificationService} from '../../../../core/services';
-import {SettingsService} from '../../../../core/services/settings/settings.service';
-import {Admin} from '../../../../shared/entity/member';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {SettingsService} from '@core/services/settings/settings.service';
+import {Admin} from '@shared/entity/member';
 
 @Component({
   selector: 'km-add-admin-dialog',

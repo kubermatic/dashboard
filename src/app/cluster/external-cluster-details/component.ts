@@ -10,23 +10,23 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {merge, Subject, timer} from 'rxjs';
-
-import {Cluster} from '../../shared/entity/cluster';
-import {Event} from '../../shared/entity/event';
-import {ClusterMetrics, NodeMetrics} from '../../shared/entity/metrics';
-
-import {PathParam} from '../../core/services/params/params.service';
-import {ClusterService, NotificationService, UserService} from '../../core/services';
-import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {Member} from '../../shared/entity/member';
-import {MemberUtils, Permission} from '../../shared/utils/member-utils/member-utils';
-import {GroupConfig} from '../../shared/model/Config';
-import {Node} from '../../shared/entity/node';
-import {ExternalClusterDataDialogComponent} from '../../shared/components/external-cluster-data-dialog/component';
 import {MatDialog} from '@angular/material/dialog';
-import {AppConfigService} from '../../config.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AppConfigService} from '@app/config.service';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {PathParam} from '@core/services/params/params.service';
+import {UserService} from '@core/services/user/user.service';
+import {ExternalClusterDataDialogComponent} from '@shared/components/external-cluster-data-dialog/component';
+import {Cluster} from '@shared/entity/cluster';
+import {Event} from '@shared/entity/event';
+import {Member} from '@shared/entity/member';
+import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
+import {Node} from '@shared/entity/node';
+import {GroupConfig} from '@shared/model/Config';
+import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
+import {merge, Subject, timer} from 'rxjs';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-cluster-details',

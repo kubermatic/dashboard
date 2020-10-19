@@ -12,44 +12,40 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
+import {AppConfigService} from '@app/config.service';
+import {ApiService} from '@core/services/api/api.service';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {PathParam} from '@core/services/params/params.service';
+import {RBACService} from '@core/services/rbac/rbac.service';
+import {SettingsService} from '@core/services/settings/settings.service';
+import {UserService} from '@core/services/user/user.service';
+import {Addon} from '@shared/entity/addon';
+import {Cluster, ClusterType, getClusterProvider, MasterVersion} from '@shared/entity/cluster';
+import {View} from '@shared/entity/common';
+import {Datacenter} from '@shared/entity/datacenter';
+import {Event} from '@shared/entity/event';
+import {Health, HealthState} from '@shared/entity/health';
+import {MachineDeployment} from '@shared/entity/machine-deployment';
+import {Member} from '@shared/entity/member';
+import {ClusterMetrics} from '@shared/entity/metrics';
+import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '@shared/entity/rbac';
+import {SSHKey} from '@shared/entity/ssh-key';
+import {Config, GroupConfig} from '@shared/model/Config';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
+import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
+import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
+import * as _ from 'lodash';
 import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
-import {filter, first, map, switchMap, takeUntil, take} from 'rxjs/operators';
-
-import {AppConfigService} from '../../config.service';
-import {
-  ApiService,
-  ClusterService,
-  DatacenterService,
-  NotificationService,
-  RBACService,
-  UserService,
-} from '../../core/services';
-import {SettingsService} from '../../core/services/settings/settings.service';
-import {Addon} from '../../shared/entity/addon';
-import {Cluster, ClusterType, getClusterProvider, MasterVersion} from '../../shared/entity/cluster';
-import {View} from '../../shared/entity/common';
-import {Datacenter} from '../../shared/entity/datacenter';
-import {Event} from '../../shared/entity/event';
-import {Health, HealthState} from '../../shared/entity/health';
-import {Member} from '../../shared/entity/member';
-import {ClusterMetrics} from '../../shared/entity/metrics';
-import {MachineDeployment} from '../../shared/entity/machine-deployment';
-import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '../../shared/entity/rbac';
-import {SSHKey} from '../../shared/entity/ssh-key';
-import {Config, GroupConfig} from '../../shared/model/Config';
-import {NodeProvider} from '../../shared/model/NodeProviderConstants';
-import {AdmissionPluginUtils} from '../../shared/utils/admission-plugin-utils/admission-plugin-utils';
-import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
-import {MemberUtils, Permission} from '../../shared/utils/member-utils/member-utils';
+import {filter, first, map, switchMap, take, takeUntil} from 'rxjs/operators';
 import {NodeService} from '../services/node.service';
-
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/cluster-delete-confirmation.component';
 import {EditClusterComponent} from './edit-cluster/edit-cluster.component';
 import {EditSSHKeysComponent} from './edit-sshkeys/edit-sshkeys.component';
 import {RevokeTokenComponent} from './revoke-token/revoke-token.component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/share-kubeconfig.component';
-import {PathParam} from '../../core/services/params/params.service';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'km-cluster-details',

@@ -9,24 +9,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
+import {fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
+import {nodeAWSFake, nodeFake} from '@app/testing/fake-data/node.fake';
+import {fakeProject} from '@app/testing/fake-data/project.fake';
+import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
+import {SettingsMockService} from '@app/testing/services/settings-mock.service';
+import {UserMockService} from '@app/testing/services/user-mock.service';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {SettingsService} from '@core/services/settings/settings.service';
+import {UserService} from '@core/services/user/user.service';
+import {SharedModule} from '@shared/shared.module';
 import {of} from 'rxjs';
-
-import {ClusterService, NotificationService, UserService} from '../../../core/services';
-import {SettingsService} from '../../../core/services/settings/settings.service';
-import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {SharedModule} from '../../../shared/shared.module';
-import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {fakeSeedDatacenter} from '../../../testing/fake-data/datacenter.fake';
-import {nodeAWSFake, nodeFake} from '../../../testing/fake-data/node.fake';
-import {fakeProject} from '../../../testing/fake-data/project.fake';
-import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
-import {SettingsMockService} from '../../../testing/services/settings-mock.service';
-import {UserMockService} from '../../../testing/services/user-mock.service';
-
 import {NodeListComponent} from './node-list.component';
 
 class MatDialogMock {
@@ -42,20 +42,22 @@ describe('NodeComponent', () => {
   let component: NodeListComponent;
   let clusterService: ClusterService;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [...modules],
-      declarations: [NodeListComponent],
-      providers: [
-        {provide: ClusterService, useClass: ClusterMockService},
-        {provide: MatDialog, useClass: MatDialogMock},
-        {provide: SettingsService, useClass: SettingsMockService},
-        {provide: UserService, useClass: UserMockService},
-        GoogleAnalyticsService,
-        NotificationService,
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        declarations: [NodeListComponent],
+        providers: [
+          {provide: ClusterService, useClass: ClusterMockService},
+          {provide: MatDialog, useClass: MatDialogMock},
+          {provide: SettingsService, useClass: SettingsMockService},
+          {provide: UserService, useClass: UserMockService},
+          GoogleAnalyticsService,
+          NotificationService,
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NodeListComponent);
@@ -63,9 +65,12 @@ describe('NodeComponent', () => {
     clusterService = fixture.debugElement.injector.get(ClusterService);
   });
 
-  it('should create the cluster details cmp', async(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the cluster details cmp',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should call deleteNode', fakeAsync(() => {
     component.cluster = fakeDigitaloceanCluster();

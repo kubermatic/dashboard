@@ -13,15 +13,16 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {ApiService} from '@core/services/api/api.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {UserService} from '@core/services/user/user.service';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
+import {Project} from '@shared/entity/project';
+import {ServiceAccount, ServiceAccountToken} from '@shared/entity/service-account';
+import {GroupConfig} from '@shared/model/Config';
 import {filter, first, switchMap} from 'rxjs/operators';
-
-import {ApiService, NotificationService, ProjectService, UserService} from '../../core/services';
-import {GoogleAnalyticsService} from '../../google-analytics.service';
-import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {Project} from '../../shared/entity/project';
-import {ServiceAccount, ServiceAccountToken} from '../../shared/entity/service-account';
-import {GroupConfig} from '../../shared/model/Config';
-
 import {AddServiceAccountTokenComponent} from './add-serviceaccount-token/add-serviceaccount-token.component';
 import {EditServiceAccountTokenComponent} from './edit-serviceaccount-token/edit-serviceaccount-token.component';
 import {TokenDialogComponent} from './token-dialog/token-dialog.component';

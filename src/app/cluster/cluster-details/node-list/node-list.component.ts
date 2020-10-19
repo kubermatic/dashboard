@@ -14,22 +14,23 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {UserService} from '@core/services/user/user.service';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
+import {Cluster} from '@shared/entity/cluster';
+import {Member} from '@shared/entity/member';
+import {NodeMetrics} from '@shared/entity/metrics';
+import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '@shared/entity/node';
+import {GroupConfig} from '@shared/model/Config';
+import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
+import {NodeHealthStatus} from '@shared/utils/health-status/node-health-status';
+import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
+import {NodeUtils} from '@shared/utils/node-utils/node-utils';
+import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
-import * as _ from 'lodash';
-
-import {ClusterService, NotificationService, UserService} from '../../../core/services';
-import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {Cluster} from '../../../shared/entity/cluster';
-import {Member} from '../../../shared/entity/member';
-import {NodeMetrics} from '../../../shared/entity/metrics';
-import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '../../../shared/entity/node';
-import {GroupConfig} from '../../../shared/model/Config';
-import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
-import {NodeHealthStatus} from '../../../shared/utils/health-status/node-health-status';
-import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
-import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 
 @Component({
   selector: 'km-node-list',

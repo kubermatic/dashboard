@@ -34,7 +34,7 @@ export class RouterLinkStubDirective {
   selector: '[routerLinkActive]',
 })
 export class RouterLinkActiveStubDirective {
-  @Input() set routerLinkActive(data: string[] | string) {}
+  @Input() set routerLinkActive(_: string[] | string) {}
 }
 
 @Component({
@@ -47,7 +47,7 @@ export class RouterOutletStubComponent {}
 export class RouterStub {
   events = new Subject();
 
-  navigate(commands: any[], extras?: NavigationExtras): void {}
+  navigate(_commands: any[], _extras?: NavigationExtras): void {}
 }
 
 @Injectable()

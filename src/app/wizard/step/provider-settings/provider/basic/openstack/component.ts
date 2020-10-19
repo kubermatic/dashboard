@@ -19,6 +19,14 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {CloudSpec, Cluster, ClusterSpec, OpenstackCloudSpec} from '@shared/entity/cluster';
+import {OpenstackFloatingIpPool, OpenstackTenant} from '@shared/entity/provider/openstack';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {ClusterService} from '@shared/services/cluster.service';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {
@@ -32,13 +40,6 @@ import {
   takeUntil,
   tap,
 } from 'rxjs/operators';
-import {DatacenterService, PresetsService} from '../../../../../../core/services';
-import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
-import {CloudSpec, Cluster, ClusterSpec, OpenstackCloudSpec} from '../../../../../../shared/entity/cluster';
-import {OpenstackFloatingIpPool, OpenstackTenant} from '../../../../../../shared/entity/provider/openstack';
-import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../../../../shared/services/cluster.service';
-import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 
 enum Controls {
   Domain = 'domain',

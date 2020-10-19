@@ -10,17 +10,16 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
+import {Addon} from '@shared/entity/addon';
+import {Cluster, ClusterPatch, MasterVersion, ProviderSettingsPatch} from '@shared/entity/cluster';
+import {Event} from '@shared/entity/event';
+import {Health} from '@shared/entity/health';
+import {ClusterMetrics} from '@shared/entity/metrics';
+import {Node} from '@shared/entity/node';
+import {SSHKey} from '@shared/entity/ssh-key';
+import {CreateClusterModel} from '@shared/model/CreateClusterModel';
 import {defer, Observable, of, Subject} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
-
-import {Addon} from '../../shared/entity/addon';
-import {Cluster, ClusterPatch, MasterVersion, ProviderSettingsPatch} from '../../shared/entity/cluster';
-import {Event} from '../../shared/entity/event';
-import {Health} from '../../shared/entity/health';
-import {ClusterMetrics} from '../../shared/entity/metrics';
-import {Node} from '../../shared/entity/node';
-import {SSHKey} from '../../shared/entity/ssh-key';
-import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
 import {fakeClusters, fakeDigitaloceanCluster} from '../fake-data/cluster.fake';
 import {fakeEvents} from '../fake-data/event.fake';
 import {fakeHealth} from '../fake-data/health.fake';
@@ -39,15 +38,15 @@ export class ClusterMockService {
 
   changeProviderSettingsPatch(): void {}
 
-  cluster(clusterId: string, dc: string, projectID: string): Observable<Cluster> {
+  cluster(_clusterId: string, _dc: string, _projectID: string): Observable<Cluster> {
     return asyncData(this._cluster);
   }
 
-  clusters(projectID: string): Observable<Cluster[]> {
+  clusters(_projectID: string): Observable<Cluster[]> {
     return asyncData(this._clusters);
   }
 
-  health(cluster: string, dc: string, projectID: string): Observable<Health> {
+  health(_cluster: string, _dc: string, _projectID: string): Observable<Health> {
     return asyncData(this._health);
   }
 
@@ -55,47 +54,47 @@ export class ClusterMockService {
     return asyncData(this._sshKeys);
   }
 
-  deleteSSHKey(fingerprint: string): Observable<any> {
+  deleteSSHKey(_fingerprint: string): Observable<any> {
     return asyncData(null);
   }
 
-  create(createClusterModel: CreateClusterModel, dc: string, projectID: string): Observable<Cluster> {
+  create(_createClusterModel: CreateClusterModel, _dc: string, _projectID: string): Observable<Cluster> {
     return asyncData(this._cluster);
   }
 
-  delete(clusterName: string, dc: string, projectID: string): Observable<any> {
+  delete(_clusterName: string, _dc: string, _projectID: string): Observable<any> {
     return asyncData(null);
   }
 
-  edit(cluster: Cluster, dc: string, projectID: string): Observable<Cluster> {
+  edit(_cluster: Cluster, _dc: string, _projectID: string): Observable<Cluster> {
     return asyncData(this._cluster);
   }
 
-  patch(projectID: string, clusterID: string, datacenter: string, patch: ClusterPatch): Observable<Cluster> {
+  patch(_projectID: string, _clusterId: string, _datacenter: string, _patch: ClusterPatch): Observable<Cluster> {
     return asyncData(this._cluster);
   }
 
-  deleteNode(clusterName: string, nodeName: string, dc: string, projectID: string): Observable<any> {
+  deleteNode(_clusterName: string, _nodeName: string, _dc: string, _projectID: string): Observable<any> {
     return asyncData(null);
   }
 
-  getNodes(cluster: string, dc: string, projectID: string): Observable<Node[]> {
+  getNodes(_cluster: string, _dc: string, _projectID: string): Observable<Node[]> {
     return asyncData(this._nodes);
   }
 
-  upgrades(cluster: string): Observable<MasterVersion[]> {
+  upgrades(_cluster: string): Observable<MasterVersion[]> {
     return asyncData([]);
   }
 
-  nodes(projectID: string, clusterID: string, datacenter: string): Observable<Node[]> {
+  nodes(_projectID: string, _clusterId: string, _datacenter: string): Observable<Node[]> {
     return asyncData(nodesFake());
   }
 
-  metrics(projectID: string, clusterID: string, datacenter: string): Observable<ClusterMetrics> {
+  metrics(_projectID: string, _clusterId: string, _datacenter: string): Observable<ClusterMetrics> {
     return asyncData(null);
   }
 
-  nodeUpgrades(controlPlaneVersion: string, type: string): Observable<MasterVersion[]> {
+  nodeUpgrades(_controlPlaneVersion: string, _type: string): Observable<MasterVersion[]> {
     return asyncData([]);
   }
 
@@ -103,15 +102,15 @@ export class ClusterMockService {
     return of([]);
   }
 
-  createSSHKey(sshKey: SSHKey): Observable<SSHKey> {
+  createSSHKey(_sshKey: SSHKey): Observable<SSHKey> {
     return of(null);
   }
 
-  events(projectID: string, clusterID: string, datacenter: string): Observable<Event[]> {
+  events(_projectID: string, _clusterId: string, _datacenter: string): Observable<Event[]> {
     return of(fakeEvents());
   }
 
-  addons(projectID: string, cluster: string, dc: string): Observable<Addon[]> {
+  addons(_projectID: string, _cluster: string, _dc: string): Observable<Addon[]> {
     return of([]);
   }
 

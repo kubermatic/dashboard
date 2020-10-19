@@ -11,11 +11,9 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-
-import {AuthGuard} from '../../core/services';
-
+import {getEditionDirName} from '@app/dynamic/common';
+import {AuthGuard} from '@core/services/auth/auth.guard';
 import {UserSettingsComponent} from './user-settings.component';
-import {getEditionDirName} from '../../dynamic/common';
 
 const routes: Routes = [
   {

@@ -9,27 +9,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
+import {NodeService} from '@app/cluster/services/node.service';
+import {AppConfigService} from '@app/config.service';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {RouterStub} from '@app/testing/router-stubs';
+import {ApiMockService} from '@app/testing/services/api-mock.service';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
+import {NodeMockService} from '@app/testing/services/node-mock.service';
+import {ProjectMockService} from '@app/testing/services/project-mock.service';
+import {SettingsMockService} from '@app/testing/services/settings-mock.service';
+import {UserMockService} from '@app/testing/services/user-mock.service';
+import {ApiService} from '@core/services/api/api.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {SettingsService} from '@core/services/settings/settings.service';
+import {UserService} from '@core/services/user/user.service';
+import {SharedModule} from '@shared/shared.module';
 import {of} from 'rxjs';
-
-import {AppConfigService} from '../../../config.service';
-import {ApiService, ProjectService, UserService} from '../../../core/services';
-import {SettingsService} from '../../../core/services/settings/settings.service';
-import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {SharedModule} from '../../../shared/shared.module';
-import {RouterStub} from '../../../testing/router-stubs';
-import {ApiMockService} from '../../../testing/services/api-mock.service';
-import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
-import {NodeMockService} from '../../../testing/services/node-mock.service';
-import {ProjectMockService} from '../../../testing/services/project-mock.service';
-import {SettingsMockService} from '../../../testing/services/settings-mock.service';
-import {UserMockService} from '../../../testing/services/user-mock.service';
-import {NodeService} from '../../services/node.service';
-
 import {MachineDeploymentListComponent} from './machine-deployment-list.component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
@@ -44,30 +44,35 @@ describe('MachineDeploymentListComponent', () => {
   let fixture: ComponentFixture<MachineDeploymentListComponent>;
   let component: MachineDeploymentListComponent;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [...modules],
-      declarations: [MachineDeploymentListComponent],
-      providers: [
-        {provide: ApiService, useClass: ApiMockService},
-        {provide: NodeService, useClass: NodeMockService},
-        {provide: UserService, useClass: UserMockService},
-        {provide: AppConfigService, useClass: AppConfigMockService},
-        {provide: ProjectService, useClass: ProjectMockService},
-        {provide: MatDialog, useClass: MatDialogMock},
-        {provide: Router, useClass: RouterStub},
-        {provide: SettingsService, useClass: SettingsMockService},
-        GoogleAnalyticsService,
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        declarations: [MachineDeploymentListComponent],
+        providers: [
+          {provide: ApiService, useClass: ApiMockService},
+          {provide: NodeService, useClass: NodeMockService},
+          {provide: UserService, useClass: UserMockService},
+          {provide: AppConfigService, useClass: AppConfigMockService},
+          {provide: ProjectService, useClass: ProjectMockService},
+          {provide: MatDialog, useClass: MatDialogMock},
+          {provide: Router, useClass: RouterStub},
+          {provide: SettingsService, useClass: SettingsMockService},
+          GoogleAnalyticsService,
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MachineDeploymentListComponent);
     component = fixture.componentInstance;
   });
 
-  it('should create the cluster details cmp', async(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the cluster details cmp',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 });

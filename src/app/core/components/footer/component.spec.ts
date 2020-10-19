@@ -10,19 +10,19 @@
 // limitations under the License.
 
 import {HttpClientModule} from '@angular/common/http';
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-
-import {SharedModule} from '../../../shared/shared.module';
-import {RouterStub} from '../../../testing/router-stubs';
-import {AuthMockService} from '../../../testing/services/auth-mock.service';
-import {ProjectMockService} from '../../../testing/services/project-mock.service';
-import {UserMockService} from '../../../testing/services/user-mock.service';
-import {Auth, ProjectService, UserService} from '../../services';
-
+import {RouterStub} from '@app/testing/router-stubs';
+import {AuthMockService} from '@app/testing/services/auth-mock.service';
+import {ProjectMockService} from '@app/testing/services/project-mock.service';
+import {UserMockService} from '@app/testing/services/user-mock.service';
+import {Auth} from '@core/services/auth/auth.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {UserService} from '@core/services/user/user.service';
+import {SharedModule} from '@shared/shared.module';
 import {FooterComponent} from './component';
 
 const modules: any[] = [BrowserModule, HttpClientModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];
@@ -49,7 +49,10 @@ describe('FooterComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should initialize', async(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should initialize',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 });

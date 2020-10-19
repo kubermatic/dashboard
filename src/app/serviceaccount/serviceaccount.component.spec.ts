@@ -9,27 +9,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {async, ComponentFixture, fakeAsync, flush, TestBed, tick} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/components/noop-confirmation-dialog.component';
+import {fakeServiceAccounts, fakeServiceAccountTokens} from '@app/testing/fake-data/serviceaccount.fake';
+import {RouterStub} from '@app/testing/router-stubs';
+import {asyncData} from '@app/testing/services/api-mock.service';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
+import {ProjectMockService} from '@app/testing/services/project-mock.service';
+import {SettingsMockService} from '@app/testing/services/settings-mock.service';
+import {UserMockService} from '@app/testing/services/user-mock.service';
+import {ApiService} from '@core/services/api/api.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {SettingsService} from '@core/services/settings/settings.service';
+import {UserService} from '@core/services/user/user.service';
+import {SharedModule} from '@shared/shared.module';
+import {HealthStatusColor} from '@shared/utils/health-status/health-status';
 import {of} from 'rxjs';
-
 import {AppConfigService} from '../config.service';
-import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
-import {SettingsService} from '../core/services/settings/settings.service';
-import {GoogleAnalyticsService} from '../google-analytics.service';
-import {SharedModule} from '../shared/shared.module';
-import {HealthStatusColor} from '../shared/utils/health-status/health-status';
-import {DialogTestModule, NoopConfirmDialogComponent} from '../testing/components/noop-confirmation-dialog.component';
-import {fakeServiceAccounts, fakeServiceAccountTokens} from '../testing/fake-data/serviceaccount.fake';
-import {RouterStub} from '../testing/router-stubs';
-import {asyncData} from '../testing/services/api-mock.service';
-import {AppConfigMockService} from '../testing/services/app-config-mock.service';
-import {ProjectMockService} from '../testing/services/project-mock.service';
-import {SettingsMockService} from '../testing/services/settings-mock.service';
-import {UserMockService} from '../testing/services/user-mock.service';
 import {ServiceAccountComponent} from './serviceaccount.component';
 import {ServiceAccountModule} from './serviceaccount.module';
 
@@ -39,31 +41,33 @@ describe('ServiceAccountComponent', () => {
   let component: ServiceAccountComponent;
   let deleteServiceAccountSpy;
 
-  beforeEach(async(() => {
-    const apiMock = {
-      getServiceAccounts: jest.fn(),
-      getServiceAccountTokens: jest.fn(),
-      deleteServiceAccount: jest.fn(),
-    };
-    apiMock.getServiceAccounts.mockReturnValue(asyncData(fakeServiceAccounts()));
-    apiMock.getServiceAccountTokens.mockReturnValue(asyncData(fakeServiceAccountTokens()));
-    deleteServiceAccountSpy = apiMock.deleteServiceAccount.mockReturnValue(of(null));
+  beforeEach(
+    waitForAsync(() => {
+      const apiMock = {
+        getServiceAccounts: jest.fn(),
+        getServiceAccountTokens: jest.fn(),
+        deleteServiceAccount: jest.fn(),
+      };
+      apiMock.getServiceAccounts.mockReturnValue(asyncData(fakeServiceAccounts()));
+      apiMock.getServiceAccountTokens.mockReturnValue(asyncData(fakeServiceAccountTokens()));
+      deleteServiceAccountSpy = apiMock.deleteServiceAccount.mockReturnValue(of(null));
 
-    TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, ServiceAccountModule, DialogTestModule],
-      providers: [
-        {provide: Router, useClass: RouterStub},
-        {provide: ApiService, useValue: apiMock},
-        {provide: ProjectService, useClass: ProjectMockService},
-        {provide: UserService, useClass: UserMockService},
-        {provide: AppConfigService, useClass: AppConfigMockService},
-        {provide: SettingsService, useClass: SettingsMockService},
-        MatDialog,
-        GoogleAnalyticsService,
-        NotificationService,
-      ],
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [BrowserModule, BrowserAnimationsModule, SharedModule, ServiceAccountModule, DialogTestModule],
+        providers: [
+          {provide: Router, useClass: RouterStub},
+          {provide: ApiService, useValue: apiMock},
+          {provide: ProjectService, useClass: ProjectMockService},
+          {provide: UserService, useClass: UserMockService},
+          {provide: AppConfigService, useClass: AppConfigMockService},
+          {provide: SettingsService, useClass: SettingsMockService},
+          MatDialog,
+          GoogleAnalyticsService,
+          NotificationService,
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ServiceAccountComponent);

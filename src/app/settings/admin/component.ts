@@ -11,17 +11,17 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatButtonToggleGroup} from '@angular/material/button-toggle';
+import {HistoryService} from '@core/services/history/history.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {SettingsService} from '@core/services/settings/settings.service';
+import {UserService} from '@core/services/user/user.service';
+import {ClusterType} from '@shared/entity/cluster';
+import {Member} from '@shared/entity/member';
+import {AdminSettings, ClusterTypeOptions} from '@shared/entity/settings';
+import {objectDiff} from '@shared/utils/common-utils';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
-
-import {HistoryService, NotificationService, UserService} from '../../core/services';
-import {SettingsService} from '../../core/services/settings/settings.service';
-
-import {ClusterType} from '../../shared/entity/cluster';
-import {Member} from '../../shared/entity/member';
-import {AdminSettings, ClusterTypeOptions} from '../../shared/entity/settings';
-import {objectDiff} from '../../shared/utils/common-utils';
 
 @Component({
   selector: 'km-admin-settings',
@@ -72,22 +72,6 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  private _applySettings(settings: AdminSettings): void {
-    this.apiSettings = settings;
-    this.settings = _.cloneDeep(this.apiSettings);
-    this._setDistro(this.settings.clusterTypeOptions);
-  }
-
-  private _getPatch(): AdminSettings {
-    const patch: AdminSettings = objectDiff(this.settings, this.apiSettings);
-
-    if (patch.customLinks) {
-      patch.customLinks = this.settings.customLinks;
-    }
-
-    return patch;
-  }
-
   onSettingsChange(): void {
     this._settingsChange.next();
   }
@@ -95,32 +79,6 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   onDistroChange(group: MatButtonToggleGroup): void {
     this.settings.clusterTypeOptions = this._getDistro(group);
     this.onSettingsChange();
-  }
-
-  private _getDistro(group: MatButtonToggleGroup): ClusterTypeOptions {
-    const isKubernetesSelected = group.value && group.value.indexOf(ClusterType.Kubernetes) > -1;
-    const isOpenshiftSelected = group.value && group.value.indexOf(ClusterType.OpenShift) > -1;
-
-    if (isKubernetesSelected && isOpenshiftSelected) {
-      return ClusterTypeOptions.All;
-    } else if (isKubernetesSelected) {
-      return ClusterTypeOptions.Kubernetes;
-    }
-    return ClusterTypeOptions.OpenShift;
-  }
-
-  private _setDistro(distro: ClusterTypeOptions): void {
-    switch (distro) {
-      case ClusterTypeOptions.All:
-        this.selectedDistro = [ClusterType.Kubernetes, ClusterType.OpenShift];
-        break;
-      case ClusterTypeOptions.Kubernetes:
-        this.selectedDistro = [ClusterType.Kubernetes];
-        break;
-      case ClusterTypeOptions.OpenShift:
-        this.selectedDistro = [ClusterType.OpenShift];
-        break;
-    }
   }
 
   isLastDistro(group: MatButtonToggleGroup, distro: string): boolean {
@@ -150,5 +108,47 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
       this.isEqual(this.settings.displayDemoInfo, this.apiSettings.displayDemoInfo) &&
       this.isEqual(this.settings.displayTermsOfService, this.apiSettings.displayTermsOfService)
     );
+  }
+
+  private _applySettings(settings: AdminSettings): void {
+    this.apiSettings = settings;
+    this.settings = _.cloneDeep(this.apiSettings);
+    this._setDistro(this.settings.clusterTypeOptions);
+  }
+
+  private _getPatch(): AdminSettings {
+    const patch: AdminSettings = objectDiff(this.settings, this.apiSettings);
+
+    if (patch.customLinks) {
+      patch.customLinks = this.settings.customLinks;
+    }
+
+    return patch;
+  }
+
+  private _getDistro(group: MatButtonToggleGroup): ClusterTypeOptions {
+    const isKubernetesSelected = group.value && group.value.indexOf(ClusterType.Kubernetes) > -1;
+    const isOpenshiftSelected = group.value && group.value.indexOf(ClusterType.OpenShift) > -1;
+
+    if (isKubernetesSelected && isOpenshiftSelected) {
+      return ClusterTypeOptions.All;
+    } else if (isKubernetesSelected) {
+      return ClusterTypeOptions.Kubernetes;
+    }
+    return ClusterTypeOptions.OpenShift;
+  }
+
+  private _setDistro(distro: ClusterTypeOptions): void {
+    switch (distro) {
+      case ClusterTypeOptions.All:
+        this.selectedDistro = [ClusterType.Kubernetes, ClusterType.OpenShift];
+        break;
+      case ClusterTypeOptions.Kubernetes:
+        this.selectedDistro = [ClusterType.Kubernetes];
+        break;
+      case ClusterTypeOptions.OpenShift:
+        this.selectedDistro = [ClusterType.OpenShift];
+        break;
+    }
   }
 }

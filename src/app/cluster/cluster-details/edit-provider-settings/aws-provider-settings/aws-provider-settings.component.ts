@@ -11,11 +11,10 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {ProviderSettingsPatch} from '@shared/entity/cluster';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
-
-import {ClusterService} from '../../../../core/services';
-import {ProviderSettingsPatch} from '../../../../shared/entity/cluster';
 
 @Component({
   selector: 'km-aws-provider-settings',
@@ -29,6 +28,14 @@ export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(private clusterService: ClusterService) {}
+
+  get accessKeyId(): AbstractControl {
+    return this.form.controls.accessKeyId;
+  }
+
+  get secretAccessKey(): AbstractControl {
+    return this.form.controls.secretAccessKey;
+  }
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -49,14 +56,6 @@ export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
           this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
         }
       });
-  }
-
-  get accessKeyId(): AbstractControl {
-    return this.form.controls.accessKeyId;
-  }
-
-  get secretAccessKey(): AbstractControl {
-    return this.form.controls.secretAccessKey;
   }
 
   setValidators(): void {

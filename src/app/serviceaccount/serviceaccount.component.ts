@@ -14,20 +14,21 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {AppConfigService} from '@app/config.service';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {ApiService} from '@core/services/api/api.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {UserService} from '@core/services/user/user.service';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
+import {Project} from '@shared/entity/project';
+import {ServiceAccount} from '@shared/entity/service-account';
+import {GroupConfig} from '@shared/model/Config';
+import {MemberUtils} from '@shared/utils/member-utils/member-utils';
+import {ProjectUtils} from '@shared/utils/project-utils/project-utils';
+import * as _ from 'lodash';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {filter, first, switchMap, switchMapTo, takeUntil} from 'rxjs/operators';
-import * as _ from 'lodash';
-
-import {AppConfigService} from '../config.service';
-import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
-import {GoogleAnalyticsService} from '../google-analytics.service';
-import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {Project} from '../shared/entity/project';
-import {ServiceAccount} from '../shared/entity/service-account';
-import {GroupConfig} from '../shared/model/Config';
-import {MemberUtils} from '../shared/utils/member-utils/member-utils';
-import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
-
 import {AddServiceAccountComponent} from './add-serviceaccount/add-serviceaccount.component';
 import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceaccount.component';
 

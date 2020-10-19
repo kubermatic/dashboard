@@ -11,9 +11,9 @@
 
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Injectable, Injector} from '@angular/core';
+import {NotificationService} from '@core/services/notification/notification.service';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {NotificationService} from '../../services';
 
 @Injectable()
 export class ErrorNotificationsInterceptor implements HttpInterceptor {

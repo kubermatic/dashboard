@@ -11,13 +11,13 @@
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatSelect, MatSelectChange} from '@angular/material/select';
+import {ProjectService} from '@core/services/project/project.service';
+import {UserService} from '@core/services/user/user.service';
+import {Project} from '@shared/entity/project';
+import * as _ from 'lodash';
 import {differenceBy} from 'lodash';
 import {merge, Subject} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
-
-import {Project} from '../../../../shared/entity/project';
-import {ProjectService, UserService} from '../../../services';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'km-project-selector',

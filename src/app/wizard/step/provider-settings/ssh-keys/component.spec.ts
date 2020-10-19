@@ -10,46 +10,50 @@
 // limitations under the License.
 
 import {HttpClientModule} from '@angular/common/http';
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AppConfigService} from '../../../../config.service';
-import {ApiService, ProjectService, UserService} from '../../../../core/services';
-import {SharedModule} from '../../../../shared/shared.module';
-import {fakeSSHKeys} from '../../../../testing/fake-data/sshkey.fake';
-import {RouterStub} from '../../../../testing/router-stubs';
-import {ActivatedRouteMock} from '../../../../testing/services/activate-route-mock';
-import {asyncData} from '../../../../testing/services/api-mock.service';
-import {AppConfigMockService} from '../../../../testing/services/app-config-mock.service';
-import {ProjectMockService} from '../../../../testing/services/project-mock.service';
-import {UserMockService} from '../../../../testing/services/user-mock.service';
-import {ClusterService} from '../../../../shared/services/cluster.service';
+import {AppConfigService} from '@app/config.service';
+import {fakeSSHKeys} from '@app/testing/fake-data/sshkey.fake';
+import {RouterStub} from '@app/testing/router-stubs';
+import {ActivatedRouteMock} from '@app/testing/services/activate-route-mock';
+import {asyncData} from '@app/testing/services/api-mock.service';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
+import {ProjectMockService} from '@app/testing/services/project-mock.service';
+import {UserMockService} from '@app/testing/services/user-mock.service';
+import {ApiService} from '@core/services/api/api.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {UserService} from '@core/services/user/user.service';
+import {ClusterService} from '@shared/services/cluster.service';
+import {SharedModule} from '@shared/shared.module';
 import {ClusterSSHKeysComponent} from './component';
 
 describe('ClusterSSHKeys', () => {
   let fixture: ComponentFixture<ClusterSSHKeysComponent>;
   let component: ClusterSSHKeysComponent;
 
-  beforeEach(async(() => {
-    const apiMock = {getSSHKeys: jest.fn()};
-    apiMock.getSSHKeys.mockReturnValue(asyncData(fakeSSHKeys()));
+  beforeEach(
+    waitForAsync(() => {
+      const apiMock = {getSSHKeys: jest.fn()};
+      apiMock.getSSHKeys.mockReturnValue(asyncData(fakeSSHKeys()));
 
-    TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
-      declarations: [ClusterSSHKeysComponent],
-      providers: [
-        ClusterService,
-        {provide: ActivatedRoute, useClass: ActivatedRouteMock},
-        {provide: ApiService, useValue: apiMock},
-        {provide: ProjectService, useClass: ProjectMockService},
-        {provide: UserService, useClass: UserMockService},
-        {provide: AppConfigService, useClass: AppConfigMockService},
-        {provide: Router, useClass: RouterStub},
-      ],
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
+        declarations: [ClusterSSHKeysComponent],
+        providers: [
+          ClusterService,
+          {provide: ActivatedRoute, useClass: ActivatedRouteMock},
+          {provide: ApiService, useValue: apiMock},
+          {provide: ProjectService, useClass: ProjectMockService},
+          {provide: UserService, useClass: UserMockService},
+          {provide: AppConfigService, useClass: AppConfigMockService},
+          {provide: Router, useClass: RouterStub},
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterSSHKeysComponent);

@@ -12,14 +12,14 @@
 import {Component, DoCheck, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {SettingsService} from '@core/services/settings/settings.service';
+import {Cluster, Finalizer} from '@shared/entity/cluster';
+import {AdminSettings} from '@shared/entity/settings';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-
-import {ClusterService, NotificationService} from '../../../core/services';
-import {SettingsService} from '../../../core/services/settings/settings.service';
-import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {Cluster, Finalizer} from '../../../shared/entity/cluster';
-import {AdminSettings} from '../../../shared/entity/settings';
 
 @Component({
   selector: 'km-cluster-delete-confirmation',

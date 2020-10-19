@@ -12,14 +12,12 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {ApiService} from '@core/services/api/api.service';
+import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
-import * as _ from 'lodash';
-
-import {ApiService} from '../../../core/services';
-import {AddonConfig, Addon, getAddonLogoData, hasAddonLogoData} from '../../entity/addon';
+import {Addon, AddonConfig, getAddonLogoData, hasAddonLogoData} from '../../entity/addon';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
-
 import {EditAddonDialogComponent} from './edit-addon-dialog/edit-addon-dialog.component';
 import {SelectAddonDialogComponent} from './select-addon-dialog/select-addon-dialog.component';
 

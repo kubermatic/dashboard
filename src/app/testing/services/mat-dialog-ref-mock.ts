@@ -10,7 +10,7 @@
 // limitations under the License.
 
 export class MatDialogRefMock {
-  close(dialogResult?: any): void {}
+  close(_dialogResult?: any): void {}
 
-  open(cmp: any, config: any): void {}
+  open(_cmp: any, _config: any): void {}
 }

@@ -14,20 +14,21 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {AppConfigService} from '@app/config.service';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {ApiService} from '@core/services/api/api.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {UserService} from '@core/services/user/user.service';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
+import {View} from '@shared/entity/common';
+import {Member} from '@shared/entity/member';
+import {Project} from '@shared/entity/project';
+import {GroupConfig} from '@shared/model/Config';
+import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import * as _ from 'lodash';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
-
-import {AppConfigService} from '../config.service';
-import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
-import {GoogleAnalyticsService} from '../google-analytics.service';
-import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {Member} from '../shared/entity/member';
-import {View} from '../shared/entity/common';
-import {Project} from '../shared/entity/project';
-import {GroupConfig} from '../shared/model/Config';
-import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
-
 import {AddMemberComponent} from './add-member/add-member.component';
 import {EditMemberComponent} from './edit-member/edit-member.component';
 

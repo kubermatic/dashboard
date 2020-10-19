@@ -12,19 +12,21 @@
 import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
-import {filter, first, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {ApiService} from '@core/services/api/api.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {UserService} from '@core/services/user/user.service';
 
-import {ApiService, ProjectService, UserService} from '../../../../core/services';
-import {AddSshKeyDialogComponent} from '../../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
-import {View} from '../../../../shared/entity/common';
-import {Member} from '../../../../shared/entity/member';
-import {Project} from '../../../../shared/entity/project';
-import {SSHKey} from '../../../../shared/entity/ssh-key';
-import {GroupConfig} from '../../../../shared/model/Config';
-import {ClusterService} from '../../../../shared/services/cluster.service';
-import {MemberUtils, Permission} from '../../../../shared/utils/member-utils/member-utils';
-import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
+import {AddSshKeyDialogComponent} from '@shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
+import {View} from '@shared/entity/common';
+import {Member} from '@shared/entity/member';
+import {Project} from '@shared/entity/project';
+import {SSHKey} from '@shared/entity/ssh-key';
+import {GroupConfig} from '@shared/model/Config';
+import {ClusterService} from '@shared/services/cluster.service';
+import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
+import {filter, first, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
   Keys = 'keys',
@@ -49,8 +51,6 @@ enum Controls {
 })
 export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
-
-  private _keys: SSHKey[] = [];
   private _project = {} as Project;
   private _user: Member;
   private _groupConfig: GroupConfig;
@@ -67,12 +67,14 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
     super();
   }
 
-  set keys(keys: SSHKey[]) {
-    this._keys = _.sortBy(keys, k => k.name.toLowerCase());
-  }
+  private _keys: SSHKey[] = [];
 
   get keys(): SSHKey[] {
     return this._keys;
+  }
+
+  set keys(keys: SSHKey[]) {
+    this._keys = _.sortBy(keys, k => k.name.toLowerCase());
   }
 
   ngOnInit(): void {

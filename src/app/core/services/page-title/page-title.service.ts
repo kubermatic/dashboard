@@ -11,13 +11,14 @@
 
 import {Injectable} from '@angular/core';
 import {Title} from '@angular/platform-browser';
-import {Subject, of, Observable} from 'rxjs';
-
-import {ProjectService, ClusterService, ApiService} from '../../services';
-import {ParamsService, PathParam} from '../../services/params/params.service';
-import {Cluster} from '../../../shared/entity/cluster';
-import {View, getViewDisplayName, ViewDisplayName} from '../../../shared/entity/common';
-import {MachineDeployment} from '../../../shared/entity/machine-deployment';
+import {ApiService} from '@core/services/api/api.service';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {ParamsService, PathParam} from '@core/services/params/params.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {Cluster} from '@shared/entity/cluster';
+import {getViewDisplayName, View, ViewDisplayName} from '@shared/entity/common';
+import {MachineDeployment} from '@shared/entity/machine-deployment';
+import {Observable, of, Subject} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
 
 @Injectable()

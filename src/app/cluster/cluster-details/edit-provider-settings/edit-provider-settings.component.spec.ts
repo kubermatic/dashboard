@@ -13,13 +13,11 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-
-import {ClusterService} from '@core/services';
-import {SharedModule} from '@shared/shared.module';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
 import {RouterStub} from '@app/testing/router-stubs';
 import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
-
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {SharedModule} from '@shared/shared.module';
 import {AlibabaProviderSettingsComponent} from './alibaba-provider-settings/alibaba-provider-settings.component';
 import {AWSProviderSettingsComponent} from './aws-provider-settings/aws-provider-settings.component';
 import {AzureProviderSettingsComponent} from './azure-provider-settings/azure-provider-settings.component';

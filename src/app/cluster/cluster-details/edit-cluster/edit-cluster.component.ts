@@ -12,19 +12,18 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
+import {ApiService} from '@core/services/api/api.service';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {Cluster, ClusterPatch, ProviderSettingsPatch} from '@shared/entity/cluster';
+import {ResourceType} from '@shared/entity/common';
+import {Datacenter} from '@shared/entity/datacenter';
+import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
+import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-
-import {ApiService, ClusterService, DatacenterService, NotificationService} from '../../../core/services';
-import {Cluster, ClusterPatch, ProviderSettingsPatch} from '../../../shared/entity/cluster';
-import {Datacenter} from '../../../shared/entity/datacenter';
-import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
-import {ResourceType} from '../../../shared/entity/common';
-import {
-  AdmissionPlugin,
-  AdmissionPluginUtils,
-} from '../../../shared/utils/admission-plugin-utils/admission-plugin-utils';
 
 @Component({
   selector: 'km-edit-cluster',

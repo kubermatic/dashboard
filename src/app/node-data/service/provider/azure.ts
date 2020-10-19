@@ -9,15 +9,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {NodeDataMode} from '@app/node-data/config';
+import {NodeDataService} from '@app/node-data/service/service';
+import {ApiService} from '@core/services/api/api.service';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {Cluster} from '@shared/entity/cluster';
+import {AzureSizes, AzureZones} from '@shared/entity/provider/azure';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {ClusterService} from '@shared/services/cluster.service';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, first, switchMap, tap} from 'rxjs/operators';
-import {ApiService, DatacenterService, PresetsService, ProjectService} from '../../../core/services';
-import {Cluster} from '../../../shared/entity/cluster';
-import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../shared/services/cluster.service';
-import {NodeDataMode} from '../../config';
-import {NodeDataService} from '../service';
-import {AzureSizes, AzureZones} from '../../../shared/entity/provider/azure';
 
 export class NodeDataAzureProvider {
   constructor(

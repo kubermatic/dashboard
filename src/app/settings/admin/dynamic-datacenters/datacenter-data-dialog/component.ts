@@ -9,20 +9,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatChipInputEvent} from '@angular/material/chips';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {Datacenter} from '@shared/entity/datacenter';
+import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
+import * as countryCodeLookup from 'country-code-lookup';
 import {dump, load} from 'js-yaml';
 import * as _ from 'lodash';
-import * as countryCodeLookup from 'country-code-lookup';
-
-import {Datacenter} from '../../../../shared/entity/datacenter';
-import {NodeProvider, NodeProviderConstants} from '../../../../shared/model/NodeProviderConstants';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {MatChipInputEvent} from '@angular/material/chips';
-import {takeUntil} from 'rxjs/operators';
-import {DatacenterService} from '../../../../core/services';
 import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 export interface DatacenterDataDialogConfig {
   title: string;

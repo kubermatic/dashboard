@@ -12,11 +12,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-
-import {ApiService, NotificationService} from '../../../core/services';
-import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {SSHKey} from '../../entity/ssh-key';
-import {SSHKeyFormValidator} from '../../validators/ssh-key-form.validator';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {ApiService} from '@core/services/api/api.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {SSHKey} from '@shared/entity/ssh-key';
+import {SSHKeyFormValidator} from '@shared/validators/ssh-key-form.validator';
 
 @Component({
   selector: 'km-add-ssh-key-dialog',

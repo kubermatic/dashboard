@@ -11,14 +11,14 @@
 
 import {DOCUMENT} from '@angular/common';
 import {Component, ElementRef, HostListener, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {Auth} from '@core/services/auth/auth.service';
+import {SettingsService} from '@core/services/settings/settings.service';
+import {UserService} from '@core/services/user/user.service';
+import {slideOut} from '@shared/animations/slide';
+import {Member} from '@shared/entity/member';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-
-import {slideOut} from '../../../shared/animations/slide';
-import {Auth, UserService} from '../../services';
-import {Router} from '@angular/router';
-import {SettingsService} from '../../services/settings/settings.service';
-import {Member} from '../../../shared/entity/member';
 
 @Component({
   selector: 'km-user-panel',

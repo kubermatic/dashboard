@@ -11,20 +11,18 @@
 
 import {DOCUMENT} from '@angular/common';
 import {Inject, Injectable} from '@angular/core';
+import {ThemeInformerService} from '@core/services/theme-informer/theme-informer.service';
+import {UserService} from '@core/services/user/user.service';
+import {UserSettings} from '@shared/entity/settings';
 import {filter} from 'rxjs/operators';
-import {UserService} from '../../../../core/services';
-import {ThemeInformerService} from '../../../../core/services/theme-informer/theme-informer.service';
-import {UserSettings} from '../../../../shared/entity/settings';
 import {ColorSchemeService} from './color-scheme';
 import {ThemeService} from './theme';
 
 @Injectable()
 export class ThemeManagerService {
-  private readonly _themeClassName = themeName => `km-style-${themeName}`;
-  private readonly _themesPath = themeName => `assets/themes/${themeName}.css`;
+  readonly systemDefaultOption = 'systemDefault';
   private readonly _defaultTheme = 'light';
   private _selectedTheme = this._defaultTheme;
-  readonly systemDefaultOption = 'systemDefault';
 
   constructor(
     @Inject(DOCUMENT) private readonly _document: Document,
@@ -34,15 +32,15 @@ export class ThemeManagerService {
     private readonly _themeInformerService: ThemeInformerService
   ) {}
 
+  get isSystemDefaultThemeDark(): boolean {
+    return this._colorSchemeService.hasPreferredTheme() && this._colorSchemeService.getPreferredTheme().isDark;
+  }
+
   // Force the initial theme load during application start.
   init(): void {
     this._userService.currentUserSettings
       .pipe(filter(settings => this.getDefaultTheme(settings) !== this._selectedTheme))
       .subscribe(settings => this.setTheme(this.getDefaultTheme(settings)));
-  }
-
-  get isSystemDefaultThemeDark(): boolean {
-    return this._colorSchemeService.hasPreferredTheme() && this._colorSchemeService.getPreferredTheme().isDark;
   }
 
   setTheme(themeName: string) {
@@ -52,15 +50,6 @@ export class ThemeManagerService {
     this._selectedTheme = themeName;
 
     this._themeInformerService.isCurrentThemeDark$.next(this._isThemeDark(themeName));
-  }
-
-  private _isThemeDark(name: string): boolean {
-    if (name === this.systemDefaultOption) {
-      return this.isSystemDefaultThemeDark;
-    }
-
-    const selectedThemeObject = this._themeService.themes.find(theme => theme.name === name);
-    return selectedThemeObject ? selectedThemeObject.isDark : false;
   }
 
   /**
@@ -84,6 +73,19 @@ export class ThemeManagerService {
     }
 
     return this._defaultTheme;
+  }
+
+  private readonly _themeClassName = themeName => `km-style-${themeName}`;
+
+  private readonly _themesPath = themeName => `assets/themes/${themeName}.css`;
+
+  private _isThemeDark(name: string): boolean {
+    if (name === this.systemDefaultOption) {
+      return this.isSystemDefaultThemeDark;
+    }
+
+    const selectedThemeObject = this._themeService.themes.find(theme => theme.name === name);
+    return selectedThemeObject ? selectedThemeObject.isDark : false;
   }
 
   private _getLinkElementForTheme(styleName: string): Element {

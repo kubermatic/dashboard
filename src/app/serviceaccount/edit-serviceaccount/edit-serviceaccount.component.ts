@@ -12,12 +12,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
+import {ApiService} from '@core/services/api/api.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {Project} from '@shared/entity/project';
+import {ServiceAccount} from '@shared/entity/service-account';
 import {first} from 'rxjs/operators';
-
-import {NotificationService} from '../../core/services';
-import {ApiService} from '../../core/services';
-import {Project} from '../../shared/entity/project';
-import {ServiceAccount} from '../../shared/entity/service-account';
 
 @Component({
   selector: 'km-edit-serviceaccount',

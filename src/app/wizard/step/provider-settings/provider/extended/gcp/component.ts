@@ -20,16 +20,15 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {GCPNetwork, GCPSubnetwork} from '@shared/entity/provider/gcp';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {ClusterService} from '@shared/services/cluster.service';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {EMPTY, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
-
-import {PresetsService} from '../../../../../../core/services';
-import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
-import {GCPNetwork, GCPSubnetwork} from '../../../../../../shared/entity/provider/gcp';
-import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../../../../shared/services/cluster.service';
-import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 
 enum Controls {
   Network = 'network',
@@ -66,15 +65,12 @@ enum SubNetworkState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GCPProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private _onNetworkChange = new EventEmitter<void>();
-
   readonly Controls = Controls;
-
   networks: GCPNetwork[] = [];
   networkLabel = NetworkState.Empty;
   subNetworks: GCPSubnetwork[] = [];
   subNetworkLabel = SubNetworkState.Empty;
-
+  private _onNetworkChange = new EventEmitter<void>();
   @ViewChild('networkCombobox')
   private readonly _networkCombobox: FilteredComboboxComponent;
   @ViewChild('subNetworkCombobox')

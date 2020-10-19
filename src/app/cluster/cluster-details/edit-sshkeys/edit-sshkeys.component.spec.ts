@@ -9,17 +9,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {AppConfigService} from '../../../config.service';
-import {ClusterService, NotificationService, UserService} from '../../../core/services';
-import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {SharedModule} from '../../../shared/shared.module';
-import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
-import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
-import {UserMockService} from '../../../testing/services/user-mock.service';
+import {AppConfigService} from '@app/config.service';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
+import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
+import {UserMockService} from '@app/testing/services/user-mock.service';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {UserService} from '@core/services/user/user.service';
+import {SharedModule} from '@shared/shared.module';
 import {EditSSHKeysComponent} from './edit-sshkeys.component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
@@ -28,27 +30,34 @@ describe('EditSSHKeysComponent', () => {
   let fixture: ComponentFixture<EditSSHKeysComponent>;
   let component: EditSSHKeysComponent;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [...modules],
-      declarations: [EditSSHKeysComponent],
-      providers: [
-        {provide: ClusterService, useClass: ClusterMockService},
-        {provide: UserService, useClass: UserMockService},
-        {provide: AppConfigService, useClass: AppConfigMockService},
-        MatDialog,
-        GoogleAnalyticsService,
-        NotificationService,
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        declarations: [EditSSHKeysComponent],
+        providers: [
+          {provide: ClusterService, useClass: ClusterMockService},
+          {provide: UserService, useClass: UserMockService},
+          {provide: AppConfigService, useClass: AppConfigMockService},
+          MatDialog,
+          GoogleAnalyticsService,
+          NotificationService,
+        ],
+      }).compileComponents();
+    })
+  );
 
-  beforeEach(async(() => {
-    fixture = TestBed.createComponent(EditSSHKeysComponent);
-    component = fixture.componentInstance;
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      fixture = TestBed.createComponent(EditSSHKeysComponent);
+      component = fixture.componentInstance;
+    })
+  );
 
-  it('should create the edit sshkeys component', async(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the edit sshkeys component',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 });

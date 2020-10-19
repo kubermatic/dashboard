@@ -10,9 +10,9 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
+import {Datacenter} from '@shared/entity/datacenter';
 import {find} from 'lodash';
 import {Observable, of} from 'rxjs';
-import {Datacenter} from '../../shared/entity/datacenter';
 import {fakeNodeDatacenters} from '../fake-data/datacenter.fake';
 
 @Injectable()

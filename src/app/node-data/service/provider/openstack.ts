@@ -9,13 +9,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {ApiService} from '@core/services/api/api.service';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {OpenstackAvailabilityZone, OpenstackFlavor} from '@shared/entity/provider/openstack';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {ClusterService} from '@shared/services/cluster.service';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, first, switchMap, tap} from 'rxjs/operators';
-
-import {ApiService, DatacenterService, PresetsService, ProjectService} from '../../../core/services';
-import {OpenstackAvailabilityZone, OpenstackFlavor} from '../../../shared/entity/provider/openstack';
-import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../shared/services/cluster.service';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
 

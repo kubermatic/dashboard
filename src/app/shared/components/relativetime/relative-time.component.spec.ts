@@ -9,14 +9,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {SharedModule} from '@shared/shared.module';
-
 import {RelativeTimeComponent} from './relative-time.component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
@@ -40,7 +38,10 @@ describe('RelativeTimeComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should initialize', async(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should initialize',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 });
