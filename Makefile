@@ -12,7 +12,7 @@ REPO_OLD=quay.io/kubermatic/ui-v2
 all: install run
 
 install:
-	@$(CC) ci
+	@$(CC) ci --unsafe-perm
 
 check: install
 	@$(CC) run check
