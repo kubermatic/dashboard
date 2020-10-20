@@ -183,4 +183,19 @@
     border-color: map-get($colors, primary);
     color: map-get($colors, text);
   }
+
+  .km-search-input {
+    &.mat-form-field {
+      &.mat-form-field-appearance-outline {
+        &.mat-form-field-should-float {
+          .mat-form-field-outline-start,
+          .mat-form-field-outline-gap,
+          .mat-form-field-outline-end {
+            border-width: 2px;
+            color: map-get($colors, primary);
+          }
+        }
+      }
+    }
+  }
 }
