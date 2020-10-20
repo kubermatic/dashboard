@@ -85,8 +85,7 @@ limitations under the License.
           </mat-form-field>
         </div>
 
-        <div fxLayout="column"
-             fxLayoutGap="16px">
+        <div fxLayout="column">
           <mat-form-field *ngIf="isOpenshiftSelected()">
             <mat-label>Image Pull Secret</mat-label>
             <textarea matInput
@@ -138,10 +137,8 @@ limitations under the License.
           </div>
 
           <div fxLayout="column"
-               fxLayoutGap="16px"
                fxFlex="100">
-            <div fxLayout="row"
-                 fxLayoutGap="16px">
+            <div fxLayout="row">
               <mat-checkbox [formControlName]="Controls.AuditLogging">
                 Audit Logging
                 <i *ngIf="isEnforced(Controls.AuditLogging)"
