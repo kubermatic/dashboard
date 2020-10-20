@@ -300,6 +300,10 @@
       border: 1px solid map-get($colors, divider);
       color: map-get($colors, text);
 
+      &::after {
+        background: transparent;
+      }
+
       div:not(.mat-chip-ripple) {
         background: map-get($colors, divider);
       }
