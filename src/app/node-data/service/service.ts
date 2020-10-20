@@ -69,7 +69,7 @@ export class NodeDataService {
   set operatingSystemSpec(spec: OperatingSystemSpec) {
     delete this._nodeData.spec.operatingSystem;
     this._nodeData.spec.operatingSystem = spec;
-    this.operatingSystemChanges.next(OperatingSystemSpec.getOperatingSystem(spec));
+    this._operatingSystemChanges.next(OperatingSystemSpec.getOperatingSystem(spec));
   }
 
   get operatingSystemSpec(): OperatingSystemSpec {

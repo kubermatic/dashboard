@@ -11,48 +11,18 @@
 
 import {EventEmitter, Injectable} from '@angular/core';
 import {MatStepper} from '@angular/material/stepper';
-import {NodeDataService} from '../../node-data/service/service';
-import {NodeProvider, OperatingSystem} from '../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../shared/services/cluster.service';
+import {NodeDataService} from '@app/node-data/service/service';
+import {NodeProvider, OperatingSystem} from '@shared/model/NodeProviderConstants';
+import {ClusterService} from '@shared/services/cluster.service';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {StepRegistry, WizardStep} from '../config';
 
 @Injectable()
 export class WizardService {
   readonly stepsChanges = new EventEmitter<StepRegistry>();
 
-  private _stepper: MatStepper;
-  private _steps: WizardStep[];
-
-  constructor(private readonly _clusterService: ClusterService, private readonly _nodeDataService: NodeDataService) {
-    this._nodeDataService.operatingSystemChanges.subscribe(os => this._stepHandler.handleOSChange(os));
-  }
-
-  set provider(provider: NodeProvider) {
-    this._stepHandler.handleProviderChange(provider);
-    this._clusterService.provider = provider;
-  }
-
-  set stepper(stepper: MatStepper) {
-    this._stepper = stepper;
-  }
-
-  get stepper(): MatStepper {
-    return this._stepper;
-  }
-
-  get steps(): WizardStep[] {
-    return this._steps;
-  }
-
-  set steps(steps: WizardStep[]) {
-    this._steps = steps;
-  }
-
-  reset(): void {
-    this._clusterService.reset();
-    this._nodeDataService.reset();
-  }
-
+  private _unsubscribe = new Subject<void>();
   private _stepHandler = new (class {
     constructor(private _parent: WizardService) {}
 
@@ -108,4 +78,52 @@ export class WizardService {
       });
     }
   })(this);
+
+  constructor(private readonly _clusterService: ClusterService, private readonly _nodeDataService: NodeDataService) {
+    this._nodeDataService.operatingSystemChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(os => this._stepHandler.handleOSChange(os));
+  }
+
+  private _stepper: MatStepper;
+
+  get stepper(): MatStepper {
+    return this._stepper;
+  }
+
+  set stepper(stepper: MatStepper) {
+    this._stepper = stepper;
+  }
+
+  private _steps: WizardStep[];
+
+  get steps(): WizardStep[] {
+    return this._steps;
+  }
+
+  set steps(steps: WizardStep[]) {
+    this._steps = steps;
+  }
+
+  set provider(provider: NodeProvider) {
+    this._stepHandler.handleProviderChange(provider);
+    this._clusterService.provider = provider;
+  }
+
+  reset(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+
+    this._clusterService.reset();
+    this._nodeDataService.reset();
+
+    this._unsubscribe = new Subject<void>();
+    this._monitorOSChange();
+  }
+
+  private _monitorOSChange(): void {
+    this._nodeDataService.operatingSystemChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(os => this._stepHandler.handleOSChange(os));
+  }
 }

@@ -80,7 +80,7 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
     }
 
     this.machineNetworks$.emit(machineNetworks);
-    this.valid$.emit(this._formArray.controls.every(c => c.valid));
+    this.valid$.emit(this._formArray.controls.length > 0 && this._formArray.controls.every(c => c.valid));
   }
 
   private _createNetwork(): FormGroup {
