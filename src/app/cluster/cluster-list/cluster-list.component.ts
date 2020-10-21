@@ -49,7 +49,7 @@ import {ExternalClusterDataDialogComponent} from '../../shared/components/extern
 })
 export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   clusters: Cluster[] = [];
-  isInitialized = true;
+  isInitialized = false;
   nodeDC: Datacenter[] = [];
   health: Health[] = [];
   machineDeployments: MachineDeployment[][] = [];
@@ -120,7 +120,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
         switchMap((clusters: Cluster[]) => {
           this.clusters = clusters;
           this.dataSource.data = this.clusters;
-          this.isInitialized = false;
+          this.isInitialized = true;
 
           return forkJoin(
             clusters
@@ -285,5 +285,9 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
 
   trackByClusterID(cluster: Cluster): string {
     return cluster.id;
+  }
+
+  isEmpty(arr: any): boolean {
+    return _.isEmpty(arr);
   }
 }

@@ -193,13 +193,18 @@ limitations under the License.
           (click)="navigateToCluster(row)"></tr>
     </table>
 
-    <ng-container *ngIf="!clusters || clusters.length === 0">
-      <div class="km-row km-empty-list-msg"
-           *ngIf="!isInitialized">
-        No clusters available.
+    <ng-container [ngSwitch]="isInitialized">
+      <div *ngSwitchCase="true"
+           class="km-row km-empty-list-msg">
+        <ng-container *ngIf="isEmpty(clusters)">
+          No clusters available.
+        </ng-container>
+        <ng-container *ngIf="!isEmpty(clusters) && isEmpty(dataSource.filteredData)">
+          No clusters found.
+        </ng-container>
       </div>
-      <div class="km-row"
-           *ngIf="isInitialized">
+      <div *ngSwitchCase="false"
+           class="km-row">
         <mat-spinner color="accent"
                      class="km-spinner km-with-spacing"
                      [diameter]="25"></mat-spinner>
