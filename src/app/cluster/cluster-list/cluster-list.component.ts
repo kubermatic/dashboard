@@ -178,16 +178,18 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     // Check labels.
-    let hasMatchingLabel = false;
-    Object.keys(cluster.labels).forEach(key => {
-      const value = cluster.labels[key];
-      if (key.toLowerCase().includes(query) || value.toLowerCase().includes(query)) {
-        hasMatchingLabel = true;
-        return;
+    if (cluster.labels) {
+      let hasMatchingLabel = false;
+      Object.keys(cluster.labels).forEach(key => {
+        const value = cluster.labels[key];
+        if (key.toLowerCase().includes(query) || value.toLowerCase().includes(query)) {
+          hasMatchingLabel = true;
+          return;
+        }
+      });
+      if (hasMatchingLabel) {
+        return true;
       }
-    });
-    if (hasMatchingLabel) {
-      return true;
     }
 
     // Following checks are only for internal clusters.
