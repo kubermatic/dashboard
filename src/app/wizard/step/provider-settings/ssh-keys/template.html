@@ -26,7 +26,8 @@ limitations under the License.
     </mat-select>
   </mat-form-field>
   <p *ngIf="!hasKeys()">You have no SSH keys</p>
-  <div>
+  <div class="km-full-width">
+    <div fxFlex></div>
     <button (click)="addSSHKeyDialog()"
             mat-flat-button
             [disabled]="!canAdd()">Add SSH key
