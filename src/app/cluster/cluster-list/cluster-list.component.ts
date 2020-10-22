@@ -49,7 +49,7 @@ import {ExternalClusterDataDialogComponent} from '../../shared/components/extern
 })
 export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   clusters: Cluster[] = [];
-  isInitialized = true;
+  isInitialized = false;
   nodeDC: Datacenter[] = [];
   health: Health[] = [];
   machineDeployments: MachineDeployment[][] = [];
@@ -120,7 +120,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
         switchMap((clusters: Cluster[]) => {
           this.clusters = clusters;
           this.dataSource.data = this.clusters;
-          this.isInitialized = false;
+          this.isInitialized = true;
 
           return forkJoin(
             clusters
@@ -178,16 +178,18 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     // Check labels.
-    let hasMatchingLabel = false;
-    Object.keys(cluster.labels).forEach(key => {
-      const value = cluster.labels[key];
-      if (key.toLowerCase().includes(query) || value.toLowerCase().includes(query)) {
-        hasMatchingLabel = true;
-        return;
+    if (cluster.labels) {
+      let hasMatchingLabel = false;
+      Object.keys(cluster.labels).forEach(key => {
+        const value = cluster.labels[key];
+        if (key.toLowerCase().includes(query) || value.toLowerCase().includes(query)) {
+          hasMatchingLabel = true;
+          return;
+        }
+      });
+      if (hasMatchingLabel) {
+        return true;
       }
-    });
-    if (hasMatchingLabel) {
-      return true;
     }
 
     // Following checks are only for internal clusters.
@@ -283,5 +285,9 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
 
   trackByClusterID(cluster: Cluster): string {
     return cluster.id;
+  }
+
+  isEmpty(arr: any): boolean {
+    return _.isEmpty(arr);
   }
 }
