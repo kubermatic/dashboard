@@ -193,23 +193,22 @@ limitations under the License.
           (click)="navigateToCluster(row)"></tr>
     </table>
 
-    <ng-container [ngSwitch]="isInitialized">
-      <div *ngSwitchCase="true"
-           class="km-row km-empty-list-msg">
-        <ng-container *ngIf="isEmpty(clusters)">
-          No clusters available.
-        </ng-container>
-        <ng-container *ngIf="!isEmpty(clusters) && isEmpty(dataSource.filteredData)">
-          No clusters found.
-        </ng-container>
-      </div>
-      <div *ngSwitchCase="false"
-           class="km-row">
-        <mat-spinner color="accent"
-                     class="km-spinner km-with-spacing"
-                     [diameter]="25"></mat-spinner>
-      </div>
-    </ng-container>
+    <div class="km-row km-empty-list-msg"
+         *ngIf="isInitialized && isEmpty(clusters)">
+      No clusters available.
+    </div>
+
+    <div class="km-row km-empty-list-msg"
+         *ngIf="isInitialized && !isEmpty(clusters) && isEmpty(dataSource.filteredData)">
+      No clusters found.
+    </div>
+
+    <div class="km-row"
+         *ngIf="!isInitialized">
+      <mat-spinner color="accent"
+                   class="km-spinner km-with-spacing"
+                   [diameter]="25"></mat-spinner>
+    </div>
 
     <div [hidden]="!isPaginatorVisible()">
       <mat-paginator showFirstLastButtons></mat-paginator>
