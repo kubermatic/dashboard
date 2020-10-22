@@ -72,7 +72,7 @@ limitations under the License.
             <span>{{getOperatingSystem()}}</span>
             <i *ngIf="nodeData.spec.operatingSystem.containerLinux"
                class="km-icon-error with-margin"
-               matTooltip="Container Linux is going end-of-life on May 26, 2020."></i>
+               matTooltip="Container Linux has reached its end of life and is no longer maintained or updated."></i>
           </div>
         </km-property>
         <div [ngSwitch]="displayTags(cluster.labels)">
