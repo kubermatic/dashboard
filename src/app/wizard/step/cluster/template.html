@@ -97,10 +97,9 @@ limitations under the License.
             <mat-error *ngIf="form.get(Controls.ImagePullSecret).hasError('required')">
               Image Pull Secret is <strong>required</strong>.
             </mat-error>
-            <mat-hint>This is a JSON document containing your Docker registry credentials, see&nbsp;<a target="_blank"
+            <mat-hint>Use JSON containing your Docker registry credentials, see&nbsp;<a target="_blank"
                  rel="noopener"
-                 href="https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/">here</a>&nbsp;for
-              more information
+                 href="https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/">more information</a>.
             </mat-hint>
           </mat-form-field>
 
