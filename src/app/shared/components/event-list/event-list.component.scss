@@ -38,6 +38,21 @@ mat-card-header {
   }
 }
 
+.mat-card {
+  &:not(.km-toggled-events) {
+    .mat-card-header {
+      .mat-card-title {
+        margin: 0;
+        padding: 8px 0;
+      }
+
+      .km-events-title {
+        padding: 8px 0;
+      }
+    }
+  }
+}
+
 .km-events-title {
   font-size: $font-size-subhead;
   line-height: 20px;

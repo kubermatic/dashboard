@@ -85,8 +85,7 @@ limitations under the License.
           </mat-form-field>
         </div>
 
-        <div fxLayout="column"
-             fxLayoutGap="16px">
+        <div fxLayout="column">
           <mat-form-field *ngIf="isOpenshiftSelected()">
             <mat-label>Image Pull Secret</mat-label>
             <textarea matInput
@@ -98,10 +97,9 @@ limitations under the License.
             <mat-error *ngIf="form.get(Controls.ImagePullSecret).hasError('required')">
               Image Pull Secret is <strong>required</strong>.
             </mat-error>
-            <mat-hint>This is a JSON document containing your Docker registry credentials, see&nbsp;<a target="_blank"
+            <mat-hint>Use JSON containing your Docker registry credentials, see&nbsp;<a target="_blank"
                  rel="noopener"
-                 href="https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/">here</a>&nbsp;for
-              more information
+                 href="https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/">more information</a>.
             </mat-hint>
           </mat-form-field>
 
@@ -138,10 +136,8 @@ limitations under the License.
           </div>
 
           <div fxLayout="column"
-               fxLayoutGap="16px"
                fxFlex="100">
-            <div fxLayout="row"
-                 fxLayoutGap="16px">
+            <div fxLayout="row">
               <mat-checkbox [formControlName]="Controls.AuditLogging">
                 Audit Logging
                 <i *ngIf="isEnforced(Controls.AuditLogging)"

@@ -41,6 +41,8 @@ export class EditorComponent implements OnInit {
    */
   options: any = {
     contextmenu: false,
+    fontFamily: 'Inconsolata, monospace',
+    fontSize: 14,
     lineNumbersMinChars: 4,
     minimap: {enabled: false},
     scrollbar: {vertical: 'hidden'},

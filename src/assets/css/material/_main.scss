@@ -474,6 +474,7 @@ button {
 .mat-chip {
   &.mat-standard-chip {
     border-radius: $border-radius;
+    box-shadow: none !important;
     font-size: $font-size-body;
     font-weight: normal;
     height: 100%;
@@ -482,6 +483,10 @@ button {
     min-height: 22px;
     overflow: hidden;
     padding: 3px 0;
+
+    div.mat-chip-ripple {
+      display: none;
+    }
 
     div:not(.mat-chip-ripple) {
       align-items: center;

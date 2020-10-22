@@ -33,11 +33,6 @@ $content-top-margin: 7px;
       left: $numbers-column-width + $content-left-margin !important;
       top: $content-top-margin;
 
-      .view-line {
-        font-family: $font-tertiary;
-        font-size: $font-size-body;
-      }
-
       .decorationsOverviewRuler {
         visibility: hidden;
       }
