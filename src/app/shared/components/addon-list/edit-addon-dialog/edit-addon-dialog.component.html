@@ -22,7 +22,7 @@ limitations under the License.
     {{addonConfig.spec.description}}
   </div>
   <form [formGroup]="form">
-    <div *ngFor="let control of addonConfig.spec.formSpec">
+    <div *ngFor="let control of addonConfig?.spec?.formSpec">
       <mat-form-field *ngIf="['text', 'number'].includes(control.type)">
         <mat-label>{{control.displayName}}{{control.required ? '*' : ''}}</mat-label>
         <input matInput

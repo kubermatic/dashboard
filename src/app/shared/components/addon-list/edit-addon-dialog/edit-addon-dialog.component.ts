@@ -10,12 +10,19 @@
 // limitations under the License.
 
 import {Component, Input, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
-import {AddonConfig, Addon, getAddonLogoData, hasAddonLogoData} from '../../../entity/addon';
-import {InstallAddonDialogComponent} from '../install-addon-dialog/install-addon-dialog.component';
+import {
+  AddonConfig,
+  Addon,
+  getAddonLogoData,
+  getAddonVariable,
+  hasAddonLogoData,
+  hasAddonFormData,
+  AddonFormSpec,
+} from '../../../entity/addon';
 
 export enum Controls {
   ContinuouslyReconcile = 'continuouslyReconcile',
@@ -34,6 +41,15 @@ export class EditAddonDialogComponent implements OnInit {
   form: FormGroup;
   formBasic: FormGroup;
 
+  static getFormState(addon: Addon, control: AddonFormSpec): string | number {
+    const value = getAddonVariable(addon, control.internalName);
+    return value === undefined ? (control.type === 'number' ? 0 : '') : value;
+  }
+
+  static getControlValidators(control: AddonFormSpec): ValidatorFn[] {
+    return control.required ? [Validators.required] : [];
+  }
+
   constructor(
     public dialogRef: MatDialogRef<EditAddonDialogComponent>,
     private readonly _domSanitizer: DomSanitizer,
@@ -42,11 +58,11 @@ export class EditAddonDialogComponent implements OnInit {
 
   ngOnInit(): void {
     const group = {};
-    if (this.addonConfig.spec.formSpec) {
+    if (this.hasForm()) {
       this.addonConfig.spec.formSpec.forEach(control => {
         group[control.internalName] = new FormControl(
-          this.addon.spec.variables[control.internalName],
-          InstallAddonDialogComponent.getControlValidators(control)
+          EditAddonDialogComponent.getFormState(this.addon, control),
+          EditAddonDialogComponent.getControlValidators(control)
         );
       });
     }
@@ -56,6 +72,10 @@ export class EditAddonDialogComponent implements OnInit {
     this.formBasic = this._builder.group({
       [Controls.ContinuouslyReconcile]: this._builder.control(this.addon.spec.continuouslyReconcile),
     });
+  }
+
+  hasForm(): boolean {
+    return hasAddonFormData(this.addonConfig);
   }
 
   hasLogo(): boolean {

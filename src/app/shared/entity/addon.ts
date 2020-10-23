@@ -46,6 +46,14 @@ export class AddonFormSpec {
   type: string;
 }
 
+export function getAddonVariable(addon: Addon, internalName: string): any {
+  if (!!addon && !!addon.spec && !!addon.spec.variables) {
+    return undefined;
+  }
+
+  return addon.spec.variables[internalName];
+}
+
 export function hasAddonFormData(addonConfig: AddonConfig) {
   return !!addonConfig && !!addonConfig.spec && !!addonConfig.spec.formSpec;
 }
