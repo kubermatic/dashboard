@@ -41,9 +41,8 @@ export class EditAddonDialogComponent implements OnInit {
   form: FormGroup;
   formBasic: FormGroup;
 
-  static getFormState(addon: Addon, control: AddonFormSpec): string | number {
-    const value = getAddonVariable(addon, control.internalName);
-    return value === undefined ? (control.type === 'number' ? 0 : '') : value;
+  static getFormState(addon: Addon, control: AddonFormSpec): any {
+    return getAddonVariable(addon, control.internalName);
   }
 
   static getControlValidators(control: AddonFormSpec): ValidatorFn[] {
