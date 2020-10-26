@@ -44,10 +44,6 @@ export class InstallAddonDialogComponent implements OnInit {
     return control.required ? [Validators.required] : [];
   }
 
-  static getFormState(control: AddonFormSpec): string | number {
-    return control.type === 'number' ? 0 : '';
-  }
-
   constructor(
     public dialogRef: MatDialogRef<InstallAddonDialogComponent>,
     private readonly _domSanitizer: DomSanitizer,
@@ -59,7 +55,7 @@ export class InstallAddonDialogComponent implements OnInit {
     if (this.hasForm()) {
       this.addonConfig.spec.formSpec.forEach(control => {
         group[control.internalName] = new FormControl(
-          InstallAddonDialogComponent.getFormState(control),
+          undefined,
           InstallAddonDialogComponent.getControlValidators(control)
         );
       });
