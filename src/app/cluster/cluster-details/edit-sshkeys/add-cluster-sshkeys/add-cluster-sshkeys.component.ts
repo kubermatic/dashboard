@@ -12,18 +12,20 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {ApiService} from '@core/services/api/api.service';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {UserService} from '@core/services/user/user.service';
+import {AddSshKeyDialogComponent} from '@shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
+import {Cluster} from '@shared/entity/cluster';
+import {View} from '@shared/entity/common';
+import {Member} from '@shared/entity/member';
+import {SSHKey} from '@shared/entity/ssh-key';
+import {GroupConfig} from '@shared/model/Config';
+import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
+import * as _ from 'lodash';
 import {Subscription} from 'rxjs';
 import {first} from 'rxjs/operators';
-
-import {ApiService, ClusterService, NotificationService, UserService} from '../../../../core/services';
-import {AddSshKeyDialogComponent} from '../../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
-import {Cluster} from '../../../../shared/entity/cluster';
-import {View} from '../../../../shared/entity/common';
-import {Member} from '../../../../shared/entity/member';
-import {SSHKey} from '../../../../shared/entity/ssh-key';
-import {GroupConfig} from '../../../../shared/model/Config';
-import {MemberUtils, Permission} from '../../../../shared/utils/member-utils/member-utils';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'km-add-cluster-sshkeys',

@@ -14,7 +14,7 @@ import {
   OpenstackSecurityGroup,
   OpenstackSubnet,
   OpenstackTenant,
-} from '../../shared/entity/provider/openstack';
+} from '@shared/entity/provider/openstack';
 
 export function openstackTenantsFake(): OpenstackTenant[] {
   return [

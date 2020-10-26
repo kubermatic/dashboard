@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {Component, Input} from '@angular/core';
-import {EndOfLifeService} from '../../services/eol.service';
+import {EndOfLifeService} from '@shared/services/eol.service';
 
 export enum Type {
   Badge = 'badge',

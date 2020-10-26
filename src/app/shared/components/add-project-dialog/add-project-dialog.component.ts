@@ -12,11 +12,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-
-import {ApiService, NotificationService} from '../../../core/services';
-import {CreateProjectModel} from '../../model/CreateProjectModel';
-import {AsyncValidators} from '../../validators/async-label-form.validator';
-import {ResourceType} from '../../entity/common';
+import {ApiService} from '@core/services/api/api.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {ResourceType} from '@shared/entity/common';
+import {CreateProjectModel} from '@shared/model/CreateProjectModel';
+import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 
 @Component({
   selector: 'km-add-project-dialog',

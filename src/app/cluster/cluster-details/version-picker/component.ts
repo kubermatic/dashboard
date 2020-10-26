@@ -11,13 +11,12 @@
 
 import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {Cluster, MasterVersion} from '@shared/entity/cluster';
+import {EndOfLifeService} from '@shared/services/eol.service';
 import {first} from 'rxjs/operators';
-
-import {ClusterService} from '../../../core/services';
-import {Cluster, MasterVersion} from '../../../shared/entity/cluster';
-import {EndOfLifeService} from '../../../shared/services/eol.service';
+import {gt, lt} from 'semver';
 import {ChangeClusterVersionComponent} from '../change-cluster-version/change-cluster-version.component';
-import {lt, gt} from 'semver';
 
 @Component({
   selector: 'km-version-picker',
@@ -45,7 +44,7 @@ export class VersionPickerComponent implements OnInit, OnChanges {
     this.processData();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(_: SimpleChanges): void {
     this.processData();
   }
 

@@ -12,8 +12,8 @@
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
+import {Auth} from '@core/services/auth/auth.service';
 import {Observable} from 'rxjs';
-import {Auth} from '../../services';
 
 @Injectable()
 export class CheckTokenInterceptor implements HttpInterceptor {

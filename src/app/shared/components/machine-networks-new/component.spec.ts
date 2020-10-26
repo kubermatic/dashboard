@@ -10,21 +10,25 @@
 // limitations under the License.
 
 import {HttpClientModule} from '@angular/common/http';
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
-import {AppConfigService} from '../../../app-config.service';
-import {ApiService, DatacenterService, ParamsService, PresetsService, ProjectService} from '../../../core/services';
-import {NODE_DATA_CONFIG, NodeDataMode} from '../../../node-data/config';
-import {NodeDataService} from '../../../node-data/service/service';
-import {ClusterService} from '../../../shared/services/cluster.service';
-import {ApiMockService} from '../../../testing/services/api-mock.service';
-import {ProjectMockService} from '../../../testing/services/project-mock.service';
-import {WizardService} from '../../../wizard/service/wizard';
-import {SharedModule} from '../../shared.module';
+import {AppConfigService} from '@app/config.service';
+import {NODE_DATA_CONFIG, NodeDataMode} from '@app/node-data/config';
+import {NodeDataService} from '@app/node-data/service/service';
+import {ApiMockService} from '@app/testing/services/api-mock.service';
+import {DatacenterMockService} from '@app/testing/services/datacenter-mock.service';
+import {ProjectMockService} from '@app/testing/services/project-mock.service';
+import {WizardService} from '@app/wizard/service/wizard';
+import {ApiService} from '@core/services/api/api.service';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {ParamsService} from '@core/services/params/params.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {ClusterService} from '@shared/services/cluster.service';
+import {SharedModule} from '@shared/shared.module';
 import {MachineNetworkComponent} from './component';
-import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 
 const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
 
@@ -32,23 +36,25 @@ describe('MachineNetworksComponent', () => {
   let component: MachineNetworkComponent;
   let fixture: ComponentFixture<MachineNetworkComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [...modules],
-      providers: [
-        AppConfigService,
-        ClusterService,
-        NodeDataService,
-        ParamsService,
-        PresetsService,
-        WizardService,
-        {provide: ProjectService, useValue: ProjectMockService},
-        {provide: ApiService, useValue: ApiMockService},
-        {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
-        {provide: DatacenterService, useClass: DatacenterMockService},
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        providers: [
+          AppConfigService,
+          ClusterService,
+          NodeDataService,
+          ParamsService,
+          PresetsService,
+          WizardService,
+          {provide: ProjectService, useValue: ProjectMockService},
+          {provide: ApiService, useValue: ApiMockService},
+          {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
+          {provide: DatacenterService, useClass: DatacenterMockService},
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MachineNetworkComponent);

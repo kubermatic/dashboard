@@ -10,10 +10,10 @@
 // limitations under the License.
 
 import {Component, Input, OnInit} from '@angular/core';
+import {Auth} from '@core/services/auth/auth.service';
+import {UserService} from '@core/services/user/user.service';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
-
-import {Auth, UserService} from '../../services';
 
 @Component({
   selector: 'km-navigation',

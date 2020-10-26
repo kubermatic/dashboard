@@ -9,14 +9,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {merge, Observable, of, onErrorResumeNext} from 'rxjs';
+import {ApiService} from '@core/services/api/api.service';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {OpenstackAvailabilityZone, OpenstackFlavor} from '@shared/entity/provider/openstack';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {ClusterService} from '@shared/services/cluster.service';
+import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, first, switchMap, tap} from 'rxjs/operators';
-
-import {ApiService, DatacenterService, PresetsService, ProjectService} from '../../../core/services';
-import {Datacenter} from '../../../shared/entity/datacenter';
-import {OpenstackAvailabilityZone, OpenstackFlavor} from '../../../shared/entity/provider/openstack';
-import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../shared/services/cluster.service';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
 
@@ -93,19 +94,6 @@ export class NodeDataOpenstackProvider {
           )
           .pipe(first());
       }
-    }
-  }
-
-  dc(): Observable<Datacenter> {
-    switch (this._nodeDataService.mode) {
-      case NodeDataMode.Wizard:
-        return merge(this._nodeDataService.operatingSystemChanges, this._clusterService.datacenterChanges)
-          .pipe(filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK))
-          .pipe(
-            switchMap(_ =>
-              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(first())
-            )
-          );
     }
   }
 

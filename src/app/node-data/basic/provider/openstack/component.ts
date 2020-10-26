@@ -20,20 +20,20 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {NodeDataService} from '@app/node-data/service/service';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {ClusterType} from '@shared/entity/cluster';
+import {DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
+import {NodeCloudSpec, NodeSpec, OpenstackNodeSpec} from '@shared/entity/node';
+import {OpenstackAvailabilityZone, OpenstackFlavor} from '@shared/entity/provider/openstack';
+import {OperatingSystem} from '@shared/model/NodeProviderConstants';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {ClusterService} from '@shared/services/cluster.service';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {merge, Observable, of} from 'rxjs';
 import {filter, first, map, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {DatacenterService} from '../../../../core/services';
-import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
-import {ClusterType} from '../../../../shared/entity/cluster';
-import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/datacenter';
-import {NodeCloudSpec, NodeSpec, OpenstackNodeSpec} from '../../../../shared/entity/node';
-import {OpenstackAvailabilityZone, OpenstackFlavor} from '../../../../shared/entity/provider/openstack';
-import {OperatingSystem} from '../../../../shared/model/NodeProviderConstants';
-import {NodeData} from '../../../../shared/model/NodeSpecChange';
-import {ClusterService} from '../../../../shared/services/cluster.service';
-import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
-import {NodeDataService} from '../../../service/service';
 
 enum Controls {
   Flavor = 'flavor',

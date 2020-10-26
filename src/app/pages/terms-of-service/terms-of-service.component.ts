@@ -11,8 +11,7 @@
 
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-
-import {Auth} from '../../core/services';
+import {Auth} from '@core/services/auth/auth.service';
 
 @Component({
   selector: 'km-terms-of-service',

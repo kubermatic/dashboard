@@ -16,71 +16,71 @@ limitations under the License.
      fxLayoutGap="20px">
   <div fxFlex="100%">
 
-    <h2 *ngIf="!!isWizard">Machine Networks</h2>
-    <form [formGroup]="machineNetworksForm"
+    <form [formGroup]="form"
           fxLayout
           class="km-machine-networks-form">
-      <div fxFlex="{{width}}%"
-           *ngFor="let tag of getMachineNetworksForm(machineNetworksForm); let i=index"
+      <div fxFlex="100%"
+           *ngFor="let network of networks; let i=index"
            formArrayName="machineNetworks"
-           class="km-machine-networks-form-inner"
-           [ngClass]="width === 100 ? '' : 'withPadding'">
+           class="km-machine-networks-form-inner">
         <div class="km-form-group-tags-inner"
              [formGroupName]="i">
           <span class="km-single-machine-network">
             <h3>#{{i+1}}</h3>
             <i class="km-icon-close"
-               style="float: right"
                aria-hidden="true"
-               (click)="deleteMachineNetwork(i)"></i>
+               (click)="delete(i)"></i>
           </span>
 
           <mat-form-field class="km-machine-networks-form-field">
-            <mat-label>CIDR Range*</mat-label>
+            <mat-label>CIDR Range</mat-label>
             <input matInput
+                   required
                    formControlName="cidr"
                    autocomplete="off">
             <mat-hint>Example: 196.44.198.32/29</mat-hint>
-            <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.cidr.hasError('required')">
+            <mat-error *ngIf="form.controls.machineNetworks.controls[i].controls.cidr.hasError('required')">
               CIDR is <strong>required</strong>.
             </mat-error>
-            <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.cidr.hasError('pattern')">
+            <mat-error *ngIf="form.controls.machineNetworks.controls[i].controls.cidr.hasError('pattern')">
               Pattern is not valid.
             </mat-error>
           </mat-form-field>
           <mat-form-field class="km-machine-networks-form-field">
-            <mat-label>DNS Servers*</mat-label>
+            <mat-label>DNS Servers</mat-label>
             <input matInput
+                   required
                    formControlName="dnsServers"
                    autocomplete="off">
             <mat-hint>DNS Servers separated with commas, example: 8.8.8.8, 8.8.8.4</mat-hint>
-            <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.dnsServers.hasError('required')">
+            <mat-error *ngIf="form.controls.machineNetworks.controls[i].controls.dnsServers.hasError('required')">
               DNS Server is <strong>required</strong>.
             </mat-error>
-            <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.dnsServers.hasError('pattern')">
+            <mat-error *ngIf="form.controls.machineNetworks.controls[i].controls.dnsServers.hasError('pattern')">
               Pattern is not valid.
             </mat-error>
           </mat-form-field>
           <mat-form-field class="km-machine-networks-form-field">
-            <mat-label>Gateway*</mat-label>
+            <mat-label>Gateway</mat-label>
             <input matInput
+                   required
                    formControlName="gateway"
                    autocomplete="off">
             <mat-hint>Example: 10.0.0.1</mat-hint>
-            <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.gateway.hasError('required')">
+            <mat-error *ngIf="form.controls.machineNetworks.controls[i].controls.gateway.hasError('required')">
               Gateway is <strong>required</strong>.
             </mat-error>
-            <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.gateway.hasError('pattern')">
+            <mat-error *ngIf="form.controls.machineNetworks.controls[i].controls.gateway.hasError('pattern')">
               Pattern is not valid.
             </mat-error>
           </mat-form-field>
         </div>
       </div>
 
-      <div fxFlex="{{width}}%"
-           [ngClass]="width === 100 ? 'km-machine-networks-form-inner' : 'km-machine-networks-form-inner withPadding'">
+      <div fxFlex="100%"
+           class="km-machine-networks-form-inner">
         <div class="km-add-machine-network km-border-dashed"
-             (click)="addMachineNetwork()"
+             (click)="add()"
              matTooltip="Add a new address range to pick worker addresses from">
           + Machine Network
         </div>

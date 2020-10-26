@@ -11,14 +11,13 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {Cluster} from '@shared/entity/cluster';
+import {PresetList} from '@shared/entity/preset';
+import {ClusterService} from '@shared/services/cluster.service';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {switchMap, takeUntil} from 'rxjs/operators';
-
-import {PresetsService} from '../../../../core/services';
-import {Cluster} from '../../../../shared/entity/cluster';
-import {PresetList} from '../../../../shared/entity/preset';
-import {ClusterService} from '../../../../shared/services/cluster.service';
-import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 
 export enum Controls {
   Preset = 'name',
@@ -55,6 +54,14 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
 
   private _state = PresetsState.Loading;
 
+  constructor(
+    private readonly _presets: PresetsService,
+    private readonly _builder: FormBuilder,
+    private readonly _clusterService: ClusterService
+  ) {
+    super('Preset');
+  }
+
   get label(): string {
     return this._state;
   }
@@ -67,14 +74,6 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
     this.form.get(Controls.Preset).setValue(preset);
     this._presets.preset = preset;
     this._clusterService.cluster = {credential: preset} as Cluster;
-  }
-
-  constructor(
-    private readonly _presets: PresetsService,
-    private readonly _builder: FormBuilder,
-    private readonly _clusterService: ClusterService
-  ) {
-    super('Preset');
   }
 
   ngOnInit(): void {

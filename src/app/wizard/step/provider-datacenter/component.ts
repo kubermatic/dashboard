@@ -19,13 +19,12 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
+import {WizardService} from '@app/wizard/service/wizard';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {Datacenter, getDatacenterProvider} from '@shared/entity/datacenter';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {ClusterService} from '@shared/services/cluster.service';
 import {filter, switchMap, takeUntil} from 'rxjs/operators';
-
-import {DatacenterService} from '../../../core/services';
-import {Datacenter, getDatacenterProvider} from '../../../shared/entity/datacenter';
-import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../shared/services/cluster.service';
-import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
 
 enum Controls {

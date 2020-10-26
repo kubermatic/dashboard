@@ -13,16 +13,15 @@ import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild} from '@angula
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {UserService} from '@core/services/user/user.service';
+import {Cluster} from '@shared/entity/cluster';
+import {NodeMetrics} from '@shared/entity/metrics';
+import {Node} from '@shared/entity/node';
+import {NodeHealthStatus} from '@shared/utils/health-status/node-health-status';
+import {NodeUtils} from '@shared/utils/node-utils/node-utils';
+import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import * as _ from 'lodash';
-
-import {UserService} from '../../../core/services';
-import {Cluster} from '../../../shared/entity/cluster';
-import {NodeMetrics} from '../../../shared/entity/metrics';
-import {Node} from '../../../shared/entity/node';
-import {NodeHealthStatus} from '../../../shared/utils/health-status/node-health-status';
-import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 
 @Component({
   selector: 'km-external-node-list',

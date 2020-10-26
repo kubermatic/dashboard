@@ -9,12 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {waitForAsync, ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import {ApiService, Auth, DatacenterService} from '../core/services';
+import {ApiService} from '@core/services/api/api.service';
+import {Auth} from '@core/services/auth/auth.service';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
 import {ActivatedRouteStub, RouterStub} from '../testing/router-stubs';
 import {ApiMockService} from '../testing/services/api-mock.service';
 import {AuthMockService} from '../testing/services/auth-mock.service';
@@ -46,7 +48,10 @@ describe('DashboardComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should create the cmp', async(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the cmp',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 });

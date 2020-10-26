@@ -11,9 +11,9 @@
 
 import {Component, Input, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {Cluster} from '../../../shared/entity/cluster';
-import {Health, HealthState} from '../../../shared/entity/health';
-import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
+import {Cluster} from '@shared/entity/cluster';
+import {Health, HealthState} from '@shared/entity/health';
+import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
 
 @Component({
   selector: 'km-cluster-secrets',

@@ -13,21 +13,22 @@ import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatStepper} from '@angular/material/stepper';
 import {Router} from '@angular/router';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {NodeDataService} from '@app/node-data/service/service';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {Cluster} from '@shared/entity/cluster';
+import {Datacenter} from '@shared/entity/datacenter';
+import {Project} from '@shared/entity/project';
+import {SSHKey} from '@shared/entity/ssh-key';
+import {CreateClusterModel} from '@shared/model/CreateClusterModel';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {ClusterService as ClusterModelService} from '@shared/services/cluster.service';
 import {forkJoin, of, Subject} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
-
-import {ClusterService, DatacenterService, NotificationService, ProjectService} from '../core/services';
-import {GoogleAnalyticsService} from '../google-analytics.service';
-import {NodeDataService} from '../node-data/service/service';
-import {Cluster} from '../shared/entity/cluster';
-import {Datacenter} from '../shared/entity/datacenter';
-import {Project} from '../shared/entity/project';
-import {SSHKey} from '../shared/entity/ssh-key';
-import {CreateClusterModel} from '../shared/model/CreateClusterModel';
-import {NodeData} from '../shared/model/NodeSpecChange';
-
 import {StepRegistry, steps, WizardStep} from './config';
-import {ClusterService as ClusterModelService} from '../shared/services/cluster.service';
 import {WizardService} from './service/wizard';
 
 @Component({

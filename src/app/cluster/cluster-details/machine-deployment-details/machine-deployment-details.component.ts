@@ -11,23 +11,26 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {NodeService} from '@app/cluster/services/node.service';
+import {AppConfigService} from '@app/config.service';
+import {ApiService} from '@core/services/api/api.service';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {PathParam} from '@core/services/params/params.service';
+import {UserService} from '@core/services/user/user.service';
+import {Cluster} from '@shared/entity/cluster';
+import {Datacenter} from '@shared/entity/datacenter';
+import {Event} from '@shared/entity/event';
+import {MachineDeployment} from '@shared/entity/machine-deployment';
+import {Member} from '@shared/entity/member';
+import {NodeMetrics} from '@shared/entity/metrics';
+import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '@shared/entity/node';
+import {GroupConfig} from '@shared/model/Config';
+import {MachineDeploymentHealthStatus} from '@shared/utils/health-status/machine-deployment-health-status';
+import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {Subject, timer} from 'rxjs';
 import {first, take, takeUntil} from 'rxjs/operators';
-
-import {AppConfigService} from '../../../app-config.service';
-import {ApiService, ClusterService, DatacenterService, NotificationService, UserService} from '../../../core/services';
-import {Cluster} from '../../../shared/entity/cluster';
-import {Datacenter} from '../../../shared/entity/datacenter';
-import {Event} from '../../../shared/entity/event';
-import {Member} from '../../../shared/entity/member';
-import {NodeMetrics} from '../../../shared/entity/metrics';
-import {MachineDeployment} from '../../../shared/entity/machine-deployment';
-import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '../../../shared/entity/node';
-import {GroupConfig} from '../../../shared/model/Config';
-import {MachineDeploymentHealthStatus} from '../../../shared/utils/health-status/machine-deployment-health-status';
-import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
-import {NodeService} from '../../services/node.service';
-import {PathParam} from '../../../core/services/params/params.service';
 
 @Component({
   selector: 'km-machine-deployment-details',
@@ -139,12 +142,6 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  private _storeNodeMetrics(metrics: NodeMetrics[]): void {
-    const map = new Map<string, NodeMetrics>();
-    metrics.forEach(m => map.set(m.name, m));
-    this.metrics = map;
-  }
-
   loadCluster(): void {
     this._clusterService
       .cluster(this.projectID, this._clusterName)
@@ -226,5 +223,11 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  private _storeNodeMetrics(metrics: NodeMetrics[]): void {
+    const map = new Map<string, NodeMetrics>();
+    metrics.forEach(m => map.set(m.name, m));
+    this.metrics = map;
   }
 }

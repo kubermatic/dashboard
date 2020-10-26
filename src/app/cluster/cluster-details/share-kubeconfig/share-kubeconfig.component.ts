@@ -10,9 +10,11 @@
 // limitations under the License.
 
 import {Component, Input, OnInit} from '@angular/core';
+import {ApiService} from '@core/services/api/api.service';
+import {Auth} from '@core/services/auth/auth.service';
+import {UserService} from '@core/services/user/user.service';
+import {Cluster} from '@shared/entity/cluster';
 import {first} from 'rxjs/operators';
-import {ApiService, Auth, UserService} from '../../../core/services';
-import {Cluster} from '../../../shared/entity/cluster';
 
 @Component({
   selector: 'km-share-kubeconfig',

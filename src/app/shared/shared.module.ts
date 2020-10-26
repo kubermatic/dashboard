@@ -153,11 +153,6 @@ const components: any[] = [
   ClusterTypeEOLComponent,
   ChipComponent,
   EditorComponent,
-  LoaderComponent,
-  SearchFieldComponent,
-];
-
-const entryComponents: any[] = [
   AddProjectDialogComponent,
   AddSshKeyDialogComponent,
   ConfirmationDialogComponent,
@@ -167,6 +162,8 @@ const entryComponents: any[] = [
   TokenDialogComponent,
   NotificationComponent,
   ExternalClusterDataDialogComponent,
+  LoaderComponent,
+  SearchFieldComponent,
 ];
 
 const services: any[] = [ClusterService, EndOfLifeService];
@@ -175,9 +172,8 @@ const directives: any[] = [AutofocusDirective, OptionDirective];
 
 @NgModule({
   imports: [...modules],
-  declarations: [...components, ...entryComponents, ...directives],
-  exports: [...modules, ...components, ...entryComponents, ...directives],
+  declarations: [...components, ...directives],
+  exports: [...modules, ...components, ...directives],
   providers: [...services],
-  entryComponents: [...entryComponents],
 })
 export class SharedModule {}

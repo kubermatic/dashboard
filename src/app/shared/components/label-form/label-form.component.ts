@@ -133,7 +133,7 @@ export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccess
     isDisabled ? this.form.disable() : this.form.enable();
   }
 
-  validate(control: AbstractControl): Observable<ValidationErrors | null> {
+  validate(_: AbstractControl): Observable<ValidationErrors | null> {
     return of(this.form.valid ? null : {invalid: true});
   }
 

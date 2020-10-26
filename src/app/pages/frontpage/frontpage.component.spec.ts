@@ -9,18 +9,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
+import {RouterStub} from '@app/testing/router-stubs';
+import {AuthMockService} from '@app/testing/services/auth-mock.service';
+import {Auth} from '@core/services/auth/auth.service';
+import {SharedModule} from '@shared/shared.module';
 import {CookieService} from 'ngx-cookie-service';
-
-import {Auth} from '../../core/services';
-import {SharedModule} from '../../shared/shared.module';
-import {RouterStub} from '../../testing/router-stubs';
-import {AuthMockService} from '../../testing/services/auth-mock.service';
-
 import {FrontpageComponent} from './frontpage.component';
 
 const modules: any[] = [BrowserModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];
@@ -47,9 +45,12 @@ describe('FrontpageComponent', () => {
     router = fixture.debugElement.injector.get(Router);
   });
 
-  it('should create the cmp', async(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the cmp',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should navigate to clusters list if authenticated', () => {
     const spyNavigate = jest.spyOn(router, 'navigate');

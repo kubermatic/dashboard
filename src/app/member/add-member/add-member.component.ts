@@ -12,11 +12,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {NotificationService} from '../../core/services';
-
-import {ApiService} from '../../core/services';
-import {CreateMember, Member} from '../../shared/entity/member';
-import {Project} from '../../shared/entity/project';
+import {ApiService} from '@core/services/api/api.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {CreateMember, Member} from '@shared/entity/member';
+import {Project} from '@shared/entity/project';
 
 @Component({
   selector: 'km-add-member',

@@ -61,15 +61,11 @@ const components: any[] = [
   ClusterListComponent,
   MachineNetworksDisplayComponent,
   RBACComponent,
-];
-
-const entryComponents: any[] = [
   ClusterDeleteConfirmationComponent,
   ChangeClusterVersionComponent,
   ClusterSecretsComponent,
   EditClusterComponent,
   RevokeTokenComponent,
-  AddMachineNetworkComponent,
   EditProviderSettingsComponent,
   AWSProviderSettingsComponent,
   DigitaloceanProviderSettingsComponent,
@@ -86,13 +82,15 @@ const entryComponents: any[] = [
   ShareKubeconfigComponent,
   ClusterPanelComponent,
   AddBindingComponent,
+  VersionPickerComponent,
 ];
+
+const dialogs: any[] = [AddMachineNetworkComponent];
 
 @NgModule({
   imports: [SharedModule, ClusterRoutingModule, MachineNetworksModule, NodeDataModule],
-  declarations: [...components, ...entryComponents, VersionPickerComponent],
+  declarations: [...components, ...dialogs],
   exports: [...components],
-  entryComponents: [...entryComponents],
   providers: [
     NodeService,
     {

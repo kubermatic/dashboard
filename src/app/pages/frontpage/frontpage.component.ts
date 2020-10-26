@@ -12,7 +12,7 @@
 import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {MatAnchor} from '@angular/material/button';
 import {Router} from '@angular/router';
-import {Auth} from '../../core/services';
+import {Auth} from '@core/services/auth/auth.service';
 
 @Component({
   selector: 'km-frontpage',

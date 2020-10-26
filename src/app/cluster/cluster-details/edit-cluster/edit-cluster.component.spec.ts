@@ -10,21 +10,30 @@
 // limitations under the License.
 
 import {EventEmitter} from '@angular/core';
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {Router} from '@angular/router';
+import {AppConfigService} from '@app/config.service';
+import {doPatchCloudSpecFake} from '@app/testing/fake-data/cloud-spec.fake';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
+import {fakeDigitaloceanDatacenter, fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
+import {fakeProject} from '@app/testing/fake-data/project.fake';
+import {RouterStub} from '@app/testing/router-stubs';
+import {ApiMockService, asyncData} from '@app/testing/services/api-mock.service';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
+import {DatacenterMockService} from '@app/testing/services/datacenter-mock.service';
+import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
+import {UserMockService} from '@app/testing/services/user-mock.service';
+import {CoreModule} from '@core/core.module';
+import {ApiService} from '@core/services/api/api.service';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {UserService} from '@core/services/user/user.service';
+import {ProviderSettingsPatch} from '@shared/entity/cluster';
+import {SharedModule} from '@shared/shared.module';
 import {Subject} from 'rxjs';
-
-import {CoreModule} from '../../../core/core.module';
-import {ApiService, ClusterService, DatacenterService, UserService} from '../../../core/services';
-import {SharedModule} from '../../../shared/shared.module';
-import {doPatchCloudSpecFake} from '../../../testing/fake-data/cloud-spec.fake';
-import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {fakeDigitaloceanDatacenter, fakeSeedDatacenter} from '../../../testing/fake-data/datacenter.fake';
-import {fakeProject} from '../../../testing/fake-data/project.fake';
-import {ApiMockService, asyncData} from '../../../testing/services/api-mock.service';
-import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {AlibabaProviderSettingsComponent} from '../edit-provider-settings/alibaba-provider-settings/alibaba-provider-settings.component';
 import {AWSProviderSettingsComponent} from '../edit-provider-settings/aws-provider-settings/aws-provider-settings.component';
 import {AzureProviderSettingsComponent} from '../edit-provider-settings/azure-provider-settings/azure-provider-settings.component';
@@ -36,15 +45,7 @@ import {KubevirtProviderSettingsComponent} from '../edit-provider-settings/kubev
 import {OpenstackProviderSettingsComponent} from '../edit-provider-settings/openstack-provider-settings/openstack-provider-settings.component';
 import {PacketProviderSettingsComponent} from '../edit-provider-settings/packet-provider-settings/packet-provider-settings.component';
 import {VSphereProviderSettingsComponent} from '../edit-provider-settings/vsphere-provider-settings/vsphere-provider-settings.component';
-
 import {EditClusterComponent} from './edit-cluster.component';
-import {ProviderSettingsPatch} from '../../../shared/entity/cluster';
-import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
-import {AppConfigService} from '../../../app-config.service';
-import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
-import {UserMockService} from '../../../testing/services/user-mock.service';
-import {RouterStub} from '../../../testing/router-stubs';
-import {Router} from '@angular/router';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 
@@ -53,58 +54,65 @@ describe('EditClusterComponent', () => {
   let component: EditClusterComponent;
   let editClusterSpy;
 
-  beforeEach(async(() => {
-    const clusterServiceMock = {
-      patch: jest.fn(),
-      changeProviderSettingsPatch: jest.fn(),
-      providerSettingsPatchChanges$: new EventEmitter<ProviderSettingsPatch>(),
-      onClusterUpdate: new Subject<void>(),
-    };
-    editClusterSpy = clusterServiceMock.patch.mockReturnValue(asyncData(fakeDigitaloceanCluster()));
+  beforeEach(
+    waitForAsync(() => {
+      const clusterServiceMock = {
+        patch: jest.fn(),
+        changeProviderSettingsPatch: jest.fn(),
+        providerSettingsPatchChanges$: new EventEmitter<ProviderSettingsPatch>(),
+        onClusterUpdate: new Subject<void>(),
+      };
+      editClusterSpy = clusterServiceMock.patch.mockReturnValue(asyncData(fakeDigitaloceanCluster()));
 
-    TestBed.configureTestingModule({
-      imports: [...modules],
-      declarations: [
-        EditClusterComponent,
-        EditProviderSettingsComponent,
-        AWSProviderSettingsComponent,
-        DigitaloceanProviderSettingsComponent,
-        HetznerProviderSettingsComponent,
-        OpenstackProviderSettingsComponent,
-        VSphereProviderSettingsComponent,
-        AzureProviderSettingsComponent,
-        PacketProviderSettingsComponent,
-        GCPProviderSettingsComponent,
-        KubevirtProviderSettingsComponent,
-        AlibabaProviderSettingsComponent,
-      ],
-      providers: [
-        {provide: DatacenterService, useClass: DatacenterMockService},
-        {provide: MatDialogRef, useClass: MatDialogRefMock},
-        {provide: ClusterService, useValue: clusterServiceMock},
-        {provide: ApiService, useClass: ApiMockService},
-        {provide: AppConfigService, useClass: AppConfigMockService},
-        {provide: UserService, useClass: UserMockService},
-        {provide: Router, useClass: RouterStub},
-      ],
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        declarations: [
+          EditClusterComponent,
+          EditProviderSettingsComponent,
+          AWSProviderSettingsComponent,
+          DigitaloceanProviderSettingsComponent,
+          HetznerProviderSettingsComponent,
+          OpenstackProviderSettingsComponent,
+          VSphereProviderSettingsComponent,
+          AzureProviderSettingsComponent,
+          PacketProviderSettingsComponent,
+          GCPProviderSettingsComponent,
+          KubevirtProviderSettingsComponent,
+          AlibabaProviderSettingsComponent,
+        ],
+        providers: [
+          {provide: DatacenterService, useClass: DatacenterMockService},
+          {provide: MatDialogRef, useClass: MatDialogRefMock},
+          {provide: ClusterService, useValue: clusterServiceMock},
+          {provide: ApiService, useClass: ApiMockService},
+          {provide: AppConfigService, useClass: AppConfigMockService},
+          {provide: UserService, useClass: UserMockService},
+          {provide: Router, useClass: RouterStub},
+        ],
+      }).compileComponents();
+    })
+  );
 
-  beforeEach(async(() => {
-    fixture = TestBed.createComponent(EditClusterComponent);
-    component = fixture.componentInstance;
-    component.cluster = fakeDigitaloceanCluster();
-    component.seed = fakeSeedDatacenter();
-    component.datacenter = fakeDigitaloceanDatacenter();
-    component.projectID = fakeProject().id;
-    component.labels = {};
-    component.asyncLabelValidators = [];
-    fixture.detectChanges();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      fixture = TestBed.createComponent(EditClusterComponent);
+      component = fixture.componentInstance;
+      component.cluster = fakeDigitaloceanCluster();
+      component.seed = fakeSeedDatacenter();
+      component.datacenter = fakeDigitaloceanDatacenter();
+      component.projectID = fakeProject().id;
+      component.labels = {};
+      component.asyncLabelValidators = [];
+      fixture.detectChanges();
+    })
+  );
 
-  it('should create the edit cluster component', async(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the edit cluster component',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should have valid form after creating', () => {
     expect(component.form.valid).toBeTruthy();

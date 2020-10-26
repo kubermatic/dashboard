@@ -20,17 +20,16 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {NodeDataService} from '@app/node-data/service/service';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
+import {AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import * as _ from 'lodash';
 import {merge, Observable} from 'rxjs';
 import {map, switchMap, takeUntil, tap} from 'rxjs/operators';
-
-import {PresetsService} from '../../../../core/services';
-import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
-import {AWSSize, AWSSubnet} from '../../../../shared/entity/provider/aws';
-import {NodeData} from '../../../../shared/model/NodeSpecChange';
-import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
-import {NodeDataService} from '../../../service/service';
-import * as _ from 'lodash';
 
 enum Controls {
   Size = 'size',
@@ -70,26 +69,35 @@ enum SubnetState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewChecked, OnDestroy {
-  private readonly _defaultDiskSize = 25;
-
-  private _diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
-  private _subnets: AWSSubnet[] = [];
-  private _subnetMap: {[type: string]: AWSSubnet[]} = {};
-
-  @ViewChild('sizeCombobox')
-  private readonly _sizeCombobox: FilteredComboboxComponent;
-  @ViewChild('subnetCombobox')
-  private readonly _subnetCombobox: FilteredComboboxComponent;
-
   readonly Controls = Controls;
-
   sizes: AWSSize[] = [];
   selectedSize = '';
   sizeLabel = SizeState.Empty;
   selectedSubnet = '';
   subnetLabel = SubnetState.Empty;
-  diskTypes = this._diskTypes.map(type => ({name: type}));
   selectedDiskType = '';
+  private readonly _defaultDiskSize = 25;
+  private _diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
+  diskTypes = this._diskTypes.map(type => ({name: type}));
+  private _subnets: AWSSubnet[] = [];
+  private _subnetMap: {[type: string]: AWSSubnet[]} = {};
+  @ViewChild('sizeCombobox')
+  private readonly _sizeCombobox: FilteredComboboxComponent;
+  @ViewChild('subnetCombobox')
+  private readonly _subnetCombobox: FilteredComboboxComponent;
+
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _presets: PresetsService,
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _cdr: ChangeDetectorRef
+  ) {
+    super();
+  }
+
+  get subnetAZ(): string[] {
+    return Object.keys(this._subnetMap);
+  }
 
   private get _sizesObservable(): Observable<AWSSize[]> {
     return this._nodeDataService.aws
@@ -99,19 +107,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   private get _subnetIdsObservable(): Observable<AWSSubnet[]> {
     return this._nodeDataService.aws.subnets(this._clearSubnet.bind(this), this._onSubnetLoading.bind(this));
-  }
-
-  get subnetAZ(): string[] {
-    return Object.keys(this._subnetMap);
-  }
-
-  constructor(
-    private readonly _builder: FormBuilder,
-    private readonly _presets: PresetsService,
-    private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef
-  ) {
-    super();
   }
 
   ngOnInit(): void {

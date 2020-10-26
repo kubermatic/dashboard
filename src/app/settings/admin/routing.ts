@@ -11,10 +11,8 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-
-import {AuthGuard} from '../../core/services';
-
-import {AdminSettingsComponent} from './admin-settings.component';
+import {AuthGuard} from '@core/services/auth/auth.guard';
+import {AdminSettingsComponent} from './component';
 
 const routes: Routes = [
   {

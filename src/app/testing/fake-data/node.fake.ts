@@ -9,9 +9,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {MachineDeployment} from '../../shared/entity/machine-deployment';
-import {Node} from '../../shared/entity/node';
-import {NodeData} from '../../shared/model/NodeSpecChange';
+import {MachineDeployment} from '@shared/entity/machine-deployment';
+import {Node} from '@shared/entity/node';
+import {NodeData} from '@shared/model/NodeSpecChange';
 
 export function fakeDigitaloceanCreateNode(): Node {
   return {

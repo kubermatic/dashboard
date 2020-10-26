@@ -26,6 +26,7 @@ export class MachineNetworksDisplayComponent {
   @Input() cluster: Cluster;
   @Input() seed: string;
   @Input() projectID: string;
+  @Input() isClusterRunning: boolean;
 
   displayedColumns: string[] = ['number', 'cidr', 'dnsServers', 'gateway'];
   dataSource = new MatTableDataSource<MachineNetwork>();

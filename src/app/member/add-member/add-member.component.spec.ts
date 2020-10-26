@@ -9,20 +9,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
-import {ApiService, NotificationService, ProjectService} from '../../core/services';
-import {SharedModule} from '../../shared/shared.module';
-import {Group} from '../../shared/utils/member-utils/member-utils';
-import {fakeMember} from '../../testing/fake-data/member.fake';
-import {fakeProject} from '../../testing/fake-data/project.fake';
-import {asyncData} from '../../testing/services/api-mock.service';
-import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
-import {ProjectMockService} from '../../testing/services/project-mock.service';
-
+import {fakeMember} from '@app/testing/fake-data/member.fake';
+import {fakeProject} from '@app/testing/fake-data/project.fake';
+import {asyncData} from '@app/testing/services/api-mock.service';
+import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
+import {ProjectMockService} from '@app/testing/services/project-mock.service';
+import {ApiService} from '@core/services/api/api.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {SharedModule} from '@shared/shared.module';
+import {Group} from '@shared/utils/member-utils/member-utils';
 import {AddMemberComponent} from './add-member.component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
@@ -32,31 +32,38 @@ describe('AddProjectComponent', () => {
   let component: AddMemberComponent;
   let createMembersSpy;
 
-  beforeEach(async(() => {
-    const apiMock = {createMembers: jest.fn()};
-    createMembersSpy = apiMock.createMembers.mockReturnValue(asyncData(fakeMember()));
+  beforeEach(
+    waitForAsync(() => {
+      const apiMock = {createMembers: jest.fn()};
+      createMembersSpy = apiMock.createMembers.mockReturnValue(asyncData(fakeMember()));
 
-    TestBed.configureTestingModule({
-      imports: [...modules],
-      declarations: [AddMemberComponent],
-      providers: [
-        {provide: MatDialogRef, useClass: MatDialogRefMock},
-        {provide: ApiService, useValue: apiMock},
-        {provide: ProjectService, useClass: ProjectMockService},
-        NotificationService,
-      ],
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        declarations: [AddMemberComponent],
+        providers: [
+          {provide: MatDialogRef, useClass: MatDialogRefMock},
+          {provide: ApiService, useValue: apiMock},
+          {provide: ProjectService, useClass: ProjectMockService},
+          NotificationService,
+        ],
+      }).compileComponents();
+    })
+  );
 
-  beforeEach(async(() => {
-    fixture = TestBed.createComponent(AddMemberComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      fixture = TestBed.createComponent(AddMemberComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    })
+  );
 
-  it('should create the add member component', async(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the add member component',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('form invalid after creating', () => {
     expect(component.addMemberForm.valid).toBeFalsy();

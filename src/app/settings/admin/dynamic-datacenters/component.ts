@@ -10,24 +10,26 @@
 // limitations under the License.
 
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {CreateDatacenterModel, Datacenter} from '../../../shared/entity/datacenter';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatSort} from '@angular/material/sort';
-import {MatPaginator} from '@angular/material/paginator';
-import {NodeProvider, NodeProviderConstants} from '../../../shared/model/NodeProviderConstants';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {UserService} from '@core/services/user/user.service';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
+import {CreateDatacenterModel, Datacenter} from '@shared/entity/datacenter';
+import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
 import * as countryCodeLookup from 'country-code-lookup';
-import {DatacenterService, NotificationService, UserService} from '../../../core/services';
-import {Subject} from 'rxjs';
-import {DatacenterDataDialogComponent} from './datacenter-data-dialog/datacenter-data-dialog.component';
 import * as _ from 'lodash';
+import {Subject} from 'rxjs';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {DatacenterDataDialogComponent} from './datacenter-data-dialog/component';
 
 @Component({
   selector: 'km-dynamic-datacenters',
-  templateUrl: './dynamic-datacenters.component.html',
-  styleUrls: ['./dynamic-datacenters.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges {
   datacenters: Datacenter[] = [];

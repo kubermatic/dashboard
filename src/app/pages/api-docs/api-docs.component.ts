@@ -12,9 +12,9 @@
 import {DOCUMENT} from '@angular/common';
 import {Component, Inject, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {ApiService} from '@core/services/api/api.service';
+import {Auth} from '@core/services/auth/auth.service';
 import * as SwaggerUI from 'swagger-ui';
-
-import {ApiService, Auth} from '../../core/services';
 
 @Component({
   selector: 'km-api-docs',
@@ -29,7 +29,7 @@ export class ApiDocsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this._api.getSwaggerJson().subscribe(swaggerSpec => {
+    this._api.getSwaggerJson().subscribe(_ => {
       SwaggerUI({
         dom_id: '#km-swagger-container',
         url: `${this._document.location.origin}/api/swagger.json`,

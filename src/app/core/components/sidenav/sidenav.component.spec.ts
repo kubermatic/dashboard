@@ -11,26 +11,25 @@
 
 import {HttpClientModule} from '@angular/common/http';
 import {DebugElement} from '@angular/core';
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
+import {AppConfigService} from '@app/config.service';
+import {fakeProjects} from '@app/testing/fake-data/project.fake';
+import {RouterLinkStubDirective, RouterTestingModule} from '@app/testing/router-stubs';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
+import {ProjectMockService} from '@app/testing/services/project-mock.service';
+import {SettingsMockService} from '@app/testing/services/settings-mock.service';
+import {UserMockService} from '@app/testing/services/user-mock.service';
+import {click} from '@app/testing/utils/click-handler';
+import {ProjectSelectorComponent} from '@core/components/navigation/project/component';
+import {ProjectService} from '@core/services/project/project.service';
+import {SettingsService} from '@core/services/settings/settings.service';
+import {UserService} from '@core/services/user/user.service';
+import {SharedModule} from '@shared/shared.module';
 import {MockComponent} from 'ng2-mock-component';
-
-import {AppConfigService} from '../../../app-config.service';
-import {SharedModule} from '../../../shared/shared.module';
-import {fakeProjects} from '../../../testing/fake-data/project.fake';
-import {RouterLinkStubDirective, RouterTestingModule} from '../../../testing/router-stubs';
-import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
-import {ProjectMockService} from '../../../testing/services/project-mock.service';
-import {SettingsMockService} from '../../../testing/services/settings-mock.service';
-import {UserMockService} from '../../../testing/services/user-mock.service';
-import {click} from '../../../testing/utils/click-handler';
-import {ProjectService, UserService} from '../../services';
-import {SettingsService} from '../../services/settings/settings.service';
-import {ProjectSelectorComponent} from '../navigation/project/component';
-
 import {SidenavComponent} from './sidenav.component';
 
 const modules: any[] = [BrowserModule, RouterTestingModule, HttpClientModule, BrowserAnimationsModule, SharedModule];
@@ -78,9 +77,12 @@ describe('SidenavComponent', () => {
     links = linkDes.map(de => de.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective);
   });
 
-  it('should initialize', async(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should initialize',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should get RouterLinks from template', () => {
     const expectedLinks = 5;

@@ -37,11 +37,9 @@ export class ClusterService {
       return;
     }
 
-    this._cluster = _.mergeWith(this._cluster, cluster, value => {
-      if (_.isArray(value)) {
-        return value;
-      }
-    });
+    this._cluster = _.mergeWith(this._cluster, cluster, (dest, src) =>
+      _.isArray(dest) && _.isArray(src) ? dest : undefined
+    );
     this.clusterChanges.emit(this._cluster);
   }
 

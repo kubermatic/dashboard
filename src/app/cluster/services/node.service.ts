@@ -11,16 +11,15 @@
 
 import {EventEmitter, Injectable, Injector} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import * as _ from 'lodash';
+import {DialogDataInput, DialogDataOutput, NodeDataDialogComponent} from '@app/node-data/dialog/component';
+import {ApiService} from '@core/services/api/api.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
+import {Cluster} from '@shared/entity/cluster';
+import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-deployment';
+import {NodeData} from '@shared/model/NodeSpecChange';
 import {Observable, of} from 'rxjs';
-import {catchError, filter, first, flatMap, switchMap} from 'rxjs/operators';
-
-import {ApiService, NotificationService} from '../../core/services';
-import {DialogDataInput, DialogDataOutput, NodeDataDialogComponent} from '../../node-data/dialog/component';
-import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {Cluster} from '../../shared/entity/cluster';
-import {MachineDeployment, MachineDeploymentPatch} from '../../shared/entity/machine-deployment';
-import {NodeData} from '../../shared/model/NodeSpecChange';
+import {catchError, filter, first, mergeMap, switchMap} from 'rxjs/operators';
 
 @Injectable()
 export class NodeService {
@@ -147,7 +146,7 @@ export class NodeService {
     return dialogRef
       .afterClosed()
       .pipe(
-        flatMap(
+        mergeMap(
           (isConfirmed: boolean): Observable<boolean> => {
             if (isConfirmed) {
               return this._apiService
@@ -165,7 +164,7 @@ export class NodeService {
         )
       )
       .pipe(
-        flatMap(
+        mergeMap(
           (data: any): Observable<boolean> => {
             if (data) {
               this._notificationService.success(`The <strong>${md.name}</strong> node deployment was removed`);

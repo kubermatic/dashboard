@@ -10,41 +10,45 @@
 // limitations under the License.
 
 import {HttpClientModule} from '@angular/common/http';
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {waitForAsync, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ApiService, Auth, UserService} from '../../../core/services';
-import {SharedModule} from '../../../shared/shared.module';
-import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {fakeSeedDatacenter} from '../../../testing/fake-data/datacenter.fake';
-import {fakeProject} from '../../../testing/fake-data/project.fake';
-import {RouterTestingModule} from '../../../testing/router-stubs';
-import {UserMockService} from '../../../testing/services/user-mock.service';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
+import {fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
+import {fakeProject} from '@app/testing/fake-data/project.fake';
+import {RouterTestingModule} from '@app/testing/router-stubs';
+import {UserMockService} from '@app/testing/services/user-mock.service';
+import {ApiService} from '@core/services/api/api.service';
+import {Auth} from '@core/services/auth/auth.service';
+import {UserService} from '@core/services/user/user.service';
+import {SharedModule} from '@shared/shared.module';
 import {ShareKubeconfigComponent} from './share-kubeconfig.component';
 
 describe('ShareKubeconfigComponent', () => {
   let component: ShareKubeconfigComponent;
   let fixture: ComponentFixture<ShareKubeconfigComponent>;
 
-  beforeEach(async(() => {
-    const apiMock = {getShareKubeconfigURL: jest.fn()};
-    const authMock = {authenticated: jest.fn()};
-    TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
-      declarations: [ShareKubeconfigComponent],
-      providers: [
-        {provide: ApiService, useValue: apiMock},
-        {provide: Auth, useValue: authMock},
-        {provide: UserService, useClass: UserMockService},
-        {
-          provide: MAT_DIALOG_DATA,
-          useValue: {cluster: fakeDigitaloceanCluster()},
-        },
-        {provide: MatDialogRef, useValue: {}},
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      const apiMock = {getShareKubeconfigURL: jest.fn()};
+      const authMock = {authenticated: jest.fn()};
+      TestBed.configureTestingModule({
+        imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
+        declarations: [ShareKubeconfigComponent],
+        providers: [
+          {provide: ApiService, useValue: apiMock},
+          {provide: Auth, useValue: authMock},
+          {provide: UserService, useClass: UserMockService},
+          {
+            provide: MAT_DIALOG_DATA,
+            useValue: {cluster: fakeDigitaloceanCluster()},
+          },
+          {provide: MatDialogRef, useValue: {}},
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ShareKubeconfigComponent);

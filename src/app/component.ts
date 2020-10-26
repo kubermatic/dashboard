@@ -13,25 +13,24 @@ import {DOCUMENT} from '@angular/common';
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
 import {NavigationEnd, Router} from '@angular/router';
+import {Auth} from '@core/services/auth/auth.service';
+import {PageTitleService} from '@core/services/page-title/page-title.service';
+import {SettingsService} from '@core/services/settings/settings.service';
+import {AdminSettings, CustomLink} from '@shared/entity/settings';
+import {VersionInfo} from '@shared/entity/version-info';
+import {Config} from '@shared/model/Config';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-
-import {AppConfigService} from './app-config.service';
-import {Auth} from './core/services';
-import {SettingsService} from './core/services/settings/settings.service';
-import {PageTitleService} from './core/services/page-title/page-title.service';
+import {AppConfigService} from './config.service';
 import {GoogleAnalyticsService} from './google-analytics.service';
-import {AdminSettings, CustomLink} from './shared/entity/settings';
-import {VersionInfo} from './shared/entity/version-info';
-import {Config} from './shared/model/Config';
 
 const PAGES_WITHOUT_MENU = ['/projects', '/account', '/settings', '/rest-api', '/terms-of-service', '/404'];
 
 @Component({
   selector: 'km-root',
-  templateUrl: './kubermatic.component.html',
-  styleUrls: ['./kubermatic.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class KubermaticComponent implements OnInit, OnDestroy {
   @ViewChild('sidenav') sidenav: MatSidenav;

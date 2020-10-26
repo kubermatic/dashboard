@@ -10,20 +10,21 @@
 // limitations under the License.
 
 import {HttpClientModule} from '@angular/common/http';
-import {async, ComponentFixture, inject, TestBed} from '@angular/core/testing';
+import {ComponentFixture, inject, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-
-import {SharedModule} from '../../../shared/shared.module';
-import {AuthMockService} from '../../../testing/services/auth-mock.service';
-import {ProjectMockService} from '../../../testing/services/project-mock.service';
-import {SettingsMockService} from '../../../testing/services/settings-mock.service';
-import {UserMockService} from '../../../testing/services/user-mock.service';
-import {Auth, ProjectService, UserService} from '../../services/index';
-import {SettingsService} from '../../services/settings/settings.service';
+import {AuthMockService} from '@app/testing/services/auth-mock.service';
+import {ProjectMockService} from '@app/testing/services/project-mock.service';
+import {SettingsMockService} from '@app/testing/services/settings-mock.service';
+import {UserMockService} from '@app/testing/services/user-mock.service';
+import {Auth} from '@core/services/auth/auth.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {SettingsService} from '@core/services/settings/settings.service';
+import {UserService} from '@core/services/user/user.service';
+import {SharedModule} from '@shared/shared.module';
 import {UserPanelComponent} from './user-panel.component';
 
 const modules: any[] = [BrowserModule, HttpClientModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];
@@ -52,9 +53,12 @@ describe('UserPanelComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should initialize', async(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should initialize',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should tell Router to navigate when user logout', inject([Router], (router: Router) => {
     authService = fixture.debugElement.injector.get(Auth) as any;
@@ -67,11 +71,14 @@ describe('UserPanelComponent', () => {
     expect(spyLogOut).toHaveBeenCalled();
   }));
 
-  it('should not display user information after logout', async(() => {
-    fixture.detectChanges();
-    expect(component.user).toBeDefined();
+  it(
+    'should not display user information after logout',
+    waitForAsync(() => {
+      fixture.detectChanges();
+      expect(component.user).toBeDefined();
 
-    component.logout();
-    expect(component.user).not.toBeDefined();
-  }));
+      component.logout();
+      expect(component.user).not.toBeDefined();
+    })
+  );
 });

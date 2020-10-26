@@ -15,8 +15,8 @@ import {Observable} from 'rxjs';
 import {first, tap} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
-import {AppConfigService} from '../../../app-config.service';
-import {Cookie, COOKIE_DI_TOKEN} from '../../../app.config';
+import {AppConfigService} from '../../../config.service';
+import {Cookie, COOKIE_DI_TOKEN} from '../../../config';
 import {RandomString} from '../../../shared/functions/generate-random-string';
 import {PreviousRouteService} from '../previous-route/previous-route.service';
 import {TokenService} from '../token/token.service';

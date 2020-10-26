@@ -25,27 +25,27 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
+import {Cookie, COOKIE_DI_TOKEN} from '@app/config';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {PreviousRouteService} from '@core/services/previous-route/previous-route.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {SettingsService} from '@core/services/settings/settings.service';
+import {UserService} from '@core/services/user/user.service';
+import {AddProjectDialogComponent} from '@shared/components/add-project-dialog/add-project-dialog.component';
+import {View} from '@shared/entity/common';
+import {Member} from '@shared/entity/member';
+import {Project, ProjectOwners} from '@shared/entity/project';
+import {UserSettings} from '@shared/entity/settings';
+import {objectDiff} from '@shared/utils/common-utils';
+import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
+import {ProjectUtils} from '@shared/utils/project-utils/project-utils';
 import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
 import {filter, first, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-
-import {Cookie, COOKIE_DI_TOKEN} from '../app.config';
-import {NotificationService, ProjectService, UserService} from '../core/services';
-import {PreviousRouteService} from '../core/services/previous-route/previous-route.service';
-import {SettingsService} from '../core/services/settings/settings.service';
-import {GoogleAnalyticsService} from '../google-analytics.service';
-import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
-import {View} from '../shared/entity/common';
-import {Member} from '../shared/entity/member';
-import {Project, ProjectOwners} from '../shared/entity/project';
-import {UserSettings} from '../shared/entity/settings';
-import {objectDiff} from '../shared/utils/common-utils';
-import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
-import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
-
-import {EditProjectComponent} from './edit-project/edit-project.component';
 import {DeleteProjectConfirmationComponent} from './delete-project/delete-project.component';
+import {EditProjectComponent} from './edit-project/edit-project.component';
 
 @Component({
   selector: 'km-project',

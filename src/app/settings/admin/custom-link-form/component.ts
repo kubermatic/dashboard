@@ -18,8 +18,8 @@ import {CustomLink, CustomLinkLocation} from '../../../shared/entity/settings';
 
 @Component({
   selector: 'km-custom-links-form',
-  templateUrl: './custom-links-form.component.html',
-  styleUrls: ['./custom-links-form.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class CustomLinksFormComponent implements OnDestroy {
   @Input()

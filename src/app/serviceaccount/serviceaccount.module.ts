@@ -22,6 +22,5 @@ const components: any[] = [ServiceAccountComponent, ServiceAccountTokenComponent
   imports: [SharedModule, ServiceAccountRoutingModule],
   declarations: [...components],
   exports: [...components],
-  entryComponents: [],
 })
 export class ServiceAccountModule {}

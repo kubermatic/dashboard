@@ -11,14 +11,13 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '@shared/entity/cluster';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {ClusterService} from '@shared/services/cluster.service';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
 import {filter, takeUntil} from 'rxjs/operators';
-
-import {PresetsService} from '../../../../../../core/services';
-import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '../../../../../../shared/entity/cluster';
-import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
-import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../../../../shared/services/cluster.service';
 
 enum Controls {
   SecurityGroup = 'securityGroup',

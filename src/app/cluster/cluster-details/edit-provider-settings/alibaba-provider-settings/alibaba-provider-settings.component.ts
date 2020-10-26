@@ -11,11 +11,10 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {ProviderSettingsPatch} from '@shared/entity/cluster';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
-
-import {ClusterService} from '../../../../core/services';
-import {ProviderSettingsPatch} from '../../../../shared/entity/cluster';
 
 @Component({
   selector: 'km-alibaba-provider-settings',

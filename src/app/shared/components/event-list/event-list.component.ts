@@ -13,12 +13,11 @@ import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild} from '@angula
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {UserService} from '@core/services/user/user.service';
+import {Event} from '@shared/entity/event';
+import {HealthStatusColor} from '@shared/utils/health-status/health-status';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-
-import {Event} from '../../entity/event';
-import {HealthStatusColor} from '../../utils/health-status/health-status';
-import {UserService} from '../../../core/services';
 
 @Component({
   selector: 'km-event-list',

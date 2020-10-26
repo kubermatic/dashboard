@@ -20,6 +20,5 @@ const components: any[] = [MemberComponent];
   imports: [SharedModule, MemberRoutingModule],
   declarations: [...components],
   exports: [...components],
-  entryComponents: [],
 })
 export class MemberModule {}

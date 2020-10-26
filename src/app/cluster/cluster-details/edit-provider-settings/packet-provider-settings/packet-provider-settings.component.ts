@@ -11,11 +11,10 @@
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {AVAILABLE_PACKET_BILLING_CYCLES, Cluster, ProviderSettingsPatch} from '@shared/entity/cluster';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
-
-import {ClusterService} from '../../../../core/services';
-import {AVAILABLE_PACKET_BILLING_CYCLES, Cluster, ProviderSettingsPatch} from '../../../../shared/entity/cluster';
 
 @Component({
   selector: 'km-packet-provider-settings',
@@ -34,6 +33,14 @@ export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(private clusterService: ClusterService) {}
+
+  get apiKey(): AbstractControl {
+    return this.form.controls.apiKey;
+  }
+
+  get projectID(): AbstractControl {
+    return this.form.controls.projectID;
+  }
 
   ngOnInit(): void {
     let billingCycle = this.cluster.spec.cloud.packet.billingCycle;
@@ -63,14 +70,6 @@ export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
           this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
         }
       });
-  }
-
-  get apiKey(): AbstractControl {
-    return this.form.controls.apiKey;
-  }
-
-  get projectID(): AbstractControl {
-    return this.form.controls.projectID;
   }
 
   setValidators(): void {

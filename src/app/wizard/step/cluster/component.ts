@@ -19,23 +19,20 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
+import {AppConfigService} from '@app/config.service';
+import {ApiService} from '@core/services/api/api.service';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {ClusterNameGenerator} from '@core/util/name-generator.service';
+import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '@shared/entity/cluster';
+import {ResourceType} from '@shared/entity/common';
+import {Datacenter} from '@shared/entity/datacenter';
+import {ClusterService} from '@shared/services/cluster.service';
+import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
+import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import {merge} from 'rxjs';
-import {switchMap, takeUntil, filter, first} from 'rxjs/operators';
-
-import {AppConfigService} from '../../../app-config.service';
-import {ApiService, DatacenterService} from '../../../core/services';
-import {ClusterNameGenerator} from '../../../core/util/name-generator.service';
-import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '../../../shared/entity/cluster';
-import {Datacenter} from '../../../shared/entity/datacenter';
-import {
-  AdmissionPlugin,
-  AdmissionPluginUtils,
-} from '../../../shared/utils/admission-plugin-utils/admission-plugin-utils';
-import {AsyncValidators} from '../../../shared/validators/async-label-form.validator';
-import {ClusterService} from '../../../shared/services/cluster.service';
+import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
-import {ResourceType} from '../../../shared/entity/common';
 
 enum Controls {
   Name = 'name',

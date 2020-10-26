@@ -9,26 +9,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed} from '@angular/core/testing';
+import {ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
-import {CoreModule} from '../../../../core/core.module';
-import {RBACService} from '../../../../core/services';
-import {SharedModule} from '../../../../shared/shared.module';
-import {fakeDigitaloceanCluster} from '../../../../testing/fake-data/cluster.fake';
-import {fakeSeedDatacenter} from '../../../../testing/fake-data/datacenter.fake';
-import {fakeProject} from '../../../../testing/fake-data/project.fake';
-import {
-  fakeBinding,
-  fakeClusterBinding,
-  fakeClusterRoleNames,
-  fakeRoleNames,
-} from '../../../../testing/fake-data/rbac.fake';
-import {asyncData} from '../../../../testing/services/api-mock.service';
-import {MatDialogRefMock} from '../../../../testing/services/mat-dialog-ref-mock';
-
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
+import {fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
+import {fakeProject} from '@app/testing/fake-data/project.fake';
+import {fakeBinding, fakeClusterBinding, fakeClusterRoleNames, fakeRoleNames} from '@app/testing/fake-data/rbac.fake';
+import {asyncData} from '@app/testing/services/api-mock.service';
+import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
+import {CoreModule} from '@core/core.module';
+import {RBACService} from '@core/services/rbac/rbac.service';
+import {SharedModule} from '@shared/shared.module';
 import {AddBindingComponent} from './add-binding.component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
@@ -37,41 +30,48 @@ describe('AddBindingComponent', () => {
   let fixture: ComponentFixture<AddBindingComponent>;
   let component: AddBindingComponent;
 
-  beforeEach(async(() => {
-    const rbacMock = {
-      getClusterRoleNames: jest.fn(),
-      getRoleNames: jest.fn(),
-      createClusterBinding: jest.fn(),
-      createBinding: jest.fn(),
-    };
+  beforeEach(
+    waitForAsync(() => {
+      const rbacMock = {
+        getClusterRoleNames: jest.fn(),
+        getRoleNames: jest.fn(),
+        createClusterBinding: jest.fn(),
+        createBinding: jest.fn(),
+      };
 
-    rbacMock.getClusterRoleNames.mockReturnValue(asyncData(fakeClusterRoleNames()));
-    rbacMock.getRoleNames.mockReturnValue(asyncData(fakeRoleNames()));
-    rbacMock.createClusterBinding.mockReturnValue(asyncData(fakeClusterBinding()));
-    rbacMock.createBinding.mockReturnValue(asyncData(fakeBinding()));
+      rbacMock.getClusterRoleNames.mockReturnValue(asyncData(fakeClusterRoleNames()));
+      rbacMock.getRoleNames.mockReturnValue(asyncData(fakeRoleNames()));
+      rbacMock.createClusterBinding.mockReturnValue(asyncData(fakeClusterBinding()));
+      rbacMock.createBinding.mockReturnValue(asyncData(fakeBinding()));
 
-    TestBed.configureTestingModule({
-      imports: [...modules],
-      declarations: [AddBindingComponent],
-      providers: [
-        {provide: RBACService, useValue: rbacMock},
-        {provide: MatDialogRef, useClass: MatDialogRefMock},
-      ],
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        declarations: [AddBindingComponent],
+        providers: [
+          {provide: RBACService, useValue: rbacMock},
+          {provide: MatDialogRef, useClass: MatDialogRefMock},
+        ],
+      }).compileComponents();
+    })
+  );
 
-  beforeEach(async(() => {
-    fixture = TestBed.createComponent(AddBindingComponent);
-    component = fixture.componentInstance;
-    component.cluster = fakeDigitaloceanCluster();
-    component.seed = fakeSeedDatacenter();
-    component.projectID = fakeProject().id;
-    fixture.detectChanges();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      fixture = TestBed.createComponent(AddBindingComponent);
+      component = fixture.componentInstance;
+      component.cluster = fakeDigitaloceanCluster();
+      component.seed = fakeSeedDatacenter();
+      component.projectID = fakeProject().id;
+      fixture.detectChanges();
+    })
+  );
 
-  it('should create the rbac add binding cmp', async(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the rbac add binding cmp',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('cluster form should be validated correctly', fakeAsync(() => {
     component.bindingType = 'cluster';

@@ -9,13 +9,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
-import * as _ from 'lodash';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Cluster, MachineNetwork} from '@shared/entity/cluster';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
-import {WizardService} from '../core/services';
-import {Cluster} from '../shared/entity/cluster';
+
+export enum Controls {
+  MachineNetworks = 'machineNetworks',
+}
 
 @Component({
   selector: 'km-machine-networks',
@@ -24,71 +26,31 @@ import {Cluster} from '../shared/entity/cluster';
 })
 export class MachineNetworksComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() width: number;
-  @Input() isWizard: boolean;
+  @Output('machineNetworks') machineNetworks$ = new EventEmitter<MachineNetwork[]>();
+  @Output('valid') valid$ = new EventEmitter<boolean>();
 
-  machineNetworksForm: FormGroup;
-  machineNetworks: FormArray;
+  form: FormGroup;
 
-  private readonly _debounceTime = 1000;
+  private readonly _debounceTime = 500;
+  private _formArray: FormArray;
   private _unsubscribe = new Subject<void>();
 
-  constructor(private wizardService: WizardService) {}
+  get networks(): AbstractControl[] {
+    return this._formArray.controls;
+  }
+
+  constructor(private readonly _builder: FormBuilder) {}
 
   ngOnInit(): void {
-    const machineNetworksList = new FormArray([]);
-
-    if (this.isWizard) {
-      for (const i in this.cluster.spec.machineNetworks) {
-        if (Object.prototype.hasOwnProperty.call(this.cluster.spec.machineNetworks, i)) {
-          machineNetworksList.push(
-            new FormGroup({
-              cidr: new FormControl(this.cluster.spec.machineNetworks[i].cidr, [
-                Validators.required,
-                Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/),
-              ]),
-              dnsServers: new FormControl(this.cluster.spec.machineNetworks[i].dnsServers, [
-                Validators.required,
-                Validators.pattern(/^((((\d{1,3}\.){3}\d{1,3})\s*,*\s*)+)$/),
-              ]),
-              gateway: new FormControl(this.cluster.spec.machineNetworks[i].gateway, [
-                Validators.required,
-                Validators.pattern(/^((\d{1,3}\.){3}\d{1,3})$/),
-              ]),
-            })
-          );
-        }
-      }
-    }
-
-    if (machineNetworksList.length === 0) {
-      machineNetworksList.push(
-        new FormGroup({
-          cidr: new FormControl('', [
-            Validators.required,
-            Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/),
-          ]),
-          dnsServers: new FormControl(
-            [],
-            [Validators.required, Validators.pattern(/^((((\d{1,3}\.){3}\d{1,3})\s*,*\s*)+)$/)]
-          ),
-          gateway: new FormControl('', [Validators.required, Validators.pattern(/^((\d{1,3}\.){3}\d{1,3})$/)]),
-        })
-      );
-    }
-
-    this.machineNetworksForm = new FormGroup({
-      machineNetworks: machineNetworksList,
+    this._formArray = this._builder.array([this._createNetwork()]);
+    this.form = new FormGroup({
+      [Controls.MachineNetworks]: this._formArray,
     });
 
-    this.machineNetworksForm.valueChanges
+    this.form.valueChanges
       .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(() => {
-        this.setMachineNetworkSpec();
-      });
-
-    this.setMachineNetworkSpec();
+      .subscribe(_ => this._update());
   }
 
   ngOnDestroy(): void {
@@ -96,47 +58,42 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getMachineNetworksForm(form): void {
-    return form.get('machineNetworks').controls;
+  add(): void {
+    this._formArray.push(this._createNetwork());
   }
 
-  addMachineNetwork(): void {
-    this.machineNetworks = this.machineNetworksForm.get('machineNetworks') as FormArray;
-    this.machineNetworks.push(
-      new FormGroup({
-        cidr: new FormControl('', [
-          Validators.required,
-          Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/),
-        ]),
-        dnsServers: new FormControl(
-          [],
-          [Validators.required, Validators.pattern(/^((((\d{1,3}\.){3}\d{1,3})\s*,*\s*)+)$/)]
-        ),
-        gateway: new FormControl('', [Validators.required, Validators.pattern(/^((\d{1,3}\.){3}\d{1,3})$/)]),
-      })
-    );
+  delete(index: number): void {
+    this._formArray.removeAt(index);
+    this._update();
   }
 
-  deleteMachineNetwork(index: number): void {
-    const arrayControl = this.machineNetworksForm.get('machineNetworks') as FormArray;
-    arrayControl.removeAt(index);
-    this.setMachineNetworkSpec();
-  }
-
-  setMachineNetworkSpec(): void {
-    const machineNetworks = this.machineNetworksForm.get('machineNetworks') as FormArray;
-    const machineNetworksMap = [];
-    for (const i in machineNetworks.controls) {
-      if (Object.prototype.hasOwnProperty.call(machineNetworks.controls, i)) {
-        machineNetworksMap.push({
-          cidr: machineNetworks.value[i].cidr,
-          gateway: machineNetworks.value[i].gateway,
-          dnsServers: machineNetworks.value[i].dnsServers.toString().replace(/\s/g, '').split(','),
-          valid: machineNetworks.controls[i].valid,
+  private _update(): void {
+    const machineNetworks = [];
+    for (const i in this._formArray.controls) {
+      if (Object.prototype.hasOwnProperty.call(this._formArray.controls, i)) {
+        machineNetworks.push({
+          cidr: this._formArray.value[i].cidr,
+          gateway: this._formArray.value[i].gateway,
+          dnsServers: this._formArray.value[i].dnsServers.toString().replace(/\s/g, '').split(','),
         });
       }
     }
 
-    this.wizardService.changeMachineNetwork(machineNetworksMap);
+    this.machineNetworks$.emit(machineNetworks);
+    this.valid$.emit(this._formArray.controls.length > 0 && this._formArray.controls.every(c => c.valid));
+  }
+
+  private _createNetwork(): FormGroup {
+    return this._builder.group({
+      cidr: this._builder.control('', [
+        Validators.required,
+        Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/),
+      ]),
+      dnsServers: this._builder.control(
+        [],
+        [Validators.required, Validators.pattern(/^((((\d{1,3}\.){3}\d{1,3})\s*,*\s*)+)$/)]
+      ),
+      gateway: this._builder.control('', [Validators.required, Validators.pattern(/^((\d{1,3}\.){3}\d{1,3})$/)]),
+    });
   }
 }

@@ -11,22 +11,21 @@
 
 import {EventEmitter, Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
-
-import {Cluster} from '../../shared/entity/cluster';
-import {Datacenter} from '../../shared/entity/datacenter';
-import {MachineDeployment} from '../../shared/entity/machine-deployment';
-import {NodeSpec} from '../../shared/entity/node';
-import {NodeData} from '../../shared/model/NodeSpecChange';
+import {Cluster} from '@shared/entity/cluster';
+import {Datacenter} from '@shared/entity/datacenter';
+import {MachineDeployment} from '@shared/entity/machine-deployment';
+import {NodeSpec} from '@shared/entity/node';
+import {NodeData} from '@shared/model/NodeSpecChange';
 
 @Injectable()
 export class NodeMockService {
-  createNodes(nodeData: NodeData, dc: Datacenter, cluster: Cluster, project: string): void {}
+  createNodes(_nodeData: NodeData, _dc: Datacenter, _cluster: Cluster, _project: string): void {}
 
-  getOperatingSystem(spec: NodeSpec): string {
+  getOperatingSystem(_spec: NodeSpec): string {
     return 'ubuntu';
   }
 
-  getHealthStatus(md: MachineDeployment): object {
+  getHealthStatus(_md: MachineDeployment): object {
     return {
       color: 'km-icon-mask km-icon-circle km-warning-bg',
       status: 'In progress',
@@ -35,21 +34,21 @@ export class NodeMockService {
   }
 
   showMachineDeploymentEditDialog(
-    md: MachineDeployment,
-    cluster: Cluster,
-    projectID: string,
-    datacenter: Datacenter,
-    changeEventEmitter: EventEmitter<MachineDeployment>
+    _md: MachineDeployment,
+    _cluster: Cluster,
+    _projectID: string,
+    _datacenter: Datacenter,
+    _changeEventEmitter: EventEmitter<MachineDeployment>
   ): Observable<boolean> {
     return of(true);
   }
 
   showMachineDeploymentDeleteDialog(
-    md: MachineDeployment,
-    clusterID: string,
-    projectID: string,
-    dcName: string,
-    changeEventEmitter: EventEmitter<MachineDeployment>
+    _md: MachineDeployment,
+    _clusterID: string,
+    _projectID: string,
+    _dcName: string,
+    _changeEventEmitter: EventEmitter<MachineDeployment>
   ): Observable<boolean> {
     return of(true);
   }

@@ -11,17 +11,17 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {NodeDataService} from '@app/node-data/service/service';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {ClusterType} from '@shared/entity/cluster';
+import {DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
+import {NodeCloudSpec, NodeSpec, VSphereNodeSpec} from '@shared/entity/node';
+import {OperatingSystem} from '@shared/model/NodeProviderConstants';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {ClusterService} from '@shared/services/cluster.service';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge, of} from 'rxjs';
 import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {DatacenterService} from '../../../../core/services';
-import {ClusterType} from '../../../../shared/entity/cluster';
-import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/datacenter';
-import {NodeCloudSpec, NodeSpec, VSphereNodeSpec} from '../../../../shared/entity/node';
-import {OperatingSystem} from '../../../../shared/model/NodeProviderConstants';
-import {NodeData} from '../../../../shared/model/NodeSpecChange';
-import {ClusterService} from '../../../../shared/services/cluster.service';
-import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
-import {NodeDataService} from '../../../service/service';
 
 enum Controls {
   CPU = 'cpu',
@@ -46,18 +46,12 @@ enum Controls {
   ],
 })
 export class VSphereBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  readonly Controls = Controls;
   private readonly _defaultCPUCount = 2;
   private readonly _defaultMemory = 4096;
   private readonly _minMemory = 512;
-
   private _defaultTemplate = '';
   private _templates: DatacenterOperatingSystemOptions;
-
-  readonly Controls = Controls;
-
-  get template(): string {
-    return this.form.get(Controls.Template).value ? this.form.get(Controls.Template).value : this._defaultTemplate;
-  }
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -66,6 +60,10 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
     private readonly _datacenterService: DatacenterService
   ) {
     super();
+  }
+
+  get template(): string {
+    return this.form.get(Controls.Template).value ? this.form.get(Controls.Template).value : this._defaultTemplate;
   }
 
   ngOnInit(): void {

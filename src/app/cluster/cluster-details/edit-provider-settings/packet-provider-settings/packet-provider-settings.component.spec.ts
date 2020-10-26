@@ -13,13 +13,13 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
-import {ApiService, ClusterService} from '../../../../core/services';
-import {SharedModule} from '../../../../shared/shared.module';
-import {fakePacketCluster} from '../../../../testing/fake-data/cluster.fake';
-import {ApiMockService} from '../../../../testing/services/api-mock.service';
-import {ClusterMockService} from '../../../../testing/services/cluster-mock-service';
-import {MatDialogRefMock} from '../../../../testing/services/mat-dialog-ref-mock';
+import {fakePacketCluster} from '@app/testing/fake-data/cluster.fake';
+import {ApiMockService} from '@app/testing/services/api-mock.service';
+import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
+import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
+import {ApiService} from '@core/services/api/api.service';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {SharedModule} from '@shared/shared.module';
 import {AlibabaProviderSettingsComponent} from '../alibaba-provider-settings/alibaba-provider-settings.component';
 import {AWSProviderSettingsComponent} from '../aws-provider-settings/aws-provider-settings.component';
 import {AzureProviderSettingsComponent} from '../azure-provider-settings/azure-provider-settings.component';
@@ -30,7 +30,6 @@ import {HetznerProviderSettingsComponent} from '../hetzner-provider-settings/het
 import {KubevirtProviderSettingsComponent} from '../kubevirt-provider-settings/kubevirt-provider-settings.component';
 import {OpenstackProviderSettingsComponent} from '../openstack-provider-settings/openstack-provider-settings.component';
 import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/vsphere-provider-settings.component';
-
 import {PacketProviderSettingsComponent} from './packet-provider-settings.component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];

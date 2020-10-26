@@ -20,18 +20,17 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {NodeDataService} from '@app/node-data/service/service';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
+import {AlibabaInstanceType, AlibabaZone} from '@shared/entity/provider/alibaba';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {compare} from '@shared/utils/common-utils';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import * as _ from 'lodash';
 import {merge, Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-
-import {PresetsService} from '../../../../core/services';
-import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
-import {AlibabaInstanceType, AlibabaZone} from '../../../../shared/entity/provider/alibaba';
-import {NodeData} from '../../../../shared/model/NodeSpecChange';
-import {compare} from '../../../../shared/utils/common-utils';
-import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
-import {NodeDataService} from '../../../service/service';
-import * as _ from 'lodash';
 
 enum Controls {
   InstanceType = 'instanceType',

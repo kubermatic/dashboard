@@ -13,19 +13,20 @@ import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, Vi
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
-import {Subject} from 'rxjs';
-import {switchMap, takeUntil, take} from 'rxjs/operators';
+import {NodeService} from '@app/cluster/services/node.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {UserService} from '@core/services/user/user.service';
+import {Cluster} from '@shared/entity/cluster';
+import {MachineDeployment} from '@shared/entity/machine-deployment';
+import {Member} from '@shared/entity/member';
+import {getOperatingSystem} from '@shared/entity/node';
+import {GroupConfig} from '@shared/model/Config';
+import {MachineDeploymentHealthStatus} from '@shared/utils/health-status/machine-deployment-health-status';
+import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import * as _ from 'lodash';
-
-import {NotificationService, ProjectService, UserService} from '../../../core/services';
-import {Cluster} from '../../../shared/entity/cluster';
-import {Member} from '../../../shared/entity/member';
-import {MachineDeployment} from '../../../shared/entity/machine-deployment';
-import {GroupConfig} from '../../../shared/model/Config';
-import {MachineDeploymentHealthStatus} from '../../../shared/utils/health-status/machine-deployment-health-status';
-import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
-import {NodeService} from '../../services/node.service';
-import {getOperatingSystem} from '../../../shared/entity/node';
+import {Subject} from 'rxjs';
+import {switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-machine-deployment-list',

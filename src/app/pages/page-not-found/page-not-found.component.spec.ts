@@ -9,16 +9,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import {Auth} from '../../core/services';
-import {SharedModule} from '../../shared/shared.module';
-import {RouterStub} from '../../testing/router-stubs';
-import {AuthMockService} from '../../testing/services/auth-mock.service';
-import {click} from '../../testing/utils/click-handler';
+import {RouterStub} from '@app/testing/router-stubs';
+import {AuthMockService} from '@app/testing/services/auth-mock.service';
+import {click} from '@app/testing/utils/click-handler';
+import {Auth} from '@core/services/auth/auth.service';
+import {SharedModule} from '@shared/shared.module';
 import {PageNotFoundComponent} from './page-not-found.component';
 
 const modules: any[] = [BrowserModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];
@@ -48,9 +48,12 @@ describe('PageNotFoundComponent', () => {
     router = fixture.debugElement.injector.get(Router);
   });
 
-  it('should create the cmp', async(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the cmp',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should navigate to clusters list', () => {
     const spyNavigate = jest.spyOn(router, 'navigate');

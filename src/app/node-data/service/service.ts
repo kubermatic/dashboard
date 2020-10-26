@@ -10,16 +10,17 @@
 // limitations under the License.
 
 import {Inject, Injectable} from '@angular/core';
+import {ApiService} from '@core/services/api/api.service';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {ProjectService} from '@core/services/project/project.service';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {OperatingSystemSpec, Taint} from '@shared/entity/node';
+import {OperatingSystem} from '@shared/model/NodeProviderConstants';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {ClusterService} from '@shared/services/cluster.service';
 import * as _ from 'lodash';
 import {ReplaySubject} from 'rxjs';
-
-import {ApiService, DatacenterService, PresetsService, ProjectService} from '../../core/services';
-import {OperatingSystemSpec, Taint} from '../../shared/entity/node';
-import {OperatingSystem} from '../../shared/model/NodeProviderConstants';
-import {NodeData} from '../../shared/model/NodeSpecChange';
-import {ClusterService} from '../../shared/services/cluster.service';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../config';
-
 import {NodeDataAlibabaProvider} from './provider/alibaba';
 import {NodeDataAWSProvider} from './provider/aws';
 import {NodeDataAzureProvider} from './provider/azure';
@@ -68,7 +69,7 @@ export class NodeDataService {
   set operatingSystemSpec(spec: OperatingSystemSpec) {
     delete this._nodeData.spec.operatingSystem;
     this._nodeData.spec.operatingSystem = spec;
-    this.operatingSystemChanges.next(OperatingSystemSpec.getOperatingSystem(spec));
+    this._operatingSystemChanges.next(OperatingSystemSpec.getOperatingSystem(spec));
   }
 
   get operatingSystemSpec(): OperatingSystemSpec {

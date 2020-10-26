@@ -12,19 +12,19 @@
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
+import {ProjectService} from '@core/services/project/project.service';
+import {SettingsService} from '@core/services/settings/settings.service';
+import {UserService} from '@core/services/user/user.service';
+import {environment} from '@environments/environment';
+import {View} from '@shared/entity/common';
+import {Member} from '@shared/entity/member';
+import {Project} from '@shared/entity/project';
+import {CustomLink, CustomLinkLocation, filterCustomLinks, UserSettings} from '@shared/entity/settings';
+import {GroupConfig} from '@shared/model/Config';
+import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import * as _ from 'lodash';
 import {BehaviorSubject, merge, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
-
-import {environment} from '../../../../environments/environment';
-import {Member} from '../../../shared/entity/member';
-import {Project} from '../../../shared/entity/project';
-import {View} from '../../../shared/entity/common';
-import {GroupConfig} from '../../../shared/model/Config';
-import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
-import {ProjectService, UserService} from '../../services';
-import {SettingsService} from '../../services/settings/settings.service';
-import {CustomLink, CustomLinkLocation, filterCustomLinks, UserSettings} from '../../../shared/entity/settings';
 
 @Component({
   selector: 'km-sidenav',

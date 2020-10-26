@@ -11,16 +11,15 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {AppConfigService} from '@app/config.service';
+import {Auth} from '@core/services/auth/auth.service';
+import {environment} from '@environments/environment';
+import {Admin} from '@shared/entity/member';
+import {AdminSettings, CustomLink, DEFAULT_ADMIN_SETTINGS} from '@shared/entity/settings';
 import {Settings} from 'http2';
 import {BehaviorSubject, iif, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, delay, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
 import {webSocket} from 'rxjs/webSocket';
-
-import {environment} from '../../../../environments/environment';
-import {AppConfigService} from '../../../app-config.service';
-import {Admin} from '../../../shared/entity/member';
-import {AdminSettings, CustomLink, DEFAULT_ADMIN_SETTINGS} from '../../../shared/entity/settings';
-import {Auth} from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',

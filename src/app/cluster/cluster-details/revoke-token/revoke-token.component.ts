@@ -11,14 +11,15 @@
 
 import {Component, Input, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
+import {ApiService} from '@core/services/api/api.service';
+import {NotificationService} from '@core/services/notification/notification.service';
+import {UserService} from '@core/services/user/user.service';
+import {Cluster} from '@shared/entity/cluster';
+import {View} from '@shared/entity/common';
+import {Member} from '@shared/entity/member';
+import {GroupConfig} from '@shared/model/Config';
+import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {first} from 'rxjs/operators';
-
-import {ApiService, NotificationService, UserService} from '../../../core/services';
-import {Cluster} from '../../../shared/entity/cluster';
-import {View} from '../../../shared/entity/common';
-import {Member} from '../../../shared/entity/member';
-import {GroupConfig} from '../../../shared/model/Config';
-import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
 
 @Component({
   selector: 'km-revoke-token',

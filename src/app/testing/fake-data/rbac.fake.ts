@@ -16,7 +16,7 @@ import {
   RoleName,
   SimpleBinding,
   SimpleClusterBinding,
-} from '../../shared/entity/rbac';
+} from '@shared/entity/rbac';
 
 export function fakeClusterBinding(): ClusterBinding {
   return {

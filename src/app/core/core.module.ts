@@ -14,46 +14,40 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {Injector, NgModule, Optional, SkipSelf} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
-import {COOKIE, COOKIE_DI_TOKEN} from '../app.config';
-
+import {ApiService} from '@core/services/api/api.service';
+import {AuthGuard, AuthzGuard} from '@core/services/auth/auth.guard';
+import {Auth} from '@core/services/auth/auth.service';
+import {ClusterService} from '@core/services/cluster/cluster.service';
+import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {HistoryService} from '@core/services/history/history.service';
+import {LabelService} from '@core/services/label/label.service';
+import {ParamsService} from '@core/services/params/params.service';
+import {RBACService} from '@core/services/rbac/rbac.service';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {SharedModule} from '@shared/shared.module';
+import {COOKIE, COOKIE_DI_TOKEN} from '../config';
 import {AddMemberComponent} from '../member/add-member/add-member.component';
 import {EditMemberComponent} from '../member/edit-member/edit-member.component';
 import {AddServiceAccountComponent} from '../serviceaccount/add-serviceaccount/add-serviceaccount.component';
 import {EditServiceAccountComponent} from '../serviceaccount/edit-serviceaccount/edit-serviceaccount.component';
 import {AddServiceAccountTokenComponent} from '../serviceaccount/serviceaccount-token/add-serviceaccount-token/add-serviceaccount-token.component';
 import {EditServiceAccountTokenComponent} from '../serviceaccount/serviceaccount-token/edit-serviceaccount-token/edit-serviceaccount-token.component';
-import {SharedModule} from '../shared/shared.module';
-
 import {FooterComponent} from './components/footer/component';
 import {NavigationComponent} from './components/navigation/navigation.component';
 import {ProjectSelectorComponent} from './components/navigation/project/component';
 import {NotificationPanelComponent} from './components/notification-panel/notification-panel.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
+import {UserPanelComponent} from './components/user-panel/user-panel.component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
-import {
-  ApiService,
-  Auth,
-  AuthGuard,
-  AuthzGuard,
-  ClusterService,
-  DatacenterService,
-  HistoryService,
-  LabelService,
-  ParamsService,
-  PresetsService,
-  RBACService,
-  WizardService,
-} from './services';
 import {GlobalModule} from './services/global/global.module';
 import {NodeDataService} from './services/node-data/node-data.service';
-import {PreviousRouteService} from './services/previous-route/previous-route.service';
 import {PageTitleService} from './services/page-title/page-title.service';
+import {PreviousRouteService} from './services/previous-route/previous-route.service';
 import {SettingsService} from './services/settings/settings.service';
+import {ThemeInformerService} from './services/theme-informer/theme-informer.service';
 import {TokenService} from './services/token/token.service';
 import {StepsService} from './services/wizard/steps.service';
 import {ClusterNameGenerator} from './util/name-generator.service';
-import {ThemeInformerService} from './services/theme-informer/theme-informer.service';
-import {UserPanelComponent} from './components/user-panel/user-panel.component';
 
 const modules: any[] = [
   CommonModule,
@@ -85,7 +79,6 @@ const services: any[] = [
   AuthzGuard,
   DatacenterService,
   NodeDataService,
-  WizardService,
   StepsService,
   ClusterNameGenerator,
   ApiService,
@@ -133,6 +126,7 @@ const interceptors: any[] = [
 })
 export class CoreModule {
   static injector: Injector;
+
   constructor(@Optional() @SkipSelf() parentModule: CoreModule, injector: Injector) {
     if (parentModule) {
       throw new Error('CoreModule is already loaded. Import it in the AppModule only');
