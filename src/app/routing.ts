@@ -48,11 +48,11 @@ function createRouting(): Routes {
         },
         {
           path: 'projects/:projectID/clusters',
-          loadChildren: () => import('./cluster/cluster.module').then(m => m.ClusterModule),
+          loadChildren: () => import('./cluster/module').then(m => m.ClusterModule),
         },
         {
           path: 'projects/:projectID/dc/:seedDc/clusters',
-          loadChildren: () => import('./cluster/cluster.module').then(m => m.ClusterModule),
+          loadChildren: () => import('./cluster/module').then(m => m.ClusterModule),
         },
         {
           path: 'account',
