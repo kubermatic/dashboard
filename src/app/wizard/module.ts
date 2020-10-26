@@ -12,8 +12,7 @@
 import {NgModule} from '@angular/core';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../node-data/config';
 import {NodeDataModule} from '../node-data/module';
-import {SharedModule} from '../shared/shared.module';
-
+import {SharedModule} from '@shared/shared.module';
 import {WizardComponent} from './component';
 import {Routing} from './routing';
 import {WizardService} from './service/wizard';

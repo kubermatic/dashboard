@@ -492,9 +492,33 @@ limitations under the License.
             </km-property>
           </ng-container>
 
-          <km-property-boolean label="Dynamic kubelet Config"
-                               [value]="nodeData.dynamicConfig">
-          </km-property-boolean>
+        <!-- Anexia Nodes -->
+        <ng-container *ngIf="cluster.spec.cloud.anexia">
+          <km-property>
+            <div key>Number of CPUs</div>
+            <div value>{{nodeData.spec.cloud.anexia?.cpus}}</div>
+          </km-property>
+          <km-property>
+            <div key>Memory in GB</div>
+            <div value>{{nodeData.spec.cloud.anexia?.memory}}</div>
+          </km-property>
+          <km-property>
+            <div key>Disk Size in GB</div>
+            <div value>{{nodeData.spec.cloud.anexia?.diskSize}}</div>
+          </km-property>
+          <km-property>
+            <div key>Template ID</div>
+            <div value>{{nodeData.spec.cloud.anexia?.templateID}}</div>
+          </km-property>
+          <km-property>
+            <div key>VLAN ID</div>
+            <div value>{{nodeData.spec.cloud.anexia?.vlanID}}</div>
+          </km-property>
+        </ng-container>
+
+        <km-property-boolean label="Dynamic kubelet Config"
+                             [value]="nodeData.dynamicConfig">
+        </km-property-boolean>
 
           <!-- AWS Node Options -->
           <ng-container *ngIf="cluster.spec.cloud.aws">

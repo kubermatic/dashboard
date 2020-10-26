@@ -129,7 +129,13 @@ export class NodeSystemInfo {
   containerRuntimeVersion: string;
 }
 
-export class AnexiaNodeSpec {}
+export class AnexiaNodeSpec {
+  vlanID: string;
+  templateID: string;
+  cpus: number;
+  memory: number;
+  diskSize: number;
+}
 
 export class AlibabaNodeSpec {
   instanceType: string;
