@@ -58,9 +58,15 @@ export class ProviderSettingsStepComponent extends StepBase implements OnInit, O
 
   ngOnInit(): void {
     this._init();
-    this._clusterService.providerChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(provider => (this.provider = provider));
+
+    this._clusterService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(provider => {
+      this.provider = provider;
+      if (this.isProviderWithoutSettings(provider)) {
+        this._initProviderWithoutSettings();
+      } else {
+        this._init();
+      }
+    });
   }
 
   hasExtendedSection(provider: NodeProvider): boolean {
@@ -71,6 +77,16 @@ export class ProviderSettingsStepComponent extends StepBase implements OnInit, O
       NodeProvider.GCP,
       NodeProvider.OPENSTACK,
     ].includes(provider);
+  }
+
+  isProviderWithoutSettings(provider: NodeProvider): boolean {
+    return [NodeProvider.BRINGYOUROWN].includes(provider);
+  }
+
+  private _initProviderWithoutSettings(): void {
+    this.form = this._builder.group({
+      [Controls.SSHKeys]: this._builder.control(''),
+    });
   }
 
   private _init(): void {
