@@ -24,7 +24,7 @@ import {NotificationService} from '@core/services/notification/notification.serv
 import {RBACService} from '@core/services/rbac/rbac.service';
 import {SharedModule} from '@shared/shared.module';
 import {of} from 'rxjs';
-import {RBACComponent} from './rbac.component';
+import {RBACComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 

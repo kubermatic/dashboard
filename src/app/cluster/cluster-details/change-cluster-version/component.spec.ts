@@ -28,8 +28,7 @@ import {NotificationService} from '@core/services/notification/notification.serv
 import {ProjectService} from '@core/services/project/project.service';
 import {SharedModule} from '@shared/shared.module';
 import {of} from 'rxjs';
-
-import {ChangeClusterVersionComponent} from './change-cluster-version.component';
+import {ChangeClusterVersionComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 

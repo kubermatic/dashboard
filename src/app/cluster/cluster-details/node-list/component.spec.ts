@@ -27,7 +27,7 @@ import {SettingsService} from '@core/services/settings/settings.service';
 import {UserService} from '@core/services/user/user.service';
 import {SharedModule} from '@shared/shared.module';
 import {of} from 'rxjs';
-import {NodeListComponent} from './node-list.component';
+import {NodeListComponent} from './component';
 
 class MatDialogMock {
   open(): any {

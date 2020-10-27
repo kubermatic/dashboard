@@ -23,7 +23,7 @@ import {ApiService} from '@core/services/api/api.service';
 import {Auth} from '@core/services/auth/auth.service';
 import {UserService} from '@core/services/user/user.service';
 import {SharedModule} from '@shared/shared.module';
-import {ShareKubeconfigComponent} from './share-kubeconfig.component';
+import {ShareKubeconfigComponent} from './component';
 
 describe('ShareKubeconfigComponent', () => {
   let component: ShareKubeconfigComponent;

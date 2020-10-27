@@ -21,13 +21,13 @@ import {AlibabaProviderSettingsComponent} from '../alibaba-provider-settings/com
 import {AWSProviderSettingsComponent} from '../aws-provider-settings/component';
 import {AzureProviderSettingsComponent} from '../azure-provider-settings/component';
 import {DigitaloceanProviderSettingsComponent} from '../digitalocean-provider-settings/component';
-import {EditProviderSettingsComponent} from '../edit-provider-settings.component';
+import {EditProviderSettingsComponent} from '../component';
 import {GCPProviderSettingsComponent} from '../gcp-provider-settings/component';
 import {HetznerProviderSettingsComponent} from '../hetzner-provider-settings/component';
 import {KubevirtProviderSettingsComponent} from '../kubevirt-provider-settings/component';
-import {OpenstackProviderSettingsComponent} from '../openstack-provider-settings/openstack-provider-settings.component';
-import {PacketProviderSettingsComponent} from '../packet-provider-settings/packet-provider-settings.component';
-import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/vsphere-provider-settings.component';
+import {OpenstackProviderSettingsComponent} from '../openstack-provider-settings/component';
+import {PacketProviderSettingsComponent} from '../packet-provider-settings/component';
+import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 

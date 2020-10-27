@@ -41,9 +41,9 @@ import {SettingsService} from '@core/services/settings/settings.service';
 import {UserService} from '@core/services/user/user.service';
 import {SharedModule} from '@shared/shared.module';
 import {MachineDeploymentHealthStatus} from '@shared/utils/health-status/machine-deployment-health-status';
-import {NodeListComponent} from '../node-list/node-list.component';
-import {ClusterPanelComponent} from './cluster-panel/cluster-panel.component';
-import {MachineDeploymentDetailsComponent} from './machine-deployment-details.component';
+import {NodeListComponent} from '../node-list/component';
+import {ClusterPanelComponent} from './cluster-panel/component';
+import {MachineDeploymentDetailsComponent} from './component';
 
 describe('MachineDeploymentDetailsComponent', () => {
   let fixture: ComponentFixture<MachineDeploymentDetailsComponent>;

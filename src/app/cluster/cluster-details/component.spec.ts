@@ -48,12 +48,12 @@ import {UserService} from '@core/services/user/user.service';
 import {SharedModule} from '@shared/shared.module';
 import {of} from 'rxjs';
 import {NodeService} from '../services/node.service';
-import {ClusterDetailsComponent} from './cluster-details.component';
-import {ClusterSecretsComponent} from './cluster-secrets/cluster-secrets.component';
-import {MachineDeploymentListComponent} from './machine-deployment-list/machine-deployment-list.component';
-import {MachineNetworksDisplayComponent} from './machine-networks-display/machine-networks-display.component';
-import {NodeListComponent} from './node-list/node-list.component';
-import {RBACComponent} from './rbac/rbac.component';
+import {ClusterDetailsComponent} from './component';
+import {ClusterSecretsComponent} from './cluster-secrets/component';
+import {MachineDeploymentListComponent} from './machine-deployment-list/component';
+import {MachineNetworksDisplayComponent} from './machine-networks-display/component';
+import {NodeListComponent} from './node-list/component';
+import {RBACComponent} from './rbac/component';
 import {VersionPickerComponent} from './version-picker/component';
 
 describe('ClusterDetailsComponent', () => {

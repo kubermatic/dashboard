@@ -22,7 +22,7 @@ import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/core.module';
 import {RBACService} from '@core/services/rbac/rbac.service';
 import {SharedModule} from '@shared/shared.module';
-import {AddBindingComponent} from './add-binding.component';
+import {AddBindingComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 

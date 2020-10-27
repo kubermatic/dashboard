@@ -22,7 +22,7 @@ import {ClusterService} from '@core/services/cluster/cluster.service';
 import {NotificationService} from '@core/services/notification/notification.service';
 import {UserService} from '@core/services/user/user.service';
 import {SharedModule} from '@shared/shared.module';
-import {EditSSHKeysComponent} from './edit-sshkeys.component';
+import {EditSSHKeysComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
