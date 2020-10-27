@@ -16,7 +16,7 @@ import {Cluster, MasterVersion} from '@shared/entity/cluster';
 import {EndOfLifeService} from '@shared/services/eol.service';
 import {first} from 'rxjs/operators';
 import {gt, lt} from 'semver';
-import {ChangeClusterVersionComponent} from '../change-cluster-version/change-cluster-version.component';
+import {ChangeClusterVersionComponent} from '../change-cluster-version/component';
 
 @Component({
   selector: 'km-version-picker',
