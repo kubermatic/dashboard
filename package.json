@@ -82,7 +82,7 @@
     "cypress": "5.4.0",
     "eslint-plugin-compat": "3.8.0",
     "eslint-plugin-rxjs": "1.0.1",
-    "gts": "3.0.1",
+    "gts": "3.0.2",
     "husky": "4.3.0",
     "jest": "26.6.1",
     "jest-preset-angular": "8.3.2",
