@@ -18,8 +18,8 @@ import {first} from 'rxjs/operators';
 
 @Component({
   selector: 'km-share-kubeconfig',
-  templateUrl: './share-kubeconfig.component.html',
-  styleUrls: ['./share-kubeconfig.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class ShareKubeconfigComponent implements OnInit {
   @Input() cluster: Cluster;

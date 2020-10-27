@@ -10,11 +10,11 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
+import {AddMachineNetworkComponent} from '@app/cluster/cluster-details/add-machine-network/component';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '@app/node-data/config';
 import {NodeDataModule} from '@app/node-data/module';
 import {SharedModule} from '@shared/shared.module';
 import {MachineNetworksModule} from '../machine-networks/machine-networks.module';
-import {AddMachineNetworkComponent} from './cluster-details/add-machine-network/component';
 import {ChangeClusterVersionComponent} from './cluster-details/change-cluster-version/component';
 import {ClusterDeleteConfirmationComponent} from './cluster-details/cluster-delete-confirmation/component';
 import {ClusterSecretsComponent} from './cluster-details/cluster-secrets/component';
@@ -40,13 +40,13 @@ import {MachineNetworksDisplayComponent} from './cluster-details/machine-network
 import {NodeListComponent} from './cluster-details/node-list/component';
 import {AddBindingComponent} from './cluster-details/rbac/add-binding/component';
 import {RBACComponent} from './cluster-details/rbac/component';
-import {RevokeTokenComponent} from './cluster-details/revoke-token/revoke-token.component';
-import {ShareKubeconfigComponent} from './cluster-details/share-kubeconfig/share-kubeconfig.component';
+import {RevokeTokenComponent} from './cluster-details/revoke-token/component';
+import {ShareKubeconfigComponent} from './cluster-details/share-kubeconfig/component';
 import {VersionPickerComponent} from './cluster-details/version-picker/component';
 import {ClusterListComponent} from './cluster-list/component';
-import {ClusterRoutingModule} from './routing.module';
 import {ExternalClusterDetailsComponent} from './external-cluster-details/component';
 import {ExternalNodeListComponent} from './external-cluster-details/external-node-list/component';
+import {ClusterRoutingModule} from './routing.module';
 import {NodeService} from './services/node.service';
 
 const components: any[] = [

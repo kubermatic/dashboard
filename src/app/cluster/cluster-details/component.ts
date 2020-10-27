@@ -44,8 +44,8 @@ import {NodeService} from '../services/node.service';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/component';
 import {EditClusterComponent} from './edit-cluster/component';
 import {EditSSHKeysComponent} from './edit-sshkeys/component';
-import {RevokeTokenComponent} from './revoke-token/revoke-token.component';
-import {ShareKubeconfigComponent} from './share-kubeconfig/share-kubeconfig.component';
+import {RevokeTokenComponent} from './revoke-token/component';
+import {ShareKubeconfigComponent} from './share-kubeconfig/component';
 
 @Component({
   selector: 'km-cluster-details',

@@ -23,8 +23,8 @@ import {first} from 'rxjs/operators';
 
 @Component({
   selector: 'km-revoke-token',
-  templateUrl: './revoke-token.component.html',
-  styleUrls: ['./revoke-token.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class RevokeTokenComponent implements OnInit {
   @Input() cluster: Cluster;
