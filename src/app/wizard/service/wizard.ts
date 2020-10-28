@@ -29,6 +29,7 @@ export class WizardService {
     handleProviderChange(provider: NodeProvider): void {
       switch (provider) {
         case NodeProvider.BRINGYOUROWN:
+          this._hideStep(StepRegistry.ProviderSettings);
           this._hideStep(StepRegistry.NodeSettings);
           this._hideStep(StepRegistry.MachineNetwork);
           break;

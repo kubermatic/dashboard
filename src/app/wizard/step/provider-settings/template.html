@@ -25,18 +25,14 @@ limitations under the License.
                        class="km-no-padding">
         <mat-card-title>Basic</mat-card-title>
       </mat-card-header>
-      <km-wizard-presets *ngIf="!isProviderWithoutSettings(provider)"
-                         [formControl]="form.get(Control.Preset)"></km-wizard-presets>
-      <km-wizard-provider-basic *ngIf="!isProviderWithoutSettings(provider)"
-                                [provider]="provider"
+      <km-wizard-presets [formControl]="form.get(Control.Preset)"></km-wizard-presets>
+      <km-wizard-provider-basic [provider]="provider"
                                 [formControl]="form.get(Control.ProviderBasic)"></km-wizard-provider-basic>
-      <km-wizard-cluster-ssh-keys [formControl]="form.get(Control.SSHKeys)"></km-wizard-cluster-ssh-keys>
     </div>
 
     <div fxFlex="50"
          fxLayout="column">
       <km-wizard-provider-extended [provider]="provider"
-                                   *ngIf="!isProviderWithoutSettings(provider)"
                                    [visible]="hasExtendedSection(provider)"
                                    [formControl]="form.get(Control.ProviderExtended)">
       </km-wizard-provider-extended>

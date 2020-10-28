@@ -152,10 +152,9 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
 
   private _hasProviderOptions(provider: NodeProvider): boolean {
     return (
-      (this._clusterService.provider === provider &&
-        this.cluster.spec.cloud[provider] &&
-        Object.values(this.cluster.spec.cloud[provider]).some(val => val)) ||
-      !_.isEmpty(this.clusterSSHKeys)
+      this._clusterService.provider === provider &&
+      this.cluster.spec.cloud[provider] &&
+      Object.values(this.cluster.spec.cloud[provider]).some(val => val)
     );
   }
 

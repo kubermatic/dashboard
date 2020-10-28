@@ -51,7 +51,6 @@ describe('Basic Story', () => {
     WizardPage.getDatacenterBtn(Datacenter.Frankfurt).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
-    WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
     ClustersPage.verifyUrl();
