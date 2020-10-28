@@ -90,8 +90,7 @@ limitations under the License.
           </button>
           <button mat-menu-item
                   (click)="editSSHKeys()"
-                  [disabled]="!isSSHKeysEditEnabled()"
-                  *ngIf="!cluster.spec.cloud.bringyourown">
+                  [disabled]="!isSSHKeysEditEnabled()">
             <span>Manage SSH keys</span>
           </button>
 

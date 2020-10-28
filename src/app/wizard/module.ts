@@ -40,7 +40,7 @@ import {ProviderExtendedComponent} from './step/provider-settings/provider/exten
 import {GCPProviderExtendedComponent} from './step/provider-settings/provider/extended/gcp/component';
 import {OpenstackProviderExtendedComponent} from './step/provider-settings/provider/extended/openstack/component';
 import {VSphereProviderExtendedComponent} from './step/provider-settings/provider/extended/vsphere/component';
-import {ClusterSSHKeysComponent} from './step/provider-settings/ssh-keys/component';
+import {ClusterSSHKeysComponent} from './step/cluster/ssh-keys/component';
 import {SummaryStepComponent} from './step/summary/component';
 
 const components: any[] = [
