@@ -45,6 +45,7 @@ enum Controls {
   AuditLogging = 'auditLogging',
   Labels = 'labels',
   AdmissionPlugins = 'admissionPlugins',
+  SSHKeys = 'sshKeys',
 }
 
 @Component({
@@ -100,6 +101,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.AuditLogging]: new FormControl(false),
       [Controls.AdmissionPlugins]: new FormControl([]),
       [Controls.Labels]: new FormControl(''),
+      [Controls.SSHKeys]: this._builder.control(''),
     });
 
     this._clusterService.datacenterChanges

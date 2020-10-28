@@ -124,6 +124,13 @@ limitations under the License.
                              label="Disable system auto-update"
                              [value]="nodeData.spec.operatingSystem.flatcar.disableAutoUpdate">
         </km-property-boolean>
+        <div fxLayout="row"
+             fxLayoutAlign=" center"
+             fxLayoutGap="10px"
+             *ngIf="clusterSSHKeys.length">
+          <i class="km-icon-key"></i>
+          <span>{{getSSHKeyNames()}}</span>
+        </div>
       </div>
     </div>
 
@@ -268,13 +275,6 @@ limitations under the License.
             </km-property>
           </ng-container>
         </ng-container>
-        <div fxLayout="row"
-             fxLayoutAlign=" center"
-             fxLayoutGap="10px"
-             *ngIf="clusterSSHKeys.length">
-          <i class="km-icon-key"></i>
-          <span>{{getSSHKeyNames()}}</span>
-        </div>
       </div>
     </div>
   </div>
