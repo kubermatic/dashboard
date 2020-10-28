@@ -22,7 +22,6 @@ enum Controls {
   ProviderBasic = 'providerBasic',
   ProviderExtended = 'providerExtended',
   Preset = 'preset',
-  SSHKeys = 'sshKeys',
 }
 
 @Component({
@@ -78,7 +77,6 @@ export class ProviderSettingsStepComponent extends StepBase implements OnInit, O
       [Controls.Preset]: this._builder.control(''),
       [Controls.ProviderBasic]: this._builder.control(''),
       [Controls.ProviderExtended]: this._builder.control(''),
-      [Controls.SSHKeys]: this._builder.control(''),
     });
   }
 }
