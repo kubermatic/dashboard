@@ -123,6 +123,8 @@ export class ClusterService {
 
   reset(): void {
     this._cluster = Cluster.newEmptyClusterEntity();
+    this._sshKeys = [];
+    this._admissionPluginsEntity = [];
   }
 
   private _getProvider(cluster: Cluster): NodeProvider {
