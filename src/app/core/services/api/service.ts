@@ -12,6 +12,8 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
+import {GuidedTourService} from '@core/services/guided-tour/guided-tour.service';
+import {GuidedTourItemsService} from '@core/services/guided-tour/guided-tour-items.service';
 import {environment} from '@environments/environment';
 import {LabelFormComponent} from '@shared/components/label-form/label-form.component';
 import {TaintFormComponent} from '@shared/components/taint-form/taint-form.component';
@@ -42,7 +44,6 @@ import {SSHKey} from '@shared/entity/ssh-key';
 import {CreateProjectModel} from '@shared/model/CreateProjectModel';
 import {Observable, of, timer} from 'rxjs';
 import {catchError, shareReplay, switchMap} from 'rxjs/operators';
-import {GuidedTourService, GuidedTourItemsService} from '../../../core/services/guided-tour';
 
 @Injectable()
 export class ApiService {

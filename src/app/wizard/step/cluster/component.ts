@@ -22,7 +22,8 @@ import {
 import {AppConfigService} from '@app/config.service';
 import {ApiService} from '@core/services/api/service';
 import {DatacenterService} from '@core/services/datacenter/service';
-import {GuidedTourService, GuidedTourItemsService} from '@core/services/guided-tour';
+import {GuidedTourService} from '@core/services/guided-tour/guided-tour.service';
+import {GuidedTourItemsService} from '@core/services/guided-tour/guided-tour-items.service';
 import {NameGeneratorService} from '@core/services/name-generator/service';import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter} from '@shared/entity/datacenter';

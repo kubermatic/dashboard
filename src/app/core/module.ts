@@ -19,6 +19,12 @@ import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
 import {Auth} from '@core/services/auth/service';
 import {ClusterService} from '@core/services/cluster/service';
 import {DatacenterService} from '@core/services/datacenter/service';
+import {EventListenerService} from '@core/services/guided-tour/event-listener.service';
+import {GuidedTourItemsService} from '@core/services/guided-tour/guided-tour-items.service';
+import {GuidedTourOptionsService} from '@core/services/guided-tour/guided-tour-options.service';
+import {GuidedTourStepService} from '@core/services/guided-tour/guided-tour-step.service';
+import {GuidedTourStepsContainerService} from '@core/services/guided-tour/guided-tour-steps-container.service';
+import {GuidedTourService} from '@core/services/guided-tour/guided-tour.service';
 import {HistoryService} from '@core/services/history/service';
 import {LabelService} from '@core/services/label/service';
 import {ParamsService} from '@core/services/params/service';
@@ -49,14 +55,6 @@ import {ThemeInformerService} from './services/theme-informer/service';
 import {TokenService} from './services/token/service';
 import {StepsService} from './services/wizard/steps.service';
 import {HelpPanelComponent} from './components/help-panel/help-panel.component';
-import {
-  EventListenerService,
-  GuidedTourItemsService,
-  GuidedTourOptionsService,
-  GuidedTourStepService,
-  GuidedTourStepsContainerService,
-  GuidedTourService,
-} from './services/guided-tour';
 
 const modules: any[] = [
   CommonModule,

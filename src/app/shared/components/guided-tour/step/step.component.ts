@@ -25,11 +25,11 @@ import {
 import {Subscription, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {GuidedTourStep} from '../../../entity/guided-tour';
-import {GuidedTourStepService} from '../../../../core/services/guided-tour/guided-tour-step.service';
-import {GuidedTourStepsContainerService} from '../../../../core/services/guided-tour/guided-tour-steps-container.service';
-import {EventListenerService} from '../../../../core/services/guided-tour/event-listener.service';
-import {GuidedTourOptionsService} from '../../../../core/services/guided-tour/guided-tour-options.service';
+import {GuidedTourStep} from '@shared/entity/guided-tour';
+import {GuidedTourStepService} from '@core/services/guided-tour/guided-tour-step.service';
+import {GuidedTourStepsContainerService} from '@core/services/guided-tour/guided-tour-steps-container.service';
+import {EventListenerService} from '@core/services/guided-tour/event-listener.service';
+import {GuidedTourOptionsService} from '@core/services/guided-tour/guided-tour-options.service';
 
 @Component({
   selector: 'guided-tour-step',

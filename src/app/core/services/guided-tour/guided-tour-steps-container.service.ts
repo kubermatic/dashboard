@@ -12,7 +12,7 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs';
 
-import {GuidedTourStep, Step, StepActionType} from '../../../shared/entity/guided-tour';
+import {GuidedTourStep, Step, StepActionType} from '@shared/entity/guided-tour';
 import {GuidedTourOptionsService} from './guided-tour-options.service';
 import {GuidedTourItemsService} from './guided-tour-items.service';
 

@@ -11,12 +11,13 @@
 
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {GuidedTourService} from '@core/services/guided-tour/guided-tour.service';
+import {GuidedTourItemsService} from '@core/services/guided-tour/guided-tour-items.service';
 import {Observable, of} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {DigitaloceanSizes, Optimized, Standard} from '../../../../shared/entity/provider/digitalocean';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataService} from '../../../service/service';
-import {GuidedTourService, GuidedTourItemsService} from '../../../../core/services/guided-tour';
 
 enum Controls {
   Size = 'size',

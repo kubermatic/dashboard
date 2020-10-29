@@ -10,14 +10,14 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
-import {GuidedTourItem} from '../../../shared/entity/guided-tour';
-import {Project} from '../../../shared/entity/project';
-import {Cluster, ClusterType, MasterVersion} from '../../../shared/entity/cluster';
-import {Node} from '../../../shared/entity/node';
-import {MachineDeployment} from '../../../shared/entity/machine-deployment';
-import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean';
-import {Health} from '../../../shared/entity/health';
-import {GuidedTourID} from '../../../shared/utils/guided-tour-utils/guided-tour-utils';
+import {GuidedTourItem} from '@shared/entity/guided-tour';
+import {Project} from '@shared/entity/project';
+import {Cluster, ClusterType, MasterVersion} from '@shared/entity/cluster';
+import {Node} from '@shared/entity/node';
+import {MachineDeployment} from '@shared/entity/machine-deployment';
+import {DigitaloceanSizes} from '@shared/entity/provider/digitalocean';
+import {Health} from '@shared/entity/health';
+import {GuidedTourID} from '@shared/utils/guided-tour-utils/guided-tour-utils';
 
 @Injectable()
 export class GuidedTourItemsService {

@@ -12,7 +12,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetsService} from '@core/services/wizard/presets.service';
-import {GuidedTourService} from '@core/services/guided-tour';
+import {GuidedTourService} from '@core/services/guided-tour/guided-tour.service';
 import {CloudSpec, Cluster, ClusterSpec, DigitaloceanCloudSpec} from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';

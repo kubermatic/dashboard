@@ -13,8 +13,8 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {finalize} from 'rxjs/operators';
 
-import {GuidedTourOptions, GuidedTourStepInfo} from '../../../shared/entity/guided-tour';
-import {GuidedTourID} from '../../../shared/utils/guided-tour-utils/guided-tour-utils';
+import {GuidedTourOptions, GuidedTourStepInfo} from '@shared/entity/guided-tour';
+import {GuidedTourID} from '@shared/utils/guided-tour-utils/guided-tour-utils';
 import {GuidedTourStepService} from './guided-tour-step.service';
 import {GuidedTourOptionsService} from './guided-tour-options.service';
 

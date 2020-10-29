@@ -11,7 +11,7 @@
 
 import {Injectable} from '@angular/core';
 
-import {GuidedTourOptions} from '../../../shared/entity/guided-tour';
+import {GuidedTourOptions} from '@shared/entity/guided-tour';
 
 @Injectable()
 export class GuidedTourOptionsService {

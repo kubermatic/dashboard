@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {ViewContainerRef, EventEmitter} from '@angular/core';
-import {GuidedTourStepComponent} from '../../shared/components/guided-tour/step/step.component';
+import {GuidedTourStepComponent} from '@shared/components/guided-tour/step/step.component';
 
 export class GuidedTourItem {
   id: string;

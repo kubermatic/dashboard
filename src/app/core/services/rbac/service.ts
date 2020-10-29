@@ -12,7 +12,7 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {GuidedTourService} from '../../../core/services/guided-tour';
+import {GuidedTourService} from '@core/services/guided-tour/guided-tour.service';
 import {environment} from '../../../../environments/environment';
 import {
   Binding,
