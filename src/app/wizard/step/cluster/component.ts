@@ -30,7 +30,8 @@ import {ClusterService} from '@shared/services/cluster.service';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import {merge} from 'rxjs';
-import {filter, first, switchMap, takeUntil} from 'rxjs/operators';import {WizardService} from '../../service/wizard';
+import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
+import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
 
 enum Controls {

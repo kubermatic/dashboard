@@ -25,7 +25,7 @@ import {GuidedTourStep, GuidedTourStepInfo, StepActionType} from '../../../share
 import {EventListenerService} from './event-listener.service';
 import {GuidedTourStepsContainerService} from './guided-tour-steps-container.service';
 import {GuidedTourOptionsService} from './guided-tour-options.service';
-import {GuidedTourStepComponent} from '../../../shared/components/guided-tour/step/step.component';
+import {GuidedTourStepComponent} from '@shared/components/guided-tour/step/step.component';
 
 @Injectable()
 export class GuidedTourStepService {
@@ -232,6 +232,7 @@ export class GuidedTourStepService {
           this._currentStep.stepInstance.stepHeight / divider
       );
     }
+    return targetAbsoluteTop;
   }
 
   private _getMaxTargetAndStepTopPosition(): number {
@@ -251,6 +252,7 @@ export class GuidedTourStepService {
           this._currentStep.stepInstance.stepHeight / divider
       );
     }
+    return targetAbsoluteTop;
   }
 
   private _scrollIfElementBeyondOtherElements(): void {
@@ -325,5 +327,7 @@ export class GuidedTourStepService {
     if (winReference.pageXOffset !== null) {
       return {x: winReference.pageXOffset, y: winReference.pageYOffset};
     }
+
+    return {x: 0, y: 0};
   }
 }

@@ -156,7 +156,7 @@ const components: any[] = [
   ClusterTypeEOLComponent,
   ChipComponent,
   EditorComponent,
-const entryComponents: any[] = [  AddProjectDialogComponent,
+  AddProjectDialogComponent,
   AddSshKeyDialogComponent,
   ConfirmationDialogComponent,
   SelectAddonDialogComponent,

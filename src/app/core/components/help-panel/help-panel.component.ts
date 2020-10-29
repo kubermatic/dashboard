@@ -12,10 +12,10 @@
 import {Component, ElementRef, HostListener, OnDestroy} from '@angular/core';
 import {Subject} from 'rxjs';
 
-import {slideOut} from '../../../shared/animations/slide';
-import {GuidedTourID} from '../../../shared/utils/guided-tour-utils/guided-tour-utils';
-import {GuidedTourService} from '../../../core/services/guided-tour';
-import {Auth} from '../../services';
+import {slideOut} from '@shared/animations/slide';
+import {GuidedTourID} from '@shared/utils/guided-tour-utils/guided-tour-utils';
+import {GuidedTourService} from '@core/services/guided-tour';
+import {Auth} from '@core/services/auth/auth.service';
 
 @Component({
   selector: 'km-help-panel',

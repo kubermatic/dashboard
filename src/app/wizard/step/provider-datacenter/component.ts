@@ -26,7 +26,6 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
 import {GuidedTourID} from '@shared/utils/guided-tour-utils/guided-tour-utils';
 import {filter, switchMap, takeUntil} from 'rxjs/operators';
-import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
 
 enum Controls {

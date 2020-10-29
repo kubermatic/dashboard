@@ -31,7 +31,7 @@ export class EventListenerService {
   }
 
   startListeningScrollEvents(): void {
-    this._scrollUnlisten = this._renderer.listen('document', 'scroll', evt => {
+    this._scrollUnlisten = this._renderer.listen('document', 'scroll', _ => {
       this.scrollEvent.next({
         scrollX: window.pageXOffset,
         scrollY: window.pageYOffset,

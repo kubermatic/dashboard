@@ -30,6 +30,8 @@ export class GuidedTourArrowComponent {
         return 'guided-tour-arrow-bottom';
       case 'left':
         return 'guided-tour-arrow-left';
+      default:
+        return 'guided-tour-arrow-top';
     }
   }
 }
