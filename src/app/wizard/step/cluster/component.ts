@@ -20,9 +20,9 @@ import {
   Validators,
 } from '@angular/forms';
 import {AppConfigService} from '@app/config.service';
-import {ApiService} from '@core/services/api/api.service';
-import {DatacenterService} from '@core/services/datacenter/datacenter.service';
-import {ClusterNameGenerator} from '@core/util/name-generator.service';
+import {ApiService} from '@core/services/api/service';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {NameGeneratorService} from '@core/services/name-generator/service';
 import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter} from '@shared/entity/datacenter';
@@ -77,7 +77,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     private readonly _builder: FormBuilder,
     private readonly _api: ApiService,
     private readonly _appConfig: AppConfigService,
-    private readonly _nameGenerator: ClusterNameGenerator,
+    private readonly _nameGenerator: NameGeneratorService,
     private readonly _clusterService: ClusterService,
     private readonly _datacenterService: DatacenterService,
     wizard: WizardService

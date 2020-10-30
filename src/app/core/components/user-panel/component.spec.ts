@@ -20,12 +20,12 @@ import {AuthMockService} from '@app/testing/services/auth-mock.service';
 import {ProjectMockService} from '@app/testing/services/project-mock.service';
 import {SettingsMockService} from '@app/testing/services/settings-mock.service';
 import {UserMockService} from '@app/testing/services/user-mock.service';
-import {Auth} from '@core/services/auth/auth.service';
-import {ProjectService} from '@core/services/project/project.service';
-import {SettingsService} from '@core/services/settings/settings.service';
-import {UserService} from '@core/services/user/user.service';
+import {Auth} from '@core/services/auth/service';
+import {ProjectService} from '@core/services/project/service';
+import {SettingsService} from '@core/services/settings/service';
+import {UserService} from '@core/services/user/service';
 import {SharedModule} from '@shared/shared.module';
-import {UserPanelComponent} from './user-panel.component';
+import {UserPanelComponent} from './component';
 
 const modules: any[] = [BrowserModule, HttpClientModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];
 

@@ -10,9 +10,9 @@
 // limitations under the License.
 
 import {Component, Input, OnInit} from '@angular/core';
-import {ApiService} from '@core/services/api/api.service';
-import {Auth} from '@core/services/auth/auth.service';
-import {UserService} from '@core/services/user/user.service';
+import {ApiService} from '@core/services/api/service';
+import {Auth} from '@core/services/auth/service';
+import {UserService} from '@core/services/user/service';
 import {Cluster} from '@shared/entity/cluster';
 import {first} from 'rxjs/operators';
 

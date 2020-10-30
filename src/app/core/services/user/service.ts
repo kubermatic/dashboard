@@ -13,14 +13,13 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, EMPTY, iif, Observable, of} from 'rxjs';
 import {catchError, delay, filter, first, map, retryWhen, switchMap, tap} from 'rxjs/operators';
-
-import {environment} from '../../../../environments/environment';
-import {AppConfigService} from '../../../config.service';
-import {Member} from '../../../shared/entity/member';
-import {GroupConfig} from '../../../shared/model/Config';
-import {MemberUtils} from '../../../shared/utils/member-utils/member-utils';
-import {TokenService} from '../token/token.service';
-import {DEFAULT_USER_SETTINGS, UserSettings} from '../../../shared/entity/settings';
+import {environment} from '@environments/environment';
+import {AppConfigService} from '@app/config.service';
+import {Member} from '@shared/entity/member';
+import {GroupConfig} from '@shared/model/Config';
+import {MemberUtils} from '@shared/utils/member-utils/member-utils';
+import {TokenService} from '../token/service';
+import {DEFAULT_USER_SETTINGS, UserSettings} from '@shared/entity/settings';
 import {webSocket} from 'rxjs/webSocket';
 
 @Injectable()

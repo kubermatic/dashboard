@@ -19,8 +19,8 @@ export enum NotificationType {
 
 @Component({
   selector: 'km-notification',
-  templateUrl: './notification.component.html',
-  styleUrls: ['./notification.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class NotificationComponent {
   private _snackBarRef: MatSnackBarRef<NotificationComponent>;

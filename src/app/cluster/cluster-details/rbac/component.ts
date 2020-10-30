@@ -12,8 +12,8 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
-import {NotificationService} from '@core/services/notification/notification.service';
-import {RBACService} from '@core/services/rbac/rbac.service';
+import {NotificationService} from '@core/services/notification/service';
+import {RBACService} from '@core/services/rbac/service';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '@shared/entity/cluster';
 import {SimpleBinding, SimpleClusterBinding} from '@shared/entity/rbac';

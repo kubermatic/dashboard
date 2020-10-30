@@ -16,11 +16,11 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {CoreModule} from '@core/core.module';
-import {DatacenterService} from '@core/services/datacenter/datacenter.service';
-import {ProjectService} from '@core/services/project/project.service';
-import {SettingsService} from '@core/services/settings/settings.service';
-import {UserService} from '@core/services/user/user.service';
+import {CoreModule} from '@core/module';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {ProjectService} from '@core/services/project/service';
+import {SettingsService} from '@core/services/settings/service';
+import {UserService} from '@core/services/user/service';
 import {SharedModule} from '@shared/shared.module';
 import {CookieService} from 'ngx-cookie-service';
 import {

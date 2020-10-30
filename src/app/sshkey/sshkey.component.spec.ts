@@ -26,11 +26,11 @@ import {AppConfigMockService} from '@app/testing/services/app-config-mock.servic
 import {ProjectMockService} from '@app/testing/services/project-mock.service';
 import {SettingsMockService} from '@app/testing/services/settings-mock.service';
 import {UserMockService} from '@app/testing/services/user-mock.service';
-import {ApiService} from '@core/services/api/api.service';
-import {NotificationService} from '@core/services/notification/notification.service';
-import {ProjectService} from '@core/services/project/project.service';
-import {SettingsService} from '@core/services/settings/settings.service';
-import {UserService} from '@core/services/user/user.service';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
+import {ProjectService} from '@core/services/project/service';
+import {SettingsService} from '@core/services/settings/service';
+import {UserService} from '@core/services/user/service';
 import {SharedModule} from '@shared/shared.module';
 import {of} from 'rxjs';
 import {SSHKeyComponent} from './sshkey.component';

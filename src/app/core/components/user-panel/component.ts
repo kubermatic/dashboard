@@ -12,9 +12,9 @@
 import {DOCUMENT} from '@angular/common';
 import {Component, ElementRef, HostListener, Inject, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {Auth} from '@core/services/auth/auth.service';
-import {SettingsService} from '@core/services/settings/settings.service';
-import {UserService} from '@core/services/user/user.service';
+import {Auth} from '@core/services/auth/service';
+import {SettingsService} from '@core/services/settings/service';
+import {UserService} from '@core/services/user/service';
 import {slideOut} from '@shared/animations/slide';
 import {Member} from '@shared/entity/member';
 import {Subject} from 'rxjs';
@@ -22,8 +22,8 @@ import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-user-panel',
-  templateUrl: './user-panel.component.html',
-  styleUrls: ['./user-panel.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
   animations: [slideOut],
 })
 export class UserPanelComponent implements OnInit, OnDestroy {

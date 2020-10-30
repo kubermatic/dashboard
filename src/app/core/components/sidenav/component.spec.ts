@@ -25,12 +25,12 @@ import {SettingsMockService} from '@app/testing/services/settings-mock.service';
 import {UserMockService} from '@app/testing/services/user-mock.service';
 import {click} from '@app/testing/utils/click-handler';
 import {ProjectSelectorComponent} from '@core/components/navigation/project/component';
-import {ProjectService} from '@core/services/project/project.service';
-import {SettingsService} from '@core/services/settings/settings.service';
-import {UserService} from '@core/services/user/user.service';
+import {ProjectService} from '@core/services/project/service';
+import {SettingsService} from '@core/services/settings/service';
+import {UserService} from '@core/services/user/service';
 import {SharedModule} from '@shared/shared.module';
 import {MockComponent} from 'ng2-mock-component';
-import {SidenavComponent} from './sidenav.component';
+import {SidenavComponent} from './component';
 
 const modules: any[] = [BrowserModule, RouterTestingModule, HttpClientModule, BrowserAnimationsModule, SharedModule];
 

@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {inject, TestBed} from '@angular/core/testing';
-import {LoaderInterceptor} from './loader.service';
+import {LoaderInterceptor} from './interceptor';
 
 describe('LoaderInterceptorService', () => {
   beforeEach(() => {

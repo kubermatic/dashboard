@@ -15,7 +15,7 @@ import {tap} from 'rxjs/operators';
 
 import {environment} from '../environments/environment';
 
-import {NotificationService} from '@core/services/notification/notification.service';
+import {NotificationService} from '@core/services/notification/service';
 import {VersionInfo} from '@shared/entity/version-info';
 import {Config, EndOfLife, UserGroupConfig} from '@shared/model/Config';
 

@@ -11,8 +11,8 @@
 
 import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
-import {NotificationType} from '@core/components/notification/notification.component';
-import {Notification, NotificationService} from '@core/services/notification/notification.service';
+import {NotificationType} from '@core/components/notification/component';
+import {Notification, NotificationService} from '@core/services/notification/service';
 
 import {slideOut} from '@shared/animations/slide';
 import {Subject} from 'rxjs';
@@ -20,8 +20,8 @@ import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-notification-panel',
-  templateUrl: './notification-panel.component.html',
-  styleUrls: ['./notification-panel.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
   animations: [slideOut],
 })
 export class NotificationPanelComponent implements OnInit, OnDestroy {

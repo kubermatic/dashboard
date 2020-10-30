@@ -12,7 +12,7 @@
 import {Injectable} from '@angular/core';
 
 @Injectable()
-export class ClusterNameGenerator {
+export class NameGeneratorService {
   private prefix: string[] = [
     'admiring',
     'adoring',

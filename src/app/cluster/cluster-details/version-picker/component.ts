@@ -11,7 +11,7 @@
 
 import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {ClusterService} from '@core/services/cluster/cluster.service';
+import {ClusterService} from '@core/services/cluster/service';
 import {Cluster, MasterVersion} from '@shared/entity/cluster';
 import {EndOfLifeService} from '@shared/services/eol.service';
 import {first} from 'rxjs/operators';

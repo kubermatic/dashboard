@@ -14,7 +14,7 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {DatacenterService} from '@core/services/datacenter/service';
 import {Datacenter} from '@shared/entity/datacenter';
 import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
 import * as countryCodeLookup from 'country-code-lookup';

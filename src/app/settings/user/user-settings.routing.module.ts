@@ -12,7 +12,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {getEditionDirName} from '@app/dynamic/common';
-import {AuthGuard} from '@core/services/auth/auth.guard';
+import {AuthGuard} from '@core/services/auth/guard';
 import {UserSettingsComponent} from './user-settings.component';
 
 const routes: Routes = [

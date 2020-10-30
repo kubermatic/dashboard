@@ -17,7 +17,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {RouterStub} from '@app/testing/router-stubs';
 import {AuthMockService} from '@app/testing/services/auth-mock.service';
 import {click} from '@app/testing/utils/click-handler';
-import {Auth} from '@core/services/auth/auth.service';
+import {Auth} from '@core/services/auth/service';
 import {SharedModule} from '@shared/shared.module';
 import {PageNotFoundComponent} from './page-not-found.component';
 

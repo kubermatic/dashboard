@@ -17,9 +17,9 @@ import {fakeMember} from '@app/testing/fake-data/member.fake';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {asyncData} from '@app/testing/services/api-mock.service';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
-import {CoreModule} from '@core/core.module';
-import {ApiService} from '@core/services/api/api.service';
-import {NotificationService} from '@core/services/notification/notification.service';
+import {CoreModule} from '@core/module';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
 import {SharedModule} from '@shared/shared.module';
 import {EditMemberComponent} from './edit-member.component';
 

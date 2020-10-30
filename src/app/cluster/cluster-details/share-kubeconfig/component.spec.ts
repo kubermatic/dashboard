@@ -19,9 +19,9 @@ import {fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {RouterTestingModule} from '@app/testing/router-stubs';
 import {UserMockService} from '@app/testing/services/user-mock.service';
-import {ApiService} from '@core/services/api/api.service';
-import {Auth} from '@core/services/auth/auth.service';
-import {UserService} from '@core/services/user/user.service';
+import {ApiService} from '@core/services/api/service';
+import {Auth} from '@core/services/auth/service';
+import {UserService} from '@core/services/user/service';
 import {SharedModule} from '@shared/shared.module';
 import {ShareKubeconfigComponent} from './component';
 

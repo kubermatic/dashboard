@@ -21,10 +21,10 @@ import {fakeUserGroupConfig} from '../../../testing/fake-data/userGroupConfig.fa
 import {RouterTestingModule} from '../../../testing/router-stubs';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../../testing/services/auth-mock.service';
-import {Auth} from '../auth/auth.service';
-import {TokenService} from '../token/token.service';
+import {Auth} from '../auth/service';
+import {TokenService} from '../token/service';
 
-import {UserService} from './user.service';
+import {UserService} from './service';
 
 describe('Service: UserService', () => {
   let userService: UserService;

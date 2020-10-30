@@ -10,36 +10,33 @@
 // limitations under the License.
 
 import {HttpClientModule} from '@angular/common/http';
-import {inject, TestBed} from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
-import {RouterTestingModule} from '@angular/router/testing';
-import {COOKIE, COOKIE_DI_TOKEN} from '@app/config';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '@app/config.service';
+import {RouterTestingModule} from '@app/testing/router-stubs';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
-import {UserService} from '@core/services/user/user.service';
-import {CookieService} from 'ngx-cookie-service';
-import {PreviousRouteService} from '../previous-route/previous-route.service';
-import {TokenService} from '../token/token.service';
-import {Auth} from './auth.service';
+import {AuthMockService} from '@app/testing/services/auth-mock.service';
+import {Auth} from '@core/services/auth/service';
+import {SharedModule} from '@shared/shared.module';
+import {SettingsService} from './service';
 
-describe('Auth', () => {
+describe('SettingsService', () => {
+  let settingsService: SettingsService;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, RouterTestingModule],
-      declarations: [],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
       providers: [
-        {provide: COOKIE_DI_TOKEN, useValue: COOKIE},
-        UserService,
-        TokenService,
-        Auth,
-        CookieService,
-        PreviousRouteService,
+        SettingsService,
         {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: Auth, useClass: AuthMockService},
       ],
-    }).compileComponents();
+    });
+    settingsService = TestBed.inject(SettingsService);
   });
 
-  it('should create auth service correctly', inject([Auth], (service: Auth) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', () => {
+    expect(settingsService).toBeTruthy();
+  });
 });

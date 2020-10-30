@@ -11,8 +11,8 @@
 
 import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {ClusterService} from '@core/services/cluster/cluster.service';
-import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {ClusterService} from '@core/services/cluster/service';
+import {DatacenterService} from '@core/services/datacenter/service';
 import {Cluster, ClusterType, MasterVersion} from '@shared/entity/cluster';
 import {NodeSpec} from '@shared/entity/node';
 import {NodeData} from '@shared/model/NodeSpecChange';

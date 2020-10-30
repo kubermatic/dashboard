@@ -16,7 +16,7 @@ import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {RouterStub} from '@app/testing/router-stubs';
 import {AuthMockService} from '@app/testing/services/auth-mock.service';
-import {Auth} from '@core/services/auth/auth.service';
+import {Auth} from '@core/services/auth/service';
 import {SharedModule} from '@shared/shared.module';
 import {CookieService} from 'ngx-cookie-service';
 import {FrontpageComponent} from './frontpage.component';

@@ -13,8 +13,7 @@ import {Injectable} from '@angular/core';
 import {MatSnackBar, MatSnackBarConfig, MatSnackBarDismiss} from '@angular/material/snack-bar';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {delay, filter, map, take, tap} from 'rxjs/operators';
-
-import {NotificationComponent, NotificationType} from '../../components/notification/notification.component';
+import {NotificationComponent, NotificationType} from '../../components/notification/component';
 
 export interface Notification {
   message: string;
@@ -52,6 +51,22 @@ export class NotificationService {
       )
       .pipe(map(queue => queue[0]))
       .subscribe(snackBarItem => this._open(snackBarItem.message, snackBarItem.type));
+  }
+
+  success(message: string): void {
+    this._pushNotification(message, NotificationType.success);
+  }
+
+  error(message: string): void {
+    this._pushNotification(message, NotificationType.error);
+  }
+
+  getNotificationHistory(): Observable<Notification[]> {
+    return this._notificationHistory.asObservable();
+  }
+
+  clearNotificationHistory(): void {
+    this._notificationHistory.next([]);
   }
 
   private _open(message: string, type: NotificationType): void {
@@ -96,21 +111,5 @@ export class NotificationService {
 
   private _isUnique(message: string): boolean {
     return !this.snackBarQueue.value.find(n => n.message === message);
-  }
-
-  success(message: string): void {
-    this._pushNotification(message, NotificationType.success);
-  }
-
-  error(message: string): void {
-    this._pushNotification(message, NotificationType.error);
-  }
-
-  getNotificationHistory(): Observable<Notification[]> {
-    return this._notificationHistory.asObservable();
-  }
-
-  clearNotificationHistory(): void {
-    this._notificationHistory.next([]);
   }
 }

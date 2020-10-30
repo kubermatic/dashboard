@@ -12,10 +12,10 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {ApiService} from '@core/services/api/api.service';
-import {ClusterService} from '@core/services/cluster/cluster.service';
-import {NotificationService} from '@core/services/notification/notification.service';
-import {UserService} from '@core/services/user/user.service';
+import {ApiService} from '@core/services/api/service';
+import {ClusterService} from '@core/services/cluster/service';
+import {NotificationService} from '@core/services/notification/service';
+import {UserService} from '@core/services/user/service';
 import {AddSshKeyDialogComponent} from '@shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {Cluster} from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';

@@ -19,9 +19,9 @@ import {RouterStub} from '@app/testing/router-stubs';
 import {AuthMockService} from '@app/testing/services/auth-mock.service';
 import {ProjectMockService} from '@app/testing/services/project-mock.service';
 import {UserMockService} from '@app/testing/services/user-mock.service';
-import {Auth} from '@core/services/auth/auth.service';
-import {ProjectService} from '@core/services/project/project.service';
-import {UserService} from '@core/services/user/user.service';
+import {Auth} from '@core/services/auth/service';
+import {ProjectService} from '@core/services/project/service';
+import {UserService} from '@core/services/user/service';
 import {SharedModule} from '@shared/shared.module';
 import {FooterComponent} from './component';
 

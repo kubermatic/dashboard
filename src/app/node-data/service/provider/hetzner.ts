@@ -10,9 +10,9 @@
 // limitations under the License.
 
 import {NodeDataMode} from '@app/node-data/config';
-import {ApiService} from '@core/services/api/api.service';
-import {DatacenterService} from '@core/services/datacenter/datacenter.service';
-import {ProjectService} from '@core/services/project/project.service';
+import {ApiService} from '@core/services/api/service';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {ProjectService} from '@core/services/project/service';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {HetznerTypes} from '@shared/entity/provider/hetzner';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';

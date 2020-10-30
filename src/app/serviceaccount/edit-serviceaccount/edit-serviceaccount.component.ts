@@ -12,8 +12,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {ApiService} from '@core/services/api/api.service';
-import {NotificationService} from '@core/services/notification/notification.service';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
 import {Project} from '@shared/entity/project';
 import {ServiceAccount} from '@shared/entity/service-account';
 import {first} from 'rxjs/operators';

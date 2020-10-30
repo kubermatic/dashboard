@@ -11,10 +11,10 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatButtonToggleGroup} from '@angular/material/button-toggle';
-import {HistoryService} from '@core/services/history/history.service';
-import {NotificationService} from '@core/services/notification/notification.service';
-import {SettingsService} from '@core/services/settings/settings.service';
-import {UserService} from '@core/services/user/user.service';
+import {HistoryService} from '@core/services/history/service';
+import {NotificationService} from '@core/services/notification/service';
+import {SettingsService} from '@core/services/settings/service';
+import {UserService} from '@core/services/user/service';
 import {ClusterType} from '@shared/entity/cluster';
 import {Member} from '@shared/entity/member';
 import {AdminSettings, ClusterTypeOptions} from '@shared/entity/settings';
