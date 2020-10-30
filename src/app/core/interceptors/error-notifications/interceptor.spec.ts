@@ -15,7 +15,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
 import {SharedModule} from '@shared/shared.module';
-import {CoreModule} from '@core/core.module';
+import {CoreModule} from '@core/module';
 import {ErrorNotificationsInterceptor} from '@core/interceptors';
 
 const modules: any[] = [

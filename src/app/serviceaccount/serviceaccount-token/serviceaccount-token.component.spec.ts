@@ -23,7 +23,7 @@ import {RouterStub} from '@app/testing/router-stubs';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
 import {ProjectMockService} from '@app/testing/services/project-mock.service';
 import {UserMockService} from '@app/testing/services/user-mock.service';
-import {CoreModule} from '@core/core.module';
+import {CoreModule} from '@core/module';
 import {ApiService} from '@core/services/api/service';
 import {NotificationService} from '@core/services/notification/service';
 import {ProjectService} from '@core/services/project/service';

@@ -18,7 +18,7 @@ import {fakeServiceAccount, fakeServiceAccountTokens} from '@app/testing/fake-da
 import {asyncData} from '@app/testing/services/api-mock.service';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock.service';
-import {CoreModule} from '@core/core.module';
+import {CoreModule} from '@core/module';
 import {ApiService} from '@core/services/api/service';
 import {NotificationService} from '@core/services/notification/service';
 import {ProjectService} from '@core/services/project/service';

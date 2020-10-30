@@ -19,7 +19,7 @@ import {fakeDigitaloceanDatacenter} from '@app/testing/fake-data/datacenter.fake
 import {machineDeploymentsFake} from '@app/testing/fake-data/node.fake';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {ApiMockService} from '@app/testing/services/api-mock.service';
-import {CoreModule} from '@core/core.module';
+import {CoreModule} from '@core/module';
 import {ApiService} from '@core/services/api/service';
 import {NotificationService} from '@core/services/notification/service';
 import {of} from 'rxjs';

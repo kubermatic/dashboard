@@ -14,7 +14,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
-import {CoreModule} from '@core/core.module';
+import {CoreModule} from '@core/module';
 import {ApiService} from '@core/services/api/service';
 import {AuthGuard} from '@core/services/auth/guard';
 import {Auth} from '@core/services/auth/service';
