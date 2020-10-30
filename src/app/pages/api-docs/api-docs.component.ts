@@ -12,8 +12,8 @@
 import {DOCUMENT} from '@angular/common';
 import {Component, Inject, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {ApiService} from '@core/services/api/api.service';
-import {Auth} from '@core/services/auth/auth.service';
+import {ApiService} from '@core/services/api/service';
+import {Auth} from '@core/services/auth/service';
 import * as SwaggerUI from 'swagger-ui';
 
 @Component({

@@ -23,16 +23,16 @@ import {AppConfigMockService} from '@app/testing/services/app-config-mock.servic
 import {AuthMockService} from '@app/testing/services/auth-mock.service';
 import {ProjectMockService} from '@app/testing/services/project-mock.service';
 import {UserMockService} from '@app/testing/services/user-mock.service';
-import {NotificationPanelComponent} from '@core/components/notification-panel/notification-panel.component';
-import {ApiService} from '@core/services/api/api.service';
-import {Auth} from '@core/services/auth/auth.service';
-import {ProjectService} from '@core/services/project/project.service';
-import {UserService} from '@core/services/user/user.service';
+import {NotificationPanelComponent} from '@core/components/notification-panel/component';
+import {ApiService} from '@core/services/api/service';
+import {Auth} from '@core/services/auth/service';
+import {ProjectService} from '@core/services/project/service';
+import {UserService} from '@core/services/user/service';
 import {Project} from '@shared/entity/project';
 import {SharedModule} from '@shared/shared.module';
 import {MockComponent} from 'ng2-mock-component';
-import {UserPanelComponent} from '../../user-panel/user-panel.component';
-import {NavigationComponent} from '../navigation.component';
+import {UserPanelComponent} from '../../user-panel/component';
+import {NavigationComponent} from '../component';
 import {ProjectSelectorComponent} from './component';
 
 const modules: any[] = [BrowserModule, RouterTestingModule, HttpClientModule, BrowserAnimationsModule, SharedModule];

@@ -10,9 +10,9 @@
 // limitations under the License.
 
 import {Inject, Injectable} from '@angular/core';
-import {ApiService} from '@core/services/api/api.service';
-import {DatacenterService} from '@core/services/datacenter/datacenter.service';
-import {ProjectService} from '@core/services/project/project.service';
+import {ApiService} from '@core/services/api/service';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {ProjectService} from '@core/services/project/service';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';

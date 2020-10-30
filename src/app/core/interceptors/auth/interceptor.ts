@@ -11,7 +11,7 @@
 
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Auth} from '@core/services/auth/auth.service';
+import {Auth} from '@core/services/auth/service';
 import {environment} from 'environments/environment';
 import {Observable} from 'rxjs/Observable';
 

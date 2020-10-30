@@ -22,9 +22,9 @@ import {AppConfigMockService} from '@app/testing/services/app-config-mock.servic
 import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
 import {ProjectMockService} from '@app/testing/services/project-mock.service';
 import {UserMockService} from '@app/testing/services/user-mock.service';
-import {ClusterService} from '@core/services/cluster/cluster.service';
-import {ProjectService} from '@core/services/project/project.service';
-import {UserService} from '@core/services/user/user.service';
+import {ClusterService} from '@core/services/cluster/service';
+import {ProjectService} from '@core/services/project/service';
+import {UserService} from '@core/services/user/service';
 import {HealthState} from '@shared/entity/health';
 import {SharedModule} from '@shared/shared.module';
 import {ClusterSecretsComponent} from './component';

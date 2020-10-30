@@ -11,9 +11,9 @@
 
 import {Component, Input, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import {ApiService} from '@core/services/api/api.service';
-import {NotificationService} from '@core/services/notification/notification.service';
-import {UserService} from '@core/services/user/user.service';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
+import {UserService} from '@core/services/user/service';
 import {Cluster} from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';

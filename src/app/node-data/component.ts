@@ -19,8 +19,8 @@ import {
   OnInit,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {DatacenterService} from '@core/services/datacenter/datacenter.service';
-import {ClusterNameGenerator} from '@core/util/name-generator.service';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {NameGeneratorService} from '@core/services/name-generator/service';
 import {ClusterType} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
@@ -88,7 +88,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
   constructor(
     private readonly _builder: FormBuilder,
-    private readonly _nameGenerator: ClusterNameGenerator,
+    private readonly _nameGenerator: NameGeneratorService,
     private readonly _clusterService: ClusterService,
     private readonly _datacenterService: DatacenterService,
     private readonly _nodeDataService: NodeDataService,

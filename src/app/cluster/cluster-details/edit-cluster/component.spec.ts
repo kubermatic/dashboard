@@ -27,10 +27,10 @@ import {DatacenterMockService} from '@app/testing/services/datacenter-mock.servi
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {UserMockService} from '@app/testing/services/user-mock.service';
 import {CoreModule} from '@core/core.module';
-import {ApiService} from '@core/services/api/api.service';
-import {ClusterService} from '@core/services/cluster/cluster.service';
-import {DatacenterService} from '@core/services/datacenter/datacenter.service';
-import {UserService} from '@core/services/user/user.service';
+import {ApiService} from '@core/services/api/service';
+import {ClusterService} from '@core/services/cluster/service';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {UserService} from '@core/services/user/service';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
 import {SharedModule} from '@shared/shared.module';
 import {Subject} from 'rxjs';

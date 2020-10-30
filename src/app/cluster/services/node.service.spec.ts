@@ -20,8 +20,8 @@ import {machineDeploymentsFake} from '@app/testing/fake-data/node.fake';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {ApiMockService} from '@app/testing/services/api-mock.service';
 import {CoreModule} from '@core/core.module';
-import {ApiService} from '@core/services/api/api.service';
-import {NotificationService} from '@core/services/notification/notification.service';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
 import {of} from 'rxjs';
 import {NodeService} from './node.service';
 

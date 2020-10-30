@@ -18,9 +18,9 @@ import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
 import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
 import {UserMockService} from '@app/testing/services/user-mock.service';
-import {ClusterService} from '@core/services/cluster/cluster.service';
-import {NotificationService} from '@core/services/notification/notification.service';
-import {UserService} from '@core/services/user/user.service';
+import {ClusterService} from '@core/services/cluster/service';
+import {NotificationService} from '@core/services/notification/service';
+import {UserService} from '@core/services/user/service';
 import {SharedModule} from '@shared/shared.module';
 import {EditSSHKeysComponent} from './component';
 

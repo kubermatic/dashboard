@@ -17,7 +17,7 @@ import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {asyncData} from '@app/testing/services/api-mock.service';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/core.module';
-import {ApiService} from '@core/services/api/api.service';
+import {ApiService} from '@core/services/api/service';
 import {SharedModule} from '@shared/shared.module';
 import {ProjectModule} from '../project.module';
 import {EditProjectComponent} from './edit-project.component';

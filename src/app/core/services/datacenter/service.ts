@@ -16,7 +16,7 @@ import {first, map, shareReplay, switchMap} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {CreateDatacenterModel, Datacenter} from '../../../shared/entity/datacenter';
 import {AppConfigService} from '../../../config.service';
-import {Auth} from '../auth/auth.service';
+import {Auth} from '../auth/service';
 import * as _ from 'lodash';
 
 @Injectable()

@@ -14,15 +14,15 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {Injector, NgModule, Optional, SkipSelf} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
-import {ApiService} from '@core/services/api/api.service';
-import {AuthGuard, AuthzGuard} from '@core/services/auth/auth.guard';
-import {Auth} from '@core/services/auth/auth.service';
-import {ClusterService} from '@core/services/cluster/cluster.service';
-import {DatacenterService} from '@core/services/datacenter/datacenter.service';
-import {HistoryService} from '@core/services/history/history.service';
-import {LabelService} from '@core/services/label/label.service';
-import {ParamsService} from '@core/services/params/params.service';
-import {RBACService} from '@core/services/rbac/rbac.service';
+import {ApiService} from '@core/services/api/service';
+import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
+import {Auth} from '@core/services/auth/service';
+import {ClusterService} from '@core/services/cluster/service';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {HistoryService} from '@core/services/history/service';
+import {LabelService} from '@core/services/label/service';
+import {ParamsService} from '@core/services/params/service';
+import {RBACService} from '@core/services/rbac/service';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {SharedModule} from '@shared/shared.module';
 import {COOKIE, COOKIE_DI_TOKEN} from '../config';
@@ -33,21 +33,21 @@ import {EditServiceAccountComponent} from '../serviceaccount/edit-serviceaccount
 import {AddServiceAccountTokenComponent} from '../serviceaccount/serviceaccount-token/add-serviceaccount-token/add-serviceaccount-token.component';
 import {EditServiceAccountTokenComponent} from '../serviceaccount/serviceaccount-token/edit-serviceaccount-token/edit-serviceaccount-token.component';
 import {FooterComponent} from './components/footer/component';
-import {NavigationComponent} from './components/navigation/navigation.component';
+import {NavigationComponent} from './components/navigation/component';
 import {ProjectSelectorComponent} from './components/navigation/project/component';
-import {NotificationPanelComponent} from './components/notification-panel/notification-panel.component';
-import {SidenavComponent} from './components/sidenav/sidenav.component';
-import {UserPanelComponent} from './components/user-panel/user-panel.component';
+import {NotificationPanelComponent} from './components/notification-panel/component';
+import {SidenavComponent} from './components/sidenav/component';
+import {UserPanelComponent} from './components/user-panel/component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
-import {GlobalModule} from './services/global/global.module';
-import {NodeDataService} from './services/node-data/node-data.service';
-import {PageTitleService} from './services/page-title/page-title.service';
-import {PreviousRouteService} from './services/previous-route/previous-route.service';
-import {SettingsService} from './services/settings/settings.service';
-import {ThemeInformerService} from './services/theme-informer/theme-informer.service';
-import {TokenService} from './services/token/token.service';
+import {GlobalModule} from './services/global/module';
+import {NameGeneratorService} from './services/name-generator/service';
+import {NodeDataService} from './services/node-data/service';
+import {PageTitleService} from './services/page-title/service';
+import {PreviousRouteService} from './services/previous-route/service';
+import {SettingsService} from './services/settings/service';
+import {ThemeInformerService} from './services/theme-informer/service';
+import {TokenService} from './services/token/service';
 import {StepsService} from './services/wizard/steps.service';
-import {ClusterNameGenerator} from './util/name-generator.service';
 
 const modules: any[] = [
   CommonModule,
@@ -80,7 +80,7 @@ const services: any[] = [
   DatacenterService,
   NodeDataService,
   StepsService,
-  ClusterNameGenerator,
+  NameGeneratorService,
   ApiService,
   ClusterService,
   ParamsService,

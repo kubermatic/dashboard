@@ -12,9 +12,9 @@
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
-import {ProjectService} from '@core/services/project/project.service';
-import {SettingsService} from '@core/services/settings/settings.service';
-import {UserService} from '@core/services/user/user.service';
+import {ProjectService} from '@core/services/project/service';
+import {SettingsService} from '@core/services/settings/service';
+import {UserService} from '@core/services/user/service';
 import {environment} from '@environments/environment';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
@@ -28,8 +28,8 @@ import {switchMap, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-sidenav',
-  templateUrl: './sidenav.component.html',
-  styleUrls: ['./sidenav.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class SidenavComponent implements OnInit, OnDestroy {
   environment: any = environment;

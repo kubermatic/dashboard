@@ -10,17 +10,16 @@
 // limitations under the License.
 
 import {Inject, Injectable} from '@angular/core';
+import {Cookie, COOKIE_DI_TOKEN} from '@app/config';
+import {AppConfigService} from '@app/config.service';
+import {environment} from '@environments/environment';
+import {RandomString} from '@shared/functions/generate-random-string';
 import {CookieService} from 'ngx-cookie-service';
 import {Observable} from 'rxjs';
 import {first, tap} from 'rxjs/operators';
-
-import {environment} from '../../../../environments/environment';
-import {AppConfigService} from '../../../config.service';
-import {Cookie, COOKIE_DI_TOKEN} from '../../../config';
-import {RandomString} from '../../../shared/functions/generate-random-string';
-import {PreviousRouteService} from '../previous-route/previous-route.service';
-import {TokenService} from '../token/token.service';
-import {UserService} from '../user/user.service';
+import {PreviousRouteService} from '../previous-route/service';
+import {TokenService} from '../token/service';
+import {UserService} from '../user/service';
 
 @Injectable()
 export class Auth {

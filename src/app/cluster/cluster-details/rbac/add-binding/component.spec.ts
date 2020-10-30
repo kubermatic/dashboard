@@ -20,7 +20,7 @@ import {fakeBinding, fakeClusterBinding, fakeClusterRoleNames, fakeRoleNames} fr
 import {asyncData} from '@app/testing/services/api-mock.service';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/core.module';
-import {RBACService} from '@core/services/rbac/rbac.service';
+import {RBACService} from '@core/services/rbac/service';
 import {SharedModule} from '@shared/shared.module';
 import {AddBindingComponent} from './component';
 

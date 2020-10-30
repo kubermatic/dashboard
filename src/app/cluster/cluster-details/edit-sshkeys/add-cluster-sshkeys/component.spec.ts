@@ -20,11 +20,11 @@ import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock.service';
 import {UserMockService} from '@app/testing/services/user-mock.service';
-import {ApiService} from '@core/services/api/api.service';
-import {ClusterService} from '@core/services/cluster/cluster.service';
-import {NotificationService} from '@core/services/notification/notification.service';
-import {ProjectService} from '@core/services/project/project.service';
-import {UserService} from '@core/services/user/user.service';
+import {ApiService} from '@core/services/api/service';
+import {ClusterService} from '@core/services/cluster/service';
+import {NotificationService} from '@core/services/notification/service';
+import {ProjectService} from '@core/services/project/service';
+import {UserService} from '@core/services/user/service';
 import {SharedModule} from '@shared/shared.module';
 import {AddClusterSSHKeysComponent} from './component';
 

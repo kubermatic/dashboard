@@ -19,7 +19,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {DatacenterService} from '@core/services/datacenter/datacenter.service';
+import {DatacenterService} from '@core/services/datacenter/service';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {CloudSpec, Cluster, ClusterSpec, OpenstackCloudSpec} from '@shared/entity/cluster';

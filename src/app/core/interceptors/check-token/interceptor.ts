@@ -12,7 +12,7 @@
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
-import {Auth} from '@core/services/auth/auth.service';
+import {Auth} from '@core/services/auth/service';
 import {Observable} from 'rxjs';
 
 @Injectable()

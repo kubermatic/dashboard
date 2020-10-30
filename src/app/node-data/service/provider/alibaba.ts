@@ -9,9 +9,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ApiService} from '@core/services/api/api.service';
-import {DatacenterService} from '@core/services/datacenter/datacenter.service';
-import {ProjectService} from '@core/services/project/project.service';
+import {ApiService} from '@core/services/api/service';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {ProjectService} from '@core/services/project/service';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {Cluster} from '@shared/entity/cluster';
 import {AlibabaInstanceType, AlibabaZone} from '@shared/entity/provider/alibaba';

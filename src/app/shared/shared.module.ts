@@ -47,7 +47,7 @@ import {ClipboardModule} from 'ngx-clipboard';
 import {CustomFormsModule} from 'ngx-custom-validators';
 import {FilterPipeModule} from 'ngx-filter-pipe';
 
-import {NotificationComponent} from '../core/components/notification/notification.component';
+import {NotificationComponent} from '../core/components/notification/component';
 import {TokenDialogComponent} from '../serviceaccount/serviceaccount-token/token-dialog/token-dialog.component';
 
 import {AddProjectDialogComponent} from './components/add-project-dialog/add-project-dialog.component';

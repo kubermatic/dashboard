@@ -10,15 +10,15 @@
 // limitations under the License.
 
 import {Component, Input, OnInit} from '@angular/core';
-import {Auth} from '@core/services/auth/auth.service';
-import {UserService} from '@core/services/user/user.service';
+import {Auth} from '@core/services/auth/service';
+import {UserService} from '@core/services/user/service';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-navigation',
-  templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class NavigationComponent implements OnInit {
   @Input() showMenuSwitchAndProjectSelector: boolean;

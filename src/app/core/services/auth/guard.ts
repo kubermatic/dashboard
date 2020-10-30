@@ -11,15 +11,13 @@
 
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
+import {View} from '@shared/entity/common';
+import {Member} from '@shared/entity/member';
+import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {from, Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-
-import {Member} from '../../../shared/entity/member';
-import {View} from '../../../shared/entity/common';
-import {MemberUtils, Permission} from '../../../shared/utils/member-utils/member-utils';
-import {UserService} from '../user/user.service';
-
-import {Auth} from './auth.service';
+import {UserService} from '../user/service';
+import {Auth} from './service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
