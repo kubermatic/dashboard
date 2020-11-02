@@ -132,11 +132,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           // Conditionally create an array of observables to use for 'combineLatest' operator.
           // In case real observable should not be returned, observable emitting empty array will be added to the array.
           const reload$ = []
-            .concat(
-              this._canReloadVersions()
-                ? this._clusterService.upgrades(this.projectID, this.cluster.id, this.seed)
-                : of([])
-            )
+            .concat(this._canReloadVersions() ? this._clusterService.upgrades(this.projectID, this.cluster.id) : of([]))
             .concat(
               this._canReloadBindings()
                 ? [

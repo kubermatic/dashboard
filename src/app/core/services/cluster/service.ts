@@ -150,8 +150,8 @@ export class ClusterService {
     return this._http.delete(url);
   }
 
-  upgrades(projectID: string, clusterID: string, seed: string): Observable<MasterVersion[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/upgrades`;
+  upgrades(projectID: string, clusterID: string): Observable<MasterVersion[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/upgrades`;
     return this._http.get<MasterVersion[]>(url).pipe(
       catchError(() => {
         return of<MasterVersion[]>([]).pipe(catchError(() => of<MasterVersion[]>()));
