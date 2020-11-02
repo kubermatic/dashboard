@@ -74,11 +74,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     this.sort.direction = 'asc';
 
     merge(timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase()), this._sshKeysUpdate)
-      .pipe(
-        switchMap(() =>
-          this.projectID ? this._clusterService.sshKeys(this.projectID, this.cluster.id, this.seed) : EMPTY
-        )
-      )
+      .pipe(switchMap(() => (this.projectID ? this._clusterService.sshKeys(this.projectID, this.cluster.id) : EMPTY)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(sshkeys => {
         this.sshKeys = sshkeys;
@@ -144,7 +140,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     dialogRef
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(switchMap(_ => this._clusterService.deleteSSHKey(this.projectID, this.cluster.id, this.seed, sshKey.id)))
+      .pipe(switchMap(_ => this._clusterService.deleteSSHKey(this.projectID, this.cluster.id, sshKey.id)))
       .pipe(first())
       .subscribe(() => {
         this._notificationService.success(

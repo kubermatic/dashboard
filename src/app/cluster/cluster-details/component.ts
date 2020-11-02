@@ -114,7 +114,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.nodeDc = datacenter;
 
           return combineLatest([
-            this._clusterService.sshKeys(this.projectID, this.cluster.id, this.seed),
+            this._clusterService.sshKeys(this.projectID, this.cluster.id),
             this._clusterService.health(this.projectID, this.cluster.id),
             this._clusterService.events(this.projectID, this.cluster.id),
           ]);

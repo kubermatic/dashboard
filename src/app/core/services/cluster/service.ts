@@ -213,18 +213,18 @@ export class ClusterService {
     );
   }
 
-  sshKeys(projectID: string, clusterID: string, seed: string): Observable<SSHKey[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/sshkeys`;
+  sshKeys(projectID: string, clusterID: string): Observable<SSHKey[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/sshkeys`;
     return this._http.get<SSHKey[]>(url).pipe(catchError(() => of<SSHKey[]>()));
   }
 
-  createSSHKey(projectID: string, clusterID: string, seed: string, sshKeyID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
+  createSSHKey(projectID: string, clusterID: string, sshKeyID: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
     return this._http.put(url, null);
   }
 
-  deleteSSHKey(projectID: string, clusterID: string, seed: string, sshKeyID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
+  deleteSSHKey(projectID: string, clusterID: string, sshKeyID: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
     return this._http.delete(url);
   }
 
