@@ -145,7 +145,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               this._canReloadNodes()
                 ? [
                     this._clusterService.addons(this.projectID, this.cluster.id, this.seed),
-                    this._api.getMachineDeployments(this.cluster.id, this.seed, this.projectID),
+                    this._api.getMachineDeployments(this.cluster.id, this.projectID),
                     this._clusterService.metrics(this.projectID, this.cluster.id),
                   ]
                 : [of([]), of([]), of([]), of([])]
@@ -243,7 +243,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   addNode(): void {
     this._node
-      .showMachineDeploymentCreateDialog(this.cluster, this.projectID, this.seed)
+      .showMachineDeploymentCreateDialog(this.cluster, this.projectID)
       .pipe(take(1))
       .subscribe(
         _ => this._clusterService.onClusterUpdate.next(),
