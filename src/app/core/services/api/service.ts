@@ -48,6 +48,7 @@ export class ApiService {
   private readonly _refreshTime = 30; // in seconds
   private _location: string = window.location.protocol + '//' + window.location.host;
   private _restRoot: string = environment.restRoot;
+  private _newRestRoot: string = environment.newRestRoot;
   private _addonConfigs$: Observable<any>;
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
 
@@ -237,8 +238,8 @@ export class ApiService {
     return this._http.get<OpenstackAvailabilityZone[]>(url);
   }
 
-  getKubeconfigURL(projectID: string, seed: string, clusterID: string): string {
-    return `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/kubeconfig`;
+  getKubeconfigURL(projectID: string, clusterID: string): string {
+    return `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/kubeconfig`;
   }
 
   getDashboardProxyURL(projectID: string, seed: string, clusterID: string): string {

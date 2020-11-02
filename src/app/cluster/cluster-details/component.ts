@@ -286,7 +286,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this._userService.currentUser.pipe(
             map((user: Member) => this._api.getShareKubeconfigURL(this.projectID, this.seed, this.cluster.id, user.id))
           ),
-          of(this._api.getKubeconfigURL(this.projectID, this.seed, this.cluster.id))
+          of(this._api.getKubeconfigURL(this.projectID, this.cluster.id))
         )
       )
     );
