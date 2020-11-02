@@ -10,20 +10,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div fxLayout="row"
-     fxLayout.md="column"
-     fxLayout.sm="column"
-     fxLayout.xs="column"
-     fxLayoutGap="20px"
-     fxLayoutGap.md="0"
-     fxLayoutGap.sm="0"
-     fxLayoutGap.xs="0"
-     fxLayoutAlign="start start"
-     class="km-wizard-summary">
-  <div fxFlex="50%"
-       fxLayout="column"
-       fxLayoutAlign="start start">
+<div class="km-wizard-summary">
+  <div fxFlex
+       fxLayoutAlign="start start"
+       fxLayout="row wrap"
+       fxLayout.sm="column"
+       fxLayout.xs="column">
     <div class="section"
+         fxFlex="50%"
          fxLayout="column"
          fxLayoutAlign="start start">
       <div class="header">Provider</div>
@@ -40,6 +34,7 @@ limitations under the License.
     </div>
 
     <div class="section"
+         fxFlex="50%"
          fxLayout="column"
          fxLayoutAlign="start start">
       <div class="header">Cluster</div>
@@ -136,6 +131,7 @@ limitations under the License.
 
     <div *ngIf="cluster.credential || displaySettings()"
          class="section"
+         fxFlex="50%"
          fxLayout="column"
          fxLayoutAlign="start start">
       <div class="header">Settings</div>
@@ -273,6 +269,14 @@ limitations under the License.
               <div key>Folder</div>
               <div value>{{cluster.spec.cloud.vsphere.folder}}</div>
             </km-property>
+            <km-property *ngIf="cluster.spec.cloud.vsphere.datastore">
+              <div key>Datastore</div>
+              <div value>{{cluster.spec.cloud.vsphere.datastore}}</div>
+            </km-property>
+            <km-property *ngIf="cluster.spec.cloud.vsphere.datastoreCluster">
+              <div key>Datastore Cluster</div>
+              <div value>{{cluster.spec.cloud.vsphere.datastoreCluster}}</div>
+            </km-property>
           </ng-container>
         </ng-container>
       </div>
@@ -282,6 +286,7 @@ limitations under the License.
          fxLayout="column"
          fxLayoutAlign="start start">
       <div class="section"
+           fxFlex="50%"
            fxLayout="column"
            fxLayoutAlign="start start"
            *ngIf="!cluster.spec.cloud.bringyourown">
@@ -645,6 +650,7 @@ limitations under the License.
 
 
       <div class="section"
+           fxFlex="50%"
            fxLayout="column"
            fxLayoutAlign="start start"
            *ngIf="cluster.spec.cloud.vsphere && cluster.spec.machineNetworks && cluster.spec.machineNetworks?.length > 0">
@@ -679,3 +685,4 @@ limitations under the License.
       </p>
     </div>
   </div>
+</div>

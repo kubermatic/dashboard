@@ -178,6 +178,8 @@ export class VSphereCloudSpec {
   vmNetName: string;
   folder?: string;
   infraManagementUser: VSphereInfraManagementUser;
+  datastore?: string;
+  datastoreCluster?: string;
 }
 
 export class VSphereInfraManagementUser {
