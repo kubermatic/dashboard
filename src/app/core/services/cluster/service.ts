@@ -159,8 +159,8 @@ export class ClusterService {
     );
   }
 
-  metrics(projectID: string, clusterID: string, seed: string): Observable<ClusterMetrics> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/metrics`;
+  metrics(projectID: string, clusterID: string): Observable<ClusterMetrics> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/metrics`;
     return this._http.get<ClusterMetrics>(url).pipe(catchError(() => of<ClusterMetrics>(undefined)));
   }
 

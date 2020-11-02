@@ -150,7 +150,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                 ? [
                     this._clusterService.addons(this.projectID, this.cluster.id, this.seed),
                     this._api.getMachineDeployments(this.cluster.id, this.seed, this.projectID),
-                    this._clusterService.metrics(this.projectID, this.cluster.id, this.seed),
+                    this._clusterService.metrics(this.projectID, this.cluster.id),
                   ]
                 : [of([]), of([]), of([]), of([])]
             );
