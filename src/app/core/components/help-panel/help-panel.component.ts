@@ -15,7 +15,7 @@ import {Subject} from 'rxjs';
 import {slideOut} from '@shared/animations/slide';
 import {GuidedTourID} from '@shared/utils/guided-tour-utils/guided-tour-utils';
 import {GuidedTourService} from '@core/services/guided-tour/guided-tour.service';
-import {Auth} from '@core/services/auth/auth.service';
+import {Auth} from '@core/services/auth/service';
 
 @Component({
   selector: 'km-help-panel',
