@@ -199,8 +199,8 @@ export class ClusterService {
     return this._http.put(url, {version} as MasterVersion);
   }
 
-  deleteNode(projectID: string, clusterID: string, seed: string, nodeID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/nodes/${nodeID}`;
+  deleteNode(projectID: string, clusterID: string, nodeID: string): Observable<any> {
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/machines/nodes/${nodeID}`;
     return this._http.delete(url);
   }
 

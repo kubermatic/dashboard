@@ -133,7 +133,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     dialogRef
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(switchMap(_ => this._clusterService.deleteNode(this.projectID, this.cluster.id, this.seed, node.id)))
+      .pipe(switchMap(_ => this._clusterService.deleteNode(this.projectID, this.cluster.id, node.id)))
       .pipe(first())
       .subscribe(() => {
         this._notificationService.success(
