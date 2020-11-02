@@ -194,8 +194,8 @@ export class ClusterService {
     return this._http.get<Health>(url).pipe(catchError(() => of<Health>()));
   }
 
-  upgradeMachineDeployments(projectID: string, clusterID: string, seed: string, version: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/nodes/upgrades`;
+  upgradeMachineDeployments(projectID: string, clusterID: string, version: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/nodes/upgrades`;
     return this._http.put(url, {version} as MasterVersion);
   }
 
