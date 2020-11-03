@@ -132,7 +132,7 @@ export class WizardComponent implements OnInit, OnDestroy {
           if (this._clusterModelService.sshKeys.length > 0) {
             return forkJoin(
               this._clusterModelService.sshKeys.map(key =>
-                this._clusterService.createSSHKey(this.project.id, createdCluster.id, datacenter.spec.seed, key.id)
+                this._clusterService.createSSHKey(this.project.id, createdCluster.id, key.id)
               )
             );
           }

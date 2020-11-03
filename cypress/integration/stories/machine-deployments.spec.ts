@@ -83,7 +83,7 @@ describe.skip('Machine Deployments Story', () => {
     const timeout = 900000;
     TrafficMonitor.newTrafficMonitor()
       .method(RequestType.GET)
-      .url(Endpoint.NodeDeployments)
+      .url(Endpoint.MachineDeployments)
       .alias('getMachineDeployments')
       .timeout(timeout)
       .wait();

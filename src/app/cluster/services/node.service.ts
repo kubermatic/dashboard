@@ -65,21 +65,15 @@ export class NodeService {
     this._notificationService = this._inj.get(NotificationService);
   }
 
-  createMachineDeployment(
-    nodeData: NodeData,
-    projectID: string,
-    seedDCName: string,
-    clusterID: string
-  ): Observable<MachineDeployment> {
+  createMachineDeployment(nodeData: NodeData, projectID: string, clusterID: string): Observable<MachineDeployment> {
     return this._apiService.createMachineDeployment(
       NodeService._getMachineDeploymentEntity(nodeData),
       clusterID,
-      seedDCName,
       projectID
     );
   }
 
-  showMachineDeploymentCreateDialog(cluster: Cluster, projectID: string, seed: string): Observable<MachineDeployment> {
+  showMachineDeploymentCreateDialog(cluster: Cluster, projectID: string): Observable<MachineDeployment> {
     const dialogRef = this._matDialog.open<NodeDataDialogComponent, DialogDataInput, DialogDataOutput>(
       NodeDataDialogComponent,
       {
@@ -92,7 +86,7 @@ export class NodeService {
     return dialogRef
       .afterClosed()
       .pipe(filter(data => !!data))
-      .pipe(switchMap(data => this.createMachineDeployment(data.nodeData, projectID, seed, cluster.id)));
+      .pipe(switchMap(data => this.createMachineDeployment(data.nodeData, projectID, cluster.id)));
   }
 
   showMachineDeploymentEditDialog(

@@ -135,11 +135,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
                     .pipe(
                       switchMap(_ =>
                         Health.allHealthy(this.health[cluster.id])
-                          ? this._apiService.getMachineDeployments(
-                              cluster.id,
-                              this.nodeDC[cluster.id].spec.seed,
-                              this._selectedProject.id
-                            )
+                          ? this._apiService.getMachineDeployments(cluster.id, this._selectedProject.id)
                           : of([])
                       )
                     )

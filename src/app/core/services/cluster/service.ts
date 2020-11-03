@@ -150,8 +150,8 @@ export class ClusterService {
     return this._http.delete(url);
   }
 
-  upgrades(projectID: string, clusterID: string, seed: string): Observable<MasterVersion[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/upgrades`;
+  upgrades(projectID: string, clusterID: string): Observable<MasterVersion[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/upgrades`;
     return this._http.get<MasterVersion[]>(url).pipe(
       catchError(() => {
         return of<MasterVersion[]>([]).pipe(catchError(() => of<MasterVersion[]>()));
@@ -159,8 +159,8 @@ export class ClusterService {
     );
   }
 
-  metrics(projectID: string, clusterID: string, seed: string): Observable<ClusterMetrics> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/metrics`;
+  metrics(projectID: string, clusterID: string): Observable<ClusterMetrics> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/metrics`;
     return this._http.get<ClusterMetrics>(url).pipe(catchError(() => of<ClusterMetrics>(undefined)));
   }
 
@@ -194,13 +194,13 @@ export class ClusterService {
     return this._http.get<Health>(url).pipe(catchError(() => of<Health>()));
   }
 
-  upgradeMachineDeployments(projectID: string, clusterID: string, seed: string, version: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/nodes/upgrades`;
+  upgradeMachineDeployments(projectID: string, clusterID: string, version: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/nodes/upgrades`;
     return this._http.put(url, {version} as MasterVersion);
   }
 
-  deleteNode(projectID: string, clusterID: string, seed: string, nodeID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/nodes/${nodeID}`;
+  deleteNode(projectID: string, clusterID: string, nodeID: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/machinedeployments/nodes/${nodeID}`;
     return this._http.delete(url);
   }
 
@@ -213,18 +213,18 @@ export class ClusterService {
     );
   }
 
-  sshKeys(projectID: string, clusterID: string, seed: string): Observable<SSHKey[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/sshkeys`;
+  sshKeys(projectID: string, clusterID: string): Observable<SSHKey[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/sshkeys`;
     return this._http.get<SSHKey[]>(url).pipe(catchError(() => of<SSHKey[]>()));
   }
 
-  createSSHKey(projectID: string, clusterID: string, seed: string, sshKeyID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
+  createSSHKey(projectID: string, clusterID: string, sshKeyID: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
     return this._http.put(url, null);
   }
 
-  deleteSSHKey(projectID: string, clusterID: string, seed: string, sshKeyID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
+  deleteSSHKey(projectID: string, clusterID: string, sshKeyID: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
     return this._http.delete(url);
   }
 

@@ -114,7 +114,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.nodeDc = datacenter;
 
           return combineLatest([
-            this._clusterService.sshKeys(this.projectID, this.cluster.id, this.seed),
+            this._clusterService.sshKeys(this.projectID, this.cluster.id),
             this._clusterService.health(this.projectID, this.cluster.id),
             this._clusterService.events(this.projectID, this.cluster.id),
           ]);
@@ -132,11 +132,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           // Conditionally create an array of observables to use for 'combineLatest' operator.
           // In case real observable should not be returned, observable emitting empty array will be added to the array.
           const reload$ = []
-            .concat(
-              this._canReloadVersions()
-                ? this._clusterService.upgrades(this.projectID, this.cluster.id, this.seed)
-                : of([])
-            )
+            .concat(this._canReloadVersions() ? this._clusterService.upgrades(this.projectID, this.cluster.id) : of([]))
             .concat(
               this._canReloadBindings()
                 ? [
@@ -149,8 +145,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               this._canReloadNodes()
                 ? [
                     this._clusterService.addons(this.projectID, this.cluster.id, this.seed),
-                    this._api.getMachineDeployments(this.cluster.id, this.seed, this.projectID),
-                    this._clusterService.metrics(this.projectID, this.cluster.id, this.seed),
+                    this._api.getMachineDeployments(this.cluster.id, this.projectID),
+                    this._clusterService.metrics(this.projectID, this.cluster.id),
                   ]
                 : [of([]), of([]), of([]), of([])]
             );
@@ -247,7 +243,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   addNode(): void {
     this._node
-      .showMachineDeploymentCreateDialog(this.cluster, this.projectID, this.seed)
+      .showMachineDeploymentCreateDialog(this.cluster, this.projectID)
       .pipe(take(1))
       .subscribe(
         _ => this._clusterService.onClusterUpdate.next(),
@@ -290,7 +286,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this._userService.currentUser.pipe(
             map((user: Member) => this._api.getShareKubeconfigURL(this.projectID, this.seed, this.cluster.id, user.id))
           ),
-          of(this._api.getKubeconfigURL(this.projectID, this.seed, this.cluster.id))
+          of(this._api.getKubeconfigURL(this.projectID, this.cluster.id))
         )
       )
     );

@@ -77,7 +77,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
 
   upgradeMachineDeployments(): void {
     this._clusterService
-      .upgradeMachineDeployments(this.project.id, this.cluster.id, this.seed, this.selectedVersion)
+      .upgradeMachineDeployments(this.project.id, this.cluster.id, this.selectedVersion)
       .pipe(first())
       .subscribe(() => {
         this._notificationService.success(
