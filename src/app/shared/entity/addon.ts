@@ -42,6 +42,7 @@ export class AddonConfigSpec {
 export class AddonFormSpec {
   displayName: string;
   internalName: string;
+  helpText: string;
   required: boolean;
   type: string;
 }
