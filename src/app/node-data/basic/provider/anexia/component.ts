@@ -46,7 +46,7 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
   readonly Controls = Controls;
   private readonly _defaultDiskSize = 20; // in GiB
   private readonly _defaultCpus = 1;
-  private readonly _defaultMemory = 2; // in GB
+  private readonly _defaultMemory = 2048; // in MB
 
   constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
     super();

@@ -13,27 +13,11 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {iif, merge, Observable, of, Subject, timer} from 'rxjs';
 import {first, map, shareReplay, switchMap} from 'rxjs/operators';
-import {environment} from '../../../../environments/environment';
-import {CreateDatacenterModel, Datacenter} from '../../../shared/entity/datacenter';
-import {AppConfigService} from '../../../config.service';
+import {environment} from '@environments/environment';
+import {CreateDatacenterModel, Datacenter} from '@shared/entity/datacenter';
+import {AppConfigService} from '@app/config.service';
 import {Auth} from '../auth/service';
 import * as _ from 'lodash';
-
-// TODO: Remove this and the concat from init().
-const ANEXIA_DC: Datacenter = {
-  metadata: {
-    name: 'anexia-dc',
-  },
-  spec: {
-    anexia: {},
-    seed: 'europe-west3-c',
-    country: 'de',
-    location: 'Hamburg',
-    provider: 'anexia',
-    enforceAuditLogging: false,
-    enforcePodSecurityPolicy: false,
-  },
-};
 
 @Injectable()
 export class DatacenterService {
@@ -54,7 +38,7 @@ export class DatacenterService {
   init(): void {
     this._datacenters$ = merge(this._datacentersRefresh$, this._refreshTimer$)
       .pipe(switchMap(() => iif(() => this._auth.authenticated(), this._getDatacenters(), of([]))))
-      .pipe(map(datacenters => _.sortBy(datacenters.concat(ANEXIA_DC), d => d.metadata.name.toLowerCase())))
+      .pipe(map(datacenters => _.sortBy(datacenters, d => d.metadata.name.toLowerCase())))
       .pipe(shareReplay(1));
     this._datacenters$.pipe(first()).subscribe(_ => {});
 

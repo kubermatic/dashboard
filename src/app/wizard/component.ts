@@ -113,13 +113,6 @@ export class WizardComponent implements OnInit, OnDestroy {
       this._nodeDataService.nodeData
     );
 
-    // TODO: Remove this.
-    if (createCluster.cluster.spec.cloud.dc === 'anexia-dc') {
-      // eslint-disable-next-line no-console
-      console.log(createCluster);
-      return;
-    }
-
     this._datacenterService
       .getDatacenter(this._clusterModelService.datacenter)
       .pipe(tap(dc => (datacenter = dc)))

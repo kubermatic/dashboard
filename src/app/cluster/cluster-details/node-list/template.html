@@ -287,6 +287,27 @@ limitations under the License.
               <div key>VM Template</div>
               <div value>{{element.spec.cloud.vsphere.template}}</div>
             </km-property>
+
+            <km-property *ngIf="element.spec.cloud.anexia?.cpus">
+              <div key>Number of CPU's</div>
+              <div value>{{element.spec.cloud.anexia.cpus}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.anexia?.memory">
+              <div key>Memory in MB</div>
+              <div value>{{element.spec.cloud.anexia.memory}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.anexia?.diskSize">
+              <div key>Disk Size in GB</div>
+              <div value>{{element.spec.cloud.anexia.diskSize}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.anexia?.templateID">
+              <div key>Template ID</div>
+              <div value>{{element.spec.cloud.anexia.templateID}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.anexia?.vlanID">
+              <div key>VLAN ID</div>
+              <div value>{{element.spec.cloud.anexia.vlanID}}</div>
+            </km-property>
             <!-- End of other properties. -->
 
             <!-- Tags for all providers. -->

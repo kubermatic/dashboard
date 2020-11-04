@@ -11,12 +11,11 @@
 
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
-import {EMPTY, Observable, of} from 'rxjs';
-
-import {environment} from '../../../../environments/environment';
-import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
+import {EMPTY, Observable} from 'rxjs';
+import {environment} from '@environments/environment';
+import {PresetList} from '@shared/entity/preset';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Alibaba} from './provider/alibaba';
-
 import {AWS} from './provider/aws';
 import {Azure} from './provider/azure';
 import {Digitalocean} from './provider/digitalocean';
@@ -26,7 +25,6 @@ import {Openstack} from './provider/openstack';
 import {Packet} from './provider/packet';
 import {Provider} from './provider/provider';
 import {VSphere} from './provider/vsphere';
-import {PresetList} from '../../../shared/entity/preset';
 
 @Injectable()
 export class PresetsService {
@@ -88,11 +86,6 @@ export class PresetsService {
   presets(provider: NodeProvider, datacenter: string): Observable<PresetList> {
     if (!provider || !datacenter) {
       return EMPTY;
-    }
-
-    // TODO: Remove this.
-    if (datacenter === 'anexia-dc') {
-      return of(new PresetList('anexia-preset'));
     }
 
     const url = `${environment.restRoot}/providers/${provider}/presets/credentials?datacenter=${datacenter}`;
