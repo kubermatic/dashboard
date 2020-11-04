@@ -20,7 +20,12 @@
 form {
   margin: 16px 0;
 
-  .km-install-addon-boolean-container {
+  .boolean-field {
     margin-bottom: 16px;
+
+    .mat-hint {
+      font-size: 75%;
+      margin: 4px 0 0 12px;
+    }
   }
 }

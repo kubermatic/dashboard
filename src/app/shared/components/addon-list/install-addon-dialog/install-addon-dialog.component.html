@@ -42,11 +42,11 @@ limitations under the License.
       </mat-form-field>
 
       <div *ngIf="control.type === 'boolean'"
-           class="km-install-addon-boolean-container">
+           class="boolean-field">
         <mat-checkbox [formControlName]="control.internalName">
           {{control.displayName}}
         </mat-checkbox>
-        <mat-hint>{{control.helpText}}</mat-hint>
+        <div class="mat-hint">{{control.helpText}}</div>
       </div>
     </div>
   </form>
