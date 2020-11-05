@@ -57,6 +57,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   nodeDc: Datacenter;
   seed: string;
   sshKeys: SSHKey[] = [];
+  nodes: Node[] = [];
   machineDeployments: MachineDeployment[];
   isClusterRunning = false;
   isClusterAPIRunning = false;
@@ -145,6 +146,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               this._canReloadNodes()
                 ? [
                     this._clusterService.addons(this.projectID, this.cluster.id, this.seed),
+                    this._clusterService.nodes(this.projectID, this.cluster.id),
                     this._api.getMachineDeployments(this.cluster.id, this.projectID),
                     this._clusterService.metrics(this.projectID, this.cluster.id),
                   ]
@@ -156,15 +158,17 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(
-        ([upgrades, clusterBindings, bindings, addons, machineDeployments, metrics]: [
+        ([upgrades, clusterBindings, bindings, addons, nodes, machineDeployments, metrics]: [
           MasterVersion[],
           ClusterBinding[],
           Binding[],
           Addon[],
+          Node[],
           MachineDeployment[],
           ClusterMetrics
         ]) => {
           this.addons = addons;
+          this.nodes = nodes;
           this.machineDeployments = machineDeployments;
           this.metrics = metrics;
           this.upgrades = _.isEmpty(upgrades) ? [] : upgrades;
