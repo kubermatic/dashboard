@@ -55,6 +55,7 @@ import {MachineNetworksDisplayComponent} from './machine-networks-display/compon
 import {NodeListComponent} from './node-list/component';
 import {RBACComponent} from './rbac/component';
 import {VersionPickerComponent} from './version-picker/component';
+import {nodesFake} from '@app/testing/fake-data/node.fake';
 
 describe('ClusterDetailsComponent', () => {
   let fixture: ComponentFixture<ClusterDetailsComponent>;
@@ -133,6 +134,17 @@ describe('ClusterDetailsComponent', () => {
 
     tick();
     expect(component.cluster).toEqual(expectedCluster);
+  }));
+
+  it('should get nodes', fakeAsync(() => {
+    fixture.detectChanges();
+
+    const expectedNodes = nodesFake();
+    expectedNodes[0].creationTimestamp = expect.any(Date);
+    expectedNodes[1].creationTimestamp = expect.any(Date);
+
+    tick();
+    expect(component.nodes).toEqual(expectedNodes);
   }));
 
   it('should create simple cluster binding for rbac', () => {
