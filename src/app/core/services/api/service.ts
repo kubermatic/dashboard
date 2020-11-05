@@ -90,7 +90,9 @@ export class ApiService {
     if (this._guidedTourService.isTourInProgress()) {
       return of([this._guidedTourItemsService.guidedTourDOMachineDeployment()]);
     }
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments`;    return this._http.get<MachineDeployment[]>(url).pipe(catchError(() => of<MachineDeployment[]>()));
+
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments`;
+    return this._http.get<MachineDeployment[]>(url).pipe(catchError(() => of<MachineDeployment[]>()));
   }
 
   // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
@@ -300,7 +302,8 @@ export class ApiService {
       return '';
     }
 
-    return `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/kubeconfig`;  }
+    return `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/kubeconfig`;
+  }
 
   getDashboardProxyURL(projectID: string, seed: string, clusterID: string): string {
     if (this._guidedTourService.isTourInProgress()) {

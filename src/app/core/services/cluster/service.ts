@@ -180,7 +180,8 @@ export class ClusterService {
       return of([]);
     }
 
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/upgrades`;    return this._http.get<MasterVersion[]>(url).pipe(
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/upgrades`;
+    return this._http.get<MasterVersion[]>(url).pipe(
       catchError(() => {
         return of<MasterVersion[]>([]).pipe(catchError(() => of<MasterVersion[]>()));
       })
@@ -192,7 +193,8 @@ export class ClusterService {
       return of();
     }
 
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/metrics`;    return this._http.get<ClusterMetrics>(url).pipe(catchError(() => of<ClusterMetrics>(undefined)));
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/metrics`;
+    return this._http.get<ClusterMetrics>(url).pipe(catchError(() => of<ClusterMetrics>(undefined)));
   }
 
   externalClusterMetrics(projectID: string, clusterID: string): Observable<ClusterMetrics> {
@@ -238,7 +240,8 @@ export class ClusterService {
       return of();
     }
 
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/nodes/upgrades`;    return this._http.put(url, {version} as MasterVersion);
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/nodes/upgrades`;
+    return this._http.put(url, {version} as MasterVersion);
   }
 
   nodes(projectID: string, clusterID: string): Observable<Node[]> {
@@ -273,7 +276,8 @@ export class ClusterService {
       return of([]);
     }
 
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/sshkeys`;    return this._http.get<SSHKey[]>(url).pipe(catchError(() => of<SSHKey[]>()));
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/sshkeys`;
+    return this._http.get<SSHKey[]>(url).pipe(catchError(() => of<SSHKey[]>()));
   }
 
   createSSHKey(projectID: string, clusterID: string, sshKeyID: string): Observable<any> {
@@ -281,7 +285,8 @@ export class ClusterService {
       return of();
     }
 
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/sshkeys/${sshKeyID}`;    return this._http.put(url, null);
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
+    return this._http.put(url, null);
   }
 
   deleteSSHKey(projectID: string, clusterID: string, sshKeyID: string): Observable<any> {
@@ -289,7 +294,8 @@ export class ClusterService {
       return of();
     }
 
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/sshkeys/${sshKeyID}`;    return this._http.delete(url);
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
+    return this._http.delete(url);
   }
 
   addons(projectID: string, cluster: string, seed: string): Observable<Addon[]> {

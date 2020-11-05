@@ -15,7 +15,6 @@ import {EMPTY, Observable, of} from 'rxjs';
 import {environment} from '@environments/environment';
 import {PresetList} from '@shared/entity/preset';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {PresetList} from '../../../shared/entity/preset';
 import {GuidedTourService} from '@core/services/guided-tour/guided-tour.service';
 import {Alibaba} from './provider/alibaba';
 import {AWS} from './provider/aws';
