@@ -38,4 +38,6 @@ limitations under the License.
                           [formControl]="form.get(Control.ProviderBasic)"></km-gcp-basic-node-data>
   <km-openstack-basic-node-data *ngSwitchCase="Provider.OPENSTACK"
                                 [formControl]="form.get(Control.ProviderBasic)"></km-openstack-basic-node-data>
+  <km-anexia-basic-node-data *ngSwitchCase="Provider.ANEXIA"
+                             [formControl]="form.get(Control.ProviderBasic)"></km-anexia-basic-node-data>
 </form>

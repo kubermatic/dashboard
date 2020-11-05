@@ -134,7 +134,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     merge(this._clusterService.clusterTypeChanges, this._clusterService.providerChanges)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
+      .subscribe(_ => {
+        this.provider = this._clusterService.provider;
+        this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS());
+      });
 
     merge<string>(this._clusterService.datacenterChanges, of(this._clusterService.datacenter))
       .pipe(filter(dc => !!dc))
@@ -231,10 +234,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           NodeProvider.OPENSTACK
         );
       case OperatingSystem.Flatcar:
-        return this.isProvider(NodeProvider.AWS, NodeProvider.AZURE, NodeProvider.OPENSTACK);
+        return this.isProvider(NodeProvider.AWS, NodeProvider.AZURE, NodeProvider.OPENSTACK, NodeProvider.ANEXIA);
       case OperatingSystem.Ubuntu:
       case OperatingSystem.CentOS:
-        return !this.isProvider(NodeProvider.VSPHERE);
+        return !this.isProvider(NodeProvider.VSPHERE, NodeProvider.ANEXIA);
     }
 
     return false;
@@ -346,7 +349,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   private _getDefaultOS(): OperatingSystem {
-    if (this._nodeDataService.operatingSystem) {
+    if (this.isOperatingSystemSupported(this._nodeDataService.operatingSystem)) {
       return this._nodeDataService.operatingSystem;
     }
 
@@ -356,6 +359,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     if (this._datacenterSpec) {
       return this._getDefaultSystemTemplate(this.provider);
+    }
+
+    if (this.isProvider(NodeProvider.ANEXIA)) {
+      return OperatingSystem.Flatcar;
     }
 
     return OperatingSystem.Ubuntu;

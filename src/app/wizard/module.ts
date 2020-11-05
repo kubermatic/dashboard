@@ -12,8 +12,7 @@
 import {NgModule} from '@angular/core';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../node-data/config';
 import {NodeDataModule} from '../node-data/module';
-import {SharedModule} from '../shared/shared.module';
-
+import {SharedModule} from '@shared/shared.module';
 import {WizardComponent} from './component';
 import {Routing} from './routing';
 import {WizardService} from './service/wizard';
@@ -24,6 +23,7 @@ import {ProviderStepComponent} from './step/provider-datacenter/component';
 import {ProviderSettingsStepComponent} from './step/provider-settings/component';
 import {PresetsComponent} from './step/provider-settings/preset/component';
 import {AlibabaProviderBasicComponent} from './step/provider-settings/provider/basic/alibaba/component';
+import {AnexiaProviderBasicComponent} from './step/provider-settings/provider/basic/anexia/component';
 import {AWSProviderBasicComponent} from './step/provider-settings/provider/basic/aws/component';
 import {AzureProviderBasicComponent} from './step/provider-settings/provider/basic/azure/component';
 import {ProviderBasicComponent} from './step/provider-settings/provider/basic/component';
@@ -68,6 +68,7 @@ const components: any[] = [
   AzureProviderExtendedComponent,
   GCPProviderBasicComponent,
   GCPProviderExtendedComponent,
+  AnexiaProviderBasicComponent,
   NodeSettingsStepComponent,
   ClusterSSHKeysComponent,
 ];

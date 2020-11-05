@@ -97,6 +97,7 @@ export class CloudSpec {
   gcp?: GCPCloudSpec;
   kubevirt?: KubeVirtCloudSpec;
   alibaba?: AlibabaCloudSpec;
+  anexia?: AnexiaCloudSpec;
 }
 
 export class AlibabaCloudSpec {
@@ -133,6 +134,10 @@ export class BareMetalCloudSpec {
 export class BringYourOwnCloudSpec {}
 
 export class DigitaloceanCloudSpec {
+  token: string;
+}
+
+export class AnexiaCloudSpec {
   token: string;
 }
 
@@ -398,6 +403,8 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
         accessKeyID: '',
         accessKeySecret: '',
       } as AlibabaCloudSpec;
+    case NodeProvider.ANEXIA:
+      return {};
   }
   return {};
 }
