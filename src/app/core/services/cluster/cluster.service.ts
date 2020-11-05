@@ -204,6 +204,11 @@ export class ClusterService {
     return this._http.put(url, {version} as MasterVersion);
   }
 
+  nodes(projectID: string, clusterID: string, seed: string): Observable<Node[]> {
+    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/nodes?hideInitialConditions=true`;
+    return this._http.get<Node[]>(url).pipe(catchError(() => of<Node[]>()));
+  }
+
   deleteNode(projectID: string, clusterID: string, seed: string, nodeID: string): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/nodes/${nodeID}`;
     return this._http.delete(url);
