@@ -47,7 +47,7 @@
     "@angular/platform-browser": "10.1.6",
     "@angular/platform-browser-dynamic": "10.1.6",
     "@angular/router": "10.1.6",
-    "core-js": "3.6.5",
+    "core-js": "3.7.0",
     "country-code-lookup": "0.0.18",
     "flag-icon-css": "3.5.0",
     "fontsource-inconsolata": "3.0.5",
