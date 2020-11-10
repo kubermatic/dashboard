@@ -429,6 +429,8 @@ export function nodeDataCentOsFake(): NodeData {
           image: '',
           useFloatingIP: false,
           tags: {},
+          instanceReadyCheckPeriod: '10',
+          instanceReadyCheckTimeout: '120',
         },
         hetzner: {
           type: 'cx31',
@@ -494,6 +496,8 @@ export function nodeDataContainerLinuxFake(): NodeData {
           image: '',
           useFloatingIP: false,
           tags: {},
+          instanceReadyCheckPeriod: '10',
+          instanceReadyCheckTimeout: '120',
         },
         hetzner: {
           type: 'cx31',
@@ -558,6 +562,8 @@ export function nodeDataSLESFake(): NodeData {
           image: '',
           useFloatingIP: false,
           tags: {},
+          instanceReadyCheckPeriod: '10',
+          instanceReadyCheckTimeout: '120',
         },
         hetzner: {
           type: 'cx31',
