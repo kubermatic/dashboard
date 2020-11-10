@@ -85,4 +85,26 @@ limitations under the License.
        class="km-icon-info km-pointer"
        matTooltip="Floating IP usage is enforced by selected datacenter"></i>
   </mat-checkbox>
+
+  <mat-form-field fxFlex>
+    <mat-label>Instance Ready Check Period</mat-label>
+    <input [formControlName]="Controls.InstanceReadyCheckPeriod"
+           matInput
+           min="5"
+           type="number"
+           autocomplete="off"
+           required>
+    <mat-hint>Time in seconds between running a check for instance ready status.</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Instance Ready Check Timeout</mat-label>
+    <input [formControlName]="Controls.InstanceReadyCheckTimeout"
+           matInput
+           min="10"
+           type="number"
+           autocomplete="off"
+           required>
+    <mat-hint>Time in seconds to wait for instance to be in ready status before timing out.</mat-hint>
+  </mat-form-field>
 </form>

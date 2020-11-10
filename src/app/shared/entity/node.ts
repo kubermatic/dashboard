@@ -205,6 +205,8 @@ export class OpenstackNodeSpec {
   tags: object;
   diskSize?: number;
   availabilityZone?: string;
+  instanceReadyCheckPeriod: string;
+  instanceReadyCheckTimeout: string;
 }
 
 export class PacketNodeSpec {

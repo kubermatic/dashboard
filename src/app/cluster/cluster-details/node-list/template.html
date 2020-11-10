@@ -245,6 +245,14 @@ limitations under the License.
               <div key>Availability Zone</div>
               <div value>{{element.spec.cloud.openstack.availabilityZone}}</div>
             </km-property>
+            <km-property *ngIf="element.spec.cloud.openstack?.instanceReadyCheckPeriod">
+              <div key>Instance Ready Check Period</div>
+              <div value>{{element.spec.cloud.openstack.instanceReadyCheckPeriod}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.openstack?.instanceReadyCheckTimeout">
+              <div key>Instance Ready Check Timeout</div>
+              <div value>{{element.spec.cloud.openstack.instanceReadyCheckTimeout}}</div>
+            </km-property>
 
             <km-property *ngIf="element.spec.cloud.kubevirt">
               <div key>Number of CPUs</div>
