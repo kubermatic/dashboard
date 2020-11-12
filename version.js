@@ -18,7 +18,7 @@ const gitInfo = gitDescribeSync({
 gitInfo.edition = getEditionDisplayName();
 
 // Re-use the version logic from our Makefile
-gitInfo.ui = execSync("make version").toString().trim();
+gitInfo.ui = execSync("make version --no-print-directory").toString().trim();
 
 const versionInfoJson = JSON.stringify(gitInfo, null, 2);
 
