@@ -19,6 +19,7 @@ export class VersionInfo {
   suffix: string;
   tag: string;
   edition: string;
+  humanReadable: string;
 }
 
 export class Semver {

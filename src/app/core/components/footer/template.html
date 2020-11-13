@@ -23,9 +23,7 @@ limitations under the License.
          rel="noopener">powered by Kubermatic</a>
     </div>
 
-    <div *ngIf="!!version && !version.distance">{{version.tag}}</div>
-
-    <div *ngIf="!!version && !!version.distance">v{{version.semverString}}</div>
+    <div *ngIf="!!version">{{version.humanReadable}}</div>
 
     <div id="km-edition">{{version.edition}}</div>
 
