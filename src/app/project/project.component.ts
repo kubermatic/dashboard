@@ -47,6 +47,9 @@ import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {DeleteProjectConfirmationComponent} from './delete-project/delete-project.component';
 import {EditProjectComponent} from './edit-project/edit-project.component';
 
+import {DialogService} from '@shared/components/guided-tour/dialog/service';
+import {StepComponent} from '@shared/components/guided-tour/step/component';
+
 @Component({
   selector: 'km-project',
   templateUrl: './project.component.html',
@@ -106,6 +109,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _previousRouteService: PreviousRouteService,
     private readonly _cdr: ChangeDetectorRef,
     private readonly _settingsService: SettingsService,
+    public dialog: DialogService,
     @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie
   ) {}
 
@@ -419,5 +423,11 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   private _isPaginatorVisible(): boolean {
     return !_.isEmpty(this.projects) && this.paginator && this.projects.length > this.paginator.pageSize;
+  }
+
+  startTour(): void {
+    this.dialog.open(StepComponent, {
+      data: {message: 'Test'},
+    });
   }
 }

@@ -86,6 +86,9 @@ import {ExternalClusterDataDialogComponent} from './components/external-cluster-
 import {LoaderComponent} from './components/loader/component';
 import {SearchFieldComponent} from './components/search-field/component';
 
+import {DialogModule} from './components/guided-tour/dialog/module';
+import {StepComponent} from './components/guided-tour/step/component';
+
 const modules: any[] = [
   CommonModule,
   FormsModule,
@@ -127,6 +130,7 @@ const modules: any[] = [
   MatRippleModule,
   FilterPipeModule,
   MonacoEditorModule,
+  DialogModule,
 ];
 
 const components: any[] = [
@@ -164,6 +168,7 @@ const components: any[] = [
   ExternalClusterDataDialogComponent,
   LoaderComponent,
   SearchFieldComponent,
+  StepComponent,
 ];
 
 const services: any[] = [ClusterService, EndOfLifeService];
