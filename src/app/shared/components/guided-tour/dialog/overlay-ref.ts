@@ -9,19 +9,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component} from '@angular/core';
-import {DialogConfig} from '../dialog/entity';
-import {DialogRef} from '../dialog/dialog-ref';
+import {OverlayRef} from '@angular/cdk/overlay';
 
-@Component({
-  selector: 'km-guided-tour-step',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-})
-export class StepComponent {
-  constructor(public config: DialogConfig, public dialog: DialogRef) {}
+export class DialogRef {
+  constructor(private overlayRef: OverlayRef) {}
 
-  onClose(): void {
-    this.dialog.close('closed');
+  close(): void {
+    this.overlayRef.dispose();
   }
 }

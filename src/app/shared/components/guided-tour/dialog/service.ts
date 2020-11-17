@@ -9,72 +9,54 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {
-  Injectable,
-  ComponentFactoryResolver,
-  ApplicationRef,
-  Injector,
-  EmbeddedViewRef,
-  ComponentRef,
-  Type,
-} from '@angular/core';
-import {DialogModule} from './module';
+import {Injectable, Injector, ComponentRef} from '@angular/core';
+import {Overlay, OverlayConfig, OverlayRef} from '@angular/cdk/overlay';
+import {ComponentPortal, PortalInjector} from '@angular/cdk/portal';
 import {DialogComponent} from './component';
-import {DialogRef} from './dialog-ref';
-import {DialogConfig} from './entity';
-import {DialogInjector} from './injector';
+import {DialogRef} from './overlay-ref';
+import {DialogConfig, DEFAULT_CONFIG} from './entity';
 
-@Injectable({
-  providedIn: DialogModule,
-})
+@Injectable()
 export class DialogService {
-  dialogComponentRef: ComponentRef<DialogComponent>;
+  constructor(private injector: Injector, private overlay: Overlay) {}
 
-  constructor(
-    private _componentFactoryResolver: ComponentFactoryResolver,
-    private _appRef: ApplicationRef,
-    private _injector: Injector
-  ) {}
-
-  private appendDialogComponentToBody(config: DialogConfig): DialogRef {
-    const map = new WeakMap();
-    map.set(DialogConfig, config);
-
-    const dialogRef = new DialogRef();
-    map.set(DialogRef, dialogRef);
-
-    const sub = dialogRef.afterClosed.subscribe(() => {
-      this.removeDialogComponentFromBody();
-      sub.unsubscribe();
-    });
-
-    const componentFactory = this._componentFactoryResolver.resolveComponentFactory(DialogComponent);
-    const componentRef = componentFactory.create(new DialogInjector(this._injector, map));
-
-    this._appRef.attachView(componentRef.hostView);
-
-    const domElem = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
-    document.body.appendChild(domElem);
-
-    this.dialogComponentRef = componentRef;
-
-    this.dialogComponentRef.instance.onClose.subscribe(() => {
-      this.removeDialogComponentFromBody();
-    });
-
+  open(config: DialogConfig = {}): DialogRef {
+    const dialogConfig = {...DEFAULT_CONFIG, ...config};
+    const overlayRef = this.createOverlay(dialogConfig);
+    const dialogRef = new DialogRef(overlayRef);
+    this.attachDialogContainer(overlayRef, dialogRef);
     return dialogRef;
   }
 
-  private removeDialogComponentFromBody(): void {
-    this._appRef.detachView(this.dialogComponentRef.hostView);
-    this.dialogComponentRef.destroy();
+  private createOverlay(config: DialogConfig): OverlayRef {
+    const overlayConfig = this.getOverlayConfig(config);
+    return this.overlay.create(overlayConfig);
   }
 
-  open(componentType: Type<any>, config: DialogConfig): DialogRef {
-    const dialogRef = this.appendDialogComponentToBody(config);
+  private attachDialogContainer(overlayRef: OverlayRef, dialogRef: DialogRef): DialogComponent {
+    const injector = this.createInjector(dialogRef);
+    const containerPortal = new ComponentPortal(DialogComponent, null, injector);
+    const containerRef: ComponentRef<DialogComponent> = overlayRef.attach(containerPortal);
+    return containerRef.instance;
+  }
 
-    this.dialogComponentRef.instance.childComponentType = componentType;
+  private createInjector(dialogRef: DialogRef): PortalInjector {
+    const injectionTokens = new WeakMap();
+    injectionTokens.set(DialogRef, dialogRef);
+    return new PortalInjector(this.injector, injectionTokens);
+  }
 
-    return dialogRef;
+  private getOverlayConfig(config: DialogConfig): OverlayConfig {
+    const positionStrategy = this.overlay.position().global().centerHorizontally().centerVertically();
+
+    const overlayConfig = new OverlayConfig({
+      hasBackdrop: config.hasBackdrop,
+      backdropClass: config.backdropClass,
+      panelClass: config.panelClass,
+      scrollStrategy: this.overlay.scrollStrategies.block(),
+      positionStrategy,
+    });
+
+    return overlayConfig;
   }
 }

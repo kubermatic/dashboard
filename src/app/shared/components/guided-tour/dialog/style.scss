@@ -9,21 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-.overlay {
-  align-items: center;
-  background: rgba(0, 0, 0, 0.7);
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  left: 0;
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: 1001;
-}
-
-.dialog {
+.km-guided-tour {
   background-color: white;
   box-shadow: 0 1px 18px rgba(0, 0, 0, 0.12), 0 6px 10px rgba(0, 0, 0, 0.14), 0 3px 5px rgba(0, 0, 0, 0.2);
   display: flex;
@@ -31,4 +17,10 @@
   max-width: 450px;
   min-width: 300px;
   padding: 10px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }

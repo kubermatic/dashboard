@@ -86,8 +86,9 @@ import {ExternalClusterDataDialogComponent} from './components/external-cluster-
 import {LoaderComponent} from './components/loader/component';
 import {SearchFieldComponent} from './components/search-field/component';
 
-import {DialogModule} from './components/guided-tour/dialog/module';
-import {StepComponent} from './components/guided-tour/step/component';
+import {OverlayModule} from '@angular/cdk/overlay';
+import {DialogComponent} from './components/guided-tour/dialog/component';
+import {DialogService} from './components/guided-tour/dialog/service';
 
 const modules: any[] = [
   CommonModule,
@@ -130,7 +131,7 @@ const modules: any[] = [
   MatRippleModule,
   FilterPipeModule,
   MonacoEditorModule,
-  DialogModule,
+  OverlayModule,
 ];
 
 const components: any[] = [
@@ -168,10 +169,10 @@ const components: any[] = [
   ExternalClusterDataDialogComponent,
   LoaderComponent,
   SearchFieldComponent,
-  StepComponent,
+  DialogComponent,
 ];
 
-const services: any[] = [ClusterService, EndOfLifeService];
+const services: any[] = [ClusterService, EndOfLifeService, DialogService];
 
 const directives: any[] = [AutofocusDirective, OptionDirective];
 

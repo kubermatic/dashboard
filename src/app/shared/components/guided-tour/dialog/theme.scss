@@ -9,22 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-:host {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-}
-
-.text-wrapper {
-  align-content: center;
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  text-align: center;
-}
-
-.actions {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+@mixin theme-guided-tour-overlay-component($colors) {
+  .cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+    background: rgba(0, 0, 0, 0.7);
+  }
 }

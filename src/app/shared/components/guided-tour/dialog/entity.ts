@@ -9,6 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class DialogConfig<D = any> {
-  data?: D;
+export class DialogConfig {
+  panelClass?: string;
+  hasBackdrop?: boolean;
+  backdropClass?: string;
 }
+
+export const DEFAULT_CONFIG: DialogConfig = {
+  hasBackdrop: true,
+  backdropClass: 'dark-backdrop',
+  panelClass: 'km-guided-tour-dialog-panel',
+};

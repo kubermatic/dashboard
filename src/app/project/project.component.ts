@@ -48,7 +48,6 @@ import {DeleteProjectConfirmationComponent} from './delete-project/delete-projec
 import {EditProjectComponent} from './edit-project/edit-project.component';
 
 import {DialogService} from '@shared/components/guided-tour/dialog/service';
-import {StepComponent} from '@shared/components/guided-tour/step/component';
 
 @Component({
   selector: 'km-project',
@@ -109,7 +108,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _previousRouteService: PreviousRouteService,
     private readonly _cdr: ChangeDetectorRef,
     private readonly _settingsService: SettingsService,
-    public dialog: DialogService,
+    private _dialogService: DialogService,
     @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie
   ) {}
 
@@ -426,8 +425,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   startTour(): void {
-    this.dialog.open(StepComponent, {
-      data: {message: 'Test'},
-    });
+    this._dialogService.open();
   }
 }
