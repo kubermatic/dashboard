@@ -35,7 +35,8 @@ limitations under the License.
             mat-flat-button
             type="button"
             [disabled]="isProjectCreationRestricted()"
-            (click)="addProject()">
+            (click)="addProject()"
+            [kmGuidedTour]="GuidedTourID.AddProjectBtn">
       Add Project
     </button>
   </div>

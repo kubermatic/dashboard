@@ -9,19 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject} from '@angular/core';
-import {DialogRef} from './overlay-ref';
-import {GuidedTourStep, STEP_DATA} from '../entity';
-
-@Component({
-  selector: 'guided-tour-overlay',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-})
-export class DialogComponent {
-  constructor(public dialogRef: DialogRef, @Inject(STEP_DATA) public step: GuidedTourStep) {}
-
-  onClose(): void {
-    this.dialogRef.close();
-  }
+export enum GuidedTourID {
+  StartTour = 'km-gt-start-tour',
+  AddProjectBtn = 'km-gt-add-project-btn',
+  AddProjectDialog = 'km-gt-add-project-dialog',
+  ProjectItem = 'km-gt-project-item',
 }
+
+export class GuidedTourUtils {}

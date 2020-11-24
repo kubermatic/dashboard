@@ -89,6 +89,8 @@ import {SearchFieldComponent} from './components/search-field/component';
 import {OverlayModule} from '@angular/cdk/overlay';
 import {DialogComponent} from './components/guided-tour/dialog/component';
 import {DialogService} from './components/guided-tour/dialog/service';
+import {GuidedTourItemsService} from './components/guided-tour/items.service';
+import {GuidedTourDirective} from './components/guided-tour/directive';
 
 const modules: any[] = [
   CommonModule,
@@ -172,9 +174,9 @@ const components: any[] = [
   DialogComponent,
 ];
 
-const services: any[] = [ClusterService, EndOfLifeService, DialogService];
+const services: any[] = [ClusterService, EndOfLifeService, DialogService, GuidedTourItemsService];
 
-const directives: any[] = [AutofocusDirective, OptionDirective];
+const directives: any[] = [AutofocusDirective, OptionDirective, GuidedTourDirective];
 
 @NgModule({
   imports: [...modules],

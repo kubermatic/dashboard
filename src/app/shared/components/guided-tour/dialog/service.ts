@@ -10,14 +10,17 @@
 // limitations under the License.
 
 import {Injectable, Injector, ComponentRef} from '@angular/core';
-import {Overlay, OverlayConfig, OverlayRef} from '@angular/cdk/overlay';
+import {Overlay, OverlayConfig, OverlayRef, ConnectionPositionPair} from '@angular/cdk/overlay';
 import {ComponentPortal, PortalInjector} from '@angular/cdk/portal';
 import {DialogComponent} from './component';
 import {DialogRef} from './overlay-ref';
 import {DialogConfig, DEFAULT_CONFIG} from './entity';
+import {GuidedTourStep, STEP_DATA} from '../entity';
 
 @Injectable()
 export class DialogService {
+  private _step: GuidedTourStep;
+
   constructor(private injector: Injector, private overlay: Overlay) {}
 
   open(config: DialogConfig = {}): DialogRef {
@@ -43,11 +46,15 @@ export class DialogService {
   private createInjector(dialogRef: DialogRef): PortalInjector {
     const injectionTokens = new WeakMap();
     injectionTokens.set(DialogRef, dialogRef);
+    injectionTokens.set(STEP_DATA, this._step);
     return new PortalInjector(this.injector, injectionTokens);
   }
 
   private getOverlayConfig(config: DialogConfig): OverlayConfig {
-    const positionStrategy = this.overlay.position().global().centerHorizontally().centerVertically();
+    const positionStrategy = this.overlay
+      .position()
+      .flexibleConnectedTo(this._step.targetViewContainer.element)
+      .withPositions(this.getPositions());
 
     const overlayConfig = new OverlayConfig({
       hasBackdrop: config.hasBackdrop,
@@ -58,5 +65,16 @@ export class DialogService {
     });
 
     return overlayConfig;
+  }
+
+  private getPositions(): ConnectionPositionPair[] {
+    return [
+      new ConnectionPositionPair({originX: 'start', originY: 'bottom'}, {overlayX: 'start', overlayY: 'top'}),
+      new ConnectionPositionPair({originX: 'start', originY: 'top'}, {overlayX: 'start', overlayY: 'bottom'}),
+    ];
+  }
+
+  addStep(stepToAdd: GuidedTourStep): void {
+    this._step = stepToAdd;
   }
 }

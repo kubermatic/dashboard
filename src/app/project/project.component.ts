@@ -48,6 +48,7 @@ import {DeleteProjectConfirmationComponent} from './delete-project/delete-projec
 import {EditProjectComponent} from './edit-project/edit-project.component';
 
 import {DialogService} from '@shared/components/guided-tour/dialog/service';
+import {GuidedTourID} from '@shared/components/guided-tour/utils';
 
 @Component({
   selector: 'km-project',
@@ -56,6 +57,8 @@ import {DialogService} from '@shared/components/guided-tour/dialog/service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
+  readonly GuidedTourID = GuidedTourID;
+
   projects: Project[] = [];
   currentUser: Member;
   isInitializing = true;
