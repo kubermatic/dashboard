@@ -326,7 +326,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   editSSHKeys(): void {
     const modal = this._matDialog.open(EditSSHKeysComponent);
     modal.componentInstance.cluster = this.cluster;
-    modal.componentInstance.seed = this.seed;
     modal.componentInstance.projectID = this.projectID;
     modal
       .afterClosed()

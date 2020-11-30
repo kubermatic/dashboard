@@ -35,7 +35,6 @@ import {first} from 'rxjs/operators';
 export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
   @Input() projectID: string;
-  @Input() seed: string;
   @Input() sshKeys: SSHKey[] = [];
 
   keys: SSHKey[] = [];

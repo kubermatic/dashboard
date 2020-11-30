@@ -37,7 +37,6 @@ import {AddClusterSSHKeysComponent} from './add-cluster-sshkeys/component';
 })
 export class EditSSHKeysComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() seed: string;
   @Input() projectID: string;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -104,7 +103,6 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     const dialogRef = this._dialog.open(AddClusterSSHKeysComponent);
     dialogRef.componentInstance.projectID = this.projectID;
     dialogRef.componentInstance.cluster = this.cluster;
-    dialogRef.componentInstance.seed = this.seed;
     dialogRef.componentInstance.sshKeys = this.sshKeys;
 
     dialogRef
