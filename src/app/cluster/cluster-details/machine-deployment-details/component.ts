@@ -125,7 +125,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodesEvents(): void {
     this._apiService
-      .getMachineDeploymentNodesEvents(this._machineDeploymentID, this._clusterName, this.seed, this.projectID)
+      .getMachineDeploymentNodesEvents(this._machineDeploymentID, this._clusterName, this.projectID)
       .pipe(first())
       .subscribe(e => {
         this.events = e;
@@ -137,9 +137,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
     this._apiService
       .getMachineDeploymentNodesMetrics(this._machineDeploymentID, this._clusterName, this.seed, this.projectID)
       .pipe(first())
-      .subscribe(metrics => {
-        this._storeNodeMetrics(metrics);
-      });
+      .subscribe(metrics => this._storeNodeMetrics(metrics));
   }
 
   loadCluster(): void {
