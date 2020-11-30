@@ -112,7 +112,6 @@ export class RBACComponent implements OnInit, OnDestroy {
         switchMap(_ =>
           this._rbacService.deleteClusterBinding(
             this.cluster.id,
-            this.seed,
             this.projectID,
             element.role,
             element.kind,
@@ -152,7 +151,6 @@ export class RBACComponent implements OnInit, OnDestroy {
         switchMap(_ =>
           this._rbacService.deleteBinding(
             this.cluster.id,
-            this.seed,
             this.projectID,
             element.role,
             element.namespace,
