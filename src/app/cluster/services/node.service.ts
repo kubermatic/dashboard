@@ -92,8 +92,7 @@ export class NodeService {
   showMachineDeploymentEditDialog(
     md: MachineDeployment,
     cluster: Cluster,
-    projectID: string,
-    seed: string
+    projectID: string
   ): Observable<MachineDeployment> {
     const dialogRef = this._matDialog.open(NodeDataDialogComponent, {
       data: {
@@ -113,7 +112,7 @@ export class NodeService {
       .pipe(filter(data => !!data))
       .pipe(
         switchMap(data =>
-          this._apiService.patchMachineDeployment(NodeService._createPatch(data), md.id, cluster.id, seed, projectID)
+          this._apiService.patchMachineDeployment(NodeService._createPatch(data), md.id, cluster.id, projectID)
         )
       );
   }

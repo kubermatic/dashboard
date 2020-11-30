@@ -15,7 +15,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
 import {nodeAWSFake, nodeFake} from '@app/testing/fake-data/node.fake';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
@@ -74,7 +73,6 @@ describe('NodeComponent', () => {
 
   it('should call deleteNode', fakeAsync(() => {
     component.cluster = fakeDigitaloceanCluster();
-    component.seed = fakeSeedDatacenter();
     component.projectID = fakeProject().id;
     const event = new MouseEvent('click');
 

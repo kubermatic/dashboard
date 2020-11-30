@@ -110,7 +110,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
 
   showEditDialog(md: MachineDeployment): void {
     this._nodeService
-      .showMachineDeploymentEditDialog(md, this.cluster, this.projectID, this.seed)
+      .showMachineDeploymentEditDialog(md, this.cluster, this.projectID)
       .pipe(take(1))
       .subscribe(
         _ => {
