@@ -262,7 +262,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   deleteClusterDialog(): void {
     const modal = this._matDialog.open(ClusterDeleteConfirmationComponent);
     modal.componentInstance.cluster = this.cluster;
-    modal.componentInstance.seed = this.seed;
     modal.componentInstance.projectID = this.projectID;
     modal
       .afterClosed()
