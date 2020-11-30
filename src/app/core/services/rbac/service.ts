@@ -43,12 +43,11 @@ export class RBACService {
 
   createClusterBinding(
     clusterID: string,
-    seed: string,
     projectID: string,
     roleID: string,
     createClusterRole: CreateBinding
   ): Observable<ClusterBinding> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/clusterroles/${roleID}/clusterbindings`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterroles/${roleID}/clusterbindings`;
     return this._http.post<ClusterBinding>(url, createClusterRole);
   }
 
@@ -79,13 +78,12 @@ export class RBACService {
 
   createBinding(
     clusterID: string,
-    seed: string,
     projectID: string,
     roleID: string,
     namespace: string,
     createRole: CreateBinding
   ): Observable<Binding> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/roles/${namespace}/${roleID}/bindings`;
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/roles/${namespace}/${roleID}/bindings`;
     return this._http.post<Binding>(url, createRole);
   }
 

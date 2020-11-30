@@ -183,7 +183,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     }
 
     this._rbacService
-      .createClusterBinding(this.cluster.id, this.seed, this.projectID, this.form.controls.role.value, clusterBinding)
+      .createClusterBinding(this.cluster.id, this.projectID, this.form.controls.role.value, clusterBinding)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(binding => {
         this._matDialogRef.close(binding);
@@ -206,7 +206,6 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     this._rbacService
       .createBinding(
         this.cluster.id,
-        this.seed,
         this.projectID,
         this.form.controls.role.value,
         this.form.controls.namespace.value,
