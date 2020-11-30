@@ -135,7 +135,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodesMetrics(): void {
     this._apiService
-      .getMachineDeploymentNodesMetrics(this._machineDeploymentID, this._clusterName, this.seed, this.projectID)
+      .getMachineDeploymentNodesMetrics(this._machineDeploymentID, this._clusterName, this.projectID)
       .pipe(first())
       .subscribe(metrics => this._storeNodeMetrics(metrics));
   }

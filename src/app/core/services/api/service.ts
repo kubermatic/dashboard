@@ -88,14 +88,8 @@ export class ApiService {
     return this._http.get<Node[]>(url);
   }
 
-  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
-  getMachineDeploymentNodesMetrics(
-    mdId: string,
-    cluster: string,
-    seed: string,
-    projectID: string
-  ): Observable<NodeMetrics[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/nodedeployments/${mdId}/nodes/metrics`;
+  getMachineDeploymentNodesMetrics(mdId: string, cluster: string, projectID: string): Observable<NodeMetrics[]> {
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}/nodes/metrics`;
     return this._http.get<NodeMetrics[]>(url);
   }
 
