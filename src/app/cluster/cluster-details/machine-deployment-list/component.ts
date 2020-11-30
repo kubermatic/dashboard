@@ -127,7 +127,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
 
   showDeleteDialog(md: MachineDeployment): void {
     this._nodeService
-      .showMachineDeploymentDeleteDialog(md, this.cluster.id, this.projectID, this.seed, this.changeMachineDeployment)
+      .showMachineDeploymentDeleteDialog(md, this.cluster.id, this.projectID, this.changeMachineDeployment)
       .subscribe(() => {});
   }
 

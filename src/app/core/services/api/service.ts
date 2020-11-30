@@ -117,9 +117,8 @@ export class ApiService {
     return this._http.patch<MachineDeployment>(url, patch);
   }
 
-  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
-  deleteMachineDeployment(cluster: string, md: MachineDeployment, seed: string, projectID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/nodedeployments/${md.id}`;
+  deleteMachineDeployment(cluster: string, md: MachineDeployment, projectID: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${md.id}`;
     return this._http.delete(url);
   }
 

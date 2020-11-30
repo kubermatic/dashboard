@@ -122,7 +122,6 @@ export class NodeService {
     md: MachineDeployment,
     clusterID: string,
     projectID: string,
-    dcName: string,
     changeEventEmitter: EventEmitter<MachineDeployment>
   ): Observable<boolean> {
     const dialogConfig: MatDialogConfig = {
@@ -144,7 +143,7 @@ export class NodeService {
           (isConfirmed: boolean): Observable<boolean> => {
             if (isConfirmed) {
               return this._apiService
-                .deleteMachineDeployment(clusterID, md, dcName, projectID)
+                .deleteMachineDeployment(clusterID, md, projectID)
                 .pipe(first())
                 .pipe(
                   catchError(() => {

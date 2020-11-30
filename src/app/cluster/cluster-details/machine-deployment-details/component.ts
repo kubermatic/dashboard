@@ -212,7 +212,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   showDeleteDialog(): void {
     this._nodeService
-      .showMachineDeploymentDeleteDialog(this.machineDeployment, this.cluster.id, this.projectID, this.seed, undefined)
+      .showMachineDeploymentDeleteDialog(this.machineDeployment, this.cluster.id, this.projectID, undefined)
       .subscribe(isConfirmed => {
         if (isConfirmed) {
           this.goBackToCluster();
