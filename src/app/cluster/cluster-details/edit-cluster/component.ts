@@ -32,7 +32,6 @@ import {takeUntil} from 'rxjs/operators';
 })
 export class EditClusterComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() seed: string;
   @Input() projectID: string;
   datacenter: Datacenter;
   admissionPlugin = AdmissionPlugin;
