@@ -102,7 +102,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadMachineDeployment(): void {
     this._apiService
-      .getMachineDeployment(this._machineDeploymentID, this._clusterName, this.seed, this.projectID)
+      .getMachineDeployment(this._machineDeploymentID, this._clusterName, this.projectID)
       .pipe(first())
       .subscribe((md: MachineDeployment) => {
         this.machineDeployment = md;

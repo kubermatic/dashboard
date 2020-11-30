@@ -76,9 +76,8 @@ export class ApiService {
     return this._http.get<MachineDeployment[]>(url).pipe(catchError(() => of<MachineDeployment[]>()));
   }
 
-  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
-  getMachineDeployment(mdId: string, cluster: string, seed: string, projectID: string): Observable<MachineDeployment> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/nodedeployments/${mdId}`;
+  getMachineDeployment(mdId: string, cluster: string, projectID: string): Observable<MachineDeployment> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}`;
     return this._http.get<MachineDeployment>(url);
   }
 
