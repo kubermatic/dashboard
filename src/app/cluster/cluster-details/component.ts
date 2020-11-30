@@ -137,8 +137,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             .concat(
               this._canReloadBindings()
                 ? [
-                    this._rbacService.getClusterBindings(this.cluster.id, this.seed, this.projectID),
-                    this._rbacService.getBindings(this.cluster.id, this.seed, this.projectID),
+                    this._rbacService.getClusterBindings(this.cluster.id, this.projectID),
+                    this._rbacService.getBindings(this.cluster.id, this.projectID),
                   ]
                 : [of([]), of([])]
             )

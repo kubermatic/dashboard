@@ -35,8 +35,8 @@ export class RBACService {
     return this._http.get<ClusterRoleName[]>(url);
   }
 
-  getClusterBindings(clusterID: string, seed: string, projectID: string): Observable<ClusterBinding[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/clusterbindings`;
+  getClusterBindings(clusterID: string, projectID: string): Observable<ClusterBinding[]> {
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/clusterbindings`;
     return this._http.get<ClusterBinding[]>(url);
   }
 
@@ -72,8 +72,8 @@ export class RBACService {
     return this._http.get<RoleName[]>(url);
   }
 
-  getBindings(clusterID: string, seed: string, projectID: string): Observable<Binding[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/bindings`;
+  getBindings(clusterID: string, projectID: string): Observable<Binding[]> {
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/bindings`;
     return this._http.get<Binding[]>(url);
   }
 
