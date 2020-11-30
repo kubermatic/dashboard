@@ -89,24 +89,22 @@ export class ApiService {
   }
 
   getMachineDeploymentNodesMetrics(mdId: string, cluster: string, projectID: string): Observable<NodeMetrics[]> {
-    const url = `${this._restRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}/nodes/metrics`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}/nodes/metrics`;
     return this._http.get<NodeMetrics[]>(url);
   }
 
   getMachineDeploymentNodesEvents(mdId: string, cluster: string, projectID: string): Observable<Event[]> {
-    const url = `${this._restRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}/nodes/events`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}/nodes/events`;
     return this._http.get<Event[]>(url);
   }
 
-  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
   patchMachineDeployment(
     patch: MachineDeploymentPatch,
     machineDeploymentId: string,
     clusterId: string,
-    seed: string,
     projectID: string
   ): Observable<MachineDeployment> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterId}/nodedeployments/${machineDeploymentId}`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterId}/machinedeployments/${machineDeploymentId}`;
     return this._http.patch<MachineDeployment>(url, patch);
   }
 
