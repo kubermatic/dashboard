@@ -190,7 +190,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   showEditDialog(): void {
     this._nodeService
-      .showMachineDeploymentEditDialog(this.machineDeployment, this.cluster, this.projectID, this.seed)
+      .showMachineDeploymentEditDialog(this.machineDeployment, this.cluster, this.projectID)
       .pipe(take(1))
       .subscribe(
         _ => {

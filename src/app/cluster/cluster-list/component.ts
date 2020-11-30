@@ -253,7 +253,6 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
 
     const modal = this._matDialog.open(ClusterDeleteConfirmationComponent);
     modal.componentInstance.cluster = cluster;
-    modal.componentInstance.seed = this.nodeDC[cluster.id].spec.seed;
     modal.componentInstance.projectID = this._selectedProject.id;
   }
 
