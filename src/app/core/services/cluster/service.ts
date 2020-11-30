@@ -233,23 +233,23 @@ export class ClusterService {
     return this._http.delete(url);
   }
 
-  addons(projectID: string, cluster: string, seed: string): Observable<Addon[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/addons`;
+  addons(projectID: string, cluster: string): Observable<Addon[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/addons`;
     return this._http.get<Addon[]>(url);
   }
 
-  createAddon(addon: Addon, projectID: string, cluster: string, seed: string): Observable<Addon> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/addons`;
+  createAddon(addon: Addon, projectID: string, cluster: string): Observable<Addon> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/addons`;
     return this._http.post<Addon>(url, addon);
   }
 
-  editAddon(addon: Addon, projectID: string, cluster: string, seed: string): Observable<Addon> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/addons/${addon.name}`;
+  editAddon(addon: Addon, projectID: string, cluster: string): Observable<Addon> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/addons/${addon.name}`;
     return this._http.patch<Addon>(url, addon);
   }
 
-  deleteAddon(addonID: string, projectID: string, cluster: string, seed: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/addons/${addonID}`;
+  deleteAddon(addonID: string, projectID: string, cluster: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/addons/${addonID}`;
     return this._http.delete(url);
   }
 

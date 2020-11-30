@@ -39,7 +39,7 @@ import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-st
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import * as _ from 'lodash';
 import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
-import {filter, first, map, switchMap, take, takeUntil} from 'rxjs/operators';
+import {filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
 import {NodeService} from '../services/node.service';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/component';
 import {EditClusterComponent} from './edit-cluster/component';
@@ -96,7 +96,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const clusterID = this._route.snapshot.paramMap.get(PathParam.ClusterID);
     this.seed = this._route.snapshot.paramMap.get(PathParam.SeedDC);
 
-    this._userService.currentUser.pipe(first()).subscribe(user => (this._user = user));
+    this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 
     this._userService
       .getCurrentUserGroup(this.projectID)
@@ -145,7 +145,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             .concat(
               this._canReloadNodes()
                 ? [
-                    this._clusterService.addons(this.projectID, this.cluster.id, this.seed),
+                    this._clusterService.addons(this.projectID, this.cluster.id),
                     this._clusterService.nodes(this.projectID, this.cluster.id),
                     this._api.getMachineDeployments(this.cluster.id, this.projectID),
                     this._clusterService.metrics(this.projectID, this.cluster.id),
@@ -332,7 +332,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.projectID = this.projectID;
     modal
       .afterClosed()
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(isChanged => {
         if (isChanged) {
           this._clusterService.onClusterUpdate.next();
@@ -353,8 +353,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   handleAddonCreation(addon: Addon): void {
     this._clusterService
-      .createAddon(addon, this.projectID, this.cluster.id, this.seed)
-      .pipe(first())
+      .createAddon(addon, this.projectID, this.cluster.id)
+      .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this.reloadAddons();
@@ -366,8 +366,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   handleAddonEdition(addon: Addon): void {
     this._clusterService
-      .editAddon(addon, this.projectID, this.cluster.id, this.seed)
-      .pipe(first())
+      .editAddon(addon, this.projectID, this.cluster.id)
+      .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this.reloadAddons();
@@ -377,8 +377,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   handleAddonDeletion(addon: Addon): void {
     this._clusterService
-      .deleteAddon(addon.id, this.projectID, this.cluster.id, this.seed)
-      .pipe(first())
+      .deleteAddon(addon.id, this.projectID, this.cluster.id)
+      .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this.reloadAddons();
@@ -389,13 +389,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   reloadAddons(): void {
-    if (this.projectID && this.cluster && this.seed) {
+    if (this.projectID && this.cluster) {
       this._clusterService
-        .addons(this.projectID, this.cluster.id, this.seed)
-        .pipe(first())
-        .subscribe(addons => {
-          this.addons = addons;
-        });
+        .addons(this.projectID, this.cluster.id)
+        .pipe(take(1))
+        .subscribe(addons => (this.addons = addons));
     }
   }
 
