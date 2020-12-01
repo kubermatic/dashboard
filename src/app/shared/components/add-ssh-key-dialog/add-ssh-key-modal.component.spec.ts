@@ -46,7 +46,7 @@ const modules: any[] = [
 describe('AddSshKeyDialogComponent', () => {
   let fixture: ComponentFixture<AddSshKeyDialogComponent>;
   let component: AddSshKeyDialogComponent;
-  let dialogRef: MatDialogRef<AddSshKeyDialogComponent, any>;
+  let dialogRef: MatDialogRef<AddSshKeyDialogComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -66,7 +66,7 @@ describe('AddSshKeyDialogComponent', () => {
     component = fixture.componentInstance;
     component.projectID = fakeProject().id;
     fixture.detectChanges();
-    dialogRef = fixture.debugElement.injector.get(MatDialogRef) as MatDialogRef<AddSshKeyDialogComponent, any>;
+    dialogRef = fixture.debugElement.injector.get(MatDialogRef) as MatDialogRef<AddSshKeyDialogComponent>;
   });
 
   it(
