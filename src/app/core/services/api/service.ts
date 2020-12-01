@@ -178,13 +178,13 @@ export class ApiService {
     return this._http.put<Token>(url, token);
   }
 
-  getAWSSubnets(projectId: string, seed: string, clusterId: string): Observable<AWSSubnet[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/aws/subnets`;
+  getAWSSubnets(projectId: string, clusterId: string): Observable<AWSSubnet[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/aws/subnets`;
     return this._http.get<AWSSubnet[]>(url);
   }
 
-  getAWSSizes(projectId: string, seed: string, clusterId: string): Observable<AWSSize[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/aws/sizes`;
+  getAWSSizes(projectId: string, clusterId: string): Observable<AWSSize[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/aws/sizes`;
     return this._http.get<AWSSize[]>(url);
   }
 

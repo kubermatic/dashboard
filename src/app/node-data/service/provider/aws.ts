@@ -62,17 +62,8 @@ export class NodeDataAWSProvider {
         let selectedProject: string;
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
-          .pipe(
-            switchMap(_ =>
-              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(first())
-            )
-          )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(
-            switchMap(dc =>
-              this._apiService.getAWSSizes(selectedProject, dc.spec.seed, this._clusterService.cluster.id)
-            )
-          )
+          .pipe(switchMap(_ => this._apiService.getAWSSizes(selectedProject, this._clusterService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {
@@ -116,17 +107,8 @@ export class NodeDataAWSProvider {
         let selectedProject: string;
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
-          .pipe(
-            switchMap(_ =>
-              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(first())
-            )
-          )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(
-            switchMap(dc =>
-              this._apiService.getAWSSubnets(selectedProject, dc.spec.seed, this._clusterService.cluster.id)
-            )
-          )
+          .pipe(switchMap(_ => this._apiService.getAWSSubnets(selectedProject, this._clusterService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {
