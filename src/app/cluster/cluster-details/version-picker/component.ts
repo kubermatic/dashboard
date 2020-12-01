@@ -24,7 +24,6 @@ import {ChangeClusterVersionComponent} from '../change-cluster-version/component
   styleUrls: ['./style.scss'],
 })
 export class VersionPickerComponent implements OnInit, OnChanges {
-  @Input() seed = '';
   @Input() cluster: Cluster;
   @Input() isClusterRunning = false;
   @Input() upgrades: MasterVersion[] = [];
@@ -98,7 +97,6 @@ export class VersionPickerComponent implements OnInit, OnChanges {
     if (this.isEnabled()) {
       const modal = this._matDialog.open(ChangeClusterVersionComponent);
       modal.componentInstance.cluster = this.cluster;
-      modal.componentInstance.seed = this.seed;
       modal.componentInstance.controlPlaneVersions = this.versionsList;
       modal
         .afterClosed()
