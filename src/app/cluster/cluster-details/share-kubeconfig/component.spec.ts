@@ -15,7 +15,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {RouterTestingModule} from '@app/testing/router-stubs';
 import {UserMockService} from '@app/testing/services/user-mock.service';
@@ -55,7 +54,6 @@ describe('ShareKubeconfigComponent', () => {
     component = fixture.componentInstance;
     component.projectID = fakeProject().id;
     component.cluster = fakeDigitaloceanCluster();
-    component.seed = fakeSeedDatacenter();
 
     fixture.detectChanges();
   });

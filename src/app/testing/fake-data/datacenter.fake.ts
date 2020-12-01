@@ -93,10 +93,6 @@ export function fakeOpenstackDatacenter(): Datacenter {
   };
 }
 
-export function fakeSeedDatacenter(): string {
-  return 'europe-west3-c';
-}
-
 export function fakeAzureDatacenter(): Datacenter {
   return {
     metadata: {
