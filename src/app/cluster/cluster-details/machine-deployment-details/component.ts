@@ -17,7 +17,6 @@ import {ApiService} from '@core/services/api/service';
 import {ClusterService} from '@core/services/cluster/service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {NotificationService} from '@core/services/notification/service';
-import {PathParam} from '@core/services/params/service';
 import {UserService} from '@core/services/user/service';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
@@ -46,7 +45,6 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   cluster: Cluster;
   clusterProvider: string;
   datacenter: Datacenter;
-  seed: string;
   system: string;
   systemLogoClass: string;
   projectID: string;
@@ -79,7 +77,6 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
     this._clusterName = this._activatedRoute.snapshot.paramMap.get('clusterName');
     this._machineDeploymentID = this._activatedRoute.snapshot.paramMap.get('machineDeploymentID');
     this.projectID = this._activatedRoute.snapshot.paramMap.get('projectID');
-    this.seed = this._activatedRoute.snapshot.paramMap.get(PathParam.SeedDC);
 
     this._userService.currentUser.pipe(first()).subscribe(user => (this._user = user));
 
@@ -181,7 +178,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   goBackToCluster(): void {
-    this._router.navigate(['/projects/' + this.projectID + '/dc/' + this.seed + '/clusters/' + this._clusterName]);
+    this._router.navigate(['/projects/' + this.projectID + '/clusters/' + this._clusterName]);
   }
 
   isEditEnabled(): boolean {

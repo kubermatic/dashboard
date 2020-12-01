@@ -14,7 +14,6 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {fakeBinding, fakeClusterBinding, fakeClusterRoleNames, fakeRoleNames} from '@app/testing/fake-data/rbac.fake';
 import {asyncData} from '@app/testing/services/api-mock.service';
@@ -60,7 +59,6 @@ describe('AddBindingComponent', () => {
       fixture = TestBed.createComponent(AddBindingComponent);
       component = fixture.componentInstance;
       component.cluster = fakeDigitaloceanCluster();
-      component.seed = fakeSeedDatacenter();
       component.projectID = fakeProject().id;
       fixture.detectChanges();
     })

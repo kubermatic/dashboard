@@ -35,7 +35,6 @@ import {switchMap, take, takeUntil} from 'rxjs/operators';
 })
 export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() seed: string;
   @Input() machineDeployments: MachineDeployment[] = [];
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
@@ -99,9 +98,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
   }
 
   goToDetails(md: MachineDeployment): void {
-    this._router.navigate([
-      '/projects/' + this.projectID + '/dc/' + this.seed + '/clusters/' + this.cluster.id + /md/ + md.id,
-    ]);
+    this._router.navigate(['/projects/' + this.projectID + '/clusters/' + this.cluster.id + /md/ + md.id]);
   }
 
   isEditEnabled(): boolean {

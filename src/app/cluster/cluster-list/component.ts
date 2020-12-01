@@ -238,9 +238,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     if (cluster.isExternal) {
       this._router.navigate([`/projects/${this._selectedProject.id}/clusters/external/${cluster.id}`]);
     } else {
-      this._router.navigate([
-        `/projects/${this._selectedProject.id}/dc/${this.nodeDC[cluster.id].spec.seed}/clusters/${cluster.id}`,
-      ]);
+      this._router.navigate([`/projects/${this._selectedProject.id}/clusters/${cluster.id}`]);
     }
   }
 

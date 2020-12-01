@@ -21,7 +21,7 @@ class SelectedPreloadingStrategy implements PreloadingStrategy {
 }
 
 function createRouting(): Routes {
-  const routes = [
+  return [
     {
       path: '',
       component: DashboardComponent,
@@ -51,10 +51,6 @@ function createRouting(): Routes {
           loadChildren: () => import('./cluster/module').then(m => m.ClusterModule),
         },
         {
-          path: 'projects/:projectID/dc/:seedDc/clusters',
-          loadChildren: () => import('./cluster/module').then(m => m.ClusterModule),
-        },
-        {
           path: 'account',
           loadChildren: () => import('./settings/user/user-settings.module').then(m => m.UserSettingsModule),
           data: {preload: true},
@@ -74,8 +70,6 @@ function createRouting(): Routes {
       redirectTo: '404',
     },
   ];
-
-  return routes;
 }
 
 @NgModule({
