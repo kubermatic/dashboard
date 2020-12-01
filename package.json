@@ -65,7 +65,7 @@
     "ngx-monaco-editor": "9.0.0",
     "rxjs": "6.6.3",
     "rxjs-compat": "6.6.3",
-    "semver": "7.3.2",
+    "semver": "7.3.4",
     "swagger-ui": "3.37.2",
     "zone.js": "0.11.3"
   },
