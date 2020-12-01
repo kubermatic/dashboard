@@ -26,13 +26,12 @@ import {
 
 @Injectable()
 export class RBACService {
-  private _restRoot: string = environment.restRoot;
   private _newRestRoot: string = environment.newRestRoot;
 
   constructor(private readonly _http: HttpClient) {}
 
-  getClusterRoleNames(clusterID: string, seed: string, projectID: string): Observable<ClusterRoleName[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/clusterrolenames`;
+  getClusterRoleNames(clusterID: string, projectID: string): Observable<ClusterRoleName[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterrolenames`;
     return this._http.get<ClusterRoleName[]>(url);
   }
 
@@ -66,8 +65,8 @@ export class RBACService {
     return this._http.delete(url, options);
   }
 
-  getRoleNames(clusterID: string, seed: string, projectID: string): Observable<RoleName[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/rolenames`;
+  getRoleNames(clusterID: string, projectID: string): Observable<RoleName[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/rolenames`;
     return this._http.get<RoleName[]>(url);
   }
 
@@ -83,7 +82,7 @@ export class RBACService {
     namespace: string,
     createRole: CreateBinding
   ): Observable<Binding> {
-    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/roles/${namespace}/${roleID}/bindings`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/roles/${namespace}/${roleID}/bindings`;
     return this._http.post<Binding>(url, createRole);
   }
 

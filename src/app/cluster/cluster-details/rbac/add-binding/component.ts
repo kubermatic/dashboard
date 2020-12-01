@@ -35,7 +35,6 @@ export enum Controls {
 })
 export class AddBindingComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() seed: string;
   @Input() projectID: string;
 
   readonly controls = Controls;
@@ -64,12 +63,12 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     });
 
     this._rbacService
-      .getClusterRoleNames(this.cluster.id, this.seed, this.projectID)
+      .getClusterRoleNames(this.cluster.id, this.projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(clusterRoles => (this.clusterRoles = _.sortBy(clusterRoles, cr => cr.name.toLowerCase())));
 
     this._rbacService
-      .getRoleNames(this.cluster.id, this.seed, this.projectID)
+      .getRoleNames(this.cluster.id, this.projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(roles => (this.roles = _.sortBy(roles, r => r.name.toLowerCase())));
 

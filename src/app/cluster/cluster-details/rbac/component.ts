@@ -29,7 +29,6 @@ import {AddBindingComponent} from './add-binding/component';
 })
 export class RBACComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() seed: string;
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
   @Input() clusterBindings: SimpleClusterBinding[] = [];
@@ -62,7 +61,6 @@ export class RBACComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     const modal = this._matDialog.open(AddBindingComponent);
     modal.componentInstance.cluster = this.cluster;
-    modal.componentInstance.seed = this.seed;
     modal.componentInstance.projectID = this.projectID;
   }
 
