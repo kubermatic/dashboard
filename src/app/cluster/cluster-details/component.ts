@@ -94,7 +94,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this.config = this._appConfigService.getConfig();
     this.projectID = this._route.snapshot.paramMap.get(PathParam.ProjectID);
     const clusterID = this._route.snapshot.paramMap.get(PathParam.ClusterID);
-    this.seed = this._route.snapshot.paramMap.get(PathParam.SeedDC);
 
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 
@@ -113,6 +112,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(datacenter => {
           this.nodeDc = datacenter;
+          this.seed = datacenter.spec.seed;
 
           return combineLatest([
             this._clusterService.sshKeys(this.projectID, this.cluster.id),
@@ -344,7 +344,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   revokeToken(): void {
     const dialogRef = this._matDialog.open(RevokeTokenComponent);
     dialogRef.componentInstance.cluster = this.cluster;
-    dialogRef.componentInstance.seed = this.seed;
     dialogRef.componentInstance.projectID = this.projectID;
   }
 

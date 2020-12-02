@@ -168,13 +168,13 @@ export class ApiService {
     return this._http.get<AlibabaZone[]>(url, {headers});
   }
 
-  editToken(cluster: Cluster, seed: string, projectID: string, token: Token): Observable<Token> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster.id}/token`;
+  editToken(cluster: Cluster, projectID: string, token: Token): Observable<Token> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster.id}/token`;
     return this._http.put<Token>(url, token);
   }
 
-  editViewerToken(cluster: Cluster, seed: string, projectID: string, token: Token): Observable<Token> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster.id}/viewertoken`;
+  editViewerToken(cluster: Cluster, projectID: string, token: Token): Observable<Token> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster.id}/viewertoken`;
     return this._http.put<Token>(url, token);
   }
 
