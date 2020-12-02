@@ -30,6 +30,7 @@ import {MachineDeploymentHealthStatus} from '@shared/utils/health-status/machine
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {Subject, timer} from 'rxjs';
 import {first, take, takeUntil} from 'rxjs/operators';
+import {PathParam} from '@core/services/params/service';
 
 @Component({
   selector: 'km-machine-deployment-details',
@@ -74,9 +75,9 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._clusterName = this._activatedRoute.snapshot.paramMap.get('clusterName');
-    this._machineDeploymentID = this._activatedRoute.snapshot.paramMap.get('machineDeploymentID');
-    this.projectID = this._activatedRoute.snapshot.paramMap.get('projectID');
+    this._clusterName = this._activatedRoute.snapshot.paramMap.get(PathParam.ClusterID);
+    this._machineDeploymentID = this._activatedRoute.snapshot.paramMap.get(PathParam.MachineDeploymentID);
+    this.projectID = this._activatedRoute.snapshot.paramMap.get(PathParam.ProjectID);
 
     this._userService.currentUser.pipe(first()).subscribe(user => (this._user = user));
 

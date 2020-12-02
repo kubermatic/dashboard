@@ -38,6 +38,7 @@ import * as _ from 'lodash';
 import {EMPTY, forkJoin, Observable, of, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, distinctUntilChanged, filter, first, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-delete-confirmation/component';
+import {PathParam} from '@core/services/params/service';
 
 @Component({
   selector: 'km-cluster-list',
@@ -79,7 +80,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._selectedProject.id = this._activeRoute.snapshot.paramMap.get('projectID');
+    this._selectedProject.id = this._activeRoute.snapshot.paramMap.get(PathParam.ProjectID);
     this.dataSource.data = this.clusters;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
