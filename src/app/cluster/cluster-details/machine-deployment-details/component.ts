@@ -30,7 +30,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {MachineDeploymentHealthStatus} from '@shared/utils/health-status/machine-deployment-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {Subject, timer} from 'rxjs';
-import {first, take, takeUntil} from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-machine-deployment-details',
@@ -81,7 +81,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
     this.projectID = this._activatedRoute.snapshot.paramMap.get('projectID');
     this.seed = this._activatedRoute.snapshot.paramMap.get(PathParam.SeedDC);
 
-    this._userService.currentUser.pipe(first()).subscribe(user => (this._user = user));
+    this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 
     this._userService
       .getCurrentUserGroup(this.projectID)
@@ -103,7 +103,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   loadMachineDeployment(): void {
     this._apiService
       .getMachineDeployment(this._machineDeploymentID, this._clusterName, this.seed, this.projectID)
-      .pipe(first())
+      .pipe(take(1))
       .subscribe((md: MachineDeployment) => {
         this.machineDeployment = md;
         this.system = getOperatingSystem(this.machineDeployment.spec.template);
@@ -116,7 +116,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   loadNodes(): void {
     this._apiService
       .getMachineDeploymentNodes(this._machineDeploymentID, this._clusterName, this.seed, this.projectID)
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(n => {
         this.nodes = n;
         this._areNodesLoaded = true;
@@ -126,7 +126,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   loadNodesEvents(): void {
     this._apiService
       .getMachineDeploymentNodesEvents(this._machineDeploymentID, this._clusterName, this.seed, this.projectID)
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(e => {
         this.events = e;
         this._areNodesEventsLoaded = true;
@@ -136,7 +136,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   loadNodesMetrics(): void {
     this._apiService
       .getMachineDeploymentNodesMetrics(this._machineDeploymentID, this._clusterName, this.seed, this.projectID)
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(metrics => {
         this._storeNodeMetrics(metrics);
       });
@@ -145,7 +145,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   loadCluster(): void {
     this._clusterService
       .cluster(this.projectID, this._clusterName)
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(c => {
         this.cluster = c;
         this.clusterProvider = Cluster.getProvider(this.cluster.spec.cloud);
@@ -157,7 +157,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   loadDatacenter(): void {
     this._datacenterService
       .getDatacenter(this.cluster.spec.cloud.dc)
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(d => {
         this.datacenter = d;
         this._isDatacenterLoaded = true;

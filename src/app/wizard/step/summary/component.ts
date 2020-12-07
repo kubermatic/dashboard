@@ -23,7 +23,7 @@ import {ClusterService} from '@shared/services/cluster.service';
 import {AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {first, switchMap, takeUntil} from 'rxjs/operators';
+import {take, switchMap, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-wizard-summary-step',
@@ -75,7 +75,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
       .subscribe(plugins => (this.clusterAdmissionPlugins = plugins));
 
     this._clusterService.datacenterChanges
-      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(first())))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => {
         this._location = dc.spec.location;

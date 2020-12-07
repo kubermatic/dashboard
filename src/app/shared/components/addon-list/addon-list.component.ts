@@ -15,7 +15,7 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {ApiService} from '@core/services/api/service';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
 import {Addon, AddonConfig, getAddonLogoData, hasAddonLogoData} from '../../entity/addon';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
 import {EditAddonDialogComponent} from './edit-addon-dialog/edit-addon-dialog.component';
@@ -127,7 +127,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
       dialog.componentInstance.addonConfigs = this.addonConfigs;
       dialog
         .afterClosed()
-        .pipe(first())
+        .pipe(take(1))
         .subscribe(addedAddon => {
           if (addedAddon) {
             this.addAddon.emit(addedAddon);
@@ -142,7 +142,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     dialog.componentInstance.addonConfig = this.addonConfigs.get(addon.name);
     dialog
       .afterClosed()
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(editedAddon => {
         if (editedAddon) {
           this.editAddon.emit(editedAddon);
@@ -166,7 +166,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     const dialog = this._matDialog.open(ConfirmationDialogComponent, config);
     dialog
       .afterClosed()
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(isConfirmed => {
         if (isConfirmed) {
           this.deleteAddon.emit(addon);

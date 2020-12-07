@@ -12,7 +12,7 @@
 import {Component, Input} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {first} from 'rxjs/operators';
+import {take} from 'rxjs/operators';
 
 import {AddonConfig, getAddonLogoData, getAddonShortDescription, hasAddonLogoData} from '../../../entity/addon';
 import {InstallAddonDialogComponent} from '../install-addon-dialog/install-addon-dialog.component';
@@ -51,7 +51,7 @@ export class SelectAddonDialogComponent {
     dialog.componentInstance.addonConfig = this.addonConfigs.get(name);
     dialog
       .afterClosed()
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(addedAddon => {
         this.dialogRef.close(addedAddon);
       });

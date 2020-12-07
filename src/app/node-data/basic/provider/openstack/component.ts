@@ -33,7 +33,7 @@ import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {merge, Observable, of} from 'rxjs';
-import {filter, first, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import moment = require('moment');
 
 enum Controls {
@@ -153,7 +153,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
     merge<string>(this._clusterService.datacenterChanges, of(this._clusterService.datacenter))
       .pipe(filter(dc => !!dc))
-      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(first())))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(tap(dc => (this._images = dc.spec.openstack.images)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => {

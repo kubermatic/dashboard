@@ -19,7 +19,7 @@ import {Cluster} from '@shared/entity/cluster';
 import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-deployment';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {Observable, of} from 'rxjs';
-import {catchError, filter, first, mergeMap, switchMap} from 'rxjs/operators';
+import {catchError, filter, mergeMap, switchMap, take} from 'rxjs/operators';
 
 @Injectable()
 export class NodeService {
@@ -145,7 +145,7 @@ export class NodeService {
             if (isConfirmed) {
               return this._apiService
                 .deleteMachineDeployment(clusterID, md, dcName, projectID)
-                .pipe(first())
+                .pipe(take(1))
                 .pipe(
                   catchError(() => {
                     this._notificationService.error('Could not remove the <strong>${md.name}</strong> node deployment');
@@ -171,6 +171,6 @@ export class NodeService {
           }
         )
       )
-      .pipe(first());
+      .pipe(take(1));
   }
 }

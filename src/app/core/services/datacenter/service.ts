@@ -12,7 +12,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {iif, merge, Observable, of, Subject, timer} from 'rxjs';
-import {first, map, shareReplay, switchMap} from 'rxjs/operators';
+import {map, shareReplay, switchMap, take} from 'rxjs/operators';
 import {environment} from '@environments/environment';
 import {CreateDatacenterModel, Datacenter} from '@shared/entity/datacenter';
 import {AppConfigService} from '@app/config.service';
@@ -40,13 +40,13 @@ export class DatacenterService {
       .pipe(switchMap(() => iif(() => this._auth.authenticated(), this._getDatacenters(), of([]))))
       .pipe(map(datacenters => _.sortBy(datacenters, d => d.metadata.name.toLowerCase())))
       .pipe(shareReplay(1));
-    this._datacenters$.pipe(first()).subscribe(_ => {});
+    this._datacenters$.pipe(take(1)).subscribe(_ => {});
 
     this._seeds$ = merge(this._seedsRefresh$, this._refreshTimer$)
       .pipe(switchMap(() => iif(() => this._auth.authenticated(), this._getSeeds(), of([]))))
       .pipe(map((seeds: string[]) => _.sortBy(seeds, s => s.toLowerCase())))
       .pipe(shareReplay(1));
-    this._seeds$.pipe(first()).subscribe(_ => {});
+    this._seeds$.pipe(take(1)).subscribe(_ => {});
   }
 
   get datacenters(): Observable<Datacenter[]> {

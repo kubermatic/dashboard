@@ -43,7 +43,7 @@ import {ProjectUtils} from '@shared/utils/project-utils/project-utils';
 import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
-import {filter, first, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {DeleteProjectConfirmationComponent} from './delete-project/delete-project.component';
 import {EditProjectComponent} from './edit-project/edit-project.component';
 
@@ -348,7 +348,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     this._matDialog
       .open(AddProjectDialogComponent)
       .afterClosed()
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(isAdded => {
         if (isAdded) {
           this._projectService.onProjectsUpdate.next();
@@ -372,7 +372,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     modal.componentInstance.project = project;
     modal
       .afterClosed()
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(editedProject => {
         if (editedProject) {
           this._projectService.onProjectsUpdate.next();

@@ -28,7 +28,7 @@ import {MemberUtils} from '@shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '@shared/utils/project-utils/project-utils';
 import * as _ from 'lodash';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
-import {filter, first, switchMap, switchMapTo, takeUntil} from 'rxjs/operators';
+import {filter, switchMap, switchMapTo, take, takeUntil} from 'rxjs/operators';
 import {AddServiceAccountComponent} from './add-serviceaccount/add-serviceaccount.component';
 import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceaccount.component';
 
@@ -78,7 +78,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
 
-    merge(this._serviceAccountUpdate, this._projectService.selectedProject.pipe(first()))
+    merge(this._serviceAccountUpdate, this._projectService.selectedProject.pipe(take(1)))
       .pipe(switchMapTo(this._projectService.selectedProject))
       .pipe(
         switchMap(project => {
@@ -152,7 +152,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
 
     modal
       .afterClosed()
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(isAdded => {
         if (isAdded) {
           this._serviceAccountUpdate.next();
@@ -167,7 +167,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
     modal.componentInstance.serviceaccount = serviceAccount;
     modal
       .afterClosed()
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(isEdited => {
         if (isEdited) {
           this._serviceAccountUpdate.next();
@@ -194,7 +194,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
       .pipe(switchMap(_ => this._apiService.deleteServiceAccount(this._selectedProject.id, serviceAccount)))
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         delete this.tokenList[serviceAccount.id];
         this._serviceAccountUpdate.next();

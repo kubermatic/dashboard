@@ -19,7 +19,7 @@ import {Cluster, ClusterPatch} from '@shared/entity/cluster';
 import {Project} from '@shared/entity/project';
 import {EndOfLifeService} from '@shared/services/eol.service';
 import {Subject} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-change-cluster-version',
@@ -78,7 +78,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   upgradeMachineDeployments(): void {
     this._clusterService
       .upgradeMachineDeployments(this.project.id, this.cluster.id, this.selectedVersion)
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(
           `The machine deployments from the <strong>${this.cluster.name}</strong> cluster are being updated to the ${this.selectedVersion} version`
