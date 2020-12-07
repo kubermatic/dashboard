@@ -16,7 +16,7 @@ import {ApiService} from '@core/services/api/service';
 import {NotificationService} from '@core/services/notification/service';
 import {Project} from '@shared/entity/project';
 import {ServiceAccountModel} from '@shared/entity/service-account';
-import {first} from 'rxjs/operators';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'km-add-serviceaccount',
@@ -47,7 +47,7 @@ export class AddServiceAccountComponent implements OnInit {
 
     this._apiService
       .createServiceAccount(this.project.id, createServiceAccount)
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         this._matDialogRef.close(true);
         this._notificationService.success(

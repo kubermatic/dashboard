@@ -16,7 +16,7 @@ import {ApiService} from '@core/services/api/service';
 import {NotificationService} from '@core/services/notification/service';
 import {Project} from '@shared/entity/project';
 import {ServiceAccount, ServiceAccountToken, ServiceAccountTokenPatch} from '@shared/entity/service-account';
-import {first} from 'rxjs/operators';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'km-edit-serviceaccount-token',
@@ -47,7 +47,7 @@ export class EditServiceAccountTokenComponent implements OnInit {
 
     this._apiService
       .patchServiceAccountToken(this.project.id, this.serviceaccount, this.token, patchServiceAccountToken)
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         this._matDialogRef.close(true);
         this._notificationService.success(`The <strong>${this.token.name}</strong> token was updated`);

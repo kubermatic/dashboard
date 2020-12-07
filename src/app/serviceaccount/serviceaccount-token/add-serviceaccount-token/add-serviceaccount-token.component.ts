@@ -17,8 +17,8 @@ import {NotificationService} from '@core/services/notification/service';
 
 import {Project} from '@shared/entity/project';
 import {CreateTokenEntity, ServiceAccount, ServiceAccountToken} from '@shared/entity/service-account';
-import {first} from 'rxjs/operators';
 import {TokenDialogComponent} from '../token-dialog/token-dialog.component';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'km-add-serviceaccount-token',
@@ -49,7 +49,7 @@ export class AddServiceAccountTokenComponent implements OnInit {
 
     this._apiService
       .createServiceAccountToken(this.project.id, this.serviceaccount, createServiceAccountToken)
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(token => {
         this._matDialogRef.close(true);
         this._notificationService.success(

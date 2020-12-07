@@ -30,7 +30,7 @@ import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {NoIpsLeftValidator} from '@shared/validators/no-ips-left.validator';
 import {merge, of} from 'rxjs';
-import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {filter, take, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {NodeDataService} from './service/service';
 
 enum Controls {
@@ -141,7 +141,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     merge<string>(this._clusterService.datacenterChanges, of(this._clusterService.datacenter))
       .pipe(filter(dc => !!dc))
-      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(first())))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(takeUntil(this._unsubscribe))
       .pipe(tap(dc => (this._datacenterSpec = dc)))
       .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));

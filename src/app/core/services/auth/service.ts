@@ -16,7 +16,7 @@ import {environment} from '@environments/environment';
 import {RandomString} from '@shared/functions/generate-random-string';
 import {CookieService} from 'ngx-cookie-service';
 import {Observable} from 'rxjs';
-import {first, tap} from 'rxjs/operators';
+import {take, tap} from 'rxjs/operators';
 import {PreviousRouteService} from '../previous-route/service';
 import {TokenService} from '../token/service';
 import {UserService} from '../user/service';
@@ -116,7 +116,7 @@ export class Auth {
           this._cookieService.delete(this._cookie.nonce, '/');
         })
       )
-      .pipe(first());
+      .pipe(take(1));
   }
 
   setNonce(): void {

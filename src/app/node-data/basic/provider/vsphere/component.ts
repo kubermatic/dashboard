@@ -21,7 +21,7 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge, of} from 'rxjs';
-import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
   CPU = 'cpu',
@@ -89,7 +89,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
 
     merge<string>(this._clusterService.datacenterChanges, of(this._clusterService.datacenter))
       .pipe(filter(dc => !!dc))
-      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(first())))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(tap(dc => (this._templates = dc.spec.vsphere.templates)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._setDefaultTemplate(OperatingSystem.Ubuntu));

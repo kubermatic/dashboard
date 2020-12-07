@@ -22,7 +22,7 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {Project} from '@shared/entity/project';
 import {ServiceAccount, ServiceAccountToken} from '@shared/entity/service-account';
 import {GroupConfig} from '@shared/model/Config';
-import {filter, first, switchMap} from 'rxjs/operators';
+import {filter, switchMap, take} from 'rxjs/operators';
 import {AddServiceAccountTokenComponent} from './add-serviceaccount-token/add-serviceaccount-token.component';
 import {EditServiceAccountTokenComponent} from './edit-serviceaccount-token/edit-serviceaccount-token.component';
 import {TokenDialogComponent} from './token-dialog/token-dialog.component';
@@ -63,7 +63,7 @@ export class ServiceAccountTokenComponent implements OnInit {
           return this._userService.getCurrentUserGroup(project.id);
         })
       )
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
   }
 
@@ -104,7 +104,7 @@ export class ServiceAccountTokenComponent implements OnInit {
           this._apiService.regenerateServiceAccountToken(this._selectedProject.id, this.serviceaccount, token)
         )
       )
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(token => {
         this.openTokenDialog(token);
         this._notificationService.success(`The <strong>${token.name}</strong> was regenerated`);
@@ -139,7 +139,7 @@ export class ServiceAccountTokenComponent implements OnInit {
       .pipe(
         switchMap(_ => this._apiService.deleteServiceAccountToken(this._selectedProject.id, this.serviceaccount, token))
       )
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(
           `The <strong>${token.name}</strong> token was removed from the <strong>${this.serviceaccount.name}</strong> service account`

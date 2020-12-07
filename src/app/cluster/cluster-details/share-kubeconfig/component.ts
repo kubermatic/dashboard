@@ -14,7 +14,7 @@ import {ApiService} from '@core/services/api/service';
 import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user/service';
 import {Cluster} from '@shared/entity/cluster';
-import {first} from 'rxjs/operators';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'km-share-kubeconfig',
@@ -36,7 +36,7 @@ export class ShareKubeconfigComponent implements OnInit {
 
   ngOnInit(): void {
     if (this._auth.authenticated()) {
-      this._userService.currentUser.pipe(first()).subscribe(user => {
+      this._userService.currentUser.pipe(take(1)).subscribe(user => {
         this.userID = user.id;
         this.kubeconfigLink = this._api.getShareKubeconfigURL(this.projectID, this.seed, this.cluster.id, this.userID);
       });

@@ -12,7 +12,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, EMPTY, iif, Observable, of} from 'rxjs';
-import {catchError, delay, filter, first, map, retryWhen, switchMap, tap} from 'rxjs/operators';
+import {catchError, delay, filter, take, map, retryWhen, switchMap, tap} from 'rxjs/operators';
 import {environment} from '@environments/environment';
 import {AppConfigService} from '@app/config.service';
 import {Member} from '@shared/entity/member';
@@ -101,6 +101,6 @@ export class UserService {
       .pipe(switchMap(user => this._httpClient.post(url, user)))
       .pipe(map(_ => true))
       .pipe(catchError(_ => of(false)))
-      .pipe(first());
+      .pipe(take(1));
   }
 }

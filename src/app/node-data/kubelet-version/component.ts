@@ -18,7 +18,7 @@ import {NodeSpec} from '@shared/entity/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {ClusterService as ClusterDataService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {first, switchMap, takeUntil} from 'rxjs/operators';
+import {take, switchMap, takeUntil} from 'rxjs/operators';
 import {NodeDataService} from '../service/service';
 
 enum Controls {
@@ -82,7 +82,7 @@ export class KubeletVersionNodeDataComponent extends BaseFormValidator implement
           )
         )
       )
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(this._setDefaultVersion.bind(this));
 
     this.form

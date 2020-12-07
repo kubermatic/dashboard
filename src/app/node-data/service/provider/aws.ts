@@ -17,7 +17,7 @@ import {AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, first, switchMap, tap} from 'rxjs/operators';
+import {catchError, filter, take, switchMap, tap} from 'rxjs/operators';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
 
@@ -40,7 +40,7 @@ export class NodeDataAWSProvider {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterService.datacenterChanges
-          .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(first())))
+          .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
           .pipe(
             switchMap(dc =>
               this._presetService
@@ -64,7 +64,7 @@ export class NodeDataAWSProvider {
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(
             switchMap(_ =>
-              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(first())
+              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(take(1))
             )
           )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
@@ -82,7 +82,7 @@ export class NodeDataAWSProvider {
               return onErrorResumeNext(of([]));
             })
           )
-          .pipe(first());
+          .pipe(take(1));
       }
     }
   }
@@ -118,7 +118,7 @@ export class NodeDataAWSProvider {
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(
             switchMap(_ =>
-              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(first())
+              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(take(1))
             )
           )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
@@ -136,7 +136,7 @@ export class NodeDataAWSProvider {
               return onErrorResumeNext(of([]));
             })
           )
-          .pipe(first());
+          .pipe(take(1));
       }
     }
   }

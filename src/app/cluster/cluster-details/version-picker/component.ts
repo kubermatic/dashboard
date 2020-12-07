@@ -14,9 +14,9 @@ import {MatDialog} from '@angular/material/dialog';
 import {ClusterService} from '@core/services/cluster/service';
 import {Cluster, MasterVersion} from '@shared/entity/cluster';
 import {EndOfLifeService} from '@shared/services/eol.service';
-import {first} from 'rxjs/operators';
 import {gt, lt} from 'semver';
 import {ChangeClusterVersionComponent} from '../change-cluster-version/component';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'km-version-picker',
@@ -102,7 +102,7 @@ export class VersionPickerComponent implements OnInit, OnChanges {
       modal.componentInstance.controlPlaneVersions = this.versionsList;
       modal
         .afterClosed()
-        .pipe(first())
+        .pipe(take(1))
         .subscribe(isChanged => {
           if (isChanged) {
             this._clusterService.onClusterUpdate.next();
