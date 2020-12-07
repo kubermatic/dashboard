@@ -17,7 +17,6 @@ import {ApiService} from '@core/services/api/service';
 import {ClusterService} from '@core/services/cluster/service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {NotificationService} from '@core/services/notification/service';
-import {PathParam} from '@core/services/params/service';
 import {UserService} from '@core/services/user/service';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
@@ -31,6 +30,7 @@ import {MachineDeploymentHealthStatus} from '@shared/utils/health-status/machine
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {Subject, timer} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
+import {PathParam} from '@core/services/params/service';
 
 @Component({
   selector: 'km-machine-deployment-details',
@@ -46,7 +46,6 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   cluster: Cluster;
   clusterProvider: string;
   datacenter: Datacenter;
-  seed: string;
   system: string;
   systemLogoClass: string;
   projectID: string;
@@ -76,10 +75,9 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._clusterName = this._activatedRoute.snapshot.paramMap.get('clusterName');
-    this._machineDeploymentID = this._activatedRoute.snapshot.paramMap.get('machineDeploymentID');
-    this.projectID = this._activatedRoute.snapshot.paramMap.get('projectID');
-    this.seed = this._activatedRoute.snapshot.paramMap.get(PathParam.SeedDC);
+    this._clusterName = this._activatedRoute.snapshot.paramMap.get(PathParam.ClusterID);
+    this._machineDeploymentID = this._activatedRoute.snapshot.paramMap.get(PathParam.MachineDeploymentID);
+    this.projectID = this._activatedRoute.snapshot.paramMap.get(PathParam.ProjectID);
 
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 
@@ -102,7 +100,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadMachineDeployment(): void {
     this._apiService
-      .getMachineDeployment(this._machineDeploymentID, this._clusterName, this.seed, this.projectID)
+      .getMachineDeployment(this._machineDeploymentID, this._clusterName, this.projectID)
       .pipe(take(1))
       .subscribe((md: MachineDeployment) => {
         this.machineDeployment = md;
@@ -115,7 +113,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodes(): void {
     this._apiService
-      .getMachineDeploymentNodes(this._machineDeploymentID, this._clusterName, this.seed, this.projectID)
+      .getMachineDeploymentNodes(this._machineDeploymentID, this._clusterName, this.projectID)
       .pipe(take(1))
       .subscribe(n => {
         this.nodes = n;
@@ -125,7 +123,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodesEvents(): void {
     this._apiService
-      .getMachineDeploymentNodesEvents(this._machineDeploymentID, this._clusterName, this.seed, this.projectID)
+      .getMachineDeploymentNodesEvents(this._machineDeploymentID, this._clusterName, this.projectID)
       .pipe(take(1))
       .subscribe(e => {
         this.events = e;
@@ -135,11 +133,9 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodesMetrics(): void {
     this._apiService
-      .getMachineDeploymentNodesMetrics(this._machineDeploymentID, this._clusterName, this.seed, this.projectID)
+      .getMachineDeploymentNodesMetrics(this._machineDeploymentID, this._clusterName, this.projectID)
       .pipe(take(1))
-      .subscribe(metrics => {
-        this._storeNodeMetrics(metrics);
-      });
+      .subscribe(metrics => this._storeNodeMetrics(metrics));
   }
 
   loadCluster(): void {
@@ -183,7 +179,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   goBackToCluster(): void {
-    this._router.navigate(['/projects/' + this.projectID + '/dc/' + this.seed + '/clusters/' + this._clusterName]);
+    this._router.navigate(['/projects/' + this.projectID + '/clusters/' + this._clusterName]);
   }
 
   isEditEnabled(): boolean {
@@ -192,7 +188,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   showEditDialog(): void {
     this._nodeService
-      .showMachineDeploymentEditDialog(this.machineDeployment, this.cluster, this.projectID, this.seed)
+      .showMachineDeploymentEditDialog(this.machineDeployment, this.cluster, this.projectID)
       .pipe(take(1))
       .subscribe(
         _ => {
@@ -212,7 +208,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   showDeleteDialog(): void {
     this._nodeService
-      .showMachineDeploymentDeleteDialog(this.machineDeployment, this.cluster.id, this.projectID, this.seed, undefined)
+      .showMachineDeploymentDeleteDialog(this.machineDeployment, this.cluster.id, this.projectID, undefined)
       .subscribe(isConfirmed => {
         if (isConfirmed) {
           this.goBackToCluster();

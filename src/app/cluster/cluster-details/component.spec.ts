@@ -113,10 +113,7 @@ describe('ClusterDetailsComponent', () => {
     component = fixture.componentInstance;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
-    activatedRoute.testParamMap = {
-      clusterName: '4k6txp5sq',
-      seedDc: 'europe-west3-c',
-    };
+    activatedRoute.testParamMap = {clusterName: '4k6txp5sq'};
 
     fixture.debugElement.query(By.css('.km-spinner'));
     fixture.debugElement.query(By.css('.km-cluster-detail-actions'));

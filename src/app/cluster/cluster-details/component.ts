@@ -94,7 +94,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this.config = this._appConfigService.getConfig();
     this.projectID = this._route.snapshot.paramMap.get(PathParam.ProjectID);
     const clusterID = this._route.snapshot.paramMap.get(PathParam.ClusterID);
-    this.seed = this._route.snapshot.paramMap.get(PathParam.SeedDC);
 
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 
@@ -113,6 +112,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(datacenter => {
           this.nodeDc = datacenter;
+          this.seed = datacenter.spec.seed;
 
           return combineLatest([
             this._clusterService.sshKeys(this.projectID, this.cluster.id),
@@ -137,15 +137,15 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             .concat(
               this._canReloadBindings()
                 ? [
-                    this._rbacService.getClusterBindings(this.cluster.id, this.seed, this.projectID),
-                    this._rbacService.getBindings(this.cluster.id, this.seed, this.projectID),
+                    this._rbacService.getClusterBindings(this.cluster.id, this.projectID),
+                    this._rbacService.getBindings(this.cluster.id, this.projectID),
                   ]
                 : [of([]), of([])]
             )
             .concat(
               this._canReloadNodes()
                 ? [
-                    this._clusterService.addons(this.projectID, this.cluster.id, this.seed),
+                    this._clusterService.addons(this.projectID, this.cluster.id),
                     this._clusterService.nodes(this.projectID, this.cluster.id),
                     this._api.getMachineDeployments(this.cluster.id, this.projectID),
                     this._clusterService.metrics(this.projectID, this.cluster.id),
@@ -262,7 +262,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   deleteClusterDialog(): void {
     const modal = this._matDialog.open(ClusterDeleteConfirmationComponent);
     modal.componentInstance.cluster = this.cluster;
-    modal.componentInstance.seed = this.seed;
     modal.componentInstance.projectID = this.projectID;
     modal
       .afterClosed()
@@ -317,7 +316,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   editCluster(): void {
     const modal = this._matDialog.open(EditClusterComponent);
     modal.componentInstance.cluster = this.cluster;
-    modal.componentInstance.seed = this.seed;
     modal.componentInstance.projectID = this.projectID;
   }
 
@@ -328,7 +326,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   editSSHKeys(): void {
     const modal = this._matDialog.open(EditSSHKeysComponent);
     modal.componentInstance.cluster = this.cluster;
-    modal.componentInstance.seed = this.seed;
     modal.componentInstance.projectID = this.projectID;
     modal
       .afterClosed()
@@ -347,13 +344,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   revokeToken(): void {
     const dialogRef = this._matDialog.open(RevokeTokenComponent);
     dialogRef.componentInstance.cluster = this.cluster;
-    dialogRef.componentInstance.seed = this.seed;
     dialogRef.componentInstance.projectID = this.projectID;
   }
 
   handleAddonCreation(addon: Addon): void {
     this._clusterService
-      .createAddon(addon, this.projectID, this.cluster.id, this.seed)
+      .createAddon(addon, this.projectID, this.cluster.id)
       .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
@@ -366,7 +362,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   handleAddonEdition(addon: Addon): void {
     this._clusterService
-      .editAddon(addon, this.projectID, this.cluster.id, this.seed)
+      .editAddon(addon, this.projectID, this.cluster.id)
       .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
@@ -377,7 +373,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   handleAddonDeletion(addon: Addon): void {
     this._clusterService
-      .deleteAddon(addon.id, this.projectID, this.cluster.id, this.seed)
+      .deleteAddon(addon.id, this.projectID, this.cluster.id)
       .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
@@ -389,13 +385,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   reloadAddons(): void {
-    if (this.projectID && this.cluster && this.seed) {
+    if (this.projectID && this.cluster) {
       this._clusterService
-        .addons(this.projectID, this.cluster.id, this.seed)
+        .addons(this.projectID, this.cluster.id)
         .pipe(take(1))
-        .subscribe(addons => {
-          this.addons = addons;
-        });
+        .subscribe(addons => (this.addons = addons));
     }
   }
 

@@ -20,7 +20,6 @@ import {NodeService} from '@app/cluster/services/node.service';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
 import {ActivatedRouteStub, RouterStub} from '@app/testing/router-stubs';
 import {ApiMockService} from '@app/testing/services/api-mock.service';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
@@ -83,7 +82,6 @@ describe('VersionPickerComponent', () => {
     component = fixture.componentInstance;
 
     component.cluster = fakeDigitaloceanCluster();
-    component.seed = fakeSeedDatacenter();
     component.isClusterRunning = true;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;

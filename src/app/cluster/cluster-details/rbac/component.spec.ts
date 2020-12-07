@@ -16,7 +16,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {fakeSimpleBindings, fakeSimpleClusterBindings} from '@app/testing/fake-data/rbac.fake';
 import {RouterStub} from '@app/testing/router-stubs';
@@ -59,7 +58,6 @@ describe('RBACComponent', () => {
     fixture = TestBed.createComponent(RBACComponent);
     component = fixture.componentInstance;
     component.cluster = fakeDigitaloceanCluster();
-    component.seed = fakeSeedDatacenter();
     component.projectID = fakeProject().id;
     component.clusterBindings = fakeSimpleClusterBindings();
     component.bindings = fakeSimpleBindings();

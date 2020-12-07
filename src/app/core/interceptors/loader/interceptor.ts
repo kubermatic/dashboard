@@ -16,11 +16,7 @@ import {tap} from 'rxjs/operators';
 
 @Injectable()
 export class LoaderInterceptor implements HttpInterceptor {
-  private progressBarElement: HTMLElement;
-
-  constructor() {
-    this.progressBarElement = document.getElementById('km-top-progress-bar');
-  }
+  private progressBarElement = document.getElementById('km-top-progress-bar');
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.setProgressBarVisibility('visible');

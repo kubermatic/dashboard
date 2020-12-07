@@ -16,7 +16,7 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {Datacenter} from '@shared/entity/datacenter';
-import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import * as countryCodeLookup from 'country-code-lookup';
 import {dump, load} from 'js-yaml';
 import * as _ from 'lodash';
@@ -111,10 +111,6 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
         this.providerConfig = dump(spec);
       }
     }
-  }
-
-  getProviderName(provider: NodeProvider): string {
-    return NodeProviderConstants.displayName(provider);
   }
 
   getCountryName(code: string): string {

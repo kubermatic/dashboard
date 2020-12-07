@@ -101,10 +101,9 @@ export class PageTitleService {
     const projectId = this._params.get(PathParam.ProjectID);
     const clusterId = this._params.get(PathParam.ClusterID);
     const machineDeploymentId = this._params.get(PathParam.MachineDeploymentID);
-    const seed = this._params.get(PathParam.SeedDC);
 
-    return projectId && clusterId && machineDeploymentId && seed
-      ? this._apiService.getMachineDeployment(machineDeploymentId, clusterId, seed, projectId)
+    return projectId && clusterId && machineDeploymentId
+      ? this._apiService.getMachineDeployment(machineDeploymentId, clusterId, projectId)
       : of(null);
   }
 }

@@ -26,34 +26,32 @@ import {
 
 @Injectable()
 export class RBACService {
-  private _restRoot: string = environment.restRoot;
+  private _newRestRoot: string = environment.newRestRoot;
 
   constructor(private readonly _http: HttpClient) {}
 
-  getClusterRoleNames(clusterID: string, seed: string, projectID: string): Observable<ClusterRoleName[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/clusterrolenames`;
+  getClusterRoleNames(clusterID: string, projectID: string): Observable<ClusterRoleName[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterrolenames`;
     return this._http.get<ClusterRoleName[]>(url);
   }
 
-  getClusterBindings(clusterID: string, seed: string, projectID: string): Observable<ClusterBinding[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/clusterbindings`;
+  getClusterBindings(clusterID: string, projectID: string): Observable<ClusterBinding[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterbindings`;
     return this._http.get<ClusterBinding[]>(url);
   }
 
   createClusterBinding(
     clusterID: string,
-    seed: string,
     projectID: string,
     roleID: string,
     createClusterRole: CreateBinding
   ): Observable<ClusterBinding> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/clusterroles/${roleID}/clusterbindings`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterroles/${roleID}/clusterbindings`;
     return this._http.post<ClusterBinding>(url, createClusterRole);
   }
 
   deleteClusterBinding(
     clusterID: string,
-    seed: string,
     projectID: string,
     roleID: string,
     kind: string,
@@ -63,35 +61,33 @@ export class RBACService {
       headers: new HttpHeaders(),
       body: this._getDeleteBindingBody(kind, name),
     };
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/clusterroles/${roleID}/clusterbindings`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterroles/${roleID}/clusterbindings`;
     return this._http.delete(url, options);
   }
 
-  getRoleNames(clusterID: string, seed: string, projectID: string): Observable<RoleName[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/rolenames`;
+  getRoleNames(clusterID: string, projectID: string): Observable<RoleName[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/rolenames`;
     return this._http.get<RoleName[]>(url);
   }
 
-  getBindings(clusterID: string, seed: string, projectID: string): Observable<Binding[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/bindings`;
+  getBindings(clusterID: string, projectID: string): Observable<Binding[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/bindings`;
     return this._http.get<Binding[]>(url);
   }
 
   createBinding(
     clusterID: string,
-    seed: string,
     projectID: string,
     roleID: string,
     namespace: string,
     createRole: CreateBinding
   ): Observable<Binding> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/roles/${namespace}/${roleID}/bindings`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/roles/${namespace}/${roleID}/bindings`;
     return this._http.post<Binding>(url, createRole);
   }
 
   deleteBinding(
     clusterID: string,
-    seed: string,
     projectID: string,
     roleID: string,
     namespace: string,
@@ -102,7 +98,7 @@ export class RBACService {
       headers: new HttpHeaders(),
       body: this._getDeleteBindingBody(kind, name),
     };
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/roles/${namespace}/${roleID}/bindings`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/roles/${namespace}/${roleID}/bindings`;
     return this._http.delete(url, options);
   }
 

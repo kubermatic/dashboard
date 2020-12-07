@@ -97,10 +97,6 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     return this.settings.selectedProjectId ? '' : 'None';
   }
 
-  isAdmin(): boolean {
-    return !!this.user && this.user.isAdmin;
-  }
-
   private _checkDefaultProject(): void {
     if (!!this.settings.selectedProjectId && !this.projectIds.includes(this.settings.selectedProjectId)) {
       this.settings.selectedProjectId = '';

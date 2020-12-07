@@ -22,7 +22,6 @@ import {AddMachineNetworkComponent} from '../add-machine-network/component';
 })
 export class MachineNetworksDisplayComponent {
   @Input() cluster: Cluster;
-  @Input() seed: string;
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
 

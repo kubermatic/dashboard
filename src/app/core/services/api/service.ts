@@ -76,50 +76,38 @@ export class ApiService {
     return this._http.get<MachineDeployment[]>(url).pipe(catchError(() => of<MachineDeployment[]>()));
   }
 
-  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
-  getMachineDeployment(mdId: string, cluster: string, seed: string, projectID: string): Observable<MachineDeployment> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/nodedeployments/${mdId}`;
+  getMachineDeployment(mdId: string, cluster: string, projectID: string): Observable<MachineDeployment> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}`;
     return this._http.get<MachineDeployment>(url);
   }
 
-  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
-  getMachineDeploymentNodes(mdId: string, cluster: string, seed: string, projectID: string): Observable<Node[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/nodedeployments/${mdId}/nodes`;
+  getMachineDeploymentNodes(mdId: string, cluster: string, projectID: string): Observable<Node[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}/nodes`;
     return this._http.get<Node[]>(url);
   }
 
-  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
-  getMachineDeploymentNodesMetrics(
-    mdId: string,
-    cluster: string,
-    seed: string,
-    projectID: string
-  ): Observable<NodeMetrics[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/nodedeployments/${mdId}/nodes/metrics`;
+  getMachineDeploymentNodesMetrics(mdId: string, cluster: string, projectID: string): Observable<NodeMetrics[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}/nodes/metrics`;
     return this._http.get<NodeMetrics[]>(url);
   }
 
-  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
-  getMachineDeploymentNodesEvents(mdId: string, cluster: string, seed: string, projectID: string): Observable<Event[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/nodedeployments/${mdId}/nodes/events`;
+  getMachineDeploymentNodesEvents(mdId: string, cluster: string, projectID: string): Observable<Event[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}/nodes/events`;
     return this._http.get<Event[]>(url);
   }
 
-  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
   patchMachineDeployment(
     patch: MachineDeploymentPatch,
     machineDeploymentId: string,
     clusterId: string,
-    seed: string,
     projectID: string
   ): Observable<MachineDeployment> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterId}/nodedeployments/${machineDeploymentId}`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterId}/machinedeployments/${machineDeploymentId}`;
     return this._http.patch<MachineDeployment>(url, patch);
   }
 
-  // NOTE: The Kubermatic API abstraction for MachineDeployments is NodeDeployments
-  deleteMachineDeployment(cluster: string, md: MachineDeployment, seed: string, projectID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster}/nodedeployments/${md.id}`;
+  deleteMachineDeployment(cluster: string, md: MachineDeployment, projectID: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${md.id}`;
     return this._http.delete(url);
   }
 
@@ -180,23 +168,23 @@ export class ApiService {
     return this._http.get<AlibabaZone[]>(url, {headers});
   }
 
-  editToken(cluster: Cluster, seed: string, projectID: string, token: Token): Observable<Token> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster.id}/token`;
+  editToken(cluster: Cluster, projectID: string, token: Token): Observable<Token> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster.id}/token`;
     return this._http.put<Token>(url, token);
   }
 
-  editViewerToken(cluster: Cluster, seed: string, projectID: string, token: Token): Observable<Token> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${cluster.id}/viewertoken`;
+  editViewerToken(cluster: Cluster, projectID: string, token: Token): Observable<Token> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster.id}/viewertoken`;
     return this._http.put<Token>(url, token);
   }
 
-  getAWSSubnets(projectId: string, seed: string, clusterId: string): Observable<AWSSubnet[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/aws/subnets`;
+  getAWSSubnets(projectId: string, clusterId: string): Observable<AWSSubnet[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/aws/subnets`;
     return this._http.get<AWSSubnet[]>(url);
   }
 
-  getAWSSizes(projectId: string, seed: string, clusterId: string): Observable<AWSSize[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/aws/sizes`;
+  getAWSSizes(projectId: string, clusterId: string): Observable<AWSSize[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/aws/sizes`;
     return this._http.get<AWSSize[]>(url);
   }
 

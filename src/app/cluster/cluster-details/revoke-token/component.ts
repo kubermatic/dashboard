@@ -28,7 +28,6 @@ import {take} from 'rxjs/operators';
 })
 export class RevokeTokenComponent implements OnInit {
   @Input() cluster: Cluster;
-  @Input() seed: string;
   @Input() projectID: string;
   revokeAdminToken = false;
   revokeViewerToken = false;
@@ -56,7 +55,7 @@ export class RevokeTokenComponent implements OnInit {
 
   revokeToken(): void {
     if (this.revokeAdminToken) {
-      this._apiService.editToken(this.cluster, this.seed, this.projectID, {token: ''}).subscribe(res => {
+      this._apiService.editToken(this.cluster, this.projectID, {token: ''}).subscribe(res => {
         this._notificationService.success(
           `The admin token for the <strong>${this.cluster.name}</strong> cluster was revoked`
         );
@@ -65,7 +64,7 @@ export class RevokeTokenComponent implements OnInit {
     }
 
     if (this.revokeViewerToken) {
-      this._apiService.editViewerToken(this.cluster, this.seed, this.projectID, {token: ''}).subscribe(res => {
+      this._apiService.editViewerToken(this.cluster, this.projectID, {token: ''}).subscribe(res => {
         this._notificationService.success(
           `The viewer token for the <strong>${this.cluster.name}</strong> cluster was revoked`
         );

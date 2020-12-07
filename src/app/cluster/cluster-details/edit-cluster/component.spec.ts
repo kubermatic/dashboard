@@ -18,7 +18,7 @@ import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {doPatchCloudSpecFake} from '@app/testing/fake-data/cloud-spec.fake';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeDigitaloceanDatacenter, fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
+import {fakeDigitaloceanDatacenter} from '@app/testing/fake-data/datacenter.fake';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {RouterStub} from '@app/testing/router-stubs';
 import {ApiMockService, asyncData} from '@app/testing/services/api-mock.service';
@@ -98,7 +98,6 @@ describe('EditClusterComponent', () => {
       fixture = TestBed.createComponent(EditClusterComponent);
       component = fixture.componentInstance;
       component.cluster = fakeDigitaloceanCluster();
-      component.seed = fakeSeedDatacenter();
       component.datacenter = fakeDigitaloceanDatacenter();
       component.projectID = fakeProject().id;
       component.labels = {};

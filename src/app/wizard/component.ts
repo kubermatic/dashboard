@@ -16,11 +16,9 @@ import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {NodeDataService} from '@app/node-data/service/service';
 import {ClusterService} from '@core/services/cluster/service';
-import {DatacenterService} from '@core/services/datacenter/service';
 import {NotificationService} from '@core/services/notification/service';
 import {ProjectService} from '@core/services/project/service';
 import {Cluster} from '@shared/entity/cluster';
-import {Datacenter} from '@shared/entity/datacenter';
 import {Project} from '@shared/entity/project';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {CreateClusterModel} from '@shared/model/CreateClusterModel';
@@ -56,7 +54,6 @@ export class WizardComponent implements OnInit, OnDestroy {
     private readonly _clusterService: ClusterService,
     private readonly _nodeDataService: NodeDataService,
     private readonly _router: Router,
-    private readonly _datacenterService: DatacenterService,
     private readonly _googleAnalyticsService: GoogleAnalyticsService
   ) {}
 
@@ -107,16 +104,13 @@ export class WizardComponent implements OnInit, OnDestroy {
   create(): void {
     this.creating = true;
     let createdCluster: Cluster;
-    let datacenter: Datacenter;
     const createCluster = this._getCreateClusterModel(
       this._clusterModelService.cluster,
       this._nodeDataService.nodeData
     );
 
-    this._datacenterService
-      .getDatacenter(this._clusterModelService.datacenter)
-      .pipe(tap(dc => (datacenter = dc)))
-      .pipe(switchMap(_ => this._clusterService.create(this.project.id, createCluster)))
+    this._clusterService
+      .create(this.project.id, createCluster)
       .pipe(
         tap(cluster => {
           this._notificationService.success(`The <strong>${createCluster.cluster.name}</strong> cluster was created`);
@@ -126,7 +120,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       )
       .pipe(switchMap(_ => this._clusterService.cluster(this.project.id, createdCluster.id)))
       .pipe(
-        switchMap(() => {
+        switchMap(_ => {
           this.creating = false;
 
           if (this._clusterModelService.sshKeys.length > 0) {
@@ -143,9 +137,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(
         (keys: SSHKey[]) => {
-          this._router.navigate([
-            `/projects/${this.project.id}/dc/${datacenter.spec.seed}/clusters/${createdCluster.id}`,
-          ]);
+          this._router.navigate([`/projects/${this.project.id}/clusters/${createdCluster.id}`]);
           keys.forEach(key =>
             this._notificationService.success(
               `The <strong>${key.name}</strong> SSH key was added to cluster <strong>${createCluster.cluster.name}</strong>`

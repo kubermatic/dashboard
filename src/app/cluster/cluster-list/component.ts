@@ -38,6 +38,7 @@ import * as _ from 'lodash';
 import {EMPTY, forkJoin, Observable, of, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, distinctUntilChanged, filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-delete-confirmation/component';
+import {PathParam} from '@core/services/params/service';
 
 @Component({
   selector: 'km-cluster-list',
@@ -79,7 +80,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._selectedProject.id = this._activeRoute.snapshot.paramMap.get('projectID');
+    this._selectedProject.id = this._activeRoute.snapshot.paramMap.get(PathParam.ProjectID);
     this.dataSource.data = this.clusters;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
@@ -238,9 +239,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     if (cluster.isExternal) {
       this._router.navigate([`/projects/${this._selectedProject.id}/clusters/external/${cluster.id}`]);
     } else {
-      this._router.navigate([
-        `/projects/${this._selectedProject.id}/dc/${this.nodeDC[cluster.id].spec.seed}/clusters/${cluster.id}`,
-      ]);
+      this._router.navigate([`/projects/${this._selectedProject.id}/clusters/${cluster.id}`]);
     }
   }
 
@@ -253,7 +252,6 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
 
     const modal = this._matDialog.open(ClusterDeleteConfirmationComponent);
     modal.componentInstance.cluster = cluster;
-    modal.componentInstance.seed = this.nodeDC[cluster.id].spec.seed;
     modal.componentInstance.projectID = this._selectedProject.id;
   }
 

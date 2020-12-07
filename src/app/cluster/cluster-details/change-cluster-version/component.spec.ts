@@ -17,7 +17,6 @@ import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {RouterStub} from '@app/testing/router-stubs';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
@@ -82,7 +81,6 @@ describe('ChangeClusterVersionComponent', () => {
     component.selectedVersion = 'new version';
     // copy object here since this test modifies the global fake cluster object which impacts other tests otherwise
     component.cluster = JSON.parse(JSON.stringify(fakeDigitaloceanCluster()));
-    component.seed = fakeSeedDatacenter();
     component.controlPlaneVersions = ['1.9.5'];
 
     fixture.detectChanges();
@@ -93,7 +91,6 @@ describe('ChangeClusterVersionComponent', () => {
 
   it('should call upgradeClusterMachineDeployments method', fakeAsync(() => {
     component.cluster = fakeDigitaloceanCluster();
-    component.seed = fakeSeedDatacenter();
     component.selectedVersion = 'new-version';
     component.project = fakeProject();
 

@@ -39,7 +39,6 @@ import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 })
 export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() seed: string;
   @Input() nodes: Node[] = [];
   @Input() nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   @Input() projectID: string;

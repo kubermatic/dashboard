@@ -18,7 +18,6 @@ import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
@@ -76,7 +75,6 @@ describe('ClusterDeleteConfirmationComponent', () => {
   it('should able add button', () => {
     component.projectID = fakeProject().id;
     component.cluster = fakeDigitaloceanCluster();
-    component.seed = fakeSeedDatacenter();
 
     fixture.detectChanges();
 
@@ -91,7 +89,6 @@ describe('ClusterDeleteConfirmationComponent', () => {
 
   it('should call deleteCluster method', fakeAsync(() => {
     component.cluster = fakeDigitaloceanCluster();
-    component.seed = fakeSeedDatacenter();
     component.inputName = fakeDigitaloceanCluster().name;
     component.projectID = fakeProject().id;
 

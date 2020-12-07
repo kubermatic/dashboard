@@ -19,7 +19,7 @@ import {NodeService} from '@app/cluster/services/node.service';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeDigitaloceanDatacenter, fakeSeedDatacenter} from '@app/testing/fake-data/datacenter.fake';
+import {fakeDigitaloceanDatacenter} from '@app/testing/fake-data/datacenter.fake';
 import {machineDeploymentsFake, nodesFake} from '@app/testing/fake-data/node.fake';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {ActivatedRouteStub, RouterStub} from '@app/testing/router-stubs';
@@ -99,13 +99,11 @@ describe('MachineDeploymentDetailsComponent', () => {
     component.nodes = nodesFake();
     component.cluster = fakeDigitaloceanCluster();
     component.datacenter = fakeDigitaloceanDatacenter();
-    component.seed = fakeSeedDatacenter();
     component.projectID = fakeProject().id;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
     activatedRoute.testParamMap = {
       clusterName: fakeDigitaloceanCluster().id,
-      seedDc: fakeSeedDatacenter(),
       machineDeploymentID: machineDeploymentsFake()[0].id,
       projectID: fakeProject().id,
     };

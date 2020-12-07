@@ -27,7 +27,6 @@ import {take, takeUntil} from 'rxjs/operators';
 })
 export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() seed: string;
   controlPlaneVersions: string[] = [];
   selectedVersion: string;
   project: Project;

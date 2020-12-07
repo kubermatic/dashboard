@@ -50,7 +50,7 @@ limitations under the License.
             <ng-container *ngSwitchCase="false">
               <button mat-icon-button
                       matTooltip="Delete SSH key"
-                      (click)="deleteSshKey(element, $event)"
+                      (click)="deleteSshKey(element)"
                       [disabled]="!canDelete()">
                 <i class="km-icon-delete"></i>
               </button>

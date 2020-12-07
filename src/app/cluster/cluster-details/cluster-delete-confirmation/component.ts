@@ -28,7 +28,6 @@ import {takeUntil} from 'rxjs/operators';
 })
 export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDestroy {
   @Input() cluster: Cluster;
-  @Input() seed: string;
   @Input() projectID: string;
   @ViewChild('clusterNameInput', {static: true})
   clusterNameInputRef: ElementRef;
