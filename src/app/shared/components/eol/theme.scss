@@ -9,25 +9,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
-
-.mat-chip {
-  &.mat-standard-chip {
-    border: none;
-    border-radius: 12px;
-    min-height: 18px;
-    padding: 0 12px;
+@mixin theme-eol-component($colors) {
+  .km-warning-border {
+    border-color: map-get($colors, indicator-orange);
   }
-}
 
-:host {
-  align-self: center;
-
-  .mat-chip {
-    &.mat-standard-chip {
-      font-size: $font-size-body;
-      font-weight: bold;
-      vertical-align: middle;
-    }
+  .km-error-border {
+    border-color: map-get($colors, indicator-red);
   }
 }
