@@ -19,7 +19,7 @@ import {Theme} from '@shared/model/Config';
 import {objectDiff} from '@shared/utils/common-utils';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
+import {debounceTime, take, switchMap, takeUntil} from 'rxjs/operators';
 
 @Component({
   templateUrl: 'template.html',
@@ -69,7 +69,7 @@ export class StylePickerComponent implements OnInit {
   ngOnInit(): void {
     this.themes = this._themeService.themes;
 
-    this._userService.currentUserSettings.pipe(first()).subscribe(this._selectDefaultTheme.bind(this));
+    this._userService.currentUserSettings.pipe(take(1)).subscribe(this._selectDefaultTheme.bind(this));
 
     this._userService.currentUserSettings
       .pipe(takeUntil(this._unsubscribe))

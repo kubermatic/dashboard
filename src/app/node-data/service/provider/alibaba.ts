@@ -18,7 +18,7 @@ import {AlibabaInstanceType, AlibabaZone} from '@shared/entity/provider/alibaba'
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, first, switchMap, tap} from 'rxjs/operators';
+import {catchError, filter, take, switchMap, tap} from 'rxjs/operators';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
 
@@ -47,7 +47,7 @@ export class NodeDataAlibabaProvider {
         return this._clusterService.clusterChanges
           .pipe(filter(_ => this._clusterService.provider === NodeProvider.ALIBABA))
           .pipe(tap(c => (cluster = c)))
-          .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(first())))
+          .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
           .pipe(tap(dc => (region = dc.spec.alibaba.region)))
           .pipe(
             switchMap(_ =>
@@ -75,7 +75,7 @@ export class NodeDataAlibabaProvider {
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(
             switchMap(_ =>
-              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(first())
+              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(take(1))
             )
           )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
@@ -98,7 +98,7 @@ export class NodeDataAlibabaProvider {
               return onErrorResumeNext(of([]));
             })
           )
-          .pipe(first());
+          .pipe(take(1));
       }
     }
   }
@@ -112,7 +112,7 @@ export class NodeDataAlibabaProvider {
         return this._clusterService.clusterChanges
           .pipe(filter(_ => this._clusterService.provider === NodeProvider.ALIBABA))
           .pipe(tap(c => (cluster = c)))
-          .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(first())))
+          .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
           .pipe(tap(dc => (region = dc.spec.alibaba.region)))
           .pipe(
             switchMap(_ =>
@@ -159,7 +159,7 @@ export class NodeDataAlibabaProvider {
               return onErrorResumeNext(of([]));
             })
           )
-          .pipe(first());
+          .pipe(take(1));
       }
     }
   }

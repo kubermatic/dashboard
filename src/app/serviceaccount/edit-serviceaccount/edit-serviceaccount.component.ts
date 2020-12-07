@@ -16,7 +16,7 @@ import {ApiService} from '@core/services/api/service';
 import {NotificationService} from '@core/services/notification/service';
 import {Project} from '@shared/entity/project';
 import {ServiceAccount} from '@shared/entity/service-account';
-import {first} from 'rxjs/operators';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'km-edit-serviceaccount',
@@ -52,7 +52,7 @@ export class EditServiceAccountComponent implements OnInit {
 
     this._apiService
       .editServiceAccount(this.project.id, editServiceAccount)
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         this._matDialogRef.close(true);
         this._notificationService.success(

@@ -27,7 +27,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import * as _ from 'lodash';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
-import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
+import {filter, take, switchMap, takeUntil} from 'rxjs/operators';
 import {AddClusterSSHKeysComponent} from './add-cluster-sshkeys/component';
 
 @Component({
@@ -62,7 +62,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._userService.currentUser.pipe(first()).subscribe(user => (this._user = user));
+    this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 
     this._userService
       .getCurrentUserGroup(this.projectID)
@@ -107,7 +107,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
 
     dialogRef
       .afterClosed()
-      .pipe(first())
+      .pipe(take(1))
       .subscribe((sshkey: SSHKey) => {
         if (sshkey) {
           this.sshKeys.push(sshkey);
@@ -139,7 +139,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
       .pipe(switchMap(_ => this._clusterService.deleteSSHKey(this.projectID, this.cluster.id, sshKey.id)))
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(
           `The <strong>${sshKey.name}</strong> SSH key was removed from the <strong>${this.cluster.name}</strong> cluster`

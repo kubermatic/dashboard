@@ -19,7 +19,7 @@ import {environment} from '@environments/environment';
 import {Project} from '@shared/entity/project';
 import {ProjectUtils} from '@shared/utils/project-utils/project-utils';
 import {EMPTY, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, first, map, shareReplay, switchMap, switchMapTo} from 'rxjs/operators';
+import {catchError, map, shareReplay, switchMap, switchMapTo, take} from 'rxjs/operators';
 
 @Injectable()
 export class ProjectService {
@@ -66,7 +66,7 @@ export class ProjectService {
 
   get selectedProject(): Observable<Project> {
     if (!this._project$) {
-      this._project$ = merge(this._params.onParamChange, this.projects.pipe(first()))
+      this._project$ = merge(this._params.onParamChange, this.projects.pipe(take(1)))
         .pipe(switchMapTo(this.projects))
         .pipe(map(projects => projects.find(project => project.id === this._selectedProjectID)))
         .pipe(switchMap(project => (project ? of(project) : this._getProject(this._selectedProjectID))))

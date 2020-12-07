@@ -28,7 +28,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import * as _ from 'lodash';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
-import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {AddMemberComponent} from './add-member/add-member.component';
 import {EditMemberComponent} from './edit-member/edit-member.component';
 
@@ -74,7 +74,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
 
-    this._userService.currentUser.pipe(first()).subscribe(user => (this.currentUser = user));
+    this._userService.currentUser.pipe(take(1)).subscribe(user => (this.currentUser = user));
 
     this._projectService.selectedProject
       .pipe(
@@ -83,7 +83,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
           return this._userService.getCurrentUserGroup(project.id);
         })
       )
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     merge(timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase()), this._membersUpdate)
@@ -120,7 +120,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
     modal.componentInstance.project = this._selectedProject;
     modal
       .afterClosed()
-      .pipe(first())
+      .pipe(take(1))
       .subscribe((member: Member) => {
         if (member) {
           this.members.push(member);
@@ -150,7 +150,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
     modal.componentInstance.member = member;
     modal
       .afterClosed()
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(isEdited => {
         if (isEdited) {
           this._membersUpdate.next();
@@ -191,7 +191,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
       .pipe(switchMap(_ => this._apiService.deleteMembers(this._selectedProject.id, member)))
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(
           `The <strong>${member.name}</strong> member was removed from the <strong>${this._selectedProject.name}</strong> project`

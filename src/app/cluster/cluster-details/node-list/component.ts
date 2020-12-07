@@ -30,7 +30,7 @@ import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {NodeUtils} from '@shared/utils/node-utils/node-utils';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-node-list',
@@ -85,7 +85,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._userService.currentUser.pipe(first()).subscribe(user => (this._user = user));
+    this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 
     this._userService
       .getCurrentUserGroup(this.projectID)
@@ -133,7 +133,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
       .pipe(switchMap(_ => this._clusterService.deleteNode(this.projectID, this.cluster.id, node.id)))
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(
           `The <strong>${node.name}</strong> node was removed from the <strong>${this.cluster.name}</strong> cluster`

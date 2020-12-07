@@ -19,7 +19,7 @@ import {Cluster} from '@shared/entity/cluster';
 import {SimpleBinding, SimpleClusterBinding} from '@shared/entity/rbac';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {filter, first, switchMap} from 'rxjs/operators';
+import {filter, switchMap, take} from 'rxjs/operators';
 import {AddBindingComponent} from './add-binding/component';
 
 @Component({
@@ -117,7 +117,7 @@ export class RBACComponent implements OnInit, OnDestroy {
           )
         )
       )
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(
           `The <strong>${element.name}</strong> ${element.kind} was removed from the binding`
@@ -157,7 +157,7 @@ export class RBACComponent implements OnInit, OnDestroy {
           )
         )
       )
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(
           `The <strong>${element.name}</strong> ${element.kind} was removed from the binding`

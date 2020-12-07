@@ -15,7 +15,7 @@ import {ClusterService} from '@core/services/cluster/service';
 import {NotificationService} from '@core/services/notification/service';
 import {Cluster, ClusterPatch, MachineNetwork} from '@shared/entity/cluster';
 import * as _ from 'lodash';
-import {first} from 'rxjs/operators';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'km-add-machine-network',
@@ -45,7 +45,7 @@ export class AddMachineNetworkComponent {
           machineNetworks: this.machineNetworks,
         },
       } as ClusterPatch)
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(res => {
         this._notificationService.success(
           `The machine network(s) for the <strong>${this.cluster.name}</strong> cluster were added`

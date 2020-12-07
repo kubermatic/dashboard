@@ -34,7 +34,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   filter,
-  first,
+  take,
   map,
   switchMap,
   takeUntil,
@@ -131,7 +131,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
 
     merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
       .pipe(filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK))
-      .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.datacenter).pipe(first())))
+      .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.datacenter).pipe(take(1))))
       .pipe(tap(dc => (this._isFloatingPoolIPEnforced = dc.spec.openstack.enforce_floating_ip)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());

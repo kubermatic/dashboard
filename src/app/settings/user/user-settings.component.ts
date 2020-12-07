@@ -20,7 +20,7 @@ import {UserSettings} from '@shared/entity/settings';
 import {objectDiff} from '@shared/utils/common-utils';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
+import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-user-settings',
@@ -48,7 +48,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._userService.currentUser.pipe(first()).subscribe(user => (this.user = user));
+    this._userService.currentUser.pipe(take(1)).subscribe(user => (this.user = user));
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(settings, this.apiSettings)) {

@@ -19,7 +19,7 @@ import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import {first} from 'rxjs/operators';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'km-revoke-token',
@@ -42,7 +42,7 @@ export class RevokeTokenComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this._userService.currentUser.pipe(first()).subscribe(user => (this._user = user));
+    this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 
     this._userService.getCurrentUserGroup(this.projectID).subscribe(userGroup => {
       this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup);
