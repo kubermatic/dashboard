@@ -24,6 +24,8 @@
 @import 'src/app/shared/components/property-usage/theme';
 @import 'src/app/wizard/step/cluster/theme';
 @import 'src/app/wizard/step/summary/theme';
+@import 'src/app/shared/components/eol/theme';
+@import 'src/app/shared/components/chip/theme';
 
 @mixin theme-components($colors) {
   @include theme-addon-list-component($colors);
@@ -41,4 +43,6 @@
   @include theme-version-picker-component($colors);
   @include theme-wizard-cluster-step-component($colors);
   @include theme-wizard-summary-step-component($colors);
+  @include theme-eol-component($colors);
+  @include theme-chip-component($colors);
 }

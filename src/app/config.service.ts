@@ -11,13 +11,11 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable, Injector} from '@angular/core';
-import {tap} from 'rxjs/operators';
-
-import {environment} from '../environments/environment';
-
 import {NotificationService} from '@core/services/notification/service';
+import {environment} from '@environments/environment';
 import {VersionInfo} from '@shared/entity/version-info';
 import {Config, EndOfLife, UserGroupConfig} from '@shared/model/Config';
+import {tap} from 'rxjs/operators';
 
 @Injectable()
 export class AppConfigService {

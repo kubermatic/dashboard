@@ -38,7 +38,9 @@
         margin: 0;
       }
 
-      .km-icon-update-available {
+      .km-icon-update-available,
+      .km-icon-warning,
+      .km-icon-error {
         @include size(16px);
 
         position: absolute;
