@@ -19,13 +19,14 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
-import {AppConfigService} from '@app/config.service';
 import {ApiService} from '@core/services/api/service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {NameGeneratorService} from '@core/services/name-generator/service';
+import {SettingsService} from '@core/services/settings/service';
 import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter} from '@shared/entity/datacenter';
+import {AdminSettings, ClusterTypeOptions} from '@shared/entity/settings';
 import {ClusterService} from '@shared/services/cluster.service';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
@@ -68,15 +69,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   admissionPlugins: AdmissionPlugin[] = [];
   labels: object;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
-
-  private _datacenterSpec: Datacenter;
-  private readonly _minNameLength = 5;
   readonly Controls = Controls;
+  private _datacenterSpec: Datacenter;
+  private _adminSettings: AdminSettings;
+  private readonly _minNameLength = 5;
 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _api: ApiService,
-    private readonly _appConfig: AppConfigService,
+    private readonly _settingsService: SettingsService,
     private readonly _nameGenerator: NameGeneratorService,
     private readonly _clusterService: ClusterService,
     private readonly _datacenterService: DatacenterService,
@@ -143,7 +144,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
 
-    this._setDefaultClusterType();
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this._adminSettings = settings;
+      this._setDefaultClusterType();
+    });
   }
 
   generateName(): void {
@@ -151,7 +155,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   hasMultipleTypes(): boolean {
-    return Object.values(ClusterType).every(type => !this._appConfig.getConfig()[`hide_${type}`]);
+    return this._adminSettings.clusterTypeOptions === ClusterTypeOptions.All;
   }
 
   isOpenshiftSelected(): boolean {
@@ -216,22 +220,21 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   private _setDefaultClusterType(): void {
-    if (this.controlValue(Controls.Type)) {
-      return;
-    }
-
-    if (this._isClusterTypeVisible(ClusterType.Kubernetes)) {
+    if (this._isClusterTypeVisible(ClusterTypeOptions.Kubernetes)) {
       this.control(Controls.Type).setValue(ClusterType.Kubernetes);
       return;
     }
 
-    if (this._isClusterTypeVisible(ClusterType.OpenShift)) {
+    if (this._isClusterTypeVisible(ClusterTypeOptions.OpenShift)) {
       this.control(Controls.Type).setValue(ClusterType.OpenShift);
     }
   }
 
-  private _isClusterTypeVisible(type: ClusterType): boolean {
-    return !this._appConfig.getConfig()[`hide_${type}`];
+  private _isClusterTypeVisible(type: ClusterTypeOptions): boolean {
+    return (
+      this._adminSettings.clusterTypeOptions === ClusterTypeOptions.All ||
+      this._adminSettings.clusterTypeOptions === type
+    );
   }
 
   private _getClusterEntity(): Cluster {
