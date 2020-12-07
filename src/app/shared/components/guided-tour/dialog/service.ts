@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Injectable, Injector, ComponentRef} from '@angular/core';
-import {Overlay, OverlayConfig, OverlayRef, ConnectionPositionPair} from '@angular/cdk/overlay';
+import {Injectable, Injector, ComponentRef, Renderer2, RendererFactory2} from '@angular/core';
+import {Overlay, OverlayConfig, OverlayRef, ConnectionPositionPair, OverlayContainer} from '@angular/cdk/overlay';
 import {ComponentPortal, PortalInjector} from '@angular/cdk/portal';
 import {DialogComponent} from './component';
 import {DialogRef} from './overlay-ref';
@@ -20,14 +20,43 @@ import {GuidedTourStep, STEP_DATA} from '../entity';
 @Injectable()
 export class DialogService {
   private _step: GuidedTourStep;
+  private renderer: Renderer2;
 
-  constructor(private injector: Injector, private overlay: Overlay) {}
+  constructor(
+    private injector: Injector,
+    private overlay: Overlay,
+    rendererFactory: RendererFactory2,
+    private overlayContainer: OverlayContainer
+  ) {
+    this.renderer = rendererFactory.createRenderer(null, null);
+  }
 
   open(config: DialogConfig = {}): DialogRef {
+    const targetBackdrop = this.renderer.createElement('div');
+    this.renderer.addClass(targetBackdrop, 'backdrop-target');
+    this.renderer.setStyle(targetBackdrop, 'flex-shrink', '0');
+    this.renderer.setStyle(targetBackdrop, 'width', this._step.elementRef.nativeElement.offsetWidth + 'px');
+    this.overlayContainer.getContainerElement().append(targetBackdrop);
+
+    let nativeElement: any;
+    if (this._step.elementRef.nativeElement.getBoundingClientRect) {
+      nativeElement = this._step.elementRef.nativeElement;
+    } else {
+      nativeElement = this._step.elementRef.nativeElement._elementRef.nativeElement;
+    }
+
     const dialogConfig = {...DEFAULT_CONFIG, ...config};
     const overlayRef = this.createOverlay(dialogConfig);
+
+    overlayRef.detachments().subscribe(() => {
+      this.renderer.removeClass(nativeElement, 'highlight');
+      this.renderer.removeAttribute(nativeElement, 'id');
+    });
+
     const dialogRef = new DialogRef(overlayRef);
     this.attachDialogContainer(overlayRef, dialogRef);
+    this.renderer.addClass(nativeElement, 'highlight');
+    this.renderer.setAttribute(nativeElement, 'id', 'guided-tour-active');
     return dialogRef;
   }
 

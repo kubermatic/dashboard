@@ -9,33 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {InjectionToken, ViewContainerRef} from '@angular/core';
+import {InjectionToken, ViewContainerRef, ElementRef} from '@angular/core';
 import {DialogComponent} from './dialog/component';
-
-export class GuidedTourItem {
-  id: string;
-  title?: string;
-  text?: string;
-  nextText?: string;
-  stepPosition?: string;
-  route?: string;
-}
-
-export class Step {
-  id: string;
-  step: GuidedTourStep;
-  route: string;
-}
 
 export class GuidedTourStep {
   id: string;
-  route: string;
-  position: string;
-  title: string;
-  text: string;
-  nextText?: string;
   targetViewContainer: ViewContainerRef;
+  elementRef: ElementRef;
   stepInstance: DialogComponent;
 }
 
-export const STEP_DATA = new InjectionToken<GuidedTourItem>('STEP_DATA');
+export const STEP_DATA = new InjectionToken<GuidedTourStep>('STEP_DATA');

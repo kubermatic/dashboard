@@ -13,4 +13,39 @@
   .cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
     background: rgba(0, 0, 0, 0.7);
   }
+
+  .km-guided-tour {
+    background-color: white;
+    box-shadow: 0 1px 18px rgba(0, 0, 0, 0.12), 0 6px 10px rgba(0, 0, 0, 0.14), 0 3px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    max-width: 450px;
+    min-width: 300px;
+    padding: 20px;
+
+    .title {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .text {
+      margin-bottom: 20px;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+    }
+  }
+
+  .highlight#guided-tour-active {
+    z-index: 10000;
+  }
+
+  .highlight {
+    background-color: red;
+    position: relative !important;
+  }
 }

@@ -89,8 +89,10 @@ import {SearchFieldComponent} from './components/search-field/component';
 import {OverlayModule} from '@angular/cdk/overlay';
 import {DialogComponent} from './components/guided-tour/dialog/component';
 import {DialogService} from './components/guided-tour/dialog/service';
-import {GuidedTourItemsService} from './components/guided-tour/items.service';
 import {GuidedTourDirective} from './components/guided-tour/directive';
+import {GTAddProjectBtnComponent} from './components/guided-tour/steps/add-project-btn/component';
+import {GTAddProjectDialogComponent} from './components/guided-tour/steps/add-project-dialog/component';
+import {GTProjectItemComponent} from './components/guided-tour/steps/project-item/component';
 
 const modules: any[] = [
   CommonModule,
@@ -172,9 +174,12 @@ const components: any[] = [
   LoaderComponent,
   SearchFieldComponent,
   DialogComponent,
+  GTAddProjectBtnComponent,
+  GTAddProjectDialogComponent,
+  GTProjectItemComponent,
 ];
 
-const services: any[] = [ClusterService, EndOfLifeService, DialogService, GuidedTourItemsService];
+const services: any[] = [ClusterService, EndOfLifeService, DialogService];
 
 const directives: any[] = [AutofocusDirective, OptionDirective, GuidedTourDirective];
 
