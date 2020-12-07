@@ -157,6 +157,12 @@
       "rxjs/no-nested-subscribe": "error",
       "rxjs/no-unbound-methods": "error",
       "rxjs/no-unsafe-takeuntil": "error",
+      "rxjs/ban-operators": [
+        "error",
+        {
+          "first": "use take(1) instead"
+        }
+      ],
       "no-undef": "off",
       "no-inner-declarations": "off",
       "no-redeclare": "off",
