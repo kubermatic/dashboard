@@ -11,7 +11,7 @@
 
 @import 'variables';
 
-#km-add-binding-dialog {
+.dialog {
   .mat-button-toggle-group {
     border-radius: $border-radius;
     margin-bottom: 30px;
@@ -21,6 +21,7 @@
     }
 
     .mat-button-toggle {
+      border-radius: 0;
       margin-right: 0;
       max-height: 40px;
       min-height: 40px;
