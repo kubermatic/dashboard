@@ -174,7 +174,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
     if (!!this.projects && !!this.currentUser) {
       this.projects
-        .filter(p => p.owners.map(o => o.email).includes(this.currentUser.email))
+        .filter(p => (p.owners ? p.owners.map(o => o.email).includes(this.currentUser.email) : false))
         .forEach(p => this.role.set(p.id, 'Owner'));
     }
   }
