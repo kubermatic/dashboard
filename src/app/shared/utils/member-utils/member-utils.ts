@@ -36,6 +36,8 @@ export class MemberUtils {
   }
 
   static getGroupDisplayName(groupInternalName: string): string {
+    groupInternalName = Object.values(Group).find(g => groupInternalName.includes(g));
+
     switch (groupInternalName) {
       case Group.Owner:
         return 'Owner';
