@@ -74,7 +74,7 @@
     "@angular/cli": "10.2.0",
     "@angular/compiler-cli": "10.1.6",
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
-    "@types/jest": "26.0.16",
+    "@types/jest": "26.0.17",
     "@types/js-yaml": "3.12.5",
     "@types/lodash": "4.14.165",
     "@types/node": "14.14.10",
