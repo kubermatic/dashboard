@@ -45,6 +45,12 @@ $breakpoints: (
   display: inline-block;
 }
 
+@mixin provider-image($url, $width, $height: $width) {
+  @include background-image($url, $width, $height);
+
+  display: block;
+}
+
 @mixin mask-image($url, $width, $height: $width, $color: null) {
   @include size($width, $height, true);
 
