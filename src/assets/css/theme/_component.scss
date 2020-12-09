@@ -26,6 +26,7 @@
 @import 'src/app/wizard/step/summary/theme';
 @import 'src/app/shared/components/eol/theme';
 @import 'src/app/shared/components/chip/theme';
+@import 'src/app/cluster/cluster-details/rbac/add-binding/theme';
 
 @mixin theme-components($colors) {
   @include theme-addon-list-component($colors);
@@ -45,4 +46,5 @@
   @include theme-wizard-summary-step-component($colors);
   @include theme-eol-component($colors);
   @include theme-chip-component($colors);
+  @include theme-add-binding-component($colors);
 }

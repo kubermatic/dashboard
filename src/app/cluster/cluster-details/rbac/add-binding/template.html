@@ -10,7 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div id="km-add-binding-dialog">
+<div class="dialog">
   <km-dialog-title>Add Binding</km-dialog-title>
   <mat-dialog-content>
     <mat-button-toggle-group group="bindingType"
@@ -44,8 +44,7 @@ limitations under the License.
         <mat-form-field fxFlex
                         *ngIf="subjectType === 'user'">
           <mat-label>User Email*</mat-label>
-          <input id="km-add-binding-dialog-email-input"
-                 matInput
+          <input matInput
                  formControlName="email"
                  type="email"
                  autocomplete="off">
@@ -57,8 +56,7 @@ limitations under the License.
         <mat-form-field fxFlex
                         *ngIf="subjectType === 'group'">
           <mat-label>Group*</mat-label>
-          <input id="km-add-binding-dialog-group-input"
-                 matInput
+          <input matInput
                  formControlName="group"
                  autocomplete="off">
           <mat-error *ngIf="form.get(controls.Group).hasError('required')">
@@ -87,8 +85,7 @@ limitations under the License.
         <mat-form-field fxFlex
                         *ngIf="subjectType === 'user'">
           <mat-label>User Email*</mat-label>
-          <input id="km-add-binding-dialog-email-input"
-                 matInput
+          <input matInput
                  formControlName="email"
                  type="email"
                  autocomplete="off">
@@ -100,8 +97,7 @@ limitations under the License.
         <mat-form-field fxFlex
                         *ngIf="subjectType === 'group'">
           <mat-label>Group*</mat-label>
-          <input id="km-add-binding-dialog-group-input"
-                 matInput
+          <input matInput
                  formControlName="group"
                  autocomplete="off">
           <mat-error *ngIf="form.get(controls.Group).hasError('required')">
