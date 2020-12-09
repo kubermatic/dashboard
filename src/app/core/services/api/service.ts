@@ -136,13 +136,13 @@ export class ApiService {
     return this._http.post<SSHKey>(url, sshKey);
   }
 
-  getDigitaloceanSizes(projectId: string, seed: string, clusterId: string): Observable<DigitaloceanSizes> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/digitalocean/sizes`;
+  getDigitaloceanSizes(projectId: string, clusterId: string): Observable<DigitaloceanSizes> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/digitalocean/sizes`;
     return this._http.get<DigitaloceanSizes>(url);
   }
 
-  getHetznerTypes(projectId: string, seed: string, clusterId: string): Observable<HetznerTypes> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/hetzner/sizes`;
+  getHetznerTypes(projectId: string, clusterId: string): Observable<HetznerTypes> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/hetzner/sizes`;
     return this._http.get<HetznerTypes>(url);
   }
 

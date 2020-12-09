@@ -128,16 +128,14 @@ export class NodeDataService {
     this._clusterService,
     this._presetService,
     this._apiService,
-    this._projectService,
-    this._datacenterService
+    this._projectService
   );
   readonly hetzner = new NodeDataHetznerProvider(
     this,
     this._clusterService,
     this._presetService,
     this._apiService,
-    this._projectService,
-    this._datacenterService
+    this._projectService
   );
   readonly packet = new NodeDataPacketProvider(
     this,
