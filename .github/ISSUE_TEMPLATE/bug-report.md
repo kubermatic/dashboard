@@ -15,8 +15,4 @@ labels: kind/bug, team/ui
 - UI Version:
 - API Version:
 - Domain:
-  - [ ] run
-  - [ ] run-2
-  - [ ] dev
-  - [ ] locally
 - Others:
