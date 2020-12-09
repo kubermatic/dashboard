@@ -205,17 +205,13 @@ export class ApiService {
     return this._http.get<GCPDiskType[]>(url, {headers});
   }
 
-  getOpenStackFlavors(projectId: string, seed: string, cluster: string): Observable<OpenstackFlavor[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${cluster}/providers/openstack/sizes`;
+  getOpenStackFlavors(projectId: string, cluster: string): Observable<OpenstackFlavor[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${cluster}/providers/openstack/sizes`;
     return this._http.get<OpenstackFlavor[]>(url);
   }
 
-  getOpenStackAvailabilityZones(
-    projectId: string,
-    seed: string,
-    cluster: string
-  ): Observable<OpenstackAvailabilityZone[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${cluster}/providers/openstack/availabilityzones`;
+  getOpenStackAvailabilityZones(projectId: string, cluster: string): Observable<OpenstackAvailabilityZone[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${cluster}/providers/openstack/availabilityzones`;
     return this._http.get<OpenstackAvailabilityZone[]>(url);
   }
 
