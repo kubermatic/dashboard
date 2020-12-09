@@ -70,11 +70,11 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 .km-addon-logo,
 .km-addon-logo-disabled,
 .km-icon-randomize,
-.km-cluster-spec-type .mat-button-toggle .km-icon-openshift,
+.km-cluster-spec-type .mat-button-toggle:not(.mat-button-toggle-checked) .km-icon-openshift,
 .km-sidenav a:not(.active) i,
 .km-footer i,
 *[class*="km-os-image-"] {
-  filter: invert(.25) brightness(100) contrast(100) !important;
+  filter: invert(.25) brightness(100) contrast(100);
 }
 
 // Swap some of the images.
@@ -87,19 +87,19 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 }
 
 .km-provider-logo-bringyourown {
-  @include background-image("/assets/images/clouds/bringyourown-dark.svg", 30px);
+  @include provider-image("/assets/images/clouds/bringyourown-dark.svg", 30px);
 
   filter: none;
 }
 
 .km-provider-logo-kubevirt {
-  @include background-image("/assets/images/clouds/kubevirt-dark.svg", 30px);
+  @include provider-image("/assets/images/clouds/kubevirt-dark.svg", 30px);
 
   filter: none;
 }
 
 .km-provider-logo-vsphere {
-  @include background-image("/assets/images/clouds/vsphere-dark.svg", 30px);
+  @include provider-image("/assets/images/clouds/vsphere-dark.svg", 30px);
 
   filter: none;
 }
