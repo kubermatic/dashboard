@@ -188,19 +188,19 @@ export class ApiService {
     return this._http.get<AWSSize[]>(url);
   }
 
-  getGCPZones(projectId: string, seed: string, clusterId: string): Observable<GCPZone[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/gcp/zones`;
+  getGCPZones(projectId: string, clusterId: string): Observable<GCPZone[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/gcp/zones`;
     return this._http.get<GCPZone[]>(url);
   }
 
-  getGCPSizes(zone: string, projectId: string, seed: string, clusterId: string): Observable<GCPMachineSize[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/gcp/sizes`;
+  getGCPSizes(zone: string, projectId: string, clusterId: string): Observable<GCPMachineSize[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/gcp/sizes`;
     const headers = new HttpHeaders().set('Zone', zone);
     return this._http.get<GCPMachineSize[]>(url, {headers});
   }
 
-  getGCPDiskTypes(zone: string, projectId: string, seed: string, clusterId: string): Observable<GCPDiskType[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/gcp/disktypes`;
+  getGCPDiskTypes(zone: string, projectId: string, clusterId: string): Observable<GCPDiskType[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/gcp/disktypes`;
     const headers = new HttpHeaders().set('Zone', zone);
     return this._http.get<GCPDiskType[]>(url, {headers});
   }
