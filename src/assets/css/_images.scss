@@ -231,59 +231,59 @@
 }
 
 .km-provider-logo-alibaba {
-  @include background-image("/assets/images/clouds/alibaba.svg", 30px);
+  @include provider-image("/assets/images/clouds/alibaba.svg", 30px);
 }
 
 .km-provider-logo-aws {
-  @include background-image("/assets/images/clouds/aws.svg", 24px);
+  @include provider-image("/assets/images/clouds/aws.svg", 24px);
 }
 
 .km-provider-logo-azure {
-  @include background-image("/assets/images/clouds/azure.svg", 24px);
+  @include provider-image("/assets/images/clouds/azure.svg", 24px);
 }
 
 .km-provider-logo-baremetal {
-  @include background-image("/assets/images/clouds/baremetal.png", 30px);
+  @include provider-image("/assets/images/clouds/baremetal.png", 30px);
 }
 
 .km-provider-logo-bringyourown {
-  @include background-image("/assets/images/clouds/bringyourown.svg", 30px);
+  @include provider-image("/assets/images/clouds/bringyourown.svg", 30px);
 }
 
 .km-provider-logo-digitalocean {
-  @include background-image("/assets/images/clouds/digitalocean.svg", 30px);
+  @include provider-image("/assets/images/clouds/digitalocean.svg", 30px);
 }
 
 .km-provider-logo-fake {
-  @include background-image("/assets/images/clouds/fake.png", 30px);
+  @include provider-image("/assets/images/clouds/fake.png", 30px);
 }
 
 .km-provider-logo-gcp {
-  @include background-image("/assets/images/clouds/gcp.svg", 30px);
+  @include provider-image("/assets/images/clouds/gcp.svg", 30px);
 }
 
 .km-provider-logo-hetzner {
-  @include background-image("/assets/images/clouds/hetzner.svg", 30px);
+  @include provider-image("/assets/images/clouds/hetzner.svg", 30px);
 }
 
 .km-provider-logo-openstack {
-  @include background-image("/assets/images/clouds/openstack.svg", 30px);
+  @include provider-image("/assets/images/clouds/openstack.svg", 30px);
 }
 
 .km-provider-logo-packet {
-  @include background-image("/assets/images/clouds/packet.svg", 24px);
+  @include provider-image("/assets/images/clouds/packet.svg", 24px);
 }
 
 .km-provider-logo-kubevirt {
-  @include background-image("/assets/images/clouds/kubevirt.svg", 30px);
+  @include provider-image("/assets/images/clouds/kubevirt.svg", 30px);
 }
 
 .km-provider-logo-vsphere {
-  @include background-image("/assets/images/clouds/vsphere.svg", 24px);
+  @include provider-image("/assets/images/clouds/vsphere.svg", 24px);
 }
 
 .km-provider-logo-anexia {
-  @include background-image("/assets/images/clouds/anexia.svg", 24px);
+  @include provider-image("/assets/images/clouds/anexia.svg", 24px);
 }
 
 .km-os-image-centos {

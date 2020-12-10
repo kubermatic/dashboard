@@ -27,12 +27,7 @@ $toggle-height: 61px;
     border-width: 2px;
     margin: 4px 0 0 0;
 
-    i {
-      filter: grayscale(100%);
-    }
-
     &:hover {
-      background-color: transparent;
       transition: all .5s ease;
     }
 
@@ -44,14 +39,6 @@ $toggle-height: 61px;
     &[value='openshift'] {
       border-bottom-right-radius: $border-radius;
       border-top-right-radius: $border-radius;
-    }
-
-    &.mat-button-toggle-checked {
-      background-color: transparent;
-
-      i {
-        filter: none;
-      }
     }
   }
 }
@@ -70,10 +57,6 @@ $toggle-height: 61px;
   align-items: center;
   display: flex;
   justify-content: center;
-}
-
-.mat-icon-button i {
-  background-color: transparent;
 }
 
 .km-version-inline {
