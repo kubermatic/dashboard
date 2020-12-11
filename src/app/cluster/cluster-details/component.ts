@@ -298,7 +298,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   getProxyURL(): string {
     return this.cluster.type === ClusterType.OpenShift
       ? this._api.getOpenshiftProxyURL(this.projectID, this.seed, this.cluster.id)
-      : this._api.getDashboardProxyURL(this.projectID, this.seed, this.cluster.id);
+      : this._api.getDashboardProxyURL(this.projectID, this.cluster.id);
   }
 
   isLoaded(): boolean {

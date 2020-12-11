@@ -214,8 +214,8 @@ export class ApiService {
     return `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/kubeconfig`;
   }
 
-  getDashboardProxyURL(projectID: string, seed: string, clusterID: string): string {
-    return `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/dashboard/proxy`;
+  getDashboardProxyURL(projectID: string, clusterID: string): string {
+    return `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/dashboard/proxy`;
   }
 
   getOpenshiftProxyURL(projectID: string, seed: string, clusterID: string): string {
