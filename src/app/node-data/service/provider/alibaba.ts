@@ -83,7 +83,6 @@ export class NodeDataAlibabaProvider {
             switchMap(dc =>
               this._apiService.getAlibabaInstanceTypes(
                 selectedProject,
-                dc.spec.seed,
                 this._clusterService.cluster.id,
                 dc.spec.alibaba.region
               )

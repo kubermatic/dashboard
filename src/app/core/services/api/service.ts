@@ -146,18 +146,13 @@ export class ApiService {
     return this._http.get<HetznerTypes>(url);
   }
 
-  getPacketSizes(projectId: string, seed: string, clusterId: string): Observable<PacketSize[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/packet/sizes`;
+  getPacketSizes(projectId: string, clusterId: string): Observable<PacketSize[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/packet/sizes`;
     return this._http.get<PacketSize[]>(url);
   }
 
-  getAlibabaInstanceTypes(
-    projectId: string,
-    seed: string,
-    clusterId: string,
-    region: string
-  ): Observable<AlibabaInstanceType[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/alibaba/instancetypes`;
+  getAlibabaInstanceTypes(projectId: string, clusterId: string, region: string): Observable<AlibabaInstanceType[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/alibaba/instancetypes`;
     const headers = new HttpHeaders().set('Region', region);
     return this._http.get<AlibabaInstanceType[]>(url, {headers});
   }
