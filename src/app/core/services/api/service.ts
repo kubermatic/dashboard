@@ -236,13 +236,13 @@ export class ApiService {
     return this._http.get<string[]>(url);
   }
 
-  getAzureSizes(projectId: string, seed: string, cluster: string): Observable<AzureSizes[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${cluster}/providers/azure/sizes`;
+  getAzureSizes(projectId: string, cluster: string): Observable<AzureSizes[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${cluster}/providers/azure/sizes`;
     return this._http.get<AzureSizes[]>(url);
   }
 
-  getAzureAvailabilityZones(projectId: string, seed: string, cluster: string, size: string): Observable<AzureZones> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${cluster}/providers/azure/availabilityzones`;
+  getAzureAvailabilityZones(projectId: string, cluster: string, size: string): Observable<AzureZones> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${cluster}/providers/azure/availabilityzones`;
     const headers = new HttpHeaders().set('SKUName', size);
     return this._http.get<AzureZones>(url, {headers});
   }

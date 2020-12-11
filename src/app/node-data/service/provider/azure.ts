@@ -74,17 +74,8 @@ export class NodeDataAzureProvider {
         let selectedProject: string;
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
-          .pipe(
-            switchMap(_ =>
-              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(take(1))
-            )
-          )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(
-            switchMap(dc =>
-              this._apiService.getAzureSizes(selectedProject, dc.spec.seed, this._clusterService.cluster.id)
-            )
-          )
+          .pipe(switchMap(_ => this._apiService.getAzureSizes(selectedProject, this._clusterService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {
@@ -136,17 +127,11 @@ export class NodeDataAzureProvider {
         let selectedProject: string;
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
-          .pipe(
-            switchMap(_ =>
-              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(take(1))
-            )
-          )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
-            switchMap(dc =>
+            switchMap(_ =>
               this._apiService.getAzureAvailabilityZones(
                 selectedProject,
-                dc.spec.seed,
                 this._clusterService.cluster.id,
                 this._nodeDataService.nodeData.spec.cloud.azure.size
               )
