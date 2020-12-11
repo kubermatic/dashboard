@@ -141,12 +141,7 @@ export class NodeDataAlibabaProvider {
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(dc =>
-              this._apiService.getAlibabaZones(
-                selectedProject,
-                dc.spec.seed,
-                this._clusterService.cluster.id,
-                dc.spec.alibaba.region
-              )
+              this._apiService.getAlibabaZones(selectedProject, this._clusterService.cluster.id, dc.spec.alibaba.region)
             )
           )
           .pipe(

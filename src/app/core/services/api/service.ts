@@ -157,8 +157,8 @@ export class ApiService {
     return this._http.get<AlibabaInstanceType[]>(url, {headers});
   }
 
-  getAlibabaZones(projectId: string, seed: string, clusterId: string, region: string): Observable<AlibabaZone[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/alibaba/zones`;
+  getAlibabaZones(projectId: string, clusterId: string, region: string): Observable<AlibabaZone[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/alibaba/zones`;
     const headers = new HttpHeaders().set('Region', region);
     return this._http.get<AlibabaZone[]>(url, {headers});
   }
