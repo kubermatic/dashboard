@@ -9,8 +9,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@mixin theme-chip-component($colors) {
+@import 'variables';
+
+@mixin theme-tab-card-component($colors) {
   .km-tab-card {
-    font-size: initial;
+    .mat-tab-label {
+      font-size: $font-size-subhead;
+      font-weight: 400;
+      opacity: 1;
+    }
+
+    .mat-tab-label-active {
+      background: map-get($colors, background-card);
+    }
+
+    .mat-ink-bar {
+      top: 0;
+    }
+
+    .mat-card {
+      margin: 0;
+    }
   }
 }
