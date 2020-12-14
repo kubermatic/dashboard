@@ -85,6 +85,8 @@ import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {ExternalClusterDataDialogComponent} from './components/external-cluster-data-dialog/component';
 import {LoaderComponent} from './components/loader/component';
 import {SearchFieldComponent} from './components/search-field/component';
+import {TabCardComponent} from '@shared/components/tab-card/component';
+import {TabComponent} from '@shared/components/tab-card/tab/component';
 
 const modules: any[] = [
   CommonModule,
@@ -164,6 +166,8 @@ const components: any[] = [
   ExternalClusterDataDialogComponent,
   LoaderComponent,
   SearchFieldComponent,
+  TabCardComponent,
+  TabComponent,
 ];
 
 const services: any[] = [ClusterService, EndOfLifeService];

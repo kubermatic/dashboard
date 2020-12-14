@@ -74,10 +74,6 @@ export class RBACComponent implements OnInit, OnDestroy {
     return this.dataSourceNamespace;
   }
 
-  toggleRBAC(): void {
-    this.isShowRBAC = !this.isShowRBAC;
-  }
-
   isLoadingData(data: SimpleBinding[] | SimpleClusterBinding[]): boolean {
     return _.isEmpty(data) && !this.isClusterRunning;
   }

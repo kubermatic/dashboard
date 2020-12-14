@@ -220,29 +220,27 @@ limitations under the License.
                   [isClusterRunning]="isClusterAPIRunning"></km-node-list>
   </div>
 
-  <km-rbac *ngIf="isRBACEnabled()"
-           [cluster]="cluster"
-           [projectID]="projectID"
-           [isClusterRunning]="isClusterRunning"
-           [clusterBindings]="clusterBindings"
-           [bindings]="bindings"></km-rbac>
-
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title class="additional-margin">Addons</mat-card-title>
-    </mat-card-header>
-    <mat-card-content class="km-addon-card-content">
+  <km-tab-card>
+    <km-tab label="Events">
+      <km-event-list [events]="events"></km-event-list>
+    </km-tab>
+    <km-tab label="RBAC"
+            *ngIf="isRBACEnabled()">
+      <km-rbac [cluster]="cluster"
+               [projectID]="projectID"
+               [isClusterRunning]="isClusterRunning"
+               [clusterBindings]="clusterBindings"
+               [bindings]="bindings"></km-rbac>
+    </km-tab>
+    <km-tab label="Addons">
       <km-addon-list [addons]="addons"
                      [isClusterReady]="isClusterRunning"
                      [canEdit]="isEditEnabled()"
                      (addAddon)="handleAddonCreation($event)"
                      (editAddon)="handleAddonEdition($event)"
                      (deleteAddon)="handleAddonDeletion($event)"></km-addon-list>
-    </mat-card-content>
-  </mat-card>
-
-  <km-event-list [events]="events"></km-event-list>
-
+    </km-tab>
+  </km-tab-card>
 </ng-container>
 
 <div *ngIf="!isLoaded()">
