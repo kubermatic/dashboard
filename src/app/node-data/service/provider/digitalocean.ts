@@ -10,7 +10,6 @@
 // limitations under the License.
 
 import {ApiService} from '@core/services/api/service';
-import {DatacenterService} from '@core/services/datacenter/service';
 import {ProjectService} from '@core/services/project/service';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {DigitaloceanSizes} from '@shared/entity/provider/digitalocean';
@@ -27,8 +26,7 @@ export class NodeDataDigitalOceanProvider {
     private readonly _clusterService: ClusterService,
     private readonly _presetService: PresetsService,
     private readonly _apiService: ApiService,
-    private readonly _projectService: ProjectService,
-    private readonly _datacenterService: DatacenterService
+    private readonly _projectService: ProjectService
   ) {}
 
   set tags(tags: string[]) {
@@ -64,17 +62,8 @@ export class NodeDataDigitalOceanProvider {
         let selectedProject: string;
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
-          .pipe(
-            switchMap(_ =>
-              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(take(1))
-            )
-          )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(
-            switchMap(dc =>
-              this._apiService.getDigitaloceanSizes(selectedProject, dc.spec.seed, this._clusterService.cluster.id)
-            )
-          )
+          .pipe(switchMap(_ => this._apiService.getDigitaloceanSizes(selectedProject, this._clusterService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {

@@ -136,34 +136,29 @@ export class ApiService {
     return this._http.post<SSHKey>(url, sshKey);
   }
 
-  getDigitaloceanSizes(projectId: string, seed: string, clusterId: string): Observable<DigitaloceanSizes> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/digitalocean/sizes`;
+  getDigitaloceanSizes(projectId: string, clusterId: string): Observable<DigitaloceanSizes> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/digitalocean/sizes`;
     return this._http.get<DigitaloceanSizes>(url);
   }
 
-  getHetznerTypes(projectId: string, seed: string, clusterId: string): Observable<HetznerTypes> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/hetzner/sizes`;
+  getHetznerTypes(projectId: string, clusterId: string): Observable<HetznerTypes> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/hetzner/sizes`;
     return this._http.get<HetznerTypes>(url);
   }
 
-  getPacketSizes(projectId: string, seed: string, clusterId: string): Observable<PacketSize[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/packet/sizes`;
+  getPacketSizes(projectId: string, clusterId: string): Observable<PacketSize[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/packet/sizes`;
     return this._http.get<PacketSize[]>(url);
   }
 
-  getAlibabaInstanceTypes(
-    projectId: string,
-    seed: string,
-    clusterId: string,
-    region: string
-  ): Observable<AlibabaInstanceType[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/alibaba/instancetypes`;
+  getAlibabaInstanceTypes(projectId: string, clusterId: string, region: string): Observable<AlibabaInstanceType[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/alibaba/instancetypes`;
     const headers = new HttpHeaders().set('Region', region);
     return this._http.get<AlibabaInstanceType[]>(url, {headers});
   }
 
-  getAlibabaZones(projectId: string, seed: string, clusterId: string, region: string): Observable<AlibabaZone[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/alibaba/zones`;
+  getAlibabaZones(projectId: string, clusterId: string, region: string): Observable<AlibabaZone[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/alibaba/zones`;
     const headers = new HttpHeaders().set('Region', region);
     return this._http.get<AlibabaZone[]>(url, {headers});
   }
@@ -188,34 +183,30 @@ export class ApiService {
     return this._http.get<AWSSize[]>(url);
   }
 
-  getGCPZones(projectId: string, seed: string, clusterId: string): Observable<GCPZone[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/gcp/zones`;
+  getGCPZones(projectId: string, clusterId: string): Observable<GCPZone[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/gcp/zones`;
     return this._http.get<GCPZone[]>(url);
   }
 
-  getGCPSizes(zone: string, projectId: string, seed: string, clusterId: string): Observable<GCPMachineSize[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/gcp/sizes`;
+  getGCPSizes(zone: string, projectId: string, clusterId: string): Observable<GCPMachineSize[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/gcp/sizes`;
     const headers = new HttpHeaders().set('Zone', zone);
     return this._http.get<GCPMachineSize[]>(url, {headers});
   }
 
-  getGCPDiskTypes(zone: string, projectId: string, seed: string, clusterId: string): Observable<GCPDiskType[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${clusterId}/providers/gcp/disktypes`;
+  getGCPDiskTypes(zone: string, projectId: string, clusterId: string): Observable<GCPDiskType[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/gcp/disktypes`;
     const headers = new HttpHeaders().set('Zone', zone);
     return this._http.get<GCPDiskType[]>(url, {headers});
   }
 
-  getOpenStackFlavors(projectId: string, seed: string, cluster: string): Observable<OpenstackFlavor[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${cluster}/providers/openstack/sizes`;
+  getOpenStackFlavors(projectId: string, cluster: string): Observable<OpenstackFlavor[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${cluster}/providers/openstack/sizes`;
     return this._http.get<OpenstackFlavor[]>(url);
   }
 
-  getOpenStackAvailabilityZones(
-    projectId: string,
-    seed: string,
-    cluster: string
-  ): Observable<OpenstackAvailabilityZone[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${cluster}/providers/openstack/availabilityzones`;
+  getOpenStackAvailabilityZones(projectId: string, cluster: string): Observable<OpenstackAvailabilityZone[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${cluster}/providers/openstack/availabilityzones`;
     return this._http.get<OpenstackAvailabilityZone[]>(url);
   }
 
@@ -223,8 +214,8 @@ export class ApiService {
     return `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/kubeconfig`;
   }
 
-  getDashboardProxyURL(projectID: string, seed: string, clusterID: string): string {
-    return `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/dashboard/proxy`;
+  getDashboardProxyURL(projectID: string, clusterID: string): string {
+    return `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/dashboard/proxy`;
   }
 
   getOpenshiftProxyURL(projectID: string, seed: string, clusterID: string): string {
@@ -245,13 +236,13 @@ export class ApiService {
     return this._http.get<string[]>(url);
   }
 
-  getAzureSizes(projectId: string, seed: string, cluster: string): Observable<AzureSizes[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${cluster}/providers/azure/sizes`;
+  getAzureSizes(projectId: string, cluster: string): Observable<AzureSizes[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${cluster}/providers/azure/sizes`;
     return this._http.get<AzureSizes[]>(url);
   }
 
-  getAzureAvailabilityZones(projectId: string, seed: string, cluster: string, size: string): Observable<AzureZones> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${seed}/clusters/${cluster}/providers/azure/availabilityzones`;
+  getAzureAvailabilityZones(projectId: string, cluster: string, size: string): Observable<AzureZones> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${cluster}/providers/azure/availabilityzones`;
     const headers = new HttpHeaders().set('SKUName', size);
     return this._http.get<AzureZones>(url, {headers});
   }
