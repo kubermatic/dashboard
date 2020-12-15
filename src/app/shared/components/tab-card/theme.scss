@@ -27,6 +27,10 @@
           font-weight: 400;
           opacity: 1;
           padding-bottom: $border-radius;
+
+          &:hover:not(.mat-tab-label-active) {
+            background: map-get($colors, background-hover);
+          }
         }
 
         .mat-tab-label-active {
