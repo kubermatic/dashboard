@@ -26,6 +26,7 @@ import {takeUntil} from 'rxjs/operators';
 })
 export class EventListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() events: Event[] = [];
+  @Input() showHeader = true;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -45,6 +46,8 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
   constructor(private readonly _userService: UserService) {}
 
   ngOnInit(): void {
+    this.isShowEvents = !this.showHeader;
+
     this.dataSource.data = this.events;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;

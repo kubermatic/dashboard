@@ -11,7 +11,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <mat-card [ngClass]="{'km-toggled-events': isShowEvents}">
-  <mat-card-header (click)="toggleEvents()">
+  <mat-card-header (click)="toggleEvents()"
+                   *ngIf="showHeader">
     <mat-card-title>
       <i class="km-icon-mask"
          [ngClass]="isShowEvents ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>

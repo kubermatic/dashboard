@@ -13,22 +13,32 @@
 
 @mixin theme-tab-card-component($colors) {
   .km-tab-card {
-    .mat-tab-label {
-      font-size: $font-size-subhead;
-      font-weight: 400;
-      opacity: 1;
-    }
+    .mat-tab-header {
+      border-bottom: none;
 
-    .mat-tab-label-active {
-      background: map-get($colors, background-card);
-    }
+      .mat-tab-label {
+        font-size: $font-size-subhead;
+        font-weight: 400;
+        opacity: 1;
+      }
 
-    .mat-ink-bar {
-      top: 0;
+      .mat-tab-label-active {
+        background: map-get($colors, background-card);
+      }
+
+      .mat-ink-bar {
+        top: 0;
+      }
     }
 
     .mat-card {
       margin: 0;
+
+      .mat-card {
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+      }
     }
   }
 }
