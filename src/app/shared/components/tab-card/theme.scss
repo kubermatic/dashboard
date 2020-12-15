@@ -13,21 +13,25 @@
 
 @mixin theme-tab-card-component($colors) {
   .km-tab-card {
-    margin: -$content-padding;
+    margin-left: -$content-padding;
 
     .mat-tab-header {
       border-bottom: none;
-      margin: (2 * $content-padding) $content-padding 0 $content-padding;
+      margin: $content-padding $content-padding 0 0;
 
-      .mat-tab-label {
-        font-size: $font-size-subhead;
-        font-weight: 400;
-        opacity: 1;
-      }
+      .mat-tab-label-container {
+        padding-left: $content-padding;
 
-      .mat-tab-label-active {
-        background: map-get($colors, background-card);
-        box-shadow: $border-box-shadow;
+        .mat-tab-label {
+          font-size: $font-size-subhead;
+          font-weight: 400;
+          opacity: 1;
+        }
+
+        .mat-tab-label-active {
+          background: map-get($colors, background-card);
+          box-shadow: $border-box-shadow;
+        }
       }
 
       .mat-ink-bar {
