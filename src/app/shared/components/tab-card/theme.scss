@@ -17,7 +17,7 @@
 
     .mat-tab-header {
       border-bottom: none;
-      margin: $content-padding $content-padding 0 0;
+      margin: $content-padding $content-padding (-$border-radius) 0;
 
       .mat-tab-label-container {
         padding-left: $content-padding;
@@ -26,6 +26,7 @@
           font-size: $font-size-subhead;
           font-weight: 400;
           opacity: 1;
+          padding-bottom: $border-radius;
         }
 
         .mat-tab-label-active {
