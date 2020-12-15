@@ -15,7 +15,6 @@ import {TabComponent} from '@shared/components/tab-card/tab/component';
 @Component({
   selector: 'km-tab-card',
   templateUrl: 'template.html',
-  styleUrls: ['style.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush, // TODO
 })
 export class TabCardComponent implements AfterContentInit {
