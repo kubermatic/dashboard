@@ -49,6 +49,8 @@ tr {
   }
 }
 
-.km-add-button {
-  margin-right: 8px;
+.add-button {
+  position: absolute;
+  right: $content-padding;
+  top: $content-padding;
 }

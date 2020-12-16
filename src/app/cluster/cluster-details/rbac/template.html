@@ -10,10 +10,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+
 <button mat-icon-button
-        class="km-add-button"
+        class="add-button"
         matTooltip="Add Binding"
-        *ngIf="isShowRBAC && isClusterRunning"
+        *ngIf="isClusterRunning"
         (click)="addBinding($event)">
   <i class="km-icon-add"></i>
 </button>

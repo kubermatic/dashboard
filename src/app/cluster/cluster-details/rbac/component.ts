@@ -34,7 +34,6 @@ export class RBACComponent implements OnInit, OnDestroy {
   @Input() clusterBindings: SimpleClusterBinding[] = [];
   @Input() bindings: SimpleBinding[] = [];
 
-  isShowRBAC = false;
   dataSourceCluster = new MatTableDataSource<SimpleClusterBinding>();
   displayedColumnsCluster: string[] = ['kind', 'name', 'clusterRole', 'actions'];
   dataSourceNamespace = new MatTableDataSource<SimpleBinding>();

@@ -13,7 +13,7 @@
 
 @mixin theme-tab-card-component($colors) {
   .km-tab-card {
-    margin-left: -$content-padding;
+    margin: 0 (-$content-padding);
 
     .mat-tab-header {
       border-bottom: none;
