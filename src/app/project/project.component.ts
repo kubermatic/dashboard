@@ -428,6 +428,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   startTour(): void {
-    this._dialogService.open();
+    this._dialogService.showDialog();
   }
 }

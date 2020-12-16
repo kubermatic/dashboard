@@ -3,15 +3,13 @@
     <div class="title">
       Your first project
     </div>
+    <button mat-icon-button
+            id="km-close-dialog-btn"
+            (click)="onClose()">
+      <i class="km-icon km-icon-close"></i>
+    </button>
   </div>
   <div class="text">
     Select a name to describe your project. Add labels you want to be inherited to every cluster and node inside the project or leave them blank. These settings can be edited later.
   </div>
-</div>
-<div class="actions">
-  <button mat-flat-button
-          type="button"
-          (click)="onClose()">
-    Got it
-  </button>
 </div>

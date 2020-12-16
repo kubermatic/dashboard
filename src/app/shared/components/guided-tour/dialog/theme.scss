@@ -24,9 +24,20 @@
     min-width: 300px;
     padding: 20px;
 
-    .title {
-      font-size: 20px;
-      margin-bottom: 20px;
+    .header {
+      display: flex;
+      line-height: 40px;
+      position: relative;
+
+      button {
+        position: absolute;
+        right: 0;
+      }
+
+      .title {
+        font-size: 20px;
+        margin-bottom: 20px;
+      }
     }
 
     .text {
@@ -40,12 +51,17 @@
     }
   }
 
-  .highlight#guided-tour-active {
-    z-index: 10000;
-  }
-
   .highlight {
-    background-color: red;
     position: relative !important;
+    z-index: 1001;
   }
+}
+
+.backdrop-target {
+  background: rgba(0, 0, 0, 0.7) !important;
+  height: 100%;
+  opacity: 1;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
 }

@@ -12,9 +12,9 @@
 import {OverlayRef} from '@angular/cdk/overlay';
 
 export class DialogRef {
-  constructor(private overlayRef: OverlayRef) {}
+  constructor(private _overlayRef: OverlayRef) {}
 
   close(): void {
-    this.overlayRef.dispose();
+    this._overlayRef.dispose();
   }
 }

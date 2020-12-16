@@ -11,12 +11,20 @@
 
 import {InjectionToken, ViewContainerRef, ElementRef} from '@angular/core';
 import {DialogComponent} from './dialog/component';
+import {GuidedTourID} from './utils';
 
 export class GuidedTourStep {
   id: string;
+  withBackdrop: boolean;
   targetViewContainer: ViewContainerRef;
   elementRef: ElementRef;
   stepInstance: DialogComponent;
 }
 
 export const STEP_DATA = new InjectionToken<GuidedTourStep>('STEP_DATA');
+
+export const STEP_ORDER: string[] = [
+  GuidedTourID.AddProjectBtn,
+  GuidedTourID.AddProjectDialog,
+  GuidedTourID.ProjectItem,
+];

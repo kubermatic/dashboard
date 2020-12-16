@@ -3,15 +3,13 @@
     <div class="title">
       Get started by adding a project
     </div>
+    <button mat-icon-button
+            id="km-close-dialog-btn"
+            (click)="onClose()">
+      <i class="km-icon km-icon-close"></i>
+    </button>
   </div>
   <div class="text">
     A project groups your clusters together for ease of management.
   </div>
-</div>
-<div class="actions">
-  <button mat-flat-button
-          type="button"
-          (click)="onClose()">
-    Got it
-  </button>
 </div>

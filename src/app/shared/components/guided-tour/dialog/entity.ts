@@ -12,11 +12,9 @@
 export class DialogConfig {
   panelClass?: string;
   hasBackdrop?: boolean;
-  backdropClass?: string;
 }
 
 export const DEFAULT_CONFIG: DialogConfig = {
-  hasBackdrop: true,
-  backdropClass: 'dark-backdrop',
+  hasBackdrop: false,
   panelClass: 'km-guided-tour-dialog-panel',
 };

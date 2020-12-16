@@ -36,7 +36,8 @@ limitations under the License.
             type="button"
             [disabled]="isProjectCreationRestricted()"
             (click)="addProject()"
-            [kmGuidedTour]="GuidedTourID.AddProjectBtn">
+            [kmGuidedTour]="GuidedTourID.AddProjectBtn"
+            kmGuidedTourIDToListen="km-add-project-top-btn">
       Add Project
     </button>
   </div>
@@ -204,7 +205,8 @@ limitations under the License.
        fxLayoutGap="20px">
 
     <mat-card *ngFor="let project of projects"
-              (click)="selectProject(project)">
+              (click)="selectProject(project)"
+              [kmGuidedTour]="GuidedTourID.ProjectItem">
       <mat-card-header>
         <i mat-card-avatar
            [matTooltip]="project.status"

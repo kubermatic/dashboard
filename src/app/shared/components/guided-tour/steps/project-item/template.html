@@ -3,6 +3,11 @@
     <div class="title">
       Project created
     </div>
+    <button mat-icon-button
+            id="km-close-dialog-btn"
+            (click)="onClose()">
+      <i class="km-icon km-icon-close"></i>
+    </button>
   </div>
   <div class="text">
     Click on the project. We will start creating clusters shortly.
@@ -12,6 +17,6 @@
   <button mat-flat-button
           type="button"
           (click)="onClose()">
-    Got it
+    Close Tour
   </button>
 </div>

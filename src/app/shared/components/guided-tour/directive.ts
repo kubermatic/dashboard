@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AfterViewInit, Directive, Input, OnDestroy, ViewContainerRef, ElementRef} from '@angular/core';
+import {AfterViewInit, Directive, Input, OnDestroy, ViewContainerRef, ElementRef, HostListener} from '@angular/core';
 import {Subject} from 'rxjs';
 
 import {GuidedTourStep} from './entity';
@@ -20,6 +20,18 @@ import {DialogService} from './dialog/service';
 })
 export class GuidedTourDirective implements AfterViewInit, OnDestroy {
   @Input('kmGuidedTour') id: string;
+  @Input('kmGuidedTourWithBackdrop') withBackdrop = true;
+  @Input('kmGuidedTourIDToListen') idToListen: string;
+
+  @HostListener('click', ['$event'])
+  onClick(event) {
+    if (
+      !!this._dialogService.isTourInProgress() &&
+      (event.target.id === this.idToListen || event.target.parentElement.id === this.idToListen)
+    ) {
+      this._dialogService.showNextStep();
+    }
+  }
 
   private _step: GuidedTourStep;
   private readonly _unsubscribe = new Subject<void>();
@@ -27,15 +39,16 @@ export class GuidedTourDirective implements AfterViewInit, OnDestroy {
   constructor(
     private readonly _dialogService: DialogService,
     private readonly _viewContainerRef: ViewContainerRef,
-    private elementRef: ElementRef
+    private _elementRef: ElementRef
   ) {
     this._step = new GuidedTourStep();
   }
 
   ngAfterViewInit(): void {
     this._step.targetViewContainer = this._viewContainerRef;
-    this._step.elementRef = this.elementRef;
+    this._step.elementRef = this._elementRef;
     this._step.id = this.id;
+    this._step.withBackdrop = this.withBackdrop;
 
     this._dialogService.addStep(this._step);
   }
