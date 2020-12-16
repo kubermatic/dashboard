@@ -234,12 +234,15 @@ limitations under the License.
                [bindings]="bindings"></km-rbac>
     </km-tab>
     <km-tab label="Addons">
-      <km-addon-list [addons]="addons"
-                     [isClusterReady]="isClusterRunning"
-                     [canEdit]="isEditEnabled()"
-                     (addAddon)="handleAddonCreation($event)"
-                     (editAddon)="handleAddonEdition($event)"
-                     (deleteAddon)="handleAddonDeletion($event)"></km-addon-list>
+      <div class="addon-tab-content">
+        <km-addon-list [addons]="addons"
+                       [isClusterReady]="isClusterRunning"
+                       [canEdit]="isEditEnabled()"
+                       (addAddon)="handleAddonCreation($event)"
+                       (editAddon)="handleAddonEdition($event)"
+                       (deleteAddon)="handleAddonDeletion($event)"></km-addon-list>
+      </div>
+
     </km-tab>
   </km-tab-card>
 </ng-container>
