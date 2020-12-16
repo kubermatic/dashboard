@@ -10,109 +10,92 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<mat-card [ngClass]="{'km-toggled-events': isShowEvents}">
-  <mat-card-header (click)="toggleEvents()"
-                   *ngIf="showHeader">
-    <mat-card-title>
-      <i class="km-icon-mask"
-         [ngClass]="isShowEvents ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
-      <span>Events</span>
-    </mat-card-title>
-    <div fxFlex></div>
-    <span class="km-events-title">
-      <i [ngClass]="getTypeIconForEvents()"></i>
-      {{events.length}} event<ng-container *ngIf="events.length != 1">s</ng-container>
-    </span>
-  </mat-card-header>
-  <mat-card-content>
-    <table class="km-table"
-           mat-table
-           [hidden]="!isShowEvents"
-           [dataSource]="dataSource"
-           matSort>
-      <ng-container matColumnDef="status">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell"></th>
-        <td mat-cell
-            *matCellDef="let element">
-          <i [matTooltip]="element.type"
-             [ngClass]="getTypeIcon(element)"></i>
-        </td>
-      </ng-container>
 
-      <ng-container matColumnDef="message">
-        <th mat-header-cell
-            mat-sort-header
-            *matHeaderCellDef
-            class="km-header-cell">Message
-        </th>
-        <td mat-cell
-            class="km-events-long-text"
-            *matCellDef="let element">{{element.message}}</td>
-      </ng-container>
+<table class="km-table"
+       mat-table
+       [dataSource]="dataSource"
+       matSort>
+  <ng-container matColumnDef="status">
+    <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell"></th>
+    <td mat-cell
+        *matCellDef="let element">
+      <i [matTooltip]="element.type"
+         [ngClass]="getTypeIcon(element)"></i>
+    </td>
+  </ng-container>
 
-      <ng-container matColumnDef="involvedObjectName">
-        <th mat-header-cell
-            mat-sort-header
-            *matHeaderCellDef
-            class="km-header-cell">Name
-        </th>
-        <td mat-cell
-            class="km-events-long-text"
-            *matCellDef="let element">{{element.involvedObject.name}}</td>
-      </ng-container>
+  <ng-container matColumnDef="message">
+    <th mat-header-cell
+        mat-sort-header
+        *matHeaderCellDef
+        class="km-header-cell">Message
+    </th>
+    <td mat-cell
+        class="km-events-long-text"
+        *matCellDef="let element">{{element.message}}</td>
+  </ng-container>
 
-      <ng-container matColumnDef="involvedObjectKind">
-        <th mat-header-cell
-            mat-sort-header
-            *matHeaderCellDef
-            class="km-header-cell">Type
-        </th>
-        <td mat-cell
-            class="km-events-long-text"
-            *matCellDef="let element">{{element.involvedObject.type}}</td>
-      </ng-container>
+  <ng-container matColumnDef="involvedObjectName">
+    <th mat-header-cell
+        mat-sort-header
+        *matHeaderCellDef
+        class="km-header-cell">Name
+    </th>
+    <td mat-cell
+        class="km-events-long-text"
+        *matCellDef="let element">{{element.involvedObject.name}}</td>
+  </ng-container>
 
-      <ng-container matColumnDef="count">
-        <th mat-header-cell
-            mat-sort-header
-            *matHeaderCellDef
-            class="km-header-cell">Count
-        </th>
-        <td mat-cell
-            *matCellDef="let element">{{element.count}}</td>
-      </ng-container>
+  <ng-container matColumnDef="involvedObjectKind">
+    <th mat-header-cell
+        mat-sort-header
+        *matHeaderCellDef
+        class="km-header-cell">Type
+    </th>
+    <td mat-cell
+        class="km-events-long-text"
+        *matCellDef="let element">{{element.involvedObject.type}}</td>
+  </ng-container>
 
-      <ng-container matColumnDef="lastTimestamp">
-        <th mat-header-cell
-            mat-sort-header
-            *matHeaderCellDef
-            class="km-header-cell">Occurred
-        </th>
-        <td mat-cell
-            class="km-events-long-text km-events-timestamp"
-            *matCellDef="let element">
-          <km-relative-time [date]="element.lastTimestamp"></km-relative-time>
-        </td>
-      </ng-container>
+  <ng-container matColumnDef="count">
+    <th mat-header-cell
+        mat-sort-header
+        *matHeaderCellDef
+        class="km-header-cell">Count
+    </th>
+    <td mat-cell
+        *matCellDef="let element">{{element.count}}</td>
+  </ng-container>
 
-      <tr mat-header-row
-          class="km-header-row"
-          *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row
-          *matRowDef="let row; columns: displayedColumns"
-          class="km-mat-row"></tr>
-    </table>
+  <ng-container matColumnDef="lastTimestamp">
+    <th mat-header-cell
+        mat-sort-header
+        *matHeaderCellDef
+        class="km-header-cell">Occurred
+    </th>
+    <td mat-cell
+        class="km-events-long-text km-events-timestamp"
+        *matCellDef="let element">
+      <km-relative-time [date]="element.lastTimestamp"></km-relative-time>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row
+      class="km-header-row"
+      *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      class="km-mat-row"></tr>
+</table>
 
 
-    <div *ngIf="!hasEvents() && isShowEvents"
-         class="km-row km-empty-list-msg">
-      No events available.
-    </div>
+<div *ngIf="!hasEvents()"
+     class="km-row km-empty-list-msg">
+  No events available.
+</div>
 
-    <div [hidden]="!isPaginatorVisible()">
-      <mat-paginator showFirstLastButtons></mat-paginator>
-    </div>
-  </mat-card-content>
-</mat-card>
+<div [hidden]="!isPaginatorVisible()">
+  <mat-paginator showFirstLastButtons></mat-paginator>
+</div>

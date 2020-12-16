@@ -26,12 +26,10 @@ import {takeUntil} from 'rxjs/operators';
 })
 export class EventListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() events: Event[] = [];
-  @Input() showHeader = true;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  isShowEvents = false;
   dataSource = new MatTableDataSource<Event>();
   displayedColumns: string[] = [
     'status',
@@ -46,8 +44,6 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
   constructor(private readonly _userService: UserService) {}
 
   ngOnInit(): void {
-    this.isShowEvents = !this.showHeader;
-
     this.dataSource.data = this.events;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
@@ -86,19 +82,6 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isPaginatorVisible(): boolean {
-    return this.isShowEvents && this.hasEvents() && this.paginator && this.events.length >= this.paginator.pageSize;
-  }
-
-  toggleEvents(): void {
-    this.isShowEvents = !this.isShowEvents;
-  }
-
-  getTypeIconForEvents(): string {
-    if (this.events.filter(event => event.type === 'Warning').length > 0) {
-      return HealthStatusColor.Orange;
-    } else if (this.events.filter(event => event.type === 'Normal').length > 0) {
-      return HealthStatusColor.Green;
-    }
-    return '';
+    return this.hasEvents() && this.paginator && this.events.length >= this.paginator.pageSize;
   }
 }

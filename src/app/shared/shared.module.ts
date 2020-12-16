@@ -87,6 +87,7 @@ import {LoaderComponent} from './components/loader/component';
 import {SearchFieldComponent} from './components/search-field/component';
 import {TabCardComponent} from '@shared/components/tab-card/component';
 import {TabComponent} from '@shared/components/tab-card/tab/component';
+import {EventCardComponent} from '@shared/components/event-card/event-card.component';
 
 const modules: any[] = [
   CommonModule,
@@ -135,6 +136,7 @@ const components: any[] = [
   PropertyBooleanComponent,
   DialogTitleComponent,
   PropertyComponent,
+  EventCardComponent,
   EventListComponent,
   LabelFormComponent,
   LabelsComponent,
