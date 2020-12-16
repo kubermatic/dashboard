@@ -41,8 +41,8 @@ export class CreatePresetDialogComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(
-    public _matDialogRef: MatDialogRef<CreatePresetDialogComponent>,
-    public _formBuilder: FormBuilder,
+    private readonly _matDialogRef: MatDialogRef<CreatePresetDialogComponent>,
+    private readonly _formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: CreatePresetDialogData
   ) {}
 

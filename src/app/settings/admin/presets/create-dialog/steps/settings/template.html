@@ -15,11 +15,9 @@ limitations under the License.
       fxLayout="column">
   <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
 
-  <km-wizard-provider-basic [provider]="provider"
-                            [formControl]="form.get(controls.Basic)"></km-wizard-provider-basic>
-
-  <km-wizard-provider-extended [provider]="provider"
-                               [visible]="true"
-                               [formControl]="form.get(controls.Extended)">
-  </km-wizard-provider-extended>
+  <div [ngSwitch]="provider">
+    <km-alibaba-settings *ngSwitchCase="Providers.ALIBABA"
+                         [formControl]="form.get(Controls.Settings)">
+    </km-alibaba-settings>
+  </div>
 </form>

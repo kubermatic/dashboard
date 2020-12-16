@@ -49,4 +49,9 @@ export class BaseFormValidator implements ControlValueAccessor, Validator {
   setDisabledState?(isDisabled: boolean): void {
     isDisabled ? this.form.disable() : this.form.enable();
   }
+
+  reset(): void {
+    this.form.reset();
+    Object.keys(this.form.controls).forEach(field => this.form.get(field).setErrors(null));
+  }
 }

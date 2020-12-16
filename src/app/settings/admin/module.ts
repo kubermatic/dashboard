@@ -14,8 +14,9 @@ import {PresetListComponent} from '@app/settings/admin/presets/component';
 import {CreatePresetDialogComponent} from '@app/settings/admin/presets/create-dialog/component';
 import {PresetStepComponent} from '@app/settings/admin/presets/create-dialog/steps/preset/component';
 import {PresetProviderStepComponent} from '@app/settings/admin/presets/create-dialog/steps/provider/component';
+import {PresetDialogService} from '@app/settings/admin/presets/create-dialog/steps/service';
 import {PresetSettingsStepComponent} from '@app/settings/admin/presets/create-dialog/steps/settings/component';
-import {WizardModule} from '@app/wizard/module';
+import {AlibabaSettingsComponent} from '@app/settings/admin/presets/create-dialog/steps/settings/provider/alibaba/component';
 import {SharedModule} from '@shared/shared.module';
 import {AddAdminDialogComponent} from './admins/add-admin-dialog/component';
 import {AdminsComponent} from './admins/component';
@@ -26,7 +27,7 @@ import {DatacenterDataDialogComponent} from './dynamic-datacenters/datacenter-da
 import {AdminSettingsRoutingModule} from './routing';
 
 @NgModule({
-  imports: [SharedModule, AdminSettingsRoutingModule, WizardModule],
+  imports: [SharedModule, AdminSettingsRoutingModule],
   declarations: [
     AdminSettingsComponent,
     AddAdminDialogComponent,
@@ -39,6 +40,8 @@ import {AdminSettingsRoutingModule} from './routing';
     PresetStepComponent,
     PresetProviderStepComponent,
     PresetSettingsStepComponent,
+    AlibabaSettingsComponent,
   ],
+  providers: [PresetDialogService],
 })
 export class AdminSettingsModule {}

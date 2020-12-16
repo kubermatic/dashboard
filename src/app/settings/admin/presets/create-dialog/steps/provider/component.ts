@@ -20,9 +20,9 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
+import {PresetDialogService} from '@app/settings/admin/presets/create-dialog/steps/service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {map, takeUntil} from 'rxjs/operators';
 
@@ -56,7 +56,7 @@ export class PresetProviderStepComponent extends BaseFormValidator implements On
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _datacenterService: DatacenterService,
-    private readonly _clusterService: ClusterService
+    private readonly _presetDialogService: PresetDialogService
   ) {
     super();
   }
@@ -79,6 +79,6 @@ export class PresetProviderStepComponent extends BaseFormValidator implements On
     this.form
       .get(Controls.Provider)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(provider => (this._clusterService.provider = provider));
+      .subscribe(provider => (this._presetDialogService.provider = provider));
   }
 }

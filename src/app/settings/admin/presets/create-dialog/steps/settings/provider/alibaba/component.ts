@@ -9,46 +9,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnInit} from '@angular/core';
-import {
-  ControlValueAccessor,
-  FormBuilder,
-  FormGroup,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validator,
-} from '@angular/forms';
+import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/create-dialog/steps/service';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {takeUntil} from 'rxjs/operators';
+import {merge} from 'rxjs';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
-enum Controls {
-  Settings = 'Settings',
+export enum Controls {
+  AccessKeyID = 'accessKeyId',
+  AccessKeySecret = 'secretAccessKey',
 }
 
 @Component({
-  selector: 'km-preset-settings-step',
+  selector: 'km-alibaba-settings',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PresetSettingsStepComponent),
+      useExisting: forwardRef(() => AlibabaSettingsComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PresetSettingsStepComponent),
+      useExisting: forwardRef(() => AlibabaSettingsComponent),
       multi: true,
     },
   ],
 })
-export class PresetSettingsStepComponent extends BaseFormValidator implements OnInit, ControlValueAccessor, Validator {
-  form: FormGroup;
-  provider: NodeProvider;
-
-  readonly Providers = NodeProvider;
+export class AlibabaSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
   constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
@@ -57,11 +46,20 @@ export class PresetSettingsStepComponent extends BaseFormValidator implements On
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Settings]: this._builder.control(''),
+      [Controls.AccessKeyID]: this._builder.control('', Validators.required),
+      [Controls.AccessKeySecret]: this._builder.control('', Validators.required),
     });
 
-    this._presetDialogService.providerChanges
+    this._presetDialogService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.reset());
+
+    merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.AccessKeySecret).valueChanges)
+      .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(provider => (this.provider = provider));
+      .subscribe(_ => {});
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 }
