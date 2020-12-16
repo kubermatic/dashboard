@@ -25,8 +25,8 @@ limitations under the License.
        matSort
        matSortActive="name"
        matSortDirection="asc"
-       [dataSource]="getDataSourceCluster()"
-       [hidden]="isLoadingData(clusterBindings)">>
+       [dataSource]="clusterBindingsDataSource"
+       [hidden]="isLoadingData(clusterBindingsDataSource.data)">>
   <ng-container matColumnDef="kind">
     <th mat-header-cell
         *matHeaderCellDef
@@ -86,19 +86,19 @@ limitations under the License.
 
   <tr mat-header-row
       class="km-header-row"
-      *matHeaderRowDef="displayedColumnsCluster"></tr>
+      *matHeaderRowDef="clusterBindingsDisplayedColumns"></tr>
   <tr mat-row
-      *matRowDef="let row; columns: displayedColumnsCluster"
+      *matRowDef="let row; columns: clusterBindingsDisplayedColumns"
       class="km-mat-row"
       [attr.id]="row.id"></tr>
 </table>
 
 <div class="km-row km-empty-list-msg"
-     *ngIf="hasNoData(clusterBindings)">
+     *ngIf="hasNoData(clusterBindingsDataSource.data)">
   No bindings available.
 </div>
 
-<km-loader *ngIf="isLoadingData(clusterBindings)"></km-loader>
+<km-loader *ngIf="isLoadingData(clusterBindingsDataSource.data)"></km-loader>
 
 <h2>Namespace</h2>
 <table class="km-table"
@@ -106,8 +106,8 @@ limitations under the License.
        matSort
        matSortActive="name"
        matSortDirection="asc"
-       [dataSource]="getDataSourceNamespace()"
-       [hidden]="isLoadingData(bindings)">
+       [dataSource]="bindingsDataSource"
+       [hidden]="isLoadingData(bindingsDataSource.data)">
   <ng-container matColumnDef="kind">
     <th mat-header-cell
         *matHeaderCellDef
@@ -175,16 +175,16 @@ limitations under the License.
 
   <tr mat-header-row
       class="km-header-row"
-      *matHeaderRowDef="displayedColumnsNamespace"></tr>
+      *matHeaderRowDef="bindingsDisplayedColumns"></tr>
   <tr mat-row
-      *matRowDef="let row; columns: displayedColumnsNamespace"
+      *matRowDef="let row; columns: bindingsDisplayedColumns"
       class="km-mat-row"
       [attr.id]="row.id"></tr>
 </table>
 
 <div class="km-row km-empty-list-msg"
-     *ngIf="hasNoData(bindings)">
+     *ngIf="hasNoData(bindingsDataSource.data)">
   No bindings available.
 </div>
 
-<km-loader *ngIf="isLoadingData(bindings)"></km-loader>
+<km-loader *ngIf="isLoadingData(bindingsDataSource.data)"></km-loader>
