@@ -97,7 +97,7 @@ limitations under the License.
   No bindings available.
 </div>
 
-<km-loader [isVisible]="isLoadingData(clusterBindings)"></km-loader>
+<km-loader *ngIf="isLoadingData(clusterBindings)"></km-loader>
 
 <h2>Namespace</h2>
 <table class="km-table"
@@ -186,4 +186,4 @@ limitations under the License.
   No bindings available.
 </div>
 
-<km-loader [isVisible]="isLoadingData(bindings)"></km-loader>
+<km-loader *ngIf="isLoadingData(bindings)"></km-loader>
