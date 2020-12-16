@@ -9,20 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class SimplePresetList {
-  names: string[] = [];
-
-  constructor(...names: string[]) {
-    this.names = names;
+@mixin theme-preset-list-component($colors) {
+  .mat-card-content {
+    button {
+      color: inherit;
+    }
   }
-}
-
-export class PresetList {
-  items: Preset[];
-}
-
-export class Preset {
-  name: string;
-  enabled: boolean;
-  providers: string[];
 }

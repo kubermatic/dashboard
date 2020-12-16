@@ -11,10 +11,10 @@
 
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
-import {EMPTY, Observable} from 'rxjs';
 import {environment} from '@environments/environment';
-import {PresetList} from '@shared/entity/preset';
+import {PresetList, SimplePresetList} from '@shared/entity/preset';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {EMPTY, Observable} from 'rxjs';
 import {Alibaba} from './provider/alibaba';
 import {AWS} from './provider/aws';
 import {Azure} from './provider/azure';
@@ -32,17 +32,17 @@ export class PresetsService {
   readonly presetStatusChanges = new EventEmitter<boolean>();
   readonly presetChanges = new EventEmitter<string>();
 
+  constructor(private readonly _http: HttpClient) {}
+
   private _preset: string;
 
-  constructor(private readonly _http: HttpClient) {}
+  get preset(): string {
+    return this._preset;
+  }
 
   set preset(preset: string) {
     this._preset = preset;
     this.presetChanges.next(preset);
-  }
-
-  get preset(): string {
-    return this._preset;
   }
 
   enablePresets(enable: boolean): void {
@@ -83,12 +83,22 @@ export class PresetsService {
     }
   }
 
-  presets(provider: NodeProvider, datacenter: string): Observable<PresetList> {
+  simplePresets(provider: NodeProvider, datacenter: string): Observable<SimplePresetList> {
     if (!provider || !datacenter) {
       return EMPTY;
     }
 
     const url = `${environment.restRoot}/providers/${provider}/presets/credentials?datacenter=${datacenter}`;
+    return this._http.get<SimplePresetList>(url);
+  }
+
+  presets(provider?: NodeProvider, datacenter?: string, disabled?: boolean): Observable<PresetList> {
+    if (!provider) {
+      const url = `${environment.newRestRoot}/presets?disabled=${disabled}`;
+      return this._http.get<PresetList>(url);
+    }
+
+    const url = `${environment.newRestRoot}/providers/${provider}/presets?datacenter=${datacenter}&disabled=${disabled}`;
     return this._http.get<PresetList>(url);
   }
 }

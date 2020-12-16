@@ -9,54 +9,60 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, Input, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {merge} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {Component, forwardRef, OnInit} from '@angular/core';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  Validator,
+} from '@angular/forms';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {ClusterService} from '@shared/services/cluster.service';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {takeUntil} from 'rxjs/operators';
 
 enum Controls {
-  ProviderBasic = 'providerBasic',
+  Basic = 'basic',
+  Extended = 'extended',
 }
 
 @Component({
-  selector: 'km-wizard-provider-basic',
+  selector: 'km-preset-settings-step',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ProviderBasicComponent),
+      useExisting: forwardRef(() => PresetSettingsStepComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => ProviderBasicComponent),
+      useExisting: forwardRef(() => PresetSettingsStepComponent),
       multi: true,
     },
   ],
 })
-export class ProviderBasicComponent extends BaseFormValidator implements OnInit {
-  @Input() provider: NodeProvider;
+export class PresetSettingsStepComponent extends BaseFormValidator implements OnInit, ControlValueAccessor, Validator {
+  form: FormGroup;
+  provider: NodeProvider;
 
-  readonly Providers = NodeProvider;
-  readonly Controls = Controls;
+  readonly controls = Controls;
 
   constructor(private readonly _builder: FormBuilder, private readonly _clusterService: ClusterService) {
-    super('Provider Basic');
+    super();
   }
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.ProviderBasic]: this._builder.control(''),
+      [Controls.Basic]: this._builder.control(''),
+      [Controls.Extended]: this._builder.control(''),
     });
 
-    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
+    this._clusterService.providerChanges
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
-        this.form.removeControl(Controls.ProviderBasic);
-        this.form.addControl(Controls.ProviderBasic, this._builder.control(''));
-      });
+      .subscribe(provider => (this.provider = provider));
   }
 }

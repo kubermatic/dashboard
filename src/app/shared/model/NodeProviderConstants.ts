@@ -59,6 +59,11 @@ export namespace NodeProviderConstants {
     return PROVIDER_DISPLAY_NAMES.get(provider);
   }
 
+  export function newNodeProvider(provider: string): NodeProvider {
+    const result = Object.values(NodeProvider).find(np => np === provider);
+    return result ? result : NodeProvider.NONE;
+  }
+
   export function getOperatingSystemSpecName(spec: NodeSpec) {
     if (spec.operatingSystem.ubuntu) {
       return OperatingSystem.Ubuntu;

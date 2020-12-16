@@ -10,19 +10,23 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
-
-import {SharedModule} from '../../shared/shared.module';
-
-import {AdminSettingsComponent} from './component';
-import {AdminSettingsRoutingModule} from './routing';
+import {PresetListComponent} from '@app/settings/admin/presets/component';
+import {CreatePresetDialogComponent} from '@app/settings/admin/presets/create-dialog/component';
+import {PresetStepComponent} from '@app/settings/admin/presets/create-dialog/steps/preset/component';
+import {PresetProviderStepComponent} from '@app/settings/admin/presets/create-dialog/steps/provider/component';
+import {PresetSettingsStepComponent} from '@app/settings/admin/presets/create-dialog/steps/settings/component';
+import {WizardModule} from '@app/wizard/module';
+import {SharedModule} from '@shared/shared.module';
 import {AddAdminDialogComponent} from './admins/add-admin-dialog/component';
 import {AdminsComponent} from './admins/component';
+import {AdminSettingsComponent} from './component';
 import {CustomLinksFormComponent} from './custom-link-form/component';
-import {DatacenterDataDialogComponent} from './dynamic-datacenters/datacenter-data-dialog/component';
 import {DynamicDatacentersComponent} from './dynamic-datacenters/component';
+import {DatacenterDataDialogComponent} from './dynamic-datacenters/datacenter-data-dialog/component';
+import {AdminSettingsRoutingModule} from './routing';
 
 @NgModule({
-  imports: [SharedModule, AdminSettingsRoutingModule],
+  imports: [SharedModule, AdminSettingsRoutingModule, WizardModule],
   declarations: [
     AdminSettingsComponent,
     AddAdminDialogComponent,
@@ -30,6 +34,11 @@ import {DynamicDatacentersComponent} from './dynamic-datacenters/component';
     DatacenterDataDialogComponent,
     DynamicDatacentersComponent,
     AdminsComponent,
+    PresetListComponent,
+    CreatePresetDialogComponent,
+    PresetStepComponent,
+    PresetProviderStepComponent,
+    PresetSettingsStepComponent,
   ],
 })
 export class AdminSettingsModule {}

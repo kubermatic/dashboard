@@ -13,7 +13,7 @@ import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {Cluster} from '@shared/entity/cluster';
-import {PresetList} from '@shared/entity/preset';
+import {SimplePresetList} from '@shared/entity/preset';
 import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
@@ -47,7 +47,7 @@ export enum PresetsState {
   ],
 })
 export class PresetsComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  presetList = new PresetList();
+  presetList = new SimplePresetList();
   presetsLoaded = false;
 
   readonly Controls = Controls;
@@ -84,7 +84,7 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
     this._clusterService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.reset());
 
     this._clusterService.datacenterChanges
-      .pipe(switchMap(dc => this._presets.presets(this._clusterService.provider, dc)))
+      .pipe(switchMap(dc => this._presets.simplePresets(this._clusterService.provider, dc)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(presetList => {
         this.reset();

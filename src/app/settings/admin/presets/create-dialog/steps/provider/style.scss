@@ -9,20 +9,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class SimplePresetList {
-  names: string[] = [];
+@import 'variables';
+@import 'mixins';
 
-  constructor(...names: string[]) {
-    this.names = names;
+.km-provider-logo {
+  background-position: center;
+}
+
+.mat-button-toggle {
+  .mat-button-toggle-button {
+    @include size(150px, 100%);
   }
 }
 
-export class PresetList {
-  items: Preset[];
-}
-
-export class Preset {
-  name: string;
-  enabled: boolean;
-  providers: string[];
+.mat-button-toggle-group[group='providerGroup'] {
+  margin-bottom: 0;
+  padding-bottom: $content-padding;
 }

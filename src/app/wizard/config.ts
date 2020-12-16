@@ -13,6 +13,10 @@ export class WizardStep {
   name: string;
   enabled: boolean;
 
+  get id(): string {
+    return this.name.toLowerCase().replace(' ', '-');
+  }
+
   static newWizardStep(name: string, enabled = true): WizardStep {
     return {
       name,
