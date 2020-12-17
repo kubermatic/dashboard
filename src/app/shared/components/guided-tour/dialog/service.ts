@@ -15,41 +15,63 @@ import {ComponentPortal, PortalInjector} from '@angular/cdk/portal';
 import {DialogComponent} from './component';
 import {DialogRef} from './overlay-ref';
 import {DialogConfig, DEFAULT_CONFIG} from './entity';
+import {DialogHelperService} from './helper.service';
 import {GuidedTourStep, STEP_DATA, STEP_ORDER} from '../entity';
 
 @Injectable()
 export class DialogService {
-  private _steps: GuidedTourStep[];
   private _tempSteps: GuidedTourStep[] = [];
-  private _currentStepIndex = 0;
   private _renderer: Renderer2;
-  private _tourInProgress = false;
 
   dialogRef: DialogRef;
   targetBackdrop: Element;
   mainElement = document.body.querySelector('.km-main');
 
-  constructor(private _injector: Injector, private _overlay: Overlay, rendererFactory: RendererFactory2) {
+  constructor(
+    private _injector: Injector,
+    private _overlay: Overlay,
+    rendererFactory: RendererFactory2,
+    private _dialogHelperService: DialogHelperService
+  ) {
     this._renderer = rendererFactory.createRenderer(null, null);
   }
 
-  isTourInProgress(): boolean {
-    return this._tourInProgress;
+  get steps(): GuidedTourStep[] {
+    return this._dialogHelperService.getSteps();
+  }
+
+  get currentStepIndex(): number {
+    return this._dialogHelperService.getCurrentStepIndex();
+  }
+
+  get isTourInProgress(): boolean {
+    return this._dialogHelperService.isTourInProgress();
+  }
+
+  startTour(): void {
+    this._dialogHelperService.resetTour();
+    this.showDialog();
   }
 
   showDialog(): void {
-    this._tourInProgress = true;
+    this._dialogHelperService.setTourInProgress(true);
 
-    this._steps = [];
+    this._dialogHelperService.setSteps([]);
     const stepIds = STEP_ORDER;
+    const steps = [];
     stepIds.forEach(stepId => {
       const stepItem = this._tempSteps.find(item => item.id === stepId);
-      this._steps.push(stepItem);
+      steps.push(stepItem);
     });
+    this._dialogHelperService.setSteps(steps);
 
-    if (this._tourInProgress) {
+    if (this.isTourInProgress) {
       this.open();
     }
+  }
+
+  close(): void {
+    this.dialogRef.close();
   }
 
   open(config: DialogConfig = {}): DialogRef {
@@ -67,7 +89,7 @@ export class DialogService {
 
     this._renderer.addClass(nativeElement, 'highlight');
 
-    if (this._steps[this._currentStepIndex].withBackdrop) {
+    if (this.steps[this.currentStepIndex].withBackdrop) {
       this._createBackdrop();
     }
 
@@ -85,7 +107,7 @@ export class DialogService {
   }
 
   showNextStep(): void {
-    this._currentStepIndex += 1;
+    this._dialogHelperService.setCurrentStepIndex(this.currentStepIndex + 1);
     this.dialogRef.close();
     this._renderer.removeChild(this.mainElement, this.targetBackdrop);
 
@@ -95,16 +117,17 @@ export class DialogService {
       } catch (error) {
         this.dialogRef.close();
         this._renderer.removeChild(this.mainElement, this.targetBackdrop);
+        this._dialogHelperService.resetTour();
       }
     }, 1);
   }
 
   private _getNativeElement(): Element {
     let nativeElement: Element;
-    if (this._steps[this._currentStepIndex].elementRef.nativeElement.getBoundingClientRect) {
-      nativeElement = this._steps[this._currentStepIndex].elementRef.nativeElement;
+    if (this.steps[this.currentStepIndex].elementRef.nativeElement.getBoundingClientRect) {
+      nativeElement = this.steps[this.currentStepIndex].elementRef.nativeElement;
     } else {
-      nativeElement = this._steps[this._currentStepIndex].elementRef.nativeElement._elementRef.nativeElement;
+      nativeElement = this.steps[this.currentStepIndex].elementRef.nativeElement._elementRef.nativeElement;
     }
 
     return nativeElement;
@@ -125,14 +148,14 @@ export class DialogService {
   private _createInjector(dialogRef: DialogRef): PortalInjector {
     const injectionTokens = new WeakMap();
     injectionTokens.set(DialogRef, dialogRef);
-    injectionTokens.set(STEP_DATA, this._steps[this._currentStepIndex]);
+    injectionTokens.set(STEP_DATA, this.steps[this.currentStepIndex]);
     return new PortalInjector(this._injector, injectionTokens);
   }
 
   private _getOverlayConfig(config: DialogConfig): OverlayConfig {
     const positionStrategy = this._overlay
       .position()
-      .flexibleConnectedTo(this._steps[this._currentStepIndex].targetViewContainer.element)
+      .flexibleConnectedTo(this.steps[this.currentStepIndex].targetViewContainer.element)
       .withPositions(this._getPositions());
 
     const overlayConfig = new OverlayConfig({

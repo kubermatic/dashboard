@@ -11,15 +11,17 @@
 
 import {Component} from '@angular/core';
 import {DialogRef} from '../../dialog/overlay-ref';
+import {DialogHelperService} from '../../dialog/helper.service';
 
 @Component({
   selector: 'km-gt-add-project-dialog',
   templateUrl: 'template.html',
 })
 export class GTAddProjectDialogComponent {
-  constructor(public dialogRef: DialogRef) {}
+  constructor(public dialogRef: DialogRef, private _dialogHelperService: DialogHelperService) {}
 
   onClose(): void {
     this.dialogRef.close();
+    this._dialogHelperService.resetTour();
   }
 }

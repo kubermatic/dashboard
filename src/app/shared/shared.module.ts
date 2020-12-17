@@ -93,6 +93,7 @@ import {GuidedTourDirective} from './components/guided-tour/directive';
 import {GTAddProjectBtnComponent} from './components/guided-tour/steps/add-project-btn/component';
 import {GTAddProjectDialogComponent} from './components/guided-tour/steps/add-project-dialog/component';
 import {GTProjectItemComponent} from './components/guided-tour/steps/project-item/component';
+import {DialogHelperService} from './components/guided-tour/dialog/helper.service';
 
 const modules: any[] = [
   CommonModule,
@@ -179,7 +180,7 @@ const components: any[] = [
   GTProjectItemComponent,
 ];
 
-const services: any[] = [ClusterService, EndOfLifeService, DialogService];
+const services: any[] = [ClusterService, EndOfLifeService, DialogService, DialogHelperService];
 
 const directives: any[] = [AutofocusDirective, OptionDirective, GuidedTourDirective];
 

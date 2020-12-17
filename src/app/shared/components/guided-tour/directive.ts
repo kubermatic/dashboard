@@ -11,9 +11,9 @@
 
 import {AfterViewInit, Directive, Input, OnDestroy, ViewContainerRef, ElementRef, HostListener} from '@angular/core';
 import {Subject} from 'rxjs';
-
 import {GuidedTourStep} from './entity';
 import {DialogService} from './dialog/service';
+import {DialogHelperService} from './dialog/helper.service';
 
 @Directive({
   selector: 'kmGuidedTour, [kmGuidedTour]',
@@ -26,7 +26,7 @@ export class GuidedTourDirective implements AfterViewInit, OnDestroy {
   @HostListener('click', ['$event'])
   onClick(event) {
     if (
-      !!this._dialogService.isTourInProgress() &&
+      !!this._dialogHelperService.isTourInProgress() &&
       (event.target.id === this.idToListen || event.target.parentElement.id === this.idToListen)
     ) {
       this._dialogService.showNextStep();
@@ -38,6 +38,7 @@ export class GuidedTourDirective implements AfterViewInit, OnDestroy {
 
   constructor(
     private readonly _dialogService: DialogService,
+    private readonly _dialogHelperService: DialogHelperService,
     private readonly _viewContainerRef: ViewContainerRef,
     private _elementRef: ElementRef
   ) {
