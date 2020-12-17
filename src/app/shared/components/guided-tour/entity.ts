@@ -16,6 +16,7 @@ import {GuidedTourID} from './utils';
 export class GuidedTourStep {
   id: string;
   withBackdrop: boolean;
+  position: string;
   targetViewContainer: ViewContainerRef;
   elementRef: ElementRef;
   stepInstance: DialogComponent;

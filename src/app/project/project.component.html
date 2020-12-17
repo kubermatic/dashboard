@@ -37,7 +37,8 @@ limitations under the License.
             [disabled]="isProjectCreationRestricted()"
             (click)="addProject()"
             [kmGuidedTour]="GuidedTourID.AddProjectBtn"
-            kmGuidedTourIDToListen="km-add-project-top-btn">
+            kmGuidedTourIDToListen="km-add-project-top-btn"
+            kmGuidedTourPosition="bottom">
       Add Project
     </button>
   </div>
@@ -174,7 +175,9 @@ limitations under the License.
             *matRowDef="let row; columns: displayedColumns"
             class="km-mat-row"
             [ngClass]="{'km-pointer': isProjectActive(row)}"
-            (click)="selectProject(row)"></tr>
+            (click)="selectProject(row)"
+            [kmGuidedTour]="GuidedTourID.ProjectItem"
+            kmGuidedTourPosition="bottom"></tr>
       </table>
 
       <ng-container *ngIf="!projects || projects.length === 0">
@@ -206,7 +209,8 @@ limitations under the License.
 
     <mat-card *ngFor="let project of projects"
               (click)="selectProject(project)"
-              [kmGuidedTour]="GuidedTourID.ProjectItem">
+              [kmGuidedTour]="GuidedTourID.ProjectItem"
+              kmGuidedTourPosition="bottom">
       <mat-card-header>
         <i mat-card-avatar
            [matTooltip]="project.status"

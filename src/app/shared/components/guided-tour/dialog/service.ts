@@ -17,6 +17,7 @@ import {DialogRef} from './overlay-ref';
 import {DialogConfig, DEFAULT_CONFIG} from './entity';
 import {DialogHelperService} from './helper.service';
 import {GuidedTourStep, STEP_DATA, STEP_ORDER} from '../entity';
+import {POSITION_MAP} from '../utils';
 
 @Injectable()
 export class DialogService {
@@ -74,7 +75,7 @@ export class DialogService {
     this.dialogRef.close();
   }
 
-  open(config: DialogConfig = {}): DialogRef {
+  open(config: DialogConfig = {}): void {
     const nativeElement = this._getNativeElement();
     const dialogConfig = {...DEFAULT_CONFIG, ...config};
     const overlayRef = this._createOverlay(dialogConfig);
@@ -92,8 +93,6 @@ export class DialogService {
     if (this.steps[this.currentStepIndex].withBackdrop) {
       this._createBackdrop();
     }
-
-    return this.dialogRef;
   }
 
   addStep(stepToAdd: GuidedTourStep): void {
@@ -169,10 +168,18 @@ export class DialogService {
   }
 
   private _getPositions(): ConnectionPositionPair[] {
-    return [
-      new ConnectionPositionPair({originX: 'start', originY: 'bottom'}, {overlayX: 'start', overlayY: 'top'}),
-      new ConnectionPositionPair({originX: 'start', originY: 'top'}, {overlayX: 'start', overlayY: 'bottom'}),
-    ];
+    switch (this.steps[this.currentStepIndex].position) {
+      case 'top':
+        return [POSITION_MAP.top];
+      case 'bottom':
+        return [POSITION_MAP.bottom];
+      case 'left':
+        return [POSITION_MAP.left];
+      case 'right':
+        return [POSITION_MAP.right];
+      default:
+        return [POSITION_MAP.bottom];
+    }
   }
 
   private _createBackdrop(): void {

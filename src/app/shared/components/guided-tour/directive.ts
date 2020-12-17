@@ -22,6 +22,7 @@ export class GuidedTourDirective implements AfterViewInit, OnDestroy {
   @Input('kmGuidedTour') id: string;
   @Input('kmGuidedTourWithBackdrop') withBackdrop = true;
   @Input('kmGuidedTourIDToListen') idToListen: string;
+  @Input('kmGuidedTourPosition') position = 'bottom';
 
   @HostListener('click', ['$event'])
   onClick(event) {
@@ -50,6 +51,7 @@ export class GuidedTourDirective implements AfterViewInit, OnDestroy {
     this._step.elementRef = this._elementRef;
     this._step.id = this.id;
     this._step.withBackdrop = this.withBackdrop;
+    this._step.position = this.position;
 
     this._dialogService.addStep(this._step);
   }
