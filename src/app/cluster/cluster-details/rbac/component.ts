@@ -20,10 +20,11 @@ import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '@sha
 import * as _ from 'lodash';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AddBindingComponent} from './add-binding/component';
-import {combineLatest, iif, of, Subject} from 'rxjs';
+import {combineLatest, iif, merge, of, Subject, timer} from 'rxjs';
 import {ClusterService} from '@core/services/cluster/service';
 import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
 import {Health} from '@shared/entity/health';
+import {AppConfigService} from '@app/config.service';
 
 @Component({
   selector: 'km-rbac',
@@ -38,19 +39,23 @@ export class RBACComponent implements OnInit, OnDestroy {
   clusterBindingsDisplayedColumns: string[] = ['kind', 'name', 'clusterRole', 'actions'];
   bindingsDataSource = new MatTableDataSource<SimpleBinding>();
   bindingsDisplayedColumns: string[] = ['kind', 'name', 'clusterRole', 'namespace', 'actions'];
+  private readonly _refreshTime = 30; // In seconds.
+  private readonly _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
+  private _refresh = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 
   constructor(
     private readonly _clusterService: ClusterService,
     private readonly _rbacService: RBACService,
     private readonly _matDialog: MatDialog,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private readonly _appConfigService: AppConfigService
   ) {}
 
   ngOnInit(): void {
-    this._clusterService
-      .health(this.projectID, this.cluster.id)
+    merge(this._refreshTimer$, this._refresh)
       .pipe(
+        switchMap(_ => this._clusterService.health(this.projectID, this.cluster.id)),
         tap((health: Health) => (this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health))),
         switchMap(_ =>
           combineLatest([
@@ -113,6 +118,10 @@ export class RBACComponent implements OnInit, OnDestroy {
     const modal = this._matDialog.open(AddBindingComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.projectID = this.projectID;
+    modal
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => this._refresh.next());
   }
 
   isLoadingData(data: SimpleBinding[] | SimpleClusterBinding[]): boolean {
@@ -156,6 +165,7 @@ export class RBACComponent implements OnInit, OnDestroy {
       )
       .pipe(take(1))
       .subscribe(() => {
+        this._refresh.next();
         this._notificationService.success(
           `The <strong>${element.name}</strong> ${element.kind} was removed from the binding`
         );
@@ -196,6 +206,7 @@ export class RBACComponent implements OnInit, OnDestroy {
       )
       .pipe(take(1))
       .subscribe(() => {
+        this._refresh.next();
         this._notificationService.success(
           `The <strong>${element.name}</strong> ${element.kind} was removed from the binding`
         );
