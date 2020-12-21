@@ -12,33 +12,39 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/create-dialog/steps/service';
-import {AlibabaPresetSpec} from '@shared/entity/preset';
+import {AzurePresetSpec} from '@shared/entity/preset';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {merge} from 'rxjs';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 export enum Controls {
-  AccessKeyID = 'accessKeyId',
-  AccessKeySecret = 'secretAccessKey',
+  TenantID = 'tenantID',
+  SubscriptionID = 'subscriptionID',
+  ClientID = 'clientID',
+  ClientSecret = 'clientSecret',
+  ResourceGroup = 'resourceGroup',
+  VNet = 'vnet',
+  Subnet = 'subnet',
+  RouteTable = 'routeTable',
+  SecurityGroup = 'securityGroup',
 }
 
 @Component({
-  selector: 'km-alibaba-settings',
+  selector: 'km-azure-settings',
   templateUrl: './template.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AlibabaSettingsComponent),
+      useExisting: forwardRef(() => AzureSettingsComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => AlibabaSettingsComponent),
+      useExisting: forwardRef(() => AzureSettingsComponent),
       multi: true,
     },
   ],
 })
-export class AlibabaSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class AzureSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
   constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
@@ -47,13 +53,20 @@ export class AlibabaSettingsComponent extends BaseFormValidator implements OnIni
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.AccessKeyID]: this._builder.control('', Validators.required),
-      [Controls.AccessKeySecret]: this._builder.control('', Validators.required),
+      [Controls.TenantID]: this._builder.control('', Validators.required),
+      [Controls.SubscriptionID]: this._builder.control('', Validators.required),
+      [Controls.ClientID]: this._builder.control('', Validators.required),
+      [Controls.ClientSecret]: this._builder.control('', Validators.required),
+      [Controls.ResourceGroup]: this._builder.control(''),
+      [Controls.VNet]: this._builder.control(''),
+      [Controls.Subnet]: this._builder.control(''),
+      [Controls.RouteTable]: this._builder.control(''),
+      [Controls.SecurityGroup]: this._builder.control(''),
     });
 
     this._presetDialogService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.reset());
 
-    merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.AccessKeySecret).valueChanges)
+    this.form.valueChanges
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._update());
@@ -65,9 +78,16 @@ export class AlibabaSettingsComponent extends BaseFormValidator implements OnIni
   }
 
   private _update(): void {
-    this._presetDialogService.preset.spec.alibaba = {
-      accessKeyId: this.form.get(Controls.AccessKeyID).value,
-      accessKeySecret: this.form.get(Controls.AccessKeySecret).value,
-    } as AlibabaPresetSpec;
+    this._presetDialogService.preset.spec.azure = {
+      tenantID: this.form.get(Controls.TenantID).value,
+      subscriptionID: this.form.get(Controls.SubscriptionID).value,
+      clientID: this.form.get(Controls.ClientID).value,
+      clientSecret: this.form.get(Controls.ClientSecret).value,
+      resourceGroup: this.form.get(Controls.ResourceGroup).value,
+      vnet: this.form.get(Controls.VNet).value,
+      subnet: this.form.get(Controls.Subnet).value,
+      routeTable: this.form.get(Controls.RouteTable).value,
+      securityGroup: this.form.get(Controls.SecurityGroup).value,
+    } as AzurePresetSpec;
   }
 }

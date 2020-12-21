@@ -11,7 +11,7 @@
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MatStepper} from '@angular/material/stepper';
 import {Subject} from 'rxjs';
 
@@ -41,7 +41,7 @@ export class CreatePresetDialogComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(
-    private readonly _matDialogRef: MatDialogRef<CreatePresetDialogComponent>,
+    // private readonly _matDialogRef: MatDialogRef<CreatePresetDialogComponent>,
     private readonly _formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: CreatePresetDialogData
   ) {}

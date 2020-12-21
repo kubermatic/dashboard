@@ -14,28 +14,33 @@ limitations under the License.
       fxLayout="column"
       fxLayoutGap="16px">
   <mat-form-field fxFlex>
-    <mat-label>Access Key ID</mat-label>
+    <mat-label>Service Account</mat-label>
     <input matInput
-           [formControlName]="Controls.AccessKeyID"
-           [name]="Controls.AccessKeyID"
-           type="text"
+           [formControlName]="Controls.ServiceAccount"
+           [name]="Controls.ServiceAccount"
+           type="password"
            autocomplete="off"
            required>
-    <mat-error *ngIf="form.get(Controls.AccessKeyID).hasError('required')">
-      Access Key ID is <strong>required</strong>.
+    <mat-error *ngIf="form.get(Controls.ServiceAccount).hasError('required')">
+      Service Account is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>Access Key Secret</mat-label>
+    <mat-label>Network</mat-label>
     <input matInput
-           [formControlName]="Controls.AccessKeySecret"
-           [name]="Controls.AccessKeySecret"
-           type="password"
-           autocomplete="off"
-           required>
-    <mat-error *ngIf="form.get(Controls.AccessKeySecret).hasError('required')">
-      Access Key Secret is <strong>required</strong>.
-    </mat-error>
+           [formControlName]="Controls.Network"
+           [name]="Controls.Network"
+           type="text"
+           autocomplete="off">
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Subnetwork</mat-label>
+    <input matInput
+           [formControlName]="Controls.Subnetwork"
+           [name]="Controls.Subnetwork"
+           type="text"
+           autocomplete="off">
   </mat-form-field>
 </form>

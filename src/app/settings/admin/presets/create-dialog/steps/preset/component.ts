@@ -14,13 +14,15 @@ import {
   ControlValueAccessor,
   FormBuilder,
   FormControl,
-  FormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   Validator,
   Validators,
 } from '@angular/forms';
+import {PresetDialogService} from '@app/settings/admin/presets/create-dialog/steps/service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {merge} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 enum Controls {
   Name = 'name',
@@ -45,11 +47,9 @@ enum Controls {
   ],
 })
 export class PresetStepComponent extends BaseFormValidator implements OnInit, ControlValueAccessor, Validator {
-  form: FormGroup;
-
   readonly controls = Controls;
 
-  constructor(private readonly _builder: FormBuilder) {
+  constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
     super();
   }
 
@@ -59,5 +59,19 @@ export class PresetStepComponent extends BaseFormValidator implements OnInit, Co
       [Controls.Domain]: new FormControl(''),
       [Controls.Disable]: new FormControl(''),
     });
+
+    merge(
+      this.form.get(Controls.Name).valueChanges,
+      this.form.get(Controls.Domain).valueChanges,
+      this.form.get(Controls.Disable).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this._update());
+  }
+
+  private _update(): void {
+    this._presetDialogService.preset.metadata.name = this.form.get(Controls.Name).value;
+    this._presetDialogService.preset.spec.requiredEmailDomain = this.form.get(Controls.Domain).value;
+    this._presetDialogService.preset.spec.enabled = !this.form.get(Controls.Disable).value;
   }
 }

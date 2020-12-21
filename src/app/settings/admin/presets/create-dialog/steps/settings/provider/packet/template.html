@@ -14,28 +14,36 @@ limitations under the License.
       fxLayout="column"
       fxLayoutGap="16px">
   <mat-form-field fxFlex>
-    <mat-label>Access Key ID</mat-label>
+    <mat-label>Project ID</mat-label>
     <input matInput
-           [formControlName]="Controls.AccessKeyID"
-           [name]="Controls.AccessKeyID"
+           [formControlName]="Controls.ProjectID"
+           [name]="Controls.ProjectID"
            type="text"
            autocomplete="off"
            required>
-    <mat-error *ngIf="form.get(Controls.AccessKeyID).hasError('required')">
-      Access Key ID is <strong>required</strong>.
+    <mat-error *ngIf="form.get(Controls.ProjectID).hasError('required')">
+      Project ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>Access Key Secret</mat-label>
+    <mat-label>API Key</mat-label>
     <input matInput
-           [formControlName]="Controls.AccessKeySecret"
-           [name]="Controls.AccessKeySecret"
+           [formControlName]="Controls.ApiKey"
+           [name]="Controls.ApiKey"
            type="password"
            autocomplete="off"
            required>
-    <mat-error *ngIf="form.get(Controls.AccessKeySecret).hasError('required')">
-      Access Key Secret is <strong>required</strong>.
+    <mat-error *ngIf="form.get(Controls.ApiKey).hasError('required')">
+      API Key is <strong>required</strong>.
     </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Billing Cycle</mat-label>
+    <mat-select [formControlName]="Controls.BillingCycle">
+      <mat-option value="hourly">Hourly</mat-option>
+      <mat-option value="daily">Daily</mat-option>
+    </mat-select>
   </mat-form-field>
 </form>

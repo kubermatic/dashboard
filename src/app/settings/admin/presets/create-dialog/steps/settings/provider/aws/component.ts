@@ -12,33 +12,37 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/create-dialog/steps/service';
-import {AlibabaPresetSpec} from '@shared/entity/preset';
+import {AWSPresetSpec} from '@shared/entity/preset';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {merge} from 'rxjs';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 export enum Controls {
-  AccessKeyID = 'accessKeyId',
-  AccessKeySecret = 'secretAccessKey',
+  AccessKeyID = 'accessKeyID',
+  SecretAccessKey = 'secretAccessKey',
+  VpcID = 'vpcID',
+  RouteTableID = 'routeTableID',
+  InstanceProfileName = 'instanceProfileName',
+  SecurityGroupID = 'securityGroupID',
+  RoleARN = 'roleARN',
 }
 
 @Component({
-  selector: 'km-alibaba-settings',
+  selector: 'km-aws-settings',
   templateUrl: './template.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AlibabaSettingsComponent),
+      useExisting: forwardRef(() => AWSSettingsComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => AlibabaSettingsComponent),
+      useExisting: forwardRef(() => AWSSettingsComponent),
       multi: true,
     },
   ],
 })
-export class AlibabaSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class AWSSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
   constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
@@ -48,12 +52,17 @@ export class AlibabaSettingsComponent extends BaseFormValidator implements OnIni
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.AccessKeyID]: this._builder.control('', Validators.required),
-      [Controls.AccessKeySecret]: this._builder.control('', Validators.required),
+      [Controls.SecretAccessKey]: this._builder.control('', Validators.required),
+      [Controls.VpcID]: this._builder.control(''),
+      [Controls.RouteTableID]: this._builder.control(''),
+      [Controls.InstanceProfileName]: this._builder.control(''),
+      [Controls.SecurityGroupID]: this._builder.control(''),
+      [Controls.RoleARN]: this._builder.control(''),
     });
 
     this._presetDialogService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.reset());
 
-    merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.AccessKeySecret).valueChanges)
+    this.form.valueChanges
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._update());
@@ -65,9 +74,14 @@ export class AlibabaSettingsComponent extends BaseFormValidator implements OnIni
   }
 
   private _update(): void {
-    this._presetDialogService.preset.spec.alibaba = {
-      accessKeyId: this.form.get(Controls.AccessKeyID).value,
-      accessKeySecret: this.form.get(Controls.AccessKeySecret).value,
-    } as AlibabaPresetSpec;
+    this._presetDialogService.preset.spec.aws = {
+      accessKeyID: this.form.get(Controls.AccessKeyID).value,
+      secretAccessKey: this.form.get(Controls.SecretAccessKey).value,
+      vpcID: this.form.get(Controls.VpcID).value,
+      routeTableID: this.form.get(Controls.RouteTableID).value,
+      instanceProfileName: this.form.get(Controls.InstanceProfileName).value,
+      securityGroupID: this.form.get(Controls.SecurityGroupID).value,
+      roleARN: this.form.get(Controls.RoleARN).value,
+    } as AWSPresetSpec;
   }
 }

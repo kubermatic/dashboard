@@ -10,11 +10,13 @@
 // limitations under the License.
 
 import {EventEmitter, Injectable} from '@angular/core';
+import {CreatePresetReq} from '@shared/entity/preset';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 @Injectable({providedIn: 'root'})
 export class PresetDialogService {
   providerChanges = new EventEmitter<NodeProvider>();
+  preset: CreatePresetReq = new CreatePresetReq();
 
   private _provider: NodeProvider;
 

@@ -17,6 +17,16 @@ import {PresetProviderStepComponent} from '@app/settings/admin/presets/create-di
 import {PresetDialogService} from '@app/settings/admin/presets/create-dialog/steps/service';
 import {PresetSettingsStepComponent} from '@app/settings/admin/presets/create-dialog/steps/settings/component';
 import {AlibabaSettingsComponent} from '@app/settings/admin/presets/create-dialog/steps/settings/provider/alibaba/component';
+import {AnexiaSettingsComponent} from '@app/settings/admin/presets/create-dialog/steps/settings/provider/anexia/component';
+import {AWSSettingsComponent} from '@app/settings/admin/presets/create-dialog/steps/settings/provider/aws/component';
+import {AzureSettingsComponent} from '@app/settings/admin/presets/create-dialog/steps/settings/provider/azure/component';
+import {DigitaloceanSettingsComponent} from '@app/settings/admin/presets/create-dialog/steps/settings/provider/digitalocean/component';
+import {GCPSettingsComponent} from '@app/settings/admin/presets/create-dialog/steps/settings/provider/gcp/component';
+import {HetznerSettingsComponent} from '@app/settings/admin/presets/create-dialog/steps/settings/provider/hetzner/component';
+import {KubevirtSettingsComponent} from '@app/settings/admin/presets/create-dialog/steps/settings/provider/kubevirt/component';
+import {OpenstackSettingsComponent} from '@app/settings/admin/presets/create-dialog/steps/settings/provider/openstack/component';
+import {PacketSettingsComponent} from '@app/settings/admin/presets/create-dialog/steps/settings/provider/packet/component';
+import {VSphereSettingsComponent} from '@app/settings/admin/presets/create-dialog/steps/settings/provider/vsphere/component';
 import {SharedModule} from '@shared/shared.module';
 import {AddAdminDialogComponent} from './admins/add-admin-dialog/component';
 import {AdminsComponent} from './admins/component';
@@ -41,6 +51,16 @@ import {AdminSettingsRoutingModule} from './routing';
     PresetProviderStepComponent,
     PresetSettingsStepComponent,
     AlibabaSettingsComponent,
+    AnexiaSettingsComponent,
+    AWSSettingsComponent,
+    AzureSettingsComponent,
+    DigitaloceanSettingsComponent,
+    GCPSettingsComponent,
+    HetznerSettingsComponent,
+    KubevirtSettingsComponent,
+    OpenstackSettingsComponent,
+    PacketSettingsComponent,
+    VSphereSettingsComponent,
   ],
   providers: [PresetDialogService],
 })

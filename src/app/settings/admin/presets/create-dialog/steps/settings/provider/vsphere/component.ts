@@ -12,33 +12,36 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/create-dialog/steps/service';
-import {AlibabaPresetSpec} from '@shared/entity/preset';
+import {VSpherePresetSpec} from '@shared/entity/preset';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 export enum Controls {
-  AccessKeyID = 'accessKeyId',
-  AccessKeySecret = 'secretAccessKey',
+  Username = 'username',
+  Password = 'password',
+  VMNetName = 'vmNetName',
+  Datastore = 'datastore',
+  DatastoreCluster = 'datastoreCluster',
 }
 
 @Component({
-  selector: 'km-alibaba-settings',
+  selector: 'km-vsphere-settings',
   templateUrl: './template.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AlibabaSettingsComponent),
+      useExisting: forwardRef(() => VSphereSettingsComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => AlibabaSettingsComponent),
+      useExisting: forwardRef(() => VSphereSettingsComponent),
       multi: true,
     },
   ],
 })
-export class AlibabaSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class VSphereSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
   constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
@@ -47,13 +50,16 @@ export class AlibabaSettingsComponent extends BaseFormValidator implements OnIni
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.AccessKeyID]: this._builder.control('', Validators.required),
-      [Controls.AccessKeySecret]: this._builder.control('', Validators.required),
+      [Controls.Username]: this._builder.control('', Validators.required),
+      [Controls.Password]: this._builder.control('', Validators.required),
+      [Controls.VMNetName]: this._builder.control(''),
+      [Controls.Datastore]: this._builder.control(''),
+      [Controls.DatastoreCluster]: this._builder.control(''),
     });
 
     this._presetDialogService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.reset());
 
-    merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.AccessKeySecret).valueChanges)
+    merge()
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._update());
@@ -65,9 +71,12 @@ export class AlibabaSettingsComponent extends BaseFormValidator implements OnIni
   }
 
   private _update(): void {
-    this._presetDialogService.preset.spec.alibaba = {
-      accessKeyId: this.form.get(Controls.AccessKeyID).value,
-      accessKeySecret: this.form.get(Controls.AccessKeySecret).value,
-    } as AlibabaPresetSpec;
+    this._presetDialogService.preset.spec.vsphere = {
+      username: this.form.get(Controls.Username).value,
+      password: this.form.get(Controls.Password).value,
+      vmNetName: this.form.get(Controls.VMNetName).value,
+      datastore: this.form.get(Controls.Datastore).value,
+      datastoreCluster: this.form.get(Controls.DatastoreCluster).value,
+    } as VSpherePresetSpec;
   }
 }

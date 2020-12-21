@@ -9,6 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {Metadata} from '@shared/entity/common';
+
 export class SimplePresetList {
   names: string[] = [];
 
@@ -25,4 +27,118 @@ export class Preset {
   name: string;
   enabled: boolean;
   providers: string[];
+}
+
+export class CreatePresetReq {
+  metadata: Metadata;
+  spec: CreatePresetSpec;
+
+  constructor() {
+    this.metadata = new Metadata();
+    this.spec = new CreatePresetSpec();
+  }
+}
+
+export class CreatePresetSpec {
+  alibaba?: AlibabaPresetSpec;
+  anexia?: AnexiaPresetSpec;
+  aws?: AWSPresetSpec;
+  azure?: AzurePresetSpec;
+  digitalocean?: DigitaloceanPresetSpec;
+  gcp?: GCPPresetSpec;
+  hetzner?: HetznerPresetSpec;
+  kubevirt?: KubevirtPresetSpec;
+  openstack?: OpenstackPresetSpec;
+  packet?: PacketPresetSpec;
+  vsphere?: VSpherePresetSpec;
+
+  requiredEmailDomain?: string;
+  enabled?: boolean;
+}
+
+export class PresetProvider {
+  enabled?: boolean;
+  datacenter?: string;
+}
+
+export class AlibabaPresetSpec extends PresetProvider {
+  accessKeyId: string;
+  accessKeySecret: string;
+}
+
+export class AnexiaPresetSpec extends PresetProvider {
+  token: string;
+}
+
+export class AWSPresetSpec extends PresetProvider {
+  accessKeyID: string;
+  secretAccessKey: string;
+
+  vpcID?: string;
+  routeTableID?: string;
+  instanceProfileName?: string;
+  securityGroupID?: string;
+  roleARN?: string;
+}
+
+export class AzurePresetSpec extends PresetProvider {
+  tenantID: string;
+  subscriptionID: string;
+  clientID: string;
+  clientSecret: string;
+
+  resourceGroup?: string;
+  vnet?: string;
+  subnet?: string;
+  routeTable?: string;
+  securityGroup?: string;
+}
+
+export class DigitaloceanPresetSpec extends PresetProvider {
+  token: string;
+}
+
+export class GCPPresetSpec extends PresetProvider {
+  serviceAccount: string;
+
+  network?: string;
+  subnetwork?: string;
+}
+
+export class HetznerPresetSpec extends PresetProvider {
+  token: string;
+}
+
+export class KubevirtPresetSpec extends PresetProvider {
+  kubeconfig: string;
+}
+
+export class OpenstackPresetSpec extends PresetProvider {
+  username: string;
+  password: string;
+  tenant: string;
+  tenantID: string;
+  domain: string;
+
+  network?: string;
+  securityGroups?: string;
+  floatingIpPool?: string;
+  routerID?: string;
+  subnetID?: string;
+}
+
+export class PacketPresetSpec extends PresetProvider {
+  apiKey: string;
+  projectID: string;
+
+  billingCycle?: string;
+}
+
+export class VSpherePresetSpec extends PresetProvider {
+  username: string;
+  password: string;
+
+  vmNetName?: string;
+  datastore?: string;
+  datastoreCluster?: string;
 }

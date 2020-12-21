@@ -124,6 +124,7 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
 
   add(): void {
     const dialogConfig: MatDialogConfig = {
+      panelClass: 'km-create-preset-dialog',
       data: {
         title: 'Add Datacenter',
         isEditing: false,

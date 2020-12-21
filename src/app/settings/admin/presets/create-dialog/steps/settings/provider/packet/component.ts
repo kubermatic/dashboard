@@ -12,33 +12,33 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/create-dialog/steps/service';
-import {AlibabaPresetSpec} from '@shared/entity/preset';
+import {PacketPresetSpec} from '@shared/entity/preset';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {merge} from 'rxjs';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 export enum Controls {
-  AccessKeyID = 'accessKeyId',
-  AccessKeySecret = 'secretAccessKey',
+  ApiKey = 'apiKey',
+  ProjectID = 'projectID',
+  BillingCycle = 'billingCycle',
 }
 
 @Component({
-  selector: 'km-alibaba-settings',
+  selector: 'km-packet-settings',
   templateUrl: './template.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AlibabaSettingsComponent),
+      useExisting: forwardRef(() => PacketSettingsComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => AlibabaSettingsComponent),
+      useExisting: forwardRef(() => PacketSettingsComponent),
       multi: true,
     },
   ],
 })
-export class AlibabaSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class PacketSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
   constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
@@ -47,13 +47,14 @@ export class AlibabaSettingsComponent extends BaseFormValidator implements OnIni
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.AccessKeyID]: this._builder.control('', Validators.required),
-      [Controls.AccessKeySecret]: this._builder.control('', Validators.required),
+      [Controls.ApiKey]: this._builder.control('', Validators.required),
+      [Controls.ProjectID]: this._builder.control('', Validators.required),
+      [Controls.BillingCycle]: this._builder.control(''),
     });
 
     this._presetDialogService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.reset());
 
-    merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.AccessKeySecret).valueChanges)
+    this.form.valueChanges
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._update());
@@ -65,9 +66,10 @@ export class AlibabaSettingsComponent extends BaseFormValidator implements OnIni
   }
 
   private _update(): void {
-    this._presetDialogService.preset.spec.alibaba = {
-      accessKeyId: this.form.get(Controls.AccessKeyID).value,
-      accessKeySecret: this.form.get(Controls.AccessKeySecret).value,
-    } as AlibabaPresetSpec;
+    this._presetDialogService.preset.spec.packet = {
+      apiKey: this.form.get(Controls.ApiKey).value,
+      projectID: this.form.get(Controls.ProjectID).value,
+      billingCycle: this.form.get(Controls.BillingCycle).value,
+    } as PacketPresetSpec;
   }
 }
