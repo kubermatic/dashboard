@@ -88,7 +88,7 @@ export class ServiceAccountTokenComponent implements OnInit {
       hasBackdrop: true,
       data: {
         title: 'Regenerate Token',
-        message: `Regenerate token "<strong>${token.name}</strong>" for service account "<strong>${this.serviceaccount.name}</strong>"?`,
+        message: `Regenerate ${token.name} token for ${this.serviceaccount.name} service account?`,
         confirmLabel: 'Regenerate',
       },
     };
@@ -107,7 +107,7 @@ export class ServiceAccountTokenComponent implements OnInit {
       .pipe(take(1))
       .subscribe(token => {
         this.openTokenDialog(token);
-        this._notificationService.success(`The <strong>${token.name}</strong> was regenerated`);
+        this._notificationService.success(`The ${token.name} token was regenerated`);
         this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenRegenerated');
       });
   }
@@ -125,7 +125,7 @@ export class ServiceAccountTokenComponent implements OnInit {
       hasBackdrop: true,
       data: {
         title: 'Delete Token',
-        message: `Delete token "<strong>${token.name}</strong>" from service account "<strong>${this.serviceaccount.name}</strong>" permanently?`,
+        message: `Delete ${token.name} token from ${this.serviceaccount.name} service account permanently?`,
         confirmLabel: 'Delete',
       },
     };
@@ -142,7 +142,7 @@ export class ServiceAccountTokenComponent implements OnInit {
       .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(
-          `The <strong>${token.name}</strong> token was removed from the <strong>${this.serviceaccount.name}</strong> service account`
+          `The ${token.name} token was removed from the ${this.serviceaccount.name} service account`
         );
         this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenDeleted');
       });

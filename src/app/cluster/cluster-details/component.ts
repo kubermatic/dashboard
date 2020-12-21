@@ -251,7 +251,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(
         _ => this._clusterService.onClusterUpdate.next(),
-        _ => this._notificationService.error('There was an error during node deployment creation.')
+        _ => this._notificationService.error('There was an error during machine deployment creation.')
       );
   }
 

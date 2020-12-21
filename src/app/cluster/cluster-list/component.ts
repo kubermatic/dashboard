@@ -259,7 +259,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     event.stopPropagation();
 
     this._clusterService.showDisconnectClusterDialog(cluster, this._selectedProject.id).subscribe(_ => {
-      this._notificationService.success(`The <strong>${cluster.name}</strong> cluster was disconnected`);
+      this._notificationService.success(`The ${cluster.name} cluster was disconnected`);
     });
   }
 
