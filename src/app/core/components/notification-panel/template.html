@@ -59,8 +59,7 @@ limitations under the License.
              [ngClass]="getNotificationIconClass(notification.type)"></i>
           <div fxLayout="column"
                fxFlex>
-            <span class="notification-message km-text"
-                  [innerHTML]="notification.message"></span>
+            <span class="notification-message km-text">{{notification.message}}</span>
             <div class="notification-info"
                  fxLayoutAlign=" center">
               <i class="km-icon-mask km-icon-copy-small"
