@@ -9,13 +9,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AfterContentInit, ChangeDetectionStrategy, Component, ContentChildren, QueryList} from '@angular/core';
+import {
+  AfterContentInit,
+  ChangeDetectionStrategy,
+  Component,
+  ContentChildren,
+  QueryList,
+  ViewEncapsulation,
+} from '@angular/core';
 import {TabComponent} from '@shared/components/tab-card/tab/component';
 
 @Component({
   selector: 'km-tab-card',
   templateUrl: 'template.html',
-  changeDetection: ChangeDetectionStrategy.OnPush, // TODO
+  styleUrls: ['style.scss'],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TabCardComponent implements AfterContentInit {
   @ContentChildren(TabComponent) inputTabs: QueryList<TabComponent>;
