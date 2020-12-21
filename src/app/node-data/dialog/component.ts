@@ -163,6 +163,7 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
   }
 
   private _isRecreationWarningVisible(): boolean {
-    return this.mode === Mode.Edit && !_.isEqual(objectDiff(this._data.initialNodeData, this._output.nodeData), {});
+    const diff = objectDiff(this._data.initialNodeData, this._output.nodeData);
+    return this.mode === Mode.Edit && !_.isEqual(diff, {}) && !(Object.keys(diff).length === 1 && !!diff.count);
   }
 }
