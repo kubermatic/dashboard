@@ -63,9 +63,7 @@ export class RevokeTokenComponent implements OnInit {
 
     if (this.revokeViewerToken) {
       this._apiService.editViewerToken(this.cluster, this.projectID, {token: ''}).subscribe(res => {
-        this._notificationService.success(
-          `The viewer token for the <strong>${this.cluster.name}</strong> cluster was revoked`
-        );
+        this._notificationService.success(`The viewer token for the ${this.cluster.name} cluster was revoked`);
         this._matDialogRef.close(res);
       });
     }

@@ -94,9 +94,9 @@ export class RBACComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Binding',
-        message: `Are you sure you want to permanently delete the ${element.kind.toLowerCase()} "<strong>${
+        message: `Are you sure you want to permanently delete the ${element.kind.toLowerCase()} "${
           element.name
-        }</strong>" from binding?`,
+        }" from binding?`,
         confirmLabel: 'Delete',
       },
     };
@@ -119,9 +119,7 @@ export class RBACComponent implements OnInit, OnDestroy {
       )
       .pipe(take(1))
       .subscribe(() => {
-        this._notificationService.success(
-          `The <strong>${element.name}</strong> ${element.kind} was removed from the binding`
-        );
+        this._notificationService.success(`The ${element.name} ${element.kind} was removed from the binding`);
       });
   }
 
@@ -133,9 +131,9 @@ export class RBACComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Binding',
-        message: `Are you sure you want to permanently delete the ${element.kind.toLowerCase()} "<strong>${
+        message: `Are you sure you want to permanently delete the ${element.kind.toLowerCase()} "${
           element.name
-        }</strong>" from binding?`,
+        }" from binding?`,
         confirmLabel: 'Delete',
       },
     };
@@ -159,9 +157,7 @@ export class RBACComponent implements OnInit, OnDestroy {
       )
       .pipe(take(1))
       .subscribe(() => {
-        this._notificationService.success(
-          `The <strong>${element.name}</strong> ${element.kind} was removed from the binding`
-        );
+        this._notificationService.success(`The ${element.name} ${element.kind} was removed from the binding`);
       });
   }
 }

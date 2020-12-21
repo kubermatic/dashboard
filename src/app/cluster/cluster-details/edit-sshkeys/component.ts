@@ -126,8 +126,8 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete SSH Key',
-        message: `Are you sure you want to permanently delete the <strong>${sshKey.name}</strong>
-          SSH key from the <strong>${this.cluster.name}</strong> cluster?`,
+        message: `Are you sure you want to permanently delete the ${sshKey.name}
+          SSH key from the ${this.cluster.name} cluster?`,
         confirmLabel: 'Delete',
       },
     };
@@ -142,7 +142,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(
-          `The <strong>${sshKey.name}</strong> SSH key was removed from the <strong>${this.cluster.name}</strong> cluster`
+          `The ${sshKey.name} SSH key was removed from the ${this.cluster.name} cluster`
         );
         this._googleAnalyticsService.emitEvent('clusterOverview', 'SshKeyDeleted');
       });

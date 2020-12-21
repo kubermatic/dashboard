@@ -90,7 +90,7 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
       .createSSHKey(this.projectID, this.cluster.id, this.keysForm.controls.keys.value)
       .subscribe(res => {
         this._notificationService.success(
-          `The <strong>${this.keysForm.controls.keys.value}</strong> SSH key was added to the <strong>${this.cluster.name}</strong> cluster`
+          `The ${this.keysForm.controls.keys.value} SSH key was added to the ${this.cluster.name} cluster`
         );
         this._dialogRef.close(res);
       });
