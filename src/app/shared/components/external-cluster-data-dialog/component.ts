@@ -20,6 +20,7 @@ export enum Controls {
 
 @Component({
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class ExternalClusterDataDialogComponent implements OnInit {
   @Input() editMode = false;
