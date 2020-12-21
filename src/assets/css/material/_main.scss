@@ -508,7 +508,7 @@ mat-chip-list {
 
 // Tooltips.
 .mat-tooltip {
-  font-size: $font-size-caption;
+  font-size: $font-size-caption !important;
   margin-top: 5px;
 }
 
