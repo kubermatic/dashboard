@@ -94,9 +94,9 @@ export class RBACComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Binding',
-        message: `Are you sure you want to permanently delete the ${element.kind.toLowerCase()} "${
+        message: `Are you sure you want to permanently delete the ${element.kind.toLowerCase()} ${
           element.name
-        }" from binding?`,
+        } from binding?`,
         confirmLabel: 'Delete',
       },
     };
@@ -131,9 +131,9 @@ export class RBACComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Binding',
-        message: `Are you sure you want to permanently delete the ${element.kind.toLowerCase()} "${
+        message: `Are you sure you want to permanently delete the ${element.kind.toLowerCase()} ${
           element.name
-        }" from binding?`,
+        } from binding?`,
         confirmLabel: 'Delete',
       },
     };
