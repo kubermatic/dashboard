@@ -37,7 +37,7 @@ limitations under the License.
             (click)="onConfirm()"
             [disabled]="form.invalid"
             class="btn btn-primary">
-      {{mode}} Machine Deployment
+      {{getConfirmButtonText()}}
     </button>
   </mat-dialog-actions>
 </form>

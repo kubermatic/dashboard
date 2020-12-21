@@ -138,6 +138,17 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
     this._dialogRef.close(this._output);
   }
 
+  getConfirmButtonText(): string {
+    switch (this.mode) {
+      case Mode.Add:
+        return 'Add Machine Deployment';
+      case Mode.Edit:
+        return 'Save Changes';
+      default:
+        return 'Add Machine Deployment';
+    }
+  }
+
   private _updateNodeData(): void {
     this._output.nodeData = this._nodeDataService.nodeData;
     this.isRecreationWarningVisible = this._isRecreationWarningVisible();
