@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ColorSchemeService} from '@app/dynamic/enterprise/theming/services/color-scheme';
 import {ThemeManagerService} from '@app/dynamic/enterprise/theming/services/manager';
 import {ThemeService} from '@app/dynamic/enterprise/theming/services/theme';
@@ -24,7 +24,6 @@ import {debounceTime, take, switchMap, takeUntil} from 'rxjs/operators';
 @Component({
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StylePickerComponent implements OnInit {
   readonly isEqual = _.isEqual;
