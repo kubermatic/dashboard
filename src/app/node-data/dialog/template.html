@@ -12,7 +12,7 @@ limitations under the License.
 -->
 
 <form [formGroup]="form">
-  <km-dialog-title>{{mode}} Node Deployment</km-dialog-title>
+  <km-dialog-title>{{mode}} Machine Deployment</km-dialog-title>
   <mat-dialog-content class="km-add-node-outer">
     <km-node-data [provider]="provider"
                   [showExtended]="isExtended"
@@ -30,14 +30,14 @@ limitations under the License.
     </button>
     <div fxFlex></div>
     <i *ngIf="isRecreationWarningVisible"
-       class="km-icon-error km-warning"
+       class="km-icon-error km-warning-bg"
        matTooltip="You have changed node specification. All nodes will be recreated.">
     </i>
     <button mat-flat-button
             (click)="onConfirm()"
             [disabled]="form.invalid"
             class="btn btn-primary">
-      {{mode}} Node Deployment
+      {{getConfirmButtonText()}}
     </button>
   </mat-dialog-actions>
 </form>

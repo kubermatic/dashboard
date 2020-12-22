@@ -195,6 +195,14 @@
             color: map-get($colors, primary);
           }
         }
+
+        .mat-form-field-outline {
+          color: map-get($colors, sidenav-divider);
+        }
+      }
+
+      .mat-input-element::placeholder {
+        color: map-get($colors, text-secondary);
       }
     }
   }

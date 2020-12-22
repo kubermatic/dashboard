@@ -138,6 +138,17 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
     this._dialogRef.close(this._output);
   }
 
+  getConfirmButtonText(): string {
+    switch (this.mode) {
+      case Mode.Add:
+        return 'Add Machine Deployment';
+      case Mode.Edit:
+        return 'Save Changes';
+      default:
+        return 'Add Machine Deployment';
+    }
+  }
+
   private _updateNodeData(): void {
     this._output.nodeData = this._nodeDataService.nodeData;
     this.isRecreationWarningVisible = this._isRecreationWarningVisible();
@@ -163,6 +174,13 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
   }
 
   private _isRecreationWarningVisible(): boolean {
-    return this.mode === Mode.Edit && !_.isEqual(objectDiff(this._data.initialNodeData, this._output.nodeData), {});
+    // the icon should not be displayed if only the node replica has changed,
+    // but of course it should be displayed if something else (also) has changed
+    const diff = objectDiff(this._data.initialNodeData, this._output.nodeData);
+    return (
+      this.mode === Mode.Edit &&
+      !_.isEqual(diff, {}) &&
+      !(Object.keys(diff).length === 1 && Object.prototype.hasOwnProperty.call(diff, 'count'))
+    );
   }
 }
