@@ -37,6 +37,10 @@ $panel-width: 350px;
         @include size(16px, $force: true);
 
         margin-top: -4px;
+
+        &.km-icon-filter {
+          margin-top: -1px;
+        }
       }
 
       .km-icon-clear {
