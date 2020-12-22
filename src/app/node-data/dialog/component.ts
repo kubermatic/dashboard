@@ -174,6 +174,8 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
   }
 
   private _isRecreationWarningVisible(): boolean {
+    // the icon should not be displayed if only the node replica has changed,
+    // but of course it should be displayed if something else (also) has changed
     const diff = objectDiff(this._data.initialNodeData, this._output.nodeData);
     return this.mode === Mode.Edit && !_.isEqual(diff, {}) && !(Object.keys(diff).length === 1 && !!diff.count);
   }
