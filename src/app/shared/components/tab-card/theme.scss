@@ -9,13 +9,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
+@import 'variables';
 
-@Component({
-  selector: 'km-loader',
-  templateUrl: 'template.html',
-  styleUrls: ['style.scss'],
-})
-export class LoaderComponent {
-  @Input() text = 'Loading...';
+@mixin theme-tab-card-component($colors) {
+  .km-tab-card {
+    .mat-tab-header {
+      .mat-tab-label-container {
+        .mat-tab-label:hover:not(.mat-tab-label-active) {
+          background: map-get($colors, background-hover);
+        }
+
+        .mat-tab-label-active {
+          background: map-get($colors, background-card);
+        }
+      }
+    }
+  }
 }

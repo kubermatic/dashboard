@@ -17,13 +17,22 @@ import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
-import {fakeSimpleBindings, fakeSimpleClusterBindings} from '@app/testing/fake-data/rbac.fake';
 import {RouterStub} from '@app/testing/router-stubs';
 import {NotificationService} from '@core/services/notification/service';
 import {RBACService} from '@core/services/rbac/service';
 import {SharedModule} from '@shared/shared.module';
 import {of} from 'rxjs';
 import {RBACComponent} from './component';
+import {ClusterService} from '@core/services/cluster/service';
+import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
+import {AppConfigService} from '@app/config.service';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
+import {
+  fakeBindings,
+  fakeClusterBindings,
+  fakeSimpleBindings,
+  fakeSimpleClusterBindings,
+} from '@app/testing/fake-data/rbac.fake';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
@@ -46,6 +55,8 @@ describe('RBACComponent', () => {
         providers: [
           {provide: RBACService, useValue: rbacMock},
           {provide: Router, useClass: RouterStub},
+          {provide: ClusterService, useClass: ClusterMockService},
+          {provide: AppConfigService, useClass: AppConfigMockService},
           MatDialog,
           GoogleAnalyticsService,
           NotificationService,
@@ -59,8 +70,6 @@ describe('RBACComponent', () => {
     component = fixture.componentInstance;
     component.cluster = fakeDigitaloceanCluster();
     component.projectID = fakeProject().id;
-    component.clusterBindings = fakeSimpleClusterBindings();
-    component.bindings = fakeSimpleBindings();
     fixture.detectChanges();
   });
 
@@ -70,4 +79,14 @@ describe('RBACComponent', () => {
       expect(component).toBeTruthy();
     })
   );
+
+  it('should create simple cluster binding for rbac', () => {
+    const simpleClusterBindings = component.createSimpleClusterBinding(fakeClusterBindings());
+    expect(simpleClusterBindings).toEqual(fakeSimpleClusterBindings());
+  });
+
+  it('should create simple binding for rbac', () => {
+    const simpleBindings = component.createSimpleBinding(fakeBindings());
+    expect(simpleBindings).toEqual(fakeSimpleBindings());
+  });
 });

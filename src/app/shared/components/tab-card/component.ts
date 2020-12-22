@@ -9,13 +9,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
+import {
+  AfterContentInit,
+  ChangeDetectionStrategy,
+  Component,
+  ContentChildren,
+  QueryList,
+  ViewEncapsulation,
+} from '@angular/core';
+import {TabComponent} from '@shared/components/tab-card/tab/component';
 
 @Component({
-  selector: 'km-loader',
+  selector: 'km-tab-card',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoaderComponent {
-  @Input() text = 'Loading...';
+export class TabCardComponent implements AfterContentInit {
+  @ContentChildren(TabComponent) inputTabs: QueryList<TabComponent>;
+  tabs: TabComponent[];
+
+  public ngAfterContentInit(): void {
+    this.tabs = this.inputTabs.toArray();
+  }
 }
