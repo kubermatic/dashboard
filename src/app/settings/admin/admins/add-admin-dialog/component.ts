@@ -36,6 +36,10 @@ export class AddAdminDialogComponent implements OnInit {
   }
 
   add(): void {
+    if (!this.form) {
+      return;
+    }
+
     const adminEntity: Admin = {
       email: this.form.controls.email.value,
       isAdmin: true,

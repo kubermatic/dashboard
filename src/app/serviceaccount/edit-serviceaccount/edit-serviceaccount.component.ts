@@ -41,6 +41,10 @@ export class EditServiceAccountComponent implements OnInit {
   }
 
   editServiceAccount(): void {
+    if (!this.editServiceAccountForm) {
+      return;
+    }
+
     const editServiceAccount: ServiceAccount = {
       id: this.serviceaccount.id,
       name: this.editServiceAccountForm.controls.name.value,

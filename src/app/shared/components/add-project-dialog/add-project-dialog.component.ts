@@ -41,6 +41,10 @@ export class AddProjectDialogComponent implements OnInit {
   }
 
   addProject(): void {
+    if (!this.form.valid) {
+      return;
+    }
+
     const createProject: CreateProjectModel = {
       name: this.form.controls.name.value,
       labels: this.labels,

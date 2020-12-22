@@ -14,7 +14,8 @@ limitations under the License.
   <km-dialog-title>Add Member</km-dialog-title>
   <mat-dialog-content>
     <form [formGroup]="addMemberForm"
-          fxLayout="column">
+          fxLayout="column"
+          (keydown.enter)="addMember()">
 
       <mat-form-field fxFlex>
         <mat-label>Email*</mat-label>

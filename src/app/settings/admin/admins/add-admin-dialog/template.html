@@ -13,7 +13,8 @@ limitations under the License.
 <km-dialog-title>Add Admin</km-dialog-title>
 <mat-dialog-content>
   <form [formGroup]="form"
-        fxLayout="column">
+        fxLayout="column"
+        (keydown.enter)="add()">
     <mat-form-field fxFlex>
       <mat-label>Email*</mat-label>
       <input matInput

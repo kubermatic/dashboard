@@ -43,6 +43,10 @@ export class AddServiceAccountTokenComponent implements OnInit {
   }
 
   addServiceAccountToken(): void {
+    if (!this.addServiceAccountToken) {
+      return;
+    }
+
     const createServiceAccountToken: CreateTokenEntity = {
       name: this.addServiceAccountTokenForm.controls.name.value,
     };

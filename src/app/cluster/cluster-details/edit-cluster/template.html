@@ -15,7 +15,8 @@ limitations under the License.
   <mat-dialog-content>
     <form [formGroup]="form"
           fxLayout="column"
-          class="km-edit-cluster-form">
+          class="km-edit-cluster-form"
+          (keydown.enter)="editCluster()">
       <mat-form-field fxFlex>
         <mat-label>Name*</mat-label>
         <input id="km-edit-cluster-dialog-input"

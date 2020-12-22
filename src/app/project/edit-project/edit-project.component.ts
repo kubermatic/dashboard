@@ -45,6 +45,10 @@ export class EditProjectComponent implements OnInit {
   }
 
   editProject(): void {
+    if (!this.form.valid) {
+      return;
+    }
+
     const project: EditProject = {
       name: this.form.controls.name.value,
       labels: this.labels,

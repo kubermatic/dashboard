@@ -134,6 +134,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   }
 
   editCluster(): void {
+    if (!this.form.valid) {
+      return;
+    }
+
     const patch: ClusterPatch = {
       name: this.form.controls.name.value,
       labels: this.labels,

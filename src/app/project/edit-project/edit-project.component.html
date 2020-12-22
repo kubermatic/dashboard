@@ -14,7 +14,8 @@ limitations under the License.
   <km-dialog-title>Edit Project</km-dialog-title>
   <mat-dialog-content>
     <form [formGroup]="form"
-          fxLayout="column">
+          fxLayout="column"
+          (keydown.enter)="editProject()">
       <mat-form-field fxFlex>
         <mat-label>Name*</mat-label>
         <input id="km-edit-project-dialog-input"

@@ -41,6 +41,10 @@ export class EditServiceAccountTokenComponent implements OnInit {
   }
 
   editServiceAccountToken(): void {
+    if (!this.editServiceAccountTokenForm.valid) {
+      return;
+    }
+
     const patchServiceAccountToken: ServiceAccountTokenPatch = {
       name: this.editServiceAccountTokenForm.controls.name.value,
     };

@@ -166,6 +166,10 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   }
 
   addBinding(): void {
+    if (!this.form.valid) {
+      return;
+    }
+
     this.bindingType === 'cluster' ? this.addClusterBinding() : this.addNamespaceBinding();
   }
 

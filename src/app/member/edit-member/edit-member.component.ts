@@ -40,6 +40,10 @@ export class EditMemberComponent implements OnInit {
   }
 
   editMember(): void {
+    if (!this.editMemberForm.valid) {
+      return;
+    }
+
     const editMember: Member = {
       id: this.member.id,
       name: this.member.name,

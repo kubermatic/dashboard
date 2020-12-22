@@ -39,6 +39,10 @@ export class AddMemberComponent implements OnInit {
   }
 
   addMember(): void {
+    if (!this.addMemberForm.valid) {
+      return;
+    }
+
     const createMember: CreateMember = {
       email: this.addMemberForm.controls.email.value,
       projects: [

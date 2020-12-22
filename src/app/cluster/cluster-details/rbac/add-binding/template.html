@@ -39,7 +39,8 @@ limitations under the License.
     </mat-button-toggle-group>
 
     <form [formGroup]="form"
-          fxLayout="column">
+          fxLayout="column"
+          (keydown.enter)="addBinding()">
       <ng-container *ngIf="bindingType === 'cluster'">
         <mat-form-field fxFlex
                         *ngIf="subjectType === 'user'">

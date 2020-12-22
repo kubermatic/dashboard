@@ -12,7 +12,8 @@ limitations under the License.
 -->
 <km-dialog-title>Add SSH Key</km-dialog-title>
 <mat-dialog-content>
-  <form [formGroup]="addSSHKeyForm">
+  <form [formGroup]="addSSHKeyForm"
+        (keydown.enter)="addSSHKey()">
     <mat-form-field class="km-ssh-key-input">
       <mat-label>Name</mat-label>
       <input id="name"
