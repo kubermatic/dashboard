@@ -15,8 +15,8 @@ import {HealthStatusColor} from '@shared/utils/health-status/health-status';
 
 @Component({
   selector: 'km-event-card',
-  templateUrl: './event-card.component.html',
-  styleUrls: ['./event-card.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class EventCardComponent {
   @Input() events: Event[] = [];

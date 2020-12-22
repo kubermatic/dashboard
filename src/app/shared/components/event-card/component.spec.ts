@@ -14,15 +14,14 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {UserMockService} from '@app/testing/services/user-mock.service';
 import {UserService} from '@core/services/user/service';
-import {Event} from '@shared/entity/event';
 import {SharedModule} from '@shared/shared.module';
-import {EventListComponent} from './event-list.component';
+import {EventCardComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
-describe('EventListComponent', () => {
-  let fixture: ComponentFixture<EventListComponent>;
-  let component: EventListComponent;
+describe('EventCardComponent', () => {
+  let fixture: ComponentFixture<EventCardComponent>;
+  let component: EventCardComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -32,20 +31,11 @@ describe('EventListComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EventListComponent);
+    fixture = TestBed.createComponent(EventCardComponent);
     component = fixture.componentInstance;
   });
 
   it('should initialize', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should return true when there are events', () => {
-    component.events = [{} as Event];
-    expect(component.hasEvents()).toBeTruthy();
-  });
-
-  it('should return false when there are no events', () => {
-    expect(component.hasEvents()).toBeFalsy();
   });
 });

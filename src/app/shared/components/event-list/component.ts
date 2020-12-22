@@ -21,8 +21,8 @@ import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-event-list',
-  templateUrl: './event-list.component.html',
-  styleUrls: ['./event-list.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class EventListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() events: Event[] = [];
