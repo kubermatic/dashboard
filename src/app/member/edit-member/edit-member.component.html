@@ -12,25 +12,25 @@ limitations under the License.
 -->
 <div id="km-edit-member-dialog">
   <km-dialog-title>Edit Member</km-dialog-title>
-  <mat-dialog-content>
-    <form [formGroup]="editMemberForm"
-          fxLayout="column"
-          (submit)="editMember()">
-      <mat-form-field fxFlex>
+  <form [formGroup]="editMemberForm"
+        fxLayout="column"
+        (submit)="editMember()">
+    <mat-dialog-content>
+      <mat-form-field>
         <mat-label>Name</mat-label>
         <input matInput
                disabled
                [value]="member.name">
       </mat-form-field>
 
-      <mat-form-field fxFlex>
+      <mat-form-field>
         <mat-label>Email</mat-label>
         <input matInput
                disabled
                [value]="member.email">
       </mat-form-field>
 
-      <mat-form-field fxFlex>
+      <mat-form-field>
         <mat-label>Group*</mat-label>
         <mat-select id="km-edit-member-dialog-group-combobox"
                     panelClass="km-add-dialog-dropdown"
@@ -45,14 +45,14 @@ limitations under the License.
           Group is <strong>required</strong>.
         </mat-error>
       </mat-form-field>
-    </form>
-  </mat-dialog-content>
-  <mat-dialog-actions>
-    <button id="km-edit-member-dialog-edit-btn"
-            mat-flat-button
-            type="submit"
-            [disabled]="!editMemberForm.valid">
-      Edit
-    </button>
-  </mat-dialog-actions>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button id="km-edit-member-dialog-edit-btn"
+              mat-flat-button
+              type="submit"
+              [disabled]="!editMemberForm.valid">
+        Edit
+      </button>
+    </mat-dialog-actions>
+  </form>
 </div>

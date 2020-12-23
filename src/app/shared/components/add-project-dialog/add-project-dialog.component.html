@@ -12,11 +12,11 @@ limitations under the License.
 -->
 <div id="km-add-project-dialog">
   <km-dialog-title>Add Project</km-dialog-title>
-  <mat-dialog-content>
-    <form [formGroup]="form"
-          fxLayout="column"
-          (submit)="addProject()">
-      <mat-form-field fxFlex>
+  <form [formGroup]="form"
+        fxLayout="column"
+        (submit)="addProject()">
+    <mat-dialog-content>
+      <mat-form-field>
         <mat-label>Name*</mat-label>
         <input id="km-add-project-dialog-input"
                matInput
@@ -32,14 +32,14 @@ limitations under the License.
                      [(labels)]="labels"
                      [asyncKeyValidators]=asyncLabelValidators
                      formControlName="labels"></km-label-form>
-    </form>
-  </mat-dialog-content>
-  <mat-dialog-actions>
-    <button id="km-add-project-dialog-save"
-            mat-flat-button
-            type="submit"
-            [disabled]="!form.valid">
-      Save
-    </button>
-  </mat-dialog-actions>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button id="km-add-project-dialog-save"
+              mat-flat-button
+              type="submit"
+              [disabled]="!form.valid">
+        Save
+      </button>
+    </mat-dialog-actions>
+  </form>
 </div>

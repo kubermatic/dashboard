@@ -12,38 +12,37 @@ limitations under the License.
 -->
 <div class="dialog">
   <km-dialog-title>Add Binding</km-dialog-title>
-  <mat-dialog-content>
-    <mat-button-toggle-group group="bindingType"
-                             (change)="changeView($event)">
-      <mat-button-toggle value="cluster"
-                         [checked]="bindingType === 'cluster'">
-        Cluster
-      </mat-button-toggle>
-      <mat-button-toggle value="namespace"
-                         [checked]="bindingType === 'namespace'">
-        Namespace
-      </mat-button-toggle>
-    </mat-button-toggle-group>
+  <form [formGroup]="form"
+        fxLayout="column"
+        (submit)="addBinding()">
+    <mat-dialog-content>
+      <mat-button-toggle-group group="bindingType"
+                               (change)="changeView($event)">
+        <mat-button-toggle value="cluster"
+                           [checked]="bindingType === 'cluster'">
+          Cluster
+        </mat-button-toggle>
+        <mat-button-toggle value="namespace"
+                           [checked]="bindingType === 'namespace'">
+          Namespace
+        </mat-button-toggle>
+      </mat-button-toggle-group>
 
-    <mat-button-toggle-group group="subjectType"
-                             class="km-toggle-subject-type"
-                             (change)="changeSubjectType($event)">
-      <mat-button-toggle value="user"
-                         [checked]="subjectType === 'user'">
-        User
-      </mat-button-toggle>
-      <mat-button-toggle value="group"
-                         [checked]="subjectType === 'group'">
-        Group
-      </mat-button-toggle>
-    </mat-button-toggle-group>
+      <mat-button-toggle-group group="subjectType"
+                               class="km-toggle-subject-type"
+                               (change)="changeSubjectType($event)">
+        <mat-button-toggle value="user"
+                           [checked]="subjectType === 'user'">
+          User
+        </mat-button-toggle>
+        <mat-button-toggle value="group"
+                           [checked]="subjectType === 'group'">
+          Group
+        </mat-button-toggle>
+      </mat-button-toggle-group>
 
-    <form [formGroup]="form"
-          fxLayout="column"
-          (submit)="addBinding()">
       <ng-container *ngIf="bindingType === 'cluster'">
-        <mat-form-field fxFlex
-                        *ngIf="subjectType === 'user'">
+        <mat-form-field *ngIf="subjectType === 'user'">
           <mat-label>User Email*</mat-label>
           <input matInput
                  formControlName="email"
@@ -54,8 +53,7 @@ limitations under the License.
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field fxFlex
-                        *ngIf="subjectType === 'group'">
+        <mat-form-field *ngIf="subjectType === 'group'">
           <mat-label>Group*</mat-label>
           <input matInput
                  formControlName="group"
@@ -65,7 +63,7 @@ limitations under the License.
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field fxFlex>
+        <mat-form-field>
           <mat-label>{{getRoleFormState()}}</mat-label>
           <mat-select formControlName="role"
                       panelClass="km-add-dialog-dropdown"
@@ -83,8 +81,7 @@ limitations under the License.
       </ng-container>
 
       <ng-container *ngIf="bindingType === 'namespace'">
-        <mat-form-field fxFlex
-                        *ngIf="subjectType === 'user'">
+        <mat-form-field *ngIf="subjectType === 'user'">
           <mat-label>User Email*</mat-label>
           <input matInput
                  formControlName="email"
@@ -95,8 +92,7 @@ limitations under the License.
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field fxFlex
-                        *ngIf="subjectType === 'group'">
+        <mat-form-field *ngIf="subjectType === 'group'">
           <mat-label>Group*</mat-label>
           <input matInput
                  formControlName="group"
@@ -106,7 +102,7 @@ limitations under the License.
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field fxFlex>
+        <mat-form-field>
           <mat-label>{{getRoleFormState()}}</mat-label>
           <mat-select formControlName="role"
                       panelClass="km-add-dialog-dropdown"
@@ -122,7 +118,7 @@ limitations under the License.
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field fxFlex>
+        <mat-form-field>
           <mat-label>{{getNamespaceFormState()}}</mat-label>
           <mat-select formControlName="namespace"
                       panelClass="km-add-dialog-dropdown"
@@ -138,14 +134,14 @@ limitations under the License.
           </mat-error>
         </mat-form-field>
       </ng-container>
-    </form>
-  </mat-dialog-content>
-  <mat-dialog-actions>
-    <button id="km-add-binding-dialog-add-btn"
-            mat-flat-button
-            type="submit"
-            [disabled]="!form.valid">
-      Add Binding
-    </button>
-  </mat-dialog-actions>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button id="km-add-binding-dialog-add-btn"
+              mat-flat-button
+              type="submit"
+              [disabled]="!form.valid">
+        Add Binding
+      </button>
+    </mat-dialog-actions>
+  </form>
 </div>

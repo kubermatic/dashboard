@@ -12,12 +12,12 @@ limitations under the License.
 -->
 <div id="km-edit-cluster-dialog">
   <km-dialog-title>Edit Cluster</km-dialog-title>
-  <mat-dialog-content>
-    <form [formGroup]="form"
-          fxLayout="column"
-          class="km-edit-cluster-form"
-          (submit)="editCluster()">
-      <mat-form-field fxFlex>
+  <form [formGroup]="form"
+        fxLayout="column"
+        class="km-edit-cluster-form"
+        (submit)="editCluster()">
+    <mat-dialog-content>
+      <mat-form-field>
         <mat-label>Name*</mat-label>
         <input id="km-edit-cluster-dialog-input"
                matInput
@@ -36,8 +36,7 @@ limitations under the License.
         </mat-error>
       </mat-form-field>
 
-      <div fxFlex="100"
-           fxLayout="column">
+      <div>
         <mat-form-field>
           <mat-label>Admission Plugins</mat-label>
           <mat-select formControlName="admissionPlugins"
@@ -68,33 +67,29 @@ limitations under the License.
         </span>
       </div>
 
-      <div fxLayout="row"
-           fxLayoutGap="16px">
-        <div fxLayout="row"
-             fxLayoutGap="8px"
-             fxLayoutAlign=" center">
-          <mat-checkbox formControlName="auditLogging">Audit Logging</mat-checkbox>
-          <i *ngIf="!!datacenter.spec.enforceAuditLogging"
-             class="km-icon-error km-warning"
-             matTooltip="Audit Logging is enforced by your admin in the chosen datacenter.">
-          </i>
-        </div>
+      <div>
+        <mat-checkbox formControlName="auditLogging">Audit Logging</mat-checkbox>
+        <i *ngIf="!!datacenter.spec.enforceAuditLogging"
+           class="km-icon-error km-warning"
+           matTooltip="Audit Logging is enforced by your admin in the chosen datacenter.">
+        </i>
       </div>
+
       <km-label-form title="Labels"
                      [(labels)]="labels"
                      [inheritedLabels]="cluster.inheritedLabels"
                      [asyncKeyValidators]=asyncLabelValidators
                      formControlName="labels"></km-label-form>
-    </form>
-    <km-edit-provider-settings [cluster]="cluster"
-                               *ngIf="!cluster.spec.cloud.bringyourown"></km-edit-provider-settings>
-  </mat-dialog-content>
-  <mat-dialog-actions>
-    <button id="km-edit-cluster-dialog-edit-btn"
-            mat-flat-button
-            type="submit"
-            [disabled]="!form.valid || !providerSettingsPatch.isValid">
-      Save Changes
-    </button>
-  </mat-dialog-actions>
+      <km-edit-provider-settings [cluster]="cluster"
+                                 *ngIf="!cluster.spec.cloud.bringyourown"></km-edit-provider-settings>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button id="km-edit-cluster-dialog-edit-btn"
+              mat-flat-button
+              type="submit"
+              [disabled]="!form.valid || !providerSettingsPatch.isValid">
+        Save Changes
+      </button>
+    </mat-dialog-actions>
+  </form>
 </div>
