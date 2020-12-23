@@ -15,7 +15,7 @@ limitations under the License.
   <mat-dialog-content>
     <form [formGroup]="form"
           fxLayout="column"
-          (keydown.enter)="editProject()">
+          (submit)="editProject()">
       <mat-form-field fxFlex>
         <mat-label>Name*</mat-label>
         <input id="km-edit-project-dialog-input"
@@ -37,7 +37,7 @@ limitations under the License.
   <mat-dialog-actions>
     <button id="km-edit-project-dialog-edit-btn"
             mat-flat-button
-            (click)="editProject()"
+            type="submit"
             [disabled]="!form.valid">
       Edit
     </button>

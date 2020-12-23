@@ -15,7 +15,7 @@ limitations under the License.
   <mat-dialog-content>
     <form [formGroup]="addMemberForm"
           fxLayout="column"
-          (keydown.enter)="addMember()">
+          (submit)="addMember()">
 
       <mat-form-field fxFlex>
         <mat-label>Email*</mat-label>
@@ -50,7 +50,7 @@ limitations under the License.
   <mat-dialog-actions>
     <button id="km-add-member-dialog-add-btn"
             mat-flat-button
-            (click)="addMember()"
+            type="submit"
             [disabled]="!addMemberForm.valid">
       Add
     </button>

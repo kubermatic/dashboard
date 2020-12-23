@@ -16,7 +16,7 @@ limitations under the License.
     <form [formGroup]="form"
           fxLayout="column"
           class="km-edit-cluster-form"
-          (keydown.enter)="editCluster()">
+          (submit)="editCluster()">
       <mat-form-field fxFlex>
         <mat-label>Name*</mat-label>
         <input id="km-edit-cluster-dialog-input"
@@ -92,7 +92,7 @@ limitations under the License.
   <mat-dialog-actions>
     <button id="km-edit-cluster-dialog-edit-btn"
             mat-flat-button
-            (click)="editCluster()"
+            type="submit"
             [disabled]="!form.valid || !providerSettingsPatch.isValid">
       Save Changes
     </button>

@@ -15,7 +15,7 @@ limitations under the License.
   <mat-dialog-content>
     <form [formGroup]="form"
           fxLayout="column"
-          (keydown.enter)="addProject()">
+          (submit)="addProject()">
       <mat-form-field fxFlex>
         <mat-label>Name*</mat-label>
         <input id="km-add-project-dialog-input"
@@ -37,7 +37,7 @@ limitations under the License.
   <mat-dialog-actions>
     <button id="km-add-project-dialog-save"
             mat-flat-button
-            (click)="addProject()"
+            type="submit"
             [disabled]="!form.valid">
       Save
     </button>

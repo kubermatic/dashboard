@@ -14,7 +14,7 @@ limitations under the License.
 <mat-dialog-content>
   <form [formGroup]="form"
         fxLayout="column"
-        (keydown.enter)="add()">
+        (submit)="add()">
     <mat-form-field fxFlex>
       <mat-label>Email*</mat-label>
       <input matInput
@@ -30,7 +30,7 @@ limitations under the License.
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
-          (click)="add()"
+          type="submit"
           [disabled]="!form.valid">
     Save
   </button>

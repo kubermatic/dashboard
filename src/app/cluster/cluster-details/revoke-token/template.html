@@ -15,7 +15,7 @@ limitations under the License.
   <p>Choose the token you wish to revoke for "<b>{{cluster.name}}</b>":</p>
   <div class="options"
        fxLayoutGap="30px"
-       (keydown.enter)="revokeToken()">
+       (submit)="revokeToken()">
     <mat-checkbox [disabled]="!isRevokeTokenEnabled"
                   [(ngModel)]="revokeAdminToken">
       Revoke Admin Token
@@ -28,7 +28,7 @@ limitations under the License.
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
-          (click)="revokeToken()"
+          type="submit"
           [disabled]="!revokeAdminToken && !revokeViewerToken">
     Revoke Token
   </button>

@@ -16,7 +16,7 @@ limitations under the License.
   <p *ngIf="!keys || keys.length === 0">No SSH keys available in this project.</p>
   <form [formGroup]="keysForm"
         [hidden]="keys.length === 0"
-        (keydown.enter)="addClusterSSHKeys()">
+        (submit)="addClusterSSHKeys()">
     <mat-form-field *ngIf="keys.length > 0">
       <mat-label>SSH key</mat-label>
       <mat-select formControlName="keys"
@@ -38,7 +38,7 @@ limitations under the License.
   </button>
 
   <button mat-flat-button
-          (click)="addClusterSSHKeys()"
+          type="submit"
           [disabled]="!keysForm.valid"
           *ngIf="keys.length > 0">
     Add SSH key

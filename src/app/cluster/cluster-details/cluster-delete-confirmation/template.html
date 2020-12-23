@@ -12,7 +12,7 @@ limitations under the License.
 -->
 <form [formGroup]="deleteForm"
       id="km-delete-cluster-dialog"
-      (keydown.enter)="deleteCluster()">
+      (submit)="deleteCluster()">
   <km-dialog-title>Delete Cluster</km-dialog-title>
   <mat-dialog-content>
 
@@ -52,7 +52,7 @@ limitations under the License.
   </mat-dialog-content>
   <mat-dialog-actions>
     <button id="km-delete-cluster-dialog-delete-btn"
-            (click)="deleteCluster()"
+            type="submit"
             mat-dialog-close
             mat-flat-button
             [disabled]="!inputNameMatches()">
