@@ -9,13 +9,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
+@import 'variables';
 
-@Component({
-  selector: 'km-loader',
-  templateUrl: 'template.html',
-  styleUrls: ['style.scss'],
-})
-export class LoaderComponent {
-  @Input() text = 'Loading...';
+.km-events-long-text {
+  line-height: 20px;
+}
+
+.km-events-timestamp {
+  min-width: 180px;
+}
+
+.km-mat-row td {
+  line-height: 20px;
+  padding-bottom: 10px;
+  padding-top: 10px;
 }

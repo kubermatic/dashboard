@@ -22,7 +22,7 @@ limitations under the License.
        *ngIf="isOpen()">
     <div class="header"
          fxLayout="row">
-      <span fxFlex>Notifications ({{getNotificationCount()}})</span>
+      <span fxFlex>{{getNotificationCount()}} Notification{{getNotificationCount() !== 1 ? 's' : ''}}</span>
       <button mat-icon-button
               fxLayoutAlign="center center"
               (click)="clear()"

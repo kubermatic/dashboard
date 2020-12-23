@@ -16,11 +16,15 @@ import {NotificationService} from '@core/services/notification/service';
 import {RBACService} from '@core/services/rbac/service';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '@shared/entity/cluster';
-import {SimpleBinding, SimpleClusterBinding} from '@shared/entity/rbac';
+import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '@shared/entity/rbac';
 import * as _ from 'lodash';
-import {Subject} from 'rxjs';
-import {filter, switchMap, take} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AddBindingComponent} from './add-binding/component';
+import {combineLatest, iif, merge, of, Subject, timer} from 'rxjs';
+import {ClusterService} from '@core/services/cluster/service';
+import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
+import {Health} from '@shared/entity/health';
+import {AppConfigService} from '@app/config.service';
 
 @Component({
   selector: 'km-rbac',
@@ -30,26 +34,45 @@ import {AddBindingComponent} from './add-binding/component';
 export class RBACComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
   @Input() projectID: string;
-  @Input() isClusterRunning: boolean;
-  @Input() clusterBindings: SimpleClusterBinding[] = [];
-  @Input() bindings: SimpleBinding[] = [];
-
-  isShowRBAC = false;
-  dataSourceCluster = new MatTableDataSource<SimpleClusterBinding>();
-  displayedColumnsCluster: string[] = ['kind', 'name', 'clusterRole', 'actions'];
-  dataSourceNamespace = new MatTableDataSource<SimpleBinding>();
-  displayedColumnsNamespace: string[] = ['kind', 'name', 'clusterRole', 'namespace', 'actions'];
+  isClusterRunning: boolean;
+  clusterBindingsDataSource = new MatTableDataSource<SimpleClusterBinding>();
+  clusterBindingsDisplayedColumns: string[] = ['kind', 'name', 'clusterRole', 'actions'];
+  bindingsDataSource = new MatTableDataSource<SimpleBinding>();
+  bindingsDisplayedColumns: string[] = ['kind', 'name', 'clusterRole', 'namespace', 'actions'];
+  private readonly _refreshTime = 30; // In seconds.
+  private readonly _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
+  private _refresh = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 
   constructor(
+    private readonly _clusterService: ClusterService,
     private readonly _rbacService: RBACService,
     private readonly _matDialog: MatDialog,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private readonly _appConfigService: AppConfigService
   ) {}
 
   ngOnInit(): void {
-    this.dataSourceCluster.data = this.clusterBindings;
-    this.dataSourceNamespace.data = this.bindings;
+    merge(this._refreshTimer$, this._refresh)
+      .pipe(
+        switchMap(_ => this._clusterService.health(this.projectID, this.cluster.id)),
+        tap((health: Health) => (this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health))),
+        switchMap(_ =>
+          combineLatest([
+            iif(
+              () => this.isClusterRunning,
+              this._rbacService.getClusterBindings(this.cluster.id, this.projectID),
+              of([])
+            ),
+            iif(() => this.isClusterRunning, this._rbacService.getBindings(this.cluster.id, this.projectID), of([])),
+          ])
+        ),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(([clusterBindings, bindings]) => {
+        this.clusterBindingsDataSource.data = this.createSimpleClusterBinding(clusterBindings);
+        this.bindingsDataSource.data = this.createSimpleBinding(bindings);
+      });
   }
 
   ngOnDestroy(): void {
@@ -57,25 +80,48 @@ export class RBACComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  createSimpleClusterBinding(bindings: ClusterBinding[]): SimpleClusterBinding[] {
+    const clusterBindingArray = [];
+    bindings.forEach(binding => {
+      if (binding.subjects) {
+        binding.subjects.map(subject => {
+          clusterBindingArray.push({
+            name: subject.name,
+            role: binding.roleRefName,
+            kind: subject.kind,
+          });
+        });
+      }
+    });
+    return clusterBindingArray;
+  }
+
+  createSimpleBinding(bindings: Binding[]): SimpleBinding[] {
+    const bindingArray = [];
+    bindings.forEach(binding => {
+      if (binding.subjects) {
+        binding.subjects.map(subject => {
+          bindingArray.push({
+            name: subject.name,
+            role: binding.roleRefName,
+            namespace: binding.namespace,
+            kind: subject.kind,
+          });
+        });
+      }
+    });
+    return bindingArray;
+  }
+
   addBinding(event: Event): void {
     event.stopPropagation();
     const modal = this._matDialog.open(AddBindingComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.projectID = this.projectID;
-  }
-
-  getDataSourceCluster(): MatTableDataSource<SimpleClusterBinding> {
-    this.dataSourceCluster.data = this.clusterBindings;
-    return this.dataSourceCluster;
-  }
-
-  getDataSourceNamespace(): MatTableDataSource<SimpleBinding> {
-    this.dataSourceNamespace.data = this.bindings;
-    return this.dataSourceNamespace;
-  }
-
-  toggleRBAC(): void {
-    this.isShowRBAC = !this.isShowRBAC;
+    modal
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => this._refresh.next());
   }
 
   isLoadingData(data: SimpleBinding[] | SimpleClusterBinding[]): boolean {
@@ -119,6 +165,7 @@ export class RBACComponent implements OnInit, OnDestroy {
       )
       .pipe(take(1))
       .subscribe(() => {
+        this._refresh.next();
         this._notificationService.success(`The ${element.name} ${element.kind} was removed from the binding`);
       });
   }
@@ -157,6 +204,7 @@ export class RBACComponent implements OnInit, OnDestroy {
       )
       .pipe(take(1))
       .subscribe(() => {
+        this._refresh.next();
         this._notificationService.success(`The ${element.name} ${element.kind} was removed from the binding`);
       });
   }

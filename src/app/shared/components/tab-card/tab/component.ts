@@ -9,13 +9,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
+import {Component, Input, TemplateRef, ViewChild} from '@angular/core';
 
 @Component({
-  selector: 'km-loader',
+  selector: 'km-tab',
   templateUrl: 'template.html',
-  styleUrls: ['style.scss'],
 })
-export class LoaderComponent {
-  @Input() text = 'Loading...';
+export class TabComponent {
+  @Input() label: string;
+  @ViewChild(TemplateRef) template: TemplateRef<any>;
 }

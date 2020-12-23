@@ -11,7 +11,12 @@
 
 @import 'variables';
 
-.km-toggled-rbac {
+mat-card-header {
+  cursor: pointer;
+  padding: 0;
+}
+
+.km-toggled-events {
   padding-bottom: 8px;
 
   mat-card-header {
@@ -19,26 +24,33 @@
   }
 }
 
-h2 {
-  font-size: $font-size-card-title;
-  font-weight: normal;
-  margin-bottom: 0;
-  padding: 0 60px;
-}
+.mat-card {
+  &:not(.km-toggled-events) {
+    .mat-card-header {
+      .mat-card-title {
+        margin: 0;
+        padding: 8px 0;
+      }
 
-tr {
-  &.mat-row,
-  &.mat-header-row {
-    padding-left: 60px;
-
-    td:first-child,
-    th:first-child {
-      &.mat-cell,
-      &.mat-header-cell {
-        padding-left: 60px;
+      .km-events-title {
+        padding: 8px 0;
       }
     }
   }
+}
+
+.km-events-title {
+  font-size: $font-size-subhead;
+  line-height: 20px;
+  padding: 8px 30px 16px 0;
+
+  i {
+    margin-right: 10px;
+  }
+}
+
+.km-icon-arrow-down {
+  margin-left: 0;
 }
 
 .mat-card-title {
@@ -47,10 +59,4 @@ tr {
     margin-left: 0;
     margin-right: 18px;
   }
-}
-
-.add-button {
-  position: absolute;
-  right: $content-padding;
-  top: $content-padding;
 }

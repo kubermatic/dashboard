@@ -9,48 +9,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@import 'mixins';
 @import 'variables';
 
-.km-toggled-rbac {
-  padding-bottom: 8px;
+.km-tab-card {
+  margin: 0 (-$content-padding);
 
-  mat-card-header {
-    border-radius: $border-radius;
-  }
-}
+  .mat-tab-header {
+    border-bottom: none;
+    margin: $content-padding $content-padding (-$border-radius) 0;
 
-h2 {
-  font-size: $font-size-card-title;
-  font-weight: normal;
-  margin-bottom: 0;
-  padding: 0 60px;
-}
+    .mat-tab-label-container {
+      padding-left: $content-padding;
 
-tr {
-  &.mat-row,
-  &.mat-header-row {
-    padding-left: 60px;
+      .mat-tab-label {
+        font-size: $font-size-subhead;
+        font-weight: 400;
+        opacity: 1;
+        padding-bottom: $border-radius;
+      }
 
-    td:first-child,
-    th:first-child {
-      &.mat-cell,
-      &.mat-header-cell {
-        padding-left: 60px;
+      .mat-tab-label-active {
+        box-shadow: $border-box-shadow;
       }
     }
-  }
-}
 
-.mat-card-title {
-  .km-icon-arrow-down,
-  .km-icon-arrow-up {
-    margin-left: 0;
-    margin-right: 18px;
+    .mat-ink-bar {
+      top: 0;
+    }
   }
-}
 
-.add-button {
-  position: absolute;
-  right: $content-padding;
-  top: $content-padding;
+  .tab-content {
+    margin: 0 $content-padding $content-padding $content-padding;
+
+    .mat-card {
+      margin: 0;
+    }
+  }
 }

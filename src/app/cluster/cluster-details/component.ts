@@ -18,7 +18,6 @@ import {ClusterService} from '@core/services/cluster/service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {NotificationService} from '@core/services/notification/service';
 import {PathParam} from '@core/services/params/service';
-import {RBACService} from '@core/services/rbac/service';
 import {SettingsService} from '@core/services/settings/service';
 import {UserService} from '@core/services/user/service';
 import {Addon} from '@shared/entity/addon';
@@ -30,7 +29,6 @@ import {Health, HealthState} from '@shared/entity/health';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {ClusterMetrics} from '@shared/entity/metrics';
-import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '@shared/entity/rbac';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {Config, GroupConfig} from '@shared/model/Config';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
@@ -69,8 +67,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   events: Event[] = [];
   addons: Addon[] = [];
   upgrades: MasterVersion[] = [];
-  clusterBindings: SimpleClusterBinding[] = [];
-  bindings: SimpleBinding[] = [];
   private _unsubscribe: Subject<any> = new Subject();
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
@@ -85,7 +81,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _node: NodeService,
     private readonly _userService: UserService,
     private readonly _api: ApiService,
-    private readonly _rbacService: RBACService,
     private readonly _notificationService: NotificationService,
     readonly settings: SettingsService
   ) {}
@@ -135,14 +130,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           const reload$ = []
             .concat(this._canReloadVersions() ? this._clusterService.upgrades(this.projectID, this.cluster.id) : of([]))
             .concat(
-              this._canReloadBindings()
-                ? [
-                    this._rbacService.getClusterBindings(this.cluster.id, this.projectID),
-                    this._rbacService.getBindings(this.cluster.id, this.projectID),
-                  ]
-                : [of([]), of([])]
-            )
-            .concat(
               this._canReloadNodes()
                 ? [
                     this._clusterService.addons(this.projectID, this.cluster.id),
@@ -158,10 +145,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(
-        ([upgrades, clusterBindings, bindings, addons, nodes, machineDeployments, metrics]: [
+        ([upgrades, addons, nodes, machineDeployments, metrics]: [
           MasterVersion[],
-          ClusterBinding[],
-          Binding[],
           Addon[],
           Node[],
           MachineDeployment[],
@@ -172,8 +157,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.machineDeployments = machineDeployments;
           this.metrics = metrics;
           this.upgrades = _.isEmpty(upgrades) ? [] : upgrades;
-          this.clusterBindings = this.createSimpleClusterBinding(clusterBindings);
-          this.bindings = this.createSimpleBinding(bindings);
         },
         error => {
           const errorCodeNotFound = 404;
@@ -193,10 +176,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     );
   }
 
-  private _canReloadBindings(): boolean {
-    return this.cluster && Health.allHealthy(this.health) && this.isRBACEnabled();
-  }
-
   private _canReloadNodes(): boolean {
     return this.cluster && Health.allHealthy(this.health);
   }
@@ -210,39 +189,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       this.isClusterRunning &&
       MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Create)
     );
-  }
-
-  createSimpleClusterBinding(bindings: ClusterBinding[]): SimpleClusterBinding[] {
-    const clusterBindingArray = [];
-    bindings.forEach(binding => {
-      if (binding.subjects) {
-        binding.subjects.map(subject => {
-          clusterBindingArray.push({
-            name: subject.name,
-            role: binding.roleRefName,
-            kind: subject.kind,
-          });
-        });
-      }
-    });
-    return clusterBindingArray;
-  }
-
-  createSimpleBinding(bindings: Binding[]): SimpleBinding[] {
-    const bindingArray = [];
-    bindings.forEach(binding => {
-      if (binding.subjects) {
-        binding.subjects.map(subject => {
-          bindingArray.push({
-            name: subject.name,
-            role: binding.roleRefName,
-            namespace: binding.namespace,
-            kind: subject.kind,
-          });
-        });
-      }
-    });
-    return bindingArray;
   }
 
   addNode(): void {
