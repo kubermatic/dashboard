@@ -121,7 +121,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Node',
-        message: `Are you sure you want to permanently delete node <strong>${node.name}</strong>?`,
+        message: `Are you sure you want to permanently delete node ${node.name}?`,
         confirmLabel: 'Delete',
       },
     };
@@ -135,9 +135,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(switchMap(_ => this._clusterService.deleteNode(this.projectID, this.cluster.id, node.id)))
       .pipe(take(1))
       .subscribe(() => {
-        this._notificationService.success(
-          `The <strong>${node.name}</strong> node was removed from the <strong>${this.cluster.name}</strong> cluster`
-        );
+        this._notificationService.success(`The ${node.name} node was removed from the ${this.cluster.name} cluster`);
         this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeleted');
         this.deleteNode.emit(node);
       });

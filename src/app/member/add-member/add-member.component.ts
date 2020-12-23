@@ -51,9 +51,7 @@ export class AddMemberComponent implements OnInit {
 
     this._apiService.createMembers(this.project.id, createMember).subscribe((member: Member) => {
       this._matDialogRef.close(member);
-      this._notificationService.success(
-        `The <strong>${member.email}</strong> member was added to the <strong>${this.project.name}</strong> project`
-      );
+      this._notificationService.success(`The ${member.email} member was added to the ${this.project.name} project`);
     });
   }
 }

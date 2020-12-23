@@ -103,7 +103,7 @@ export class AdminsComponent implements OnInit, OnChanges {
       .setAdmin(admin)
       .pipe(take(1))
       .subscribe(() => {
-        this._notificationService.success(`The <strong>${admin.name}</strong> user was deleted from admin group`);
+        this._notificationService.success(`The ${admin.name} user was deleted from admin group`);
         this._settingsService.refreshAdmins();
       });
   }

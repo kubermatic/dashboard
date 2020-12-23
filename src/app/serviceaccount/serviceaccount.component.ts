@@ -182,7 +182,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Service Account',
-        message: `Delete "<strong>${serviceAccount.name}</strong>" from "<strong>${this._selectedProject.name}</strong>" permanently?`,
+        message: `Delete ${serviceAccount.name} from ${this._selectedProject.name} permanently?`,
         confirmLabel: 'Delete',
       },
     };
@@ -199,7 +199,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
         delete this.tokenList[serviceAccount.id];
         this._serviceAccountUpdate.next();
         this._notificationService.success(
-          `The <strong>${serviceAccount.name}</strong> service account was removed from the <strong>${this._selectedProject.name}</strong> project`
+          `The ${serviceAccount.name} service account was removed from the ${this._selectedProject.name} project`
         );
         this._googleAnalyticsService.emitEvent('serviceAccountOverview', 'ServiceAccountDeleted');
       });

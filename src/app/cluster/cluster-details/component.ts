@@ -197,7 +197,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(
         _ => this._clusterService.onClusterUpdate.next(),
-        _ => this._notificationService.error('There was an error during node deployment creation.')
+        _ => this._notificationService.error('There was an error during machine deployment creation.')
       );
   }
 
@@ -300,9 +300,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this.reloadAddons();
-        this._notificationService.success(
-          `The <strong>${addon.name}</strong> addon was added to the <strong>${this.cluster.name}</strong> cluster`
-        );
+        this._notificationService.success(`The ${addon.name} addon was added to the ${this.cluster.name} cluster`);
       });
   }
 
@@ -313,7 +311,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this.reloadAddons();
-        this._notificationService.success(`The <strong>${addon.name}</strong> addon was updated`);
+        this._notificationService.success(`The ${addon.name} addon was updated`);
       });
   }
 
@@ -324,9 +322,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this.reloadAddons();
-        this._notificationService.success(
-          `The <strong>${addon.name}</strong> addon was removed from the <strong>${this.cluster.name}</strong> cluster`
-        );
+        this._notificationService.success(`The ${addon.name} addon was removed from the ${this.cluster.name} cluster`);
       });
   }
 

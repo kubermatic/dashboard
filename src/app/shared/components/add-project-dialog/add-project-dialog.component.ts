@@ -47,7 +47,7 @@ export class AddProjectDialogComponent implements OnInit {
     };
     this._apiService.createProject(createProject).subscribe(res => {
       this._matDialogRef.close(res);
-      this._notificationService.success(`The <strong>${createProject.name}</strong> project was added`);
+      this._notificationService.success(`The ${createProject.name} project was added`);
     });
   }
 }
