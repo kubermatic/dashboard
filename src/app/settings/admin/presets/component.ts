@@ -14,7 +14,11 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {CreatePresetDialogComponent} from '@app/settings/admin/presets/create-dialog/component';
+import {
+  CreatePresetDialogComponent,
+  CreatePresetDialogData,
+  Mode,
+} from '@app/settings/admin/presets/create-dialog/component';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {UserService} from '@core/services/user/service';
 import {PresetsService} from '@core/services/wizard/presets.service';
@@ -122,14 +126,58 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
     //   });
   }
 
-  add(): void {
+  createPreset(): void {
     const dialogConfig: MatDialogConfig = {
       panelClass: 'km-create-preset-dialog',
       data: {
-        title: 'Add Datacenter',
-        isEditing: false,
-        confirmLabel: 'Add',
-      },
+        title: 'Create a Preset',
+        steps: ['Preset', 'Provider', 'Settings'],
+        mode: Mode.Create,
+      } as CreatePresetDialogData,
+    };
+
+    this._matDialog
+      .open(CreatePresetDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {});
+  }
+
+  addProvider(preset: Preset): void {
+    const dialogConfig: MatDialogConfig = {
+      panelClass: 'km-create-preset-dialog',
+      data: {
+        title: 'Add Provider',
+        steps: ['Provider', 'Settings'],
+        mode: Mode.Add,
+        preset: preset,
+      } as CreatePresetDialogData,
+    };
+
+    this._matDialog
+      .open(CreatePresetDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {});
+  }
+
+  canAddProvider(preset: Preset): boolean {
+    return (
+      Object.values(NodeProvider).filter(
+        p => [NodeProvider.BAREMETAL, NodeProvider.BRINGYOUROWN, NodeProvider.NONE].indexOf(p) < 0
+      ).length > preset.providers.length
+    );
+  }
+
+  editProvider(preset: Preset): void {
+    const dialogConfig: MatDialogConfig = {
+      panelClass: 'km-create-preset-dialog',
+      data: {
+        title: 'Edit Provider',
+        steps: ['Provider', 'Settings'],
+        mode: Mode.Edit,
+        preset: preset,
+      } as CreatePresetDialogData,
     };
 
     this._matDialog

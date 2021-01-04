@@ -14,15 +14,15 @@ limitations under the License.
       fxLayout="column"
       fxLayoutGap="16px">
   <mat-form-field fxFlex>
-    <mat-label>Token</mat-label>
+    <mat-label>Kubeconfig</mat-label>
     <input matInput
-           [formControlName]="Controls.Token"
-           [name]="Controls.Token"
+           [formControlName]="Controls.Kubeconfig"
+           [name]="Controls.Kubeconfig"
            type="password"
            autocomplete="off"
            required>
-    <mat-error *ngIf="form.get(Controls.Token).hasError('required')">
-      Token is <strong>required</strong>.
+    <mat-error *ngIf="form.get(Controls.Kubeconfig).hasError('required')">
+      Kubeconfig is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 </form>

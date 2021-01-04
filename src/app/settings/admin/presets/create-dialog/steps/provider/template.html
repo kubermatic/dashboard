@@ -15,7 +15,8 @@ limitations under the License.
       fxLayout="column">
   <mat-button-toggle-group group="providerGroup"
                            [formControlName]="controls.Provider"
-                           fxLayout="row wrap">
+                           fxLayout="row wrap"
+                           fxLayoutAlign="center center">
     <mat-button-toggle *ngFor="let provider of providers;"
                        value="{{provider}}">
       <span class="km-provider-logo km-provider-logo-{{provider}}"></span>

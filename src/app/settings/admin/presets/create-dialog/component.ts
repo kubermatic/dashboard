@@ -13,13 +13,21 @@ import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MatStepper} from '@angular/material/stepper';
+import {Preset} from '@shared/entity/preset';
 import {Subject} from 'rxjs';
 
 export interface CreatePresetDialogData {
   title: string;
+  mode: Mode;
+  steps: StepRegistry[];
+  preset: Preset;
 }
 
-export enum Controls {}
+export enum Mode {
+  Create = 'create',
+  Add = 'add',
+  Edit = 'edit',
+}
 
 enum StepRegistry {
   Preset = 'Preset',
@@ -33,24 +41,24 @@ enum StepRegistry {
   styleUrls: ['./style.scss'],
 })
 export class CreatePresetDialogComponent implements OnInit, OnDestroy {
-  readonly controls = Controls;
   readonly stepRegistry = StepRegistry;
+
   form: FormGroup;
   creating = false;
+
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
   private _unsubscribe = new Subject<void>();
 
   constructor(
-    // private readonly _matDialogRef: MatDialogRef<CreatePresetDialogComponent>,
     private readonly _formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: CreatePresetDialogData
   ) {}
 
-  get steps(): {name: string}[] {
-    return [{name: 'Preset'}, {name: 'Provider'}, {name: 'Settings'}];
+  get steps(): StepRegistry[] {
+    return this.data.steps;
   }
 
-  get active(): {name: string} {
+  get active(): string {
     return this.steps[this._stepper.selectedIndex];
   }
 
@@ -63,18 +71,22 @@ export class CreatePresetDialogComponent implements OnInit, OnDestroy {
   }
 
   get invalid(): boolean {
-    return this.form.get(this.active.name).invalid;
+    return this.form.get(this.active).invalid;
   }
 
   ngOnInit(): void {
     const controls = {};
-    this.steps.forEach(step => (controls[step.name] = this._formBuilder.control('')));
+    this.steps.forEach(step => (controls[step] = this._formBuilder.control('')));
     this.form = this._formBuilder.group(controls);
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  isEnabled(step: StepRegistry): boolean {
+    return this.steps.indexOf(step) > -1;
   }
 
   save(): void {}

@@ -13,8 +13,9 @@ import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/create-dialog/steps/service';
 import {KubevirtPresetSpec} from '@shared/entity/preset';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 
 export enum Controls {
   Kubeconfig = 'kubeconfig',
@@ -48,7 +49,10 @@ export class KubevirtSettingsComponent extends BaseFormValidator implements OnIn
       [Controls.Kubeconfig]: this._builder.control('', Validators.required),
     });
 
-    this._presetDialogService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.reset());
+    this._presetDialogService.providerChanges
+      .pipe(filter(provider => provider === NodeProvider.KUBEVIRT))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this.reset());
 
     this.form
       .get(Controls.Kubeconfig)

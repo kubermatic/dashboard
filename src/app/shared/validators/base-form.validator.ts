@@ -51,7 +51,9 @@ export class BaseFormValidator implements ControlValueAccessor, Validator {
   }
 
   reset(): void {
-    this.form.reset();
-    Object.keys(this.form.controls).forEach(field => this.form.get(field).setErrors(null));
+    Object.keys(this.form.controls).forEach(field => {
+      this.form.get(field).reset();
+      this.form.get(field).setErrors(null);
+    });
   }
 }

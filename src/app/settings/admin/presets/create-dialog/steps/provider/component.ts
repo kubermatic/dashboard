@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnInit} from '@angular/core';
+import {Component, forwardRef, Input, OnInit} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -20,6 +20,7 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
+import {Mode} from '@app/settings/admin/presets/create-dialog/component';
 import {PresetDialogService} from '@app/settings/admin/presets/create-dialog/steps/service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
@@ -48,6 +49,9 @@ enum Controls {
   ],
 })
 export class PresetProviderStepComponent extends BaseFormValidator implements OnInit, ControlValueAccessor, Validator {
+  @Input() existingProviders: NodeProvider[] = [];
+  @Input() mode: Mode = Mode.Add;
+
   providers: NodeProvider[] = [];
   form: FormGroup;
 
@@ -66,11 +70,22 @@ export class PresetProviderStepComponent extends BaseFormValidator implements On
       [Controls.Provider]: new FormControl('', [Validators.required]),
     });
 
+    this.existingProviders = this.existingProviders || [];
+
     this._datacenterService.datacenters
       .pipe(map(datacenters => datacenters.map(dc => NodeProviderConstants.newNodeProvider(dc.spec.provider))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(providers => {
-        const seen = {[NodeProvider.BRINGYOUROWN]: true};
+        if (this.mode === Mode.Edit) {
+          this.providers = this.existingProviders;
+          return;
+        }
+
+        const seen = {
+          [NodeProvider.BRINGYOUROWN]: true,
+          [NodeProvider.BAREMETAL]: true,
+        };
+        this.existingProviders.forEach(p => (seen[p] = true));
         this.providers = providers.filter(provider =>
           Object.prototype.hasOwnProperty.call(seen, provider) ? false : (seen[provider] = true)
         );

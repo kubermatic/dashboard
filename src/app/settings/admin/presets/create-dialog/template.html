@@ -11,7 +11,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <km-dialog-title>Create Preset</km-dialog-title>
-<mat-horizontal-stepper linear
+<mat-horizontal-stepper id="km-preset-dialog-stepper"
+                        linear
                         disableRipple
                         [@.disabled]="true"
                         #stepper>
@@ -19,19 +20,24 @@ limitations under the License.
     <mat-icon>done</mat-icon>
   </ng-template>
 
-  <mat-step [stepControl]="form.get(stepRegistry.Preset)"
+  <mat-step *ngIf="isEnabled(stepRegistry.Preset)"
+            [stepControl]="form.get(stepRegistry.Preset)"
             [label]="stepRegistry.Preset"
             fxFlex="100%">
     <km-preset-step [formControl]="form.get(stepRegistry.Preset)"></km-preset-step>
   </mat-step>
 
-  <mat-step [stepControl]="form.get(stepRegistry.Provider)"
+  <mat-step *ngIf="isEnabled(stepRegistry.Provider)"
+            [stepControl]="form.get(stepRegistry.Provider)"
             [label]="stepRegistry.Provider"
             fxFlex="100%">
-    <km-preset-provider-step [formControl]="form.get(stepRegistry.Provider)"></km-preset-provider-step>
+    <km-preset-provider-step [existingProviders]="data.preset?.providers"
+                             [mode]="data.mode"
+                             [formControl]="form.get(stepRegistry.Provider)"></km-preset-provider-step>
   </mat-step>
 
-  <mat-step [stepControl]="form.get(stepRegistry.Settings)"
+  <mat-step *ngIf="isEnabled(stepRegistry.Settings)"
+            [stepControl]="form.get(stepRegistry.Settings)"
             [label]="stepRegistry.Settings"
             fxFlex="100%">
     <km-preset-settings-step [formControl]="form.get(stepRegistry.Settings)"></km-preset-settings-step>

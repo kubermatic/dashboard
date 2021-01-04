@@ -13,9 +13,10 @@ import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/create-dialog/steps/service';
 import {OpenstackPresetSpec} from '@shared/entity/preset';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
-import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 
 export enum Controls {
   Username = 'username',
@@ -67,7 +68,10 @@ export class OpenstackSettingsComponent extends BaseFormValidator implements OnI
       [Controls.SubnetID]: this._builder.control(''),
     });
 
-    this._presetDialogService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.reset());
+    this._presetDialogService.providerChanges
+      .pipe(filter(provider => provider === NodeProvider.OPENSTACK))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this.reset());
 
     merge()
       .pipe(distinctUntilChanged())

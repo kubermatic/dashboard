@@ -10,6 +10,7 @@
 // limitations under the License.
 
 import {Metadata} from '@shared/entity/common';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 export class SimplePresetList {
   names: string[] = [];
@@ -26,7 +27,7 @@ export class PresetList {
 export class Preset {
   name: string;
   enabled: boolean;
-  providers: string[];
+  providers: NodeProvider[];
 }
 
 export class CreatePresetReq {

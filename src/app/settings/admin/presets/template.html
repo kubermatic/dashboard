@@ -112,7 +112,7 @@ limitations under the License.
     </div>
     <button mat-icon-button
             matTooltip="Create a Preset"
-            (click)="add()">
+            (click)="createPreset()">
       <i class="km-icon-add"></i>
     </button>
   </mat-card-header>
@@ -182,11 +182,14 @@ limitations under the License.
                 <span>Edit Preset</span>
               </button>
 
-              <button mat-menu-item>
+              <button mat-menu-item
+                      [disabled]="!canAddProvider(element)"
+                      (click)="addProvider(element)">
                 <span>Add Provider</span>
               </button>
 
-              <button mat-menu-item>
+              <button mat-menu-item
+                      (click)="editProvider(element)">
                 <span>Edit Provider</span>
               </button>
             </mat-menu>
