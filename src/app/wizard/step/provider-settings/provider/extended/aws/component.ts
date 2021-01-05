@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '@shared/entity/cluster';
@@ -20,6 +20,7 @@ import {merge} from 'rxjs';
 import {filter, takeUntil} from 'rxjs/operators';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {AWSSecurityGroup} from '@shared/entity/provider/aws';
+import * as _ from 'lodash';
 
 enum Controls {
   SecurityGroup = 'securityGroup',
@@ -62,7 +63,8 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterService: ClusterService,
+    private readonly _cdr: ChangeDetectorRef
   ) {
     super('AWS Provider Extended');
   }
@@ -112,8 +114,35 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     return '';
   }
 
+  private _hasRequiredCredentials(): boolean {
+    return (
+      !!this._clusterService.cluster.spec.cloud.aws.accessKeyId &&
+      !!this._clusterService.cluster.spec.cloud.aws.secretAccessKey
+    );
+  }
+
   onSecurityGroupChange(groupId: string): void {
     this._clusterService.cluster.spec.cloud.aws.securityGroupID = groupId;
+  }
+
+  private _onSecurityGroupLoading(): void {
+    this._clearSecurityGroup();
+    this.securityGroupLabel = SecurityGroupState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _clearSecurityGroup(): void {
+    this.securityGroups = [];
+    this.selectedSecurityGroup = '';
+    this.securityGroupLabel = SecurityGroupState.Empty;
+    this._securityGroupCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _initSecurityGroup(securityGroups: AWSSecurityGroup[]): void {
+    this.securityGroups = securityGroups;
+    this.securityGroupLabel = !_.isEmpty(this.securityGroups) ? SecurityGroupState.Ready : SecurityGroupState.Empty;
+    this._cdr.detectChanges();
   }
 
   private _enable(enable: boolean, name: string): void {
