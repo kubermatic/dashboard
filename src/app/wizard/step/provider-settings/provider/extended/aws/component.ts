@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {Component, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '@shared/entity/cluster';
@@ -18,12 +18,20 @@ import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
 import {filter, takeUntil} from 'rxjs/operators';
+import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {AWSSecurityGroup} from '@shared/entity/provider/aws';
 
 enum Controls {
   SecurityGroup = 'securityGroup',
   RouteTableID = 'routeTableId',
   InstanceProfileName = 'instanceProfileName',
   RoleARN = 'roleARN',
+}
+
+enum SecurityGroupState {
+  Loading = 'Loading...',
+  Ready = 'Security Group ID',
+  Empty = 'No Security Groups IDs Available',
 }
 
 @Component({
@@ -44,6 +52,12 @@ enum Controls {
 })
 export class AWSProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
+
+  @ViewChild('securityGroupCombobox')
+  private readonly _securityGroupCombobox: FilteredComboboxComponent;
+  selectedSecurityGroup = '';
+  securityGroups: AWSSecurityGroup[] = [];
+  securityGroupLabel = SecurityGroupState.Empty;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -85,6 +99,21 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  getHint(control: Controls): string {
+    switch (control) {
+      case Controls.SecurityGroup:
+        return this._hasRequiredCredentials()
+          ? 'Specify to attach worker nodes to it, otherwise a new security group will be used.'
+          : 'Please enter your credentials first.';
+    }
+
+    return '';
+  }
+
+  onSecurityGroupChange(groupId: string): void {
+    this._clusterService.cluster.spec.cloud.aws.securityGroupID = groupId;
   }
 
   private _enable(enable: boolean, name: string): void {

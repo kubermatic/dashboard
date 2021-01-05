@@ -19,6 +19,8 @@ import {Provider} from './provider';
 import {AWSSize, AWSSubnet, AWSVPC} from '../../../../shared/entity/provider/aws';
 
 export class AWS extends Provider {
+  private readonly _securityGroupsUrl = `${this._restRoot}/providers/aws/securitygroups`;
+
   constructor(http: HttpClient, provider: NodeProvider) {
     super(http, provider);
 
