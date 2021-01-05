@@ -96,7 +96,6 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       .subscribe(this._loadSecurityGroups.bind(this));
 
     merge(
-      this.form.get(Controls.SecurityGroup).valueChanges,
       this.form.get(Controls.RouteTableID).valueChanges,
       this.form.get(Controls.InstanceProfileName).valueChanges,
       this.form.get(Controls.RoleARN).valueChanges
@@ -186,7 +185,6 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
             instanceProfileName: this.form.get(Controls.InstanceProfileName).value,
             roleARN: this.form.get(Controls.RoleARN).value,
             routeTableId: this.form.get(Controls.RouteTableID).value,
-            securityGroupID: this.form.get(Controls.SecurityGroup).value,
           } as AWSCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
