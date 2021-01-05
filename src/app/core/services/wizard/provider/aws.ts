@@ -16,7 +16,8 @@ import {map} from 'rxjs/operators';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
-import {AWSSize, AWSSubnet, AWSVPC} from '../../../../shared/entity/provider/aws';
+import {AWSSecurityGroup, AWSSize, AWSSubnet, AWSVPC} from '../../../../shared/entity/provider/aws';
+import {Openstack} from '@core/services/wizard/provider/openstack';
 
 export class AWS extends Provider {
   private readonly _securityGroupsUrl = `${this._restRoot}/providers/aws/securitygroups`;
@@ -60,6 +61,13 @@ export class AWS extends Provider {
     return this;
   }
 
+  datacenter(datacenter: string): AWS {
+    if (datacenter) {
+      this._headers = this._headers.set(AWS.Header.Datacenter, datacenter);
+    }
+    return this;
+  }
+
   vpcs(seed: string, onLoadingCb: () => void = null): Observable<AWSVPC[]> {
     if (!this._hasRequiredHeaders() || !seed) {
       return EMPTY;
@@ -73,6 +81,25 @@ export class AWS extends Provider {
     return this._http
       .get<AWSVPC[]>(url, {headers: this._headers})
       .pipe(map(vpcs => vpcs.map(vpc => Object.assign(new AWSVPC(), vpc))));
+  }
+
+  securityGroups(seed: string, onLoadingCb: () => void = null): Observable<AWSSecurityGroup[]> {
+    if (!this._hasRequiredHeaders() || !seed) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._restRoot}/providers/${this._provider}/${seed}/securitygroups`;
+    return this._http
+      .get<AWSSecurityGroup[]>(url, {headers: this._headers})
+      .pipe(
+        map(securityGroups =>
+          securityGroups.map(securityGroups => Object.assign(new AWSSecurityGroup(), securityGroups))
+        )
+      );
   }
 
   subnets(seed: string, onLoadingCb: () => void = null): Observable<AWSSubnet[]> {
@@ -109,5 +136,6 @@ export namespace AWS {
     SecretAccessKey = 'SecretAccessKey',
     VPC = 'VPC',
     Region = 'Region',
+    Datacenter = 'DatacenterName',
   }
 }

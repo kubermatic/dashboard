@@ -16,8 +16,8 @@ import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '@shared/entity/clus
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {merge} from 'rxjs';
-import {filter, takeUntil} from 'rxjs/operators';
+import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
+import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {AWSSecurityGroup} from '@shared/entity/provider/aws';
 import * as _ from 'lodash';
@@ -88,6 +88,13 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
         this._presets.enablePresets(Object.values(this._clusterService.cluster.spec.cloud.aws).every(value => !value));
       });
 
+    this._clusterService.clusterChanges
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AWS))
+      .pipe(tap(_ => (!this._hasRequiredCredentials() ? this._clearSecurityGroup() : null)))
+      .pipe(switchMap(_ => this._securityGroupObservable()))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._loadSecurityGroups.bind(this));
+
     merge(
       this.form.get(Controls.SecurityGroup).valueChanges,
       this.form.get(Controls.RouteTableID).valueChanges,
@@ -125,6 +132,22 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     this._clusterService.cluster.spec.cloud.aws.securityGroupID = groupId;
   }
 
+  private _securityGroupObservable(): Observable<AWSSecurityGroup[]> {
+    return this._presets
+      .provider(NodeProvider.AWS)
+      .accessKeyID(this._clusterService.cluster.spec.cloud.aws.accessKeyId)
+      .secretAccessKey(this._clusterService.cluster.spec.cloud.aws.secretAccessKey)
+      .datacenter(this._clusterService.cluster.spec.cloud.dc)
+      .securityGroups(this._onSecurityGroupLoading.bind(this))
+      .pipe(map(securityGroups => _.sortBy(securityGroups, sg => sg.groupName.toLowerCase())))
+      .pipe(
+        catchError(() => {
+          this._clearSecurityGroup();
+          return onErrorResumeNext(EMPTY);
+        })
+      );
+  }
+
   private _onSecurityGroupLoading(): void {
     this._clearSecurityGroup();
     this.securityGroupLabel = SecurityGroupState.Loading;
@@ -139,7 +162,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     this._cdr.detectChanges();
   }
 
-  private _initSecurityGroup(securityGroups: AWSSecurityGroup[]): void {
+  private _loadSecurityGroups(securityGroups: AWSSecurityGroup[]): void {
     this.securityGroups = securityGroups;
     this.securityGroupLabel = !_.isEmpty(this.securityGroups) ? SecurityGroupState.Ready : SecurityGroupState.Empty;
     this._cdr.detectChanges();
