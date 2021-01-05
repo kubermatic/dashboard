@@ -13,15 +13,12 @@ import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
-import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
-import {AWSSecurityGroup, AWSSize, AWSSubnet, AWSVPC} from '../../../../shared/entity/provider/aws';
-import {Openstack} from '@core/services/wizard/provider/openstack';
+import {AWSSecurityGroup, AWSSize, AWSSubnet, AWSVPC} from '@shared/entity/provider/aws';
 
 export class AWS extends Provider {
-  private readonly _securityGroupsUrl = `${this._restRoot}/providers/aws/securitygroups`;
-
   constructor(http: HttpClient, provider: NodeProvider) {
     super(http, provider);
 
