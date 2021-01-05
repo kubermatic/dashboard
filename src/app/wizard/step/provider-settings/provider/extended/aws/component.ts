@@ -136,8 +136,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       .provider(NodeProvider.AWS)
       .accessKeyID(this._clusterService.cluster.spec.cloud.aws.accessKeyId)
       .secretAccessKey(this._clusterService.cluster.spec.cloud.aws.secretAccessKey)
-      .datacenter(this._clusterService.cluster.spec.cloud.dc)
-      .securityGroups(this._onSecurityGroupLoading.bind(this))
+      .securityGroups(this._clusterService.datacenter, this._onSecurityGroupLoading.bind(this))
       .pipe(map(securityGroups => _.sortBy(securityGroups, sg => sg.groupName.toLowerCase())))
       .pipe(
         catchError(() => {

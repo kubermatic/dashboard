@@ -58,13 +58,6 @@ export class AWS extends Provider {
     return this;
   }
 
-  datacenter(datacenter: string): AWS {
-    if (datacenter) {
-      this._headers = this._headers.set(AWS.Header.Datacenter, datacenter);
-    }
-    return this;
-  }
-
   vpcs(seed: string, onLoadingCb: () => void = null): Observable<AWSVPC[]> {
     if (!this._hasRequiredHeaders() || !seed) {
       return EMPTY;
@@ -80,8 +73,8 @@ export class AWS extends Provider {
       .pipe(map(vpcs => vpcs.map(vpc => Object.assign(new AWSVPC(), vpc))));
   }
 
-  securityGroups(seed: string, onLoadingCb: () => void = null): Observable<AWSSecurityGroup[]> {
-    if (!this._hasRequiredHeaders() || !seed) {
+  securityGroups(dc: string, onLoadingCb: () => void = null): Observable<AWSSecurityGroup[]> {
+    if (!this._hasRequiredHeaders() || !dc) {
       return EMPTY;
     }
 
@@ -89,7 +82,7 @@ export class AWS extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/${seed}/securitygroups`;
+    const url = `${this._restRoot}/providers/${this._provider}/${dc}/securitygroups`;
     return this._http
       .get<AWSSecurityGroup[]>(url, {headers: this._headers})
       .pipe(
@@ -133,6 +126,5 @@ export namespace AWS {
     SecretAccessKey = 'SecretAccessKey',
     VPC = 'VPC',
     Region = 'Region',
-    Datacenter = 'DatacenterName',
   }
 }
