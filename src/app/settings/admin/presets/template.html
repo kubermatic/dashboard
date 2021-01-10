@@ -78,37 +78,6 @@ limitations under the License.
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field fxFlex>
-        <mat-label>Status</mat-label>
-        <mat-select disableOptionCentering
-                    class="km-select-ellipsis"
-                    [(ngModel)]="statusFilter"
-                    (selectionChange)="filter()">
-          <mat-select-trigger fxFlex
-                              fxLayout="row">
-            <div fxFlex
-                 fxLayoutAlign="start">
-              <ng-container [ngSwitch]="statusFilter">
-                <ng-container *ngSwitchCase="true">Enabled</ng-container>
-                <ng-container *ngSwitchCase="false">Disabled</ng-container>
-              </ng-container>
-            </div>
-            <div fxFlex
-                 fxLayoutAlign="end">
-              <button *ngIf="statusFilter"
-                      (click)="statusFilter = undefined; filter(); $event.stopPropagation()"
-                      mat-icon-button
-                      class="km-clear-input-btn"
-                      aria-label="Clear">
-                <mat-icon inline="true">close</mat-icon>
-              </button>
-            </div>
-          </mat-select-trigger>
-          <mat-option [value]="true">Enabled</mat-option>
-          <mat-option [value]="false">Disabled</mat-option>
-        </mat-select>
-      </mat-form-field>
-
     </div>
     <button mat-icon-button
             matTooltip="Create a Preset"
@@ -141,7 +110,7 @@ limitations under the License.
             fxLayout="row"
             class="providers-column">
           <ng-container *ngFor="let provider of element.providers">
-            <span class="km-provider-logo km-provider-logo-{{provider}} provider-logo-medium"></span>
+            <span class="km-provider-logo km-provider-logo-{{provider.name}} provider-logo-medium"></span>
           </ng-container>
         </td>
       </ng-container>
@@ -149,19 +118,24 @@ limitations under the License.
       <ng-container matColumnDef="show">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell"
-            mat-sort-header>
-          Show
-          <div class="km-icon-info km-pointer tooltip"
-               matTooltip=""></div>
+            class="km-header-cell">
+          <div fxLayout="row"
+               class="show">
+            Show
+            <div fxFlexAlign="center"
+                 fxLayoutAlign="center"
+                 class="km-icon-info km-pointer tooltip"
+                 matTooltip="Shows if the Preset is enabled or disabled. Disabled Presets cannot be used to create new clusters."></div>
+          </div>
         </th>
         <td mat-cell
             *matCellDef="let element"
             fxLayoutGap="6px">
-          <span *ngIf="element.enabled"
-                class="km-image-show km-pointer"></span>
-          <span *ngIf="!element.enabled"
-                class="km-image-hide km-pointer"></span>
+          <button mat-icon-button
+                  (click)="updatePresetStatus(element.name, !element.enabled)"
+                  fxLayoutAlign="center center">
+            <i [ngClass]="element.enabled ? 'km-icon-show' : 'km-icon-hide'"></i>
+          </button>
         </td>
       </ng-container>
 
@@ -178,7 +152,8 @@ limitations under the License.
             </button>
             <mat-menu #menu="matMenu"
                       class="km-provider-edit-settings">
-              <button mat-menu-item>
+              <button mat-menu-item
+                      (click)="editPreset(element)">
                 <span>Edit Preset</span>
               </button>
 

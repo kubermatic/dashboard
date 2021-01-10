@@ -14,19 +14,19 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {
-  CreatePresetDialogComponent,
-  CreatePresetDialogData,
-  Mode,
-} from '@app/settings/admin/presets/create-dialog/component';
+import {Mode, PresetDialogComponent, PresetDialogData} from '@app/settings/admin/presets/dialog/component';
+import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
+import {EditPresetDialogComponent} from '@app/settings/admin/presets/edit-dialog/component';
 import {DatacenterService} from '@core/services/datacenter/service';
+import {NotificationService} from '@core/services/notification/service';
 import {UserService} from '@core/services/user/service';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {Datacenter} from '@shared/entity/datacenter';
-import {Preset} from '@shared/entity/preset';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {Subject} from 'rxjs';
-import {take, takeUntil} from 'rxjs/operators';
+import {Preset, PresetList} from '@shared/entity/preset';
+import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
+import {merge, of, Subject} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
+import {switchMap, take, takeUntil} from 'rxjs/operators';
 
 enum Column {
   Name = 'name',
@@ -48,19 +48,34 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
   datacenterFilter: string;
   providers: NodeProvider[] = Object.values(NodeProvider).filter(provider => !!provider);
   providerFilter: NodeProvider;
-  statusFilter: boolean;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   private _unsubscribe = new Subject<void>();
+  private _supportedProviders: NodeProvider[] = [];
+  private _presetsChanged = new Subject<void>();
 
   constructor(
     private readonly _userService: UserService,
     private readonly _presetService: PresetsService,
     private readonly _datacenterService: DatacenterService,
-    private readonly _matDialog: MatDialog
+    private readonly _matDialog: MatDialog,
+    private readonly _presetDialogService: PresetDialogService,
+    private readonly _notificationService: NotificationService
   ) {}
+
+  get _presets$(): Observable<PresetList> {
+    if (this.datacenterFilter) {
+      return this._presetService.presets(true, this.providerFilter, this.datacenterFilter);
+    }
+
+    if (this.providerFilter) {
+      return this._presetService.presets(true, this.providerFilter);
+    }
+
+    return this._presetService.presets(true);
+  }
 
   ngOnInit() {
     this.dataSource.sort = this.sort;
@@ -79,17 +94,21 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
       }
     };
 
-    this._presetService
-      .presets()
+    merge(of(true), this._presetsChanged)
+      .pipe(switchMap(_ => this._presets$))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(presetList => {
         this.presets = presetList.items;
         this.dataSource.data = this.presets;
       });
 
-    this._datacenterService.datacenters
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(datacenters => (this.datacenters = datacenters));
+    this._datacenterService.datacenters.pipe(takeUntil(this._unsubscribe)).subscribe(datacenters => {
+      this.datacenters = datacenters;
+      const uniqueProviders = new Set<NodeProvider>(
+        this.datacenters.map(dc => NodeProviderConstants.newNodeProvider(dc.spec.provider))
+      );
+      this._supportedProviders = Array.from(uniqueProviders);
+    });
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
@@ -107,55 +126,37 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   filter(): void {
-    //   this.dataSource.data = this.datacenters.filter(datacenter => {
-    //     let isVisible = true;
-    //
-    //     if (this.countryFilter) {
-    //       isVisible = isVisible && datacenter.spec.country === this.countryFilter;
-    //     }
-    //
-    //     if (this.seedFilter) {
-    //       isVisible = isVisible && datacenter.spec.seed === this.seedFilter;
-    //     }
-    //
-    //     if (this.providerFilter) {
-    //       isVisible = isVisible && datacenter.spec.provider === this.providerFilter;
-    //     }
-    //
-    //     return isVisible;
-    //   });
+    this._presetsChanged.next();
   }
 
   createPreset(): void {
     const dialogConfig: MatDialogConfig = {
-      panelClass: 'km-create-preset-dialog',
+      panelClass: 'km-preset-dialog',
+      maxWidth: '600px',
       data: {
-        title: 'Create a Preset',
+        title: 'Create Preset',
         steps: ['Preset', 'Provider', 'Settings'],
         mode: Mode.Create,
-      } as CreatePresetDialogData,
+      } as PresetDialogData,
     };
 
     this._matDialog
-      .open(CreatePresetDialogComponent, dialogConfig)
+      .open(PresetDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(take(1))
-      .subscribe(_ => {});
+      .subscribe(created => (created === true ? this._presetsChanged.next() : null));
   }
 
-  addProvider(preset: Preset): void {
+  editPreset(preset: Preset): void {
     const dialogConfig: MatDialogConfig = {
-      panelClass: 'km-create-preset-dialog',
+      panelClass: 'km-preset-dialog',
       data: {
-        title: 'Add Provider',
-        steps: ['Provider', 'Settings'],
-        mode: Mode.Add,
         preset: preset,
-      } as CreatePresetDialogData,
+      } as PresetDialogData,
     };
 
     this._matDialog
-      .open(CreatePresetDialogComponent, dialogConfig)
+      .open(EditPresetDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(take(1))
       .subscribe(_ => {});
@@ -163,100 +164,61 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
 
   canAddProvider(preset: Preset): boolean {
     return (
-      Object.values(NodeProvider).filter(
-        p => [NodeProvider.BAREMETAL, NodeProvider.BRINGYOUROWN, NodeProvider.NONE].indexOf(p) < 0
-      ).length > preset.providers.length
+      this._supportedProviders.filter(p => this._presetDialogService.unsupportedProviders.indexOf(p) < 0).length >
+      preset.providers.length
     );
+  }
+
+  addProvider(preset: Preset): void {
+    const dialogConfig: MatDialogConfig = {
+      panelClass: 'km-preset-dialog',
+      maxWidth: '600px',
+      data: {
+        title: 'Add Preset Provider',
+        steps: ['Provider', 'Settings'],
+        mode: Mode.Add,
+        preset: preset,
+      } as PresetDialogData,
+    };
+
+    this._matDialog
+      .open(PresetDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(created => (created === true ? this._presetsChanged.next() : null));
   }
 
   editProvider(preset: Preset): void {
     const dialogConfig: MatDialogConfig = {
-      panelClass: 'km-create-preset-dialog',
+      panelClass: 'km-preset-dialog',
+      maxWidth: '600px',
       data: {
-        title: 'Edit Provider',
+        title: 'Edit Preset Provider',
         steps: ['Provider', 'Settings'],
         mode: Mode.Edit,
         preset: preset,
-      } as CreatePresetDialogData,
+      } as PresetDialogData,
     };
 
     this._matDialog
-      .open(CreatePresetDialogComponent, dialogConfig)
+      .open(PresetDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(take(1))
-      .subscribe(_ => {});
+      .subscribe(created => (created === true ? this._presetsChanged.next() : null));
   }
 
-  // private _add(datacenter: Datacenter): void {
-  //   const model: CreateDatacenterModel = {
-  //     name: datacenter.metadata.name,
-  //     spec: datacenter.spec,
-  //   };
-  //
-  //   this._datacenterService
-  //     .createDatacenter(model)
-  //     .pipe(take(1))
-  //     .subscribe(datacenter => {
-  //       this._notificationService.success(`The <strong>${datacenter.metadata.name}</strong> datacenter was created`);
-  //       this._datacenterService.refreshDatacenters();
-  //     });
-  // }
-
-  // edit(datacenter: Datacenter): void {
-  //   const dialogConfig: MatDialogConfig = {
-  //     data: {
-  //       title: 'Edit Datacenter',
-  //       datacenter: datacenter,
-  //       isEditing: true,
-  //       confirmLabel: 'Edit',
-  //     },
-  //   };
-  //
-  //   this._matDialog
-  //     .open(DatacenterDataDialogComponent, dialogConfig)
-  //     .afterClosed()
-  //     .pipe(filter(datacenter => !!datacenter))
-  //     .pipe(take(1))
-  //     .subscribe((result: Datacenter) => this._edit(datacenter, result));
-  // }
-  //
-  // private _edit(original: Datacenter, edited: Datacenter): void {
-  //   this._datacenterService
-  //     .patchDatacenter(original.spec.seed, original.metadata.name, edited)
-  //     .pipe(take(1))
-  //     .subscribe(datacenter => {
-  //       this._notificationService.success(`The <strong>${datacenter.metadata.name}</strong> datacenter was updated`);
-  //       this._datacenterService.refreshDatacenters();
-  //     });
-  // }
-  //
-  // delete(datacenter: Datacenter): void {
-  //   const dialogConfig: MatDialogConfig = {
-  //     data: {
-  //       title: 'Delete Datacenter',
-  //       message: `Are you sure you want to delete the ${datacenter.metadata.name} datacenter?`,
-  //       confirmLabel: 'Delete',
-  //     },
-  //   };
-  //
-  //   this._matDialog
-  //     .open(ConfirmationDialogComponent, dialogConfig)
-  //     .afterClosed()
-  //     .pipe(filter(isConfirmed => isConfirmed))
-  //     .pipe(switchMap(_ => this._datacenterService.deleteDatacenter(datacenter)))
-  //     .pipe(take(1))
-  //     .subscribe(_ => {
-  //       this._notificationService.success(`The <strong>${datacenter.metadata.name}</strong> datacenter was deleted`);
-  //       this._datacenterService.refreshDatacenters();
-  //     });
-  // }
+  updatePresetStatus(name: string, enabled: boolean): void {
+    this._presetService
+      .updateStatus(name, {enabled: enabled})
+      .pipe(take(1))
+      .subscribe(_ => {
+        const idx = this.presets.findIndex(p => p.name === name);
+        this.presets[idx].enabled = enabled;
+        this._notificationService.success(`${enabled ? 'Enabled' : 'Disabled'} preset ${name}.`);
+      });
+  }
 
   isPaginatorVisible(): boolean {
-    return (
-      this.datacenters &&
-      this.datacenters.length > 0 &&
-      this.paginator &&
-      this.datacenters.length > this.paginator.pageSize
-    );
+    return this.presets && this.presets.length > 0 && this.paginator && this.presets.length > this.paginator.pageSize;
   }
 }

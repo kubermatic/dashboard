@@ -420,11 +420,12 @@ km-dashboard {
 }
 
 .cdk-overlay-pane {
-  &.km-create-preset-dialog {
-    max-height: 600px;
+  &.km-preset-dialog {
+    max-height: 660px;
     overflow: hidden;
 
     .mat-dialog-container {
+      min-width: 600px;
       overflow: hidden;
     }
 

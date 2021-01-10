@@ -474,6 +474,17 @@ button {
       border-radius: $border-radius;
     }
   }
+
+  .mat-checkbox-label {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &.km-disable-ripple {
+    .mat-checkbox-ripple {
+      display: none;
+    }
+  }
 }
 
 // Chips.

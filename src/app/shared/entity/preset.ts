@@ -10,7 +10,8 @@
 // limitations under the License.
 
 import {Metadata} from '@shared/entity/common';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
+import * as _ from 'lodash';
 
 export class SimplePresetList {
   names: string[] = [];
@@ -27,7 +28,16 @@ export class PresetList {
 export class Preset {
   name: string;
   enabled: boolean;
-  providers: NodeProvider[];
+  providers: PresetProvider[];
+}
+
+export class PresetProvider {
+  name: NodeProvider;
+  enabled: boolean;
+}
+
+export class UpdatePresetStatusReq {
+  enabled: boolean;
 }
 
 export class CreatePresetReq {
@@ -55,23 +65,28 @@ export class CreatePresetSpec {
 
   requiredEmailDomain?: string;
   enabled?: boolean;
+
+  provider(): NodeProvider {
+    const providerKey = Object.keys(this).find(key => !_.isEmpty(this[key]) && _.isObject(this[key]));
+    return providerKey ? NodeProviderConstants.newNodeProvider(providerKey) : NodeProvider.NONE;
+  }
 }
 
-export class PresetProvider {
+export class PresetProviderSpec {
   enabled?: boolean;
   datacenter?: string;
 }
 
-export class AlibabaPresetSpec extends PresetProvider {
+export class AlibabaPresetSpec extends PresetProviderSpec {
   accessKeyId: string;
   accessKeySecret: string;
 }
 
-export class AnexiaPresetSpec extends PresetProvider {
+export class AnexiaPresetSpec extends PresetProviderSpec {
   token: string;
 }
 
-export class AWSPresetSpec extends PresetProvider {
+export class AWSPresetSpec extends PresetProviderSpec {
   accessKeyID: string;
   secretAccessKey: string;
 
@@ -82,7 +97,7 @@ export class AWSPresetSpec extends PresetProvider {
   roleARN?: string;
 }
 
-export class AzurePresetSpec extends PresetProvider {
+export class AzurePresetSpec extends PresetProviderSpec {
   tenantID: string;
   subscriptionID: string;
   clientID: string;
@@ -95,26 +110,26 @@ export class AzurePresetSpec extends PresetProvider {
   securityGroup?: string;
 }
 
-export class DigitaloceanPresetSpec extends PresetProvider {
+export class DigitaloceanPresetSpec extends PresetProviderSpec {
   token: string;
 }
 
-export class GCPPresetSpec extends PresetProvider {
+export class GCPPresetSpec extends PresetProviderSpec {
   serviceAccount: string;
 
   network?: string;
   subnetwork?: string;
 }
 
-export class HetznerPresetSpec extends PresetProvider {
+export class HetznerPresetSpec extends PresetProviderSpec {
   token: string;
 }
 
-export class KubevirtPresetSpec extends PresetProvider {
+export class KubevirtPresetSpec extends PresetProviderSpec {
   kubeconfig: string;
 }
 
-export class OpenstackPresetSpec extends PresetProvider {
+export class OpenstackPresetSpec extends PresetProviderSpec {
   username: string;
   password: string;
   tenant: string;
@@ -128,14 +143,14 @@ export class OpenstackPresetSpec extends PresetProvider {
   subnetID?: string;
 }
 
-export class PacketPresetSpec extends PresetProvider {
+export class PacketPresetSpec extends PresetProviderSpec {
   apiKey: string;
   projectID: string;
 
   billingCycle?: string;
 }
 
-export class VSpherePresetSpec extends PresetProvider {
+export class VSpherePresetSpec extends PresetProviderSpec {
   username: string;
   password: string;
 

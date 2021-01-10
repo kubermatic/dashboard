@@ -12,7 +12,7 @@
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
-import {PresetList, SimplePresetList} from '@shared/entity/preset';
+import {CreatePresetReq, Preset, PresetList, SimplePresetList, UpdatePresetStatusReq} from '@shared/entity/preset';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {EMPTY, Observable} from 'rxjs';
 import {Alibaba} from './provider/alibaba';
@@ -92,7 +92,7 @@ export class PresetsService {
     return this._http.get<SimplePresetList>(url);
   }
 
-  presets(provider?: NodeProvider, datacenter?: string, disabled?: boolean): Observable<PresetList> {
+  presets(disabled?: boolean, provider: NodeProvider = NodeProvider.NONE, datacenter = ''): Observable<PresetList> {
     if (!provider) {
       const url = `${environment.newRestRoot}/presets?disabled=${disabled}`;
       return this._http.get<PresetList>(url);
@@ -100,5 +100,24 @@ export class PresetsService {
 
     const url = `${environment.newRestRoot}/providers/${provider}/presets?datacenter=${datacenter}&disabled=${disabled}`;
     return this._http.get<PresetList>(url);
+  }
+
+  updateStatus(
+    presetName: string,
+    status: UpdatePresetStatusReq,
+    provider: NodeProvider = NodeProvider.NONE
+  ): Observable<Preset> {
+    const url = `${environment.newRestRoot}/presets/${presetName}/status?provider=${provider}`;
+    return this._http.put<Preset>(url, status);
+  }
+
+  create(preset: CreatePresetReq): Observable<Preset> {
+    const url = `${environment.newRestRoot}/providers/${preset.spec.provider()}/presets`;
+    return this._http.post<Preset>(url, preset);
+  }
+
+  update(preset: CreatePresetReq): Observable<Preset> {
+    const url = `${environment.newRestRoot}/providers/${preset.spec.provider()}/presets`;
+    return this._http.put<Preset>(url, preset);
   }
 }

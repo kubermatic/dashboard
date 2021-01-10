@@ -27,11 +27,11 @@
   @include background-image("/assets/images/branding/404-illustration-light.svg", 80%);
 }
 
-.km-image-show {
+.km-icon-show {
   @include mask-image("/assets/images/icons/show.svg", 24px);
 }
 
-.km-image-hide {
+.km-icon-hide {
   @include mask-image("/assets/images/icons/hide.svg", 24px);
 }
 
