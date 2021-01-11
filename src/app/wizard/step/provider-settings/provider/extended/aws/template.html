@@ -14,18 +14,15 @@ limitations under the License.
       fxLayout="column"
       fxLayoutGap="16px">
   <km-combobox #securityGroupCombobox
-               [required]="false"
-               [grouped]="false"
                [options]="securityGroups"
                [selected]="selectedSecurityGroup"
                [hint]="getHint(Controls.SecurityGroup)"
                [formControlName]="Controls.SecurityGroup"
                [label]="securityGroupLabel"
                (changed)="onSecurityGroupChange($event)"
-               inputLabel="Select Security Group ID..."
-               filterBy="securityGroup">
+               inputLabel="Select Security Group ID...">
     <div *option="let securityGroup">
-      {{securityGroup.groupID}}
+      {{securityGroup}}
     </div>
   </km-combobox>
   <mat-error *ngIf="form.get(Controls.SecurityGroup).hasError( 'pattern')">

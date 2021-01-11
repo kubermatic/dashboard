@@ -56,10 +56,10 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   @Input() required = false;
   @Input() grouped = false;
   @Input() groups: string[] = [];
-  @Input() options: object[] = [];
+  @Input() options: object[] | string[] = [];
   @Input() filterBy: string;
   @Input() selectBy: string;
-  @Input('optionsGetter') getOptions: (group: string) => object[];
+  @Input('optionsGetter') getOptions: (group: string) => object[] | string[];
   @Input() selected = '';
   @Input() hint: string;
   @Input() valueFormatter: (selected: string) => string;
@@ -83,7 +83,7 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
       [Controls.Select]: this._builder.control('', this.required ? Validators.required : []),
     });
 
-    if (!this.selectBy) {
+    if (!this.selectBy && !!this.filterBy) {
       this.selectBy = this.filterBy;
     }
 
@@ -109,6 +109,10 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
 
   hasOptions(): boolean {
     return this._matSelect && this._matSelect.options && this._matSelect.options.length > 0;
+  }
+
+  getSelectValue(option: object | string): string {
+    return !this.selectBy ? option : option[this.selectBy];
   }
 
   ngOnChanges(): void {

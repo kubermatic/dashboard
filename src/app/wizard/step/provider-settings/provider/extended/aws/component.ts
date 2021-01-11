@@ -19,7 +19,6 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
-import {AWSSecurityGroup} from '@shared/entity/provider/aws';
 import * as _ from 'lodash';
 
 enum Controls {
@@ -57,7 +56,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
   @ViewChild('securityGroupCombobox')
   private readonly _securityGroupCombobox: FilteredComboboxComponent;
   selectedSecurityGroup = '';
-  securityGroups: AWSSecurityGroup[] = [];
+  securityGroups: string[] = [];
   securityGroupLabel = SecurityGroupState.Empty;
 
   constructor(
@@ -131,13 +130,13 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     this._clusterService.cluster.spec.cloud.aws.securityGroupID = groupId;
   }
 
-  private _securityGroupObservable(): Observable<AWSSecurityGroup[]> {
+  // TODO: Add sort.
+  private _securityGroupObservable(): Observable<string[]> {
     return this._presets
       .provider(NodeProvider.AWS)
       .accessKeyID(this._clusterService.cluster.spec.cloud.aws.accessKeyId)
       .secretAccessKey(this._clusterService.cluster.spec.cloud.aws.secretAccessKey)
       .securityGroups(this._clusterService.datacenter, this._onSecurityGroupLoading.bind(this))
-      .pipe(map(securityGroups => _.sortBy(securityGroups, sg => sg.groupName.toLowerCase())))
       .pipe(
         catchError(() => {
           this._clearSecurityGroup();
@@ -160,7 +159,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     this._cdr.detectChanges();
   }
 
-  private _loadSecurityGroups(securityGroups: AWSSecurityGroup[]): void {
+  private _loadSecurityGroups(securityGroups: string[]): void {
     this.securityGroups = securityGroups;
     this.securityGroupLabel = !_.isEmpty(this.securityGroups) ? SecurityGroupState.Ready : SecurityGroupState.Empty;
     this._cdr.detectChanges();
