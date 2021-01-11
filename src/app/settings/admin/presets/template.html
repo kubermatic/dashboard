@@ -110,7 +110,9 @@ limitations under the License.
             fxLayout="row"
             class="providers-column">
           <ng-container *ngFor="let provider of element.providers">
-            <span class="km-provider-logo km-provider-logo-{{provider.name}} provider-logo-medium"></span>
+            <span class="km-provider-logo km-provider-logo-{{provider.name}} provider-logo-medium"
+                  [ngClass]="provider.enabled ? '' : 'disabled'">
+            </span>
           </ng-container>
         </td>
       </ng-container>

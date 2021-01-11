@@ -15,4 +15,10 @@
       color: inherit;
     }
   }
+
+  .km-provider-logo {
+    &.disabled {
+      filter: grayscale(1);
+    }
+  }
 }

@@ -17,4 +17,10 @@
   .row {
     border-bottom-color: map-get($colors, divider);
   }
+
+  .km-provider-logo {
+    &.disabled {
+      filter: grayscale(1);
+    }
+  }
 }

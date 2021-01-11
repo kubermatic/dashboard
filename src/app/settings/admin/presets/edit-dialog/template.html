@@ -36,7 +36,8 @@ limitations under the License.
          fxLayout="row"
          fxLayoutAlign="space-between">
       <div fxFlexAlign="center">
-        <i class="km-provider-logo km-provider-logo-{{provider.name}} provider-logo-medium"></i>
+        <i class="km-provider-logo km-provider-logo-{{provider.name}} provider-logo-medium"
+           [ngClass]="provider.enabled ? '' : 'disabled'"></i>
       </div>
 
       <button mat-icon-button
