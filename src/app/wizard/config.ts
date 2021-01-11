@@ -13,15 +13,17 @@ export class WizardStep {
   name: string;
   enabled: boolean;
 
+  constructor(name: string, enabled: boolean) {
+    this.name = name;
+    this.enabled = enabled;
+  }
+
   get id(): string {
     return this.name.toLowerCase().replace(' ', '-');
   }
 
   static newWizardStep(name: string, enabled = true): WizardStep {
-    return {
-      name,
-      enabled,
-    } as WizardStep;
+    return new WizardStep(name, enabled);
   }
 }
 

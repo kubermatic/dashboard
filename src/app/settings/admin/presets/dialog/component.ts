@@ -83,7 +83,10 @@ export class PresetDialogComponent implements OnInit, OnDestroy {
   }
 
   get invalid(): boolean {
-    return this.form.get(this.active).invalid;
+    return (
+      this.form.get(this.active).invalid ||
+      (this.active === StepRegistry.Settings && !this._presetDialogService.isSettingsStepValid)
+    );
   }
 
   ngOnInit(): void {

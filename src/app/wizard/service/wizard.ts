@@ -22,6 +22,8 @@ import {StepRegistry, WizardStep} from '../config';
 export class WizardService {
   readonly stepsChanges = new EventEmitter<StepRegistry>();
 
+  private _stepper: MatStepper;
+  private _steps: WizardStep[];
   private _unsubscribe = new Subject<void>();
   private _stepHandler = new (class {
     constructor(private _parent: WizardService) {}
@@ -85,8 +87,6 @@ export class WizardService {
       .subscribe(os => this._stepHandler.handleOSChange(os));
   }
 
-  private _stepper: MatStepper;
-
   get stepper(): MatStepper {
     return this._stepper;
   }
@@ -94,8 +94,6 @@ export class WizardService {
   set stepper(stepper: MatStepper) {
     this._stepper = stepper;
   }
-
-  private _steps: WizardStep[];
 
   get steps(): WizardStep[] {
     return this._steps;

@@ -14,6 +14,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {PacketPresetSpec} from '@shared/entity/preset';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {merge, of} from 'rxjs';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 export enum Controls {
@@ -56,6 +57,10 @@ export class PacketSettingsComponent extends BaseFormValidator implements OnInit
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._update());
+
+    merge(of(false), this.form.statusChanges)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._presetDialogService.settingsStepValidity = this.form.valid));
   }
 
   ngOnDestroy(): void {
