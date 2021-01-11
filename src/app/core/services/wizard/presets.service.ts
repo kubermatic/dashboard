@@ -83,15 +83,6 @@ export class PresetsService {
     }
   }
 
-  simplePresets(provider: NodeProvider, datacenter: string): Observable<SimplePresetList> {
-    if (!provider || !datacenter) {
-      return EMPTY;
-    }
-
-    const url = `${environment.restRoot}/providers/${provider}/presets/credentials?datacenter=${datacenter}`;
-    return this._http.get<SimplePresetList>(url);
-  }
-
   presets(disabled?: boolean, provider: NodeProvider = NodeProvider.NONE, datacenter = ''): Observable<PresetList> {
     if (!provider) {
       const url = `${environment.newRestRoot}/presets?disabled=${disabled}`;

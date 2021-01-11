@@ -17,7 +17,7 @@ import {SimplePresetList} from '@shared/entity/preset';
 import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
-import {switchMap, takeUntil} from 'rxjs/operators';
+import {map, switchMap, takeUntil} from 'rxjs/operators';
 
 export enum Controls {
   Preset = 'name',
@@ -84,7 +84,8 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
     this._clusterService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.reset());
 
     this._clusterService.datacenterChanges
-      .pipe(switchMap(dc => this._presets.simplePresets(this._clusterService.provider, dc)))
+      .pipe(switchMap(dc => this._presets.presets(false, this._clusterService.provider, dc)))
+      .pipe(map(presetList => new SimplePresetList(...presetList.items.map(preset => preset.name))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(presetList => {
         this.reset();
