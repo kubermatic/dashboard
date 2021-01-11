@@ -12,9 +12,9 @@
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
-import {CreatePresetReq, Preset, PresetList, SimplePresetList, UpdatePresetStatusReq} from '@shared/entity/preset';
+import {CreatePresetReq, Preset, PresetList, UpdatePresetStatusReq} from '@shared/entity/preset';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {EMPTY, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Alibaba} from './provider/alibaba';
 import {AWS} from './provider/aws';
 import {Azure} from './provider/azure';
