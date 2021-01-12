@@ -316,6 +316,40 @@ limitations under the License.
               <div key>VLAN ID</div>
               <div value>{{element.spec.cloud.anexia.vlanID}}</div>
             </km-property>
+
+            <km-property>
+              <div key>Node Size</div>
+              <div value>{{element.spec.cloud.azure.size}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.azure.zones">
+              <div key>Zones</div>
+              <div value>{{element.spec.cloud.azure.zones}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.azure.imageID">
+              <div key>Image ID</div>
+              <div value>{{element.spec.cloud.azure.imageID}}</div>
+            </km-property>
+            <km-property>
+              <div key>Data Disk Size</div>
+              <div *ngIf="element.spec.cloud.azure.dataDiskSize === 0"
+                   value>
+                Default
+              </div>
+              <div value
+                   *ngIf="element.spec.cloud.azure.dataDiskSize !== 0">
+                {{element.spec.cloud.azure.dataDiskSize}} GB
+              </div>
+            </km-property>
+            <km-property>
+              <div key>OS Disk Size</div>
+              <div *ngIf="element.spec.cloud.azure.osDiskSize === 0"
+                   value>
+                Default
+              </div>
+              <div *ngIf="element.spec.cloud.azure.osDiskSize !== 0"
+                   value>{{element.spec.cloud.azure.osDiskSize}} GB
+              </div>
+            </km-property>
             <!-- End of other properties. -->
 
             <!-- Tags for all providers. -->
