@@ -34,7 +34,7 @@ limitations under the License.
         <mat-optgroup *ngFor="let group of groups"
                       [label]="group">
           <mat-option *ngFor="let option of getOptions(group) | filterBy: filterByInput"
-                      [value]="getSelectValue(option)">
+                      [value]="option[selectBy]">
             <ng-container *ngTemplateOutlet="optionTemplate; context: {$implicit: option}"></ng-container>
           </mat-option>
         </mat-optgroup>
@@ -42,7 +42,7 @@ limitations under the License.
 
       <ng-template #ungrouped>
         <mat-option *ngFor="let option of options | filterBy: filterByInput"
-                    [value]="getSelectValue(option)">
+                    [value]="option[selectBy]">
           <ng-container *ngTemplateOutlet="optionTemplate; context: {$implicit: option}"></ng-container>
         </mat-option>
       </ng-template>
