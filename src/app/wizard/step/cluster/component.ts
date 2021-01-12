@@ -145,8 +145,16 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      if (!this._adminSettings) {
+        this._adminSettings = settings;
+        this._setDefaultClusterType();
+      }
+
+      if (this._adminSettings.clusterTypeOptions !== settings.clusterTypeOptions) {
+        this._setDefaultClusterType();
+      }
+
       this._adminSettings = settings;
-      this._setDefaultClusterType();
     });
   }
 

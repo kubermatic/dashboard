@@ -163,7 +163,7 @@ export class AzureNodeSpec {
   assignPublicIP: boolean;
   tags: object;
   imageID?: string;
-  zone: string;
+  zones: string[];
   osDiskSize: number;
   dataDiskSize: number;
 }
