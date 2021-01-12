@@ -37,6 +37,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   admissionPlugin = AdmissionPlugin;
   form: FormGroup;
   labels: object;
+  podNodeSelectorAdmissionPluginConfig: object;
   admissionPlugins: string[] = [];
   providerSettingsPatch: ProviderSettingsPatch = {
     isValid: true,
@@ -57,6 +58,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.labels = _.cloneDeep(this.cluster.labels);
+    this.podNodeSelectorAdmissionPluginConfig = _.cloneDeep(this.cluster.spec.podNodeSelectorAdmissionPluginConfig);
 
     this.form = new FormGroup({
       name: new FormControl(this.cluster.name, [
@@ -66,6 +68,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       ]),
       auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
       admissionPlugins: new FormControl(this.cluster.spec.admissionPlugins),
+      podNodeSelectorAdmissionPluginConfig: new FormControl(''),
       labels: new FormControl(''),
     });
 
@@ -145,6 +148,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         usePodNodeSelectorAdmissionPlugin: null,
         usePodSecurityPolicyAdmissionPlugin: null,
         admissionPlugins: this.form.controls.admissionPlugins.value,
+        podNodeSelectorAdmissionPluginConfig: this.podNodeSelectorAdmissionPluginConfig,
       },
     };
 
