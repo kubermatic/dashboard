@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '@shared/entity/cluster';
@@ -17,8 +17,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {catchError, filter, map, startWith, switchMap, takeUntil, tap} from 'rxjs/operators';
 import * as _ from 'lodash';
 
 enum Controls {
@@ -53,8 +52,7 @@ enum SecurityGroupState {
 export class AWSProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
-  @ViewChild('securityGroupCombobox')
-  private readonly _securityGroupCombobox: FilteredComboboxComponent;
+  filteredSecurityGroups: Observable<string[]>;
   selectedSecurityGroup = '';
   securityGroups: string[] = [];
   securityGroupLabel = SecurityGroupState.Empty;
@@ -68,6 +66,10 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     super('AWS Provider Extended');
   }
 
+  private _filter(value: string): string[] {
+    return this.securityGroups.filter(option => !!option && option.toLowerCase().indexOf(value.toLowerCase()) === 0);
+  }
+
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.SecurityGroup]: this._builder.control('', Validators.pattern('sg-(\\w{8}|\\w{17})')),
@@ -75,6 +77,11 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       [Controls.InstanceProfileName]: this._builder.control(''),
       [Controls.RoleARN]: this._builder.control(''),
     });
+
+    this.filteredSecurityGroups = this.form.get(Controls.SecurityGroup).valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
 
     this._presets.presetChanges
       .pipe(takeUntil(this._unsubscribe))
@@ -153,9 +160,8 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
 
   private _clearSecurityGroup(): void {
     this.securityGroups = [];
-    this.selectedSecurityGroup = '';
+    this.form.get(Controls.SecurityGroup).reset();
     this.securityGroupLabel = SecurityGroupState.Empty;
-    this._securityGroupCombobox.reset();
     this._cdr.detectChanges();
   }
 
