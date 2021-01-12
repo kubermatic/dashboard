@@ -104,6 +104,13 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
+
+    this.form
+      .get(Controls.SecurityGroup)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(change => {
+        this._clusterService.cluster.spec.cloud.aws.securityGroupID = change;
+      });
   }
 
   ngOnDestroy(): void {
