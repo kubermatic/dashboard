@@ -11,9 +11,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <km-dialog-title>Add SSH Key</km-dialog-title>
-<form [formGroup]="addSSHKeyForm"
-      (submit)="addSSHKey()">
-  <mat-dialog-content>
+<mat-dialog-content>
+  <form [formGroup]="addSSHKeyForm"
+        (submit)="addSSHKey()"
+        id="add-ssh-key-form">
     <mat-form-field class="km-ssh-key-input">
       <mat-label>Name</mat-label>
       <input id="name"
@@ -44,13 +45,14 @@ limitations under the License.
         SSH Key has invalid form. Use OpenSSH format.
       </mat-error>
     </mat-form-field>
-  </mat-dialog-content>
-  <mat-dialog-actions>
-    <button id="km-add-ssh-key-dialog-save"
-            type="submit"
-            mat-flat-button
-            [disabled]="!addSSHKeyForm.valid">
-      Add SSH key
-    </button>
-  </mat-dialog-actions>
-</form>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button id="km-add-ssh-key-dialog-save"
+          type="submit"
+          mat-flat-button
+          form="add-ssh-key-form"
+          [disabled]="!addSSHKeyForm.valid">
+    Add SSH key
+  </button>
+</mat-dialog-actions>

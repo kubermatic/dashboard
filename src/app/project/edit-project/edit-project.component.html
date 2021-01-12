@@ -12,10 +12,11 @@ limitations under the License.
 -->
 <div id="km-edit-project-dialog">
   <km-dialog-title>Edit Project</km-dialog-title>
-  <form [formGroup]="form"
-        fxLayout="column"
-        (submit)="editProject()">
-    <mat-dialog-content>
+  <mat-dialog-content>
+    <form [formGroup]="form"
+          fxLayout="column"
+          (submit)="editProject()"
+          id="edit-project-form">
       <mat-form-field fxFlex>
         <mat-label>Name*</mat-label>
         <input id="km-edit-project-dialog-input"
@@ -32,14 +33,15 @@ limitations under the License.
                      [(labels)]="labels"
                      [asyncKeyValidators]=asyncLabelValidators
                      formControlName="labels"></km-label-form>
-    </mat-dialog-content>
-    <mat-dialog-actions>
-      <button id="km-edit-project-dialog-edit-btn"
-              mat-flat-button
-              type="submit"
-              [disabled]="!form.valid">
-        Edit
-      </button>
-    </mat-dialog-actions>
-  </form>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button id="km-edit-project-dialog-edit-btn"
+            mat-flat-button
+            type="submit"
+            form="edit-project-form"
+            [disabled]="!form.valid">
+      Edit
+    </button>
+  </mat-dialog-actions>
 </div>

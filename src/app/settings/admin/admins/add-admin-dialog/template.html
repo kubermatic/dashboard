@@ -11,11 +11,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <km-dialog-title>Add Admin</km-dialog-title>
-<form [formGroup]="form"
-      fxLayout="column"
-      (submit)="add()">
-  <mat-dialog-content>
-    <mat-form-field>
+<mat-dialog-content>
+  <form [formGroup]="form"
+        fxLayout="column"
+        (submit)="add()"
+        id="add-admin-form">
+    <mat-form-field fxFlex>
       <mat-label>Email*</mat-label>
       <input matInput
              formControlName="email"
@@ -26,12 +27,13 @@ limitations under the License.
         Email is <strong>required</strong>.
       </mat-error>
     </mat-form-field>
-  </mat-dialog-content>
-  <mat-dialog-actions>
-    <button mat-flat-button
-            type="submit"
-            [disabled]="!form.valid">
-      Save
-    </button>
-  </mat-dialog-actions>
-</form>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button
+          type="submit"
+          form="add-admin-form"
+          [disabled]="!form.valid">
+    Save
+  </button>
+</mat-dialog-actions>
