@@ -12,14 +12,12 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {Subject} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {ApiService} from '@core/services/api/service';
 import * as _ from 'lodash';
-
-import {ApiService} from '../../../core/services';
-import {AddonConfig, Addon, getAddonLogoData, hasAddonLogoData} from '../../entity/addon';
+import {Subject} from 'rxjs';
+import {take, takeUntil} from 'rxjs/operators';
+import {Addon, AddonConfig, getAddonLogoData, hasAddonLogoData} from '../../entity/addon';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
-
 import {EditAddonDialogComponent} from './edit-addon-dialog/edit-addon-dialog.component';
 import {SelectAddonDialogComponent} from './select-addon-dialog/select-addon-dialog.component';
 
@@ -67,7 +65,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(_: SimpleChanges): void {
     this._updateInstallableAddons();
   }
 
@@ -118,6 +116,10 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     return '';
   }
 
+  getTooltip(addon: Addon): string {
+    return addon.deletionTimestamp ? 'Addon is being deleted' : '';
+  }
+
   add(): void {
     if (this.canAdd()) {
       const dialog = this._matDialog.open(SelectAddonDialogComponent);
@@ -125,7 +127,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
       dialog.componentInstance.addonConfigs = this.addonConfigs;
       dialog
         .afterClosed()
-        .pipe(first())
+        .pipe(take(1))
         .subscribe(addedAddon => {
           if (addedAddon) {
             this.addAddon.emit(addedAddon);
@@ -140,7 +142,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     dialog.componentInstance.addonConfig = this.addonConfigs.get(addon.name);
     dialog
       .afterClosed()
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(editedAddon => {
         if (editedAddon) {
           this.editAddon.emit(editedAddon);
@@ -152,7 +154,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     const config: MatDialogConfig = {
       data: {
         title: 'Delete Addon',
-        message: `Delete addon "<strong>${addon.name}</strong>" permanently?`,
+        message: `Delete ${addon.name} addon permanently?`,
         confirmLabel: 'Delete',
       },
     };
@@ -164,7 +166,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     const dialog = this._matDialog.open(ConfirmationDialogComponent, config);
     dialog
       .afterClosed()
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(isConfirmed => {
         if (isConfirmed) {
           this.deleteAddon.emit(addon);

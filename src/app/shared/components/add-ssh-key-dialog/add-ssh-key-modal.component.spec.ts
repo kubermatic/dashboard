@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -19,15 +19,14 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-
-import {CoreModule} from '../../../core/core.module';
-import {ApiService, NotificationService} from '../../../core/services';
-import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {fakeProject} from '../../../testing/fake-data/project.fake';
-import {RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
-import {ApiMockService} from '../../../testing/services/api-mock.service';
-import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
-
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {fakeProject} from '@app/testing/fake-data/project.fake';
+import {RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
+import {ApiMockService} from '@app/testing/services/api-mock.service';
+import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
+import {CoreModule} from '@core/module';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
 import {AddSshKeyDialogComponent} from './add-ssh-key-dialog.component';
 
 const modules: any[] = [
@@ -47,7 +46,7 @@ const modules: any[] = [
 describe('AddSshKeyDialogComponent', () => {
   let fixture: ComponentFixture<AddSshKeyDialogComponent>;
   let component: AddSshKeyDialogComponent;
-  let dialogRef: MatDialogRef<AddSshKeyDialogComponent, any>;
+  let dialogRef: MatDialogRef<AddSshKeyDialogComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -67,12 +66,15 @@ describe('AddSshKeyDialogComponent', () => {
     component = fixture.componentInstance;
     component.projectID = fakeProject().id;
     fixture.detectChanges();
-    dialogRef = fixture.debugElement.injector.get(MatDialogRef) as MatDialogRef<AddSshKeyDialogComponent, any>;
+    dialogRef = fixture.debugElement.injector.get(MatDialogRef) as MatDialogRef<AddSshKeyDialogComponent>;
   });
 
-  it('should create the add node modal cmp', async(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the add node modal cmp',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('form invalid when empty', () => {
     expect(component.addSSHKeyForm.valid).toBeFalsy();

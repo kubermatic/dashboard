@@ -24,32 +24,44 @@ limitations under the License.
   <form [formGroup]="form">
     <div *ngFor="let control of addonConfig?.spec?.formSpec">
       <mat-form-field *ngIf="['text', 'number'].includes(control.type)">
-        <mat-label>{{control.displayName}}{{control.required ? '*' : ''}}</mat-label>
+        <mat-label>{{control.displayName}}</mat-label>
         <input matInput
                [formControlName]="control.internalName"
                [type]="control.type"
-               [title]="control.displayName">
+               [title]="control.displayName"
+               [required]="!!control.required">
+        <mat-hint>{{control.helpText}}</mat-hint>
       </mat-form-field>
 
       <mat-form-field *ngIf="control.type === 'text-area'">
-        <mat-label>{{control.displayName}}{{control.required ? '*' : ''}}</mat-label>
+        <mat-label>{{control.displayName}}</mat-label>
         <textarea matInput
                   [formControlName]="control.internalName"
                   [type]="control.type"
-                  [title]="control.displayName"></textarea>
+                  [title]="control.displayName"
+                  [required]="!!control.required"></textarea>
+        <mat-hint>{{control.helpText}}</mat-hint>
       </mat-form-field>
 
       <div *ngIf="control.type === 'boolean'"
-           class="km-install-addon-boolean-container">
+           class="boolean-field">
         <mat-checkbox [formControlName]="control.internalName">
           {{control.displayName}}
         </mat-checkbox>
+        <div class="mat-hint">{{control.helpText}}</div>
       </div>
     </div>
+  </form>
+  <form [formGroup]="formBasic">
+    <mat-checkbox [formControlName]="Controls.ContinuouslyReconcile"
+                  matTooltip="With this flag enabled the addon cannot be deleted or modified outside of the UI after installation.">
+      Continuously reconcile addon
+    </mat-checkbox>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
+          [disabled]="!form.valid"
           (click)="install()">
     Install
   </button>

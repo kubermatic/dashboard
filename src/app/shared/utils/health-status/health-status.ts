@@ -10,9 +10,9 @@
 // limitations under the License.
 
 export enum HealthStatusColor {
-  Green = 'km-icon-mask km-icon-circle km-success-bg',
-  Orange = 'km-icon-mask km-icon-circle km-warning-bg',
-  Red = 'km-icon-mask km-icon-circle km-error-bg',
+  Green = 'km-icon-circle km-success-bg',
+  Orange = 'km-icon-circle km-warning-bg',
+  Red = 'km-icon-circle km-error-bg',
 }
 
 export enum HealthStatusMessage {

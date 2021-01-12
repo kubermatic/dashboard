@@ -41,6 +41,7 @@ export class DatacenterSpec {
   gcp?: GCPDatacenterSpec;
   kubevirt?: KubeVirtDatacenterSpec;
   alibaba?: AlibabaDatacenterSpec;
+  anexia?: AnexiaDatacenterSpec;
 }
 
 export class DatacenterOperatingSystemOptions {
@@ -51,6 +52,8 @@ export class DatacenterOperatingSystemOptions {
   rhel?: string;
   flatcar?: string;
 }
+
+export class AnexiaDatacenterSpec {}
 
 export class AlibabaDatacenterSpec {
   region: string;

@@ -12,12 +12,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {first} from 'rxjs/operators';
-
-import {NotificationService} from '../../core/services';
-import {ApiService} from '../../core/services';
-import {Project} from '../../shared/entity/project';
-import {ServiceAccount} from '../../shared/entity/service-account';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
+import {Project} from '@shared/entity/project';
+import {ServiceAccount} from '@shared/entity/service-account';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'km-edit-serviceaccount',
@@ -53,12 +52,10 @@ export class EditServiceAccountComponent implements OnInit {
 
     this._apiService
       .editServiceAccount(this.project.id, editServiceAccount)
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         this._matDialogRef.close(true);
-        this._notificationService.success(
-          `The <strong>${this.serviceaccount.name}</strong> service account was updated`
-        );
+        this._notificationService.success(`The ${this.serviceaccount.name} service account was updated`);
       });
   }
 }

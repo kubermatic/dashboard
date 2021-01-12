@@ -47,7 +47,7 @@ import {ClipboardModule} from 'ngx-clipboard';
 import {CustomFormsModule} from 'ngx-custom-validators';
 import {FilterPipeModule} from 'ngx-filter-pipe';
 
-import {NotificationComponent} from '../core/components/notification/notification.component';
+import {NotificationComponent} from '../core/components/notification/component';
 import {TokenDialogComponent} from '../serviceaccount/serviceaccount-token/token-dialog/token-dialog.component';
 
 import {AddProjectDialogComponent} from './components/add-project-dialog/add-project-dialog.component';
@@ -56,28 +56,38 @@ import {AddonsListComponent} from './components/addon-list/addon-list.component'
 import {EditAddonDialogComponent} from './components/addon-list/edit-addon-dialog/edit-addon-dialog.component';
 import {InstallAddonDialogComponent} from './components/addon-list/install-addon-dialog/install-addon-dialog.component';
 import {SelectAddonDialogComponent} from './components/addon-list/select-addon-dialog/select-addon-dialog.component';
+import {ChipComponent} from './components/chip/component';
 import {FilteredComboboxComponent} from './components/combobox/component';
 import {OptionDirective} from './components/combobox/directive';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 import {DialogTitleComponent} from './components/dialog-title/dialog-title.component';
-import {EventListComponent} from './components/event-list/event-list.component';
+import {ClusterTypeEOLComponent} from './components/eol/component';
+import {EventListComponent} from './components/event-list/component';
 import {LabelFormComponent} from './components/label-form/label-form.component';
 import {LabelsComponent} from './components/labels/labels.component';
 import {MachineNetworkComponent} from './components/machine-networks-new/component';
 import {PropertyBooleanComponent} from './components/property-boolean/property-boolean.component';
-import {PropertyUsageComponent} from './components/property-usage/property-usage.component';
+import {PropertyUsageComponent} from './components/property-usage/component';
 import {PropertyComponent} from './components/property/property.component';
 import {RelativeTimeComponent} from './components/relativetime/relative-time.component';
 import {SettingsStatusComponent} from './components/settings-status/settings-status.component';
-import {ShortNameInCircleComponent} from './components/short-name-in-circle/short-name-in-circle.component';
+import {InitialsCircleComponent} from './components/initials-circle/initials-circle.component';
 import {SSHKeyListComponent} from './components/ssh-key-list/ssh-key-list.component';
 import {TagListComponent} from './components/tag-list/tag-list.component';
 import {TaintFormComponent} from './components/taint-form/taint-form.component';
 import {TaintsComponent} from './components/taints/taints.component';
 import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
-import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {ClusterService} from './services/cluster.service';
+import {EndOfLifeService} from './services/eol.service';
+import {EditorComponent} from './components/editor/component';
+import {MonacoEditorModule} from 'ngx-monaco-editor';
+import {ExternalClusterDataDialogComponent} from './components/external-cluster-data-dialog/component';
+import {LoaderComponent} from './components/loader/component';
+import {SearchFieldComponent} from './components/search-field/component';
+import {TabCardComponent} from '@shared/components/tab-card/component';
+import {TabComponent} from '@shared/components/tab-card/tab/component';
+import {EventCardComponent} from '@shared/components/event-card/component';
 
 const modules: any[] = [
   CommonModule,
@@ -126,6 +136,7 @@ const components: any[] = [
   PropertyBooleanComponent,
   DialogTitleComponent,
   PropertyComponent,
+  EventCardComponent,
   EventListComponent,
   LabelFormComponent,
   LabelsComponent,
@@ -136,16 +147,16 @@ const components: any[] = [
   SSHKeyListComponent,
   AddonsListComponent,
   SettingsStatusComponent,
-  ShortNameInCircleComponent,
+  InitialsCircleComponent,
   TagListComponent,
   TokenDialogComponent,
   NotificationComponent,
   PropertyUsageComponent,
   FilteredComboboxComponent,
   MachineNetworkComponent,
-];
-
-const entryComponents: any[] = [
+  ClusterTypeEOLComponent,
+  ChipComponent,
+  EditorComponent,
   AddProjectDialogComponent,
   AddSshKeyDialogComponent,
   ConfirmationDialogComponent,
@@ -154,17 +165,21 @@ const entryComponents: any[] = [
   EditAddonDialogComponent,
   TokenDialogComponent,
   NotificationComponent,
+  ExternalClusterDataDialogComponent,
+  LoaderComponent,
+  SearchFieldComponent,
+  TabCardComponent,
+  TabComponent,
 ];
 
-const services: any[] = [ClusterService];
+const services: any[] = [ClusterService, EndOfLifeService];
 
 const directives: any[] = [AutofocusDirective, OptionDirective];
 
 @NgModule({
   imports: [...modules],
-  declarations: [...components, ...entryComponents, ...directives],
-  exports: [...modules, ...components, ...entryComponents, ...directives],
+  declarations: [...components, ...directives],
+  exports: [...modules, ...components, ...directives],
   providers: [...services],
-  entryComponents: [...entryComponents],
 })
 export class SharedModule {}

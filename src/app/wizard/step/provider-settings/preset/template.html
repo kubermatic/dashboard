@@ -14,8 +14,10 @@ limitations under the License.
   <mat-form-field fxFlex>
     <mat-label>{{ label }}</mat-label>
     <mat-select id="km-wizard-select-preset"
+                class="km-select-ellipsis"
                 [formControlName]="Controls.Preset"
                 panelClass="km-preset-dropdown"
+                disableOptionCentering
                 required>
       <mat-option *ngFor="let presetName of presetList.names"
                   [value]="presetName">{{presetName}}</mat-option>
@@ -31,8 +33,9 @@ limitations under the License.
           <button *ngIf="selectedPreset"
                   (click)="reset(); $event.stopPropagation()"
                   mat-icon-button
+                  class="km-clear-input-btn"
                   aria-label="Clear">
-            <mat-icon inline="true">close</mat-icon>
+            <i class="km-icon-mask km-icon-remove"></i>
           </button>
         </div>
       </mat-select-trigger>

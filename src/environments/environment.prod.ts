@@ -18,8 +18,9 @@ export const environment = {
   production: true,
   configUrl: '/config/config.json',
   gitVersionUrl: '../assets/config/version.json',
-  refreshTimeBase: 1000, // Unit: ms
+  refreshTimeBase: 1000,
   restRoot: '/api/v1',
+  newRestRoot: '/api/v2',
   wsRoot: `${wsProtocol}//${host}/api/v1/ws`,
   oidcProviderUrl: `${protocol}//${host}/dex/auth`,
   oidcConnectorId: null,

@@ -10,7 +10,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-TAG=v0.5
+TAG=v0.6
 
 set -euox pipefail
 

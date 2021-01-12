@@ -19,6 +19,14 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {CloudSpec, Cluster, ClusterSpec, OpenstackCloudSpec} from '@shared/entity/cluster';
+import {OpenstackFloatingIpPool, OpenstackTenant} from '@shared/entity/provider/openstack';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {ClusterService} from '@shared/services/cluster.service';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {
@@ -26,19 +34,12 @@ import {
   debounceTime,
   distinctUntilChanged,
   filter,
-  first,
+  take,
   map,
   switchMap,
   takeUntil,
   tap,
 } from 'rxjs/operators';
-import {DatacenterService, PresetsService} from '../../../../../../core/services';
-import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
-import {CloudSpec, Cluster, ClusterSpec, OpenstackCloudSpec} from '../../../../../../shared/entity/cluster';
-import {OpenstackFloatingIpPool, OpenstackTenant} from '../../../../../../shared/entity/provider/openstack';
-import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../../../../shared/services/cluster.service';
-import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 
 enum Controls {
   Domain = 'domain',
@@ -130,7 +131,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
 
     merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
       .pipe(filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK))
-      .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.datacenter).pipe(first())))
+      .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.datacenter).pipe(take(1))))
       .pipe(tap(dc => (this._isFloatingPoolIPEnforced = dc.spec.openstack.enforce_floating_ip)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
@@ -209,6 +210,8 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       case Controls.FloatingIPPool:
         return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first & project/project ID.';
     }
+
+    return '';
   }
 
   isRequired(control: Controls): boolean {

@@ -11,15 +11,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <div id="km-confirmation-dialog"
-     class="km-confirmation-dialog km-confirmation"
      (keydown.enter)="onEnterKeyDown()">
-  <km-dialog-title>{{data.title}}</km-dialog-title>
+  <km-dialog-title>
+    <div>{{data.title}}</div>
+  </km-dialog-title>
   <mat-dialog-content>
     <p [innerHTML]="data.message"></p>
     <div *ngIf="!!data.warning"
          class="km-dialog-warning"
          fxLayoutAlign=" center">
-      <i class="km-icon-warning"></i>
+      <i class="km-icon-error"></i>
       <span [innerHTML]="data.warning"></span>
     </div>
     <mat-form-field *ngIf="!!data.compareName && data.compareName.length > 0">

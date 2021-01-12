@@ -20,6 +20,7 @@ export class Addon {
 export class AddonSpec {
   isDefault?: boolean;
   variables?: object;
+  continuouslyReconcile?: boolean;
 }
 
 export class AddonConfig {
@@ -41,8 +42,17 @@ export class AddonConfigSpec {
 export class AddonFormSpec {
   displayName: string;
   internalName: string;
+  helpText: string;
   required: boolean;
   type: string;
+}
+
+export function getAddonVariable(addon: Addon, internalName: string): any {
+  if (!addon || !addon.spec || !addon.spec.variables) {
+    return undefined;
+  }
+
+  return addon.spec.variables[internalName];
 }
 
 export function hasAddonFormData(addonConfig: AddonConfig) {

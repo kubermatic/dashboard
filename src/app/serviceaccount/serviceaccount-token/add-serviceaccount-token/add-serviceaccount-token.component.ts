@@ -12,12 +12,13 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {first} from 'rxjs/operators';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
 
-import {ApiService, NotificationService} from '../../../core/services';
-import {Project} from '../../../shared/entity/project';
-import {CreateTokenEntity, ServiceAccount, ServiceAccountToken} from '../../../shared/entity/service-account';
+import {Project} from '@shared/entity/project';
+import {CreateTokenEntity, ServiceAccount, ServiceAccountToken} from '@shared/entity/service-account';
 import {TokenDialogComponent} from '../token-dialog/token-dialog.component';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'km-add-serviceaccount-token',
@@ -48,11 +49,11 @@ export class AddServiceAccountTokenComponent implements OnInit {
 
     this._apiService
       .createServiceAccountToken(this.project.id, this.serviceaccount, createServiceAccountToken)
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(token => {
         this._matDialogRef.close(true);
         this._notificationService.success(
-          `The <strong>${createServiceAccountToken.name}</strong> token was added to the <strong>${this.serviceaccount.name}</strong> service account`
+          `The ${createServiceAccountToken.name} token was added to the ${this.serviceaccount.name} service account`
         );
         this.openTokenDialog(token);
       });

@@ -14,27 +14,27 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {AppConfigService} from '@app/config.service';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
+import {ProjectService} from '@core/services/project/service';
+import {UserService} from '@core/services/user/service';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
+import {View} from '@shared/entity/common';
+import {Member} from '@shared/entity/member';
+import {Project} from '@shared/entity/project';
+import {GroupConfig} from '@shared/model/Config';
+import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import * as _ from 'lodash';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
-import {filter, first, switchMap, takeUntil} from 'rxjs/operators';
-
-import {AppConfigService} from '../app-config.service';
-import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
-import {GoogleAnalyticsService} from '../google-analytics.service';
-import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {Member} from '../shared/entity/member';
-import {View} from '../shared/entity/common';
-import {Project} from '../shared/entity/project';
-import {GroupConfig} from '../shared/model/Config';
-import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
-
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {AddMemberComponent} from './add-member/add-member.component';
 import {EditMemberComponent} from './edit-member/edit-member.component';
 
 @Component({
   selector: 'km-member',
   templateUrl: './member.component.html',
-  styleUrls: ['./member.component.scss'],
 })
 export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   members: Member[] = [];
@@ -74,7 +74,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
 
-    this._userService.currentUser.pipe(first()).subscribe(user => (this.currentUser = user));
+    this._userService.currentUser.pipe(take(1)).subscribe(user => (this.currentUser = user));
 
     this._projectService.selectedProject
       .pipe(
@@ -83,7 +83,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
           return this._userService.getCurrentUserGroup(project.id);
         })
       )
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     merge(timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase()), this._membersUpdate)
@@ -120,7 +120,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
     modal.componentInstance.project = this._selectedProject;
     modal
       .afterClosed()
-      .pipe(first())
+      .pipe(take(1))
       .subscribe((member: Member) => {
         if (member) {
           this.members.push(member);
@@ -131,9 +131,17 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
 
   isEditEnabled(member: Member): boolean {
     return (
-      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Members, Permission.Edit) ||
-      (this.currentUser && member && this.currentUser.email !== member.email)
+      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Members, Permission.Edit) &&
+      this.currentUser &&
+      member &&
+      this.currentUser.email !== member.email
     );
+  }
+
+  getEditTooltip(member: Member): string {
+    return this.currentUser && member && this.currentUser.email === member.email
+      ? 'You cannot edit your own data and permissions'
+      : 'Edit member';
   }
 
   editMember(member: Member): void {
@@ -142,7 +150,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
     modal.componentInstance.member = member;
     modal
       .afterClosed()
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(isEdited => {
         if (isEdited) {
           this._membersUpdate.next();
@@ -152,9 +160,17 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
 
   isDeleteEnabled(member: Member): boolean {
     return (
-      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Members, Permission.Delete) ||
-      (this.currentUser && member && this.currentUser.email !== member.email)
+      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Members, Permission.Delete) &&
+      this.currentUser &&
+      member &&
+      this.currentUser.email !== member.email
     );
+  }
+
+  getDeleteTooltip(member: Member): string {
+    return this.currentUser && member && this.currentUser.email === member.email
+      ? 'You cannot edit your own data and permissions'
+      : 'Delete member';
   }
 
   deleteMember(member: Member): void {
@@ -163,7 +179,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Member',
-        message: `Delete member "<strong>${member.name}</strong>" from project "<strong>${this._selectedProject.name}</strong>"?`,
+        message: `Delete ${member.name} member from the ${this._selectedProject.name} project?`,
         confirmLabel: 'Delete',
       },
     };
@@ -175,10 +191,10 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
       .pipe(switchMap(_ => this._apiService.deleteMembers(this._selectedProject.id, member)))
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(
-          `The <strong>${member.name}</strong> member was removed from the <strong>${this._selectedProject.name}</strong> project`
+          `The ${member.name} member was removed from the ${this._selectedProject.name} project`
         );
         this._googleAnalyticsService.emitEvent('memberOverview', 'MemberDeleted');
       });

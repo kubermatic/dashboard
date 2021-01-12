@@ -14,9 +14,10 @@ limitations under the License.
 <mat-dialog-content>
   <form [formGroup]="addSSHKeyForm">
     <mat-form-field class="km-ssh-key-input">
-      <mat-label>Name*</mat-label>
+      <mat-label>Name</mat-label>
       <input id="name"
              matInput
+             required
              formControlName="name"
              type="text"
              autocomplete="off"
@@ -27,16 +28,14 @@ limitations under the License.
     </mat-form-field>
 
     <mat-form-field class="km-ssh-key-textarea">
-      <mat-label>Key*</mat-label>
+      <mat-label>Public SSH Key</mat-label>
       <textarea id="key"
                 matInput
+                required
                 formControlName="key"
                 type="text"
                 class="form-control"
                 (change)="onNewKeyTextChanged()"></textarea>
-      <mat-hint>
-        Paste only the public part of your SSH key and store the private part safely.
-      </mat-hint>
       <mat-error *ngIf="addSSHKeyForm.controls.key.hasError('required')">
         Key is <strong>required</strong>.
       </mat-error>

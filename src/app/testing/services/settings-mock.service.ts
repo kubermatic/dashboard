@@ -11,7 +11,7 @@
 
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {AdminSettings, ClusterTypeOptions, UserSettings} from '../../shared/entity/settings';
+import {AdminSettings, ClusterTypeOptions, UserSettings} from '@shared/entity/settings';
 
 export const DEFAULT_USER_SETTINGS_MOCK: UserSettings = {
   itemsPerPage: 10,
@@ -33,6 +33,8 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
   enableDashboard: true,
   enableOIDCKubeconfig: false,
   userProjectsLimit: 0,
+  restrictProjectCreation: false,
+  enableExternalClusterImport: true,
 };
 
 @Injectable()

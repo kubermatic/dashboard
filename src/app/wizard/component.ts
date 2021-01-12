@@ -13,21 +13,20 @@ import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatStepper} from '@angular/material/stepper';
 import {Router} from '@angular/router';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {NodeDataService} from '@app/node-data/service/service';
+import {ClusterService} from '@core/services/cluster/service';
+import {NotificationService} from '@core/services/notification/service';
+import {ProjectService} from '@core/services/project/service';
+import {Cluster} from '@shared/entity/cluster';
+import {Project} from '@shared/entity/project';
+import {SSHKey} from '@shared/entity/ssh-key';
+import {CreateClusterModel} from '@shared/model/CreateClusterModel';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {ClusterService as ClusterModelService} from '@shared/services/cluster.service';
 import {forkJoin, of, Subject} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
-
-import {ClusterService, DatacenterService, NotificationService, ProjectService} from '../core/services';
-import {GoogleAnalyticsService} from '../google-analytics.service';
-import {NodeDataService} from '../node-data/service/service';
-import {Cluster} from '../shared/entity/cluster';
-import {Datacenter} from '../shared/entity/datacenter';
-import {Project} from '../shared/entity/project';
-import {SSHKey} from '../shared/entity/ssh-key';
-import {CreateClusterModel} from '../shared/model/CreateClusterModel';
-import {NodeData} from '../shared/model/NodeSpecChange';
-
 import {StepRegistry, steps, WizardStep} from './config';
-import {ClusterService as ClusterModelService} from '../shared/services/cluster.service';
 import {WizardService} from './service/wizard';
 
 @Component({
@@ -55,7 +54,6 @@ export class WizardComponent implements OnInit, OnDestroy {
     private readonly _clusterService: ClusterService,
     private readonly _nodeDataService: NodeDataService,
     private readonly _router: Router,
-    private readonly _datacenterService: DatacenterService,
     private readonly _googleAnalyticsService: GoogleAnalyticsService
   ) {}
 
@@ -106,32 +104,29 @@ export class WizardComponent implements OnInit, OnDestroy {
   create(): void {
     this.creating = true;
     let createdCluster: Cluster;
-    let datacenter: Datacenter;
     const createCluster = this._getCreateClusterModel(
       this._clusterModelService.cluster,
       this._nodeDataService.nodeData
     );
 
-    this._datacenterService
-      .getDatacenter(this._clusterModelService.datacenter)
-      .pipe(tap(dc => (datacenter = dc)))
-      .pipe(switchMap(_ => this._clusterService.create(this.project.id, datacenter.spec.seed, createCluster)))
+    this._clusterService
+      .create(this.project.id, createCluster)
       .pipe(
         tap(cluster => {
-          this._notificationService.success(`The <strong>${createCluster.cluster.name}</strong> cluster was created`);
+          this._notificationService.success(`The ${createCluster.cluster.name} cluster was created`);
           this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
           createdCluster = cluster;
         })
       )
-      .pipe(switchMap(_ => this._clusterService.cluster(this.project.id, createdCluster.id, datacenter.spec.seed)))
+      .pipe(switchMap(_ => this._clusterService.cluster(this.project.id, createdCluster.id)))
       .pipe(
-        switchMap(() => {
+        switchMap(_ => {
           this.creating = false;
 
           if (this._clusterModelService.sshKeys.length > 0) {
             return forkJoin(
               this._clusterModelService.sshKeys.map(key =>
-                this._clusterService.createSSHKey(this.project.id, createdCluster.id, datacenter.spec.seed, key.id)
+                this._clusterService.createSSHKey(this.project.id, createdCluster.id, key.id)
               )
             );
           }
@@ -142,19 +137,15 @@ export class WizardComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(
         (keys: SSHKey[]) => {
-          this._router.navigate([
-            `/projects/${this.project.id}/dc/${datacenter.spec.seed}/clusters/${createdCluster.id}`,
-          ]);
+          this._router.navigate([`/projects/${this.project.id}/clusters/${createdCluster.id}`]);
           keys.forEach(key =>
             this._notificationService.success(
-              `The <strong>${key.name}</strong> SSH key was added to cluster <strong>${createCluster.cluster.name}</strong>`
+              `The ${key.name} SSH key was added to cluster ${createCluster.cluster.name}`
             )
           );
         },
         () => {
-          this._notificationService.error(
-            `Could not create the <strong>${createCluster.cluster.name}</strong> cluster`
-          );
+          this._notificationService.error(`Could not create the ${createCluster.cluster.name} cluster`);
           this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
           this.creating = false;
         }

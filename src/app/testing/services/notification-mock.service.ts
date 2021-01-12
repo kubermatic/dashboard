@@ -13,11 +13,11 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class NotificationMockService {
-  success(...restOfData: string[]): void {}
+  success(..._restOfData: string[]): void {}
 
-  error(...restOfData: string[]): void {}
+  error(..._restOfData: string[]): void {}
 
-  alert(...restOfData: string[]): void {}
+  alert(..._restOfData: string[]): void {}
 
-  info(...restOfData: string[]): void {}
+  info(..._restOfData: string[]): void {}
 }

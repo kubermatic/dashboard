@@ -10,21 +10,25 @@
 // limitations under the License.
 
 import {HttpClientModule} from '@angular/common/http';
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ApiService, Auth, DatacenterService, PresetsService, ProjectService} from '../../../core/services';
-import {NODE_DATA_CONFIG, NodeDataMode} from '../../../node-data/config';
-import {NodeDataService} from '../../../node-data/service/service';
-import {SharedModule} from '../../../shared/shared.module';
-import {ClusterService} from '../../../shared/services/cluster.service';
-import {ApiMockService} from '../../../testing/services/api-mock.service';
-import {ProjectMockService} from '../../../testing/services/project-mock.service';
-import {WizardService} from '../../service/wizard';
+import {AppConfigService} from '@app/config.service';
+import {NODE_DATA_CONFIG, NodeDataMode} from '@app/node-data/config';
+import {NodeDataService} from '@app/node-data/service/service';
+import {ApiMockService} from '@app/testing/services/api-mock.service';
+import {AuthMockService} from '@app/testing/services/auth-mock.service';
+import {ProjectMockService} from '@app/testing/services/project-mock.service';
+import {WizardService} from '@app/wizard/service/wizard';
+import {ApiService} from '@core/services/api/service';
+import {Auth} from '@core/services/auth/service';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {ProjectService} from '@core/services/project/service';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {ClusterService} from '@shared/services/cluster.service';
+import {SharedModule} from '@shared/shared.module';
 import {MachineNetworkStepComponent} from './component';
-import {AppConfigService} from '../../../app-config.service';
-import {AuthMockService} from '../../../testing/services/auth-mock.service';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule];
 
@@ -32,25 +36,27 @@ describe('MachineNetworkStepComponent', () => {
   let fixture: ComponentFixture<MachineNetworkStepComponent>;
   let component: MachineNetworkStepComponent;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [...modules],
-      declarations: [MachineNetworkStepComponent],
-      providers: [
-        WizardService,
-        ClusterService,
-        NodeDataService,
-        ClusterService,
-        PresetsService,
-        DatacenterService,
-        AppConfigService,
-        {provide: ProjectService, useValue: ProjectMockService},
-        {provide: ApiService, useValue: ApiMockService},
-        {provide: Auth, useClass: AuthMockService},
-        {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        declarations: [MachineNetworkStepComponent],
+        providers: [
+          WizardService,
+          ClusterService,
+          NodeDataService,
+          ClusterService,
+          PresetsService,
+          DatacenterService,
+          AppConfigService,
+          {provide: ProjectService, useValue: ProjectMockService},
+          {provide: ApiService, useValue: ApiMockService},
+          {provide: Auth, useClass: AuthMockService},
+          {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MachineNetworkStepComponent);

@@ -14,20 +14,22 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {Subject, timer} from 'rxjs';
-import {filter, first, retry, switchMap, takeUntil} from 'rxjs/operators';
+import {AppConfigService} from '@app/config.service';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
+import {ProjectService} from '@core/services/project/service';
+import {UserService} from '@core/services/user/service';
+import {AddSshKeyDialogComponent} from '@shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
+import {View} from '@shared/entity/common';
+import {Member} from '@shared/entity/member';
+import {SSHKey} from '@shared/entity/ssh-key';
+import {GroupConfig} from '@shared/model/Config';
+import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import * as _ from 'lodash';
-
-import {AppConfigService} from '../app-config.service';
-import {ApiService, NotificationService, ProjectService, UserService} from '../core/services';
-import {GoogleAnalyticsService} from '../google-analytics.service';
-import {AddSshKeyDialogComponent} from '../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
-import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {View} from '../shared/entity/common';
-import {Member} from '../shared/entity/member';
-import {SSHKey} from '../shared/entity/ssh-key';
-import {GroupConfig} from '../shared/model/Config';
-import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
+import {Subject, timer} from 'rxjs';
+import {filter, retry, switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-sshkey',
@@ -69,11 +71,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._userService.currentUser.pipe(first()).subscribe(user => (this._user = user));
-
-    this._userService
-      .getCurrentUserGroup(this.projectID)
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
+    this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
@@ -90,6 +88,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(
         switchMap(group => {
           this.userGroup = group;
+          this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(group);
           return timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase());
         })
       )
@@ -152,7 +151,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         dialogId: 'km-delete-sshkey-dialog',
         title: 'Delete SSH Key',
-        message: `Delete SSH key "<strong>${sshKey.name}</strong>" permanently?`,
+        message: `Delete SSH key ${sshKey.name} permanently?`,
         confirmLabel: 'Delete',
         confirmLabelId: 'km-delete-sshkey-dialog-btn',
       },
@@ -165,11 +164,9 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
       .pipe(switchMap(_ => this._api.deleteSSHKey(sshKey.id, this.projectID)))
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
-        this._notificationService.success(
-          `The <strong>${sshKey.name}</strong> SSH key was removed from the <strong>${this.projectID}</strong> project`
-        );
+        this._notificationService.success(`The ${sshKey.name} SSH key was removed from the ${this.projectID} project`);
         this._googleAnalyticsService.emitEvent('sshKeyOverview', 'SshKeyDeleted');
       });
   }

@@ -10,10 +10,10 @@
 // limitations under the License.
 
 import {HttpClient} from '@angular/common/http';
+import {DigitaloceanSizes} from '@shared/entity/provider/digitalocean';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {EMPTY, Observable} from 'rxjs';
-import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {Provider} from './provider';
-import {DigitaloceanSizes} from '../../../../shared/entity/provider/digitalocean';
 
 export class Digitalocean extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {

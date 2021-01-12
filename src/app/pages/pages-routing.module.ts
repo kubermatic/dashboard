@@ -11,9 +11,7 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-
-import {AuthGuard} from '../core/services';
-
+import {AuthGuard} from '@core/services/auth/guard';
 import {ApiDocsComponent} from './api-docs/api-docs.component';
 import {FrontpageComponent} from './frontpage/frontpage.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';

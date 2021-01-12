@@ -9,9 +9,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {MachineDeployment} from '../../shared/entity/machine-deployment';
-import {Node} from '../../shared/entity/node';
-import {NodeData} from '../../shared/model/NodeSpecChange';
+import {MachineDeployment} from '@shared/entity/machine-deployment';
+import {Node} from '@shared/entity/node';
+import {NodeData} from '@shared/model/NodeSpecChange';
 
 export function fakeDigitaloceanCreateNode(): Node {
   return {
@@ -348,6 +348,8 @@ export function nodeDataFake(): NodeData {
           image: '',
           useFloatingIP: false,
           tags: {},
+          instanceReadyCheckPeriod: '10',
+          instanceReadyCheckTimeout: '120',
         },
         hetzner: {
           type: 'cx31',
@@ -427,6 +429,8 @@ export function nodeDataCentOsFake(): NodeData {
           image: '',
           useFloatingIP: false,
           tags: {},
+          instanceReadyCheckPeriod: '10',
+          instanceReadyCheckTimeout: '120',
         },
         hetzner: {
           type: 'cx31',
@@ -492,6 +496,8 @@ export function nodeDataContainerLinuxFake(): NodeData {
           image: '',
           useFloatingIP: false,
           tags: {},
+          instanceReadyCheckPeriod: '10',
+          instanceReadyCheckTimeout: '120',
         },
         hetzner: {
           type: 'cx31',
@@ -556,6 +562,8 @@ export function nodeDataSLESFake(): NodeData {
           image: '',
           useFloatingIP: false,
           tags: {},
+          instanceReadyCheckPeriod: '10',
+          instanceReadyCheckTimeout: '120',
         },
         hetzner: {
           type: 'cx31',

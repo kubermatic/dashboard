@@ -20,6 +20,5 @@ const components: any[] = [SSHKeyComponent];
   imports: [SharedModule, SSHKeyRoutingModule],
   declarations: [...components],
   exports: [...components],
-  entryComponents: [],
 })
 export class SSHKeyModule {}

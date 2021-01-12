@@ -9,27 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../assets/css/variables";
-
-.mat-card {
-  padding: 0 $baseline-grid;
-}
+@import 'variables';
+@import 'mixins';
 
 .km-button-navigation {
-  margin-top: 2 * $baseline-grid;
+  margin-top: 16px;
 
   &:not(#summary-nav) {
-    margin-top: .5 * $baseline-grid;
-  }
-}
-
-::ng-deep.mat-horizontal-stepper-content[aria-expanded="false"] {
-  width: 0 !important;
-}
-
-@include km-breakpoint('small') {
-  ::ng-deep.mat-horizontal-stepper-header-container {
-    display: none !important;
+    margin-top: 4px;
   }
 }
 
@@ -37,11 +24,44 @@
   padding-top: 45px;
 }
 
-::ng-deep.mat-card-header {
-  margin-bottom: 0 !important;
+.km-wizard-step {
+  cursor: default;
+  font-size: $font-size-subhead;
+  font-weight: 400;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-top: 8px;
+  user-select: none;
+
+  .km-wizard-step-number {
+    @include size(24px);
+
+    align-items: center;
+    border-radius: 50%;
+    display: inline-flex;
+    font-size: $font-size-body;
+    font-weight: normal;
+    justify-content: center;
+    margin-right: 14px;
+  }
+
+  &.active {
+    font-weight: 500;
+  }
+
+  &.completed {
+    cursor: pointer;
+  }
 }
 
-::ng-deep.mat-card-title {
-  margin-bottom: 0 !important;
-  padding-bottom: 20px !important;
+.km-wizard-step-divider {
+  height: 1px;
+  margin: 20px 20px 0 8px;
+}
+
+mat-card {
+  &.mat-card {
+    margin: 0;
+    padding: 16px 30px 30px;
+  }
 }

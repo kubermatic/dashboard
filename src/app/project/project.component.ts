@@ -9,37 +9,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Inject,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
+import {Cookie, COOKIE_DI_TOKEN} from '@app/config';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {NotificationService} from '@core/services/notification/service';
+import {PreviousRouteService} from '@core/services/previous-route/service';
+import {ProjectService} from '@core/services/project/service';
+import {SettingsService} from '@core/services/settings/service';
+import {UserService} from '@core/services/user/service';
+import {AddProjectDialogComponent} from '@shared/components/add-project-dialog/add-project-dialog.component';
+import {View} from '@shared/entity/common';
+import {Member} from '@shared/entity/member';
+import {Project, ProjectOwners} from '@shared/entity/project';
+import {UserSettings} from '@shared/entity/settings';
+import {objectDiff} from '@shared/utils/common-utils';
+import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
+import {ProjectUtils} from '@shared/utils/project-utils/project-utils';
 import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
-import {merge, Subject, timer} from 'rxjs';
-import {debounceTime, filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
-
-import {AppConfigService} from '../app-config.service';
-import {Cookie, COOKIE_DI_TOKEN} from '../app.config';
-import {NotificationService, ProjectService, UserService} from '../core/services';
-import {PreviousRouteService} from '../core/services/previous-route/previous-route.service';
-import {GoogleAnalyticsService} from '../google-analytics.service';
-import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
-import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {Member} from '../shared/entity/member';
-import {View} from '../shared/entity/common';
-import {Project, ProjectOwners} from '../shared/entity/project';
-import {UserSettings} from '../shared/entity/settings';
-import {MemberUtils, Permission} from '../shared/utils/member-utils/member-utils';
-import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
-
+import {Subject} from 'rxjs';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {DeleteProjectConfirmationComponent} from './delete-project/delete-project.component';
 import {EditProjectComponent} from './edit-project/edit-project.component';
 
 @Component({
   selector: 'km-project',
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   projects: Project[] = [];
@@ -51,27 +63,29 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   isPaginatorVisible = false;
   showCards = true;
   settings: UserSettings;
+  restrictProjectCreation = false;
 
-  private readonly _refreshTime = 10; // in seconds
-  private readonly _debounceTime = 500;
   private readonly _maxOwnersLen = 30;
-  private _settingsChange = new Subject<void>();
+  private _apiSettings: UserSettings;
+  private _settingsChange = new EventEmitter<void>();
   private _unsubscribe: Subject<any> = new Subject();
-  private _refreshTimer$ = timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase());
+
+  get isAdmin(): boolean {
+    return !!this.currentUser && this.currentUser.isAdmin;
+  }
 
   paginator: MatPaginator;
   @ViewChild(MatPaginator)
   set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
 
-    setTimeout(_ => {
-      if (this.paginator && this.settings) {
-        this.paginator.pageSize = this.settings.itemsPerPage;
-        this.isPaginatorVisible = this._isPaginatorVisible();
-      }
-    });
+    if (this.paginator && this.settings) {
+      this.paginator.pageSize = this.settings.itemsPerPage;
+      this.isPaginatorVisible = this._isPaginatorVisible();
+    }
 
     this.dataSource.paginator = this.paginator;
+    this._cdr.detectChanges();
   }
 
   sort: MatSort;
@@ -90,7 +104,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _cookieService: CookieService,
     private readonly _notificationService: NotificationService,
     private readonly _previousRouteService: PreviousRouteService,
-    private readonly _appConfig: AppConfigService,
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _settingsService: SettingsService,
     @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie
   ) {}
 
@@ -105,7 +120,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     this._userService.currentUserSettings
       .pipe(
         tap(settings => {
-          this.settings = settings;
+          this._apiSettings = settings;
+          this.settings = _.cloneDeep(this._apiSettings);
           this.showCards = !settings.selectProjectTableView;
         })
       )
@@ -114,30 +130,31 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(_ => this.selectDefaultProject());
 
     this._settingsChange
-      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
-      .pipe(
-        switchMap(() =>
-          this._userService.patchCurrentUserSettings({selectProjectTableView: !this.showCards} as UserSettings)
-        )
-      )
-      .subscribe();
-
-    merge(this._refreshTimer$, this._projectService.onProjectsUpdate)
-      .pipe(switchMap(() => this._projectService.projects))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(projects => {
-        this.projects = this._sortProjects(projects);
-        this._loadCurrentUserRoles();
-        this.dataSource.data = this.projects;
-        this._sortProjectOwners();
-
-        if (this._shouldRedirectToCluster()) {
-          this._redirectToCluster();
-        }
-        this.isInitializing = false;
-        this.selectDefaultProject();
+      .pipe(switchMap(() => this._userService.patchCurrentUserSettings(objectDiff(this.settings, this._apiSettings))))
+      .subscribe(settings => {
+        this._apiSettings = settings;
+        this.settings = _.cloneDeep(this._apiSettings);
       });
+
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.restrictProjectCreation = settings.restrictProjectCreation;
+    });
+
+    this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe((projects: Project[]) => {
+      this.projects = projects;
+      this.projects = this._sortProjects(this.projects);
+      this._loadCurrentUserRoles();
+      this.dataSource.data = this.projects;
+      this._sortProjectOwners();
+
+      if (this._shouldRedirectToCluster()) {
+        this._redirectToCluster();
+      }
+      this.isInitializing = false;
+      this.selectDefaultProject();
+      this._cdr.detectChanges();
+    });
   }
 
   ngOnDestroy(): void {
@@ -147,6 +164,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(): void {
     this.dataSource.data = this.projects;
+    this._cdr.detectChanges();
   }
 
   private _loadCurrentUserRoles(): void {
@@ -154,9 +172,9 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       this.currentUser.projects.forEach(mp => this.role.set(mp.id, MemberUtils.getGroupDisplayName(mp.group)));
     }
 
-    if (this.projects) {
+    if (!!this.projects && !!this.currentUser) {
       this.projects
-        .filter(p => p.owners.map(o => o.email).includes(this.currentUser.email))
+        .filter(p => (p.owners ? p.owners.map(o => o.email).includes(this.currentUser.email) : false))
         .forEach(p => this.role.set(p.id, 'Owner'));
     }
   }
@@ -202,7 +220,12 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   changeView(): void {
     this.showCards = !this.showCards;
     this.settings.selectProjectTableView = !this.settings.selectProjectTableView;
-    this._settingsChange.next();
+    this._settingsChange.emit();
+  }
+
+  changeProjectVisibility(): void {
+    this.settings.displayAllProjectsForAdmin = !this.settings.displayAllProjectsForAdmin;
+    this._settingsChange.emit();
   }
 
   selectProject(project: Project): void {
@@ -317,14 +340,19 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     return ProjectUtils.getStateIconClass(project.status);
   }
 
+  isProjectCreationRestricted(): boolean {
+    return !this.isAdmin && !!this.restrictProjectCreation;
+  }
+
   addProject(): void {
     this._matDialog
       .open(AddProjectDialogComponent)
       .afterClosed()
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(isAdded => {
         if (isAdded) {
           this._projectService.onProjectsUpdate.next();
+          this.projects.push(isAdded);
         }
       });
   }
@@ -344,7 +372,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     modal.componentInstance.project = project;
     modal
       .afterClosed()
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(editedProject => {
         if (editedProject) {
           this._projectService.onProjectsUpdate.next();
@@ -363,29 +391,17 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   deleteProject(project: Project, event: Event): void {
     event.stopPropagation();
-    const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
-      data: {
-        title: 'Delete Project',
-        message: `Are you sure you want to permanently delete project "<strong>${project.name}</strong>"?`,
-        confirmLabel: 'Delete',
-        compareName: project.name,
-        inputPlaceholder: 'Project Name',
-        inputTitle: 'Project Name',
-      },
-    };
-
-    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
+    const dialogRef = this._matDialog.open(DeleteProjectConfirmationComponent);
+    dialogRef.componentInstance.project = project;
     this._googleAnalyticsService.emitEvent('projectOverview', 'deleteProjectOpened');
 
     dialogRef
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
       .pipe(switchMap(_ => this._projectService.delete(project.id)))
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
-        this._notificationService.success(`The <strong>${project.name}</strong> project is being deleted`);
+        this._notificationService.success(`The ${project.name} project is being deleted`);
         this._googleAnalyticsService.emitEvent('projectOverview', 'ProjectDeleted');
         this._projectService.onProjectsUpdate.next();
       });

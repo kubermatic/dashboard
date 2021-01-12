@@ -9,16 +9,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {ApiService} from '@core/services/api/service';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {ProjectService} from '@core/services/project/service';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {Cluster} from '@shared/entity/cluster';
+import {AlibabaInstanceType, AlibabaZone} from '@shared/entity/provider/alibaba';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {ClusterService} from '@shared/services/cluster.service';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, first, switchMap, tap} from 'rxjs/operators';
-
-import {ApiService, DatacenterService, PresetsService, ProjectService} from '../../../core/services';
-import {Cluster} from '../../../shared/entity/cluster';
-import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../shared/services/cluster.service';
+import {catchError, filter, take, switchMap, tap} from 'rxjs/operators';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
-import {AlibabaInstanceType, AlibabaZone} from '../../../shared/entity/provider/alibaba';
 
 export class NodeDataAlibabaProvider {
   constructor(
@@ -45,7 +47,7 @@ export class NodeDataAlibabaProvider {
         return this._clusterService.clusterChanges
           .pipe(filter(_ => this._clusterService.provider === NodeProvider.ALIBABA))
           .pipe(tap(c => (cluster = c)))
-          .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(first())))
+          .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
           .pipe(tap(dc => (region = dc.spec.alibaba.region)))
           .pipe(
             switchMap(_ =>
@@ -73,7 +75,7 @@ export class NodeDataAlibabaProvider {
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(
             switchMap(_ =>
-              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(first())
+              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(take(1))
             )
           )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
@@ -81,7 +83,6 @@ export class NodeDataAlibabaProvider {
             switchMap(dc =>
               this._apiService.getAlibabaInstanceTypes(
                 selectedProject,
-                dc.spec.seed,
                 this._clusterService.cluster.id,
                 dc.spec.alibaba.region
               )
@@ -96,7 +97,7 @@ export class NodeDataAlibabaProvider {
               return onErrorResumeNext(of([]));
             })
           )
-          .pipe(first());
+          .pipe(take(1));
       }
     }
   }
@@ -110,7 +111,7 @@ export class NodeDataAlibabaProvider {
         return this._clusterService.clusterChanges
           .pipe(filter(_ => this._clusterService.provider === NodeProvider.ALIBABA))
           .pipe(tap(c => (cluster = c)))
-          .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(first())))
+          .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
           .pipe(tap(dc => (region = dc.spec.alibaba.region)))
           .pipe(
             switchMap(_ =>
@@ -140,12 +141,7 @@ export class NodeDataAlibabaProvider {
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(dc =>
-              this._apiService.getAlibabaZones(
-                selectedProject,
-                dc.spec.seed,
-                this._clusterService.cluster.id,
-                dc.spec.alibaba.region
-              )
+              this._apiService.getAlibabaZones(selectedProject, this._clusterService.cluster.id, dc.spec.alibaba.region)
             )
           )
           .pipe(
@@ -157,7 +153,7 @@ export class NodeDataAlibabaProvider {
               return onErrorResumeNext(of([]));
             })
           )
-          .pipe(first());
+          .pipe(take(1));
       }
     }
   }

@@ -11,16 +11,15 @@
 
 import {EventEmitter, Injectable, Injector} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import * as _ from 'lodash';
+import {DialogDataInput, DialogDataOutput, NodeDataDialogComponent} from '@app/node-data/dialog/component';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
+import {Cluster} from '@shared/entity/cluster';
+import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-deployment';
+import {NodeData} from '@shared/model/NodeSpecChange';
 import {Observable, of} from 'rxjs';
-import {catchError, filter, first, flatMap, switchMap} from 'rxjs/operators';
-
-import {ApiService, NotificationService} from '../../core/services';
-import {DialogDataInput, DialogDataOutput, NodeDataDialogComponent} from '../../node-data/dialog/component';
-import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {Cluster} from '../../shared/entity/cluster';
-import {MachineDeployment, MachineDeploymentPatch} from '../../shared/entity/machine-deployment';
-import {NodeData} from '../../shared/model/NodeSpecChange';
+import {catchError, filter, mergeMap, switchMap, take} from 'rxjs/operators';
 
 @Injectable()
 export class NodeService {
@@ -66,21 +65,15 @@ export class NodeService {
     this._notificationService = this._inj.get(NotificationService);
   }
 
-  createMachineDeployment(
-    nodeData: NodeData,
-    projectID: string,
-    seedDCName: string,
-    clusterID: string
-  ): Observable<MachineDeployment> {
+  createMachineDeployment(nodeData: NodeData, projectID: string, clusterID: string): Observable<MachineDeployment> {
     return this._apiService.createMachineDeployment(
       NodeService._getMachineDeploymentEntity(nodeData),
       clusterID,
-      seedDCName,
       projectID
     );
   }
 
-  showMachineDeploymentCreateDialog(cluster: Cluster, projectID: string, seed: string): Observable<MachineDeployment> {
+  showMachineDeploymentCreateDialog(cluster: Cluster, projectID: string): Observable<MachineDeployment> {
     const dialogRef = this._matDialog.open<NodeDataDialogComponent, DialogDataInput, DialogDataOutput>(
       NodeDataDialogComponent,
       {
@@ -93,14 +86,13 @@ export class NodeService {
     return dialogRef
       .afterClosed()
       .pipe(filter(data => !!data))
-      .pipe(switchMap(data => this.createMachineDeployment(data.nodeData, projectID, seed, cluster.id)));
+      .pipe(switchMap(data => this.createMachineDeployment(data.nodeData, projectID, cluster.id)));
   }
 
   showMachineDeploymentEditDialog(
     md: MachineDeployment,
     cluster: Cluster,
-    projectID: string,
-    seed: string
+    projectID: string
   ): Observable<MachineDeployment> {
     const dialogRef = this._matDialog.open(NodeDataDialogComponent, {
       data: {
@@ -120,7 +112,7 @@ export class NodeService {
       .pipe(filter(data => !!data))
       .pipe(
         switchMap(data =>
-          this._apiService.patchMachineDeployment(NodeService._createPatch(data), md.id, cluster.id, seed, projectID)
+          this._apiService.patchMachineDeployment(NodeService._createPatch(data), md.id, cluster.id, projectID)
         )
       );
   }
@@ -129,7 +121,6 @@ export class NodeService {
     md: MachineDeployment,
     clusterID: string,
     projectID: string,
-    dcName: string,
     changeEventEmitter: EventEmitter<MachineDeployment>
   ): Observable<boolean> {
     const dialogConfig: MatDialogConfig = {
@@ -137,7 +128,7 @@ export class NodeService {
       hasBackdrop: true,
       data: {
         title: 'Delete Machine Deployment',
-        message: `Delete "<strong>${md.name}</strong>" permanently?`,
+        message: `Delete ${md.name} machine deployment permanently?`,
         confirmLabel: 'Delete',
       },
     };
@@ -147,15 +138,15 @@ export class NodeService {
     return dialogRef
       .afterClosed()
       .pipe(
-        flatMap(
+        mergeMap(
           (isConfirmed: boolean): Observable<boolean> => {
             if (isConfirmed) {
               return this._apiService
-                .deleteMachineDeployment(clusterID, md, dcName, projectID)
-                .pipe(first())
+                .deleteMachineDeployment(clusterID, md, projectID)
+                .pipe(take(1))
                 .pipe(
                   catchError(() => {
-                    this._notificationService.error('Could not remove the <strong>${md.name}</strong> node deployment');
+                    this._notificationService.error('Could not remove the ${md.name} machine deployment');
                     return of(false);
                   })
                 );
@@ -165,10 +156,10 @@ export class NodeService {
         )
       )
       .pipe(
-        flatMap(
+        mergeMap(
           (data: any): Observable<boolean> => {
             if (data) {
-              this._notificationService.success(`The <strong>${md.name}</strong> node deployment was removed`);
+              this._notificationService.success(`The ${md.name} machine deployment was removed`);
               if (changeEventEmitter) {
                 changeEventEmitter.emit(md);
               }
@@ -178,6 +169,6 @@ export class NodeService {
           }
         )
       )
-      .pipe(first());
+      .pipe(take(1));
   }
 }

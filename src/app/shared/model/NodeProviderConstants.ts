@@ -13,6 +13,7 @@ import {NodeSpec} from '../entity/node';
 
 export enum NodeProvider {
   ALIBABA = 'alibaba',
+  ANEXIA = 'anexia',
   AWS = 'aws',
   AZURE = 'azure',
   DIGITALOCEAN = 'digitalocean',
@@ -40,6 +41,7 @@ export enum OperatingSystem {
 export namespace NodeProviderConstants {
   const PROVIDER_DISPLAY_NAMES = new Map<NodeProvider, string>([
     [NodeProvider.ALIBABA, 'Alibaba'],
+    [NodeProvider.ANEXIA, 'Anexia'],
     [NodeProvider.AWS, 'AWS'],
     [NodeProvider.AZURE, 'Azure'],
     [NodeProvider.BAREMETAL, 'Bare-metal'],

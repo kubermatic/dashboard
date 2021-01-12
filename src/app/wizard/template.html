@@ -11,14 +11,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <form [formGroup]="form">
-  <mat-card fxFlex="100%"
-            class="km-with-padding">
+  <mat-card fxFlex="100%">
     <mat-horizontal-stepper linear
                             disableRipple
                             [@.disabled]="true"
                             #stepper>
       <ng-template matStepperIcon="edit">
-        <mat-icon>done</mat-icon>
+        <i class="km-icon-done"></i>
       </ng-template>
 
       <mat-step *ngFor="let step of steps; index as i;"
@@ -78,7 +77,7 @@ limitations under the License.
                   mat-flat-button
                   [disabled]="creating"
                   *ngIf="last"
-                  (click)="create()">Create
+                  (click)="create()">Create Cluster
           </button>
         </div>
       </mat-step>

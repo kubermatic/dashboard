@@ -19,16 +19,16 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '@shared/entity/cluster';
+import {AWSVPC} from '@shared/entity/provider/aws';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {ClusterService} from '@shared/services/cluster.service';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {PresetsService} from '../../../../../../core/services';
-import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
-import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '../../../../../../shared/entity/cluster';
-import {AWSVPC} from '../../../../../../shared/entity/provider/aws';
-import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../../../../shared/services/cluster.service';
-import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
 
 export enum Controls {
   AccessKeyID = 'accessKeyID',
@@ -123,6 +123,8 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
           ? 'When specified, all worker nodes will be attached to this VPC. If not specified, the default VPC will be used.'
           : 'Please enter your credentials first.';
     }
+
+    return '';
   }
 
   onVPCChange(vpcId: string): void {

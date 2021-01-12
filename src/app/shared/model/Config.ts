@@ -15,6 +15,8 @@ export interface Theme {
   isDark: boolean;
 }
 
+export type EndOfLife = {[version: string]: string};
+
 export interface Config {
   share_kubeconfig?: boolean;
   openstack?: {wizard_use_default_user?: boolean};
@@ -26,6 +28,7 @@ export interface Config {
   oidc_connector_id?: string;
   themes?: Theme[];
   enforced_theme?: string;
+  end_of_life?: EndOfLife;
 }
 
 export interface UserGroupConfig {

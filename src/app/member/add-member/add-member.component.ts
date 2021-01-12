@@ -12,11 +12,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {NotificationService} from '../../core/services';
-
-import {ApiService} from '../../core/services';
-import {CreateMember, Member} from '../../shared/entity/member';
-import {Project} from '../../shared/entity/project';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
+import {CreateMember, Member} from '@shared/entity/member';
+import {Project} from '@shared/entity/project';
 
 @Component({
   selector: 'km-add-member',
@@ -52,9 +51,7 @@ export class AddMemberComponent implements OnInit {
 
     this._apiService.createMembers(this.project.id, createMember).subscribe((member: Member) => {
       this._matDialogRef.close(member);
-      this._notificationService.success(
-        `The <strong>${member.email}</strong> member was added to the <strong>${this.project.name}</strong> project`
-      );
+      this._notificationService.success(`The ${member.email} member was added to the ${this.project.name} project`);
     });
   }
 }

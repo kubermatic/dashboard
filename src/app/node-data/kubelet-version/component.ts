@@ -11,13 +11,14 @@
 
 import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {first, switchMap, takeUntil} from 'rxjs/operators';
-import {ClusterService, DatacenterService} from '../../core/services';
-import {Cluster, ClusterType, MasterVersion} from '../../shared/entity/cluster';
-import {NodeSpec} from '../../shared/entity/node';
-import {NodeData} from '../../shared/model/NodeSpecChange';
-import {ClusterService as ClusterDataService} from '../../shared/services/cluster.service';
-import {BaseFormValidator} from '../../shared/validators/base-form.validator';
+import {ClusterService} from '@core/services/cluster/service';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {Cluster, ClusterType, MasterVersion} from '@shared/entity/cluster';
+import {NodeSpec} from '@shared/entity/node';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {ClusterService as ClusterDataService} from '@shared/services/cluster.service';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {take, switchMap, takeUntil} from 'rxjs/operators';
 import {NodeDataService} from '../service/service';
 
 enum Controls {
@@ -81,7 +82,7 @@ export class KubeletVersionNodeDataComponent extends BaseFormValidator implement
           )
         )
       )
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(this._setDefaultVersion.bind(this));
 
     this.form

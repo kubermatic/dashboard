@@ -16,20 +16,21 @@ limitations under the License.
      ngxClipboard
      [cbContent]="serviceaccountToken.token"
      matTooltip="click to copy">{{serviceaccountToken.token}}</p>
-  <div class="km-dialog-warning">
-    <i class="km-icon-warning"></i>
+  <div class="km-dialog-warning"
+       fxLayoutAlign=" center">
+    <i class="km-icon-error"></i>
     <div>Store this token securely on your device. It will not be displayed again.</div>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <a class="km-small-button"
-     mat-flat-button
-     color="alternative"
-     [href]="downloadUrl"
+  <a [href]="downloadUrl"
      [download]="downloadTitle"
      target="_blank"
      rel="noopener">
-    <i class="km-icon-download"></i>
+    <button mat-flat-button
+            color="alternative">
+      <i class="km-icon-download"></i>
+    </button>
   </a>
   <button id="km-token-dialog-confirm-btn"
           mat-dialog-close

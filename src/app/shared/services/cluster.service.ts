@@ -37,11 +37,9 @@ export class ClusterService {
       return;
     }
 
-    this._cluster = _.mergeWith(this._cluster, cluster, value => {
-      if (_.isArray(value)) {
-        return value;
-      }
-    });
+    this._cluster = _.mergeWith(this._cluster, cluster, (dest, src) =>
+      _.isArray(dest) && _.isArray(src) ? dest : undefined
+    );
     this.clusterChanges.emit(this._cluster);
   }
 
@@ -106,6 +104,7 @@ export class ClusterService {
 
   set admissionPlugins(plugins: string[]) {
     this._admissionPluginsEntity = plugins;
+    this._cluster.spec.admissionPlugins = plugins;
     this.admissionPluginsChanges.emit(this._admissionPluginsEntity);
   }
 
@@ -124,6 +123,8 @@ export class ClusterService {
 
   reset(): void {
     this._cluster = Cluster.newEmptyClusterEntity();
+    this._sshKeys = [];
+    this._admissionPluginsEntity = [];
   }
 
   private _getProvider(cluster: Cluster): NodeProvider {

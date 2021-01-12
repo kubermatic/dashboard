@@ -22,6 +22,7 @@ import {NodeData} from '../../shared/model/NodeSpecChange';
 import {ClusterService} from '../../shared/services/cluster.service';
 import {objectDiff} from '../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../shared/validators/base-form.validator';
+import {NodeDataMode} from '../config';
 import {NodeDataService} from '../service/service';
 
 enum Mode {
@@ -65,6 +66,7 @@ export interface DialogDataOutput {
 export class NodeDataDialogComponent extends BaseFormValidator implements OnInit, OnDestroy {
   isRecreationWarningVisible = false;
   isExtended = false;
+  mode = Mode.Add;
 
   readonly Control = Controls;
 
@@ -73,10 +75,6 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
 
   get provider(): NodeProvider {
     return this._clusterService.provider;
-  }
-
-  get mode(): Mode {
-    return this._nodeDataService.isInDialogEditMode() ? Mode.Edit : Mode.Add;
   }
 
   get existingNodesCount(): number {
@@ -103,6 +101,10 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
 
     this._clusterService.cluster = this._data.initialClusterData;
     this._nodeDataService.nodeData = this._initNodeData();
+    this.mode =
+      this._nodeDataService.mode === NodeDataMode.Dialog && !!this._nodeDataService.nodeData.name
+        ? Mode.Edit
+        : Mode.Add;
 
     merge(this._nodeDataService.nodeDataChanges, this._nodeDataService.operatingSystemChanges)
       .pipe(takeUntil(this._unsubscribe))
@@ -136,6 +138,17 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
     this._dialogRef.close(this._output);
   }
 
+  getConfirmButtonText(): string {
+    switch (this.mode) {
+      case Mode.Add:
+        return 'Add Machine Deployment';
+      case Mode.Edit:
+        return 'Save Changes';
+      default:
+        return 'Add Machine Deployment';
+    }
+  }
+
   private _updateNodeData(): void {
     this._output.nodeData = this._nodeDataService.nodeData;
     this.isRecreationWarningVisible = this._isRecreationWarningVisible();
@@ -161,6 +174,13 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
   }
 
   private _isRecreationWarningVisible(): boolean {
-    return this.mode === Mode.Edit && !_.isEqual(objectDiff(this._data.initialNodeData, this._output.nodeData), {});
+    // the icon should not be displayed if only the node replica has changed,
+    // but of course it should be displayed if something else (also) has changed
+    const diff = objectDiff(this._data.initialNodeData, this._output.nodeData);
+    return (
+      this.mode === Mode.Edit &&
+      !_.isEqual(diff, {}) &&
+      !(Object.keys(diff).length === 1 && Object.prototype.hasOwnProperty.call(diff, 'count'))
+    );
   }
 }

@@ -11,7 +11,7 @@
 
 import {EventEmitter, Injectable} from '@angular/core';
 import {Observable, of, Subject} from 'rxjs';
-import {Project} from '../../shared/entity/project';
+import {Project} from '@shared/entity/project';
 import {fakeProject, fakeProjects} from '../fake-data/project.fake';
 
 @Injectable()
@@ -27,7 +27,7 @@ export class ProjectMockService {
     return of(fakeProjects());
   }
 
-  delete(projectID: string): Observable<any> {
+  delete(_projectID: string): Observable<any> {
     return of(null);
   }
 }

@@ -1,0 +1,49 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@import 'mixins';
+@import 'variables';
+
+.km-tab-card {
+  margin: 0 (-$content-padding);
+
+  .mat-tab-header {
+    border-bottom: none;
+    margin: $content-padding $content-padding (-$border-radius) 0;
+
+    .mat-tab-label-container {
+      padding-left: $content-padding;
+
+      .mat-tab-label {
+        font-size: $font-size-subhead;
+        font-weight: 400;
+        opacity: 1;
+        padding-bottom: $border-radius;
+      }
+
+      .mat-tab-label-active {
+        box-shadow: $border-box-shadow;
+      }
+    }
+
+    .mat-ink-bar {
+      top: 0;
+    }
+  }
+
+  .tab-content {
+    margin: 0 $content-padding $content-padding $content-padding;
+
+    .mat-card {
+      margin: 0;
+    }
+  }
+}

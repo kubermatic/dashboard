@@ -18,6 +18,7 @@ export function fakeVersionInfo(): VersionInfo {
     hash: '1234abcd',
     raw: 'v1.0.0',
     semverString: 'v1.0.0',
+    humanReadable: 'v1.0.0',
     suffix: '',
     tag: 'v1.0.0',
   } as VersionInfo;

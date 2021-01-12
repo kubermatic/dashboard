@@ -12,12 +12,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {NotificationService} from '../../core/services';
-
-import {ApiService} from '../../core/services';
-import {Member} from '../../shared/entity/member';
-import {Project} from '../../shared/entity/project';
-import {MemberUtils} from '../../shared/utils/member-utils/member-utils';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
+import {Member} from '@shared/entity/member';
+import {Project} from '@shared/entity/project';
+import {MemberUtils} from '@shared/utils/member-utils/member-utils';
 
 @Component({
   selector: 'km-edit-member',
@@ -57,7 +56,7 @@ export class EditMemberComponent implements OnInit {
 
     this._apiService.editMembers(this.project.id, editMember).subscribe(() => {
       this._matDialogRef.close(true);
-      this._notificationService.success(`The <strong>${this.member.name}</strong> member was updated`);
+      this._notificationService.success(`The ${this.member.name} member was updated`);
     });
   }
 }

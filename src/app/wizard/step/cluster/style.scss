@@ -9,33 +9,61 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../assets/css/variables";
+@import 'mixins';
+@import 'variables';
 
-.km-icon-warning {
+$toggle-width: 150px;
+$toggle-height: 61px;
+
+.km-cluster-spec-type {
+  margin-right: 20px;
+  max-width: $toggle-width * 2 + 8px;
+  min-width: $toggle-width * 2 + 8px;
+
+  .mat-button-toggle {
+    @include size($toggle-width, $toggle-height, true);
+
+    border-radius: unset;
+    border-width: 2px;
+    margin: 4px 0 0 0;
+
+    &:hover {
+      transition: all .5s ease;
+    }
+
+    &[value='kubernetes'] {
+      border-bottom-left-radius: $border-radius;
+      border-top-left-radius: $border-radius;
+    }
+
+    &[value='openshift'] {
+      border-bottom-right-radius: $border-radius;
+      border-top-right-radius: $border-radius;
+    }
+  }
+}
+
+.km-icon-error {
   cursor: pointer;
 }
 
 .km-randomize-btn {
   position: absolute;
-  right: -0.625 * $baseline-grid;
+  right: -5px;
   top: 0;
 }
 
-.km-randomize-btn ::ng-deep .mat-button-wrapper {
-  display: flex;
+.km-randomize-btn .mat-button-wrapper {
   align-items: center;
+  display: flex;
   justify-content: center;
 }
 
-.mat-icon-button i {
-  background-color: transparent;
-}
-
 .km-version-inline {
+  max-width: 150px;
   width: auto;
-  max-width: 16.25 * $baseline-grid;
 }
 
 km-label-form {
-  margin-top: 3.75 * $baseline-grid;
+  margin-top: 30px;
 }

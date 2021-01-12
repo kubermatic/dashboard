@@ -9,14 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {merge, Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, debounceTime, filter, first, switchMap, tap} from 'rxjs/operators';
-
-import {ApiService, DatacenterService, PresetsService, ProjectService} from '../../../core/services';
-import {Datacenter} from '../../../shared/entity/datacenter';
-import {OpenstackAvailabilityZone, OpenstackFlavor} from '../../../shared/entity/provider/openstack';
-import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../shared/services/cluster.service';
+import {ApiService} from '@core/services/api/service';
+import {ProjectService} from '@core/services/project/service';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {OpenstackAvailabilityZone, OpenstackFlavor} from '@shared/entity/provider/openstack';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {ClusterService} from '@shared/services/cluster.service';
+import {Observable, of, onErrorResumeNext} from 'rxjs';
+import {catchError, debounceTime, filter, take, switchMap, tap} from 'rxjs/operators';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
 
@@ -28,8 +28,7 @@ export class NodeDataOpenstackProvider {
     private readonly _clusterService: ClusterService,
     private readonly _presetService: PresetsService,
     private readonly _apiService: ApiService,
-    private readonly _projectService: ProjectService,
-    private readonly _datacenterService: DatacenterService
+    private readonly _projectService: ProjectService
   ) {}
 
   set tags(tags: object) {
@@ -71,17 +70,8 @@ export class NodeDataOpenstackProvider {
         let selectedProject: string;
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
-          .pipe(
-            switchMap(_ =>
-              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(first())
-            )
-          )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(
-            switchMap(dc =>
-              this._apiService.getOpenStackFlavors(selectedProject, dc.spec.seed, this._clusterService.cluster.id)
-            )
-          )
+          .pipe(switchMap(_ => this._apiService.getOpenStackFlavors(selectedProject, this._clusterService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {
@@ -91,21 +81,8 @@ export class NodeDataOpenstackProvider {
               return onErrorResumeNext(of([]));
             })
           )
-          .pipe(first());
+          .pipe(take(1));
       }
-    }
-  }
-
-  dc(): Observable<Datacenter> {
-    switch (this._nodeDataService.mode) {
-      case NodeDataMode.Wizard:
-        return merge(this._nodeDataService.operatingSystemChanges, this._clusterService.datacenterChanges)
-          .pipe(filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK))
-          .pipe(
-            switchMap(_ =>
-              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(first())
-            )
-          );
     }
   }
 
@@ -145,19 +122,10 @@ export class NodeDataOpenstackProvider {
         let selectedProject: string;
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
-          .pipe(
-            switchMap(_ =>
-              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(first())
-            )
-          )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
-            switchMap(dc =>
-              this._apiService.getOpenStackAvailabilityZones(
-                selectedProject,
-                dc.spec.seed,
-                this._clusterService.cluster.id
-              )
+            switchMap(_ =>
+              this._apiService.getOpenStackAvailabilityZones(selectedProject, this._clusterService.cluster.id)
             )
           )
           .pipe(
@@ -169,7 +137,7 @@ export class NodeDataOpenstackProvider {
               return onErrorResumeNext(of([]));
             })
           )
-          .pipe(first());
+          .pipe(take(1));
       }
     }
   }

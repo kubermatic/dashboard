@@ -16,7 +16,7 @@ RUN apt-get install -y bash vim wget xz-utils make python
 RUN apt-get build-dep -y nodejs
 
 # just get a recent nodejs with npm included:
-RUN wget -O /opt/n.tar.xz https://nodejs.org/dist/v11.15.0/node-v11.15.0-linux-arm64.tar.xz
+RUN wget -O /opt/n.tar.xz https://nodejs.org/dist/v14.12.0/node-v14.12.0-linux-arm64.tar.gz
 
 # install node
 RUN tar x -C /opt -f /opt/n.tar.xz

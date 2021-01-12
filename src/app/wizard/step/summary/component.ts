@@ -10,21 +10,20 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subject} from 'rxjs';
-import {first, switchMap, takeUntil} from 'rxjs/operators';
+import {NodeDataService} from '@app/node-data/service/service';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {LabelFormComponent} from '@shared/components/label-form/label-form.component';
+import {Cluster} from '@shared/entity/cluster';
+import {getOperatingSystem, getOperatingSystemLogoClass} from '@shared/entity/node';
+import {SSHKey} from '@shared/entity/ssh-key';
+import {getIpCount} from '@shared/functions/get-ip-count';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {ClusterService} from '@shared/services/cluster.service';
+import {AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import * as _ from 'lodash';
-
-import {DatacenterService} from '../../../core/services';
-import {NodeDataService} from '../../../node-data/service/service';
-import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
-import {Cluster} from '../../../shared/entity/cluster';
-import {SSHKey} from '../../../shared/entity/ssh-key';
-import {getIpCount} from '../../../shared/functions/get-ip-count';
-import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {NodeData} from '../../../shared/model/NodeSpecChange';
-import {AdmissionPluginUtils} from '../../../shared/utils/admission-plugin-utils/admission-plugin-utils';
-import {getOperatingSystem, getOperatingSystemLogoClass} from '../../../shared/entity/node';
-import {ClusterService} from '../../../shared/services/cluster.service';
+import {Subject} from 'rxjs';
+import {take, switchMap, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-wizard-summary-step',
@@ -76,7 +75,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
       .subscribe(plugins => (this.clusterAdmissionPlugins = plugins));
 
     this._clusterService.datacenterChanges
-      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(first())))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => {
         this._location = dc.spec.location;

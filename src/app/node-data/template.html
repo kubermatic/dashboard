@@ -22,7 +22,8 @@ limitations under the License.
   <div [fxFlex]="isDialogView() ? '100%' : '50%'"
        fxLayout="column"
        fxLayoutGap="16px">
-    <mat-card-header *ngIf="!isDialogView()">
+    <mat-card-header *ngIf="!isDialogView()"
+                     class="km-no-padding">
       <mat-card-title>Basic</mat-card-title>
     </mat-card-header>
     <mat-form-field>
@@ -40,7 +41,7 @@ limitations under the License.
               (click)="generateName()">
         <i class="km-icon-randomize"></i>
       </button>
-      <mat-hint>Leave it empty to use server-side generation.</mat-hint>
+      <mat-hint>Leave this field blank to use automatic name generation.</mat-hint>
       <mat-error *ngIf="form.get(Controls.Name).hasError( 'pattern')">
         Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
       </mat-error>
@@ -107,9 +108,9 @@ limitations under the License.
       </mat-button-toggle-group>
 
       <span *ngIf="isOperatingSystemSelected(OperatingSystem.ContainerLinux)"
-            class="km-eol-warning with-margin">
-        <i class="km-icon-warning"></i>
-        Container Linux is going end-of-life on May 26, 2020
+            class="eol-warning with-margin">
+        <i class="km-icon-error"></i>
+        Container Linux has reached its end of life and is no longer maintained or updated
       </span>
 
       <!-- Options for RHEL -->
@@ -144,7 +145,7 @@ limitations under the License.
       </div>
 
       <div fxLayout="row"
-           fxLayoutGap="16px">
+           fxLayoutGap="36px">
         <!-- Options for Ubuntu, CenOS, SLES and RHEL -->
         <div *ngIf="isOperatingSystemSelected(OperatingSystem.Ubuntu, OperatingSystem.CentOS, OperatingSystem.SLES, OperatingSystem.RHEL)"
              class="km-os-options">
@@ -189,7 +190,7 @@ limitations under the License.
        fxFlex="50%"
        fxLayout="column"
        fxLayoutGap="16px">
-    <mat-card-header>
+    <mat-card-header class="km-no-padding">
       <mat-card-title>{{ providerDisplayName }}</mat-card-title>
     </mat-card-header>
 

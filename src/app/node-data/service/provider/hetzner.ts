@@ -9,15 +9,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {NodeDataMode} from '@app/node-data/config';
+import {ApiService} from '@core/services/api/service';
+import {ProjectService} from '@core/services/project/service';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {HetznerTypes} from '@shared/entity/provider/hetzner';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {ClusterService} from '@shared/services/cluster.service';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, first, switchMap, tap} from 'rxjs/operators';
-
-import {ApiService, DatacenterService, PresetsService, ProjectService} from '../../../core/services';
-import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../shared/services/cluster.service';
-import {NodeDataMode} from '../../config';
+import {catchError, filter, take, switchMap, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
-import {HetznerTypes} from '../../../shared/entity/provider/hetzner';
 
 export class NodeDataHetznerProvider {
   constructor(
@@ -25,8 +26,7 @@ export class NodeDataHetznerProvider {
     private readonly _clusterService: ClusterService,
     private readonly _presetService: PresetsService,
     private readonly _apiService: ApiService,
-    private readonly _projectService: ProjectService,
-    private readonly _datacenterService: DatacenterService
+    private readonly _projectService: ProjectService
   ) {}
 
   flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<HetznerTypes> {
@@ -56,17 +56,8 @@ export class NodeDataHetznerProvider {
         let selectedProject: string;
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
-          .pipe(
-            switchMap(_ =>
-              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(first())
-            )
-          )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(
-            switchMap(dc =>
-              this._apiService.getHetznerTypes(selectedProject, dc.spec.seed, this._clusterService.cluster.id)
-            )
-          )
+          .pipe(switchMap(_ => this._apiService.getHetznerTypes(selectedProject, this._clusterService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {
@@ -76,7 +67,7 @@ export class NodeDataHetznerProvider {
               return onErrorResumeNext(of(HetznerTypes.newHetznerTypes()));
             })
           )
-          .pipe(first());
+          .pipe(take(1));
       }
     }
   }

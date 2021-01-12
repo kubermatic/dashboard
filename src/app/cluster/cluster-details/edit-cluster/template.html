@@ -1,0 +1,99 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<div id="km-edit-cluster-dialog">
+  <km-dialog-title>Edit Cluster</km-dialog-title>
+  <mat-dialog-content>
+    <form [formGroup]="form"
+          fxLayout="column"
+          class="km-edit-cluster-form">
+      <mat-form-field fxFlex>
+        <mat-label>Name*</mat-label>
+        <input id="km-edit-cluster-dialog-input"
+               matInput
+               formControlName="name"
+               type="text"
+               autocomplete="off"
+               cdkFocusInitial>
+        <mat-error *ngIf="form.controls.name.hasError('required')">
+          Name is <strong>required</strong>.
+        </mat-error>
+        <mat-error *ngIf="form.controls.name.hasError('minlength')">
+          Name must be at least {{form.controls.name.getError('minlength').requiredLength}} characters.
+        </mat-error>
+        <mat-error *ngIf="form.controls.name.hasError('pattern')">
+          Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
+        </mat-error>
+      </mat-form-field>
+
+      <div fxFlex="100"
+           fxLayout="column">
+        <mat-form-field>
+          <mat-label>Admission Plugins</mat-label>
+          <mat-select formControlName="admissionPlugins"
+                      multiple
+                      panelClass="km-multiple-values-dropdown"
+                      disableOptionCentering>
+            <mat-option *ngFor="let admissionPlugin of admissionPlugins"
+                        [value]="admissionPlugin"
+                        [disabled]="admissionPlugin === admissionPlugin.PodSecurityPolicy && !!isPodSecurityPolicyEnforced()">
+              {{getPluginName(admissionPlugin)}}
+              <i *ngIf="admissionPlugin === admissionPlugin.PodSecurityPolicy"
+                 class="km-icon-info km-pointer"
+                 matTooltip="Pod Security Policies allow detailed authorization of pod creation and updates."></i>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <span *ngIf="isPluginEnabled(admissionPlugin.PodSecurityPolicy)"
+              class="km-admission-plugin-warning"
+              fxLayout="row">
+          <i class="km-icon-error km-warning"></i>
+          <p fxFlex="95">Activating Pod Security Policy will mean that a lot of Pod specifications, Operators and Helm charts will not work out of the box. Make sure that you know the consequences of activating this feature.</p>
+        </span>
+        <span *ngIf="isPodSecurityPolicyEnforced()"
+              class="km-admission-plugin-warning"
+              fxLayout="row">
+          <i class="km-icon-info km-pointer"></i>
+          <p fxFlex="95">Pod Security Policy is enforced by your admin in the chosen datacenter.</p>
+        </span>
+      </div>
+
+      <div fxLayout="row"
+           fxLayoutGap="16px">
+        <div fxLayout="row"
+             fxLayoutGap="8px"
+             fxLayoutAlign=" center">
+          <mat-checkbox formControlName="auditLogging">Audit Logging</mat-checkbox>
+          <i *ngIf="!!datacenter.spec.enforceAuditLogging"
+             class="km-icon-error km-warning"
+             matTooltip="Audit Logging is enforced by your admin in the chosen datacenter.">
+          </i>
+        </div>
+      </div>
+      <km-label-form title="Labels"
+                     [(labels)]="labels"
+                     [inheritedLabels]="cluster.inheritedLabels"
+                     [asyncKeyValidators]=asyncLabelValidators
+                     formControlName="labels"></km-label-form>
+    </form>
+    <km-edit-provider-settings [cluster]="cluster"
+                               *ngIf="!cluster.spec.cloud.bringyourown"></km-edit-provider-settings>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button id="km-edit-cluster-dialog-edit-btn"
+            mat-flat-button
+            (click)="editCluster()"
+            [disabled]="!form.valid || !providerSettingsPatch.isValid">
+      Save Changes
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {Component, Input, OnInit} from '@angular/core';
-import {FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
@@ -23,27 +23,31 @@ import {
   hasAddonLogoData,
 } from '../../../entity/addon';
 
+export enum Controls {
+  ContinuouslyReconcile = 'continuouslyReconcile',
+}
+
 @Component({
   selector: 'km-install-addon-dialog',
   templateUrl: './install-addon-dialog.component.html',
   styleUrls: ['./install-addon-dialog.component.scss'],
 })
 export class InstallAddonDialogComponent implements OnInit {
+  readonly Controls = Controls;
+
   @Input() addonName: string;
   @Input() addonConfig: AddonConfig;
   form: FormGroup;
+  formBasic: FormGroup;
 
   static getControlValidators(control: AddonFormSpec): ValidatorFn[] {
     return control.required ? [Validators.required] : [];
   }
 
-  static getFormState(control: AddonFormSpec): string | number {
-    return control.type === 'number' ? 0 : '';
-  }
-
   constructor(
     public dialogRef: MatDialogRef<InstallAddonDialogComponent>,
-    private readonly _domSanitizer: DomSanitizer
+    private readonly _domSanitizer: DomSanitizer,
+    private readonly _builder: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -51,13 +55,17 @@ export class InstallAddonDialogComponent implements OnInit {
     if (this.hasForm()) {
       this.addonConfig.spec.formSpec.forEach(control => {
         group[control.internalName] = new FormControl(
-          InstallAddonDialogComponent.getFormState(control),
+          undefined,
           InstallAddonDialogComponent.getControlValidators(control)
         );
       });
     }
 
     this.form = new FormGroup(group);
+
+    this.formBasic = this._builder.group({
+      [Controls.ContinuouslyReconcile]: this._builder.control(false),
+    });
   }
 
   hasForm(): boolean {
@@ -79,7 +87,10 @@ export class InstallAddonDialogComponent implements OnInit {
       variables[key] = this.form.controls[key].value;
     });
 
-    return {name: this.addonName, spec: {variables}};
+    return {
+      name: this.addonName,
+      spec: {variables, continuouslyReconcile: this.formBasic.controls.continuouslyReconcile.value},
+    };
   }
 
   install(): void {

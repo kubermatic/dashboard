@@ -9,20 +9,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
+import {AppConfigService} from '@app/config.service';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {CoreModule} from '@core/module';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {ProjectService} from '@core/services/project/service';
+import {SettingsService} from '@core/services/settings/service';
+import {UserService} from '@core/services/user/service';
+import {SharedModule} from '@shared/shared.module';
 import {CookieService} from 'ngx-cookie-service';
-
-import {AppConfigService} from '../app-config.service';
-import {CoreModule} from '../core/core.module';
-import {DatacenterService, ProjectService, UserService} from '../core/services';
-import {SettingsService} from '../core/services/settings/settings.service';
-import {GoogleAnalyticsService} from '../google-analytics.service';
-import {SharedModule} from '../shared/shared.module';
-import {DialogTestModule, NoopConfirmDialogComponent} from '../testing/components/noop-confirmation-dialog.component';
+import {
+  DialogTestModule,
+  NoopProjectDeleteDialogComponent,
+} from '../testing/components/noop-project-delete-dialog.component';
 import {fakeProject} from '../testing/fake-data/project.fake';
 import {RouterStub, RouterTestingModule} from '../testing/router-stubs';
 import {AppConfigMockService} from '../testing/services/app-config-mock.service';
@@ -30,43 +34,45 @@ import {DatacenterMockService} from '../testing/services/datacenter-mock.service
 import {ProjectMockService} from '../testing/services/project-mock.service';
 import {SettingsMockService} from '../testing/services/settings-mock.service';
 import {UserMockService} from '../testing/services/user-mock.service';
-
 import {ProjectComponent} from './project.component';
+import {ProjectModule} from './project.module';
 
 describe('ProjectComponent', () => {
   let fixture: ComponentFixture<ProjectComponent>;
   let component: ProjectComponent;
-  let noop: ComponentFixture<NoopConfirmDialogComponent>;
+  let noop: ComponentFixture<NoopProjectDeleteDialogComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        RouterTestingModule,
-        SharedModule,
-        DialogTestModule,
-        CoreModule,
-      ],
-      declarations: [ProjectComponent],
-      providers: [
-        {provide: Router, useClass: RouterStub},
-        {provide: ProjectService, useClass: ProjectMockService},
-        {provide: UserService, useClass: UserMockService},
-        {provide: AppConfigService, useClass: AppConfigMockService},
-        {provide: DatacenterService, useClass: DatacenterMockService},
-        {provide: SettingsService, useClass: SettingsMockService},
-        MatDialog,
-        GoogleAnalyticsService,
-        CookieService,
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          BrowserModule,
+          BrowserAnimationsModule,
+          RouterTestingModule,
+          ProjectModule,
+          SharedModule,
+          CoreModule,
+          DialogTestModule,
+        ],
+        providers: [
+          {provide: Router, useClass: RouterStub},
+          {provide: ProjectService, useClass: ProjectMockService},
+          {provide: UserService, useClass: UserMockService},
+          {provide: AppConfigService, useClass: AppConfigMockService},
+          {provide: DatacenterService, useClass: DatacenterMockService},
+          {provide: SettingsService, useClass: SettingsMockService},
+          MatDialog,
+          GoogleAnalyticsService,
+          CookieService,
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ProjectComponent);
     component = fixture.componentInstance;
-    noop = TestBed.createComponent(NoopConfirmDialogComponent);
+    noop = TestBed.createComponent(NoopProjectDeleteDialogComponent);
     fixture.detectChanges();
     fixture.debugElement.injector.get(Router);
   });
@@ -86,8 +92,8 @@ describe('ProjectComponent', () => {
     tick(waitTime);
 
     const dialogTitle = document.body.querySelector('.mat-dialog-title');
-    const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
-    const dialogInput = document.querySelector('#km-confirmation-dialog-input');
+    const deleteButton = document.body.querySelector('#km-delete-project-dialog-confirm-btn') as HTMLInputElement;
+    const dialogInput = document.querySelector('#km-delete-project-dialog-input');
 
     dialogInput.setAttribute('value', project.name);
     deleteButton.disabled = false;
@@ -96,6 +102,6 @@ describe('ProjectComponent', () => {
     fixture.detectChanges();
 
     expect(dialogTitle.textContent).toBe('Delete Project');
-    expect(document.querySelector('#km-confirmation-dialog-input').getAttribute('value')).toBe(project.name);
+    expect(document.querySelector('#km-delete-project-dialog-input').getAttribute('value')).toBe(project.name);
   }));
 });

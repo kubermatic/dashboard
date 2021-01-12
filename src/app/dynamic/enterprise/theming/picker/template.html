@@ -13,11 +13,11 @@ limitations under the License.
 <div *ngIf="!isThemeEnforced"
      fxLayout="row"
      id="km-theme-picker">
-  <div class="km-account-settings-entry-label"
+  <div class="entry-label"
        fxLayoutAlign=" center">Theme</div>
   <mat-button-toggle-group [(value)]="selectedThemeOption"
                            (change)="onThemeChange($event.value)"
-                           class="km-account-settings-toggle"
+                           class="toggle-button"
                            fxLayout="row wrap">
     <mat-button-toggle *ngIf="hasPreferredTheme"
                        [value]="systemDefaultOption">
@@ -32,6 +32,5 @@ limitations under the License.
       {{theme.displayName}}
     </mat-button-toggle>
   </mat-button-toggle-group>
-  <km-settings-status [isSaved]="isEqual(settings?.selectedTheme, apiSettings?.selectedTheme)"
-                      class="km-settings-status-margin"></km-settings-status>
+  <km-settings-status [isSaved]="isEqual(settings?.selectedTheme, apiSettings?.selectedTheme)"></km-settings-status>
 </div>

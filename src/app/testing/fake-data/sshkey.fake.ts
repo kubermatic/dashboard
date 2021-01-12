@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {SSHKey} from '../../shared/entity/ssh-key';
+import {SSHKey} from '@shared/entity/ssh-key';
 
 export function fakeSSHKeys(): SSHKey[] {
   return [

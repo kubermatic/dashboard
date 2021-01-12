@@ -16,7 +16,7 @@
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "tsConfig": "src/tsconfig.app.json",
+            "tsConfig": "src/tsconfig.ee.json",
             "polyfills": "src/polyfills.ts",
             "extractCss": true,
             "assets": [
@@ -30,24 +30,20 @@
               ]
             },
             "styles": [
-              "node_modules/swagger-ui/dist/swagger-ui.css",
-              "src/assets/css/main.scss",
+              "src/assets/css/root.scss",
               {
                 "input": "src/assets/themes/light.scss",
                 "bundleName": "assets/themes/light",
-                "lazy": true,
                 "inject": false
               },
               {
                 "input": "src/assets/themes/dark.scss",
                 "bundleName": "assets/themes/dark",
-                "lazy": true,
                 "inject": false
               },
               {
                 "input": "src/assets/themes/custom.scss",
                 "bundleName": "assets/themes/custom",
-                "lazy": true,
                 "inject": false
               }
             ],
@@ -171,23 +167,11 @@
               "node_modules/jquery/dist/jquery.js"
             ],
             "styles": [
-              "src/assets/css/main.scss"
+              "src/assets/css/root.scss"
             ],
             "assets": [
               "src/assets",
               "src/favicon.ico"
-            ]
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
             ]
           }
         }

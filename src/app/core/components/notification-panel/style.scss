@@ -1,0 +1,103 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@import 'mixins';
+@import 'variables';
+
+$panel-width: 350px;
+
+.root-button {
+  @include toolbar-button(2);
+}
+
+.panel {
+  @include size($panel-width);
+
+  right: 96px;
+  top: $toolbar-height - 5px;
+
+  .header {
+    font-size: $font-size-subhead;
+    padding: 20px 20px 8px;
+
+    .mat-icon-button {
+      @include size(35px, $force: true);
+
+      margin: -8px 4px 0 0;
+
+      i {
+        @include size(16px, $force: true);
+
+        margin-top: -4px;
+
+        &.km-icon-filter {
+          margin-top: -1px;
+        }
+      }
+
+      .km-icon-clear {
+        @include size(18px, $force: true);
+      }
+
+      .filter-indicator {
+        @include size(8px);
+
+        border-radius: 50%;
+        bottom: 10px;
+        position: absolute;
+        right: 8px;
+      }
+    }
+  }
+
+  .notification-list {
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    .notification {
+      margin: 8px 20px 20px 8px;
+
+      .notification-icon {
+        margin: 0 16px 0 8px;
+        min-height: 18px;
+        min-width: 18px;
+      }
+
+      .notification-message {
+        font-size: $font-size-body;
+        line-height: 16px;
+        margin-bottom: 8px;
+        word-break: break-word;
+      }
+
+      .notification-info {
+        padding: 0 20px 8px 0;
+
+        .km-icon-copy-small {
+          @include size(14px);
+
+          cursor: pointer;
+          margin-right: 8px;
+        }
+      }
+
+      .notification-timestamp {
+        cursor: pointer;
+        font-size: $font-size-caption;
+        line-height: 14px;
+      }
+    }
+  }
+
+  .zero-state {
+    font-size: $font-size-subhead;
+  }
+}

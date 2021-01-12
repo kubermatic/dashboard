@@ -11,11 +11,11 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {takeUntil} from 'rxjs/operators';
+import {WizardService} from '@app/wizard/service/wizard';
 
-import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../shared/services/cluster.service';
-import {WizardService} from '../../service/wizard';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {ClusterService} from '@shared/services/cluster.service';
+import {takeUntil} from 'rxjs/operators';
 import {StepBase} from '../base';
 
 enum Controls {

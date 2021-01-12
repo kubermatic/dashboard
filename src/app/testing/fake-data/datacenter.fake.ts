@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Datacenter} from '../../shared/entity/datacenter';
+import {Datacenter} from '@shared/entity/datacenter';
 
 export function fakeDigitaloceanDatacenter(): Datacenter {
   return {
@@ -91,10 +91,6 @@ export function fakeOpenstackDatacenter(): Datacenter {
       enforcePodSecurityPolicy: false,
     },
   };
-}
-
-export function fakeSeedDatacenter(): string {
-  return 'europe-west3-c';
 }
 
 export function fakeAzureDatacenter(): Datacenter {

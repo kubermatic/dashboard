@@ -20,23 +20,24 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {CloudSpec, Cluster, ClusterSpec, VSphereCloudSpec} from '@shared/entity/cluster';
+import {VSphereFolder, VSphereNetwork} from '@shared/entity/provider/vsphere';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {ClusterService} from '@shared/services/cluster.service';
+import {isObjectEmpty} from '@shared/utils/common-utils';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 import * as _ from 'lodash';
-import {EMPTY, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
-
-import {PresetsService} from '../../../../../../core/services';
-import {FilteredComboboxComponent} from '../../../../../../shared/components/combobox/component';
-import {Cluster} from '../../../../../../shared/entity/cluster';
-import {VSphereFolder, VSphereNetwork} from '../../../../../../shared/entity/provider/vsphere';
-import {NodeProvider} from '../../../../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../../../../shared/services/cluster.service';
-import {isObjectEmpty} from '../../../../../../shared/utils/common-utils';
-import {BaseFormValidator} from '../../../../../../shared/validators/base-form.validator';
+import {forkJoin, merge, Observable, of} from 'rxjs';
+import {catchError, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
   VMNetName = 'vmNetName',
   Folder = 'folder',
+  Datastore = 'datastore',
+  DatastoreCluster = 'datastoreCluster',
 }
 
 enum NetworkState {
@@ -102,6 +103,8 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     this.form = this._builder.group({
       [Controls.VMNetName]: this._builder.control({value: '', disabled: true}),
       [Controls.Folder]: this._builder.control({value: '', disabled: true}),
+      [Controls.Datastore]: this._builder.control({value: '', disabled: false}),
+      [Controls.DatastoreCluster]: this._builder.control({value: '', disabled: false}),
     });
 
     this.form.valueChanges
@@ -120,15 +123,31 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
     this._credentialsChanged
       .pipe(tap(_ => this._clearFolders()))
-      .pipe(switchMap(_ => this._folderListObservable()))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._loadFolders.bind(this));
-
-    this._credentialsChanged
       .pipe(tap(_ => this._clearNetworks()))
-      .pipe(switchMap(_ => this._networkListObservable()))
+      .pipe(switchMap(_ => forkJoin([this._folderListObservable(), this._networkListObservable()])))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._loadNetworks.bind(this));
+      .subscribe(([folders, networks]) => {
+        this._loadFolders(folders);
+        this._loadNetworks(networks);
+      });
+
+    // Mutually exclusive fields
+    this.form
+      .get(Controls.Datastore)
+      .valueChanges.pipe(filter(_ => !this._presets.preset))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(val => this._enable(!val, Controls.DatastoreCluster));
+
+    this.form
+      .get(Controls.DatastoreCluster)
+      .valueChanges.pipe(filter(_ => !this._presets.preset))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(val => this._enable(!val, Controls.Datastore));
+
+    merge(this.form.get(Controls.Datastore).valueChanges, this.form.get(Controls.DatastoreCluster).valueChanges)
+      .pipe(distinctUntilChanged())
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._clusterService.cluster = this._getCluster()));
   }
 
   getNetworks(type: string): VSphereNetwork[] {
@@ -149,6 +168,8 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       case Controls.Folder:
         return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
     }
+
+    return '';
   }
 
   ngOnDestroy(): void {
@@ -216,9 +237,9 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .networks(this._onNetworksLoading.bind(this))
       .pipe(map(networks => _.sortBy(networks, n => n.name.toLowerCase())))
       .pipe(
-        catchError(() => {
+        catchError(_ => {
           this._clearNetworks();
-          return onErrorResumeNext(EMPTY);
+          return of([]);
         })
       );
   }
@@ -244,9 +265,9 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .datacenter(this._clusterService.datacenter)
       .folders(this._onFoldersLoading.bind(this))
       .pipe(
-        catchError(() => {
+        catchError(_ => {
           this._clearFolders();
-          return onErrorResumeNext(EMPTY);
+          return of([]);
         })
       );
   }
@@ -272,5 +293,18 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     if (!enable && this.form.get(name).enabled) {
       this.form.get(name).disable();
     }
+  }
+
+  private _getCluster(): Cluster {
+    return {
+      spec: {
+        cloud: {
+          vsphere: {
+            datastore: this.form.get(Controls.Datastore).value,
+            datastoreCluster: this.form.get(Controls.DatastoreCluster).value,
+          } as VSphereCloudSpec,
+        } as CloudSpec,
+      } as ClusterSpec,
+    } as Cluster;
   }
 }

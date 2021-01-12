@@ -12,13 +12,12 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
+import {ResourceType} from '@shared/entity/common';
+import {EditProject, Project} from '@shared/entity/project';
+import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import * as _ from 'lodash';
-
-import {NotificationService} from '../../core/services';
-import {ApiService} from '../../core/services';
-import {EditProject, Project} from '../../shared/entity/project';
-import {AsyncValidators} from '../../shared/validators/async-label-form.validator';
-import {ResourceType} from '../../shared/entity/common';
 
 @Component({
   selector: 'km-edit-project',
@@ -63,7 +62,7 @@ export class EditProjectComponent implements OnInit {
 
     this.api.editProject(this.project.id, project).subscribe(project => {
       this.dialogRef.close(project);
-      this._notificationService.success(`The <strong>${this.project.name}</strong> project was updated`);
+      this._notificationService.success(`The ${this.project.name} project was updated`);
     });
   }
 }

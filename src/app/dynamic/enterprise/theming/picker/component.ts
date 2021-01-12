@@ -9,34 +9,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ColorSchemeService} from '@app/dynamic/enterprise/theming/services/color-scheme';
+import {ThemeManagerService} from '@app/dynamic/enterprise/theming/services/manager';
+import {ThemeService} from '@app/dynamic/enterprise/theming/services/theme';
+import {UserService} from '@core/services/user/service';
+import {UserSettings} from '@shared/entity/settings';
+import {Theme} from '@shared/model/Config';
+import {objectDiff} from '@shared/utils/common-utils';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
-import {UserService} from '../../../../core/services';
-import {UserSettings} from '../../../../shared/entity/settings';
-import {Theme} from '../../../../shared/model/Config';
-import {objectDiff} from '../../../../shared/utils/common-utils';
-import {ColorSchemeService} from '../services/color-scheme';
-import {ThemeManagerService} from '../services/manager';
-import {ThemeService} from '../services/theme';
+import {debounceTime, take, switchMap, takeUntil} from 'rxjs/operators';
 
 @Component({
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StylePickerComponent implements OnInit {
-  private readonly _settingsChange = new Subject<void>();
-  private readonly _unsubscribe = new Subject<void>();
-  private readonly _debounceTime = 1000;
-
   readonly isEqual = _.isEqual;
-
   apiSettings: UserSettings;
   settings: UserSettings;
   themes: Theme[];
   selectedThemeOption: string;
+  private readonly _settingsChange = new Subject<void>();
+  private readonly _unsubscribe = new Subject<void>();
+  private readonly _debounceTime = 1000;
+
+  constructor(
+    private readonly _themeManageService: ThemeManagerService,
+    private readonly _themeService: ThemeService,
+    private readonly _userService: UserService,
+    private readonly _colorSchemeService: ColorSchemeService,
+    private readonly _cdr: ChangeDetectorRef
+  ) {}
 
   get isThemeEnforced(): boolean {
     return this._themeService.isThemeEnforced();
@@ -60,18 +65,10 @@ export class StylePickerComponent implements OnInit {
       : this._themeManageService.getDefaultTheme(this.settings);
   }
 
-  constructor(
-    private readonly _themeManageService: ThemeManagerService,
-    private readonly _themeService: ThemeService,
-    private readonly _userService: UserService,
-    private readonly _colorSchemeService: ColorSchemeService,
-    private readonly _cdr: ChangeDetectorRef
-  ) {}
-
   ngOnInit(): void {
     this.themes = this._themeService.themes;
 
-    this._userService.currentUserSettings.pipe(first()).subscribe(this._selectDefaultTheme.bind(this));
+    this._userService.currentUserSettings.pipe(take(1)).subscribe(this._selectDefaultTheme.bind(this));
 
     this._userService.currentUserSettings
       .pipe(takeUntil(this._unsubscribe))

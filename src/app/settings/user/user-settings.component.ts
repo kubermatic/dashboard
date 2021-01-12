@@ -10,15 +10,17 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {HistoryService} from '@core/services/history/service';
+import {NotificationService} from '@core/services/notification/service';
+import {ProjectService} from '@core/services/project/service';
+import {UserService} from '@core/services/user/service';
+import {Member} from '@shared/entity/member';
+import {Project} from '@shared/entity/project';
+import {UserSettings} from '@shared/entity/settings';
+import {objectDiff} from '@shared/utils/common-utils';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {debounceTime, first, switchMap, takeUntil} from 'rxjs/operators';
-import {NotificationService, ProjectService, UserService} from '../../core/services';
-import {HistoryService} from '../../core/services/history/history.service';
-import {Member} from '../../shared/entity/member';
-import {Project} from '../../shared/entity/project';
-import {UserSettings} from '../../shared/entity/settings';
-import {objectDiff} from '../../shared/utils/common-utils';
+import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-user-settings',
@@ -29,6 +31,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   readonly itemsPerPageOptions = [5, 10, 15, 20, 25];
   projects: Project[] = [];
+  projectIds: string[] = [];
   user: Member;
   settings: UserSettings; // Local settings copy. User can edit it.
   apiSettings: UserSettings; // Original settings from the API. Cannot be edited by the user.
@@ -45,7 +48,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._userService.currentUser.pipe(first()).subscribe(user => (this.user = user));
+    this._userService.currentUser.pipe(take(1)).subscribe(user => (this.user = user));
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(settings, this.apiSettings)) {
@@ -68,6 +71,8 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
 
     this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe(projects => {
       this.projects = projects;
+      this.projectIds = this.projects.map(p => p.id);
+      this._checkDefaultProject();
     });
   }
 
@@ -89,10 +94,13 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   }
 
   hasDefaultProject(): string {
-    return this.settings.selectedProjectId ? '' : '-- None --';
+    return this.settings.selectedProjectId ? '' : 'None';
   }
 
-  isAdmin(): boolean {
-    return !!this.user && this.user.isAdmin;
+  private _checkDefaultProject(): void {
+    if (!!this.settings.selectedProjectId && !this.projectIds.includes(this.settings.selectedProjectId)) {
+      this.settings.selectedProjectId = '';
+      this.onSettingsChange();
+    }
   }
 }

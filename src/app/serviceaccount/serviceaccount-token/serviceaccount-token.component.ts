@@ -13,15 +13,16 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {filter, first, switchMap} from 'rxjs/operators';
-
-import {ApiService, NotificationService, ProjectService, UserService} from '../../core/services';
-import {GoogleAnalyticsService} from '../../google-analytics.service';
-import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {Project} from '../../shared/entity/project';
-import {ServiceAccount, ServiceAccountToken} from '../../shared/entity/service-account';
-import {GroupConfig} from '../../shared/model/Config';
-
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
+import {ProjectService} from '@core/services/project/service';
+import {UserService} from '@core/services/user/service';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
+import {Project} from '@shared/entity/project';
+import {ServiceAccount, ServiceAccountToken} from '@shared/entity/service-account';
+import {GroupConfig} from '@shared/model/Config';
+import {filter, switchMap, take} from 'rxjs/operators';
 import {AddServiceAccountTokenComponent} from './add-serviceaccount-token/add-serviceaccount-token.component';
 import {EditServiceAccountTokenComponent} from './edit-serviceaccount-token/edit-serviceaccount-token.component';
 import {TokenDialogComponent} from './token-dialog/token-dialog.component';
@@ -62,7 +63,7 @@ export class ServiceAccountTokenComponent implements OnInit {
           return this._userService.getCurrentUserGroup(project.id);
         })
       )
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
   }
 
@@ -87,7 +88,7 @@ export class ServiceAccountTokenComponent implements OnInit {
       hasBackdrop: true,
       data: {
         title: 'Regenerate Token',
-        message: `Regenerate token "<strong>${token.name}</strong>" for service account "<strong>${this.serviceaccount.name}</strong>"?`,
+        message: `Regenerate ${token.name} token for ${this.serviceaccount.name} service account?`,
         confirmLabel: 'Regenerate',
       },
     };
@@ -103,10 +104,10 @@ export class ServiceAccountTokenComponent implements OnInit {
           this._apiService.regenerateServiceAccountToken(this._selectedProject.id, this.serviceaccount, token)
         )
       )
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(token => {
         this.openTokenDialog(token);
-        this._notificationService.success(`The <strong>${token.name}</strong> was regenerated`);
+        this._notificationService.success(`The ${token.name} token was regenerated`);
         this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenRegenerated');
       });
   }
@@ -124,7 +125,7 @@ export class ServiceAccountTokenComponent implements OnInit {
       hasBackdrop: true,
       data: {
         title: 'Delete Token',
-        message: `Delete token "<strong>${token.name}</strong>" from service account "<strong>${this.serviceaccount.name}</strong>" permanently?`,
+        message: `Delete ${token.name} token from ${this.serviceaccount.name} service account permanently?`,
         confirmLabel: 'Delete',
       },
     };
@@ -138,10 +139,10 @@ export class ServiceAccountTokenComponent implements OnInit {
       .pipe(
         switchMap(_ => this._apiService.deleteServiceAccountToken(this._selectedProject.id, this.serviceaccount, token))
       )
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(
-          `The <strong>${token.name}</strong> token was removed from the <strong>${this.serviceaccount.name}</strong> service account`
+          `The ${token.name} token was removed from the ${this.serviceaccount.name} service account`
         );
         this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenDeleted');
       });

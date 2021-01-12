@@ -1,0 +1,53 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@use 'sass:map';
+
+@import '~@angular/material/theming';
+@import 'material/theme';
+@import 'global/theme';
+@import 'component';
+
+@include mat-core();
+
+@mixin theme($theme, $colors) {
+  $palette-background: map-get($theme, background);
+  $palette-foreground: map-get($theme, foreground);
+
+  $theme-colors: (
+    background-app-bar: mat-color($palette-background, app-bar),
+    background-card: mat-color($palette-background, card),
+    background-dialog: mat-color($palette-background, dialog),
+    background-disabled-button: mat-color($palette-background, disabled-button),
+    background-hover: mat-color($palette-background, hover),
+    background: mat-color($palette-background, background),
+    checkbox-disabled: mat-color($palette-foreground, disabled-checkbox),
+    divider-disabled: mat-color($palette-foreground, disabled),
+    divider: mat-color($palette-foreground, divider),
+    project-switch: rgba(mat-color($palette-foreground, secondary-text), .7),
+    text-disabled: mat-color($palette-foreground, disabled-text),
+    text-secondary: mat-color($palette-foreground, secondary-text),
+    text: mat-color($palette-foreground, text),
+  );
+
+  // Create merged colors map from custom and theme colors
+  // that can be accessed from components' theme files.
+  $merged-colors: map.merge($colors, $theme-colors);
+
+  // Override default material themes.
+  @include theme-material($merged-colors);
+
+  // Register global theming rules.
+  @include theme-global($merged-colors);
+
+  // Register component-level themes.
+  @include theme-components($merged-colors);
+}

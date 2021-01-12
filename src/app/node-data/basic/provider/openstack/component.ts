@@ -20,20 +20,21 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {NodeDataService} from '@app/node-data/service/service';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {ClusterType} from '@shared/entity/cluster';
+import {DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
+import {NodeCloudSpec, NodeSpec, OpenstackNodeSpec} from '@shared/entity/node';
+import {OpenstackAvailabilityZone, OpenstackFlavor} from '@shared/entity/provider/openstack';
+import {OperatingSystem} from '@shared/model/NodeProviderConstants';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {ClusterService} from '@shared/services/cluster.service';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {merge, Observable, of} from 'rxjs';
-import {filter, first, map, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {DatacenterService} from '../../../../core/services';
-import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
-import {ClusterType} from '../../../../shared/entity/cluster';
-import {DatacenterOperatingSystemOptions} from '../../../../shared/entity/datacenter';
-import {NodeCloudSpec, NodeSpec, OpenstackNodeSpec} from '../../../../shared/entity/node';
-import {OpenstackAvailabilityZone, OpenstackFlavor} from '../../../../shared/entity/provider/openstack';
-import {OperatingSystem} from '../../../../shared/model/NodeProviderConstants';
-import {NodeData} from '../../../../shared/model/NodeSpecChange';
-import {ClusterService} from '../../../../shared/services/cluster.service';
-import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
-import {NodeDataService} from '../../../service/service';
+import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import moment = require('moment');
 
 enum Controls {
   Flavor = 'flavor',
@@ -42,6 +43,8 @@ enum Controls {
   CustomDiskSize = 'customDiskSize',
   Image = 'image',
   AvailabilityZone = 'availabilityZone',
+  InstanceReadyCheckPeriod = 'instanceReadyCheckPeriod',
+  InstanceReadyCheckTimeout = 'instanceReadyCheckTimeout',
 }
 
 enum FlavorState {
@@ -77,6 +80,8 @@ enum AvailabilityZoneState {
 export class OpenstackBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy, AfterViewInit {
   private _defaultImage = '';
   private _images: DatacenterOperatingSystemOptions;
+  private readonly _instanceReadyCheckPeriodDefault = 5; // seconds
+  private readonly _instanceReadyCheckTimeoutDefault = 120; // seconds
 
   @ViewChild('flavorCombobox')
   private readonly _flavorCombobox: FilteredComboboxComponent;
@@ -127,6 +132,8 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       [Controls.CustomDiskSize]: this._builder.control(''),
       [Controls.Image]: this._builder.control('', Validators.required),
       [Controls.AvailabilityZone]: this._builder.control(''),
+      [Controls.InstanceReadyCheckPeriod]: this._builder.control(this._instanceReadyCheckPeriodDefault),
+      [Controls.InstanceReadyCheckTimeout]: this._builder.control(this._instanceReadyCheckTimeoutDefault),
     });
 
     this._init();
@@ -135,7 +142,9 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     merge(
       this.form.get(Controls.DiskSize).valueChanges,
       this.form.get(Controls.Image).valueChanges,
-      this.form.get(Controls.UseFloatingIP).valueChanges
+      this.form.get(Controls.UseFloatingIP).valueChanges,
+      this.form.get(Controls.InstanceReadyCheckPeriod).valueChanges,
+      this.form.get(Controls.InstanceReadyCheckTimeout).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
@@ -144,7 +153,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
     merge<string>(this._clusterService.datacenterChanges, of(this._clusterService.datacenter))
       .pipe(filter(dc => !!dc))
-      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(first())))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(tap(dc => (this._images = dc.spec.openstack.images)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => {
@@ -206,9 +215,18 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.openstack) {
+      const instanceReadyCheckPeriod = moment
+        .duration(`PT${this._nodeDataService.nodeData.spec.cloud.openstack.instanceReadyCheckPeriod}`.toUpperCase())
+        .asSeconds();
+      const instanceReadyCheckTimeout = moment
+        .duration(`PT${this._nodeDataService.nodeData.spec.cloud.openstack.instanceReadyCheckTimeout}`.toUpperCase())
+        .asSeconds();
+
       this.form.get(Controls.UseFloatingIP).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.useFloatingIP);
       this.form.get(Controls.Image).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.image);
       this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.diskSize);
+      this.form.get(Controls.InstanceReadyCheckPeriod).setValue(instanceReadyCheckPeriod);
+      this.form.get(Controls.InstanceReadyCheckTimeout).setValue(instanceReadyCheckTimeout);
 
       this._cdr.detectChanges();
     }
@@ -315,6 +333,8 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
             image: this.form.get(Controls.Image).value,
             useFloatingIP: this.form.get(Controls.UseFloatingIP).value,
             diskSize: this.form.get(Controls.DiskSize).value,
+            instanceReadyCheckPeriod: `${this.form.get(Controls.InstanceReadyCheckPeriod).value}s`,
+            instanceReadyCheckTimeout: `${this.form.get(Controls.InstanceReadyCheckTimeout).value}s`,
           } as OpenstackNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,

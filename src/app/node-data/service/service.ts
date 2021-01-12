@@ -10,16 +10,17 @@
 // limitations under the License.
 
 import {Inject, Injectable} from '@angular/core';
+import {ApiService} from '@core/services/api/service';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {ProjectService} from '@core/services/project/service';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {OperatingSystemSpec, Taint} from '@shared/entity/node';
+import {OperatingSystem} from '@shared/model/NodeProviderConstants';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {ClusterService} from '@shared/services/cluster.service';
 import * as _ from 'lodash';
 import {ReplaySubject} from 'rxjs';
-
-import {ApiService, DatacenterService, PresetsService, ProjectService} from '../../core/services';
-import {OperatingSystemSpec, Taint} from '../../shared/entity/node';
-import {OperatingSystem} from '../../shared/model/NodeProviderConstants';
-import {NodeData} from '../../shared/model/NodeSpecChange';
-import {ClusterService} from '../../shared/services/cluster.service';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../config';
-
 import {NodeDataAlibabaProvider} from './provider/alibaba';
 import {NodeDataAWSProvider} from './provider/aws';
 import {NodeDataAzureProvider} from './provider/azure';
@@ -68,7 +69,7 @@ export class NodeDataService {
   set operatingSystemSpec(spec: OperatingSystemSpec) {
     delete this._nodeData.spec.operatingSystem;
     this._nodeData.spec.operatingSystem = spec;
-    this.operatingSystemChanges.next(OperatingSystemSpec.getOperatingSystem(spec));
+    this._operatingSystemChanges.next(OperatingSystemSpec.getOperatingSystem(spec));
   }
 
   get operatingSystemSpec(): OperatingSystemSpec {
@@ -87,11 +88,6 @@ export class NodeDataService {
   set taints(taints: Taint[]) {
     delete this._nodeData.spec.taints;
     this._nodeData.spec.taints = taints;
-  }
-
-  isInDialogEditMode(): boolean {
-    // In dialog edit mode node will always have a name
-    return this.mode === NodeDataMode.Dialog && !!this._nodeData.name;
   }
 
   isInWizardMode(): boolean {
@@ -132,39 +128,34 @@ export class NodeDataService {
     this._clusterService,
     this._presetService,
     this._apiService,
-    this._projectService,
-    this._datacenterService
+    this._projectService
   );
   readonly hetzner = new NodeDataHetznerProvider(
     this,
     this._clusterService,
     this._presetService,
     this._apiService,
-    this._projectService,
-    this._datacenterService
+    this._projectService
   );
   readonly packet = new NodeDataPacketProvider(
     this,
     this._clusterService,
     this._presetService,
     this._apiService,
-    this._projectService,
-    this._datacenterService
+    this._projectService
   );
   readonly gcp = new NodeDataGCPProvider(
     this,
     this._clusterService,
     this._presetService,
     this._apiService,
-    this._projectService,
-    this._datacenterService
+    this._projectService
   );
   readonly openstack = new NodeDataOpenstackProvider(
     this,
     this._clusterService,
     this._presetService,
     this._apiService,
-    this._projectService,
-    this._datacenterService
+    this._projectService
   );
 }

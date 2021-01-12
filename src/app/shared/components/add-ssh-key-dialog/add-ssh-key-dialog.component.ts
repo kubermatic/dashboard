@@ -12,11 +12,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-
-import {ApiService, NotificationService} from '../../../core/services';
-import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {SSHKey} from '../../entity/ssh-key';
-import {SSHKeyFormValidator} from '../../validators/ssh-key-form.validator';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
+import {SSHKey} from '@shared/entity/ssh-key';
+import {SSHKeyFormValidator} from '@shared/validators/ssh-key-form.validator';
 
 @Component({
   selector: 'km-add-ssh-key-dialog',
@@ -48,7 +48,7 @@ export class AddSshKeyDialogComponent implements OnInit {
     const key = this.addSSHKeyForm.controls['key'].value;
 
     this.api.addSSHKey(new SSHKey(name, null, key), this.projectID).subscribe(result => {
-      this._notificationService.success(`The <strong>${name}</strong> SSH key was added`);
+      this._notificationService.success(`The ${name} SSH key was added`);
       this.googleAnalyticsService.emitEvent('addSshKey', 'sshKeyAdded');
       this.dialogRef.close(result);
     });

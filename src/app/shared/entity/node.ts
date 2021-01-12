@@ -54,6 +54,7 @@ export class NodeCloudSpec {
   gcp?: GCPNodeSpec;
   kubevirt?: KubeVirtNodeSpec;
   alibaba?: AlibabaNodeSpec;
+  anexia?: AnexiaNodeSpec;
 }
 
 export class OperatingSystemSpec {
@@ -128,6 +129,14 @@ export class NodeSystemInfo {
   containerRuntimeVersion: string;
 }
 
+export class AnexiaNodeSpec {
+  vlanID: string;
+  templateID: string;
+  cpus: number;
+  memory: number;
+  diskSize: number;
+}
+
 export class AlibabaNodeSpec {
   instanceType: string;
   diskSize: string;
@@ -198,6 +207,8 @@ export class OpenstackNodeSpec {
   tags: object;
   diskSize?: number;
   availabilityZone?: string;
+  instanceReadyCheckPeriod: string;
+  instanceReadyCheckTimeout: string;
 }
 
 export class PacketNodeSpec {

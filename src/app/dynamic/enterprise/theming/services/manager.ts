@@ -11,20 +11,18 @@
 
 import {DOCUMENT} from '@angular/common';
 import {Inject, Injectable} from '@angular/core';
+import {ThemeInformerService} from '@core/services/theme-informer/service';
+import {UserService} from '@core/services/user/service';
+import {UserSettings} from '@shared/entity/settings';
 import {filter} from 'rxjs/operators';
-import {ThemeInformerService} from '../../../../core/services/theme-informer/theme-informer.service';
-import {UserSettings} from '../../../../shared/entity/settings';
 import {ColorSchemeService} from './color-scheme';
 import {ThemeService} from './theme';
-import {UserService} from '../../../../core/services';
 
 @Injectable()
 export class ThemeManagerService {
-  private readonly _themeClassName = themeName => `km-style-${themeName}`;
-  private readonly _themesPath = themeName => `assets/themes/${themeName}.css`;
+  readonly systemDefaultOption = 'systemDefault';
   private readonly _defaultTheme = 'light';
   private _selectedTheme = this._defaultTheme;
-  readonly systemDefaultOption = 'systemDefault';
 
   constructor(
     @Inject(DOCUMENT) private readonly _document: Document,
@@ -34,6 +32,10 @@ export class ThemeManagerService {
     private readonly _themeInformerService: ThemeInformerService
   ) {}
 
+  get isSystemDefaultThemeDark(): boolean {
+    return this._colorSchemeService.hasPreferredTheme() && this._colorSchemeService.getPreferredTheme().isDark;
+  }
+
   // Force the initial theme load during application start.
   init(): void {
     this._userService.currentUserSettings
@@ -41,28 +43,13 @@ export class ThemeManagerService {
       .subscribe(settings => this.setTheme(this.getDefaultTheme(settings)));
   }
 
-  get isSystemDefaultThemeDark(): boolean {
-    return this._colorSchemeService.hasPreferredTheme() && this._colorSchemeService.getPreferredTheme().isDark;
-  }
-
   setTheme(themeName: string) {
-    if (this._selectedTheme) {
-      this._removeTheme(this._selectedTheme);
-    }
-
-    this._getLinkElementForTheme(themeName).setAttribute('href', this._themesPath(themeName));
+    const element = this._getLinkElementForTheme(this._selectedTheme);
+    element.setAttribute('href', this._themesPath(themeName));
+    element.setAttribute('class', this._themeClassName(themeName));
     this._selectedTheme = themeName;
 
     this._themeInformerService.isCurrentThemeDark$.next(this._isThemeDark(themeName));
-  }
-
-  private _isThemeDark(name: string): boolean {
-    if (name === this.systemDefaultOption) {
-      return this.isSystemDefaultThemeDark;
-    }
-
-    const selectedThemeObject = this._themeService.themes.find(theme => theme.name === name);
-    return selectedThemeObject ? selectedThemeObject.isDark : false;
   }
 
   /**
@@ -88,11 +75,17 @@ export class ThemeManagerService {
     return this._defaultTheme;
   }
 
-  private _removeTheme(styleName: string) {
-    const existingLinkElement = this._getExistingLinkElementForTheme(styleName);
-    if (existingLinkElement) {
-      this._document.head.removeChild(existingLinkElement);
+  private readonly _themeClassName = themeName => `km-style-${themeName}`;
+
+  private readonly _themesPath = themeName => `assets/themes/${themeName}.css`;
+
+  private _isThemeDark(name: string): boolean {
+    if (name === this.systemDefaultOption) {
+      return this.isSystemDefaultThemeDark;
     }
+
+    const selectedThemeObject = this._themeService.themes.find(theme => theme.name === name);
+    return selectedThemeObject ? selectedThemeObject.isDark : false;
   }
 
   private _getLinkElementForTheme(styleName: string): Element {
@@ -108,6 +101,13 @@ export class ThemeManagerService {
     const linkEl: HTMLLinkElement = this._document.createElement('link');
     linkEl.setAttribute('rel', 'stylesheet');
     linkEl.classList.add(this._themeClassName(styleName));
+
+    const positionElement = this._document.head.querySelector('link[rel="stylesheet"]:last-of-type');
+    if (positionElement) {
+      positionElement.after(linkEl);
+      return linkEl;
+    }
+
     this._document.head.appendChild(linkEl);
     return linkEl;
   }

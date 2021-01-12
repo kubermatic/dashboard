@@ -19,18 +19,18 @@ import {
   OnInit,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {NameGeneratorService} from '@core/services/name-generator/service';
+import {ClusterType} from '@shared/entity/cluster';
+import {Datacenter} from '@shared/entity/datacenter';
+import {OperatingSystemSpec, Taint} from '@shared/entity/node';
+import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {ClusterService} from '@shared/services/cluster.service';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {NoIpsLeftValidator} from '@shared/validators/no-ips-left.validator';
 import {merge, of} from 'rxjs';
-import {filter, first, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {DatacenterService} from '../core/services';
-import {ClusterNameGenerator} from '../core/util/name-generator.service';
-import {ClusterType} from '../shared/entity/cluster';
-import {Datacenter} from '../shared/entity/datacenter';
-import {OperatingSystemSpec, Taint} from '../shared/entity/node';
-import {NodeProvider, NodeProviderConstants, OperatingSystem} from '../shared/model/NodeProviderConstants';
-import {NodeData} from '../shared/model/NodeSpecChange';
-import {ClusterService} from '../shared/services/cluster.service';
-import {BaseFormValidator} from '../shared/validators/base-form.validator';
-import {NoIpsLeftValidator} from '../shared/validators/no-ips-left.validator';
+import {filter, take, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {NodeDataService} from './service/service';
 
 enum Controls {
@@ -88,7 +88,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
   constructor(
     private readonly _builder: FormBuilder,
-    private readonly _nameGenerator: ClusterNameGenerator,
+    private readonly _nameGenerator: NameGeneratorService,
     private readonly _clusterService: ClusterService,
     private readonly _datacenterService: DatacenterService,
     private readonly _nodeDataService: NodeDataService,
@@ -134,11 +134,14 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     merge(this._clusterService.clusterTypeChanges, this._clusterService.providerChanges)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
+      .subscribe(_ => {
+        this.provider = this._clusterService.provider;
+        this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS());
+      });
 
     merge<string>(this._clusterService.datacenterChanges, of(this._clusterService.datacenter))
       .pipe(filter(dc => !!dc))
-      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(first())))
+      .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(takeUntil(this._unsubscribe))
       .pipe(tap(dc => (this._datacenterSpec = dc)))
       .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
@@ -231,10 +234,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           NodeProvider.OPENSTACK
         );
       case OperatingSystem.Flatcar:
-        return this.isProvider(NodeProvider.AWS, NodeProvider.AZURE, NodeProvider.OPENSTACK);
+        return this.isProvider(NodeProvider.AWS, NodeProvider.AZURE, NodeProvider.OPENSTACK, NodeProvider.ANEXIA);
       case OperatingSystem.Ubuntu:
       case OperatingSystem.CentOS:
-        return !this.isProvider(NodeProvider.VSPHERE);
+        return !this.isProvider(NodeProvider.VSPHERE, NodeProvider.ANEXIA);
     }
 
     return false;
@@ -346,7 +349,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   private _getDefaultOS(): OperatingSystem {
-    if (this._nodeDataService.operatingSystem) {
+    if (this.isOperatingSystemSupported(this._nodeDataService.operatingSystem)) {
       return this._nodeDataService.operatingSystem;
     }
 
@@ -356,6 +359,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     if (this._datacenterSpec) {
       return this._getDefaultSystemTemplate(this.provider);
+    }
+
+    if (this.isProvider(NodeProvider.ANEXIA)) {
+      return OperatingSystem.Flatcar;
     }
 
     return OperatingSystem.Ubuntu;

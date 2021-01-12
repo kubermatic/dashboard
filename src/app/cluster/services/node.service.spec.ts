@@ -13,17 +13,15 @@ import {fakeAsync, inject, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
+import {machineDeploymentsFake} from '@app/testing/fake-data/node.fake';
+import {fakeProject} from '@app/testing/fake-data/project.fake';
+import {ApiMockService} from '@app/testing/services/api-mock.service';
+import {CoreModule} from '@core/module';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
 import {of} from 'rxjs';
-
-import {CoreModule} from '../../core/core.module';
-import {ApiService, NotificationService} from '../../core/services';
-import {GoogleAnalyticsService} from '../../google-analytics.service';
-import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
-import {fakeDigitaloceanDatacenter} from '../../testing/fake-data/datacenter.fake';
-import {machineDeploymentsFake} from '../../testing/fake-data/node.fake';
-import {fakeProject} from '../../testing/fake-data/project.fake';
-import {ApiMockService} from '../../testing/services/api-mock.service';
-
 import {NodeService} from './node.service';
 
 class MatDialogMock {
@@ -55,10 +53,9 @@ describe('NodeService', () => {
       const md = machineDeploymentsFake()[0];
       const clusterID = fakeDigitaloceanCluster().id;
       const projectID = fakeProject().id;
-      const dcName = fakeDigitaloceanDatacenter().metadata.name;
       let isConfirmed = false;
 
-      service.showMachineDeploymentDeleteDialog(md, clusterID, projectID, dcName, null).subscribe(confirmed => {
+      service.showMachineDeploymentDeleteDialog(md, clusterID, projectID, null).subscribe(confirmed => {
         isConfirmed = confirmed;
       });
       tick();

@@ -15,7 +15,7 @@ export namespace Endpoint {
   }
 
   export const Clusters = '**/clusters';
-  export const NodeDeployments = '**/nodedeployments';
+  export const MachineDeployments = '**/machinedeployments';
   export const Users = '**/users';
   export const Projects = '**/projects?displayAll=false';
   export const Tokens = '**/tokens';

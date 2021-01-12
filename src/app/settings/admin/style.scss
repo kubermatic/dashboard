@@ -1,0 +1,83 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@import 'mixins';
+@import 'variables';
+
+.mat-card {
+  .mat-card-header {
+    padding: 0 30px;
+  }
+
+  .mat-card-content {
+    padding: 30px;
+  }
+
+  .km-admin-settings {
+    font-size: $font-size-subhead;
+
+    .entry-label {
+      min-width: 316px;
+    }
+
+    .km-pointer,
+    .km-icon-error {
+      margin-left: 4px;
+      min-height: 16px;
+      min-width: 16px;
+    }
+
+    .km-account-settings-toggle {
+      mat-button-toggle {
+        @include size(150px, 50px, true);
+
+        border-radius: $border-radius;
+        margin-bottom: 0;
+
+        .tech-preview-name {
+          line-height: 22px;
+        }
+
+        .tech-preview-tag {
+          border-radius: 4px;
+          font-size: $font-size-small;
+          line-height: 12px;
+        }
+
+        i {
+          filter: grayscale(100%);
+        }
+
+        &:hover {
+          background-color: transparent;
+          transition: all .5s ease;
+        }
+
+        &.mat-button-toggle-checked {
+          background-color: transparent;
+
+          i {
+            filter: none;
+          }
+        }
+      }
+    }
+
+    .input {
+      margin: 0 16px -20px 0;
+      width: 204px;
+    }
+
+    mat-checkbox {
+      margin-right: 48px;
+    }
+  }
+}

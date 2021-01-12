@@ -29,7 +29,6 @@ import 'core-js/es/symbol';
 
 import 'zone.js/dist/zone';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 window.Buffer = window.Buffer || require('buffer').Buffer;
 

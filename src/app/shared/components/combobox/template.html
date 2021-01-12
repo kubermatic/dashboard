@@ -14,6 +14,9 @@ limitations under the License.
   <mat-form-field fxFlex>
     <mat-label>{{label}}</mat-label>
     <mat-select #select
+                class="km-select-ellipsis"
+                panelClass="km-combobox-panel"
+                disableOptionCentering
                 [formControlName]="controls.Select"
                 (openedChange)="onOpen($event)"
                 [required]="required"
@@ -23,7 +26,6 @@ limitations under the License.
              name="filterBySubnet"
              [placeholder]="inputLabel"
              type="text"
-             class="km-select-input"
              autocomplete="off"
              matInput
              kmAutofocus
@@ -57,8 +59,9 @@ limitations under the License.
           <button *ngIf="selected"
                   (click)="reset(); $event.stopPropagation()"
                   mat-icon-button
+                  class="km-clear-input-btn"
                   aria-label="Clear">
-            <mat-icon inline="true">close</mat-icon>
+            <i class="km-icon-mask km-icon-remove"></i>
           </button>
         </div>
       </mat-select-trigger>

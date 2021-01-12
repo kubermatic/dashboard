@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ServiceAccount, ServiceAccountToken} from '../../shared/entity/service-account';
+import {ServiceAccount, ServiceAccountToken} from '@shared/entity/service-account';
 
 export function fakeServiceAccounts(): ServiceAccount[] {
   return [

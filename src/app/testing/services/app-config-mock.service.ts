@@ -10,13 +10,12 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
-
-import {VersionInfo} from '../../shared/entity/version-info';
-import {Config, UserGroupConfig} from '../../shared/model/Config';
+import {CustomLink} from '@shared/entity/settings';
+import {VersionInfo} from '@shared/entity/version-info';
+import {Config, EndOfLife, UserGroupConfig} from '@shared/model/Config';
 import {fakeAppConfig} from '../fake-data/appConfig.fake';
 import {fakeUserGroupConfig} from '../fake-data/userGroupConfig.fake';
 import {fakeVersionInfo} from '../fake-data/versionInfo.fake';
-import {CustomLink} from '../../shared/entity/settings';
 
 @Injectable()
 export class AppConfigMockService {
@@ -40,5 +39,9 @@ export class AppConfigMockService {
 
   getRefreshTimeBase(): number {
     return this._refreshTimeBase;
+  }
+
+  getEndOfLifeConfig(): EndOfLife {
+    return {};
   }
 }

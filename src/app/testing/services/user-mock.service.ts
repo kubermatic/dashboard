@@ -10,12 +10,12 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
+import {Member} from '@shared/entity/member';
+import {UserSettings} from '@shared/entity/settings';
+import {GroupConfig} from '@shared/model/Config';
 import {Observable, of} from 'rxjs';
-import {Member} from '../../shared/entity/member';
-import {GroupConfig} from '../../shared/model/Config';
 import {fakeMember} from '../fake-data/member.fake';
 import {fakeUserGroupConfig} from '../fake-data/userGroupConfig.fake';
-import {UserSettings} from '../../shared/entity/settings';
 import {DEFAULT_USER_SETTINGS_MOCK} from './settings-mock.service';
 
 @Injectable()
@@ -35,7 +35,7 @@ export class UserMockService {
     return DEFAULT_USER_SETTINGS_MOCK;
   }
 
-  getCurrentUserGroup(projectID: string): Observable<string> {
+  getCurrentUserGroup(_projectID: string): Observable<string> {
     return of(fakeMember().projects[0].group);
   }
 

@@ -9,80 +9,51 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../assets/css/variables";
+@import 'variables';
+@import 'mixins';
 
 .mat-card {
-  margin-top: $content-padding !important;
-
   .mat-card-header {
-    padding: 0 (3.75 * $baseline-grid);
+    padding: 0 30px;
   }
 
   .mat-card-content {
-    padding: 3.75 * $baseline-grid;
+    padding: 30px;
   }
 
-  .km-user {
-    align-items: center;
-    display: flex;
-    min-height: 3 * $baseline-grid;
-    margin-right: 3.75 * $baseline-grid;
-    min-width: 3 * $baseline-grid;
-  }
-
-  .km-account-info-name {
+  .user-name {
     font-size: $font-size-subhead-lg;
-    line-height: 21px;
   }
 
-  .km-account-info-email {
+  .user-email {
     font-size: $font-size-subhead;
   }
 
   .km-account-settings {
-    min-width: 390px;
     font-size: $font-size-subhead;
+    min-width: 390px;
 
     .km-account-settings-header {
       font-size: $font-size-subhead-lg;
       line-height: initial;
-      margin-bottom: 3 * $baseline-grid;
+      margin-bottom: 24px;
     }
 
-    .km-account-settings-entry-label {
-      align-items: center;
-      display: flex;
-      min-width: 23 * $baseline-grid;
-      line-height: 8 * $baseline-grid;
-
-      span {
-        margin-right: .625 * $baseline-grid;
-      }
-    }
-
-    .km-account-settings-toggle {
-      mat-button-toggle {
-        min-height: 50px;
-        max-height: 50px;
-        min-width: 140px;
-        max-width: 140px;
-        border-radius: $border-radius;
-
-        ::ng-deep.mat-button-toggle-label-content {
-          font-weight: normal;
-          font-size: $font-size-subhead;
-        }
-      }
+    .entry-label {
+      min-width: 200px;
     }
   }
 }
 
-.km-icon-info {
-  margin-left: $baseline-grid;
+.km-pointer {
+  margin-left: 8px;
 }
 
-::ng-deep.mat-slide-toggle-label {
-  .mat-slide-toggle-bar {
-    margin-left: 0 !important;
+.input {
+  margin: 0 16px -20px 0;
+  width: 290px;
+
+  &.sm {
+    width: 140px;
   }
 }

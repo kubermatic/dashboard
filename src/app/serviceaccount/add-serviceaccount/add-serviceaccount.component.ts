@@ -12,12 +12,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {first} from 'rxjs/operators';
-
-import {NotificationService} from '../../core/services';
-import {ApiService} from '../../core/services';
-import {Project} from '../../shared/entity/project';
-import {ServiceAccountModel} from '../../shared/entity/service-account';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
+import {Project} from '@shared/entity/project';
+import {ServiceAccountModel} from '@shared/entity/service-account';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'km-add-serviceaccount',
@@ -48,11 +47,11 @@ export class AddServiceAccountComponent implements OnInit {
 
     this._apiService
       .createServiceAccount(this.project.id, createServiceAccount)
-      .pipe(first())
+      .pipe(take(1))
       .subscribe(() => {
         this._matDialogRef.close(true);
         this._notificationService.success(
-          `The <strong>${createServiceAccount.name}</strong> service account was added to the <strong>${this.project.name}</strong> project`
+          `The ${createServiceAccount.name} service account was added to the ${this.project.name} project`
         );
       });
   }

@@ -9,11 +9,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.12.9
+FROM golang:1.15.2
 
 LABEL maintainer="sebastian.florek@loodse.com"
 
-RUN curl -sL https://deb.nodesource.com/setup_11.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get update && apt-get install -y \
     make \
     nodejs

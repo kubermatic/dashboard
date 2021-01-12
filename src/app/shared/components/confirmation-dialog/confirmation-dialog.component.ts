@@ -36,10 +36,6 @@ export class ConfirmationDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: ConfirmationDialogConfig
   ) {}
 
-  onNoClick(): void {
-    this.dialogRef.close(false);
-  }
-
   onEnterKeyDown(): void {
     if (!this.inputNameMatches()) {
       return;

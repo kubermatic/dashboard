@@ -1,0 +1,89 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<div class="km-sidenav"
+     fxLayout="column"
+     [ngClass]="isSidenavCollapsed() ? 'km-collapse-sidenav' : ''">
+  <div [matTooltip]="getTooltip('clusters')"
+       [ngClass]="getMenuItemClass('clusters')"
+       class="menu-item">
+    <a id="km-nav-item-clusters"
+       fxLayoutAlign=" center"
+       [routerLink]="getRouterLink('clusters')"
+       [ngClass]="getLinkClass('clusters')">
+      <i class="km-icon-cluster"></i>
+      <span *ngIf="!isSidenavCollapsed()">Clusters</span>
+    </a>
+  </div>
+
+  <div [matTooltip]="getTooltip('sshkeys')"
+       [ngClass]="getMenuItemClass('sshkeys')"
+       class="menu-item">
+    <a id="km-nav-item-sshkeys"
+       fxLayoutAlign=" center"
+       [routerLink]="getRouterLink('sshkeys')"
+       [ngClass]="getLinkClass('sshkeys')">
+      <i class="km-icon-key"></i>
+      <span *ngIf="!isSidenavCollapsed()">SSH Keys</span>
+    </a>
+  </div>
+
+  <div [matTooltip]="getTooltip('members')"
+       [ngClass]="getMenuItemClass('members')"
+       class="menu-item">
+    <a id="km-nav-item-members"
+       fxLayoutAlign=" center"
+       [routerLink]="getRouterLink('members')"
+       [ngClass]="getLinkClass('members')">
+      <i class="km-icon-member"></i>
+      <span *ngIf="!isSidenavCollapsed()">Members</span>
+    </a>
+  </div>
+
+  <div [matTooltip]="getTooltip('serviceaccounts')"
+       [ngClass]="getMenuItemClass('serviceaccounts')"
+       class="menu-item">
+    <a id="km-nav-item-service-accounts"
+       fxLayoutAlign=" center"
+       [routerLink]="getRouterLink('serviceaccounts')"
+       [ngClass]="getLinkClass('serviceaccounts')">
+      <i class="km-icon-serviceaccount"></i>
+      <span *ngIf="!isSidenavCollapsed()">Service Accounts</span></a>
+  </div>
+
+  <mat-divider *ngIf="isCustomLinkPanelVisible()"></mat-divider>
+
+  <div *ngIf="isCustomLinkPanelVisible()">
+    <div *ngFor="let link of customLinks"
+         class="menu-item">
+      <a [href]="link.url"
+         fxLayoutAlign=" center"
+         target="_blank"
+         rel="noopener">
+        <i [ngStyle]="getCustomLinkIconStyle(link)"></i>
+        <span *ngIf="!isSidenavCollapsed()">{{link.label}}</span>
+      </a>
+    </div>
+  </div>
+
+  <div fxFlex></div>
+
+  <div [matTooltip]="getTooltip('projects')"
+       class="menu-item">
+    <a id="km-nav-item-projects"
+       fxLayoutAlign="center center"
+       routerLink="/projects">
+      <i class="km-icon-arrow-left"></i>
+      <span *ngIf="!isSidenavCollapsed()">back to projects</span>
+    </a>
+  </div>
+</div>

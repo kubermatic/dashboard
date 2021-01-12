@@ -1,0 +1,36 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<form [formGroup]="form"
+      fxLayoutAlign="start start"
+      fxLayout="column">
+  <div class="km-header">SSH Keys</div>
+  <mat-form-field *ngIf="hasKeys()">
+    <mat-label>SSH Keys</mat-label>
+    <mat-select [formControlName]="Controls.Keys"
+                multiple
+                disableOptionCentering
+                panelClass="km-multiple-values-dropdown"
+                [compareWith]="compareValues">
+      <mat-option *ngFor="let key of keys"
+                  [value]="key">{{key.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <p *ngIf="!hasKeys()">You have no SSH keys</p>
+  <div class="km-full-width">
+    <div fxFlex></div>
+    <button (click)="addSSHKeyDialog()"
+            mat-flat-button
+            [disabled]="!canAdd()">Add SSH key
+    </button>
+  </div>
+</form>

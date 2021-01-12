@@ -33,31 +33,11 @@ export class Cluster {
   labels?: object;
   inheritedLabels?: object;
   credential?: string;
+  isExternal?: boolean = false;
 
   static getProvider(cloud: CloudSpec): string {
-    if (cloud.aws) {
-      return 'aws';
-    } else if (cloud.digitalocean) {
-      return 'digitalocean';
-    } else if (cloud.openstack) {
-      return 'openstack';
-    } else if (cloud.bringyourown) {
-      return 'bringyourown';
-    } else if (cloud.hetzner) {
-      return 'hetzner';
-    } else if (cloud.vsphere) {
-      return 'vsphere';
-    } else if (cloud.azure) {
-      return 'azure';
-    } else if (cloud.packet) {
-      return 'packet';
-    } else if (cloud.gcp) {
-      return 'gcp';
-    } else if (cloud.kubevirt) {
-      return 'kubevirt';
-    } else if (cloud.alibaba) {
-      return 'alibaba';
-    }
+    const providers = Object.keys(cloud);
+    return providers.length > 0 ? providers.pop().toLowerCase() : '';
   }
 
   static isOpenshiftType(cluster: Cluster): boolean {
@@ -81,6 +61,8 @@ export class Cluster {
     } else if (type === 'openshift') {
       return 'OpenShift Version';
     }
+
+    return '';
   }
 
   static newEmptyClusterEntity(): Cluster {
@@ -115,6 +97,7 @@ export class CloudSpec {
   gcp?: GCPCloudSpec;
   kubevirt?: KubeVirtCloudSpec;
   alibaba?: AlibabaCloudSpec;
+  anexia?: AnexiaCloudSpec;
 }
 
 export class AlibabaCloudSpec {
@@ -151,6 +134,10 @@ export class BareMetalCloudSpec {
 export class BringYourOwnCloudSpec {}
 
 export class DigitaloceanCloudSpec {
+  token: string;
+}
+
+export class AnexiaCloudSpec {
   token: string;
 }
 
@@ -196,6 +183,8 @@ export class VSphereCloudSpec {
   vmNetName: string;
   folder?: string;
   infraManagementUser: VSphereInfraManagementUser;
+  datastore?: string;
+  datastoreCluster?: string;
 }
 
 export class VSphereInfraManagementUser {
@@ -258,6 +247,7 @@ export class ClusterSpecPatch {
   admissionPlugins?: string[];
   auditLogging?: AuditLoggingSettings;
   openshift?: OpenShiftPatch;
+  machineNetworks?: MachineNetwork[];
 }
 
 export class OpenShiftPatch {
@@ -413,6 +403,8 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
         accessKeyID: '',
         accessKeySecret: '',
       } as AlibabaCloudSpec;
+    case NodeProvider.ANEXIA:
+      return {};
   }
   return {};
 }

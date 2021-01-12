@@ -10,9 +10,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+
 <div fxLayout>
   <div fxFlex
-       class="km-project-top-bar">
+       fxLayoutAlign="end center">
+    <mat-slide-toggle *ngIf="isAdmin"
+                      class="km-all-projects-toggle"
+                      labelPosition="before"
+                      [ngModel]="settings.displayAllProjectsForAdmin"
+                      (toggleChange)="changeProjectVisibility()">Show All Projects</mat-slide-toggle>
     <mat-button-toggle-group class="km-project-view-switch"
                              group="projectsView"
                              (change)="changeView()">
@@ -28,6 +34,7 @@ limitations under the License.
     <button id="km-add-project-top-btn"
             mat-flat-button
             type="button"
+            [disabled]="isProjectCreationRestricted()"
             (click)="addProject()">
       Add Project
     </button>
@@ -36,7 +43,7 @@ limitations under the License.
 
 <!-- Table View -->
 <div *ngIf="!showCards">
-  <mat-card class="km-with-table-header km-project-view">
+  <mat-card class="km-project-view">
     <mat-card-content>
       <table class="km-table"
              mat-table
@@ -92,9 +99,7 @@ limitations under the License.
               *matCellDef="let element">
             <span *ngIf="!!getRole(element.id)">{{getRole(element.id)}}</span>
             <span *ngIf="!getRole(element.id)"
-                  class="km-projects-external">
-              <p>External Project</p>
-            </span>
+                  class="km-label-primary">External Project</span>
           </td>
         </ng-container>
 
@@ -113,12 +118,12 @@ limitations under the License.
           <td mat-cell
               *matCellDef="let element"
               class="km-project-item-owner">
-            {{getOwners(element.owners)}}
-            <p class="km-project-more-owner"
-               *ngIf="isMoreOwners(element.owners)"
-               [matTooltip]="getMoreOwners(element.owners)">&nbsp;...
-              <span *ngIf="getMoreOwnersCount(element.owners) > 0">+{{getMoreOwnersCount(element.owners)}}</span>
-            </p>
+            <span>{{getOwners(element.owners)}}</span>
+            <span *ngIf="isMoreOwners(element.owners)"
+                  [matTooltip]="getMoreOwners(element.owners)">...
+              <span *ngIf="getMoreOwnersCount(element.owners) > 0"
+                    class="km-text-muted">+{{getMoreOwnersCount(element.owners)}}</span>
+            </span>
           </td>
         </ng-container>
 
@@ -128,7 +133,8 @@ limitations under the License.
               class="km-header-cell"></th>
           <td mat-cell
               *matCellDef="let element">
-            <div class="km-table-actions km-project-item-actions">
+            <div fxLayoutAlign="end"
+                 class="km-table-actions">
               <ng-container [ngSwitch]="!!element.deletionTimestamp">
                 <ng-container *ngSwitchCase="true">
                   <mat-spinner [diameter]="25"
@@ -163,12 +169,12 @@ limitations under the License.
         <tr mat-row
             *matRowDef="let row; columns: displayedColumns"
             class="km-mat-row"
-            [ngClass]="{'km-clickable': isProjectActive(row)}"
+            [ngClass]="{'km-pointer': isProjectActive(row)}"
             (click)="selectProject(row)"></tr>
       </table>
 
       <ng-container *ngIf="!projects || projects.length === 0">
-        <div class="km-row km-no-item"
+        <div class="km-row km-empty-list-msg"
              *ngIf="!isInitializing">
           No projects available.
         </div>
@@ -181,8 +187,7 @@ limitations under the License.
       </ng-container>
 
       <div [hidden]="!isPaginatorVisible || showCards">
-        <mat-paginator showFirstLastButtons
-                       class="km-paginator"></mat-paginator>
+        <mat-paginator showFirstLastButtons></mat-paginator>
       </div>
     </mat-card-content>
   </mat-card>
@@ -198,18 +203,18 @@ limitations under the License.
     <mat-card *ngFor="let project of projects"
               (click)="selectProject(project)">
       <mat-card-header>
-        <div mat-card-avatar
-             class="km-project-cards-status">
-          <i [matTooltip]="project.status"
-             [ngClass]="getProjectStateIconClass(project)"
-             class="km-health-state"></i>
-        </div>
+        <i mat-card-avatar
+           [matTooltip]="project.status"
+           [ngClass]="getProjectStateIconClass(project)"
+           class="km-health-state km-project-cards-status"
+           fxFlexAlign=" center"></i>
         <mat-card-title [matTooltip]="getProjectTooltip(project.name)"
                         [attr.id]="'km-project-name-' + project.name">{{getName(project.name)}}</mat-card-title>
         <mat-card-subtitle>
           <strong>ID</strong> {{project.id}}
         </mat-card-subtitle>
-        <div class="km-project-item-actions">
+        <div fxFlex
+             fxLayoutAlign="end">
           <button mat-icon-button
                   [attr.id]="'km-edit-project-' + project.name"
                   matTooltip="Edit Project"
@@ -227,32 +232,49 @@ limitations under the License.
         </div>
       </mat-card-header>
       <mat-divider></mat-divider>
-      <mat-card-content>
-        <div class="km-project-cards-content-row">
-          <span><i class="km-icon-mask km-icon-cluster"></i> {{project.clustersNumber ? project.clustersNumber : 0}}</span>
-          <span [matTooltip]="getLabelsTooltip(project)">
+      <mat-card-content fxLayout="column"
+                        fxLayoutGap="15px">
+        <div fxLayout="row"
+             fxLayoutGap="30px"
+             fxFlex>
+          <div fxLayout="row"
+               fxLayoutAlign=" center"
+               fxLayoutGap="8px">
+            <i class="km-icon-mask km-icon-cluster"></i>
+            <div>{{project.clustersNumber ? project.clustersNumber : 0}}</div>
+          </div>
+          <div fxLayout="row"
+               fxLayoutAlign=" center"
+               fxLayoutGap="8px"
+               [matTooltip]="getLabelsTooltip(project)">
             <i class="km-icon-mask km-icon-labels"></i>
-            {{getLabelsLength(project)}}
-          </span>
+            <div>{{getLabelsLength(project)}}</div>
+          </div>
         </div>
 
-        <div class="km-project-cards-content-row">
-          <span class="km-projects-less-space">
+        <div fxLayout="row"
+             fxLayoutGap="15px"
+             fxFlex>
+          <div fxLayout="row"
+               fxLayoutAlign=" center"
+               fxLayoutGap="8px">
             <i class="km-icon-mask km-icon-owner"></i>
             <span *ngIf="project.owners.length === 1"
                   [matTooltip]="getOwners(project.owners)">{{getName(project.owners[0].name)}}</span>
-            <km-short-name-in-circle *ngIf="project.owners.length > 1"
-                                     [owners]="project.owners"
-                                     [limit]="2"></km-short-name-in-circle>
-          </span>
-          <span *ngIf="!!getRole(project.id)">
+            <km-initials-circle *ngIf="project.owners.length > 1"
+                                [owners]="project.owners"
+                                [limit]="2"></km-initials-circle>
+          </div>
+          <div fxLayout="row"
+               fxLayoutAlign=" center"
+               fxLayoutGap="8px"
+               *ngIf="!!getRole(project.id)">
             <i class="km-icon-mask km-icon-role"></i>
             {{getRole(project.id)}}
-          </span>
+          </div>
+          <div fxFlex></div>
           <span *ngIf="!getRole(project.id)"
-                class="km-projects-external km-projects-external-right">
-            <p>External Project</p>
-          </span>
+                class="km-label-primary">External Project</span>
         </div>
       </mat-card-content>
     </mat-card>

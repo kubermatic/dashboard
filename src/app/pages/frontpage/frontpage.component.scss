@@ -9,15 +9,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../assets/css/variables";
+@import 'variables';
+@import 'mixins';
 
 .km-frontpage-background {
+  @include size(100%);
+
   background-color: #001930;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
   left: 0;
+  position: absolute;
+  top: 0;
 }
 
 .km-frontpage-content {
@@ -28,23 +29,23 @@
   z-index: 1;
 
   .km-frontpage-inner-text {
-    text-align: center;
     color: #fff;
     font-family: $font-secondary;
     font-size: 28px;
     font-weight: 500;
     line-height: 42px;
     margin-bottom: 40px;
+    text-align: center;
   }
 
   .mat-raised-button {
+    @include size(200px, 50px);
+
     background-color: #fff;
-    color: #203f58 !important;
-    font-size: 20px !important;
+    color: #203f58;
     font-family: $font-primary;
-    font-weight: 500 !important;
-    line-height: 50px !important;
-    width: 200px;
-    height: 50px;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 50px;
   }
 }

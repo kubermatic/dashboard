@@ -10,12 +10,23 @@
 // limitations under the License.
 
 import {Component, Input, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
-import {AddonConfig, Addon, getAddonLogoData, hasAddonLogoData} from '../../../entity/addon';
-import {InstallAddonDialogComponent} from '../install-addon-dialog/install-addon-dialog.component';
+import {
+  AddonConfig,
+  Addon,
+  getAddonLogoData,
+  getAddonVariable,
+  hasAddonLogoData,
+  hasAddonFormData,
+  AddonFormSpec,
+} from '../../../entity/addon';
+
+export enum Controls {
+  ContinuouslyReconcile = 'continuouslyReconcile',
+}
 
 @Component({
   selector: 'km-edit-addon-dialog',
@@ -23,24 +34,47 @@ import {InstallAddonDialogComponent} from '../install-addon-dialog/install-addon
   styleUrls: ['./edit-addon-dialog.component.scss'],
 })
 export class EditAddonDialogComponent implements OnInit {
+  readonly Controls = Controls;
+
   @Input() addon: Addon;
   @Input() addonConfig: AddonConfig;
   form: FormGroup;
+  formBasic: FormGroup;
 
-  constructor(public dialogRef: MatDialogRef<EditAddonDialogComponent>, private readonly _domSanitizer: DomSanitizer) {}
+  static getFormState(addon: Addon, control: AddonFormSpec): any {
+    return getAddonVariable(addon, control.internalName);
+  }
+
+  static getControlValidators(control: AddonFormSpec): ValidatorFn[] {
+    return control.required ? [Validators.required] : [];
+  }
+
+  constructor(
+    public dialogRef: MatDialogRef<EditAddonDialogComponent>,
+    private readonly _domSanitizer: DomSanitizer,
+    private readonly _builder: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     const group = {};
-    if (this.addonConfig.spec.formSpec) {
+    if (this.hasForm()) {
       this.addonConfig.spec.formSpec.forEach(control => {
         group[control.internalName] = new FormControl(
-          this.addon.spec.variables[control.internalName],
-          InstallAddonDialogComponent.getControlValidators(control)
+          EditAddonDialogComponent.getFormState(this.addon, control),
+          EditAddonDialogComponent.getControlValidators(control)
         );
       });
     }
 
     this.form = new FormGroup(group);
+
+    this.formBasic = this._builder.group({
+      [Controls.ContinuouslyReconcile]: this._builder.control(this.addon.spec.continuouslyReconcile),
+    });
+  }
+
+  hasForm(): boolean {
+    return hasAddonFormData(this.addonConfig);
   }
 
   hasLogo(): boolean {
@@ -58,7 +92,10 @@ export class EditAddonDialogComponent implements OnInit {
       variables[key] = this.form.controls[key].value;
     });
 
-    return {name: this.addon.name, spec: {variables}};
+    return {
+      name: this.addon.name,
+      spec: {variables, continuouslyReconcile: this.formBasic.controls.continuouslyReconcile.value},
+    };
   }
 
   edit(): void {

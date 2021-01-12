@@ -41,4 +41,24 @@ limitations under the License.
       {{folder.path}}
     </div>
   </km-combobox>
+
+  <mat-form-field fxFlex>
+    <mat-label>Datastore</mat-label>
+    <input matInput
+           [formControlName]="Controls.Datastore"
+           [name]="Controls.Datastore"
+           type="text"
+           autocomplete="off">
+    <mat-hint>Datastore to be used for the virtual machines. It is mutually exclusive with Datastore Cluster field.</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Datastore Cluster</mat-label>
+    <input matInput
+           [formControlName]="Controls.DatastoreCluster"
+           [name]="Controls.DatastoreCluster"
+           type="text"
+           autocomplete="off">
+    <mat-hint>Datastore to be used for the virtual machines. It is mutually exclusive with Datastore field.</mat-hint>
+  </mat-form-field>
 </form>

@@ -9,20 +9,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
-import {CoreModule} from '../../core/core.module';
-import {ApiService, NotificationService, ProjectService} from '../../core/services';
-import {SharedModule} from '../../shared/shared.module';
-import {fakeProject} from '../../testing/fake-data/project.fake';
-import {fakeServiceAccount} from '../../testing/fake-data/serviceaccount.fake';
-import {asyncData} from '../../testing/services/api-mock.service';
-import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
-import {ProjectMockService} from '../../testing/services/project-mock.service';
-
+import {fakeProject} from '@app/testing/fake-data/project.fake';
+import {fakeServiceAccount} from '@app/testing/fake-data/serviceaccount.fake';
+import {asyncData} from '@app/testing/services/api-mock.service';
+import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
+import {ProjectMockService} from '@app/testing/services/project-mock.service';
+import {CoreModule} from '@core/module';
+import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
+import {ProjectService} from '@core/services/project/service';
+import {SharedModule} from '@shared/shared.module';
 import {AddServiceAccountComponent} from './add-serviceaccount.component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
@@ -32,30 +32,37 @@ describe('AddServiceAccountComponent', () => {
   let component: AddServiceAccountComponent;
   let createServiceAccountSpy;
 
-  beforeEach(async(() => {
-    const apiMock = {createServiceAccount: jest.fn()};
-    createServiceAccountSpy = apiMock.createServiceAccount.mockReturnValue(asyncData(fakeServiceAccount()));
+  beforeEach(
+    waitForAsync(() => {
+      const apiMock = {createServiceAccount: jest.fn()};
+      createServiceAccountSpy = apiMock.createServiceAccount.mockReturnValue(asyncData(fakeServiceAccount()));
 
-    TestBed.configureTestingModule({
-      imports: [...modules],
-      providers: [
-        {provide: MatDialogRef, useClass: MatDialogRefMock},
-        {provide: ApiService, useValue: apiMock},
-        {provide: ProjectService, useClass: ProjectMockService},
-        NotificationService,
-      ],
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        providers: [
+          {provide: MatDialogRef, useClass: MatDialogRefMock},
+          {provide: ApiService, useValue: apiMock},
+          {provide: ProjectService, useClass: ProjectMockService},
+          NotificationService,
+        ],
+      }).compileComponents();
+    })
+  );
 
-  beforeEach(async(() => {
-    fixture = TestBed.createComponent(AddServiceAccountComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      fixture = TestBed.createComponent(AddServiceAccountComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    })
+  );
 
-  it('should create the add service account component', async(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the add service account component',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('form invalid after creating', () => {
     expect(component.addServiceAccountForm.valid).toBeFalsy();

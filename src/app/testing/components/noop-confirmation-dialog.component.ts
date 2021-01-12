@@ -12,19 +12,15 @@
 import {Component, NgModule} from '@angular/core';
 import {MatDialogModule} from '@angular/material/dialog';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-
-import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {SharedModule} from '../../shared/shared.module';
 
 // NoopConfirmDialogComponent is only a workaround to trigger change detection
 @Component({template: ''})
 export class NoopConfirmDialogComponent {}
 
-const TEST_DIRECTIVES = [NoopConfirmDialogComponent];
-
 @NgModule({
-  imports: [MatDialogModule, NoopAnimationsModule],
-  exports: TEST_DIRECTIVES,
-  declarations: TEST_DIRECTIVES,
-  entryComponents: [ConfirmationDialogComponent],
+  imports: [MatDialogModule, NoopAnimationsModule, SharedModule],
+  exports: [NoopConfirmDialogComponent],
+  declarations: [NoopConfirmDialogComponent],
 })
 export class DialogTestModule {}

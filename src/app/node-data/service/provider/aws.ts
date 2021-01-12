@@ -9,14 +9,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {ApiService} from '@core/services/api/service';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {ProjectService} from '@core/services/project/service';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {ClusterService} from '@shared/services/cluster.service';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, first, switchMap, tap} from 'rxjs/operators';
-import {ApiService, DatacenterService, PresetsService, ProjectService} from '../../../core/services';
-import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../shared/services/cluster.service';
+import {catchError, filter, take, switchMap, tap} from 'rxjs/operators';
 import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
-import {AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws';
 
 export class NodeDataAWSProvider {
   constructor(
@@ -37,7 +40,7 @@ export class NodeDataAWSProvider {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterService.datacenterChanges
-          .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(first())))
+          .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
           .pipe(
             switchMap(dc =>
               this._presetService
@@ -59,17 +62,8 @@ export class NodeDataAWSProvider {
         let selectedProject: string;
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
-          .pipe(
-            switchMap(_ =>
-              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(first())
-            )
-          )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(
-            switchMap(dc =>
-              this._apiService.getAWSSizes(selectedProject, dc.spec.seed, this._clusterService.cluster.id)
-            )
-          )
+          .pipe(switchMap(_ => this._apiService.getAWSSizes(selectedProject, this._clusterService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {
@@ -79,7 +73,7 @@ export class NodeDataAWSProvider {
               return onErrorResumeNext(of([]));
             })
           )
-          .pipe(first());
+          .pipe(take(1));
       }
     }
   }
@@ -113,17 +107,8 @@ export class NodeDataAWSProvider {
         let selectedProject: string;
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
-          .pipe(
-            switchMap(_ =>
-              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(first())
-            )
-          )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(
-            switchMap(dc =>
-              this._apiService.getAWSSubnets(selectedProject, dc.spec.seed, this._clusterService.cluster.id)
-            )
-          )
+          .pipe(switchMap(_ => this._apiService.getAWSSubnets(selectedProject, this._clusterService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {
@@ -133,7 +118,7 @@ export class NodeDataAWSProvider {
               return onErrorResumeNext(of([]));
             })
           )
-          .pipe(first());
+          .pipe(take(1));
       }
     }
   }

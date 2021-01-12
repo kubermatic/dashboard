@@ -9,22 +9,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "../../../../../assets/css/variables";
-
-.mat-dialog-container {
-  width: 200px;
-  padding: 0;
-}
+@import 'variables';
 
 .km-select-addon-dialog-option-container {
   border-radius: $border-radius;
   cursor: pointer;
-  padding: 3 * $baseline-grid;
-  margin: $baseline-grid 0;
+  margin: 8px 0;
+  padding: 24px;
+
+  &:hover {
+    transition: all .5s ease;
+  }
 
   .km-select-addon-dialog-option-desc {
     font-size: $font-size-body;
-    line-height: $font-size-subhead;
-    margin-top: 2 * $baseline-grid;
+    line-height: 16px;
+    margin-top: 16px;
   }
 }
