@@ -21,14 +21,14 @@ limitations under the License.
          fxLayout="row"
          fxLayoutGap="10px">
       <mat-form-field fxFlex="45">
-        <mat-label>Key</mat-label>
+        <mat-label>{{keyName}}</mat-label>
         <input matInput
                (keyup)="check(i)"
                name="key"
                formControlName="key">
         <mat-error *ngIf="label.get('key').errors?.validLabelKeyUniqueness"
                    i18n>
-          Key is not unique.
+          {{keyName}} is not unique.
         </mat-error>
         <mat-error *ngIf="label.get('key').errors?.validLabelKeyPrefixPattern"
                    i18n>
@@ -51,18 +51,18 @@ limitations under the License.
         </mat-error>
       </mat-form-field>
       <mat-form-field fxFlex="45">
-        <mat-label>Value</mat-label>
+        <mat-label>{{valueName}}</mat-label>
         <input matInput
                (keyup)="check(i)"
                name="value"
                formControlName="value">
         <mat-error *ngIf="label.get('value').errors?.validLabelValuePattern"
                    i18n>
-          Value not allowed.
+          {{valueName}} not allowed.
         </mat-error>
         <mat-error *ngIf="label.get('value').errors?.validLabelValueLength"
                    i18n>
-          Value is too long.
+          {{valueName}} is too long.
         </mat-error>
       </mat-form-field>
       <button mat-icon-button

@@ -93,6 +93,11 @@ export class ClusterService {
     this._cluster.labels = labels;
   }
 
+  set podNodeSelectorAdmissionPluginConfig(config: object) {
+    delete this._cluster.spec.podNodeSelectorAdmissionPluginConfig;
+    this._cluster.spec.podNodeSelectorAdmissionPluginConfig = config;
+  }
+
   set sshKeys(keys: SSHKey[]) {
     this._sshKeys = keys;
     this.sshKeyChanges.emit(this._sshKeys);
