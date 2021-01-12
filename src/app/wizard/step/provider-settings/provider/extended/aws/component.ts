@@ -73,6 +73,8 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       [Controls.RoleARN]: this._builder.control(''),
     });
 
+    this.form.get(Controls.SecurityGroup).disable();
+
     this._presets.presetChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
@@ -99,8 +101,8 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     merge(
       this.form.get(Controls.RouteTableID).valueChanges,
       this.form.get(Controls.InstanceProfileName).valueChanges,
-      this.form.get(Controls.RoleARN).valueChanges,
-      this.form.get(Controls.SecurityGroup).valueChanges
+      this.form.get(Controls.RoleARN).valueChanges
+      //this.form.get(Controls.SecurityGroup).valueChanges TODO
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
@@ -158,7 +160,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
 
   private _clearSecurityGroup(): void {
     this.securityGroups = [];
-    this.form.get(Controls.SecurityGroup).reset();
+    this.form.get(Controls.SecurityGroup).setValue('');
     this.form.get(Controls.SecurityGroup).disable();
     this.securityGroupLabel = SecurityGroupState.Empty;
     this._cdr.detectChanges();
