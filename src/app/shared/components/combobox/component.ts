@@ -60,19 +60,17 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   @Input() filterBy: string;
   @Input() selectBy: string;
   @Input('optionsGetter') getOptions: (group: string) => object[];
-  @Input() selected = '';
+  @Input() selected: string | string[] = '';
   @Input() hint: string;
-  @Input() valueFormatter: (selected: string) => string;
+  @Input() valueFormatter: (selected: string | string[]) => string;
+  @Input() multiple = false;
 
-  @Output() changed = new EventEmitter<string>();
-
+  @Output() changed = new EventEmitter<string | string[]>();
+  @ContentChild(OptionDirective, {read: TemplateRef}) optionTemplate;
+  filterByInput: object = {};
+  readonly controls = Controls;
   @ViewChild('input', {static: true}) private readonly _inputEl: ElementRef;
   @ViewChild('select', {static: true}) private readonly _matSelect: MatSelect;
-  @ContentChild(OptionDirective, {read: TemplateRef}) optionTemplate;
-
-  filterByInput: object = {};
-
-  readonly controls = Controls;
 
   constructor(private readonly _builder: FormBuilder) {
     super();
@@ -103,7 +101,7 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   }
 
   reset(): void {
-    this.selected = '';
+    this.selected = null;
     this.form.get(Controls.Select).setValue(this.selected);
   }
 
@@ -123,5 +121,9 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  writeValue(value: string | string[]) {
+    this.form.get(Controls.Select).setValue(value, {emitEvent: false});
   }
 }

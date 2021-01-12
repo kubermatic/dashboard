@@ -27,13 +27,15 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {compare} from '@shared/utils/common-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
-import {Observable} from 'rxjs';
-import {filter, switchMap, takeUntil} from 'rxjs/operators';
+import {merge, Observable} from 'rxjs';
+import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
   Size = 'size',
   Zone = 'zone',
   ImageID = 'imageID',
+  OSDiskSize = 'osDiskSize',
+  DataDiskSize = 'dataDiskSize',
 }
 
 enum SizeState {
@@ -67,6 +69,7 @@ enum ZoneState {
 })
 export class AzureBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private _sizeChanges = new EventEmitter<boolean>();
+  private readonly _defaultDiskSize = 0;
 
   readonly Controls = Controls;
 
@@ -75,7 +78,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   sizeLabel = SizeState.Empty;
   zoneLabel = ZoneState.Empty;
   selectedSize = '';
-  selectedZone = '';
+  selectedZones: string[] = [];
 
   private get _sizesObservable(): Observable<AzureSizes[]> {
     return this._nodeDataService.azure.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
@@ -99,6 +102,8 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
       [Controls.Size]: this._builder.control('', Validators.required),
       [Controls.Zone]: this._builder.control(''),
       [Controls.ImageID]: this._builder.control(''),
+      [Controls.OSDiskSize]: this._builder.control(this._defaultDiskSize),
+      [Controls.DataDiskSize]: this._builder.control(this._defaultDiskSize),
     });
 
     this._init();
@@ -109,14 +114,18 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(this._clearSize.bind(this));
 
     this._sizeChanges
+      .pipe(tap(_ => this._clearZone()))
       .pipe(filter(hasValue => hasValue))
       .pipe(switchMap(_ => this._zonesObservable))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setZones.bind(this));
 
-    this.form
-      .get(Controls.ImageID)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+    merge(
+      this.form.get(Controls.ImageID).valueChanges,
+      this.form.get(Controls.OSDiskSize).valueChanges,
+      this.form.get(Controls.DataDiskSize).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
 
@@ -131,15 +140,15 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     this._sizeChanges.emit(!!size);
   }
 
-  onZoneChange(zone: string): void {
-    this._nodeDataService.nodeData.spec.cloud.azure.zone = zone;
+  onZoneChange(zones: string[]): void {
+    this._nodeDataService.nodeData.spec.cloud.azure.zones = zones;
     this._nodeDataService.nodeDataChanges.next();
   }
 
   getHint(control: Controls): string {
     switch (control) {
       case Controls.Zone:
-        return this._nodeDataService.nodeData.spec.cloud.azure.size !== '' ? '' : 'Please enter your Node Size first.';
+        return this._nodeDataService.nodeData.spec.cloud.azure.size !== '' ? '' : 'Please select Node Size first.';
     }
 
     return '';
@@ -156,9 +165,15 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.azure) {
-      this.selectedZone = this._nodeDataService.nodeData.spec.cloud.azure.zone;
+      this.selectedZones = this._nodeDataService.nodeData.spec.cloud.azure.zones;
 
       this.form.get(Controls.ImageID).setValue(this._nodeDataService.nodeData.spec.cloud.azure.imageID);
+      this.form
+        .get(Controls.OSDiskSize)
+        .setValue(this._nodeDataService.nodeData.spec.cloud.azure.osDiskSize || this._defaultDiskSize);
+      this.form
+        .get(Controls.DataDiskSize)
+        .setValue(this._nodeDataService.nodeData.spec.cloud.azure.dataDiskSize || this._defaultDiskSize);
 
       this._cdr.detectChanges();
     }
@@ -206,8 +221,8 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
       this.zones = _.sortBy(zones.zones, s => s.toLowerCase()).map(zone => ({name: zone}));
     }
 
-    if (this.selectedZone) {
-      this.form.get(Controls.Zone).setValue(this.selectedZone);
+    if (!!this.selectedZones && this.selectedZones.length > 0) {
+      this.form.get(Controls.Zone).setValue(this.selectedZones);
     }
 
     this.zoneLabel = this.zones && this.zones.length > 0 ? ZoneState.Ready : ZoneState.Empty;
@@ -227,6 +242,8 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
         cloud: {
           azure: {
             imageID: this.form.get(Controls.ImageID).value,
+            osDiskSize: this.form.get(Controls.OSDiskSize).value,
+            dataDiskSize: this.form.get(Controls.DataDiskSize).value,
           } as AzureNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,
