@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '@shared/entity/cluster';
@@ -59,8 +59,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
-    private readonly _clusterService: ClusterService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _clusterService: ClusterService
   ) {
     super('AWS Provider Extended');
   }
@@ -102,7 +101,6 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       this.form.get(Controls.RouteTableID).valueChanges,
       this.form.get(Controls.InstanceProfileName).valueChanges,
       this.form.get(Controls.RoleARN).valueChanges
-      //this.form.get(Controls.SecurityGroup).valueChanges TODO
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
@@ -153,9 +151,8 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
   }
 
   private _onSecurityGroupLoading(): void {
-    this._clearSecurityGroup();
+    this.form.get(Controls.SecurityGroup).disable();
     this.securityGroupLabel = SecurityGroupState.Loading;
-    this._cdr.detectChanges();
   }
 
   private _clearSecurityGroup(): void {
@@ -163,14 +160,12 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     this.form.get(Controls.SecurityGroup).setValue('');
     this.form.get(Controls.SecurityGroup).disable();
     this.securityGroupLabel = SecurityGroupState.Empty;
-    this._cdr.detectChanges();
   }
 
   private _loadSecurityGroups(securityGroups: string[]): void {
     this.securityGroups = securityGroups;
     this.securityGroupLabel = !_.isEmpty(this.securityGroups) ? SecurityGroupState.Ready : SecurityGroupState.Empty;
     this.form.get(Controls.SecurityGroup).enable();
-    this._cdr.detectChanges();
   }
 
   private _enable(enable: boolean, name: string): void {
@@ -191,7 +186,6 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
             instanceProfileName: this.form.get(Controls.InstanceProfileName).value,
             roleARN: this.form.get(Controls.RoleARN).value,
             routeTableId: this.form.get(Controls.RouteTableID).value,
-            securityGroupID: this.form.get(Controls.SecurityGroup).value,
           } as AWSCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
