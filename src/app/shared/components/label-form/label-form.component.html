@@ -25,8 +25,7 @@ limitations under the License.
         <input matInput
                (keyup)="check(i)"
                name="key"
-               formControlName="key"
-               onkeypress="return event.keyCode != 13;">
+               formControlName="key">
         <mat-error *ngIf="label.get('key').errors?.validLabelKeyUniqueness"
                    i18n>
           Key is not unique.
@@ -56,8 +55,7 @@ limitations under the License.
         <input matInput
                (keyup)="check(i)"
                name="value"
-               formControlName="value"
-               onkeypress="return event.keyCode != 13;">
+               formControlName="value">
         <mat-error *ngIf="label.get('value').errors?.validLabelValuePattern"
                    i18n>
           Value not allowed.
