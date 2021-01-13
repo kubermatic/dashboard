@@ -14,10 +14,8 @@ limitations under the License.
       fxLayout="column"
       fxLayoutGap="16px">
   <mat-form-field fxFlex>
-    <mat-label>{{securityGroupLabel}}</mat-label>
+    <mat-label>Security Group ID</mat-label>
     <input type="text"
-           placeholder="Select Security Group ID..."
-           aria-label="Number"
            matInput
            [formControlName]="Controls.SecurityGroup"
            [matAutocomplete]="auto">
@@ -28,7 +26,10 @@ limitations under the License.
         {{securityGroup}}
       </mat-option>
     </mat-autocomplete>
-    <mat-hint>{{getHint(Controls.SecurityGroup)}}</mat-hint>
+    <mat-hint>
+      <ng-container>Specify to attach worker nodes to it, otherwise a new security group will be used.</ng-container>
+      <ng-container *ngIf="!hasRequiredCredentials()">&nbsp;Enter your credentials to load autocompletions.</ng-container>
+    </mat-hint>
     <mat-error *ngIf="form.get(Controls.SecurityGroup).hasError( 'pattern')">
       The security group ID need to look similar to 'sg-a2c195ca'.
     </mat-error>

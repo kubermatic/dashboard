@@ -27,12 +27,6 @@ enum Controls {
   RoleARN = 'roleARN',
 }
 
-enum SecurityGroupState {
-  Loading = 'Loading...',
-  Ready = 'Security Group ID',
-  Empty = 'No Security Groups IDs Available',
-}
-
 @Component({
   selector: 'km-wizard-aws-provider-extended',
   templateUrl: './template.html',
@@ -54,7 +48,6 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
 
   securityGroups: string[] = [];
   filteredSecurityGroups: Observable<string[]>;
-  securityGroupLabel = SecurityGroupState.Empty;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -87,7 +80,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
 
     this._clusterService.clusterChanges
       .pipe(filter(_ => this._clusterService.provider === NodeProvider.AWS))
-      .pipe(tap(_ => (!this._hasRequiredCredentials() ? this._clearSecurityGroup() : null)))
+      .pipe(tap(_ => (!this.hasRequiredCredentials() ? this._clearSecurityGroup() : null)))
       .pipe(switchMap(_ => this._securityGroupObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadSecurityGroups.bind(this));
@@ -118,15 +111,11 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     this._unsubscribe.complete();
   }
 
-  getHint(control: Controls): string {
-    switch (control) {
-      case Controls.SecurityGroup:
-        return this._hasRequiredCredentials()
-          ? 'Specify to attach worker nodes to it, otherwise a new security group will be used.'
-          : 'Please enter your credentials first.';
-    }
-
-    return '';
+  hasRequiredCredentials(): boolean {
+    return (
+      !!this._clusterService.cluster.spec.cloud.aws.accessKeyId &&
+      !!this._clusterService.cluster.spec.cloud.aws.secretAccessKey
+    );
   }
 
   private _filter(value: string): string[] {
@@ -135,19 +124,12 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     );
   }
 
-  private _hasRequiredCredentials(): boolean {
-    return (
-      !!this._clusterService.cluster.spec.cloud.aws.accessKeyId &&
-      !!this._clusterService.cluster.spec.cloud.aws.secretAccessKey
-    );
-  }
-
   private _securityGroupObservable(): Observable<string[]> {
     return this._presets
       .provider(NodeProvider.AWS)
       .accessKeyID(this._clusterService.cluster.spec.cloud.aws.accessKeyId)
       .secretAccessKey(this._clusterService.cluster.spec.cloud.aws.secretAccessKey)
-      .securityGroups(this._clusterService.datacenter, this._onSecurityGroupLoading.bind(this))
+      .securityGroups(this._clusterService.datacenter)
       .pipe(
         map(securityGroups => _.sortBy(securityGroups, sg => sg.toLowerCase())),
         catchError(() => {
@@ -157,22 +139,13 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       );
   }
 
-  private _onSecurityGroupLoading(): void {
-    this.form.get(Controls.SecurityGroup).disable();
-    this.securityGroupLabel = SecurityGroupState.Loading;
-  }
-
   private _clearSecurityGroup(): void {
     this.securityGroups = [];
     this.form.get(Controls.SecurityGroup).setValue('');
-    this.form.get(Controls.SecurityGroup).disable();
-    this.securityGroupLabel = SecurityGroupState.Empty;
   }
 
   private _loadSecurityGroups(securityGroups: string[]): void {
     this.securityGroups = securityGroups;
-    this.securityGroupLabel = !_.isEmpty(this.securityGroups) ? SecurityGroupState.Ready : SecurityGroupState.Empty;
-    this.form.get(Controls.SecurityGroup).enable();
   }
 
   private _enable(enable: boolean, name: string): void {
