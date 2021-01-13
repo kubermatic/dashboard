@@ -65,8 +65,6 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       [Controls.RoleARN]: this._builder.control(''),
     });
 
-    this.form.get(Controls.SecurityGroup).disable();
-
     this._presets.presetChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
