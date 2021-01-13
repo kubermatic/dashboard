@@ -13,7 +13,13 @@ import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {Provider} from './provider';
-import {AzureSizes, AzureZones} from '../../../../shared/entity/provider/azure';
+import {
+  AzureResourceGroups,
+  AzureSecurityGroups,
+  AzureSizes,
+  AzureZones,
+} from '../../../../shared/entity/provider/azure';
+import {map} from 'rxjs/operators';
 
 export class Azure extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
@@ -69,6 +75,13 @@ export class Azure extends Provider {
     return this;
   }
 
+  resourceGroup(resourceGroup: string): Azure {
+    if (resourceGroup) {
+      this._headers = this._headers.set(Azure.Header.ResourceGroup, resourceGroup);
+    }
+    return this;
+  }
+
   credential(credential: string): Azure {
     super._credential(credential);
     return this;
@@ -86,7 +99,7 @@ export class Azure extends Provider {
     return this._http.get<AzureSizes[]>(this._url, {headers: this._headers});
   }
 
-  resourceGroups(onLoadingCb: () => void = null): Observable<AzureSizes[]> {
+  resourceGroups(onLoadingCb: () => void = null): Observable<string[]> {
     this._setRequiredHeaders(
       Azure.Header.SubscriptionID,
       Azure.Header.TenantID,
@@ -104,10 +117,12 @@ export class Azure extends Provider {
     }
 
     const url = `${this._restRoot}/providers/${this._provider}/resourcegroups`;
-    return this._http.get<AzureSizes[]>(url, {headers: this._headers});
+    return this._http
+      .get<AzureResourceGroups>(url, {headers: this._headers})
+      .pipe(map(resourceGroups => resourceGroups.resourceGroups));
   }
 
-  securityGroups(onLoadingCb: () => void = null): Observable<AzureSizes[]> {
+  securityGroups(onLoadingCb: () => void = null): Observable<string[]> {
     this._setRequiredHeaders(
       Azure.Header.SubscriptionID,
       Azure.Header.TenantID,
@@ -126,7 +141,9 @@ export class Azure extends Provider {
     }
 
     const url = `${this._restRoot}/providers/${this._provider}/securitygroups`;
-    return this._http.get<AzureSizes[]>(url, {headers: this._headers});
+    return this._http
+      .get<AzureSecurityGroups>(url, {headers: this._headers})
+      .pipe(map(securityGroups => securityGroups.securityGroups));
   }
 
   availabilityZones(onLoadingCb: () => void = null): Observable<AzureZones> {
