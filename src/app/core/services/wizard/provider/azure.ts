@@ -86,6 +86,49 @@ export class Azure extends Provider {
     return this._http.get<AzureSizes[]>(this._url, {headers: this._headers});
   }
 
+  resourceGroups(onLoadingCb: () => void = null): Observable<AzureSizes[]> {
+    this._setRequiredHeaders(
+      Azure.Header.SubscriptionID,
+      Azure.Header.TenantID,
+      Azure.Header.ClientID,
+      Azure.Header.ClientSecret,
+      Azure.Header.Location
+    );
+
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._restRoot}/providers/${this._provider}/resourcegroups`;
+    return this._http.get<AzureSizes[]>(url, {headers: this._headers});
+  }
+
+  securityGroups(onLoadingCb: () => void = null): Observable<AzureSizes[]> {
+    this._setRequiredHeaders(
+      Azure.Header.SubscriptionID,
+      Azure.Header.TenantID,
+      Azure.Header.ClientID,
+      Azure.Header.ClientSecret,
+      Azure.Header.ResourceGroup,
+      Azure.Header.Location
+    );
+
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._restRoot}/providers/${this._provider}/securitygroups`;
+    return this._http.get<AzureSizes[]>(url, {headers: this._headers});
+  }
+
   availabilityZones(onLoadingCb: () => void = null): Observable<AzureZones> {
     this._setRequiredHeaders(
       Azure.Header.ClientID,
@@ -116,6 +159,7 @@ export namespace Azure {
     SubscriptionID = 'SubscriptionID',
     TenantID = 'TenantID',
     Location = 'Location',
+    ResourceGroup = 'ResourceGroup',
     SKUName = 'SKUName',
   }
 }
