@@ -94,7 +94,6 @@ export class ClusterService {
   }
 
   set podNodeSelectorAdmissionPluginConfig(config: object) {
-    delete this._cluster.spec.podNodeSelectorAdmissionPluginConfig;
     this._cluster.spec.podNodeSelectorAdmissionPluginConfig = config;
   }
 
