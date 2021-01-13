@@ -17,7 +17,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, map, startWith, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {catchError, filter, map, startWith, switchMap, takeUntil} from 'rxjs/operators';
 import * as _ from 'lodash';
 
 enum Controls {
@@ -80,7 +80,6 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
 
     this._clusterService.clusterChanges
       .pipe(filter(_ => this._clusterService.provider === NodeProvider.AWS))
-      .pipe(tap(_ => (!this.hasRequiredCredentials() ? this._clearSecurityGroup() : null)))
       .pipe(switchMap(_ => this._securityGroupObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadSecurityGroups.bind(this));
@@ -132,16 +131,8 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       .securityGroups(this._clusterService.datacenter)
       .pipe(
         map(securityGroups => _.sortBy(securityGroups, sg => sg.toLowerCase())),
-        catchError(() => {
-          this._clearSecurityGroup();
-          return onErrorResumeNext(EMPTY);
-        })
+        catchError(() => onErrorResumeNext(EMPTY))
       );
-  }
-
-  private _clearSecurityGroup(): void {
-    this.securityGroups = [];
-    this.form.get(Controls.SecurityGroup).setValue('');
   }
 
   private _loadSecurityGroups(securityGroups: string[]): void {
