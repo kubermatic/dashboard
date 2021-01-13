@@ -200,6 +200,7 @@ export class ClusterSpec {
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
   admissionPlugins?: string[];
+  podNodeSelectorAdmissionPluginConfig?: object;
   openshift?: OpenShift;
 }
 
@@ -245,6 +246,7 @@ export class ClusterSpecPatch {
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
   admissionPlugins?: string[];
+  podNodeSelectorAdmissionPluginConfig?: object;
   auditLogging?: AuditLoggingSettings;
   openshift?: OpenShiftPatch;
   machineNetworks?: MachineNetwork[];

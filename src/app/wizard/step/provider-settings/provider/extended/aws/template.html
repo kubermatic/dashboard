@@ -15,17 +15,25 @@ limitations under the License.
       fxLayoutGap="16px">
   <mat-form-field fxFlex>
     <mat-label>Security Group ID</mat-label>
-    <input matInput
+    <input type="text"
+           matInput
            [formControlName]="Controls.SecurityGroup"
-           [name]="Controls.SecurityGroup"
-           type="text"
-           autocomplete="off">
-    <mat-hint>Specify to attach worker nodes to it, otherwise a new security group will be used.</mat-hint>
+           [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption
+                      #auto="matAutocomplete">
+      <mat-option *ngFor="let securityGroup of securityGroups | filterBy: form.get(Controls.SecurityGroup).value"
+                  [value]="securityGroup">
+        {{securityGroup}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-hint>
+      <ng-container>Specify to attach worker nodes to it, otherwise a new security group will be used.</ng-container>
+      <ng-container *ngIf="!hasRequiredCredentials()">&nbsp;Enter your credentials to load autocompletions.</ng-container>
+    </mat-hint>
     <mat-error *ngIf="form.get(Controls.SecurityGroup).hasError( 'pattern')">
       The security group ID need to look similar to 'sg-a2c195ca'.
     </mat-error>
   </mat-form-field>
-
   <mat-form-field fxFlex>
     <mat-label>Route Table ID</mat-label>
     <input matInput

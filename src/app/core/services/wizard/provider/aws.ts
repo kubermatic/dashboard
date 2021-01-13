@@ -13,10 +13,10 @@ import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
-import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
-import {AWSSize, AWSSubnet, AWSVPC} from '../../../../shared/entity/provider/aws';
+import {AWSSecurityGroups, AWSSize, AWSSubnet, AWSVPC} from '@shared/entity/provider/aws';
 
 export class AWS extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
@@ -71,6 +71,21 @@ export class AWS extends Provider {
     return this._http
       .get<AWSVPC[]>(url, {headers: this._headers})
       .pipe(map(vpcs => vpcs.map(vpc => Object.assign(new AWSVPC(), vpc))));
+  }
+
+  securityGroups(dc: string, onLoadingCb: () => void = null): Observable<string[]> {
+    if (!this._hasRequiredHeaders() || !dc) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._restRoot}/providers/${this._provider}/${dc}/securitygroups`;
+    return this._http
+      .get<AWSSecurityGroups>(url, {headers: this._headers})
+      .pipe(map(securityGroups => securityGroups.ids));
   }
 
   subnets(seed: string, onLoadingCb: () => void = null): Observable<AWSSubnet[]> {
