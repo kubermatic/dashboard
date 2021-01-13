@@ -21,3 +21,11 @@ export class AzureSizes {
 export class AzureZones {
   zones: string[];
 }
+
+export class AzureSecurityGroups {
+  securityGroups: string[];
+}
+
+export class AzureResourceGroups {
+  resourceGroups: string[];
+}
