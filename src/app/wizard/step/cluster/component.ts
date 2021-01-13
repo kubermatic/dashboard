@@ -46,6 +46,7 @@ enum Controls {
   Labels = 'labels',
   AdmissionPlugins = 'admissionPlugins',
   SSHKeys = 'sshKeys',
+  PodNodeSelectorAdmissionPluginConfig = 'podNodeSelectorAdmissionPluginConfig',
 }
 
 @Component({
@@ -70,6 +71,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   masterVersions: MasterVersion[] = [];
   admissionPlugins: AdmissionPlugin[] = [];
   labels: object;
+  podNodeSelectorAdmissionPluginConfig: object;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
 
   private _datacenterSpec: Datacenter;
@@ -100,6 +102,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.ImagePullSecret]: new FormControl(''),
       [Controls.AuditLogging]: new FormControl(false),
       [Controls.AdmissionPlugins]: new FormControl([]),
+      [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
       [Controls.Labels]: new FormControl(''),
       [Controls.SSHKeys]: this._builder.control(''),
     });
@@ -164,6 +167,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   onLabelsChange(labels: object): void {
     this.labels = labels;
     this._clusterService.labels = this.labels;
+  }
+
+  onPodNodeSelectorAdmissionPluginConfigChange(config: object): void {
+    this.podNodeSelectorAdmissionPluginConfig = config;
+    this._clusterService.podNodeSelectorAdmissionPluginConfig = this.podNodeSelectorAdmissionPluginConfig;
   }
 
   isEnforced(control: Controls): boolean {
