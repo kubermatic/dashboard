@@ -88,6 +88,7 @@ import {SearchFieldComponent} from './components/search-field/component';
 import {TabCardComponent} from '@shared/components/tab-card/component';
 import {TabComponent} from '@shared/components/tab-card/tab/component';
 import {EventCardComponent} from '@shared/components/event-card/component';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 
 const modules: any[] = [
   CommonModule,
@@ -128,6 +129,7 @@ const modules: any[] = [
   MatBadgeModule,
   MatStepperModule,
   MatRippleModule,
+  ScrollingModule,
   FilterPipeModule,
   MonacoEditorModule,
 ];

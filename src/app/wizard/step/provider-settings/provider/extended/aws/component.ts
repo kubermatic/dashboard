@@ -16,8 +16,9 @@ import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '@shared/entity/clus
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {merge} from 'rxjs';
-import {filter, takeUntil} from 'rxjs/operators';
+import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
+import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import * as _ from 'lodash';
 
 enum Controls {
   SecurityGroup = 'securityGroup',
@@ -44,6 +45,9 @@ enum Controls {
 })
 export class AWSProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
+
+  securityGroups: string[] = [];
+  filteredSecurityGroups: Observable<string[]>;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -72,19 +76,63 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
         this._presets.enablePresets(Object.values(this._clusterService.cluster.spec.cloud.aws).every(value => !value));
       });
 
+    this._clusterService.clusterChanges
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AWS))
+      .pipe(tap(_ => (!this.hasRequiredCredentials() ? this._clearSecurityGroup() : null)))
+      .pipe(switchMap(_ => this._securityGroupObservable()))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._loadSecurityGroups.bind(this));
+
     merge(
-      this.form.get(Controls.SecurityGroup).valueChanges,
       this.form.get(Controls.RouteTableID).valueChanges,
       this.form.get(Controls.InstanceProfileName).valueChanges,
       this.form.get(Controls.RoleARN).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
+
+    this.form
+      .get(Controls.SecurityGroup)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(change => {
+        this._clusterService.cluster.spec.cloud.aws.securityGroupID = change;
+      });
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  hasRequiredCredentials(): boolean {
+    return (
+      !!this._clusterService.cluster.spec.cloud.aws.accessKeyId &&
+      !!this._clusterService.cluster.spec.cloud.aws.secretAccessKey
+    );
+  }
+
+  private _securityGroupObservable(): Observable<string[]> {
+    return this._presets
+      .provider(NodeProvider.AWS)
+      .accessKeyID(this._clusterService.cluster.spec.cloud.aws.accessKeyId)
+      .secretAccessKey(this._clusterService.cluster.spec.cloud.aws.secretAccessKey)
+      .securityGroups(this._clusterService.datacenter)
+      .pipe(
+        map(securityGroups => _.sortBy(securityGroups, sg => sg.toLowerCase())),
+        catchError(() => {
+          this._clearSecurityGroup();
+          return onErrorResumeNext(EMPTY);
+        })
+      );
+  }
+
+  private _clearSecurityGroup(): void {
+    this.securityGroups = [];
+    this.form.get(Controls.SecurityGroup).setValue('');
+  }
+
+  private _loadSecurityGroups(securityGroups: string[]): void {
+    this.securityGroups = securityGroups;
   }
 
   private _enable(enable: boolean, name: string): void {
@@ -105,7 +153,6 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
             instanceProfileName: this.form.get(Controls.InstanceProfileName).value,
             roleARN: this.form.get(Controls.RoleARN).value,
             routeTableId: this.form.get(Controls.RouteTableID).value,
-            securityGroupID: this.form.get(Controls.SecurityGroup).value,
           } as AWSCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
