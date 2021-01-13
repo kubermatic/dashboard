@@ -64,6 +64,6 @@ $toggle-height: 61px;
   width: auto;
 }
 
-km-label-form {
+km-label-form:not(.pod-node-selector-config) {
   margin-top: 30px;
 }
