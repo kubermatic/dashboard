@@ -15,7 +15,9 @@ limitations under the License.
   <mat-dialog-content>
     <form [formGroup]="form"
           fxLayout="column"
-          class="km-edit-cluster-form">
+          class="km-edit-cluster-form"
+          (submit)="editCluster()"
+          id="edit-cluster-form">
       <mat-form-field fxFlex>
         <mat-label>Name*</mat-label>
         <input id="km-edit-cluster-dialog-input"
@@ -79,19 +81,21 @@ limitations under the License.
           </i>
         </div>
       </div>
+
       <km-label-form title="Labels"
                      [(labels)]="labels"
                      [inheritedLabels]="cluster.inheritedLabels"
                      [asyncKeyValidators]=asyncLabelValidators
                      formControlName="labels"></km-label-form>
+      <km-edit-provider-settings [cluster]="cluster"
+                                 *ngIf="!cluster.spec.cloud.bringyourown"></km-edit-provider-settings>
     </form>
-    <km-edit-provider-settings [cluster]="cluster"
-                               *ngIf="!cluster.spec.cloud.bringyourown"></km-edit-provider-settings>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button id="km-edit-cluster-dialog-edit-btn"
             mat-flat-button
-            (click)="editCluster()"
+            type="submit"
+            form="edit-cluster-form"
             [disabled]="!form.valid || !providerSettingsPatch.isValid">
       Save Changes
     </button>

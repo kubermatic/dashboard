@@ -14,8 +14,9 @@ limitations under the License.
   <km-dialog-title>Add Member</km-dialog-title>
   <mat-dialog-content>
     <form [formGroup]="addMemberForm"
-          fxLayout="column">
-
+          fxLayout="column"
+          (submit)="addMember()"
+          id="add-member-form">
       <mat-form-field fxFlex>
         <mat-label>Email*</mat-label>
         <input id="km-add-member-dialog-email-input"
@@ -43,13 +44,13 @@ limitations under the License.
           Group is <strong>required</strong>
         </mat-error>
       </mat-form-field>
-
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button id="km-add-member-dialog-add-btn"
             mat-flat-button
-            (click)="addMember()"
+            type="submit"
+            form="add-member-form"
             [disabled]="!addMemberForm.valid">
       Add
     </button>

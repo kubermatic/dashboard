@@ -40,6 +40,10 @@ export class AddServiceAccountComponent implements OnInit {
   }
 
   addServiceAccount(): void {
+    if (!this.addServiceAccountForm.valid) {
+      return;
+    }
+
     const createServiceAccount: ServiceAccountModel = {
       name: this.addServiceAccountForm.controls.name.value,
       group: this.addServiceAccountForm.controls.group.value,

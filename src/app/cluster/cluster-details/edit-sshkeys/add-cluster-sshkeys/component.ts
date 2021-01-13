@@ -86,6 +86,10 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   addClusterSSHKeys(): void {
+    if (!this.keysForm.valid) {
+      return;
+    }
+
     this._clusterService
       .createSSHKey(this.projectID, this.cluster.id, this.keysForm.controls.keys.value)
       .subscribe(res => {

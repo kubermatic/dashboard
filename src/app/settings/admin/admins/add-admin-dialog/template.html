@@ -13,7 +13,9 @@ limitations under the License.
 <km-dialog-title>Add Admin</km-dialog-title>
 <mat-dialog-content>
   <form [formGroup]="form"
-        fxLayout="column">
+        fxLayout="column"
+        (submit)="add()"
+        id="add-admin-form">
     <mat-form-field fxFlex>
       <mat-label>Email*</mat-label>
       <input matInput
@@ -29,7 +31,8 @@ limitations under the License.
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
-          (click)="add()"
+          type="submit"
+          form="add-admin-form"
           [disabled]="!form.valid">
     Save
   </button>

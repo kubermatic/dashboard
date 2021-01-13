@@ -44,6 +44,10 @@ export class AddSshKeyDialogComponent implements OnInit {
   }
 
   addSSHKey(): void {
+    if (!this.addSSHKeyForm.valid) {
+      return;
+    }
+
     const name = this.addSSHKeyForm.controls['name'].value;
     const key = this.addSSHKeyForm.controls['key'].value;
 

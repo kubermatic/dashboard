@@ -10,12 +10,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<form [formGroup]="deleteForm"
-      id="km-delete-cluster-dialog"
-      (keydown.enter)="deleteCluster()">
-  <km-dialog-title>Delete Cluster</km-dialog-title>
-  <mat-dialog-content>
-
+<km-dialog-title>Delete Cluster</km-dialog-title>
+<mat-dialog-content>
+  <form [formGroup]="deleteForm"
+        id="km-delete-cluster-dialog"
+        (submit)="deleteCluster()"
+        id="delete-cluster-form">
     <p>Are you sure you want to permanently delete the <strong ngxClipboard
               [cbContent]="cluster.name"
               matTooltip="Click to copy"
@@ -48,15 +48,14 @@ limitations under the License.
       <i class="km-icon-error"></i>
       <div>Deactivating clean up may result in leftover resources at your provider.</div>
     </div>
-
-  </mat-dialog-content>
-  <mat-dialog-actions>
-    <button id="km-delete-cluster-dialog-delete-btn"
-            (click)="deleteCluster()"
-            mat-dialog-close
-            mat-flat-button
-            [disabled]="!inputNameMatches()">
-      Delete
-    </button>
-  </mat-dialog-actions>
-</form>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button id="km-delete-cluster-dialog-delete-btn"
+          type="submit"
+          mat-flat-button
+          form="delete-cluster-form"
+          [disabled]="!inputNameMatches()">
+    Delete
+  </button>
+</mat-dialog-actions>
