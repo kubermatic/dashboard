@@ -116,7 +116,7 @@ export class Azure extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/resourcegroups`;
+    const url = `${this._newRestRoot}/providers/${this._provider}/resourcegroups`;
     return this._http
       .get<AzureResourceGroups>(url, {headers: this._headers})
       .pipe(map(resourceGroups => resourceGroups.resourceGroups));

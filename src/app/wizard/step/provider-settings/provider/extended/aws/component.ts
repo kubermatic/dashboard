@@ -45,9 +45,7 @@ enum Controls {
 })
 export class AWSProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
-
   securityGroups: string[] = [];
-  filteredSecurityGroups: Observable<string[]>;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -81,7 +79,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       .pipe(tap(_ => (!this.hasRequiredCredentials() ? this._clearSecurityGroup() : null)))
       .pipe(switchMap(_ => this._securityGroupObservable()))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._loadSecurityGroups.bind(this));
+      .subscribe(securityGroups => (this.securityGroups = securityGroups));
 
     merge(
       this.form.get(Controls.RouteTableID).valueChanges,
@@ -94,8 +92,8 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     this.form
       .get(Controls.SecurityGroup)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(change => {
-        this._clusterService.cluster.spec.cloud.aws.securityGroupID = change;
+      .subscribe(sg => {
+        this._clusterService.cluster.spec.cloud.aws.securityGroupID = sg;
       });
   }
 
@@ -129,10 +127,6 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
   private _clearSecurityGroup(): void {
     this.securityGroups = [];
     this.form.get(Controls.SecurityGroup).setValue('');
-  }
-
-  private _loadSecurityGroups(securityGroups: string[]): void {
-    this.securityGroups = securityGroups;
   }
 
   private _enable(enable: boolean, name: string): void {
