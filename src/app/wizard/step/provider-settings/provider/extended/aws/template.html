@@ -21,7 +21,7 @@ limitations under the License.
            [matAutocomplete]="auto">
     <mat-autocomplete autoActiveFirstOption
                       #auto="matAutocomplete">
-      <mat-option *ngFor="let securityGroup of filteredSecurityGroups | async"
+      <mat-option *ngFor="let securityGroup of securityGroups | filterBy: form.get(Controls.SecurityGroup).value"
                   [value]="securityGroup">
         {{securityGroup}}
       </mat-option>

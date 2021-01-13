@@ -17,7 +17,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, map, startWith, switchMap, takeUntil} from 'rxjs/operators';
+import {catchError, filter, map, switchMap, takeUntil} from 'rxjs/operators';
 import * as _ from 'lodash';
 
 enum Controls {
@@ -82,11 +82,6 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadSecurityGroups.bind(this));
 
-    this.filteredSecurityGroups = this.form.get(Controls.SecurityGroup).valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value))
-    );
-
     merge(
       this.form.get(Controls.RouteTableID).valueChanges,
       this.form.get(Controls.InstanceProfileName).valueChanges,
@@ -112,12 +107,6 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     return (
       !!this._clusterService.cluster.spec.cloud.aws.accessKeyId &&
       !!this._clusterService.cluster.spec.cloud.aws.secretAccessKey
-    );
-  }
-
-  private _filter(value: string): string[] {
-    return this.securityGroups.filter(
-      option => !value || (!!option && option.toLowerCase().startsWith(value.toLowerCase()))
     );
   }
 
