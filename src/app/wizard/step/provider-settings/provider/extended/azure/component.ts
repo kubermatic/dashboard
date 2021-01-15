@@ -191,7 +191,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
             .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
             .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
             .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
-            .resourceGroup(this._clusterService.cluster.spec.cloud.azure.resourceGroup)
+            .resourceGroup(this.form.get(Controls.ResourceGroup).value)
             .location(location)
             .credential(this._presets.preset)
             .securityGroups()
