@@ -44,13 +44,17 @@ export class AddProjectDialogComponent implements OnInit {
   }
 
   addProject(): void {
+    if (!this.form.valid) {
+      return;
+    }
+
     const createProject: CreateProjectModel = {
       name: this.form.controls.name.value,
       labels: this.labels,
     };
     this._apiService.createProject(createProject).subscribe(res => {
       this._matDialogRef.close(res);
-      this._notificationService.success(`The <strong>${createProject.name}</strong> project was added`);
+      this._notificationService.success(`The ${createProject.name} project was added`);
     });
   }
 }

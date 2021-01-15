@@ -92,6 +92,12 @@ limitations under the License.
                                [value]="false">
           </km-property-boolean>
         </div>
+        <km-property *ngIf="cluster.spec.podNodeSelectorAdmissionPluginConfig">
+          <div key>Pod Node Selector Config</div>
+          <div value>
+            <km-labels [labels]="cluster.spec.podNodeSelectorAdmissionPluginConfig"></km-labels>
+          </div>
+        </km-property>
         <km-property-boolean label="Audit Logging"
                              [value]="cluster.spec.auditLogging?.enabled">
         </km-property-boolean>
@@ -366,13 +372,34 @@ limitations under the License.
               <div key>Node Size</div>
               <div value>{{nodeData.spec.cloud.azure.size}}</div>
             </km-property>
-            <km-property *ngIf="nodeData.spec.cloud.azure.zone">
-              <div key>Zone</div>
-              <div value>{{nodeData.spec.cloud.azure.zone}}</div>
+            <km-property *ngIf="nodeData.spec.cloud.azure.zones">
+              <div key>Zones</div>
+              <div value>{{nodeData.spec.cloud.azure.zones}}</div>
             </km-property>
             <km-property *ngIf="nodeData.spec.cloud.azure.imageID">
               <div key>Image ID</div>
               <div value>{{nodeData.spec.cloud.azure.imageID}}</div>
+            </km-property>
+            <km-property>
+              <div key>Data Disk Size</div>
+              <div *ngIf="nodeData.spec.cloud.azure.dataDiskSize === 0"
+                   value>
+                Default
+              </div>
+              <div value
+                   *ngIf="nodeData.spec.cloud.azure.dataDiskSize !== 0">
+                {{nodeData.spec.cloud.azure.dataDiskSize}} GB
+              </div>
+            </km-property>
+            <km-property>
+              <div key>OS Disk Size</div>
+              <div *ngIf="nodeData.spec.cloud.azure.osDiskSize === 0"
+                   value>
+                Default
+              </div>
+              <div *ngIf="nodeData.spec.cloud.azure.osDiskSize !== 0"
+                   value>{{nodeData.spec.cloud.azure.osDiskSize}} GB
+              </div>
             </km-property>
           </ng-container>
 

@@ -24,11 +24,8 @@ limitations under the License.
      class="content km-pointer"
      (click)="copyToClipboard()"
      matTooltip="Click to copy">
-  <span *ngIf="message?.length <= 128; else truncated"
-        [innerHTML]="message"></span>
-  <ng-template #truncated>
-    <span [innerHTML]="message | slice:0:128"></span>...
-  </ng-template>
+  <span *ngIf="message?.length <= 128; else truncated">{{message}}</span>
+  <ng-template #truncated><span>{{message | slice:0:128}}</span>...</ng-template>
 </div>
 
 <button class="km-icon-close km-pointer"

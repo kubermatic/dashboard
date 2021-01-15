@@ -132,7 +132,7 @@ export class ClusterService {
       hasBackdrop: true,
       data: {
         title: 'Disconnect Cluster',
-        message: `Are you sure you want to disconnect <strong>${cluster.name}</strong> cluster?`,
+        message: `Are you sure you want to disconnect ${cluster.name} cluster?`,
         confirmLabel: 'Disconnect',
       },
     };

@@ -62,7 +62,7 @@ import {OptionDirective} from './components/combobox/directive';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 import {DialogTitleComponent} from './components/dialog-title/dialog-title.component';
 import {ClusterTypeEOLComponent} from './components/eol/component';
-import {EventListComponent} from './components/event-list/event-list.component';
+import {EventListComponent} from './components/event-list/component';
 import {LabelFormComponent} from './components/label-form/label-form.component';
 import {LabelsComponent} from './components/labels/labels.component';
 import {MachineNetworkComponent} from './components/machine-networks-new/component';
@@ -85,6 +85,10 @@ import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {ExternalClusterDataDialogComponent} from './components/external-cluster-data-dialog/component';
 import {LoaderComponent} from './components/loader/component';
 import {SearchFieldComponent} from './components/search-field/component';
+import {TabCardComponent} from '@shared/components/tab-card/component';
+import {TabComponent} from '@shared/components/tab-card/tab/component';
+import {EventCardComponent} from '@shared/components/event-card/component';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 
 import {OverlayModule} from '@angular/cdk/overlay';
 import {DialogComponent} from './components/guided-tour/dialog/component';
@@ -134,6 +138,7 @@ const modules: any[] = [
   MatBadgeModule,
   MatStepperModule,
   MatRippleModule,
+  ScrollingModule,
   FilterPipeModule,
   MonacoEditorModule,
   OverlayModule,
@@ -143,6 +148,7 @@ const components: any[] = [
   PropertyBooleanComponent,
   DialogTitleComponent,
   PropertyComponent,
+  EventCardComponent,
   EventListComponent,
   LabelFormComponent,
   LabelsComponent,
@@ -178,6 +184,8 @@ const components: any[] = [
   GTAddProjectBtnComponent,
   GTAddProjectDialogComponent,
   GTProjectItemComponent,
+  TabCardComponent,
+  TabComponent,
 ];
 
 const services: any[] = [ClusterService, EndOfLifeService, DialogService, DialogHelperService];

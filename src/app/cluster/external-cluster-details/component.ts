@@ -121,7 +121,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(_ => {
         this._clusterRefresh.next();
-        this._notificationService.success(`The <strong>${this.cluster.name}</strong> cluster was updated`);
+        this._notificationService.success(`The ${this.cluster.name} cluster was updated`);
       });
   }
 
@@ -132,7 +132,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   disconnect(): void {
     this._clusterService.showDisconnectClusterDialog(this.cluster, this.projectId).subscribe(_ => {
       this._router.navigate(['/projects/' + this.projectId + '/clusters']);
-      this._notificationService.success(`The <strong>${this.cluster.name}</strong> cluster was disconnected`);
+      this._notificationService.success(`The ${this.cluster.name} cluster was disconnected`);
     });
   }
 }

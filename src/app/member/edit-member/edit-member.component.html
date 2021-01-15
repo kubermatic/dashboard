@@ -14,7 +14,9 @@ limitations under the License.
   <km-dialog-title>Edit Member</km-dialog-title>
   <mat-dialog-content>
     <form [formGroup]="editMemberForm"
-          fxLayout="column">
+          fxLayout="column"
+          (submit)="editMember()"
+          id="edit-member-form">
       <mat-form-field fxFlex>
         <mat-label>Name</mat-label>
         <input matInput
@@ -49,7 +51,8 @@ limitations under the License.
   <mat-dialog-actions>
     <button id="km-edit-member-dialog-edit-btn"
             mat-flat-button
-            (click)="editMember()"
+            type="submit"
+            form="edit-member-form"
             [disabled]="!editMemberForm.valid">
       Edit
     </button>

@@ -30,7 +30,7 @@ limitations under the License.
     <div [matMenuTriggerFor]="menu"
          fxLayoutAlign="center center"
          class="km-addon-menu">
-      <mat-icon>more_vert</mat-icon>
+      <i class="km-icon-mask km-icon-points-menu"></i>
     </div>
     <mat-menu #menu="matMenu">
       <button mat-menu-item
@@ -54,4 +54,4 @@ limitations under the License.
   </div>
 </div>
 
-<km-loader [isVisible]="!isClusterReady"></km-loader>
+<km-loader *ngIf="!isClusterReady"></km-loader>

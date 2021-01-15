@@ -16,7 +16,7 @@ import {UserMockService} from '@app/testing/services/user-mock.service';
 import {UserService} from '@core/services/user/service';
 import {Event} from '@shared/entity/event';
 import {SharedModule} from '@shared/shared.module';
-import {EventListComponent} from './event-list.component';
+import {EventListComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 

@@ -22,7 +22,8 @@ limitations under the License.
                 [removable]="removable"
                 (removed)="removeTag(tag)">
         {{tag}}
-        <mat-icon matChipRemove>cancel</mat-icon>
+        <i matChipRemove
+           class="km-icon-mask km-icon-remove"></i>
       </mat-chip>
       <input placeholder="Add tag..."
              formControlName="tags"

@@ -46,6 +46,10 @@ export class AWSVPC {
   }
 }
 
+export class AWSSecurityGroups {
+  ids: string[];
+}
+
 export class AWSCidrBlockSet {
   associationId: string;
   cidrBlock: string;

@@ -41,6 +41,10 @@ export class EditServiceAccountTokenComponent implements OnInit {
   }
 
   editServiceAccountToken(): void {
+    if (!this.editServiceAccountTokenForm.valid) {
+      return;
+    }
+
     const patchServiceAccountToken: ServiceAccountTokenPatch = {
       name: this.editServiceAccountTokenForm.controls.name.value,
     };
@@ -50,7 +54,7 @@ export class EditServiceAccountTokenComponent implements OnInit {
       .pipe(take(1))
       .subscribe(() => {
         this._matDialogRef.close(true);
-        this._notificationService.success(`The <strong>${this.token.name}</strong> token was updated`);
+        this._notificationService.success(`The ${this.token.name} token was updated`);
       });
   }
 }

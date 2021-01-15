@@ -18,12 +18,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {
-  fakeBindings,
-  fakeClusterBindings,
-  fakeSimpleBindings,
-  fakeSimpleClusterBindings,
-} from '@app/testing/fake-data/rbac.fake';
+import {fakeBindings, fakeClusterBindings} from '@app/testing/fake-data/rbac.fake';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
 import {ApiMockService, asyncData} from '@app/testing/services/api-mock.service';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
@@ -143,14 +138,4 @@ describe('ClusterDetailsComponent', () => {
     tick();
     expect(component.nodes).toEqual(expectedNodes);
   }));
-
-  it('should create simple cluster binding for rbac', () => {
-    const simpleClusterBindings = component.createSimpleClusterBinding(fakeClusterBindings());
-    expect(simpleClusterBindings).toEqual(fakeSimpleClusterBindings());
-  });
-
-  it('should create simple binding for rbac', () => {
-    const simpleBindings = component.createSimpleBinding(fakeBindings());
-    expect(simpleBindings).toEqual(fakeSimpleBindings());
-  });
 });

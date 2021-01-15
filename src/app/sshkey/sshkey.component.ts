@@ -151,7 +151,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         dialogId: 'km-delete-sshkey-dialog',
         title: 'Delete SSH Key',
-        message: `Delete SSH key "<strong>${sshKey.name}</strong>" permanently?`,
+        message: `Delete SSH key ${sshKey.name} permanently?`,
         confirmLabel: 'Delete',
         confirmLabelId: 'km-delete-sshkey-dialog-btn',
       },
@@ -166,9 +166,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(switchMap(_ => this._api.deleteSSHKey(sshKey.id, this.projectID)))
       .pipe(take(1))
       .subscribe(() => {
-        this._notificationService.success(
-          `The <strong>${sshKey.name}</strong> SSH key was removed from the <strong>${this.projectID}</strong> project`
-        );
+        this._notificationService.success(`The ${sshKey.name} SSH key was removed from the ${this.projectID} project`);
         this._googleAnalyticsService.emitEvent('sshKeyOverview', 'SshKeyDeleted');
       });
   }

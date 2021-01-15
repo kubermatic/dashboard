@@ -128,7 +128,7 @@ export class NodeService {
       hasBackdrop: true,
       data: {
         title: 'Delete Machine Deployment',
-        message: `Delete "<strong>${md.name}</strong>" permanently?`,
+        message: `Delete ${md.name} machine deployment permanently?`,
         confirmLabel: 'Delete',
       },
     };
@@ -146,7 +146,7 @@ export class NodeService {
                 .pipe(take(1))
                 .pipe(
                   catchError(() => {
-                    this._notificationService.error('Could not remove the <strong>${md.name}</strong> node deployment');
+                    this._notificationService.error('Could not remove the ${md.name} machine deployment');
                     return of(false);
                   })
                 );
@@ -159,7 +159,7 @@ export class NodeService {
         mergeMap(
           (data: any): Observable<boolean> => {
             if (data) {
-              this._notificationService.success(`The <strong>${md.name}</strong> node deployment was removed`);
+              this._notificationService.success(`The ${md.name} machine deployment was removed`);
               if (changeEventEmitter) {
                 changeEventEmitter.emit(md);
               }

@@ -362,8 +362,10 @@ export function nodeDataFake(): NodeData {
         azure: {
           size: 'cx31',
           assignPublicIP: false,
-          zone: '1',
+          zones: ['1'],
           tags: {},
+          dataDiskSize: 0,
+          osDiskSize: 0,
         },
         packet: {
           instanceType: 'm1.small',
@@ -444,8 +446,10 @@ export function nodeDataCentOsFake(): NodeData {
         azure: {
           size: 'cx31',
           assignPublicIP: false,
-          zone: '1',
+          zones: ['1'],
           tags: {},
+          dataDiskSize: 0,
+          osDiskSize: 0,
         },
         gcp: {
           diskSize: 25,
@@ -510,8 +514,10 @@ export function nodeDataContainerLinuxFake(): NodeData {
         azure: {
           size: 'cx31',
           assignPublicIP: false,
-          zone: '1',
+          zones: ['1'],
           tags: {},
+          dataDiskSize: 0,
+          osDiskSize: 0,
         },
         gcp: {
           diskSize: 25,
@@ -577,8 +583,10 @@ export function nodeDataSLESFake(): NodeData {
         azure: {
           size: 'cx31',
           assignPublicIP: false,
-          zone: '1',
+          zones: ['1'],
           tags: {},
+          dataDiskSize: 0,
+          osDiskSize: 0,
         },
         gcp: {
           diskSize: 25,
@@ -672,8 +680,10 @@ export function nodeDataFlatcarFake(): NodeData {
         azure: {
           size: 'cx31',
           assignPublicIP: false,
-          zone: '1',
+          zones: ['1'],
           tags: {},
+          dataDiskSize: 0,
+          osDiskSize: 0,
         },
       },
       operatingSystem: {

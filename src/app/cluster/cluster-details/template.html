@@ -79,7 +79,7 @@ limitations under the License.
         <button mat-icon-button
                 class="km-provider-menu-btn"
                 [matMenuTriggerFor]="menu">
-          <mat-icon>more_vert</mat-icon>
+          <i class="km-icon-mask km-icon-points-menu"></i>
         </button>
         <mat-menu #menu="matMenu"
                   class="km-provider-edit-settings">
@@ -220,29 +220,27 @@ limitations under the License.
                   [isClusterRunning]="isClusterAPIRunning"></km-node-list>
   </div>
 
-  <km-rbac *ngIf="isRBACEnabled()"
-           [cluster]="cluster"
-           [projectID]="projectID"
-           [isClusterRunning]="isClusterRunning"
-           [clusterBindings]="clusterBindings"
-           [bindings]="bindings"></km-rbac>
+  <km-tab-card>
+    <km-tab label="Events">
+      <km-event-list [events]="events"></km-event-list>
+    </km-tab>
+    <km-tab label="RBAC"
+            *ngIf="isRBACEnabled()">
+      <km-rbac [cluster]="cluster"
+               [projectID]="projectID"></km-rbac>
+    </km-tab>
+    <km-tab label="Addons">
+      <div class="addon-tab-content">
+        <km-addon-list [addons]="addons"
+                       [isClusterReady]="isClusterRunning"
+                       [canEdit]="isEditEnabled()"
+                       (addAddon)="handleAddonCreation($event)"
+                       (editAddon)="handleAddonEdition($event)"
+                       (deleteAddon)="handleAddonDeletion($event)"></km-addon-list>
+      </div>
 
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title class="additional-margin">Addons</mat-card-title>
-    </mat-card-header>
-    <mat-card-content class="km-addon-card-content">
-      <km-addon-list [addons]="addons"
-                     [isClusterReady]="isClusterRunning"
-                     [canEdit]="isEditEnabled()"
-                     (addAddon)="handleAddonCreation($event)"
-                     (editAddon)="handleAddonEdition($event)"
-                     (deleteAddon)="handleAddonDeletion($event)"></km-addon-list>
-    </mat-card-content>
-  </mat-card>
-
-  <km-event-list [events]="events"></km-event-list>
-
+    </km-tab>
+  </km-tab-card>
 </ng-container>
 
 <div *ngIf="!isLoaded()">

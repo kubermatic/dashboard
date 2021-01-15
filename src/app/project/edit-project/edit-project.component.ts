@@ -45,6 +45,10 @@ export class EditProjectComponent implements OnInit {
   }
 
   editProject(): void {
+    if (!this.form.valid) {
+      return;
+    }
+
     const project: EditProject = {
       name: this.form.controls.name.value,
       labels: this.labels,
@@ -62,7 +66,7 @@ export class EditProjectComponent implements OnInit {
 
     this.api.editProject(this.project.id, project).subscribe(project => {
       this.dialogRef.close(project);
-      this._notificationService.success(`The <strong>${this.project.name}</strong> project was updated`);
+      this._notificationService.success(`The ${this.project.name} project was updated`);
     });
   }
 }

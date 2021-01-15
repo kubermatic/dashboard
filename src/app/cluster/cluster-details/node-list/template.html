@@ -63,8 +63,8 @@ limitations under the License.
                *ngIf="showInfo(element)"></i>
           </ng-container>
           <ng-container *ngIf="element.status.errorMessage">
-            <mat-icon [matTooltip]="element.status.errorMessage"
-                      class="km-error">report_problem</mat-icon>
+            <i [matTooltip]="element.status.errorMessage"
+               class="km-icon-error"></i>
           </ng-container>
         </td>
       </ng-container>
@@ -315,6 +315,40 @@ limitations under the License.
             <km-property *ngIf="element.spec.cloud.anexia?.vlanID">
               <div key>VLAN ID</div>
               <div value>{{element.spec.cloud.anexia.vlanID}}</div>
+            </km-property>
+
+            <km-property *ngIf="element.spec.cloud.azure?.size">
+              <div key>Node Size</div>
+              <div value>{{element.spec.cloud.azure.size}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.azure?.zones">
+              <div key>Zones</div>
+              <div value>{{element.spec.cloud.azure.zones}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.azure?.imageID">
+              <div key>Image ID</div>
+              <div value>{{element.spec.cloud.azure.imageID}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.azure">
+              <div key>Data Disk Size</div>
+              <div *ngIf="element.spec.cloud.azure.dataDiskSize === 0"
+                   value>
+                Default
+              </div>
+              <div value
+                   *ngIf="element.spec.cloud.azure.dataDiskSize !== 0">
+                {{element.spec.cloud.azure.dataDiskSize}} GB
+              </div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.azure">
+              <div key>OS Disk Size</div>
+              <div *ngIf="element.spec.cloud.azure.osDiskSize === 0"
+                   value>
+                Default
+              </div>
+              <div *ngIf="element.spec.cloud.azure.osDiskSize !== 0"
+                   value>{{element.spec.cloud.azure.osDiskSize}} GB
+              </div>
             </km-property>
             <!-- End of other properties. -->
 

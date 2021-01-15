@@ -36,15 +36,17 @@ export class AddAdminDialogComponent implements OnInit {
   }
 
   add(): void {
+    if (!this.form) {
+      return;
+    }
+
     const adminEntity: Admin = {
       email: this.form.controls.email.value,
       isAdmin: true,
     };
 
     this._settingsService.setAdmin(adminEntity).subscribe(admin => {
-      this._notificationService.success(
-        `The <strong>${admin.name}</strong> user was successfully added to admin group`
-      );
+      this._notificationService.success(`The ${admin.name} user was successfully added to admin group`);
       this._matDialogRef.close(admin);
     });
   }

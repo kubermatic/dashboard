@@ -15,7 +15,9 @@ limitations under the License.
   <mat-dialog-content>
     <form [formGroup]="form"
           fxLayout="column"
-          class="km-edit-cluster-form">
+          class="km-edit-cluster-form"
+          (submit)="editCluster()"
+          id="edit-cluster-form">
       <mat-form-field fxFlex>
         <mat-label>Name*</mat-label>
         <input id="km-edit-cluster-dialog-input"
@@ -65,6 +67,15 @@ limitations under the License.
           <i class="km-icon-info km-pointer"></i>
           <p fxFlex="95">Pod Security Policy is enforced by your admin in the chosen datacenter.</p>
         </span>
+        <km-label-form *ngIf="isPluginEnabled(admissionPlugin.PodNodeSelector)"
+                       class="pod-node-selector-config"
+                       title="Pod Node Selector Configuration"
+                       keyName="Namespace"
+                       valueName="Label Selector"
+                       noValidators="true"
+                       [(labels)]="podNodeSelectorAdmissionPluginConfig"
+                       formControlName="podNodeSelectorAdmissionPluginConfig"
+                       fxFlex="100"></km-label-form>
       </div>
 
       <div fxLayout="row"
@@ -79,21 +90,23 @@ limitations under the License.
           </i>
         </div>
       </div>
+
       <km-label-form title="Labels"
                      [(labels)]="labels"
                      [inheritedLabels]="cluster.inheritedLabels"
                      [asyncKeyValidators]=asyncLabelValidators
                      formControlName="labels"></km-label-form>
+      <km-edit-provider-settings [cluster]="cluster"
+                                 *ngIf="!cluster.spec.cloud.bringyourown"></km-edit-provider-settings>
     </form>
-    <km-edit-provider-settings [cluster]="cluster"
-                               *ngIf="!cluster.spec.cloud.bringyourown"></km-edit-provider-settings>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button id="km-edit-cluster-dialog-edit-btn"
             mat-flat-button
-            (click)="editCluster()"
+            type="submit"
+            form="edit-cluster-form"
             [disabled]="!form.valid || !providerSettingsPatch.isValid">
-      Edit
+      Save Changes
     </button>
   </mat-dialog-actions>
 </div>

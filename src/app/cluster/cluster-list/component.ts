@@ -231,7 +231,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(take(1))
       .subscribe(addedCluster => {
         this._router.navigate([`/projects/${this._selectedProject.id}/clusters/external/${addedCluster.id}`]);
-        this._notificationService.success(`The <strong>${addedCluster.name}</strong> cluster was added`);
+        this._notificationService.success(`The ${addedCluster.name} cluster was added`);
       });
   }
 
@@ -259,7 +259,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     event.stopPropagation();
 
     this._clusterService.showDisconnectClusterDialog(cluster, this._selectedProject.id).subscribe(_ => {
-      this._notificationService.success(`The <strong>${cluster.name}</strong> cluster was disconnected`);
+      this._notificationService.success(`The ${cluster.name} cluster was disconnected`);
     });
   }
 

@@ -21,6 +21,10 @@ mat-card {
     margin: 20px 0 0 0;
     padding: 30px 0;
 
+    &:not([class*=mat-elevation-z]) {
+      box-shadow: $border-box-shadow;
+    }
+
     .mat-card-header {
       border-radius: $border-radius $border-radius 0 0;
       line-height: 16px;
@@ -59,6 +63,10 @@ mat-card {
 }
 
 // Dialogs.
+.cdk-overlay-pane .mat-dialog-container {
+  box-shadow: $border-box-shadow;
+}
+
 .mat-dialog-container {
   max-width: $dialog-width;
   min-width: $dialog-width;
@@ -507,7 +515,7 @@ mat-chip-list {
 }
 
 // Tooltips.
-.mat-tooltip {
+mat-tooltip-component .mat-tooltip {
   font-size: $font-size-caption;
   margin-top: 5px;
 }

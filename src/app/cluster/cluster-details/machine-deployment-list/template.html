@@ -178,7 +178,7 @@ limitations under the License.
       No machine deployments available.
     </div>
 
-    <km-loader [isVisible]="isLoadingData()"></km-loader>
+    <km-loader *ngIf="isLoadingData()"></km-loader>
 
     <div [hidden]="!isPaginatorVisible()">
       <mat-paginator showFirstLastButtons></mat-paginator>

@@ -51,6 +51,18 @@
   @include mask-image("/assets/images/icons/collapse-menu.svg", 24px);
 }
 
+.km-icon-points-menu {
+  @include mask-image("/assets/images/icons/points-menu.svg", 18px);
+}
+
+.km-icon-remove {
+  @include mask-image("/assets/images/icons/remove.svg", 14px);
+}
+
+.km-icon-done {
+  @include mask-image("/assets/images/icons/tick.svg", 12px, $color: #00a3d9);
+}
+
 .km-icon-delete {
   @include mask-image("/assets/images/icons/trash.svg", 18px);
 }

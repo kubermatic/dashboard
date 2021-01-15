@@ -44,6 +44,7 @@ enum Controls {
   Labels = 'labels',
   AdmissionPlugins = 'admissionPlugins',
   SSHKeys = 'sshKeys',
+  PodNodeSelectorAdmissionPluginConfig = 'podNodeSelectorAdmissionPluginConfig',
 }
 
 @Component({
@@ -68,6 +69,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   masterVersions: MasterVersion[] = [];
   admissionPlugins: AdmissionPlugin[] = [];
   labels: object;
+  podNodeSelectorAdmissionPluginConfig: object;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   readonly Controls = Controls;
   private _datacenterSpec: Datacenter;
@@ -98,6 +100,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.ImagePullSecret]: new FormControl(''),
       [Controls.AuditLogging]: new FormControl(false),
       [Controls.AdmissionPlugins]: new FormControl([]),
+      [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
       [Controls.Labels]: new FormControl(''),
       [Controls.SSHKeys]: this._builder.control(''),
     });
@@ -145,8 +148,16 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      if (!this._adminSettings) {
+        this._adminSettings = settings;
+        this._setDefaultClusterType();
+      }
+
+      if (this._adminSettings.clusterTypeOptions !== settings.clusterTypeOptions) {
+        this._setDefaultClusterType();
+      }
+
       this._adminSettings = settings;
-      this._setDefaultClusterType();
     });
   }
 
@@ -165,6 +176,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   onLabelsChange(labels: object): void {
     this.labels = labels;
     this._clusterService.labels = this.labels;
+  }
+
+  onPodNodeSelectorAdmissionPluginConfigChange(config: object): void {
+    this.podNodeSelectorAdmissionPluginConfig = config;
+    this._clusterService.podNodeSelectorAdmissionPluginConfig = this.podNodeSelectorAdmissionPluginConfig;
   }
 
   isEnforced(control: Controls): boolean {

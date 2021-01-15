@@ -40,6 +40,10 @@ export class AddServiceAccountComponent implements OnInit {
   }
 
   addServiceAccount(): void {
+    if (!this.addServiceAccountForm.valid) {
+      return;
+    }
+
     const createServiceAccount: ServiceAccountModel = {
       name: this.addServiceAccountForm.controls.name.value,
       group: this.addServiceAccountForm.controls.group.value,
@@ -51,7 +55,7 @@ export class AddServiceAccountComponent implements OnInit {
       .subscribe(() => {
         this._matDialogRef.close(true);
         this._notificationService.success(
-          `The <strong>${createServiceAccount.name}</strong> service account was added to the <strong>${this.project.name}</strong> project`
+          `The ${createServiceAccount.name} service account was added to the ${this.project.name} project`
         );
       });
   }

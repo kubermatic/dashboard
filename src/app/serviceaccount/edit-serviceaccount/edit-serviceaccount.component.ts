@@ -41,6 +41,10 @@ export class EditServiceAccountComponent implements OnInit {
   }
 
   editServiceAccount(): void {
+    if (!this.editServiceAccountForm) {
+      return;
+    }
+
     const editServiceAccount: ServiceAccount = {
       id: this.serviceaccount.id,
       name: this.editServiceAccountForm.controls.name.value,
@@ -55,9 +59,7 @@ export class EditServiceAccountComponent implements OnInit {
       .pipe(take(1))
       .subscribe(() => {
         this._matDialogRef.close(true);
-        this._notificationService.success(
-          `The <strong>${this.serviceaccount.name}</strong> service account was updated`
-        );
+        this._notificationService.success(`The ${this.serviceaccount.name} service account was updated`);
       });
   }
 }

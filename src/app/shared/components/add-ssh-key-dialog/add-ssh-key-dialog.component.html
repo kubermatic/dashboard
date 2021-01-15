@@ -12,7 +12,9 @@ limitations under the License.
 -->
 <km-dialog-title>Add SSH Key</km-dialog-title>
 <mat-dialog-content>
-  <form [formGroup]="addSSHKeyForm">
+  <form [formGroup]="addSSHKeyForm"
+        (submit)="addSSHKey()"
+        id="add-ssh-key-form">
     <mat-form-field class="km-ssh-key-input">
       <mat-label>Name</mat-label>
       <input id="name"
@@ -47,8 +49,9 @@ limitations under the License.
 </mat-dialog-content>
 <mat-dialog-actions>
   <button id="km-add-ssh-key-dialog-save"
-          (click)="addSSHKey()"
+          type="submit"
           mat-flat-button
+          form="add-ssh-key-form"
           [disabled]="!addSSHKeyForm.valid">
     Add SSH key
   </button>

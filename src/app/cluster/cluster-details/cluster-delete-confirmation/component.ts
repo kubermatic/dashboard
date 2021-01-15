@@ -104,7 +104,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
         [Finalizer.DeleteVolumes]: !!this.deleteForm.controls.clusterVolumeCleanupCheckbox.value,
       })
       .subscribe(() => {
-        this._notificationService.success(`The <strong>${this.cluster.name}</strong> is being deleted`);
+        this._notificationService.success(`The ${this.cluster.name} is being deleted`);
         this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterDeleted');
         this._clusterService.refreshClusters();
       });
