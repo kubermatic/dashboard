@@ -92,7 +92,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(resourceGroups => (this.resourceGroups = resourceGroups));
 
-    this._clusterService.clusterChanges
+    merge(this._clusterService.clusterChanges, this.form.get(Controls.ResourceGroup).valueChanges)
       .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
       .pipe(
         tap(_ =>

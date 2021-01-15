@@ -18,9 +18,9 @@ limitations under the License.
     <input type="text"
            matInput
            [formControlName]="Controls.ResourceGroup"
-           [matAutocomplete]="auto">
+           [matAutocomplete]="autoResourceGroup">
     <mat-autocomplete autoActiveFirstOption
-                      #auto="matAutocomplete">
+                      #autoResourceGroup="matAutocomplete">
       <mat-option *ngFor="let resourceGroup of resourceGroups | filterBy: form.get(Controls.ResourceGroup).value"
                   [value]="resourceGroup">
         {{resourceGroup}}
@@ -43,9 +43,9 @@ limitations under the License.
     <input type="text"
            matInput
            [formControlName]="Controls.SecurityGroup"
-           [matAutocomplete]="auto">
+           [matAutocomplete]="autoSecurityGroup">
     <mat-autocomplete autoActiveFirstOption
-                      #auto="matAutocomplete">
+                      #autoSecurityGroup="matAutocomplete">
       <mat-option *ngFor="let securityGroup of securityGroups | filterBy: form.get(Controls.SecurityGroup).value"
                   [value]="securityGroup">
         {{securityGroup}}

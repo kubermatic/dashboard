@@ -140,7 +140,7 @@ export class Azure extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/securitygroups`;
+    const url = `${this._newRestRoot}/providers/${this._provider}/securitygroups`;
     return this._http
       .get<AzureSecurityGroups>(url, {headers: this._headers})
       .pipe(map(securityGroups => securityGroups.securityGroups));
