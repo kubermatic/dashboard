@@ -25,7 +25,7 @@ limitations under the License.
                 fxFlex="100%">
         <ng-template matStepLabel>{{step.name}}</ng-template>
         <div [ngSwitch]="step.name"
-             id="{{toStepID(step)}}-step"
+             id="{{step.id}}-step"
              class="km-wizard-step">
           <ng-container *ngSwitchCase="stepRegistry.Provider">
             <km-wizard-provider-step [formControl]="form.get(stepRegistry.Provider)"></km-wizard-provider-step>
@@ -53,7 +53,7 @@ limitations under the License.
         </div>
 
         <div class="km-button-navigation"
-             id="{{toStepID(step)}}-nav">
+             id="{{step.id}}-nav">
           <a mat-flat-button
              color="tertiary"
              routerLink="/projects/{{project?.id}}/clusters">Cancel</a>
@@ -67,7 +67,7 @@ limitations under the License.
                   matStepperPrevious
                   *ngIf="!first">Back
           </button>
-          <button id="km-wizard-{{toStepID(step)}}-next-btn"
+          <button id="km-wizard-{{step.id}}-next-btn"
                   mat-flat-button
                   matStepperNext
                   [disabled]="invalid"

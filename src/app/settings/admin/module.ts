@@ -10,16 +10,32 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
-
-import {SharedModule} from '../../shared/shared.module';
-
-import {AdminSettingsComponent} from './component';
-import {AdminSettingsRoutingModule} from './routing';
+import {PresetListComponent} from '@app/settings/admin/presets/component';
+import {PresetDialogComponent} from '@app/settings/admin/presets/dialog/component';
+import {PresetStepComponent} from '@app/settings/admin/presets/dialog/steps/preset/component';
+import {PresetProviderStepComponent} from '@app/settings/admin/presets/dialog/steps/provider/component';
+import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
+import {PresetSettingsStepComponent} from '@app/settings/admin/presets/dialog/steps/settings/component';
+import {AlibabaSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/alibaba/component';
+import {AnexiaSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/anexia/component';
+import {AWSSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/aws/component';
+import {AzureSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/azure/component';
+import {DigitaloceanSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/digitalocean/component';
+import {GCPSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/gcp/component';
+import {HetznerSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/hetzner/component';
+import {KubevirtSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/kubevirt/component';
+import {OpenstackSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/openstack/component';
+import {PacketSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/packet/component';
+import {VSphereSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/vsphere/component';
+import {EditPresetDialogComponent} from '@app/settings/admin/presets/edit-dialog/component';
+import {SharedModule} from '@shared/shared.module';
 import {AddAdminDialogComponent} from './admins/add-admin-dialog/component';
 import {AdminsComponent} from './admins/component';
+import {AdminSettingsComponent} from './component';
 import {CustomLinksFormComponent} from './custom-link-form/component';
-import {DatacenterDataDialogComponent} from './dynamic-datacenters/datacenter-data-dialog/component';
 import {DynamicDatacentersComponent} from './dynamic-datacenters/component';
+import {DatacenterDataDialogComponent} from './dynamic-datacenters/datacenter-data-dialog/component';
+import {AdminSettingsRoutingModule} from './routing';
 
 @NgModule({
   imports: [SharedModule, AdminSettingsRoutingModule],
@@ -30,6 +46,24 @@ import {DynamicDatacentersComponent} from './dynamic-datacenters/component';
     DatacenterDataDialogComponent,
     DynamicDatacentersComponent,
     AdminsComponent,
+    PresetListComponent,
+    PresetDialogComponent,
+    EditPresetDialogComponent,
+    PresetStepComponent,
+    PresetProviderStepComponent,
+    PresetSettingsStepComponent,
+    AlibabaSettingsComponent,
+    AnexiaSettingsComponent,
+    AWSSettingsComponent,
+    AzureSettingsComponent,
+    DigitaloceanSettingsComponent,
+    GCPSettingsComponent,
+    HetznerSettingsComponent,
+    KubevirtSettingsComponent,
+    OpenstackSettingsComponent,
+    PacketSettingsComponent,
+    VSphereSettingsComponent,
   ],
+  providers: [PresetDialogService],
 })
 export class AdminSettingsModule {}

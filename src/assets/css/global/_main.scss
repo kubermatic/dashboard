@@ -418,3 +418,20 @@ km-dashboard {
     }
   }
 }
+
+.cdk-overlay-pane {
+  &.km-preset-dialog {
+    max-height: 660px;
+    overflow: hidden;
+
+    .mat-dialog-container {
+      min-width: 600px;
+      overflow: hidden;
+    }
+
+    .mat-horizontal-content-container {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+  }
+}

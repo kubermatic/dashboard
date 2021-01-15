@@ -1,0 +1,46 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<form [formGroup]="form"
+      fxFlex="100%"
+      fxLayout="column">
+  <div style="margin-bottom: 20px;">Create a Preset with a single provider and add the other providers later.</div>
+  <mat-form-field fxFlex>
+    <mat-label>Preset Name</mat-label>
+    <input matInput
+           [formControlName]="controls.Name"
+           type="text"
+           title="name"
+           autocomplete="off"
+           required>
+  </mat-form-field>
+
+  <div class="optional-section">Optional Settings</div>
+
+  <mat-form-field fxFlex>
+    <mat-label>Restrict Preset Group to Domain</mat-label>
+    <input matInput
+           [formControlName]="controls.Domain"
+           type="text"
+           title="domain"
+           autocomplete="off">
+  </mat-form-field>
+
+  <mat-checkbox [formControlName]="controls.Disable"
+                class="km-disable-ripple">
+    Hide upon creation
+    <div fxFlexAlign="center"
+         fxLayoutAlign="center"
+         class="km-icon-info km-pointer tooltip"
+         matTooltip="Controls if the Preset should be enabled or disabled after creation. Disabled Presets cannot be used to create new clusters."></div>
+  </mat-checkbox>
+</form>

@@ -9,10 +9,152 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class PresetList {
+import {Metadata} from '@shared/entity/common';
+import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
+import * as _ from 'lodash';
+
+export class SimplePresetList {
   names: string[] = [];
 
   constructor(...names: string[]) {
     this.names = names;
   }
+}
+
+export class PresetList {
+  items: Preset[];
+}
+
+export class Preset {
+  name: string;
+  enabled: boolean;
+  providers: PresetProvider[];
+}
+
+export class PresetProvider {
+  name: NodeProvider;
+  enabled: boolean;
+}
+
+export class UpdatePresetStatusReq {
+  enabled: boolean;
+}
+
+export class CreatePresetReq {
+  metadata: Metadata;
+  spec: CreatePresetSpec;
+
+  constructor() {
+    this.metadata = new Metadata();
+    this.spec = new CreatePresetSpec();
+  }
+}
+
+export class CreatePresetSpec {
+  alibaba?: AlibabaPresetSpec;
+  anexia?: AnexiaPresetSpec;
+  aws?: AWSPresetSpec;
+  azure?: AzurePresetSpec;
+  digitalocean?: DigitaloceanPresetSpec;
+  gcp?: GCPPresetSpec;
+  hetzner?: HetznerPresetSpec;
+  kubevirt?: KubevirtPresetSpec;
+  openstack?: OpenstackPresetSpec;
+  packet?: PacketPresetSpec;
+  vsphere?: VSpherePresetSpec;
+
+  requiredEmailDomain?: string;
+  enabled?: boolean;
+
+  provider(): NodeProvider {
+    const providerKey = Object.keys(this).find(key => !_.isEmpty(this[key]) && _.isObject(this[key]));
+    return providerKey ? NodeProviderConstants.newNodeProvider(providerKey) : NodeProvider.NONE;
+  }
+}
+
+export class PresetProviderSpec {
+  enabled?: boolean;
+  datacenter?: string;
+}
+
+export class AlibabaPresetSpec extends PresetProviderSpec {
+  accessKeyId: string;
+  accessKeySecret: string;
+}
+
+export class AnexiaPresetSpec extends PresetProviderSpec {
+  token: string;
+}
+
+export class AWSPresetSpec extends PresetProviderSpec {
+  accessKeyID: string;
+  secretAccessKey: string;
+
+  vpcID?: string;
+  routeTableID?: string;
+  instanceProfileName?: string;
+  securityGroupID?: string;
+  roleARN?: string;
+}
+
+export class AzurePresetSpec extends PresetProviderSpec {
+  tenantID: string;
+  subscriptionID: string;
+  clientID: string;
+  clientSecret: string;
+
+  resourceGroup?: string;
+  vnet?: string;
+  subnet?: string;
+  routeTable?: string;
+  securityGroup?: string;
+}
+
+export class DigitaloceanPresetSpec extends PresetProviderSpec {
+  token: string;
+}
+
+export class GCPPresetSpec extends PresetProviderSpec {
+  serviceAccount: string;
+
+  network?: string;
+  subnetwork?: string;
+}
+
+export class HetznerPresetSpec extends PresetProviderSpec {
+  token: string;
+}
+
+export class KubevirtPresetSpec extends PresetProviderSpec {
+  kubeconfig: string;
+}
+
+export class OpenstackPresetSpec extends PresetProviderSpec {
+  username: string;
+  password: string;
+  tenant: string;
+  tenantID: string;
+  domain: string;
+
+  network?: string;
+  securityGroups?: string;
+  floatingIpPool?: string;
+  routerID?: string;
+  subnetID?: string;
+}
+
+export class PacketPresetSpec extends PresetProviderSpec {
+  apiKey: string;
+  projectID: string;
+
+  billingCycle?: string;
+}
+
+export class VSpherePresetSpec extends PresetProviderSpec {
+  username: string;
+  password: string;
+
+  vmNetName?: string;
+  datastore?: string;
+  datastoreCluster?: string;
 }
