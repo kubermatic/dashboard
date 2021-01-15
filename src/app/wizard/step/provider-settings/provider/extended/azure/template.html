@@ -40,11 +40,20 @@ limitations under the License.
 
   <mat-form-field fxFlex>
     <mat-label>Security Group</mat-label>
-    <input matInput
+    <input type="text"
+           matInput
            [formControlName]="Controls.SecurityGroup"
-           [name]="Controls.SecurityGroup"
-           type="text"
-           autocomplete="off">
+           [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption
+                      #auto="matAutocomplete">
+      <mat-option *ngFor="let securityGroup of securityGroups | filterBy: form.get(Controls.SecurityGroup).value"
+                  [value]="securityGroup">
+        {{securityGroup}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-hint *ngIf="!hasRequiredCredentials() || !form.get(Controls.ResourceGroup).value">
+      Enter your credentials and resource group to load autocompletions.
+    </mat-hint>
   </mat-form-field>
 
   <mat-form-field fxFlex>

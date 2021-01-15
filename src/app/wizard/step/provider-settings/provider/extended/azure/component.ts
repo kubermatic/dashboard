@@ -48,6 +48,7 @@ enum Controls {
 export class AzureProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
   resourceGroups: string[] = [];
+  securityGroups: string[] = [];
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -91,9 +92,21 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(resourceGroups => (this.resourceGroups = resourceGroups));
 
+    this._clusterService.clusterChanges
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
+      .pipe(
+        tap(_ =>
+          !this.hasRequiredCredentials() || !this.form.get(Controls.ResourceGroup).value
+            ? this._clearSecurityGroup()
+            : null
+        )
+      )
+      .pipe(switchMap(_ => this._securityGroupObservable()))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(securityGroups => (this.securityGroups = securityGroups));
+
     merge(
       this.form.get(Controls.RouteTable).valueChanges,
-      this.form.get(Controls.SecurityGroup).valueChanges,
       this.form.get(Controls.Subnet).valueChanges,
       this.form.get(Controls.VNet).valueChanges
     )
@@ -105,6 +118,13 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(rg => {
         this._clusterService.cluster.spec.cloud.azure.resourceGroup = rg;
+      });
+
+    this.form
+      .get(Controls.SecurityGroup)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(sg => {
+        this._clusterService.cluster.spec.cloud.azure.securityGroup = sg;
       });
   }
 
@@ -156,6 +176,41 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
     this.form.get(Controls.ResourceGroup).setValue('');
   }
 
+  private _securityGroupObservable(): Observable<string[]> {
+    let location = '';
+    return this._datacenterService
+      .getDatacenter(this._clusterService.cluster.spec.cloud.dc)
+      .pipe(take(1))
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
+      .pipe(tap(dc => (location = dc.spec.azure.location)))
+      .pipe(
+        switchMap(_dc =>
+          this._presets
+            .provider(NodeProvider.AZURE)
+            .clientID(this._clusterService.cluster.spec.cloud.azure.clientID)
+            .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
+            .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
+            .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
+            .resourceGroup(this._clusterService.cluster.spec.cloud.azure.resourceGroup)
+            .location(location)
+            .credential(this._presets.preset)
+            .securityGroups()
+            .pipe(
+              map(securityGroups => _.sortBy(securityGroups, sg => sg.toLowerCase())),
+              catchError(() => {
+                this._clearSecurityGroup();
+                return onErrorResumeNext(EMPTY);
+              })
+            )
+        )
+      );
+  }
+
+  private _clearSecurityGroup(): void {
+    this.securityGroups = [];
+    this.form.get(Controls.SecurityGroup).setValue('');
+  }
+
   private _enable(enable: boolean, name: string): void {
     if (enable && this.form.get(name).disabled) {
       this.form.get(name).enable();
@@ -172,7 +227,6 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
         cloud: {
           azure: {
             routeTable: this.form.get(Controls.RouteTable).value,
-            securityGroup: this.form.get(Controls.SecurityGroup).value,
             subnet: this.form.get(Controls.Subnet).value,
             vnet: this.form.get(Controls.VNet).value,
           } as AzureCloudSpec,
