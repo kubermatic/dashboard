@@ -19,6 +19,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() settings: AdminSettings;
   labels: object;
+  podNodeSelectorAdmissionPluginConfig: object;
   clusterSpecForm: FormGroup;
   masterVersions: MasterVersion[] = [];
   defaultVersion: string;
@@ -44,6 +45,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       usePodSecurityPolicyAdmissionPlugin: new FormControl(this.cluster.spec.usePodSecurityPolicyAdmissionPlugin),
       usePodNodeSelectorAdmissionPlugin: new FormControl(this.cluster.spec.usePodNodeSelectorAdmissionPlugin),
       auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
+      podNodeSelectorAdmissionPluginConfig: new FormControl(''),
       labels: new FormControl(''),
     });
 
@@ -124,6 +126,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       imagePullSecret: this.clusterSpecForm.controls.imagePullSecret.value,
       usePodSecurityPolicyAdmissionPlugin: this.clusterSpecForm.controls.usePodSecurityPolicyAdmissionPlugin.value,
       usePodNodeSelectorAdmissionPlugin: this.clusterSpecForm.controls.usePodNodeSelectorAdmissionPlugin.value,
+      podNodeSelectorAdmissionPluginConfig: this.podNodeSelectorAdmissionPluginConfig,
       auditLogging: {
         enabled: this.clusterSpecForm.controls.auditLogging.value,
       },

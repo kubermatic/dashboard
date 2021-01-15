@@ -47,6 +47,12 @@
         </span>
         <span>Pod Node Selector</span>
       </div>
+      <div *ngIf="cluster.spec.usePodNodeSelectorAdmissionPlugin && cluster.spec.podNodeSelectorAdmissionPluginConfig && displayTags(cluster.spec.podNodeSelectorAdmissionPluginConfig)"
+           class="km-summary-tags">
+        <div class="km-summary-row">Pod Node Selector Config</div>
+        <km-labels [labels]="cluster.spec.podNodeSelectorAdmissionPluginConfig"
+                   emptyMessage="No assigned config"></km-labels>
+      </div>
       <div *ngIf="cluster.labels && displayTags(cluster.labels)"
            class="km-summary-tags">
         <div class="km-summary-row">Cluster Labels</div>

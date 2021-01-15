@@ -42,6 +42,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     type: ClusterType.Empty,
     version: '',
     labels: {},
+    podNodeSelectorAdmissionPluginConfig: {},
   };
   private _clusterProviderSettingsFormData: ClusterProviderSettingsForm = {
     valid: false,
@@ -81,7 +82,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   ) {
     this.cluster = {
       name: '',
-      spec: {version: '', cloud: {dc: ''}, machineNetworks: []},
+      spec: {version: '', cloud: {dc: ''}, machineNetworks: [], podNodeSelectorAdmissionPluginConfig: {}},
       type: ClusterType.Empty,
     };
     this.addNodeData = {
@@ -117,6 +118,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         this.cluster.labels = this._clusterSpecFormData.labels;
         this.cluster.spec.usePodSecurityPolicyAdmissionPlugin = this._clusterSpecFormData.usePodSecurityPolicyAdmissionPlugin;
         this.cluster.spec.usePodNodeSelectorAdmissionPlugin = this._clusterSpecFormData.usePodNodeSelectorAdmissionPlugin;
+        this.cluster.spec.podNodeSelectorAdmissionPluginConfig = this._clusterSpecFormData.podNodeSelectorAdmissionPluginConfig;
 
         if (this._clusterSpecFormData.type === ClusterType.OpenShift) {
           this.cluster.spec.openshift = {

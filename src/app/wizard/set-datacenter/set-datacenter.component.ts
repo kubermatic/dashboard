@@ -96,6 +96,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
       imagePullSecret: this.cluster.spec.openshift ? this.cluster.spec.openshift.imagePullSecret : '',
       usePodSecurityPolicyAdmissionPlugin,
       usePodNodeSelectorAdmissionPlugin: this.cluster.spec.usePodNodeSelectorAdmissionPlugin,
+      podNodeSelectorAdmissionPluginConfig: this.cluster.spec.podNodeSelectorAdmissionPluginConfig,
       auditLogging,
       valid: true,
     });
