@@ -49,6 +49,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
   private readonly _debounceTime = 1000;
   readonly Controls = Controls;
   resourceGroups: string[] = [];
+  routeTables: string[] = [];
   securityGroups: string[] = [];
 
   constructor(
@@ -100,6 +101,20 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .pipe(
         tap(_ =>
           !this.hasRequiredCredentials() || !this.form.get(Controls.ResourceGroup).value
+            ? this._clearRouteTable()
+            : null
+        )
+      )
+      .pipe(switchMap(_ => (this.form.get(Controls.ResourceGroup).value ? this._routeTableObservable() : of([]))))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(routeTables => (this.routeTables = routeTables));
+
+    merge(this._clusterService.clusterChanges, this.form.get(Controls.ResourceGroup).valueChanges)
+      .pipe(debounceTime(this._debounceTime))
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
+      .pipe(
+        tap(_ =>
+          !this.hasRequiredCredentials() || !this.form.get(Controls.ResourceGroup).value
             ? this._clearSecurityGroup()
             : null
         )
@@ -108,11 +123,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(securityGroups => (this.securityGroups = securityGroups));
 
-    merge(
-      this.form.get(Controls.RouteTable).valueChanges,
-      this.form.get(Controls.Subnet).valueChanges,
-      this.form.get(Controls.VNet).valueChanges
-    )
+    merge(this.form.get(Controls.Subnet).valueChanges, this.form.get(Controls.VNet).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
 
@@ -121,6 +132,13 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(rg => {
         this._clusterService.cluster.spec.cloud.azure.resourceGroup = rg;
+      });
+
+    this.form
+      .get(Controls.RouteTable)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(rt => {
+        this._clusterService.cluster.spec.cloud.azure.routeTable = rt;
       });
 
     this.form
@@ -179,6 +197,41 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
     this.form.get(Controls.ResourceGroup).setValue('');
   }
 
+  private _routeTableObservable(): Observable<string[]> {
+    let location = '';
+    return this._datacenterService
+      .getDatacenter(this._clusterService.cluster.spec.cloud.dc)
+      .pipe(take(1))
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
+      .pipe(tap(dc => (location = dc.spec.azure.location)))
+      .pipe(
+        switchMap(_dc =>
+          this._presets
+            .provider(NodeProvider.AZURE)
+            .clientID(this._clusterService.cluster.spec.cloud.azure.clientID)
+            .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
+            .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
+            .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
+            .resourceGroup(this.form.get(Controls.ResourceGroup).value)
+            .location(location)
+            .credential(this._presets.preset)
+            .routeTables()
+            .pipe(
+              map(routeTables => _.sortBy(routeTables, rt => rt.toLowerCase())),
+              catchError(() => {
+                this._clearRouteTable();
+                return onErrorResumeNext(EMPTY);
+              })
+            )
+        )
+      );
+  }
+
+  private _clearRouteTable(): void {
+    this.routeTables = [];
+    this.form.get(Controls.RouteTable).setValue('');
+  }
+
   private _securityGroupObservable(): Observable<string[]> {
     let location = '';
     return this._datacenterService
@@ -229,7 +282,6 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       spec: {
         cloud: {
           azure: {
-            routeTable: this.form.get(Controls.RouteTable).value,
             subnet: this.form.get(Controls.Subnet).value,
             vnet: this.form.get(Controls.VNet).value,
           } as AzureCloudSpec,

@@ -29,13 +29,23 @@ limitations under the License.
     <mat-hint *ngIf="!hasRequiredCredentials()">Enter your credentials to load autocompletions.</mat-hint>
   </mat-form-field>
 
+
   <mat-form-field fxFlex>
     <mat-label>Route Table</mat-label>
-    <input matInput
+    <input type="text"
+           matInput
            [formControlName]="Controls.RouteTable"
-           [name]="Controls.RouteTable"
-           type="text"
-           autocomplete="off">
+           [matAutocomplete]="autoRouteTable">
+    <mat-autocomplete autoActiveFirstOption
+                      #autoRouteTable="matAutocomplete">
+      <mat-option *ngFor="let routeTable of routeTables | filterBy: form.get(Controls.RouteTable).value"
+                  [value]="routeTable">
+        {{routeTable}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-hint *ngIf="!hasRequiredCredentials() || !form.get(Controls.ResourceGroup).value">
+      Enter your credentials and resource group to load autocompletions.
+    </mat-hint>
   </mat-form-field>
 
   <mat-form-field fxFlex>

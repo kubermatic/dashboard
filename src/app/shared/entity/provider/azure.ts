@@ -22,6 +22,10 @@ export class AzureZones {
   zones: string[];
 }
 
+export class AzureRouteTables {
+  routeTables: string[];
+}
+
 export class AzureSecurityGroups {
   securityGroups: string[];
 }

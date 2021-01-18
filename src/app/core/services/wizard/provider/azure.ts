@@ -15,6 +15,7 @@ import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {Provider} from './provider';
 import {
   AzureResourceGroups,
+  AzureRouteTables,
   AzureSecurityGroups,
   AzureSizes,
   AzureZones,
@@ -144,6 +145,30 @@ export class Azure extends Provider {
     return this._http
       .get<AzureSecurityGroups>(url, {headers: this._headers})
       .pipe(map(securityGroups => securityGroups.securityGroups));
+  }
+
+  routeTables(onLoadingCb: () => void = null): Observable<string[]> {
+    this._setRequiredHeaders(
+      Azure.Header.SubscriptionID,
+      Azure.Header.TenantID,
+      Azure.Header.ClientID,
+      Azure.Header.ClientSecret,
+      Azure.Header.ResourceGroup,
+      Azure.Header.Location
+    );
+
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._newRestRoot}/providers/${this._provider}/routetables`;
+    return this._http
+      .get<AzureRouteTables>(url, {headers: this._headers})
+      .pipe(map(routeTables => routeTables.routeTables));
   }
 
   availabilityZones(onLoadingCb: () => void = null): Observable<AzureZones> {
