@@ -17,7 +17,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {catchError, debounceTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as _ from 'lodash';
 import {DatacenterService} from '@core/services/datacenter/service';
 
@@ -46,6 +46,7 @@ enum Controls {
   ],
 })
 export class AzureProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  private readonly _debounceTime = 1000;
   readonly Controls = Controls;
   resourceGroups: string[] = [];
   securityGroups: string[] = [];
@@ -86,6 +87,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .subscribe(_ => this.form.reset());
 
     this._clusterService.clusterChanges
+      .pipe(debounceTime(this._debounceTime))
       .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
       .pipe(tap(_ => (!this.hasRequiredCredentials() ? this._clearResourceGroup() : null)))
       .pipe(switchMap(_ => this._resourceGroupObservable()))
@@ -93,6 +95,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .subscribe(resourceGroups => (this.resourceGroups = resourceGroups));
 
     merge(this._clusterService.clusterChanges, this.form.get(Controls.ResourceGroup).valueChanges)
+      .pipe(debounceTime(this._debounceTime))
       .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
       .pipe(
         tap(_ =>

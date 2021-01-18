@@ -17,7 +17,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import * as _ from 'lodash';
 
 enum Controls {
@@ -44,6 +44,7 @@ enum Controls {
   ],
 })
 export class AWSProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  private readonly _debounceTime = 1000;
   readonly Controls = Controls;
   securityGroups: string[] = [];
 
@@ -75,6 +76,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       });
 
     this._clusterService.clusterChanges
+      .pipe(debounceTime(this._debounceTime))
       .pipe(filter(_ => this._clusterService.provider === NodeProvider.AWS))
       .pipe(tap(_ => (!this.hasRequiredCredentials() ? this._clearSecurityGroup() : null)))
       .pipe(switchMap(_ => this._securityGroupObservable()))
