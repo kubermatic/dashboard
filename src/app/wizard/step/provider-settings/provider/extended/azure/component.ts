@@ -16,7 +16,7 @@ import {AzureCloudSpec, CloudSpec, Cluster, ClusterSpec} from '@shared/entity/cl
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
+import {EMPTY, merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as _ from 'lodash';
 import {DatacenterService} from '@core/services/datacenter/service';
@@ -104,7 +104,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
             : null
         )
       )
-      .pipe(switchMap(_ => this._securityGroupObservable()))
+      .pipe(switchMap(_ => (this.form.get(Controls.ResourceGroup).value ? this._securityGroupObservable() : of([]))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(securityGroups => (this.securityGroups = securityGroups));
 
