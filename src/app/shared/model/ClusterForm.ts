@@ -22,6 +22,7 @@ export class ClusterSpecForm {
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
   admissionPlugins?: string[];
+  podNodeSelectorAdmissionPluginConfig?: object;
   auditLogging?: AuditLoggingSettings;
   valid: boolean;
 }

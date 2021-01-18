@@ -97,6 +97,12 @@ limitations under the License.
                                [value]="false">
           </km-property-boolean>
         </div>
+        <km-property *ngIf="cluster.spec.podNodeSelectorAdmissionPluginConfig">
+          <div key>Pod Node Selector Config</div>
+          <div value>
+            <km-labels [labels]="cluster.spec.podNodeSelectorAdmissionPluginConfig"></km-labels>
+          </div>
+        </km-property>
         <km-property-boolean label="Audit Logging"
                              [value]="cluster.spec.auditLogging?.enabled">
         </km-property-boolean>
