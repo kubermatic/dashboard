@@ -8,23 +8,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+export PATH="$PATH:/usr/local/go/bin"
 export KUBERMATIC_VERSION=latest
-export PATH=$PATH:/usr/local/go/bin
-export SEED_NAME=prow-build-cluster
-export TARGET_BRANCH=${PULL_BASE_REF:-master}
+export TARGET_BRANCH="${PULL_BASE_REF:-master}"
+export KUBERMATIC_OIDC_LOGIN="roxy@loodse.com"
+export KUBERMATIC_OIDC_PASSWORD="password"
 
-if [[ -z ${JOB_NAME} ]]; then
-	echo "This script should only be running in a CI environment."
-	exit 1
-fi
+# Set docker config
+echo "$IMAGE_PULL_SECRET_DATA" | base64 -d > /config.json
 
-if [[ -z ${PROW_JOB_ID} ]]; then
-	echo "Build id env variable has to be set."
-	exit 1
-fi
-
+REPO_ROOT="$(realpath .)"
 cd "${GOPATH}/src/github.com/kubermatic/kubermatic"
-source hack/lib.sh
 
 if [[ ${TARGET_BRANCH} == release* ]]; then
   VERSION=${TARGET_BRANCH#release/}
@@ -35,245 +30,48 @@ if [[ ${TARGET_BRANCH} == release* ]]; then
   export KUBERMATIC_VERSION=${TAG_VERSION}
 fi
 
-TEST_NAME="Get Vault token"
-echodate "Getting secrets from Vault"
-export VAULT_ADDR=https://vault.loodse.com/
-export VAULT_TOKEN=$(vault write \
-  --format=json auth/approle/login \
-  role_id=$VAULT_ROLE_ID secret_id=$VAULT_SECRET_ID \
-  | jq .auth.client_token -r)
-export VALUES_FILE=/tmp/values.yaml
-TEST_NAME="Get Values file from Vault"
-retry 5 vault kv get -field=values.yaml \
-  dev/seed-clusters/ci.kubermatic.io > $VALUES_FILE
-
-# Set docker config
-echo $IMAGE_PULL_SECRET_DATA | base64 -d > /config.json
-
-# Start docker daemon
-if ps xf| grep -v grep | grep -q dockerd; then
-  echodate "Docker already started"
-else
-  echodate "Starting docker"
-  dockerd > /tmp/docker.log 2>&1 &
-  echodate "Started docker"
+REPOSUFFIX=""
+if [ "$KUBERMATIC_EDITION" != "ce" ]; then
+  REPOSUFFIX="-$KUBERMATIC_EDITION"
 fi
 
-function docker_logs {
-  originalRC=$?
-  if [[ $originalRC -ne 0 ]]; then
-    echodate "Printing docker logs"
-    cat /tmp/docker.log
-    echodate "Done printing docker logs"
-  fi
-  return $originalRC
-}
-appendTrap docker_logs EXIT
-
-# Wait for it to start
-echodate "Waiting for docker"
-retry 5 docker stats --no-stream
-echodate "Docker became ready"
-
-# Load kind image
-if docker images | grep -q kindest; then
-  echodate "Kindest image already loaded"
-else
-  echodate "Loading kindest image"
-  docker load --input /kindest.tar
-  echodate "Loaded kindest image"
-fi
-
-# Prevent mtu-related timeouts
-echodate "Setting iptables rule to clamp mss to path mtu"
-iptables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
-
-# Make debugging a bit better
-echodate "Confuguring bash"
-cat <<EOF >>~/.bashrc
-# Gets set to the CI clusters kubeconfig from a preset
-unset KUBECONFIG
-cn ()
-{
-    kubectl config set-context \$(kubectl config current-context) --namespace=\$1
-}
-kubeconfig ()
-{
-    TMP_KUBECONFIG=\$(mktemp);
-    kubectl get secret admin-kubeconfig -o go-template='{{ index .data "kubeconfig" }}' | base64 -d > \$TMP_KUBECONFIG;
-    export KUBECONFIG=\$TMP_KUBECONFIG;
-    cn kube-system
-}
-# this alias makes it so that watch can be used with other aliases, like "watch k get pods"
-alias watch='watch '
-alias k=kubectl
-alias ll='ls -lh --file-type --group-directories-first'
-alias lll='ls -lahF --group-directories-first'
-source <(k completion bash )
-source <(k completion bash | sed s/kubectl/k/g)
+HELM_VALUES_FILE="$(mktemp)"
+cat <<EOF >$HELM_VALUES_FILE
+kubermaticOperator:
+  image:
+    repository: "quay.io/kubermatic/kubermatic$REPOSUFFIX"
+    tag: "$KUBERMATIC_VERSION"
 EOF
 
-# The container runtime allows us to change the content but not to change the inode
-# which is what sed -i does, so write to a tempfile and write the tempfiles content back.
+# append custom Dex configuration
+cat hack/ci/testdata/oauth_values.yaml >> $HELM_VALUES_FILE
+
 # The alias makes it easier to access the port-forwarded Dex inside the Kind cluster;
 # the token issuer cannot be localhost:5556, because pods inside the cluster would not
-# find Dex anymore.
-echodate "Setting dex.oauth alias in /etc/hosts"
-temp_hosts="$(mktemp)"
-sed 's/localhost/localhost dex.oauth/' /etc/hosts > $temp_hosts
-cat $temp_hosts >/etc/hosts
-echodate "Set dex.oauth alias in /etc/hosts"
-
-if kind get clusters | grep -q ${SEED_NAME}; then
-  echodate "Kind cluster already exists"
-else
-  # Create kind cluster
-  TEST_NAME="Create kind cluster"
-  echodate "Creating the kind cluster"
-  export KUBECONFIG=~/.kube/config
-  kind create cluster --name ${SEED_NAME} --image=kindest/node:v1.15.6
+# find Dex anymore. As this script can be run multiple times in the same CI job,
+# we must make sure to only add the alias once.
+if ! grep oauth /etc/hosts > /dev/null; then
+  echodate "Setting dex.oauth alias in /etc/hosts"
+  # The container runtime allows us to change the content but not to change the inode
+  # which is what sed -i does, so write to a tempfile and write the tempfiles content back.
+  temp_hosts="$(mktemp)"
+  sed 's/localhost/localhost dex.oauth/' /etc/hosts > $temp_hosts
+  cat $temp_hosts > /etc/hosts
+  echodate "Set dex.oauth alias in /etc/hosts"
 fi
-
-if ls /var/log/clusterexposer.log &>/dev/null; then
-  echodate "Cluster-Exposer already running"
-else
-  echodate "Starting clusterexposer"
-  CGO_ENABLED=0 go build --tags "$KUBERMATIC_EDITION" -v -o /tmp/clusterexposer ./pkg/test/clusterexposer/cmd
-  CGO_ENABLED=0 /tmp/clusterexposer \
-    --kubeconfig-inner "$KUBECONFIG" \
-    --kubeconfig-outer "/etc/kubeconfig/kubeconfig" \
-    --build-id "$PROW_JOB_ID" &> /var/log/clusterexposer.log &
-fi
-
-function print_cluster_exposer_logs {
-  originalRC=$?
-
-  # Tolerate errors and just continue
-  set +e
-  echodate "Printing clusterexposer logs"
-  cat /var/log/clusterexposer.log
-  echodate "Done printing clusterexposer logs"
-  set -e
-
-  return $originalRC
-}
-appendTrap print_cluster_exposer_logs EXIT
-
-TEST_NAME="Wait for cluster exposer"
-echodate "Waiting for cluster exposer to be running"
-
-retry 5 curl --fail http://127.0.0.1:2047/metrics -o /dev/null
-echodate "Cluster exposer is running"
-
-echodate "Setting up iptables rules for to make nodeports available"
-iptables -t nat -A PREROUTING -i eth0 -p tcp -m multiport --dports=30000:33000 -j DNAT --to-destination 172.17.0.2
-# By default all traffic gets dropped unless specified (tested with docker
-# server 18.09.1)
-iptables -t filter -I DOCKER-USER -d 172.17.0.2/32 ! -i docker0 -o docker0 -p tcp -m multiport --dports=30000:33000 -j ACCEPT
-
-# Docker sets up a MASQUERADE rule for postrouting, so nothing to do for us
-echodate "Successfully set up iptables rules for nodeports"
-
-echodate "Creating kubermatic-fast storageclass"
-TEST_NAME="Create kubermatic-fast storageclass"
-retry 5 kubectl get storageclasses.storage.k8s.io standard -o json \
-  |jq 'del(.metadata)|.metadata.name = "kubermatic-fast"'\
-  |kubectl apply -f -
-echodate "Successfully created kubermatic-fast storageclass"
-
-INITIAL_MANIFESTS="$(mktemp)"
-cat <<EOF >$INITIAL_MANIFESTS
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: tiller
-  namespace: kube-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: tiller
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
-subjects:
-  - kind: ServiceAccount
-    name: tiller
-    namespace: kube-system
----
-EOF
-
-TEST_NAME="Create Helm bindings"
-echodate "Creating Helm bindings"
-retry 5 kubectl apply -f $INITIAL_MANIFESTS
-
-TEST_NAME="Deploy Tiller"
-if kubectl get deployment -n kube-system tiller-deploy &>/dev/null; then
-  echodate "Tiller is already deployed."
-else
-  echodate "Deploying Tiller"
-  helm init --wait --service-account=tiller
-fi
-
-TEST_NAME="Deploy Dex"
-echodate "Deploying Dex"
 
 export KUBERMATIC_DEX_VALUES_FILE=$(realpath hack/ci/testdata/oauth_values.yaml)
 
-if kubectl get namespace oauth; then
-  echodate "Dex already deployed"
-else
-  retry 5 helm install --wait --timeout 180 \
-    --values $KUBERMATIC_DEX_VALUES_FILE \
-    --namespace oauth \
-    --name oauth charts/oauth/
-fi
+# Build binaries and load the Docker images into the kind cluster
+echodate "Building binaries for $KUBERMATIC_VERSION"
+TEST_NAME="Build Kubermatic binaries"
+make kubermatic-installer
 
-export KUBERMATIC_OIDC_LOGIN="roxy@loodse.com"
-export KUBERMATIC_OIDC_PASSWORD="password"
-
-TEST_NAME="Deploy Kubermatic CRDs"
-echodate "Deploying Kubermatic CRDs"
-
-retry 5 kubectl apply -f charts/kubermatic/crd/
-
-function check_all_deployments_ready() {
-  local namespace="$1"
-
-  # check that Deployments have been created
-  local deployments
-  deployments=$(kubectl -n $namespace get deployments -o json)
-
-  if [ $(jq '.items | length' <<< $deployments) -eq 0 ]; then
-    echodate "No Deployments created yet."
-    return 1
-  fi
-
-  # check that all Deployments are ready
-  local unready
-  unready=$(jq -r '[.items[] | select(.spec.replicas > 0) | select (.status.availableReplicas < .spec.replicas) | .metadata.name] | @tsv' <<< $deployments)
-  if [ -n "$unready" ]; then
-    echodate "Not all Deployments have finished rolling out, namely: $unready"
-    return 1
-  fi
-
-  return 0
-}
-
-# We don't need a valid certificate (and can't even get one), but still need
-# to have the CRDs installed so we can at least create a Certificate resource.
-TEST_NAME="Deploy cert-manager CRDs"
-echodate "Deploying cert-manager CRDs"
-retry 5 kubectl apply -f charts/cert-manager/crd/
+echo "OK"
+exit 0
 
 TEST_NAME="Deploy Kubermatic"
 echodate "Deploying Kubermatic [${KUBERMATIC_VERSION}] using Helm..."
-
-OLD_HEAD="$(git rev-parse HEAD)"
-if [[ -n ${CHARTS_VERSION:-} ]]; then
-  git checkout "$CHARTS_VERSION"
-fi
 
 # --force is needed in case the first attempt at installing didn't succeed
 # see https://github.com/helm/helm/pull/3597

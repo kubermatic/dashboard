@@ -10,15 +10,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -eo pipefail
+set -euo pipefail
 
-shopt -s nocasematch
-if [[ ${KUBERMATIC_EDITION} = ce ]]; then
-  export CYPRESS_KUBERMATIC_EDITION=ce
-else
-  export CYPRESS_KUBERMATIC_EDITION=ee
+source "${GOPATH}/src/github.com/kubermatic/kubermatic/hack/lib.sh"
+
+if [ -z "${JOB_NAME:-}" ] || [ -z "${PROW_JOB_ID:-}" ]; then
+  echodate "This script should only be running in a CI environment."
+  exit 1
 fi
 
+export KUBERMATIC_EDITION="${KUBERMATIC_EDITION:-ee}"
+export CYPRESS_KUBERMATIC_EDITION="${KUBERMATIC_EDITION}"
+export SEED_NAME="kubermatic"
+export KIND_CLUSTER_NAME="${SEED_NAME}"
 export CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME="roxy@loodse.com"
 export CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME_2="roxy2@loodse.com"
 export CYPRESS_KUBERMATIC_DEX_DEV_E2E_PASSWORD="password"
@@ -26,6 +30,7 @@ export CYPRESS_RECORD_KEY=7859bcb8-1d2a-4d56-b7f5-ca70b93f944c
 
 apt install -y gettext bash-completion
 
-source hack/e2e/ci-setup-kubermatic-in-kind.sh
+source hack/e2e/setup-kind-cluster.sh
+source hack/e2e/setup-kubermatic-in-kind.sh
 
 WAIT_ON_TIMEOUT=600000 npm run e2e:local
