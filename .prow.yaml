@@ -1,24 +1,4 @@
 presubmits:
-- name: pre-dashboard-validate-prow
-  always_run: true
-  decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
-  extra_refs:
-    - org: kubermatic
-      repo: infra
-      base_ref: master
-      clone_uri: git@github.com:kubermatic/infra.git
-  spec:
-    containers:
-      - image: gcr.io/k8s-prow/checkconfig:v20200203-711d3732b
-        command:
-          - /app/prow/cmd/checkconfig/app.binary
-        args:
-          - --plugin-config=/home/prow/go/src/github.com/kubermatic/infra/prow/plugins.yaml
-          - --config-path=/home/prow/go/src/github.com/kubermatic/infra/prow/config.yaml
-          - --job-config-path=/home/prow/go/src/github.com/kubermatic/infra/prow/jobs
-          - --prow-yaml-repo-name=$(REPO_OWNER)/$(REPO_NAME)
-
 - name: pre-dashboard-go-mod-verify
   always_run: true
   decorate: true
@@ -30,7 +10,6 @@ presubmits:
       - image: golang:1.15.2
         command:
           - make
-        args:
           - verify-go
         resources:
           requests:
@@ -45,7 +24,6 @@ presubmits:
       - image: node:14.11.0
         command:
           - make
-        args:
           - check
         resources:
           requests:
@@ -64,7 +42,6 @@ presubmits:
       - image: quay.io/kubermatic/chrome-headless:v0.6
         command:
           - make
-        args:
           - test-headless
         resources:
           requests:
@@ -85,11 +62,11 @@ presubmits:
   decorate: true
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
   extra_refs:
-  # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
-  - org: kubermatic
-    repo: kubermatic
-    base_ref: master
-    clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
+    # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
+    - org: kubermatic
+      repo: kubermatic
+      base_ref: master
+      clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
   labels:
     preset-digitalocean: "true"
     preset-openstack: "true"
@@ -102,25 +79,25 @@ presubmits:
     preset-goproxy: "true"
   spec:
     containers:
-    - image: quay.io/kubermatic/e2e-kind-cypress:v1.2.1
-      command:
-      - make
-      - run-e2e-ci
-      securityContext:
-        privileged: true
-      resources:
-        requests:
-          memory: 6Gi
-          cpu: 4
-        limits:
-          memory: 6Gi
-          cpu: 4
-      env:
-      - name: SERVICE_ACCOUNT_KEY
-        valueFrom:
-          secretKeyRef:
-            name: e2e-ci
-            key: serviceAccountSigningKey
+      - image: quay.io/kubermatic/e2e-kind-cypress:v1.2.1
+        command:
+          - make
+          - run-e2e-ci
+        securityContext:
+          privileged: true
+        resources:
+          requests:
+            memory: 6Gi
+            cpu: 4
+          limits:
+            memory: 6Gi
+            cpu: 4
+        env:
+          - name: SERVICE_ACCOUNT_KEY
+            valueFrom:
+              secretKeyRef:
+                name: e2e-ci
+                key: serviceAccountSigningKey
 
 - name: pre-dashboard-test-e2e-ce
   always_run: true
@@ -146,12 +123,8 @@ presubmits:
     containers:
       - image: quay.io/kubermatic/e2e-kind-cypress:v1.2.1
         command:
-          - /bin/bash
-          - -c
-          - >-
-            set -eo pipefail &&
-            export KUBERMATIC_EDITION=ce &&
-            make run-e2e-ci
+          - make
+          - run-e2e-ci
         securityContext:
           privileged: true
         resources:
@@ -162,6 +135,8 @@ presubmits:
             memory: 6Gi
             cpu: 4
         env:
+          - name: KUBERMATIC_EDITION
+            value: ce
           - name: SERVICE_ACCOUNT_KEY
             valueFrom:
               secretKeyRef:
@@ -177,7 +152,7 @@ presubmits:
     preset-goproxy: "true"
   spec:
     containers:
-      - image: quay.io/kubermatic/go-docker-node:v1.3.0
+      - image: quay.io/kubermatic/go-docker-node:v1.3.1
         command:
           - /bin/bash
           - -c
