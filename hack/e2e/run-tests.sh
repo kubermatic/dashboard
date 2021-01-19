@@ -19,6 +19,7 @@ if [ -z "${JOB_NAME:-}" ] || [ -z "${PROW_JOB_ID:-}" ]; then
   exit 1
 fi
 
+export PATH="$PATH:/usr/local/go/bin"
 export KUBERMATIC_EDITION="${KUBERMATIC_EDITION:-ee}"
 export CYPRESS_KUBERMATIC_EDITION="${KUBERMATIC_EDITION}"
 export SEED_NAME="kubermatic"
@@ -27,8 +28,6 @@ export CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME="roxy@loodse.com"
 export CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME_2="roxy2@loodse.com"
 export CYPRESS_KUBERMATIC_DEX_DEV_E2E_PASSWORD="password"
 export CYPRESS_RECORD_KEY=7859bcb8-1d2a-4d56-b7f5-ca70b93f944c
-
-apt install -y gettext bash-completion
 
 source hack/e2e/setup-kind-cluster.sh
 source hack/e2e/setup-kubermatic-in-kind.sh

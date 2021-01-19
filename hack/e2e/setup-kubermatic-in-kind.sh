@@ -9,7 +9,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-export PATH="$PATH:/usr/local/go/bin"
 export KUBERMATIC_VERSION=latest
 export TARGET_BRANCH="${PULL_BASE_REF:-master}"
 export KUBERMATIC_OIDC_LOGIN="roxy@loodse.com"
