@@ -10,6 +10,7 @@
 # limitations under the License.
 
 REPO_ROOT="$(realpath .)"
+cd "${GOPATH}/src/github.com/kubermatic/kubermatic"
 
 echodate "Setting up kind cluster..."
 

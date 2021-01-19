@@ -54,8 +54,7 @@ test-headless: install
 	@$(CC) run test:ci
 	./hack/upload-coverage.sh
 
-#run-e2e-ci: install
-run-e2e-ci:
+run-e2e-ci: install
 	./hack/e2e/run-tests.sh
 
 dist: install
