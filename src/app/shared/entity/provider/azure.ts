@@ -22,6 +22,14 @@ export class AzureZones {
   zones: string[];
 }
 
+export class AzureVNets {
+  vnets: string[];
+}
+
+export class AzureSubnets {
+  subnets: string[];
+}
+
 export class AzureRouteTables {
   routeTables: string[];
 }

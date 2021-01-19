@@ -11,15 +11,17 @@
 
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
-import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Provider} from './provider';
 import {
   AzureResourceGroups,
   AzureRouteTables,
   AzureSecurityGroups,
   AzureSizes,
+  AzureSubnets,
+  AzureVNets,
   AzureZones,
-} from '../../../../shared/entity/provider/azure';
+} from '@shared/entity/provider/azure';
 import {map} from 'rxjs/operators';
 
 export class Azure extends Provider {
@@ -79,6 +81,13 @@ export class Azure extends Provider {
   resourceGroup(resourceGroup: string): Azure {
     if (resourceGroup) {
       this._headers = this._headers.set(Azure.Header.ResourceGroup, resourceGroup);
+    }
+    return this;
+  }
+
+  vnet(vnet: string): Azure {
+    if (vnet) {
+      this._headers = this._headers.set(Azure.Header.VNet, vnet);
     }
     return this;
   }
@@ -171,6 +180,54 @@ export class Azure extends Provider {
       .pipe(map(routeTables => routeTables.routeTables));
   }
 
+  vnets(onLoadingCb: () => void = null): Observable<string[]> {
+    this._setRequiredHeaders(
+      Azure.Header.SubscriptionID,
+      Azure.Header.TenantID,
+      Azure.Header.ClientID,
+      Azure.Header.ClientSecret,
+      Azure.Header.ResourceGroup,
+      Azure.Header.Location
+    );
+
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._newRestRoot}/providers/${this._provider}/vnets`;
+    return this._http
+      .get<AzureVNets>(url, {headers: this._headers})
+      .pipe(map(vnets => vnets.vnets));
+  }
+
+  subnets(onLoadingCb: () => void = null): Observable<string[]> {
+    this._setRequiredHeaders(
+      Azure.Header.SubscriptionID,
+      Azure.Header.TenantID,
+      Azure.Header.ClientID,
+      Azure.Header.ClientSecret,
+      Azure.Header.ResourceGroup,
+      Azure.Header.VNet
+    );
+
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._newRestRoot}/providers/${this._provider}/subnets`;
+    return this._http
+      .get<AzureSubnets>(url, {headers: this._headers})
+      .pipe(map(subnets => subnets.subnets));
+  }
+
   availabilityZones(onLoadingCb: () => void = null): Observable<AzureZones> {
     this._setRequiredHeaders(
       Azure.Header.ClientID,
@@ -202,6 +259,7 @@ export namespace Azure {
     TenantID = 'TenantID',
     Location = 'Location',
     ResourceGroup = 'ResourceGroup',
+    VNet = 'VirtualNetwork',
     SKUName = 'SKUName',
   }
 }
