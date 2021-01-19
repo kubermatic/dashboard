@@ -20,6 +20,7 @@ import {EMPTY, merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as _ from 'lodash';
 import {DatacenterService} from '@core/services/datacenter/service';
+import {Datacenter} from '@shared/entity/datacenter';
 
 enum Controls {
   ResourceGroup = 'resourceGroup',
@@ -199,10 +200,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
 
   private _routeTableObservable(): Observable<string[]> {
     let location = '';
-    return this._datacenterService
-      .getDatacenter(this._clusterService.cluster.spec.cloud.dc)
-      .pipe(take(1))
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
+    return this._getDatacenter()
       .pipe(tap(dc => (location = dc.spec.azure.location)))
       .pipe(
         switchMap(_dc =>
@@ -234,10 +232,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
 
   private _securityGroupObservable(): Observable<string[]> {
     let location = '';
-    return this._datacenterService
-      .getDatacenter(this._clusterService.cluster.spec.cloud.dc)
-      .pipe(take(1))
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
+    return this._getDatacenter()
       .pipe(tap(dc => (location = dc.spec.azure.location)))
       .pipe(
         switchMap(_dc =>
@@ -265,6 +260,13 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
   private _clearSecurityGroup(): void {
     this.securityGroups = [];
     this.form.get(Controls.SecurityGroup).setValue('');
+  }
+
+  private _getDatacenter(): Observable<Datacenter> {
+    return this._datacenterService
+      .getDatacenter(this._clusterService.cluster.spec.cloud.dc)
+      .pipe(take(1))
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE));
   }
 
   private _enable(enable: boolean, name: string): void {
