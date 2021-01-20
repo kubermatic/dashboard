@@ -10,15 +10,18 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ApiService} from '@core/services/api/service';
+import {NotificationService} from '@core/services/notification/service';
 import {UserService} from '@core/services/user/service';
 import {ConstraintTemplate} from '@shared/entity/opa';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {takeUntil, filter, take} from 'rxjs/operators';
+import {OPADataDialogComponent} from './opa-data-dialog/component';
 
 @Component({
   selector: 'km-opa-admin',
@@ -27,12 +30,17 @@ import {takeUntil} from 'rxjs/operators';
 export class OPAAdminComponent implements OnInit, OnDestroy {
   constraintTemplates: ConstraintTemplate[] = [];
   dataSource = new MatTableDataSource<ConstraintTemplate>();
-  displayedColumns: string[] = ['templateName', 'appliesTo', 'actions'];
+  displayedColumns: string[] = ['templateName', 'actions'];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _apiService: ApiService, private readonly _userService: UserService) {}
+  constructor(
+    private readonly _apiService: ApiService,
+    private readonly _userService: UserService,
+    private readonly _notificationService: NotificationService,
+    private readonly _matDialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.dataSource.data = this.constraintTemplates;
@@ -67,5 +75,31 @@ export class OPAAdminComponent implements OnInit, OnDestroy {
       this.paginator &&
       this.constraintTemplates.length > this.paginator.pageSize
     );
+  }
+
+  add(): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Add Constraint Template',
+        isEditing: false,
+        confirmLabel: 'Add',
+      },
+    };
+
+    this._matDialog
+      .open(OPADataDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(filter(constraintTemplate => !!constraintTemplate))
+      .pipe(take(1))
+      .subscribe((result: ConstraintTemplate) => this._add(result));
+  }
+
+  private _add(constraintTemplate: ConstraintTemplate): void {
+    this._apiService
+      .createConstraintTemplate(constraintTemplate)
+      .pipe(take(1))
+      .subscribe(constraintTemplate => {
+        this._notificationService.success(`The constraint template ${constraintTemplate.name} was created`);
+      });
   }
 }

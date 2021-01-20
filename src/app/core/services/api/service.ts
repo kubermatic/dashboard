@@ -344,4 +344,9 @@ export class ApiService {
     const url = `${this._newRestRoot}/constrainttemplates`;
     return this._http.get<ConstraintTemplate[]>(url);
   }
+
+  createConstraintTemplate(template: ConstraintTemplate): Observable<ConstraintTemplate> {
+    const url = `${this._newRestRoot}/constrainttemplates`;
+    return this._http.post<ConstraintTemplate>(url, template);
+  }
 }

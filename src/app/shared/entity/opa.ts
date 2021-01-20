@@ -12,7 +12,7 @@
 export class ConstraintTemplate {
   name: string;
   spec: ConstraintTemplateSpec;
-  status: ConstraintTemplateStatus;
+  status?: ConstraintTemplateStatus;
 }
 
 export class ConstraintTemplateStatus {
@@ -21,7 +21,7 @@ export class ConstraintTemplateStatus {
 }
 
 export class ByPodStatus {
-  errors: CreateCRDError[];
+  errors?: CreateCRDError[];
   id: string;
   observedGeneration: number;
 }
