@@ -21,3 +21,23 @@ export class AzureSizes {
 export class AzureZones {
   zones: string[];
 }
+
+export class AzureVNets {
+  vnets: string[];
+}
+
+export class AzureSubnets {
+  subnets: string[];
+}
+
+export class AzureRouteTables {
+  routeTables: string[];
+}
+
+export class AzureSecurityGroups {
+  securityGroups: string[];
+}
+
+export class AzureResourceGroups {
+  resourceGroups: string[];
+}

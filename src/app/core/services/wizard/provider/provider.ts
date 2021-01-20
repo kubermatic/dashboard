@@ -18,6 +18,7 @@ export abstract class Provider {
 
   protected _headers = new HttpHeaders();
   protected _restRoot = environment.restRoot;
+  protected _newRestRoot = environment.newRestRoot;
   protected readonly _url = `${this._restRoot}/providers/${this._provider}/sizes`;
 
   protected constructor(protected _http: HttpClient, protected readonly _provider: NodeProvider) {}

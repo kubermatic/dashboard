@@ -17,7 +17,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import * as _ from 'lodash';
 
 enum Controls {
@@ -44,10 +44,9 @@ enum Controls {
   ],
 })
 export class AWSProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  private readonly _debounceTime = 1000;
   readonly Controls = Controls;
-
   securityGroups: string[] = [];
-  filteredSecurityGroups: Observable<string[]>;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -77,11 +76,12 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       });
 
     this._clusterService.clusterChanges
+      .pipe(debounceTime(this._debounceTime))
       .pipe(filter(_ => this._clusterService.provider === NodeProvider.AWS))
       .pipe(tap(_ => (!this.hasRequiredCredentials() ? this._clearSecurityGroup() : null)))
       .pipe(switchMap(_ => this._securityGroupObservable()))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._loadSecurityGroups.bind(this));
+      .subscribe(securityGroups => (this.securityGroups = securityGroups));
 
     merge(
       this.form.get(Controls.RouteTableID).valueChanges,
@@ -94,8 +94,8 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     this.form
       .get(Controls.SecurityGroup)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(change => {
-        this._clusterService.cluster.spec.cloud.aws.securityGroupID = change;
+      .subscribe(sg => {
+        this._clusterService.cluster.spec.cloud.aws.securityGroupID = sg;
       });
   }
 
@@ -129,10 +129,6 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
   private _clearSecurityGroup(): void {
     this.securityGroups = [];
     this.form.get(Controls.SecurityGroup).setValue('');
-  }
-
-  private _loadSecurityGroups(securityGroups: string[]): void {
-    this.securityGroups = securityGroups;
   }
 
   private _enable(enable: boolean, name: string): void {

@@ -16,8 +16,11 @@ import {AzureCloudSpec, CloudSpec, Cluster, ClusterSpec} from '@shared/entity/cl
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {merge} from 'rxjs';
-import {filter, takeUntil} from 'rxjs/operators';
+import {EMPTY, merge, Observable, of, onErrorResumeNext} from 'rxjs';
+import {catchError, debounceTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import * as _ from 'lodash';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {Datacenter} from '@shared/entity/datacenter';
 
 enum Controls {
   ResourceGroup = 'resourceGroup',
@@ -44,12 +47,18 @@ enum Controls {
   ],
 })
 export class AzureProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  private readonly _debounceTime = 500;
   readonly Controls = Controls;
+  resourceGroups: string[] = [];
+  routeTables: string[] = [];
+  securityGroups: string[] = [];
+  vnets: string[] = [];
 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterService: ClusterService,
+    private readonly _datacenterService: DatacenterService
   ) {
     super('Azure Provider Extended');
   }
@@ -80,20 +89,237 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
 
-    merge(
-      this.form.get(Controls.ResourceGroup).valueChanges,
-      this.form.get(Controls.RouteTable).valueChanges,
-      this.form.get(Controls.SecurityGroup).valueChanges,
-      this.form.get(Controls.Subnet).valueChanges,
-      this.form.get(Controls.VNet).valueChanges
-    )
+    this._clusterService.clusterChanges
+      .pipe(debounceTime(this._debounceTime))
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
+      .pipe(tap(_ => (!this.hasRequiredCredentials() ? this._clearResourceGroup() : null)))
+      .pipe(switchMap(_ => this._resourceGroupObservable()))
       .pipe(takeUntil(this._unsubscribe))
+      .subscribe(resourceGroups => (this.resourceGroups = resourceGroups));
+
+    this._getCredentialAndResourceGroupChanges()
+      .pipe(
+        tap(_ =>
+          !this.hasRequiredCredentials() || !this.form.get(Controls.ResourceGroup).value
+            ? this._clearRouteTable()
+            : null
+        )
+      )
+      .pipe(switchMap(_ => (this.form.get(Controls.ResourceGroup).value ? this._routeTableObservable() : of([]))))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(routeTables => (this.routeTables = routeTables));
+
+    this._getCredentialAndResourceGroupChanges()
+      .pipe(
+        tap(_ =>
+          !this.hasRequiredCredentials() || !this.form.get(Controls.ResourceGroup).value
+            ? this._clearSecurityGroup()
+            : null
+        )
+      )
+      .pipe(switchMap(_ => (this.form.get(Controls.ResourceGroup).value ? this._securityGroupObservable() : of([]))))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(securityGroups => (this.securityGroups = securityGroups));
+
+    this._getCredentialAndResourceGroupChanges()
+      .pipe(
+        tap(_ =>
+          !this.hasRequiredCredentials() || !this.form.get(Controls.ResourceGroup).value ? this._clearVNet() : null
+        )
+      )
+      .pipe(switchMap(_ => (this.form.get(Controls.ResourceGroup).value ? this._vnetObservable() : of([]))))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(vnets => (this.vnets = vnets));
+
+    this.form
+      .get(Controls.Subnet)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
+
+    this.form
+      .get(Controls.ResourceGroup)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(rg => {
+        this._clusterService.cluster.spec.cloud.azure.resourceGroup = rg;
+      });
+
+    this.form
+      .get(Controls.RouteTable)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(rt => {
+        this._clusterService.cluster.spec.cloud.azure.routeTable = rt;
+      });
+
+    this.form
+      .get(Controls.SecurityGroup)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(sg => {
+        this._clusterService.cluster.spec.cloud.azure.securityGroup = sg;
+      });
+
+    this.form
+      .get(Controls.VNet)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(v => {
+        this._clusterService.cluster.spec.cloud.azure.vnet = v;
+      });
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  hasRequiredCredentials(): boolean {
+    return (
+      !!this._clusterService.cluster.spec.cloud.azure.subscriptionID &&
+      !!this._clusterService.cluster.spec.cloud.azure.tenantID &&
+      !!this._clusterService.cluster.spec.cloud.azure.clientID &&
+      !!this._clusterService.cluster.spec.cloud.azure.clientSecret
+    );
+  }
+
+  private _resourceGroupObservable(): Observable<string[]> {
+    let location = '';
+    return this._datacenterService
+      .getDatacenter(this._clusterService.cluster.spec.cloud.dc)
+      .pipe(take(1))
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
+      .pipe(tap(dc => (location = dc.spec.azure.location)))
+      .pipe(
+        switchMap(_dc =>
+          this._presets
+            .provider(NodeProvider.AZURE)
+            .clientID(this._clusterService.cluster.spec.cloud.azure.clientID)
+            .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
+            .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
+            .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
+            .location(location)
+            .credential(this._presets.preset)
+            .resourceGroups()
+            .pipe(
+              map(resourceGroups => _.sortBy(resourceGroups, rg => rg.toLowerCase())),
+              catchError(() => {
+                this._clearResourceGroup();
+                return onErrorResumeNext(EMPTY);
+              })
+            )
+        )
+      );
+  }
+
+  private _clearResourceGroup(): void {
+    this.resourceGroups = [];
+    this.form.get(Controls.ResourceGroup).setValue('');
+  }
+
+  private _routeTableObservable(): Observable<string[]> {
+    let location = '';
+    return this._getDatacenter()
+      .pipe(tap(dc => (location = dc.spec.azure.location)))
+      .pipe(
+        switchMap(_dc =>
+          this._presets
+            .provider(NodeProvider.AZURE)
+            .clientID(this._clusterService.cluster.spec.cloud.azure.clientID)
+            .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
+            .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
+            .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
+            .resourceGroup(this.form.get(Controls.ResourceGroup).value)
+            .location(location)
+            .credential(this._presets.preset)
+            .routeTables()
+            .pipe(
+              map(routeTables => _.sortBy(routeTables, rt => rt.toLowerCase())),
+              catchError(() => {
+                this._clearRouteTable();
+                return onErrorResumeNext(EMPTY);
+              })
+            )
+        )
+      );
+  }
+
+  private _clearRouteTable(): void {
+    this.routeTables = [];
+    this.form.get(Controls.RouteTable).setValue('');
+  }
+
+  private _securityGroupObservable(): Observable<string[]> {
+    let location = '';
+    return this._getDatacenter()
+      .pipe(tap(dc => (location = dc.spec.azure.location)))
+      .pipe(
+        switchMap(_dc =>
+          this._presets
+            .provider(NodeProvider.AZURE)
+            .clientID(this._clusterService.cluster.spec.cloud.azure.clientID)
+            .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
+            .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
+            .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
+            .resourceGroup(this.form.get(Controls.ResourceGroup).value)
+            .location(location)
+            .credential(this._presets.preset)
+            .securityGroups()
+            .pipe(
+              map(securityGroups => _.sortBy(securityGroups, sg => sg.toLowerCase())),
+              catchError(() => {
+                this._clearSecurityGroup();
+                return onErrorResumeNext(EMPTY);
+              })
+            )
+        )
+      );
+  }
+
+  private _clearSecurityGroup(): void {
+    this.securityGroups = [];
+    this.form.get(Controls.SecurityGroup).setValue('');
+  }
+
+  private _vnetObservable(): Observable<string[]> {
+    let location = '';
+    return this._getDatacenter()
+      .pipe(tap(dc => (location = dc.spec.azure.location)))
+      .pipe(
+        switchMap(_dc =>
+          this._presets
+            .provider(NodeProvider.AZURE)
+            .clientID(this._clusterService.cluster.spec.cloud.azure.clientID)
+            .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
+            .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
+            .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
+            .resourceGroup(this.form.get(Controls.ResourceGroup).value)
+            .location(location)
+            .credential(this._presets.preset)
+            .vnets()
+            .pipe(
+              map(vnets => _.sortBy(vnets, v => v.toLowerCase())),
+              catchError(() => {
+                this._clearVNet();
+                return onErrorResumeNext(EMPTY);
+              })
+            )
+        )
+      );
+  }
+
+  private _clearVNet(): void {
+    this.vnets = [];
+    this.form.get(Controls.VNet).setValue('');
+  }
+
+  private _getCredentialAndResourceGroupChanges(): Observable<any> {
+    return merge(this._clusterService.clusterChanges, this.form.get(Controls.ResourceGroup).valueChanges)
+      .pipe(debounceTime(this._debounceTime))
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE));
+  }
+
+  private _getDatacenter(): Observable<Datacenter> {
+    return this._datacenterService
+      .getDatacenter(this._clusterService.cluster.spec.cloud.dc)
+      .pipe(take(1))
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE));
   }
 
   private _enable(enable: boolean, name: string): void {
@@ -111,11 +337,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       spec: {
         cloud: {
           azure: {
-            resourceGroup: this.form.get(Controls.ResourceGroup).value,
-            routeTable: this.form.get(Controls.RouteTable).value,
-            securityGroup: this.form.get(Controls.SecurityGroup).value,
             subnet: this.form.get(Controls.Subnet).value,
-            vnet: this.form.get(Controls.VNet).value,
           } as AzureCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
