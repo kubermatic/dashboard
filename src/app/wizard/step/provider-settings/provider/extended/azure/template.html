@@ -86,10 +86,19 @@ limitations under the License.
 
   <mat-form-field fxFlex>
     <mat-label>Subnet</mat-label>
-    <input matInput
+    <input type="text"
+           matInput
            [formControlName]="Controls.Subnet"
-           [name]="Controls.Subnet"
-           type="text"
-           autocomplete="off">
+           [matAutocomplete]="autoVNet">
+    <mat-autocomplete autoActiveFirstOption
+                      #autoVNet="matAutocomplete">
+      <mat-option *ngFor="let subnet of subnets | filterBy: form.get(Controls.Subnet).value"
+                  [value]="subnet">
+        {{subnet}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-hint *ngIf="!hasRequiredCredentials() || !form.get(Controls.ResourceGroup).value || !form.get(Controls.VNet).value">
+      Enter your credentials, resource group and VNet to load autocompletions.
+    </mat-hint>
   </mat-form-field>
 </form>

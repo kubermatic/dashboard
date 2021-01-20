@@ -23,7 +23,7 @@ export class AzureZones {
 }
 
 export class AzureVNets {
-  vnets: string[];
+  virtualNetworks: string[];
 }
 
 export class AzureSubnets {

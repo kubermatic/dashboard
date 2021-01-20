@@ -12,7 +12,6 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {PresetsService} from '@core/services/wizard/presets.service';
-import {AzureCloudSpec, CloudSpec, Cluster, ClusterSpec} from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -53,6 +52,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
   routeTables: string[] = [];
   securityGroups: string[] = [];
   vnets: string[] = [];
+  subnets: string[] = [];
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -97,7 +97,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(resourceGroups => (this.resourceGroups = resourceGroups));
 
-    this._getCredentialAndResourceGroupChanges()
+    this._getCredentialChanges(this.form.get(Controls.ResourceGroup).valueChanges)
       .pipe(
         tap(_ =>
           !this.hasRequiredCredentials() || !this.form.get(Controls.ResourceGroup).value
@@ -109,7 +109,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(routeTables => (this.routeTables = routeTables));
 
-    this._getCredentialAndResourceGroupChanges()
+    this._getCredentialChanges(this.form.get(Controls.ResourceGroup).valueChanges)
       .pipe(
         tap(_ =>
           !this.hasRequiredCredentials() || !this.form.get(Controls.ResourceGroup).value
@@ -121,7 +121,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(securityGroups => (this.securityGroups = securityGroups));
 
-    this._getCredentialAndResourceGroupChanges()
+    this._getCredentialChanges(this.form.get(Controls.ResourceGroup).valueChanges)
       .pipe(
         tap(_ =>
           !this.hasRequiredCredentials() || !this.form.get(Controls.ResourceGroup).value ? this._clearVNet() : null
@@ -131,38 +131,53 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(vnets => (this.vnets = vnets));
 
-    this.form
-      .get(Controls.Subnet)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
+    this._getCredentialChanges(
+      this.form.get(Controls.ResourceGroup).valueChanges,
+      this.form.get(Controls.VNet).valueChanges
+    )
+      .pipe(
+        tap(_ =>
+          !this.hasRequiredCredentials() ||
+          !this.form.get(Controls.ResourceGroup).value ||
+          !this.form.get(Controls.VNet).value
+            ? this._clearSubnet()
+            : null
+        )
+      )
+      .pipe(
+        switchMap(_ =>
+          this.form.get(Controls.ResourceGroup).value && this.form.get(Controls.VNet).value
+            ? this._subnetObservable()
+            : of([])
+        )
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(subnets => (this.subnets = subnets));
 
     this.form
       .get(Controls.ResourceGroup)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(rg => {
-        this._clusterService.cluster.spec.cloud.azure.resourceGroup = rg;
-      });
+      .subscribe(rg => (this._clusterService.cluster.spec.cloud.azure.resourceGroup = rg));
 
     this.form
       .get(Controls.RouteTable)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(rt => {
-        this._clusterService.cluster.spec.cloud.azure.routeTable = rt;
-      });
+      .subscribe(rt => (this._clusterService.cluster.spec.cloud.azure.routeTable = rt));
 
     this.form
       .get(Controls.SecurityGroup)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(sg => {
-        this._clusterService.cluster.spec.cloud.azure.securityGroup = sg;
-      });
+      .subscribe(sg => (this._clusterService.cluster.spec.cloud.azure.securityGroup = sg));
 
     this.form
       .get(Controls.VNet)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(v => {
-        this._clusterService.cluster.spec.cloud.azure.vnet = v;
-      });
+      .subscribe(v => (this._clusterService.cluster.spec.cloud.azure.vnet = v));
+
+    this.form
+      .get(Controls.Subnet)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(s => (this._clusterService.cluster.spec.cloud.azure.subnet = s));
   }
 
   ngOnDestroy(): void {
@@ -309,8 +324,33 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
     this.form.get(Controls.VNet).setValue('');
   }
 
-  private _getCredentialAndResourceGroupChanges(): Observable<any> {
-    return merge(this._clusterService.clusterChanges, this.form.get(Controls.ResourceGroup).valueChanges)
+  private _subnetObservable(): Observable<string[]> {
+    return this._presets
+      .provider(NodeProvider.AZURE)
+      .clientID(this._clusterService.cluster.spec.cloud.azure.clientID)
+      .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
+      .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
+      .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
+      .resourceGroup(this.form.get(Controls.ResourceGroup).value)
+      .vnet(this.form.get(Controls.VNet).value)
+      .credential(this._presets.preset)
+      .subnets()
+      .pipe(
+        map(subnets => _.sortBy(subnets, s => s.toLowerCase())),
+        catchError(() => {
+          this._clearSubnet();
+          return onErrorResumeNext(EMPTY);
+        })
+      );
+  }
+
+  private _clearSubnet(): void {
+    this.subnets = [];
+    this.form.get(Controls.Subnet).setValue('');
+  }
+
+  private _getCredentialChanges(...changes: Observable<any>[]): Observable<any> {
+    return merge(this._clusterService.clusterChanges, ...changes)
       .pipe(debounceTime(this._debounceTime))
       .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE));
   }
@@ -330,17 +370,5 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
     if (!enable && this.form.get(name).enabled) {
       this.form.get(name).disable();
     }
-  }
-
-  private _getClusterEntity(): Cluster {
-    return {
-      spec: {
-        cloud: {
-          azure: {
-            subnet: this.form.get(Controls.Subnet).value,
-          } as AzureCloudSpec,
-        } as CloudSpec,
-      } as ClusterSpec,
-    } as Cluster;
   }
 }

@@ -201,7 +201,7 @@ export class Azure extends Provider {
     const url = `${this._newRestRoot}/providers/${this._provider}/vnets`;
     return this._http
       .get<AzureVNets>(url, {headers: this._headers})
-      .pipe(map(vnets => vnets.vnets));
+      .pipe(map(vnets => vnets.virtualNetworks));
   }
 
   subnets(onLoadingCb: () => void = null): Observable<string[]> {
