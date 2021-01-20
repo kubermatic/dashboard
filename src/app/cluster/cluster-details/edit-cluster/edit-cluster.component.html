@@ -50,6 +50,14 @@
         </div>
         <mat-checkbox formControlName="usePodNodeSelectorAdmissionPlugin">Pod Node Selector</mat-checkbox>
       </div>
+      <km-label-form *ngIf="form.controls.usePodNodeSelectorAdmissionPlugin.value"
+                     title="Pod Node Selector Configuration"
+                     keyName="Namespace"
+                     valueName="Label Selector"
+                     noValidators="true"
+                     [(labels)]="podNodeSelectorAdmissionPluginConfig"
+                     formControlName="podNodeSelectorAdmissionPluginConfig"
+                     fxFlex="100"></km-label-form>
       <km-label-form title="Labels"
                      [(labels)]="labels"
                      [inheritedLabels]="cluster.inheritedLabels"

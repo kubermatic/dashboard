@@ -36,8 +36,11 @@ import {LabelFormValidators} from '../../validators/label-form.validators';
 })
 export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccessor, AsyncValidator, DoCheck {
   @Input() title = 'Labels';
+  @Input() keyName = 'Key';
+  @Input() valueName = 'Value';
   @Input() labels: object;
   @Input() inheritedLabels: object = {};
+  @Input() noValidators = false;
   @Input() asyncKeyValidators: AsyncValidatorFn[] = [];
   @Output() labelsChange = new EventEmitter<object>();
   form: FormGroup;
@@ -153,24 +156,33 @@ export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccess
   }
 
   private _addLabel(key = '', value = ''): void {
-    this.labelArray.push(
-      this._formBuilder.group({
-        key: [
-          {value: key, disabled: this._isInherited(key)},
-          Validators.compose([
-            LabelFormValidators.labelKeyNameLength,
-            LabelFormValidators.labelKeyPrefixLength,
-            LabelFormValidators.labelKeyNamePattern,
-            LabelFormValidators.labelKeyPrefixPattern,
-          ]),
-          Validators.composeAsync(this.asyncKeyValidators),
-        ],
-        value: [
-          {value, disabled: this._isInherited(key)},
-          Validators.compose([LabelFormValidators.labelValueLength, LabelFormValidators.labelValuePattern]),
-        ],
-      })
-    );
+    if (this.noValidators) {
+      this.labelArray.push(
+        this._formBuilder.group({
+          key: [{value: key, disabled: this._isInherited(key)}],
+          value: [{value, disabled: this._isInherited(key)}],
+        })
+      );
+    } else {
+      this.labelArray.push(
+        this._formBuilder.group({
+          key: [
+            {value: key, disabled: this._isInherited(key)},
+            Validators.compose([
+              LabelFormValidators.labelKeyNameLength,
+              LabelFormValidators.labelKeyPrefixLength,
+              LabelFormValidators.labelKeyNamePattern,
+              LabelFormValidators.labelKeyPrefixPattern,
+            ]),
+            Validators.composeAsync(this.asyncKeyValidators),
+          ],
+          value: [
+            {value, disabled: this._isInherited(key)},
+            Validators.compose([LabelFormValidators.labelValueLength, LabelFormValidators.labelValuePattern]),
+          ],
+        })
+      );
+    }
   }
 
   private _validateKey(index: number): void {

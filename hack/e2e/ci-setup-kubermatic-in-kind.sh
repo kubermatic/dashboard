@@ -14,13 +14,15 @@ if [[ -z ${PROW_JOB_ID} ]]; then
 fi
 
 cd "${GOPATH}/src/github.com/kubermatic/kubermatic"
-source hack/lib.sh
 
 if [[ ${TARGET_BRANCH} == release* ]]; then
   VERSION=${TARGET_BRANCH#release/}
   TAG_VERSION=$(git tag | egrep "${VERSION}" | tail -n 1)
   export KUBERMATIC_VERSION=${TAG_VERSION}
 fi
+
+# NB: This only works in 2.14. 2.15+ does not have api/ anymore.
+source api/hack/lib.sh
 
 TEST_NAME="Get Vault token"
 echodate "Getting secrets from Vault"
@@ -125,8 +127,8 @@ if ls /var/log/clusterexposer.log &>/dev/null; then
   echodate "Cluster-Exposer already running"
 else
   echodate "Starting clusterexposer"
-  make download-gocache
-  CGO_ENABLED=0 go build --tags "$KUBERMATIC_EDITION" -v -o /tmp/clusterexposer ./pkg/test/clusterexposer/cmd
+  make -C api download-gocache
+  CGO_ENABLED=0 go build --tags "$KUBERMATIC_EDITION" -v -o /tmp/clusterexposer ./api/pkg/test/clusterexposer/cmd
   CGO_ENABLED=0 /tmp/clusterexposer \
     --kubeconfig-inner "$KUBECONFIG" \
     --kubeconfig-outer "/etc/kubeconfig/kubeconfig" \
@@ -207,7 +209,7 @@ fi
 TEST_NAME="Deploy Dex"
 echodate "Deploying Dex"
 
-export KUBERMATIC_DEX_VALUES_FILE=$(realpath hack/ci/testdata/oauth_values.yaml)
+export KUBERMATIC_DEX_VALUES_FILE=$(realpath api/hack/ci/testdata/oauth_values.yaml)
 
 if kubectl get namespace oauth; then
   echodate "Dex already deployed"
@@ -215,7 +217,7 @@ else
   retry 5 helm install --wait --timeout 180 \
     --values $KUBERMATIC_DEX_VALUES_FILE \
     --namespace oauth \
-    --name oauth charts/oauth/
+    --name oauth config/oauth/
 fi
 
 export KUBERMATIC_OIDC_LOGIN="roxy@loodse.com"
@@ -224,7 +226,7 @@ export KUBERMATIC_OIDC_PASSWORD="password"
 TEST_NAME="Deploy Kubermatic CRDs"
 echodate "Deploying Kubermatic CRDs"
 
-retry 5 kubectl apply -f charts/kubermatic/crd/
+retry 5 kubectl apply -f config/kubermatic/crd/
 
 function check_all_deployments_ready() {
   local namespace="$1"
@@ -253,15 +255,10 @@ function check_all_deployments_ready() {
 # to have the CRDs installed so we can at least create a Certificate resource.
 TEST_NAME="Deploy cert-manager CRDs"
 echodate "Deploying cert-manager CRDs"
-retry 5 kubectl apply -f charts/cert-manager/crd/
+retry 5 kubectl apply -f config/cert-manager/templates/crd.yaml
 
 TEST_NAME="Deploy Kubermatic"
 echodate "Deploying Kubermatic [${KUBERMATIC_VERSION}] using Helm..."
-
-OLD_HEAD="$(git rev-parse HEAD)"
-if [[ -n ${CHARTS_VERSION:-} ]]; then
-  git checkout "$CHARTS_VERSION"
-fi
 
 # --force is needed in case the first attempt at installing didn't succeed
 # see https://github.com/helm/helm/pull/3597
@@ -292,7 +289,7 @@ retry 3 helm upgrade --install --force --wait --timeout 300 \
   --namespace=kubermatic \
   --values ${VALUES_FILE} \
   kubermatic \
-  charts/kubermatic/
+  config/kubermatic/
 
 echodate "Finished installing Kubermatic"
 

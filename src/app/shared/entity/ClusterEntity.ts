@@ -207,6 +207,7 @@ export class ClusterSpec {
   version?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
+  podNodeSelectorAdmissionPluginConfig?: object;
   openshift?: OpenShift;
 }
 
