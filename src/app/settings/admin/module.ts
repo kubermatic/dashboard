@@ -35,6 +35,7 @@ import {AdminSettingsComponent} from './component';
 import {CustomLinksFormComponent} from './custom-link-form/component';
 import {DynamicDatacentersComponent} from './dynamic-datacenters/component';
 import {DatacenterDataDialogComponent} from './dynamic-datacenters/datacenter-data-dialog/component';
+import {OPAAdminComponent} from './opa/component';
 import {AdminSettingsRoutingModule} from './routing';
 
 @NgModule({
@@ -63,6 +64,7 @@ import {AdminSettingsRoutingModule} from './routing';
     OpenstackSettingsComponent,
     PacketSettingsComponent,
     VSphereSettingsComponent,
+    OPAAdminComponent,
   ],
   providers: [PresetDialogService],
 })
