@@ -349,4 +349,9 @@ export class ApiService {
     const url = `${this._newRestRoot}/constrainttemplates`;
     return this._http.post<ConstraintTemplate>(url, template);
   }
+
+  patchConstraintTemplate(ctName: string, patch: ConstraintTemplate): Observable<ConstraintTemplate> {
+    const url = `${this._newRestRoot}/constrainttemplates/${ctName}`;
+    return this._http.patch<ConstraintTemplate>(url, patch);
+  }
 }
