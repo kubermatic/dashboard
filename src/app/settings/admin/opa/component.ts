@@ -17,10 +17,11 @@ import {MatTableDataSource} from '@angular/material/table';
 import {ApiService} from '@core/services/api/service';
 import {NotificationService} from '@core/services/notification/service';
 import {UserService} from '@core/services/user/service';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ConstraintTemplate} from '@shared/entity/opa';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {takeUntil, filter, take} from 'rxjs/operators';
+import {takeUntil, filter, take, switchMap} from 'rxjs/operators';
 import {OPADataDialogComponent} from './opa-data-dialog/component';
 
 @Component({
@@ -100,6 +101,54 @@ export class OPAAdminComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(constraintTemplate => {
         this._notificationService.success(`The constraint template ${constraintTemplate.name} was created`);
+      });
+  }
+
+  edit(constraintTemplate: ConstraintTemplate): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Edit Constraint Template',
+        constraintTemplate: constraintTemplate,
+        isEditing: true,
+        confirmLabel: 'Edit',
+      },
+    };
+
+    this._matDialog
+      .open(OPADataDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(filter(constraintTemplate => !!constraintTemplate))
+      .pipe(take(1))
+      .subscribe((result: ConstraintTemplate) => this._edit(constraintTemplate, result));
+  }
+
+  private _edit(original: ConstraintTemplate, edited: ConstraintTemplate): void {
+    this._apiService
+      .patchConstraintTemplate(original.name, edited)
+      .pipe(take(1))
+      .subscribe(constraintTemplate => {
+        this._notificationService.success(`The constraint template ${constraintTemplate.name} was updated`);
+      });
+  }
+
+  delete(constraintTemplate: ConstraintTemplate): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Delete Constraint Template',
+        message: `Are you sure you want to delete the constraint template ${constraintTemplate.name}?
+                  <p class="km-confirmation-dialog-delete-warning"> <i class="km-icon-warning"></i> Deleting this constraint template will cause all constraints related to it to be deleted as well.</p>`,
+        confirmLabel: 'Delete',
+      },
+    };
+
+    this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(switchMap(_ => this._apiService.deleteConstraintTemplate(constraintTemplate.name)))
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._notificationService.success(`The constraint template ${constraintTemplate.name} was deleted`);
       });
   }
 }

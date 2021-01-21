@@ -43,6 +43,14 @@ limitations under the License.
             *matCellDef="let element">
           <div class="km-table-actions"
                fxLayoutAlign="end">
+            <button mat-icon-button
+                    (click)="edit(element)">
+              <i class="km-icon-edit"></i>
+            </button>
+            <button mat-icon-button
+                    (click)="delete(element)">
+              <i class="km-icon-delete"></i>
+            </button>
           </div>
         </td>
       </ng-container>

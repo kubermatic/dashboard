@@ -88,7 +88,7 @@ mat-card {
     overflow-x: unset;
     overflow-y: auto;
 
-    p {
+    p:not(.km-confirmation-dialog-delete-warning) {
       margin: 0 0 8px;
     }
 

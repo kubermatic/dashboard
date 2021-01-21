@@ -435,3 +435,11 @@ km-dashboard {
     }
   }
 }
+
+p.km-confirmation-dialog-delete-warning {
+  display: flex;
+
+  i.km-icon-warning {
+    margin: 3px 10px 0 0;
+  }
+}

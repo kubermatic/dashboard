@@ -354,4 +354,9 @@ export class ApiService {
     const url = `${this._newRestRoot}/constrainttemplates/${ctName}`;
     return this._http.patch<ConstraintTemplate>(url, patch);
   }
+
+  deleteConstraintTemplate(ctName: string): Observable<any> {
+    const url = `${this._newRestRoot}/constrainttemplates/${ctName}`;
+    return this._http.delete(url);
+  }
 }
