@@ -36,14 +36,14 @@ export enum Controls {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class OPADataDialogComponent implements OnInit, OnDestroy {
+export class ConstraintTemplatesDataDialogComponent implements OnInit, OnDestroy {
   readonly controls = Controls;
   form: FormGroup;
   spec = '';
   private _unsubscribe = new Subject<void>();
 
   constructor(
-    public _matDialogRef: MatDialogRef<OPADataDialogComponent>,
+    public _matDialogRef: MatDialogRef<ConstraintTemplatesDataDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ConstraintTemplateDataDialogConfig
   ) {}
 

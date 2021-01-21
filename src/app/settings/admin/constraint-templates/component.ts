@@ -22,13 +22,13 @@ import {ConstraintTemplate} from '@shared/entity/opa';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil, filter, take, switchMap} from 'rxjs/operators';
-import {OPADataDialogComponent} from './opa-data-dialog/component';
+import {ConstraintTemplatesDataDialogComponent} from './constraint-templates-data-dialog/component';
 
 @Component({
-  selector: 'km-opa-admin',
+  selector: 'km-constraint-templates',
   templateUrl: './template.html',
 })
-export class OPAAdminComponent implements OnInit, OnDestroy {
+export class ConstraintTemplatesComponent implements OnInit, OnDestroy {
   constraintTemplates: ConstraintTemplate[] = [];
   dataSource = new MatTableDataSource<ConstraintTemplate>();
   displayedColumns: string[] = ['templateName', 'actions'];
@@ -88,7 +88,7 @@ export class OPAAdminComponent implements OnInit, OnDestroy {
     };
 
     this._matDialog
-      .open(OPADataDialogComponent, dialogConfig)
+      .open(ConstraintTemplatesDataDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(filter(constraintTemplate => !!constraintTemplate))
       .pipe(take(1))
@@ -115,7 +115,7 @@ export class OPAAdminComponent implements OnInit, OnDestroy {
     };
 
     this._matDialog
-      .open(OPADataDialogComponent, dialogConfig)
+      .open(ConstraintTemplatesDataDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(filter(constraintTemplate => !!constraintTemplate))
       .pipe(take(1))
