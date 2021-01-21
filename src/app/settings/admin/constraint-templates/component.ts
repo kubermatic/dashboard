@@ -9,18 +9,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {AppConfigService} from '@app/config.service';
 import {ApiService} from '@core/services/api/service';
 import {NotificationService} from '@core/services/notification/service';
 import {UserService} from '@core/services/user/service';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ConstraintTemplate} from '@shared/entity/opa';
 import * as _ from 'lodash';
-import {Subject} from 'rxjs';
+import {Subject, timer} from 'rxjs';
 import {takeUntil, filter, take, switchMap} from 'rxjs/operators';
 import {ConstraintTemplatesDataDialogComponent} from './constraint-templates-data-dialog/component';
 
@@ -28,19 +29,21 @@ import {ConstraintTemplatesDataDialogComponent} from './constraint-templates-dat
   selector: 'km-constraint-templates',
   templateUrl: './template.html',
 })
-export class ConstraintTemplatesComponent implements OnInit, OnDestroy {
+export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestroy {
   constraintTemplates: ConstraintTemplate[] = [];
   dataSource = new MatTableDataSource<ConstraintTemplate>();
   displayedColumns: string[] = ['templateName', 'actions'];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  private readonly _refreshTime = 10; // in seconds
   private _unsubscribe = new Subject<void>();
 
   constructor(
     private readonly _apiService: ApiService,
     private readonly _userService: UserService,
     private readonly _notificationService: NotificationService,
-    private readonly _matDialog: MatDialog
+    private readonly _matDialog: MatDialog,
+    private readonly _appConfig: AppConfigService
   ) {}
 
   ngOnInit() {
@@ -50,18 +53,20 @@ export class ConstraintTemplatesComponent implements OnInit, OnDestroy {
     this.sort.active = 'templateName';
     this.sort.direction = 'asc';
 
-    this._apiService
-      .getConstraintTemplates()
+    timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase())
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(constraintTemplates => {
-        this.constraintTemplates = constraintTemplates;
-        this.dataSource.data = this.constraintTemplates;
+      .subscribe(() => {
+        this.loadConstraintTemplates();
       });
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
+  }
+
+  ngOnChanges(): void {
+    this.dataSource.data = this.constraintTemplates;
   }
 
   ngOnDestroy(): void {
@@ -78,6 +83,16 @@ export class ConstraintTemplatesComponent implements OnInit, OnDestroy {
     );
   }
 
+  loadConstraintTemplates(): void {
+    this._apiService
+      .getConstraintTemplates()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(constraintTemplates => {
+        this.constraintTemplates = constraintTemplates;
+        this.dataSource.data = this.constraintTemplates;
+      });
+  }
+
   add(): void {
     const dialogConfig: MatDialogConfig = {
       data: {
@@ -92,7 +107,10 @@ export class ConstraintTemplatesComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(filter(constraintTemplate => !!constraintTemplate))
       .pipe(take(1))
-      .subscribe((result: ConstraintTemplate) => this._add(result));
+      .subscribe((result: ConstraintTemplate) => {
+        this._add(result);
+        this.loadConstraintTemplates();
+      });
   }
 
   private _add(constraintTemplate: ConstraintTemplate): void {
@@ -119,7 +137,9 @@ export class ConstraintTemplatesComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(filter(constraintTemplate => !!constraintTemplate))
       .pipe(take(1))
-      .subscribe((result: ConstraintTemplate) => this._edit(constraintTemplate, result));
+      .subscribe((result: ConstraintTemplate) => {
+        this._edit(constraintTemplate, result);
+      });
   }
 
   private _edit(original: ConstraintTemplate, edited: ConstraintTemplate): void {
