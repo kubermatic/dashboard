@@ -101,6 +101,10 @@ limitations under the License.
         <km-property-boolean label="Audit Logging"
                              [value]="cluster.spec.auditLogging?.enabled">
         </km-property-boolean>
+        <!-- TODO: un-comment when feature is done -->
+        <!-- <km-property-boolean label="OPA Integration"
+                             [value]="cluster.spec.opaIntegration?.enabled">
+        </km-property-boolean> -->
         <km-property-boolean *ngIf="nodeData.spec.operatingSystem.ubuntu"
                              label="Upgrade system on the first boot"
                              [value]="nodeData.spec.operatingSystem.ubuntu.distUpgradeOnBoot">
