@@ -17,7 +17,7 @@ import {dump, load} from 'js-yaml';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 
-export interface ConstraintTemplateDataDialogConfig {
+export interface ConstraintTemplateDialogConfig {
   title: string;
   confirmLabel: string;
   isEditing: boolean;
@@ -32,19 +32,19 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-add-constraint-template-dialog',
+  selector: 'km-constraint-template-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class ConstraintTemplatesDataDialogComponent implements OnInit, OnDestroy {
+export class ConstraintTemplateDialog implements OnInit, OnDestroy {
   readonly controls = Controls;
   form: FormGroup;
   spec = '';
-  private _unsubscribe = new Subject<void>();
+  private readonly _unsubscribe = new Subject<void>();
 
   constructor(
-    public _matDialogRef: MatDialogRef<ConstraintTemplatesDataDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ConstraintTemplateDataDialogConfig
+    public _matDialogRef: MatDialogRef<ConstraintTemplateDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: ConstraintTemplateDialogConfig
   ) {}
 
   ngOnInit(): void {

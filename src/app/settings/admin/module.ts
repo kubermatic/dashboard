@@ -36,7 +36,8 @@ import {CustomLinksFormComponent} from './custom-link-form/component';
 import {DynamicDatacentersComponent} from './dynamic-datacenters/component';
 import {DatacenterDataDialogComponent} from './dynamic-datacenters/datacenter-data-dialog/component';
 import {ConstraintTemplatesComponent} from './constraint-templates/component';
-import {ConstraintTemplatesDataDialogComponent} from './constraint-templates/constraint-templates-data-dialog/component';
+import {ConstraintTemplateDialog} from './constraint-templates/constraint-template-dialog/component';
+import {DeleteConstraintTemplateDialog} from './constraint-templates/delete-constraint-template-dialog/component';
 import {AdminSettingsRoutingModule} from './routing';
 
 @NgModule({
@@ -66,7 +67,8 @@ import {AdminSettingsRoutingModule} from './routing';
     PacketSettingsComponent,
     VSphereSettingsComponent,
     ConstraintTemplatesComponent,
-    ConstraintTemplatesDataDialogComponent,
+    ConstraintTemplateDialog,
+    DeleteConstraintTemplateDialog,
   ],
   providers: [PresetDialogService],
 })

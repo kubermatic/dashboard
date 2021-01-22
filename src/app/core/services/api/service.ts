@@ -39,7 +39,6 @@ import {
   ServiceAccountTokenPatch,
 } from '@shared/entity/service-account';
 import {SSHKey} from '@shared/entity/ssh-key';
-import {ConstraintTemplate} from '@shared/entity/opa';
 import {CreateProjectModel} from '@shared/model/CreateProjectModel';
 import {Observable, of, timer} from 'rxjs';
 import {catchError, shareReplay, switchMap} from 'rxjs/operators';
@@ -338,25 +337,5 @@ export class ApiService {
   getSwaggerJson(): Observable<any> {
     const url = '/api/swagger.json';
     return this._http.get(url);
-  }
-
-  getConstraintTemplates(): Observable<ConstraintTemplate[]> {
-    const url = `${this._newRestRoot}/constrainttemplates`;
-    return this._http.get<ConstraintTemplate[]>(url);
-  }
-
-  createConstraintTemplate(template: ConstraintTemplate): Observable<ConstraintTemplate> {
-    const url = `${this._newRestRoot}/constrainttemplates`;
-    return this._http.post<ConstraintTemplate>(url, template);
-  }
-
-  patchConstraintTemplate(ctName: string, patch: ConstraintTemplate): Observable<ConstraintTemplate> {
-    const url = `${this._newRestRoot}/constrainttemplates/${ctName}`;
-    return this._http.patch<ConstraintTemplate>(url, patch);
-  }
-
-  deleteConstraintTemplate(ctName: string): Observable<any> {
-    const url = `${this._newRestRoot}/constrainttemplates/${ctName}`;
-    return this._http.delete(url);
   }
 }

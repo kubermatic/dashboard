@@ -15,18 +15,18 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {AppConfigService} from '@app/config.service';
-import {ApiService} from '@core/services/api/service';
+import {OPAService} from '@core/services/opa/service';
 import {NotificationService} from '@core/services/notification/service';
 import {UserService} from '@core/services/user/service';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ConstraintTemplate} from '@shared/entity/opa';
 import * as _ from 'lodash';
 import {Subject, timer} from 'rxjs';
 import {takeUntil, filter, take, switchMap} from 'rxjs/operators';
-import {ConstraintTemplatesDataDialogComponent} from './constraint-templates-data-dialog/component';
+import {ConstraintTemplateDialog} from './constraint-template-dialog/component';
+import {DeleteConstraintTemplateDialog} from './delete-constraint-template-dialog/component';
 
 @Component({
-  selector: 'km-constraint-templates',
+  selector: 'km-constraint-templates-list',
   templateUrl: './template.html',
 })
 export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestroy {
@@ -36,10 +36,10 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private readonly _refreshTime = 10; // in seconds
-  private _unsubscribe = new Subject<void>();
+  private readonly _unsubscribe = new Subject<void>();
 
   constructor(
-    private readonly _apiService: ApiService,
+    private readonly _opaService: OPAService,
     private readonly _userService: UserService,
     private readonly _notificationService: NotificationService,
     private readonly _matDialog: MatDialog,
@@ -84,7 +84,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
   }
 
   loadConstraintTemplates(): void {
-    this._apiService
+    this._opaService
       .getConstraintTemplates()
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(constraintTemplates => {
@@ -103,7 +103,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
     };
 
     this._matDialog
-      .open(ConstraintTemplatesDataDialogComponent, dialogConfig)
+      .open(ConstraintTemplateDialog, dialogConfig)
       .afterClosed()
       .pipe(filter(constraintTemplate => !!constraintTemplate))
       .pipe(take(1))
@@ -114,7 +114,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
   }
 
   private _add(constraintTemplate: ConstraintTemplate): void {
-    this._apiService
+    this._opaService
       .createConstraintTemplate(constraintTemplate)
       .pipe(take(1))
       .subscribe(constraintTemplate => {
@@ -133,7 +133,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
     };
 
     this._matDialog
-      .open(ConstraintTemplatesDataDialogComponent, dialogConfig)
+      .open(ConstraintTemplateDialog, dialogConfig)
       .afterClosed()
       .pipe(filter(constraintTemplate => !!constraintTemplate))
       .pipe(take(1))
@@ -143,7 +143,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
   }
 
   private _edit(original: ConstraintTemplate, edited: ConstraintTemplate): void {
-    this._apiService
+    this._opaService
       .patchConstraintTemplate(original.name, edited)
       .pipe(take(1))
       .subscribe(constraintTemplate => {
@@ -152,20 +152,13 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
   }
 
   delete(constraintTemplate: ConstraintTemplate): void {
-    const dialogConfig: MatDialogConfig = {
-      data: {
-        title: 'Delete Constraint Template',
-        message: `Are you sure you want to delete the constraint template ${constraintTemplate.name}?
-                  <p class="km-confirmation-dialog-delete-warning"> <i class="km-icon-warning"></i> Deleting this constraint template will cause all constraints related to it to be deleted as well.</p>`,
-        confirmLabel: 'Delete',
-      },
-    };
+    const dialogRef = this._matDialog.open(DeleteConstraintTemplateDialog);
+    dialogRef.componentInstance.constraintTemplate = constraintTemplate;
 
-    this._matDialog
-      .open(ConfirmationDialogComponent, dialogConfig)
+    dialogRef
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(switchMap(_ => this._apiService.deleteConstraintTemplate(constraintTemplate.name)))
+      .pipe(switchMap(_ => this._opaService.deleteConstraintTemplate(constraintTemplate.name)))
       .pipe(take(1))
       .subscribe(_ => {
         this._notificationService.success(`The constraint template ${constraintTemplate.name} was deleted`);
