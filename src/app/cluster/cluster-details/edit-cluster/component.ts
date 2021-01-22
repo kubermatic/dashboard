@@ -67,6 +67,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         Validators.pattern('[a-zA-Z0-9-]*'),
       ]),
       auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
+      opaIntegration: new FormControl(!!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled),
       admissionPlugins: new FormControl(this.cluster.spec.admissionPlugins),
       podNodeSelectorAdmissionPluginConfig: new FormControl(''),
       labels: new FormControl(''),
@@ -148,6 +149,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         cloud: this.providerSettingsPatch.cloudSpecPatch,
         auditLogging: {
           enabled: this.form.controls.auditLogging.value,
+        },
+        opaIntegration: {
+          enabled: this.form.controls.opaIntegration.value,
         },
         usePodNodeSelectorAdmissionPlugin: null,
         usePodSecurityPolicyAdmissionPlugin: null,

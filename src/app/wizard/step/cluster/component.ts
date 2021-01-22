@@ -45,6 +45,7 @@ enum Controls {
   AdmissionPlugins = 'admissionPlugins',
   SSHKeys = 'sshKeys',
   PodNodeSelectorAdmissionPluginConfig = 'podNodeSelectorAdmissionPluginConfig',
+  OPAIntegration = 'opaIntegration',
 }
 
 @Component({
@@ -99,6 +100,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.Type]: new FormControl(''),
       [Controls.ImagePullSecret]: new FormControl(''),
       [Controls.AuditLogging]: new FormControl(false),
+      [Controls.OPAIntegration]: new FormControl(false),
       [Controls.AdmissionPlugins]: new FormControl([]),
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
       [Controls.Labels]: new FormControl(''),
@@ -142,7 +144,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Version).valueChanges,
       this.form.get(Controls.ImagePullSecret).valueChanges,
-      this.form.get(Controls.AuditLogging).valueChanges
+      this.form.get(Controls.AuditLogging).valueChanges,
+      this.form.get(Controls.OPAIntegration).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
@@ -264,6 +267,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         },
         auditLogging: {
           enabled: this.controlValue(Controls.AuditLogging),
+        },
+        opaIntegration: {
+          enabled: this.controlValue(Controls.OPAIntegration),
         },
       } as ClusterSpec,
     } as Cluster;

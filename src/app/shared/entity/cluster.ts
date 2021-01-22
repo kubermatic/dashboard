@@ -196,6 +196,7 @@ export class ClusterSpec {
   cloud: CloudSpec;
   machineNetworks?: MachineNetwork[];
   auditLogging?: AuditLoggingSettings;
+  opaIntegration?: OPAIntegration;
   version?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
@@ -206,6 +207,10 @@ export class ClusterSpec {
 
 export class AuditLoggingSettings {
   enabled?: boolean;
+}
+
+export class OPAIntegration {
+  enabled: boolean;
 }
 
 export class OpenShift {
@@ -246,6 +251,7 @@ export class ClusterSpecPatch {
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
   admissionPlugins?: string[];
+  opaIntegration?: OPAIntegration;
   podNodeSelectorAdmissionPluginConfig?: object;
   auditLogging?: AuditLoggingSettings;
   openshift?: OpenShiftPatch;
