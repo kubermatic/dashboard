@@ -14,13 +14,12 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {AppConfigService} from '@app/config.service';
 import {OPAService} from '@core/services/opa/service';
 import {NotificationService} from '@core/services/notification/service';
 import {UserService} from '@core/services/user/service';
 import {ConstraintTemplate} from '@shared/entity/opa';
 import * as _ from 'lodash';
-import {Subject, timer} from 'rxjs';
+import {merge, Subject, Observable, of} from 'rxjs';
 import {takeUntil, filter, take, switchMap} from 'rxjs/operators';
 import {ConstraintTemplateDialog} from './constraint-template-dialog/component';
 import {DeleteConstraintTemplateDialog} from './delete-constraint-template-dialog/component';
@@ -35,16 +34,20 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
   displayedColumns: string[] = ['templateName', 'actions'];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  private readonly _refreshTime = 10; // in seconds
+  private _constraintTemplatesChanged = new Subject<void>();
   private readonly _unsubscribe = new Subject<void>();
+  private readonly _defaultTimeout = 3000;
 
   constructor(
     private readonly _opaService: OPAService,
     private readonly _userService: UserService,
     private readonly _notificationService: NotificationService,
-    private readonly _matDialog: MatDialog,
-    private readonly _appConfig: AppConfigService
+    private readonly _matDialog: MatDialog
   ) {}
+
+  get _constraintTemplates$(): Observable<ConstraintTemplate[]> {
+    return this._opaService.getConstraintTemplates();
+  }
 
   ngOnInit() {
     this.dataSource.data = this.constraintTemplates;
@@ -53,10 +56,12 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
     this.sort.active = 'templateName';
     this.sort.direction = 'asc';
 
-    timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase())
+    merge(of(true), this._constraintTemplatesChanged)
+      .pipe(switchMap(_ => this._constraintTemplates$))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(() => {
-        this.loadConstraintTemplates();
+      .subscribe(constraintTemplates => {
+        this.constraintTemplates = constraintTemplates;
+        this.dataSource.data = this.constraintTemplates;
       });
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
@@ -83,16 +88,6 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
     );
   }
 
-  loadConstraintTemplates(): void {
-    this._opaService
-      .getConstraintTemplates()
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(constraintTemplates => {
-        this.constraintTemplates = constraintTemplates;
-        this.dataSource.data = this.constraintTemplates;
-      });
-  }
-
   add(): void {
     const dialogConfig: MatDialogConfig = {
       data: {
@@ -109,7 +104,6 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
       .pipe(take(1))
       .subscribe((result: ConstraintTemplate) => {
         this._add(result);
-        this.loadConstraintTemplates();
       });
   }
 
@@ -118,6 +112,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
       .createConstraintTemplate(constraintTemplate)
       .pipe(take(1))
       .subscribe(constraintTemplate => {
+        this._constraintTemplatesChanged.next();
         this._notificationService.success(`The constraint template ${constraintTemplate.name} was created`);
       });
   }
@@ -147,6 +142,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
       .patchConstraintTemplate(original.name, edited)
       .pipe(take(1))
       .subscribe(constraintTemplate => {
+        this._constraintTemplatesChanged.next();
         this._notificationService.success(`The constraint template ${constraintTemplate.name} was updated`);
       });
   }
@@ -162,6 +158,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
       .pipe(take(1))
       .subscribe(_ => {
         this._notificationService.success(`The constraint template ${constraintTemplate.name} was deleted`);
+        setTimeout(() => this._constraintTemplatesChanged.next(), this._defaultTimeout);
       });
   }
 }

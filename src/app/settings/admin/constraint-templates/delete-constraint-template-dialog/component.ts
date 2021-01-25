@@ -10,7 +10,6 @@
 // limitations under the License.
 
 import {Component, Input} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
 import {ConstraintTemplate} from '@shared/entity/opa';
 
 @Component({
@@ -20,6 +19,4 @@ import {ConstraintTemplate} from '@shared/entity/opa';
 })
 export class DeleteConstraintTemplateDialog {
   @Input() constraintTemplate: ConstraintTemplate;
-
-  constructor(public dialogRef: MatDialogRef<DeleteConstraintTemplateDialog>) {}
 }
