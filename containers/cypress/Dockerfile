@@ -11,15 +11,15 @@
 
 FROM ubuntu:16.04 AS download
 
-ENV HELM2_VERSION="v2.16.6"
-ENV HELM3_VERSION="v3.1.2"
-ENV VAULT_VERSION="1.4.1"
-ENV KIND_VERSION="v0.6.1"
-ENV YQ_VERSION="3.3.0"
-ENV KUBECTL_VERSION="v1.18.2"
+ENV HELM2_VERSION="v2.17.0"
+ENV HELM3_VERSION="v3.4.2"
+ENV VAULT_VERSION="1.6.1"
+ENV KIND_VERSION="v0.8.1"
+ENV YQ_VERSION="3.3.2"
+ENV KUBECTL_VERSION="v1.19.7"
 
-RUN apt update && \
-    apt install -y unzip curl && \
+RUN apt-get update && \
+    apt-get install -y unzip curl && \
     curl --fail -L https://get.helm.sh/helm-${HELM2_VERSION}-linux-amd64.tar.gz | tar -xzO linux-amd64/helm > helm2 && \
     curl --fail -L https://get.helm.sh/helm-${HELM3_VERSION}-linux-amd64.tar.gz | tar -xzO linux-amd64/helm > helm3 && \
     curl --fail -LO https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
@@ -59,7 +59,9 @@ RUN apt-get update -qq && \
     apt-get install -y \
     curl \
     bash \
+    bash-completion \
     jq \
+    gettext \
     git && \
     rm -rf /var/lib/apt/lists/* && \
     curl --fail -L https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz|tar -C /usr/local -xvz && \

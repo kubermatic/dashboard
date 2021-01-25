@@ -55,7 +55,7 @@ test-headless: install
 	./hack/upload-coverage.sh
 
 run-e2e-ci: install
-	./hack/e2e/ci-e2e.sh
+	./hack/e2e/run-tests.sh
 
 dist: install
 	@KUBERMATIC_EDITION=${KUBERMATIC_EDITION} $(CC) run build

@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # Copyright 2020 The Kubermatic Kubernetes Platform contributors.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -10,22 +9,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -eo pipefail
-
-shopt -s nocasematch
-if [[ ${KUBERMATIC_EDITION} = ce ]]; then
-  export CYPRESS_KUBERMATIC_EDITION=ce
-else
-  export CYPRESS_KUBERMATIC_EDITION=ee
-fi
-
-export CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME="roxy@loodse.com"
-export CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME_2="roxy2@loodse.com"
-export CYPRESS_KUBERMATIC_DEX_DEV_E2E_PASSWORD="password"
-export CYPRESS_RECORD_KEY=7859bcb8-1d2a-4d56-b7f5-ca70b93f944c
-
-apt install -y gettext bash-completion
-
-source hack/e2e/ci-setup-kubermatic-in-kind.sh
-
-WAIT_ON_TIMEOUT=600000 npm run e2e:local
+apiVersion: operator.kubermatic.io/v1alpha1
+kind: KubermaticConfiguration
+metadata:
+  name: e2e
+  namespace: kubermatic
+spec:
+  ingress:
+    domain: ci.kubermatic.io
+    disable: true
+  imagePullSecret: '__IMAGE_PULL_SECRET__'
+  userCluster:
+    apiserverReplicas: 1
+  api:
+    replicas: 1
+    debugLog: true
+  ui:
+    replicas: 0
+  # Dex integration
+  auth:
+    tokenIssuer: "http://dex.oauth:5556/dex"
+    issuerRedirectURL: "http://localhost:8000"
+    serviceAccountKey: "__SERVICE_ACCOUNT_KEY__"
