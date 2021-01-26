@@ -10,7 +10,7 @@ module.exports = {
   globals: {
     'ts-jest': {
       ...tsJestPreset,
-      tsConfig: 'src/tsconfig.spec.json',
+      tsconfig: 'src/tsconfig.spec.json',
     },
   },
   moduleNameMapper: {

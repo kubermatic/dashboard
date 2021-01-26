@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {HttpClientModule} from '@angular/common/http';
-import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -97,6 +97,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
 
     component.deleteCluster();
     tick();
+    flush();
 
     expect(spyDeleteCluster).toHaveBeenCalled();
   }));

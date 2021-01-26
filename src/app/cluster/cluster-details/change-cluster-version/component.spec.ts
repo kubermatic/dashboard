@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -86,6 +86,8 @@ describe('ChangeClusterVersionComponent', () => {
     fixture.detectChanges();
     component.changeVersion();
     tick();
+    flush();
+
     expect(patchClusterSpy).toHaveBeenCalledTimes(1);
   }));
 
@@ -97,6 +99,7 @@ describe('ChangeClusterVersionComponent', () => {
     fixture.detectChanges();
     component.upgradeMachineDeployments();
     tick();
+    flush();
 
     expect(upgradeClusterMachineDeploymentsSpy).toHaveBeenCalled();
   }));

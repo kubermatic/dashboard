@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -72,6 +72,7 @@ describe('EditServiceAccountComponent', () => {
     component.editServiceAccountForm.controls.group.patchValue('editors');
     component.editServiceAccount();
     tick();
+    flush();
 
     expect(editServiceAccountSpy).toHaveBeenCalled();
   }));
