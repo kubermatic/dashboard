@@ -26,6 +26,7 @@ import {AddAdminDialogComponent} from './add-admin-dialog/component';
 @Component({
   selector: 'km-admins',
   templateUrl: './template.html',
+  styleUrls: ['style.scss'],
 })
 export class AdminsComponent implements OnInit, OnChanges {
   user: Member;
