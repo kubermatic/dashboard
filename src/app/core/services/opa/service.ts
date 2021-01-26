@@ -11,19 +11,40 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
 import {ConstraintTemplate} from '@shared/entity/opa';
-import {Observable} from 'rxjs';
+import {Observable, Subject, timer, merge} from 'rxjs';
+import {switchMap, shareReplay} from 'rxjs/operators';
 
 @Injectable()
 export class OPAService {
   private _newRestRoot: string = environment.newRestRoot;
 
-  constructor(private readonly _http: HttpClient) {}
+  private readonly _refreshTime = 10;
+  private _constraintTemplates$: Observable<ConstraintTemplate[]>;
+  private _constraintTemplatesRefresh$ = new Subject<void>();
+  private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
-  getConstraintTemplates(): Observable<ConstraintTemplate[]> {
+  constructor(private readonly _http: HttpClient, private readonly _appConfigService: AppConfigService) {}
+
+  get constraintTemplates(): Observable<ConstraintTemplate[]> {
+    if (!this._constraintTemplates$) {
+      this._constraintTemplates$ = merge(this._constraintTemplatesRefresh$, this._refreshTimer$)
+        .pipe(switchMap(_ => this._getConstraintTemplates()))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+    }
+
+    return this._constraintTemplates$;
+  }
+
+  private _getConstraintTemplates(): Observable<ConstraintTemplate[]> {
     const url = `${this._newRestRoot}/constrainttemplates`;
     return this._http.get<ConstraintTemplate[]>(url);
+  }
+
+  refreshConstraintTemplates(): void {
+    this._constraintTemplatesRefresh$.next();
   }
 
   createConstraintTemplate(template: ConstraintTemplate): Observable<ConstraintTemplate> {

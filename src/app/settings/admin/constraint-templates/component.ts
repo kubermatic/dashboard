@@ -19,7 +19,7 @@ import {NotificationService} from '@core/services/notification/service';
 import {UserService} from '@core/services/user/service';
 import {ConstraintTemplate} from '@shared/entity/opa';
 import * as _ from 'lodash';
-import {merge, Subject, Observable, of} from 'rxjs';
+import {Subject} from 'rxjs';
 import {takeUntil, filter, take, switchMap} from 'rxjs/operators';
 import {ConstraintTemplateDialog} from './constraint-template-dialog/component';
 import {DeleteConstraintTemplateDialog} from './delete-constraint-template-dialog/component';
@@ -34,7 +34,6 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
   displayedColumns: string[] = ['templateName', 'actions'];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  private _constraintTemplatesChanged = new Subject<void>();
   private readonly _unsubscribe = new Subject<void>();
   private readonly _defaultTimeout = 3000;
 
@@ -45,10 +44,6 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
     private readonly _matDialog: MatDialog
   ) {}
 
-  get _constraintTemplates$(): Observable<ConstraintTemplate[]> {
-    return this._opaService.getConstraintTemplates();
-  }
-
   ngOnInit() {
     this.dataSource.data = this.constraintTemplates;
     this.dataSource.sort = this.sort;
@@ -56,13 +51,10 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
     this.sort.active = 'templateName';
     this.sort.direction = 'asc';
 
-    merge(of(true), this._constraintTemplatesChanged)
-      .pipe(switchMap(_ => this._constraintTemplates$))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(constraintTemplates => {
-        this.constraintTemplates = constraintTemplates;
-        this.dataSource.data = this.constraintTemplates;
-      });
+    this._opaService.constraintTemplates.pipe(takeUntil(this._unsubscribe)).subscribe(constraintTemplates => {
+      this.constraintTemplates = constraintTemplates;
+      this.dataSource.data = this.constraintTemplates;
+    });
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
@@ -112,7 +104,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
       .createConstraintTemplate(constraintTemplate)
       .pipe(take(1))
       .subscribe(constraintTemplate => {
-        this._constraintTemplatesChanged.next();
+        this._opaService.refreshConstraintTemplates();
         this._notificationService.success(`The constraint template ${constraintTemplate.name} was created`);
       });
   }
@@ -142,7 +134,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
       .patchConstraintTemplate(original.name, edited)
       .pipe(take(1))
       .subscribe(constraintTemplate => {
-        this._constraintTemplatesChanged.next();
+        this._opaService.refreshConstraintTemplates();
         this._notificationService.success(`The constraint template ${constraintTemplate.name} was updated`);
       });
   }
@@ -158,7 +150,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
       .pipe(take(1))
       .subscribe(_ => {
         this._notificationService.success(`The constraint template ${constraintTemplate.name} was deleted`);
-        setTimeout(() => this._constraintTemplatesChanged.next(), this._defaultTimeout);
+        setTimeout(() => this._opaService.refreshConstraintTemplates(), this._defaultTimeout);
       });
   }
 }
