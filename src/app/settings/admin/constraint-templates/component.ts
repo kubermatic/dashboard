@@ -15,13 +15,12 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {OPAService} from '@core/services/opa/service';
-import {NotificationService} from '@core/services/notification/service';
 import {UserService} from '@core/services/user/service';
 import {ConstraintTemplate} from '@shared/entity/opa';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {takeUntil, filter, take, switchMap} from 'rxjs/operators';
-import {ConstraintTemplateDialog} from './constraint-template-dialog/component';
+import {take, takeUntil} from 'rxjs/operators';
+import {Mode, ConstraintTemplateDialog} from './constraint-template-dialog/component';
 import {DeleteConstraintTemplateDialog} from './delete-constraint-template-dialog/component';
 
 @Component({
@@ -35,12 +34,10 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private readonly _unsubscribe = new Subject<void>();
-  private readonly _defaultTimeout = 3000;
 
   constructor(
     private readonly _opaService: OPAService,
     private readonly _userService: UserService,
-    private readonly _notificationService: NotificationService,
     private readonly _matDialog: MatDialog
   ) {}
 
@@ -84,7 +81,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Add Constraint Template',
-        isEditing: false,
+        mode: Mode.Add,
         confirmLabel: 'Add',
       },
     };
@@ -92,21 +89,8 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
     this._matDialog
       .open(ConstraintTemplateDialog, dialogConfig)
       .afterClosed()
-      .pipe(filter(constraintTemplate => !!constraintTemplate))
       .pipe(take(1))
-      .subscribe((result: ConstraintTemplate) => {
-        this._add(result);
-      });
-  }
-
-  private _add(constraintTemplate: ConstraintTemplate): void {
-    this._opaService
-      .createConstraintTemplate(constraintTemplate)
-      .pipe(take(1))
-      .subscribe(constraintTemplate => {
-        this._opaService.refreshConstraintTemplates();
-        this._notificationService.success(`The constraint template ${constraintTemplate.name} was created`);
-      });
+      .subscribe(_ => {});
   }
 
   edit(constraintTemplate: ConstraintTemplate): void {
@@ -114,7 +98,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
       data: {
         title: 'Edit Constraint Template',
         constraintTemplate: constraintTemplate,
-        isEditing: true,
+        mode: Mode.Edit,
         confirmLabel: 'Edit',
       },
     };
@@ -122,35 +106,21 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
     this._matDialog
       .open(ConstraintTemplateDialog, dialogConfig)
       .afterClosed()
-      .pipe(filter(constraintTemplate => !!constraintTemplate))
       .pipe(take(1))
-      .subscribe((result: ConstraintTemplate) => {
-        this._edit(constraintTemplate, result);
-      });
-  }
-
-  private _edit(original: ConstraintTemplate, edited: ConstraintTemplate): void {
-    this._opaService
-      .patchConstraintTemplate(original.name, edited)
-      .pipe(take(1))
-      .subscribe(constraintTemplate => {
-        this._opaService.refreshConstraintTemplates();
-        this._notificationService.success(`The constraint template ${constraintTemplate.name} was updated`);
-      });
+      .subscribe(_ => {});
   }
 
   delete(constraintTemplate: ConstraintTemplate): void {
-    const dialogRef = this._matDialog.open(DeleteConstraintTemplateDialog);
-    dialogRef.componentInstance.constraintTemplate = constraintTemplate;
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        constraintTemplate: constraintTemplate,
+      },
+    };
 
-    dialogRef
+    this._matDialog
+      .open(DeleteConstraintTemplateDialog, dialogConfig)
       .afterClosed()
-      .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(switchMap(_ => this._opaService.deleteConstraintTemplate(constraintTemplate.name)))
       .pipe(take(1))
-      .subscribe(_ => {
-        this._notificationService.success(`The constraint template ${constraintTemplate.name} was deleted`);
-        setTimeout(() => this._opaService.refreshConstraintTemplates(), this._defaultTimeout);
-      });
+      .subscribe(_ => {});
   }
 }

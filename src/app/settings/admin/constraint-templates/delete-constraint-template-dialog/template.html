@@ -13,7 +13,7 @@ limitations under the License.
 <div id="km-delete-constraint-template-dialog">
   <km-dialog-title>Delete Constraint Template</km-dialog-title>
   <mat-dialog-content>
-    <p>Are you sure you want to delete the constraint template {{constraintTemplate.name}}?</p>
+    <p>Are you sure you want to delete the constraint template {{data.constraintTemplate.name}}?</p>
     <p class="km-confirmation-dialog-delete-warning">
       <i class="km-icon-warning"></i>
       Deleting this constraint template will cause all constraints related to it to be deleted as well.
@@ -21,7 +21,7 @@ limitations under the License.
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-flat-button
-            [mat-dialog-close]="true"
+            (click)="delete()"
             id="km-delete-constraint-template-dialog-confirm-btn">
       Delete
     </button>

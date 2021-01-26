@@ -9,8 +9,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
+import {Component, Inject} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {OPAService} from '@core/services/opa/service';
+import {NotificationService} from '@core/services/notification/service';
 import {ConstraintTemplate} from '@shared/entity/opa';
+import {take} from 'rxjs/operators';
+
+export interface DeleteConstraintTemplateDialogConfig {
+  constraintTemplate: ConstraintTemplate;
+}
 
 @Component({
   selector: 'km-delete-constraint-template-dialog',
@@ -18,5 +26,23 @@ import {ConstraintTemplate} from '@shared/entity/opa';
   styleUrls: ['./style.scss'],
 })
 export class DeleteConstraintTemplateDialog {
-  @Input() constraintTemplate: ConstraintTemplate;
+  private readonly _defaultTimeout = 3000;
+
+  constructor(
+    public _matDialogRef: MatDialogRef<DeleteConstraintTemplateDialog>,
+    private readonly _opaService: OPAService,
+    private readonly _notificationService: NotificationService,
+    @Inject(MAT_DIALOG_DATA) public data: DeleteConstraintTemplateDialogConfig
+  ) {}
+
+  delete(): void {
+    this._opaService
+      .deleteConstraintTemplate(this.data.constraintTemplate.name)
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._matDialogRef.close(true);
+        this._notificationService.success(`The constraint template ${this.data.constraintTemplate.name} was deleted`);
+        setTimeout(() => this._opaService.refreshConstraintTemplates(), this._defaultTimeout);
+      });
+  }
 }

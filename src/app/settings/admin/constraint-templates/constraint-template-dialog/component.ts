@@ -12,18 +12,26 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {OPAService} from '@core/services/opa/service';
+import {NotificationService} from '@core/services/notification/service';
 import {ConstraintTemplate} from '@shared/entity/opa';
 import {dump, load} from 'js-yaml';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
+import {take} from 'rxjs/operators';
 
 export interface ConstraintTemplateDialogConfig {
   title: string;
+  mode: Mode;
   confirmLabel: string;
-  isEditing: boolean;
 
   // Constraint Template has to be specified only if dialog is used in the edit mode.
   constraintTemplate?: ConstraintTemplate;
+}
+
+export enum Mode {
+  Add = 'add',
+  Edit = 'edit',
 }
 
 export enum Controls {
@@ -44,12 +52,16 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
 
   constructor(
     public _matDialogRef: MatDialogRef<ConstraintTemplateDialog>,
+    private readonly _opaService: OPAService,
+    private readonly _notificationService: NotificationService,
     @Inject(MAT_DIALOG_DATA) public data: ConstraintTemplateDialogConfig
   ) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      name: new FormControl(this.data.isEditing ? this.data.constraintTemplate.name : '', [Validators.required]),
+      name: new FormControl(this.data.mode === Mode.Edit ? this.data.constraintTemplate.name : '', [
+        Validators.required,
+      ]),
     });
 
     this._initProviderConfigEditor();
@@ -61,7 +73,7 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
   }
 
   private _initProviderConfigEditor(): void {
-    if (this.data.isEditing) {
+    if (this.data.mode === Mode.Edit) {
       const spec = this.data.constraintTemplate.spec;
       if (!_.isEmpty(spec)) {
         this.spec = dump(spec);
@@ -80,6 +92,33 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
       spec: this._getSpec(),
     };
 
-    this._matDialogRef.close(constraintTemplate);
+    switch (this.data.mode) {
+      case Mode.Add:
+        return this._create(constraintTemplate);
+      case Mode.Edit:
+        return this._edit(constraintTemplate);
+    }
+  }
+
+  private _create(constraintTemplate: ConstraintTemplate): void {
+    this._opaService
+      .createConstraintTemplate(constraintTemplate)
+      .pipe(take(1))
+      .subscribe(result => {
+        this._matDialogRef.close(true);
+        this._notificationService.success(`The constraint template ${result.name} was created`);
+        this._opaService.refreshConstraintTemplates();
+      });
+  }
+
+  private _edit(constraintTemplate: ConstraintTemplate): void {
+    this._opaService
+      .patchConstraintTemplate(this.data.constraintTemplate.name, constraintTemplate)
+      .pipe(take(1))
+      .subscribe(result => {
+        this._matDialogRef.close(true);
+        this._notificationService.success(`The constraint template ${result.name} was updated`);
+        this._opaService.refreshConstraintTemplates();
+      });
   }
 }
