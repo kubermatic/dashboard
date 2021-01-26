@@ -16,12 +16,13 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {OPAService} from '@core/services/opa/service';
 import {UserService} from '@core/services/user/service';
+import {NotificationService} from '@core/services/notification/service';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ConstraintTemplate} from '@shared/entity/opa';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {take, takeUntil} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {Mode, ConstraintTemplateDialog} from './constraint-template-dialog/component';
-import {DeleteConstraintTemplateDialog} from './delete-constraint-template-dialog/component';
 
 @Component({
   selector: 'km-constraint-templates-list',
@@ -34,10 +35,12 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private readonly _unsubscribe = new Subject<void>();
+  private readonly _defaultTimeout = 3000;
 
   constructor(
     private readonly _opaService: OPAService,
     private readonly _userService: UserService,
+    private readonly _notificationService: NotificationService,
     private readonly _matDialog: MatDialog
   ) {}
 
@@ -112,15 +115,25 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
 
   delete(constraintTemplate: ConstraintTemplate): void {
     const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
       data: {
-        constraintTemplate: constraintTemplate,
+        title: 'Delete Constraint Template',
+        message: `Are you sure you want to delete the constraint template ${constraintTemplate.name}?`,
+        confirmLabel: 'Delete',
+        warning: 'Deleting this constraint template will cause all constraints related to it to be deleted as well.',
       },
     };
 
     this._matDialog
-      .open(DeleteConstraintTemplateDialog, dialogConfig)
+      .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(switchMap(_ => this._opaService.deleteConstraintTemplate(constraintTemplate.name)))
       .pipe(take(1))
-      .subscribe(_ => {});
+      .subscribe(_ => {
+        this._notificationService.success(`The constraint template ${constraintTemplate.name} was deleted`);
+        setTimeout(() => this._opaService.refreshConstraintTemplates(), this._defaultTimeout);
+      });
   }
 }

@@ -37,7 +37,6 @@ import {DynamicDatacentersComponent} from './dynamic-datacenters/component';
 import {DatacenterDataDialogComponent} from './dynamic-datacenters/datacenter-data-dialog/component';
 import {ConstraintTemplatesComponent} from './constraint-templates/component';
 import {ConstraintTemplateDialog} from './constraint-templates/constraint-template-dialog/component';
-import {DeleteConstraintTemplateDialog} from './constraint-templates/delete-constraint-template-dialog/component';
 import {AdminSettingsRoutingModule} from './routing';
 
 @NgModule({
@@ -68,7 +67,6 @@ import {AdminSettingsRoutingModule} from './routing';
     VSphereSettingsComponent,
     ConstraintTemplatesComponent,
     ConstraintTemplateDialog,
-    DeleteConstraintTemplateDialog,
   ],
   providers: [PresetDialogService],
 })
