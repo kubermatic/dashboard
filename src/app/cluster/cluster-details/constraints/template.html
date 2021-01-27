@@ -16,8 +16,8 @@ limitations under the License.
        matSort
        matSortActive="constraintName"
        matSortDirection="asc"
-       [dataSource]="constraintsDataSource"
-       [hidden]="isLoadingData(constraintsDataSource.data)">
+       [dataSource]="dataSource"
+       [hidden]="isLoadingData(dataSource.data)">
   <ng-container matColumnDef="constraintName">
     <th mat-header-cell
         *matHeaderCellDef
@@ -70,16 +70,16 @@ limitations under the License.
 
   <tr mat-header-row
       class="km-header-row"
-      *matHeaderRowDef="constraintsDisplayedColumns"></tr>
+      *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row
-      *matRowDef="let row; columns: constraintsDisplayedColumns"
+      *matRowDef="let row; columns: displayedColumns"
       class="km-mat-row"
       [attr.id]="row.id"></tr>
 </table>
 
 <div class="km-row km-empty-list-msg"
-     *ngIf="hasNoData(constraintsDataSource.data)">
+     *ngIf="hasNoData(dataSource.data)">
   No constraints available.
 </div>
 
-<km-loader *ngIf="isLoadingData(constraintsDataSource.data)"></km-loader>
+<km-loader *ngIf="isLoadingData(dataSource.data)"></km-loader>

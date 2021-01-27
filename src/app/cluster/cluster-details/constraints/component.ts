@@ -9,12 +9,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {OPAService} from '@core/services/opa/service';
+import {UserService} from '@core/services/user/service';
 import {Cluster} from '@shared/entity/cluster';
 import {Constraint} from '@shared/entity/opa';
+import {UserSettings} from '@shared/entity/settings';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-constraints-list',
@@ -23,24 +29,70 @@ import {Subject} from 'rxjs';
 export class ConstraintsComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
   @Input() projectID: string;
-  constraintsDataSource = new MatTableDataSource<Constraint>();
-  constraintsDisplayedColumns: string[] = ['constraintName', 'constraintTemplate', 'targets', 'violations', 'actions'];
+  @Input() isClusterRunning: boolean;
+  constraints: Constraint[] = [];
+  settings: UserSettings;
+  dataSource = new MatTableDataSource<Constraint>();
+  displayedColumns: string[] = ['constraintName', 'constraintTemplate', 'targets', 'violations', 'actions'];
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  paginator: MatPaginator;
+  @ViewChild(MatPaginator)
+  set matPaginator(mp: MatPaginator) {
+    this.paginator = mp;
+    if (this.paginator && this.settings) {
+      this.paginator.pageSize = this.settings.itemsPerPage;
+    }
+    this.dataSource.paginator = this.paginator;
+    this._cdr.detectChanges();
+  }
+
   private _unsubscribe = new Subject<void>();
 
-  constructor() {}
+  constructor(
+    private readonly _opaService: OPAService,
+    private readonly _userService: UserService,
+    private readonly _cdr: ChangeDetectorRef
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.dataSource.data = this.constraints;
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    this.sort.active = 'templateName';
+    this.sort.direction = 'asc';
+
+    this._opaService
+      .constraints(this.projectID, this.cluster.id)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(constraints => {
+        this.constraints = constraints;
+        this.dataSource.data = this.constraints;
+      });
+
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.settings = settings;
+    });
+  }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
   }
 
+  isPaginatorVisible(): boolean {
+    return (
+      this.constraints &&
+      this.constraints.length > 0 &&
+      this.paginator &&
+      this.constraints.length > this.paginator.pageSize
+    );
+  }
+
   isLoadingData(data: Constraint[]): boolean {
-    return _.isEmpty(data);
+    return _.isEmpty(data) && !this.isClusterRunning;
   }
 
   hasNoData(data: Constraint[]): boolean {
-    return _.isEmpty(data);
+    return _.isEmpty(data) && this.isClusterRunning;
   }
 }
