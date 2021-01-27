@@ -21,6 +21,7 @@ import {ClusterService} from '@core/services/cluster/service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {HistoryService} from '@core/services/history/service';
 import {LabelService} from '@core/services/label/service';
+import {OPAService} from '@core/services/opa/service';
 import {ParamsService} from '@core/services/params/service';
 import {RBACService} from '@core/services/rbac/service';
 import {PresetsService} from '@core/services/wizard/presets.service';
@@ -93,6 +94,7 @@ const services: any[] = [
   ThemeInformerService,
   TokenService,
   PageTitleService,
+  OPAService,
 ];
 
 const interceptors: any[] = [
