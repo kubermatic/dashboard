@@ -28,8 +28,6 @@ limitations under the License.
   </div>
 </div>
 
-<km-preset-list></km-preset-list>
-
 <mat-card>
   <mat-card-header>
     <mat-card-title>Admin Settings</mat-card-title>
@@ -213,6 +211,14 @@ limitations under the License.
   </mat-card-content>
 </mat-card>
 
-<km-dynamic-datacenters></km-dynamic-datacenters>
-
-<km-admins></km-admins>
+<km-tab-card>
+  <km-tab label="Dynamic Datacenters">
+    <km-dynamic-datacenters></km-dynamic-datacenters>
+  </km-tab>
+  <km-tab label="Administrators">
+    <km-admins></km-admins>
+  </km-tab>
+  <km-tab label="Presets">
+    <km-preset-list></km-preset-list>
+  </km-tab>
+</km-tab-card>
