@@ -19,6 +19,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {Auth} from '@core/services/auth/service';
+import {AppConfigService} from '@app/config.service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
@@ -101,6 +103,8 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
     private readonly _presets: PresetsService,
     private readonly _clusterService: ClusterService,
     private readonly _datacenterService: DatacenterService,
+    private readonly _appConfigService: AppConfigService,
+    private readonly _auth: Auth,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super('Openstack Provider Basic');
@@ -134,7 +138,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.datacenter).pipe(take(1))))
       .pipe(tap(dc => (this._isFloatingPoolIPEnforced = dc.spec.openstack.enforce_floating_ip)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this.form.reset());
+      .subscribe(this._formReset.bind(this));
 
     merge(
       this.form.get(Controls.Domain).valueChanges,
@@ -192,6 +196,19 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       .subscribe(value => {
         value ? this.form.get(Controls.Project).disable() : this.form.get(Controls.Project).enable();
       });
+  }
+
+  private _formReset(): void {
+    this.form.reset();
+    const config = this._appConfigService.getConfig();
+    if (config.openstack) {
+      if (config.openstack.wizard_default_domain_name) {
+        this.form.get(Controls.Domain).setValue(config.openstack.wizard_default_domain_name);
+      }
+      if (config.openstack.wizard_use_default_user) {
+        this.form.get(Controls.Username).setValue(this._auth.getUsername());
+      }
+    }
   }
 
   ngOnDestroy(): void {

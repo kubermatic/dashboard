@@ -9,44 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'mixins';
 @import 'variables';
 
-.header {
-  padding: 0 30px;
+.spec {
+  font-size: $font-size-subhead-lg;
+  line-height: 25px;
+  margin-top: 24px;
 }
 
-.filters {
-  margin-top: -16px;
-
-  .filter-title {
-    margin: -20px 8px 0 0;
-  }
-
-  .mat-form-field {
-    width: 280px;
-  }
-}
-
-.km-provider-logo {
-  background-position: left;
-  margin: 8px 8px 0 0;
-  max-height: 28px;
-  max-width: 120px;
-  min-height: 28px;
-  min-width: 40px;
-
-  &.provider-logo-medium {
-    margin: unset;
-    max-height: 22px;
-    max-width: 80px;
-    min-height: 22px;
-  }
-
-  &.provider-logo-small {
-    margin: unset;
-    max-height: 18px;
-    max-width: 80px;
-    min-height: 18px;
-  }
+.monaco-editor {
+  margin-top: 16px;
 }
