@@ -190,6 +190,10 @@ a {
     min-width: $notification-width;
     overflow: hidden;
     padding: 0;
+
+    div {
+      height: 100%;
+    }
   }
 }
 

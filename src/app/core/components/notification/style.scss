@@ -21,6 +21,12 @@
   max-height: 100%;
   padding: 8px 20px;
   word-break: break-word;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 }
 
 .km-icon-close {
@@ -28,5 +34,6 @@
 }
 
 :host {
+  height: 100%;
   width: 100%;
 }

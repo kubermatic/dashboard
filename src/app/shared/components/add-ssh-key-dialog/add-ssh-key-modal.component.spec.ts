@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -102,6 +102,7 @@ describe('AddSshKeyDialogComponent', () => {
     component.addSSHKey();
     tick();
     fixture.detectChanges();
+    flush();
 
     expect(spyDialogRefClose).toHaveBeenCalledTimes(1);
   }));

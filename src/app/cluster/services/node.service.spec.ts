@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {fakeAsync, inject, TestBed, tick} from '@angular/core/testing';
+import {fakeAsync, flush, inject, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -55,10 +55,11 @@ describe('NodeService', () => {
       const projectID = fakeProject().id;
       let isConfirmed = false;
 
-      service.showMachineDeploymentDeleteDialog(md, clusterID, projectID, null).subscribe(confirmed => {
-        isConfirmed = confirmed;
-      });
+      service
+        .showMachineDeploymentDeleteDialog(md, clusterID, projectID, null)
+        .subscribe(confirmed => (isConfirmed = confirmed));
       tick();
+      flush();
 
       expect(isConfirmed).toBeTruthy();
     })
