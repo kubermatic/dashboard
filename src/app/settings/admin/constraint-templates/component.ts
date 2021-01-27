@@ -35,7 +35,6 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private readonly _unsubscribe = new Subject<void>();
-  private readonly _defaultTimeout = 3000;
 
   constructor(
     private readonly _opaService: OPAService,
@@ -133,7 +132,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
       .pipe(take(1))
       .subscribe(_ => {
         this._notificationService.success(`The constraint template ${constraintTemplate.name} was deleted`);
-        setTimeout(() => this._opaService.refreshConstraintTemplates(), this._defaultTimeout);
+        this._opaService.refreshConstraintTemplates();
       });
   }
 }
