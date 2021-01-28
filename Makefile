@@ -19,7 +19,7 @@ ifeq (${HUMAN_VERSION},)
 	TARGET_BRANCH=$(or ${PULL_BASE_REF},${PULL_BASE_REF},${CURRENT_BRANCH})
 
 	ifeq (${TARGET_BRANCH},master)
-	HUMAN_VERSION=v2.16.0-dev-g$(shell git rev-parse --short HEAD)
+	HUMAN_VERSION=v2.17.0-dev-g$(shell git rev-parse --short HEAD)
 	else
 	HUMAN_VERSION=$(shell git describe --tags --match "v[0-9]*")
 	endif
