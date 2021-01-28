@@ -78,4 +78,9 @@ export class OPAService {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/constraints`;
     return this._http.get<Constraint[]>(url);
   }
+
+  createConstraint(projectId: string, clusterId: string, constraint: Constraint): Observable<Constraint> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/constraints`;
+    return this._http.post<Constraint>(url, constraint);
+  }
 }

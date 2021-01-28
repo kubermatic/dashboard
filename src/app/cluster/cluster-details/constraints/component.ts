@@ -10,6 +10,7 @@
 // limitations under the License.
 
 import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -20,17 +21,20 @@ import {Constraint} from '@shared/entity/opa';
 import {UserSettings} from '@shared/entity/settings';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
+import {Mode, ConstraintDialog} from './constraint-dialog/component';
 
 @Component({
   selector: 'km-constraints-list',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class ConstraintsComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
   constraints: Constraint[] = [];
+
   settings: UserSettings;
   dataSource = new MatTableDataSource<Constraint>();
   displayedColumns: string[] = ['constraintName', 'constraintTemplate', 'targets', 'violations', 'actions'];
@@ -51,7 +55,8 @@ export class ConstraintsComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _opaService: OPAService,
     private readonly _userService: UserService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _matDialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -94,5 +99,23 @@ export class ConstraintsComponent implements OnInit, OnDestroy {
 
   hasNoData(data: Constraint[]): boolean {
     return _.isEmpty(data) && this.isClusterRunning;
+  }
+
+  add(): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Add Constraint',
+        projectId: this.projectID,
+        clusterId: this.cluster.id,
+        mode: Mode.Add,
+        confirmLabel: 'Add',
+      },
+    };
+
+    this._matDialog
+      .open(ConstraintDialog, dialogConfig)
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {});
   }
 }

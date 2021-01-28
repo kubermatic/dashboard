@@ -11,6 +11,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<button mat-icon-button
+        class="add-button"
+        matTooltip="Add Constraint"
+        *ngIf="isClusterRunning"
+        (click)="add()">
+  <i class="km-icon-add"></i>
+</button>
+
 <table class="km-table"
        mat-table
        matSort
@@ -35,7 +43,7 @@ limitations under the License.
         mat-sort-header>Constraint Template
     </th>
     <td mat-cell
-        *matCellDef="let element">{{element.name}}</td>
+        *matCellDef="let element">{{element.spec.constraintType}}</td>
   </ng-container>
 
   <ng-container matColumnDef="targets">
