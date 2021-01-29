@@ -207,6 +207,66 @@ limitations under the License.
         </mat-form-field>
         <km-settings-status [isSaved]="isEqual(settings.userProjectsLimit, apiSettings.userProjectsLimit)"></km-settings-status>
       </div>
+
+      <div fxLayout="row">
+        <div fxFlex="16%"
+             fxLayoutAlign=" center"
+             class="entry-label">
+          <span>Resource quota</span>
+          <div class="km-icon-info km-pointer"
+               matTooltip=""></div>
+        </div>
+
+        <mat-form-field class="input km-no-padding">
+          <mat-label>Min CPU</mat-label>
+          <input matInput
+                 required
+                 type="number"
+                 min="0"
+                 autocomplete="off"
+                 [(ngModel)]="settings.machineDeploymentVMResourceQuota.minCPU"
+                 (change)="onSettingsChange()">
+        </mat-form-field>
+
+        <mat-form-field class="input km-no-padding">
+          <mat-label>Max CPU</mat-label>
+          <input matInput
+                 required
+                 type="number"
+                 min="0"
+                 autocomplete="off"
+                 [(ngModel)]="settings.machineDeploymentVMResourceQuota.maxCPU"
+                 (change)="onSettingsChange()">
+        </mat-form-field>
+
+        <mat-form-field class="input km-no-padding">
+          <mat-label>Min RAM</mat-label>
+          <input matInput
+                 required
+                 type="number"
+                 min="0"
+                 autocomplete="off"
+                 [(ngModel)]="settings.machineDeploymentVMResourceQuota.minRAM"
+                 (change)="onSettingsChange()">
+        </mat-form-field>
+
+        <mat-form-field class="input km-no-padding">
+          <mat-label>Max RAM</mat-label>
+          <input matInput
+                 required
+                 type="number"
+                 min="0"
+                 autocomplete="off"
+                 [(ngModel)]="settings.machineDeploymentVMResourceQuota.maxRAM"
+                 (change)="onSettingsChange()">
+        </mat-form-field>
+
+        <mat-checkbox fxLayoutAlign=" center"
+                      [(ngModel)]="settings.machineDeploymentVMResourceQuota.enableGPU"
+                      (change)="onSettingsChange()">Enable GPU</mat-checkbox>
+
+        <km-settings-status [isSaved]="isEqual(settings.machineDeploymentVMResourceQuota, apiSettings.machineDeploymentVMResourceQuota)"></km-settings-status>
+      </div>
     </div>
   </mat-card-content>
 </mat-card>

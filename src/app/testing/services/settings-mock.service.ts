@@ -35,6 +35,13 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
   userProjectsLimit: 0,
   restrictProjectCreation: false,
   enableExternalClusterImport: true,
+  machineDeploymentVMResourceQuota: {
+    minRAM: 0,
+    maxRAM: 0,
+    minCPU: 0,
+    maxCPU: 0,
+    enableGPU: false,
+  },
 };
 
 @Injectable()
