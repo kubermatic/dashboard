@@ -162,9 +162,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     this.form
       .get(Controls.Datastore)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(d => {
-        this._clusterService.cluster.spec.cloud.vsphere.datastore = d;
-      });
+      .subscribe(d => (this._clusterService.cluster.spec.cloud.vsphere.datastore = d));
   }
 
   getNetworks(type: string): VSphereNetwork[] {
