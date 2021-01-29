@@ -44,12 +44,21 @@ limitations under the License.
 
   <mat-form-field fxFlex>
     <mat-label>Datastore</mat-label>
-    <input matInput
+    <input type="text"
+           matInput
            [formControlName]="Controls.Datastore"
-           [name]="Controls.Datastore"
-           type="text"
-           autocomplete="off">
-    <mat-hint>Datastore to be used for the virtual machines. It is mutually exclusive with Datastore Cluster field.</mat-hint>
+           [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption
+                      #auto="matAutocomplete">
+      <mat-option *ngFor="let datastore of datastores | filterBy: form.get(Controls.Datastore).value"
+                  [value]="datastore">
+        {{datastore}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-hint>
+      <ng-container>Datastore to be used for the virtual machines. It is mutually exclusive with Datastore Cluster field.</ng-container>
+      <ng-container *ngIf="!hasRequiredCredentials()">&nbsp;Enter your credentials to load autocompletions.</ng-container>
+    </mat-hint>
   </mat-form-field>
 
   <mat-form-field fxFlex>
