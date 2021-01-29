@@ -30,8 +30,8 @@ import {isObjectEmpty} from '@shared/utils/common-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 import * as _ from 'lodash';
-import {forkJoin, merge, Observable, of} from 'rxjs';
-import {catchError, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {EMPTY, forkJoin, Observable, of, onErrorResumeNext} from 'rxjs';
+import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
   VMNetName = 'vmNetName',
@@ -70,6 +70,7 @@ enum FolderState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VSphereProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  private readonly _debounceTime = 1000;
   private _networkMap: {[type: string]: VSphereNetwork[]} = {};
   private _credentialsChanged = new EventEmitter<void>();
   private _username = '';
@@ -81,7 +82,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   private readonly _networkCombobox: FilteredComboboxComponent;
 
   readonly Controls = Controls;
-
+  datastores: string[] = [];
   folders: VSphereFolder[] = [];
   folderLabel = FolderState.Empty;
   networkLabel = NetworkState.Empty;
@@ -131,6 +132,14 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
         this._loadNetworks(networks);
       });
 
+    this._clusterService.clusterChanges
+      .pipe(debounceTime(this._debounceTime))
+      .pipe(filter(_ => this._clusterService.provider === NodeProvider.VSPHERE))
+      .pipe(tap(_ => (!this.hasRequiredCredentials() ? this._clearDatastores() : null)))
+      .pipe(switchMap(_ => this._datastoresObservable()))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(datastores => (this.datastores = datastores));
+
     // Mutually exclusive fields
     this.form
       .get(Controls.Datastore)
@@ -144,10 +153,18 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(val => this._enable(!val, Controls.Datastore));
 
-    merge(this.form.get(Controls.Datastore).valueChanges, this.form.get(Controls.DatastoreCluster).valueChanges)
-      .pipe(distinctUntilChanged())
+    this.form
+      .get(Controls.DatastoreCluster)
+      .valueChanges.pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterService.cluster = this._getCluster()));
+
+    this.form
+      .get(Controls.Datastore)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(d => {
+        this._clusterService.cluster.spec.cloud.vsphere.datastore = d;
+      });
   }
 
   getNetworks(type: string): VSphereNetwork[] {
@@ -166,7 +183,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     switch (control) {
       case Controls.VMNetName:
       case Controls.Folder:
-        return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
+        return this.hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
     }
 
     return '';
@@ -220,7 +237,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     }
   }
 
-  private _hasRequiredCredentials(): boolean {
+  hasRequiredCredentials(): boolean {
     return (
       !!this._clusterService.cluster.spec.cloud.vsphere &&
       !!this._clusterService.cluster.spec.cloud.vsphere.username &&
@@ -285,6 +302,27 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     this._cdr.detectChanges();
   }
 
+  private _datastoresObservable(): Observable<string[]> {
+    return this._presets
+      .provider(NodeProvider.VSPHERE)
+      .username(this._clusterService.cluster.spec.cloud.vsphere.username)
+      .password(this._clusterService.cluster.spec.cloud.vsphere.password)
+      .datacenter(this._clusterService.datacenter)
+      .datastores()
+      .pipe(
+        map(datastores => _.sortBy(datastores, d => d.toLowerCase())),
+        catchError(() => {
+          this._clearDatastores();
+          return onErrorResumeNext(EMPTY);
+        })
+      );
+  }
+
+  private _clearDatastores(): void {
+    this.datastores = [];
+    this.form.get(Controls.Datastore).setValue('');
+  }
+
   private _enable(enable: boolean, name: string): void {
     if (enable && this.form.get(name).disabled) {
       this.form.get(name).enable();
@@ -300,7 +338,6 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       spec: {
         cloud: {
           vsphere: {
-            datastore: this.form.get(Controls.Datastore).value,
             datastoreCluster: this.form.get(Controls.DatastoreCluster).value,
           } as VSphereCloudSpec,
         } as CloudSpec,
