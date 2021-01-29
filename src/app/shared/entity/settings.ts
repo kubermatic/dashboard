@@ -33,6 +33,15 @@ export class AdminSettings {
   userProjectsLimit: number;
   restrictProjectCreation: boolean;
   enableExternalClusterImport: boolean;
+  machineDeploymentVMResourceQuota: MachineDeploymentVMResourceQuota;
+}
+
+export class MachineDeploymentVMResourceQuota {
+  minCPU: number;
+  maxCPU: number;
+  minRAM: number;
+  maxRAM: number;
+  enableGPU: boolean;
 }
 
 export class CleanupOptions {
@@ -132,4 +141,11 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   enableOIDCKubeconfig: false,
   restrictProjectCreation: false,
   enableExternalClusterImport: true,
+  machineDeploymentVMResourceQuota: {
+    minRAM: 0,
+    maxRAM: 0,
+    minCPU: 0,
+    maxCPU: 0,
+    enableGPU: false,
+  },
 };
