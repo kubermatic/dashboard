@@ -11,9 +11,10 @@
 
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
-import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Provider} from './provider';
-import {VSphereFolder, VSphereNetwork} from '../../../../shared/entity/provider/vsphere';
+import {VSphereDatastores, VSphereFolder, VSphereNetwork} from '@shared/entity/provider/vsphere';
+import {map} from 'rxjs/operators';
 
 export class VSphere extends Provider {
   private readonly _networksUrl = `${this._restRoot}/providers/vsphere/networks`;
@@ -77,6 +78,21 @@ export class VSphere extends Provider {
     return this._http.get<VSphereFolder[]>(this._foldersUrl, {
       headers: this._headers,
     });
+  }
+
+  datastores(onLoadingCb: () => void = null): Observable<string[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._newRestRoot}/providers/${this._provider}/datastores`;
+    return this._http
+      .get<VSphereDatastores>(url, {headers: this._headers})
+      .pipe(map(datastores => datastores.datastores));
   }
 }
 

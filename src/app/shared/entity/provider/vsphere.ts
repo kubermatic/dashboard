@@ -19,3 +19,7 @@ export class VSphereNetwork {
 export class VSphereFolder {
   path: string;
 }
+
+export class VSphereDatastores {
+  datastores: string[];
+}
