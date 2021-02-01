@@ -41,6 +41,7 @@ enum Controls {
   Type = 'type',
   ImagePullSecret = 'imagePullSecret',
   AuditLogging = 'auditLogging',
+  UserSSHKeyAgent = 'userSshKeyAgent',
   Labels = 'labels',
   AdmissionPlugins = 'admissionPlugins',
   SSHKeys = 'sshKeys',
@@ -100,6 +101,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.Type]: new FormControl(''),
       [Controls.ImagePullSecret]: new FormControl(''),
       [Controls.AuditLogging]: new FormControl(false),
+      [Controls.UserSSHKeyAgent]: new FormControl(true),
       [Controls.OPAIntegration]: new FormControl(false),
       [Controls.AdmissionPlugins]: new FormControl([]),
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
@@ -145,6 +147,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.Version).valueChanges,
       this.form.get(Controls.ImagePullSecret).valueChanges,
       this.form.get(Controls.AuditLogging).valueChanges,
+      this.form.get(Controls.UserSSHKeyAgent).valueChanges,
       this.form.get(Controls.OPAIntegration).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
@@ -271,6 +274,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         opaIntegration: {
           enabled: this.controlValue(Controls.OPAIntegration),
         },
+        enableUserSSHKeyAgent: this.controlValue(Controls.UserSSHKeyAgent),
       } as ClusterSpec,
     } as Cluster;
   }
