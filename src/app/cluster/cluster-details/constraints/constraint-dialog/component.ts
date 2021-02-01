@@ -93,6 +93,8 @@ export class ConstraintDialog implements OnInit, OnDestroy {
     switch (this.data.mode) {
       case Mode.Add:
         return this._create(constraint);
+      case Mode.Edit:
+        return this._edit(constraint);
     }
   }
 
@@ -103,7 +105,18 @@ export class ConstraintDialog implements OnInit, OnDestroy {
       .subscribe(result => {
         this._matDialogRef.close(true);
         this._notificationService.success(`The constraint ${result.name} was created`);
-        this._opaService.refreshConstraintTemplates();
+        this._opaService.refreshConstraint();
+      });
+  }
+
+  private _edit(constraint: Constraint): void {
+    this._opaService
+      .patchConstraint(this.data.projectId, this.data.clusterId, this.data.constraint.name, constraint)
+      .pipe(take(1))
+      .subscribe(result => {
+        this._matDialogRef.close(true);
+        this._notificationService.success(`The constraint ${result.name} was updated`);
+        this._opaService.refreshConstraint();
       });
   }
 

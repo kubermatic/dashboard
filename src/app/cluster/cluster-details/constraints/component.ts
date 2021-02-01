@@ -118,4 +118,23 @@ export class ConstraintsComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(_ => {});
   }
+
+  edit(constraint: Constraint): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Edit Constraint',
+        projectId: this.projectID,
+        clusterId: this.cluster.id,
+        constraint: constraint,
+        mode: Mode.Edit,
+        confirmLabel: 'Edit',
+      },
+    };
+
+    this._matDialog
+      .open(ConstraintDialog, dialogConfig)
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {});
+  }
 }

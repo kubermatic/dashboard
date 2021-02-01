@@ -79,8 +79,17 @@ export class OPAService {
     return this._http.get<Constraint[]>(url);
   }
 
+  refreshConstraint(): void {
+    this._constraintsRefresh$.next();
+  }
+
   createConstraint(projectId: string, clusterId: string, constraint: Constraint): Observable<Constraint> {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/constraints`;
     return this._http.post<Constraint>(url, constraint);
+  }
+
+  patchConstraint(projectId: string, clusterId: string, name: string, patch: Constraint): Observable<Constraint> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/constraints/${name}`;
+    return this._http.patch<Constraint>(url, patch);
   }
 }
