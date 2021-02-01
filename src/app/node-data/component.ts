@@ -18,20 +18,20 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
-import { DatacenterService } from '@core/services/datacenter/service';
-import { NameGeneratorService } from '@core/services/name-generator/service';
-import { ClusterType } from '@shared/entity/cluster';
-import { Datacenter } from '@shared/entity/datacenter';
-import { OperatingSystemSpec, Taint } from '@shared/entity/node';
-import { NodeProvider, NodeProviderConstants, OperatingSystem } from '@shared/model/NodeProviderConstants';
-import { NodeData } from '@shared/model/NodeSpecChange';
-import { ClusterService } from '@shared/services/cluster.service';
-import { BaseFormValidator } from '@shared/validators/base-form.validator';
-import { NoIpsLeftValidator } from '@shared/validators/no-ips-left.validator';
-import { merge, of } from 'rxjs';
-import { filter, take, switchMap, takeUntil, tap } from 'rxjs/operators';
-import { NodeDataService } from './service/service';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {DatacenterService} from '@core/services/datacenter/service';
+import {NameGeneratorService} from '@core/services/name-generator/service';
+import {ClusterType} from '@shared/entity/cluster';
+import {Datacenter} from '@shared/entity/datacenter';
+import {OperatingSystemSpec, Taint} from '@shared/entity/node';
+import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {ClusterService} from '@shared/services/cluster.service';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {NoIpsLeftValidator} from '@shared/validators/no-ips-left.validator';
+import {merge, of} from 'rxjs';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {NodeDataService} from './service/service';
 
 enum Controls {
   Name = 'name',
@@ -195,12 +195,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     // Disable unsupported systems when Openshift is used
     if (
       this.isOpenshiftCluster() &&
-      [
-        OperatingSystem.Flatcar,
-        OperatingSystem.SLES,
-        OperatingSystem.Ubuntu,
-        OperatingSystem.RHEL,
-      ].includes(os)
+      [OperatingSystem.Flatcar, OperatingSystem.SLES, OperatingSystem.Ubuntu, OperatingSystem.RHEL].includes(os)
     ) {
       return false;
     }
@@ -254,10 +249,20 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   private _init(): void {
-    const upgradeOnBoot = this._nodeDataService.operatingSystemSpec[this._nodeDataService.operatingSystem]
-      .distUpgradeOnBoot;
-    const disableAutoUpdate = this._nodeDataService.operatingSystemSpec[this._nodeDataService.operatingSystem]
-      .disableAutoUpdate;
+    let upgradeOnBoot = false;
+    let disableAutoUpdate = false;
+
+    switch (this._nodeDataService.operatingSystem) {
+      case OperatingSystem.Ubuntu:
+      case OperatingSystem.CentOS:
+      case OperatingSystem.SLES:
+      case OperatingSystem.RHEL:
+        upgradeOnBoot = this._nodeDataService.operatingSystem[this._nodeDataService.operatingSystem].distUpgradeOnBoot;
+        break;
+      case OperatingSystem.Flatcar:
+        disableAutoUpdate = this._nodeDataService.operatingSystem[this._nodeDataService.operatingSystem]
+          .disableAutoUpdate;
+    }
 
     this.onLabelsChange(this._nodeDataService.nodeData.spec.labels);
     this.onTaintsChange(this._nodeDataService.nodeData.spec.taints);
@@ -294,7 +299,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           },
         };
       default:
-        return { ubuntu: { distUpgradeOnBoot: false } };
+        return {ubuntu: {distUpgradeOnBoot: false}};
     }
   }
 
