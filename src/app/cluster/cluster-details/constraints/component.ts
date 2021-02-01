@@ -16,12 +16,14 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {OPAService} from '@core/services/opa/service';
 import {UserService} from '@core/services/user/service';
+import {NotificationService} from '@core/services/notification/service';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '@shared/entity/cluster';
 import {Constraint} from '@shared/entity/opa';
 import {UserSettings} from '@shared/entity/settings';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {take, takeUntil} from 'rxjs/operators';
+import {take, takeUntil, filter, switchMap} from 'rxjs/operators';
 import {Mode, ConstraintDialog} from './constraint-dialog/component';
 
 @Component({
@@ -56,7 +58,8 @@ export class ConstraintsComponent implements OnInit, OnDestroy {
     private readonly _opaService: OPAService,
     private readonly _userService: UserService,
     private readonly _cdr: ChangeDetectorRef,
-    private readonly _matDialog: MatDialog
+    private readonly _matDialog: MatDialog,
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -136,5 +139,28 @@ export class ConstraintsComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(take(1))
       .subscribe(_ => {});
+  }
+
+  delete(constraint: Constraint): void {
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        title: 'Delete Constraint',
+        message: `Are you sure you want to delete the constraint ${constraint.name}?`,
+        confirmLabel: 'Delete',
+      },
+    };
+
+    this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(switchMap(_ => this._opaService.deleteConstraint(this.projectID, this.cluster.id, constraint.name)))
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._notificationService.success(`The constraint template ${constraint.name} was deleted`);
+        this._opaService.refreshConstraintTemplates();
+      });
   }
 }

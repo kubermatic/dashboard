@@ -92,4 +92,9 @@ export class OPAService {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/constraints/${name}`;
     return this._http.patch<Constraint>(url, patch);
   }
+
+  deleteConstraint(projectId: string, clusterId: string, name: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/constraints/${name}`;
+    return this._http.delete(url);
+  }
 }
