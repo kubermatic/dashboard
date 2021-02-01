@@ -147,6 +147,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.Version).valueChanges,
       this.form.get(Controls.ImagePullSecret).valueChanges,
       this.form.get(Controls.AuditLogging).valueChanges,
+      this.form.get(Controls.UserSSHKeyAgent).valueChanges,
       this.form.get(Controls.OPAIntegration).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
@@ -273,6 +274,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         opaIntegration: {
           enabled: this.controlValue(Controls.OPAIntegration),
         },
+        enableUserSSHKeyAgent: this.controlValue(Controls.UserSSHKeyAgent),
       } as ClusterSpec,
     } as Cluster;
   }
