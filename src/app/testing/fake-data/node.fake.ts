@@ -395,7 +395,6 @@ export function nodeDataFake(): NodeData {
           distUpgradeOnBoot: false,
         },
         centos: null,
-        containerLinux: null,
       },
       versions: {
         kubelet: null,
@@ -464,74 +463,6 @@ export function nodeDataCentOsFake(): NodeData {
       operatingSystem: {
         centos: {
           distUpgradeOnBoot: false,
-        },
-      },
-      versions: {
-        kubelet: null,
-      },
-    },
-    count: 3,
-    valid: true,
-  };
-}
-
-export function nodeDataContainerLinuxFake(): NodeData {
-  return {
-    spec: {
-      cloud: {
-        digitalocean: {
-          size: 's-1vcpu-1gb',
-          backups: false,
-          ipv6: false,
-          monitoring: false,
-          tags: [],
-        },
-        aws: {
-          instanceType: 't3.small',
-          diskSize: 25,
-          volumeType: 'standard',
-          ami: '',
-          tags: {},
-          subnetID: 'subnet-f3427db9',
-          availabilityZone: 'eu-central-1c',
-        },
-        openstack: {
-          flavor: 'm1.small',
-          image: '',
-          useFloatingIP: false,
-          tags: {},
-          instanceReadyCheckPeriod: '10',
-          instanceReadyCheckTimeout: '120',
-        },
-        hetzner: {
-          type: 'cx31',
-        },
-        vsphere: {
-          cpus: 1,
-          memory: 512,
-          template: '',
-        },
-        azure: {
-          size: 'cx31',
-          assignPublicIP: false,
-          zones: ['1'],
-          tags: {},
-          dataDiskSize: 0,
-          osDiskSize: 0,
-        },
-        gcp: {
-          diskSize: 25,
-          diskType: 'pd-ssd',
-          machineType: '',
-          zone: '',
-          preemptible: false,
-          tags: [],
-          labels: {},
-        },
-      },
-      operatingSystem: {
-        containerLinux: {
-          disableAutoUpdate: false,
         },
       },
       versions: {

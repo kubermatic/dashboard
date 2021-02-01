@@ -58,7 +58,6 @@ spec:
           templates:
             ubuntu: "machine-controller-e2e-ubuntu"
             centos: "machine-controller-e2e-centos"
-            coreos: "machine-controller-e2e-coreos"
     azure-westeurope:
       location: "Azure West europe"
       country: NL
@@ -111,7 +110,6 @@ spec:
           ignore_volume_az: false
           images:
             centos: kubermatic-e2e-centos
-            coreos: kubermatic-e2e-coreos
             ubuntu: kubermatic-e2e-ubuntu
           node_size_requirements:
             minimum_memory: 0

@@ -31,11 +31,9 @@ export enum NodeProvider {
 export enum OperatingSystem {
   Ubuntu = 'ubuntu',
   CentOS = 'centos',
-  ContainerLinux = 'containerLinux',
   SLES = 'sles',
   RHEL = 'rhel',
   Flatcar = 'flatcar',
-  CoreOS = 'coreos',
 }
 
 export namespace NodeProviderConstants {
@@ -69,8 +67,6 @@ export namespace NodeProviderConstants {
       return OperatingSystem.Ubuntu;
     } else if (spec.operatingSystem.centos) {
       return OperatingSystem.CentOS;
-    } else if (spec.operatingSystem.containerLinux) {
-      return OperatingSystem.ContainerLinux;
     } else if (spec.operatingSystem.sles) {
       return OperatingSystem.SLES;
     } else if (spec.operatingSystem.rhel) {

@@ -11,13 +11,12 @@
 
 import {
   CentosSpec,
-  ContainerLinuxSpec,
   NodeCloudSpec,
   NodeSpec,
   RHELSpec,
   SLESSpec,
   UbuntuSpec,
-  FlatcarSpec,
+  FlatcarSpec
 } from '../entity/node';
 
 export class NodeData {
@@ -47,7 +46,6 @@ export class NodeProviderData {
 export class NodeOperatingSystemData {
   ubuntu?: UbuntuSpec;
   centos?: CentosSpec;
-  containerLinux?: ContainerLinuxSpec;
   sles?: SLESSpec;
   rhel?: RHELSpec;
   flatcar?: FlatcarSpec;

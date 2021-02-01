@@ -50,7 +50,6 @@ export class NodeService {
     // It is not part of API service as it is not required in all cases (i.e. replicas count change).
     patch.spec.template.operatingSystem.ubuntu = patch.spec.template.operatingSystem.ubuntu || null;
     patch.spec.template.operatingSystem.centos = patch.spec.template.operatingSystem.centos || null;
-    patch.spec.template.operatingSystem.containerLinux = patch.spec.template.operatingSystem.containerLinux || null;
     patch.spec.template.operatingSystem.flatcar = patch.spec.template.operatingSystem.flatcar || null;
     patch.spec.template.operatingSystem.sles = patch.spec.template.operatingSystem.sles || null;
 

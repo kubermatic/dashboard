@@ -60,7 +60,6 @@ export class NodeCloudSpec {
 export class OperatingSystemSpec {
   ubuntu?: UbuntuSpec;
   centos?: CentosSpec;
-  containerLinux?: ContainerLinuxSpec;
   sles?: SLESSpec;
   rhel?: RHELSpec;
   flatcar?: FlatcarSpec;
@@ -76,10 +75,6 @@ export class UbuntuSpec {
 
 export class CentosSpec {
   distUpgradeOnBoot: boolean;
-}
-
-export class ContainerLinuxSpec {
-  disableAutoUpdate: boolean;
 }
 
 export class FlatcarSpec {
@@ -312,8 +307,6 @@ export function getOperatingSystem(spec: NodeSpec): string {
     return 'Ubuntu';
   } else if (spec.operatingSystem.centos) {
     return 'CentOS';
-  } else if (spec.operatingSystem.containerLinux) {
-    return 'Container Linux';
   } else if (spec.operatingSystem.sles) {
     return 'SLES';
   } else if (spec.operatingSystem.rhel) {
@@ -329,8 +322,6 @@ export function getOperatingSystemLogoClass(spec: NodeSpec): string {
     return 'ubuntu';
   } else if (spec.operatingSystem.centos) {
     return 'centos';
-  } else if (spec.operatingSystem.containerLinux) {
-    return 'container-linux';
   } else if (spec.operatingSystem.sles) {
     return 'sles';
   } else if (spec.operatingSystem.rhel) {

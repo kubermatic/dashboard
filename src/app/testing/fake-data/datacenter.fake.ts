@@ -77,7 +77,6 @@ export function fakeOpenstackDatacenter(): Datacenter {
         availability_zone: 'az1',
         region: '',
         images: {
-          coreos: '',
           centos: '',
           ubuntu: 'Ubuntu 16.04 LTS 2018.03.26',
           sles: '',
@@ -136,7 +135,6 @@ export function fakeVSphereDatacenter(): Datacenter {
         datastore: 'datastore1',
         templates: {
           centos: 'centos-template',
-          coreos: 'coreos-template',
           ubuntu: 'ubuntu-template',
           flatcar: 'flatcar-template',
         },

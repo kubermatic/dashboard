@@ -18,20 +18,20 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {DatacenterService} from '@core/services/datacenter/service';
-import {NameGeneratorService} from '@core/services/name-generator/service';
-import {ClusterType} from '@shared/entity/cluster';
-import {Datacenter} from '@shared/entity/datacenter';
-import {OperatingSystemSpec, Taint} from '@shared/entity/node';
-import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
-import {NodeData} from '@shared/model/NodeSpecChange';
-import {ClusterService} from '@shared/services/cluster.service';
-import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {NoIpsLeftValidator} from '@shared/validators/no-ips-left.validator';
-import {merge, of} from 'rxjs';
-import {filter, take, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {NodeDataService} from './service/service';
+import { FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import { DatacenterService } from '@core/services/datacenter/service';
+import { NameGeneratorService } from '@core/services/name-generator/service';
+import { ClusterType } from '@shared/entity/cluster';
+import { Datacenter } from '@shared/entity/datacenter';
+import { OperatingSystemSpec, Taint } from '@shared/entity/node';
+import { NodeProvider, NodeProviderConstants, OperatingSystem } from '@shared/model/NodeProviderConstants';
+import { NodeData } from '@shared/model/NodeSpecChange';
+import { ClusterService } from '@shared/services/cluster.service';
+import { BaseFormValidator } from '@shared/validators/base-form.validator';
+import { NoIpsLeftValidator } from '@shared/validators/no-ips-left.validator';
+import { merge, of } from 'rxjs';
+import { filter, take, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { NodeDataService } from './service/service';
 
 enum Controls {
   Name = 'name',
@@ -198,7 +198,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [
         OperatingSystem.Flatcar,
         OperatingSystem.SLES,
-        OperatingSystem.ContainerLinux,
         OperatingSystem.Ubuntu,
         OperatingSystem.RHEL,
       ].includes(os)
@@ -213,16 +212,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     // Enable OS per-provider basis
     switch (os) {
-      case OperatingSystem.ContainerLinux:
-        return this.isProvider(
-          NodeProvider.AWS,
-          NodeProvider.AZURE,
-          NodeProvider.DIGITALOCEAN,
-          NodeProvider.GCP,
-          NodeProvider.KUBEVIRT,
-          NodeProvider.PACKET,
-          NodeProvider.OPENSTACK
-        );
       case OperatingSystem.SLES:
         return this.isProvider(NodeProvider.AWS);
       case OperatingSystem.RHEL:
@@ -239,8 +228,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       case OperatingSystem.CentOS:
         return !this.isProvider(NodeProvider.VSPHERE, NodeProvider.ANEXIA);
     }
-
-    return false;
   }
 
   isOperatingSystemSelected(...os: OperatingSystem[]): boolean {
@@ -291,7 +278,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
             distUpgradeOnBoot: this.form.get(Controls.UpgradeOnBoot).value,
           },
         };
-      case OperatingSystem.ContainerLinux:
       case OperatingSystem.Flatcar:
         return {
           [this.form.get(Controls.OperatingSystem).value]: {
@@ -308,18 +294,13 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           },
         };
       default:
-        return {ubuntu: {distUpgradeOnBoot: false}};
+        return { ubuntu: { distUpgradeOnBoot: false } };
     }
   }
 
   private _hasSystemTemplate(provider: NodeProvider, os: OperatingSystem): boolean {
     if (!this._datacenterSpec) {
       return false;
-    }
-
-    // Map Container Linux to CoreOS template
-    if (os === OperatingSystem.ContainerLinux) {
-      os = OperatingSystem.CoreOS;
     }
 
     switch (provider) {
@@ -341,7 +322,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         const defaultTemplate = this._datacenterSpec.spec.vsphere.templates
           ? (Object.keys(this._datacenterSpec.spec.vsphere.templates)[0] as OperatingSystem)
           : OperatingSystem.Ubuntu;
-        return defaultTemplate === OperatingSystem.CoreOS ? OperatingSystem.ContainerLinux : defaultTemplate;
+        return defaultTemplate;
       }
     }
 

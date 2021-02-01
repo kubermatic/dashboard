@@ -295,9 +295,6 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       case OperatingSystem.SLES:
         this._defaultImage = this._images.sles;
         break;
-      case OperatingSystem.ContainerLinux:
-        this._defaultImage = this._images.coreos;
-        break;
       case OperatingSystem.RHEL:
         this._defaultImage = this._images.rhel;
         break;

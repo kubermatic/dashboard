@@ -136,9 +136,6 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       case OperatingSystem.SLES:
         this._defaultTemplate = this._templates.sles;
         break;
-      case OperatingSystem.ContainerLinux:
-        this._defaultTemplate = this._templates.coreos;
-        break;
       case OperatingSystem.Flatcar:
         this._defaultTemplate = this._templates.flatcar;
         break;

@@ -45,7 +45,6 @@ export class DatacenterSpec {
 }
 
 export class DatacenterOperatingSystemOptions {
-  coreos: string;
   centos: string;
   ubuntu: string;
   sles?: string;
