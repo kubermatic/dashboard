@@ -90,6 +90,7 @@ limitations under the License.
           </button>
           <button mat-menu-item
                   (click)="editSSHKeys()"
+                  *ngIf="cluster.spec.enableUserSSHKeyAgent"
                   [disabled]="!isSSHKeysEditEnabled()">
             <span>Manage SSH keys</span>
           </button>
@@ -131,6 +132,10 @@ limitations under the License.
             <span class="km-provider-logo km-provider-logo-{{getProvider(nodeDc?.spec?.provider)}}"></span>
           </div>
         </km-property>
+
+        <km-property-boolean label="User SSH Key Agent"
+                             [value]="cluster.spec.enableUserSSHKeyAgent">
+        </km-property-boolean>
 
         <km-property-boolean label="Audit Logging"
                              [value]="!!cluster.spec.auditLogging && cluster.spec.auditLogging.enabled"
