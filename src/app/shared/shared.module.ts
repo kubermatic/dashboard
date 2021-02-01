@@ -9,6 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {ScrollingModule} from '@angular/cdk/scrolling';
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
@@ -43,13 +44,14 @@ import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {NotificationComponent} from '@core/components/notification/component';
+import {EventCardComponent} from '@shared/components/event-card/component';
+import {TabCardComponent} from '@shared/components/tab-card/component';
+import {TabComponent} from '@shared/components/tab-card/tab/component';
 import {ClipboardModule} from 'ngx-clipboard';
 import {CustomFormsModule} from 'ngx-custom-validators';
 import {FilterPipeModule} from 'ngx-filter-pipe';
-
-import {NotificationComponent} from '../core/components/notification/component';
-import {TokenDialogComponent} from '../serviceaccount/serviceaccount-token/token-dialog/token-dialog.component';
-
+import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {AddProjectDialogComponent} from './components/add-project-dialog/add-project-dialog.component';
 import {AddSshKeyDialogComponent} from './components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {AddonsListComponent} from './components/addon-list/addon-list.component';
@@ -61,17 +63,21 @@ import {FilteredComboboxComponent} from './components/combobox/component';
 import {OptionDirective} from './components/combobox/directive';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 import {DialogTitleComponent} from './components/dialog-title/dialog-title.component';
+import {EditorComponent} from './components/editor/component';
 import {ClusterTypeEOLComponent} from './components/eol/component';
 import {EventListComponent} from './components/event-list/component';
+import {ExternalClusterDataDialogComponent} from './components/external-cluster-data-dialog/component';
+import {InitialsCircleComponent} from './components/initials-circle/initials-circle.component';
 import {LabelFormComponent} from './components/label-form/label-form.component';
 import {LabelsComponent} from './components/labels/labels.component';
+import {LoaderComponent} from './components/loader/component';
 import {MachineNetworkComponent} from './components/machine-networks-new/component';
 import {PropertyBooleanComponent} from './components/property-boolean/property-boolean.component';
 import {PropertyUsageComponent} from './components/property-usage/component';
 import {PropertyComponent} from './components/property/property.component';
 import {RelativeTimeComponent} from './components/relativetime/relative-time.component';
+import {SearchFieldComponent} from './components/search-field/component';
 import {SettingsStatusComponent} from './components/settings-status/settings-status.component';
-import {InitialsCircleComponent} from './components/initials-circle/initials-circle.component';
 import {SSHKeyListComponent} from './components/ssh-key-list/ssh-key-list.component';
 import {TagListComponent} from './components/tag-list/tag-list.component';
 import {TaintFormComponent} from './components/taint-form/taint-form.component';
@@ -80,15 +86,6 @@ import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
 import {ClusterService} from './services/cluster.service';
 import {EndOfLifeService} from './services/eol.service';
-import {EditorComponent} from './components/editor/component';
-import {MonacoEditorModule} from 'ngx-monaco-editor';
-import {ExternalClusterDataDialogComponent} from './components/external-cluster-data-dialog/component';
-import {LoaderComponent} from './components/loader/component';
-import {SearchFieldComponent} from './components/search-field/component';
-import {TabCardComponent} from '@shared/components/tab-card/component';
-import {TabComponent} from '@shared/components/tab-card/tab/component';
-import {EventCardComponent} from '@shared/components/event-card/component';
-import {ScrollingModule} from '@angular/cdk/scrolling';
 
 const modules: any[] = [
   CommonModule,
@@ -151,7 +148,6 @@ const components: any[] = [
   SettingsStatusComponent,
   InitialsCircleComponent,
   TagListComponent,
-  TokenDialogComponent,
   NotificationComponent,
   PropertyUsageComponent,
   FilteredComboboxComponent,
@@ -165,8 +161,6 @@ const components: any[] = [
   SelectAddonDialogComponent,
   InstallAddonDialogComponent,
   EditAddonDialogComponent,
-  TokenDialogComponent,
-  NotificationComponent,
   ExternalClusterDataDialogComponent,
   LoaderComponent,
   SearchFieldComponent,

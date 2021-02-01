@@ -9,21 +9,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {AuthGuard, AuthzGuard} from '../core/services/auth/guard';
-import {ServiceAccountComponent} from '../serviceaccount/serviceaccount.component';
+@import 'variables';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: ServiceAccountComponent,
-    canActivate: [AuthGuard, AuthzGuard],
-  },
-];
+.km-serviceaccount-token-view {
+  margin: 0;
+}
 
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class ServiceAccountRoutingModule {}
+.km-empty-list-msg {
+  border-style: solid;
+  border-top-left-radius: $border-radius;
+  border-top-right-radius: $border-radius;
+  border-width: 1px 1px 0 1px;
+}
+
+.km-table-actions button {
+  opacity: 1;
+}

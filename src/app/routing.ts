@@ -44,7 +44,7 @@ function createRouting(): Routes {
         },
         {
           path: 'projects/:projectID/serviceaccounts',
-          loadChildren: () => import('./serviceaccount/serviceaccount.module').then(m => m.ServiceAccountModule),
+          loadChildren: () => import('./serviceaccount/module').then(m => m.ServiceAccountModule),
         },
         {
           path: 'projects/:projectID/clusters',

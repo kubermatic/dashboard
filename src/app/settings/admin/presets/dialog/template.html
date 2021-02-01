@@ -60,8 +60,7 @@ limitations under the License.
             [disabled]="invalid"
             *ngIf="!last">Next
     </button>
-    <button id="km-wizard-create-btn"
-            mat-flat-button
+    <button mat-flat-button
             [disabled]="creating || invalid"
             *ngIf="last"
             (click)="save()">Create

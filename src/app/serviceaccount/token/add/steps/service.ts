@@ -9,18 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
-@import 'mixins';
+import {Injectable} from '@angular/core';
+import {SafeUrl} from '@angular/platform-browser';
 
-.optional-section {
-  font-size: $font-size-subhead-lg;
-  padding: 14px 0 20px 0;
-}
-
-.tooltip {
-  margin-left: 4px;
-}
-
-.spacing {
-  margin-bottom: 20px;
+@Injectable({providedIn: 'root'})
+export class ServiceAccountTokenDialogService {
+  token: string;
+  tokenName: string;
+  projectID: string;
+  downloadUrl: SafeUrl;
+  downloadTitle: string;
 }

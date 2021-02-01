@@ -1,0 +1,115 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<km-dialog-title>{{mode}} Token</km-dialog-title>
+
+<form *ngIf="mode === modes.Create"
+      (keydown.enter)="form.valid ? update() : null">
+  <mat-horizontal-stepper linear
+                          disableRipple
+                          [@.disabled]="true"
+                          #stepper>
+    <ng-template matStepperIcon="edit">
+      <i class="km-icon-done"></i>
+    </ng-template>
+
+    <mat-step [stepControl]="form.get(controls.Name)"
+              [label]="registry.Name"
+              fxFlex="100%">
+      <km-serviceaccount-token-name-step [formControl]="form.get(controls.Name)"></km-serviceaccount-token-name-step>
+    </mat-step>
+
+    <mat-step [stepControl]="form.get(controls.Information)"
+              [label]="registry.Information"
+              fxFlex="100%">
+      <km-serviceaccount-token-information-step *ngIf="created"
+                                                [formControl]="form.get(controls.Information)">
+      </km-serviceaccount-token-information-step>
+    </mat-step>
+  </mat-horizontal-stepper>
+
+  <mat-dialog-actions>
+    <mat-spinner fxFlexAlign="center"
+                 [diameter]="30"
+                 color="accent"
+                 *ngIf="updating"></mat-spinner>
+    <button *ngIf="first"
+            mat-flat-button
+            [disabled]="updating || form.invalid"
+            (click)="update()">{{mode}}
+    </button>
+
+    <a *ngIf="!first"
+       [href]="downloadURL"
+       [download]="downloadTitle"
+       target="_blank"
+       rel="noopener">
+      <button mat-flat-button
+              color="alternative">
+        <i class="km-icon-download"></i>
+        Download Token
+      </button>
+    </a>
+
+    <button mat-flat-button
+            mat-dialog-close
+            *ngIf="!first">Got it
+    </button>
+  </mat-dialog-actions>
+</form>
+
+<form *ngIf="mode === modes.Edit"
+      (keydown.enter)="form.valid ? update() : null">
+  <km-serviceaccount-token-name-step [formControl]="form.get(controls.Name)"></km-serviceaccount-token-name-step>
+
+  <mat-dialog-actions>
+    <mat-spinner fxFlexAlign="center"
+                 [diameter]="30"
+                 color="accent"
+                 *ngIf="updating"></mat-spinner>
+    <button mat-flat-button
+            [disabled]="updating || form.invalid"
+            (click)="update()">{{mode}}
+    </button>
+  </mat-dialog-actions>
+</form>
+
+<ng-container *ngIf="mode === modes.Regenerate">
+  <ng-container *ngIf="updating">
+    <mat-spinner class="centered"
+                 [diameter]="60"
+                 color="accent"></mat-spinner>
+  </ng-container>
+
+  <ng-container *ngIf="!updating">
+    <km-serviceaccount-token-information-step [formControl]="form.get(controls.Information)"></km-serviceaccount-token-information-step>
+
+    <mat-dialog-actions>
+      <a [href]="downloadURL"
+         [download]="downloadTitle"
+         target="_blank"
+         rel="noopener">
+        <button mat-flat-button
+                color="alternative">
+          <i class="km-icon-download"></i>
+          Download Token
+        </button>
+      </a>
+
+      <button mat-flat-button
+              mat-dialog-close>
+        Got it
+      </button>
+    </mat-dialog-actions>
+  </ng-container>
+</ng-container>

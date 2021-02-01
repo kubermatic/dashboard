@@ -9,18 +9,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
-@import 'mixins';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
+import {ServiceAccountComponent} from '../serviceaccount/component';
 
-.optional-section {
-  font-size: $font-size-subhead-lg;
-  padding: 14px 0 20px 0;
-}
+const routes: Routes = [
+  {
+    path: '',
+    component: ServiceAccountComponent,
+    canActivate: [AuthGuard, AuthzGuard],
+  },
+];
 
-.tooltip {
-  margin-left: 4px;
-}
-
-.spacing {
-  margin-bottom: 20px;
-}
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class ServiceAccountRoutingModule {}

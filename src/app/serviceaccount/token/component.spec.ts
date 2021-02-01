@@ -30,8 +30,8 @@ import {ProjectService} from '@core/services/project/service';
 import {UserService} from '@core/services/user/service';
 import {SharedModule} from '@shared/shared.module';
 import {of} from 'rxjs';
-import {ServiceAccountModule} from '../serviceaccount.module';
-import {ServiceAccountTokenComponent} from './serviceaccount-token.component';
+import {ServiceAccountModule} from '../module';
+import {ServiceAccountTokenComponent} from './component';
 
 describe('ServiceAccountTokenComponent', () => {
   let fixture: ComponentFixture<ServiceAccountTokenComponent>;
@@ -87,7 +87,7 @@ describe('ServiceAccountTokenComponent', () => {
 
   it('should open delete service account token dialog & call deleteServiceAccountToken()', fakeAsync(() => {
     const waitTime = 15000;
-    component.deleteServiceAccountToken(fakeServiceAccountTokens()[0]);
+    component.deleteToken(fakeServiceAccountTokens()[0]);
     noop.detectChanges();
     tick(waitTime);
 

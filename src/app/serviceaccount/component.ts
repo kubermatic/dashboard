@@ -34,8 +34,8 @@ import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceacc
 
 @Component({
   selector: 'km-serviceaccount',
-  templateUrl: './serviceaccount.component.html',
-  styleUrls: ['./serviceaccount.component.scss'],
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
 })
 export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   isInitializing = true;
