@@ -41,6 +41,7 @@ enum Controls {
   Type = 'type',
   ImagePullSecret = 'imagePullSecret',
   AuditLogging = 'auditLogging',
+  UserSSHKeyAgent = 'userSshKeyAgent',
   Labels = 'labels',
   AdmissionPlugins = 'admissionPlugins',
   SSHKeys = 'sshKeys',
