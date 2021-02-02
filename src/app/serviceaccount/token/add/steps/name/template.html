@@ -17,11 +17,13 @@ limitations under the License.
   <mat-form-field fxFlex
                   class="spacing">
     <mat-label>Name</mat-label>
-    <input matInput
+    <input id="km-serviceaccount-token-dialog-name-input"
+           matInput
            [formControlName]="controls.Name"
            type="text"
            title="name"
            autocomplete="off"
+           cdkFocusInitial
            required>
   </mat-form-field>
 </form>
