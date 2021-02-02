@@ -11,27 +11,16 @@
 
 @import 'variables';
 
-.km-table {
-  margin-top: 30px;
+.km-serviceaccount-token-view {
+  margin: 0;
 }
 
-.add-button {
-  position: absolute;
-  right: $content-padding;
-  top: $content-padding;
-}
+.km-table-dropdown {
+  td:first-child {
+    border-left: none;
+  }
 
-td {
-  &.mat-cell {
-    &.cdk-cell {
-      &.km-violation-details {
-        padding: 0;
-
-        .km-violation-details-wrapper {
-          box-shadow: $border-box-shadow-inset;
-          padding: $item-details-padding;
-        }
-      }
-    }
+  td:last-child {
+    border-right: none;
   }
 }

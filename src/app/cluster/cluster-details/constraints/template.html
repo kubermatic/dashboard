@@ -24,6 +24,7 @@ limitations under the License.
        matSort
        matSortActive="constraintName"
        matSortDirection="asc"
+       multiTemplateDataRows
        [dataSource]="dataSource"
        [hidden]="isLoadingData(dataSource.data)">
   <ng-container matColumnDef="constraintName">
@@ -46,13 +47,13 @@ limitations under the License.
         *matCellDef="let element">{{element.spec.constraintType}}</td>
   </ng-container>
 
-  <ng-container matColumnDef="targets">
+  <ng-container matColumnDef="match">
     <th mat-header-cell
         *matHeaderCellDef
-        class="km-header-cell">Targets
+        class="km-header-cell">Match
     </th>
     <td mat-cell
-        *matCellDef="let element">{{element.name}}</td>
+        *matCellDef="let element">{{listMatch(element.spec.match.kinds)}}</td>
   </ng-container>
 
   <ng-container matColumnDef="violations">
@@ -61,7 +62,7 @@ limitations under the License.
         class="km-header-cell">Violations
     </th>
     <td mat-cell
-        *matCellDef="let element">{{element.name}}</td>
+        *matCellDef="let element">{{getViolationCount(element.status.violations)}}</td>
   </ng-container>
 
   <ng-container matColumnDef="actions">
@@ -73,13 +74,24 @@ limitations under the License.
       <div class="km-table-actions"
            fxLayoutAlign="end">
         <button mat-icon-button
-                (click)="edit(element)">
+                (click)="edit(element, $event)">
           <i class="km-icon-edit"></i>
         </button>
         <button mat-icon-button
-                (click)="delete(element)">
+                (click)="delete(element, $event)">
           <i class="km-icon-delete"></i>
         </button>
+      </div>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="violationDetails">
+    <td mat-cell
+        *matCellDef="let element"
+        class="km-violation-details"
+        [attr.colspan]="displayedColumns.length">
+      <div class="km-violation-details-wrapper">
+        <km-violation-details-list [violations]="element.status.violations"></km-violation-details-list>
       </div>
     </td>
   </ng-container>
@@ -89,8 +101,13 @@ limitations under the License.
       *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row
       *matRowDef="let row; columns: displayedColumns"
-      class="km-mat-row"
-      [attr.id]="row.id"></tr>
+      class="km-mat-row km-pointer"
+      [attr.id]="row.name"
+      (click)="toggleDetails(row)"></tr>
+  <tr mat-row
+      *matRowDef="let row; let i=index; columns: toggledColumns;"
+      [ngClass]="isShowDetails[row.name] ? '' : 'km-hidden'"
+      class="km-mat-row"></tr>
 </table>
 
 <div class="km-row km-empty-list-msg"

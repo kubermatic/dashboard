@@ -19,7 +19,7 @@ import {UserService} from '@core/services/user/service';
 import {NotificationService} from '@core/services/notification/service';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '@shared/entity/cluster';
-import {Constraint} from '@shared/entity/opa';
+import {Constraint, Kind, Violation} from '@shared/entity/opa';
 import {UserSettings} from '@shared/entity/settings';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -36,10 +36,11 @@ export class ConstraintsComponent implements OnInit, OnDestroy {
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
   constraints: Constraint[] = [];
-
   settings: UserSettings;
   dataSource = new MatTableDataSource<Constraint>();
-  displayedColumns: string[] = ['constraintName', 'constraintTemplate', 'targets', 'violations', 'actions'];
+  displayedColumns: string[] = ['constraintName', 'constraintTemplate', 'match', 'violations', 'actions'];
+  toggledColumns: string[] = ['violationDetails'];
+  isShowDetails = [];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   paginator: MatPaginator;
   @ViewChild(MatPaginator)
@@ -66,7 +67,7 @@ export class ConstraintsComponent implements OnInit, OnDestroy {
     this.dataSource.data = this.constraints;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.sort.active = 'templateName';
+    this.sort.active = 'constraintName';
     this.sort.direction = 'asc';
 
     this._opaService
@@ -104,6 +105,20 @@ export class ConstraintsComponent implements OnInit, OnDestroy {
     return _.isEmpty(data) && this.isClusterRunning;
   }
 
+  toggleDetails(element: Constraint): void {
+    this.isShowDetails[element.name] = !this.isShowDetails[element.name];
+  }
+
+  listMatch(element: Kind[]): string {
+    const matches = [];
+    element.forEach(x => matches.push(x.kinds));
+    return matches.join(', ');
+  }
+
+  getViolationCount(violations: Violation[]): number {
+    return violations ? violations.length : 0;
+  }
+
   add(): void {
     const dialogConfig: MatDialogConfig = {
       data: {
@@ -122,7 +137,8 @@ export class ConstraintsComponent implements OnInit, OnDestroy {
       .subscribe(_ => {});
   }
 
-  edit(constraint: Constraint): void {
+  edit(constraint: Constraint, event: Event): void {
+    event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Edit Constraint',
@@ -141,7 +157,8 @@ export class ConstraintsComponent implements OnInit, OnDestroy {
       .subscribe(_ => {});
   }
 
-  delete(constraint: Constraint): void {
+  delete(constraint: Constraint, event: Event): void {
+    event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
