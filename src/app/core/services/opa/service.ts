@@ -65,11 +65,9 @@ export class OPAService {
   }
 
   constraints(projectId: string, clusterId: string): Observable<Constraint[]> {
-    if (!this._constraints$) {
-      this._constraints$ = merge(this._constraintsRefresh$, this._refreshTimer$)
-        .pipe(switchMap(_ => this._getConstraints(projectId, clusterId)))
-        .pipe(shareReplay({refCount: true, bufferSize: 1}));
-    }
+    this._constraints$ = merge(this._constraintsRefresh$, this._refreshTimer$)
+      .pipe(switchMap(_ => this._getConstraints(projectId, clusterId)))
+      .pipe(shareReplay({refCount: true, bufferSize: 1}));
 
     return this._constraints$;
   }

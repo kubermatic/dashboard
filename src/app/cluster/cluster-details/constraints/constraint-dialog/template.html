@@ -32,7 +32,7 @@ limitations under the License.
       <mat-select [formControlName]="Controls.ConstraintTemplate"
                   disableOptionCentering>
         <mat-option *ngFor="let constraintTemplate of constraintTemplates"
-                    [value]="constraintTemplate.name">
+                    [value]="constraintTemplate.spec.crd.spec.names.kind">
           {{constraintTemplate.name}}
         </mat-option>
       </mat-select>

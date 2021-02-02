@@ -131,6 +131,7 @@ export class ConstraintDialog implements OnInit, OnDestroy {
 
   private _getSpec(): any {
     const raw = load(this.spec);
+    raw['constraintType'] = this.form.get(Controls.ConstraintTemplate).value;
     return !_.isEmpty(raw) ? raw : {};
   }
 }
