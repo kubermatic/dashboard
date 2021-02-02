@@ -343,6 +343,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'rbac', Permission.View);
   }
 
+  isOPAEnabled(): boolean {
+    return !!this.cluster.spec.opaIntegration && !!this.cluster.spec.opaIntegration.enabled;
+  }
+
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
