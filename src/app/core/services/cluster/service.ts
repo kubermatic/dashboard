@@ -38,6 +38,7 @@ export class ClusterService {
   private _newRestRoot: string = environment.newRestRoot;
   private _headers: HttpHeaders = new HttpHeaders();
   private _clusters$ = new Map<string, Observable<Cluster[]>>();
+  private _cluster$ = new Map<string, Observable<Cluster>>();
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
   private _onClustersUpdate = new Subject<void>();
 
@@ -74,12 +75,21 @@ export class ClusterService {
   refreshClusters(): void {
     this._onClustersUpdate.next();
     this._clusters$.clear();
+    this._cluster$.clear();
   }
 
   cluster(projectID: string, clusterID: string): Observable<Cluster> {
-    return merge(this.onClusterUpdate, this._refreshTimer$)
-      .pipe(switchMapTo(this._getCluster(projectID, clusterID)))
-      .pipe(shareReplay({refCount: true, bufferSize: 1}));
+    const id = `${projectID}-${clusterID}`;
+
+    if (!this._cluster$.get(id)) {
+      const cluster$ = merge(this.onClusterUpdate, this._refreshTimer$)
+        .pipe(switchMapTo(this._getCluster(projectID, clusterID)))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+
+      this._cluster$.set(id, cluster$);
+    }
+
+    return this._cluster$.get(id);
   }
 
   externalCluster(projectID: string, clusterID: string): Observable<Cluster> {
