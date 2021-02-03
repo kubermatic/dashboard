@@ -26,6 +26,7 @@ import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
 import {NodeData} from '@shared/model/NodeSpecChange';
+import {compare} from '@shared/utils/common-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {merge, Observable} from 'rxjs';
@@ -175,7 +176,12 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
       return sizeName;
     }
 
-    return `${size.name} (${size.vcpus} vCPU, ${size.memory} GB RAM, ${size.price} USD per hour)`;
+    let result = `${size.pretty_name} (${size.vcpus} vCPU`;
+    if (size.gpus) {
+      result = `${result}, ${size.gpus} GPU`;
+    }
+
+    return `${result}, ${size.memory} GB RAM, ${size.price} USD per hour)`;
   }
 
   private _init(): void {
@@ -197,7 +203,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   private _setDefaultSize(sizes: AWSSize[]): void {
-    this.sizes = sizes;
+    this.sizes = sizes.sort((a, b) => compare(a.price, b.price));
     this.selectedSize = this._nodeDataService.nodeData.spec.cloud.aws.instanceType;
 
     if (!this.selectedSize && this.sizes.length > 0) {

@@ -25,7 +25,7 @@ limitations under the License.
                inputLabel="Select size..."
                filterBy="name">
     <div *option="let size">
-      {{size.name}} ({{size.vcpus}} vCPU, {{size.memory}} GB RAM, {{size.price | number: '1.2-5'}} USD per hour)
+      {{sizeDisplayName(size.name)}}
     </div>
   </km-combobox>
 
