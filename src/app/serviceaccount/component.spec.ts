@@ -15,6 +15,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {ServiceAccountModule} from '@app/serviceaccount/module';
 import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/components/noop-confirmation-dialog.component';
 import {fakeServiceAccounts, fakeServiceAccountTokens} from '@app/testing/fake-data/serviceaccount.fake';
 import {RouterStub} from '@app/testing/router-stubs';
@@ -32,8 +33,7 @@ import {SharedModule} from '@shared/shared.module';
 import {HealthStatusColor} from '@shared/utils/health-status/health-status';
 import {of} from 'rxjs';
 import {AppConfigService} from '../config.service';
-import {ServiceAccountComponent} from './serviceaccount.component';
-import {ServiceAccountModule} from './serviceaccount.module';
+import {ServiceAccountComponent} from './component';
 
 describe('ServiceAccountComponent', () => {
   let fixture: ComponentFixture<ServiceAccountComponent>;

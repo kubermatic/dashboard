@@ -20,13 +20,13 @@ import {RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
 import {ProjectMockService} from '@app/testing/services/project-mock.service';
 import {ProjectService} from '@core/services/project/service';
 import {SharedModule} from '@shared/shared.module';
-import {TokenDialogComponent} from './token-dialog.component';
+import {ServiceAccountTokenInformationStepComponent} from './component';
 
 const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
 
-describe('TokenDialogComponent', () => {
-  let component: TokenDialogComponent;
-  let fixture: ComponentFixture<TokenDialogComponent>;
+describe('ServiceAccountTokenInformationStepComponent', () => {
+  let component: ServiceAccountTokenInformationStepComponent;
+  let fixture: ComponentFixture<ServiceAccountTokenInformationStepComponent>;
 
   beforeEach(
     waitForAsync(() => {
@@ -46,14 +46,13 @@ describe('TokenDialogComponent', () => {
   );
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TokenDialogComponent);
+    fixture = TestBed.createComponent(ServiceAccountTokenInformationStepComponent);
     component = fixture.componentInstance;
-    component.serviceaccountToken = fakeServiceAccountToken();
 
     fixture.detectChanges();
   });
 
-  it('should create the token dialog component', () => {
+  it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 });

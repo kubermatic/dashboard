@@ -75,7 +75,7 @@ export class MembersPage {
   // Utils.
 
   static waitForRefresh(): void {
-    TrafficMonitor.newTrafficMonitor().url(Endpoint.Users).method(RequestType.GET).alias('list members').wait();
+    TrafficMonitor.newTrafficMonitor().url(Endpoint.Users).method(RequestType.GET).wait();
   }
 
   static verifyUrl(): void {

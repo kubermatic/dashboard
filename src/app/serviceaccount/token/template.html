@@ -68,7 +68,7 @@ limitations under the License.
             <button mat-icon-button
                     [attr.id]="'km-regenerate-serviceaccount-token-' + element?.id"
                     matTooltip="Regenerate Service Account Token"
-                    (click)="regenerateServiceAccountToken(element)"
+                    (click)="regenerateToken(element)"
                     [disabled]="!isEnabled('edit')">
               <i class="km-icon-regenerate"></i>
             </button>
@@ -76,7 +76,7 @@ limitations under the License.
             <button mat-icon-button
                     [attr.id]="'km-edit-serviceaccount-token-' + element?.name"
                     matTooltip="Edit Service Account Token"
-                    (click)="editServiceAccountToken(element)"
+                    (click)="editToken(element)"
                     [disabled]="!isEnabled('edit')">
               <i class="km-icon-edit"></i>
             </button>
@@ -84,7 +84,7 @@ limitations under the License.
             <button mat-icon-button
                     [attr.id]="'km-delete-serviceaccount-token-' + element?.id"
                     matTooltip="Delete Service Account Token"
-                    (click)="deleteServiceAccountToken(element)"
+                    (click)="deleteToken(element)"
                     [disabled]="!isEnabled('delete')">
               <i class="km-icon-delete"></i>
             </button>
@@ -119,7 +119,7 @@ limitations under the License.
   <div class="km-mat-row km-mat-footer-row">
     <button id="km-add-serviceaccount-token"
             class="km-text-muted"
-            (click)="addServiceAccountToken()"
+            (click)="createToken()"
             [disabled]="!isEnabled('create')">+ Add Token
     </button>
   </div>

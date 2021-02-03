@@ -18,43 +18,43 @@ import {WizardPage} from './wizard.po';
 export class ClustersPage {
   private static readonly _defaultTimeout = 5000;
 
-  static getAddClusterBtn(): Cypress.Chainable<any> {
+  static getAddClusterBtn(): Cypress.Chainable {
     return cy.get('#km-add-cluster-top-btn');
   }
 
-  static getClusterItem(clusterName: string): Cypress.Chainable<any> {
+  static getClusterItem(clusterName: string): Cypress.Chainable {
     return cy.get(`#km-clusters-${clusterName}`);
   }
 
-  static getDeleteClusterBtn(): Cypress.Chainable<any> {
+  static getDeleteClusterBtn(): Cypress.Chainable {
     return cy.get('#km-delete-cluster-btn');
   }
 
-  static getDeleteDialogInput(): Cypress.Chainable<any> {
+  static getDeleteDialogInput(): Cypress.Chainable {
     return cy.get('#km-delete-cluster-dialog-input');
   }
 
-  static getDeleteDialogBtn(): Cypress.Chainable<any> {
+  static getDeleteDialogBtn(): Cypress.Chainable {
     return cy.get('#km-delete-cluster-dialog-delete-btn');
   }
 
-  static getTable(): Cypress.Chainable<any> {
+  static getTable(): Cypress.Chainable {
     return cy.get('tbody');
   }
 
-  static getTableRow(machineDeploymentName: string): Cypress.Chainable<any> {
+  static getTableRow(machineDeploymentName: string): Cypress.Chainable {
     return this.getTableRowMachineDeploymentNameColumn(machineDeploymentName).parent();
   }
 
-  static getTableRowMachineDeploymentNameColumn(machineDeploymentName: string): Cypress.Chainable<any> {
+  static getTableRowMachineDeploymentNameColumn(machineDeploymentName: string): Cypress.Chainable {
     return cy.get(`td#km-machine-deployment-${machineDeploymentName}`);
   }
 
-  static getMachineDeploymentRemoveBtn(machineDeploymentName: string): Cypress.Chainable<any> {
+  static getMachineDeploymentRemoveBtn(machineDeploymentName: string): Cypress.Chainable {
     return this.getTableRow(machineDeploymentName).find('button i.km-icon-delete');
   }
 
-  static getDeleteMachineDeploymentDialogBtn(): Cypress.Chainable<any> {
+  static getDeleteMachineDeploymentDialogBtn(): Cypress.Chainable {
     return cy.get('#km-confirmation-dialog-confirm-btn');
   }
 
@@ -69,7 +69,7 @@ export class ClustersPage {
   // Utils.
 
   static waitForRefresh(): void {
-    TrafficMonitor.newTrafficMonitor().url(Endpoint.Clusters).method(RequestType.GET).alias('listClusters').wait();
+    TrafficMonitor.newTrafficMonitor().url(Endpoint.Clusters).method(RequestType.GET).wait();
   }
 
   static verifyUrl(): void {

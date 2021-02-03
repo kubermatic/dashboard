@@ -59,7 +59,7 @@ export class ProjectsPage {
   // Utils.
 
   static waitForRefresh(): void {
-    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.Projects).alias('listProjects').wait();
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.Projects).wait();
   }
 
   static waitForProject(projectName: string): void {
@@ -67,7 +67,6 @@ export class ProjectsPage {
     TrafficMonitor.newTrafficMonitor()
       .method(RequestType.GET)
       .url(Endpoint.Projects)
-      .alias('listProjects')
       .retry(retries)
       .expect(Response.newResponse(ResponseType.LIST).elements(1).property(Property.newProperty('name', projectName)));
   }
@@ -122,7 +121,6 @@ export class ProjectsPage {
         TrafficMonitor.newTrafficMonitor()
           .method(RequestType.GET)
           .url(Endpoint.Projects)
-          .alias('listProjects')
           .retry(retries)
           .expect(Response.newResponse(ResponseType.LIST).elements(0));
       });

@@ -10,14 +10,7 @@
 // limitations under the License.
 
 import {Component, forwardRef, OnInit} from '@angular/core';
-import {
-  ControlValueAccessor,
-  FormBuilder,
-  FormGroup,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  Validator,
-} from '@angular/forms';
+import {FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -46,7 +39,7 @@ enum Controls {
     },
   ],
 })
-export class PresetSettingsStepComponent extends BaseFormValidator implements OnInit, ControlValueAccessor, Validator {
+export class PresetSettingsStepComponent extends BaseFormValidator implements OnInit {
   form: FormGroup;
   provider: NodeProvider;
 

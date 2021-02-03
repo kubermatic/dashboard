@@ -14,6 +14,11 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {
+  ServiceAccountTokenDialog,
+  ServiceAccountTokenDialogData,
+  ServiceAccountTokenDialogMode,
+} from '@app/serviceaccount/token/add/component';
 import {ApiService} from '@core/services/api/service';
 import {NotificationService} from '@core/services/notification/service';
 import {ProjectService} from '@core/services/project/service';
@@ -23,14 +28,11 @@ import {Project} from '@shared/entity/project';
 import {ServiceAccount, ServiceAccountToken} from '@shared/entity/service-account';
 import {GroupConfig} from '@shared/model/Config';
 import {filter, switchMap, take} from 'rxjs/operators';
-import {AddServiceAccountTokenComponent} from './add-serviceaccount-token/add-serviceaccount-token.component';
-import {EditServiceAccountTokenComponent} from './edit-serviceaccount-token/edit-serviceaccount-token.component';
-import {TokenDialogComponent} from './token-dialog/token-dialog.component';
 
 @Component({
   selector: 'km-serviceaccount-token',
-  templateUrl: './serviceaccount-token.component.html',
-  styleUrls: ['./serviceaccount-token.component.scss'],
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
 })
 export class ServiceAccountTokenComponent implements OnInit {
   @Input() serviceaccount: ServiceAccount;
@@ -76,50 +78,45 @@ export class ServiceAccountTokenComponent implements OnInit {
     return !this._currentGroupConfig || this._currentGroupConfig.serviceaccountToken[action];
   }
 
-  addServiceAccountToken(): void {
-    const modal = this._matDialog.open(AddServiceAccountTokenComponent);
-    modal.componentInstance.project = this._selectedProject;
-    modal.componentInstance.serviceaccount = this.serviceaccount;
-  }
-
-  regenerateServiceAccountToken(token: ServiceAccountToken): void {
-    const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
+  createToken(): void {
+    const config: MatDialogConfig = {
       data: {
-        title: 'Regenerate Token',
-        message: `Regenerate ${token.name} token for ${this.serviceaccount.name} service account?`,
-        confirmLabel: 'Regenerate',
-      },
+        projectID: this._selectedProject.id,
+        serviceAccount: this.serviceaccount,
+        mode: ServiceAccountTokenDialogMode.Create,
+      } as ServiceAccountTokenDialogData,
     };
 
-    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
-    this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'regenerateServiceAccountTokenOpened');
-
-    dialogRef
-      .afterClosed()
-      .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(
-        switchMap(_ =>
-          this._apiService.regenerateServiceAccountToken(this._selectedProject.id, this.serviceaccount, token)
-        )
-      )
-      .pipe(take(1))
-      .subscribe(token => {
-        this.openTokenDialog(token);
-        this._notificationService.success(`The ${token.name} token was regenerated`);
-        this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenRegenerated');
-      });
+    this._matDialog.open(ServiceAccountTokenDialog, config);
   }
 
-  editServiceAccountToken(token: ServiceAccountToken): void {
-    const modal = this._matDialog.open(EditServiceAccountTokenComponent);
-    modal.componentInstance.project = this._selectedProject;
-    modal.componentInstance.serviceaccount = this.serviceaccount;
-    modal.componentInstance.token = token;
+  regenerateToken(token: ServiceAccountToken): void {
+    const config: MatDialogConfig = {
+      data: {
+        projectID: this._selectedProject.id,
+        serviceAccount: this.serviceaccount,
+        mode: ServiceAccountTokenDialogMode.Regenerate,
+        token: token,
+      } as ServiceAccountTokenDialogData,
+    };
+
+    this._matDialog.open(ServiceAccountTokenDialog, config);
   }
 
-  deleteServiceAccountToken(token: ServiceAccountToken): void {
+  editToken(token: ServiceAccountToken): void {
+    const config: MatDialogConfig = {
+      data: {
+        projectID: this._selectedProject.id,
+        serviceAccount: this.serviceaccount,
+        mode: ServiceAccountTokenDialogMode.Edit,
+        token: token,
+      } as ServiceAccountTokenDialogData,
+    };
+
+    this._matDialog.open(ServiceAccountTokenDialog, config);
+  }
+
+  deleteToken(token: ServiceAccountToken): void {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
@@ -146,10 +143,5 @@ export class ServiceAccountTokenComponent implements OnInit {
         );
         this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenDeleted');
       });
-  }
-
-  openTokenDialog(token: ServiceAccountToken): void {
-    const modal = this._matDialog.open(TokenDialogComponent);
-    modal.componentInstance.serviceaccountToken = token;
   }
 }

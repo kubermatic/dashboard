@@ -49,19 +49,19 @@ export class ServiceAccountsPage {
   }
 
   static getAddTokenNameInput(): Cypress.Chainable<any> {
-    return cy.get('#km-add-serviceaccount-token-dialog-name-input');
+    return cy.get('#km-serviceaccount-token-dialog-name-input');
   }
 
   static getAddTokenSaveBtn(): Cypress.Chainable<any> {
-    return cy.get('#km-add-serviceaccount-token-dialog-add-btn');
+    return cy.get('#km-serviceaccount-token-dialog-update-btn');
   }
 
   static getTokenGotItBtn(): Cypress.Chainable<any> {
-    return cy.get('#km-token-dialog-confirm-btn');
+    return cy.get('#km-serviceaccount-token-dialog-confirm-btn');
   }
 
   static _waitForTokenRefresh(): void {
-    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.Tokens).alias('list tokens').wait();
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.Tokens).wait();
   }
 
   static getTableRow(name: string): Cypress.Chainable<any> {
@@ -71,7 +71,7 @@ export class ServiceAccountsPage {
   // Utils.
 
   static waitForRefresh(): void {
-    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.ServiceAccounts).alias('list sa').wait();
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.ServiceAccounts).wait();
   }
 
   static verifyUrl(): void {
