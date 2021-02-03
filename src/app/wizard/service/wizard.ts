@@ -48,7 +48,7 @@ export class WizardService {
       }
     }
 
-    handleOSChange(_os: OperatingSystem): void {
+    handleOSChange(_: OperatingSystem): void {
       if (this._parent._clusterService.provider !== NodeProvider.VSPHERE) {
         this._hideStep(StepRegistry.MachineNetwork);
         return;

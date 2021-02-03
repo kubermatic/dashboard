@@ -324,10 +324,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   private _getDefaultSystemTemplate(provider: NodeProvider): OperatingSystem {
     switch (provider) {
       case NodeProvider.VSPHERE: {
-        const defaultTemplate = this._datacenterSpec.spec.vsphere.templates
+        return this._datacenterSpec.spec.vsphere.templates
           ? (Object.keys(this._datacenterSpec.spec.vsphere.templates)[0] as OperatingSystem)
           : OperatingSystem.Ubuntu;
-        return defaultTemplate;
       }
     }
 
