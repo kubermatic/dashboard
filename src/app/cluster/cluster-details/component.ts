@@ -351,7 +351,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isOPAEnabled(): boolean {
-    return this.cluster.spec.opaIntegration.enabled;
+    return !!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled;
   }
 
   ngOnDestroy(): void {
