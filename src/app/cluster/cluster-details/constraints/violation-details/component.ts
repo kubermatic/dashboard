@@ -26,14 +26,9 @@ export class ViolationDetailsComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   ngOnInit(): void {
-    this.dataSource.data = this.violations;
+    this.dataSource.data = this.violations || [];
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
-  }
-
-  getDataSource(): MatTableDataSource<Violation> {
-    this.dataSource.data = this.violations ? this.violations : [];
-    return this.dataSource;
   }
 }

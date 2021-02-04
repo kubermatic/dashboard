@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -27,15 +27,15 @@ import {take, takeUntil, filter, switchMap} from 'rxjs/operators';
 import {Mode, ConstraintDialog} from './constraint-dialog/component';
 
 @Component({
-  selector: 'km-constraints-list',
+  selector: 'km-constraint-list',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class ConstraintsComponent implements OnInit, OnDestroy {
+export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: Cluster;
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
-  constraints: Constraint[] = [];
+  @Input() constraints: Constraint[] = [];
   settings: UserSettings;
   dataSource = new MatTableDataSource<Constraint>();
   displayedColumns: string[] = ['constraintName', 'constraintTemplate', 'match', 'violations', 'actions'];
@@ -70,17 +70,13 @@ export class ConstraintsComponent implements OnInit, OnDestroy {
     this.sort.active = 'constraintName';
     this.sort.direction = 'asc';
 
-    this._opaService
-      .constraints(this.projectID, this.cluster.id)
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(constraints => {
-        this.constraints = constraints;
-        this.dataSource.data = this.constraints;
-      });
-
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.settings = settings;
     });
+  }
+
+  ngOnChanges(): void {
+    this.dataSource.data = this.constraints;
   }
 
   ngOnDestroy(): void {
@@ -130,11 +126,7 @@ export class ConstraintsComponent implements OnInit, OnDestroy {
       },
     };
 
-    this._matDialog
-      .open(ConstraintDialog, dialogConfig)
-      .afterClosed()
-      .pipe(take(1))
-      .subscribe(_ => {});
+    this._matDialog.open(ConstraintDialog, dialogConfig);
   }
 
   edit(constraint: Constraint, event: Event): void {
@@ -150,11 +142,7 @@ export class ConstraintsComponent implements OnInit, OnDestroy {
       },
     };
 
-    this._matDialog
-      .open(ConstraintDialog, dialogConfig)
-      .afterClosed()
-      .pipe(take(1))
-      .subscribe(_ => {});
+    this._matDialog.open(ConstraintDialog, dialogConfig);
   }
 
   delete(constraint: Constraint, event: Event): void {

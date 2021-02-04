@@ -24,7 +24,7 @@ export class OPAService {
   private readonly _refreshTime = 10;
   private _constraintTemplates$: Observable<ConstraintTemplate[]>;
   private _constraintTemplatesRefresh$ = new Subject<void>();
-  private _constraints$: Observable<Constraint[]>;
+  private _constraints$ = new Map<string, Observable<Constraint[]>>();
   private _constraintsRefresh$ = new Subject<void>();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
@@ -65,11 +65,17 @@ export class OPAService {
   }
 
   constraints(projectId: string, clusterId: string): Observable<Constraint[]> {
-    this._constraints$ = merge(this._constraintsRefresh$, this._refreshTimer$)
-      .pipe(switchMap(_ => this._getConstraints(projectId, clusterId)))
-      .pipe(shareReplay({refCount: true, bufferSize: 1}));
+    const id = `${projectId}-${clusterId}`;
 
-    return this._constraints$;
+    if (!this._constraints$.get(id)) {
+      const _constraints$ = merge(this._constraintsRefresh$, this._refreshTimer$)
+        .pipe(switchMap(_ => this._getConstraints(projectId, clusterId)))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+
+      this._constraints$.set(id, _constraints$);
+    }
+
+    return this._constraints$.get(id);
   }
 
   private _getConstraints(projectId: string, clusterId: string): Observable<Constraint[]> {

@@ -14,7 +14,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {OPAService} from '@core/services/opa/service';
 import {NotificationService} from '@core/services/notification/service';
-import {Constraint, ConstraintTemplate} from '@shared/entity/opa';
+import {Constraint, ConstraintTemplate, ConstraintSpec} from '@shared/entity/opa';
 import {dump, load} from 'js-yaml';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -129,9 +129,13 @@ export class ConstraintDialog implements OnInit, OnDestroy {
     }
   }
 
-  private _getSpec(): any {
-    const raw = load(this.spec);
-    raw['constraintType'] = this.form.get(Controls.ConstraintTemplate).value;
-    return !_.isEmpty(raw) ? raw : {};
+  private _getSpec(): ConstraintSpec {
+    let spec = new ConstraintSpec();
+    const raw = load(this.spec) as ConstraintSpec;
+    if (!_.isEmpty(raw)) {
+      spec = raw;
+    }
+    spec['constraintType'] = this.form.get(Controls.ConstraintTemplate).value;
+    return spec;
   }
 }
