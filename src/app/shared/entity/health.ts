@@ -19,7 +19,17 @@ export class Health {
   userClusterControllerManager: HealthState;
 
   static allHealthy(health: Health): boolean {
-    return Object.values(health).every(status => HealthState.isUp(status));
+    const supported = [
+      health.apiserver,
+      health.controller,
+      health.etcd,
+      health.machineController,
+      health.scheduler,
+      health.cloudProviderInfrastructure,
+      health.userClusterControllerManager,
+    ];
+
+    return supported.every(status => HealthState.isUp(status));
   }
 }
 
