@@ -30,7 +30,7 @@ import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {NoIpsLeftValidator} from '@shared/validators/no-ips-left.validator';
 import {merge, of} from 'rxjs';
-import {filter, take, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {NodeDataService} from './service/service';
 
 enum Controls {
@@ -195,13 +195,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     // Disable unsupported systems when Openshift is used
     if (
       this.isOpenshiftCluster() &&
-      [
-        OperatingSystem.Flatcar,
-        OperatingSystem.SLES,
-        OperatingSystem.ContainerLinux,
-        OperatingSystem.Ubuntu,
-        OperatingSystem.RHEL,
-      ].includes(os)
+      [OperatingSystem.Flatcar, OperatingSystem.SLES, OperatingSystem.Ubuntu, OperatingSystem.RHEL].includes(os)
     ) {
       return false;
     }
@@ -213,16 +207,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     // Enable OS per-provider basis
     switch (os) {
-      case OperatingSystem.ContainerLinux:
-        return this.isProvider(
-          NodeProvider.AWS,
-          NodeProvider.AZURE,
-          NodeProvider.DIGITALOCEAN,
-          NodeProvider.GCP,
-          NodeProvider.KUBEVIRT,
-          NodeProvider.PACKET,
-          NodeProvider.OPENSTACK
-        );
       case OperatingSystem.SLES:
         return this.isProvider(NodeProvider.AWS);
       case OperatingSystem.RHEL:
@@ -239,8 +223,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       case OperatingSystem.CentOS:
         return !this.isProvider(NodeProvider.VSPHERE, NodeProvider.ANEXIA);
     }
-
-    return false;
   }
 
   isOperatingSystemSelected(...os: OperatingSystem[]): boolean {
@@ -267,10 +249,21 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   private _init(): void {
-    const upgradeOnBoot = this._nodeDataService.operatingSystemSpec[this._nodeDataService.operatingSystem]
-      .distUpgradeOnBoot;
-    const disableAutoUpdate = this._nodeDataService.operatingSystemSpec[this._nodeDataService.operatingSystem]
-      .disableAutoUpdate;
+    let upgradeOnBoot = false;
+    let disableAutoUpdate = false;
+
+    switch (this._nodeDataService.operatingSystem) {
+      case OperatingSystem.Ubuntu:
+      case OperatingSystem.CentOS:
+      case OperatingSystem.SLES:
+      case OperatingSystem.RHEL:
+        upgradeOnBoot = this._nodeDataService.operatingSystemSpec[this._nodeDataService.operatingSystem]
+          .distUpgradeOnBoot;
+        break;
+      case OperatingSystem.Flatcar:
+        disableAutoUpdate = this._nodeDataService.operatingSystemSpec[this._nodeDataService.operatingSystem]
+          .disableAutoUpdate;
+    }
 
     this.onLabelsChange(this._nodeDataService.nodeData.spec.labels);
     this.onTaintsChange(this._nodeDataService.nodeData.spec.taints);
@@ -291,7 +284,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
             distUpgradeOnBoot: this.form.get(Controls.UpgradeOnBoot).value,
           },
         };
-      case OperatingSystem.ContainerLinux:
       case OperatingSystem.Flatcar:
         return {
           [this.form.get(Controls.OperatingSystem).value]: {
@@ -317,11 +309,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       return false;
     }
 
-    // Map Container Linux to CoreOS template
-    if (os === OperatingSystem.ContainerLinux) {
-      os = OperatingSystem.CoreOS;
-    }
-
     switch (provider) {
       case NodeProvider.VSPHERE: {
         const vSphereSpec = this._datacenterSpec.spec.vsphere;
@@ -338,10 +325,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   private _getDefaultSystemTemplate(provider: NodeProvider): OperatingSystem {
     switch (provider) {
       case NodeProvider.VSPHERE: {
-        const defaultTemplate = this._datacenterSpec.spec.vsphere.templates
+        return this._datacenterSpec.spec.vsphere.templates
           ? (Object.keys(this._datacenterSpec.spec.vsphere.templates)[0] as OperatingSystem)
           : OperatingSystem.Ubuntu;
-        return defaultTemplate === OperatingSystem.CoreOS ? OperatingSystem.ContainerLinux : defaultTemplate;
       }
     }
 

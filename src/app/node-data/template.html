@@ -84,11 +84,6 @@ limitations under the License.
           <i class="km-os-image-centos"></i>
           CentOS
         </mat-button-toggle>
-        <mat-button-toggle [value]="OperatingSystem.ContainerLinux"
-                           *ngIf="isOperatingSystemSupported(OperatingSystem.ContainerLinux)">
-          <i class="km-os-image-container-linux"></i>
-          Container Linux
-        </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.Flatcar"
                            *ngIf="isOperatingSystemSupported(OperatingSystem.Flatcar)">
           <i class="km-os-image-flatcar"></i>
@@ -106,12 +101,6 @@ limitations under the License.
           RHEL
         </mat-button-toggle>
       </mat-button-toggle-group>
-
-      <span *ngIf="isOperatingSystemSelected(OperatingSystem.ContainerLinux)"
-            class="eol-warning with-margin">
-        <i class="km-icon-error"></i>
-        Container Linux has reached its end of life and is no longer maintained or updated
-      </span>
 
       <!-- Options for RHEL -->
       <div *ngIf="isOperatingSystemSelected(OperatingSystem.RHEL)"
@@ -154,8 +143,8 @@ limitations under the License.
           </mat-checkbox>
         </div>
 
-        <!-- Options for Container Linux -->
-        <div *ngIf="isOperatingSystemSelected(OperatingSystem.ContainerLinux, OperatingSystem.Flatcar)"
+        <!-- Options for Flatcar -->
+        <div *ngIf="isOperatingSystemSelected(OperatingSystem.Flatcar)"
              class="km-os-options">
           <mat-checkbox [id]="Controls.DisableAutoUpdate"
                         [formControlName]="Controls.DisableAutoUpdate">Disable auto-update

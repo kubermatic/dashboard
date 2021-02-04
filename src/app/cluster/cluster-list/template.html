@@ -63,11 +63,6 @@ limitations under the License.
           <div fxLayoutAlign=" center"
                fxLayoutGap="8px">
             <span>{{element.name}}</span>
-            <km-chip *ngIf="showEOLWarning(element)"
-                     text="EOL"
-                     type="error"
-                     matTooltip="Container Linux has reached its end of life and is no longer maintained or updated.">
-            </km-chip>
             <span *ngIf="element.isExternal"
                   class="km-label-primary">External</span>
           </div>
