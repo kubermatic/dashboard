@@ -19,9 +19,17 @@ export class Health {
   userClusterControllerManager: HealthState;
 
   static allHealthy(health: Health): boolean {
-    return Object.keys(Health)
-      .map(key => health[key])
-      .every(status => HealthState.isUp(status));
+    const supported = [
+      health.apiserver,
+      health.controller,
+      health.etcd,
+      health.machineController,
+      health.scheduler,
+      health.cloudProviderInfrastructure,
+      health.userClusterControllerManager,
+    ];
+
+    return supported.every(status => HealthState.isUp(status));
   }
 }
 
