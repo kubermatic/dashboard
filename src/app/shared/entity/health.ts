@@ -19,7 +19,9 @@ export class Health {
   userClusterControllerManager: HealthState;
 
   static allHealthy(health: Health): boolean {
-    return Object.values(health).every(status => HealthState.isUp(status));
+    return Object.keys(Health)
+      .map(key => health[key])
+      .every(status => HealthState.isUp(status));
   }
 }
 
