@@ -257,10 +257,11 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       case OperatingSystem.CentOS:
       case OperatingSystem.SLES:
       case OperatingSystem.RHEL:
-        upgradeOnBoot = this._nodeDataService.operatingSystem[this._nodeDataService.operatingSystem].distUpgradeOnBoot;
+        upgradeOnBoot = this._nodeDataService.operatingSystemSpec[this._nodeDataService.operatingSystem]
+          .distUpgradeOnBoot;
         break;
       case OperatingSystem.Flatcar:
-        disableAutoUpdate = this._nodeDataService.operatingSystem[this._nodeDataService.operatingSystem]
+        disableAutoUpdate = this._nodeDataService.operatingSystemSpec[this._nodeDataService.operatingSystem]
           .disableAutoUpdate;
     }
 
