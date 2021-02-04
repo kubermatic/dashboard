@@ -63,4 +63,5 @@ export class AWSSize {
   memory: number;
   vcpus: number;
   price: number;
+  gpus: number;
 }
