@@ -36,6 +36,7 @@ import {PacketProviderSettingsComponent} from './cluster-details/edit-provider-s
 import {VSphereProviderSettingsComponent} from './cluster-details/edit-provider-settings/vsphere-provider-settings/component';
 import {AddClusterSSHKeysComponent} from './cluster-details/edit-sshkeys/add-cluster-sshkeys/component';
 import {EditSSHKeysComponent} from './cluster-details/edit-sshkeys/component';
+import {GatekeeperConfigComponent} from './cluster-details/gatekeeper-config/component';
 import {ClusterPanelComponent} from './cluster-details/machine-deployment-details/cluster-panel/component';
 import {MachineDeploymentDetailsComponent} from './cluster-details/machine-deployment-details/component';
 import {MachineDeploymentListComponent} from './cluster-details/machine-deployment-list/component';
@@ -87,6 +88,7 @@ const components: any[] = [
   ConstraintsComponent,
   ConstraintDialog,
   ViolationDetailsComponent,
+  GatekeeperConfigComponent,
 ];
 
 const dialogs: any[] = [AddMachineNetworkComponent];
