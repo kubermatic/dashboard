@@ -178,3 +178,44 @@ export class LabelSelectorRequirement {
   values: string[];
   operator: string;
 }
+
+// Gatekeeper Config
+export class GatekeeperConfig {
+  spec: GatekeeperConfigSpec;
+}
+
+export class GatekeeperConfigSpec {
+  sync?: Sync;
+  validation?: GatekeeperValidation;
+  match?: MatchEntry[];
+  readiness?: ReadinessSpec;
+}
+
+export class Sync {
+  syncOnly?: GVK[];
+}
+
+export class GatekeeperValidation {
+  traces?: Trace[];
+}
+
+export class Trace {
+  user?: string;
+  kind?: GVK;
+  dump?: string;
+}
+
+export class MatchEntry {
+  excludedNamespaces?: string[];
+  processes?: string[];
+}
+
+export class ReadinessSpec {
+  statsEnabled?: boolean;
+}
+
+export class GVK {
+  group?: string;
+  version?: string;
+  kind?: string;
+}
