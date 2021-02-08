@@ -137,4 +137,9 @@ export class OPAService {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/gatekeeper/config`;
     return this._http.patch<GatekeeperConfig>(url, patch);
   }
+
+  deleteGatekeeperConfig(projectId: string, clusterId: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/gatekeeper/config`;
+    return this._http.delete(url);
+  }
 }

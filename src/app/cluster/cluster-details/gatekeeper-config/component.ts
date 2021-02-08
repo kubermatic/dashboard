@@ -11,10 +11,14 @@
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {NotificationService} from '@core/services/notification/service';
+import {OPAService} from '@core/services/opa/service';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '@shared/entity/cluster';
 import {GatekeeperConfig} from '@shared/entity/opa';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
+import {filter, switchMap, take} from 'rxjs/operators';
 import {Mode, GatekeeperConfigDialog} from './gatekeeper-config-dialog/component';
 
 @Component({
@@ -30,7 +34,11 @@ export class GatekeeperConfigComponent implements OnInit, OnDestroy {
 
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _matDialog: MatDialog) {}
+  constructor(
+    private readonly _matDialog: MatDialog,
+    private readonly _opaService: OPAService,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -74,5 +82,29 @@ export class GatekeeperConfigComponent implements OnInit, OnDestroy {
     };
 
     this._matDialog.open(GatekeeperConfigDialog, dialogConfig);
+  }
+
+  delete(): void {
+    event.stopPropagation();
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        title: 'Delete Gatekeeper Config',
+        message: 'Are you sure you want to delete the Gatekeeper Config?',
+        confirmLabel: 'Delete',
+      },
+    };
+
+    this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(switchMap(_ => this._opaService.deleteGatekeeperConfig(this.projectID, this.cluster.id)))
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._notificationService.success('The Gatekeeper Config was deleted');
+        this._opaService.refreshGatekeeperConfig();
+      });
   }
 }
