@@ -9,10 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {EventEmitter, Injectable} from '@angular/core';
-import {timer} from 'rxjs';
+import {EventEmitter, Inject, Injectable} from '@angular/core';
 import {ThemeService} from './theme';
 import {Theme} from '../../../../shared/model/Config';
+import {DOCUMENT} from '@angular/common';
 
 export enum ColorScheme {
   Dark = 'dark',
@@ -22,14 +22,19 @@ export enum ColorScheme {
 
 @Injectable()
 export class ColorSchemeService {
-  private readonly _colorSchemeMediaQuery = colorScheme => `(prefers-color-scheme: ${colorScheme})`;
-  private readonly _timerInterval = 1000;
+  private readonly _colorSchemeQuery = '(prefers-color-scheme: dark)';
   private _selectedColorScheme = ColorScheme.NoPreference;
 
   readonly onColorSchemeUpdate = new EventEmitter<ColorScheme>();
 
-  constructor(private readonly _themeService: ThemeService) {
-    timer(0, this._timerInterval).subscribe(_ => this._updateColorScheme(this._getCurrentColorScheme()));
+  constructor(@Inject(DOCUMENT) private readonly _document: Document, private readonly _themeService: ThemeService) {
+    // Load initial color scheme.
+    this._updateColorScheme(this._document.defaultView.matchMedia(this._colorSchemeQuery).matches);
+
+    // Watch for changes.
+    this._document.defaultView
+      .matchMedia(this._colorSchemeQuery)
+      .addEventListener('change', e => this._updateColorScheme(e.matches));
   }
 
   getPreferredTheme(): Theme {
@@ -40,19 +45,9 @@ export class ColorSchemeService {
     return this._selectedColorScheme !== ColorScheme.NoPreference;
   }
 
-  private _getCurrentColorScheme(): ColorScheme {
-    if (this._matchesColorScheme(ColorScheme.Light)) {
-      return ColorScheme.Light;
-    }
+  private _updateColorScheme(isDark: boolean): void {
+    const scheme = isDark ? ColorScheme.Dark : ColorScheme.Light;
 
-    if (this._matchesColorScheme(ColorScheme.Dark)) {
-      return ColorScheme.Dark;
-    }
-
-    return ColorScheme.NoPreference;
-  }
-
-  private _updateColorScheme(scheme: ColorScheme): void {
     if (scheme !== this._selectedColorScheme) {
       this._selectedColorScheme = scheme;
       this.onColorSchemeUpdate.next(this._selectedColorScheme);
@@ -61,9 +56,5 @@ export class ColorSchemeService {
 
   private _getThemeForScheme(scheme: ColorScheme): Theme {
     return this._themeService.themes.find(theme => scheme === theme.name);
-  }
-
-  private _matchesColorScheme(scheme: ColorScheme): boolean {
-    return window.matchMedia(this._colorSchemeMediaQuery(scheme)).matches;
   }
 }
