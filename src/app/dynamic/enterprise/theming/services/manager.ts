@@ -17,6 +17,7 @@ import {UserSettings} from '@shared/entity/settings';
 import {filter} from 'rxjs/operators';
 import {ColorSchemeService} from './color-scheme';
 import {ThemeService} from './theme';
+import {combineLatest} from 'rxjs';
 
 @Injectable()
 export class ThemeManagerService {
@@ -38,9 +39,12 @@ export class ThemeManagerService {
 
   // Force the initial theme load during application start.
   init(): void {
-    this._userService.currentUserSettings
-      .pipe(filter(settings => this.getDefaultTheme(settings) !== this._selectedTheme))
-      .subscribe(settings => this.setTheme(this.getDefaultTheme(settings)));
+    combineLatest([
+      this._userService.currentUserSettings.pipe(
+        filter(settings => this.getDefaultTheme(settings) !== this._selectedTheme)
+      ),
+      this._colorSchemeService.onColorSchemeUpdate,
+    ]).subscribe(([settings, _]) => this.setTheme(this.getDefaultTheme(settings)));
   }
 
   setTheme(themeName: string) {
