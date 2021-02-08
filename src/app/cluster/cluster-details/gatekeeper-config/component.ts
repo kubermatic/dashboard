@@ -60,4 +60,19 @@ export class GatekeeperConfigComponent implements OnInit, OnDestroy {
 
     this._matDialog.open(GatekeeperConfigDialog, dialogConfig);
   }
+
+  edit(): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Edit Gatekeeper Config',
+        projectId: this.projectID,
+        clusterId: this.cluster.id,
+        gatekeeperConfig: this.gatekeeperConfig,
+        mode: Mode.Edit,
+        confirmLabel: 'Edit',
+      },
+    };
+
+    this._matDialog.open(GatekeeperConfigDialog, dialogConfig);
+  }
 }

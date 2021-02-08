@@ -11,6 +11,12 @@
 
 @import 'variables';
 
+.km-gatekeeper-config-actions {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
 h2 {
   font-size: $font-size-card-title;
   font-weight: normal;

@@ -11,9 +11,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<div *ngIf="!isLoadingData() && !hasNoData()"
+     class="km-gatekeeper-config-actions">
+  <button mat-icon-button
+          matTooltip="Edit Gatekeeper Config"
+          (click)="edit()">
+    <i class="km-icon-edit"></i>
+  </button>
+</div>
 <h2>Gatekeeper Config</h2>
-<div *ngIf="!!isLoadingData()">
 
+<div *ngIf="!isLoadingData() && !hasNoData()">
 </div>
 
 <div class="km-empty-list-msg"

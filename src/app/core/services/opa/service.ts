@@ -127,4 +127,14 @@ export class OPAService {
   refreshGatekeeperConfig(): void {
     this._gatekeeperConfigRefresh$.next();
   }
+
+  createGatekeeperConfig(projectId: string, clusterId: string, config: GatekeeperConfig): Observable<GatekeeperConfig> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/gatekeeper/config`;
+    return this._http.post<GatekeeperConfig>(url, config);
+  }
+
+  patchGatekeeperConfig(projectId: string, clusterId: string, patch: GatekeeperConfig): Observable<GatekeeperConfig> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/gatekeeper/config`;
+    return this._http.patch<GatekeeperConfig>(url, patch);
+  }
 }
