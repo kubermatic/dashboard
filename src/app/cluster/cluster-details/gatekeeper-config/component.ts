@@ -10,10 +10,12 @@
 // limitations under the License.
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {Cluster} from '@shared/entity/cluster';
 import {GatekeeperConfig} from '@shared/entity/opa';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
+import {Mode, GatekeeperConfigDialog} from './gatekeeper-config-dialog/component';
 
 @Component({
   selector: 'km-gatekeeper-config',
@@ -28,7 +30,7 @@ export class GatekeeperConfigComponent implements OnInit, OnDestroy {
 
   private _unsubscribe = new Subject<void>();
 
-  constructor() {}
+  constructor(private readonly _matDialog: MatDialog) {}
 
   ngOnInit(): void {}
 
@@ -43,5 +45,19 @@ export class GatekeeperConfigComponent implements OnInit, OnDestroy {
 
   hasNoData(): boolean {
     return _.isEmpty(this.gatekeeperConfig) && this.isClusterRunning;
+  }
+
+  add(): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Add Gatekeeper Config',
+        projectId: this.projectID,
+        clusterId: this.cluster.id,
+        mode: Mode.Add,
+        confirmLabel: 'Add',
+      },
+    };
+
+    this._matDialog.open(GatekeeperConfigDialog, dialogConfig);
   }
 }

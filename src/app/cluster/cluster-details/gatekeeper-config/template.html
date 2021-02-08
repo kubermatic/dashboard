@@ -16,9 +16,13 @@ limitations under the License.
 
 </div>
 
-<div class="km-row km-empty-list-msg"
+<div class="km-empty-list-msg"
      *ngIf="hasNoData()">
-  No Gatekeeper Config defined.
+  <p>No Gatekeeper Config defined.</p>
+  <button (click)="add()"
+          mat-flat-button
+          [disabled]="!isClusterRunning">Add Gatekeeper Config
+  </button>
 </div>
 
 <km-loader *ngIf="isLoadingData()"></km-loader>
