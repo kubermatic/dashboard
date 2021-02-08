@@ -11,7 +11,7 @@
 
 import {EventEmitter, Inject, Injectable} from '@angular/core';
 import {ThemeService} from './theme';
-import {Theme} from '../../../../shared/model/Config';
+import {Theme} from '@shared/model/Config';
 import {DOCUMENT} from '@angular/common';
 
 export enum ColorScheme {
@@ -24,7 +24,6 @@ export enum ColorScheme {
 export class ColorSchemeService {
   private readonly _colorSchemeQuery = '(prefers-color-scheme: dark)';
   private _selectedColorScheme = ColorScheme.NoPreference;
-
   readonly onColorSchemeUpdate = new EventEmitter<ColorScheme>();
 
   constructor(@Inject(DOCUMENT) private readonly _document: Document, private readonly _themeService: ThemeService) {
