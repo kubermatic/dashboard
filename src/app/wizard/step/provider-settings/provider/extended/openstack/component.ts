@@ -178,7 +178,7 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
   }
 
   private _loadNetworks(networks: OpenstackNetwork[]): void {
-    this.networks = networks;
+    this.networks = networks.filter(network => !network.external);
     this.networksLabel = !_.isEmpty(this.networks) ? NetworkState.Ready : NetworkState.Empty;
     this._cdr.detectChanges();
   }
