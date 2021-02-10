@@ -12,6 +12,8 @@
 import {Condition} from '../utils/condition';
 import {View} from '../utils/view';
 import {UserPanel} from './user-panel.po';
+import {RequestType, TrafficMonitor} from "../utils/monitor";
+import {Endpoint} from "../utils/endpoint";
 
 export class UserSettingsPage {
   static getThemePicker(): Cypress.Chainable<any> {
@@ -24,8 +26,15 @@ export class UserSettingsPage {
     cy.url().should(Condition.Include, View.Account);
   }
 
+  static waitForRefresh(): void {
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.Settings).wait();
+  }
+
   static visit(): void {
-    UserPanel.openUserSettings();
-    this.verifyUrl();
+    UserPanel.open();
+    UserPanel.getUserSettingsBtn().click().then(() => {
+      this.waitForRefresh();
+      this.verifyUrl();
+    });
   }
 }
