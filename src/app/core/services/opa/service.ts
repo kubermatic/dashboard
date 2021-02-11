@@ -15,8 +15,8 @@ import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
 import {Constraint, ConstraintTemplate} from '@shared/entity/opa';
 import {ConstraintTemplate, GatekeeperConfig} from '@shared/entity/opa';
-import {Observable, Subject, timer, merge} from 'rxjs';
-import {switchMap, shareReplay} from 'rxjs/operators';
+import {Observable, Subject, timer, merge, of} from 'rxjs';
+import {switchMap, shareReplay, catchError} from 'rxjs/operators';
 
 @Injectable()
 export class OPAService {
@@ -121,7 +121,7 @@ export class OPAService {
 
   private _getGatekeeperConfig(projectId: string, clusterId: string): Observable<GatekeeperConfig> {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/gatekeeper/config`;
-    return this._http.get<GatekeeperConfig>(url);
+    return this._http.get<GatekeeperConfig>(url).pipe(catchError(() => of<GatekeeperConfig>()));
   }
 
   refreshGatekeeperConfig(): void {
