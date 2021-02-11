@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {OPAService} from '@core/services/opa/service';
 import {NotificationService} from '@core/services/notification/service';
@@ -55,19 +55,20 @@ export class ConstraintDialog implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(
-    public _matDialogRef: MatDialogRef<ConstraintDialog>,
+    private readonly _matDialogRef: MatDialogRef<ConstraintDialog>,
     private readonly _opaService: OPAService,
     private readonly _notificationService: NotificationService,
+    private readonly _builder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: ConstraintDialogConfig
   ) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      [Controls.Name]: new FormControl(this.data.mode === Mode.Edit ? this.data.constraint.name : '', [
+    this.form = this._builder.group({
+      [Controls.Name]: this._builder.control(this.data.mode === Mode.Edit ? this.data.constraint.name : '', [
         Validators.required,
       ]),
-      [Controls.ConstraintTemplate]: new FormControl(
-        this.data.mode === Mode.Edit ? this.data.constraint.spec.constraintType.toLowerCase() : '',
+      [Controls.ConstraintTemplate]: this._builder.control(
+        this.data.mode === Mode.Edit ? this.data.constraint.spec.constraintType : '',
         [Validators.required]
       ),
     });

@@ -9,7 +9,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  SimpleChanges,
+} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -53,7 +62,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
     this._cdr.detectChanges();
   }
 
-  private _unsubscribe = new Subject<void>();
+  private readonly _unsubscribe = new Subject<void>();
 
   constructor(
     private readonly _opaService: OPAService,
@@ -70,13 +79,15 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
     this.sort.active = 'constraintName';
     this.sort.direction = 'asc';
 
-    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      this.settings = settings;
-    });
+    this._userService.currentUserSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => (this.settings = settings));
   }
 
-  ngOnChanges(): void {
-    this.dataSource.data = this.constraints;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.constraints) {
+      this.dataSource.data = this.constraints;
+    }
   }
 
   ngOnDestroy(): void {
@@ -105,10 +116,10 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
     this.isShowDetails[element.name] = !this.isShowDetails[element.name];
   }
 
-  listMatch(element: Kind[]): string {
-    const matches = [];
-    element.forEach(x => matches.push(x.kinds));
-    return matches.join(', ');
+  displayKindNames(element: Kind[]): string {
+    const kinds = [];
+    element.map(x => kinds.push(x.kinds));
+    return kinds.join(', ');
   }
 
   getViolationCount(violations: Violation[]): number {
