@@ -17,13 +17,6 @@
   top: 20px;
 }
 
-h2 {
-  font-size: $font-size-card-title;
-  font-weight: normal;
-  margin: 0;
-  padding: 0 60px;
-}
-
 .km-empty-list-msg {
   border-top: none;
 
@@ -33,7 +26,7 @@ h2 {
 }
 
 .km-code-block {
-  margin: 16px 30px;
+  margin: 40px 30px 16px 30px;
   max-height: 250px;
   overflow-y: auto;
 }

@@ -35,22 +35,17 @@ export enum Mode {
   Edit = 'edit',
 }
 
-export enum Controls {
-  Spec = 'spec',
-}
-
 @Component({
   selector: 'km-gatekeeper-config-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
 export class GatekeeperConfigDialog implements OnInit, OnDestroy {
-  readonly controls = Controls;
   spec = '';
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(
-    public _matDialogRef: MatDialogRef<GatekeeperConfigDialog>,
+    private readonly _matDialogRef: MatDialogRef<GatekeeperConfigDialog>,
     private readonly _opaService: OPAService,
     private readonly _notificationService: NotificationService,
     @Inject(MAT_DIALOG_DATA) public data: GatekeeperConfigDialogData

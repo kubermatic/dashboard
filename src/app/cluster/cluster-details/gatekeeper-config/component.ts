@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification/service';
 import {OPAService} from '@core/services/opa/service';
@@ -26,21 +26,19 @@ import {Mode, GatekeeperConfigDialog} from './gatekeeper-config-dialog/component
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class GatekeeperConfigComponent implements OnInit, OnDestroy {
+export class GatekeeperConfigComponent implements OnDestroy {
   @Input() cluster: Cluster;
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
   @Input() gatekeeperConfig: GatekeeperConfig;
 
-  private _unsubscribe = new Subject<void>();
+  private readonly _unsubscribe = new Subject<void>();
 
   constructor(
     private readonly _matDialog: MatDialog,
     private readonly _opaService: OPAService,
     private readonly _notificationService: NotificationService
   ) {}
-
-  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this._unsubscribe.next();

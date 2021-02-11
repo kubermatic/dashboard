@@ -121,7 +121,7 @@ export class OPAService {
 
   private _getGatekeeperConfig(projectId: string, clusterId: string): Observable<GatekeeperConfig> {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/gatekeeper/config`;
-    return this._http.get<GatekeeperConfig>(url).pipe(catchError(() => of<GatekeeperConfig>()));
+    return this._http.get<GatekeeperConfig>(url).pipe(catchError(() => of<GatekeeperConfig>(undefined)));
   }
 
   refreshGatekeeperConfig(): void {
