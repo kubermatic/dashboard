@@ -71,8 +71,9 @@ describe('ClusterDetailsComponent', () => {
       rbacMock.deleteClusterBinding.mockReturnValue(of(null));
       rbacMock.deleteBinding.mockReturnValue(of(null));
 
-      const opaMock = {constraints: jest.fn()};
+      const opaMock = {constraints: jest.fn(), gatekeeperConfig: jest.fn()};
       opaMock.constraints.mockReturnValue(of([]));
+      opaMock.gatekeeperConfig.mockReturnValue(of(null));
 
       TestBed.configureTestingModule({
         imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
