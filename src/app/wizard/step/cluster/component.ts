@@ -95,7 +95,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.Name]: new FormControl('', [
         Validators.required,
         Validators.minLength(this._minNameLength),
-        Validators.pattern('[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'),
+        Validators.pattern('[a-zA-Z0-9-]*'),
       ]),
       [Controls.Version]: new FormControl('', [Validators.required]),
       [Controls.Type]: new FormControl(''),
