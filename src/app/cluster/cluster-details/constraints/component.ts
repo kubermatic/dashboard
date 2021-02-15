@@ -117,9 +117,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   displayKindNames(element: Kind[]): string {
-    const kinds = [];
-    element.map(x => kinds.push(x.kinds));
-    return kinds.join(', ');
+    return element.map(x => x.kinds).join(', ');
   }
 
   getViolationCount(violations: Violation[]): number {
