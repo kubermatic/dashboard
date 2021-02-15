@@ -27,6 +27,7 @@ import {Mode, ConstraintTemplateDialog} from './constraint-template-dialog/compo
 @Component({
   selector: 'km-constraint-templates-list',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestroy {
   constraintTemplates: ConstraintTemplate[] = [];
@@ -77,6 +78,10 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
       this.paginator &&
       this.constraintTemplates.length > this.paginator.pageSize
     );
+  }
+
+  hasNoData(): boolean {
+    return _.isEmpty(this.constraintTemplates);
   }
 
   add(): void {
