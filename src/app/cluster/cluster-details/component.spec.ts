@@ -36,6 +36,7 @@ import {Auth} from '@core/services/auth/service';
 import {ClusterService} from '@core/services/cluster/service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {NotificationService} from '@core/services/notification/service';
+import {OPAService} from '@core/services/opa/service';
 import {ProjectService} from '@core/services/project/service';
 import {RBACService} from '@core/services/rbac/service';
 import {SettingsService} from '@core/services/settings/service';
@@ -70,6 +71,9 @@ describe('ClusterDetailsComponent', () => {
       rbacMock.deleteClusterBinding.mockReturnValue(of(null));
       rbacMock.deleteBinding.mockReturnValue(of(null));
 
+      const opaMock = {constraints: jest.fn()};
+      opaMock.constraints.mockReturnValue(of([]));
+
       TestBed.configureTestingModule({
         imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
         declarations: [
@@ -94,6 +98,7 @@ describe('ClusterDetailsComponent', () => {
           {provide: ProjectService, useClass: ProjectMockService},
           {provide: SettingsService, useClass: SettingsMockService},
           {provide: RBACService, useValue: rbacMock},
+          {provide: OPAService, useValue: opaMock},
           {provide: MatDialogRef, useClass: MatDialogRefMock},
           {provide: MatDialog, useClass: MatDialogMock},
           GoogleAnalyticsService,
