@@ -26,7 +26,7 @@ export interface GatekeeperConfigDialogData {
   mode: Mode;
   confirmLabel: string;
 
-  // Gatekeeper Confog has to be specified only if dialog is used in the edit mode.
+  // Gatekeeper Config has to be specified only if dialog is used in the edit mode.
   gatekeeperConfig?: GatekeeperConfig;
 }
 
