@@ -17,6 +17,8 @@ export class Health {
   scheduler: HealthState;
   cloudProviderInfrastructure: HealthState;
   userClusterControllerManager: HealthState;
+  gatekeeperAudit?: HealthState;
+  gatekeeperController?: HealthState;
 
   static allHealthy(health: Health): boolean {
     const supported = [
