@@ -13,8 +13,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
-import {Constraint, ConstraintTemplate} from '@shared/entity/opa';
-import {ConstraintTemplate, GatekeeperConfig} from '@shared/entity/opa';
+import {Constraint, ConstraintTemplate, GatekeeperConfig} from '@shared/entity/opa';
 import {Observable, Subject, timer, merge, of} from 'rxjs';
 import {switchMap, shareReplay, catchError} from 'rxjs/operators';
 
