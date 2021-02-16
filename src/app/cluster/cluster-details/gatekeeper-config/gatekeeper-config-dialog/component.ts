@@ -60,6 +60,23 @@ export class GatekeeperConfigDialog implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  isValid(): boolean {
+    return !_.isEmpty(this.spec);
+  }
+
+  save(): void {
+    const gatekeeperConfig: GatekeeperConfig = {
+      spec: this._getSpec(),
+    };
+
+    switch (this.data.mode) {
+      case Mode.Add:
+        return this._create(gatekeeperConfig);
+      case Mode.Edit:
+        return this._edit(gatekeeperConfig);
+    }
+  }
+
   private _initProviderConfigEditor(): void {
     if (this.data.mode === Mode.Edit) {
       const spec = this.data.gatekeeperConfig.spec;
@@ -76,19 +93,6 @@ export class GatekeeperConfigDialog implements OnInit, OnDestroy {
       spec = raw;
     }
     return spec;
-  }
-
-  save(): void {
-    const gatekeeperConfig: GatekeeperConfig = {
-      spec: this._getSpec(),
-    };
-
-    switch (this.data.mode) {
-      case Mode.Add:
-        return this._create(gatekeeperConfig);
-      case Mode.Edit:
-        return this._edit(gatekeeperConfig);
-    }
   }
 
   private _create(gatekeeperConfig: GatekeeperConfig): void {
