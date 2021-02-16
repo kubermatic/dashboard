@@ -26,11 +26,11 @@ limitations under the License.
 </div>
 
 <div *ngIf="!isLoadingData() && !hasNoData()"
-     class="km-code-block">
+     class="km-code-block gatekeeper-config">
   <pre>{{gatekeeperConfig | json}}</pre>
 </div>
 
-<div class="km-empty-list-msg"
+<div class="km-empty-list-msg no-items"
      *ngIf="hasNoData()">
   <p>No Gatekeeper Config defined.</p>
   <button (click)="add()"
