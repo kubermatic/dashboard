@@ -19,7 +19,10 @@ import {tap} from 'rxjs/operators';
 export class ErrorNotificationsInterceptor implements HttpInterceptor {
   private readonly _notificationService: NotificationService;
   // Array of partial error messages that should be silenced in the UI.
-  private readonly _silenceErrArr = ['external cluster functionality'];
+  private readonly _silenceErrArr = [
+    'external cluster functionality',
+    'configs.config.gatekeeper.sh "config" not found',
+  ];
 
   constructor(private readonly _inj: Injector) {
     this._notificationService = this._inj.get(NotificationService);

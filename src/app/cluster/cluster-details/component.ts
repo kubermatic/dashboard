@@ -16,8 +16,8 @@ import {AppConfigService} from '@app/config.service';
 import {ApiService} from '@core/services/api/service';
 import {ClusterService} from '@core/services/cluster/service';
 import {DatacenterService} from '@core/services/datacenter/service';
-import {OPAService} from '@core/services/opa/service';
 import {NotificationService} from '@core/services/notification/service';
+import {OPAService} from '@core/services/opa/service';
 import {PathParam} from '@core/services/params/service';
 import {SettingsService} from '@core/services/settings/service';
 import {UserService} from '@core/services/user/service';
@@ -30,7 +30,7 @@ import {Health, HealthState} from '@shared/entity/health';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {ClusterMetrics} from '@shared/entity/metrics';
-import {Constraint} from '@shared/entity/opa';
+import {Constraint, GatekeeperConfig} from '@shared/entity/opa';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {Config, GroupConfig} from '@shared/model/Config';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
@@ -70,6 +70,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   addons: Addon[] = [];
   upgrades: MasterVersion[] = [];
   constraints: Constraint[] = [];
+  gatekeeperConfig: GatekeeperConfig;
   private _unsubscribe: Subject<any> = new Subject();
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
@@ -141,8 +142,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                     this._api.getMachineDeployments(this.cluster.id, this.projectID),
                     this._clusterService.metrics(this.projectID, this.cluster.id),
                     this._opaService.constraints(this.projectID, this.cluster.id),
+                    this._opaService.gatekeeperConfig(this.projectID, this.cluster.id),
                   ]
-                : [of([]), of([]), of([]), of([]), of([])]
+                : [of([]), of([]), of([]), of([]), of([]), of([])]
             );
 
           return combineLatest(reload$);
@@ -150,13 +152,14 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(
-        ([upgrades, addons, nodes, machineDeployments, metrics, constraints]: [
+        ([upgrades, addons, nodes, machineDeployments, metrics, constraints, gatekeeperConfig]: [
           MasterVersion[],
           Addon[],
           Node[],
           MachineDeployment[],
           ClusterMetrics,
-          Constraint[]
+          Constraint[],
+          GatekeeperConfig
         ]) => {
           this.addons = addons;
           this.nodes = nodes;
@@ -164,6 +167,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.metrics = metrics;
           this.upgrades = _.isEmpty(upgrades) ? [] : upgrades;
           this.constraints = constraints;
+          this.gatekeeperConfig = gatekeeperConfig;
         },
         error => {
           const errorCodeNotFound = 404;
