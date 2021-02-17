@@ -141,10 +141,16 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                     this._clusterService.nodes(this.projectID, this.cluster.id),
                     this._api.getMachineDeployments(this.cluster.id, this.projectID),
                     this._clusterService.metrics(this.projectID, this.cluster.id),
+                  ]
+                : [of([]), of([]), of([]), of([])]
+            )
+            .concat(
+              this._canReloadNodes() && this.isOPAEnabled()
+                ? [
                     this._opaService.constraints(this.projectID, this.cluster.id),
                     this._opaService.gatekeeperConfig(this.projectID, this.cluster.id),
                   ]
-                : [of([]), of([]), of([]), of([]), of([]), of([])]
+                : [of([]), of([])]
             );
 
           return combineLatest(reload$);
