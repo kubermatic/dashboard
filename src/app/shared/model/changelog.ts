@@ -9,20 +9,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@mixin theme-api-docs-component($colors) {
-  .km-swagger-container {
-    .info *,
-    .schemes-title,
-    .model-title,
-    .swagger-ui a.nostyle,
-    .swagger-ui .opblock-summary-description,
-    .swagger-ui .markdown p,
-    .swagger-ui .title {
-      color: map-get($colors, text);
-    }
-
-    .scheme-container {
-      background-color: transparent;
-    }
-  }
+export enum ChangelogCategory {
+  ActionRequired = 'action-required',
+  API = 'api',
+  Interface = 'interface',
+  Infrastructure = 'infrastructure',
+  MachineController = 'machine-controller',
 }
+
+export interface ChangelogEntryLink {
+  url: URL;
+  caption: string;
+}
+
+export interface ChangelogEntry {
+  category: ChangelogCategory;
+  description: string;
+  links?: ChangelogEntryLink[];
+}
+
+export interface Changelog {
+  entries: ChangelogEntry[];
+}
+
+namespace Changelog {}

@@ -11,15 +11,26 @@
 
 import {Injectable, Injector} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
+import {Subject} from 'rxjs';
 import {filter, pairwise} from 'rxjs/operators';
 
 @Injectable()
 export class HistoryService {
+  readonly onNavigationChange = new Subject<void>();
+
   private _router: Router;
   private _previousStateUrl: string;
   private _currentStateUrl: string;
 
   constructor(private readonly _injector: Injector) {}
+
+  get previousURL(): string {
+    return this._previousStateUrl;
+  }
+
+  get currentURL(): string {
+    return this._currentStateUrl;
+  }
 
   init(): void {
     if (!this._router) {
@@ -29,9 +40,17 @@ export class HistoryService {
         .pipe(filter(e => e instanceof NavigationEnd))
         .pipe(pairwise())
         .subscribe((e: [NavigationEnd, NavigationEnd]) => {
-          this._previousStateUrl = e[0].url;
-          this._currentStateUrl = e[1].url;
+          if (e[0].url !== e[1].url) {
+            this._previousStateUrl = e[0].url;
+            this._currentStateUrl = e[1].url;
+            this.onNavigationChange.next();
+          }
         });
+
+      this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((e: NavigationEnd) => {
+        this._currentStateUrl = e.url;
+        this.onNavigationChange.next();
+      });
     }
   }
 

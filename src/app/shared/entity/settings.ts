@@ -18,6 +18,7 @@ export class UserSettings {
   selectProjectTableView?: boolean;
   collapseSidenav?: boolean;
   displayAllProjectsForAdmin?: boolean;
+  lastSeenChangelogVersion?: string;
 }
 
 export class AdminSettings {

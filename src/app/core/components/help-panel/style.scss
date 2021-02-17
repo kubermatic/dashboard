@@ -9,20 +9,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@mixin theme-api-docs-component($colors) {
-  .km-swagger-container {
-    .info *,
-    .schemes-title,
-    .model-title,
-    .swagger-ui a.nostyle,
-    .swagger-ui .opblock-summary-description,
-    .swagger-ui .markdown p,
-    .swagger-ui .title {
-      color: map-get($colors, text);
-    }
+@import 'variables';
+@import 'mixins';
 
-    .scheme-container {
-      background-color: transparent;
+.root-button {
+  @include toolbar-button(3);
+}
+
+.panel {
+  right: 152px;
+  top: $toolbar-height - 5px;
+  width: 200px;
+
+  .header {
+    font-size: $font-size-subhead;
+    padding: 20px 20px 8px;
+
+    .mat-icon-button {
+      @include size(35px);
+
+      margin: -8px -4px 0 0;
+
+      i {
+        @include size(16px);
+
+        margin-top: -4px;
+      }
     }
+  }
+
+  .menu div {
+    cursor: pointer;
+    padding: 12px 20px;
   }
 }
