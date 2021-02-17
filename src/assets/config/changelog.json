@@ -1,1 +1,38 @@
-{}
+{
+  "entries": [
+    {
+      "category": "action-required",
+      "description": "Added logos and descriptions for the addons. In order to see the logos and description, addons have to be configured with AddonConfig CRDs with the same names as addons."
+    },
+    {
+      "category": "api",
+      "description": "Kubernetes End-of-Life for v1.14 support ended."
+    },
+    {
+      "category": "api",
+      "description": "The authorized_keys files on nodes are now updated whenever the SSH keys for a cluster are changed"
+    },
+    {
+      "category": "interface",
+      "description": "Added User Settings, Cluster Addons management, RBAC management functionality and new Project View",
+      "links": [
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.16/installation/compatibility/",
+          "caption": "User Guide"
+        },
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.16/installation/compatibility/",
+          "caption": "Tutorial"
+        }
+      ]
+    },
+    {
+      "category": "infrastructure",
+      "description": "Cluster namespaces could end up stuck in Terminating state when deleting a cluster"
+    },
+    {
+      "category": "machine-controller",
+      "description": "Added support for external Cloud Controller Manager"
+    }
+  ]
+}
