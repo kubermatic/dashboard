@@ -11,18 +11,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<button mat-icon-button
-        class="add-button"
-        matTooltip="Add Constraint Template"
-        (click)="add()">
-  <i class="km-icon-add"></i>
-</button>
+<div class="header"
+     fxLayoutAlign="end ">
+  <button mat-icon-button
+          matTooltip="Add Constraint Template"
+          (click)="add()">
+    <i class="km-icon-add"></i>
+  </button>
+</div>
 
 <table class="km-table constraint-templates-table"
        mat-table
        matSort
        [dataSource]="dataSource">
-  <ng-container matColumnDef="templateName">
+  <ng-container matColumnDef="name">
     <th mat-header-cell
         *matHeaderCellDef
         class="km-header-cell"

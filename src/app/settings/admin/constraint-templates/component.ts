@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild, SimpleChanges} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -32,7 +32,7 @@ import {Mode, ConstraintTemplateDialog} from './constraint-template-dialog/compo
 export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestroy {
   constraintTemplates: ConstraintTemplate[] = [];
   dataSource = new MatTableDataSource<ConstraintTemplate>();
-  displayedColumns: string[] = ['templateName', 'actions'];
+  displayedColumns: string[] = ['name', 'actions'];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private readonly _unsubscribe = new Subject<void>();
@@ -48,7 +48,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
     this.dataSource.data = this.constraintTemplates;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.sort.active = 'templateName';
+    this.sort.active = 'name';
     this.sort.direction = 'asc';
 
     this._opaService.constraintTemplates.pipe(takeUntil(this._unsubscribe)).subscribe(constraintTemplates => {
@@ -62,8 +62,10 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
     });
   }
 
-  ngOnChanges(): void {
-    this.dataSource.data = this.constraintTemplates;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.constraintTemplates) {
+      this.dataSource.data = this.constraintTemplates;
+    }
   }
 
   ngOnDestroy(): void {
