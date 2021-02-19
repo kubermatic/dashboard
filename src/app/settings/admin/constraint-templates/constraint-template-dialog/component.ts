@@ -64,14 +64,14 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
   }
 
   isValid(): boolean {
-    return !_.isEmpty(this.spec) && !!_.get(this._getSpec(), 'crd.spec.names.kind');
+    return !_.isEmpty(this.spec);
   }
 
   save(): void {
     const formSpec = this._getSpec();
 
     const constraintTemplate: ConstraintTemplate = {
-      name: formSpec.crd.spec.names.kind.toLowerCase(),
+      name: _.get(this._getSpec(), 'crd.spec.names.kind') ? formSpec.crd.spec.names.kind.toLowerCase() : '',
       spec: formSpec,
     };
 
