@@ -16,23 +16,23 @@
     }
 
     &.km-action-required {
-      background-color: #4a4d53;
+      background-color: map-get($colors, changelog-action-required);
     }
 
     &.km-api {
-      background-color: #31586f;
+      background-color: map-get($colors, changelog-api);
     }
 
     &.km-interface {
-      background-color: #00a3d9;
+      background-color: map-get($colors, changelog-interface);
     }
 
     &.km-infrastructure {
-      background-color: #1ac67f;
+      background-color: map-get($colors, changelog-infrastructure);
     }
 
     &.km-machine-controller {
-      background-color: #ffb135;
+      background-color: map-get($colors, changelog-machine-controller);
     }
   }
 
