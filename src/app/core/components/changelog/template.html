@@ -18,7 +18,7 @@ limitations under the License.
     <ng-container *ngIf="released">, Released {{released | date:'MMM d, y'}}</ng-container>
   </div>
 
-  <div class="km-changelog-content-container">
+  <mat-dialog-content class="km-changelog-content-container">
     <div *ngFor="let category of categories"
          class="category">
       <mat-chip-list>
@@ -55,9 +55,9 @@ limitations under the License.
         </div>
       </div>
     </div>
-  </div>
+  </mat-dialog-content>
 
-  <div fxLayout="row"
+  <mat-dialog-actions fxLayout="row"
        fxLayoutAlign="end center"
        class="actions">
     <mat-spinner *ngIf="saving"
@@ -67,5 +67,5 @@ limitations under the License.
             [disabled]="saving"
             (click)="remember()">Got It
     </button>
-  </div>
+  </mat-dialog-actions>
 </div>

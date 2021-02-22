@@ -440,17 +440,13 @@ km-dashboard {
   }
 
   &.km-changelog-dialog {
-    overflow: hidden;
-
     .mat-dialog-container {
       max-width: 600px;
       min-width: 600px;
-      overflow: hidden;
-    }
 
-    .km-changelog-content-container {
-      max-height: 600px;
-      overflow-x: hidden;
+      .mat-dialog-content {
+        max-height: 600px;
+      }
     }
   }
 }
