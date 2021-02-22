@@ -12,7 +12,7 @@ limitations under the License.
 -->
 
 <ng-container *ngIf="isBefore() || isAfter()">
-  <div *ngIf="type === 'chip'"
+  <div *ngIf="type === displayType.Chip"
        fxLayoutAlign=" center">
     <km-chip *ngIf="isAfter()"
              text="EOL"
@@ -25,7 +25,7 @@ limitations under the License.
              matTooltip="Kubernetes version {{eolVersion}} is going end-of-life on {{date | date:'MMM d, y'}}."></km-chip>
   </div>
 
-  <div *ngIf="type === 'badge'"
+  <div *ngIf="type === displayType.Badge"
        class="km-update-available-badge"
        [ngClass]="isBefore() ? 'km-warning-border' : 'km-error-border'">
     <i class="km-badge-icon"

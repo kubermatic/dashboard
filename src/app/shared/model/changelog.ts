@@ -9,21 +9,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const host = window.location.host.replace(/\/+$/, '');
-const protocol = window.location.protocol;
-const wsProtocol = protocol.replace('http', 'ws');
+export enum ChangelogCategory {
+  ActionRequired = 'action-required',
+  API = 'api',
+  Interface = 'interface',
+  Infrastructure = 'infrastructure',
+  MachineController = 'machine-controller',
+}
 
-export const environment = {
-  name: 'prod',
-  production: true,
-  configUrl: '/config/config.json',
-  changelogUrl: '../assets/config/changelog.json',
-  gitVersionUrl: '../assets/config/version.json',
-  refreshTimeBase: 1000,
-  restRoot: '/api/v1',
-  newRestRoot: '/api/v2',
-  wsRoot: `${wsProtocol}//${host}/api/v1/ws`,
-  oidcProviderUrl: `${protocol}//${host}/dex/auth`,
-  oidcConnectorId: null,
-  animations: true,
-};
+export interface ChangelogEntryLink {
+  url: URL;
+  caption: string;
+}
+
+export interface ChangelogEntry {
+  category: ChangelogCategory;
+  description: string;
+  links?: ChangelogEntryLink[];
+}
+
+export interface Changelog {
+  entries: ChangelogEntry[];
+}
+
+namespace Changelog {}

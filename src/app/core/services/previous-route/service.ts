@@ -15,7 +15,7 @@ import {filter} from 'rxjs/operators';
 
 @Injectable()
 export class PreviousRouteService {
-  private history = [];
+  private _history = [];
 
   constructor(private router: Router) {}
 
@@ -23,20 +23,20 @@ export class PreviousRouteService {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((urlAfterRedirects: NavigationEnd) => {
-        this.history = [...this.history, urlAfterRedirects];
+        this._history = [...this._history, urlAfterRedirects];
         const maxHistoryLen = 10;
-        if (this.history.length > maxHistoryLen) {
-          this.history.splice(0, 1);
+        if (this._history.length > maxHistoryLen) {
+          this._history.splice(0, 1);
         }
       });
   }
 
   getHistory(): string[] {
-    return this.history;
+    return this._history;
   }
 
   getPreviousUrl(): string {
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    return this.history[this.history.length - 2] || '/';
+    return this._history[this._history.length - 2] || '/';
   }
 }

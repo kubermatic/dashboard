@@ -214,6 +214,18 @@
   transform: rotate(180deg);
 }
 
+.km-icon-link {
+  @include mask-image("/assets/images/icons/link.svg", 24px);
+}
+
+.km-icon-external-link {
+  @include mask-image("/assets/images/icons/external-link.svg", 24px);
+}
+
+.km-icon-help {
+  @include mask-image("/assets/images/icons/help.svg", 24px);
+}
+
 .km-icon-loading {
   @include mask-image("/assets/images/icons/sandclock.svg", 28px);
 }

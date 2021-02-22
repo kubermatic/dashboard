@@ -14,9 +14,13 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {Injector, NgModule, Optional, SkipSelf} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
+import {ChangelogDialog} from '@core/components/changelog/dialog';
+import {HelpPanelComponent} from '@core/components/help-panel/component';
 import {ApiService} from '@core/services/api/service';
 import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
 import {Auth} from '@core/services/auth/service';
+import {ChangelogManagerService} from '@core/services/changelog/listener';
+import {ChangelogService} from '@core/services/changelog/service';
 import {ClusterService} from '@core/services/cluster/service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {HistoryService} from '@core/services/history/service';
@@ -68,6 +72,8 @@ const components: any[] = [
   FooterComponent,
   NotificationPanelComponent,
   UserPanelComponent,
+  ChangelogDialog,
+  HelpPanelComponent,
 ];
 
 const services: any[] = [
@@ -91,6 +97,8 @@ const services: any[] = [
   TokenService,
   PageTitleService,
   OPAService,
+  ChangelogService,
+  ChangelogManagerService,
 ];
 
 const interceptors: any[] = [

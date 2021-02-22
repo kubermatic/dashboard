@@ -17,6 +17,7 @@
 @import 'src/app/core/components/navigation/theme';
 @import 'src/app/core/components/notification/theme';
 @import 'src/app/core/components/sidenav/theme';
+@import 'src/app/core/components/changelog/theme';
 @import 'src/app/pages/api-docs/theme';
 @import 'src/app/project/theme';
 @import 'src/app/shared/components/addon-list/select-addon-dialog/theme';
@@ -55,4 +56,5 @@
   @include theme-preset-list-component($colors);
   @include theme-preset-edit-dialog-component($colors);
   @include theme-gatekeeper-config-component($colors);
+  @include theme-changelog-component($colors);
 }

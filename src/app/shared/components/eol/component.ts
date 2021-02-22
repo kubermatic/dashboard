@@ -24,7 +24,9 @@ export enum Type {
 })
 export class ClusterTypeEOLComponent {
   @Input() version: string;
-  @Input() type: 'badge' | 'chip' = Type.Chip;
+  @Input() type: Type = Type.Chip;
+
+  readonly displayType = Type;
 
   constructor(private readonly _eolService: EndOfLifeService) {}
 

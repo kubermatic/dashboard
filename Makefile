@@ -26,7 +26,7 @@ ifeq (${HUMAN_VERSION},)
 	ifeq (${TARGET_BRANCH},master)
 	HUMAN_VERSION=v2.17.0-dev-g$(shell git rev-parse --short HEAD)
 	else
-	HUMAN_VERSION=$(shell git describe --tags --match "v[0-9]*")
+	HUMAN_VERSION=$(or $(shell git describe --tags --match "v[0-9]*"),v2.17.0-dev-g$(shell git rev-parse --short HEAD))
 	endif
 endif
 
