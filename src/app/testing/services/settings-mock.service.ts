@@ -11,7 +11,7 @@
 
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {AdminSettings, ClusterTypeOptions, UserSettings} from '@shared/entity/settings';
+import {AdminSettings, UserSettings} from '@shared/entity/settings';
 
 export const DEFAULT_USER_SETTINGS_MOCK: UserSettings = {
   itemsPerPage: 10,
@@ -24,7 +24,6 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
     Enforced: false,
     Enabled: false,
   },
-  clusterTypeOptions: ClusterTypeOptions.All,
   customLinks: [],
   defaultNodeCount: 1,
   displayAPIDocs: true,
