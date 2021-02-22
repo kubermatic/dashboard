@@ -111,7 +111,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         this._enforcePodSecurityPolicy(dc.spec.enforcePodSecurityPolicy);
       });
 
-    this._api.getMasterVersions(ClusterType.Kubernetes)
+    this._api
+      .getMasterVersions(ClusterType.Kubernetes)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultVersion.bind(this));
 
