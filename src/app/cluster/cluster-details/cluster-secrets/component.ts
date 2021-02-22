@@ -48,6 +48,10 @@ export class ClusterSecretsComponent implements OnInit {
           return this.getIconClass(this.health.machineController);
         case 'userClusterControllerManager':
           return this.getIconClass(this.health.userClusterControllerManager);
+        case 'gatekeeperAudit':
+          return this.getIconClass(this.health.gatekeeperAudit);
+        case 'gatekeeperController':
+          return this.getIconClass(this.health.gatekeeperController);
         default:
           return '';
       }
@@ -84,6 +88,10 @@ export class ClusterSecretsComponent implements OnInit {
           return this.getHealthStatus(this.health.machineController);
         case 'userClusterControllerManager':
           return this.getHealthStatus(this.health.userClusterControllerManager);
+        case 'gatekeeperAudit':
+          return this.getHealthStatus(this.health.gatekeeperAudit);
+        case 'gatekeeperController':
+          return this.getHealthStatus(this.health.gatekeeperController);
         default:
           return '';
       }
@@ -100,5 +108,9 @@ export class ClusterSecretsComponent implements OnInit {
       return 'Failed';
     }
     return 'Pending';
+  }
+
+  isOPAEnabled(): boolean {
+    return !!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled;
   }
 }
