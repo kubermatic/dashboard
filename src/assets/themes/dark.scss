@@ -70,7 +70,6 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 .km-addon-logo,
 .km-addon-logo-disabled,
 .km-icon-randomize,
-.km-cluster-spec-type .mat-button-toggle:not(.mat-button-toggle-checked) .km-icon-openshift,
 .km-sidenav a:not(.active) i,
 .km-footer i,
 *[class*="km-os-image-"] {
