@@ -11,8 +11,20 @@
 
 @import 'variables';
 
-.km-table {
-  margin-top: 30px;
+.header {
+  padding: 0 30px;
+}
+
+.filters {
+  margin-top: -16px;
+
+  .filter-title {
+    margin: -20px 8px 0 0;
+  }
+
+  .mat-form-field {
+    width: 280px;
+  }
 }
 
 .add-button {

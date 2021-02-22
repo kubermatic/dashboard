@@ -10,14 +10,48 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-
-<button mat-icon-button
-        class="add-button"
-        matTooltip="Add Constraint"
-        *ngIf="isClusterRunning"
-        (click)="add()">
-  <i class="km-icon-add"></i>
-</button>
+<div class="header">
+  <div class="filters"
+       fxLayoutAlign=" center"
+       fxLayoutGap="16px">
+    <div class="filter-title">Filter by</div>
+    <mat-form-field fxFlex>
+      <mat-label>Constraint Template</mat-label>
+      <mat-select disableOptionCentering
+                  class="km-select-ellipsis"
+                  [(ngModel)]="constraintTemplateFilter"
+                  (selectionChange)="filter()">
+        <mat-select-trigger fxFlex
+                            fxLayout="row">
+          <div fxFlex
+               fxLayoutAlign="start">{{constraintTemplateFilter}}</div>
+          <div fxFlex
+               fxLayoutAlign="end">
+            <button *ngIf="constraintTemplateFilter"
+                    (click)="constraintTemplateFilter = undefined; filter(); $event.stopPropagation()"
+                    mat-icon-button
+                    class="km-clear-input-btn"
+                    aria-label="Clear">
+              <i class="km-icon-mask km-icon-remove"></i>
+            </button>
+          </div>
+        </mat-select-trigger>
+        <mat-option *ngFor="let constraintTemplate of constraintTemplates"
+                    [value]="constraintTemplate.spec?.crd?.spec?.names?.kind">
+          {{constraintTemplate.spec?.crd?.spec?.names?.kind}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div fxFlex></div>
+  <button mat-icon-button
+          class="add-button"
+          matTooltip="Add Constraint"
+          *ngIf="isClusterRunning"
+          (click)="add()">
+    <i class="km-icon-add"></i>
+  </button>
+</div>
 
 <table class="km-table"
        mat-table

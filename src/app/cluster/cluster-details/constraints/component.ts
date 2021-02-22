@@ -28,7 +28,7 @@ import {UserService} from '@core/services/user/service';
 import {NotificationService} from '@core/services/notification/service';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '@shared/entity/cluster';
-import {Constraint, Kind, Violation} from '@shared/entity/opa';
+import {Constraint, ConstraintTemplate, Kind, Violation} from '@shared/entity/opa';
 import {UserSettings} from '@shared/entity/settings';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -46,10 +46,12 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() isClusterRunning: boolean;
   @Input() constraints: Constraint[] = [];
   settings: UserSettings;
+  constraintTemplates: ConstraintTemplate[] = [];
   dataSource = new MatTableDataSource<Constraint>();
   displayedColumns: string[] = ['constraintName', 'constraintTemplate', 'match', 'violations', 'actions'];
   toggledColumns: string[] = ['violationDetails'];
   isShowDetails = [];
+  constraintTemplateFilter: string;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   paginator: MatPaginator;
   @ViewChild(MatPaginator)
@@ -82,12 +84,17 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
     this._userService.currentUserSettings
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(settings => (this.settings = settings));
+
+    this._opaService.constraintTemplates
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(constraintTemplates => (this.constraintTemplates = constraintTemplates));
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.constraints) {
       this.dataSource.data = this.constraints;
     }
+    this.filter();
   }
 
   ngOnDestroy(): void {
@@ -122,6 +129,12 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
 
   getViolationCount(violations: Violation[]): number {
     return violations ? violations.length : 0;
+  }
+
+  filter(): void {
+    this.dataSource.data = this.constraints.filter(constraint =>
+      this.constraintTemplateFilter ? constraint.spec.constraintType === this.constraintTemplateFilter : true
+    );
   }
 
   add(): void {
