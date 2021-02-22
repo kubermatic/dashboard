@@ -23,7 +23,6 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {NodeDataService} from '@app/node-data/service/service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
-import {ClusterType} from '@shared/entity/cluster';
 import {DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
 import {NodeCloudSpec, NodeSpec, OpenstackNodeSpec} from '@shared/entity/node';
 import {OpenstackAvailabilityZone, OpenstackFlavor} from '@shared/entity/provider/openstack';
@@ -165,11 +164,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       .pipe(filter(clusterType => !!clusterType))
       .pipe(filter(_ => !!this._images))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ =>
-        this._isOpenshiftCluster()
-          ? this._setDefaultImage(OperatingSystem.CentOS)
-          : this._setDefaultImage(OperatingSystem.Ubuntu)
-      );
+      .subscribe(_ => this._setDefaultImage(OperatingSystem.Ubuntu));
 
     this._nodeDataService.operatingSystemChanges
       .pipe(filter(_ => !!this._images))
@@ -230,10 +225,6 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
       this._cdr.detectChanges();
     }
-  }
-
-  private _isOpenshiftCluster(): boolean {
-    return this._clusterService.clusterType === ClusterType.OpenShift;
   }
 
   private _clearFlavor(): void {

@@ -13,7 +13,6 @@ import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {NodeDataService} from '@app/node-data/service/service';
 import {DatacenterService} from '@core/services/datacenter/service';
-import {ClusterType} from '@shared/entity/cluster';
 import {DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
 import {NodeCloudSpec, NodeSpec, VSphereNodeSpec} from '@shared/entity/node';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
@@ -97,11 +96,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
     this._clusterService.clusterTypeChanges
       .pipe(filter(_ => !!this._templates))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ =>
-        this._isOpenshiftCluster()
-          ? this._setDefaultTemplate(OperatingSystem.CentOS)
-          : this._setDefaultTemplate(OperatingSystem.Ubuntu)
-      );
+      .subscribe(_ => this._setDefaultTemplate(OperatingSystem.Ubuntu));
 
     this._nodeDataService.operatingSystemChanges
       .pipe(filter(_ => !!this._templates))
@@ -119,10 +114,6 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       this.form.get(Controls.CPU).setValue(this._nodeDataService.nodeData.spec.cloud.vsphere.cpus);
       this.form.get(Controls.Memory).setValue(this._nodeDataService.nodeData.spec.cloud.vsphere.memory);
     }
-  }
-
-  private _isOpenshiftCluster(): boolean {
-    return this._clusterService.clusterType === ClusterType.OpenShift;
   }
 
   private _setDefaultTemplate(os: OperatingSystem): void {
