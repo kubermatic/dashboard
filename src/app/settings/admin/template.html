@@ -90,41 +90,6 @@ limitations under the License.
         </div>
       </div>
 
-      <div fxLayout="row"
-           class="km-admin-settings-distro-container">
-        <div fxFlex="16%"
-             fxLayoutAlign=" center"
-             class="entry-label">
-          <span>Displayed Distributions</span>
-          <div class="km-icon-info km-pointer"
-               matTooltip="Deactivate the distributions you want to hide from the users. At least one distribution has to be enabled."></div>
-          <div *ngIf="isOpenShiftEnabled()"
-               class="km-icon-error km-warning-bg"
-               matTooltip="OpenShift is enabled, note that OpenShift is a tech-preview, an early test version for demonstration purposes."></div>
-        </div>
-        <mat-button-toggle-group #group="matButtonToggleGroup"
-                                 [value]="selectedDistro"
-                                 (change)="onDistroChange(group)"
-                                 class="km-account-settings-toggle"
-                                 multiple="true">
-          <mat-button-toggle [value]="clusterType.Kubernetes"
-                             [disabled]="isLastDistro(group, clusterType.Kubernetes)">
-            <i class="km-icon-kubernetes"></i>
-            Kubernetes
-          </mat-button-toggle>
-          <mat-button-toggle [value]="clusterType.OpenShift"
-                             [disabled]="isLastDistro(group, clusterType.OpenShift)"
-                             matTooltip="OpenShift is a tech-preview, an early test version for demonstration purposes.">
-            <i class="km-icon-openshift"></i>
-            <div fxLayout="column">
-              <div class="tech-preview-name">OpenShift</div>
-              <div class="tech-preview-tag km-border">tech-preview</div>
-            </div>
-          </mat-button-toggle>
-        </mat-button-toggle-group>
-        <km-settings-status [isSaved]="isEqual(settings.clusterTypeOptions, apiSettings.clusterTypeOptions)"></km-settings-status>
-      </div>
-
       <div fxLayout="row">
         <div fxFlex="16%"
              fxLayoutAlign=" center"
