@@ -132,15 +132,9 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   filter(): void {
-    this.dataSource.data = this.constraints.filter(constraint => {
-      let isVisible = true;
-
-      if (this.constraintTemplateFilter) {
-        isVisible = isVisible && constraint.spec.constraintType === this.constraintTemplateFilter;
-      }
-
-      return isVisible;
-    });
+    this.dataSource.data = this.constraints.filter(constraint =>
+      this.constraintTemplateFilter ? constraint.spec.constraintType === this.constraintTemplateFilter : true
+    );
   }
 
   add(): void {
