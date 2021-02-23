@@ -30,16 +30,6 @@ $toggle-height: 61px;
     &:hover {
       transition: all .5s ease;
     }
-
-    &[value='kubernetes'] {
-      border-bottom-left-radius: $border-radius;
-      border-top-left-radius: $border-radius;
-    }
-
-    &[value='openshift'] {
-      border-bottom-right-radius: $border-radius;
-      border-top-right-radius: $border-radius;
-    }
   }
 }
 

@@ -10,14 +10,12 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {MatButtonToggleGroup} from '@angular/material/button-toggle';
 import {HistoryService} from '@core/services/history/service';
 import {NotificationService} from '@core/services/notification/service';
 import {SettingsService} from '@core/services/settings/service';
 import {UserService} from '@core/services/user/service';
-import {ClusterType} from '@shared/entity/cluster';
 import {Member} from '@shared/entity/member';
-import {AdminSettings, ClusterTypeOptions} from '@shared/entity/settings';
+import {AdminSettings} from '@shared/entity/settings';
 import {objectDiff} from '@shared/utils/common-utils';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -29,9 +27,7 @@ import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
   styleUrls: ['style.scss'],
 })
 export class AdminSettingsComponent implements OnInit, OnDestroy {
-  clusterType = ClusterType;
   user: Member;
-  selectedDistro = [];
   settings: AdminSettings; // Local settings copy. User can edit it.
   apiSettings: AdminSettings; // Original settings from the API. Cannot be edited by the user.
 
@@ -76,19 +72,6 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     this._settingsChange.next();
   }
 
-  onDistroChange(group: MatButtonToggleGroup): void {
-    this.settings.clusterTypeOptions = this._getDistro(group);
-    this.onSettingsChange();
-  }
-
-  isLastDistro(group: MatButtonToggleGroup, distro: string): boolean {
-    return group.value && group.value.length <= 1 && group.value.indexOf(distro) > -1;
-  }
-
-  isOpenShiftEnabled(): boolean {
-    return this.selectedDistro.includes(ClusterType.OpenShift);
-  }
-
   resetDefaults(): void {
     this.settings = this._settingsService.defaultAdminSettings;
     this.onSettingsChange();
@@ -113,7 +96,6 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   private _applySettings(settings: AdminSettings): void {
     this.apiSettings = settings;
     this.settings = _.cloneDeep(this.apiSettings);
-    this._setDistro(this.settings.clusterTypeOptions);
   }
 
   private _getPatch(): AdminSettings {
@@ -124,31 +106,5 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     }
 
     return patch;
-  }
-
-  private _getDistro(group: MatButtonToggleGroup): ClusterTypeOptions {
-    const isKubernetesSelected = group.value && group.value.indexOf(ClusterType.Kubernetes) > -1;
-    const isOpenshiftSelected = group.value && group.value.indexOf(ClusterType.OpenShift) > -1;
-
-    if (isKubernetesSelected && isOpenshiftSelected) {
-      return ClusterTypeOptions.All;
-    } else if (isKubernetesSelected) {
-      return ClusterTypeOptions.Kubernetes;
-    }
-    return ClusterTypeOptions.OpenShift;
-  }
-
-  private _setDistro(distro: ClusterTypeOptions): void {
-    switch (distro) {
-      case ClusterTypeOptions.All:
-        this.selectedDistro = [ClusterType.Kubernetes, ClusterType.OpenShift];
-        break;
-      case ClusterTypeOptions.Kubernetes:
-        this.selectedDistro = [ClusterType.Kubernetes];
-        break;
-      case ClusterTypeOptions.OpenShift:
-        this.selectedDistro = [ClusterType.OpenShift];
-        break;
-    }
   }
 }

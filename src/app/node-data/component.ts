@@ -21,7 +21,6 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {NameGeneratorService} from '@core/services/name-generator/service';
-import {ClusterType} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
@@ -187,19 +186,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     return provider.includes(this.provider);
   }
 
-  isOpenshiftCluster(): boolean {
-    return this._clusterService.clusterType === ClusterType.OpenShift;
-  }
-
   isOperatingSystemSupported(os: OperatingSystem): boolean {
-    // Disable unsupported systems when Openshift is used
-    if (
-      this.isOpenshiftCluster() &&
-      [OperatingSystem.Flatcar, OperatingSystem.SLES, OperatingSystem.Ubuntu, OperatingSystem.RHEL].includes(os)
-    ) {
-      return false;
-    }
-
     // If VSphere is selected enable OS only if it is also defined in the datacenter spec
     if (this._hasSystemTemplate(NodeProvider.VSPHERE, os)) {
       return true;
@@ -337,10 +324,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   private _getDefaultOS(): OperatingSystem {
     if (this.isOperatingSystemSupported(this._nodeDataService.operatingSystem)) {
       return this._nodeDataService.operatingSystem;
-    }
-
-    if (this.isOpenshiftCluster()) {
-      return OperatingSystem.CentOS;
     }
 
     if (this._datacenterSpec) {

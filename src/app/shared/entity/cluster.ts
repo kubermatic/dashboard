@@ -18,7 +18,6 @@ export const enum Finalizer {
 
 export enum ClusterType {
   Kubernetes = 'kubernetes',
-  OpenShift = 'openshift',
   Empty = '',
 }
 
@@ -40,16 +39,10 @@ export class Cluster {
     return providers.length > 0 ? providers.pop().toLowerCase() : '';
   }
 
-  static isOpenshiftType(cluster: Cluster): boolean {
-    return cluster.type === ClusterType.OpenShift;
-  }
-
   static getDisplayType(cluster: Cluster): string {
     switch (cluster.type) {
       case ClusterType.Kubernetes:
         return 'Kubernetes';
-      case ClusterType.OpenShift:
-        return 'OpenShift';
       default:
         return '';
     }
@@ -58,8 +51,6 @@ export class Cluster {
   static getVersionHeadline(type: string, isKubelet: boolean): string {
     if (type === 'kubernetes') {
       return isKubelet ? 'kubelet Version' : 'Master Version';
-    } else if (type === 'openshift') {
-      return 'OpenShift Version';
     }
 
     return '';
@@ -203,7 +194,6 @@ export class ClusterSpec {
   admissionPlugins?: string[];
   enableUserSSHKeyAgent?: boolean;
   podNodeSelectorAdmissionPluginConfig?: object;
-  openshift?: OpenShift;
 }
 
 export class AuditLoggingSettings {
@@ -212,10 +202,6 @@ export class AuditLoggingSettings {
 
 export class OPAIntegration {
   enabled: boolean;
-}
-
-export class OpenShift {
-  imagePullSecret?: string;
 }
 
 export class MachineNetwork {
@@ -255,12 +241,7 @@ export class ClusterSpecPatch {
   opaIntegration?: OPAIntegration;
   podNodeSelectorAdmissionPluginConfig?: object;
   auditLogging?: AuditLoggingSettings;
-  openshift?: OpenShiftPatch;
   machineNetworks?: MachineNetwork[];
-}
-
-export class OpenShiftPatch {
-  imagePullSecret?: string;
 }
 
 export class CloudSpecPatch {

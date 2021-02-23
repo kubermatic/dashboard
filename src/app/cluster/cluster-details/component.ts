@@ -22,7 +22,7 @@ import {PathParam} from '@core/services/params/service';
 import {SettingsService} from '@core/services/settings/service';
 import {UserService} from '@core/services/user/service';
 import {Addon} from '@shared/entity/addon';
-import {Cluster, ClusterType, getClusterProvider, MasterVersion} from '@shared/entity/cluster';
+import {Cluster, getClusterProvider, MasterVersion} from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
 import {Datacenter} from '@shared/entity/datacenter';
 import {Event} from '@shared/entity/event';
@@ -259,9 +259,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   getProxyURL(): string {
-    return this.cluster.type === ClusterType.OpenShift
-      ? this._api.getOpenshiftProxyURL(this.projectID, this.seed, this.cluster.id)
-      : this._api.getDashboardProxyURL(this.projectID, this.cluster.id);
+    return this._api.getDashboardProxyURL(this.projectID, this.cluster.id);
   }
 
   isLoaded(): boolean {
@@ -270,10 +268,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   isEditEnabled(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Edit);
-  }
-
-  isOpenshiftCluster(): boolean {
-    return this.cluster.type === ClusterType.OpenShift;
   }
 
   editCluster(): void {
@@ -350,10 +344,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         .pipe(take(1))
         .subscribe(addons => (this.addons = addons));
     }
-  }
-
-  getConnectName(): string {
-    return Cluster.isOpenshiftType(this.cluster) ? 'Open Console' : 'Open Dashboard';
   }
 
   isRBACEnabled(): boolean {
