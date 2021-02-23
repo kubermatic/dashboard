@@ -28,11 +28,6 @@ export class UserPanel {
     this.getUserPanelMenuBtn().click();
   }
 
-  static openUserSettings(): void {
-    this.open();
-    this.getUserSettingsBtn().click();
-  }
-
   static logout(): void {
     this.open();
     this.getLogoutBtn().click();

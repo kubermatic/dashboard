@@ -12,7 +12,7 @@
 import {CommonModule} from '@angular/common';
 import {Component, Directive, HostListener, Injectable, Input, NgModule} from '@angular/core';
 import {convertToParamMap, NavigationExtras, ParamMap} from '@angular/router';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {BehaviorSubject} from 'rxjs';
 import {Subject} from 'rxjs';
 
 export {ActivatedRoute, Router, RouterLink, RouterOutlet} from '@angular/router';
