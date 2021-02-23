@@ -92,8 +92,6 @@ presubmits:
             memory: 6Gi
             cpu: 4
         env:
-          - name: KUBERMATIC_EDITION
-            value: ee
           - name: SERVICE_ACCOUNT_KEY
             valueFrom:
               secretKeyRef:

@@ -13,7 +13,7 @@ import {Inject, Injectable} from '@angular/core';
 import {ThemeService} from './theme';
 import {Theme} from '@shared/model/Config';
 import {DOCUMENT} from '@angular/common';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {BehaviorSubject} from 'rxjs';
 
 export enum ColorScheme {
   Dark = 'dark',
