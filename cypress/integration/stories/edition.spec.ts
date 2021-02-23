@@ -21,6 +21,7 @@ describe('Edition Story', () => {
   const kubermaticEdition = Cypress.env('KUBERMATIC_EDITION');
   const isEnterpriseEdition = kubermaticEdition === 'ee';
   const editionName = isEnterpriseEdition ? 'Enterprise Edition' : 'Community Edition';
+  const themePickerAvailability = isEnterpriseEdition ? 'available' : 'not available';
 
   it('should login', () => {
     login(email, password);
@@ -28,7 +29,7 @@ describe('Edition Story', () => {
     cy.url().should(Condition.Include, View.Projects);
   });
 
-  it('should check if footer contains correct edition', () => {
+  it(`should check if footer contains "${editionName}" text`, () => {
     ProjectsPage.getAppEdition().should(Condition.Contain, editionName);
   });
 
@@ -36,7 +37,7 @@ describe('Edition Story', () => {
     UserSettingsPage.visit();
   });
 
-  it('should check if theme picker is available', () => {
+  it(`should check if theme picker is ${themePickerAvailability}`, () => {
     UserSettingsPage.getThemePicker().should(isEnterpriseEdition ? Condition.Exist : Condition.NotExist);
   });
 

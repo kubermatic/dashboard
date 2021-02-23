@@ -25,7 +25,9 @@ export class UserSettingsPage {
   }
 
   static visit(): void {
-    UserPanel.openUserSettings();
-    this.verifyUrl();
+    UserPanel.open();
+    UserPanel.getUserSettingsBtn()
+      .click()
+      .then(() => this.verifyUrl());
   }
 }
