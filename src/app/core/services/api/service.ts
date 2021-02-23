@@ -218,10 +218,6 @@ export class ApiService {
     return `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/dashboard/proxy`;
   }
 
-  getOpenshiftProxyURL(projectID: string, seed: string, clusterID: string): string {
-    return `${this._restRoot}/projects/${projectID}/dc/${seed}/clusters/${clusterID}/openshift/console/login`;
-  }
-
   getShareKubeconfigURL(projectID: string, seed: string, clusterID: string, userID: string): string {
     return `${this._location}/${this._restRoot}/kubeconfig?project_id=${projectID}&datacenter=${seed}&cluster_id=${clusterID}&user_id=${userID}`;
   }

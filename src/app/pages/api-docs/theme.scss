@@ -13,7 +13,11 @@
   .km-swagger-container {
     .info *,
     .schemes-title,
-    .model-title {
+    .model-title,
+    .swagger-ui a.nostyle,
+    .swagger-ui .opblock-summary-description,
+    .swagger-ui .markdown p,
+    .swagger-ui .title {
       color: map-get($colors, text);
     }
 

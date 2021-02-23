@@ -137,7 +137,6 @@ a {
 .km-icon-disabled,
 .km-icon-failed,
 .km-icon-kubernetes,
-.km-icon-openshift,
 .km-icon-sun,
 .km-icon-moon {
   margin-right: 8px;
@@ -436,6 +435,17 @@ km-dashboard {
     .mat-horizontal-content-container {
       max-height: 400px;
       overflow-y: auto;
+    }
+  }
+
+  &.km-changelog-dialog {
+    .mat-dialog-container {
+      max-width: 600px;
+      min-width: 600px;
+
+      .mat-dialog-content {
+        max-height: 600px;
+      }
     }
   }
 }

@@ -22,16 +22,14 @@ import {
 import {ApiService} from '@core/services/api/service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {NameGeneratorService} from '@core/services/name-generator/service';
-import {SettingsService} from '@core/services/settings/service';
 import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter} from '@shared/entity/datacenter';
-import {AdminSettings, ClusterTypeOptions} from '@shared/entity/settings';
 import {ClusterService} from '@shared/services/cluster.service';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import {merge} from 'rxjs';
-import {filter, take, switchMap, takeUntil} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
 
@@ -39,7 +37,6 @@ enum Controls {
   Name = 'name',
   Version = 'version',
   Type = 'type',
-  ImagePullSecret = 'imagePullSecret',
   AuditLogging = 'auditLogging',
   UserSSHKeyAgent = 'userSshKeyAgent',
   Labels = 'labels',
@@ -75,13 +72,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   readonly Controls = Controls;
   private _datacenterSpec: Datacenter;
-  private _adminSettings: AdminSettings;
   private readonly _minNameLength = 5;
 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _api: ApiService,
-    private readonly _settingsService: SettingsService,
     private readonly _nameGenerator: NameGeneratorService,
     private readonly _clusterService: ClusterService,
     private readonly _datacenterService: DatacenterService,
@@ -95,11 +90,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.Name]: new FormControl('', [
         Validators.required,
         Validators.minLength(this._minNameLength),
-        Validators.pattern('[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'),
+        Validators.pattern('[a-zA-Z0-9-]*'),
       ]),
       [Controls.Version]: new FormControl('', [Validators.required]),
-      [Controls.Type]: new FormControl(''),
-      [Controls.ImagePullSecret]: new FormControl(''),
       [Controls.AuditLogging]: new FormControl(false),
       [Controls.UserSSHKeyAgent]: new FormControl(true),
       [Controls.OPAIntegration]: new FormControl(false),
@@ -118,18 +111,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         this._enforcePodSecurityPolicy(dc.spec.enforcePodSecurityPolicy);
       });
 
-    this.control(Controls.Type)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .pipe(
-        switchMap((type: ClusterType) => {
-          this.masterVersions = [];
-          this.control(Controls.Version).reset();
-          this._handleImagePullSecret(type);
-          this._clusterService.clusterType = type;
-
-          return this._api.getMasterVersions(this.controlValue(Controls.Type) as ClusterType);
-        })
-      )
+    this._api
+      .getMasterVersions(ClusterType.Kubernetes)
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultVersion.bind(this));
 
     this.control(Controls.Version)
@@ -145,38 +129,16 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     merge(
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Version).valueChanges,
-      this.form.get(Controls.ImagePullSecret).valueChanges,
       this.form.get(Controls.AuditLogging).valueChanges,
       this.form.get(Controls.UserSSHKeyAgent).valueChanges,
       this.form.get(Controls.OPAIntegration).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
-
-    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      if (!this._adminSettings) {
-        this._adminSettings = settings;
-        this._setDefaultClusterType();
-      }
-
-      if (this._adminSettings.clusterTypeOptions !== settings.clusterTypeOptions) {
-        this._setDefaultClusterType();
-      }
-
-      this._adminSettings = settings;
-    });
   }
 
   generateName(): void {
     this.control(Controls.Name).setValue(this._nameGenerator.generateName());
-  }
-
-  hasMultipleTypes(): boolean {
-    return this._adminSettings.clusterTypeOptions === ClusterTypeOptions.All;
-  }
-
-  isOpenshiftSelected(): boolean {
-    return this.controlValue(Controls.Type) === ClusterType.OpenShift;
   }
 
   onLabelsChange(labels: object): void {
@@ -227,11 +189,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     }
   }
 
-  private _handleImagePullSecret(type: ClusterType): void {
-    this.control(Controls.ImagePullSecret).setValidators(type === ClusterType.OpenShift ? [Validators.required] : []);
-    this.control(Controls.ImagePullSecret).updateValueAndValidity();
-  }
-
   private _setDefaultVersion(versions: MasterVersion[]): void {
     this.masterVersions = versions;
     for (const version of versions) {
@@ -241,33 +198,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     }
   }
 
-  private _setDefaultClusterType(): void {
-    if (this._isClusterTypeVisible(ClusterTypeOptions.Kubernetes)) {
-      this.control(Controls.Type).setValue(ClusterType.Kubernetes);
-      return;
-    }
-
-    if (this._isClusterTypeVisible(ClusterTypeOptions.OpenShift)) {
-      this.control(Controls.Type).setValue(ClusterType.OpenShift);
-    }
-  }
-
-  private _isClusterTypeVisible(type: ClusterTypeOptions): boolean {
-    return (
-      this._adminSettings.clusterTypeOptions === ClusterTypeOptions.All ||
-      this._adminSettings.clusterTypeOptions === type
-    );
-  }
-
   private _getClusterEntity(): Cluster {
     return {
       name: this.controlValue(Controls.Name),
-      type: this.controlValue(Controls.Type),
+      type: ClusterType.Kubernetes,
       spec: {
         version: this.controlValue(Controls.Version),
-        openshift: {
-          imagePullSecret: this.controlValue(Controls.ImagePullSecret),
-        },
         auditLogging: {
           enabled: this.controlValue(Controls.AuditLogging),
         },

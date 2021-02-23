@@ -256,10 +256,6 @@ export class ApiMockService {
     return '';
   }
 
-  getOpenshiftProxyURL(): string {
-    return '';
-  }
-
   getAdmissionPlugins(_version: string): Observable<string[]> {
     return of(['PodNodeSecurity', 'PodSecurityPolicy']);
   }

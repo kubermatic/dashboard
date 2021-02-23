@@ -13,9 +13,9 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
-import {ConstraintTemplate} from '@shared/entity/opa';
-import {Observable, Subject, timer, merge} from 'rxjs';
-import {switchMap, shareReplay} from 'rxjs/operators';
+import {Constraint, ConstraintTemplate, GatekeeperConfig} from '@shared/entity/opa';
+import {Observable, Subject, timer, merge, of} from 'rxjs';
+import {switchMap, shareReplay, catchError} from 'rxjs/operators';
 
 @Injectable()
 export class OPAService {
@@ -24,6 +24,10 @@ export class OPAService {
   private readonly _refreshTime = 10;
   private _constraintTemplates$: Observable<ConstraintTemplate[]>;
   private _constraintTemplatesRefresh$ = new Subject<void>();
+  private _constraints$ = new Map<string, Observable<Constraint[]>>();
+  private _constraintsRefresh$ = new Subject<void>();
+  private _gatekeeperConfig$ = new Map<string, Observable<GatekeeperConfig>>();
+  private _gatekeeperConfigRefresh$ = new Subject<void>();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
   constructor(private readonly _http: HttpClient, private readonly _appConfigService: AppConfigService) {}
@@ -59,6 +63,82 @@ export class OPAService {
 
   deleteConstraintTemplate(ctName: string): Observable<any> {
     const url = `${this._newRestRoot}/constrainttemplates/${ctName}`;
+    return this._http.delete(url);
+  }
+
+  constraints(projectId: string, clusterId: string): Observable<Constraint[]> {
+    const id = `${projectId}-${clusterId}`;
+
+    if (!this._constraints$.get(id)) {
+      const _constraints$ = merge(this._constraintsRefresh$, this._refreshTimer$)
+        .pipe(switchMap(_ => this._getConstraints(projectId, clusterId)))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+
+      this._constraints$.set(id, _constraints$);
+    }
+
+    return this._constraints$.get(id);
+  }
+
+  private _getConstraints(projectId: string, clusterId: string): Observable<Constraint[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/constraints`;
+    return this._http.get<Constraint[]>(url);
+  }
+
+  refreshConstraint(): void {
+    this._constraintsRefresh$.next();
+  }
+
+  createConstraint(projectId: string, clusterId: string, constraint: Constraint): Observable<Constraint> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/constraints`;
+    return this._http.post<Constraint>(url, constraint);
+  }
+
+  patchConstraint(projectId: string, clusterId: string, name: string, patch: Constraint): Observable<Constraint> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/constraints/${name}`;
+    return this._http.patch<Constraint>(url, patch);
+  }
+
+  deleteConstraint(projectId: string, clusterId: string, name: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/constraints/${name}`;
+    return this._http.delete(url);
+  }
+
+  gatekeeperConfig(projectId: string, clusterId: string): Observable<GatekeeperConfig> {
+    const id = `${projectId}-${clusterId}`;
+
+    if (!this._gatekeeperConfig$.get(id)) {
+      const _gatekeeperConfig$ = merge(this._gatekeeperConfigRefresh$, this._refreshTimer$)
+        .pipe(switchMap(_ => this._getGatekeeperConfig(projectId, clusterId)))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+
+      this._gatekeeperConfig$.set(id, _gatekeeperConfig$);
+    }
+
+    return this._gatekeeperConfig$.get(id);
+  }
+
+  private _getGatekeeperConfig(projectId: string, clusterId: string): Observable<GatekeeperConfig> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/gatekeeper/config`;
+    return this._http.get<GatekeeperConfig>(url).pipe(catchError(() => of<GatekeeperConfig>(undefined)));
+  }
+
+  refreshGatekeeperConfig(): void {
+    this._gatekeeperConfigRefresh$.next();
+  }
+
+  createGatekeeperConfig(projectId: string, clusterId: string, config: GatekeeperConfig): Observable<GatekeeperConfig> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/gatekeeper/config`;
+    return this._http.post<GatekeeperConfig>(url, config);
+  }
+
+  patchGatekeeperConfig(projectId: string, clusterId: string, patch: GatekeeperConfig): Observable<GatekeeperConfig> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/gatekeeper/config`;
+    return this._http.patch<GatekeeperConfig>(url, patch);
+  }
+
+  deleteGatekeeperConfig(projectId: string, clusterId: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/gatekeeper/config`;
     return this._http.delete(url);
   }
 }

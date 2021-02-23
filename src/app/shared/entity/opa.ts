@@ -9,6 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Constraint Templates
 export class ConstraintTemplate {
   name: string;
   spec: ConstraintTemplateSpec;
@@ -120,4 +121,101 @@ export class ExternalDocumentation {
 export class JSONSchemaPropsOrArray {
   jsonSchemas: JSONSchemaProps[];
   schema: JSONSchemaProps;
+}
+
+// Constraints
+export class Constraint {
+  name: string;
+  spec: ConstraintSpec;
+  status?: ConstraintStatus;
+}
+
+export class ConstraintStatus {
+  enforcement: string;
+  auditTimestamp: string;
+  violations: Violation[];
+}
+
+export class Violation {
+  enforcementAction: string;
+  kind: string;
+  message: string;
+  name: string;
+  namespace: string;
+}
+
+export class ConstraintSpec {
+  constraintType: string;
+  match: Match;
+  parameters: Parameters;
+}
+
+export class Match {
+  kinds: Kind[];
+  scope: string;
+  namespaces: string[];
+  excludedNamespaces: string[];
+  labelSelector: LabelSelector;
+  namespaceSelector: LabelSelector;
+}
+
+export class Kind {
+  kinds: string[];
+  apiGroups: string[];
+}
+
+export class Parameters {
+  rawJSON: string;
+}
+
+export class LabelSelector {
+  matchExpressions: LabelSelectorRequirement[];
+  matchLabels: object;
+}
+
+export class LabelSelectorRequirement {
+  key: string;
+  values: string[];
+  operator: string;
+}
+
+// Gatekeeper Config
+export class GatekeeperConfig {
+  spec: GatekeeperConfigSpec;
+}
+
+export class GatekeeperConfigSpec {
+  sync?: Sync;
+  validation?: GatekeeperValidation;
+  match?: MatchEntry[];
+  readiness?: ReadinessSpec;
+}
+
+export class Sync {
+  syncOnly?: GVK[];
+}
+
+export class GatekeeperValidation {
+  traces?: Trace[];
+}
+
+export class Trace {
+  user?: string;
+  kind?: GVK;
+  dump?: string;
+}
+
+export class MatchEntry {
+  excludedNamespaces?: string[];
+  processes?: string[];
+}
+
+export class ReadinessSpec {
+  statsEnabled?: boolean;
+}
+
+export class GVK {
+  group?: string;
+  version?: string;
+  kind?: string;
 }

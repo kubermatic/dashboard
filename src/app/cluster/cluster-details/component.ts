@@ -17,11 +17,12 @@ import {ApiService} from '@core/services/api/service';
 import {ClusterService} from '@core/services/cluster/service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {NotificationService} from '@core/services/notification/service';
+import {OPAService} from '@core/services/opa/service';
 import {PathParam} from '@core/services/params/service';
 import {SettingsService} from '@core/services/settings/service';
 import {UserService} from '@core/services/user/service';
 import {Addon} from '@shared/entity/addon';
-import {Cluster, ClusterType, getClusterProvider, MasterVersion} from '@shared/entity/cluster';
+import {Cluster, getClusterProvider, MasterVersion} from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
 import {Datacenter} from '@shared/entity/datacenter';
 import {Event} from '@shared/entity/event';
@@ -29,6 +30,7 @@ import {Health, HealthState} from '@shared/entity/health';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {ClusterMetrics} from '@shared/entity/metrics';
+import {Constraint, GatekeeperConfig} from '@shared/entity/opa';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {Config, GroupConfig} from '@shared/model/Config';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
@@ -67,6 +69,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   events: Event[] = [];
   addons: Addon[] = [];
   upgrades: MasterVersion[] = [];
+  constraints: Constraint[] = [];
+  gatekeeperConfig: GatekeeperConfig;
   private _unsubscribe: Subject<any> = new Subject();
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
@@ -82,6 +86,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _userService: UserService,
     private readonly _api: ApiService,
     private readonly _notificationService: NotificationService,
+    private readonly _opaService: OPAService,
     readonly settings: SettingsService
   ) {}
 
@@ -138,6 +143,14 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                     this._clusterService.metrics(this.projectID, this.cluster.id),
                   ]
                 : [of([]), of([]), of([]), of([])]
+            )
+            .concat(
+              this._canReloadNodes() && this.isOPAEnabled()
+                ? [
+                    this._opaService.constraints(this.projectID, this.cluster.id),
+                    this._opaService.gatekeeperConfig(this.projectID, this.cluster.id),
+                  ]
+                : [of([]), of([])]
             );
 
           return combineLatest(reload$);
@@ -145,18 +158,22 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(
-        ([upgrades, addons, nodes, machineDeployments, metrics]: [
+        ([upgrades, addons, nodes, machineDeployments, metrics, constraints, gatekeeperConfig]: [
           MasterVersion[],
           Addon[],
           Node[],
           MachineDeployment[],
-          ClusterMetrics
+          ClusterMetrics,
+          Constraint[],
+          GatekeeperConfig
         ]) => {
           this.addons = addons;
           this.nodes = nodes;
           this.machineDeployments = machineDeployments;
           this.metrics = metrics;
           this.upgrades = _.isEmpty(upgrades) ? [] : upgrades;
+          this.constraints = constraints;
+          this.gatekeeperConfig = gatekeeperConfig;
         },
         error => {
           const errorCodeNotFound = 404;
@@ -242,9 +259,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   getProxyURL(): string {
-    return this.cluster.type === ClusterType.OpenShift
-      ? this._api.getOpenshiftProxyURL(this.projectID, this.seed, this.cluster.id)
-      : this._api.getDashboardProxyURL(this.projectID, this.cluster.id);
+    return this._api.getDashboardProxyURL(this.projectID, this.cluster.id);
   }
 
   isLoaded(): boolean {
@@ -253,10 +268,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   isEditEnabled(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Edit);
-  }
-
-  isOpenshiftCluster(): boolean {
-    return this.cluster.type === ClusterType.OpenShift;
   }
 
   editCluster(): void {
@@ -335,12 +346,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  getConnectName(): string {
-    return Cluster.isOpenshiftType(this.cluster) ? 'Open Console' : 'Open Dashboard';
-  }
-
   isRBACEnabled(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'rbac', Permission.View);
+  }
+
+  isOPAEnabled(): boolean {
+    return !!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled;
   }
 
   ngOnDestroy(): void {

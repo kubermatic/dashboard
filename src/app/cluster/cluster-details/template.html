@@ -53,9 +53,9 @@ limitations under the License.
          [href]="getProxyURL()"
          target="_blank"
          mat-flat-button
-         [disabled]="!isClusterRunning || (!isEditEnabled() && isOpenshiftCluster())"
+         [disabled]="!isClusterRunning"
          *ngIf="(settings.adminSettings | async)?.enableDashboard">
-        {{getConnectName()}}
+        Open Dashboard
       </a>
     </div>
   </div>

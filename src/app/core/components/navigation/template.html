@@ -26,6 +26,7 @@ limitations under the License.
     <km-project-selector *ngIf="isAuthenticated() && showMenuSwitchAndProjectSelector"
                          [showSidenav]="showSidenav"
                          class="project-selector"></km-project-selector>
+    <km-help-panel *ngIf="isAuthenticated()"></km-help-panel>
     <km-notification-panel *ngIf="isAuthenticated()"></km-notification-panel>
     <km-user-panel *ngIf="isAuthenticated()"></km-user-panel>
   </div>

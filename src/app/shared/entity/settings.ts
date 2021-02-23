@@ -18,11 +18,11 @@ export class UserSettings {
   selectProjectTableView?: boolean;
   collapseSidenav?: boolean;
   displayAllProjectsForAdmin?: boolean;
+  lastSeenChangelogVersion?: string;
 }
 
 export class AdminSettings {
   cleanupOptions: CleanupOptions;
-  clusterTypeOptions: ClusterTypeOptions;
   customLinks: CustomLink[];
   defaultNodeCount: number;
   displayAPIDocs: boolean;
@@ -47,12 +47,6 @@ export class MachineDeploymentVMResourceQuota {
 export class CleanupOptions {
   Enabled: boolean;
   Enforced: boolean;
-}
-
-export enum ClusterTypeOptions {
-  All = 0,
-  Kubernetes = 1,
-  OpenShift = 2,
 }
 
 export class CustomLink {
@@ -130,7 +124,6 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
     Enforced: false,
     Enabled: false,
   },
-  clusterTypeOptions: ClusterTypeOptions.All,
   userProjectsLimit: 0,
   customLinks: [],
   defaultNodeCount: 1,

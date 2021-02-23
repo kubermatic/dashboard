@@ -10,7 +10,6 @@
 // limitations under the License.
 
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {MatButtonToggleGroup} from '@angular/material/button-toggle';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -25,7 +24,6 @@ import {HistoryService} from '@core/services/history/service';
 import {NotificationService} from '@core/services/notification/service';
 import {SettingsService} from '@core/services/settings/service';
 import {UserService} from '@core/services/user/service';
-import {ClusterType} from '@shared/entity/cluster';
 import {SharedModule} from '@shared/shared.module';
 import {AddAdminDialogComponent} from './admins/add-admin-dialog/component';
 import {AdminsComponent} from './admins/component';
@@ -70,11 +68,4 @@ describe('AdminSettingsComponent', () => {
       expect(component).toBeTruthy();
     })
   );
-
-  it('should correctly check if the last one distribution is selected', () => {
-    const group = {} as MatButtonToggleGroup;
-    group.value = [ClusterType.Kubernetes];
-    expect(component.isLastDistro(group, ClusterType.Kubernetes)).toBeTruthy();
-    expect(component.isLastDistro(group, ClusterType.OpenShift)).toBeFalsy();
-  });
 });

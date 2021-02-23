@@ -17,6 +17,7 @@ export const environment = {
   name: 'dev',
   production: false,
   configUrl: '../../assets/config/config.json',
+  changelogUrl: '../../assets/config/changelog.json',
   gitVersionUrl: '../../assets/config/version.json',
   refreshTimeBase: 1000,
   restRoot: 'api/v1',

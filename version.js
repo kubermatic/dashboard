@@ -20,6 +20,9 @@ gitInfo.edition = getEditionDisplayName();
 // Re-use the version logic from our Makefile
 gitInfo.humanReadable = execSync("make version --no-print-directory").toString().trim();
 
+// Append date information
+gitInfo.date = new Date().toDateString();
+
 const versionInfoJson = JSON.stringify(gitInfo, null, 2);
 
 // eslint-disable-next-line no-console

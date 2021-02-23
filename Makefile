@@ -2,7 +2,6 @@ SHELL=/bin/bash
 KUBERMATIC_EDITION?=ee
 REPO=quay.io/kubermatic/dashboard$(shell [[ "$(KUBERMATIC_EDITION)" != "ce" ]] && echo "\-${KUBERMATIC_EDITION}" )
 IMAGE_TAG=$(shell echo $$(git rev-parse HEAD)|tr -d '\n')
-HUMAN_VERSION=$(shell git tag --points-at HEAD)
 CC=npm
 export GOOS?=linux
 
@@ -14,14 +13,20 @@ export GOOS?=linux
 # branch is manually set to the next minor version. When using a version
 # stamp like "v2.16.0-dev-gXXXX", Git only cares for the hash at the end,
 # thankfully.
+# We start by taking PULL_BASE_REF, which can be a tag name (for tagged
+# postsubmits) or a branch name (for presubmits and postsubmits without tags).
+# If it's a version, we keep it, so that re-running old Prow jobs for old
+# revisions will still use the correct tag (think of having multiple tags
+# on the same commit).
+HUMAN_VERSION=$(shell [[ "$(PULL_BASE_REF)" =~ v[0-9]+.* ]] && echo $(PULL_BASE_REF))
 ifeq (${HUMAN_VERSION},)
 	CURRENT_BRANCH=$(shell git rev-parse --abbrev-ref HEAD)
-	TARGET_BRANCH=$(or ${PULL_BASE_REF},${PULL_BASE_REF},${CURRENT_BRANCH})
+	TARGET_BRANCH=$(or ${PULL_BASE_REF},${CURRENT_BRANCH})
 
 	ifeq (${TARGET_BRANCH},master)
 	HUMAN_VERSION=v2.17.0-dev-g$(shell git rev-parse --short HEAD)
 	else
-	HUMAN_VERSION=$(shell git describe --tags --match "v[0-9]*")
+	HUMAN_VERSION=$(or $(shell git describe --tags --match "v[0-9]*"),v2.17.0-dev-g$(shell git rev-parse --short HEAD))
 	endif
 endif
 
