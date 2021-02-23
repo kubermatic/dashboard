@@ -20,12 +20,13 @@ import {MemberUtils} from '@shared/utils/member-utils/member-utils';
 
 @Component({
   selector: 'km-edit-member',
-  templateUrl: './edit-member.component.html',
+  templateUrl: './template.html',
+  styleUrls: ['style.scss'],
 })
 export class EditMemberComponent implements OnInit {
   @Input() project: Project;
   @Input() member: Member;
-  editMemberForm: FormGroup;
+  form: FormGroup;
 
   constructor(
     private readonly _apiService: ApiService,
@@ -34,13 +35,13 @@ export class EditMemberComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.editMemberForm = new FormGroup({
+    this.form = new FormGroup({
       group: new FormControl(MemberUtils.getGroupInProject(this.member, this.project.id), [Validators.required]),
     });
   }
 
   editMember(): void {
-    if (!this.editMemberForm.valid) {
+    if (!this.form.valid) {
       return;
     }
 
@@ -52,7 +53,7 @@ export class EditMemberComponent implements OnInit {
       deletionTimestamp: this.member.deletionTimestamp,
       projects: [
         {
-          group: this.editMemberForm.controls.group.value,
+          group: this.form.controls.group.value,
           id: this.project.id,
         },
       ],

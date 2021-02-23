@@ -1,0 +1,18 @@
+@import 'variables';
+
+.group-radio-button-label {
+  font-weight: 500;
+  padding: 12px 0;
+}
+
+.group-title {
+  font-weight: 500;
+}
+
+.group-description {
+  font-size: $font-size-body;
+}
+
+.group-radio-button {
+  padding-bottom: 15px;
+}

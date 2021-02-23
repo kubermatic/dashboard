@@ -13,7 +13,7 @@ limitations under the License.
 <div id="km-edit-member-dialog">
   <km-dialog-title>Edit Member</km-dialog-title>
   <mat-dialog-content>
-    <form [formGroup]="editMemberForm"
+    <form [formGroup]="form"
           fxLayout="column"
           (submit)="editMember()"
           id="edit-member-form">
@@ -31,21 +31,27 @@ limitations under the License.
                [value]="member.email">
       </mat-form-field>
 
-      <mat-form-field fxFlex>
-        <mat-label>Group*</mat-label>
-        <mat-select id="km-edit-member-dialog-group-combobox"
-                    panelClass="km-add-dialog-dropdown"
-                    disableOptionCentering
-                    formControlName="group"
-                    cdkFocusInitial>
-          <mat-option value="owners">Owner</mat-option>
-          <mat-option value="editors">Editor</mat-option>
-          <mat-option value="viewers">Viewer</mat-option>
-        </mat-select>
-        <mat-error *ngIf="editMemberForm.controls.group.hasError('required')">
-          Group is <strong>required</strong>.
-        </mat-error>
-      </mat-form-field>
+      <label class="group-radio-button-label">Select a Group</label>
+      <mat-radio-group formControlName="group"
+                       fxFlex
+                       fxLayout="column"
+                       class="km-add-member-radio-button-group">
+        <mat-radio-button value="owners"
+                          class="group-radio-button">
+          <div class="group-title">Owner</div>
+          <div class="group-description">Full access, allows all actions, also able to remove other owners from the project</div>
+        </mat-radio-button>
+        <mat-radio-button value="editors"
+                          class="group-radio-button">
+          <div class="group-title">Editor</div>
+          <div class="group-description">Write access and management of clusters, nodes and SSH keys</div>
+        </mat-radio-button>
+        <mat-radio-button value="viewers"
+                          class="group-radio-button">
+          <div class="group-title">Viewer</div>
+          <div class="group-description">Read-only access, can only view existing resources</div>
+        </mat-radio-button>
+      </mat-radio-group>
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>
@@ -53,7 +59,7 @@ limitations under the License.
             mat-flat-button
             type="submit"
             form="edit-member-form"
-            [disabled]="!editMemberForm.valid">
+            [disabled]="!form.valid">
       Edit
     </button>
   </mat-dialog-actions>

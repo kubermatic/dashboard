@@ -449,3 +449,10 @@ km-dashboard {
     }
   }
 }
+
+.km-add-member-radio-button-group {
+  .mat-radio-container {
+    align-self: flex-start;
+    margin-top: 2px;
+  }
+}
