@@ -450,9 +450,26 @@ km-dashboard {
   }
 }
 
-.km-add-member-radio-button-group {
+.km-member-radio-group {
   .mat-radio-container {
     align-self: flex-start;
     margin-top: 2px;
   }
+}
+
+.km-member-radio-group-label {
+  font-weight: 500;
+  padding: 12px 0;
+}
+
+.km-member-radio-button {
+  padding-bottom: 15px;
+}
+
+.km-member-radio-button-title {
+  font-weight: 500;
+}
+
+.km-member-radio-button-description {
+  font-size: $font-size-body;
 }

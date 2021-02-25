@@ -31,25 +31,25 @@ limitations under the License.
                [value]="member.email">
       </mat-form-field>
 
-      <label class="group-radio-button-label">Select a Group</label>
+      <label class="km-member-radio-group-label">Select a Group</label>
       <mat-radio-group formControlName="group"
                        fxFlex
                        fxLayout="column"
-                       class="km-add-member-radio-button-group">
+                       class="km-member-radio-group">
         <mat-radio-button value="owners"
-                          class="group-radio-button">
-          <div class="group-title">Owner</div>
-          <div class="group-description">Full access, allows all actions, also able to remove other owners from the project</div>
+                          class="km-member-radio-button">
+          <div class="km-member-radio-button-title">Owner</div>
+          <div class="km-member-radio-button-description">Full access, allows all actions, also able to remove other owners from the project</div>
         </mat-radio-button>
         <mat-radio-button value="editors"
-                          class="group-radio-button">
-          <div class="group-title">Editor</div>
-          <div class="group-description">Write access and management of clusters, nodes and SSH keys</div>
+                          class="km-member-radio-button">
+          <div class="km-member-radio-button-title">Editor</div>
+          <div class="km-member-radio-button-description">Write access and management of clusters, nodes and SSH keys</div>
         </mat-radio-button>
         <mat-radio-button value="viewers"
-                          class="group-radio-button">
-          <div class="group-title">Viewer</div>
-          <div class="group-description">Read-only access, can only view existing resources</div>
+                          class="km-member-radio-button">
+          <div class="km-member-radio-button-title">Viewer</div>
+          <div class="km-member-radio-button-description">Read-only access, can only view existing resources</div>
         </mat-radio-button>
       </mat-radio-group>
     </form>

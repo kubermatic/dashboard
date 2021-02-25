@@ -21,7 +21,6 @@ import {MemberUtils} from '@shared/utils/member-utils/member-utils';
 @Component({
   selector: 'km-edit-member',
   templateUrl: './template.html',
-  styleUrls: ['style.scss'],
 })
 export class EditMemberComponent implements OnInit {
   @Input() project: Project;
