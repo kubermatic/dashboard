@@ -29,8 +29,8 @@ import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import * as _ from 'lodash';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {AddMemberComponent} from './add-member/add-member.component';
-import {EditMemberComponent} from './edit-member/edit-member.component';
+import {AddMemberComponent} from './add-member/component';
+import {EditMemberComponent} from './edit-member/component';
 
 @Component({
   selector: 'km-member',
@@ -47,8 +47,8 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   private readonly _refreshTime = 10; // in seconds
-  private _unsubscribe: Subject<any> = new Subject();
-  private _membersUpdate: Subject<any> = new Subject();
+  private _unsubscribe = new Subject<void>();
+  private _membersUpdate = new Subject<void>();
   private _currentGroupConfig: GroupConfig;
   private _selectedProject: Project;
 
@@ -80,6 +80,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(
         switchMap(project => {
           this._selectedProject = project;
+          this._membersUpdate.next();
           return this._userService.getCurrentUserGroup(project.id);
         })
       )

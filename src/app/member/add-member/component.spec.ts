@@ -23,7 +23,7 @@ import {NotificationService} from '@core/services/notification/service';
 import {ProjectService} from '@core/services/project/service';
 import {SharedModule} from '@shared/shared.module';
 import {Group} from '@shared/utils/member-utils/member-utils';
-import {AddMemberComponent} from './add-member.component';
+import {AddMemberComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 

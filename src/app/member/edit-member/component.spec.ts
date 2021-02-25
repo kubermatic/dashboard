@@ -21,7 +21,7 @@ import {CoreModule} from '@core/module';
 import {ApiService} from '@core/services/api/service';
 import {NotificationService} from '@core/services/notification/service';
 import {SharedModule} from '@shared/shared.module';
-import {EditMemberComponent} from './edit-member.component';
+import {EditMemberComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 
@@ -64,20 +64,20 @@ describe('EditMemberComponent', () => {
   );
 
   it('should have valid form defaults', () => {
-    expect(component.editMemberForm.valid).toBeTruthy();
+    expect(component.form.valid).toBeTruthy();
   });
 
   it('should have required fields', () => {
-    component.editMemberForm.controls.group.patchValue('');
-    expect(component.editMemberForm.controls.group.valid).toBeFalsy();
-    expect(component.editMemberForm.controls.group.hasError('required')).toBeTruthy();
+    component.form.controls.group.patchValue('');
+    expect(component.form.controls.group.valid).toBeFalsy();
+    expect(component.form.controls.group.hasError('required')).toBeTruthy();
 
-    component.editMemberForm.controls.group.patchValue('editor');
-    expect(component.editMemberForm.controls.group.hasError('required')).toBeFalsy();
+    component.form.controls.group.patchValue('editor');
+    expect(component.form.controls.group.hasError('required')).toBeFalsy();
   });
 
   it('should call editMember method', fakeAsync(() => {
-    component.editMemberForm.controls.group.patchValue('editor');
+    component.form.controls.group.patchValue('editor');
     component.editMember();
     tick();
     flush();

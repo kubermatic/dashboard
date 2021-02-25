@@ -19,7 +19,7 @@ import {Project} from '@shared/entity/project';
 
 @Component({
   selector: 'km-add-member',
-  templateUrl: './add-member.component.html',
+  templateUrl: './template.html',
 })
 export class AddMemberComponent implements OnInit {
   @Input() project: Project;
