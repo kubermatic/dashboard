@@ -33,7 +33,7 @@ export class MembersPage {
   }
 
   static getMemberDialogGroup(group: Group): Cypress.Chainable<any> {
-    return cy.get('mat-option').contains('span', group);
+    return cy.get('mat-radio-button').contains('div', group);
   }
 
   static getEditMemberDialogGroupCombobox(): Cypress.Chainable<any> {
@@ -94,7 +94,6 @@ export class MembersPage {
   static addMember(email: string, group: Group): void {
     this.getAddMemberBtn().should(Condition.NotBe, 'disabled').click();
     this.getAddMemberDialogEmailInput().type(email).should(Condition.HaveValue, email);
-    this.getAddMemberDialogGroupCombobox().click();
     this.getMemberDialogGroup(group).click();
     this.waitForRefresh();
     this.getAddMemberDialogSaveBtn().should(Condition.NotBe, 'disabled').click();
@@ -103,7 +102,6 @@ export class MembersPage {
 
   static editMember(email: string, newGroup: Group): void {
     this.getEditBtn(email).click();
-    this.getEditMemberDialogGroupCombobox().click();
     this.getMemberDialogGroup(newGroup).click();
     this.getEditMemberDialogSaveBtn().click();
   }
