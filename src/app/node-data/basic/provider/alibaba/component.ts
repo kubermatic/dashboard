@@ -163,13 +163,14 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     this._nodeDataService.nodeDataChanges.next();
   }
 
-  instanceDisplayName(instanceID: string): string {
+  getInstanceDisplayNameByID(instanceID: string): string {
     const instance = this.instanceTypes.find(instance => instance.id === instanceID);
-    if (!instance) {
-      return instanceID;
-    }
+    return instance ? this.getInstanceDisplayName(instance) : instanceID;
+  }
 
-    return `${instance.id} (${instance.cpuCoreCount} CPU, ${instance.memorySize} GB RAM)`;
+  getInstanceDisplayName(it: AlibabaInstanceType) {
+    const gpu = it.gpuCoreCount > 0 ? ` ${it.gpuCoreCount} GPU,` : '';
+    return `${it.id} (${it.cpuCoreCount} CPU,${gpu} ${it.memorySize} GB RAM)`;
   }
 
   private _init(): void {
