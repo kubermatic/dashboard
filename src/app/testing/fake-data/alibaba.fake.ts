@@ -9,15 +9,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AlibabaInstanceType, AlibabaZone} from '../../shared/entity/provider/alibaba';
+import {AlibabaInstanceType, AlibabaZone} from '@shared/entity/provider/alibaba';
 
 export function fakeAlibabaInstanceTypes(): AlibabaInstanceType[] {
   return [
-    {id: 'ecs.c5.large', cpuCoreCount: 2, memorySize: 4},
-    {id: 'ecs.c5.xlarge', cpuCoreCount: 4, memorySize: 8},
-    {id: 'ecs.c5.2xlarge', cpuCoreCount: 8, memorySize: 16},
-    {id: 'ecs.c5.4xlarge', cpuCoreCount: 16, memorySize: 32},
-    {id: 'ecs.c5.6xlarge', cpuCoreCount: 24, memorySize: 48},
+    {id: 'ecs.c5.large', cpuCoreCount: 2, gpuCoreCount: 0, memorySize: 4},
+    {id: 'ecs.c5.xlarge', cpuCoreCount: 4, gpuCoreCount: 2, memorySize: 8},
+    {id: 'ecs.c5.2xlarge', cpuCoreCount: 8, gpuCoreCount: 0, memorySize: 16},
+    {id: 'ecs.c5.4xlarge', cpuCoreCount: 16, gpuCoreCount: 1, memorySize: 32},
+    {id: 'ecs.c5.6xlarge', cpuCoreCount: 24, gpuCoreCount: 0, memorySize: 48},
   ];
 }
 
