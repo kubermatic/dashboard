@@ -1,7 +1,7 @@
 ---
 name: Design Draft Request
 about: Request an UI draft for Kubermatic Kubernetes Platform 
-labels: kind/design, team/ui
+labels: kind/design, sig/ui
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: Failing Test
 about: Report test failures in Kubermatic Dashboard CI jobs
-labels: kind/bug, testing, team/ui
+labels: kind/bug, testing, sig/ui
 
 ---
 
