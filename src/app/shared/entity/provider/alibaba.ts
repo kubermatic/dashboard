@@ -12,6 +12,7 @@
 export class AlibabaInstanceType {
   id: string;
   cpuCoreCount: number;
+  gpuCoreCount: number;
   memorySize: number;
 }
 
