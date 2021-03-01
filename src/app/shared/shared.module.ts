@@ -87,6 +87,7 @@ import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
 import {ClusterService} from './services/cluster.service';
 import {EndOfLifeService} from './services/eol.service';
+import {AutocompleteComponent} from "@shared/components/autocomplete/component";
 
 const modules: any[] = [
   CommonModule,
@@ -168,6 +169,7 @@ const components: any[] = [
   SearchFieldComponent,
   TabCardComponent,
   TabComponent,
+  AutocompleteComponent,
 ];
 
 const services: any[] = [ClusterService, EndOfLifeService];

@@ -47,6 +47,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
   private readonly _debounceTime = 1000;
   readonly Controls = Controls;
   securityGroups: string[] = [];
+  securityGroupValidators = [Validators.pattern('sg-(\\w{8}|\\w{17})')];
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -58,7 +59,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.SecurityGroup]: this._builder.control('', Validators.pattern('sg-(\\w{8}|\\w{17})')),
+      [Controls.SecurityGroup]: this._builder.control(''),
       [Controls.RouteTableID]: this._builder.control('', Validators.pattern('rtb-(\\w{8}|\\w{17})')),
       [Controls.InstanceProfileName]: this._builder.control(''),
       [Controls.RoleARN]: this._builder.control(''),
@@ -91,12 +92,12 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
 
-    this.form
-      .get(Controls.SecurityGroup)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(sg => {
-        this._clusterService.cluster.spec.cloud.aws.securityGroupID = sg;
-      });
+    // this.form
+    //   .get(Controls.SecurityGroup)
+    //   .valueChanges.pipe(takeUntil(this._unsubscribe))
+    //   .subscribe(sg => {
+    //     this._clusterService.cluster.spec.cloud.aws.securityGroupID = sg;
+    //   });
   }
 
   ngOnDestroy(): void {
@@ -128,7 +129,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
 
   private _clearSecurityGroup(): void {
     this.securityGroups = [];
-    this.form.get(Controls.SecurityGroup).setValue('');
+    //this.form.get(Controls.SecurityGroup).setValue('');
   }
 
   private _enable(enable: boolean, name: string): void {

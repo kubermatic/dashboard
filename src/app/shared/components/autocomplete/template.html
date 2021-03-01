@@ -1,0 +1,44 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<form [formGroup]="form">
+  <mat-form-field fxFlex>
+    <mat-label>{{label}}</mat-label>
+    <input type="text"
+           matInput
+           [formControlName]="controls.Main"
+           [required]="required"
+           [matAutocomplete]="auto">
+    <mat-spinner matSuffix
+                 *ngIf="isLoading"
+                 [diameter]="20"></mat-spinner>
+    <mat-autocomplete autoActiveFirstOption
+                      #auto="matAutocomplete">
+      <mat-option *ngFor="let option of options | filterBy: form.get(controls.Main).value"
+                  [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-hint>
+      <ng-content select="[hint]"></ng-content>
+    </mat-hint>
+
+    <!-- Errors -->
+    <mat-error *ngIf="form.get(controls.Main).hasError( 'pattern')">
+      <div #ref>
+        <ng-content select="[patternError]"></ng-content>
+      </div>
+      <ng-container *ngIf="ref.children.length < 1">{{label}} has invalid pattern.</ng-container>
+    </mat-error>
+  </mat-form-field>
+</form>
