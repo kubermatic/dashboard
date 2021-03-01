@@ -14,10 +14,11 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {AppConfigService} from '@app/config.service';
-import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {ApiService} from '@core/services/api/service';
 import {ClusterService} from '@core/services/cluster/service';
 import {NotificationService} from '@core/services/notification/service';
 import {UserService} from '@core/services/user/service';
+import {AddSshKeyDialogComponent} from '@shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
@@ -26,9 +27,8 @@ import {SSHKey} from '@shared/entity/ssh-key';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import * as _ from 'lodash';
-import {EMPTY, merge, Subject, timer} from 'rxjs';
-import {filter, take, switchMap, takeUntil} from 'rxjs/operators';
-import {AddClusterSSHKeysComponent} from './add-cluster-sshkeys/component';
+import {EMPTY, merge, Observer, Subject, timer} from 'rxjs';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'km-edit-sshkeys',
@@ -42,22 +42,31 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   loading = true;
-  sshKeys: SSHKey[] = [];
+  clusterSSHKeys: SSHKey[] = [];
+  projectSSHKeys: SSHKey[] = [];
   displayedColumns: string[] = ['name', 'actions'];
   dataSource = new MatTableDataSource<SSHKey>();
 
-  private readonly _refreshTime = 5; // in seconds
+  private readonly _refreshTime = 999; // in seconds
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
-  private _unsubscribe: Subject<any> = new Subject();
-  private _sshKeysUpdate: Subject<any> = new Subject();
+  private _unsubscribe = new Subject<void>();
+  private _sshKeysUpdate = new Subject<void>();
+
+  private get _sshKeyUpdateObserver(): Observer<void> {
+    return {
+      next: _ => this._sshKeysUpdate.next(),
+      error: _ => this._sshKeysUpdate.next(),
+      complete: _ => this._sshKeysUpdate.next(),
+    } as Observer<void>;
+  }
 
   constructor(
     private readonly _userService: UserService,
     private readonly _appConfig: AppConfigService,
     private readonly _dialog: MatDialog,
     private readonly _clusterService: ClusterService,
-    private readonly _googleAnalyticsService: GoogleAnalyticsService,
+    private readonly _apiService: ApiService,
     private readonly _notificationService: NotificationService
   ) {}
 
@@ -76,9 +85,14 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
       .pipe(switchMap(() => (this.projectID ? this._clusterService.sshKeys(this.projectID, this.cluster.id) : EMPTY)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(sshkeys => {
-        this.sshKeys = sshkeys;
+        this.clusterSSHKeys = sshkeys;
         this.loading = false;
       });
+
+    merge(timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase()), this._sshKeysUpdate)
+      .pipe(switchMap(_ => this._apiService.getSSHKeys(this.projectID)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(sshkeys => (this.projectSSHKeys = sshkeys));
   }
 
   ngOnDestroy(): void {
@@ -87,40 +101,24 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   getDataSource(): MatTableDataSource<SSHKey> {
-    this.dataSource.data = this.sshKeys;
+    this.dataSource.data = this.clusterSSHKeys;
     return this.dataSource;
   }
 
   isTableVisible(): boolean {
-    return !_.isEmpty(this.sshKeys);
+    return !_.isEmpty(this.clusterSSHKeys);
   }
 
   canAdd(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.SSHKeys, Permission.Create);
   }
 
-  addSshKey(): void {
-    const dialogRef = this._dialog.open(AddClusterSSHKeysComponent);
-    dialogRef.componentInstance.projectID = this.projectID;
-    dialogRef.componentInstance.cluster = this.cluster;
-    dialogRef.componentInstance.sshKeys = this.sshKeys;
-
-    dialogRef
-      .afterClosed()
-      .pipe(take(1))
-      .subscribe((sshkey: SSHKey) => {
-        if (sshkey) {
-          this.sshKeys.push(sshkey);
-          this._sshKeysUpdate.next();
-        }
-      });
-  }
-
   canDelete(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.SSHKeys, Permission.Delete);
   }
 
-  deleteSshKey(sshKey: SSHKey): void {
+  deleteSSHKey(sshKey: SSHKey): void {
+    sshKey.deletionTimestamp = new Date();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
@@ -133,10 +131,10 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     };
 
     const dialogRef = this._dialog.open(ConfirmationDialogComponent, dialogConfig);
-    this._googleAnalyticsService.emitEvent('clusterOverview', 'deleteSshKeyOpened');
 
     dialogRef
       .afterClosed()
+      .pipe(tap(isConfirmed => (!isConfirmed ? (sshKey.deletionTimestamp = undefined) : undefined)))
       .pipe(filter(isConfirmed => isConfirmed))
       .pipe(switchMap(_ => this._clusterService.deleteSSHKey(this.projectID, this.cluster.id, sshKey.id)))
       .pipe(take(1))
@@ -144,7 +142,37 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
         this._notificationService.success(
           `The ${sshKey.name} SSH key was removed from the ${this.cluster.name} cluster`
         );
-        this._googleAnalyticsService.emitEvent('clusterOverview', 'SshKeyDeleted');
+        this._sshKeysUpdate.next();
       });
+  }
+
+  sshKeysToAdd(): SSHKey[] {
+    const existing = new Set(this.clusterSSHKeys.map(key => key.id));
+    return this.projectSSHKeys.filter(key => !existing.has(key.id));
+  }
+
+  onSSHKeyAdd(keyID: string): void {
+    this.loading = true;
+    const sshKey = this.projectSSHKeys.find(key => key.id === keyID);
+    if (!sshKey) {
+      return;
+    }
+
+    this._clusterService
+      .createSSHKey(this.projectID, this.cluster.id, keyID)
+      .pipe(take(1))
+      .subscribe(this._sshKeyUpdateObserver);
+  }
+
+  createSSHKey(): void {
+    this.loading = true;
+    const dialogRef = this._dialog.open(AddSshKeyDialogComponent);
+    dialogRef.componentInstance.projectID = this.projectID;
+    dialogRef
+      .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(switchMap((key: SSHKey) => this._clusterService.createSSHKey(this.projectID, this.cluster.id, key.id)))
+      .pipe(take(1))
+      .subscribe(this._sshKeyUpdateObserver);
   }
 }

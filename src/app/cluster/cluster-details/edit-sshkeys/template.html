@@ -10,8 +10,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<km-dialog-title>Manage SSH Keys in the Cluster</km-dialog-title>
+
+<km-dialog-title>Manage SSH Keys of "<span class="cluster-name">{{cluster.name}}</span>"</km-dialog-title>
+
 <mat-dialog-content class="km-content-edit-sshkeys">
+  <ng-container *ngIf="loading">
+    <mat-spinner [diameter]="50"
+                 class="km-spinner"
+                 color="accent"></mat-spinner>
+  </ng-container>
+
   <table class="km-table km-table-dropdown"
          mat-table
          multiTemplateDataRows
@@ -22,8 +30,7 @@ limitations under the License.
     <ng-container matColumnDef="name">
       <th mat-header-cell
           *matHeaderCellDef
-          class="km-header-cell
-                       km-key-name"
+          class="km-header-cell"
           mat-sort-header>SSH Keys
       </th>
       <td mat-cell
@@ -43,14 +50,14 @@ limitations under the License.
           <ng-container [ngSwitch]="!!element.deletionTimestamp">
             <ng-container *ngSwitchCase="true">
               <mat-spinner [diameter]="25"
-                           class="km-spinner"
+                           class="km-spinner row"
                            color="accent"></mat-spinner>
             </ng-container>
 
             <ng-container *ngSwitchCase="false">
               <button mat-icon-button
                       matTooltip="Delete SSH key"
-                      (click)="deleteSshKey(element)"
+                      (click)="deleteSSHKey(element)"
                       [disabled]="!canDelete()">
                 <i class="km-icon-delete"></i>
               </button>
@@ -68,15 +75,27 @@ limitations under the License.
         class="km-mat-row"></tr>
   </table>
 
-  <ng-container>
-    <div class="km-mat-row km-mat-footer-row"
-         [ngClass]="isTableVisible() ? '' : 'km-no-sshkeys'">
-      <button id="km-add-sshkey-to-cluster"
-              class="km-text-muted km-pointer"
-              fxFlex
-              (click)="addSshKey()"
-              [disabled]="!canAdd()">+ Add SSH key
-      </button>
-    </div>
-  </ng-container>
+  <mat-form-field class="km-edit-sshkeys-dropdown">
+    <mat-label>Add existing SSH key</mat-label>
+    <mat-select #addSSHKeySelect
+                panelClass="km-add-dialog-dropdown"
+                (selectionChange)="onSSHKeyAdd($event.value); addSSHKeySelect.writeValue(undefined)"
+                [disabled]="sshKeysToAdd().length === 0"
+                disableOptionCentering>
+      <mat-option *ngFor="let key of sshKeysToAdd()"
+                  value="{{key.id}}">{{key.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <span *ngIf="sshKeysToAdd().length > 0"
+        class="combobox-caption indent">
+    Select one of the existing project's SSH keys to add to this cluster.
+  </span>
+  <span *ngIf="sshKeysToAdd().length === 0"
+        class="combobox-caption indent">
+    This project does not have any more SSH keys that could be added.
+  </span>
+  <a *ngIf="canAdd()"
+     class="combobox-caption km-pointer"
+     (click)="createSSHKey()">Add SSH Key to the project.</a>
 </mat-dialog-content>

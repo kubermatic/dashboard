@@ -34,7 +34,6 @@ import {KubevirtProviderSettingsComponent} from './cluster-details/edit-provider
 import {OpenstackProviderSettingsComponent} from './cluster-details/edit-provider-settings/openstack-provider-settings/component';
 import {PacketProviderSettingsComponent} from './cluster-details/edit-provider-settings/packet-provider-settings/component';
 import {VSphereProviderSettingsComponent} from './cluster-details/edit-provider-settings/vsphere-provider-settings/component';
-import {AddClusterSSHKeysComponent} from './cluster-details/edit-sshkeys/add-cluster-sshkeys/component';
 import {EditSSHKeysComponent} from './cluster-details/edit-sshkeys/component';
 import {GatekeeperConfigComponent} from './cluster-details/gatekeeper-config/component';
 import {GatekeeperConfigDialog} from './cluster-details/gatekeeper-config/gatekeeper-config-dialog/component';
@@ -81,7 +80,6 @@ const components: any[] = [
   KubevirtProviderSettingsComponent,
   AlibabaProviderSettingsComponent,
   EditSSHKeysComponent,
-  AddClusterSSHKeysComponent,
   ShareKubeconfigComponent,
   ClusterPanelComponent,
   AddBindingComponent,

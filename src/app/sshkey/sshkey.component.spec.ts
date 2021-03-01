@@ -90,7 +90,7 @@ describe('SSHKeyComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should open delete ssh key confirmation dialog & call deleteSshKey()', fakeAsync(() => {
+  it('should open delete ssh key confirmation dialog & call deleteSSHKey()', fakeAsync(() => {
     const waitTime = 15000;
     component.projectID = fakeProject().id;
     component.sshKeys = fakeSSHKeys();
