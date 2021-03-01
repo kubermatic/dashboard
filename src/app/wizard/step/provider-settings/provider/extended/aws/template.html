@@ -19,8 +19,8 @@ limitations under the License.
                    [options]="securityGroups"
                    [validators]="securityGroupValidators">
       <ng-container hint>
-        <ng-container>Specify to attach worker nodes to it, otherwise a new security group will be used.</ng-container>
-        <ng-container *ngIf="!hasRequiredCredentials()">&nbsp;Enter your credentials to load autocompletions.</ng-container>
+        Specify to attach worker nodes to it, otherwise a new security group will be used.
+        <span *ngIf="!hasRequiredCredentials()">&nbsp;Enter your credentials to load autocompletions.</span>
       </ng-container>
       <ng-container patternError>
         The security group ID need to look similar to 'sg-a2c195ca'.
