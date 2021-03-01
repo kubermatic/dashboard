@@ -19,7 +19,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import * as _ from 'lodash';
-import {AutocompleteControls} from "@shared/components/autocomplete/component";
+import {AutocompleteControls} from '@shared/components/autocomplete/component';
 
 enum Controls {
   SecurityGroup = 'securityGroup',
@@ -87,7 +87,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
           if (!this.hasRequiredCredentials) {
             this._clearSecurityGroup();
           }
-        }),
+        })
       )
       .pipe(switchMap(_ => this._securityGroupObservable()))
       .pipe(takeUntil(this._unsubscribe))
@@ -104,10 +104,15 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
 
-    this.form.get(Controls.SecurityGroup).valueChanges.pipe(
-      filter(form => form !== undefined),
-      takeUntil(this._unsubscribe)
-    ).subscribe(form => this._clusterService.cluster.spec.cloud.aws.securityGroupID = form[AutocompleteControls.Main]);
+    this.form
+      .get(Controls.SecurityGroup)
+      .valueChanges.pipe(
+        filter(form => form !== undefined),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(
+        form => (this._clusterService.cluster.spec.cloud.aws.securityGroupID = form[AutocompleteControls.Main])
+      );
   }
 
   ngOnDestroy(): void {

@@ -10,11 +10,11 @@
 // limitations under the License.
 
 import {Component, forwardRef, Input, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidatorFn, Validators} from "@angular/forms";
-import {BaseFormValidator} from "@shared/validators/base-form.validator";
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidatorFn, Validators} from '@angular/forms';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 export enum AutocompleteControls {
-  Main = 'main'
+  Main = 'main',
 }
 
 @Component({
@@ -46,8 +46,8 @@ export class AutocompleteComponent extends BaseFormValidator implements OnInit {
   }
 
   ngOnInit(): void {
-    if(this.required) {
-      this.validators = [Validators.required, ...this.validators]
+    if (this.required) {
+      this.validators = [Validators.required, ...this.validators];
     }
 
     this.form = this._builder.group({
