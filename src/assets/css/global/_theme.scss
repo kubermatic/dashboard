@@ -135,6 +135,18 @@
     td:last-child {
       border-right: 1px solid map-get($colors, divider);
     }
+
+    tr {
+      &.mat-row {
+        &:last-of-type {
+          td {
+            &.mat-cell {
+              border-bottom: 1px solid map-get($colors, divider);
+            }
+          }
+        }
+      }
+    }
   }
 
   .km-panel .panel {

@@ -473,3 +473,10 @@ km-dashboard {
 .km-member-radio-button-description {
   font-size: $font-size-body;
 }
+
+.mat-form-field.km-edit-sshkeys-dropdown {
+  .mat-form-field-wrapper {
+    margin-bottom: 2px;
+    padding: 0;
+  }
+}
