@@ -41,7 +41,7 @@ limitations under the License.
       Memory is <strong>required</strong>.
     </mat-error>
     <mat-error *ngIf="form.get(Controls.Memory).hasError('min')">
-      Memory have to be at least 512.
+      Memory has to be at least 512.
     </mat-error>
   </mat-form-field>
 
@@ -52,5 +52,24 @@ limitations under the License.
            type="text"
            autocomplete="off"
            required>
+    <mat-error *ngIf="form.get(Controls.Template).hasError('required')">
+      VM Template is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Disk Size in GB</mat-label>
+    <input matInput
+           [formControlName]="Controls.DiskSizeGB"
+           min="1"
+           type="number"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Controls.DiskSizeGB).hasError('required')">
+      Disk Size is <strong>required</strong>.
+    </mat-error>
+    <mat-error *ngIf="form.get(Controls.DiskSizeGB).hasError('min')">
+      Disk Size has to be at least 1.
+    </mat-error>
   </mat-form-field>
 </form>
