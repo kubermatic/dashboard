@@ -13,7 +13,7 @@ import {Component, forwardRef, Input, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidatorFn, Validators} from "@angular/forms";
 import {BaseFormValidator} from "@shared/validators/base-form.validator";
 
-enum Controls {
+export enum AutocompleteControls {
   Main = 'main'
 }
 
@@ -39,7 +39,7 @@ export class AutocompleteComponent extends BaseFormValidator implements OnInit {
   @Input() isLoading = false;
   @Input() options: string[] = [];
   @Input() validators: ValidatorFn[] = [];
-  controls = Controls;
+  controls = AutocompleteControls;
 
   constructor(private readonly _builder: FormBuilder) {
     super();
@@ -51,7 +51,7 @@ export class AutocompleteComponent extends BaseFormValidator implements OnInit {
     }
 
     this.form = this._builder.group({
-      [Controls.Main]: this._builder.control('', this.validators),
+      [AutocompleteControls.Main]: this._builder.control('', this.validators),
     });
   }
 }
