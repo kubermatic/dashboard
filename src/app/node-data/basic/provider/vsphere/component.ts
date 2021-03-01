@@ -27,6 +27,7 @@ enum Controls {
   CPU = 'cpu',
   Memory = 'memory',
   Template = 'template',
+  DiskSizeGB = 'diskSizeGB',
 }
 
 @Component({
@@ -50,6 +51,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
   private readonly _defaultCPUCount = 2;
   private readonly _defaultMemory = 4096;
   private readonly _minMemory = 512;
+  private readonly _defaultDiskSize = 10;
   private _defaultTemplate = '';
   private _templates: DatacenterOperatingSystemOptions;
 
@@ -73,7 +75,8 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
         Validators.required,
         Validators.min(this._minMemory),
       ]),
-      [Controls.Template]: this._builder.control(''),
+      [Controls.Template]: this._builder.control('', Validators.required),
+      [Controls.DiskSizeGB]: this._builder.control(this._defaultDiskSize, [Validators.required, Validators.min(1)]),
     });
 
     this._init();
@@ -82,7 +85,8 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
     merge(
       this.form.get(Controls.Memory).valueChanges,
       this.form.get(Controls.CPU).valueChanges,
-      this.form.get(Controls.Template).valueChanges
+      this.form.get(Controls.Template).valueChanges,
+      this.form.get(Controls.DiskSizeGB).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
@@ -118,6 +122,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
     if (this._nodeDataService.nodeData.spec.cloud.vsphere) {
       this.form.get(Controls.CPU).setValue(this._nodeDataService.nodeData.spec.cloud.vsphere.cpus);
       this.form.get(Controls.Memory).setValue(this._nodeDataService.nodeData.spec.cloud.vsphere.memory);
+      this.form.get(Controls.DiskSizeGB).setValue(this._nodeDataService.nodeData.spec.cloud.vsphere.diskSizeGB);
     }
   }
 
@@ -157,6 +162,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
             template: this.template,
             cpus: this.form.get(Controls.CPU).value,
             memory: this.form.get(Controls.Memory).value,
+            diskSizeGB: this.form.get(Controls.DiskSizeGB).value,
           } as VSphereNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,

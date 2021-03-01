@@ -43,7 +43,6 @@ import {DigitalOceanExtendedNodeDataComponent} from './extended/provider/digital
 import {GCPExtendedNodeDataComponent} from './extended/provider/gcp/component';
 import {OpenstackExtendedNodeDataComponent} from './extended/provider/openstack/component';
 import {PacketExtendedNodeDataComponent} from './extended/provider/packet/component';
-import {VSphereExtendedNodeDataComponent} from './extended/provider/vsphere/component';
 import {KubeletVersionNodeDataComponent} from './kubelet-version/component';
 import {NodeDataService} from './service/service';
 
@@ -55,7 +54,6 @@ const components = [
   DigitalOceanBasicNodeDataComponent,
   DigitalOceanExtendedNodeDataComponent,
   VSphereBasicNodeDataComponent,
-  VSphereExtendedNodeDataComponent,
   KubeVirtBasicNodeDataComponent,
   HetznerBasicNodeDataComponent,
   PacketBasicNodeDataComponent,
