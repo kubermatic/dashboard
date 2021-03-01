@@ -9,13 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatTableDataSource} from '@angular/material/table';
 import {NotificationService} from '@core/services/notification/service';
 import {OPAService} from '@core/services/opa/service';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '@shared/entity/cluster';
-import {GatekeeperConfig} from '@shared/entity/opa';
+import {GatekeeperConfig, GVK, MatchEntry, Trace} from '@shared/entity/opa';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take} from 'rxjs/operators';
@@ -26,11 +27,18 @@ import {Mode, GatekeeperConfigDialog} from './gatekeeper-config-dialog/component
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class GatekeeperConfigComponent implements OnDestroy {
+export class GatekeeperConfigComponent implements OnChanges, OnDestroy {
   @Input() cluster: Cluster;
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
   @Input() gatekeeperConfig: GatekeeperConfig;
+
+  syncDataSource = new MatTableDataSource<GVK>();
+  syncDisplayedColumns: string[] = ['group', 'version', 'kind'];
+  matchDataSource = new MatTableDataSource<MatchEntry>();
+  matchDisplayedColumns: string[] = ['excludedNamespaces', 'processes'];
+  validationDataSource = new MatTableDataSource<Trace>();
+  validationDisplayedColumns: string[] = ['user', 'group', 'version', 'kind', 'dump'];
 
   private readonly _unsubscribe = new Subject<void>();
 
@@ -39,6 +47,14 @@ export class GatekeeperConfigComponent implements OnDestroy {
     private readonly _opaService: OPAService,
     private readonly _notificationService: NotificationService
   ) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!!changes.gatekeeperConfig && !!this.gatekeeperConfig) {
+      this.syncDataSource.data = this.gatekeeperConfig.spec.sync.syncOnly || [];
+      this.matchDataSource.data = this.gatekeeperConfig.spec.match || [];
+      this.validationDataSource.data = this.gatekeeperConfig.spec.validation.traces || [];
+    }
+  }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
@@ -51,6 +67,10 @@ export class GatekeeperConfigComponent implements OnDestroy {
 
   hasNoData(): boolean {
     return _.isEmpty(this.gatekeeperConfig) && this.isClusterRunning;
+  }
+
+  toCommaSeperatedString(data: string[]): string {
+    return data.join(', ');
   }
 
   add(): void {
