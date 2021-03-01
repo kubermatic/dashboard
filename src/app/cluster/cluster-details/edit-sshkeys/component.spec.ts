@@ -15,9 +15,11 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {ApiMockService} from '@app/testing/services/api-mock.service';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
 import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
 import {UserMockService} from '@app/testing/services/user-mock.service';
+import {ApiService} from '@core/services/api/service';
 import {ClusterService} from '@core/services/cluster/service';
 import {NotificationService} from '@core/services/notification/service';
 import {UserService} from '@core/services/user/service';
@@ -39,6 +41,7 @@ describe('EditSSHKeysComponent', () => {
           {provide: ClusterService, useClass: ClusterMockService},
           {provide: UserService, useClass: UserMockService},
           {provide: AppConfigService, useClass: AppConfigMockService},
+          {provide: ApiService, useClass: ApiMockService},
           MatDialog,
           GoogleAnalyticsService,
           NotificationService,
