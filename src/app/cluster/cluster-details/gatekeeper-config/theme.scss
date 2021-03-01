@@ -10,8 +10,31 @@
 // limitations under the License.
 
 @mixin theme-gatekeeper-config-component($colors) {
-  .km-code-block {
-    background-color: transparent;
-    border: 1px solid map-get($colors, divider);
+  td:first-child {
+    border-left: 1px solid map-get($colors, divider);
+  }
+
+  td:last-child {
+    border-right: 1px solid map-get($colors, divider);
+  }
+
+  tr:last-child td.mat-cell {
+    border-bottom: 1px solid map-get($colors, divider);
+  }
+
+  tr:last-child td:last-child {
+    border-bottom-right-radius: $border-radius;
+  }
+
+  tr:last-child td:first-child {
+    border-bottom-left-radius: $border-radius;
+  }
+
+  tr:first-child td:first-child {
+    border-top-left-radius: $border-radius;
+  }
+
+  tr:first-child td:last-child {
+    border-top-right-radius: $border-radius;
   }
 }
