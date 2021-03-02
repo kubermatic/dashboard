@@ -58,8 +58,8 @@ limitations under the License.
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <km-settings-status [isSaved]="isEqual(settings.itemsPerPage, apiSettings.itemsPerPage)"
-                            fxFlexAlign=" center"></km-settings-status>
+        <km-spinner-with-confirmation [isSaved]="isEqual(settings.itemsPerPage, apiSettings.itemsPerPage)"
+                                      fxFlexAlign=" center"></km-spinner-with-confirmation>
       </div>
 
       <!-- Load the theming module -->
@@ -85,8 +85,8 @@ limitations under the License.
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <km-settings-status [isSaved]="isEqual(settings.selectedProjectId, apiSettings.selectedProjectId)"
-                            fxFlexAlign=" center"></km-settings-status>
+        <km-spinner-with-confirmation [isSaved]="isEqual(settings.selectedProjectId, apiSettings.selectedProjectId)"
+                                      fxFlexAlign=" center"></km-spinner-with-confirmation>
       </div>
     </div>
   </mat-card-content>

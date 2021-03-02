@@ -78,7 +78,7 @@ import {PropertyUsageComponent} from './components/property-usage/component';
 import {PropertyComponent} from './components/property/property.component';
 import {RelativeTimeComponent} from './components/relativetime/relative-time.component';
 import {SearchFieldComponent} from './components/search-field/component';
-import {SettingsStatusComponent} from './components/settings-status/settings-status.component';
+import {SpinnerWithConfirmationComponent} from './components/spinner-with-confirmation/component';
 import {SSHKeyListComponent} from './components/ssh-key-list/ssh-key-list.component';
 import {TagListComponent} from './components/tag-list/tag-list.component';
 import {TaintFormComponent} from './components/taint-form/taint-form.component';
@@ -148,7 +148,7 @@ const components: any[] = [
   RelativeTimeComponent,
   SSHKeyListComponent,
   AddonsListComponent,
-  SettingsStatusComponent,
+  SpinnerWithConfirmationComponent,
   InitialsCircleComponent,
   TagListComponent,
   NotificationComponent,

@@ -32,7 +32,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {EMPTY, forkJoin, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {AutocompleteControls, AutocompleteInitialState} from "@shared/components/autocomplete/component";
+import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 
 enum Controls {
   VMNetName = 'vmNetName',
@@ -107,7 +107,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       [Controls.VMNetName]: this._builder.control({value: '', disabled: true}),
       [Controls.Folder]: this._builder.control({value: '', disabled: true}),
       [Controls.Datastore]: this._builder.control(''),
-      [Controls.DatastoreCluster]: this._builder.control( ''),
+      [Controls.DatastoreCluster]: this._builder.control(''),
     });
 
     this.form.valueChanges
@@ -171,7 +171,8 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .valueChanges.pipe(
         filter(form => !!form),
         takeUntil(this._unsubscribe)
-    ).subscribe(form => (this._clusterService.cluster.spec.cloud.vsphere.datastore = form[AutocompleteControls.Main]));
+      )
+      .subscribe(form => (this._clusterService.cluster.spec.cloud.vsphere.datastore = form[AutocompleteControls.Main]));
   }
 
   getNetworks(type: string): VSphereNetwork[] {

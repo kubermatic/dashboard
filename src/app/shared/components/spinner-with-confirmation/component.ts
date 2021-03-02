@@ -13,18 +13,16 @@ import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {fadeInOut} from '../../animations/fade';
 
 @Component({
-  selector: 'km-settings-status',
-  templateUrl: './settings-status.component.html',
-  styleUrls: ['./settings-status.component.scss'],
+  selector: 'km-spinner-with-confirmation',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
   animations: [fadeInOut],
 })
-export class SettingsStatusComponent implements OnChanges {
+export class SpinnerWithConfirmationComponent implements OnChanges {
   private readonly _defaultTimeout = 3000;
-
+  isSaveConfirmationVisible = false;
   @Input() isSaved = true;
   @Input() confirmationTimeout = this._defaultTimeout;
-
-  isSaveConfirmationVisible = false;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.isSaved && !changes.isSaved.isFirstChange()) {

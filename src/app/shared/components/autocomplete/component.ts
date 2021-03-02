@@ -15,7 +15,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 export const AutocompleteInitialState = {
   main: '',
-}
+};
 
 export enum AutocompleteControls {
   Main = 'main',
