@@ -1,7 +1,7 @@
 {
   "ignore": [
     "*", ".git", ".github", ".idea", "docs", "vendor",
-    "src/assets/fonts", "src/assets/js", "src/assets/css/font-awesome",
+    "src/assets/fonts", "src/assets/js", "src/assets/css/font-awesome", "src/app/dynamic/enterprise/**", "src/index.html",
     "**/.DS_Store", "**/.gitignore", "**/*.json", "**/*.yaml", "**/*.svg", "**/*.txt", "**/*.md"
   ],
   "license": "license-header.txt",
