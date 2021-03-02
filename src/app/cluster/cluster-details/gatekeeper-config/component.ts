@@ -69,6 +69,15 @@ export class GatekeeperConfigComponent implements OnChanges, OnDestroy {
     return _.isEmpty(this.gatekeeperConfig) && this.isClusterRunning;
   }
 
+  hasSection(section: string): boolean {
+    return (
+      !!this.gatekeeperConfig &&
+      !!this.gatekeeperConfig.spec &&
+      !!this.gatekeeperConfig.spec[section] &&
+      !_.isEmpty(this.gatekeeperConfig.spec[section])
+    );
+  }
+
   toCommaSeperatedString(data: string[]): string {
     return data.join(', ');
   }

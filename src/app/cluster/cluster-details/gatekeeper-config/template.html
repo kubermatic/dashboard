@@ -12,7 +12,8 @@ limitations under the License.
 -->
 
 <div *ngIf="!isLoadingData() && !hasNoData()"
-     class="gatekeeper-config-actions">
+     class="header">
+  <div fxFlex></div>
   <button mat-icon-button
           matTooltip="Edit Gatekeeper Config"
           (click)="edit()">
@@ -27,15 +28,21 @@ limitations under the License.
 
 <div *ngIf="!isLoadingData() && !hasNoData()"
      class="gatekeeper-config">
-  <h3>Readiness</h3>
-  <km-property-boolean label="Stats Enabled"
-                       [value]="gatekeeperConfig.spec.readiness.statsEnabled">
-  </km-property-boolean>
+  <h3 *ngIf="hasSection('readiness')"
+      flexLayout="row"
+      class="section-inline">
+    Readiness
+    <km-property-boolean class="ready-check"
+                         label="Stats Enabled"
+                         [value]="gatekeeperConfig.spec.readiness.statsEnabled">
+    </km-property-boolean>
+  </h3>
 
-  <h3>Sync</h3>
+  <h3 *ngIf="hasSection('sync')">Sync</h3>
   <table class="km-table"
          mat-table
-         [dataSource]="syncDataSource">
+         [dataSource]="syncDataSource"
+         [hidden]="!hasSection('sync')">
     <ng-container matColumnDef="group">
       <th mat-header-cell
           *matHeaderCellDef
@@ -71,10 +78,11 @@ limitations under the License.
         class="km-mat-row"></tr>
   </table>
 
-  <h3>Match</h3>
+  <h3 *ngIf="hasSection('match')">Match</h3>
   <table class="km-table"
          mat-table
-         [dataSource]="matchDataSource">
+         [dataSource]="matchDataSource"
+         [hidden]="!hasSection('match')">
     <ng-container matColumnDef="excludedNamespaces">
       <th mat-header-cell
           *matHeaderCellDef
@@ -101,10 +109,11 @@ limitations under the License.
         class="km-mat-row"></tr>
   </table>
 
-  <h3>Validation</h3>
+  <h3 *ngIf="hasSection('validation')">Validation</h3>
   <table class="km-table"
          mat-table
-         [dataSource]="validationDataSource">
+         [dataSource]="validationDataSource"
+         [hidden]="!hasSection('validation')">
     <ng-container matColumnDef="user">
       <th mat-header-cell
           *matHeaderCellDef
