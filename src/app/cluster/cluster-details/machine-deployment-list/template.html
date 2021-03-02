@@ -82,7 +82,7 @@ limitations under the License.
             *matCellDef="let element"
             fxLayoutGap="4px">
           <span>{{!!element.status?.availableReplicas ? element.status.availableReplicas : 0}}
-            /{{!!element.spec?.replicas ? element.spec.replicas : 0}}</span>
+            / {{!!element.spec?.replicas ? element.spec.replicas : 0}}</span>
           <div *ngIf="element.status?.availableReplicas > element.spec.replicas"
                class="km-icon-info km-pointer"
                matTooltip="Number of available machines may be higher than number of desired machines from the template if deployment is updating."></div>
