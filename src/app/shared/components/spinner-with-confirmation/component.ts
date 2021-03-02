@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {fadeInOut} from '../../animations/fade';
 
 @Component({
@@ -24,10 +24,15 @@ export class SpinnerWithConfirmationComponent implements OnChanges {
   @Input() isSaved = true;
   @Input() confirmationTimeout = this._defaultTimeout;
 
+  constructor(private readonly _cdr: ChangeDetectorRef) {}
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.isSaved && !changes.isSaved.isFirstChange()) {
       this.isSaveConfirmationVisible = this.isSaved;
-      setTimeout(() => (this.isSaveConfirmationVisible = false), this.confirmationTimeout);
+      setTimeout(_ => {
+        this.isSaveConfirmationVisible = false;
+        this._cdr.detectChanges();
+      }, this.confirmationTimeout);
     }
   }
 }
