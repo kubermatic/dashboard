@@ -48,7 +48,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
   settings: UserSettings;
   constraintTemplates: ConstraintTemplate[] = [];
   dataSource = new MatTableDataSource<Constraint>();
-  displayedColumns: string[] = ['constraintName', 'constraintTemplate', 'match', 'violations', 'actions'];
+  displayedColumns: string[] = ['stateArrow', 'name', 'constraintTemplate', 'match', 'violations', 'actions'];
   toggledColumns: string[] = ['violationDetails'];
   isShowDetails = [];
   constraintTemplateFilter: string;
@@ -78,7 +78,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
     this.dataSource.data = this.constraints;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.sort.active = 'constraintName';
+    this.sort.active = 'name';
     this.sort.direction = 'asc';
 
     this._userService.currentUserSettings
