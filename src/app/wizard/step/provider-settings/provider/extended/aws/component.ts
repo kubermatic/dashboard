@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '@shared/entity/cluster';
@@ -52,6 +52,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
   securityGroupValidators = [Validators.pattern('sg-(\\w{8}|\\w{17})')];
 
   constructor(
+    private readonly _cdr: ChangeDetectorRef,
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
     private readonly _clusterService: ClusterService
@@ -82,18 +83,13 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       .pipe(
         filter(_ => this._clusterService.provider === NodeProvider.AWS),
         debounceTime(this._debounceTime),
-        tap(_ => {
-          this.isLoadingSecurityGroups = this.hasRequiredCredentials();
-          if (!this.hasRequiredCredentials) {
-            this._clearSecurityGroup();
-          }
-        })
+        tap(_ => (!this.hasRequiredCredentials() ? this._clearSecurityGroup() : null))
       )
       .pipe(switchMap(_ => this._securityGroupObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(securityGroups => {
         this.securityGroups = securityGroups;
-        this.isLoadingSecurityGroups = false;
+        this._setIsLoadingSecurityGroup(false);
       });
 
     merge(
@@ -107,7 +103,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     this.form
       .get(Controls.SecurityGroup)
       .valueChanges.pipe(
-        filter(form => form !== undefined),
+        filter(form => !!form),
         takeUntil(this._unsubscribe)
       )
       .subscribe(
@@ -132,7 +128,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       .provider(NodeProvider.AWS)
       .accessKeyID(this._clusterService.cluster.spec.cloud.aws.accessKeyId)
       .secretAccessKey(this._clusterService.cluster.spec.cloud.aws.secretAccessKey)
-      .securityGroups(this._clusterService.datacenter)
+      .securityGroups(this._clusterService.datacenter, () => this._setIsLoadingSecurityGroup(true))
       .pipe(
         map(securityGroups => _.sortBy(securityGroups, sg => sg.toLowerCase())),
         catchError(() => {
@@ -142,10 +138,15 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       );
   }
 
+  private _setIsLoadingSecurityGroup(isLoading: boolean): void {
+    this.isLoadingSecurityGroups = isLoading;
+    this._cdr.detectChanges();
+  }
+
   private _clearSecurityGroup(): void {
     this.securityGroups = [];
-    this.isLoadingSecurityGroups = false;
     this.form.get(Controls.SecurityGroup).reset();
+    this._setIsLoadingSecurityGroup(false);
   }
 
   private _enable(enable: boolean, name: string): void {
