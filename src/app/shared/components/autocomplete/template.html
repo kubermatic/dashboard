@@ -35,10 +35,10 @@ limitations under the License.
 
     <!-- Errors -->
     <mat-error *ngIf="form.get(controls.Main).hasError( 'pattern')">
-      <div #ref>
+      <span #patternRef>
         <ng-content select="[patternError]"></ng-content>
-      </div>
-      <ng-container *ngIf="ref.children.length < 1">{{label}} has invalid pattern.</ng-container>
+      </span>
+      <span *ngIf="!patternRef.innerHTML.trim()">{{label}} has invalid pattern.</span>
     </mat-error>
   </mat-form-field>
 </form>
