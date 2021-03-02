@@ -116,6 +116,24 @@ a {
   }
 }
 
+.km-table-with-frame {
+  tr:last-child td:last-child {
+    border-bottom-right-radius: $border-radius;
+  }
+
+  tr:last-child td:first-child {
+    border-bottom-left-radius: $border-radius;
+  }
+
+  tr:first-child td:first-child {
+    border-top-left-radius: $border-radius;
+  }
+
+  tr:first-child td:last-child {
+    border-top-right-radius: $border-radius;
+  }
+}
+
 .km-panel {
   .panel {
     border-radius: $border-radius;

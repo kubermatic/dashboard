@@ -39,7 +39,7 @@ limitations under the License.
   </h3>
 
   <h3 *ngIf="hasSection('sync')">Sync</h3>
-  <table class="km-table"
+  <table class="km-table km-table-with-frame"
          mat-table
          [dataSource]="syncDataSource"
          [hidden]="!hasSection('sync')">
@@ -79,7 +79,7 @@ limitations under the License.
   </table>
 
   <h3 *ngIf="hasSection('match')">Match</h3>
-  <table class="km-table"
+  <table class="km-table km-table-with-frame"
          mat-table
          [dataSource]="matchDataSource"
          [hidden]="!hasSection('match')">
@@ -110,7 +110,7 @@ limitations under the License.
   </table>
 
   <h3 *ngIf="hasSection('validation')">Validation</h3>
-  <table class="km-table"
+  <table class="km-table km-table-with-frame"
          mat-table
          [dataSource]="validationDataSource"
          [hidden]="!hasSection('validation')">

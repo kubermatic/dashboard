@@ -149,12 +149,25 @@
     }
   }
 
+  .km-table-with-frame {
+    td:first-child {
+      border-left: 1px solid map-get($colors, divider);
+    }
+
+    td:last-child {
+      border-right: 1px solid map-get($colors, divider);
+    }
+
+    tr:last-child td.mat-cell {
+      border-bottom: 1px solid map-get($colors, divider);
+    }
+  }
+
   .km-panel {
     .panel {
       background-color: map-get($colors, background-app-bar);
       box-shadow: map-get($colors, shadow-dark);
       color: map-get($colors, text);
-
       .notification-info .km-icon-mask {
         background-color: map-get($colors, text-secondary);
       }
