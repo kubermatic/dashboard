@@ -21,6 +21,7 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {NameGeneratorService} from '@core/services/name-generator/service';
+import {SettingsService} from '@core/services/settings/service';
 import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
@@ -91,21 +92,20 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     private readonly _clusterService: ClusterService,
     private readonly _datacenterService: DatacenterService,
     private readonly _nodeDataService: NodeDataService,
+    private readonly _settingsService: SettingsService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super();
   }
 
   ngOnInit(): void {
-    const replicas = this._nodeDataService.nodeData.count ? this._nodeDataService.nodeData.count : 1;
-
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control(this._nodeDataService.nodeData.name, [
         Validators.pattern('[a-zA-Z0-9-]*'),
       ]),
-      [Controls.Count]: this._builder.control(replicas, [
+      [Controls.Count]: this._builder.control(this._nodeDataService.nodeData.count, [
         Validators.required,
-        Validators.min(0),
+        Validators.min(1),
         NoIpsLeftValidator(this._clusterService.cluster.spec.machineNetworks, this.existingNodesCount),
       ]),
       [Controls.DynamicConfig]: this._builder.control(this._nodeDataService.nodeData.dynamicConfig),
@@ -175,6 +175,11 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.operatingSystemSpec = this._getOperatingSystemSpec()));
+
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      const replicas = this.dialogEditMode ? this._nodeDataService.nodeData.count : settings.defaultNodeCount;
+      this.form.get(Controls.Count).setValue(replicas);
+    });
   }
 
   ngOnDestroy(): void {
