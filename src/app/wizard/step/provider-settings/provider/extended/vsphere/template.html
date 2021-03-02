@@ -42,24 +42,18 @@ limitations under the License.
     </div>
   </km-combobox>
 
-  <mat-form-field fxFlex>
-    <mat-label>Datastore</mat-label>
-    <input type="text"
-           matInput
-           [formControlName]="Controls.Datastore"
-           [matAutocomplete]="auto">
-    <mat-autocomplete autoActiveFirstOption
-                      #auto="matAutocomplete">
-      <mat-option *ngFor="let datastore of datastores | filterBy: form.get(Controls.Datastore).value"
-                  [value]="datastore">
-        {{datastore}}
-      </mat-option>
-    </mat-autocomplete>
-    <mat-hint>
-      <ng-container>Datastore to be used for the virtual machines. It is mutually exclusive with Datastore Cluster field.</ng-container>
-      <ng-container *ngIf="!hasRequiredCredentials()">&nbsp;Enter your credentials to load autocompletions.</ng-container>
-    </mat-hint>
-  </mat-form-field>
+  <km-autocomplete label="Datastore"
+                   [formControlName]="Controls.Datastore"
+                   [isLoading]="isLoadingDatastores"
+                   [options]="datastores">
+    <ng-container hint>
+      Datastore to be used for the virtual machines. It is mutually exclusive with Datastore Cluster field.
+      <span *ngIf="!hasRequiredCredentials()">&nbsp;Enter your credentials to load autocompletions.</span>
+    </ng-container>
+    <ng-container patternError>
+      The security group ID need to look similar to 'sg-a2c195ca'.
+    </ng-container>
+  </km-autocomplete>
 
   <mat-form-field fxFlex>
     <mat-label>Datastore Cluster</mat-label>

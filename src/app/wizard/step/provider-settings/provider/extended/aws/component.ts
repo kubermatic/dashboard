@@ -83,10 +83,10 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       .pipe(
         filter(_ => this._clusterService.provider === NodeProvider.AWS),
         debounceTime(this._debounceTime),
-        tap(_ => (!this.hasRequiredCredentials() ? this._clearSecurityGroup() : null))
+        tap(_ => (!this.hasRequiredCredentials() ? this._clearSecurityGroup() : null)),
+        switchMap(_ => this._securityGroupObservable()),
+        takeUntil(this._unsubscribe)
       )
-      .pipe(switchMap(_ => this._securityGroupObservable()))
-      .pipe(takeUntil(this._unsubscribe))
       .subscribe(securityGroups => {
         this.securityGroups = securityGroups;
         this._setIsLoadingSecurityGroup(false);
