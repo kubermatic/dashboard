@@ -19,7 +19,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import * as _ from 'lodash';
-import {AutocompleteControls} from '@shared/components/autocomplete/component';
+import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 
 enum Controls {
   SecurityGroup = 'securityGroup',
@@ -145,7 +145,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
 
   private _clearSecurityGroup(): void {
     this.securityGroups = [];
-    this.form.get(Controls.SecurityGroup).reset();
+    this.form.get(Controls.SecurityGroup).setValue(AutocompleteInitialState);
     this._setIsLoadingSecurityGroup(false);
   }
 

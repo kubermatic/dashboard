@@ -32,7 +32,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {EMPTY, forkJoin, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {AutocompleteControls} from "@shared/components/autocomplete/component";
+import {AutocompleteControls, AutocompleteInitialState} from "@shared/components/autocomplete/component";
 
 enum Controls {
   VMNetName = 'vmNetName',
@@ -327,7 +327,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
   private _clearDatastores(): void {
     this.datastores = [];
-    this.form.get(Controls.Datastore).reset();
+    this.form.get(Controls.Datastore).setValue(AutocompleteInitialState);
     this._setIsLoadingDatastores(false);
   }
 

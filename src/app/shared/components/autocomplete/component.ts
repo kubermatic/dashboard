@@ -13,6 +13,10 @@ import {Component, forwardRef, Input, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidatorFn, Validators} from '@angular/forms';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
+export const AutocompleteInitialState = {
+  main: '',
+}
+
 export enum AutocompleteControls {
   Main = 'main',
 }
