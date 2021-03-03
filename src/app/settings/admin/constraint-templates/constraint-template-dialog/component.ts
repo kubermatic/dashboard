@@ -10,11 +10,10 @@
 // limitations under the License.
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {OPAService} from '@core/services/opa/service';
 import {NotificationService} from '@core/services/notification/service';
-import {ConstraintTemplate} from '@shared/entity/opa';
+import {ConstraintTemplate, ConstraintTemplateSpec} from '@shared/entity/opa';
 import {dump, load} from 'js-yaml';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -35,7 +34,6 @@ export enum Mode {
 }
 
 export enum Controls {
-  TemplateName = 'name',
   Spec = 'spec',
 }
 
@@ -46,30 +44,43 @@ export enum Controls {
 })
 export class ConstraintTemplateDialog implements OnInit, OnDestroy {
   readonly controls = Controls;
-  form: FormGroup;
   spec = '';
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(
-    public _matDialogRef: MatDialogRef<ConstraintTemplateDialog>,
+    private readonly _matDialogRef: MatDialogRef<ConstraintTemplateDialog>,
     private readonly _opaService: OPAService,
     private readonly _notificationService: NotificationService,
     @Inject(MAT_DIALOG_DATA) public data: ConstraintTemplateDialogConfig
   ) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      name: new FormControl(this.data.mode === Mode.Edit ? this.data.constraintTemplate.name : '', [
-        Validators.required,
-      ]),
-    });
-
     this._initProviderConfigEditor();
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  isValid(): boolean {
+    return !_.isEmpty(this.spec);
+  }
+
+  save(): void {
+    const formSpec = this._getSpec();
+
+    const constraintTemplate: ConstraintTemplate = {
+      name: _.get(this._getSpec(), 'crd.spec.names.kind') ? formSpec.crd.spec.names.kind.toLowerCase() : '',
+      spec: formSpec,
+    };
+
+    switch (this.data.mode) {
+      case Mode.Add:
+        return this._create(constraintTemplate);
+      case Mode.Edit:
+        return this._edit(constraintTemplate);
+    }
   }
 
   private _initProviderConfigEditor(): void {
@@ -81,23 +92,13 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
     }
   }
 
-  private _getSpec(): any {
-    const raw = load(this.spec);
-    return !_.isEmpty(raw) ? raw : {};
-  }
-
-  save(): void {
-    const constraintTemplate: ConstraintTemplate = {
-      name: this.form.controls.name.value,
-      spec: this._getSpec(),
-    };
-
-    switch (this.data.mode) {
-      case Mode.Add:
-        return this._create(constraintTemplate);
-      case Mode.Edit:
-        return this._edit(constraintTemplate);
+  private _getSpec(): ConstraintTemplateSpec {
+    let spec = new ConstraintTemplateSpec();
+    const raw = load(this.spec) as ConstraintTemplateSpec;
+    if (!_.isEmpty(raw)) {
+      spec = raw;
     }
+    return spec;
   }
 
   private _create(constraintTemplate: ConstraintTemplate): void {

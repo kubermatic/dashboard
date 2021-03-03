@@ -12,22 +12,6 @@ limitations under the License.
 -->
 <km-dialog-title>{{data.title}}</km-dialog-title>
 <mat-dialog-content>
-  <form [formGroup]="form"
-        fxLayout="column">
-    <mat-form-field fxFlex>
-      <mat-label>Template Name</mat-label>
-      <input required
-             matInput
-             [formControlName]="controls.TemplateName"
-             type="text"
-             autocomplete="off"
-             cdkFocusInitial>
-      <mat-error *ngIf="form.get(controls.TemplateName).hasError('required')">
-        Template Name is <strong>required</strong>.
-      </mat-error>
-    </mat-form-field>
-  </form>
-
   <div class="spec">Spec</div>
   <km-editor [(model)]="spec"
              header="YAML"></km-editor>
@@ -35,7 +19,7 @@ limitations under the License.
 <mat-dialog-actions>
   <button mat-flat-button
           (click)="save()"
-          [disabled]="!form.valid">
+          [disabled]="!isValid()">
     {{data.confirmLabel}}
   </button>
 </mat-dialog-actions>
