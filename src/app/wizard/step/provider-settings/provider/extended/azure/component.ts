@@ -245,8 +245,8 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
   }
 
   getValueFromInternalForm(control: Controls): string {
-    const internalForm = this.form.get(control);
-    return internalForm ? internalForm[AutocompleteControls.Main] : '';
+    const internalFormValue = this.form.get(control).value;
+    return internalFormValue ? internalFormValue[AutocompleteControls.Main] : '';
   }
 
   private _resourceGroupObservable(): Observable<string[]> {
