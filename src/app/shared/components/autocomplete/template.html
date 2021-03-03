@@ -20,7 +20,7 @@ limitations under the License.
            [required]="required"
            [matAutocomplete]="auto">
     <mat-spinner matSuffix
-                 *ngIf="isLoading"
+                 *ngIf="isLoading && !form.disabled"
                  [diameter]="20"></mat-spinner>
     <mat-autocomplete autoActiveFirstOption
                       #auto="matAutocomplete">
