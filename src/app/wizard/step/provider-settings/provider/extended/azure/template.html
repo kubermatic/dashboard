@@ -13,92 +13,49 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="16px">
-  <mat-form-field fxFlex>
-    <mat-label>Resource Group</mat-label>
-    <input type="text"
-           matInput
-           [formControlName]="Controls.ResourceGroup"
-           [matAutocomplete]="autoResourceGroup">
-    <mat-autocomplete autoActiveFirstOption
-                      #autoResourceGroup="matAutocomplete">
-      <mat-option *ngFor="let resourceGroup of resourceGroups | filterBy: form.get(Controls.ResourceGroup).value"
-                  [value]="resourceGroup">
-        {{resourceGroup}}
-      </mat-option>
-    </mat-autocomplete>
-    <mat-hint *ngIf="!hasRequiredCredentials()">Enter your credentials to load autocompletions.</mat-hint>
-  </mat-form-field>
-
-
-  <mat-form-field fxFlex>
-    <mat-label>Route Table</mat-label>
-    <input type="text"
-           matInput
-           [formControlName]="Controls.RouteTable"
-           [matAutocomplete]="autoRouteTable">
-    <mat-autocomplete autoActiveFirstOption
-                      #autoRouteTable="matAutocomplete">
-      <mat-option *ngFor="let routeTable of routeTables | filterBy: form.get(Controls.RouteTable).value"
-                  [value]="routeTable">
-        {{routeTable}}
-      </mat-option>
-    </mat-autocomplete>
-    <mat-hint *ngIf="!hasRequiredCredentials() || !form.get(Controls.ResourceGroup).value">
+  <km-autocomplete label="Resource Group"
+                   [formControlName]="Controls.ResourceGroup"
+                   [isLoading]="isLoadingResourceGroups"
+                   [options]="resourceGroups">
+    <ng-container hint
+                  *ngIf="!hasRequiredCredentials()">
+      Enter your credentials to load autocompletions.
+    </ng-container>
+  </km-autocomplete>
+  <km-autocomplete label="Route Table"
+                   [formControlName]="Controls.RouteTable"
+                   [isLoading]="isLoadingRouteTables"
+                   [options]="routeTables">
+    <ng-container hint
+                  *ngIf="!hasRequiredCredentials() || !form.get(Controls.ResourceGroup).value">
       Enter your credentials and resource group to load autocompletions.
-    </mat-hint>
-  </mat-form-field>
-
-  <mat-form-field fxFlex>
-    <mat-label>Security Group</mat-label>
-    <input type="text"
-           matInput
-           [formControlName]="Controls.SecurityGroup"
-           [matAutocomplete]="autoSecurityGroup">
-    <mat-autocomplete autoActiveFirstOption
-                      #autoSecurityGroup="matAutocomplete">
-      <mat-option *ngFor="let securityGroup of securityGroups | filterBy: form.get(Controls.SecurityGroup).value"
-                  [value]="securityGroup">
-        {{securityGroup}}
-      </mat-option>
-    </mat-autocomplete>
-    <mat-hint *ngIf="!hasRequiredCredentials() || !form.get(Controls.ResourceGroup).value">
+    </ng-container>
+  </km-autocomplete>
+  <km-autocomplete label="Security Group"
+                   [formControlName]="Controls.SecurityGroup"
+                   [isLoading]="isLoadingSecurityGroups"
+                   [options]="securityGroups">
+    <ng-container hint
+                  *ngIf="!hasRequiredCredentials() || !form.get(Controls.ResourceGroup).value">
       Enter your credentials and resource group to load autocompletions.
-    </mat-hint>
-  </mat-form-field>
-
-  <mat-form-field fxFlex>
-    <mat-label>VNet</mat-label>
-    <input type="text"
-           matInput
-           [formControlName]="Controls.VNet"
-           [matAutocomplete]="autoVNet">
-    <mat-autocomplete autoActiveFirstOption
-                      #autoVNet="matAutocomplete">
-      <mat-option *ngFor="let vnet of vnets | filterBy: form.get(Controls.VNet).value"
-                  [value]="vnet">
-        {{vnet}}
-      </mat-option>
-    </mat-autocomplete>
-    <mat-hint *ngIf="!hasRequiredCredentials() || !form.get(Controls.ResourceGroup).value">
+    </ng-container>
+  </km-autocomplete>
+  <km-autocomplete label="VNet"
+                   [formControlName]="Controls.VNet"
+                   [isLoading]="isLoadingVnets"
+                   [options]="vnets">
+    <ng-container hint
+                  *ngIf="!hasRequiredCredentials() || !form.get(Controls.ResourceGroup).value">
       Enter your credentials and resource group to load autocompletions.
-    </mat-hint>
-  </mat-form-field>
-
-  <mat-form-field fxFlex>
-    <mat-label>Subnet</mat-label>
-    <input type="text"
-           matInput
-           [formControlName]="Controls.Subnet"
-           [matAutocomplete]="autoVNet">
-    <mat-autocomplete autoActiveFirstOption
-                      #autoVNet="matAutocomplete">
-      <mat-option *ngFor="let subnet of subnets | filterBy: form.get(Controls.Subnet).value"
-                  [value]="subnet">
-        {{subnet}}
-      </mat-option>
-    </mat-autocomplete>
-    <mat-hint *ngIf="!hasRequiredCredentials() || !form.get(Controls.ResourceGroup).value || !form.get(Controls.VNet).value">
+    </ng-container>
+  </km-autocomplete>
+  <km-autocomplete label="Subnet"
+                   [formControlName]="Controls.Subnet"
+                   [isLoading]="isLoadingSubnets"
+                   [options]="subnets">
+    <ng-container hint
+                  *ngIf="!hasRequiredCredentials() || !form.get(Controls.ResourceGroup).value || !form.get(Controls.VNet).value">
       Enter your credentials, resource group and VNet to load autocompletions.
-    </mat-hint>
-  </mat-form-field>
+    </ng-container>
+  </km-autocomplete>
 </form>

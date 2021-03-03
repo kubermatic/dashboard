@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
@@ -20,6 +20,7 @@ import {catchError, debounceTime, filter, map, switchMap, take, takeUntil, tap} 
 import * as _ from 'lodash';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {Datacenter} from '@shared/entity/datacenter';
+import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 
 enum Controls {
   ResourceGroup = 'resourceGroup',
@@ -49,13 +50,19 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
   private readonly _debounceTime = 500;
   readonly Controls = Controls;
   resourceGroups: string[] = [];
+  isLoadingResourceGroups = false;
   routeTables: string[] = [];
+  isLoadingRouteTables = false;
   securityGroups: string[] = [];
+  isLoadingSecurityGroups = false;
   vnets: string[] = [];
+  isLoadingVnets = false;
   subnets: string[] = [];
+  isLoadingSubnets = false;
 
   constructor(
     private readonly _builder: FormBuilder,
+    private readonly _cdr: ChangeDetectorRef,
     private readonly _presets: PresetsService,
     private readonly _clusterService: ClusterService,
     private readonly _datacenterService: DatacenterService
@@ -156,27 +163,47 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
 
     this.form
       .get(Controls.ResourceGroup)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .valueChanges.pipe(
+        filter(form => !!form),
+        map(form => form[AutocompleteControls.Main]),
+        takeUntil(this._unsubscribe)
+      )
       .subscribe(rg => (this._clusterService.cluster.spec.cloud.azure.resourceGroup = rg));
 
     this.form
       .get(Controls.RouteTable)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .valueChanges.pipe(
+        filter(form => !!form),
+        map(form => form[AutocompleteControls.Main]),
+        takeUntil(this._unsubscribe)
+      )
       .subscribe(rt => (this._clusterService.cluster.spec.cloud.azure.routeTable = rt));
 
     this.form
       .get(Controls.SecurityGroup)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .valueChanges.pipe(
+        filter(form => !!form),
+        map(form => form[AutocompleteControls.Main]),
+        takeUntil(this._unsubscribe)
+      )
       .subscribe(sg => (this._clusterService.cluster.spec.cloud.azure.securityGroup = sg));
 
     this.form
       .get(Controls.VNet)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .valueChanges.pipe(
+        filter(form => !!form),
+        map(form => form[AutocompleteControls.Main]),
+        takeUntil(this._unsubscribe)
+      )
       .subscribe(v => (this._clusterService.cluster.spec.cloud.azure.vnet = v));
 
     this.form
       .get(Controls.Subnet)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .valueChanges.pipe(
+        filter(form => !!form),
+        map(form => form[AutocompleteControls.Main]),
+        takeUntil(this._unsubscribe)
+      )
       .subscribe(s => (this._clusterService.cluster.spec.cloud.azure.subnet = s));
   }
 
@@ -211,7 +238,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
             .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
             .location(location)
             .credential(this._presets.preset)
-            .resourceGroups()
+            .resourceGroups(() => this._setIsLoadingResourceGroups(true))
             .pipe(
               map(resourceGroups => _.sortBy(resourceGroups, rg => rg.toLowerCase())),
               catchError(() => {
@@ -225,7 +252,13 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
 
   private _clearResourceGroup(): void {
     this.resourceGroups = [];
-    this.form.get(Controls.ResourceGroup).setValue('');
+    this.form.get(Controls.ResourceGroup).setValue(AutocompleteInitialState);
+    this._setIsLoadingResourceGroups(false);
+  }
+
+  private _setIsLoadingResourceGroups(isLoading: boolean): void {
+    this.isLoadingResourceGroups = isLoading;
+    this._cdr.detectChanges();
   }
 
   private _routeTableObservable(): Observable<string[]> {
@@ -243,7 +276,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
             .resourceGroup(this.form.get(Controls.ResourceGroup).value)
             .location(location)
             .credential(this._presets.preset)
-            .routeTables()
+            .routeTables(() => this._setIsLoadingRouteTables(true))
             .pipe(
               map(routeTables => _.sortBy(routeTables, rt => rt.toLowerCase())),
               catchError(() => {
@@ -257,7 +290,13 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
 
   private _clearRouteTable(): void {
     this.routeTables = [];
-    this.form.get(Controls.RouteTable).setValue('');
+    this.form.get(Controls.RouteTable).setValue(AutocompleteInitialState);
+    this._setIsLoadingRouteTables(false);
+  }
+
+  private _setIsLoadingRouteTables(isLoading: boolean): void {
+    this.isLoadingRouteTables = isLoading;
+    this._cdr.detectChanges();
   }
 
   private _securityGroupObservable(): Observable<string[]> {
@@ -275,7 +314,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
             .resourceGroup(this.form.get(Controls.ResourceGroup).value)
             .location(location)
             .credential(this._presets.preset)
-            .securityGroups()
+            .securityGroups(() => this._setIsLoadingSecurityGroups(true))
             .pipe(
               map(securityGroups => _.sortBy(securityGroups, sg => sg.toLowerCase())),
               catchError(() => {
@@ -289,7 +328,13 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
 
   private _clearSecurityGroup(): void {
     this.securityGroups = [];
-    this.form.get(Controls.SecurityGroup).setValue('');
+    this.form.get(Controls.SecurityGroup).setValue(AutocompleteInitialState);
+    this._setIsLoadingSecurityGroups(false);
+  }
+
+  private _setIsLoadingSecurityGroups(isLoading: boolean): void {
+    this.isLoadingSecurityGroups = isLoading;
+    this._cdr.detectChanges();
   }
 
   private _vnetObservable(): Observable<string[]> {
@@ -307,7 +352,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
             .resourceGroup(this.form.get(Controls.ResourceGroup).value)
             .location(location)
             .credential(this._presets.preset)
-            .vnets()
+            .vnets(() => this._setIsLoadingVnets(true))
             .pipe(
               map(vnets => _.sortBy(vnets, v => v.toLowerCase())),
               catchError(() => {
@@ -321,7 +366,13 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
 
   private _clearVNet(): void {
     this.vnets = [];
-    this.form.get(Controls.VNet).setValue('');
+    this.form.get(Controls.VNet).setValue(AutocompleteInitialState);
+    this._setIsLoadingVnets(false);
+  }
+
+  private _setIsLoadingVnets(isLoading: boolean): void {
+    this.isLoadingVnets = isLoading;
+    this._cdr.detectChanges();
   }
 
   private _subnetObservable(): Observable<string[]> {
@@ -334,7 +385,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .resourceGroup(this.form.get(Controls.ResourceGroup).value)
       .vnet(this.form.get(Controls.VNet).value)
       .credential(this._presets.preset)
-      .subnets()
+      .subnets(() => this._setIsLoadingSubnets(true))
       .pipe(
         map(subnets => _.sortBy(subnets, s => s.toLowerCase())),
         catchError(() => {
@@ -346,7 +397,13 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
 
   private _clearSubnet(): void {
     this.subnets = [];
-    this.form.get(Controls.Subnet).setValue('');
+    this.form.get(Controls.Subnet).setValue(AutocompleteInitialState);
+    this._setIsLoadingSubnets(false);
+  }
+
+  private _setIsLoadingSubnets(isLoading: boolean): void {
+    this.isLoadingSubnets = isLoading;
+    this._cdr.detectChanges();
   }
 
   private _getCredentialChanges(...changes: Observable<any>[]): Observable<any> {

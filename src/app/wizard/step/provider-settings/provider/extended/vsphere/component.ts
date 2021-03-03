@@ -170,9 +170,10 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .get(Controls.Datastore)
       .valueChanges.pipe(
         filter(form => !!form),
+        map(form => form[AutocompleteControls.Main]),
         takeUntil(this._unsubscribe)
       )
-      .subscribe(form => (this._clusterService.cluster.spec.cloud.vsphere.datastore = form[AutocompleteControls.Main]));
+      .subscribe(d => (this._clusterService.cluster.spec.cloud.vsphere.datastore = d));
   }
 
   getNetworks(type: string): VSphereNetwork[] {
