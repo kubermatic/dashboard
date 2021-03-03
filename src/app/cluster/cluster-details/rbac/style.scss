@@ -19,25 +19,13 @@
   }
 }
 
-h2 {
-  font-size: $font-size-card-title;
+h3 {
   font-weight: normal;
-  margin-bottom: 0;
-  padding: 0 60px;
-}
+  margin: 40px 0 15px;
+  padding: 0 30px;
 
-tr {
-  &.mat-row,
-  &.mat-header-row {
-    padding-left: 60px;
-
-    td:first-child,
-    th:first-child {
-      &.mat-cell,
-      &.mat-header-cell {
-        padding-left: 60px;
-      }
-    }
+  &:first-of-type {
+    margin-top: 10px;
   }
 }
 
