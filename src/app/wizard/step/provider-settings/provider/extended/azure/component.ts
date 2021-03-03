@@ -102,41 +102,61 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .pipe(tap(_ => (!this.hasRequiredCredentials() ? this._clearResourceGroup() : null)))
       .pipe(switchMap(_ => this._resourceGroupObservable()))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(resourceGroups => (this.resourceGroups = resourceGroups));
+      .subscribe(resourceGroups => {
+        this.resourceGroups = resourceGroups;
+        this._setIsLoadingResourceGroups(false);
+      });
 
     this._getCredentialChanges(this.form.get(Controls.ResourceGroup).valueChanges)
       .pipe(
         tap(_ =>
-          !this.hasRequiredCredentials() || !this.form.get(Controls.ResourceGroup).value
+          !this.hasRequiredCredentials() || !this.getValueFromInternalForm(Controls.ResourceGroup)
             ? this._clearRouteTable()
             : null
         )
       )
-      .pipe(switchMap(_ => (this.form.get(Controls.ResourceGroup).value ? this._routeTableObservable() : of([]))))
+      .pipe(
+        switchMap(_ => (this.getValueFromInternalForm(Controls.ResourceGroup) ? this._routeTableObservable() : of([])))
+      )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(routeTables => (this.routeTables = routeTables));
+      .subscribe(routeTables => {
+        this.routeTables = routeTables;
+        this._setIsLoadingRouteTables(false);
+      });
 
     this._getCredentialChanges(this.form.get(Controls.ResourceGroup).valueChanges)
       .pipe(
         tap(_ =>
-          !this.hasRequiredCredentials() || !this.form.get(Controls.ResourceGroup).value
+          !this.hasRequiredCredentials() || !this.getValueFromInternalForm(Controls.ResourceGroup)
             ? this._clearSecurityGroup()
             : null
         )
       )
-      .pipe(switchMap(_ => (this.form.get(Controls.ResourceGroup).value ? this._securityGroupObservable() : of([]))))
+      .pipe(
+        switchMap(_ =>
+          this.getValueFromInternalForm(Controls.ResourceGroup) ? this._securityGroupObservable() : of([])
+        )
+      )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(securityGroups => (this.securityGroups = securityGroups));
+      .subscribe(securityGroups => {
+        this.securityGroups = securityGroups;
+        this._setIsLoadingSecurityGroups(false);
+      });
 
     this._getCredentialChanges(this.form.get(Controls.ResourceGroup).valueChanges)
       .pipe(
         tap(_ =>
-          !this.hasRequiredCredentials() || !this.form.get(Controls.ResourceGroup).value ? this._clearVNet() : null
+          !this.hasRequiredCredentials() || !this.getValueFromInternalForm(Controls.ResourceGroup)
+            ? this._clearVNet()
+            : null
         )
       )
-      .pipe(switchMap(_ => (this.form.get(Controls.ResourceGroup).value ? this._vnetObservable() : of([]))))
+      .pipe(switchMap(_ => (this.getValueFromInternalForm(Controls.ResourceGroup) ? this._vnetObservable() : of([]))))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(vnets => (this.vnets = vnets));
+      .subscribe(vnets => {
+        this.vnets = vnets;
+        this._setIsLoadingVnets(false);
+      });
 
     this._getCredentialChanges(
       this.form.get(Controls.ResourceGroup).valueChanges,
@@ -145,21 +165,24 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .pipe(
         tap(_ =>
           !this.hasRequiredCredentials() ||
-          !this.form.get(Controls.ResourceGroup).value ||
-          !this.form.get(Controls.VNet).value
+          !this.getValueFromInternalForm(Controls.ResourceGroup) ||
+          !this.getValueFromInternalForm(Controls.VNet)
             ? this._clearSubnet()
             : null
         )
       )
       .pipe(
         switchMap(_ =>
-          this.form.get(Controls.ResourceGroup).value && this.form.get(Controls.VNet).value
+          this.getValueFromInternalForm(Controls.ResourceGroup) && this.getValueFromInternalForm(Controls.VNet)
             ? this._subnetObservable()
             : of([])
         )
       )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(subnets => (this.subnets = subnets));
+      .subscribe(subnets => {
+        this.subnets = subnets;
+        this._setIsLoadingSubnets(false);
+      });
 
     this.form
       .get(Controls.ResourceGroup)
@@ -221,6 +244,11 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
     );
   }
 
+  getValueFromInternalForm(control: Controls): string {
+    const internalForm = this.form.get(control);
+    return internalForm ? internalForm[AutocompleteControls.Main] : '';
+  }
+
   private _resourceGroupObservable(): Observable<string[]> {
     let location = '';
     return this._datacenterService
@@ -273,7 +301,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
             .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
             .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
             .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
-            .resourceGroup(this.form.get(Controls.ResourceGroup).value)
+            .resourceGroup(this.getValueFromInternalForm(Controls.ResourceGroup))
             .location(location)
             .credential(this._presets.preset)
             .routeTables(() => this._setIsLoadingRouteTables(true))
@@ -311,7 +339,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
             .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
             .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
             .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
-            .resourceGroup(this.form.get(Controls.ResourceGroup).value)
+            .resourceGroup(this.getValueFromInternalForm(Controls.ResourceGroup))
             .location(location)
             .credential(this._presets.preset)
             .securityGroups(() => this._setIsLoadingSecurityGroups(true))
@@ -349,7 +377,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
             .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
             .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
             .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
-            .resourceGroup(this.form.get(Controls.ResourceGroup).value)
+            .resourceGroup(this.getValueFromInternalForm(Controls.ResourceGroup))
             .location(location)
             .credential(this._presets.preset)
             .vnets(() => this._setIsLoadingVnets(true))
@@ -382,8 +410,8 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
       .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
       .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
-      .resourceGroup(this.form.get(Controls.ResourceGroup).value)
-      .vnet(this.form.get(Controls.VNet).value)
+      .resourceGroup(this.getValueFromInternalForm(Controls.ResourceGroup))
+      .vnet(this.getValueFromInternalForm(Controls.VNet))
       .credential(this._presets.preset)
       .subnets(() => this._setIsLoadingSubnets(true))
       .pipe(

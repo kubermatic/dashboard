@@ -27,7 +27,7 @@ limitations under the License.
                    [isLoading]="isLoadingRouteTables"
                    [options]="routeTables">
     <ng-container hint
-                  *ngIf="!hasRequiredCredentials() || !form.get(Controls.ResourceGroup).value">
+                  *ngIf="!hasRequiredCredentials() || !getValueFromInternalForm(Controls.ResourceGroup)">
       Enter your credentials and resource group to load autocompletions.
     </ng-container>
   </km-autocomplete>
@@ -36,7 +36,7 @@ limitations under the License.
                    [isLoading]="isLoadingSecurityGroups"
                    [options]="securityGroups">
     <ng-container hint
-                  *ngIf="!hasRequiredCredentials() || !form.get(Controls.ResourceGroup).value">
+                  *ngIf="!hasRequiredCredentials() || !getValueFromInternalForm(Controls.ResourceGroup)">
       Enter your credentials and resource group to load autocompletions.
     </ng-container>
   </km-autocomplete>
@@ -45,7 +45,7 @@ limitations under the License.
                    [isLoading]="isLoadingVnets"
                    [options]="vnets">
     <ng-container hint
-                  *ngIf="!hasRequiredCredentials() || !form.get(Controls.ResourceGroup).value">
+                  *ngIf="!hasRequiredCredentials() || !getValueFromInternalForm(Controls.ResourceGroup)">
       Enter your credentials and resource group to load autocompletions.
     </ng-container>
   </km-autocomplete>
@@ -54,7 +54,7 @@ limitations under the License.
                    [isLoading]="isLoadingSubnets"
                    [options]="subnets">
     <ng-container hint
-                  *ngIf="!hasRequiredCredentials() || !form.get(Controls.ResourceGroup).value || !form.get(Controls.VNet).value">
+                  *ngIf="!hasRequiredCredentials() || !getValueFromInternalForm(Controls.ResourceGroup) || !getValueFromInternalForm(Controls.VNet)">
       Enter your credentials, resource group and VNet to load autocompletions.
     </ng-container>
   </km-autocomplete>
