@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '@shared/entity/cluster';
@@ -19,6 +19,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import * as _ from 'lodash';
+import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 
 enum Controls {
   SecurityGroup = 'securityGroup',
@@ -46,9 +47,12 @@ enum Controls {
 export class AWSProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _debounceTime = 1000;
   readonly Controls = Controls;
+  isLoadingSecurityGroups = false;
   securityGroups: string[] = [];
+  securityGroupValidators = [Validators.pattern('sg-(\\w{8}|\\w{17})')];
 
   constructor(
+    private readonly _cdr: ChangeDetectorRef,
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
     private readonly _clusterService: ClusterService
@@ -58,7 +62,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.SecurityGroup]: this._builder.control('', Validators.pattern('sg-(\\w{8}|\\w{17})')),
+      [Controls.SecurityGroup]: this._builder.control(''),
       [Controls.RouteTableID]: this._builder.control('', Validators.pattern('rtb-(\\w{8}|\\w{17})')),
       [Controls.InstanceProfileName]: this._builder.control(''),
       [Controls.RoleARN]: this._builder.control(''),
@@ -76,12 +80,17 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       });
 
     this._clusterService.clusterChanges
-      .pipe(debounceTime(this._debounceTime))
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AWS))
-      .pipe(tap(_ => (!this.hasRequiredCredentials() ? this._clearSecurityGroup() : null)))
-      .pipe(switchMap(_ => this._securityGroupObservable()))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(securityGroups => (this.securityGroups = securityGroups));
+      .pipe(
+        filter(_ => this._clusterService.provider === NodeProvider.AWS),
+        debounceTime(this._debounceTime),
+        tap(_ => (!this.hasRequiredCredentials() ? this._clearSecurityGroup() : null)),
+        switchMap(_ => this._securityGroupObservable()),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(securityGroups => {
+        this.securityGroups = securityGroups;
+        this._setIsLoadingSecurityGroup(false);
+      });
 
     merge(
       this.form.get(Controls.RouteTableID).valueChanges,
@@ -93,10 +102,12 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
 
     this.form
       .get(Controls.SecurityGroup)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(sg => {
-        this._clusterService.cluster.spec.cloud.aws.securityGroupID = sg;
-      });
+      .valueChanges.pipe(
+        filter(form => !!form),
+        map(form => form[AutocompleteControls.Main]),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(sg => (this._clusterService.cluster.spec.cloud.aws.securityGroupID = sg));
   }
 
   ngOnDestroy(): void {
@@ -116,7 +127,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       .provider(NodeProvider.AWS)
       .accessKeyID(this._clusterService.cluster.spec.cloud.aws.accessKeyId)
       .secretAccessKey(this._clusterService.cluster.spec.cloud.aws.secretAccessKey)
-      .securityGroups(this._clusterService.datacenter)
+      .securityGroups(this._clusterService.datacenter, () => this._setIsLoadingSecurityGroup(true))
       .pipe(
         map(securityGroups => _.sortBy(securityGroups, sg => sg.toLowerCase())),
         catchError(() => {
@@ -126,9 +137,15 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       );
   }
 
+  private _setIsLoadingSecurityGroup(isLoading: boolean): void {
+    this.isLoadingSecurityGroups = isLoading;
+    this._cdr.detectChanges();
+  }
+
   private _clearSecurityGroup(): void {
     this.securityGroups = [];
-    this.form.get(Controls.SecurityGroup).setValue('');
+    this.form.get(Controls.SecurityGroup).setValue(AutocompleteInitialState);
+    this._setIsLoadingSecurityGroup(false);
   }
 
   private _enable(enable: boolean, name: string): void {

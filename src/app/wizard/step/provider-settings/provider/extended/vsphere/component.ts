@@ -32,6 +32,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {EMPTY, forkJoin, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 
 enum Controls {
   VMNetName = 'vmNetName',
@@ -83,6 +84,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
   readonly Controls = Controls;
   datastores: string[] = [];
+  isLoadingDatastores = false;
   folders: VSphereFolder[] = [];
   folderLabel = FolderState.Empty;
   networkLabel = NetworkState.Empty;
@@ -104,8 +106,8 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     this.form = this._builder.group({
       [Controls.VMNetName]: this._builder.control({value: '', disabled: true}),
       [Controls.Folder]: this._builder.control({value: '', disabled: true}),
-      [Controls.Datastore]: this._builder.control({value: '', disabled: false}),
-      [Controls.DatastoreCluster]: this._builder.control({value: '', disabled: false}),
+      [Controls.Datastore]: this._builder.control(''),
+      [Controls.DatastoreCluster]: this._builder.control(''),
     });
 
     this.form.valueChanges
@@ -133,12 +135,17 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       });
 
     this._clusterService.clusterChanges
-      .pipe(debounceTime(this._debounceTime))
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.VSPHERE))
-      .pipe(tap(_ => (!this.hasRequiredCredentials() ? this._clearDatastores() : null)))
-      .pipe(switchMap(_ => this._datastoresObservable()))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(datastores => (this.datastores = datastores));
+      .pipe(
+        filter(_ => this._clusterService.provider === NodeProvider.VSPHERE),
+        debounceTime(this._debounceTime),
+        tap(_ => (!this.hasRequiredCredentials() ? this._clearDatastores() : null)),
+        switchMap(_ => this._datastoresObservable()),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(datastores => {
+        this.datastores = datastores;
+        this._setIsLoadingDatastores(false);
+      });
 
     // Mutually exclusive fields
     this.form
@@ -161,7 +168,11 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
     this.form
       .get(Controls.Datastore)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .valueChanges.pipe(
+        filter(form => !!form),
+        map(form => form[AutocompleteControls.Main]),
+        takeUntil(this._unsubscribe)
+      )
       .subscribe(d => (this._clusterService.cluster.spec.cloud.vsphere.datastore = d));
   }
 
@@ -306,7 +317,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .username(this._clusterService.cluster.spec.cloud.vsphere.username)
       .password(this._clusterService.cluster.spec.cloud.vsphere.password)
       .datacenter(this._clusterService.datacenter)
-      .datastores()
+      .datastores(() => this._setIsLoadingDatastores(true))
       .pipe(
         map(datastores => _.sortBy(datastores, d => d.toLowerCase())),
         catchError(() => {
@@ -318,7 +329,13 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
   private _clearDatastores(): void {
     this.datastores = [];
-    this.form.get(Controls.Datastore).setValue('');
+    this.form.get(Controls.Datastore).setValue(AutocompleteInitialState);
+    this._setIsLoadingDatastores(false);
+  }
+
+  private _setIsLoadingDatastores(isLoading: boolean): void {
+    this.isLoadingDatastores = isLoading;
+    this._cdr.detectChanges();
   }
 
   private _enable(enable: boolean, name: string): void {

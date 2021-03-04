@@ -9,27 +9,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {fadeInOut} from '../../animations/fade';
 
 @Component({
-  selector: 'km-settings-status',
-  templateUrl: './settings-status.component.html',
-  styleUrls: ['./settings-status.component.scss'],
+  selector: 'km-spinner-with-confirmation',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
   animations: [fadeInOut],
 })
-export class SettingsStatusComponent implements OnChanges {
+export class SpinnerWithConfirmationComponent implements OnChanges {
   private readonly _defaultTimeout = 3000;
-
+  isSaveConfirmationVisible = false;
   @Input() isSaved = true;
   @Input() confirmationTimeout = this._defaultTimeout;
 
-  isSaveConfirmationVisible = false;
+  constructor(private readonly _cdr: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.isSaved && !changes.isSaved.isFirstChange()) {
       this.isSaveConfirmationVisible = this.isSaved;
-      setTimeout(() => (this.isSaveConfirmationVisible = false), this.confirmationTimeout);
+      setTimeout(_ => {
+        this.isSaveConfirmationVisible = false;
+        this._cdr.detectChanges();
+      }, this.confirmationTimeout);
     }
   }
 }
