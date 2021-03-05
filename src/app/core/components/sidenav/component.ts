@@ -19,10 +19,9 @@ import {environment} from '@environments/environment';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
-import {CustomLink, CustomLinkLocation, filterCustomLinks, UserSettings} from '@shared/entity/settings';
+import {CustomLink, UserSettings} from '@shared/entity/settings';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import * as _ from 'lodash';
 import {BehaviorSubject, merge, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
@@ -62,12 +61,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
       this.settings = settings;
     });
 
-    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      const filtered = filterCustomLinks(settings.customLinks, CustomLinkLocation.Default);
-      if (!_.isEqual(this.customLinks, filtered)) {
-        this.customLinks = filtered;
-      }
-    });
+    this._settingsService.adminSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => (this.customLinks = settings.customLinks));
 
     merge(this._projectService.selectedProject, this._projectService.onProjectChange)
       .pipe(takeUntil(this._unsubscribe))
@@ -145,10 +141,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
       }
     }
     return tooltip;
-  }
-
-  isCustomLinkPanelVisible(): boolean {
-    return !_.isEmpty(this.customLinks);
   }
 
   getCustomLinkIconStyle(link: CustomLink): any {

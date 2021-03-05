@@ -11,10 +11,18 @@
 
 import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {CustomLink, CustomLinkLocation} from '@shared/entity/settings';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {CustomLink, CustomLinkLocation} from '../../../shared/entity/settings';
+
+enum Controls {
+  CustomLinks = 'customLinks',
+  Label = 'label',
+  URL = 'url',
+  Icon = 'icon',
+  Location = 'location',
+}
 
 @Component({
   selector: 'km-custom-links-form',
@@ -22,6 +30,21 @@ import {CustomLink, CustomLinkLocation} from '../../../shared/entity/settings';
   styleUrls: ['./style.scss'],
 })
 export class CustomLinksFormComponent implements OnDestroy {
+  readonly Location = CustomLinkLocation;
+  readonly Controls = Controls;
+
+  form: FormGroup;
+  @Output() customLinksChange = new EventEmitter<CustomLink[]>();
+
+  private _apiCustomLinks: CustomLink[] = [];
+  private _customLinks: CustomLink[] = [];
+  private _customLinksUpdated = new EventEmitter<void>();
+  private _unsubscribe = new Subject<void>();
+
+  @Input() set apiCustomLinks(links: CustomLink[]) {
+    this._apiCustomLinks = links;
+  }
+
   @Input()
   set customLinks(links: CustomLink[]) {
     if (_.isEqual(links, this._customLinks)) {
@@ -32,26 +55,18 @@ export class CustomLinksFormComponent implements OnDestroy {
     this._customLinksUpdated.emit();
   }
 
-  @Input() set apiCustomLinks(links: CustomLink[]) {
-    this._apiCustomLinks = links;
+  get customLinksArray(): FormArray {
+    return this.form.get(Controls.CustomLinks) as FormArray;
   }
-
-  @Output() customLinksChange = new EventEmitter<CustomLink[]>();
-  form: FormGroup;
-
-  private _apiCustomLinks: CustomLink[] = [];
-  private _customLinks: CustomLink[] = [];
-  private _customLinksUpdated = new EventEmitter<void>();
-  private _unsubscribe = new Subject<void>();
 
   constructor(private readonly _formBuilder: FormBuilder) {
     this.form = this._formBuilder.group({
-      customLinks: this._formBuilder.array([
+      [Controls.CustomLinks]: this._formBuilder.array([
         this._formBuilder.group({
-          label: [{value: '', disabled: false}, Validators.required],
-          url: [{value: '', disabled: false}, Validators.required],
-          icon: [{value: '', disabled: false}],
-          location: [{value: CustomLinkLocation.Default, disabled: false}],
+          [Controls.Label]: [{value: '', disabled: false}, Validators.required],
+          [Controls.URL]: [{value: '', disabled: false}, Validators.required],
+          [Controls.Icon]: [{value: '', disabled: false}],
+          [Controls.Location]: [{value: CustomLinkLocation.Default, disabled: false}],
         }),
       ]),
     });
@@ -59,11 +74,11 @@ export class CustomLinksFormComponent implements OnDestroy {
     this._customLinksUpdated.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._rebuildLinks());
   }
 
-  ngOnInit() {}
-
-  get customLinksArray(): FormArray {
-    return this.form.get('customLinks') as FormArray;
+  private static _isFilled(customLink: AbstractControl): boolean {
+    return customLink.get(Controls.Label).value.length !== 0 && customLink.get(Controls.URL).value.length !== 0;
   }
+
+  ngOnInit() {}
 
   ngOnDestroy() {
     this._unsubscribe.next();
@@ -94,10 +109,6 @@ export class CustomLinksFormComponent implements OnDestroy {
 
     // Check if link is already part of links returned from the API.
     return this._apiCustomLinks && this._apiCustomLinks.filter(cl => _.isEqual(cl, customLink)).length > 0;
-  }
-
-  private static _isFilled(customLink: AbstractControl): boolean {
-    return customLink.get('label').value.length !== 0 && customLink.get('url').value.length !== 0;
   }
 
   private _addLabelIfNeeded(): void {

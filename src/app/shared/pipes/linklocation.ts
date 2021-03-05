@@ -10,11 +10,15 @@
 // limitations under the License.
 
 import {Pipe, PipeTransform} from '@angular/core';
-import * as moment from 'moment';
+import {CustomLink, CustomLinkLocation} from '@shared/entity/settings';
 
-@Pipe({name: 'kmRelativeTime'})
-export class RelativeTimePipe implements PipeTransform {
-  transform(value: string): string {
-    return moment(value).fromNow();
+@Pipe({name: 'kmLinkLocation'})
+export class LinkLocationPipe implements PipeTransform {
+  transform(links: CustomLink[], location: keyof typeof CustomLinkLocation): CustomLink[] {
+    if (!location) {
+      throw new Error("Missing required parameter: 'location'");
+    }
+
+    return links ? links.filter(link => link.location === CustomLinkLocation[location]) : [];
   }
 }

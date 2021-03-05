@@ -48,6 +48,14 @@ limitations under the License.
            (click)="goToAPIDocs()">
         API Documentation
       </div>
+
+      <div *ngFor="let link of settings?.customLinks | kmLinkLocation: 'HelpPanel'"
+           class="km-hover-bg">
+        <a [href]="link.url"
+           class="custom-link"
+           target="_blank"
+           rel="noopener">{{link.label}}</a>
+      </div>
     </div>
   </div>
 </div>

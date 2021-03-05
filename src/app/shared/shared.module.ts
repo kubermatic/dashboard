@@ -49,6 +49,7 @@ import {NotificationComponent} from '@core/components/notification/component';
 import {EventCardComponent} from '@shared/components/event-card/component';
 import {TabCardComponent} from '@shared/components/tab-card/component';
 import {TabComponent} from '@shared/components/tab-card/tab/component';
+import {LinkLocationPipe} from '@shared/pipes/linklocation';
 import {ClipboardModule} from 'ngx-clipboard';
 import {CustomFormsModule} from 'ngx-custom-validators';
 import {FilterPipeModule} from 'ngx-filter-pipe';
@@ -170,6 +171,7 @@ const components: any[] = [
   TabCardComponent,
   TabComponent,
   AutocompleteComponent,
+  LinkLocationPipe,
 ];
 
 const services: any[] = [ClusterService, EndOfLifeService];
