@@ -149,13 +149,19 @@
     }
   }
 
-  .km-panel .panel {
-    background-color: map-get($colors, background-app-bar);
-    box-shadow: map-get($colors, shadow-dark);
-    color: map-get($colors, text);
+  .km-panel {
+    .panel {
+      background-color: map-get($colors, background-app-bar);
+      box-shadow: map-get($colors, shadow-dark);
+      color: map-get($colors, text);
 
-    .notification-info .km-icon-mask {
-      background-color: map-get($colors, text-secondary);
+      .notification-info .km-icon-mask {
+        background-color: map-get($colors, text-secondary);
+      }
+
+      .custom-link {
+        color: map-get($colors, text);
+      }
     }
   }
 

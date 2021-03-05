@@ -11,7 +11,7 @@
 
 import {Component, Input, SecurityContext} from '@angular/core';
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
-import {AdminSettings, CustomLink, CustomLinkLocation, filterCustomLinks} from '@shared/entity/settings';
+import {AdminSettings, CustomLink} from '@shared/entity/settings';
 import {VersionInfo} from '@shared/entity/version-info';
 
 @Component({
@@ -28,8 +28,7 @@ export class FooterComponent {
   constructor(private readonly _sanitizer: DomSanitizer) {}
 
   getCustomLinks(): CustomLink[] {
-    const customLinks = this.authenticated ? this.settings.customLinks : this.customLinks;
-    return filterCustomLinks(customLinks, CustomLinkLocation.Footer);
+    return this.authenticated ? this.settings.customLinks : this.customLinks;
   }
 
   getBackgroundImageUrlStyle(link: CustomLink): SafeStyle {

@@ -15,7 +15,7 @@ import {ChangelogManagerService} from '@core/services/changelog/listener';
 import {ChangelogService} from '@core/services/changelog/service';
 import {SettingsService} from '@core/services/settings/service';
 import {slideOut} from '@shared/animations/slide';
-import {AdminSettings} from '@shared/entity/settings';
+import {AdminSettings, CustomLinkLocation} from '@shared/entity/settings';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -77,6 +77,10 @@ export class HelpPanelComponent implements OnInit {
   }
 
   shouldShowPanel(): boolean {
-    return this.hasChangelog() || this.settings.displayAPIDocs;
+    return (
+      this.hasChangelog() ||
+      this.settings.displayAPIDocs ||
+      this.settings.customLinks.some(link => link.location === CustomLinkLocation.HelpPanel)
+    );
   }
 }

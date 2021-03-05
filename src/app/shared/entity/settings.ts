@@ -97,19 +97,7 @@ export enum CustomLinkIcon {
 export enum CustomLinkLocation {
   Default = 'default',
   Footer = 'footer',
-}
-
-export function filterCustomLinks(links: CustomLink[], location?: CustomLinkLocation): CustomLink[] {
-  return links.filter(link => {
-    // Return all links if the location param is not specified.
-    return (
-      !location ||
-      // Return link if location does match.
-      location === link.location ||
-      // Return link if default location was specified and link config is missing or is invalid.
-      (location === CustomLinkLocation.Default && !Object.values(CustomLinkLocation).includes(link.location))
-    );
-  });
+  HelpPanel = 'panel',
 }
 
 export const DEFAULT_USER_SETTINGS: UserSettings = {

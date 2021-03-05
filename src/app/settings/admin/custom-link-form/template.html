@@ -12,7 +12,7 @@ limitations under the License.
 -->
 <form [formGroup]="form"
       fxLayout="column">
-  <div formArrayName="customLinks">
+  <div [formArrayName]="Controls.CustomLinks">
     <div *ngFor="let control of customLinksArray.controls; let i = index;"
          [formGroupName]="i"
          fxLayout="row"
@@ -21,9 +21,9 @@ limitations under the License.
         <mat-label>Label</mat-label>
         <input matInput
                (keyup)="check()"
-               name="label"
-               formControlName="label">
-        <mat-error *ngIf="control.get('label').errors?.required"
+               [name]="Controls.Label"
+               [formControlName]="Controls.Label">
+        <mat-error *ngIf="control.get(Controls.Label).errors?.required"
                    i18n>
           Label is required.
         </mat-error>
@@ -32,9 +32,9 @@ limitations under the License.
         <mat-label>URL</mat-label>
         <input matInput
                (keyup)="check()"
-               name="url"
-               formControlName="url">
-        <mat-error *ngIf="control.get('url').errors?.required"
+               [name]="Controls.URL"
+               [formControlName]="Controls.URL">
+        <mat-error *ngIf="control.get(Controls.URL).errors?.required"
                    i18n>
           URL is required.
         </mat-error>
@@ -43,16 +43,17 @@ limitations under the License.
         <mat-label>Icon</mat-label>
         <input matInput
                (keyup)="check()"
-               name="icon"
-               formControlName="icon">
+               [name]="Controls.Icon"
+               [formControlName]="Controls.Icon">
       </mat-form-field>
       <mat-form-field fxFlex="13">
         <mat-label>Location</mat-label>
-        <mat-select formControlName="location"
+        <mat-select [formControlName]="Controls.Location"
                     disableOptionCentering
                     (selectionChange)="check()">
-          <mat-option value="default">Sidebar</mat-option>
-          <mat-option value="footer">Footer</mat-option>
+          <mat-option [value]="Location.Default">Sidebar</mat-option>
+          <mat-option [value]="Location.Footer">Footer</mat-option>
+          <mat-option [value]="Location.HelpPanel">Help & Support</mat-option>
         </mat-select>
       </mat-form-field>
       <button mat-icon-button

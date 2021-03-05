@@ -34,7 +34,7 @@ limitations under the License.
     <div *ngIf="settings?.displayDemoInfo">Demo system</div>
   </div>
 
-  <div *ngFor="let link of getCustomLinks()"
+  <div *ngFor="let link of getCustomLinks() | kmLinkLocation: 'Footer'"
        fxFlexAlign="center"
        fxLayoutAlign="end center">
     <a [href]="link.url"

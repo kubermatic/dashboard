@@ -60,10 +60,10 @@ limitations under the License.
       <span *ngIf="!isSidenavCollapsed()">Service Accounts</span></a>
   </div>
 
-  <mat-divider *ngIf="isCustomLinkPanelVisible()"></mat-divider>
+  <ng-container *ngIf="(customLinks | kmLinkLocation: 'Default') as filtered">
+    <mat-divider *ngIf="filtered.length > 0"></mat-divider>
 
-  <div *ngIf="isCustomLinkPanelVisible()">
-    <div *ngFor="let link of customLinks"
+    <div *ngFor="let link of filtered"
          class="menu-item">
       <a [href]="link.url"
          fxLayoutAlign=" center"
@@ -73,7 +73,7 @@ limitations under the License.
         <span *ngIf="!isSidenavCollapsed()">{{link.label}}</span>
       </a>
     </div>
-  </div>
+  </ng-container>
 
   <div fxFlex></div>
 
