@@ -66,6 +66,7 @@ export function fakeAzureSizes(): AzureSizes[] {
       maxDataDiskCount: 1,
       memoryInMB: 768,
       numberOfCores: 1,
+      numberOfGPUs: 1,
       osDiskSizeInMB: 1047552,
       resourceDiskSizeInMB: 20480,
     },

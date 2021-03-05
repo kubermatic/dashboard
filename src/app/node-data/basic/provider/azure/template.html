@@ -23,9 +23,7 @@ limitations under the License.
                [label]="sizeLabel"
                inputLabel="Select size..."
                filterBy="name">
-    <div *option="let size">
-      {{size.name}} ({{size.numberOfCores}} vCPU, {{size.memoryInMB}} MB RAM)
-    </div>
+    <div *option="let size">{{getSizeDisplayName(size)}}</div>
   </km-combobox>
 
   <km-combobox [required]="false"

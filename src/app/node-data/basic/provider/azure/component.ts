@@ -156,11 +156,13 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
   sizeDisplayName(sizeName: string): string {
     const size = this.sizes.find(size => size.name === sizeName);
-    if (!size) {
-      return sizeName;
-    }
+    return size ? this.getSizeDisplayName(size) : sizeName;
+  }
 
-    return `${size.name} (${size.numberOfCores} vCPU, ${size.memoryInMB} MB RAM)`;
+  getSizeDisplayName(s: AzureSizes): string {
+    const gpu = s.numberOfGPUs > 0 ? ` ${s.numberOfGPUs} GPU,` : '';
+    return `${s.name} (${s.numberOfCores} vCPU,${gpu} ${s.memoryInMB} MB RAM)`;
+
   }
 
   private _init(): void {
