@@ -32,7 +32,8 @@
     "fix:license": "license-check-and-add add",
     "clean": "gts clean",
     "vi": "node version.js",
-    "postinstall": "ngcc"
+    "postinstall": "ngcc",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@angular/animations": "11.1.0",
@@ -212,11 +213,6 @@
     "node_modules/*",
     "src/assets/*"
   ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged && npm run check:license && npm run check:dependency-licenses"
-    }
-  },
   "lint-staged": {
     "src/**/*.ts": [
       "gts fix"
