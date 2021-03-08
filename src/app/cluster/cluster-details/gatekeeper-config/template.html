@@ -14,12 +14,14 @@ limitations under the License.
 <div *ngIf="!isLoadingData() && !hasNoData()"
      class="header">
   <div fxFlex></div>
-  <button mat-icon-button
+  <button id="km-gatekeeper-config-edit-btn"
+          mat-icon-button
           matTooltip="Edit Gatekeeper Config"
           (click)="edit()">
     <i class="km-icon-edit"></i>
   </button>
-  <button mat-icon-button
+  <button id="km-gatekeeper-config-delete-btn"
+          mat-icon-button
           matTooltip="Delete Gatekeeper Config"
           (click)="delete()">
     <i class="km-icon-delete"></i>
@@ -170,7 +172,8 @@ limitations under the License.
 
 <div class="km-empty-list-msg no-items"
      *ngIf="hasNoData()">
-  <button (click)="add()"
+  <button id="km-gatekeeper-config-add-btn"
+          (click)="add()"
           mat-flat-button
           [disabled]="!isClusterRunning">Add Gatekeeper Config
   </button>

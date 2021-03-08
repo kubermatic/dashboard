@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Constraint, ConstraintTemplate, GatekeeperConfig} from '@shared/entity/opa';
+import {Constraint, ConstraintTemplate, GatekeeperConfig, Violation} from '@shared/entity/opa';
 
 export function fakeConstraintTemplates(): ConstraintTemplate[] {
   return [
@@ -86,6 +86,28 @@ export function fakeConstraintTemplates(): ConstraintTemplate[] {
 export function fakeConstraints(): Constraint[] {
   return [
     {
+      name: 'denyNameConstraint',
+      spec: {
+        constraintType: 'K8sDenyName',
+        match: {
+          kinds: [
+            {
+              kinds: ['Namespace'],
+              apiGroups: [''],
+            },
+          ],
+          labelSelector: {},
+          namespaceSelector: {},
+        },
+        parameters: {
+          rawJSON: '{"labels":["gatekeeper"]}',
+        },
+      },
+      status: {
+        auditTimestamp: '2021-01-01T12:33:55Z',
+      },
+    },
+    {
       name: 'reqLabelsConstraint',
       spec: {
         constraintType: 'K8sRequiredLabels',
@@ -119,28 +141,6 @@ export function fakeConstraints(): Constraint[] {
             name: 'gatekeeper-system',
           },
         ],
-      },
-    },
-    {
-      name: 'denyNameConstraint',
-      spec: {
-        constraintType: 'K8sDenyName',
-        match: {
-          kinds: [
-            {
-              kinds: ['Namespace'],
-              apiGroups: [''],
-            },
-          ],
-          labelSelector: {},
-          namespaceSelector: {},
-        },
-        parameters: {
-          rawJSON: '{"labels":["gatekeeper"]}',
-        },
-      },
-      status: {
-        auditTimestamp: '2021-01-01T12:33:55Z',
       },
     },
   ];
@@ -202,4 +202,21 @@ export function fakeGatekeeperConfig(): GatekeeperConfig {
       },
     },
   };
+}
+
+export function fakeViolations(): Violation[] {
+  return [
+    {
+      enforcementAction: 'deny',
+      kind: 'Namespace',
+      message: 'you must provide labels: {"gatekeeper"}',
+      name: 'default',
+    },
+    {
+      enforcementAction: 'deny',
+      kind: 'Namespace',
+      message: 'you must provide labels: {"gatekeeper"}',
+      name: 'gatekeeper-system',
+    },
+  ];
 }
