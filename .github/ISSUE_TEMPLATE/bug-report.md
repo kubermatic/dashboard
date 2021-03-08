@@ -1,7 +1,7 @@
 ---
 name: Bug Report
 about: Report a bug encountered while operating Kubermatic Dashboard
-labels: kind/bug, team/ui
+labels: kind/bug, sig/ui
 
 ---
 
