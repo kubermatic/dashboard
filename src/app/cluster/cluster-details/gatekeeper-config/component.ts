@@ -50,7 +50,7 @@ export class GatekeeperConfigComponent implements OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (!!changes.gatekeeperConfig && !!this.gatekeeperConfig) {
-      this.syncDataSource.data =  _.get(this.gatekeeperConfig, 'spec.sync.syncOnly') || [];
+      this.syncDataSource.data = _.get(this.gatekeeperConfig, 'spec.sync.syncOnly') || [];
       this.matchDataSource.data = _.get(this.gatekeeperConfig, 'spec.match') || [];
       this.validationDataSource.data = _.get(this.gatekeeperConfig, 'spec.validation.traces') || [];
     }
