@@ -70,6 +70,7 @@ presubmits:
   labels:
     preset-digitalocean: "true"
     preset-openstack: "true"
+    preset-aws: "true"
     preset-azure: "true"
     preset-gce: "true"
     preset-kubeconfig-ci: "true"
@@ -111,6 +112,7 @@ presubmits:
   labels:
     preset-digitalocean: "true"
     preset-openstack: "true"
+    preset-aws: "true"
     preset-azure: "true"
     preset-gce: "true"
     preset-kubeconfig-ci: "true"
