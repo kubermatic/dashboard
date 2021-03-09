@@ -108,9 +108,9 @@ export class OPAService {
     const id = `${projectId}-${clusterId}`;
 
     if (!this._gatekeeperConfig$.get(id)) {
-      const _gatekeeperConfig$ = merge(this._gatekeeperConfigRefresh$, this._refreshTimer$)
+      const _gatekeeperConfig$ = merge(of(false), this._gatekeeperConfigRefresh$)
         .pipe(switchMap(_ => this._getGatekeeperConfig(projectId, clusterId)))
-        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+        .pipe(shareReplay(1));
 
       this._gatekeeperConfig$.set(id, _gatekeeperConfig$);
     }
