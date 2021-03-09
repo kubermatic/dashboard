@@ -11,6 +11,7 @@
 
 export enum Provider {
   BringYourOwn = 'bringyourown',
+  AWS = 'aws',
   Digitalocean = 'digitalocean',
 }
 

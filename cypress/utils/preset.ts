@@ -11,4 +11,5 @@
 
 export enum Preset {
   Digitalocean = 'e2e-digitalocean',
+  AWS = 'e2e-aws',
 }
