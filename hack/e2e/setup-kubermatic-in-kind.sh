@@ -127,7 +127,7 @@ spec:
     accessKeyID: ${AWS_E2E_TESTS_KEY_ID}
     secretAccessKey: ${AWS_E2E_TESTS_SECRET}
 EOF
-retry 2 kubectl apply -f preset-azure.yaml
+retry 2 kubectl apply -f preset-aws.yaml
 
 echodate "Creating UI Azure preset..."
 cat <<EOF > preset-azure.yaml
