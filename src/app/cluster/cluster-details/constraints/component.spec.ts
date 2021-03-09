@@ -27,7 +27,7 @@ import {of} from 'rxjs';
 import {ConstraintsComponent} from './component';
 import {ViolationDetailsComponent} from './violation-details/component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule,DialogTestModule];
+const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule];
 
 describe('ConstraintsComponent', () => {
   let fixture: ComponentFixture<ConstraintsComponent>;
@@ -70,9 +70,12 @@ describe('ConstraintsComponent', () => {
     })
   );
 
-  it('should create the constraints component', waitForAsync(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the constraints component',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should filter constraints by constraint template', fakeAsync(() => {
     component.constraintTemplateFilter = fakeConstraintTemplates()[0].spec.crd.spec.names.kind;

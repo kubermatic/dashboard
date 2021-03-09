@@ -33,17 +33,17 @@ describe('ConstraintDialog', () => {
   let component: ConstraintDialog;
   let createConstraintSpy;
   let patchConstraintSpy;
-  
+
   beforeEach(
     waitForAsync(() => {
-    const opaMock = {
-      createConstraint: jest.fn(),
-      patchConstraint: jest.fn(),
-      constraintTemplates: of(fakeConstraintTemplates()),
-      refreshConstraint: () => {},
-    };
-    createConstraintSpy = opaMock.createConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
-    patchConstraintSpy = opaMock.patchConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
+      const opaMock = {
+        createConstraint: jest.fn(),
+        patchConstraint: jest.fn(),
+        constraintTemplates: of(fakeConstraintTemplates()),
+        refreshConstraint: () => {},
+      };
+      createConstraintSpy = opaMock.createConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
+      patchConstraintSpy = opaMock.patchConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
 
       TestBed.configureTestingModule({
         imports: [...modules],
@@ -51,15 +51,18 @@ describe('ConstraintDialog', () => {
         providers: [
           {provide: MatDialogRef, useClass: MatDialogRefMock},
           {provide: OPAService, useValue: opaMock},
-          {provide: MAT_DIALOG_DATA, useValue: {
-            title: '',
-            projectId: '',
-            clusterId: '',
-            mode: '',
-            confirmLabel: '',
-          }},
+          {
+            provide: MAT_DIALOG_DATA,
+            useValue: {
+              title: '',
+              projectId: '',
+              clusterId: '',
+              mode: '',
+              confirmLabel: '',
+            },
+          },
           NotificationService,
-          {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => monaco = (window as any).monaco}}
+          {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
         ],
       }).compileComponents();
     })
@@ -77,13 +80,16 @@ describe('ConstraintDialog', () => {
         clusterId: '4k6txp5sq',
         mode: Mode.Add,
         confirmLabel: 'Add',
-      }
+      };
       fixture.detectChanges();
     });
 
-    it('should create the add constraint dialog', waitForAsync(() => {
-      expect(component).toBeTruthy();
-    }));
+    it(
+      'should create the add constraint dialog',
+      waitForAsync(() => {
+        expect(component).toBeTruthy();
+      })
+    );
 
     it('should have correct title: add', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toBe('Add Constraint');
@@ -113,13 +119,16 @@ describe('ConstraintDialog', () => {
         mode: Mode.Edit,
         confirmLabel: 'Edit',
         constraint: fakeConstraints()[0],
-      }
+      };
       fixture.detectChanges();
     });
 
-    it('should create the edit constraint dialog', waitForAsync(() => {
-      expect(component).toBeTruthy();
-    }));
+    it(
+      'should create the edit constraint dialog',
+      waitForAsync(() => {
+        expect(component).toBeTruthy();
+      })
+    );
 
     it('should have correct title: edit', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toContain('Edit Constraint');

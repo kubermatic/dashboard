@@ -32,16 +32,16 @@ describe('GatekeeperConfigDialog', () => {
   let component: GatekeeperConfigDialog;
   let createGatekeeperConfigSpy;
   let patchGatekeeperConfigSpy;
-  
+
   beforeEach(
     waitForAsync(() => {
-    const opaMock = {
-      createGatekeeperConfig: jest.fn(),
-      patchGatekeeperConfig: jest.fn(),
-      refreshGatekeeperConfig: () => {},
-    };
-    createGatekeeperConfigSpy = opaMock.createGatekeeperConfig.mockReturnValue(asyncData(fakeGatekeeperConfig()));
-    patchGatekeeperConfigSpy = opaMock.patchGatekeeperConfig.mockReturnValue(asyncData(fakeGatekeeperConfig()));
+      const opaMock = {
+        createGatekeeperConfig: jest.fn(),
+        patchGatekeeperConfig: jest.fn(),
+        refreshGatekeeperConfig: () => {},
+      };
+      createGatekeeperConfigSpy = opaMock.createGatekeeperConfig.mockReturnValue(asyncData(fakeGatekeeperConfig()));
+      patchGatekeeperConfigSpy = opaMock.patchGatekeeperConfig.mockReturnValue(asyncData(fakeGatekeeperConfig()));
 
       TestBed.configureTestingModule({
         imports: [...modules],
@@ -49,15 +49,18 @@ describe('GatekeeperConfigDialog', () => {
         providers: [
           {provide: MatDialogRef, useClass: MatDialogRefMock},
           {provide: OPAService, useValue: opaMock},
-          {provide: MAT_DIALOG_DATA, useValue: {
-            title: '',
-            projectId: '',
-            clusterId: '',
-            mode: '',
-            confirmLabel: '',
-          }},
+          {
+            provide: MAT_DIALOG_DATA,
+            useValue: {
+              title: '',
+              projectId: '',
+              clusterId: '',
+              mode: '',
+              confirmLabel: '',
+            },
+          },
           NotificationService,
-          {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => monaco = (window as any).monaco}}
+          {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
         ],
       }).compileComponents();
     })
@@ -75,13 +78,16 @@ describe('GatekeeperConfigDialog', () => {
         clusterId: '4k6txp5sq',
         mode: Mode.Add,
         confirmLabel: 'Add',
-      }
+      };
       fixture.detectChanges();
     });
 
-    it('should create the add gatekeeper config dialog', waitForAsync(() => {
-      expect(component).toBeTruthy();
-    }));
+    it(
+      'should create the add gatekeeper config dialog',
+      waitForAsync(() => {
+        expect(component).toBeTruthy();
+      })
+    );
 
     it('should have correct title: add', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toBe('Add Gatekeeper Config');
@@ -111,13 +117,16 @@ describe('GatekeeperConfigDialog', () => {
         mode: Mode.Edit,
         confirmLabel: 'Edit',
         gatekeeperConfig: fakeGatekeeperConfig(),
-      }
+      };
       fixture.detectChanges();
     });
 
-    it('should create the edit gatekeeper config dialog', waitForAsync(() => {
-      expect(component).toBeTruthy();
-    }));
+    it(
+      'should create the edit gatekeeper config dialog',
+      waitForAsync(() => {
+        expect(component).toBeTruthy();
+      })
+    );
 
     it('should have correct title: edit', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toContain('Edit Gatekeeper Config');

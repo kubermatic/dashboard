@@ -64,9 +64,12 @@ describe('ConstraintTemplatesComponent', () => {
     })
   );
 
-  it('should create the constraint templates component', waitForAsync(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the constraint templates component',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should open the delete constraint template confirmation dialog & call delete()', fakeAsync(() => {
     const waitTime = 15000;

@@ -42,7 +42,10 @@ describe('ViolationDetailsComponent', () => {
     })
   );
 
-  it('should create the constraints component', waitForAsync(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the constraints component',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 });

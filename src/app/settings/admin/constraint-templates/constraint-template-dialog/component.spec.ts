@@ -32,16 +32,16 @@ describe('ConstraintTemplateDialog', () => {
   let component: ConstraintTemplateDialog;
   let createCTSpy;
   let patchCTSpy;
-  
+
   beforeEach(
     waitForAsync(() => {
-    const opaMock = {
-      createConstraintTemplate: jest.fn(),
-      patchConstraintTemplate: jest.fn(),
-      refreshConstraintTemplates: () => {},
-    };
-    createCTSpy = opaMock.createConstraintTemplate.mockReturnValue(asyncData(fakeConstraintTemplates()[0]));
-    patchCTSpy = opaMock.patchConstraintTemplate.mockReturnValue(asyncData(fakeConstraintTemplates()[0]));
+      const opaMock = {
+        createConstraintTemplate: jest.fn(),
+        patchConstraintTemplate: jest.fn(),
+        refreshConstraintTemplates: () => {},
+      };
+      createCTSpy = opaMock.createConstraintTemplate.mockReturnValue(asyncData(fakeConstraintTemplates()[0]));
+      patchCTSpy = opaMock.patchConstraintTemplate.mockReturnValue(asyncData(fakeConstraintTemplates()[0]));
 
       TestBed.configureTestingModule({
         imports: [...modules],
@@ -49,13 +49,16 @@ describe('ConstraintTemplateDialog', () => {
         providers: [
           {provide: MatDialogRef, useClass: MatDialogRefMock},
           {provide: OPAService, useValue: opaMock},
-          {provide: MAT_DIALOG_DATA, useValue: {
-            title: '',
-            mode: '',
-            confirmLabel: '',
-          }},
+          {
+            provide: MAT_DIALOG_DATA,
+            useValue: {
+              title: '',
+              mode: '',
+              confirmLabel: '',
+            },
+          },
           NotificationService,
-          {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => monaco = (window as any).monaco}}
+          {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
         ],
       }).compileComponents();
     })
@@ -71,13 +74,16 @@ describe('ConstraintTemplateDialog', () => {
         title: 'Add Constraint Template',
         mode: Mode.Add,
         confirmLabel: 'Add',
-      }
+      };
       fixture.detectChanges();
     });
 
-    it('should create the add constraint template dialog', waitForAsync(() => {
-      expect(component).toBeTruthy();
-    }));
+    it(
+      'should create the add constraint template dialog',
+      waitForAsync(() => {
+        expect(component).toBeTruthy();
+      })
+    );
 
     it('should have correct title: add', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toBe('Add Constraint Template');
@@ -105,13 +111,16 @@ describe('ConstraintTemplateDialog', () => {
         mode: Mode.Edit,
         confirmLabel: 'Edit',
         constraintTemplate: fakeConstraintTemplates()[0],
-      }
+      };
       fixture.detectChanges();
     });
 
-    it('should create the edit constraint template dialog', waitForAsync(() => {
-      expect(component).toBeTruthy();
-    }));
+    it(
+      'should create the edit constraint template dialog',
+      waitForAsync(() => {
+        expect(component).toBeTruthy();
+      })
+    );
 
     it('should have correct title: edit', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toContain('Edit Constraint Template');

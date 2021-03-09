@@ -43,11 +43,7 @@ describe('GatekeeperConfigComponent', () => {
       TestBed.configureTestingModule({
         imports: [...modules],
         declarations: [GatekeeperConfigComponent],
-        providers: [
-          {provide: OPAService, useValue: opaMock},
-          MatDialog,
-          NotificationService,
-        ],
+        providers: [{provide: OPAService, useValue: opaMock}, MatDialog, NotificationService],
       }).compileComponents();
     })
   );
