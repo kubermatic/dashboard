@@ -173,5 +173,18 @@ spec:
 EOF
 retry 2 kubectl apply -f preset-openstack.yaml
 
+echodate "Creating UI Anexia preset..."
+cat <<EOF > preset-anexia.yaml
+apiVersion: kubermatic.k8s.io/v1
+kind: Preset
+metadata:
+  name: e2e-anexia
+  namespace: kubermatic
+spec:
+  anexia:
+    token: ${ANEXIA_TOKEN}
+EOF
+retry 2 kubectl apply -f preset-anexia.yaml
+
 echodate "Applying user..."
 retry 2 kubectl apply -f hack/e2e/fixtures/user.yaml

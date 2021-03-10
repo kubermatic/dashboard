@@ -16,39 +16,39 @@ import {View} from '../utils/view';
 import {ClustersPage} from './clusters.po';
 
 export class ProjectsPage {
-  static getProjectItem(projectName: string): Cypress.Chainable<any> {
+  static getProjectItem(projectName: string): Cypress.Chainable {
     return cy.get(`#km-project-name-${projectName}`);
   }
 
-  static getActiveProjects(): Cypress.Chainable<any> {
+  static getActiveProjects(): Cypress.Chainable {
     return cy.get('i.km-health-state.km-icon-circle.km-success-bg', {timeout: 300000});
   }
 
-  static getAddProjectBtn(): Cypress.Chainable<any> {
+  static getAddProjectBtn(): Cypress.Chainable {
     return cy.get('#km-add-project-top-btn', {timeout: 10000});
   }
 
-  static getAddProjectInput(): Cypress.Chainable<any> {
+  static getAddProjectInput(): Cypress.Chainable {
     return cy.get('#km-add-project-dialog-input');
   }
 
-  static getAddProjectConfirmBtn(): Cypress.Chainable<any> {
+  static getAddProjectConfirmBtn(): Cypress.Chainable {
     return cy.get('#km-add-project-dialog-save');
   }
 
-  static getDeleteProjectBtn(projectName: string): Cypress.Chainable<any> {
+  static getDeleteProjectBtn(projectName: string): Cypress.Chainable {
     return cy.get(`#km-delete-project-${projectName}`);
   }
 
-  static getEditProjectBtn(projectName: string): Cypress.Chainable<any> {
+  static getEditProjectBtn(projectName: string): Cypress.Chainable {
     return cy.get(`#km-edit-project-${projectName}`);
   }
 
-  static getEditDialogInput(): Cypress.Chainable<any> {
+  static getEditDialogInput(): Cypress.Chainable {
     return cy.get('#km-edit-project-dialog-input');
   }
 
-  static getEditDialogConfirmBtn(): Cypress.Chainable<any> {
+  static getEditDialogConfirmBtn(): Cypress.Chainable {
     return cy.get('#km-edit-project-dialog-edit-btn');
   }
 

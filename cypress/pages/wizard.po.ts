@@ -14,32 +14,42 @@ import {Preset} from '../utils/preset';
 import {View} from '../utils/view';
 import {WizardStep} from '../utils/wizard';
 
+class Anexia {
+  static getTemplateIDInput(): Cypress.Chainable {
+    return cy.get('#templateID');
+  }
+
+  static getVlanIDInput(): Cypress.Chainable {
+    return cy.get('#vlanID');
+  }
+}
+
 export class WizardPage {
-  static getNextBtn(stepName: WizardStep): Cypress.Chainable<any> {
+  static getNextBtn(stepName: WizardStep): Cypress.Chainable {
     return cy.get(`#km-wizard-${stepName}-next-btn`);
   }
 
-  static getClusterNameInput(): Cypress.Chainable<any> {
+  static getClusterNameInput(): Cypress.Chainable {
     return cy.get('#km-wizard-cluster-name-input');
   }
 
-  static getCreateBtn(): Cypress.Chainable<any> {
+  static getCreateBtn(): Cypress.Chainable {
     return cy.get('#km-wizard-create-btn');
   }
 
-  static getProviderBtn(providerName: string): Cypress.Chainable<any> {
+  static getProviderBtn(providerName: string): Cypress.Chainable {
     return cy.get(`.km-provider-logo-${providerName}`);
   }
 
-  static getDatacenterBtn(datacenterName: string): Cypress.Chainable<any> {
+  static getDatacenterBtn(datacenterName: string): Cypress.Chainable {
     return cy.get('button').contains('.km-location', datacenterName);
   }
 
-  static getCustomPresetsCombobox(): Cypress.Chainable<any> {
+  static getCustomPresetsCombobox(): Cypress.Chainable {
     return cy.get('#km-wizard-select-preset');
   }
 
-  static getPreset(preset: Preset): Cypress.Chainable<any> {
+  static getPreset(preset: Preset): Cypress.Chainable {
     return cy.get('mat-option').then(option => {
       if (option.find('span').text(preset).length > 0) {
         return cy.get('mat-option').contains('span', preset);
@@ -50,15 +60,18 @@ export class WizardPage {
     });
   }
 
-  static getNodeNameInput(): Cypress.Chainable<any> {
+  static getNodeNameInput(): Cypress.Chainable {
     return cy.get('#km-node-name-input');
   }
 
-  static getNodeCountInput(): Cypress.Chainable<any> {
+  static getNodeCountInput(): Cypress.Chainable {
     return cy.get('#km-node-count-input');
   }
 
-  // Utils.
+  // Providers
+  static readonly anexia = Anexia;
+
+  // Utils
 
   static verifyUrl(): void {
     cy.url().should(Condition.Include, View.Wizard);

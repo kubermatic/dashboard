@@ -28,6 +28,8 @@ export CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME="roxy@loodse.com"
 export CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME_2="roxy2@loodse.com"
 export CYPRESS_KUBERMATIC_DEX_DEV_E2E_PASSWORD="password"
 export CYPRESS_RECORD_KEY=7859bcb8-1d2a-4d56-b7f5-ca70b93f944c
+export CYPRESS_ANEXIA_TEMPLATE_ID="${ANEXIA_TEMPLATE_ID}"
+export CYPRESS_ANEXIA_VLAN_ID="${ANEXIA_VLAN_ID}"
 
 source hack/e2e/setup-kind-cluster.sh
 source hack/e2e/setup-kubermatic-in-kind.sh
