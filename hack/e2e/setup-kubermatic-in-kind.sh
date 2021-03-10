@@ -124,7 +124,7 @@ metadata:
   namespace: kubermatic
 spec:
   aws:
-    accessKeyID: ${AWS_E2E_TESTS_KEY_ID}
+    accessKeyId: ${AWS_E2E_TESTS_KEY_ID}
     secretAccessKey: ${AWS_E2E_TESTS_SECRET}
     datacenter: ${AWS_E2E_TESTS_DATACENTER}
     vpcId: ${AWS_E2E_TESTS_VPC_ID}
