@@ -112,7 +112,6 @@ export class GatekeeperConfigComponent implements OnChanges, OnDestroy {
   }
 
   delete(): void {
-    event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,

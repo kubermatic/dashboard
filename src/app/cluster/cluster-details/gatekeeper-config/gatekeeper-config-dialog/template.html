@@ -17,7 +17,8 @@ limitations under the License.
              header="YAML"></km-editor>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button
+  <button id="km-gatekeeper-config-dialog-btn"
+          mat-flat-button
           (click)="save()"
           [disabled]="!isValid()">
     {{data.confirmLabel}}

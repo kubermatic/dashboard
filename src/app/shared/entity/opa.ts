@@ -13,35 +13,13 @@
 export class ConstraintTemplate {
   name: string;
   spec: ConstraintTemplateSpec;
-  status?: ConstraintTemplateStatus;
-}
-
-export class ConstraintTemplateStatus {
-  byPod: ByPodStatus[];
-  created: boolean;
-}
-
-export class ByPodStatus {
-  errors?: CreateCRDError[];
-  id: string;
-  observedGeneration: number;
-}
-
-export class CreateCRDError {
-  code: string;
-  location: string;
-  message: string;
+  status?: object;
 }
 
 export class ConstraintTemplateSpec {
-  targets: Target[];
+  targets?: object[];
   crd: CRD;
-}
-
-export class Target {
-  libs: string[];
-  rego: string;
-  target: string;
+  selector?: object;
 }
 
 export class CRD {
@@ -50,77 +28,12 @@ export class CRD {
 
 export class CRDSpec {
   names: Names;
-  validation: Validation;
+  validation?: object;
 }
 
 export class Names {
   kind: string;
-  shortNames: string[];
-}
-
-export class Validation {
-  openAPIV3Schema: JSONSchemaProps;
-}
-
-export class JSONSchemaProps {
-  dollarSchema: string;
-  allOf: JSONSchemaProps[];
-  anyOf: JSONSchemaProps[];
-  description: string;
-  enum: JSON[];
-  exclusiveMaximum: boolean;
-  exclusiveMinimum: boolean;
-  format: string;
-  id: string;
-  maxItems: number;
-  maxLength: number;
-  maxProperties: number;
-  maximum: number;
-  minItems: number;
-  minLength: number;
-  minProperties: number;
-  minimum: number;
-  multipleOf: number;
-  nullable: boolean;
-  oneOf: JSONSchemaProps[];
-  pattern: string;
-  patternProperties: object;
-  properties: object;
-  ref: string;
-  required: string[];
-  title: string;
-  type: string;
-  uniqueItems: boolean;
-  xEmbeddedResource: boolean;
-  xIntOrString: boolean;
-  xListMapKeys: string[];
-  xListType: string;
-  xMapType: string;
-  xPreserveUnknownFields: boolean;
-  additionalItems: JSONSchemaPropsOrBool;
-  additionalProperties: JSONSchemaPropsOrBool;
-  default: JSON;
-  definitions: object;
-  dependencies: object;
-  example: JSON;
-  externalDocs: ExternalDocumentation;
-  items: JSONSchemaPropsOrArray;
-  not: JSONSchemaProps;
-}
-
-export class JSONSchemaPropsOrBool {
-  allows: boolean;
-  schema: JSONSchemaProps;
-}
-
-export class ExternalDocumentation {
-  description: string;
-  url: string;
-}
-
-export class JSONSchemaPropsOrArray {
-  jsonSchemas: JSONSchemaProps[];
-  schema: JSONSchemaProps;
+  shortNames?: string[];
 }
 
 // Constraints
@@ -131,52 +44,37 @@ export class Constraint {
 }
 
 export class ConstraintStatus {
-  enforcement: string;
-  auditTimestamp: string;
-  violations: Violation[];
+  enforcement?: string;
+  auditTimestamp?: string;
+  violations?: Violation[];
 }
 
 export class Violation {
-  enforcementAction: string;
-  kind: string;
-  message: string;
-  name: string;
-  namespace: string;
+  enforcementAction?: string;
+  kind?: string;
+  message?: string;
+  name?: string;
+  namespace?: string;
 }
 
 export class ConstraintSpec {
   constraintType: string;
-  match: Match;
-  parameters: Parameters;
+  match?: Match;
+  parameters?: object;
 }
 
 export class Match {
-  kinds: Kind[];
-  scope: string;
-  namespaces: string[];
-  excludedNamespaces: string[];
-  labelSelector: LabelSelector;
-  namespaceSelector: LabelSelector;
+  kinds?: Kind[];
+  scope?: string;
+  namespaces?: string[];
+  excludedNamespaces?: string[];
+  labelSelector?: object;
+  namespaceSelector?: object;
 }
 
 export class Kind {
-  kinds: string[];
-  apiGroups: string[];
-}
-
-export class Parameters {
-  rawJSON: string;
-}
-
-export class LabelSelector {
-  matchExpressions: LabelSelectorRequirement[];
-  matchLabels: object;
-}
-
-export class LabelSelectorRequirement {
-  key: string;
-  values: string[];
-  operator: string;
+  kinds?: string[];
+  apiGroups?: string[];
 }
 
 // Gatekeeper Config

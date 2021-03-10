@@ -137,6 +137,10 @@ limitations under the License.
                              [value]="cluster.spec.enableUserSSHKeyAgent">
         </km-property-boolean>
 
+        <km-property-boolean label="OPA Integration"
+                             [value]="isOPAEnabled()">
+        </km-property-boolean>
+
         <km-property-boolean label="Audit Logging"
                              [value]="!!cluster.spec.auditLogging && cluster.spec.auditLogging.enabled"
                              *ngIf="!!cluster.spec.auditLogging && !!cluster.spec.auditLogging.enabled">
@@ -247,7 +251,20 @@ limitations under the License.
                        (editAddon)="handleAddonEdition($event)"
                        (deleteAddon)="handleAddonDeletion($event)"></km-addon-list>
       </div>
-
+    </km-tab>
+    <km-tab label="Constraints"
+            *ngIf="isOPAEnabled()">
+      <km-constraint-list [constraints]="constraints"
+                          [cluster]="cluster"
+                          [projectID]="projectID"
+                          [isClusterRunning]="isClusterRunning"></km-constraint-list>
+    </km-tab>
+    <km-tab label="Gatekeeper Config"
+            *ngIf="isOPAEnabled()">
+      <km-gatekeeper-config [gatekeeperConfig]="gatekeeperConfig"
+                            [cluster]="cluster"
+                            [projectID]="projectID"
+                            [isClusterRunning]="isClusterRunning"></km-gatekeeper-config>
     </km-tab>
   </km-tab-card>
 </ng-container>

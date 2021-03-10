@@ -19,23 +19,34 @@ import {MatDialogMock} from '@app/testing/services/mat-dialog-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {SettingsMockService} from '@app/testing/services/settings-mock.service';
 import {UserMockService} from '@app/testing/services/user-mock.service';
+import {fakeConstraintTemplates} from '@app/testing/fake-data/opa.fake';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {HistoryService} from '@core/services/history/service';
 import {NotificationService} from '@core/services/notification/service';
+import {OPAService} from '@core/services/opa/service';
 import {SettingsService} from '@core/services/settings/service';
 import {UserService} from '@core/services/user/service';
 import {SharedModule} from '@shared/shared.module';
+import {of} from 'rxjs';
 import {AddAdminDialogComponent} from './admins/add-admin-dialog/component';
 import {AdminsComponent} from './admins/component';
 import {AdminSettingsComponent} from './component';
 import {CustomLinksFormComponent} from './custom-link-form/component';
 import {DynamicDatacentersComponent} from './dynamic-datacenters/component';
+import {ConstraintTemplatesComponent} from './constraint-templates/component';
 
 describe('AdminSettingsComponent', () => {
   let fixture: ComponentFixture<AdminSettingsComponent>;
   let component: AdminSettingsComponent;
 
   beforeEach(() => {
+    const opaMock = {
+      deleteConstraintTemplate: jest.fn(),
+      constraintTemplates: of(fakeConstraintTemplates()),
+      refreshConstraintTemplates: () => {},
+    };
+    opaMock.deleteConstraintTemplate.mockReturnValue(of(null));
+
     TestBed.configureTestingModule({
       imports: [BrowserModule, RouterTestingModule, BrowserAnimationsModule, SharedModule],
       declarations: [
@@ -44,6 +55,7 @@ describe('AdminSettingsComponent', () => {
         AdminsComponent,
         AddAdminDialogComponent,
         CustomLinksFormComponent,
+        ConstraintTemplatesComponent,
       ],
       providers: [
         {provide: UserService, useClass: UserMockService},
@@ -51,6 +63,7 @@ describe('AdminSettingsComponent', () => {
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: MatDialog, useClass: MatDialogMock},
         {provide: DatacenterService, useClass: DatacenterMockService},
+        {provide: OPAService, useValue: opaMock},
         HistoryService,
         NotificationService,
       ],
