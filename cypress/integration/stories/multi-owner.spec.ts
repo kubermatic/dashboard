@@ -18,7 +18,7 @@ import {prefixedString} from '../../utils/random';
 import {ClustersPage} from '../../pages/clusters.po';
 import {View} from '../../utils/view';
 
-describe.skip('Multi owner Story', () => {
+describe('Multi owner Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const newUserEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');

@@ -15,7 +15,7 @@ import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {View} from '../../utils/view';
 
-describe.skip('Edition Story', () => {
+describe('Edition Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const kubermaticEdition = Cypress.env('KUBERMATIC_EDITION');
