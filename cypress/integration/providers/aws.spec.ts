@@ -49,6 +49,7 @@ describe('AWS Provider', () => {
   });
 
   it('should create a new cluster', () => {
+    const timeout = 300000;
     WizardPage.getProviderBtn(Provider.AWS).click();
     WizardPage.getDatacenterBtn(Datacenter.Frankfurt).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
@@ -63,6 +64,7 @@ describe('AWS Provider', () => {
       .clear()
       .type(initialMachineDeploymentReplicas)
       .should(Condition.HaveValue, initialMachineDeploymentReplicas);
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.AWSSizes).timeout(timeout).wait();
     WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
