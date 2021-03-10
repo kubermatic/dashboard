@@ -21,7 +21,7 @@ import {prefixedString} from '../../utils/random';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 
-describe('Basic Story', () => {
+describe.skip('Basic Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const newUserEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
