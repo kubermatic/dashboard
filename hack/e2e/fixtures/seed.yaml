@@ -96,6 +96,13 @@ spec:
       country: DE
       spec:
         kubevirt: {}
+    anexia-anx04:
+      country: AT
+      location: Vienna
+      node: { }
+      spec:
+        anexia:
+          location_id: b164595577114876af7662092da89f76
     syseleven-dbl1:
       country: DE
       location: Syseleven - dbl1
