@@ -12,7 +12,8 @@ limitations under the License.
 -->
 
 <div *ngIf="!isLoadingData() && !hasNoData()"
-     class="gatekeeper-config-actions">
+     class="header">
+  <div fxFlex></div>
   <button mat-icon-button
           matTooltip="Edit Gatekeeper Config"
           (click)="edit()">
@@ -26,13 +27,149 @@ limitations under the License.
 </div>
 
 <div *ngIf="!isLoadingData() && !hasNoData()"
-     class="km-code-block gatekeeper-config">
-  <pre>{{gatekeeperConfig | json}}</pre>
+     class="gatekeeper-config">
+  <h3 *ngIf="hasSection('readiness')"
+      flexLayout="row"
+      class="section-inline">
+    Readiness
+    <km-property-boolean class="ready-check"
+                         label="Stats Enabled"
+                         [value]="gatekeeperConfig.spec.readiness.statsEnabled">
+    </km-property-boolean>
+  </h3>
+
+  <h3 *ngIf="hasSection('sync')">Sync</h3>
+  <table class="km-table km-table-with-frame"
+         mat-table
+         [dataSource]="syncDataSource"
+         [hidden]="!hasSection('sync')">
+    <ng-container matColumnDef="group">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell">Group
+      </th>
+      <td mat-cell
+          *matCellDef="let element">{{element.group}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="version">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell">Version
+      </th>
+      <td mat-cell
+          *matCellDef="let element">{{element.version}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="kind">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell">Kind
+      </th>
+      <td mat-cell
+          *matCellDef="let element">{{element.kind}}</td>
+    </ng-container>
+
+    <tr mat-header-row
+        class="km-header-row"
+        *matHeaderRowDef="syncDisplayedColumns"></tr>
+    <tr mat-row
+        *matRowDef="let row; columns: syncDisplayedColumns"
+        class="km-mat-row"></tr>
+  </table>
+
+  <h3 *ngIf="hasSection('match')">Match</h3>
+  <table class="km-table km-table-with-frame"
+         mat-table
+         [dataSource]="matchDataSource"
+         [hidden]="!hasSection('match')">
+    <ng-container matColumnDef="excludedNamespaces">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell">Excluded Namespaces
+      </th>
+      <td mat-cell
+          *matCellDef="let element">{{toCommaSeperatedString(element.excludedNamespaces)}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="processes">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell">Processes
+      </th>
+      <td mat-cell
+          *matCellDef="let element">{{toCommaSeperatedString(element.processes)}}</td>
+    </ng-container>
+
+    <tr mat-header-row
+        class="km-header-row"
+        *matHeaderRowDef="matchDisplayedColumns"></tr>
+    <tr mat-row
+        *matRowDef="let row; columns: matchDisplayedColumns"
+        class="km-mat-row"></tr>
+  </table>
+
+  <h3 *ngIf="hasSection('validation')">Validation</h3>
+  <table class="km-table km-table-with-frame"
+         mat-table
+         [dataSource]="validationDataSource"
+         [hidden]="!hasSection('validation')">
+    <ng-container matColumnDef="user">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell">User
+      </th>
+      <td mat-cell
+          *matCellDef="let element">{{element.user}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="group">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell">Group
+      </th>
+      <td mat-cell
+          *matCellDef="let element">{{element.kind.group}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="version">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell">Version
+      </th>
+      <td mat-cell
+          *matCellDef="let element">{{element.kind.version}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="kind">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell">Kind
+      </th>
+      <td mat-cell
+          *matCellDef="let element">{{element.kind.kind}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="dump">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell">Dump
+      </th>
+      <td mat-cell
+          *matCellDef="let element">{{element.dump}}</td>
+    </ng-container>
+
+    <tr mat-header-row
+        class="km-header-row"
+        *matHeaderRowDef="validationDisplayedColumns"></tr>
+    <tr mat-row
+        *matRowDef="let row; columns: validationDisplayedColumns"
+        class="km-mat-row"></tr>
+  </table>
 </div>
 
 <div class="km-empty-list-msg no-items"
      *ngIf="hasNoData()">
-  <p>No Gatekeeper Config defined.</p>
   <button (click)="add()"
           mat-flat-button
           [disabled]="!isClusterRunning">Add Gatekeeper Config

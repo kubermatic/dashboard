@@ -183,21 +183,25 @@ limitations under the License.
 
       <div class="km-content-wrap"
            *ngIf="metrics">
-        <km-property-usage name="Nodes CPU Usage"
+        <km-property-usage *ngIf="metrics?.nodes?.cpuTotalMillicores"
+                           name="Nodes CPU Usage"
                            unit="millicores"
                            [used]="metrics?.nodes?.cpuTotalMillicores"
                            [total]="metrics?.nodes?.cpuAvailableMillicores"></km-property-usage>
 
-        <km-property-usage name="Nodes Memory Usage"
+        <km-property-usage *ngIf="metrics?.nodes?.memoryTotalBytes"
+                           name="Nodes Memory Usage"
                            unit="MiB"
                            [used]="metrics?.nodes?.memoryTotalBytes"
                            [total]="metrics?.nodes?.memoryAvailableBytes"></km-property-usage>
 
-        <km-property-usage name="Control Plane CPU Usage"
+        <km-property-usage *ngIf="metrics?.controlPlane?.cpuTotalMillicores"
+                           name="Control Plane CPU Usage"
                            unit="millicores"
                            [used]="metrics?.controlPlane?.cpuTotalMillicores"></km-property-usage>
 
-        <km-property-usage name="Control Plane Memory Usage"
+        <km-property-usage *ngIf="metrics?.controlPlane?.memoryTotalBytes"
+                           name="Control Plane Memory Usage"
                            unit="MiB"
                            [used]="metrics?.controlPlane?.memoryTotalBytes"></km-property-usage>
       </div>

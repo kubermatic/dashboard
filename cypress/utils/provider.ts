@@ -13,8 +13,10 @@ export enum Provider {
   BringYourOwn = 'bringyourown',
   AWS = 'aws',
   Digitalocean = 'digitalocean',
+  Anexia = 'anexia',
 }
 
 export enum Datacenter {
   Frankfurt = 'Frankfurt',
+  Vienna = 'Vienna',
 }

@@ -4,7 +4,7 @@
 
 ## Overview & More information
 
-This repo contains the Dashboard for the Kubermatic Kubernetes Platform. For more information regarding overview, installation and user guides check [Kubermatic Kubernetes Platform repo][4] & [Kubermatic Kubernetes Platform docs website][21].
+This repo contains the Dashboard for the Kubermatic Kubernetes Platform. For more information regarding overview, installation and user guides check [Kubermatic Kubernetes Platform repo][5] & [Kubermatic Kubernetes Platform docs website][21].
 
 ## Editions
 There are two editions of Kubermatic Kubernetes Platform:
@@ -44,7 +44,7 @@ See [the list of releases][3] to find out about feature changes.
 [2]: https://github.com/kubermatic/dashboard/blob/master/CONTRIBUTING.md
 [3]: https://github.com/kubermatic/dashboard/blob/master/Development.md
 [3]: https://github.com/kubermatic/dashboard/releases
-[4]: https://github.com/kubermatic/dashboard/blob/master/CODE_OF_CONDUCT.md
+[4]: https://github.com/kubermatic/dashboard/blob/master/code-of-conduct.md
 [5]: https://github.com/kubermatic/kubermatic/blob/master/README.md
 
 [11]: https://groups.google.com/forum/#!forum/kubermatic-dev

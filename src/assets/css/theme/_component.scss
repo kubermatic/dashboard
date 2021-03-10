@@ -11,7 +11,6 @@
 
 @import 'src/app/cluster/cluster-details/machine-deployment-details/cluster-panel/theme';
 @import 'src/app/cluster/cluster-details/version-picker/theme';
-@import 'src/app/cluster/cluster-details/gatekeeper-config/theme';
 @import 'src/app/core/components/footer/theme';
 @import 'src/app/core/components/navigation/project/theme';
 @import 'src/app/core/components/navigation/theme';
@@ -55,6 +54,5 @@
   @include theme-tab-card-component($colors);
   @include theme-preset-list-component($colors);
   @include theme-preset-edit-dialog-component($colors);
-  @include theme-gatekeeper-config-component($colors);
   @include theme-changelog-component($colors);
 }

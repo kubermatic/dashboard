@@ -46,6 +46,7 @@ limitations under the License.
   <mat-form-field fxFlex>
     <mat-label>Template ID</mat-label>
     <input [formControlName]="Controls.TemplateID"
+           [id]="Controls.TemplateID"
            type="text"
            autocomplete="off"
            matInput
@@ -55,6 +56,7 @@ limitations under the License.
   <mat-form-field fxFlex>
     <mat-label>VLAN ID</mat-label>
     <input [formControlName]="Controls.VlanID"
+           [id]="Controls.VlanID"
            type="text"
            autocomplete="off"
            matInput

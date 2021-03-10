@@ -68,15 +68,16 @@ presubmits:
       base_ref: master
       clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
   labels:
-    preset-digitalocean: "true"
-    preset-openstack: "true"
+    preset-anexia: "true"
     preset-aws: "true"
     preset-azure: "true"
+    preset-digitalocean: "true"
     preset-gce: "true"
-    preset-kubeconfig-ci: "true"
+    preset-openstack: "true"
     preset-docker-pull: "true"
-    preset-kind-volume-mounts: "true"
     preset-goproxy: "true"
+    preset-kind-volume-mounts: "true"
+    preset-kubeconfig-ci: "true"
   spec:
     containers:
       - image: quay.io/kubermatic/e2e-kind-cypress:v1.3.0
@@ -110,15 +111,16 @@ presubmits:
       base_ref: master
       clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
   labels:
-    preset-digitalocean: "true"
-    preset-openstack: "true"
+    preset-anexia: "true"
     preset-aws: "true"
     preset-azure: "true"
+    preset-digitalocean: "true"
     preset-gce: "true"
-    preset-kubeconfig-ci: "true"
+    preset-openstack: "true"
     preset-docker-pull: "true"
-    preset-kind-volume-mounts: "true"
     preset-goproxy: "true"
+    preset-kind-volume-mounts: "true"
+    preset-kubeconfig-ci: "true"
   spec:
     containers:
       - image: quay.io/kubermatic/e2e-kind-cypress:v1.3.0
