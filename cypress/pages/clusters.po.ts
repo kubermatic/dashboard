@@ -16,8 +16,6 @@ import {View} from '../utils/view';
 import {WizardPage} from './wizard.po';
 
 export class ClustersPage {
-  private static readonly _defaultTimeout = 5000;
-
   static getAddClusterBtn(): Cypress.Chainable {
     return cy.get('#km-add-cluster-top-btn');
   }
@@ -47,7 +45,7 @@ export class ClustersPage {
   }
 
   static getTableRowMachineDeploymentNameColumn(machineDeploymentName: string): Cypress.Chainable {
-    return cy.get(`td#km-machine-deployment-${machineDeploymentName}`, {timeout: 300000});
+    return cy.get(`td#km-machine-deployment-${machineDeploymentName}`);
   }
 
   static getMachineDeploymentRemoveBtn(machineDeploymentName: string): Cypress.Chainable {
@@ -58,8 +56,8 @@ export class ClustersPage {
     return cy.get('#km-confirmation-dialog-confirm-btn');
   }
 
-  static getMachineDeploymentList(timeout = this._defaultTimeout): Cypress.Chainable {
-    return cy.get('km-machine-deployment-list', {timeout: timeout});
+  static getMachineDeploymentList(): Cypress.Chainable {
+    return cy.get('km-machine-deployment-list');
   }
 
   static getClusterName(): Cypress.Chainable {

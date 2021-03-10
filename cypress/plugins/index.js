@@ -10,7 +10,10 @@
 // limitations under the License.
 
 const cypressTypeScriptPreprocessor = require('./cy-ts-preprocessor');
+const failFast = require('cypress-fail-fast/plugin');
 
-module.exports = on => {
+module.exports = (on, config) => {
   on('file:preprocessor', cypressTypeScriptPreprocessor);
+  failFast(on, config);
+  return config;
 };

@@ -21,11 +21,11 @@ export class ProjectsPage {
   }
 
   static getActiveProjects(): Cypress.Chainable {
-    return cy.get('i.km-health-state.km-icon-circle.km-success-bg', {timeout: 300000});
+    return cy.get('i.km-health-state.km-icon-circle.km-success-bg');
   }
 
   static getAddProjectBtn(): Cypress.Chainable {
-    return cy.get('#km-add-project-top-btn', {timeout: 10000});
+    return cy.get('#km-add-project-top-btn');
   }
 
   static getAddProjectInput(): Cypress.Chainable {
