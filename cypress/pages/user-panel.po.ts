@@ -10,15 +10,15 @@
 // limitations under the License.
 
 export class UserPanel {
-  static getUserPanelMenuBtn(): Cypress.Chainable<any> {
+  static getUserPanelMenuBtn(): Cypress.Chainable {
     return cy.get('#km-navbar-user-menu');
   }
 
-  static getLogoutBtn(): Cypress.Chainable<any> {
+  static getLogoutBtn(): Cypress.Chainable {
     return cy.get('#km-navbar-logout-btn');
   }
 
-  static getUserSettingsBtn(): Cypress.Chainable<any> {
+  static getUserSettingsBtn(): Cypress.Chainable {
     return cy.get('#km-navbar-user-settings-btn');
   }
 

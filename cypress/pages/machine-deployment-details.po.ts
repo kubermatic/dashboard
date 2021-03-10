@@ -10,15 +10,15 @@
 // limitations under the License.
 
 export class MachineDeploymentDetailsPage {
-  static getMachineDeploymentNameElement(): Cypress.Chainable<any> {
+  static getMachineDeploymentNameElement(): Cypress.Chainable {
     return cy.get('.km-machine-deployment-name');
   }
 
-  static getMachineDeploymentClusterNameElement(): Cypress.Chainable<any> {
+  static getMachineDeploymentClusterNameElement(): Cypress.Chainable {
     return cy.get('#km-cluster-panel-name');
   }
 
-  static getBackToClusterBtn(): Cypress.Chainable<any> {
-    return cy.get('.km-cluster-panel-icon');
+  static getBackToClusterBtn(): Cypress.Chainable {
+    return cy.get('#km-cluster-panel-back-button');
   }
 }

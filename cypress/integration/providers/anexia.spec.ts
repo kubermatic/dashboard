@@ -23,9 +23,11 @@ import {prefixedString} from '../../utils/random';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 
-describe('Machine Deployments Story', () => {
+describe('Anexia Provider', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
+  const templateID = Cypress.env('ANEXIA_TEMPLATE_ID');
+  const vlanID = Cypress.env('ANEXIA_VLAN_ID');
   const projectName = prefixedString('e2e-test-project');
   const clusterName = prefixedString('e2e-test-cluster');
   const initialMachineDeploymentName = prefixedString('e2e-test-md');
@@ -49,12 +51,12 @@ describe('Machine Deployments Story', () => {
   });
 
   it('should create a new cluster', () => {
-    WizardPage.getProviderBtn(Provider.Digitalocean).click();
-    WizardPage.getDatacenterBtn(Datacenter.Frankfurt).click();
+    WizardPage.getProviderBtn(Provider.Anexia).click();
+    WizardPage.getDatacenterBtn(Datacenter.Vienna).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
-    WizardPage.getPreset(Preset.Digitalocean).click();
+    WizardPage.getPreset(Preset.Anexia).click();
     WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
     WizardPage.getNodeNameInput()
       .type(initialMachineDeploymentName)
@@ -63,6 +65,8 @@ describe('Machine Deployments Story', () => {
       .clear()
       .type(initialMachineDeploymentReplicas)
       .should(Condition.HaveValue, initialMachineDeploymentReplicas);
+    WizardPage.anexia.getTemplateIDInput().type(templateID).should(Condition.HaveValue, templateID);
+    WizardPage.anexia.getVlanIDInput().type(vlanID).should(Condition.HaveValue, vlanID);
     WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 

@@ -14,7 +14,7 @@ import {View} from '../utils/view';
 import {UserPanel} from './user-panel.po';
 
 export class UserSettingsPage {
-  static getThemePicker(): Cypress.Chainable<any> {
+  static getThemePicker(): Cypress.Chainable {
     return cy.get('#km-theme-picker');
   }
 

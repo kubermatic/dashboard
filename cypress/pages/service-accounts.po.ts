@@ -16,47 +16,47 @@ import {RequestType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 
 export class ServiceAccountsPage {
-  static getAddServiceAccountBtn(): Cypress.Chainable<any> {
+  static getAddServiceAccountBtn(): Cypress.Chainable {
     return cy.get('#km-add-serviceaccount-top-btn');
   }
 
-  static getAddServiceAccountNameInput(): Cypress.Chainable<any> {
+  static getAddServiceAccountNameInput(): Cypress.Chainable {
     return cy.get('#km-add-serviceaccount-dialog-name-input');
   }
 
-  static getAddServiceAccountGroupCombobox(): Cypress.Chainable<any> {
+  static getAddServiceAccountGroupCombobox(): Cypress.Chainable {
     return cy.get('#km-add-serviceaccount-dialog-group-combobox');
   }
 
-  static getAddServiceAccountGroupOption(group: Group): Cypress.Chainable<any> {
+  static getAddServiceAccountGroupOption(group: Group): Cypress.Chainable {
     return cy.get('mat-option').contains('span', group);
   }
 
-  static getAddServiceAccountSaveBtn(): Cypress.Chainable<any> {
+  static getAddServiceAccountSaveBtn(): Cypress.Chainable {
     return cy.get('#km-add-serviceaccount-dialog-add-btn');
   }
 
-  static getDeleteServiceAccountBtn(name: string): Cypress.Chainable<any> {
+  static getDeleteServiceAccountBtn(name: string): Cypress.Chainable {
     return this.getTableRow(name).find('button i.km-icon-delete');
   }
 
-  static getTable(): Cypress.Chainable<any> {
+  static getTable(): Cypress.Chainable {
     return cy.get('tbody');
   }
 
-  static getAddTokenBtn(): Cypress.Chainable<any> {
+  static getAddTokenBtn(): Cypress.Chainable {
     return cy.get('#km-add-serviceaccount-token');
   }
 
-  static getAddTokenNameInput(): Cypress.Chainable<any> {
+  static getAddTokenNameInput(): Cypress.Chainable {
     return cy.get('#km-serviceaccount-token-dialog-name-input');
   }
 
-  static getAddTokenSaveBtn(): Cypress.Chainable<any> {
+  static getAddTokenSaveBtn(): Cypress.Chainable {
     return cy.get('#km-serviceaccount-token-dialog-update-btn');
   }
 
-  static getTokenGotItBtn(): Cypress.Chainable<any> {
+  static getTokenGotItBtn(): Cypress.Chainable {
     return cy.get('#km-serviceaccount-token-dialog-confirm-btn');
   }
 
@@ -64,7 +64,7 @@ export class ServiceAccountsPage {
     TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.Tokens).wait();
   }
 
-  static getTableRow(name: string): Cypress.Chainable<any> {
+  static getTableRow(name: string): Cypress.Chainable {
     return cy.get('td').contains(name).parent();
   }
 

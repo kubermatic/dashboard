@@ -11,4 +11,5 @@
 
 export enum Preset {
   Digitalocean = 'e2e-digitalocean',
+  Anexia = 'e2e-anexia',
 }

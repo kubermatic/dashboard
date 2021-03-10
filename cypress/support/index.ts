@@ -9,8 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Context = Mocha.Context;
-import Done = Mocha.Done;
+import 'cypress-fail-fast';
 
 before(() => {
   cy.clearCookies();
@@ -19,12 +18,4 @@ before(() => {
 beforeEach(() => {
   cy.server();
   Cypress.Cookies.preserveOnce('token', 'nonce');
-});
-
-afterEach(function (this: Context, done: Done): void {
-  if (this.currentTest && this.currentTest.state === 'failed') {
-    (Cypress as any).runner.stop();
-  }
-
-  done();
 });
