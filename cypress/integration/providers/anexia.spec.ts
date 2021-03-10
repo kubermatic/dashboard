@@ -104,11 +104,16 @@ describe('Anexia Provider', () => {
   });
 
   it('should go back to cluster details page and remove initial machine deployment', () => {
+    const deploymentInitTimeout = 30000;
+
     MachineDeploymentDetailsPage.getBackToClusterBtn().click();
     cy.url().should(Condition.Contain, View.Clusters);
     ClustersPage.getClusterName().should(Condition.Contain, clusterName);
 
-    ClustersPage.getMachineDeploymentList().should(Condition.Contain, initialMachineDeploymentName);
+    ClustersPage.getMachineDeploymentList(deploymentInitTimeout).should(
+      Condition.Contain,
+      initialMachineDeploymentName
+    );
 
     ClustersPage.getMachineDeploymentRemoveBtn(initialMachineDeploymentName).click();
     ClustersPage.getDeleteMachineDeploymentDialogBtn().click();

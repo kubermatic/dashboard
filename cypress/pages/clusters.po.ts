@@ -47,7 +47,7 @@ export class ClustersPage {
   }
 
   static getTableRowMachineDeploymentNameColumn(machineDeploymentName: string): Cypress.Chainable {
-    return cy.get(`td#km-machine-deployment-${machineDeploymentName}`);
+    return cy.get(`td#km-machine-deployment-${machineDeploymentName}`, {timeout: 300000});
   }
 
   static getMachineDeploymentRemoveBtn(machineDeploymentName: string): Cypress.Chainable {
