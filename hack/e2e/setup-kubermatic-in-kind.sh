@@ -123,7 +123,7 @@ metadata:
   name: e2e-aws
   namespace: kubermatic
 spec:
-  azure:
+  aws:
     accessKeyID: ${AWS_E2E_TESTS_KEY_ID}
     secretAccessKey: ${AWS_E2E_TESTS_SECRET}
 EOF
