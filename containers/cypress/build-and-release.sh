@@ -14,7 +14,7 @@ set -e
 
 IMG_REPO="quay.io/kubermatic"
 IMG_NAME="e2e-kind-cypress"
-IMG_VERSION="v1.3.0"
+IMG_VERSION="v1.4.0"
 
 # preload node image (this has to match the kind version;
 # each kind release specifies the default node image)

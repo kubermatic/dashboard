@@ -7,7 +7,7 @@ presubmits:
     preset-goproxy: "true"
   spec:
     containers:
-      - image: golang:1.15.2
+      - image: golang:1.16.1
         command:
           - make
           - verify-go
@@ -39,7 +39,7 @@ presubmits:
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
   spec:
     containers:
-      - image: quay.io/kubermatic/chrome-headless:v0.6
+      - image: quay.io/kubermatic/chrome-headless:v0.7
         command:
           - make
           - test-headless
@@ -79,7 +79,7 @@ presubmits:
     preset-kubeconfig-ci: "true"
   spec:
     containers:
-      - image: quay.io/kubermatic/e2e-kind-cypress:v1.3.0
+      - image: quay.io/kubermatic/e2e-kind-cypress:v1.4.0
         command:
           - make
           - run-e2e-ci
@@ -121,7 +121,7 @@ presubmits:
     preset-kubeconfig-ci: "true"
   spec:
     containers:
-      - image: quay.io/kubermatic/e2e-kind-cypress:v1.3.0
+      - image: quay.io/kubermatic/e2e-kind-cypress:v1.4.0
         command:
           - make
           - run-e2e-ci
@@ -152,7 +152,7 @@ presubmits:
     preset-goproxy: "true"
   spec:
     containers:
-      - image: quay.io/kubermatic/go-docker-node:v1.3.1
+      - image: quay.io/kubermatic/go-docker-node:v1.4.0
         command:
           - /bin/bash
           - -c
