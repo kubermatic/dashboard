@@ -184,6 +184,7 @@ export class GCPNodeSpec {
 
 export class HetznerNodeSpec {
   type: string;
+  network?: string;
 }
 
 export class KubeVirtNodeSpec {

@@ -70,6 +70,7 @@ export class ProviderSettingsStepComponent extends StepBase implements OnInit, O
       NodeProvider.AZURE,
       NodeProvider.GCP,
       NodeProvider.OPENSTACK,
+      NodeProvider.HETZNER,
     ].includes(provider);
   }
 
