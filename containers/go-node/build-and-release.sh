@@ -14,7 +14,7 @@ set -e
 
 IMG_REPO="quay.io/kubermatic"
 IMG_NAME="go-node"
-IMG_VERSION="1.15.2-14"
+IMG_VERSION="1.16.1-14"
 
 docker build -t ${IMG_REPO}/${IMG_NAME}:${IMG_VERSION} .
 docker push ${IMG_REPO}/${IMG_NAME}:${IMG_VERSION}

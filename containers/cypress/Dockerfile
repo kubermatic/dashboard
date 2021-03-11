@@ -12,11 +12,11 @@
 FROM ubuntu:16.04 AS download
 
 ENV HELM2_VERSION="v2.17.0"
-ENV HELM3_VERSION="v3.4.2"
-ENV VAULT_VERSION="1.6.1"
+ENV HELM3_VERSION="v3.5.3"
+ENV VAULT_VERSION="1.6.3"
 ENV KIND_VERSION="v0.8.1"
 ENV YQ_VERSION="3.3.2"
-ENV KUBECTL_VERSION="v1.19.7"
+ENV KUBECTL_VERSION="v1.20.4"
 
 RUN apt-get update && \
     apt-get install -y unzip curl && \
@@ -53,7 +53,7 @@ COPY --from=download /usr/local/bin/yq /usr/local/bin/yq
 COPY --from=download /usr/local/bin/kind /usr/local/bin/kind
 COPY --from=download /usr/local/bin/vault /usr/local/bin/vault
 
-ENV GO_VERSION=1.15.2
+ENV GO_VERSION=1.16.1
 
 RUN apt-get update -qq && \
     apt-get install -y \
