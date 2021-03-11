@@ -69,6 +69,7 @@ presubmits:
       clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
   labels:
     preset-anexia: "true"
+    preset-aws: "true"
     preset-azure: "true"
     preset-digitalocean: "true"
     preset-gce: "true"
@@ -111,6 +112,7 @@ presubmits:
       clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
   labels:
     preset-anexia: "true"
+    preset-aws: "true"
     preset-azure: "true"
     preset-digitalocean: "true"
     preset-gce: "true"

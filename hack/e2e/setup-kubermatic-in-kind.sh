@@ -115,6 +115,22 @@ kubectl port-forward --address 0.0.0.0 -n oauth svc/dex 5556 >/dev/null &
 kubectl port-forward --address 0.0.0.0 -n kubermatic svc/kubermatic-api 8080:80 >/dev/null &
 echodate "Finished exposing components"
 
+echodate "Creating UI AWS preset..."
+cat <<EOF > preset-aws.yaml
+apiVersion: kubermatic.k8s.io/v1
+kind: Preset
+metadata:
+  name: e2e-aws
+  namespace: kubermatic
+spec:
+  aws:
+    accessKeyId: ${AWS_E2E_TESTS_KEY_ID}
+    secretAccessKey: ${AWS_E2E_TESTS_SECRET}
+    datacenter: ${AWS_E2E_TESTS_DATACENTER}
+    vpcId: ${AWS_E2E_TESTS_VPC_ID}
+EOF
+retry 2 kubectl apply -f preset-aws.yaml
+
 echodate "Creating UI Azure preset..."
 cat <<EOF > preset-azure.yaml
 apiVersion: kubermatic.k8s.io/v1
