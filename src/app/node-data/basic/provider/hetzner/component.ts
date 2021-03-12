@@ -87,9 +87,9 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this._clusterService.clusterChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._nodeDataService.nodeData = this._getNodeData();
-    });
+    this._clusterService.clusterChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
 
   ngOnDestroy(): void {

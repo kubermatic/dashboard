@@ -200,9 +200,9 @@ limitations under the License.
 
           <!-- Hetzner -->
           <ng-container *ngIf="cluster.spec.cloud.hetzner">
-            <km-property *ngIf="cluster.spec.cloud.hetzner?.network">
+            <km-property *ngIf="cluster.spec.cloud.hetzner.network">
               <div key>Network</div>
-              <div value>{{cluster.spec.cloud.hetzner?.network}}</div>
+              <div value>{{cluster.spec.cloud.hetzner.network}}</div>
             </km-property>
           </ng-container>
 
