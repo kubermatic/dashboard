@@ -144,6 +144,7 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
       spec: {
         cloud: {
           hetzner: {
+            // network has to be the same as specified in cluster spec
             network: this._clusterService.cluster.spec.cloud.hetzner.network,
           } as HetznerNodeSpec,
         } as NodeCloudSpec,
