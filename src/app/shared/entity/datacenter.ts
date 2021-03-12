@@ -81,6 +81,7 @@ export class GCPDatacenterSpec {
 export class HetznerDatacenterSpec {
   datacenter: string;
   location: string;
+  network: string;
 }
 
 export class KubeVirtDatacenterSpec {}

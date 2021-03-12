@@ -38,6 +38,7 @@ import {AWSProviderExtendedComponent} from './step/provider-settings/provider/ex
 import {AzureProviderExtendedComponent} from './step/provider-settings/provider/extended/azure/component';
 import {ProviderExtendedComponent} from './step/provider-settings/provider/extended/component';
 import {GCPProviderExtendedComponent} from './step/provider-settings/provider/extended/gcp/component';
+import {HetznerProviderExtendedComponent} from './step/provider-settings/provider/extended/hetzner/component';
 import {OpenstackProviderExtendedComponent} from './step/provider-settings/provider/extended/openstack/component';
 import {VSphereProviderExtendedComponent} from './step/provider-settings/provider/extended/vsphere/component';
 import {ClusterSSHKeysComponent} from './step/cluster/ssh-keys/component';
@@ -56,6 +57,7 @@ const components: any[] = [
   AWSProviderBasicComponent,
   DigitalOceanProviderBasicComponent,
   HetznerProviderBasicComponent,
+  HetznerProviderExtendedComponent,
   KubeVirtProviderBasicComponent,
   OpenstackProviderBasicComponent,
   OpenstackProviderExtendedComponent,

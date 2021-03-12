@@ -11,12 +11,15 @@
 
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {NodeDataService} from '@app/node-data/service/service';
+import {HetznerNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
+import {HetznerTypes, Type} from '@shared/entity/provider/hetzner';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {ClusterService} from '@shared/services/cluster.service';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {HetznerTypes, Type} from '../../../../shared/entity/provider/hetzner';
-import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
-import {NodeDataService} from '../../../service/service';
 
 enum Controls {
   Type = 'type',
@@ -69,7 +72,8 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _clusterService: ClusterService
   ) {
     super();
   }
@@ -80,6 +84,12 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
     });
 
     this._typesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultType.bind(this));
+
+    this._nodeDataService.nodeData = this._getNodeData();
+
+    this._clusterService.clusterChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
 
   ngOnDestroy(): void {
@@ -93,7 +103,7 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   onTypeChange(type: string): void {
-    this._nodeDataService.nodeData.spec.cloud = {hetzner: {type}};
+    this._nodeDataService.nodeData.spec.cloud.hetzner.type = type;
     this._nodeDataService.nodeDataChanges.next();
   }
 
@@ -127,5 +137,18 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
 
     this.typeLabel = this.selectedType ? TypeState.Ready : TypeState.Empty;
     this._cdr.detectChanges();
+  }
+
+  private _getNodeData(): NodeData {
+    return {
+      spec: {
+        cloud: {
+          hetzner: {
+            // network has to be the same as specified in cluster spec
+            network: this._clusterService.cluster.spec.cloud.hetzner.network,
+          } as HetznerNodeSpec,
+        } as NodeCloudSpec,
+      } as NodeSpec,
+    } as NodeData;
   }
 }

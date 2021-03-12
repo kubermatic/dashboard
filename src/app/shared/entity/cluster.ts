@@ -144,6 +144,7 @@ export class GCPCloudSpec {
 
 export class HetznerCloudSpec {
   token: string;
+  network?: string;
 }
 
 export class KubeVirtCloudSpec {
