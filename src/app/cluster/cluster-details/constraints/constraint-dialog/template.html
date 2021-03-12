@@ -15,7 +15,7 @@ limitations under the License.
   <form [formGroup]="form"
         fxLayout="column">
     <mat-form-field fxFlex>
-      <mat-label>Template Name</mat-label>
+      <mat-label>Constraint Name</mat-label>
       <input required
              matInput
              [formControlName]="Controls.Name"
@@ -23,7 +23,7 @@ limitations under the License.
              autocomplete="off"
              cdkFocusInitial>
       <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
-        Template Name is <strong>required</strong>.
+        Constraint Name is <strong>required</strong>.
       </mat-error>
     </mat-form-field>
 
