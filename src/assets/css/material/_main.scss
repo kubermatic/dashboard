@@ -275,7 +275,7 @@ mat-form-field {
         top: 3px;
 
         .mat-select-arrow {
-          @include size(11px);
+          @include size(14px);
 
           color: transparent;
           display: inline-block;
@@ -293,7 +293,7 @@ mat-form-field {
           top: 3px;
 
           .mat-select-arrow {
-            @include size(11px);
+            @include size(14px);
 
             -webkit-transform: rotate(180deg);
             transform: rotate(180deg);
