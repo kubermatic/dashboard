@@ -157,7 +157,7 @@ limitations under the License.
         </ng-container>
         <ng-container *ngIf="!cluster.credential">
           <!-- AWS -->
-          <ng-container *ngIf="cluster.spec.cloud.aws">
+          <ng-container *ngIf="cluster.spec.cloud?.aws">
             <km-property *ngIf="cluster.spec.cloud?.aws?.securityGroupID">
               <div key>Security Group ID</div>
               <div value>{{cluster.spec.cloud?.aws?.securityGroupID}}</div>
@@ -181,114 +181,114 @@ limitations under the License.
           </ng-container>
 
           <!-- Azure -->
-          <ng-container *ngIf="cluster.spec.cloud.azure">
-            <km-property *ngIf="cluster.spec.cloud.azure.resourceGroup">
+          <ng-container *ngIf="cluster.spec.cloud?.azure">
+            <km-property *ngIf="cluster.spec.cloud?.azure.resourceGroup">
               <div key>Resource Group</div>
-              <div value>{{cluster.spec.cloud.azure.resourceGroup}}</div>
+              <div value>{{cluster.spec.cloud?.azure.resourceGroup}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.azure.routeTable">
+            <km-property *ngIf="cluster.spec.cloud?.azure.routeTable">
               <div key>Route Table</div>
-              <div value>{{cluster.spec.cloud.azure.routeTable}}</div>
+              <div value>{{cluster.spec.cloud?.azure.routeTable}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.azure.securityGroup">
+            <km-property *ngIf="cluster.spec.cloud?.azure.securityGroup">
               <div key>Security Group</div>
-              <div value>{{cluster.spec.cloud.azure.securityGroup}}</div>
+              <div value>{{cluster.spec.cloud?.azure.securityGroup}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.azure.subnet">
+            <km-property *ngIf="cluster.spec.cloud?.azure.subnet">
               <div key>Subnet</div>
-              <div value>{{cluster.spec.cloud.azure.subnet}}</div>
+              <div value>{{cluster.spec.cloud?.azure.subnet}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.azure.vnet">
+            <km-property *ngIf="cluster.spec.cloud?.azure.vnet">
               <div key>VNet</div>
-              <div value>{{cluster.spec.cloud.azure.vnet}}</div>
+              <div value>{{cluster.spec.cloud?.azure.vnet}}</div>
             </km-property>
           </ng-container>
 
           <!-- GCP -->
-          <ng-container *ngIf="cluster.spec.cloud.gcp">
-            <km-property *ngIf="cluster.spec.cloud.gcp?.network">
+          <ng-container *ngIf="cluster.spec.cloud?.gcp">
+            <km-property *ngIf="cluster.spec.cloud?.gcp?.network">
               <div key>Network</div>
-              <div value>{{cluster.spec.cloud.gcp?.network}}</div>
+              <div value>{{cluster.spec.cloud?.gcp?.network}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.gcp?.subnetwork">
+            <km-property *ngIf="cluster.spec.cloud?.gcp?.subnetwork">
               <div key>Subnetwork</div>
-              <div value>{{cluster.spec.cloud.gcp?.subnetwork}}</div>
+              <div value>{{cluster.spec.cloud?.gcp?.subnetwork}}</div>
             </km-property>
           </ng-container>
 
           <!-- Openstack -->
-          <ng-container *ngIf="cluster.spec.cloud.openstack">
+          <ng-container *ngIf="cluster.spec.cloud?.openstack">
             <km-property>
               <div key>Domain</div>
-              <div value>{{cluster.spec.cloud.openstack.domain}}</div>
+              <div value>{{cluster.spec.cloud?.openstack.domain}}</div>
             </km-property>
             <km-property>
               <div key>Username</div>
-              <div value>{{cluster.spec.cloud.openstack.username}}</div>
+              <div value>{{cluster.spec.cloud?.openstack.username}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.openstack.tenant">
+            <km-property *ngIf="cluster.spec.cloud?.openstack.tenant">
               <div key>Project</div>
-              <div value>{{cluster.spec.cloud.openstack.tenant}}</div>
+              <div value>{{cluster.spec.cloud?.openstack.tenant}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.openstack.tenantID">
+            <km-property *ngIf="cluster.spec.cloud?.openstack.tenantID">
               <div key>Project ID</div>
-              <div value>{{cluster.spec.cloud.openstack.tenantID}}</div>
+              <div value>{{cluster.spec.cloud?.openstack.tenantID}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.openstack.network">
+            <km-property *ngIf="cluster.spec.cloud?.openstack.network">
               <div key>Network Name</div>
-              <div value>{{cluster.spec.cloud.openstack.network}}</div>
+              <div value>{{cluster.spec.cloud?.openstack.network}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.openstack.securityGroups">
+            <km-property *ngIf="cluster.spec.cloud?.openstack.securityGroups">
               <div key>Security Groups</div>
-              <div value>{{cluster.spec.cloud.openstack.securityGroups}}</div>
+              <div value>{{cluster.spec.cloud?.openstack.securityGroups}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.openstack.floatingIpPool">
+            <km-property *ngIf="cluster.spec.cloud?.openstack.floatingIpPool">
               <div key>Floating IP Pool</div>
-              <div value>{{cluster.spec.cloud.openstack.floatingIpPool}}</div>
+              <div value>{{cluster.spec.cloud?.openstack.floatingIpPool}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.openstack.subnetID">
+            <km-property *ngIf="cluster.spec.cloud?.openstack.subnetID">
               <div key>Subnet ID</div>
-              <div value>{{cluster.spec.cloud.openstack.subnetID}}</div>
+              <div value>{{cluster.spec.cloud?.openstack.subnetID}}</div>
             </km-property>
           </ng-container>
 
           <!-- Packet -->
-          <ng-container *ngIf="cluster.spec.cloud.packet">
+          <ng-container *ngIf="cluster.spec.cloud?.packet">
             <km-property>
               <div key>Project ID</div>
-              <div value>{{cluster.spec.cloud.packet.projectID}}</div>
+              <div value>{{cluster.spec.cloud?.packet.projectID}}</div>
             </km-property>
             <km-property>
               <div key>Billing Cycle</div>
-              <div value>{{cluster.spec.cloud.packet.billingCycle}}</div>
+              <div value>{{cluster.spec.cloud?.packet.billingCycle}}</div>
             </km-property>
           </ng-container>
 
           <!-- vSphere -->
-          <ng-container *ngIf="cluster.spec.cloud.vsphere">
+          <ng-container *ngIf="cluster.spec.cloud?.vsphere">
             <km-property>
               <div key>Username</div>
-              <div value>{{cluster.spec.cloud.vsphere?.infraManagementUser?.username}}</div>
+              <div value>{{cluster.spec.cloud?.vsphere?.infraManagementUser?.username}}</div>
             </km-property>
             <km-property>
               <div key>VSphere Cloud Provider Username</div>
-              <div value>{{cluster.spec.cloud.vsphere.username}}</div>
+              <div value>{{cluster.spec.cloud?.vsphere.username}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.vsphere.vmNetName">
+            <km-property *ngIf="cluster.spec.cloud?.vsphere.vmNetName">
               <div key>Network</div>
-              <div value>{{cluster.spec.cloud.vsphere.vmNetName}}</div>
+              <div value>{{cluster.spec.cloud?.vsphere.vmNetName}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.vsphere.folder">
+            <km-property *ngIf="cluster.spec.cloud?.vsphere.folder">
               <div key>Folder</div>
-              <div value>{{cluster.spec.cloud.vsphere.folder}}</div>
+              <div value>{{cluster.spec.cloud?.vsphere.folder}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.vsphere.datastore">
+            <km-property *ngIf="cluster.spec.cloud?.vsphere.datastore">
               <div key>Datastore</div>
-              <div value>{{cluster.spec.cloud.vsphere.datastore}}</div>
+              <div value>{{cluster.spec.cloud?.vsphere.datastore}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud.vsphere.datastoreCluster">
+            <km-property *ngIf="cluster.spec.cloud?.vsphere.datastoreCluster">
               <div key>Datastore Cluster</div>
-              <div value>{{cluster.spec.cloud.vsphere.datastoreCluster}}</div>
+              <div value>{{cluster.spec.cloud?.vsphere.datastoreCluster}}</div>
             </km-property>
           </ng-container>
         </ng-container>
@@ -302,7 +302,7 @@ limitations under the License.
            fxFlex="50%"
            fxLayout="column"
            fxLayoutAlign="start start"
-           *ngIf="!cluster.spec.cloud.bringyourown">
+           *ngIf="!cluster.spec.cloud?.bringyourown">
         <div class="header">Initial Nodes</div>
         <div class="properties">
           <km-property>
@@ -318,35 +318,35 @@ limitations under the License.
           </km-property>
 
           <!-- Alibaba Nodes -->
-          <ng-container *ngIf="cluster.spec.cloud.alibaba">
+          <ng-container *ngIf="cluster.spec.cloud?.alibaba">
             <km-property>
               <div key>Instance Type</div>
-              <div value>{{nodeData.spec.cloud.alibaba.instanceType}}</div>
+              <div value>{{nodeData.spec.cloud?.alibaba.instanceType}}</div>
             </km-property>
             <km-property>
               <div key>Disk Size</div>
-              <div value>{{nodeData.spec.cloud.alibaba.diskSize}} GB</div>
+              <div value>{{nodeData.spec.cloud?.alibaba.diskSize}} GB</div>
             </km-property>
             <km-property>
               <div key>Disk Type</div>
-              <div value>{{nodeData.spec.cloud.alibaba.diskType}}</div>
+              <div value>{{nodeData.spec.cloud?.alibaba.diskType}}</div>
             </km-property>
-            <km-property *ngIf="nodeData.spec.cloud.alibaba.vSwitchID">
+            <km-property *ngIf="nodeData.spec.cloud?.alibaba.vSwitchID">
               <div key>vSwitch ID</div>
-              <div value>{{nodeData.spec.cloud.alibaba.vSwitchID}}</div>
+              <div value>{{nodeData.spec.cloud?.alibaba.vSwitchID}}</div>
             </km-property>
-            <km-property *ngIf="nodeData.spec.cloud.alibaba.internetMaxBandwidthOut">
+            <km-property *ngIf="nodeData.spec.cloud?.alibaba.internetMaxBandwidthOut">
               <div key>Internet Max Bandwidth Out</div>
-              <div value>{{nodeData.spec.cloud.alibaba.internetMaxBandwidthOut}}</div>
+              <div value>{{nodeData.spec.cloud?.alibaba.internetMaxBandwidthOut}}</div>
             </km-property>
-            <km-property *ngIf="nodeData.spec.cloud.alibaba.zoneID">
+            <km-property *ngIf="nodeData.spec.cloud?.alibaba.zoneID">
               <div key>Zone ID</div>
-              <div value>{{nodeData.spec.cloud.alibaba.zoneID}}</div>
+              <div value>{{nodeData.spec.cloud?.alibaba.zoneID}}</div>
             </km-property>
           </ng-container>
 
           <!-- AWS Nodes -->
-          <ng-container *ngIf="cluster.spec.cloud.aws">
+          <ng-container *ngIf="cluster.spec.cloud?.aws">
             <km-property>
               <div key>Instance Type</div>
               <div value>{{nodeData.spec.cloud?.aws?.instanceType}}</div>
@@ -374,140 +374,140 @@ limitations under the License.
           </ng-container>
 
           <!-- Azure Nodes -->
-          <ng-container *ngIf="cluster.spec.cloud.azure">
+          <ng-container *ngIf="cluster.spec.cloud?.azure">
             <km-property>
               <div key>Node Size</div>
-              <div value>{{nodeData.spec.cloud.azure.size}}</div>
+              <div value>{{nodeData.spec.cloud?.azure.size}}</div>
             </km-property>
-            <km-property *ngIf="nodeData.spec.cloud.azure.zones">
+            <km-property *ngIf="nodeData.spec.cloud?.azure.zones">
               <div key>Zones</div>
-              <div value>{{nodeData.spec.cloud.azure.zones}}</div>
+              <div value>{{nodeData.spec.cloud?.azure.zones}}</div>
             </km-property>
-            <km-property *ngIf="nodeData.spec.cloud.azure.imageID">
+            <km-property *ngIf="nodeData.spec.cloud?.azure.imageID">
               <div key>Image ID</div>
-              <div value>{{nodeData.spec.cloud.azure.imageID}}</div>
+              <div value>{{nodeData.spec.cloud?.azure.imageID}}</div>
             </km-property>
             <km-property>
               <div key>Data Disk Size</div>
-              <div *ngIf="nodeData.spec.cloud.azure.dataDiskSize === 0"
+              <div *ngIf="nodeData.spec.cloud?.azure.dataDiskSize === 0"
                    value>
                 Default
               </div>
               <div value
-                   *ngIf="nodeData.spec.cloud.azure.dataDiskSize !== 0">
-                {{nodeData.spec.cloud.azure.dataDiskSize}} GB
+                   *ngIf="nodeData.spec.cloud?.azure.dataDiskSize !== 0">
+                {{nodeData.spec.cloud?.azure.dataDiskSize}} GB
               </div>
             </km-property>
             <km-property>
               <div key>OS Disk Size</div>
-              <div *ngIf="nodeData.spec.cloud.azure.osDiskSize === 0"
+              <div *ngIf="nodeData.spec.cloud?.azure.osDiskSize === 0"
                    value>
                 Default
               </div>
-              <div *ngIf="nodeData.spec.cloud.azure.osDiskSize !== 0"
-                   value>{{nodeData.spec.cloud.azure.osDiskSize}} GB
+              <div *ngIf="nodeData.spec.cloud?.azure.osDiskSize !== 0"
+                   value>{{nodeData.spec.cloud?.azure.osDiskSize}} GB
               </div>
             </km-property>
           </ng-container>
 
           <!-- DigitalOcean Nodes -->
-          <ng-container *ngIf="cluster.spec.cloud.digitalocean">
+          <ng-container *ngIf="cluster.spec.cloud?.digitalocean">
             <km-property>
               <div key>Node Size</div>
-              <div value>{{nodeData.spec.cloud.digitalocean?.size}}</div>
+              <div value>{{nodeData.spec.cloud?.digitalocean?.size}}</div>
             </km-property>
           </ng-container>
 
           <!-- GCP Nodes -->
-          <ng-container *ngIf="cluster.spec.cloud.gcp">
+          <ng-container *ngIf="cluster.spec.cloud?.gcp">
             <km-property>
               <div key>Disk Size</div>
-              <div value>{{nodeData.spec.cloud.gcp?.diskSize}} GB</div>
+              <div value>{{nodeData.spec.cloud?.gcp?.diskSize}} GB</div>
             </km-property>
             <km-property>
               <div key>Disk Type</div>
-              <div value>{{nodeData.spec.cloud.gcp?.diskType}}</div>
+              <div value>{{nodeData.spec.cloud?.gcp?.diskType}}</div>
             </km-property>
             <km-property>
               <div key>Machine Type</div>
-              <div value>{{nodeData.spec.cloud.gcp?.machineType}}</div>
+              <div value>{{nodeData.spec.cloud?.gcp?.machineType}}</div>
             </km-property>
             <km-property>
               <div key>Zone</div>
-              <div value>{{nodeData.spec.cloud.gcp?.zone}}</div>
+              <div value>{{nodeData.spec.cloud?.gcp?.zone}}</div>
             </km-property>
           </ng-container>
 
           <!-- Hetzner Nodes -->
-          <ng-container *ngIf="cluster.spec.cloud.hetzner">
+          <ng-container *ngIf="cluster.spec.cloud?.hetzner">
             <km-property>
               <div key>Node Type</div>
-              <div value>{{nodeData.spec.cloud.hetzner?.type}}</div>
+              <div value>{{nodeData.spec.cloud?.hetzner?.type}}</div>
             </km-property>
           </ng-container>
 
           <!-- KubeVirt Nodes -->
-          <ng-container *ngIf="cluster.spec.cloud.kubevirt">
+          <ng-container *ngIf="cluster.spec.cloud?.kubevirt">
             <km-property>
               <div key>CPUs</div>
-              <div value>{{nodeData.spec.cloud.kubevirt.cpus}}</div>
+              <div value>{{nodeData.spec.cloud?.kubevirt.cpus}}</div>
             </km-property>
             <km-property>
               <div key>Memory</div>
-              <div value>{{nodeData.spec.cloud.kubevirt.memory}}</div>
+              <div value>{{nodeData.spec.cloud?.kubevirt.memory}}</div>
             </km-property>
             <km-property>
               <div key>PVC Size</div>
-              <div value>{{nodeData.spec.cloud.kubevirt.pvcSize}}</div>
+              <div value>{{nodeData.spec.cloud?.kubevirt.pvcSize}}</div>
             </km-property>
             <km-property>
               <div key>Storage Class Name</div>
-              <div value>{{nodeData.spec.cloud.kubevirt.storageClassName}}</div>
+              <div value>{{nodeData.spec.cloud?.kubevirt.storageClassName}}</div>
             </km-property>
             <km-property>
               <div key>Source URL</div>
-              <div value>{{nodeData.spec.cloud.kubevirt.sourceURL}}</div>
+              <div value>{{nodeData.spec.cloud?.kubevirt.sourceURL}}</div>
             </km-property>
             <km-property>
               <div key>Namespace</div>
-              <div value>{{nodeData.spec.cloud.kubevirt.namespace}}</div>
+              <div value>{{nodeData.spec.cloud?.kubevirt.namespace}}</div>
             </km-property>
           </ng-container>
 
           <!-- Openstack Nodes -->
-          <ng-container *ngIf="cluster.spec.cloud.openstack">
+          <ng-container *ngIf="cluster.spec.cloud?.openstack">
             <km-property>
               <div key>Flavor</div>
-              <div value>{{nodeData.spec.cloud.openstack.flavor}}</div>
+              <div value>{{nodeData.spec.cloud?.openstack.flavor}}</div>
             </km-property>
             <km-property *ngIf="nodeData.spec.cloud?.openstack?.diskSize">
               <div key>Custom Disk Size</div>
-              <div value>{{nodeData.spec.cloud.openstack.diskSize}}</div>
+              <div value>{{nodeData.spec.cloud?.openstack.diskSize}}</div>
             </km-property>
             <km-property *ngIf="nodeData.spec.cloud?.openstack?.availabilityZone">
               <div key>Availability Zone</div>
-              <div value>{{nodeData.spec.cloud.openstack.availabilityZone}}</div>
+              <div value>{{nodeData.spec.cloud?.openstack.availabilityZone}}</div>
             </km-property>
             <km-property>
               <div key>Image</div>
-              <div value>{{nodeData.spec.cloud.openstack.image}}</div>
+              <div value>{{nodeData.spec.cloud?.openstack.image}}</div>
             </km-property>
             <km-property>
               <div key>Instance Ready Check Period</div>
-              <div value>{{nodeData.spec.cloud.openstack.instanceReadyCheckPeriod}}</div>
+              <div value>{{nodeData.spec.cloud?.openstack.instanceReadyCheckPeriod}}</div>
             </km-property>
             <km-property>
               <div key>Instance Ready Check Timeout</div>
-              <div value>{{nodeData.spec.cloud.openstack.instanceReadyCheckTimeout}}</div>
+              <div value>{{nodeData.spec.cloud?.openstack.instanceReadyCheckTimeout}}</div>
             </km-property>
             <km-property-boolean *ngIf="nodeData.spec.operatingSystem.centos"
                                  label="Allocate Floating IP"
-                                 [value]="nodeData.spec.cloud.openstack?.useFloatingIP">
+                                 [value]="nodeData.spec.cloud?.openstack?.useFloatingIP">
             </km-property-boolean>
           </ng-container>
 
           <!-- Packet Nodes -->
-          <ng-container *ngIf="nodeData.spec.cloud.packet">
+          <ng-container *ngIf="nodeData.spec.cloud?.packet">
             <km-property>
               <div key>Instance Type</div>
               <div value>{{nodeData.spec.cloud?.packet?.instanceType}}</div>
@@ -515,46 +515,46 @@ limitations under the License.
           </ng-container>
 
           <!-- VSphere Nodes -->
-          <ng-container *ngIf="cluster.spec.cloud.vsphere">
+          <ng-container *ngIf="cluster.spec.cloud?.vsphere">
             <km-property>
               <div key>CPUs</div>
-              <div value>{{nodeData.spec.cloud.vsphere?.cpus}}</div>
+              <div value>{{nodeData.spec.cloud?.vsphere?.cpus}}</div>
             </km-property>
             <km-property>
               <div key>Memory</div>
-              <div value>{{nodeData.spec.cloud.vsphere?.memory}} MB</div>
+              <div value>{{nodeData.spec.cloud?.vsphere?.memory}} MB</div>
             </km-property>
-            <km-property *ngIf="nodeData.spec.cloud.vsphere?.diskSizeGB">
+            <km-property *ngIf="nodeData.spec.cloud?.vsphere?.diskSizeGB">
               <div key>Disk Size</div>
-              <div value>{{nodeData.spec.cloud.vsphere?.diskSizeGB}} GB</div>
+              <div value>{{nodeData.spec.cloud?.vsphere?.diskSizeGB}} GB</div>
             </km-property>
-            <km-property *ngIf="nodeData.spec.cloud.vsphere?.template">
+            <km-property *ngIf="nodeData.spec.cloud?.vsphere?.template">
               <div key>Template</div>
-              <div value>{{nodeData.spec.cloud.vsphere?.template}}</div>
+              <div value>{{nodeData.spec.cloud?.vsphere?.template}}</div>
             </km-property>
           </ng-container>
 
           <!-- Anexia Nodes -->
-          <ng-container *ngIf="cluster.spec.cloud.anexia">
+          <ng-container *ngIf="cluster.spec.cloud?.anexia">
             <km-property>
               <div key>Number of CPUs</div>
-              <div value>{{nodeData.spec.cloud.anexia?.cpus}}</div>
+              <div value>{{nodeData.spec.cloud?.anexia?.cpus}}</div>
             </km-property>
             <km-property>
               <div key>Memory in MB</div>
-              <div value>{{nodeData.spec.cloud.anexia?.memory}}</div>
+              <div value>{{nodeData.spec.cloud?.anexia?.memory}}</div>
             </km-property>
             <km-property>
               <div key>Disk Size in GB</div>
-              <div value>{{nodeData.spec.cloud.anexia?.diskSize}}</div>
+              <div value>{{nodeData.spec.cloud?.anexia?.diskSize}}</div>
             </km-property>
             <km-property>
               <div key>Template ID</div>
-              <div value>{{nodeData.spec.cloud.anexia?.templateID}}</div>
+              <div value>{{nodeData.spec.cloud?.anexia?.templateID}}</div>
             </km-property>
             <km-property>
               <div key>VLAN ID</div>
-              <div value>{{nodeData.spec.cloud.anexia?.vlanID}}</div>
+              <div value>{{nodeData.spec.cloud?.anexia?.vlanID}}</div>
             </km-property>
           </ng-container>
 
@@ -563,7 +563,7 @@ limitations under the License.
           </km-property-boolean>
 
           <!-- AWS Node Options -->
-          <ng-container *ngIf="cluster.spec.cloud.aws">
+          <ng-container *ngIf="cluster.spec.cloud?.aws">
             <km-property-boolean *ngIf="nodeData.spec.cloud?.aws?.assignPublicIP !== undefined"
                                  label="Assign Public IP"
                                  [value]="nodeData.spec.cloud?.aws?.assignPublicIP">
@@ -571,36 +571,36 @@ limitations under the License.
           </ng-container>
 
           <!-- Azure Node Options -->
-          <ng-container *ngIf="cluster.spec.cloud.azure">
+          <ng-container *ngIf="cluster.spec.cloud?.azure">
             <km-property-boolean label="Assign Public IP"
-                                 [value]="nodeData.spec.cloud.azure?.assignPublicIP">
+                                 [value]="nodeData.spec.cloud?.azure?.assignPublicIP">
             </km-property-boolean>
           </ng-container>
 
           <!-- DigitalOcean Node Options -->
-          <ng-container *ngIf="cluster.spec.cloud.digitalocean">
+          <ng-container *ngIf="cluster.spec.cloud?.digitalocean">
             <km-property-boolean label="Backups"
-                                 [value]="nodeData.spec.cloud.digitalocean?.backups">
+                                 [value]="nodeData.spec.cloud?.digitalocean?.backups">
             </km-property-boolean>
             <km-property-boolean label="IPv6"
-                                 [value]="nodeData.spec.cloud.digitalocean?.ipv6">
+                                 [value]="nodeData.spec.cloud?.digitalocean?.ipv6">
             </km-property-boolean>
             <km-property-boolean label="Monitoring"
-                                 [value]="nodeData.spec.cloud.digitalocean?.monitoring">
+                                 [value]="nodeData.spec.cloud?.digitalocean?.monitoring">
             </km-property-boolean>
           </ng-container>
 
           <!-- GCP Node Options -->
-          <ng-container *ngIf="cluster.spec.cloud.gcp">
+          <ng-container *ngIf="cluster.spec.cloud?.gcp">
             <km-property-boolean label="Preemptible"
-                                 [value]="nodeData.spec.cloud.gcp?.preemptible">
+                                 [value]="nodeData.spec.cloud?.gcp?.preemptible">
             </km-property-boolean>
           </ng-container>
 
           <!-- Openstack Node Options -->
-          <ng-container *ngIf="cluster.spec.cloud.openstack">
+          <ng-container *ngIf="cluster.spec.cloud?.openstack">
             <km-property-boolean label="Allocate Floating IP"
-                                 [value]="nodeData.spec.cloud.openstack?.useFloatingIP">
+                                 [value]="nodeData.spec.cloud?.openstack?.useFloatingIP">
             </km-property-boolean>
           </ng-container>
 
@@ -627,7 +627,7 @@ limitations under the License.
           </div>
 
           <!-- AWS Tags -->
-          <km-property *ngIf="nodeData.spec.cloud.aws && displayTags(nodeData.spec.cloud?.aws?.tags)">
+          <km-property *ngIf="nodeData.spec.cloud?.aws && displayTags(nodeData.spec.cloud?.aws?.tags)">
             <div key>Provider Tags</div>
             <div value>
               <km-labels [labels]="nodeData.spec.cloud?.aws?.tags"></km-labels>
@@ -635,42 +635,42 @@ limitations under the License.
           </km-property>
 
           <!-- Azure Tags -->
-          <km-property *ngIf="nodeData.spec.cloud.azure && displayTags(nodeData.spec.cloud.azure.tags)">
+          <km-property *ngIf="nodeData.spec.cloud?.azure && displayTags(nodeData.spec.cloud?.azure.tags)">
             <div key>Provider Tags</div>
             <div value>
-              <km-labels [labels]="nodeData.spec.cloud.azure.tags"></km-labels>
+              <km-labels [labels]="nodeData.spec.cloud?.azure.tags"></km-labels>
             </div>
           </km-property>
 
           <!-- DigitalOcean Tags -->
-          <km-property *ngIf="nodeData.spec.cloud.digitalocean && nodeData.spec.cloud.digitalocean.tags?.length > 0">
+          <km-property *ngIf="nodeData.spec.cloud?.digitalocean && nodeData.spec.cloud?.digitalocean.tags?.length > 0">
             <div key>Provider Tags</div>
             <div value>
-              <km-labels [labels]="nodeData.spec.cloud.digitalocean?.tags"></km-labels>
+              <km-labels [labels]="nodeData.spec.cloud?.digitalocean?.tags"></km-labels>
             </div>
           </km-property>
 
           <!-- GCP Tags -->
-          <km-property *ngIf="nodeData.spec.cloud.gcp && nodeData.spec.cloud.gcp?.tags?.length > 0">
+          <km-property *ngIf="nodeData.spec.cloud?.gcp && nodeData.spec.cloud?.gcp?.tags?.length > 0">
             <div key>Provider Tags</div>
             <div value>
-              <km-labels [labels]="nodeData.spec.cloud.gcp.tags"></km-labels>
+              <km-labels [labels]="nodeData.spec.cloud?.gcp.tags"></km-labels>
             </div>
           </km-property>
 
           <!-- Openstack Tags -->
-          <km-property *ngIf="nodeData.spec.cloud.openstack && displayTags(nodeData.spec.cloud.openstack.tags)">
+          <km-property *ngIf="nodeData.spec.cloud?.openstack && displayTags(nodeData.spec.cloud?.openstack.tags)">
             <div key>Provider Tags</div>
             <div value>
-              <km-labels [labels]="nodeData.spec.cloud.openstack.tags"></km-labels>
+              <km-labels [labels]="nodeData.spec.cloud?.openstack.tags"></km-labels>
             </div>
           </km-property>
 
           <!-- Packet Tags -->
-          <km-property *ngIf="nodeData.spec.cloud.packet && nodeData.spec.cloud.packet.tags?.length > 0">
+          <km-property *ngIf="nodeData.spec.cloud?.packet && nodeData.spec.cloud?.packet.tags?.length > 0">
             <div key>Provider Tags</div>
             <div value>
-              <km-labels [labels]="nodeData.spec.cloud.packet.tags"></km-labels>
+              <km-labels [labels]="nodeData.spec.cloud?.packet.tags"></km-labels>
             </div>
           </km-property>
 
@@ -681,12 +681,12 @@ limitations under the License.
           </km-property-boolean>
 
           <!-- Alibaba Labels -->
-          <ng-container *ngIf="nodeData.spec.cloud.alibaba">
-            <div [ngSwitch]="displayTags(nodeData.spec.cloud.alibaba.labels)">
+          <ng-container *ngIf="nodeData.spec.cloud?.alibaba">
+            <div [ngSwitch]="displayTags(nodeData.spec.cloud?.alibaba.labels)">
               <km-property *ngSwitchCase="true">
                 <div key>Provider Labels</div>
                 <div value>
-                  <km-labels [labels]="nodeData.spec.cloud.alibaba.labels"></km-labels>
+                  <km-labels [labels]="nodeData.spec.cloud?.alibaba.labels"></km-labels>
                 </div>
               </km-property>
               <km-property-boolean *ngSwitchCase="false"
@@ -697,12 +697,12 @@ limitations under the License.
           </ng-container>
 
           <!-- GCP Labels -->
-          <ng-container *ngIf="nodeData.spec.cloud.gcp">
-            <div [ngSwitch]="displayTags(nodeData.spec.cloud.gcp.labels)">
+          <ng-container *ngIf="nodeData.spec.cloud?.gcp">
+            <div [ngSwitch]="displayTags(nodeData.spec.cloud?.gcp.labels)">
               <km-property *ngSwitchCase="true">
                 <div key>Provider Labels</div>
                 <div value>
-                  <km-labels [labels]="nodeData.spec.cloud.gcp.labels"></km-labels>
+                  <km-labels [labels]="nodeData.spec.cloud?.gcp.labels"></km-labels>
                 </div>
               </km-property>
               <km-property-boolean *ngSwitchCase="false"
@@ -719,7 +719,7 @@ limitations under the License.
            fxFlex="50%"
            fxLayout="column"
            fxLayoutAlign="start start"
-           *ngIf="cluster.spec.cloud.vsphere && cluster.spec.machineNetworks && cluster.spec.machineNetworks?.length > 0">
+           *ngIf="cluster.spec.cloud?.vsphere && cluster.spec.machineNetworks && cluster.spec.machineNetworks?.length > 0">
         <div class="header">Machine Networks</div>
         <div class="properties"
              fxLayout="row"
