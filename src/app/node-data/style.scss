@@ -47,9 +47,12 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
 }
 
 .km-randomize-btn {
+  height: 30px;
+  line-height: 30px;
   position: absolute;
-  right: -5px;
-  top: 0;
+  right: 0;
+  top: 5px;
+  width: 30px;
 }
 
 .km-randomize-btn .mat-button-wrapper {
