@@ -44,7 +44,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
           let errorMsg = '';
 
           if (errorInstance.status) {
-            errorMsg += `Error ${errorInstance.status}`;
+            errorMsg += `Error ${errorInstance.status} `;
           }
 
           errorMsg += errorInstance.error.error.message || errorInstance.message || errorInstance.statusText;
