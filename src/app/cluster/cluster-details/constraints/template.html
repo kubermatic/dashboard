@@ -135,7 +135,8 @@ limitations under the License.
         class="km-violation-details"
         [attr.colspan]="displayedColumns.length">
       <div class="km-violation-details-wrapper">
-        <km-violation-details-list [violations]="element.status.violations"></km-violation-details-list>
+        <km-violation-details-list [violations]="element.status.violations"
+                                   [settings]="settings"></km-violation-details-list>
       </div>
     </td>
   </ng-container>
@@ -160,3 +161,7 @@ limitations under the License.
 </div>
 
 <km-loader *ngIf="isLoadingData(dataSource.data)"></km-loader>
+
+<div [hidden]="!isPaginatorVisible()">
+  <mat-paginator showFirstLastButtons></mat-paginator>
+</div>

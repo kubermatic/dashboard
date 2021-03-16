@@ -9,16 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  SimpleChanges,
-} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild, SimpleChanges} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -53,23 +44,13 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
   isShowDetails = [];
   constraintTemplateFilter: string;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  paginator: MatPaginator;
-  @ViewChild(MatPaginator)
-  set matPaginator(mp: MatPaginator) {
-    this.paginator = mp;
-    if (this.paginator && this.settings) {
-      this.paginator.pageSize = this.settings.itemsPerPage;
-    }
-    this.dataSource.paginator = this.paginator;
-    this._cdr.detectChanges();
-  }
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(
     private readonly _opaService: OPAService,
     private readonly _userService: UserService,
-    private readonly _cdr: ChangeDetectorRef,
     private readonly _matDialog: MatDialog,
     private readonly _notificationService: NotificationService
   ) {}
@@ -81,9 +62,11 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._userService.currentUserSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => (this.settings = settings));
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.settings = settings;
+      this.paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = this.paginator; // Force refresh.
+    });
 
     this._opaService.constraintTemplates
       .pipe(takeUntil(this._unsubscribe))
