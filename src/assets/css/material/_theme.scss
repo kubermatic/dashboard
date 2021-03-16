@@ -167,6 +167,10 @@
     color: map-get($colors, secondary);
   }
 
+  .mat-select-arrow-wrapper:hover {
+    background-color: map-get($colors, scrollbar);
+  }
+
   .mat-select-arrow {
     background-color: map-get($colors, text);
   }

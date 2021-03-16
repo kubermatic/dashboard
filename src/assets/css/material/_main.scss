@@ -269,19 +269,32 @@ mat-form-field {
     }
 
     &.mat-primary {
-      .mat-select-arrow-wrapper {
-        position: relative;
-        right: 0;
-        top: 3px;
+      .mat-select-trigger {
+        display: flex;
 
-        .mat-select-arrow {
-          @include size(14px);
+        .mat-select-arrow-wrapper {
+          align-items: center;
+          display: flex;
+          height: 30px;
+          justify-content: center;
+          min-width: 30px;
+          position: relative;
+          right: 0;
+          top: -2px;
 
-          color: transparent;
-          display: inline-block;
-          mask: url("/assets/images/icons/arrow-down.svg");
-          mask-repeat: no-repeat;
-          mask-size: contain;
+          &:hover {
+            border-radius: 50%;
+          }
+
+          .mat-select-arrow {
+            @include size(14px);
+
+            color: transparent;
+            display: inline-block;
+            mask: url("/assets/images/icons/arrow-down.svg");
+            mask-repeat: no-repeat;
+            mask-size: contain;
+          }
         }
       }
     }
@@ -290,7 +303,7 @@ mat-form-field {
       &.mat-primary {
         .mat-select-arrow-wrapper {
           right: 0;
-          top: 3px;
+          top: -2px;
 
           .mat-select-arrow {
             @include size(14px);
@@ -312,7 +325,7 @@ mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):no
   width: fit-content;
 
   .mat-select-value {
-    max-width: 25ch;
+    max-width: 100%;
     min-width: 2ch;
   }
 
