@@ -134,10 +134,12 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     merge(this._clusterService.clusterTypeChanges, this._clusterService.providerChanges)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
-        this.provider = this._clusterService.provider;
-        this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS());
-      });
+      .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
+
+    this._clusterService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      delete this._nodeDataService.nodeData.spec.cloud[this.provider];
+      this.provider = this._clusterService.provider;
+    });
 
     merge<string>(this._clusterService.datacenterChanges, of(this._clusterService.datacenter))
       .pipe(filter(dc => !!dc))
