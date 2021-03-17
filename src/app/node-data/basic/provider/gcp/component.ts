@@ -238,7 +238,10 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
     this.selectedDiskType = this._nodeDataService.nodeData.spec.cloud.gcp.diskType;
 
     if (!this.selectedDiskType && !_.isEmpty(this.diskTypes)) {
-      this.selectedDiskType = this.diskTypes[0].name;
+      // If pd-standard is available select it by default, otherwise use the first disk type from available ones.
+      this.selectedDiskType = this.diskTypes.find(dt => dt.name === 'pd-standard')
+        ? 'pd-standard'
+        : this.diskTypes[0].name;
     }
 
     this.diskTypeLabel = this.selectedDiskType ? DiskTypeState.Ready : DiskTypeState.Empty;
