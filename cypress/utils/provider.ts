@@ -18,7 +18,7 @@ export enum Provider {
 }
 
 export enum Datacenter {
-  Germany = 'Europe West (Germany)',
+  Germany = 'Germany',
   Frankfurt = 'Frankfurt',
   Vienna = 'Vienna',
 }
