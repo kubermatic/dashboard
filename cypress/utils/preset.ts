@@ -12,6 +12,7 @@
 export enum Preset {
   Anexia = 'e2e-anexia',
   AWS = 'e2e-aws',
+  Azure = 'e2e-azure',
   Digitalocean = 'e2e-digitalocean',
   GCP = 'e2e-gcp',
 }
