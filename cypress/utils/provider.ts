@@ -10,13 +10,15 @@
 // limitations under the License.
 
 export enum Provider {
-  BringYourOwn = 'bringyourown',
-  AWS = 'aws',
-  Digitalocean = 'digitalocean',
   Anexia = 'anexia',
+  AWS = 'aws',
+  BringYourOwn = 'bringyourown',
+  Digitalocean = 'digitalocean',
+  GCP = 'gcp',
 }
 
 export enum Datacenter {
+  Germany = 'Germany',
   Frankfurt = 'Frankfurt',
   Vienna = 'Vienna',
 }

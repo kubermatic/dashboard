@@ -23,7 +23,7 @@ import {prefixedString} from '../../utils/random';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 
-describe('AWS Provider', () => {
+describe('Google Cloud Provider', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const projectName = prefixedString('e2e-test-project');
@@ -49,12 +49,12 @@ describe('AWS Provider', () => {
   });
 
   it('should create a new cluster', () => {
-    WizardPage.getProviderBtn(Provider.AWS).click();
-    WizardPage.getDatacenterBtn(Datacenter.Frankfurt).click();
+    WizardPage.getProviderBtn(Provider.GCP).click();
+    WizardPage.getDatacenterBtn(Datacenter.Germany).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
-    WizardPage.getPreset(Preset.AWS).click();
+    WizardPage.getPreset(Preset.GCP).click();
     WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
     WizardPage.getNodeNameInput()
       .type(initialMachineDeploymentName)
