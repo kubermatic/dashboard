@@ -16,7 +16,8 @@ limitations under the License.
        fxLayoutAlign=" center"
        fxLayoutGap="16px">
     <div class="filter-title">Filter by</div>
-    <mat-form-field fxFlex>
+    <mat-form-field fxFlex
+                    class="km-dropdown-with-suffix km-filter-with-suffix">
       <mat-label>Seed</mat-label>
       <mat-select disableOptionCentering
                   class="km-select-ellipsis"
@@ -30,8 +31,8 @@ limitations under the License.
                fxLayoutAlign="end">
             <button *ngIf="seedFilter"
                     (click)="seedFilter = undefined; filter(); $event.stopPropagation()"
+                    matSuffix
                     mat-icon-button
-                    class="km-clear-input-btn"
                     aria-label="Clear">
               <i class="km-icon-mask km-icon-remove"></i>
             </button>
@@ -43,7 +44,8 @@ limitations under the License.
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field fxFlex>
+    <mat-form-field fxFlex
+                    class="km-dropdown-with-suffix km-filter-with-suffix">
       <mat-label>Country</mat-label>
       <mat-select disableOptionCentering
                   class="km-select-ellipsis"
@@ -63,8 +65,8 @@ limitations under the License.
                fxLayoutAlign="end">
             <button *ngIf="countryFilter"
                     (click)="countryFilter = undefined; filter(); $event.stopPropagation()"
+                    matSuffix
                     mat-icon-button
-                    class="km-clear-input-btn"
                     aria-label="Clear">
               <i class="km-icon-mask km-icon-remove"></i>
             </button>
@@ -79,7 +81,8 @@ limitations under the License.
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field fxFlex>
+    <mat-form-field fxFlex
+                    class="km-dropdown-with-suffix km-filter-with-suffix">
       <mat-label>Provider</mat-label>
       <mat-select disableOptionCentering
                   class="km-select-ellipsis"
@@ -95,8 +98,8 @@ limitations under the License.
                fxLayoutAlign="end">
             <button *ngIf="providerFilter"
                     (click)="providerFilter = undefined; filter(); $event.stopPropagation()"
+                    matSuffix
                     mat-icon-button
-                    class="km-clear-input-btn"
                     aria-label="Clear">
               <i class="km-icon-mask km-icon-remove"></i>
             </button>

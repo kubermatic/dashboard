@@ -399,16 +399,15 @@ km-dashboard {
   white-space: nowrap;
 }
 
-.km-clear-input-btn {
-  &.mat-icon-button {
-    position: absolute;
-    right: 30px;
-    top: -10px;
-  }
-}
-
 .km-select-ellipsis {
+  .mat-select-trigger {
+    height: 30px;
+  }
+
   mat-select-trigger {
+    align-items: center;
+    display: flex;
+
     div {
       display: block !important;
       flex: none !important;

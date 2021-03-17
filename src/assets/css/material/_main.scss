@@ -278,9 +278,8 @@ mat-form-field {
           height: 30px;
           justify-content: center;
           min-width: 30px;
-          position: relative;
           right: 0;
-          top: -2px;
+          top: 3px;
 
           &:hover {
             border-radius: 50%;
@@ -303,7 +302,7 @@ mat-form-field {
       &.mat-primary {
         .mat-select-arrow-wrapper {
           right: 0;
-          top: -2px;
+          top: 3px;
 
           .mat-select-arrow {
             @include size(14px);
@@ -311,6 +310,33 @@ mat-form-field {
             -webkit-transform: rotate(180deg);
             transform: rotate(180deg);
           }
+        }
+      }
+    }
+  }
+
+  &.km-filter-with-suffix mat-select-trigger div {
+    width: 86%;
+  }
+
+  &.km-dropdown-with-suffix {
+    .mat-form-field-infix {
+      padding: 8px 0 12px 0;
+    }
+
+    &.mat-primary {
+      .mat-select-trigger {
+        .mat-select-arrow-wrapper {
+          top: 0;
+          transform: none;
+        }
+      }
+    }
+
+    &.mat-focused {
+      &.mat-primary {
+        .mat-select-arrow-wrapper {
+          top: 0;
         }
       }
     }
