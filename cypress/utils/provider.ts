@@ -14,9 +14,11 @@ export enum Provider {
   AWS = 'aws',
   Digitalocean = 'digitalocean',
   Anexia = 'anexia',
+  OpenStack = 'openstack',
 }
 
 export enum Datacenter {
   Frankfurt = 'Frankfurt',
+  Syseleven = 'dbl1',
   Vienna = 'Vienna',
 }
