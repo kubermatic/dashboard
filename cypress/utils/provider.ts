@@ -12,6 +12,7 @@
 export enum Provider {
   Anexia = 'anexia',
   AWS = 'aws',
+  Azure = 'azure',
   BringYourOwn = 'bringyourown',
   Digitalocean = 'digitalocean',
   GCP = 'gcp',
@@ -21,4 +22,5 @@ export enum Datacenter {
   Germany = 'Germany',
   Frankfurt = 'Frankfurt',
   Vienna = 'Vienna',
+  WestEurope = 'West europe',
 }
