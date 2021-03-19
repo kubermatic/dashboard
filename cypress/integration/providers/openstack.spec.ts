@@ -64,9 +64,9 @@ describe('OpenStack Provider', () => {
       .type(initialMachineDeploymentReplicas)
       .should(Condition.HaveValue, initialMachineDeploymentReplicas);
     WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
-    WizardPage.getCreateBtn().should(Condition.BeEnabled).click({force: true});
+    WizardPage.getCreateBtn().click({force: true});
 
-    cy.wait(10000).url().should(Condition.Contain, View.Clusters);
+    cy.url().should(Condition.Contain, View.Clusters);
   });
 
   it('should check if cluster was created', () => {

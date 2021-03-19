@@ -182,10 +182,13 @@ metadata:
   namespace: kubermatic
 spec:
   openstack:
-    username: ${OS_USERNAME}
+    datacenter: ${OS_DATACENTER}
+    domain: ${OS_DOMAIN}
+    floatingIpPool: ${OS_FLOATING_IP_POOL}
     password: ${OS_PASSWORD}
     tenant: ${OS_TENANT_NAME}
-    domain: ${OS_DOMAIN}
+    tenantID: ${OS_TENANT_ID}
+    username: ${OS_USERNAME}
 EOF
 retry 2 kubectl apply -f preset-openstack.yaml
 
