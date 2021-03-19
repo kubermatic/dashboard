@@ -67,20 +67,17 @@ enum Controls {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private _datacenterSpec: Datacenter;
-
   readonly NodeProvider = NodeProvider;
   readonly Controls = Controls;
   readonly OperatingSystem = OperatingSystem;
-
   @Input() provider: NodeProvider;
   // Used only when in dialog mode.
   @Input() showExtended = false;
   @Input() existingNodesCount = 0;
-
   labels: object = {};
   taints: Taint[] = [];
   dialogEditMode = false;
+  private _datacenterSpec: Datacenter;
 
   get providerDisplayName(): string {
     return NodeProviderConstants.displayName(this.provider);
@@ -133,10 +130,12 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     merge(this._clusterService.clusterTypeChanges, this._clusterService.providerChanges)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
-        this.provider = this._clusterService.provider;
-        this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS());
-      });
+      .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
+
+    this._clusterService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      delete this._nodeDataService.nodeData.spec.cloud[this.provider];
+      this.provider = this._clusterService.provider;
+    });
 
     merge<string>(this._clusterService.datacenterChanges, of(this._clusterService.datacenter))
       .pipe(filter(dc => !!dc))

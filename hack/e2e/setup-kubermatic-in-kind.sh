@@ -204,3 +204,22 @@ retry 2 kubectl apply -f preset-anexia.yaml
 
 echodate "Applying user..."
 retry 2 kubectl apply -f hack/e2e/fixtures/user.yaml
+
+echodate "Creating UI Azure preset..."
+cat <<EOF > preset-azure.yaml
+apiVersion: kubermatic.k8s.io/v1
+kind: Preset
+metadata:
+  name: e2e-azure
+  namespace: kubermatic
+spec:
+  azure:
+    tenantId: ${AZURE_E2E_TESTS_TENANT_ID}
+    subscriptionId: ${AZURE_E2E_TESTS_SUBSCRIPTION_ID}
+    clientId: ${AZURE_E2E_TESTS_CLIENT_ID}
+    clientSecret: ${AZURE_E2E_TESTS_CLIENT_SECRET}
+EOF
+retry 2 kubectl apply -f preset-anexia.yaml
+
+echodate "Applying user..."
+retry 2 kubectl apply -f hack/e2e/fixtures/user.yaml

@@ -70,6 +70,10 @@ export class StylePickerComponent implements OnInit {
       .subscribe(_ => {});
 
     this._colorSchemeService.onColorSchemeUpdate.pipe(takeUntil(this._unsubscribe)).subscribe(theme => {
+      if (this._themeService.isThemeEnforced()) {
+        return;
+      }
+
       if (this.settings && !this.settings.selectedTheme && this.hasPreferredTheme) {
         this.selectedThemeOption = this._themeManageService.systemDefaultOption;
       }
