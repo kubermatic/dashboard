@@ -406,15 +406,18 @@ km-dashboard {
 
   mat-select-trigger {
     align-items: center;
-    display: flex;
 
-    div {
-      display: block !important;
-      flex: none !important;
+    > div:first-of-type {
+      display: initial !important;
+      flex: auto !important;
       overflow: hidden;
       text-overflow: ellipsis;
-      width: 90%;
+      white-space: nowrap;
     }
+  }
+
+  .mat-select-value {
+    align-self: center;
   }
 }
 

@@ -32,6 +32,7 @@ limitations under the License.
                  required>
           <button mat-icon-button
                   type="button"
+                  matSuffix
                   class="km-randomize-btn"
                   matTooltip="Generate name"
                   (click)="generateName()">
@@ -60,9 +61,10 @@ limitations under the License.
         <div fxFlex="100"
              fxFlexAlign=" start"
              fxLayout="row">
-          <mat-form-field class="km-version-inline">
+          <mat-form-field class="km-version-inline km-dropdown-with-suffix">
             <mat-label>Version</mat-label>
             <mat-select [formControlName]="Controls.Version"
+                        class="km-select-ellipsis"
                         disableOptionCentering
                         required>
               <mat-option *ngFor="let version of masterVersions"

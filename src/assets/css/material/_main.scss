@@ -275,15 +275,7 @@ mat-form-field {
         .mat-select-arrow-wrapper {
           align-items: center;
           display: flex;
-          height: 30px;
           justify-content: center;
-          min-width: 30px;
-          right: 0;
-          top: 3px;
-
-          &:hover {
-            border-radius: 50%;
-          }
 
           .mat-select-arrow {
             @include size(14px);
@@ -301,9 +293,6 @@ mat-form-field {
     &.mat-focused {
       &.mat-primary {
         .mat-select-arrow-wrapper {
-          right: 0;
-          top: 3px;
-
           .mat-select-arrow {
             @include size(14px);
 
@@ -313,10 +302,10 @@ mat-form-field {
         }
       }
     }
-  }
 
-  &.km-filter-with-suffix mat-select-trigger div {
-    width: 86%;
+    .mat-form-field-flex {
+      align-items: center;
+    }
   }
 
   &.km-dropdown-with-suffix {
@@ -327,16 +316,7 @@ mat-form-field {
     &.mat-primary {
       .mat-select-trigger {
         .mat-select-arrow-wrapper {
-          top: 0;
           transform: none;
-        }
-      }
-    }
-
-    &.mat-focused {
-      &.mat-primary {
-        .mat-select-arrow-wrapper {
-          top: 0;
         }
       }
     }
