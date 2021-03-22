@@ -46,6 +46,9 @@ enum Controls {
   ProviderBasic = 'providerBasic',
   ProviderExtended = 'providerExtended',
   Kubelet = 'kubelet',
+  UseAutoscaling = 'useAutoscaling',
+  MaxReplicas = 'maxReplicas',
+  MinReplicas = 'minReplicas',
 }
 
 @Component({
@@ -114,6 +117,13 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.RhsmOfflineToken]: this._builder.control(''),
       [Controls.ProviderBasic]: this._builder.control(''),
       [Controls.ProviderExtended]: this._builder.control(''),
+      [Controls.UseAutoscaling]: this._builder.control(this._nodeDataService.nodeData.maxReplicas),
+      [Controls.MinReplicas]: this._builder.control(this._nodeDataService.nodeData.minReplicas || 0, [
+        Validators.min(0),
+      ]),
+      [Controls.MaxReplicas]: this._builder.control(this._nodeDataService.nodeData.maxReplicas || 1, [
+        Validators.min(1),
+      ]),
     });
 
     if (this.isDialogView()) {
@@ -156,9 +166,37 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         }
       });
 
+    // Cross validate autoscaling options.
+    merge(
+      this.form.get(Controls.MinReplicas).valueChanges,
+      this.form.get(Controls.MaxReplicas).valueChanges,
+      this.form.get(Controls.UseAutoscaling).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const useAutoscaling = !!this.form.get(Controls.UseAutoscaling).value;
+        if (!useAutoscaling) {
+          this.form.get(Controls.MinReplicas).setErrors(null);
+          this.form.get(Controls.MaxReplicas).setErrors(null);
+          return;
+        }
+
+        const minR = this.form.get(Controls.MinReplicas).value;
+
+        const maxR = this.form.get(Controls.MaxReplicas).value;
+        if (maxR < minR) {
+          this.form.get(Controls.MaxReplicas).setErrors({lessThanMin: true});
+        } else {
+          this.form.get(Controls.MaxReplicas).setErrors(null);
+        }
+      });
+
     merge(
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Count).valueChanges,
+      this.form.get(Controls.MinReplicas).valueChanges,
+      this.form.get(Controls.MaxReplicas).valueChanges,
+      this.form.get(Controls.UseAutoscaling).valueChanges,
       this.form.get(Controls.DynamicConfig).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
@@ -343,8 +381,22 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   private _getNodeData(): NodeData {
+    let count = this.form.get(Controls.Count).value || 0;
+    let min = this.form.get(Controls.MinReplicas).value || 0;
+    let max = this.form.get(Controls.MaxReplicas).value || 0;
+    const isCreate = !this._nodeDataService.nodeData.name;
+    const useAutoscaling = !!this.form.get(Controls.UseAutoscaling).value;
+    if (isCreate && useAutoscaling) {
+      count = min;
+    }
+    if (!useAutoscaling) {
+      min = 0;
+      max = 0;
+    }
     return {
-      count: this.form.get(Controls.Count).value,
+      count: count,
+      minReplicas: min,
+      maxReplicas: max,
       name: this.form.get(Controls.Name).value,
       dynamicConfig: this.form.get(Controls.DynamicConfig).value,
     } as NodeData;

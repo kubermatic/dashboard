@@ -15,6 +15,8 @@ export class NodeData {
   name?: string;
   spec?: NodeSpec;
   count?: number;
+  minReplicas?: number;
+  maxReplicas?: number;
   valid?: boolean;
   dynamicConfig?: boolean;
 

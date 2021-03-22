@@ -48,7 +48,13 @@ limitations under the License.
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-checkbox [formControlName]="Controls.UseAutoscaling"
+                  class="km-use-autoscaling"
+                  fxFlex>
+      Use Horizontal Node Autoscaling
+    </mat-checkbox>
+
+    <mat-form-field *ngIf="!form.get(Controls.UseAutoscaling).value">
       <mat-label>Replicas</mat-label>
       <input [formControlName]="Controls.Count"
              id="km-node-count-input"
@@ -60,6 +66,33 @@ limitations under the License.
       <mat-error *ngIf="form.get(Controls.Count).hasError('required')">Number of replicas is required.</mat-error>
       <mat-error *ngIf="form.get(Controls.Count).hasError('ipsMissing')">
         Not enough IPs left. Reduce number of replicas or add more machine networks.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex
+                    *ngIf="form.get(Controls.UseAutoscaling).value">
+      <mat-label>Min Replicas*</mat-label>
+      <input [formControlName]="Controls.MinReplicas"
+             id="km-node-min-replicas-input"
+             matInput
+             type="number"
+             min="0"
+             autocomplete="off">
+    </mat-form-field>
+
+    <mat-form-field fxFlex
+                    *ngIf="form.get(Controls.UseAutoscaling).value">
+      <mat-label>Max Replicas</mat-label>
+      <input [formControlName]="Controls.MaxReplicas"
+             id="km-node-max-replicas-input"
+             matInput
+             type="number"
+             min="0"
+             min="1"
+             autocomplete="off">
+      <mat-error *ngIf="form.get(Controls.MaxReplicas).hasError('min')">Must be greater or equal 1.</mat-error>
+      <mat-error *ngIf="form.get(Controls.MaxReplicas).hasError('lessThanMin')">
+        Must be greater or equal to min replicas.
       </mat-error>
     </mat-form-field>
 
