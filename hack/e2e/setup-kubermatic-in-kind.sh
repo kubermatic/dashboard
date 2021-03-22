@@ -197,7 +197,7 @@ metadata:
   name: e2e-packet
   namespace: kubermatic
 spec:
-  anexia:
+  packet:
     apiKey: ${PACKET_API_KEY}
     projectId: ${PACKET_PROJECT_ID}
 EOF
