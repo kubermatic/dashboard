@@ -16,9 +16,11 @@ export enum Provider {
   BringYourOwn = 'bringyourown',
   Digitalocean = 'digitalocean',
   GCP = 'gcp',
+  Packet = 'packet',
 }
 
 export enum Datacenter {
+  Amsterdam = 'Amsterdam',
   Germany = 'Germany',
   Frankfurt = 'Frankfurt',
   Vienna = 'Vienna',

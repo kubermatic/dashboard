@@ -189,6 +189,20 @@ spec:
 EOF
 retry 2 kubectl apply -f preset-openstack.yaml
 
+echodate "Creating UI Packet preset..."
+cat <<EOF > preset-packet.yaml
+apiVersion: kubermatic.k8s.io/v1
+kind: Preset
+metadata:
+  name: e2e-packet
+  namespace: kubermatic
+spec:
+  anexia:
+    apiKey: ${PACKET_API_KEY}
+    projectId: ${PACKET_PROJECT_ID}
+EOF
+retry 2 kubectl apply -f preset-anexia.yaml
+
 echodate "Creating UI Anexia preset..."
 cat <<EOF > preset-anexia.yaml
 apiVersion: kubermatic.k8s.io/v1
