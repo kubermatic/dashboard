@@ -50,7 +50,7 @@ describe('Packet Provider', () => {
 
   it('should create a new cluster', () => {
     WizardPage.getProviderBtn(Provider.Packet).click();
-    WizardPage.getDatacenterBtn(Datacenter.Amsterdam).click();
+    WizardPage.getDatacenterBtn(Datacenter.Packet.NewYork).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();

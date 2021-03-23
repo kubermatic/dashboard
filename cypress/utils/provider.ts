@@ -55,6 +55,6 @@ export namespace Datacenter {
   }
 
   export enum Packet {
-    Amsterdam = 'Amsterdam',
+    NewYork = 'New York',
   }
 }
