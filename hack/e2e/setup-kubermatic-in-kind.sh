@@ -201,7 +201,7 @@ spec:
     apiKey: ${PACKET_API_KEY}
     projectId: ${PACKET_PROJECT_ID}
 EOF
-retry 2 kubectl apply -f preset-anexia.yaml
+retry 2 kubectl apply -f preset-packet.yaml
 
 echodate "Creating UI Anexia preset..."
 cat <<EOF > preset-anexia.yaml
