@@ -50,7 +50,7 @@ describe('OpenStack Provider', () => {
 
   it('should create a new cluster', () => {
     WizardPage.getProviderBtn(Provider.OpenStack).click();
-    WizardPage.getDatacenterBtn(Datacenter.Syseleven).click();
+    WizardPage.getDatacenterBtn(Datacenter.Openstack.Syseleven).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();

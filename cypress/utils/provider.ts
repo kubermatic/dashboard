@@ -16,13 +16,40 @@ export enum Provider {
   BringYourOwn = 'bringyourown',
   Digitalocean = 'digitalocean',
   GCP = 'gcp',
+  Hetzner = 'hetzner',
   OpenStack = 'openstack',
 }
 
-export enum Datacenter {
-  Germany = 'Germany',
-  Frankfurt = 'Frankfurt',
-  Syseleven = 'dbl1',
-  Vienna = 'Vienna',
-  WestEurope = 'West europe',
+export namespace Datacenter {
+  export enum Anexia {
+    Vienna = 'Vienna',
+  }
+
+  export enum AWS {
+    Frankfurt = 'Frankfurt',
+  }
+
+  export enum Azure {
+    WestEurope = 'West europe',
+  }
+
+  export enum BringYourOwn {
+    Frankfurt = 'Frankfurt',
+  }
+
+  export enum Digitalocean {
+    Frankfurt = 'Frankfurt',
+  }
+
+  export enum GCP {
+    Germany = 'Germany',
+  }
+
+  export enum Hetzner {
+    Nuremberg = 'Nuremberg 1 DC 3',
+  }
+
+  export enum Openstack {
+    Syseleven = 'dbl1',
+  }
 }

@@ -50,7 +50,7 @@ describe('DigitalOcean Provider', () => {
 
   it('should create a new cluster', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
-    WizardPage.getDatacenterBtn(Datacenter.Frankfurt).click();
+    WizardPage.getDatacenterBtn(Datacenter.Digitalocean.Frankfurt).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();

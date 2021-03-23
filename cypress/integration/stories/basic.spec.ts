@@ -48,7 +48,7 @@ describe('Basic Story', () => {
 
   it('should create a new cluster', () => {
     WizardPage.getProviderBtn(Provider.BringYourOwn).click();
-    WizardPage.getDatacenterBtn(Datacenter.Frankfurt).click();
+    WizardPage.getDatacenterBtn(Datacenter.BringYourOwn.Frankfurt).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
