@@ -15,4 +15,5 @@ export enum Preset {
   Azure = 'e2e-azure',
   Digitalocean = 'e2e-digitalocean',
   GCP = 'e2e-gcp',
+  OpenStack = 'e2e-openstack',
 }
