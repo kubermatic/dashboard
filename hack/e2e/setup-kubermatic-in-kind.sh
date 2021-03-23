@@ -219,9 +219,6 @@ spec:
 EOF
 retry 2 kubectl apply -f preset-anexia.yaml
 
-echodate "Applying user..."
-retry 2 kubectl apply -f hack/e2e/fixtures/user.yaml
-
 echodate "Creating UI Azure preset..."
 cat <<EOF > preset-azure.yaml
 apiVersion: kubermatic.k8s.io/v1
@@ -237,6 +234,20 @@ spec:
     clientSecret: ${AZURE_E2E_TESTS_CLIENT_SECRET}
 EOF
 retry 2 kubectl apply -f preset-anexia.yaml
+
+echodate "Creating UI Hetzner preset..."
+cat <<EOF > preset-hetzner.yaml
+apiVersion: kubermatic.k8s.io/v1
+kind: Preset
+metadata:
+  name: e2e-hetzner
+  namespace: kubermatic
+spec:
+  hetzner:
+    token: ${HZ_E2E_TOKEN}
+
+EOF
+retry 2 kubectl apply -f preset-hetzner.yaml
 
 echodate "Applying user..."
 retry 2 kubectl apply -f hack/e2e/fixtures/user.yaml

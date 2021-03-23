@@ -50,7 +50,7 @@ describe('Google Cloud Provider', () => {
 
   it('should create a new cluster', () => {
     WizardPage.getProviderBtn(Provider.GCP).click();
-    WizardPage.getDatacenterBtn(Datacenter.Germany).click();
+    WizardPage.getDatacenterBtn(Datacenter.GCP.Germany).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();

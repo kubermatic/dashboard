@@ -15,6 +15,7 @@ export enum Preset {
   Azure = 'e2e-azure',
   Digitalocean = 'e2e-digitalocean',
   GCP = 'e2e-gcp',
+  Hetzner = 'e2e-hetzner',
   OpenStack = 'e2e-openstack',
   Packet = 'e2e-packet',
 }

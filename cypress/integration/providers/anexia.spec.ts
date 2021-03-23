@@ -52,7 +52,7 @@ describe('Anexia Provider', () => {
 
   it('should create a new cluster', () => {
     WizardPage.getProviderBtn(Provider.Anexia).click();
-    WizardPage.getDatacenterBtn(Datacenter.Vienna).click();
+    WizardPage.getDatacenterBtn(Datacenter.Anexia.Vienna).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
