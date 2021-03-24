@@ -23,7 +23,7 @@ import {prefixedString} from '../../utils/random';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 
-describe('Hetzner Provider', () => {
+describe('VSPhere Provider', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const projectName = prefixedString('e2e-test-project');
@@ -49,12 +49,12 @@ describe('Hetzner Provider', () => {
   });
 
   it('should create a new cluster', () => {
-    WizardPage.getProviderBtn(Provider.Hetzner).click();
-    WizardPage.getDatacenterBtn(Datacenter.Hetzner.Nuremberg).click();
+    WizardPage.getProviderBtn(Provider.VSphere).click();
+    WizardPage.getDatacenterBtn(Datacenter.VSphere.Hamburg).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
-    WizardPage.getPreset(Preset.Hetzner).click();
+    WizardPage.getPreset(Preset.VSPhere).click();
     WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
     WizardPage.getNodeNameInput()
       .type(initialMachineDeploymentName)

@@ -19,6 +19,7 @@ export enum Provider {
   Hetzner = 'hetzner',
   OpenStack = 'openstack',
   Packet = 'packet',
+  VSphere = 'vsphere',
 }
 
 export namespace Datacenter {
@@ -56,5 +57,9 @@ export namespace Datacenter {
 
   export enum Packet {
     NewYork = 'New York',
+  }
+
+  export enum VSphere {
+    Hamburg = 'Hamburg',
   }
 }
