@@ -173,6 +173,20 @@ spec:
 EOF
 retry 2 kubectl apply -f preset-gcp.yaml
 
+echodate "Creating UI KubeVirt preset..."
+cat <<EOF > preset-kubevirt.yaml
+apiVersion: kubermatic.k8s.io/v1
+kind: Preset
+metadata:
+  name: e2e-kubevirt
+  namespace: kubermatic
+spec:
+  kubevirt:
+    kubeconfig: ${KUBEVIRT_E2E_TESTS_KUBECONFIG}
+
+EOF
+retry 2 kubectl apply -f preset-kubevirt.yaml
+
 echodate "Creating UI OpenStack preset..."
 cat <<EOF > preset-openstack.yaml
 apiVersion: kubermatic.k8s.io/v1

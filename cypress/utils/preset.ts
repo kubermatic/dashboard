@@ -16,5 +16,6 @@ export enum Preset {
   Digitalocean = 'e2e-digitalocean',
   GCP = 'e2e-gcp',
   Hetzner = 'e2e-hetzner',
+  KubeVirt = 'e2e-kubevirt',
   OpenStack = 'e2e-openstack',
 }
