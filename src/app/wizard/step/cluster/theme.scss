@@ -10,10 +10,6 @@
 // limitations under the License.
 
 @mixin theme-wizard-cluster-step-component($colors) {
-  .km-randomize-btn i {
-    background-color: transparent;
-  }
-
   .km-cluster-spec-type {
     &.mat-button-toggle-group {
       .mat-button-toggle {

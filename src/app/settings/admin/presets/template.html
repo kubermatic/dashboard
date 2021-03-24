@@ -16,7 +16,8 @@ limitations under the License.
        fxLayoutAlign=" center"
        fxLayoutGap="16px">
     <div class="filter-title">Filter by</div>
-    <mat-form-field fxFlex>
+    <mat-form-field fxFlex
+                    class="km-dropdown-with-suffix">
       <mat-label>Provider</mat-label>
       <mat-select disableOptionCentering
                   class="km-select-ellipsis"
@@ -32,10 +33,10 @@ limitations under the License.
                fxLayoutAlign="end">
             <button *ngIf="providerFilter"
                     (click)="providerFilter = undefined; filter(); $event.stopPropagation()"
+                    matSuffix
                     mat-icon-button
-                    class="km-clear-input-btn"
                     aria-label="Clear">
-              <i class="km-icon-close"></i>
+              <i class="km-icon-mask km-icon-remove"></i>
             </button>
           </div>
         </mat-select-trigger>
@@ -46,7 +47,8 @@ limitations under the License.
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field fxFlex>
+    <mat-form-field fxFlex
+                    class="km-dropdown-with-suffix">
       <mat-label>Datacenter</mat-label>
       <mat-select disableOptionCentering
                   class="km-select-ellipsis"
@@ -61,10 +63,10 @@ limitations under the License.
                fxLayoutAlign="end">
             <button *ngIf="datacenterFilter"
                     (click)="datacenterFilter = undefined; filter(); $event.stopPropagation()"
+                    matSuffix
                     mat-icon-button
-                    class="km-clear-input-btn"
                     aria-label="Clear">
-              <i class="km-icon-close"></i>
+              <i class="km-icon-mask km-icon-remove"></i>
             </button>
           </div>
         </mat-select-trigger>
