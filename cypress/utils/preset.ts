@@ -17,4 +17,5 @@ export enum Preset {
   GCP = 'e2e-gcp',
   Hetzner = 'e2e-hetzner',
   OpenStack = 'e2e-openstack',
+  Packet = 'e2e-packet',
 }

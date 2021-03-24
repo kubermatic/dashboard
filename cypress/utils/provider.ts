@@ -18,6 +18,7 @@ export enum Provider {
   GCP = 'gcp',
   Hetzner = 'hetzner',
   OpenStack = 'openstack',
+  Packet = 'packet',
 }
 
 export namespace Datacenter {
@@ -51,5 +52,9 @@ export namespace Datacenter {
 
   export enum Openstack {
     Syseleven = 'dbl1',
+  }
+
+  export enum Packet {
+    NewYork = 'New York',
   }
 }
