@@ -245,9 +245,23 @@ metadata:
 spec:
   hetzner:
     token: ${HZ_E2E_TOKEN}
-
 EOF
 retry 2 kubectl apply -f preset-hetzner.yaml
+
+echodate "Creating UI VSPhere preset..."
+cat <<EOF > preset-vsphere.yaml
+apiVersion: kubermatic.k8s.io/v1
+kind: Preset
+metadata:
+  name: e2e-vsphere
+  namespace: kubermatic
+spec:
+  vsphere:
+    username: ${VSPHERE_E2E_USERNAME}
+    password: ${VSPHERE_E2E_PASSWORD}
+EOF
+retry 2 kubectl apply -f preset-vsphere.yaml
+
 
 echodate "Applying user..."
 retry 2 kubectl apply -f hack/e2e/fixtures/user.yaml

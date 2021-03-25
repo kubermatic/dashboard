@@ -18,4 +18,5 @@ export enum Preset {
   Hetzner = 'e2e-hetzner',
   OpenStack = 'e2e-openstack',
   Packet = 'e2e-packet',
+  VSPhere = 'e2e-vsphere',
 }
