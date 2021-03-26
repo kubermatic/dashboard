@@ -30,6 +30,9 @@ describe('KubeVirt Provider', () => {
   const clusterName = prefixedString('e2e-test-cluster');
   const initialMachineDeploymentName = prefixedString('e2e-test-md');
   const initialMachineDeploymentReplicas = '1';
+  const namespace = 'kube-system';
+  const sourceURL = 'http://10.102.236.197/ubuntu.img';
+  const storageClassName = 'kubermatic-fast';
 
   it('should login', () => {
     login(email, password);
@@ -63,6 +66,9 @@ describe('KubeVirt Provider', () => {
       .clear()
       .type(initialMachineDeploymentReplicas)
       .should(Condition.HaveValue, initialMachineDeploymentReplicas);
+    WizardPage.kubeVirt.getNamespaceInput().type(namespace).should(Condition.HaveValue, namespace);
+    WizardPage.kubeVirt.getSourceURLInput().type(sourceURL).should(Condition.HaveValue, sourceURL);
+    WizardPage.kubeVirt.getStorageClassNameInput().type(storageClassName).should(Condition.HaveValue, storageClassName);
     WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
