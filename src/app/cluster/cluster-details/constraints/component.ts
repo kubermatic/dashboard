@@ -70,7 +70,9 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
 
     this._opaService.constraintTemplates
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(constraintTemplates => (this.constraintTemplates = constraintTemplates));
+      .subscribe(
+        constraintTemplates => (this.constraintTemplates = _.sortBy(constraintTemplates, ct => ct.name.toLowerCase()))
+      );
   }
 
   ngOnChanges(changes: SimpleChanges): void {

@@ -38,12 +38,13 @@ describe('ViolationDetailsComponent', () => {
       fixture = TestBed.createComponent(ViolationDetailsComponent);
       component = fixture.componentInstance;
       component.violations = fakeViolations();
+      component.settings = {itemsPerPage: 10};
       fixture.detectChanges();
     })
   );
 
   it(
-    'should create the constraints component',
+    'should create the violation details component',
     waitForAsync(() => {
       expect(component).toBeTruthy();
     })
