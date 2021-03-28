@@ -7,7 +7,7 @@ presubmits:
     preset-goproxy: "true"
   spec:
     containers:
-      - image: golang:1.16.1
+      - image: golang:1.16.2
         command:
           - make
           - verify-go
@@ -39,7 +39,7 @@ presubmits:
   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
   spec:
     containers:
-      - image: quay.io/kubermatic/chrome-headless:v0.7
+      - image: quay.io/kubermatic/chrome-headless:v0.8
         command:
           - make
           - test-headless
@@ -84,7 +84,7 @@ presubmits:
     preset-kubeconfig-ci: "true"
   spec:
     containers:
-      - image: quay.io/kubermatic/e2e-kind-cypress:v1.4.0
+      - image: quay.io/kubermatic/e2e-kind-cypress:v1.5.0
         command:
           - make
           - run-e2e-ci
@@ -131,7 +131,7 @@ presubmits:
     preset-kubeconfig-ci: "true"
   spec:
     containers:
-      - image: quay.io/kubermatic/e2e-kind-cypress:v1.4.0
+      - image: quay.io/kubermatic/e2e-kind-cypress:v1.5.0
         command:
           - make
           - run-e2e-ci
@@ -162,13 +162,13 @@ presubmits:
     preset-goproxy: "true"
   spec:
     containers:
-      - image: quay.io/kubermatic/go-docker-node:v1.4.0
+      - image: quay.io/kubermatic/nodejs:v2.0
         command:
           - /bin/bash
           - -c
           - >-
             set -euo pipefail &&
-            /usr/local/bin/entrypoint.sh &&
+            /usr/local/bin/start-docker.sh &&
             docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD &&
             docker login -u $QUAY_IO_USERNAME -p $QUAY_IO_PASSWORD quay.io &&
             make docker-build
@@ -182,5 +182,3 @@ presubmits:
           limits:
             cpu: 1
             memory: 3Gi
-    imagePullSecrets:
-      - name: kubermatic-quay

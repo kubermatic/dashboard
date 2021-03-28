@@ -48,11 +48,13 @@ cat $REPO_ROOT/hack/e2e/fixtures/oauth_values.yaml >> $HELM_VALUES_FILE
 # prepare to run kubermatic-installer
 KUBERMATIC_CONFIG="$(mktemp)"
 IMAGE_PULL_SECRET_INLINE="$(echo "$IMAGE_PULL_SECRET_DATA" | base64 --decode | jq --compact-output --monochrome-output '.')"
+KUBERMATIC_DOMAIN="${KUBERMATIC_DOMAIN:-ci.kubermatic.io}"
 
 cp $REPO_ROOT/hack/e2e/fixtures/kubermatic.yaml $KUBERMATIC_CONFIG
 
 sed -i "s;__SERVICE_ACCOUNT_KEY__;$SERVICE_ACCOUNT_KEY;g" $KUBERMATIC_CONFIG
 sed -i "s;__IMAGE_PULL_SECRET__;$IMAGE_PULL_SECRET_INLINE;g" $KUBERMATIC_CONFIG
+sed -i "s;__KUBERMATIC_DOMAIN__;$KUBERMATIC_DOMAIN;g" $KUBERMATIC_CONFIG
 
 # The alias makes it easier to access the port-forwarded Dex inside the Kind cluster;
 # the token issuer cannot be localhost:5556, because pods inside the cluster would not
@@ -275,7 +277,6 @@ spec:
     password: ${VSPHERE_E2E_PASSWORD}
 EOF
 retry 2 kubectl apply -f preset-vsphere.yaml
-
 
 echodate "Applying user..."
 retry 2 kubectl apply -f hack/e2e/fixtures/user.yaml

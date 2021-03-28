@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # Copyright 2020 The Kubermatic Kubernetes Platform contributors.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -10,9 +9,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-TAG=v0.7
+FROM quay.io/kubermatic/nodejs:v2.0
+LABEL maintainer="support@kubermatic.com"
 
-set -euox pipefail
-
-docker build --no-cache --pull -t quay.io/kubermatic/chrome-headless:${TAG} .
-docker push quay.io/kubermatic/chrome-headless:${TAG}
+# Install Google Chrome
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+RUN apt-get update && apt-get install -y google-chrome-stable

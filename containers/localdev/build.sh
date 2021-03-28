@@ -10,8 +10,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+cd $(dirname $0)
 
-image=localdev-dashboard
-
-cd `dirname $0`
-docker build -t $image .
+docker build -t localdev-dashboard .

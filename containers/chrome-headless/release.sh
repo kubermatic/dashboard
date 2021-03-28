@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Copyright 2020 The Kubermatic Kubernetes Platform contributors.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -9,11 +10,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.16.1
+TAG=v0.8
 
-LABEL maintainer="sebastian.florek@loodse.com"
+set -euox pipefail
 
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
-RUN apt-get update && apt-get install -y \
-    make \
-    nodejs
+cd $(dirname $0)
+
+docker build --no-cache --pull -t quay.io/kubermatic/chrome-headless:${TAG} .
+docker push quay.io/kubermatic/chrome-headless:${TAG}
