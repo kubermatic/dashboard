@@ -24,6 +24,20 @@ class Anexia {
   }
 }
 
+class KubeVirt {
+  static getNamespaceInput(): Cypress.Chainable {
+    return cy.get('#namespace');
+  }
+
+  static getSourceURLInput(): Cypress.Chainable {
+    return cy.get('#sourceURL');
+  }
+
+  static getStorageClassNameInput(): Cypress.Chainable {
+    return cy.get('#storageClassName');
+  }
+}
+
 export class WizardPage {
   static getNextBtn(stepName: WizardStep): Cypress.Chainable {
     return cy.get(`#km-wizard-${stepName}-next-btn`);
@@ -70,6 +84,7 @@ export class WizardPage {
 
   // Providers
   static readonly anexia = Anexia;
+  static readonly kubeVirt = KubeVirt;
 
   // Utils
 

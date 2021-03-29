@@ -17,6 +17,7 @@ export enum Provider {
   Digitalocean = 'digitalocean',
   GCP = 'gcp',
   Hetzner = 'hetzner',
+  KubeVirt = 'kubevirt',
   OpenStack = 'openstack',
   Packet = 'packet',
   VSphere = 'vsphere',
@@ -49,6 +50,10 @@ export namespace Datacenter {
 
   export enum Hetzner {
     Nuremberg = 'Nuremberg 1 DC 3',
+  }
+
+  export enum KubeVirt {
+    Frankfurt = 'Frankfurt',
   }
 
   export enum Openstack {
