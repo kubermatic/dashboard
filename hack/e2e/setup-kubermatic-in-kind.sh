@@ -182,7 +182,7 @@ metadata:
   namespace: kubermatic
 spec:
   kubevirt:
-    kubeconfig: ${KUBEVIRT_E2E_TESTS_KUBECONFIG}
+    kubeconfig: '${KUBEVIRT_E2E_TESTS_KUBECONFIG}'
 
 EOF
 retry 2 kubectl apply -f preset-kubevirt.yaml
