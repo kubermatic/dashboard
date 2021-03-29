@@ -23,7 +23,7 @@ import {prefixedString} from '../../utils/random';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 
-xdescribe('Anexia Provider', () => {
+describe('Anexia Provider', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const templateID = Cypress.env('ANEXIA_TEMPLATE_ID');
