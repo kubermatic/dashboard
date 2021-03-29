@@ -11,7 +11,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <form [formGroup]="form">
-  <mat-form-field fxFlex>
+  <mat-form-field fxFlex
+                  class="km-dropdown-with-suffix">
     <mat-label>{{label}}</mat-label>
     <mat-select #select
                 class="km-select-ellipsis"
@@ -59,8 +60,8 @@ limitations under the License.
              fxLayoutAlign="end">
           <button *ngIf="selected"
                   (click)="reset(); $event.stopPropagation()"
+                  matSuffix
                   mat-icon-button
-                  class="km-clear-input-btn"
                   aria-label="Clear">
             <i class="km-icon-mask km-icon-remove"></i>
           </button>

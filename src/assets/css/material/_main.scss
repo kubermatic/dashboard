@@ -269,19 +269,23 @@ mat-form-field {
     }
 
     &.mat-primary {
-      .mat-select-arrow-wrapper {
-        position: relative;
-        right: 0;
-        top: 3px;
+      .mat-select-trigger {
+        display: flex;
 
-        .mat-select-arrow {
-          @include size(11px);
+        .mat-select-arrow-wrapper {
+          align-items: center;
+          display: flex;
+          justify-content: center;
 
-          color: transparent;
-          display: inline-block;
-          mask: url("/assets/images/icons/arrow-down.svg");
-          mask-repeat: no-repeat;
-          mask-size: contain;
+          .mat-select-arrow {
+            @include size(14px);
+
+            color: transparent;
+            display: inline-block;
+            mask: url("/assets/images/icons/arrow-down.svg");
+            mask-repeat: no-repeat;
+            mask-size: contain;
+          }
         }
       }
     }
@@ -289,15 +293,30 @@ mat-form-field {
     &.mat-focused {
       &.mat-primary {
         .mat-select-arrow-wrapper {
-          right: 0;
-          top: 3px;
-
           .mat-select-arrow {
-            @include size(11px);
+            @include size(14px);
 
             -webkit-transform: rotate(180deg);
             transform: rotate(180deg);
           }
+        }
+      }
+    }
+
+    .mat-form-field-flex {
+      align-items: center;
+    }
+  }
+
+  &.km-dropdown-with-suffix {
+    .mat-form-field-infix {
+      padding: 8px 0 12px 0;
+    }
+
+    &.mat-primary {
+      .mat-select-trigger {
+        .mat-select-arrow-wrapper {
+          transform: none;
         }
       }
     }
@@ -312,7 +331,7 @@ mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):no
   width: fit-content;
 
   .mat-select-value {
-    max-width: 25ch;
+    max-width: 100%;
     min-width: 2ch;
   }
 
@@ -329,6 +348,12 @@ mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):no
     font-size: $font-size-subhead;
     line-height: 20px;
     opacity: .7;
+  }
+
+  .mat-icon-button {
+    height: 30px;
+    line-height: 30px;
+    width: 30px;
   }
 }
 

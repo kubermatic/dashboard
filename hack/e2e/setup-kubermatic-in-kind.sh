@@ -206,6 +206,20 @@ spec:
 EOF
 retry 2 kubectl apply -f preset-openstack.yaml
 
+echodate "Creating UI Packet preset..."
+cat <<EOF > preset-packet.yaml
+apiVersion: kubermatic.k8s.io/v1
+kind: Preset
+metadata:
+  name: e2e-packet
+  namespace: kubermatic
+spec:
+  packet:
+    apiKey: ${PACKET_API_KEY}
+    projectId: ${PACKET_PROJECT_ID}
+EOF
+retry 2 kubectl apply -f preset-packet.yaml
+
 echodate "Creating UI Anexia preset..."
 cat <<EOF > preset-anexia.yaml
 apiVersion: kubermatic.k8s.io/v1
@@ -245,9 +259,23 @@ metadata:
 spec:
   hetzner:
     token: ${HZ_E2E_TOKEN}
-
 EOF
 retry 2 kubectl apply -f preset-hetzner.yaml
+
+echodate "Creating UI VSPhere preset..."
+cat <<EOF > preset-vsphere.yaml
+apiVersion: kubermatic.k8s.io/v1
+kind: Preset
+metadata:
+  name: e2e-vsphere
+  namespace: kubermatic
+spec:
+  vsphere:
+    username: ${VSPHERE_E2E_USERNAME}
+    password: ${VSPHERE_E2E_PASSWORD}
+EOF
+retry 2 kubectl apply -f preset-vsphere.yaml
+
 
 echodate "Applying user..."
 retry 2 kubectl apply -f hack/e2e/fixtures/user.yaml

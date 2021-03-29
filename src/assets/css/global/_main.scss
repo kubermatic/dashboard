@@ -399,23 +399,25 @@ km-dashboard {
   white-space: nowrap;
 }
 
-.km-clear-input-btn {
-  &.mat-icon-button {
-    position: absolute;
-    right: 30px;
-    top: -13px;
-  }
-}
-
 .km-select-ellipsis {
+  .mat-select-trigger {
+    height: 30px;
+  }
+
   mat-select-trigger {
-    div {
-      display: block !important;
-      flex: none !important;
+    align-items: center;
+
+    > div:first-of-type {
+      display: initial !important;
+      flex: auto !important;
       overflow: hidden;
       text-overflow: ellipsis;
-      width: 90%;
+      white-space: nowrap;
     }
+  }
+
+  .mat-select-value {
+    align-self: center;
   }
 }
 
