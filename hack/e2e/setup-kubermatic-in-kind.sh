@@ -247,7 +247,7 @@ spec:
     clientId: ${AZURE_E2E_TESTS_CLIENT_ID}
     clientSecret: ${AZURE_E2E_TESTS_CLIENT_SECRET}
 EOF
-retry 2 kubectl apply -f preset-anexia.yaml
+retry 2 kubectl apply -f preset-azure.yaml
 
 echodate "Creating UI Hetzner preset..."
 cat <<EOF > preset-hetzner.yaml
