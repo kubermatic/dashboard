@@ -330,12 +330,12 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       return this._nodeDataService.operatingSystem;
     }
 
-    if (this._datacenterSpec) {
-      return this._getDefaultSystemTemplate(this.provider);
-    }
-
     if (this.isProvider(NodeProvider.ANEXIA)) {
       return OperatingSystem.Flatcar;
+    }
+
+    if (this._datacenterSpec) {
+      return this._getDefaultSystemTemplate(this.provider);
     }
 
     return OperatingSystem.Ubuntu;
