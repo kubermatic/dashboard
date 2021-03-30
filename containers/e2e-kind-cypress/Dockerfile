@@ -21,6 +21,7 @@ ENV GO_VERSION="1.16.2"
 ENV KIND_VERSION="v0.10.0"
 ENV KIND_NODE_VERSION="v1.20.2"
 
+COPY --from=kkpbuild /kindest.tar /kindest.tar
 COPY --from=kkpbuild /usr/local/bin/helm2 /usr/local/bin/helm2
 COPY --from=kkpbuild /usr/local/bin/helm3 /usr/local/bin/helm3
 COPY --from=kkpbuild /usr/local/bin/kubectl /usr/local/bin/kubectl
@@ -28,8 +29,8 @@ COPY --from=kkpbuild /usr/local/bin/yq /usr/local/bin/yq
 COPY --from=kkpbuild /usr/local/bin/jq /usr/local/bin/jq
 COPY --from=kkpbuild /usr/local/bin/kind /usr/local/bin/kind
 COPY --from=kkpbuild /usr/local/bin/vault /usr/local/bin/vault
+COPY --from=kkpbuild /usr/local/bin/mc /usr/local/bin/mc
 COPY --from=kkpbuild /usr/local/bin/start-docker.sh /usr/local/bin/start-docker.sh
-COPY --from=kkpbuild /kindest.tar /kindest.tar
 COPY --from=kkpbuild /root/.bashrc /root/.bashrc
 
 RUN apt-get update -qq && \

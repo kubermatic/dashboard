@@ -19,7 +19,6 @@ if [ -z "${JOB_NAME:-}" ] || [ -z "${PROW_JOB_ID:-}" ]; then
   exit 1
 fi
 
-export PATH="$PATH:/usr/local/go/bin"
 export KUBERMATIC_EDITION="${KUBERMATIC_EDITION:-ee}"
 export CYPRESS_KUBERMATIC_EDITION="${KUBERMATIC_EDITION}"
 export SEED_NAME="kubermatic"
@@ -34,4 +33,47 @@ export CYPRESS_ANEXIA_VLAN_ID="${ANEXIA_VLAN_ID}"
 source hack/e2e/setup-kind-cluster.sh
 source hack/e2e/setup-kubermatic-in-kind.sh
 
-WAIT_ON_TIMEOUT=600000 npm run e2e:local
+export WAIT_ON_TIMEOUT=600000
+
+set +e
+npm run e2e:local
+exitcode=$?
+
+if [ -d cypress/videos ] || [ -d cypress/screenshots ]; then
+  echodate "Uploading videos / screenshots..."
+
+  mc config host add minio "$MINIO_ADDRESS" "$MINIO_ACCESS_KEY" "$MINIO_SECRET_KEY"
+  bucketPath="dashboard-cypress-artifacts/pr-$PULL_NUMBER-$JOB_NAME-$BUILD_ID"
+
+  function uploadDirectory() {
+    if [ -d "cypress/$1" ]; then
+      mc mirror "cypress/$1" "minio/$bucketPath/$1"
+    fi
+  }
+
+  function printLinks() {
+    if [ -d "cypress/$1" ]; then
+      cd "cypress/$1"
+      find * -type f -print0 | sort | while IFS= read -r -d '' line; do
+        # this urlencoding needs to ensure that slashes are _not_
+        # encoded, or else the directory structure breaks
+        file="$(python -c "import urllib; print urllib.quote('''$line''')")"
+        echodate "http://127.0.0.1:9000/$bucketPath/$1/$file"
+      done
+      cd ..
+    fi
+  }
+
+  uploadDirectory screenshots
+  uploadDirectory videos
+
+  echodate "Artifacts have been uploaded to Minio and are available for roughly a week."
+  echodate "Tunnel through to Minio with 'kubectl -n minio port-forward svc/minio 9000'"
+  echodate "and then access the files:"
+  echo
+
+  printLinks screenshots
+  printLinks videos
+fi
+
+exit $exitcode
