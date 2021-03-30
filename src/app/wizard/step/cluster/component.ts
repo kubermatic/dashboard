@@ -22,9 +22,11 @@ import {
 import {ApiService} from '@core/services/api/service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {NameGeneratorService} from '@core/services/name-generator/service';
+import {SettingsService} from '@core/services/settings/service';
 import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter} from '@shared/entity/datacenter';
+import {AdminSettings} from '@shared/entity/settings';
 import {ClusterService} from '@shared/services/cluster.service';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
@@ -72,6 +74,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   readonly Controls = Controls;
   private _datacenterSpec: Datacenter;
+  private _settings: AdminSettings;
   private readonly _minNameLength = 5;
 
   constructor(
@@ -80,6 +83,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     private readonly _nameGenerator: NameGeneratorService,
     private readonly _clusterService: ClusterService,
     private readonly _datacenterService: DatacenterService,
+    private readonly _settingsService: SettingsService,
     wizard: WizardService
   ) {
     super(wizard);
@@ -100,6 +104,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
       [Controls.Labels]: new FormControl(''),
       [Controls.SSHKeys]: this._builder.control(''),
+    });
+
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this._settings = settings;
+      this._enable(Controls.OPAIntegration, this._settings.opaOptions.enabled);
+      this._enforce(Controls.OPAIntegration, this._settings.opaOptions.enforced);
     });
 
     this._clusterService.datacenterChanges
@@ -155,6 +165,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     switch (control) {
       case Controls.AuditLogging:
         return !!this._datacenterSpec && this._datacenterSpec.spec.enforceAuditLogging;
+      case Controls.OPAIntegration:
+        return !!this._settings && this._settings.opaOptions.enforced;
       default:
         return false;
     }
@@ -170,6 +182,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   isPluginEnabled(name: string): boolean {
     return AdmissionPluginUtils.isPluginEnabled(this.form.get(Controls.AdmissionPlugins), name);
+  }
+
+  private _enable(control: Controls, isEnabled: boolean): void {
+    if (isEnabled) {
+      this.form.get(control).setValue(true);
+    }
   }
 
   private _enforce(control: Controls, isEnforced: boolean): void {

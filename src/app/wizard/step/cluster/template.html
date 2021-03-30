@@ -140,6 +140,9 @@ limitations under the License.
             <mat-checkbox [formControlName]="Controls.OPAIntegration"
                           class="opa-integration">
               OPA Integration
+              <i *ngIf="isEnforced(Controls.OPAIntegration)"
+                 class="km-icon-info km-pointer"
+                 matTooltip="OPA Integration is enforced by your admin."></i>
             </mat-checkbox>
 
             <km-label-form title="Labels"
