@@ -85,6 +85,7 @@ presubmits:
   spec:
     containers:
       - image: quay.io/kubermatic/e2e-kind-cypress:v1.5.0
+        imagePullPolicy: Always
         command:
           - make
           - run-e2e-ci
@@ -132,6 +133,7 @@ presubmits:
   spec:
     containers:
       - image: quay.io/kubermatic/e2e-kind-cypress:v1.5.0
+        imagePullPolicy: Always
         command:
           - make
           - run-e2e-ci
