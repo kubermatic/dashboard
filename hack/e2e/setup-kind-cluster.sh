@@ -38,13 +38,6 @@ nodes:
   - role: control-plane
     # KIND_NODE_VERSION is defined by the kind Docker image
     image: kindest/node:$KIND_NODE_VERSION
-    # kubeadmConfigPatches:
-    #   - |
-    #     kind: InitConfiguration
-    #     nodeRegistration:
-    #       kubeletExtraArgs:
-    #         node-labels: "ingress-ready=true"
-
     # this allows us to reach NodePort services
     # from the test pod (i.e. localhost) and is
     # more stable than doing a long-lived
