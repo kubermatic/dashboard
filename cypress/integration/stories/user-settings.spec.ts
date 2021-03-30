@@ -12,19 +12,20 @@
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {View} from '../../utils/view';
-import {UserSettingsPage} from "../../pages/user-settings.po";
-import {ProjectsPage} from "../../pages/projects.po";
-import {prefixedString} from "../../utils/random";
+import {UserSettingsPage} from '../../pages/user-settings.po';
+import {ProjectsPage} from '../../pages/projects.po';
+import {prefixedString} from '../../utils/random';
 
 describe('User Settings Story', () => {
   const username = 'roxy';
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  let projectName = prefixedString('e2e-test-project');
+  const projectName = prefixedString('e2e-test-project');
   const kubermaticEdition = Cypress.env('KUBERMATIC_EDITION');
   const isEnterpriseEdition = kubermaticEdition === 'ee';
   const themePickerAvailability = isEnterpriseEdition ? 'available' : 'not available';
   const itemsPerPage = '5';
+  const waitTime = 5000;
 
   it('should login', () => {
     login(email, password);
@@ -39,11 +40,11 @@ describe('User Settings Story', () => {
     UserSettingsPage.visit();
   });
 
-  it(`should check if user name is correct`, () => {
+  it('should check if user name is correct', () => {
     UserSettingsPage.getUserName().should(Condition.Contain, username);
   });
 
-  it(`should check if user email is correct`, () => {
+  it('should check if user email is correct', () => {
     UserSettingsPage.getUserEmail().should(Condition.Contain, email);
   });
 
@@ -55,26 +56,22 @@ describe('User Settings Story', () => {
 
   it(`should set ${itemsPerPage} items per page`, () => {
     UserSettingsPage.getItemsPerPageInput().click();
-    UserSettingsPage.getItemsPerPageInput()
-      .get('mat-option')
-      .contains(itemsPerPage).click();
+    UserSettingsPage.getItemsPerPageInput().get('mat-option').contains(itemsPerPage).click();
   });
 
   it(`should set ${projectName} as default project`, () => {
     UserSettingsPage.getDefaultProjectInput().click();
-    UserSettingsPage.getDefaultProjectInput()
-      .get('mat-option')
-      .contains(projectName).click();
+    UserSettingsPage.getDefaultProjectInput().get('mat-option').contains(projectName).click();
   });
 
   it('should logout', () => {
     logout();
-    cy.wait(5000);
+    cy.wait(waitTime);
   });
 
   it('should login and get redirected', () => {
     login(email, password);
-    cy.wait(5000).url().should(Condition.Include, View.Clusters);
+    cy.wait(waitTime).url().should(Condition.Include, View.Clusters);
   });
 
   // TODO: Verify items per page and theme.
@@ -83,22 +80,18 @@ describe('User Settings Story', () => {
     UserSettingsPage.visit();
   });
 
-  it(`should set default items per page`, () => {
+  it('should set default items per page', () => {
     UserSettingsPage.getItemsPerPageInput().click();
-    UserSettingsPage.getItemsPerPageInput()
-      .get('mat-option')
-      .contains('10').click();
+    UserSettingsPage.getItemsPerPageInput().get('mat-option').contains('10').click();
   });
 
-  it(`should set unset default project`, () => {
+  it('should set unset default project', () => {
     UserSettingsPage.getDefaultProjectInput().click();
-    UserSettingsPage.getDefaultProjectInput()
-      .get('mat-option')
-      .contains('None').click();
+    UserSettingsPage.getDefaultProjectInput().get('mat-option').contains('None').click();
   });
 
   it('should go to the projects page', () => {
-    cy.wait(5000);
+    cy.wait(waitTime);
     ProjectsPage.visitUsingHeader();
   });
 
