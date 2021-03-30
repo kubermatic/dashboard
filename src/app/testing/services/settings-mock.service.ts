@@ -41,6 +41,10 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
     maxCPU: 0,
     enableGPU: false,
   },
+  opaOptions: {
+    enforced: false,
+    enabled: false,
+  },
 };
 
 @Injectable()
