@@ -15,11 +15,13 @@ import {View} from '../../utils/view';
 import {UserSettingsPage} from "../../pages/user-settings.po";
 
 describe('User Settings Story', () => {
+  const username = 'roxy';
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const kubermaticEdition = Cypress.env('KUBERMATIC_EDITION');
   const isEnterpriseEdition = kubermaticEdition === 'ee';
   const themePickerAvailability = isEnterpriseEdition ? 'available' : 'not available';
+  const itemsPerPage = '5';
 
   it('should login', () => {
     login(email, password);
@@ -30,13 +32,25 @@ describe('User Settings Story', () => {
     UserSettingsPage.visit();
   });
 
+  it(`should check if user name is correct`, () => {
+    UserSettingsPage.getUserName().should(Condition.Contain, username);
+  });
+
+  it(`should check if user email is correct`, () => {
+    UserSettingsPage.getUserEmail().should(Condition.Contain, email);
+  });
+
   it(`should check if theme picker is ${themePickerAvailability}`, () => {
     UserSettingsPage.getThemePicker().should(isEnterpriseEdition ? Condition.Exist : Condition.NotExist);
   });
 
-  // TODO: Check field availability.
-  // TODO: Modify some of the values
-  // TODO: Check if the modification were applied in the app.
+  it(`should set ${itemsPerPage} items per page`, () => {
+    UserSettingsPage.getItemsPerPageInput()
+      .type(itemsPerPage)
+      .should(Condition.HaveValue, itemsPerPage);
+  });
+
+  // TODO: Set theme & default project and verify it.
 
   it('should logout', () => {
     logout();

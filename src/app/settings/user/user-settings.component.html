@@ -50,6 +50,7 @@ limitations under the License.
              fxLayoutAlign=" center">Items per page</div>
         <mat-form-field class="input sm">
           <mat-select disableOptionCentering
+                      id="km-items-per-page-select"
                       [(ngModel)]="settings.itemsPerPage"
                       (selectionChange)="onSettingsChange()">
             <mat-option *ngFor="let itemsPerPageOption of itemsPerPageOptions"
