@@ -75,6 +75,7 @@ limitations under the License.
         </div>
         <mat-form-field class="input">
           <mat-select disableOptionCentering
+                      id="km-default-project-select"
                       [(ngModel)]="settings.selectedProjectId"
                       (selectionChange)="onSettingsChange()"
                       [placeholder]="hasDefaultProject()">

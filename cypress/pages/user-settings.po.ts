@@ -26,6 +26,10 @@ export class UserSettingsPage {
     return cy.get('#km-items-per-page-select');
   }
 
+  static getDefaultProjectInput(): Cypress.Chainable {
+    return cy.get('#km-default-project-select');
+  }
+
   static getThemePicker(): Cypress.Chainable {
     return cy.get('#km-theme-picker');
   }
