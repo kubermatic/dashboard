@@ -116,6 +116,8 @@ echodate "Exposing Dex and Kubermatic API to localhost..."
 # kubectl port-forward --address 0.0.0.0 -n oauth svc/dex 5556 >/dev/null &
 # kubectl port-forward --address 0.0.0.0 -n kubermatic svc/kubermatic-api 8080:80 >/dev/null &
 
+kubectl -n kubermatic logs --tail=-1 --selector='app.kubernetes.io/name=kubermatic-api' -f &
+
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Service
