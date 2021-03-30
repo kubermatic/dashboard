@@ -30,6 +30,7 @@ COPY --from=kkpbuild /usr/local/bin/kind /usr/local/bin/kind
 COPY --from=kkpbuild /usr/local/bin/vault /usr/local/bin/vault
 COPY --from=kkpbuild /usr/local/bin/start-docker.sh /usr/local/bin/start-docker.sh
 COPY --from=kkpbuild /kindest.tar /kindest.tar
+COPY --from=kkpbuild /root/.bashrc /root/.bashrc
 
 RUN apt-get update -qq && \
     apt-get install -y \
