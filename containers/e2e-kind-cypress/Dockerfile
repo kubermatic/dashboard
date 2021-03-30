@@ -42,8 +42,9 @@ RUN apt-get update -qq && \
       git && \
     rm -rf /var/lib/apt/lists/* && \
     curl --fail -L https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz | tar -C /usr/local -xz && \
-    echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc && \
     ln -s /usr/local/bin/helm2 /usr/local/bin/helm
+
+ENV PATH /usr/local/go/bin:$PATH
 
 # Install Docker from Docker Inc. repositories.
 RUN curl -sSL https://get.docker.com/ | sh
