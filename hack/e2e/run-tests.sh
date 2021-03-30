@@ -67,6 +67,7 @@ if [ -d cypress/videos ] || [ -d cypress/screenshots ]; then
   uploadDirectory screenshots
   uploadDirectory videos
 
+  echo
   echodate "Artifacts have been uploaded to Minio and are available for roughly a week."
   echodate "Tunnel through to Minio with 'kubectl -n minio port-forward svc/minio 9000'"
   echodate "and then access the files:"
