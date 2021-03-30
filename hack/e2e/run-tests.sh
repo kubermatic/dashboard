@@ -42,6 +42,8 @@ exitcode=$?
 if [ -d cypress/videos ] || [ -d cypress/screenshots ]; then
   echodate "Uploading videos / screenshots..."
 
+  MINIO_PUBLIC_ADDRESS="${MINIO_PUBLIC_ADDRESS:-https://minio.ci.kubermatic.io}"
+
   mc config host add minio "$MINIO_ADDRESS" "$MINIO_ACCESS_KEY" "$MINIO_SECRET_KEY"
   bucketPath="dashboard-cypress-artifacts/pr-$PULL_NUMBER-$JOB_NAME-$BUILD_ID"
 
@@ -58,9 +60,9 @@ if [ -d cypress/videos ] || [ -d cypress/screenshots ]; then
         # this urlencoding needs to ensure that slashes are _not_
         # encoded, or else the directory structure breaks
         file="$(python -c "import urllib; print urllib.quote('''$line''')")"
-        echodate "http://127.0.0.1:9000/$bucketPath/$1/$file"
+        echodate "$MINIO_PUBLIC_ADDRESS/$bucketPath/$1/$file"
       done
-      cd ..
+      cd -
     fi
   }
 
@@ -68,9 +70,8 @@ if [ -d cypress/videos ] || [ -d cypress/screenshots ]; then
   uploadDirectory videos
 
   echo
-  echodate "Artifacts have been uploaded to Minio and are available for roughly a week."
-  echodate "Tunnel through to Minio with 'kubectl -n minio port-forward svc/minio 9000'"
-  echodate "and then access the files:"
+  echodate "Artifacts have been uploaded to Minio and are available for a few days."
+  echodate "Use the following links to access them:"
   echo
 
   printLinks screenshots
