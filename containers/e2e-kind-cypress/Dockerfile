@@ -14,7 +14,7 @@ FROM quay.io/kubermatic/kind:v2.0 AS kkpbuild
 FROM cypress/browsers:node14.7.0-chrome84
 LABEL maintainer="support@kubermatic.com"
 
-ENV GO_VERSION="1.16.2"
+ENV GO_VERSION="1.16.1"
 
 # make sure to keep these in-sync with that the kkpbuild base image uses;
 # sadly it's not possible to copy env vars in multi-stage builds
