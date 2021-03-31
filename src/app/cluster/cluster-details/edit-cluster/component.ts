@@ -146,13 +146,8 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     return AdmissionPluginUtils.isPodSecurityPolicyEnforced(this.datacenter);
   }
 
-  isEnforced(name: string): boolean {
-    switch (name) {
-      case 'opaIntegration':
-        return !!this._settings && this._settings.opaOptions.enforced;
-      default:
-        return false;
-    }
+  isOPAEnforced(): boolean {
+    return !!this._settings && this._settings.opaOptions.enforced;
   }
 
   private _enforce(name: string, isEnforced: boolean): void {

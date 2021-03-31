@@ -108,7 +108,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this._settings = settings;
-      this._enable(Controls.OPAIntegration, this._settings.opaOptions.enabled);
+      this.form.get(Controls.OPAIntegration).setValue(this._settings.opaOptions.enabled);
       this._enforce(Controls.OPAIntegration, this._settings.opaOptions.enforced);
     });
 
@@ -182,12 +182,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   isPluginEnabled(name: string): boolean {
     return AdmissionPluginUtils.isPluginEnabled(this.form.get(Controls.AdmissionPlugins), name);
-  }
-
-  private _enable(control: Controls, isEnabled: boolean): void {
-    if (isEnabled) {
-      this.form.get(control).setValue(true);
-    }
   }
 
   private _enforce(control: Controls, isEnforced: boolean): void {
