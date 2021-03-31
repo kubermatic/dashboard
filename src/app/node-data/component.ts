@@ -322,20 +322,20 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       }
     }
 
-    return OperatingSystem.Ubuntu;
+    return null;
   }
 
   private _getDefaultOS(): OperatingSystem {
-    if (this.isOperatingSystemSupported(this._nodeDataService.operatingSystem)) {
-      return this._nodeDataService.operatingSystem;
+    if (this.isProvider(NodeProvider.ANEXIA)) {
+      return OperatingSystem.Flatcar;
     }
 
-    if (this._datacenterSpec) {
+    if (this._datacenterSpec && !!this._getDefaultSystemTemplate(this.provider)) {
       return this._getDefaultSystemTemplate(this.provider);
     }
 
-    if (this.isProvider(NodeProvider.ANEXIA)) {
-      return OperatingSystem.Flatcar;
+    if (this.isOperatingSystemSupported(this._nodeDataService.operatingSystem)) {
+      return this._nodeDataService.operatingSystem;
     }
 
     return OperatingSystem.Ubuntu;
