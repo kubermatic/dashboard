@@ -49,7 +49,7 @@ if [ -d cypress/videos ] || [ -d cypress/screenshots ]; then
 
   function uploadDirectory() {
     if [ -d "cypress/$1" ]; then
-      mc mirror "cypress/$1" "minio/$bucketPath/$1"
+      mc mirror --quiet "cypress/$1" "minio/$bucketPath/$1"
     fi
   }
 
@@ -62,7 +62,8 @@ if [ -d cypress/videos ] || [ -d cypress/screenshots ]; then
         file="$(python -c "import urllib; print urllib.quote('''$line''')")"
         echodate "$MINIO_PUBLIC_ADDRESS/$bucketPath/$1/$file"
       done
-      cd -
+      # do not print the directory name
+      cd - > /dev/null
     fi
   }
 
@@ -70,8 +71,7 @@ if [ -d cypress/videos ] || [ -d cypress/screenshots ]; then
   uploadDirectory videos
 
   echo
-  echodate "Artifacts have been uploaded to Minio and are available for a few days."
-  echodate "Use the following links to access them:"
+  echodate "Artifacts have been uploaded to Minio and can be accessed using the following links:"
   echo
 
   printLinks screenshots
