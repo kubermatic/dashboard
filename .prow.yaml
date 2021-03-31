@@ -1,159 +1,159 @@
 presubmits:
-- name: pre-dashboard-go-mod-verify
-  always_run: true
-  decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
-  labels:
-    preset-goproxy: "true"
-  spec:
-    containers:
-      - image: golang:1.16.2
-        command:
-          - make
-          - verify-go
-        resources:
-          requests:
-            cpu: 100m
+# - name: pre-dashboard-go-mod-verify
+#   always_run: true
+#   decorate: true
+#   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+#   labels:
+#     preset-goproxy: "true"
+#   spec:
+#     containers:
+#       - image: golang:1.16.2
+#         command:
+#           - make
+#           - verify-go
+#         resources:
+#           requests:
+#             cpu: 100m
 
-- name: pre-dashboard-check-static
-  always_run: true
-  decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
-  spec:
-    containers:
-      - image: node:14.11.0
-        command:
-          - make
-          - check
-        resources:
-          requests:
-            cpu: 1
-            memory: 3Gi
-          limits:
-            cpu: 2
-            memory: 5Gi
+# - name: pre-dashboard-check-static
+#   always_run: true
+#   decorate: true
+#   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+#   spec:
+#     containers:
+#       - image: node:14.11.0
+#         command:
+#           - make
+#           - check
+#         resources:
+#           requests:
+#             cpu: 1
+#             memory: 3Gi
+#           limits:
+#             cpu: 2
+#             memory: 5Gi
 
-- name: pre-dashboard-test-unit
-  always_run: true
-  decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
-  spec:
-    containers:
-      - image: quay.io/kubermatic/chrome-headless:v0.8
-        command:
-          - make
-          - test-headless
-        resources:
-          requests:
-            cpu: 1
-            memory: 3Gi
-          limits:
-            cpu: 2
-            memory: 5Gi
-        env:
-          - name: CODECOV_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: kubermatic-codecov
-                key: token
+# - name: pre-dashboard-test-unit
+#   always_run: true
+#   decorate: true
+#   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+#   spec:
+#     containers:
+#       - image: quay.io/kubermatic/chrome-headless:v0.8
+#         command:
+#           - make
+#           - test-headless
+#         resources:
+#           requests:
+#             cpu: 1
+#             memory: 3Gi
+#           limits:
+#             cpu: 2
+#             memory: 5Gi
+#         env:
+#           - name: CODECOV_TOKEN
+#             valueFrom:
+#               secretKeyRef:
+#                 name: kubermatic-codecov
+#                 key: token
 
-- name: pre-dashboard-test-e2e
-  always_run: true
-  decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
-  extra_refs:
-    # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
-    - org: kubermatic
-      repo: kubermatic
-      base_ref: master
-      clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
-  labels:
-    preset-anexia: "true"
-    preset-aws: "true"
-    preset-azure: "true"
-    preset-digitalocean: "true"
-    preset-gce: "true"
-    preset-hetzner: "true"
-    preset-kubevirt: "true"
-    preset-openstack: "true"
-    preset-packet: "true"
-    preset-vsphere: "true"
-    preset-docker-pull: "true"
-    preset-goproxy: "true"
-    preset-kind-volume-mounts: "true"
-    preset-kubeconfig-ci: "true"
-    preset-minio: "true"
-  spec:
-    containers:
-      - image: quay.io/kubermatic/e2e-kind-cypress:v1.5.0
-        command:
-          - make
-          - run-e2e-ci
-        securityContext:
-          privileged: true
-        resources:
-          requests:
-            memory: 6Gi
-            cpu: 4
-          limits:
-            memory: 6Gi
-            cpu: 4
-        env:
-          - name: SERVICE_ACCOUNT_KEY
-            valueFrom:
-              secretKeyRef:
-                name: e2e-ci
-                key: serviceAccountSigningKey
+# - name: pre-dashboard-test-e2e
+#   always_run: true
+#   decorate: true
+#   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+#   extra_refs:
+#     # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
+#     - org: kubermatic
+#       repo: kubermatic
+#       base_ref: master
+#       clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
+#   labels:
+#     preset-anexia: "true"
+#     preset-aws: "true"
+#     preset-azure: "true"
+#     preset-digitalocean: "true"
+#     preset-gce: "true"
+#     preset-hetzner: "true"
+#     preset-kubevirt: "true"
+#     preset-openstack: "true"
+#     preset-packet: "true"
+#     preset-vsphere: "true"
+#     preset-docker-pull: "true"
+#     preset-goproxy: "true"
+#     preset-kind-volume-mounts: "true"
+#     preset-kubeconfig-ci: "true"
+#     preset-minio: "true"
+#   spec:
+#     containers:
+#       - image: quay.io/kubermatic/e2e-kind-cypress:v1.5.0
+#         command:
+#           - make
+#           - run-e2e-ci
+#         securityContext:
+#           privileged: true
+#         resources:
+#           requests:
+#             memory: 6Gi
+#             cpu: 4
+#           limits:
+#             memory: 6Gi
+#             cpu: 4
+#         env:
+#           - name: SERVICE_ACCOUNT_KEY
+#             valueFrom:
+#               secretKeyRef:
+#                 name: e2e-ci
+#                 key: serviceAccountSigningKey
 
-- name: pre-dashboard-test-e2e-ce
-  always_run: true
-  decorate: true
-  clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
-  extra_refs:
-    # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
-    - org: kubermatic
-      repo: kubermatic
-      base_ref: master
-      clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
-  labels:
-    preset-anexia: "true"
-    preset-aws: "true"
-    preset-azure: "true"
-    preset-digitalocean: "true"
-    preset-gce: "true"
-    preset-hetzner: "true"
-    preset-kubevirt: "true"
-    preset-openstack: "true"
-    preset-packet: "true"
-    preset-vsphere: "true"
-    preset-docker-pull: "true"
-    preset-goproxy: "true"
-    preset-kind-volume-mounts: "true"
-    preset-kubeconfig-ci: "true"
-    preset-minio: "true"
-  spec:
-    containers:
-      - image: quay.io/kubermatic/e2e-kind-cypress:v1.5.0
-        command:
-          - make
-          - run-e2e-ci
-        securityContext:
-          privileged: true
-        resources:
-          requests:
-            memory: 6Gi
-            cpu: 4
-          limits:
-            memory: 6Gi
-            cpu: 4
-        env:
-          - name: KUBERMATIC_EDITION
-            value: ce
-          - name: SERVICE_ACCOUNT_KEY
-            valueFrom:
-              secretKeyRef:
-                name: e2e-ci
-                key: serviceAccountSigningKey
+# - name: pre-dashboard-test-e2e-ce
+#   always_run: true
+#   decorate: true
+#   clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+#   extra_refs:
+#     # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
+#     - org: kubermatic
+#       repo: kubermatic
+#       base_ref: master
+#       clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
+#   labels:
+#     preset-anexia: "true"
+#     preset-aws: "true"
+#     preset-azure: "true"
+#     preset-digitalocean: "true"
+#     preset-gce: "true"
+#     preset-hetzner: "true"
+#     preset-kubevirt: "true"
+#     preset-openstack: "true"
+#     preset-packet: "true"
+#     preset-vsphere: "true"
+#     preset-docker-pull: "true"
+#     preset-goproxy: "true"
+#     preset-kind-volume-mounts: "true"
+#     preset-kubeconfig-ci: "true"
+#     preset-minio: "true"
+#   spec:
+#     containers:
+#       - image: quay.io/kubermatic/e2e-kind-cypress:v1.5.0
+#         command:
+#           - make
+#           - run-e2e-ci
+#         securityContext:
+#           privileged: true
+#         resources:
+#           requests:
+#             memory: 6Gi
+#             cpu: 4
+#           limits:
+#             memory: 6Gi
+#             cpu: 4
+#         env:
+#           - name: KUBERMATIC_EDITION
+#             value: ce
+#           - name: SERVICE_ACCOUNT_KEY
+#             valueFrom:
+#               secretKeyRef:
+#                 name: e2e-ci
+#                 key: serviceAccountSigningKey
 
 - name: pre-dashboard-build-image
   always_run: true
@@ -165,22 +165,20 @@ presubmits:
   spec:
     containers:
       - image: quay.io/kubermatic/nodejs:v2.0
+        imagePullPolicy: Always
         command:
           - /bin/bash
           - -c
-          - >-
-            set -euo pipefail &&
-            /usr/local/bin/start-docker.sh &&
-            docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD &&
-            docker login -u $QUAY_IO_USERNAME -p $QUAY_IO_PASSWORD quay.io &&
+          - |
+            set -euo pipefail
+            /usr/local/bin/start-docker.sh
+            echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
+            echo "$QUAY_IO_PASSWORD" | docker login --username "$QUAY_IO_USERNAME" --password-stdin quay.io
             make docker-build
         # docker-in-docker needs privileged mode
         securityContext:
           privileged: true
         resources:
           requests:
-            cpu: 250m
-            memory: 2.5Gi
-          limits:
             cpu: 1
-            memory: 3Gi
+            memory: 2.5Gi
