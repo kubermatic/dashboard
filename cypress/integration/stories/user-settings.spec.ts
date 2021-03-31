@@ -52,7 +52,12 @@ describe('User Settings Story', () => {
     UserSettingsPage.getThemePicker().should(isEnterpriseEdition ? Condition.Exist : Condition.NotExist);
   });
 
-  // TODO: Set theme.
+  if (isEnterpriseEdition) {
+    it(`should set dark theme`, () => {
+      UserSettingsPage.getThemeButton('dark').click();
+      cy.get(`.km-style-dark`).should(Condition.Exist);
+    });
+  }
 
   it(`should set ${itemsPerPage} items per page`, () => {
     UserSettingsPage.getItemsPerPageInput().click();
@@ -74,11 +79,16 @@ describe('User Settings Story', () => {
     cy.wait(waitTime).url().should(Condition.Include, View.Clusters);
   });
 
-  // TODO: Verify items per page and theme.
-
   it('should go to the user settings', () => {
     UserSettingsPage.visit();
   });
+
+  if (isEnterpriseEdition) {
+    it(`should set default theme`, () => {
+      UserSettingsPage.getThemeButton('light').click();
+      cy.get(`.km-style-light`).should(Condition.Exist);
+    });
+  }
 
   it('should set default items per page', () => {
     UserSettingsPage.getItemsPerPageInput().click();

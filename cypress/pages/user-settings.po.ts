@@ -34,6 +34,10 @@ export class UserSettingsPage {
     return cy.get('#km-theme-picker');
   }
 
+  static getThemeButton(theme: string): Cypress.Chainable {
+    return cy.get(`#${theme}`);
+  }
+
   // Utils.
 
   static verifyUrl(): void {
