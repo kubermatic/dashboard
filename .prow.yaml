@@ -83,6 +83,7 @@ presubmits:
       preset-kind-volume-mounts: "true"
       preset-kubeconfig-ci: "true"
       preset-minio: "true"
+      preset-scratch-tmpfs: "true"
     spec:
       containers:
         - image: quay.io/kubermatic/e2e-kind-cypress:v1.5.0
@@ -132,6 +133,7 @@ presubmits:
       preset-kind-volume-mounts: "true"
       preset-kubeconfig-ci: "true"
       preset-minio: "true"
+      preset-scratch-tmpfs: "true"
     spec:
       containers:
         - image: quay.io/kubermatic/e2e-kind-cypress:v1.5.0
