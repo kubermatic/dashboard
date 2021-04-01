@@ -16,6 +16,7 @@
     <mat-button-toggle *ngFor="let theme of themes"
                        [value]="theme.name">
       <i class="km-icon-mask"
+         [id]="theme.name"
          [ngClass]="theme.isDark ? 'km-icon-moon' : 'km-icon-sun'"></i>
       {{theme.displayName}}
     </mat-button-toggle>

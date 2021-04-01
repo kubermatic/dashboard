@@ -84,6 +84,15 @@ export class ProjectsPage {
       });
   }
 
+  static visitUsingHeader(): void {
+    cy.get('.km-header-logo')
+      .click()
+      .then(() => {
+        this.waitForRefresh();
+        this.verifyUrl();
+      });
+  }
+
   static selectProject(projectName: string): void {
     const waitTime = 500;
     this.getProjectItem(projectName).should(Condition.HaveLength, 1);

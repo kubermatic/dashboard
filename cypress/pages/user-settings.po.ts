@@ -14,8 +14,24 @@ import {View} from '../utils/view';
 import {UserPanel} from './user-panel.po';
 
 export class UserSettingsPage {
+  static getUserEmail(): Cypress.Chainable {
+    return cy.get('.user-email');
+  }
+
+  static getItemsPerPageInput(): Cypress.Chainable {
+    return cy.get('#km-items-per-page-select');
+  }
+
+  static getDefaultProjectInput(): Cypress.Chainable {
+    return cy.get('#km-default-project-select');
+  }
+
   static getThemePicker(): Cypress.Chainable {
     return cy.get('#km-theme-picker');
+  }
+
+  static getThemeButton(theme: string): Cypress.Chainable {
+    return cy.get(`#${theme}`);
   }
 
   // Utils.
