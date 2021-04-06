@@ -30,6 +30,8 @@ export class OPAService {
   private _gatekeeperConfigRefresh$ = new Subject<void>();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
+  private _violationPageIndex: number;
+
   constructor(private readonly _http: HttpClient, private readonly _appConfigService: AppConfigService) {}
 
   get constraintTemplates(): Observable<ConstraintTemplate[]> {
@@ -140,5 +142,13 @@ export class OPAService {
   deleteGatekeeperConfig(projectId: string, clusterId: string): Observable<any> {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/gatekeeper/config`;
     return this._http.delete(url);
+  }
+
+  get violationPageIndex(): number {
+    return this._violationPageIndex;
+  }
+
+  saveViolationPageIndex(index: number): void {
+    this._violationPageIndex = index;
   }
 }

@@ -14,6 +14,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeViolations} from '@app/testing/fake-data/opa.fake';
 import {CoreModule} from '@core/module';
+import {OPAService} from '@core/services/opa/service';
 import {SharedModule} from '@shared/shared.module';
 import {ViolationDetailsComponent} from './component';
 
@@ -25,10 +26,18 @@ describe('ViolationDetailsComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
+      const opaMock = {
+        saveViolationPageIndex: jest.fn(),
+        violationPageIndex: jest.fn(),
+        refreshConstraint: () => {},
+      };
+      opaMock.saveViolationPageIndex.mockReturnValue(null);
+      opaMock.violationPageIndex.mockReturnValue(0);
+
       TestBed.configureTestingModule({
         imports: [...modules],
         declarations: [ViolationDetailsComponent],
-        providers: [],
+        providers: [{provide: OPAService, useValue: opaMock}],
       }).compileComponents();
     })
   );
