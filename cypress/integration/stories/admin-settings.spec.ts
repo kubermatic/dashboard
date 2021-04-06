@@ -92,6 +92,10 @@ describe('User Settings Story', () => {
     AdminSettingsPage.getDemoInfoCheckbox().should(Condition.NotBeChecked);
   })
 
+  it('should wait for a few seconds for settings to apply', () => {
+    cy.wait(waitTime);
+  })
+
   it('should check if footer does not contain custom link', () => {
 
   })
