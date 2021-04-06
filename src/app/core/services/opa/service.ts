@@ -29,8 +29,7 @@ export class OPAService {
   private _gatekeeperConfig$ = new Map<string, Observable<GatekeeperConfig>>();
   private _gatekeeperConfigRefresh$ = new Subject<void>();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
-
-  private _violationPageIndex: number;
+  private _violationPageIndex = new Map<string, number>();
 
   constructor(private readonly _http: HttpClient, private readonly _appConfigService: AppConfigService) {}
 
@@ -144,11 +143,13 @@ export class OPAService {
     return this._http.delete(url);
   }
 
-  get violationPageIndex(): number {
-    return this._violationPageIndex;
+  getViolationPageIndex(projectId: string, clusterId: string, constraintName: string): number {
+    const id = `${projectId}-${clusterId}-${constraintName}`;
+    return this._violationPageIndex.get(id);
   }
 
-  saveViolationPageIndex(index: number): void {
-    this._violationPageIndex = index;
+  saveViolationPageIndex(projectId: string, clusterId: string, constraintName: string, pageIndex: number): void {
+    const id = `${projectId}-${clusterId}-${constraintName}`;
+    this._violationPageIndex.set(id, pageIndex);
   }
 }

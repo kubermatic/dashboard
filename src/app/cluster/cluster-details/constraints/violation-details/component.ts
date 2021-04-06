@@ -25,6 +25,9 @@ import {UserSettings} from '@shared/entity/settings';
 export class ViolationDetailsComponent implements OnInit {
   @Input() violations: Violation[] = [];
   @Input() settings: UserSettings;
+  @Input() constraintName: string;
+  @Input() projectId: string;
+  @Input() clusterId: string;
   displayedColumns: string[] = ['name', 'enforcement', 'kind', 'message'];
   dataSource = new MatTableDataSource<Violation>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -37,7 +40,11 @@ export class ViolationDetailsComponent implements OnInit {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.paginator.pageSize = this.settings.itemsPerPage;
-    this.paginator.pageIndex = this._opaService.violationPageIndex;
+    this.paginator.pageIndex = this._opaService.getViolationPageIndex(
+      this.projectId,
+      this.clusterId,
+      this.constraintName
+    );
     this.sort.active = 'name';
     this.sort.direction = 'asc';
   }
@@ -52,6 +59,6 @@ export class ViolationDetailsComponent implements OnInit {
   }
 
   onPaginateChange(event: PageEvent): void {
-    this._opaService.saveViolationPageIndex(event.pageIndex);
+    this._opaService.saveViolationPageIndex(this.projectId, this.clusterId, this.constraintName, event.pageIndex);
   }
 }
