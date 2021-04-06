@@ -9,7 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM quay.io/kubermatic/kind:v2.0 AS kkpbuild
+FROM quay.io/kubermatic/build:go-1.16-kind-0.8-nodejs-14.16-0 AS kkpbuild
 
 FROM cypress/browsers:node14.7.0-chrome84
 LABEL maintainer="support@kubermatic.com"
@@ -18,8 +18,8 @@ ENV GO_VERSION="1.16.1"
 
 # make sure to keep these in-sync with that the kkpbuild base image uses;
 # sadly it's not possible to copy env vars in multi-stage builds
-ENV KIND_VERSION="v0.10.0"
-ENV KIND_NODE_VERSION="v1.20.2"
+ENV KIND_VERSION="v0.8.1"
+ENV KIND_NODE_VERSION="v1.18.2"
 
 COPY --from=kkpbuild /kindest.tar /kindest.tar
 COPY --from=kkpbuild /usr/local/bin/helm2 /usr/local/bin/helm2

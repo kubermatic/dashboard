@@ -9,10 +9,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM quay.io/kubermatic/nodejs:v2.0
+FROM quay.io/kubermatic/build:go-1.16-kind-0.8-nodejs-14.16-0
 LABEL maintainer="support@kubermatic.com"
 
 # Install Google Chrome
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-RUN apt-get update && apt-get install -y google-chrome-stable
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+    sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
+    apt-get update && \
+    apt-get install -y google-chrome-stable
