@@ -20,4 +20,6 @@ export enum Condition {
   HaveLength = 'have.length',
   NotBe = 'not.be',
   BeEnabled = 'be.enabled',
+  BeChecked = 'be.checked',
+  NotBeChecked = 'not.be.checked',
 }

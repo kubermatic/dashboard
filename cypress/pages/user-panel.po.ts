@@ -22,6 +22,10 @@ export class UserPanel {
     return cy.get('#km-navbar-user-settings-btn');
   }
 
+  static getAdminSettingsBtn(): Cypress.Chainable {
+    return cy.get('#km-navbar-admin-settings-btn');
+  }
+
   // Utils.
 
   static open(): void {
