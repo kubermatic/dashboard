@@ -15,6 +15,7 @@ export enum Condition {
   Exist = 'exist',
   HaveAttribute = 'have.attr',
   HaveClass = 'have.class',
+  NotHaveClass = 'not.have.class',
   HaveLength = 'have.length',
   HaveValue = 'have.value',
   Include = 'include',
