@@ -45,6 +45,10 @@ export class AdminSettingsPage {
     return cy.get('.km-footer');
   }
 
+  static getFooterCustomIcon(url: string): Cypress.Chainable {
+    return cy.get(`.km-footer a[href="${url}"]`)
+  }
+
   // Utils.
 
   static verifyUrl(): void {

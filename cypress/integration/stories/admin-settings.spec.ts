@@ -20,6 +20,8 @@ describe('User Settings Story', () => {
   const linkLocation = 'Footer';
   const linkLabel = 'Google';
   const linkURL = 'https://www.google.com/';
+  const demoInfo = 'Demo system';
+  const termsOfService = 'Terms of Service';
   const waitTime = 3000;
 
   it('should login', () => {
@@ -58,7 +60,7 @@ describe('User Settings Story', () => {
   })
 
   it('should check if footer contains custom link', () => {
-
+    AdminSettingsPage.getFooterCustomIcon(linkURL).should(Condition.Exist);
   })
 
   it('should check if help panel contains API docs', () => {
@@ -66,11 +68,11 @@ describe('User Settings Story', () => {
   })
 
   it('should check if footer contains terms of service', () => {
-
+    AdminSettingsPage.getFooter().should(Condition.Contain, termsOfService);
   })
 
   it('should check if footer contains demo information', () => {
-
+    AdminSettingsPage.getFooter().should(Condition.Contain, demoInfo);
   })
 
   it('should delete custom link', () => {
@@ -97,19 +99,19 @@ describe('User Settings Story', () => {
   })
 
   it('should check if footer does not contain custom link', () => {
+    AdminSettingsPage.getFooterCustomIcon(linkURL).should(Condition.NotExist);
+  })
+
+  it('should check if help panel does not contain API docs', () => {
 
   })
 
-  it('should check if help panel contains API docs', () => {
-
+  it('should check if footer does not contain terms of service', () => {
+    AdminSettingsPage.getFooter().should(Condition.NotContain, termsOfService);
   })
 
-  it('should check if footer contains terms of service', () => {
-
-  })
-
-  it('should check if footer contains demo information', () => {
-
+  it('should check if footer does not contain demo information', () => {
+    AdminSettingsPage.getFooter().should(Condition.NotContain, demoInfo);
   })
 
   it('should logout', () => {
