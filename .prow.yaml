@@ -7,7 +7,7 @@ presubmits:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: golang:1.16.2
+        - image: quay.io/kubermatic/build:go-1.16-kind-0.8-nodejs-14.16-0
           command:
             - make
             - verify-go
@@ -21,7 +21,7 @@ presubmits:
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     spec:
       containers:
-        - image: node:14.11.0
+        - image: quay.io/kubermatic/build:go-1.16-kind-0.8-nodejs-14.16-0
           command:
             - make
             - check
@@ -168,7 +168,7 @@ presubmits:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/nodejs:v2.0
+        - image: quay.io/kubermatic/build:go-1.16-kind-0.8-nodejs-14.16-0
           imagePullPolicy: Always
           command:
             - /bin/bash
