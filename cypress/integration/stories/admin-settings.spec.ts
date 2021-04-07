@@ -13,6 +13,7 @@ import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {View} from '../../utils/view';
 import {AdminSettingsPage} from "../../pages/admin-settings.po";
+import {HelpPanel} from "../../pages/help-panel.po";
 
 describe('User Settings Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
@@ -64,7 +65,8 @@ describe('User Settings Story', () => {
   })
 
   it('should check if help panel contains API docs', () => {
-
+    HelpPanel.open();
+    HelpPanel.getAPIDocsBtn().should(Condition.Exist);
   })
 
   it('should check if footer contains terms of service', () => {
@@ -76,7 +78,7 @@ describe('User Settings Story', () => {
   })
 
   it('should delete custom link', () => {
-
+    AdminSettingsPage.getSecondLastCustomLinkDeleteButton().should(Condition.NotBe, 'disabled').click();
   })
 
   it('should make sure that API documentation display is disabled', () => {
@@ -103,7 +105,8 @@ describe('User Settings Story', () => {
   })
 
   it('should check if help panel does not contain API docs', () => {
-
+    HelpPanel.open();
+    HelpPanel.getAPIDocsBtn().should(Condition.NotExist);
   })
 
   it('should check if footer does not contain terms of service', () => {

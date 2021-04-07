@@ -15,6 +15,7 @@ import {UserPanel} from './user-panel.po';
 
 export class AdminSettingsPage {
   private static lastCustomLink = 'km-custom-links-form > form > div > div:last-child';
+  private static secondLastCustomLink = 'km-custom-links-form > form > div > div:nth-last-child(2)';
 
   static getLastCustomLinkLabelInput(): Cypress.Chainable {
     return cy.get(`${AdminSettingsPage.lastCustomLink} > mat-form-field:nth-child(1)`);
@@ -27,6 +28,10 @@ export class AdminSettingsPage {
   // It should be used before setting the label and the URL because otherwise the new inputs will be added to form.
   static getLastCustomLinkLocationInput(): Cypress.Chainable {
     return cy.get(`${AdminSettingsPage.lastCustomLink} > mat-form-field:nth-child(4)`);
+  }
+
+  static getSecondLastCustomLinkDeleteButton(): Cypress.Chainable {
+    return cy.get(`${AdminSettingsPage.secondLastCustomLink} > button`);
   }
 
   static getApiDocsCheckbox(): Cypress.Chainable {
