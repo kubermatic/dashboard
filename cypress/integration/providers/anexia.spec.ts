@@ -23,6 +23,7 @@ import {prefixedString} from '../../utils/random';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 
+// TODO: Reenable once anexia node deletion is working reliably
 xdescribe('Anexia Provider', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');

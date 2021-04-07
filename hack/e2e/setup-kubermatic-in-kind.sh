@@ -48,11 +48,13 @@ cat $REPO_ROOT/hack/e2e/fixtures/oauth_values.yaml >> $HELM_VALUES_FILE
 # prepare to run kubermatic-installer
 KUBERMATIC_CONFIG="$(mktemp)"
 IMAGE_PULL_SECRET_INLINE="$(echo "$IMAGE_PULL_SECRET_DATA" | base64 --decode | jq --compact-output --monochrome-output '.')"
+KUBERMATIC_DOMAIN="${KUBERMATIC_DOMAIN:-ci.kubermatic.io}"
 
 cp $REPO_ROOT/hack/e2e/fixtures/kubermatic.yaml $KUBERMATIC_CONFIG
 
 sed -i "s;__SERVICE_ACCOUNT_KEY__;$SERVICE_ACCOUNT_KEY;g" $KUBERMATIC_CONFIG
 sed -i "s;__IMAGE_PULL_SECRET__;$IMAGE_PULL_SECRET_INLINE;g" $KUBERMATIC_CONFIG
+sed -i "s;__KUBERMATIC_DOMAIN__;$KUBERMATIC_DOMAIN;g" $KUBERMATIC_CONFIG
 
 # The alias makes it easier to access the port-forwarded Dex inside the Kind cluster;
 # the token issuer cannot be localhost:5556, because pods inside the cluster would not
@@ -111,8 +113,40 @@ appendTrap cleanup_kubermatic_clusters_in_kind EXIT
 
 TEST_NAME="Expose Dex and Kubermatic API"
 echodate "Exposing Dex and Kubermatic API to localhost..."
-kubectl port-forward --address 0.0.0.0 -n oauth svc/dex 5556 >/dev/null &
-kubectl port-forward --address 0.0.0.0 -n kubermatic svc/kubermatic-api 8080:80 >/dev/null &
+
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Service
+metadata:
+  name: dex-nodeport
+  namespace: oauth
+spec:
+  type: NodePort
+  ports:
+    - name: dex
+      port: 5556
+      protocol: TCP
+      nodePort: 32000
+  selector:
+    app: dex
+EOF
+
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubermatic-api-nodeport
+  namespace: kubermatic
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      nodePort: 32001
+  selector:
+    app.kubernetes.io/name: kubermatic-api
+EOF
 echodate "Finished exposing components"
 
 echodate "Creating UI AWS preset..."
@@ -233,22 +267,6 @@ spec:
 EOF
 retry 2 kubectl apply -f preset-anexia.yaml
 
-echodate "Creating UI Azure preset..."
-cat <<EOF > preset-azure.yaml
-apiVersion: kubermatic.k8s.io/v1
-kind: Preset
-metadata:
-  name: e2e-azure
-  namespace: kubermatic
-spec:
-  azure:
-    tenantId: ${AZURE_E2E_TESTS_TENANT_ID}
-    subscriptionId: ${AZURE_E2E_TESTS_SUBSCRIPTION_ID}
-    clientId: ${AZURE_E2E_TESTS_CLIENT_ID}
-    clientSecret: ${AZURE_E2E_TESTS_CLIENT_SECRET}
-EOF
-retry 2 kubectl apply -f preset-azure.yaml
-
 echodate "Creating UI Hetzner preset..."
 cat <<EOF > preset-hetzner.yaml
 apiVersion: kubermatic.k8s.io/v1
@@ -275,7 +293,6 @@ spec:
     password: ${VSPHERE_E2E_PASSWORD}
 EOF
 retry 2 kubectl apply -f preset-vsphere.yaml
-
 
 echodate "Applying user..."
 retry 2 kubectl apply -f hack/e2e/fixtures/user.yaml

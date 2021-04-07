@@ -19,36 +19,6 @@ export KUBERMATIC_EDITION="${KUBERMATIC_EDITION:-ce}"
 
 start_docker_daemon
 
-# Prevent mtu-related timeouts
-echodate "Setting iptables rule to clamp mss to path mtu"
-iptables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
-
-# Make debugging a bit better
-echodate "Configuring bash"
-cat <<EOF >>~/.bashrc
-# Gets set to the CI cluster's kubeconfig by a Prow preset
-unset KUBECONFIG
-
-cn() {
-  kubectl config set-context --current --namespace=\$1
-}
-
-kubeconfig() {
-  TMP_KUBECONFIG=\$(mktemp);
-  kubectl get secret admin-kubeconfig -o go-template='{{ index .data "kubeconfig" }}' | base64 -d > \$TMP_KUBECONFIG;
-  export KUBECONFIG=\$TMP_KUBECONFIG;
-  cn kube-system
-}
-
-# this alias makes it so that watch can be used with other aliases, like "watch k get pods"
-alias watch='watch '
-alias k=kubectl
-alias ll='ls -lh --file-type --group-directories-first'
-alias lll='ls -lahF --group-directories-first'
-source <(k completion bash )
-source <(k completion bash | sed s/kubectl/k/g)
-EOF
-
 # Load kind image
 echodate "Loading kindest image"
 docker load --input /kindest.tar
@@ -60,9 +30,54 @@ echodate "Creating the kind cluster"
 export KUBECONFIG=~/.kube/config
 
 beforeKindCreate=$(nowms)
-export KIND_NODE_VERSION=v1.18.2
-kind create cluster --name "$KIND_CLUSTER_NAME" --image=kindest/node:$KIND_NODE_VERSION
+cat <<EOF | kind create cluster --name="$KIND_CLUSTER_NAME" --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+    # KIND_NODE_VERSION is defined by the kind Docker image
+    image: kindest/node:$KIND_NODE_VERSION
+    # this allows us to reach NodePort services
+    # from the test pod (i.e. localhost) and is
+    # more stable than doing a long-lived
+    # kubectl port-forward
+    extraPortMappings:
+      # oauth/dex
+      - containerPort: 32000
+        hostPort: 5556
+        protocol: TCP
+      # kubermatic/kubermatic-api
+      - containerPort: 32001
+        hostPort: 8080
+        protocol: TCP
+    # make sure PVCs can be mounted to this tmpfs instead
+    # of to an SSD-backed emptyDir
+    extraMounts:
+      - hostPath: /scratch
+        containerPath: /scratch
+EOF
 pushElapsed kind_cluster_create_duration_milliseconds $beforeKindCreate "node_version=\"$KIND_NODE_VERSION\""
+
+# reconfigure the local-path-provisioner to use the tmpfs
+cat << EOF | kubectl apply --filename -
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: local-path-config
+  namespace: local-path-storage
+data:
+  config.json: |-
+    {
+      "nodePathMap":[
+        {
+          "node":"DEFAULT_PATH_FOR_NON_LISTED_NODES",
+          "paths":["/scratch"]
+        }
+      ]
+    }
+EOF
+
+kubectl --namespace local-path-storage rollout restart deployment/local-path-provisioner
 
 # Start cluster exposer, which will expose services from within kind as
 # a NodePort service on the host
