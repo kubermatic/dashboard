@@ -23,7 +23,6 @@ describe('User Settings Story', () => {
   const linkURL = 'https://www.google.com/';
   const demoInfo = 'Demo system';
   const termsOfService = 'Terms of Service';
-  const waitTime = 3000;
 
   it('should login', () => {
     login(email, password);
@@ -43,21 +42,17 @@ describe('User Settings Story', () => {
 
   it('should make sure that API documentation display is enabled', () => {
     AdminSettingsPage.getApiDocsCheckbox().click();
-    AdminSettingsPage.getApiDocsCheckbox().should(Condition.BeChecked);
+    AdminSettingsPage.getApiDocsCheckbox().find('input').should(Condition.BeChecked);
   })
 
   it('should make sure that terms of service display is enabled', () => {
     AdminSettingsPage.getTermsOfServiceCheckbox().click();
-    AdminSettingsPage.getTermsOfServiceCheckbox().should(Condition.BeChecked);
+    AdminSettingsPage.getTermsOfServiceCheckbox().find('input').should(Condition.BeChecked);
   })
 
   it('should make sure that demo information display is enabled', () => {
     AdminSettingsPage.getDemoInfoCheckbox().click();
-    AdminSettingsPage.getDemoInfoCheckbox().should(Condition.BeChecked);
-  })
-
-  it('should wait for a few seconds for settings to apply', () => {
-    cy.wait(waitTime);
+    AdminSettingsPage.getDemoInfoCheckbox().find('input').should(Condition.BeChecked);
   })
 
   it('should check if footer contains custom link', () => {
@@ -83,30 +78,25 @@ describe('User Settings Story', () => {
 
   it('should make sure that API documentation display is disabled', () => {
     AdminSettingsPage.getApiDocsCheckbox().click();
-    AdminSettingsPage.getApiDocsCheckbox().should(Condition.NotBeChecked);
+    AdminSettingsPage.getApiDocsCheckbox().find('input').should(Condition.NotBeChecked);
   })
 
   it('should make sure that terms of service display is disabled', () => {
     AdminSettingsPage.getTermsOfServiceCheckbox().click();
-    AdminSettingsPage.getTermsOfServiceCheckbox().should(Condition.NotBeChecked);
+    AdminSettingsPage.getTermsOfServiceCheckbox().find('input').should(Condition.NotBeChecked);
   })
 
   it('should make sure that demo information display is disabled', () => {
     AdminSettingsPage.getDemoInfoCheckbox().click();
-    AdminSettingsPage.getDemoInfoCheckbox().should(Condition.NotBeChecked);
-  })
-
-  it('should wait for a few seconds for settings to apply', () => {
-    cy.wait(waitTime);
+    AdminSettingsPage.getDemoInfoCheckbox().find('input').should(Condition.NotBeChecked);
   })
 
   it('should check if footer does not contain custom link', () => {
     AdminSettingsPage.getFooterCustomIcon(linkURL).should(Condition.NotExist);
   })
 
-  it('should check if help panel does not contain API docs', () => {
-    HelpPanel.open();
-    HelpPanel.getAPIDocsBtn().should(Condition.NotExist);
+  it('should check if help panel is not displayed as it would be empty anyways', () => {
+    HelpPanel.getHelpPanelMenuBtn().should(Condition.NotExist);
   })
 
   it('should check if footer does not contain terms of service', () => {

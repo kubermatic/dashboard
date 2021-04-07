@@ -18,11 +18,11 @@ export class AdminSettingsPage {
   private static secondLastCustomLink = 'km-custom-links-form > form > div > div:nth-last-child(2)';
 
   static getLastCustomLinkLabelInput(): Cypress.Chainable {
-    return cy.get(`${AdminSettingsPage.lastCustomLink} > mat-form-field:nth-child(1)`);
+    return cy.get(`${AdminSettingsPage.lastCustomLink} > mat-form-field:nth-child(1) input`);
   }
 
   static getLastCustomLinkURLInput(): Cypress.Chainable {
-    return cy.get(`${AdminSettingsPage.lastCustomLink} > mat-form-field:nth-child(2)`);
+    return cy.get(`${AdminSettingsPage.lastCustomLink} > mat-form-field:nth-child(2) input`);
   }
 
   // It should be used before setting the label and the URL because otherwise the new inputs will be added to form.

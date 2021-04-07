@@ -12,7 +12,7 @@
 export enum View {
   Clusters = 'clusters',
   Projects = 'projects',
-  Admin = 'admin',
+  Admin = 'settings',
   Account = 'account',
   Members = 'members',
   ServiceAccounts = 'serviceaccounts',
