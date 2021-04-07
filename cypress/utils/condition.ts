@@ -21,4 +21,5 @@ export enum Condition {
   NotBe = 'not.be',
   NotContain = 'not.contain',
   NotExist = 'not.exist',
+  NotHaveClass = 'not.have.class',
 }

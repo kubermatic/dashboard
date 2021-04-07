@@ -9,7 +9,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {HealthStatusMessage} from '../../../src/app/shared/utils/health-status/health-status';
 import {ClustersPage} from '../../pages/clusters.po';
 import {ProjectsPage} from '../../pages/projects.po';
 import {WizardPage} from '../../pages/wizard.po';
@@ -78,7 +77,7 @@ describe('Hetzner Provider', () => {
 
   it('should wait for the cluster to be ready', () => {
     ClustersPage.getClusterName().should(Condition.Contain, clusterName);
-    ClustersPage.getClusterStatus().should(Condition.HaveAttribute, 'ng-reflect-message', HealthStatusMessage.Running);
+    ClustersPage.getClusterStatus().should(Condition.HaveClass, 'km-success-bg');
   });
 
   it('should delete created cluster', () => {
