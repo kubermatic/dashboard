@@ -2,6 +2,8 @@
   "baseUrl": "http://localhost:8000",
   "supportFile": "./cypress/support/index.ts",
   "chromeWebSecurity": false,
+  "screenshotOnRunFailure": true,
+  "videoCompression": 4,
   "pageLoadTimeout": 60000,
   "defaultCommandTimeout": 600000,
   "responseTimeout": 600000,
@@ -9,5 +11,5 @@
   "viewportHeight": 1080,
   "viewportWidth": 1920,
   "projectId": "mdsuba",
-  "video": false
+  "video": true
 }

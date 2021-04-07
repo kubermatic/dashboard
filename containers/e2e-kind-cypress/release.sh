@@ -10,9 +10,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-TAG=v0.7
+set -e
 
-set -euox pipefail
+cd $(dirname $0)
 
-docker build --no-cache --pull -t quay.io/kubermatic/chrome-headless:${TAG} .
-docker push quay.io/kubermatic/chrome-headless:${TAG}
+image="quay.io/kubermatic/e2e-kind-cypress:v1.5.0"
+
+docker build --no-cache --pull -t "$image" .
+docker push "$image"
