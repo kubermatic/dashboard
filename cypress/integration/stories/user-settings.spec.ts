@@ -48,9 +48,9 @@ describe('User Settings Story', () => {
   });
 
   if (isEnterpriseEdition) {
-    it(`should set dark theme`, () => {
+    it('should set dark theme', () => {
       UserSettingsPage.getThemeButton('dark').click();
-      cy.get(`.km-style-dark`).should(Condition.Exist);
+      cy.get('.km-style-dark').should(Condition.Exist);
     });
   }
 
@@ -79,9 +79,9 @@ describe('User Settings Story', () => {
   });
 
   if (isEnterpriseEdition) {
-    it(`should set default theme`, () => {
+    it('should set default theme', () => {
       UserSettingsPage.getThemeButton('light').click();
-      cy.get(`.km-style-light`).should(Condition.Exist);
+      cy.get('.km-style-light').should(Condition.Exist);
     });
   }
 

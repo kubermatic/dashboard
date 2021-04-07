@@ -12,8 +12,8 @@
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {View} from '../../utils/view';
-import {AdminSettingsPage} from "../../pages/admin-settings.po";
-import {HelpPanel} from "../../pages/help-panel.po";
+import {AdminSettingsPage} from '../../pages/admin-settings.po';
+import {HelpPanel} from '../../pages/help-panel.po';
 
 describe('User Settings Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
@@ -43,69 +43,69 @@ describe('User Settings Story', () => {
   it('should make sure that API documentation display is enabled', () => {
     AdminSettingsPage.getApiDocsCheckbox().click();
     AdminSettingsPage.getApiDocsCheckbox().find('input').should(Condition.BeChecked);
-  })
+  });
 
   it('should make sure that terms of service display is enabled', () => {
     AdminSettingsPage.getTermsOfServiceCheckbox().click();
     AdminSettingsPage.getTermsOfServiceCheckbox().find('input').should(Condition.BeChecked);
-  })
+  });
 
   it('should make sure that demo information display is enabled', () => {
     AdminSettingsPage.getDemoInfoCheckbox().click();
     AdminSettingsPage.getDemoInfoCheckbox().find('input').should(Condition.BeChecked);
-  })
+  });
 
   it('should check if footer contains custom link', () => {
     AdminSettingsPage.getFooterCustomIcon(linkURL).should(Condition.Exist);
-  })
+  });
 
   it('should check if help panel contains API docs', () => {
     HelpPanel.open();
     HelpPanel.getAPIDocsBtn().should(Condition.Exist);
-  })
+  });
 
   it('should check if footer contains terms of service', () => {
     AdminSettingsPage.getFooter().should(Condition.Contain, termsOfService);
-  })
+  });
 
   it('should check if footer contains demo information', () => {
     AdminSettingsPage.getFooter().should(Condition.Contain, demoInfo);
-  })
+  });
 
   it('should delete custom link', () => {
     AdminSettingsPage.getSecondLastCustomLinkDeleteButton().should(Condition.NotBe, 'disabled').click();
-  })
+  });
 
   it('should make sure that API documentation display is disabled', () => {
     AdminSettingsPage.getApiDocsCheckbox().click();
     AdminSettingsPage.getApiDocsCheckbox().find('input').should(Condition.NotBeChecked);
-  })
+  });
 
   it('should make sure that terms of service display is disabled', () => {
     AdminSettingsPage.getTermsOfServiceCheckbox().click();
     AdminSettingsPage.getTermsOfServiceCheckbox().find('input').should(Condition.NotBeChecked);
-  })
+  });
 
   it('should make sure that demo information display is disabled', () => {
     AdminSettingsPage.getDemoInfoCheckbox().click();
     AdminSettingsPage.getDemoInfoCheckbox().find('input').should(Condition.NotBeChecked);
-  })
+  });
 
   it('should check if footer does not contain custom link', () => {
     AdminSettingsPage.getFooterCustomIcon(linkURL).should(Condition.NotExist);
-  })
+  });
 
   it('should check if help panel is not displayed as it would be empty anyways', () => {
     HelpPanel.getHelpPanelMenuBtn().should(Condition.NotExist);
-  })
+  });
 
   it('should check if footer does not contain terms of service', () => {
     AdminSettingsPage.getFooter().should(Condition.NotContain, termsOfService);
-  })
+  });
 
   it('should check if footer does not contain demo information', () => {
     AdminSettingsPage.getFooter().should(Condition.NotContain, demoInfo);
-  })
+  });
 
   it('should logout', () => {
     logout();
