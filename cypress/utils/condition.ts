@@ -10,14 +10,15 @@
 // limitations under the License.
 
 export enum Condition {
-  HaveValue = 'have.value',
+  BeEnabled = 'be.enabled',
   Contain = 'contain',
-  NotContain = 'not.contain',
-  Include = 'include',
   Exist = 'exist',
-  NotExist = 'not.exist',
+  HaveAttribute = 'have.attr',
   HaveClass = 'have.class',
   HaveLength = 'have.length',
+  HaveValue = 'have.value',
+  Include = 'include',
   NotBe = 'not.be',
-  BeEnabled = 'be.enabled',
+  NotContain = 'not.contain',
+  NotExist = 'not.exist',
 }

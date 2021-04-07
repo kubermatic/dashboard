@@ -102,7 +102,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       ]),
       [Controls.Count]: this._builder.control(this._nodeDataService.nodeData.count, [
         Validators.required,
-        Validators.min(1),
+        Validators.min(0),
         NoIpsLeftValidator(this._clusterService.cluster.spec.machineNetworks, this.existingNodesCount),
       ]),
       [Controls.DynamicConfig]: this._builder.control(this._nodeDataService.nodeData.dynamicConfig),

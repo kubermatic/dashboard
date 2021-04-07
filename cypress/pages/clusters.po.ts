@@ -61,7 +61,11 @@ export class ClustersPage {
   }
 
   static getClusterName(): Cypress.Chainable {
-    return cy.get('mat-card-title');
+    return cy.get('.km-cluster-name');
+  }
+
+  static getClusterStatus(): Cypress.Chainable {
+    return cy.get('.km-cluster-name').find('i.km-cluster-health');
   }
 
   // Utils.
