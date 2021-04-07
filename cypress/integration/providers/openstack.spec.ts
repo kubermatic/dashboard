@@ -23,7 +23,8 @@ import {prefixedString} from '../../utils/random';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 
-describe('OpenStack Provider', () => {
+// TODO: Re-enable once sys11 dc starts actually working
+xdescribe('OpenStack Provider', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const projectName = prefixedString('e2e-test-project');
