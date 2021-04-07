@@ -10,13 +10,10 @@
 // limitations under the License.
 
 import {ClustersPage} from '../../pages/clusters.po';
-import {MachineDeploymentDetailsPage} from '../../pages/machine-deployment-details.po';
 import {ProjectsPage} from '../../pages/projects.po';
 import {WizardPage} from '../../pages/wizard.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
-import {Endpoint} from '../../utils/endpoint';
-import {RequestType, TrafficMonitor} from '../../utils/monitor';
 import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
 import {prefixedString} from '../../utils/random';
@@ -29,7 +26,7 @@ describe('AWS Provider', () => {
   const projectName = prefixedString('e2e-test-project');
   const clusterName = prefixedString('e2e-test-cluster');
   const initialMachineDeploymentName = prefixedString('e2e-test-md');
-  const initialMachineDeploymentReplicas = '1';
+  const initialMachineDeploymentReplicas = '0';
 
   it('should login', () => {
     login(email, password);
@@ -78,36 +75,9 @@ describe('AWS Provider', () => {
     ClustersPage.getClusterItem(clusterName).click();
   });
 
-  it('should wait for initial machine deployment to be created', () => {
-    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.MachineDeployments).wait();
-    ClustersPage.getMachineDeploymentList().should(Condition.Contain, initialMachineDeploymentName);
-  });
-
-  it('should go to machine deployment details', () => {
-    ClustersPage.getTableRowMachineDeploymentNameColumn(initialMachineDeploymentName).click();
-  });
-
-  it('should verify machine deployment name', () => {
-    MachineDeploymentDetailsPage.getMachineDeploymentNameElement().should(
-      Condition.Contain,
-      initialMachineDeploymentName
-    );
-  });
-
-  it('should verify machine deployment cluster name', () => {
-    MachineDeploymentDetailsPage.getMachineDeploymentClusterNameElement().should(Condition.Contain, clusterName);
-  });
-
-  it('should go back to cluster details page and remove initial machine deployment', () => {
-    MachineDeploymentDetailsPage.getBackToClusterBtn().click();
-    cy.url().should(Condition.Contain, View.Clusters);
+  it('should wait for the cluster to be ready', () => {
     ClustersPage.getClusterName().should(Condition.Contain, clusterName);
-
-    ClustersPage.getMachineDeploymentList().should(Condition.Contain, initialMachineDeploymentName);
-
-    ClustersPage.getMachineDeploymentRemoveBtn(initialMachineDeploymentName).click();
-    ClustersPage.getDeleteMachineDeploymentDialogBtn().click();
-    ClustersPage.getTableRowMachineDeploymentNameColumn(initialMachineDeploymentName).should(Condition.NotExist);
+    ClustersPage.getClusterStatus().should(Condition.HaveClass, 'km-success-bg');
   });
 
   it('should delete created cluster', () => {
