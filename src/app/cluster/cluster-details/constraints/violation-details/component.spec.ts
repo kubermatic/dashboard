@@ -12,8 +12,11 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeViolations} from '@app/testing/fake-data/opa.fake';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
+import {fakeConstraints, fakeViolations} from '@app/testing/fake-data/opa.fake';
+import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {CoreModule} from '@core/module';
+import {OPAService} from '@core/services/opa/service';
 import {SharedModule} from '@shared/shared.module';
 import {ViolationDetailsComponent} from './component';
 
@@ -25,10 +28,18 @@ describe('ViolationDetailsComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
+      const opaMock = {
+        saveViolationPageIndex: jest.fn(),
+        getViolationPageIndex: jest.fn(),
+        refreshConstraint: () => {},
+      };
+      opaMock.saveViolationPageIndex.mockReturnValue(null);
+      opaMock.getViolationPageIndex.mockReturnValue(0);
+
       TestBed.configureTestingModule({
         imports: [...modules],
         declarations: [ViolationDetailsComponent],
-        providers: [],
+        providers: [{provide: OPAService, useValue: opaMock}],
       }).compileComponents();
     })
   );
@@ -38,12 +49,16 @@ describe('ViolationDetailsComponent', () => {
       fixture = TestBed.createComponent(ViolationDetailsComponent);
       component = fixture.componentInstance;
       component.violations = fakeViolations();
+      component.settings = {itemsPerPage: 10};
+      component.constraintName = fakeConstraints()[0].name;
+      component.projectId = fakeProject().id;
+      component.clusterId = fakeDigitaloceanCluster().id;
       fixture.detectChanges();
     })
   );
 
   it(
-    'should create the constraints component',
+    'should create the violation details component',
     waitForAsync(() => {
       expect(component).toBeTruthy();
     })

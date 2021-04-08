@@ -40,9 +40,13 @@ describe('ConstraintsComponent', () => {
       const opaMock = {
         deleteConstraint: jest.fn(),
         constraintTemplates: of(fakeConstraintTemplates()),
+        saveViolationPageIndex: jest.fn(),
+        getViolationPageIndex: jest.fn(),
         refreshConstraint: () => {},
       };
       deleteConstraintSpy = opaMock.deleteConstraint.mockReturnValue(of(null));
+      opaMock.saveViolationPageIndex.mockReturnValue(null);
+      opaMock.getViolationPageIndex.mockReturnValue(0);
 
       TestBed.configureTestingModule({
         imports: [...modules],
