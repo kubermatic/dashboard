@@ -64,7 +64,7 @@
     "ngx-custom-validators": "8.0.0",
     "ngx-filter-pipe": "2.1.2",
     "ngx-monaco-editor": "9.0.0",
-    "rxjs": "6.6.6",
+    "rxjs": "6.6.7",
     "rxjs-compat": "6.6.6",
     "semver": "7.3.5",
     "swagger-ui": "3.46.0",
