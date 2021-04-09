@@ -2,7 +2,6 @@
 name: Bug Report
 about: Report a bug encountered while operating Kubermatic Dashboard
 labels: kind/bug, sig/ui
-
 ---
 
 **What happened?**:
