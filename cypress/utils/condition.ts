@@ -10,16 +10,18 @@
 // limitations under the License.
 
 export enum Condition {
-  HaveValue = 'have.value',
-  Contain = 'contain',
-  NotContain = 'not.contain',
-  Include = 'include',
-  Exist = 'exist',
-  NotExist = 'not.exist',
-  HaveClass = 'have.class',
-  HaveLength = 'have.length',
-  NotBe = 'not.be',
   BeEnabled = 'be.enabled',
   BeChecked = 'be.checked',
+  Contain = 'contain',
+  Exist = 'exist',
+  HaveAttribute = 'have.attr',
+  HaveClass = 'have.class',
+  HaveLength = 'have.length',
+  HaveValue = 'have.value',
+  Include = 'include',
+  NotBe = 'not.be',
   NotBeChecked = 'not.be.checked',
+  NotContain = 'not.contain',
+  NotExist = 'not.exist',
+  NotHaveClass = 'not.have.class',
 }

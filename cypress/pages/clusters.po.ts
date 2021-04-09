@@ -15,6 +15,12 @@ import {RequestType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 import {WizardPage} from './wizard.po';
 
+export enum ProviderMenuOption {
+  EditCluster = 'Edit Cluster',
+  ManageSSHKeys = 'Manage SSH keys',
+  RevokeToken = 'Revoke Token',
+}
+
 export class ClustersPage {
   static getAddClusterBtn(): Cypress.Chainable {
     return cy.get('#km-add-cluster-top-btn');
@@ -52,7 +58,7 @@ export class ClustersPage {
     return this.getTableRow(machineDeploymentName).find('button i.km-icon-delete');
   }
 
-  static getDeleteMachineDeploymentDialogBtn(): Cypress.Chainable {
+  static getDeleteDialogConfirmButton(): Cypress.Chainable {
     return cy.get('#km-confirmation-dialog-confirm-btn');
   }
 
@@ -61,7 +67,43 @@ export class ClustersPage {
   }
 
   static getClusterName(): Cypress.Chainable {
-    return cy.get('mat-card-title');
+    return cy.get('.km-cluster-name');
+  }
+
+  static getClusterStatus(): Cypress.Chainable {
+    return cy.get('.km-cluster-name').find('i.km-cluster-health');
+  }
+
+  static getProviderMenuButton(): Cypress.Chainable {
+    return cy.get('.km-provider-menu-btn');
+  }
+
+  static getProviderMenuOption(option: ProviderMenuOption): Cypress.Chainable {
+    return cy.get('.km-provider-edit-settings').contains('span', option).parent();
+  }
+
+  static getSSHKeysTable(): Cypress.Chainable {
+    return cy.get('.km-content-edit-sshkeys').find('tbody');
+  }
+
+  static getSSHKeysTableRow(sshKeyName: string): Cypress.Chainable {
+    return this.getSSHKeysTable().contains('td', sshKeyName).parent();
+  }
+
+  static getSSHKeysTableRemoveButton(sshKeyName: string): Cypress.Chainable {
+    return this.getSSHKeysTableRow(sshKeyName).find('button i.km-icon-delete');
+  }
+
+  static getSSHKeysAddDropdown(): Cypress.Chainable {
+    return cy.get('.km-edit-sshkeys-dropdown').should(Condition.NotHaveClass, 'mat-form-field-disabled');
+  }
+
+  static getSSHKeysDropdownOption(name: string): Cypress.Chainable {
+    return cy.get('.km-add-dialog-dropdown').find('mat-option').contains('span', name);
+  }
+
+  static getDialogCloseButton(): Cypress.Chainable {
+    return cy.get('#km-close-dialog-btn');
   }
 
   // Utils.

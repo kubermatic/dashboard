@@ -82,6 +82,24 @@ export class WizardPage {
     return cy.get('#km-node-count-input');
   }
 
+  static getSSHKeysSelect(): Cypress.Chainable {
+    return cy.get('#keys');
+  }
+
+  static getSSHKeysSelectOption(name: string): Cypress.Chainable {
+    return cy.get('#keys-panel').then(option => {
+      if (option.find('mat-option').text(name).length > 0) {
+        return cy.get('mat-option').contains(name);
+      }
+
+      return cy.get('mat-option');
+    });
+  }
+
+  static getOverlayContainer(): Cypress.Chainable {
+    return cy.get('.cdk-overlay-backdrop');
+  }
+
   // Providers
   static readonly anexia = Anexia;
   static readonly kubeVirt = KubeVirt;

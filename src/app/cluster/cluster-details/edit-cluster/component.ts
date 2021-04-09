@@ -16,9 +16,11 @@ import {ApiService} from '@core/services/api/service';
 import {ClusterService} from '@core/services/cluster/service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {NotificationService} from '@core/services/notification/service';
+import {SettingsService} from '@core/services/settings/service';
 import {Cluster, ClusterPatch, ProviderSettingsPatch} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter} from '@shared/entity/datacenter';
+import {AdminSettings} from '@shared/entity/settings';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import * as _ from 'lodash';
@@ -46,6 +48,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
 
   private readonly _nameMinLen = 3;
+  private _settings: AdminSettings;
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -53,7 +56,8 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     private readonly _apiService: ApiService,
     private readonly _datacenterService: DatacenterService,
     private readonly _matDialogRef: MatDialogRef<EditClusterComponent>,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private readonly _settingsService: SettingsService
   ) {}
 
   ngOnInit(): void {
@@ -71,6 +75,11 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       admissionPlugins: new FormControl(this.cluster.spec.admissionPlugins),
       podNodeSelectorAdmissionPluginConfig: new FormControl(''),
       labels: new FormControl(''),
+    });
+
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this._settings = settings;
+      this._enforce('opaIntegration', this._settings.opaOptions.enforced);
     });
 
     this._clusterService.providerSettingsPatchChanges$
@@ -135,6 +144,17 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
   isPodSecurityPolicyEnforced(): boolean {
     return AdmissionPluginUtils.isPodSecurityPolicyEnforced(this.datacenter);
+  }
+
+  isOPAEnforced(): boolean {
+    return !!this._settings && this._settings.opaOptions.enforced;
+  }
+
+  private _enforce(name: string, isEnforced: boolean): void {
+    if (isEnforced) {
+      this.form.get(name).setValue(true);
+      this.form.get(name).disable();
+    }
   }
 
   editCluster(): void {

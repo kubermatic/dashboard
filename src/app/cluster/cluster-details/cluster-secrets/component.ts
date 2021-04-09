@@ -69,7 +69,7 @@ export class ClusterSecretsComponent implements OnInit {
       case HealthState.provisioning:
         return 'km-icon-pending km-info';
       default:
-        return '';
+        return 'km-icon-pending km-info';
     }
   }
 

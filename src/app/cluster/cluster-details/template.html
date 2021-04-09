@@ -252,14 +252,14 @@ limitations under the License.
                        (deleteAddon)="handleAddonDeletion($event)"></km-addon-list>
       </div>
     </km-tab>
-    <km-tab label="Constraints"
+    <km-tab label="OPA Constraints"
             *ngIf="isOPAEnabled()">
       <km-constraint-list [constraints]="constraints"
                           [cluster]="cluster"
                           [projectID]="projectID"
                           [isClusterRunning]="isClusterRunning"></km-constraint-list>
     </km-tab>
-    <km-tab label="Gatekeeper Config"
+    <km-tab label="OPA Gatekeeper Config"
             *ngIf="isOPAEnabled()">
       <km-gatekeeper-config [gatekeeperConfig]="gatekeeperConfig"
                             [cluster]="cluster"

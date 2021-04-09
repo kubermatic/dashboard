@@ -77,7 +77,9 @@ export class ConstraintDialog implements OnInit, OnDestroy {
 
     this._opaService.constraintTemplates
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(constraintTemplates => (this.constraintTemplates = constraintTemplates));
+      .subscribe(
+        constraintTemplates => (this.constraintTemplates = _.sortBy(constraintTemplates, ct => ct.name.toLowerCase()))
+      );
   }
 
   ngOnDestroy(): void {

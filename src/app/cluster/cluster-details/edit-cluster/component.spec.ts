@@ -24,6 +24,7 @@ import {RouterStub} from '@app/testing/router-stubs';
 import {ApiMockService, asyncData} from '@app/testing/services/api-mock.service';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
 import {DatacenterMockService} from '@app/testing/services/datacenter-mock.service';
+import {SettingsMockService} from '@app/testing/services/settings-mock.service';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {UserMockService} from '@app/testing/services/user-mock.service';
 import {CoreModule} from '@core/module';
@@ -31,6 +32,7 @@ import {ApiService} from '@core/services/api/service';
 import {ClusterService} from '@core/services/cluster/service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {UserService} from '@core/services/user/service';
+import {SettingsService} from '@core/services/settings/service';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
 import {SharedModule} from '@shared/shared.module';
 import {Subject} from 'rxjs';
@@ -87,6 +89,7 @@ describe('EditClusterComponent', () => {
           {provide: ApiService, useClass: ApiMockService},
           {provide: AppConfigService, useClass: AppConfigMockService},
           {provide: UserService, useClass: UserMockService},
+          {provide: SettingsService, useClass: SettingsMockService},
           {provide: Router, useClass: RouterStub},
         ],
       }).compileComponents();

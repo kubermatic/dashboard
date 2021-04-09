@@ -17,6 +17,7 @@ limitations under the License.
   <mat-form-field *ngIf="hasKeys()">
     <mat-label>SSH Keys</mat-label>
     <mat-select [formControlName]="Controls.Keys"
+                [id]="Controls.Keys"
                 multiple
                 disableOptionCentering
                 panelClass="km-multiple-values-dropdown"

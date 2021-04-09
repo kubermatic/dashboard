@@ -68,3 +68,8 @@ limitations under the License.
     No violations available.
   </div>
 </ng-container>
+
+<div [hidden]="!isPaginatorVisible()">
+  <mat-paginator showFirstLastButtons
+                 (page)="onPaginateChange($event)"></mat-paginator>
+</div>

@@ -34,6 +34,7 @@ export class AdminSettings {
   restrictProjectCreation: boolean;
   enableExternalClusterImport: boolean;
   machineDeploymentVMResourceQuota: MachineDeploymentVMResourceQuota;
+  opaOptions: OpaOptions;
 }
 
 export class MachineDeploymentVMResourceQuota {
@@ -47,6 +48,11 @@ export class MachineDeploymentVMResourceQuota {
 export class CleanupOptions {
   Enabled: boolean;
   Enforced: boolean;
+}
+
+export class OpaOptions {
+  enabled: boolean;
+  enforced: boolean;
 }
 
 export class CustomLink {
@@ -128,5 +134,9 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
     minCPU: 0,
     maxCPU: 0,
     enableGPU: false,
+  },
+  opaOptions: {
+    enforced: false,
+    enabled: false,
   },
 };
