@@ -55,12 +55,15 @@ limitations under the License.
                                 (customLinksChange)="onSettingsChange()"></km-custom-links-form>
           <div fxLayout="row">
             <mat-checkbox [(ngModel)]="settings.displayAPIDocs"
+                          id="km-api-docs-setting"
                           (change)="onSettingsChange()">Display API Docs
             </mat-checkbox>
             <mat-checkbox [(ngModel)]="settings.displayTermsOfService"
+                          id="km-tos-setting"
                           (change)="onSettingsChange()">Display Terms of Service
             </mat-checkbox>
             <mat-checkbox [(ngModel)]="settings.displayDemoInfo"
+                          id="km-demo-info-setting"
                           (change)="onSettingsChange()">Display Demo Information
             </mat-checkbox>
             <km-spinner-with-confirmation [isSaved]="isDisplayLinksEqual()"></km-spinner-with-confirmation>

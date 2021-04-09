@@ -14,6 +14,7 @@ limitations under the License.
      class="km-panel">
   <button mat-icon-button
           class="root-button"
+          id="km-navbar-help-menu"
           fxLayoutAlign="center center"
           (click)="toggle()">
     <i class="km-icon-mask km-icon-help"></i>
@@ -44,6 +45,7 @@ limitations under the License.
 
       <div *ngIf="settings?.displayAPIDocs"
            class="km-hover-bg"
+           id="km-navbar-api-docs-btn"
            matRipple
            (click)="goToAPIDocs()">
         API Documentation

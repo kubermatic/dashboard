@@ -9,31 +9,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class UserPanel {
-  static getUserPanelMenuBtn(): Cypress.Chainable {
-    return cy.get('#km-navbar-user-menu');
+export class HelpPanel {
+  static getHelpPanelMenuBtn(): Cypress.Chainable {
+    return cy.get('#km-navbar-help-menu');
   }
 
-  static getLogoutBtn(): Cypress.Chainable {
-    return cy.get('#km-navbar-logout-btn');
-  }
-
-  static getUserSettingsBtn(): Cypress.Chainable {
-    return cy.get('#km-navbar-user-settings-btn');
-  }
-
-  static getAdminSettingsBtn(): Cypress.Chainable {
-    return cy.get('#km-navbar-admin-settings-btn');
+  static getAPIDocsBtn(): Cypress.Chainable {
+    return cy.get('#km-navbar-api-docs-btn');
   }
 
   // Utils.
 
   static open(): void {
-    this.getUserPanelMenuBtn().click();
-  }
-
-  static logout(): void {
-    this.open();
-    this.getLogoutBtn().click();
+    this.getHelpPanelMenuBtn().click();
   }
 }
