@@ -15,5 +15,6 @@ export enum View {
   Account = 'account',
   Members = 'members',
   ServiceAccounts = 'serviceaccounts',
+  SSHKeys = 'sshkeys',
   Wizard = 'wizard',
 }

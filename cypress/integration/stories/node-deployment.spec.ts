@@ -106,7 +106,7 @@ describe('DigitalOcean Provider', () => {
     ClustersPage.getMachineDeploymentList().should(Condition.Contain, initialMachineDeploymentName);
 
     ClustersPage.getMachineDeploymentRemoveBtn(initialMachineDeploymentName).click();
-    ClustersPage.getDeleteMachineDeploymentDialogBtn().click();
+    ClustersPage.getDeleteDialogConfirmButton().click();
     ClustersPage.getTableRowMachineDeploymentNameColumn(initialMachineDeploymentName).should(Condition.NotExist);
   });
 
