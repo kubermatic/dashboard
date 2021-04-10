@@ -1,6 +1,6 @@
 export KUBERMATIC_VERSION=latest
 export PATH=$PATH:/usr/local/go/bin
-export SEED_NAME=prow-build-cluster
+export SEED_NAME=kubermatic
 export TARGET_BRANCH=${PULL_BASE_REF:-master}
 
 if [[ -z ${JOB_NAME} ]]; then
