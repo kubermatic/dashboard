@@ -198,4 +198,4 @@ presubmits:
             cpu: 1
             memory: 3Gi
     imagePullSecrets:
-      - name: quay
+      - name: kubermatic-quay
