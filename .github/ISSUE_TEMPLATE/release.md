@@ -7,7 +7,10 @@ labels: sig/ui sig/release
 ---
 
 ## Release Procedure
-List of steps to follow after finishing the [pre-release procedure](docs/manuals/release.md#pre-release-procedure):
+List of steps to follow after finishing the [pre-release procedure](docs/manuals/release.md#pre-release-procedure).
+
+### Important
+Keep in sync with [documentation](docs/manuals/release.md#release-procedure).
 
 - [ ] Version bump in the following files:
   - [ ] `package.json`
