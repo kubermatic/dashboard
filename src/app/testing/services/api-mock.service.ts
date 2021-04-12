@@ -24,7 +24,7 @@ import {
 } from '@shared/entity/service-account';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {fakeDigitaloceanSizes, fakePacketSizes} from '../fake-data/addNodeModal.fake';
-import {fakeAlibabaInstanceTypes, fakeAlibabaZones} from '../fake-data/alibaba.fake';
+import {fakeAlibabaInstanceTypes, fakeAlibabaZones, fakeAlibabaVSwitches} from '../fake-data/alibaba.fake';
 import {masterVersionsFake} from '../fake-data/cluster-spec.fake';
 import {fakeToken} from '../fake-data/cluster.fake';
 import {fakeMember, fakeMembers} from '../fake-data/member.fake';
@@ -40,7 +40,7 @@ import {fakeSSHKeys} from '../fake-data/sshkey.fake';
 import {fakeVSphereNetworks} from '../fake-data/vsphere.fake';
 import {EditProject, Project} from '@shared/entity/project';
 import {VSphereNetwork} from '@shared/entity/provider/vsphere';
-import {AlibabaInstanceType, AlibabaZone} from '@shared/entity/provider/alibaba';
+import {AlibabaInstanceType, AlibabaZone, AlibabaVSwitch} from '@shared/entity/provider/alibaba';
 import {PacketSize} from '@shared/entity/provider/packet';
 import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '@shared/entity/provider/gcp';
 import {DigitaloceanSizes} from '@shared/entity/provider/digitalocean';
@@ -250,6 +250,10 @@ export class ApiMockService {
 
   getAlibabaZones(): Observable<AlibabaZone[]> {
     return of(fakeAlibabaZones());
+  }
+
+  getAlibabaVSwitches(): Observable<AlibabaVSwitch[]> {
+    return of(fakeAlibabaVSwitches());
   }
 
   getDashboardProxyURL(): string {

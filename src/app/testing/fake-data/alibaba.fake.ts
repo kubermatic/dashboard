@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AlibabaInstanceType, AlibabaZone} from '@shared/entity/provider/alibaba';
+import {AlibabaInstanceType, AlibabaZone, AlibabaVSwitch} from '@shared/entity/provider/alibaba';
 
 export function fakeAlibabaInstanceTypes(): AlibabaInstanceType[] {
   return [
@@ -23,4 +23,8 @@ export function fakeAlibabaInstanceTypes(): AlibabaInstanceType[] {
 
 export function fakeAlibabaZones(): AlibabaZone[] {
   return [{id: 'eu-central-1a'}, {id: 'eu-central-1b'}];
+}
+
+export function fakeAlibabaVSwitches(): AlibabaVSwitch[] {
+  return [{id: 'vsw-gw8g8mn4ohmj483hsylmn'}, {id: 'vsw-gw876svgsv52bk0c95krn'}];
 }
