@@ -1,6 +1,6 @@
 export KUBERMATIC_VERSION=latest
 export PATH=$PATH:/usr/local/go/bin
-export SEED_NAME=prow-build-cluster
+export SEED_NAME=kubermatic
 export TARGET_BRANCH=${PULL_BASE_REF:-master}
 
 if [[ -z ${JOB_NAME} ]]; then
@@ -260,9 +260,12 @@ retry 5 kubectl apply -f config/cert-manager/templates/crd.yaml
 TEST_NAME="Deploy Kubermatic"
 echodate "Deploying Kubermatic [${KUBERMATIC_VERSION}] using Helm..."
 
+KUBERMATIC_DOMAIN="${KUBERMATIC_DOMAIN:-ci.kubermatic.io}"
+
 # --force is needed in case the first attempt at installing didn't succeed
 # see https://github.com/helm/helm/pull/3597
 retry 3 helm upgrade --install --force --wait --timeout 300 \
+  --set=kubermatic.domain="$KUBERMATIC_DOMAIN" \
   --set=kubermatic.isMaster=true \
   --set=kubermatic.imagePullSecretData=$IMAGE_PULL_SECRET_DATA \
   --set-string=kubermatic.controller.addons.kubernetes.image.tag="$KUBERMATIC_VERSION" \
