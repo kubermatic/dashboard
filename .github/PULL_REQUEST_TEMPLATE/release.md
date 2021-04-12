@@ -1,9 +1,9 @@
 ---
 name: Release
-title: [vX.XX] Release Preparation
-assignees: @floreks @maciaszczykm @kgroschoff
+title: "[vX.XX] Release Preparation"
+assignees: floreks, maciaszczykm, kgroschoff
 about: The list of steps that should be executed prior to the official release
-labels: sig/ui sig/release
+labels: sig/ui, sig/release
 ---
 
 ### Release steps
