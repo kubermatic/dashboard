@@ -26,7 +26,7 @@ header {
   .km-header-logo {
     display: block;
     height: 30px;
-    margin-left: $content-padding;
+    margin-left: $content-padding - 10px;
     width: 200px;
   }
 }
