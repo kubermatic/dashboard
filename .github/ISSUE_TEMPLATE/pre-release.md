@@ -12,6 +12,7 @@ manual tests and visual checks of the Kubermatic Dashboard.
 
 Every assignee should mark their name next to the checks they're willing to work on.
 
+- [ ] Validate display all projects switch on the projects view
 - [ ] Visual check of theme changes in the user settings (EE only)
 - [ ] Items per page changes in the user settings
 - [ ] Changes of the initial machine deployment replicas in the admin settings
