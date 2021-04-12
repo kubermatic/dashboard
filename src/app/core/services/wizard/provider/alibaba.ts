@@ -15,7 +15,7 @@ import {EMPTY, Observable} from 'rxjs';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
-import {AlibabaInstanceType, AlibabaZone} from '../../../../shared/entity/provider/alibaba';
+import {AlibabaInstanceType, AlibabaZone, AlibabaVSwitch} from '../../../../shared/entity/provider/alibaba';
 
 export class Alibaba extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
@@ -76,6 +76,20 @@ export class Alibaba extends Provider {
 
     const url = `${this._restRoot}/providers/${this._provider}/zones`;
     return this._http.get<AlibabaZone[]>(url, {headers: this._headers});
+  }
+
+  vSwitches(onLoadingCb: () => void = null): Observable<AlibabaVSwitch[]> {
+    this._setRequiredHeaders(Alibaba.Header.AccessKeyID, Alibaba.Header.AccessKeySecret, Alibaba.Header.Region);
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._restRoot}/providers/${this._provider}/vswitches`;
+    return this._http.get<AlibabaVSwitch[]>(url, {headers: this._headers});
   }
 }
 

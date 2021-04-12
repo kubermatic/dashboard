@@ -14,7 +14,7 @@ import {DatacenterService} from '@core/services/datacenter/service';
 import {ProjectService} from '@core/services/project/service';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {Cluster} from '@shared/entity/cluster';
-import {AlibabaInstanceType, AlibabaZone} from '@shared/entity/provider/alibaba';
+import {AlibabaInstanceType, AlibabaZone, AlibabaVSwitch} from '@shared/entity/provider/alibaba';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
@@ -142,6 +142,66 @@ export class NodeDataAlibabaProvider {
           .pipe(
             switchMap(dc =>
               this._apiService.getAlibabaZones(selectedProject, this._clusterService.cluster.id, dc.spec.alibaba.region)
+            )
+          )
+          .pipe(
+            catchError(_ => {
+              if (onError) {
+                onError();
+              }
+
+              return onErrorResumeNext(of([]));
+            })
+          )
+          .pipe(take(1));
+      }
+    }
+  }
+
+  vSwitches(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AlibabaVSwitch[]> {
+    let cluster: Cluster;
+    let region = '';
+
+    switch (this._nodeDataService.mode) {
+      case NodeDataMode.Wizard:
+        return this._clusterService.clusterChanges
+          .pipe(filter(_ => this._clusterService.provider === NodeProvider.ALIBABA))
+          .pipe(tap(c => (cluster = c)))
+          .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
+          .pipe(tap(dc => (region = dc.spec.alibaba.region)))
+          .pipe(
+            switchMap(_ =>
+              this._presetService
+                .provider(NodeProvider.ALIBABA)
+                .accessKeyID(cluster.spec.cloud.alibaba.accessKeyID)
+                .accessKeySecret(cluster.spec.cloud.alibaba.accessKeySecret)
+                .region(region)
+                .credential(this._presetService.preset)
+                .vSwitches(onLoadingCb)
+                .pipe(
+                  catchError(_ => {
+                    if (onError) {
+                      onError();
+                    }
+
+                    return onErrorResumeNext(of([]));
+                  })
+                )
+            )
+          );
+      case NodeDataMode.Dialog: {
+        let selectedProject: string;
+        return this._projectService.selectedProject
+          .pipe(tap(project => (selectedProject = project.id)))
+          .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc)))
+          .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
+          .pipe(
+            switchMap(dc =>
+              this._apiService.getAlibabaVSwitches(
+                selectedProject,
+                this._clusterService.cluster.id,
+                dc.spec.alibaba.region
+              )
             )
           )
           .pipe(

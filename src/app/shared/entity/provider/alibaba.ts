@@ -19,3 +19,7 @@ export class AlibabaInstanceType {
 export class AlibabaZone {
   id: string;
 }
+
+export class AlibabaVSwitch {
+  id: string;
+}

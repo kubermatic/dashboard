@@ -24,7 +24,7 @@ import {NodeDataService} from '@app/node-data/service/service';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
-import {AlibabaInstanceType, AlibabaZone} from '@shared/entity/provider/alibaba';
+import {AlibabaInstanceType, AlibabaZone, AlibabaVSwitch} from '@shared/entity/provider/alibaba';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {compare} from '@shared/utils/common-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -51,6 +51,12 @@ enum ZoneState {
   Ready = 'Zone ID',
   Loading = 'Loading...',
   Empty = 'No Zones Available',
+}
+
+enum VSwitchState {
+  Ready = 'VSwitch ID',
+  Loading = 'Loading...',
+  Empty = 'No VSwitch IDs Available',
 }
 
 @Component({
@@ -83,11 +89,16 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   zoneLabel = ZoneState.Empty;
   diskTypes = this._diskTypes.map(type => ({name: type}));
   selectedDiskType = '';
+  vSwitches: AlibabaVSwitch[] = [];
+  selectedVSwitch = '';
+  vSwitchLabel = VSwitchState.Empty;
 
   @ViewChild('instanceTypeCombobox')
   private _instanceTypeCombobox: FilteredComboboxComponent;
   @ViewChild('zoneCombobox')
   private _zoneCombobox: FilteredComboboxComponent;
+  @ViewChild('vSwitchCombobox')
+  private _vSwitchCombobox: FilteredComboboxComponent;
 
   private get _instanceTypesObservable(): Observable<AlibabaInstanceType[]> {
     return this._nodeDataService.alibaba.instanceTypes(
@@ -98,6 +109,10 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
 
   private get _zoneIdsObservable(): Observable<AlibabaZone[]> {
     return this._nodeDataService.alibaba.zones(this._clearZone.bind(this), this._onZoneLoading.bind(this));
+  }
+
+  private get _vSwitchIdsObservable(): Observable<AlibabaZone[]> {
+    return this._nodeDataService.alibaba.vSwitches(this._clearZone.bind(this), this._onVSwitchLoading.bind(this));
   }
 
   constructor(
@@ -124,17 +139,14 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
 
     this._instanceTypesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultInstanceType.bind(this));
     this._zoneIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultZone.bind(this));
+    this._vSwitchIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultVSwitch.bind(this));
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._clearInstanceType();
       this._clearZone();
     });
 
-    merge(
-      this.form.get(Controls.DiskSize).valueChanges,
-      this.form.get(Controls.InternetMaxBandwidthOut).valueChanges,
-      this.form.get(Controls.VSwitchID).valueChanges
-    )
+    merge(this.form.get(Controls.DiskSize).valueChanges, this.form.get(Controls.InternetMaxBandwidthOut).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
@@ -163,6 +175,11 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     this._nodeDataService.nodeDataChanges.next();
   }
 
+  onVSwitchChange(vSwitch: string): void {
+    this._nodeDataService.nodeData.spec.cloud.alibaba.vSwitchID = vSwitch;
+    this._nodeDataService.nodeDataChanges.next();
+  }
+
   getInstanceDisplayNameByID(instanceID: string): string {
     const instance = this.instanceTypes.find(instance => instance.id === instanceID);
     return instance ? this.getInstanceDisplayName(instance) : instanceID;
@@ -176,7 +193,6 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.alibaba) {
       this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.alibaba.diskSize);
-      this.form.get(Controls.VSwitchID).setValue(this._nodeDataService.nodeData.spec.cloud.alibaba.vSwitchID);
       this.form
         .get(Controls.InternetMaxBandwidthOut)
         .setValue(this._nodeDataService.nodeData.spec.cloud.alibaba.internetMaxBandwidthOut);
@@ -197,6 +213,12 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     this._cdr.detectChanges();
   }
 
+  private _onVSwitchLoading(): void {
+    this._clearVSwitch();
+    this.vSwitchLabel = VSwitchState.Loading;
+    this._cdr.detectChanges();
+  }
+
   private _clearInstanceType(): void {
     this.instanceTypes = [];
     this.selectedInstanceType = '';
@@ -210,6 +232,14 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     this.selectedZone = '';
     this.zoneLabel = ZoneState.Empty;
     this._zoneCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _clearVSwitch(): void {
+    this.vSwitches = [];
+    this.selectedVSwitch = '';
+    this.vSwitchLabel = VSwitchState.Empty;
+    this._vSwitchCombobox.reset();
     this._cdr.detectChanges();
   }
 
@@ -247,6 +277,18 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     this._cdr.detectChanges();
   }
 
+  private _setDefaultVSwitch(vSwitches: AlibabaVSwitch[]): void {
+    this.vSwitches = _.sortBy(vSwitches, vs => vs.id.toLowerCase());
+    this.selectedVSwitch = this._nodeDataService.nodeData.spec.cloud.alibaba.vSwitchID;
+
+    if (!this.selectedVSwitch && this.vSwitches.length > 0) {
+      this.selectedVSwitch = this.vSwitches[0].id;
+    }
+
+    this.vSwitchLabel = this.selectedVSwitch ? VSwitchState.Ready : VSwitchState.Empty;
+    this._cdr.detectChanges();
+  }
+
   private _findCheapestInstance(instanceTypes: AlibabaInstanceType[]): AlibabaInstanceType {
     // Avoid mutating original array
     return [...instanceTypes]
@@ -261,7 +303,6 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
           alibaba: {
             diskSize: `${this.form.get(Controls.DiskSize).value}`,
             internetMaxBandwidthOut: `${this.form.get(Controls.InternetMaxBandwidthOut).value}`,
-            vSwitchID: this.form.get(Controls.VSwitchID).value,
           },
         } as NodeCloudSpec,
       } as NodeSpec,
