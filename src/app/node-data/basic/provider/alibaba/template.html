@@ -54,13 +54,18 @@ limitations under the License.
            required>
   </mat-form-field>
 
-  <mat-form-field fxFlex>
-    <mat-label>vSwitch ID</mat-label>
-    <input [formControlName]="Controls.VSwitchID"
-           autocomplete="off"
-           matInput
-           required>
-  </mat-form-field>
+  <km-combobox #vSwitchCombobox
+               [required]="true"
+               [grouped]="false"
+               [selected]="selectedVSwitch"
+               [options]="vSwitches"
+               [formControlName]="Controls.VSwitchID"
+               (changed)="onVSwitchChange($event)"
+               [label]="vSwitchLabel"
+               inputLabel="Select vSwitch ID..."
+               filterBy="id">
+    <div *option="let vSwitch">{{vSwitch.id}}</div>
+  </km-combobox>
 
   <mat-form-field fxFlex>
     <mat-label>Internet Max Bandwidth Out</mat-label>
