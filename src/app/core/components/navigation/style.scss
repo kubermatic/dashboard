@@ -12,9 +12,6 @@
 @import 'mixins';
 @import 'variables';
 
-$logo-width: 160px;
-$logo-margin-top: 13px;
-
 header {
   height: $toolbar-height;
 }
@@ -27,11 +24,10 @@ header {
   z-index: 999;
 
   .km-header-logo {
-    @include size($logo-width + $logo-margin-top, $toolbar-height);
-
-    background-position: $logo-margin-top $logo-margin-top;
-    background-size: $logo-width;
     display: block;
+    height: 30px;
+    margin-left: $content-padding;
+    width: 200px;
   }
 }
 

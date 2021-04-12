@@ -71,6 +71,7 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 @include theme($theme-dark, $colors-dark);
 
 // Make icons and logos white.
+.km-header-logo,
 .km-provider-logo,
 .km-addon-logo,
 .km-addon-logo-disabled,
@@ -79,11 +80,6 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 .km-footer i,
 *[class*="km-os-image-"] {
   filter: invert(.25) brightness(100) contrast(100);
-}
-
-// Swap some of the images.
-.km-header-logo {
-  background-image: url("/assets/images/branding/logo-dark.svg");
 }
 
 .km-error-background {
