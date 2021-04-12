@@ -275,9 +275,12 @@ if [[ -n ${CHARTS_VERSION:-} ]]; then
   git checkout "$CHARTS_VERSION"
 fi
 
+KUBERMATIC_DOMAIN="${KUBERMATIC_DOMAIN:-ci.kubermatic.io}"
+
 # --force is needed in case the first attempt at installing didn't succeed
 # see https://github.com/helm/helm/pull/3597
 retry 3 helm upgrade --install --force --wait --timeout 300 \
+  --set=kubermatic.domain="$KUBERMATIC_DOMAIN" \
   --set=kubermatic.isMaster=true \
   --set=kubermatic.imagePullSecretData=$IMAGE_PULL_SECRET_DATA \
   --set-string=kubermatic.controller.addons.kubernetes.image.tag="$KUBERMATIC_VERSION" \
