@@ -84,7 +84,6 @@ describe('SSH Key Management Story', () => {
     ClustersPage.getProviderMenuOption(ProviderMenuOption.ManageSSHKeys).click();
     ClustersPage.getSSHKeysTableRemoveButton(sshKeyName).click();
     ClustersPage.getDeleteDialogConfirmButton().click();
-    ClustersPage.getSSHKeysTableRow(sshKeyName).should(Condition.NotExist);
   });
 
   it('should re-add the ssh key to the cluster', () => {
