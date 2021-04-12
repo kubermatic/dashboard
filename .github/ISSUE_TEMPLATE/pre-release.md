@@ -7,11 +7,8 @@ labels: sig/ui sig/release
 ---
 
 ## Pre-Release Procedure
-List of steps to execute before proceeding with the [release procedure](docs/manuals/release.md#release-procedure). It mainly consists of
+List of steps to execute before proceeding with the release procedure. It mainly consists of
 manual tests and visual checks of the Kubermatic Dashboard.
-
-### Important
-Keep in sync with [documentation](docs/manuals/release.md#pre-release-procedure).
 
 Every assignee should mark their name next to the checks they're willing to work on.
 
