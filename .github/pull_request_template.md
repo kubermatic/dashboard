@@ -1,11 +1,4 @@
----
-name: General
-about: General Pull Request template that should be used in most scenarios
-labels: sig/ui
----
-
 ### What this PR does / why we need it
-
 
 ### Which issue(s) this PR fixes
 <!--
