@@ -22,6 +22,7 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {NodeDataService} from '@app/node-data/service/service';
 import {PresetsService} from '@core/services/wizard/presets.service';
+import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {AlibabaInstanceType, AlibabaZone, AlibabaVSwitch} from '@shared/entity/provider/alibaba';
@@ -30,7 +31,7 @@ import {compare} from '@shared/utils/common-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {merge, Observable} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {filter, map, takeUntil} from 'rxjs/operators';
 
 enum Controls {
   InstanceType = 'instanceType',
@@ -51,12 +52,6 @@ enum ZoneState {
   Ready = 'Zone ID',
   Loading = 'Loading...',
   Empty = 'No Zones Available',
-}
-
-enum VSwitchState {
-  Ready = 'VSwitch ID',
-  Loading = 'Loading...',
-  Empty = 'No VSwitch IDs Available',
 }
 
 @Component({
@@ -89,16 +84,12 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   zoneLabel = ZoneState.Empty;
   diskTypes = this._diskTypes.map(type => ({name: type}));
   selectedDiskType = '';
-  vSwitches: AlibabaVSwitch[] = [];
-  selectedVSwitch = '';
-  vSwitchLabel = VSwitchState.Empty;
+  vSwitches: string[] = [];
 
   @ViewChild('instanceTypeCombobox')
   private _instanceTypeCombobox: FilteredComboboxComponent;
   @ViewChild('zoneCombobox')
   private _zoneCombobox: FilteredComboboxComponent;
-  @ViewChild('vSwitchCombobox')
-  private _vSwitchCombobox: FilteredComboboxComponent;
 
   private get _instanceTypesObservable(): Observable<AlibabaInstanceType[]> {
     return this._nodeDataService.alibaba.instanceTypes(
@@ -112,7 +103,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   private get _vSwitchIdsObservable(): Observable<AlibabaZone[]> {
-    return this._nodeDataService.alibaba.vSwitches(this._clearZone.bind(this), this._onVSwitchLoading.bind(this));
+    return this._nodeDataService.alibaba.vSwitches(this._clearVSwitch.bind(this), this._onVSwitchLoading.bind(this));
   }
 
   constructor(
@@ -149,6 +140,15 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     merge(this.form.get(Controls.DiskSize).valueChanges, this.form.get(Controls.InternetMaxBandwidthOut).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+
+    this.form
+      .get(Controls.VSwitchID)
+      .valueChanges.pipe(
+        filter(form => !!form),
+        map(form => form[AutocompleteControls.Main]),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(vs => (this._nodeDataService.nodeData.spec.cloud.alibaba.vSwitchID = vs));
   }
 
   ngAfterViewChecked(): void {
@@ -172,11 +172,6 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
 
   onDiskTypeChange(diskType: string): void {
     this._nodeDataService.nodeData.spec.cloud.alibaba.diskType = diskType;
-    this._nodeDataService.nodeDataChanges.next();
-  }
-
-  onVSwitchChange(vSwitch: string): void {
-    this._nodeDataService.nodeData.spec.cloud.alibaba.vSwitchID = vSwitch;
     this._nodeDataService.nodeDataChanges.next();
   }
 
@@ -215,7 +210,6 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
 
   private _onVSwitchLoading(): void {
     this._clearVSwitch();
-    this.vSwitchLabel = VSwitchState.Loading;
     this._cdr.detectChanges();
   }
 
@@ -237,9 +231,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
 
   private _clearVSwitch(): void {
     this.vSwitches = [];
-    this.selectedVSwitch = '';
-    this.vSwitchLabel = VSwitchState.Empty;
-    this._vSwitchCombobox.reset();
+    this.form.get(Controls.VSwitchID).setValue(AutocompleteInitialState);
     this._cdr.detectChanges();
   }
 
@@ -278,14 +270,9 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   private _setDefaultVSwitch(vSwitches: AlibabaVSwitch[]): void {
-    this.vSwitches = _.sortBy(vSwitches, vs => vs.id.toLowerCase());
-    this.selectedVSwitch = this._nodeDataService.nodeData.spec.cloud.alibaba.vSwitchID;
+    this.vSwitches = _(vSwitches).map('id').sortBy().value();
+    this.form.get(Controls.VSwitchID).setValue({main: this._nodeDataService.nodeData.spec.cloud.alibaba.vSwitchID});
 
-    if (!this.selectedVSwitch && this.vSwitches.length > 0) {
-      this.selectedVSwitch = this.vSwitches[0].id;
-    }
-
-    this.vSwitchLabel = this.selectedVSwitch ? VSwitchState.Ready : VSwitchState.Empty;
     this._cdr.detectChanges();
   }
 
