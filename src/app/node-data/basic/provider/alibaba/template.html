@@ -54,18 +54,11 @@ limitations under the License.
            required>
   </mat-form-field>
 
-  <km-combobox #vSwitchCombobox
-               [required]="true"
-               [grouped]="false"
-               [selected]="selectedVSwitch"
-               [options]="vSwitches"
-               [formControlName]="Controls.VSwitchID"
-               (changed)="onVSwitchChange($event)"
-               [label]="vSwitchLabel"
-               inputLabel="Select vSwitch ID..."
-               filterBy="id">
-    <div *option="let vSwitch">{{vSwitch.id}}</div>
-  </km-combobox>
+  <km-autocomplete label="VSwitch ID"
+                   [formControlName]="Controls.VSwitchID"
+                   [options]="vSwitches"
+                   required="true">
+  </km-autocomplete>
 
   <mat-form-field fxFlex>
     <mat-label>Internet Max Bandwidth Out</mat-label>
