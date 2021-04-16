@@ -22,15 +22,16 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {NodeDataService} from '@app/node-data/service/service';
 import {PresetsService} from '@core/services/wizard/presets.service';
+import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
-import {AlibabaInstanceType, AlibabaZone} from '@shared/entity/provider/alibaba';
+import {AlibabaInstanceType, AlibabaZone, AlibabaVSwitch} from '@shared/entity/provider/alibaba';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {compare} from '@shared/utils/common-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {merge, Observable} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {filter, map, takeUntil} from 'rxjs/operators';
 
 enum Controls {
   InstanceType = 'instanceType',
@@ -83,6 +84,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   zoneLabel = ZoneState.Empty;
   diskTypes = this._diskTypes.map(type => ({name: type}));
   selectedDiskType = '';
+  vSwitches: string[] = [];
 
   @ViewChild('instanceTypeCombobox')
   private _instanceTypeCombobox: FilteredComboboxComponent;
@@ -98,6 +100,10 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
 
   private get _zoneIdsObservable(): Observable<AlibabaZone[]> {
     return this._nodeDataService.alibaba.zones(this._clearZone.bind(this), this._onZoneLoading.bind(this));
+  }
+
+  private get _vSwitchIdsObservable(): Observable<AlibabaZone[]> {
+    return this._nodeDataService.alibaba.vSwitches(this._clearVSwitch.bind(this), this._onVSwitchLoading.bind(this));
   }
 
   constructor(
@@ -124,19 +130,25 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
 
     this._instanceTypesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultInstanceType.bind(this));
     this._zoneIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultZone.bind(this));
+    this._vSwitchIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultVSwitch.bind(this));
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._clearInstanceType();
       this._clearZone();
     });
 
-    merge(
-      this.form.get(Controls.DiskSize).valueChanges,
-      this.form.get(Controls.InternetMaxBandwidthOut).valueChanges,
-      this.form.get(Controls.VSwitchID).valueChanges
-    )
+    merge(this.form.get(Controls.DiskSize).valueChanges, this.form.get(Controls.InternetMaxBandwidthOut).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+
+    this.form
+      .get(Controls.VSwitchID)
+      .valueChanges.pipe(
+        filter(form => !!form),
+        map(form => form[AutocompleteControls.Main]),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(vs => (this._nodeDataService.nodeData.spec.cloud.alibaba.vSwitchID = vs));
   }
 
   ngAfterViewChecked(): void {
@@ -176,7 +188,6 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.alibaba) {
       this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.alibaba.diskSize);
-      this.form.get(Controls.VSwitchID).setValue(this._nodeDataService.nodeData.spec.cloud.alibaba.vSwitchID);
       this.form
         .get(Controls.InternetMaxBandwidthOut)
         .setValue(this._nodeDataService.nodeData.spec.cloud.alibaba.internetMaxBandwidthOut);
@@ -197,6 +208,11 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     this._cdr.detectChanges();
   }
 
+  private _onVSwitchLoading(): void {
+    this._clearVSwitch();
+    this._cdr.detectChanges();
+  }
+
   private _clearInstanceType(): void {
     this.instanceTypes = [];
     this.selectedInstanceType = '';
@@ -210,6 +226,12 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     this.selectedZone = '';
     this.zoneLabel = ZoneState.Empty;
     this._zoneCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _clearVSwitch(): void {
+    this.vSwitches = [];
+    this.form.get(Controls.VSwitchID).setValue(AutocompleteInitialState);
     this._cdr.detectChanges();
   }
 
@@ -247,6 +269,13 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     this._cdr.detectChanges();
   }
 
+  private _setDefaultVSwitch(vSwitches: AlibabaVSwitch[]): void {
+    this.vSwitches = _(vSwitches).map('id').sortBy().value();
+    this.form.get(Controls.VSwitchID).setValue({main: this._nodeDataService.nodeData.spec.cloud.alibaba.vSwitchID});
+
+    this._cdr.detectChanges();
+  }
+
   private _findCheapestInstance(instanceTypes: AlibabaInstanceType[]): AlibabaInstanceType {
     // Avoid mutating original array
     return [...instanceTypes]
@@ -261,7 +290,6 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
           alibaba: {
             diskSize: `${this.form.get(Controls.DiskSize).value}`,
             internetMaxBandwidthOut: `${this.form.get(Controls.InternetMaxBandwidthOut).value}`,
-            vSwitchID: this.form.get(Controls.VSwitchID).value,
           },
         } as NodeCloudSpec,
       } as NodeSpec,
