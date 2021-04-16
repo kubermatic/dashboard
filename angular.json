@@ -20,7 +20,7 @@
             "polyfills": "src/polyfills.ts",
             "assets": [
               "src/assets",
-              "src/favicon.ico",
+              "src/favicon.png",
               { "glob": "**/*", "input": "node_modules/ngx-monaco-editor/assets/monaco", "output": "./assets/monaco/" }
             ],
             "stylePreprocessorOptions": {
@@ -167,7 +167,7 @@
             ],
             "assets": [
               "src/assets",
-              "src/favicon.ico"
+              "src/favicon.png"
             ]
           }
         }
