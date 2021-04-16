@@ -23,7 +23,7 @@ import {CreateMember, Member} from '@shared/entity/member';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {EditProject, Project} from '@shared/entity/project';
-import {AlibabaInstanceType, AlibabaZone} from '@shared/entity/provider/alibaba';
+import {AlibabaInstanceType, AlibabaZone, AlibabaVSwitch} from '@shared/entity/provider/alibaba';
 import {AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
 import {AzureSizes, AzureZones} from '@shared/entity/provider/azure';
 import {DigitaloceanSizes} from '@shared/entity/provider/digitalocean';
@@ -161,6 +161,12 @@ export class ApiService {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/alibaba/zones`;
     const headers = new HttpHeaders().set('Region', region);
     return this._http.get<AlibabaZone[]>(url, {headers});
+  }
+
+  getAlibabaVSwitches(projectId: string, clusterId: string, region: string): Observable<AlibabaVSwitch[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/alibaba/vswitches`;
+    const headers = new HttpHeaders().set('Region', region);
+    return this._http.get<AlibabaVSwitch[]>(url, {headers});
   }
 
   editToken(cluster: Cluster, projectID: string, token: Token): Observable<Token> {
