@@ -17,6 +17,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable} from 'rxjs';
 import {Alibaba} from './provider/alibaba';
 import {AWS} from './provider/aws';
+import {Anexia} from './provider/anexia';
 import {Azure} from './provider/azure';
 import {Digitalocean} from './provider/digitalocean';
 import {GCP} from './provider/gcp';
@@ -58,6 +59,7 @@ export class PresetsService {
   provider(provider: NodeProvider.PACKET): Packet;
   provider(provider: NodeProvider.VSPHERE): VSphere;
   provider(provider: NodeProvider.ALIBABA): Alibaba;
+  provider(provider: NodeProvider.ANEXIA): Anexia;
   provider(provider: NodeProvider): Provider {
     switch (provider) {
       case NodeProvider.AWS:
@@ -78,6 +80,8 @@ export class PresetsService {
         return new VSphere(this._http, NodeProvider.VSPHERE);
       case NodeProvider.ALIBABA:
         return new Alibaba(this._http, NodeProvider.ALIBABA);
+      case NodeProvider.ANEXIA:
+        return new Anexia(this._http, NodeProvider.ANEXIA);
       default:
         throw new Error(`Provider ${provider} not supported.`);
     }

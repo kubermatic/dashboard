@@ -9,14 +9,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AfterViewChecked, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {NodeDataService} from '@app/node-data/service/service';
+import {PresetsService} from '@core/services/wizard/presets.service';
+import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
+import {AnexiaVlan} from '@shared/entity/provider/anexia';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {merge} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import * as _ from 'lodash';
+import {merge, Observable} from 'rxjs';
+import {filter, map, takeUntil} from 'rxjs/operators';
 
 enum Controls {
   VlanID = 'vlanID',
@@ -41,14 +53,25 @@ enum Controls {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy, AfterViewChecked {
   readonly Controls = Controls;
   private readonly _defaultDiskSize = 20; // in GiB
   private readonly _defaultCpus = 1;
   private readonly _defaultMemory = 2048; // in MB
+  vlans: string[] = [];
 
-  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
+  private get _vlanIdsObservable(): Observable<AnexiaVlan[]> {
+    return this._nodeDataService.anexia.vlans(this._clearVlan.bind(this), this._onVlanLoading.bind(this));
+  }
+
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _presets: PresetsService,
+    private readonly _cdr: ChangeDetectorRef
+  ) {
     super();
   }
 
@@ -64,8 +87,13 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
+    this._vlanIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultVlan.bind(this));
+
+    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      this._clearVlan();
+    });
+
     merge(
-      this.form.get(Controls.VlanID).valueChanges,
       this.form.get(Controls.TemplateID).valueChanges,
       this.form.get(Controls.Cpus).valueChanges,
       this.form.get(Controls.Memory).valueChanges,
@@ -73,6 +101,15 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+
+    this.form
+      .get(Controls.VlanID)
+      .valueChanges.pipe(
+        filter(form => !!form),
+        map(form => form[AutocompleteControls.Main]),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(v => (this._nodeDataService.nodeData.spec.cloud.anexia.vlanID = v));
   }
 
   ngAfterViewChecked(): void {
@@ -87,12 +124,31 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
 
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.anexia) {
-      this.form.get(Controls.VlanID).setValue(this._nodeDataService.nodeData.spec.cloud.anexia.vlanID);
       this.form.get(Controls.TemplateID).setValue(this._nodeDataService.nodeData.spec.cloud.anexia.templateID);
       this.form.get(Controls.Cpus).setValue(this._nodeDataService.nodeData.spec.cloud.anexia.cpus);
       this.form.get(Controls.Memory).setValue(this._nodeDataService.nodeData.spec.cloud.anexia.memory);
       this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.anexia.diskSize);
+
+      this._cdr.detectChanges();
     }
+  }
+
+  private _onVlanLoading(): void {
+    this._clearVlan();
+    this._cdr.detectChanges();
+  }
+
+  private _clearVlan(): void {
+    this.vlans = [];
+    this.form.get(Controls.VlanID).setValue(AutocompleteInitialState);
+    this._cdr.detectChanges();
+  }
+
+  private _setDefaultVlan(vlans: AnexiaVlan[]): void {
+    this.vlans = _(vlans).map('id').sortBy().value();
+    this.form.get(Controls.VlanID).setValue({main: this._nodeDataService.nodeData.spec.cloud.anexia.vlanID});
+
+    this._cdr.detectChanges();
   }
 
   private _getNodeData(): NodeData {
@@ -100,7 +156,6 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
       spec: {
         cloud: {
           anexia: {
-            vlanID: this.form.get(Controls.VlanID).value,
             templateID: this.form.get(Controls.TemplateID).value,
             cpus: this.form.get(Controls.Cpus).value,
             memory: this.form.get(Controls.Memory).value,
