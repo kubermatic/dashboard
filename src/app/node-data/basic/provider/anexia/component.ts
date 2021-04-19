@@ -20,7 +20,6 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {NodeDataService} from '@app/node-data/service/service';
-import {PresetsService} from '@core/services/wizard/presets.service';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
@@ -74,7 +73,6 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _presets: PresetsService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super();
@@ -94,11 +92,6 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
 
     this._vlanIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultVlan.bind(this));
     this._templateIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultTemplate.bind(this));
-
-    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this._clearVlan();
-      this._clearTemplate();
-    });
 
     merge(
       this.form.get(Controls.Cpus).valueChanges,
