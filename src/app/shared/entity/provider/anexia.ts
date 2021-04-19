@@ -12,3 +12,7 @@
 export class AnexiaVlan {
   id: string;
 }
+
+export class AnexiaTemplate {
+  id: string;
+}

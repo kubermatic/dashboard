@@ -23,7 +23,7 @@ import {NodeDataService} from '@app/node-data/service/service';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
-import {AnexiaVlan} from '@shared/entity/provider/anexia';
+import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
@@ -61,9 +61,14 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
   private readonly _defaultCpus = 1;
   private readonly _defaultMemory = 2048; // in MB
   vlans: string[] = [];
+  templates: string[] = [];
 
   private get _vlanIdsObservable(): Observable<AnexiaVlan[]> {
     return this._nodeDataService.anexia.vlans(this._clearVlan.bind(this), this._onVlanLoading.bind(this));
+  }
+
+  private get _templateIdsObservable(): Observable<AnexiaVlan[]> {
+    return this._nodeDataService.anexia.templates(this._clearTemplate.bind(this), this._onTemplateLoading.bind(this));
   }
 
   constructor(
@@ -88,13 +93,14 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     this._nodeDataService.nodeData = this._getNodeData();
 
     this._vlanIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultVlan.bind(this));
+    this._templateIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultTemplate.bind(this));
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._clearVlan();
+      this._clearTemplate();
     });
 
     merge(
-      this.form.get(Controls.TemplateID).valueChanges,
       this.form.get(Controls.Cpus).valueChanges,
       this.form.get(Controls.Memory).valueChanges,
       this.form.get(Controls.DiskSize).valueChanges
@@ -110,6 +116,15 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
         takeUntil(this._unsubscribe)
       )
       .subscribe(v => (this._nodeDataService.nodeData.spec.cloud.anexia.vlanID = v));
+
+    this.form
+      .get(Controls.TemplateID)
+      .valueChanges.pipe(
+        filter(form => !!form),
+        map(form => form[AutocompleteControls.Main]),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(t => (this._nodeDataService.nodeData.spec.cloud.anexia.templateID = t));
   }
 
   ngAfterViewChecked(): void {
@@ -124,7 +139,6 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
 
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.anexia) {
-      this.form.get(Controls.TemplateID).setValue(this._nodeDataService.nodeData.spec.cloud.anexia.templateID);
       this.form.get(Controls.Cpus).setValue(this._nodeDataService.nodeData.spec.cloud.anexia.cpus);
       this.form.get(Controls.Memory).setValue(this._nodeDataService.nodeData.spec.cloud.anexia.memory);
       this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.anexia.diskSize);
@@ -138,9 +152,20 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     this._cdr.detectChanges();
   }
 
+  private _onTemplateLoading(): void {
+    this._clearTemplate();
+    this._cdr.detectChanges();
+  }
+
   private _clearVlan(): void {
     this.vlans = [];
     this.form.get(Controls.VlanID).setValue(AutocompleteInitialState);
+    this._cdr.detectChanges();
+  }
+
+  private _clearTemplate(): void {
+    this.vlans = [];
+    this.form.get(Controls.TemplateID).setValue(AutocompleteInitialState);
     this._cdr.detectChanges();
   }
 
@@ -151,12 +176,18 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     this._cdr.detectChanges();
   }
 
+  private _setDefaultTemplate(templates: AnexiaTemplate[]): void {
+    this.templates = _(templates).map('id').sortBy().value();
+    this.form.get(Controls.TemplateID).setValue({main: this._nodeDataService.nodeData.spec.cloud.anexia.templateID});
+
+    this._cdr.detectChanges();
+  }
+
   private _getNodeData(): NodeData {
     return {
       spec: {
         cloud: {
           anexia: {
-            templateID: this.form.get(Controls.TemplateID).value,
             cpus: this.form.get(Controls.Cpus).value,
             memory: this.form.get(Controls.Memory).value,
             diskSize: this.form.get(Controls.DiskSize).value,
