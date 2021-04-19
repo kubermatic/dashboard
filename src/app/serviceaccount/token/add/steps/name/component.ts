@@ -14,6 +14,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {ServiceAccountTokenDialogService} from '@app/serviceaccount/token/add/steps/service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {takeUntil} from 'rxjs/operators';
+import {LabelFormValidators} from '@shared/validators/label-form.validators';
 
 enum Controls {
   Name = 'name',
@@ -49,7 +50,14 @@ export class ServiceAccountTokenNameStepComponent extends BaseFormValidator impl
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control('', Validators.required),
+      [Controls.Name]: this._builder.control(
+        '',
+        Validators.compose([
+          Validators.required,
+          LabelFormValidators.labelValueLength,
+          LabelFormValidators.labelValuePattern,
+        ])
+      ),
     });
 
     this.form
