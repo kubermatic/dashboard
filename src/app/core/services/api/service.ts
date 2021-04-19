@@ -24,7 +24,7 @@ import {NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {EditProject, Project} from '@shared/entity/project';
 import {AlibabaInstanceType, AlibabaZone, AlibabaVSwitch} from '@shared/entity/provider/alibaba';
-import {AnexiaVlan} from '@shared/entity/provider/anexia';
+import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 import {AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
 import {AzureSizes, AzureZones} from '@shared/entity/provider/azure';
 import {DigitaloceanSizes} from '@shared/entity/provider/digitalocean';
@@ -173,6 +173,12 @@ export class ApiService {
   getAnexiaVlans(projectId: string, clusterId: string): Observable<AnexiaVlan[]> {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/anexia/vlans`;
     return this._http.get<AnexiaVlan[]>(url);
+  }
+
+  getAnexiaTemplates(projectId: string, clusterId: string, location: string): Observable<AnexiaTemplate[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/anexia/templates`;
+    const headers = new HttpHeaders().set('Location', location);
+    return this._http.get<AnexiaTemplate[]>(url, {headers});
   }
 
   editToken(cluster: Cluster, projectID: string, token: Token): Observable<Token> {

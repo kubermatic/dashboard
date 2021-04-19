@@ -112,6 +112,7 @@ export class NodeDataService {
     this,
     this._clusterService,
     this._presetService,
+    this._datacenterService,
     this._apiService,
     this._projectService
   );

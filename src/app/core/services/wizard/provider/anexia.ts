@@ -15,7 +15,7 @@ import {EMPTY, Observable} from 'rxjs';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
-import {AnexiaVlan} from '../../../../shared/entity/provider/anexia';
+import {AnexiaTemplate, AnexiaVlan} from '../../../../shared/entity/provider/anexia';
 
 export class Anexia extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
@@ -36,6 +36,13 @@ export class Anexia extends Provider {
     return this;
   }
 
+  location(location: string): Anexia {
+    if (location) {
+      this._headers = this._headers.set(Anexia.Header.Location, location);
+    }
+    return this;
+  }
+
   vlans(onLoadingCb: () => void = null): Observable<AnexiaVlan[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
@@ -48,10 +55,25 @@ export class Anexia extends Provider {
     const url = `${this._restRoot}/providers/${this._provider}/vlans`;
     return this._http.get<AnexiaVlan[]>(url, {headers: this._headers});
   }
+
+  templates(onLoadingCb: () => void = null): Observable<AnexiaTemplate[]> {
+    this._setRequiredHeaders(Anexia.Header.Token, Anexia.Header.Location);
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._restRoot}/providers/${this._provider}/templates`;
+    return this._http.get<AnexiaTemplate[]>(url, {headers: this._headers});
+  }
 }
 
 export namespace Anexia {
   export enum Header {
     Token = 'Token',
+    Location = 'Location',
   }
 }
