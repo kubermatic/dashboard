@@ -85,6 +85,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   diskTypes = this._diskTypes.map(type => ({name: type}));
   selectedDiskType = '';
   vSwitches: string[] = [];
+  isLoadingVSwitches = false;
 
   @ViewChild('instanceTypeCombobox')
   private _instanceTypeCombobox: FilteredComboboxComponent;
@@ -209,6 +210,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   private _onVSwitchLoading(): void {
+    this.isLoadingVSwitches = true;
     this._clearVSwitch();
     this._cdr.detectChanges();
   }
@@ -270,9 +272,15 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   private _setDefaultVSwitch(vSwitches: AlibabaVSwitch[]): void {
-    this.vSwitches = _(vSwitches).map('id').sortBy().value();
-    this.form.get(Controls.VSwitchID).setValue({main: this._nodeDataService.nodeData.spec.cloud.alibaba.vSwitchID});
+    this.isLoadingVSwitches = false;
+    this.vSwitches = _.sortBy(vSwitches, it => it.id.toLowerCase()).map(it => it.id);
+    let selectedVSwitch = this._nodeDataService.nodeData.spec.cloud.alibaba.vSwitchID;
 
+    if (!selectedVSwitch && this.vSwitches.length > 0) {
+      selectedVSwitch = this.vSwitches[0];
+    }
+
+    this.form.get(Controls.VSwitchID).setValue({main: selectedVSwitch});
     this._cdr.detectChanges();
   }
 

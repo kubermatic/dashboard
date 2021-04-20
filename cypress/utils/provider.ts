@@ -10,6 +10,7 @@
 // limitations under the License.
 
 export enum Provider {
+  Alibaba = 'alibaba',
   Anexia = 'anexia',
   AWS = 'aws',
   Azure = 'azure',
@@ -24,6 +25,10 @@ export enum Provider {
 }
 
 export namespace Datacenter {
+  export enum Alibaba {
+    Frankfurt = 'Frankfurt',
+  }
+
   export enum Anexia {
     Vienna = 'Vienna',
   }
