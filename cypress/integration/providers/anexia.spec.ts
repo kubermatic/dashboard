@@ -62,8 +62,10 @@ describe('Anexia Provider', () => {
       .clear()
       .type(initialMachineDeploymentReplicas)
       .should(Condition.HaveValue, initialMachineDeploymentReplicas);
-    WizardPage.anexia.getTemplateIDInput().type(templateID).should(Condition.HaveValue, templateID);
-    WizardPage.anexia.getVlanIDInput().type(vlanID).should(Condition.HaveValue, vlanID);
+    WizardPage.anexia.getTemplateIDInput().click();
+    WizardPage.getAutocompleteOption(templateID).click();
+    WizardPage.anexia.getVlanIDInput().click();
+    WizardPage.getAutocompleteOption(vlanID).click();
     WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
