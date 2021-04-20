@@ -108,7 +108,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this._settings = settings;
-      this.form.get(Controls.OPAIntegration).setValue(this._settings.opaOptions.enabled);
+      this.form.get(Controls.OPAIntegration).setValue(this._settings.opaOptions.enabled, {emitEvent: false});
       this._enforce(Controls.OPAIntegration, this._settings.opaOptions.enforced);
     });
 
