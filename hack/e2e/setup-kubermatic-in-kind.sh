@@ -303,7 +303,7 @@ metadata:
   namespace: kubermatic
 spec:
   alibaba:
-    accessKeyID: ${ALIBABA_ACCESS_KEY_ID}
+    accessKeyId: ${ALIBABA_ACCESS_KEY_ID}
     accessKeySecret: ${ALIBABA_ACCESS_KEY_SECRET}
 EOF
 retry 2 kubectl apply -f preset-alibaba.yaml
