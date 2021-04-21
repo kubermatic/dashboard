@@ -14,6 +14,12 @@ import {Preset} from '../utils/preset';
 import {View} from '../utils/view';
 import {WizardStep} from '../utils/wizard';
 
+class Alibaba {
+  static getVSwitchIDInput(): Cypress.Chainable {
+    return cy.get('#vSwitchID');
+  }
+}
+
 class Anexia {
   static getTemplateIDInput(): Cypress.Chainable {
     return cy.get('#templateID');
@@ -103,6 +109,7 @@ export class WizardPage {
   // Providers
   static readonly anexia = Anexia;
   static readonly kubeVirt = KubeVirt;
+  static readonly alibaba = Alibaba;
 
   // Utils
 

@@ -294,5 +294,19 @@ spec:
 EOF
 retry 2 kubectl apply -f preset-vsphere.yaml
 
+echodate "Creating UI Alibaba preset..."
+cat <<EOF > preset-alibaba.yaml
+apiVersion: kubermatic.k8s.io/v1
+kind: Preset
+metadata:
+  name: e2e-alibaba
+  namespace: kubermatic
+spec:
+  alibaba:
+    accessKeyId: ${ALIBABA_ACCESS_KEY_ID}
+    accessKeySecret: ${ALIBABA_ACCESS_KEY_SECRET}
+EOF
+retry 2 kubectl apply -f preset-alibaba.yaml
+
 echodate "Applying user..."
 retry 2 kubectl apply -f hack/e2e/fixtures/user.yaml
