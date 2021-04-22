@@ -219,7 +219,7 @@ export class VSphereNodeSpec {
   diskSizeGB?: number;
 }
 
-export function getEmptyNodeProviderSpec(provider: string): object {
+export function getDefaultNodeProviderSpec(provider: string): object {
   switch (provider) {
     case NodeProvider.AWS:
       return {

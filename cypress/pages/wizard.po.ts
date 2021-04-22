@@ -19,21 +19,6 @@ class Alibaba {
     return cy.get('#vSwitchID');
   }
 }
-
-class Anexia {
-  static getTemplateIDAutocomplete(): Cypress.Chainable {
-    return cy.get('#templateID');
-  }
-
-  static getTemplateIDInput(): Cypress.Chainable {
-    return cy.get('#templateID');
-  }
-
-  static getVlanIDInput(): Cypress.Chainable {
-    return cy.get('#vlanID');
-  }
-}
-
 class KubeVirt {
   static getNamespaceInput(): Cypress.Chainable {
     return cy.get('#namespace');
@@ -90,17 +75,6 @@ export class WizardPage {
 
   static getNodeCountInput(): Cypress.Chainable {
     return cy.get('#km-node-count-input');
-  }
-
-  static getAutocompleteOption(value: string): Cypress.Chainable {
-    return cy.get('mat-option').then(option => {
-      if (option.find('span').text(value).length > 0) {
-        return cy.get('mat-option').contains('span', value);
-      }
-
-      // Fallback to the first option if preset not found
-      return cy.get('mat-option');
-    });
   }
 
   static getSSHKeysSelect(): Cypress.Chainable {
