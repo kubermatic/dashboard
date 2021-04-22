@@ -68,6 +68,7 @@ presubmits:
         base_ref: master
         clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
     labels:
+      preset-alibaba: "true"
       preset-anexia: "true"
       preset-aws: "true"
       preset-azure: "true"
@@ -118,6 +119,7 @@ presubmits:
         base_ref: master
         clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
     labels:
+      preset-alibaba: "true"
       preset-anexia: "true"
       preset-aws: "true"
       preset-azure: "true"

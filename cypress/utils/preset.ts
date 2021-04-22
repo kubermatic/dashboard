@@ -10,6 +10,7 @@
 // limitations under the License.
 
 export enum Preset {
+  Alibaba = 'e2e-alibaba',
   Anexia = 'e2e-anexia',
   AWS = 'e2e-aws',
   Azure = 'e2e-azure',
