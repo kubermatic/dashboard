@@ -45,6 +45,7 @@ limitations under the License.
 
   <km-autocomplete label="Template ID"
                    [formControlName]="Controls.TemplateID"
+                   [isLoading]="isLoadingTemplates"
                    [id]="Controls.TemplateID"
                    [options]="templates"
                    required>
@@ -52,6 +53,7 @@ limitations under the License.
 
   <km-autocomplete label="VLAN ID"
                    [formControlName]="Controls.VlanID"
+                   [isLoading]="isLoadingVlans"
                    [id]="Controls.VlanID"
                    [options]="vlans"
                    required>

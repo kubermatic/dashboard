@@ -61,6 +61,8 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
   private readonly _defaultMemory = 2048; // in MB
   vlans: string[] = [];
   templates: string[] = [];
+  isLoadingVlans = false;
+  isLoadingTemplates = false;
 
   private get _vlanIdsObservable(): Observable<AnexiaVlan[]> {
     return this._nodeDataService.anexia.vlans(this._clearVlan.bind(this), this._onVlanLoading.bind(this));
@@ -141,11 +143,13 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
   }
 
   private _onVlanLoading(): void {
+    this.isLoadingVlans = true;
     this._clearVlan();
     this._cdr.detectChanges();
   }
 
   private _onTemplateLoading(): void {
+    this.isLoadingTemplates = true;
     this._clearTemplate();
     this._cdr.detectChanges();
   }
@@ -163,16 +167,28 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
   }
 
   private _setDefaultVlan(vlans: AnexiaVlan[]): void {
-    this.vlans = _(vlans).map('id').sortBy().value();
-    this.form.get(Controls.VlanID).setValue({main: this._nodeDataService.nodeData.spec.cloud.anexia.vlanID});
+    this.isLoadingVlans = false;
+    this.vlans = _.sortBy(vlans, v => v.id.toLowerCase()).map(v => v.id);
+    let selectedVlan = this._nodeDataService.nodeData.spec.cloud.anexia.vlanID;
 
+    if (!selectedVlan && this.vlans.length > 0) {
+      selectedVlan = this.vlans[0];
+    }
+
+    this.form.get(Controls.VlanID).setValue({main: selectedVlan});
     this._cdr.detectChanges();
   }
 
   private _setDefaultTemplate(templates: AnexiaTemplate[]): void {
-    this.templates = _(templates).map('id').sortBy().value();
-    this.form.get(Controls.TemplateID).setValue({main: this._nodeDataService.nodeData.spec.cloud.anexia.templateID});
+    this.isLoadingTemplates = false;
+    this.templates = _.sortBy(templates, t => t.id.toLowerCase()).map(t => t.id);
+    let selectedTemplate = this._nodeDataService.nodeData.spec.cloud.anexia.templateID;
 
+    if (!selectedTemplate && this.templates.length > 0) {
+      selectedTemplate = this.templates[0];
+    }
+
+    this.form.get(Controls.TemplateID).setValue({main: selectedTemplate});
     this._cdr.detectChanges();
   }
 
