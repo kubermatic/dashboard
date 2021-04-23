@@ -22,6 +22,15 @@ limitations under the License.
       Enter your credentials to load autocompletions.
     </ng-container>
   </km-autocomplete>
+  <km-autocomplete label="VNet Resource Group"
+                   [formControlName]="Controls.VNetResourceGroup"
+                   [isLoading]="isLoadingResourceGroups"
+                   [options]="resourceGroups">
+    <ng-container hint
+                  *ngIf="!hasRequiredCredentials()">
+      Enter your credentials to load autocompletions.
+    </ng-container>
+  </km-autocomplete>
   <km-autocomplete label="Route Table"
                    [formControlName]="Controls.RouteTable"
                    [isLoading]="isLoadingRouteTables"

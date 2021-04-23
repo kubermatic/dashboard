@@ -24,6 +24,7 @@ import {AutocompleteControls, AutocompleteInitialState} from '@shared/components
 
 enum Controls {
   ResourceGroup = 'resourceGroup',
+  VNetResourceGroup = 'vnetResourceGroup',
   RouteTable = 'routeTable',
   SecurityGroup = 'securityGroup',
   Subnet = 'subnet',
@@ -73,6 +74,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.ResourceGroup]: this._builder.control(''),
+      [Controls.VNetResourceGroup]: this._builder.control(''),
       [Controls.RouteTable]: this._builder.control(''),
       [Controls.SecurityGroup]: this._builder.control(''),
       [Controls.Subnet]: this._builder.control(''),
@@ -192,6 +194,15 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
         takeUntil(this._unsubscribe)
       )
       .subscribe(rg => (this._clusterService.cluster.spec.cloud.azure.resourceGroup = rg));
+
+    this.form
+      .get(Controls.VNetResourceGroup)
+      .valueChanges.pipe(
+        filter(form => !!form),
+        map(form => form[AutocompleteControls.Main]),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(vrg => (this._clusterService.cluster.spec.cloud.azure.vnetResourceGroup = vrg));
 
     this.form
       .get(Controls.RouteTable)
