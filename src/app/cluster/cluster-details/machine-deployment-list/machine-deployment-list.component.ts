@@ -116,10 +116,10 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
       .pipe(take(1))
       .subscribe(
         _ => {
-          this._notificationService.success(`The <strong>${md.name}</strong> node deployment was updated`);
+          this._notificationService.success(`The <strong>${md.name}</strong> machine deployment was updated`);
           this.changeMachineDeployment.emit(md);
         },
-        _ => this._notificationService.error('There was an error during node deployment edition.')
+        _ => this._notificationService.error('There was an error during machine deployment edition.')
       );
   }
 
