@@ -70,10 +70,10 @@ func main() {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	// disable caching for the main HTML page
-	if r.URL.Path == "/" || r.URL.Path == "/index.html" {
+	// disable caching for the root(index.html) and all config files
+	if r.URL.Path == "/" || isCacheDisabled(r.URL.Path) {
 		// Forces caches to submit the request to the origin server for validation before releasing a cached copy.
-		w.Header().Add("Cache-Control", "no-cache")
+		w.Header().Add("Cache-Control", "no-cache, no-store, must-revalidate")
 
 		// It is used for backwards compatibility with HTTP/1.0 caches.
 		w.Header().Add("Pragma", "no-cache")
@@ -95,6 +95,22 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	// If we can't find the file, we still serve index.html
 	// to show dynamic pages or a 404 page
 	http.ServeFile(w, r, "./dist/index.html")
+}
+
+func isCacheDisabled(path string) bool {
+	noCacheList := []string{
+		"/index.html",
+		"/config/",
+		"/assets/config",
+	}
+
+	for _, prefix := range noCacheList {
+		if strings.HasPrefix(path, prefix) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func getEditionDisplayName() string {
