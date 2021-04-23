@@ -96,7 +96,6 @@ export class WizardPage {
   }
 
   // Providers
-  static readonly anexia = Anexia;
   static readonly kubeVirt = KubeVirt;
   static readonly alibaba = Alibaba;
 
