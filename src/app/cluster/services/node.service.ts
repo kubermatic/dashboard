@@ -155,7 +155,9 @@ export class NodeService {
                 .pipe(first())
                 .pipe(
                   catchError(() => {
-                    this._notificationService.error('Could not remove the <strong>${md.name}</strong> machine deployment');
+                    this._notificationService.error(
+                      'Could not remove the <strong>${md.name}</strong> machine deployment'
+                    );
                     return of(false);
                   })
                 );
