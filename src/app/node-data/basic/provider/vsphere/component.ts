@@ -95,12 +95,12 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(tap(dc => (this._templates = dc.spec.vsphere.templates)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._setDefaultTemplate(OperatingSystem.Ubuntu));
+      .subscribe(_ => this._setDefaultTemplate());
 
     this._clusterService.clusterTypeChanges
       .pipe(filter(_ => !!this._templates))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._setDefaultTemplate(OperatingSystem.Ubuntu));
+      .subscribe(_ => this._setDefaultTemplate());
 
     this._nodeDataService.operatingSystemChanges
       .pipe(filter(_ => !!this._templates))
@@ -121,7 +121,8 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
     }
   }
 
-  private _setDefaultTemplate(os: OperatingSystem): void {
+  private _setDefaultTemplate(os: OperatingSystem = undefined): void {
+    os = os ? os : this._getFirstAvailableOS();
     switch (os) {
       case OperatingSystem.CentOS:
         this._defaultTemplate = this._templates.centos;
@@ -136,10 +137,23 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
         this._defaultTemplate = this._templates.flatcar;
         break;
       default:
-        this._defaultTemplate = this._templates.ubuntu;
+        this._defaultTemplate = '';
     }
 
     this.form.get(Controls.Template).setValue(this._defaultTemplate);
+  }
+
+  private _getFirstAvailableOS(): OperatingSystem {
+    if (this._templates.ubuntu) {
+      return OperatingSystem.Ubuntu;
+    } else if (this._templates.centos) {
+      return OperatingSystem.CentOS;
+    } else if (this._templates.sles) {
+      return OperatingSystem.SLES;
+    } else if (this._templates.flatcar) {
+      return OperatingSystem.Flatcar;
+    }
+    return undefined;
   }
 
   private _getNodeData(): NodeData {
