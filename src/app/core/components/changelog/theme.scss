@@ -20,20 +20,28 @@
         background-color: map-get($colors, changelog-action-required);
       }
 
-      &.km-api {
-        background-color: map-get($colors, changelog-api);
+      &.km-added {
+        background-color: map-get($colors, changelog-added);
       }
 
-      &.km-interface {
-        background-color: map-get($colors, changelog-interface);
+      &.km-removed {
+        background-color: map-get($colors, changelog-removed);
       }
 
-      &.km-infrastructure {
-        background-color: map-get($colors, changelog-infrastructure);
+      &.km-fixed {
+        background-color: map-get($colors, changelog-fixed);
       }
 
-      &.km-machine-controller {
-        background-color: map-get($colors, changelog-machine-controller);
+      &.km-changed {
+        background-color: map-get($colors, changelog-changed);
+      }
+
+      &.km-deprecated {
+        background-color: map-get($colors, changelog-deprecated);
+      }
+
+      &.km-security {
+        background-color: map-get($colors, changelog-security);
       }
     }
   }
@@ -62,6 +70,12 @@
           color: map-get($colors, text-secondary);
         }
       }
+    }
+  }
+
+  .km-changelog-link-button {
+    a {
+      color: white;
     }
   }
 }
