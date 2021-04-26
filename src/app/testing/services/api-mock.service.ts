@@ -25,6 +25,7 @@ import {
 import {SSHKey} from '@shared/entity/ssh-key';
 import {fakeDigitaloceanSizes, fakePacketSizes} from '../fake-data/addNodeModal.fake';
 import {fakeAlibabaInstanceTypes, fakeAlibabaZones, fakeAlibabaVSwitches} from '../fake-data/alibaba.fake';
+import {fakeAnexiaTemplates, fakeAnexiaVlans} from '../fake-data/anexia.fake';
 import {masterVersionsFake} from '../fake-data/cluster-spec.fake';
 import {fakeToken} from '../fake-data/cluster.fake';
 import {fakeMember, fakeMembers} from '../fake-data/member.fake';
@@ -41,6 +42,7 @@ import {fakeVSphereNetworks} from '../fake-data/vsphere.fake';
 import {EditProject, Project} from '@shared/entity/project';
 import {VSphereNetwork} from '@shared/entity/provider/vsphere';
 import {AlibabaInstanceType, AlibabaZone, AlibabaVSwitch} from '@shared/entity/provider/alibaba';
+import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 import {PacketSize} from '@shared/entity/provider/packet';
 import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '@shared/entity/provider/gcp';
 import {DigitaloceanSizes} from '@shared/entity/provider/digitalocean';
@@ -254,6 +256,14 @@ export class ApiMockService {
 
   getAlibabaVSwitches(): Observable<AlibabaVSwitch[]> {
     return of(fakeAlibabaVSwitches());
+  }
+
+  getAnexiaVlans(): Observable<AnexiaVlan[]> {
+    return of(fakeAnexiaVlans());
+  }
+
+  getAnexiaTemplates(): Observable<AnexiaTemplate[]> {
+    return of(fakeAnexiaTemplates());
   }
 
   getDashboardProxyURL(): string {

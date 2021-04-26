@@ -52,7 +52,9 @@ export class DatacenterOperatingSystemOptions {
   flatcar?: string;
 }
 
-export class AnexiaDatacenterSpec {}
+export class AnexiaDatacenterSpec {
+  location_id: string;
+}
 
 export class AlibabaDatacenterSpec {
   region: string;

@@ -19,17 +19,6 @@ class Alibaba {
     return cy.get('#vSwitchID');
   }
 }
-
-class Anexia {
-  static getTemplateIDInput(): Cypress.Chainable {
-    return cy.get('#templateID');
-  }
-
-  static getVlanIDInput(): Cypress.Chainable {
-    return cy.get('#vlanID');
-  }
-}
-
 class KubeVirt {
   static getNamespaceInput(): Cypress.Chainable {
     return cy.get('#namespace');
@@ -107,7 +96,6 @@ export class WizardPage {
   }
 
   // Providers
-  static readonly anexia = Anexia;
   static readonly kubeVirt = KubeVirt;
   static readonly alibaba = Alibaba;
 
