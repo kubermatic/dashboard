@@ -16,7 +16,7 @@ import * as _ from 'lodash';
 import {merge, of} from 'rxjs';
 import {delay, takeUntil} from 'rxjs/operators';
 import {Cluster} from '../../shared/entity/cluster';
-import {getEmptyNodeProviderSpec} from '../../shared/entity/node';
+import {getDefaultNodeProviderSpec} from '../../shared/entity/node';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {ClusterService} from '../../shared/services/cluster.service';
@@ -169,7 +169,7 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
     return {
       spec: {
         cloud: {
-          [this._clusterService.provider]: getEmptyNodeProviderSpec(this._clusterService.provider),
+          [this._clusterService.provider]: getDefaultNodeProviderSpec(this._clusterService.provider),
         },
         operatingSystem: {},
         versions: {},

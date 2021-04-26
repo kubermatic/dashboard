@@ -23,8 +23,6 @@ import {WizardStep} from '../../utils/wizard';
 describe('Anexia Provider', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const templateID = Cypress.env('ANEXIA_TEMPLATE_ID');
-  const vlanID = Cypress.env('ANEXIA_VLAN_ID');
   const projectName = prefixedString('e2e-test-project');
   const clusterName = prefixedString('e2e-test-cluster');
   const initialMachineDeploymentName = prefixedString('e2e-test-md');
@@ -62,8 +60,6 @@ describe('Anexia Provider', () => {
       .clear()
       .type(initialMachineDeploymentReplicas)
       .should(Condition.HaveValue, initialMachineDeploymentReplicas);
-    WizardPage.anexia.getTemplateIDInput().type(templateID).should(Condition.HaveValue, templateID);
-    WizardPage.anexia.getVlanIDInput().type(vlanID).should(Condition.HaveValue, vlanID);
     WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
