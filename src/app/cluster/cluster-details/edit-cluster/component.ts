@@ -72,6 +72,8 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       ]),
       auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
       opaIntegration: new FormControl(!!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled),
+      mlaLogging: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.loggingEnabled),
+      mlaMonitoring: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.monitoringEnabled),
       admissionPlugins: new FormControl(this.cluster.spec.admissionPlugins),
       podNodeSelectorAdmissionPluginConfig: new FormControl(''),
       labels: new FormControl(''),
@@ -172,6 +174,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         },
         opaIntegration: {
           enabled: this.form.controls.opaIntegration.value,
+        },
+        mla: {
+          loggingEnabled: this.form.controls.mlaLogging.value,
+          monitoringEnabled: this.form.controls.mlaMonitoring.value,
         },
         usePodNodeSelectorAdmissionPlugin: null,
         usePodSecurityPolicyAdmissionPlugin: null,

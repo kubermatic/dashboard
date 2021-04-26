@@ -124,6 +124,7 @@ limitations under the License.
           <div fxLayout="column"
                fxFlex="100"
                fxLayoutGap="8px">
+
             <mat-checkbox [formControlName]="Controls.AuditLogging">
               Audit Logging
               <i *ngIf="isEnforced(Controls.AuditLogging)"
@@ -144,6 +145,11 @@ limitations under the License.
                  class="km-icon-info km-pointer"
                  matTooltip="OPA Integration is enforced by your admin."></i>
             </mat-checkbox>
+
+            <!-- TODO: un-comment once mla is done -->
+            <!-- <mat-checkbox [formControlName]="Controls.MLALogging">MLA Logging</mat-checkbox>
+
+            <mat-checkbox [formControlName]="Controls.MLAMonitoring">MLA Monitoring</mat-checkbox> -->
 
             <km-label-form title="Labels"
                            [labels]="labels"

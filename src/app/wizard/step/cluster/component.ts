@@ -46,6 +46,8 @@ enum Controls {
   SSHKeys = 'sshKeys',
   PodNodeSelectorAdmissionPluginConfig = 'podNodeSelectorAdmissionPluginConfig',
   OPAIntegration = 'opaIntegration',
+  MLALogging = 'loggingEnabled',
+  MLAMonitoring = 'monitoringEnabled',
 }
 
 @Component({
@@ -100,6 +102,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.AuditLogging]: new FormControl(false),
       [Controls.UserSSHKeyAgent]: new FormControl(true),
       [Controls.OPAIntegration]: new FormControl(false),
+      [Controls.MLALogging]: new FormControl(false),
+      [Controls.MLAMonitoring]: new FormControl(false),
       [Controls.AdmissionPlugins]: new FormControl([]),
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
       [Controls.Labels]: new FormControl(''),
@@ -141,7 +145,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.Version).valueChanges,
       this.form.get(Controls.AuditLogging).valueChanges,
       this.form.get(Controls.UserSSHKeyAgent).valueChanges,
-      this.form.get(Controls.OPAIntegration).valueChanges
+      this.form.get(Controls.OPAIntegration).valueChanges,
+      this.form.get(Controls.MLALogging).valueChanges,
+      this.form.get(Controls.MLAMonitoring).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -221,6 +227,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         },
         opaIntegration: {
           enabled: this.controlValue(Controls.OPAIntegration),
+        },
+        mla: {
+          loggingEnabled: this.controlValue(Controls.MLALogging),
+          monitoringEnabled: this.controlValue(Controls.MLAMonitoring),
         },
         enableUserSSHKeyAgent: this.controlValue(Controls.UserSSHKeyAgent),
       } as ClusterSpec,
