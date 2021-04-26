@@ -202,6 +202,7 @@ export function fakeAzureCluster(): Cluster {
           clientID: 'azure-client-id',
           clientSecret: 'azure-client-secret',
           resourceGroup: 'azure-resource-group',
+          vnetResourceGroup: 'azure-vnet-resource-group',
           routeTable: 'azure-route-table',
           securityGroup: 'azure-security-group',
           subnet: 'azure-subnet',

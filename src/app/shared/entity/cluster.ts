@@ -110,6 +110,7 @@ export class AzureCloudSpec {
   clientID: string;
   clientSecret: string;
   resourceGroup: string;
+  vnetResourceGroup: string;
   routeTable: string;
   securityGroup: string;
   subnet: string;
