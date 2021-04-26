@@ -60,6 +60,14 @@ limitations under the License.
   <mat-dialog-actions fxLayout="row"
                       fxLayoutAlign="end center"
                       class="actions">
+
+    <a *ngIf="changelogURL"
+       [href]="changelogURL"
+       mat-flat-button
+       color="alternative"
+       target="_blank"
+       rel="noopener">Full Changelog</a>
+    <div fxFlex></div>
     <mat-spinner *ngIf="saving"
                  [diameter]="25"
                  color="accent"></mat-spinner>

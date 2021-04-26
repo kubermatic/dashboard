@@ -16,6 +16,7 @@ import {ChangelogService} from '@core/services/changelog/service';
 import {UserService} from '@core/services/user/service';
 import {UserSettings} from '@shared/entity/settings';
 import {Changelog, ChangelogCategory, ChangelogEntry} from '@shared/model/changelog';
+import {compare} from '@shared/utils/common-utils';
 import {take} from 'rxjs/operators';
 
 @Component({
@@ -32,6 +33,10 @@ export class ChangelogDialog implements OnInit {
 
   private _changelog: Changelog;
 
+  get changelogURL(): URL {
+    return this._changelog.externalChangelogURL;
+  }
+
   constructor(
     private readonly _changelogService: ChangelogService,
     private readonly _configService: AppConfigService,
@@ -46,7 +51,8 @@ export class ChangelogDialog implements OnInit {
     this.categories = this._changelog.entries
       .map(entry => entry.category)
       .filter((category, idx, arr) => arr.indexOf(category) === idx)
-      .filter(category => Object.values(ChangelogCategory).indexOf(category) > -1);
+      .filter(category => Object.values(ChangelogCategory).indexOf(category) > -1)
+      .sort((a, b) => compare(Changelog.priority(a), Changelog.priority(b)));
   }
 
   entries(category: ChangelogCategory): ChangelogEntry[] {
