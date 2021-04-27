@@ -71,7 +71,7 @@ import {EventListComponent} from './components/event-list/component';
 import {ExternalClusterDataDialogComponent} from './components/external-cluster-data-dialog/component';
 import {InitialsCircleComponent} from './components/initials-circle/component';
 import {LabelFormComponent} from './components/label-form/component';
-import {LabelsComponent} from './components/labels/labels.component';
+import {LabelsComponent} from './components/labels/component';
 import {LoaderComponent} from './components/loader/component';
 import {MachineNetworkComponent} from './components/machine-networks-new/component';
 import {PropertyBooleanComponent} from './components/property-boolean/property-boolean.component';
