@@ -54,7 +54,7 @@ import {ClipboardModule} from 'ngx-clipboard';
 import {CustomFormsModule} from 'ngx-custom-validators';
 import {FilterPipeModule} from 'ngx-filter-pipe';
 import {MonacoEditorModule} from 'ngx-monaco-editor';
-import {AddProjectDialogComponent} from './components/add-project-dialog/add-project-dialog.component';
+import {AddProjectDialogComponent} from './components/add-project-dialog/component';
 import {AddSshKeyDialogComponent} from './components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {AddonsListComponent} from './components/addon-list/addon-list.component';
 import {EditAddonDialogComponent} from './components/addon-list/edit-addon-dialog/edit-addon-dialog.component';

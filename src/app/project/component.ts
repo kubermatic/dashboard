@@ -32,7 +32,7 @@ import {PreviousRouteService} from '@core/services/previous-route/service';
 import {ProjectService} from '@core/services/project/service';
 import {SettingsService} from '@core/services/settings/service';
 import {UserService} from '@core/services/user/service';
-import {AddProjectDialogComponent} from '@shared/components/add-project-dialog/add-project-dialog.component';
+import {AddProjectDialogComponent} from '@shared/components/add-project-dialog/component';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project, ProjectOwners} from '@shared/entity/project';

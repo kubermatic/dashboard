@@ -20,7 +20,7 @@ import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 
 @Component({
   selector: 'km-add-project-dialog',
-  templateUrl: './add-project-dialog.component.html',
+  templateUrl: './template.html',
 })
 export class AddProjectDialogComponent implements OnInit {
   form: FormGroup;
