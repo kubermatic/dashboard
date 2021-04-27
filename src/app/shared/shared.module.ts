@@ -74,7 +74,7 @@ import {LabelFormComponent} from './components/label-form/component';
 import {LabelsComponent} from './components/labels/component';
 import {LoaderComponent} from './components/loader/component';
 import {MachineNetworkComponent} from './components/machine-networks-new/component';
-import {PropertyBooleanComponent} from './components/property-boolean/property-boolean.component';
+import {PropertyBooleanComponent} from './components/property-boolean/component';
 import {PropertyUsageComponent} from './components/property-usage/component';
 import {PropertyComponent} from './components/property/component';
 import {RelativeTimeComponent} from './components/relativetime/relative-time.component';
