@@ -30,8 +30,8 @@ export enum Controls {
 
 @Component({
   selector: 'km-select-addon-dialog',
-  templateUrl: './install-addon-dialog.component.html',
-  styleUrls: ['./install-addon-dialog.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class InstallAddonDialogComponent {
   static getControlValidators(control: AddonFormSpec): ValidatorFn[] {
@@ -46,7 +46,7 @@ export class InstallAddonDialogComponent {
   formBasic: FormGroup;
 
   constructor(
-    public dialogRef: MatDialogRef<InstallAddonDialogComponent>,
+    public dialogRef: MatDialogRef<Component>,
     private readonly _domSanitizer: DomSanitizer,
     private readonly _builder: FormBuilder
   ) {}

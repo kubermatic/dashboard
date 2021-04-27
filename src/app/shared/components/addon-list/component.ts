@@ -19,12 +19,12 @@ import {take, takeUntil} from 'rxjs/operators';
 import {Addon, AddonConfig, getAddonLogoData, hasAddonLogoData} from '../../entity/addon';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
 import {EditAddonDialogComponent} from './edit-addon-dialog/edit-addon-dialog.component';
-import {InstallAddonDialogComponent} from './install-addon-dialog/install-addon-dialog.component';
+import {InstallAddonDialogComponent} from './install-addon-dialog/component';
 
 @Component({
   selector: 'km-addon-list',
-  templateUrl: 'addon-list.component.html',
-  styleUrls: ['addon-list.component.scss'],
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
 })
 export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() addons: Addon[] = [];
