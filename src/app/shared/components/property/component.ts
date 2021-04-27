@@ -13,7 +13,7 @@ import {Component} from '@angular/core';
 
 @Component({
   selector: 'km-property',
-  templateUrl: './property.component.html',
-  styleUrls: ['./property.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class PropertyComponent {}

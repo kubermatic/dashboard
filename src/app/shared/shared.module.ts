@@ -76,7 +76,7 @@ import {LoaderComponent} from './components/loader/component';
 import {MachineNetworkComponent} from './components/machine-networks-new/component';
 import {PropertyBooleanComponent} from './components/property-boolean/property-boolean.component';
 import {PropertyUsageComponent} from './components/property-usage/component';
-import {PropertyComponent} from './components/property/property.component';
+import {PropertyComponent} from './components/property/component';
 import {RelativeTimeComponent} from './components/relativetime/relative-time.component';
 import {SearchFieldComponent} from './components/search-field/component';
 import {SpinnerWithConfirmationComponent} from './components/spinner-with-confirmation/component';
