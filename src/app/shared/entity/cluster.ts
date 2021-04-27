@@ -110,6 +110,7 @@ export class AzureCloudSpec {
   clientID: string;
   clientSecret: string;
   resourceGroup: string;
+  vnetResourceGroup: string;
   routeTable: string;
   securityGroup: string;
   subnet: string;
@@ -395,7 +396,9 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
         accessKeySecret: '',
       } as AlibabaCloudSpec;
     case NodeProvider.ANEXIA:
-      return {};
+      return {
+        token: '',
+      };
   }
   return {};
 }

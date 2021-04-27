@@ -22,6 +22,7 @@ import * as _ from 'lodash';
 import {ReplaySubject} from 'rxjs';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../config';
 import {NodeDataAlibabaProvider} from './provider/alibaba';
+import {NodeDataAnexiaProvider} from './provider/anexia';
 import {NodeDataAWSProvider} from './provider/aws';
 import {NodeDataAzureProvider} from './provider/azure';
 import {NodeDataDigitalOceanProvider} from './provider/digitalocean';
@@ -100,6 +101,14 @@ export class NodeDataService {
   }
 
   readonly alibaba = new NodeDataAlibabaProvider(
+    this,
+    this._clusterService,
+    this._presetService,
+    this._datacenterService,
+    this._apiService,
+    this._projectService
+  );
+  readonly anexia = new NodeDataAnexiaProvider(
     this,
     this._clusterService,
     this._presetService,

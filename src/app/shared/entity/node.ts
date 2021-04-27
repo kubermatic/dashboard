@@ -219,7 +219,7 @@ export class VSphereNodeSpec {
   diskSizeGB?: number;
 }
 
-export function getEmptyNodeProviderSpec(provider: string): object {
+export function getDefaultNodeProviderSpec(provider: string): object {
   switch (provider) {
     case NodeProvider.AWS:
       return {
@@ -288,6 +288,14 @@ export function getEmptyNodeProviderSpec(provider: string): object {
         labels: {},
         zoneID: '',
       } as AlibabaNodeSpec;
+    case NodeProvider.ANEXIA:
+      return {
+        vlanID: '',
+        templateID: '',
+        cpus: 1,
+        memory: 2048,
+        diskSize: 20,
+      } as AnexiaNodeSpec;
   }
   return {};
 }

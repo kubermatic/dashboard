@@ -20,7 +20,7 @@ import {ApiService} from '@core/services/api/service';
 import {NotificationService} from '@core/services/notification/service';
 import {ProjectService} from '@core/services/project/service';
 import {UserService} from '@core/services/user/service';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Project} from '@shared/entity/project';
 import {ServiceAccount} from '@shared/entity/service-account';
 import {GroupConfig} from '@shared/model/Config';
@@ -29,8 +29,8 @@ import {ProjectUtils} from '@shared/utils/project-utils/project-utils';
 import * as _ from 'lodash';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {filter, switchMap, switchMapTo, take, takeUntil} from 'rxjs/operators';
-import {AddServiceAccountComponent} from './add-serviceaccount/add-serviceaccount.component';
-import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceaccount.component';
+import {AddServiceAccountComponent} from './add-serviceaccount/component';
+import {EditServiceAccountComponent} from './edit-serviceaccount/component';
 
 @Component({
   selector: 'km-serviceaccount',

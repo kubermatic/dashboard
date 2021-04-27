@@ -17,9 +17,9 @@ import {catchError, filter, map, shareReplay, startWith, switchMap, switchMapTo,
 
 import {environment} from 'environments/environment';
 import {AppConfigService} from '@app/config.service';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
-import {LabelFormComponent} from '@shared/components/label-form/label-form.component';
-import {TaintFormComponent} from '@shared/components/taint-form/taint-form.component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {LabelFormComponent} from '@shared/components/label-form/component';
+import {TaintFormComponent} from '@shared/components/taint-form/component';
 import {Addon} from '@shared/entity/addon';
 import {Cluster, ClusterPatch, Finalizer, MasterVersion, ProviderSettingsPatch} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';

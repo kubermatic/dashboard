@@ -17,7 +17,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {NotificationService} from '@core/services/notification/service';
 import {SettingsService} from '@core/services/settings/service';
 import {UserService} from '@core/services/user/service';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Admin, Member} from '@shared/entity/member';
 import {Subject} from 'rxjs';
 import {filter, take, takeUntil} from 'rxjs/operators';

@@ -12,7 +12,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NodeDataService} from '@app/node-data/service/service';
 import {DatacenterService} from '@core/services/datacenter/service';
-import {LabelFormComponent} from '@shared/components/label-form/label-form.component';
+import {LabelFormComponent} from '@shared/components/label-form/component';
 import {Cluster} from '@shared/entity/cluster';
 import {getOperatingSystem, getOperatingSystemLogoClass} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';

@@ -168,6 +168,10 @@ limitations under the License.
               <div key>Resource Group</div>
               <div value>{{cluster.spec.cloud?.azure.resourceGroup}}</div>
             </km-property>
+            <km-property *ngIf="cluster.spec.cloud?.azure.vnetResourceGroup">
+              <div key>VNet Resource Group</div>
+              <div value>{{cluster.spec.cloud?.azure.vnetResourceGroup}}</div>
+            </km-property>
             <km-property *ngIf="cluster.spec.cloud?.azure.routeTable">
               <div key>Route Table</div>
               <div value>{{cluster.spec.cloud?.azure.routeTable}}</div>

@@ -95,10 +95,6 @@ describe('Admin Settings Story', () => {
     AdminSettingsPage.getFooterCustomIcon(linkURL).should(Condition.NotExist);
   });
 
-  it('should check if help panel is not displayed as it would be empty anyways', () => {
-    HelpPanel.getHelpPanelMenuBtn().should(Condition.NotExist);
-  });
-
   it('should check if footer does not contain terms of service', () => {
     AdminSettingsPage.getFooter().should(Condition.NotContain, termsOfService);
   });

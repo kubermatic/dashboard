@@ -43,23 +43,19 @@ limitations under the License.
            required>
   </mat-form-field>
 
-  <mat-form-field fxFlex>
-    <mat-label>Template ID</mat-label>
-    <input [formControlName]="Controls.TemplateID"
-           [id]="Controls.TemplateID"
-           type="text"
-           autocomplete="off"
-           matInput
-           required>
-  </mat-form-field>
+  <km-autocomplete label="Template ID"
+                   [formControlName]="Controls.TemplateID"
+                   [isLoading]="isLoadingTemplates"
+                   [id]="Controls.TemplateID"
+                   [options]="templates"
+                   required>
+  </km-autocomplete>
 
-  <mat-form-field fxFlex>
-    <mat-label>VLAN ID</mat-label>
-    <input [formControlName]="Controls.VlanID"
-           [id]="Controls.VlanID"
-           type="text"
-           autocomplete="off"
-           matInput
-           required>
-  </mat-form-field>
+  <km-autocomplete label="VLAN ID"
+                   [formControlName]="Controls.VlanID"
+                   [isLoading]="isLoadingVlans"
+                   [id]="Controls.VlanID"
+                   [options]="vlans"
+                   required>
+  </km-autocomplete>
 </form>

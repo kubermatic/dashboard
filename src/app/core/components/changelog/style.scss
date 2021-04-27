@@ -10,10 +10,11 @@
 // limitations under the License.
 
 @import '../../assets/css/variables';
+@import '../../assets/css/mixins';
 
 @mixin card-border {
   border: 1px solid;
-  padding: 4px 8px 4px 4px;
+  padding: 2px 4px 2px 2px;
 }
 
 .header-title {
@@ -42,7 +43,7 @@
 }
 
 .entry {
-  padding-top: 20px;
+  padding-top: 10px;
 }
 
 .description {
@@ -66,7 +67,7 @@
 }
 
 .km-changelog-link-card {
-  margin: 8px 8px 0 10px;
+  margin: 0 8px 10px 10px;
 }
 
 .km-changelog-external-link-icon {
@@ -75,6 +76,10 @@
   border-bottom-left-radius: 8px;
   border-right: none;
   border-top-left-radius: 8px;
+
+  > i {
+    @include size($font-size-card-title, $force: true);
+  }
 }
 
 .km-changelog-link-caption {
@@ -83,5 +88,12 @@
   border-bottom-right-radius: 8px;
   border-left: none;
   border-top-right-radius: 8px;
+  font-size: $font-size-body;
   padding-left: 0;
+}
+
+.km-changelog-link-button {
+  i {
+    margin-right: 6px;
+  }
 }
