@@ -20,7 +20,7 @@ import {CoreModule} from '@core/module';
 import {ApiService} from '@core/services/api/service';
 import {SharedModule} from '@shared/shared.module';
 import {ProjectModule} from '../module';
-import {EditProjectComponent} from './edit-project.component';
+import {EditProjectComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, ProjectModule];
 

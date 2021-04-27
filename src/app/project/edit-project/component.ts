@@ -21,7 +21,7 @@ import * as _ from 'lodash';
 
 @Component({
   selector: 'km-edit-project',
-  templateUrl: './edit-project.component.html',
+  templateUrl: './template.html',
 })
 export class EditProjectComponent implements OnInit {
   @Input() project: Project;

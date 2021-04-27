@@ -11,7 +11,7 @@
 
 import {NgModule} from '@angular/core';
 import {SharedModule} from '../shared/shared.module';
-import {EditProjectComponent} from './edit-project/edit-project.component';
+import {EditProjectComponent} from './edit-project/component';
 import {ProjectRoutingModule} from './routing';
 import {ProjectComponent} from './component';
 import {DeleteProjectConfirmationComponent} from './delete-project/delete-project.component';
