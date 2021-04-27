@@ -77,7 +77,7 @@ import {MachineNetworkComponent} from './components/machine-networks-new/compone
 import {PropertyBooleanComponent} from './components/property-boolean/component';
 import {PropertyUsageComponent} from './components/property-usage/component';
 import {PropertyComponent} from './components/property/component';
-import {RelativeTimeComponent} from './components/relativetime/relative-time.component';
+import {RelativeTimeComponent} from './components/relativetime/component';
 import {SearchFieldComponent} from './components/search-field/component';
 import {SpinnerWithConfirmationComponent} from './components/spinner-with-confirmation/component';
 import {SSHKeyListComponent} from './components/ssh-key-list/ssh-key-list.component';
