@@ -17,7 +17,7 @@ import {ApiDocsComponent} from './api-docs/component';
 import {FrontpageComponent} from './frontpage/component';
 import {PageNotFoundComponent} from './page-not-found/component';
 import {PagesRoutingModule} from './pages-routing.module';
-import {TermsOfServiceComponent} from './terms-of-service/terms-of-service.component';
+import {TermsOfServiceComponent} from './terms-of-service/component';
 
 @NgModule({
   imports: [PagesRoutingModule, SharedModule],

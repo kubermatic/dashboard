@@ -15,8 +15,8 @@ import {Auth} from '@core/services/auth/service';
 
 @Component({
   selector: 'km-terms-of-service',
-  templateUrl: './terms-of-service.component.html',
-  styleUrls: ['./terms-of-service.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class TermsOfServiceComponent {
   constructor(private readonly _auth: Auth, private readonly _router: Router) {}
