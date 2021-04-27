@@ -18,7 +18,7 @@ import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-tag-list',
-  templateUrl: './tag-list.component.html',
+  templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   providers: [
     {
