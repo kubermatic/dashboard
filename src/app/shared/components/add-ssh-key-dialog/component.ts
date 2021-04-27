@@ -20,8 +20,8 @@ import {SSHKeyFormValidator} from '@shared/validators/ssh-key-form.validator';
 
 @Component({
   selector: 'km-add-ssh-key-dialog',
-  templateUrl: './add-ssh-key-dialog.component.html',
-  styleUrls: ['./add-ssh-key-dialog.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class AddSshKeyDialogComponent implements OnInit {
   @Input() projectID: string;

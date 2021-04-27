@@ -27,7 +27,7 @@ import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {ApiService} from '@core/services/api/service';
 import {NotificationService} from '@core/services/notification/service';
-import {AddSshKeyDialogComponent} from './add-ssh-key-dialog.component';
+import {AddSshKeyDialogComponent} from './component';
 
 const modules: any[] = [
   BrowserModule,

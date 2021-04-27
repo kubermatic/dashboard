@@ -20,7 +20,7 @@ import {ApiService} from '@core/services/api/service';
 import {NotificationService} from '@core/services/notification/service';
 import {ProjectService} from '@core/services/project/service';
 import {UserService} from '@core/services/user/service';
-import {AddSshKeyDialogComponent} from '@shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
+import {AddSshKeyDialogComponent} from '@shared/components/add-ssh-key-dialog/component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';

@@ -18,7 +18,7 @@ import {ApiService} from '@core/services/api/service';
 import {ClusterService} from '@core/services/cluster/service';
 import {NotificationService} from '@core/services/notification/service';
 import {UserService} from '@core/services/user/service';
-import {AddSshKeyDialogComponent} from '@shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
+import {AddSshKeyDialogComponent} from '@shared/components/add-ssh-key-dialog/component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
 import {Cluster} from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
