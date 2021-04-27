@@ -9,12 +9,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+export enum ChangelogPriority {
+  ActionRequired,
+  Security,
+  Added,
+  Changed,
+  Fixed,
+  Deprecated,
+  Removed,
+}
+
 export enum ChangelogCategory {
   ActionRequired = 'action-required',
-  API = 'api',
-  Interface = 'interface',
-  Infrastructure = 'infrastructure',
-  MachineController = 'machine-controller',
+  Added = 'added',
+  Removed = 'removed',
+  Fixed = 'fixed',
+  Changed = 'changed',
+  Deprecated = 'deprecated',
+  Security = 'security',
 }
 
 export interface ChangelogEntryLink {
@@ -30,6 +42,11 @@ export interface ChangelogEntry {
 
 export interface Changelog {
   entries: ChangelogEntry[];
+  externalChangelogURL?: URL;
 }
 
-namespace Changelog {}
+export namespace Changelog {
+  export function priority(category: ChangelogCategory): number {
+    return ChangelogPriority[Object.keys(ChangelogCategory).find(entry => ChangelogCategory[entry] === category)];
+  }
+}
