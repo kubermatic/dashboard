@@ -18,7 +18,7 @@ import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {Addon, AddonConfig, getAddonLogoData, hasAddonLogoData} from '../../entity/addon';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
-import {EditAddonDialogComponent} from './edit-addon-dialog/edit-addon-dialog.component';
+import {EditAddonDialogComponent} from './edit-addon-dialog/component';
 import {SelectAddonDialogComponent} from './select-addon-dialog/select-addon-dialog.component';
 
 @Component({

@@ -30,8 +30,8 @@ export enum Controls {
 
 @Component({
   selector: 'km-edit-addon-dialog',
-  templateUrl: './edit-addon-dialog.component.html',
-  styleUrls: ['./edit-addon-dialog.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class EditAddonDialogComponent implements OnInit {
   readonly Controls = Controls;
