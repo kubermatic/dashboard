@@ -67,7 +67,7 @@
 }
 
 .km-changelog-link-card {
-  margin: 0 8px 0 10px;
+  margin: 0 8px 10px 10px;
 }
 
 .km-changelog-external-link-icon {
@@ -90,4 +90,10 @@
   border-top-right-radius: 8px;
   font-size: $font-size-body;
   padding-left: 0;
+}
+
+.km-changelog-link-button {
+  i {
+    margin-right: 6px;
+  }
 }
