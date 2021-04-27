@@ -14,7 +14,7 @@ import {SharedModule} from '../shared/shared.module';
 import {EditProjectComponent} from './edit-project/component';
 import {ProjectRoutingModule} from './routing';
 import {ProjectComponent} from './component';
-import {DeleteProjectConfirmationComponent} from './delete-project/delete-project.component';
+import {DeleteProjectConfirmationComponent} from './delete-project/component';
 
 const components: any[] = [ProjectComponent, EditProjectComponent, DeleteProjectConfirmationComponent];
 

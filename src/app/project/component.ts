@@ -44,7 +44,7 @@ import * as _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {DeleteProjectConfirmationComponent} from './delete-project/delete-project.component';
+import {DeleteProjectConfirmationComponent} from './delete-project/component';
 import {EditProjectComponent} from './edit-project/component';
 
 @Component({

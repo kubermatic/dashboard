@@ -15,7 +15,7 @@ import {Project} from '../../shared/entity/project';
 
 @Component({
   selector: 'km-delete-project',
-  templateUrl: './delete-project.component.html',
+  templateUrl: './template.html',
 })
 export class DeleteProjectConfirmationComponent {
   @Input() project: Project;
