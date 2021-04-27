@@ -21,7 +21,7 @@ import {CoreModule} from '@core/module';
 import {ApiService} from '@core/services/api/service';
 import {NotificationService} from '@core/services/notification/service';
 import {SharedModule} from '@shared/shared.module';
-import {EditServiceAccountComponent} from './edit-serviceaccount.component';
+import {EditServiceAccountComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 

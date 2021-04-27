@@ -20,7 +20,7 @@ import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'km-edit-serviceaccount',
-  templateUrl: './edit-serviceaccount.component.html',
+  templateUrl: './template.html',
 })
 export class EditServiceAccountComponent implements OnInit {
   @Input() project: Project;
