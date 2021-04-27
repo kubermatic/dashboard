@@ -18,7 +18,7 @@ import * as SwaggerUI from 'swagger-ui';
 
 @Component({
   selector: 'km-api-docs',
-  templateUrl: './api-docs.component.html',
+  templateUrl: './template.html',
 })
 export class ApiDocsComponent implements OnInit {
   constructor(
