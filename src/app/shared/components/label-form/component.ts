@@ -30,8 +30,8 @@ import {LabelFormValidators} from '../../validators/label-form.validators';
 
 @Component({
   selector: 'km-label-form',
-  templateUrl: './label-form.component.html',
-  styleUrls: ['./label-form.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
