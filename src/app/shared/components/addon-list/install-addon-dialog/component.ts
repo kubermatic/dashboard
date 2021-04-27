@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
+import {Component, Input, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
@@ -23,9 +23,15 @@ import {
   hasAddonLogoData,
 } from '@shared/entity/addon';
 import {FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
+import {MatStepper} from '@angular/material/stepper';
 
 export enum Controls {
   ContinuouslyReconcile = 'continuouslyReconcile',
+}
+
+enum StepRegistry {
+  SelectAddon = 'Select Addon',
+  EnterSettings = 'Enter Settings',
 }
 
 @Component({
@@ -38,9 +44,11 @@ export class InstallAddonDialogComponent {
     return control.required ? [Validators.required] : [];
   }
 
-  readonly Controls = Controls;
+  readonly controls = Controls;
+  readonly stepRegistry = StepRegistry;
   @Input() installableAddons: string[] = [];
   @Input() addonConfigs = new Map<string, AddonConfig>();
+  @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
   selectedAddon: string;
   form: FormGroup;
   formBasic: FormGroup;
@@ -70,6 +78,7 @@ export class InstallAddonDialogComponent {
   select(name: string): void {
     this.selectedAddon = name;
     this._initializeForm(this.selectedAddon);
+    this._stepper.next();
   }
 
   install(): void {
