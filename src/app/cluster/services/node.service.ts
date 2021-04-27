@@ -155,7 +155,9 @@ export class NodeService {
                 .pipe(first())
                 .pipe(
                   catchError(() => {
-                    this._notificationService.error('Could not remove the <strong>${md.name}</strong> node deployment');
+                    this._notificationService.error(
+                      'Could not remove the <strong>${md.name}</strong> machine deployment'
+                    );
                     return of(false);
                   })
                 );
@@ -168,7 +170,7 @@ export class NodeService {
         flatMap(
           (data: any): Observable<boolean> => {
             if (data) {
-              this._notificationService.success(`The <strong>${md.name}</strong> node deployment was removed`);
+              this._notificationService.success(`The <strong>${md.name}</strong> machine deployment was removed`);
               if (changeEventEmitter) {
                 changeEventEmitter.emit(md);
               }

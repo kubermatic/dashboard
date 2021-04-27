@@ -12,7 +12,7 @@ limitations under the License.
 -->
 
 <form [formGroup]="form">
-  <km-dialog-title>{{mode}} Node Deployment</km-dialog-title>
+  <km-dialog-title>{{mode}} Machine Deployment</km-dialog-title>
   <mat-dialog-content class="km-add-node-outer">
     <km-node-data [provider]="provider"
                   [showExtended]="isExtended"
@@ -37,7 +37,7 @@ limitations under the License.
             (click)="onConfirm()"
             [disabled]="form.invalid"
             class="btn btn-primary">
-      {{mode}} Node Deployment
+      {{mode}} Machine Deployment
     </button>
   </mat-dialog-actions>
 </form>
