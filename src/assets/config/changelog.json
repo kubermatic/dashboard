@@ -6,7 +6,7 @@
       "description": "Added addon for Multus CNI",
       "links": [
         {
-          "url": "https://docs.kubermatic.com/kubermatic/master/guides/addons/multus/",
+          "url": "https://docs.kubermatic.com/kubermatic/v2.17/guides/addons/multus/",
           "caption": "Guide"
         }
       ]
@@ -16,11 +16,11 @@
       "description": "Added support for Open Policy Agent",
       "links": [
         {
-          "url": "https://docs.kubermatic.com/kubermatic/master/tutorials_howtos/opa_integration/opa_integration_via_ui/",
+          "url": "https://docs.kubermatic.com/kubermatic/v2.17/tutorials_howtos/opa_integration/opa_integration_via_ui/",
           "caption": "UI Tutorial"
         },
         {
-          "url": "https://docs.kubermatic.com/kubermatic/master/tutorials_howtos/opa_integration/",
+          "url": "https://docs.kubermatic.com/kubermatic/v2.17/tutorials_howtos/opa_integration/",
           "caption": "API Tutorial"
         }
       ]
@@ -30,7 +30,7 @@
       "description": "Added option to disable User SSH Key Agent during cluster creation",
       "links": [
         {
-          "url": "https://docs.kubermatic.com/kubermatic/master/tutorials_howtos/administration/user_settings/user_ssh_key_agent/",
+          "url": "https://docs.kubermatic.com/kubermatic/v2.17/tutorials_howtos/administration/user_settings/user_ssh_key_agent/",
           "caption": "Tutorial"
         }
       ]
@@ -40,7 +40,7 @@
       "description": "Added support for resource quota",
       "links": [
         {
-          "url": "https://docs.kubermatic.com/kubermatic/master/tutorials_howtos/administration/admin_panel/cluster_settings/#resource-quota",
+          "url": "https://docs.kubermatic.com/kubermatic/v2.17/tutorials_howtos/administration/admin_panel/cluster_settings/#resource-quota",
           "caption": "Tutorial"
         }
       ]
