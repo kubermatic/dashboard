@@ -14,7 +14,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from '@core/services/auth/guard';
 import {ApiDocsComponent} from './api-docs/component';
 import {FrontpageComponent} from './frontpage/component';
-import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
+import {PageNotFoundComponent} from './page-not-found/component';
 import {TermsOfServiceComponent} from './terms-of-service/terms-of-service.component';
 
 const routes: Routes = [

@@ -15,7 +15,7 @@ import {SharedModule} from '../shared/shared.module';
 
 import {ApiDocsComponent} from './api-docs/component';
 import {FrontpageComponent} from './frontpage/component';
-import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
+import {PageNotFoundComponent} from './page-not-found/component';
 import {PagesRoutingModule} from './pages-routing.module';
 import {TermsOfServiceComponent} from './terms-of-service/terms-of-service.component';
 

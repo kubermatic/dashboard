@@ -19,7 +19,7 @@ import {AuthMockService} from '@app/testing/services/auth-mock.service';
 import {click} from '@app/testing/utils/click-handler';
 import {Auth} from '@core/services/auth/service';
 import {SharedModule} from '@shared/shared.module';
-import {PageNotFoundComponent} from './page-not-found.component';
+import {PageNotFoundComponent} from './component';
 
 const modules: any[] = [BrowserModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];
 

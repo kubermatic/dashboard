@@ -15,8 +15,8 @@ import {Auth} from '@core/services/auth/service';
 
 @Component({
   selector: 'km-page-not-found',
-  templateUrl: './page-not-found.component.html',
-  styleUrls: ['./page-not-found.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class PageNotFoundComponent {
   constructor(private auth: Auth, private router: Router) {}
