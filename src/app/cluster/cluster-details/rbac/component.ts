@@ -14,7 +14,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
 import {NotificationService} from '@core/services/notification/service';
 import {RBACService} from '@core/services/rbac/service';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '@shared/entity/rbac';
 import * as _ from 'lodash';

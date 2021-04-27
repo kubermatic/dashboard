@@ -17,7 +17,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {OPAService} from '@core/services/opa/service';
 import {UserService} from '@core/services/user/service';
 import {NotificationService} from '@core/services/notification/service';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {ConstraintTemplate} from '@shared/entity/opa';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';

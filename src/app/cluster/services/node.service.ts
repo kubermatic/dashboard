@@ -14,7 +14,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DialogDataInput, DialogDataOutput, NodeDataDialogComponent} from '@app/node-data/dialog/component';
 import {ApiService} from '@core/services/api/service';
 import {NotificationService} from '@core/services/notification/service';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-deployment';
 import {NodeData} from '@shared/model/NodeSpecChange';

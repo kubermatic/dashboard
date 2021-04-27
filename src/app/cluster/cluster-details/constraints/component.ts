@@ -17,7 +17,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {OPAService} from '@core/services/opa/service';
 import {UserService} from '@core/services/user/service';
 import {NotificationService} from '@core/services/notification/service';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {Constraint, ConstraintTemplate, Kind, Violation} from '@shared/entity/opa';
 import {UserSettings} from '@shared/entity/settings';
