@@ -9,40 +9,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
+import {Component, Input} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 import {
-  AddonConfig,
   Addon,
+  AddonConfig,
   AddonFormSpec,
   getAddonLogoData,
+  getAddonShortDescription,
   hasAddonFormData,
   hasAddonLogoData,
-} from '../../../entity/addon';
+} from '@shared/entity/addon';
+import {FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 
 export enum Controls {
   ContinuouslyReconcile = 'continuouslyReconcile',
 }
 
 @Component({
-  selector: 'km-install-addon-dialog',
+  selector: 'km-select-addon-dialog',
   templateUrl: './install-addon-dialog.component.html',
   styleUrls: ['./install-addon-dialog.component.scss'],
 })
-export class InstallAddonDialogComponent implements OnInit {
-  readonly Controls = Controls;
-
-  @Input() addonName: string;
-  @Input() addonConfig: AddonConfig;
-  form: FormGroup;
-  formBasic: FormGroup;
-
+export class InstallAddonDialogComponent {
   static getControlValidators(control: AddonFormSpec): ValidatorFn[] {
     return control.required ? [Validators.required] : [];
   }
+
+  readonly Controls = Controls;
+  @Input() installableAddons: string[] = [];
+  @Input() addonConfigs = new Map<string, AddonConfig>();
+  selectedAddon: string;
+  form: FormGroup;
+  formBasic: FormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<InstallAddonDialogComponent>,
@@ -50,10 +51,35 @@ export class InstallAddonDialogComponent implements OnInit {
     private readonly _builder: FormBuilder
   ) {}
 
-  ngOnInit(): void {
+  hasLogo(name: string): boolean {
+    return hasAddonLogoData(this.addonConfigs.get(name));
+  }
+
+  hasForm(name: string): boolean {
+    return hasAddonFormData(this.addonConfigs.get(name));
+  }
+
+  getAddonLogo(name: string): SafeUrl {
+    return this._domSanitizer.bypassSecurityTrustUrl(getAddonLogoData(this.addonConfigs.get(name)));
+  }
+
+  getAddonShortDescription(name: string): string {
+    return getAddonShortDescription(this.addonConfigs.get(name));
+  }
+
+  select(name: string): void {
+    this.selectedAddon = name;
+    this._initializeForm(this.selectedAddon);
+  }
+
+  install(): void {
+    this.dialogRef.close(this._getAddonEntity());
+  }
+
+  private _initializeForm(name: string): void {
     const group = {};
-    if (this.hasForm()) {
-      this.addonConfig.spec.formSpec.forEach(control => {
+    if (this.hasForm(name)) {
+      this.addonConfigs.get(name).spec.formSpec.forEach(control => {
         group[control.internalName] = new FormControl(
           undefined,
           InstallAddonDialogComponent.getControlValidators(control)
@@ -62,22 +88,9 @@ export class InstallAddonDialogComponent implements OnInit {
     }
 
     this.form = new FormGroup(group);
-
     this.formBasic = this._builder.group({
       [Controls.ContinuouslyReconcile]: this._builder.control(false),
     });
-  }
-
-  hasForm(): boolean {
-    return hasAddonFormData(this.addonConfig);
-  }
-
-  hasLogo(): boolean {
-    return hasAddonLogoData(this.addonConfig);
-  }
-
-  getAddonLogo(): SafeUrl {
-    return this._domSanitizer.bypassSecurityTrustUrl(getAddonLogoData(this.addonConfig));
   }
 
   private _getAddonEntity(): Addon {
@@ -88,12 +101,8 @@ export class InstallAddonDialogComponent implements OnInit {
     });
 
     return {
-      name: this.addonName,
+      name: this.selectedAddon,
       spec: {variables, continuouslyReconcile: this.formBasic.controls.continuouslyReconcile.value},
     };
-  }
-
-  install(): void {
-    this.dialogRef.close(this._getAddonEntity());
   }
 }
