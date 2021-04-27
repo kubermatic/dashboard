@@ -17,7 +17,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {NotificationService} from '@core/services/notification/service';
 import {UserService} from '@core/services/user/service';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {CreateDatacenterModel, Datacenter} from '@shared/entity/datacenter';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import * as countryCodeLookup from 'country-code-lookup';

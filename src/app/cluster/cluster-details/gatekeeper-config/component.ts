@@ -14,7 +14,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
 import {NotificationService} from '@core/services/notification/service';
 import {OPAService} from '@core/services/opa/service';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/confirmation-dialog.component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {GatekeeperConfig, GVK, MatchEntry, Trace} from '@shared/entity/opa';
 import * as _ from 'lodash';

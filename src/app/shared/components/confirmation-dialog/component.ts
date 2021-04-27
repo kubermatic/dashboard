@@ -26,7 +26,7 @@ export interface ConfirmationDialogConfig {
 
 @Component({
   selector: 'km-confirmation-dialog',
-  templateUrl: './confirmation-dialog.component.html',
+  templateUrl: './template.html',
 })
 export class ConfirmationDialogComponent {
   inputName = '';
