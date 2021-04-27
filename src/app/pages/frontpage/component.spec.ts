@@ -19,7 +19,7 @@ import {AuthMockService} from '@app/testing/services/auth-mock.service';
 import {Auth} from '@core/services/auth/service';
 import {SharedModule} from '@shared/shared.module';
 import {CookieService} from 'ngx-cookie-service';
-import {FrontpageComponent} from './frontpage.component';
+import {FrontpageComponent} from './component';
 
 const modules: any[] = [BrowserModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];
 
