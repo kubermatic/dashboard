@@ -34,8 +34,8 @@ import {DatacenterMockService} from '../testing/services/datacenter-mock.service
 import {ProjectMockService} from '../testing/services/project-mock.service';
 import {SettingsMockService} from '../testing/services/settings-mock.service';
 import {UserMockService} from '../testing/services/user-mock.service';
-import {ProjectComponent} from './project.component';
-import {ProjectModule} from './project.module';
+import {ProjectComponent} from './component';
+import {ProjectModule} from './module';
 
 describe('ProjectComponent', () => {
   let fixture: ComponentFixture<ProjectComponent>;

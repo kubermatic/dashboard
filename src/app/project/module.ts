@@ -10,20 +10,17 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {AuthGuard} from '@core/services/auth/guard';
-import {ProjectComponent} from './project.component';
+import {SharedModule} from '../shared/shared.module';
+import {EditProjectComponent} from './edit-project/edit-project.component';
+import {ProjectRoutingModule} from './routing';
+import {ProjectComponent} from './component';
+import {DeleteProjectConfirmationComponent} from './delete-project/delete-project.component';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: ProjectComponent,
-    canActivate: [AuthGuard],
-  },
-];
+const components: any[] = [ProjectComponent, EditProjectComponent, DeleteProjectConfirmationComponent];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  imports: [SharedModule, ProjectRoutingModule],
+  declarations: [...components],
+  exports: [...components],
 })
-export class ProjectRoutingModule {}
+export class ProjectModule {}

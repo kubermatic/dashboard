@@ -19,7 +19,7 @@ import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {ApiService} from '@core/services/api/service';
 import {SharedModule} from '@shared/shared.module';
-import {ProjectModule} from '../project.module';
+import {ProjectModule} from '../module';
 import {EditProjectComponent} from './edit-project.component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, ProjectModule];
