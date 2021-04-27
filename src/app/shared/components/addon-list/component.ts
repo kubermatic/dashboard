@@ -23,8 +23,8 @@ import {SelectAddonDialogComponent} from './select-addon-dialog/select-addon-dia
 
 @Component({
   selector: 'km-addon-list',
-  templateUrl: 'addon-list.component.html',
-  styleUrls: ['addon-list.component.scss'],
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
 })
 export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() addons: Addon[] = [];
