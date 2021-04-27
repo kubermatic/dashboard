@@ -14,7 +14,7 @@ import {SSHKey} from '../../entity/ssh-key';
 
 @Component({
   selector: 'km-ssh-key-list',
-  templateUrl: './ssh-key-list.component.html',
+  templateUrl: './template.html',
 })
 export class SSHKeyListComponent {
   private readonly _defaultMaxDisplayed = 3;
