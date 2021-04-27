@@ -58,7 +58,7 @@ import {AddProjectDialogComponent} from './components/add-project-dialog/compone
 import {AddSshKeyDialogComponent} from './components/add-ssh-key-dialog/component';
 import {AddonsListComponent} from './components/addon-list/component';
 import {EditAddonDialogComponent} from './components/addon-list/edit-addon-dialog/component';
-import {InstallAddonDialogComponent} from './components/addon-list/install-addon-dialog/install-addon-dialog.component';
+import {InstallAddonDialogComponent} from './components/addon-list/install-addon-dialog/component';
 import {SelectAddonDialogComponent} from './components/addon-list/select-addon-dialog/select-addon-dialog.component';
 import {ChipComponent} from './components/chip/component';
 import {FilteredComboboxComponent} from './components/combobox/component';

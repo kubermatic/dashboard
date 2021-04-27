@@ -29,8 +29,8 @@ export enum Controls {
 
 @Component({
   selector: 'km-install-addon-dialog',
-  templateUrl: './install-addon-dialog.component.html',
-  styleUrls: ['./install-addon-dialog.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class InstallAddonDialogComponent implements OnInit {
   readonly Controls = Controls;
