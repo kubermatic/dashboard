@@ -34,7 +34,7 @@ import {EditMemberComponent} from './edit-member/component';
 
 @Component({
   selector: 'km-member',
-  templateUrl: './member.component.html',
+  templateUrl: './template.html',
 })
 export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   members: Member[] = [];

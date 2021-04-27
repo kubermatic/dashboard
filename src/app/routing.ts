@@ -40,7 +40,7 @@ function createRouting(): Routes {
         },
         {
           path: 'projects/:projectID/members',
-          loadChildren: () => import('./member/member.module').then(m => m.MemberModule),
+          loadChildren: () => import('./member/module').then(m => m.MemberModule),
         },
         {
           path: 'projects/:projectID/serviceaccounts',

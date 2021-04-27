@@ -10,20 +10,15 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
-import {MemberComponent} from './member.component';
+import {SharedModule} from '@shared/shared.module';
+import {MemberRoutingModule} from './routing';
+import {MemberComponent} from './component';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: MemberComponent,
-    canActivate: [AuthGuard, AuthzGuard],
-  },
-];
+const components: any[] = [MemberComponent];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  imports: [SharedModule, MemberRoutingModule],
+  declarations: [...components],
+  exports: [...components],
 })
-export class MemberRoutingModule {}
+export class MemberModule {}
