@@ -25,8 +25,8 @@ import {TaintFormValidators} from '../../validators/taint-form.validators';
 
 @Component({
   selector: 'km-taint-form',
-  templateUrl: './taint-form.component.html',
-  styleUrls: ['./taint-form.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

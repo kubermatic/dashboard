@@ -14,7 +14,7 @@ import {Injectable} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
 import {LabelFormComponent} from '@shared/components/label-form/component';
-import {TaintFormComponent} from '@shared/components/taint-form/taint-form.component';
+import {TaintFormComponent} from '@shared/components/taint-form/component';
 import {AddonConfig} from '@shared/entity/addon';
 import {Cluster, ClusterType, MasterVersion, Token} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';

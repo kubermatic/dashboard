@@ -82,7 +82,7 @@ import {SearchFieldComponent} from './components/search-field/component';
 import {SpinnerWithConfirmationComponent} from './components/spinner-with-confirmation/component';
 import {SSHKeyListComponent} from './components/ssh-key-list/component';
 import {TagListComponent} from './components/tag-list/component';
-import {TaintFormComponent} from './components/taint-form/taint-form.component';
+import {TaintFormComponent} from './components/taint-form/component';
 import {TaintsComponent} from './components/taints/taints.component';
 import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';

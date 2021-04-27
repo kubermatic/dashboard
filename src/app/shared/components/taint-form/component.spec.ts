@@ -16,7 +16,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Taint} from '../../entity/node';
 import {SharedModule} from '../../shared.module';
 
-import {TaintFormComponent} from './taint-form.component';
+import {TaintFormComponent} from './component';
 
 describe('TaintFormComponent', () => {
   let fixture: ComponentFixture<TaintFormComponent>;
