@@ -13,8 +13,8 @@ import {NgModule} from '@angular/core';
 
 import {SharedModule} from '../../shared/shared.module';
 
-import {UserSettingsComponent} from './user-settings.component';
-import {UserSettingsRoutingModule} from './user-settings.routing.module';
+import {UserSettingsComponent} from './component';
+import {UserSettingsRoutingModule} from './routing';
 
 @NgModule({
   imports: [SharedModule, UserSettingsRoutingModule],

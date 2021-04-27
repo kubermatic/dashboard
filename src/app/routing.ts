@@ -52,7 +52,7 @@ function createRouting(): Routes {
         },
         {
           path: 'account',
-          loadChildren: () => import('./settings/user/user-settings.module').then(m => m.UserSettingsModule),
+          loadChildren: () => import('./settings/user/module').then(m => m.UserSettingsModule),
           data: {preload: true},
         },
         {

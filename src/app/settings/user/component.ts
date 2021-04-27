@@ -24,8 +24,8 @@ import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-user-settings',
-  templateUrl: 'user-settings.component.html',
-  styleUrls: ['user-settings.component.scss'],
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
 })
 export class UserSettingsComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/no-magic-numbers
