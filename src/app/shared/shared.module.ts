@@ -83,7 +83,7 @@ import {SpinnerWithConfirmationComponent} from './components/spinner-with-confir
 import {SSHKeyListComponent} from './components/ssh-key-list/component';
 import {TagListComponent} from './components/tag-list/component';
 import {TaintFormComponent} from './components/taint-form/component';
-import {TaintsComponent} from './components/taints/taints.component';
+import {TaintsComponent} from './components/taints/component';
 import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
 import {ClusterService} from './services/cluster.service';

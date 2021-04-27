@@ -14,7 +14,7 @@ import {Taint} from '../../entity/node';
 
 @Component({
   selector: 'km-taints',
-  templateUrl: './taints.component.html',
+  templateUrl: './template.html',
 })
 export class TaintsComponent {
   @Input() taints: Taint[] = [];
