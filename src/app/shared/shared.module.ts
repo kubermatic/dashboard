@@ -69,7 +69,7 @@ import {EditorComponent} from './components/editor/component';
 import {ClusterTypeEOLComponent} from './components/eol/component';
 import {EventListComponent} from './components/event-list/component';
 import {ExternalClusterDataDialogComponent} from './components/external-cluster-data-dialog/component';
-import {InitialsCircleComponent} from './components/initials-circle/initials-circle.component';
+import {InitialsCircleComponent} from './components/initials-circle/component';
 import {LabelFormComponent} from './components/label-form/label-form.component';
 import {LabelsComponent} from './components/labels/labels.component';
 import {LoaderComponent} from './components/loader/component';
