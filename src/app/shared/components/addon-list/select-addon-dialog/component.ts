@@ -19,8 +19,8 @@ import {InstallAddonDialogComponent} from '../install-addon-dialog/component';
 
 @Component({
   selector: 'km-select-addon-dialog',
-  templateUrl: './select-addon-dialog.component.html',
-  styleUrls: ['./select-addon-dialog.component.scss'],
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class SelectAddonDialogComponent {
   @Input() installableAddons: string[] = [];
