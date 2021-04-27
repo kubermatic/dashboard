@@ -64,7 +64,7 @@ import {ChipComponent} from './components/chip/component';
 import {FilteredComboboxComponent} from './components/combobox/component';
 import {OptionDirective} from './components/combobox/directive';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/component';
-import {DialogTitleComponent} from './components/dialog-title/dialog-title.component';
+import {DialogTitleComponent} from './components/dialog-title/component';
 import {EditorComponent} from './components/editor/component';
 import {ClusterTypeEOLComponent} from './components/eol/component';
 import {EventListComponent} from './components/event-list/component';

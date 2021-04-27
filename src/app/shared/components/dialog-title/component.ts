@@ -13,6 +13,6 @@ import {Component} from '@angular/core';
 
 @Component({
   selector: 'km-dialog-title',
-  templateUrl: './dialog-title.component.html',
+  templateUrl: './template.html',
 })
 export class DialogTitleComponent {}
