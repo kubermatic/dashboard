@@ -33,7 +33,7 @@ import {SharedModule} from '@shared/shared.module';
 import {COOKIE, COOKIE_DI_TOKEN} from '../config';
 import {AddMemberComponent} from '../member/add-member/component';
 import {EditMemberComponent} from '../member/edit-member/component';
-import {AddServiceAccountComponent} from '../serviceaccount/add-serviceaccount/add-serviceaccount.component';
+import {AddServiceAccountComponent} from '../serviceaccount/add-serviceaccount/component';
 import {EditServiceAccountComponent} from '../serviceaccount/edit-serviceaccount/edit-serviceaccount.component';
 import {FooterComponent} from './components/footer/component';
 import {NavigationComponent} from './components/navigation/component';

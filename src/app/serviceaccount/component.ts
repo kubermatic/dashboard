@@ -29,7 +29,7 @@ import {ProjectUtils} from '@shared/utils/project-utils/project-utils';
 import * as _ from 'lodash';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {filter, switchMap, switchMapTo, take, takeUntil} from 'rxjs/operators';
-import {AddServiceAccountComponent} from './add-serviceaccount/add-serviceaccount.component';
+import {AddServiceAccountComponent} from './add-serviceaccount/component';
 import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceaccount.component';
 
 @Component({
