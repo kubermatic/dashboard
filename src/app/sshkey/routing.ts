@@ -12,7 +12,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
-import {SSHKeyComponent} from './sshkey.component';
+import {SSHKeyComponent} from './component';
 
 const routes: Routes = [
   {

@@ -33,7 +33,7 @@ import {SettingsService} from '@core/services/settings/service';
 import {UserService} from '@core/services/user/service';
 import {SharedModule} from '@shared/shared.module';
 import {of} from 'rxjs';
-import {SSHKeyComponent} from './sshkey.component';
+import {SSHKeyComponent} from './component';
 
 describe('SSHKeyComponent', () => {
   let fixture: ComponentFixture<SSHKeyComponent>;

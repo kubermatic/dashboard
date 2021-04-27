@@ -36,7 +36,7 @@ function createRouting(): Routes {
         },
         {
           path: 'projects/:projectID/sshkeys',
-          loadChildren: () => import('./sshkey/sshkey.module').then(m => m.SSHKeyModule),
+          loadChildren: () => import('./sshkey/module').then(m => m.SSHKeyModule),
         },
         {
           path: 'projects/:projectID/members',
