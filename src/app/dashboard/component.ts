@@ -13,6 +13,6 @@ import {Component} from '@angular/core';
 
 @Component({
   selector: 'km-dashboard',
-  templateUrl: './dashboard.component.html',
+  templateUrl: './template.html',
 })
 export class DashboardComponent {}

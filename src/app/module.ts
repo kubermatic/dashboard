@@ -29,7 +29,7 @@ import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {kmTooltipDefaultOptions} from '../app-config';
 import {KubermaticComponent} from './component';
 import {AppConfigService} from './config.service';
-import {DashboardComponent} from './dashboard/dashboard.component';
+import {DashboardComponent} from './dashboard/component';
 import {GoogleAnalyticsService} from './google-analytics.service';
 import {AppRoutingModule} from './routing';
 

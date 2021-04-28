@@ -21,7 +21,7 @@ import {ActivatedRouteStub, RouterStub} from '../testing/router-stubs';
 import {ApiMockService} from '../testing/services/api-mock.service';
 import {AuthMockService} from '../testing/services/auth-mock.service';
 import {DatacenterMockService} from '../testing/services/datacenter-mock.service';
-import {DashboardComponent} from './dashboard.component';
+import {DashboardComponent} from './component';
 
 const modules: any[] = [BrowserModule, RouterTestingModule, BrowserAnimationsModule];
 
