@@ -14,7 +14,7 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MachineNetworksComponent} from '@app/machine-networks/machine-networks.component';
+import {MachineNetworksComponent} from '@app/machine-networks/component';
 import {fakeClusterWithMachineNetwork} from '@app/testing/fake-data/clusterWithMachineNetworks.fake';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {RouterTestingModule} from '@app/testing/router-stubs';

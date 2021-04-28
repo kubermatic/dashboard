@@ -21,8 +21,8 @@ export enum Controls {
 
 @Component({
   selector: 'km-machine-networks',
-  templateUrl: 'machine-networks.component.html',
-  styleUrls: ['machine-networks.component.scss'],
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
 })
 export class MachineNetworksComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;

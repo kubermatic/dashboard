@@ -14,7 +14,7 @@ import {AddMachineNetworkComponent} from '@app/cluster/cluster-details/add-machi
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '@app/node-data/config';
 import {NodeDataModule} from '@app/node-data/module';
 import {SharedModule} from '@shared/shared.module';
-import {MachineNetworksModule} from '../machine-networks/machine-networks.module';
+import {MachineNetworksModule} from '../machine-networks/module';
 import {ChangeClusterVersionComponent} from './cluster-details/change-cluster-version/component';
 import {ClusterDeleteConfirmationComponent} from './cluster-details/cluster-delete-confirmation/component';
 import {ClusterSecretsComponent} from './cluster-details/cluster-secrets/component';

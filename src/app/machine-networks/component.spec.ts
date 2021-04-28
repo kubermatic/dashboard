@@ -18,7 +18,7 @@ import {fakeClusterWithMachineNetwork} from '@app/testing/fake-data/clusterWithM
 import {RouterTestingModule} from '@app/testing/router-stubs';
 import {WizardService} from '@app/wizard/service/wizard';
 import {SharedModule} from '@shared/shared.module';
-import {MachineNetworksComponent} from './machine-networks.component';
+import {MachineNetworksComponent} from './component';
 
 const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
 
