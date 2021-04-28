@@ -20,7 +20,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {NodeDataService} from '@app/node-data/service/service';
-import {PresetsService} from '@core/services/wizard/presets.service';
+import {PresetsService} from '@core/services/wizard/presets';
 import {AzureNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {AzureSizes, AzureZones} from '@shared/entity/provider/azure';
 import {NodeData} from '@shared/model/NodeSpecChange';

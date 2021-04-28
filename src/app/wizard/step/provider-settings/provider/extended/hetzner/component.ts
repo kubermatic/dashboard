@@ -11,11 +11,11 @@
 
 import {ChangeDetectionStrategy, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {PresetsService} from '@core/services/wizard/presets.service';
+import {PresetsService} from '@core/services/wizard/presets';
 import {CloudSpec, Cluster, ClusterSpec, HetznerCloudSpec} from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
-import {DatacenterService} from '@core/services/datacenter/service';
+import {DatacenterService} from '@core/services/datacenter';
 import {isObjectEmpty} from '@shared/utils/common-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';

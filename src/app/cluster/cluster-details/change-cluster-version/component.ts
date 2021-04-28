@@ -12,9 +12,9 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {ClusterService} from '@core/services/cluster/service';
-import {NotificationService} from '@core/services/notification/service';
-import {ProjectService} from '@core/services/project/service';
+import {ClusterService} from '@core/services/cluster';
+import {NotificationService} from '@core/services/notification';
+import {ProjectService} from '@core/services/project';
 import {Cluster, ClusterPatch} from '@shared/entity/cluster';
 import {Project} from '@shared/entity/project';
 import {EndOfLifeService} from '@shared/services/eol.service';

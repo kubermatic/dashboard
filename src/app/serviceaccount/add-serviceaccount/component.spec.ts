@@ -19,9 +19,9 @@ import {asyncData} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {CoreModule} from '@core/module';
-import {ApiService} from '@core/services/api/service';
-import {NotificationService} from '@core/services/notification/service';
-import {ProjectService} from '@core/services/project/service';
+import {ApiService} from '@core/services/api';
+import {NotificationService} from '@core/services/notification';
+import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
 import {AddServiceAccountComponent} from './component';
 

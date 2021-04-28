@@ -15,7 +15,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ClusterMockService} from '@app/testing/services/cluster-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
-import {ClusterService} from '@core/services/cluster/service';
+import {ClusterService} from '@core/services/cluster';
 import {SharedModule} from '@shared/module';
 import {AlibabaProviderSettingsComponent} from '../alibaba-provider-settings/component';
 import {AzureProviderSettingsComponent} from '../azure-provider-settings/component';

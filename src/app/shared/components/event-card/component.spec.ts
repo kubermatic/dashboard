@@ -13,7 +13,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {UserMockService} from '@app/testing/services/user-mock';
-import {UserService} from '@core/services/user/service';
+import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {EventCardComponent} from './component';
 

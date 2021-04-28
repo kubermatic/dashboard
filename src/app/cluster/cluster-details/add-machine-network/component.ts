@@ -11,8 +11,8 @@
 
 import {Component, Input} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import {ClusterService} from '@core/services/cluster/service';
-import {NotificationService} from '@core/services/notification/service';
+import {ClusterService} from '@core/services/cluster';
+import {NotificationService} from '@core/services/notification';
 import {Cluster, ClusterPatch, MachineNetwork} from '@shared/entity/cluster';
 import * as _ from 'lodash';
 import {take} from 'rxjs/operators';

@@ -21,7 +21,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {NodeDataService} from '@app/node-data/service/service';
-import {DatacenterService} from '@core/services/datacenter/service';
+import {DatacenterService} from '@core/services/datacenter';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
 import {NodeCloudSpec, NodeSpec, OpenstackNodeSpec} from '@shared/entity/node';

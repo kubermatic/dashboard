@@ -11,7 +11,7 @@
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ClusterService} from '@core/services/cluster/service';
+import {ClusterService} from '@core/services/cluster';
 import {AVAILABLE_PACKET_BILLING_CYCLES, Cluster, ProviderSettingsPatch} from '@shared/entity/cluster';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';

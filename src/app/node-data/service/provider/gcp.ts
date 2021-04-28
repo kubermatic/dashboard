@@ -9,9 +9,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ApiService} from '@core/services/api/service';
-import {ProjectService} from '@core/services/project/service';
-import {PresetsService} from '@core/services/wizard/presets.service';
+import {ApiService} from '@core/services/api';
+import {ProjectService} from '@core/services/project';
+import {PresetsService} from '@core/services/wizard/presets';
 import {Cluster} from '@shared/entity/cluster';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '@shared/entity/provider/gcp';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';

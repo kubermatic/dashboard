@@ -9,9 +9,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ApiService} from '@core/services/api/service';
-import {ProjectService} from '@core/services/project/service';
-import {PresetsService} from '@core/services/wizard/presets.service';
+import {ApiService} from '@core/services/api';
+import {ProjectService} from '@core/services/project';
+import {PresetsService} from '@core/services/wizard/presets';
 import {DigitaloceanSizes} from '@shared/entity/provider/digitalocean';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';

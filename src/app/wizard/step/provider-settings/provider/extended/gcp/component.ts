@@ -20,7 +20,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {PresetsService} from '@core/services/wizard/presets.service';
+import {PresetsService} from '@core/services/wizard/presets';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {GCPNetwork, GCPSubnetwork} from '@shared/entity/provider/gcp';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';

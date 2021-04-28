@@ -19,9 +19,9 @@ import {
   OnInit,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {DatacenterService} from '@core/services/datacenter/service';
-import {NameGeneratorService} from '@core/services/name-generator/service';
-import {SettingsService} from '@core/services/settings/service';
+import {DatacenterService} from '@core/services/datacenter';
+import {NameGeneratorService} from '@core/services/name-generator';
+import {SettingsService} from '@core/services/settings';
 import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';

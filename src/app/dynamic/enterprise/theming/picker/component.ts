@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ColorSchemeService} from '@app/dynamic/enterprise/theming/services/color-scheme';
 import {ThemeManagerService} from '@app/dynamic/enterprise/theming/services/manager';
 import {ThemeService} from '@app/dynamic/enterprise/theming/services/theme';
-import {UserService} from '@core/services/user/service';
+import {UserService} from '@core/services/user';
 import {UserSettings} from '@shared/entity/settings';
 import {Theme} from '@shared/model/Config';
 import {objectDiff} from '@shared/utils/common-utils';

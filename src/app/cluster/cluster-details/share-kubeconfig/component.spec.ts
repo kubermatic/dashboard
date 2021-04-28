@@ -18,9 +18,9 @@ import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
 import {fakeProject} from '@app/testing/fake-data/project';
 import {RouterTestingModule} from '@app/testing/router-stubs';
 import {UserMockService} from '@app/testing/services/user-mock';
-import {ApiService} from '@core/services/api/service';
+import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
-import {UserService} from '@core/services/user/service';
+import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {ShareKubeconfigComponent} from './component';
 

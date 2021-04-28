@@ -11,7 +11,7 @@
 
 import {AbstractControl, AsyncValidator, AsyncValidatorFn, ValidationErrors} from '@angular/forms';
 import {GlobalModule} from '@core/services/global/module';
-import {LabelService} from '@core/services/label/service';
+import {LabelService} from '@core/services/label';
 import {ResourceLabelMap, ResourceType} from '@shared/entity/common';
 import {Observable, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';

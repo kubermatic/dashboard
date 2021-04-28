@@ -11,14 +11,14 @@
 
 import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {PresetsService} from '@core/services/wizard/presets.service';
+import {PresetsService} from '@core/services/wizard/presets';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as _ from 'lodash';
-import {DatacenterService} from '@core/services/datacenter/service';
+import {DatacenterService} from '@core/services/datacenter';
 import {Datacenter} from '@shared/entity/datacenter';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 

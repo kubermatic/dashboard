@@ -19,8 +19,8 @@ import {machineDeploymentsFake} from '@app/testing/fake-data/node';
 import {fakeProject} from '@app/testing/fake-data/project';
 import {ApiMockService} from '@app/testing/services/api-mock';
 import {CoreModule} from '@core/module';
-import {ApiService} from '@core/services/api/service';
-import {NotificationService} from '@core/services/notification/service';
+import {ApiService} from '@core/services/api';
+import {NotificationService} from '@core/services/notification';
 import {of} from 'rxjs';
 import {NodeService} from './node.service';
 

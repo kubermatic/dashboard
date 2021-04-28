@@ -18,7 +18,7 @@ import {Router} from '@angular/router';
 import {fakeServiceAccountToken} from '@app/testing/fake-data/serviceaccount';
 import {RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
 import {ProjectMockService} from '@app/testing/services/project-mock';
-import {ProjectService} from '@core/services/project/service';
+import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
 import {ServiceAccountTokenInformationStepComponent} from './component';
 

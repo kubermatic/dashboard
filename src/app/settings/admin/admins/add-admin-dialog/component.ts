@@ -12,8 +12,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {NotificationService} from '@core/services/notification/service';
-import {SettingsService} from '@core/services/settings/service';
+import {NotificationService} from '@core/services/notification';
+import {SettingsService} from '@core/services/settings';
 import {Admin} from '@shared/entity/member';
 
 @Component({

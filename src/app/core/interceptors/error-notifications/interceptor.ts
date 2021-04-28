@@ -11,7 +11,7 @@
 
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Injectable, Injector} from '@angular/core';
-import {NotificationService} from '@core/services/notification/service';
+import {NotificationService} from '@core/services/notification';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 

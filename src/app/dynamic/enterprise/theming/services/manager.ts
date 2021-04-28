@@ -1,7 +1,7 @@
 import {DOCUMENT} from '@angular/common';
 import {Inject, Injectable} from '@angular/core';
-import {ThemeInformerService} from '@core/services/theme-informer/service';
-import {UserService} from '@core/services/user/service';
+import {ThemeInformerService} from '@core/services/theme-informer';
+import {UserService} from '@core/services/user';
 import {UserSettings} from '@shared/entity/settings';
 import {filter} from 'rxjs/operators';
 import {ColorSchemeService} from './color-scheme';

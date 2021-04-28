@@ -13,7 +13,7 @@ import {Injectable} from '@angular/core';
 import {MatSnackBar, MatSnackBarConfig, MatSnackBarDismiss} from '@angular/material/snack-bar';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {delay, filter, map, take, tap} from 'rxjs/operators';
-import {NotificationComponent, NotificationType} from '../../components/notification/component';
+import {NotificationComponent, NotificationType} from '../components/notification/component';
 
 export interface Notification {
   message: string;

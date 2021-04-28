@@ -19,10 +19,10 @@ import {
   ServiceAccountTokenDialogData,
   ServiceAccountTokenDialogMode,
 } from '@app/serviceaccount/token/add/component';
-import {ApiService} from '@core/services/api/service';
-import {NotificationService} from '@core/services/notification/service';
-import {ProjectService} from '@core/services/project/service';
-import {UserService} from '@core/services/user/service';
+import {ApiService} from '@core/services/api';
+import {NotificationService} from '@core/services/notification';
+import {ProjectService} from '@core/services/project';
+import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Project} from '@shared/entity/project';
 import {ServiceAccount, ServiceAccountToken} from '@shared/entity/service-account';

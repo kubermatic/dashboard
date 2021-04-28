@@ -13,7 +13,7 @@ import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild} from '@angula
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {UserService} from '@core/services/user/service';
+import {UserService} from '@core/services/user';
 import {Cluster} from '@shared/entity/cluster';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';

@@ -12,9 +12,9 @@
 import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
-import {ApiService} from '@core/services/api/service';
-import {ProjectService} from '@core/services/project/service';
-import {UserService} from '@core/services/user/service';
+import {ApiService} from '@core/services/api';
+import {ProjectService} from '@core/services/project';
+import {UserService} from '@core/services/user';
 
 import {AddSshKeyDialogComponent} from '@shared/components/add-ssh-key-dialog/component';
 import {View} from '@shared/entity/common';

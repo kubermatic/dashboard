@@ -11,7 +11,7 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable, Injector} from '@angular/core';
-import {NotificationService} from '@core/services/notification/service';
+import {NotificationService} from '@core/services/notification';
 import {environment} from '@environments/environment';
 import {VersionInfo} from '@shared/entity/version-info';
 import {Config, EndOfLife, UserGroupConfig} from '@shared/model/Config';

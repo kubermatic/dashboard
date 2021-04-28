@@ -13,8 +13,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {ApiService} from '@core/services/api/service';
-import {NotificationService} from '@core/services/notification/service';
+import {ApiService} from '@core/services/api';
+import {NotificationService} from '@core/services/notification';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {SSHKeyFormValidator} from '@shared/validators/ssh-key-form.validator';
 

@@ -9,10 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ApiService} from '@core/services/api/service';
-import {DatacenterService} from '@core/services/datacenter/service';
-import {ProjectService} from '@core/services/project/service';
-import {PresetsService} from '@core/services/wizard/presets.service';
+import {ApiService} from '@core/services/api';
+import {DatacenterService} from '@core/services/datacenter';
+import {ProjectService} from '@core/services/project';
+import {PresetsService} from '@core/services/wizard/presets';
 import {AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';

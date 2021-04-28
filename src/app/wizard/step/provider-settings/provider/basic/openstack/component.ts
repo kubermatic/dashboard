@@ -21,8 +21,8 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Auth} from '@core/services/auth/service';
 import {AppConfigService} from '@app/config.service';
-import {DatacenterService} from '@core/services/datacenter/service';
-import {PresetsService} from '@core/services/wizard/presets.service';
+import {DatacenterService} from '@core/services/datacenter';
+import {PresetsService} from '@core/services/wizard/presets';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {CloudSpec, Cluster, ClusterSpec, OpenstackCloudSpec} from '@shared/entity/cluster';
 import {OpenstackFloatingIpPool, OpenstackTenant} from '@shared/entity/provider/openstack';

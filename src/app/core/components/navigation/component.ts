@@ -11,7 +11,7 @@
 
 import {Component, Input, OnInit} from '@angular/core';
 import {Auth} from '@core/services/auth/service';
-import {UserService} from '@core/services/user/service';
+import {UserService} from '@core/services/user';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 

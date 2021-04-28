@@ -19,7 +19,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {PresetsService} from '@core/services/wizard/presets.service';
+import {PresetsService} from '@core/services/wizard/presets';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '@shared/entity/cluster';
 import {AWSVPC} from '@shared/entity/provider/aws';

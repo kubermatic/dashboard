@@ -14,8 +14,8 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {shareReplay} from 'rxjs/operators';
 
-import {environment} from '../../../../environments/environment';
-import {ResourceLabelMap} from '../../../shared/entity/common';
+import {environment} from '@environments/environment';
+import {ResourceLabelMap} from '@shared/entity/common';
 
 @Injectable()
 export class LabelService {

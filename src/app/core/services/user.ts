@@ -18,7 +18,7 @@ import {AppConfigService} from '@app/config.service';
 import {Member} from '@shared/entity/member';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils} from '@shared/utils/member-utils/member-utils';
-import {TokenService} from '../token/service';
+import {TokenService} from './token';
 import {DEFAULT_USER_SETTINGS, UserSettings} from '@shared/entity/settings';
 import {webSocket} from 'rxjs/webSocket';
 

@@ -18,8 +18,8 @@ import {fakeServiceAccount} from '@app/testing/fake-data/serviceaccount';
 import {asyncData} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
-import {ApiService} from '@core/services/api/service';
-import {NotificationService} from '@core/services/notification/service';
+import {ApiService} from '@core/services/api';
+import {NotificationService} from '@core/services/notification';
 import {SharedModule} from '@shared/module';
 import {EditServiceAccountComponent} from './component';
 

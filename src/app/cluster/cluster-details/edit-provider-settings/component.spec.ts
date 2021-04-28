@@ -16,7 +16,7 @@ import {Router} from '@angular/router';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
 import {RouterStub} from '@app/testing/router-stubs';
 import {ClusterMockService} from '@app/testing/services/cluster-mock';
-import {ClusterService} from '@core/services/cluster/service';
+import {ClusterService} from '@core/services/cluster';
 import {SharedModule} from '@shared/module';
 import {AlibabaProviderSettingsComponent} from './alibaba-provider-settings/component';
 import {AWSProviderSettingsComponent} from './aws-provider-settings/component';

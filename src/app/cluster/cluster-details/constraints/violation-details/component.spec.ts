@@ -16,7 +16,7 @@ import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
 import {fakeConstraints, fakeViolations} from '@app/testing/fake-data/opa';
 import {fakeProject} from '@app/testing/fake-data/project';
 import {CoreModule} from '@core/module';
-import {OPAService} from '@core/services/opa/service';
+import {OPAService} from '@core/services/opa';
 import {SharedModule} from '@shared/module';
 import {ViolationDetailsComponent} from './component';
 

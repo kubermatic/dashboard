@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
-import {ThemeInformerService} from '@core/services/theme-informer/service';
+import {ThemeInformerService} from '@core/services/theme-informer';
 
 /**
  * Used to apply correct styling for the editor header.

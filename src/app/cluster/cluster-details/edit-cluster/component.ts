@@ -12,11 +12,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {ApiService} from '@core/services/api/service';
-import {ClusterService} from '@core/services/cluster/service';
-import {DatacenterService} from '@core/services/datacenter/service';
-import {NotificationService} from '@core/services/notification/service';
-import {SettingsService} from '@core/services/settings/service';
+import {ApiService} from '@core/services/api';
+import {ClusterService} from '@core/services/cluster';
+import {DatacenterService} from '@core/services/datacenter';
+import {NotificationService} from '@core/services/notification';
+import {SettingsService} from '@core/services/settings';
 import {Cluster, ClusterPatch, ProviderSettingsPatch} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter} from '@shared/entity/datacenter';

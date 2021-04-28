@@ -13,7 +13,7 @@ import {Component, forwardRef, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Mode} from '@app/settings/admin/presets/dialog/component';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
-import {DatacenterService} from '@core/services/datacenter/service';
+import {DatacenterService} from '@core/services/datacenter';
 import {PresetProvider} from '@shared/entity/preset';
 import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';

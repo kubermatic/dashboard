@@ -19,10 +19,10 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
-import {ApiService} from '@core/services/api/service';
-import {DatacenterService} from '@core/services/datacenter/service';
-import {NameGeneratorService} from '@core/services/name-generator/service';
-import {SettingsService} from '@core/services/settings/service';
+import {ApiService} from '@core/services/api';
+import {DatacenterService} from '@core/services/datacenter';
+import {NameGeneratorService} from '@core/services/name-generator';
+import {SettingsService} from '@core/services/settings';
 import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter} from '@shared/entity/datacenter';

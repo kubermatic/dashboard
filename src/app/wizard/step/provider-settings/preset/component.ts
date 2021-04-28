@@ -11,7 +11,7 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {PresetsService} from '@core/services/wizard/presets.service';
+import {PresetsService} from '@core/services/wizard/presets';
 import {Cluster} from '@shared/entity/cluster';
 import {SimplePresetList} from '@shared/entity/preset';
 import {ClusterService} from '@shared/services/cluster.service';

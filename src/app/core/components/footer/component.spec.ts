@@ -20,8 +20,8 @@ import {AuthMockService} from '@app/testing/services/auth-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
 import {Auth} from '@core/services/auth/service';
-import {ProjectService} from '@core/services/project/service';
-import {UserService} from '@core/services/user/service';
+import {ProjectService} from '@core/services/project';
+import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {FooterComponent} from './component';
 

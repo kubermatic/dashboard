@@ -11,8 +11,8 @@
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {OPAService} from '@core/services/opa/service';
-import {NotificationService} from '@core/services/notification/service';
+import {OPAService} from '@core/services/opa';
+import {NotificationService} from '@core/services/notification';
 import {ConstraintTemplate, ConstraintTemplateSpec} from '@shared/entity/opa';
 import {dump, load} from 'js-yaml';
 import * as _ from 'lodash';

@@ -19,9 +19,9 @@ import {fakeConstraints, fakeConstraintTemplates} from '@app/testing/fake-data/o
 import {fakeProject} from '@app/testing/fake-data/project';
 import {UserMockService} from '@app/testing/services/user-mock';
 import {CoreModule} from '@core/module';
-import {NotificationService} from '@core/services/notification/service';
-import {UserService} from '@core/services/user/service';
-import {OPAService} from '@core/services/opa/service';
+import {NotificationService} from '@core/services/notification';
+import {UserService} from '@core/services/user';
+import {OPAService} from '@core/services/opa';
 import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {ConstraintsComponent} from './component';

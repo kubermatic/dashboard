@@ -20,7 +20,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {PresetsService} from '@core/services/wizard/presets.service';
+import {PresetsService} from '@core/services/wizard/presets';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {CloudSpec, Cluster, ClusterSpec, VSphereCloudSpec} from '@shared/entity/cluster';
 import {VSphereFolder, VSphereNetwork} from '@shared/entity/provider/vsphere';

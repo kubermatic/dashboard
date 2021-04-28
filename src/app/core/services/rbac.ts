@@ -13,7 +13,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 
-import {environment} from '../../../../environments/environment';
+import {environment} from '@environments/environment';
 import {
   Binding,
   ClusterBinding,
@@ -22,7 +22,7 @@ import {
   KIND_GROUP,
   KIND_USER,
   RoleName,
-} from '../../../shared/entity/rbac';
+} from '@shared/entity/rbac';
 
 @Injectable()
 export class RBACService {

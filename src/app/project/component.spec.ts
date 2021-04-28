@@ -17,10 +17,10 @@ import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {CoreModule} from '@core/module';
-import {DatacenterService} from '@core/services/datacenter/service';
-import {ProjectService} from '@core/services/project/service';
-import {SettingsService} from '@core/services/settings/service';
-import {UserService} from '@core/services/user/service';
+import {DatacenterService} from '@core/services/datacenter';
+import {ProjectService} from '@core/services/project';
+import {SettingsService} from '@core/services/settings';
+import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {CookieService} from 'ngx-cookie-service';
 import {

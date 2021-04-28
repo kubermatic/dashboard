@@ -19,10 +19,10 @@ import {ApiMockService} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {ClusterMockService} from '@app/testing/services/cluster-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
-import {ApiService} from '@core/services/api/service';
-import {ClusterService} from '@core/services/cluster/service';
-import {NotificationService} from '@core/services/notification/service';
-import {UserService} from '@core/services/user/service';
+import {ApiService} from '@core/services/api';
+import {ClusterService} from '@core/services/cluster';
+import {NotificationService} from '@core/services/notification';
+import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {EditSSHKeysComponent} from './component';
 

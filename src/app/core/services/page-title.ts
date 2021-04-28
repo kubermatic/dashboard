@@ -11,10 +11,10 @@
 
 import {Injectable} from '@angular/core';
 import {Title} from '@angular/platform-browser';
-import {ApiService} from '@core/services/api/service';
-import {ClusterService} from '@core/services/cluster/service';
-import {ParamsService, PathParam} from '@core/services/params/service';
-import {ProjectService} from '@core/services/project/service';
+import {ApiService} from '@core/services/api';
+import {ClusterService} from '@core/services/cluster';
+import {ParamsService, PathParam} from '@core/services/params';
+import {ProjectService} from '@core/services/project';
 import {Cluster} from '@shared/entity/cluster';
 import {getViewDisplayName, View, ViewDisplayName} from '@shared/entity/common';
 import {MachineDeployment} from '@shared/entity/machine-deployment';

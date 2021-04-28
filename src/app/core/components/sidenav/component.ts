@@ -12,9 +12,9 @@
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
-import {ProjectService} from '@core/services/project/service';
-import {SettingsService} from '@core/services/settings/service';
-import {UserService} from '@core/services/user/service';
+import {ProjectService} from '@core/services/project';
+import {SettingsService} from '@core/services/settings';
+import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';

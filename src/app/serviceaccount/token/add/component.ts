@@ -15,8 +15,8 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatStepper} from '@angular/material/stepper';
 import {SafeUrl} from '@angular/platform-browser';
 import {ServiceAccountTokenDialogService} from '@app/serviceaccount/token/add/steps/service';
-import {ApiService} from '@core/services/api/service';
-import {NotificationService} from '@core/services/notification/service';
+import {ApiService} from '@core/services/api';
+import {NotificationService} from '@core/services/notification';
 import {
   CreateTokenEntity,
   ServiceAccount,
