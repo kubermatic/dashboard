@@ -209,7 +209,9 @@ limitations under the License.
            class="km-health-state km-project-cards-status"
            fxFlexAlign=" center"></i>
         <mat-card-title [matTooltip]="getProjectTooltip(project.name)"
-                        [attr.id]="'km-project-name-' + project.name">{{getName(project.name)}}</mat-card-title>
+                        [attr.id]="'km-project-name-' + project.name">
+          {{project.name}}
+        </mat-card-title>
         <mat-card-subtitle>
           <strong>ID</strong> {{project.id}}
         </mat-card-subtitle>

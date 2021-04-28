@@ -79,8 +79,12 @@ $project-card-width: 330px;
 
   .mat-card-title {
     line-height: 23px;
-    margin: 0;
+    margin: 0 5px 0 0;
+    overflow: hidden;
     padding: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 185px;
   }
 
   .mat-card-subtitle {
