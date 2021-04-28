@@ -30,6 +30,7 @@ export enum EditorHeaderClass {
 export class EditorComponent implements OnInit {
   @Input() header = '';
   @Input() headerClass: EditorHeaderClass = EditorHeaderClass.Dialog;
+  @Input() height = '200px';
   @Input() language = 'yaml';
   @Input() model: string;
   @Output() modelChange = new EventEmitter<string>();

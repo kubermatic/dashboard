@@ -19,7 +19,7 @@
 @import 'src/app/core/components/changelog/theme';
 @import 'src/app/pages/api-docs/theme';
 @import 'src/app/project/theme';
-@import 'src/app/shared/components/addon-list/select-addon-dialog/theme';
+@import 'src/app/shared/components/addon-list/install-addon-dialog/theme';
 @import 'src/app/shared/components/addon-list/theme';
 @import 'src/app/shared/components/editor/theme';
 @import 'src/app/shared/components/property-usage/theme';
@@ -43,7 +43,7 @@
   @include theme-project-component($colors);
   @include theme-project-selector-component($colors);
   @include theme-property-usage-component($colors);
-  @include theme-select-addon-dialog-component($colors);
+  @include theme-install-addon-dialog-component($colors);
   @include theme-sidenav-component($colors);
   @include theme-version-picker-component($colors);
   @include theme-wizard-cluster-step-component($colors);
