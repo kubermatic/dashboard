@@ -16,7 +16,7 @@ import {ServiceAccountTokenNameStepComponent} from '@app/serviceaccount/token/ad
 import {ServiceAccountTokenDialogService} from '@app/serviceaccount/token/add/steps/service';
 import {SharedModule} from '@shared/module';
 import {ServiceAccountComponent} from './component';
-import {ServiceAccountRoutingModule} from './routing.module';
+import {ServiceAccountRoutingModule} from './routing';
 import {ServiceAccountTokenComponent} from './token/component';
 
 const components: any[] = [

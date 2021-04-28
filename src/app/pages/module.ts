@@ -16,7 +16,7 @@ import {SharedModule} from '@shared/module';
 import {ApiDocsComponent} from './api-docs/component';
 import {FrontpageComponent} from './frontpage/component';
 import {PageNotFoundComponent} from './page-not-found/component';
-import {PagesRoutingModule} from './pages-routing.module';
+import {PagesRoutingModule} from './routing';
 import {TermsOfServiceComponent} from './terms-of-service/component';
 
 @NgModule({

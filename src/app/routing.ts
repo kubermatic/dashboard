@@ -61,7 +61,7 @@ function createRouting(): Routes {
         },
         {
           path: '',
-          loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule),
+          loadChildren: () => import('./pages/module').then(m => m.PagesModule),
         },
       ],
     },
