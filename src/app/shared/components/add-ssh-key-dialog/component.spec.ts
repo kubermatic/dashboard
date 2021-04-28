@@ -22,7 +22,7 @@ import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {ApiMockService} from '@app/testing/services/api-mock.service';
+import {ApiMockService} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {ApiService} from '@core/services/api/service';

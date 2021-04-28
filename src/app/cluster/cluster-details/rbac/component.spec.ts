@@ -24,9 +24,9 @@ import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {RBACComponent} from './component';
 import {ClusterService} from '@core/services/cluster/service';
-import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
+import {ClusterMockService} from '@app/testing/services/cluster-mock';
 import {AppConfigService} from '@app/config.service';
-import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {
   fakeBindings,
   fakeClusterBindings,

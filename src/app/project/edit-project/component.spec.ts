@@ -14,7 +14,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
-import {asyncData} from '@app/testing/services/api-mock.service';
+import {asyncData} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {ApiService} from '@core/services/api/service';

@@ -17,7 +17,7 @@ import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/compone
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
 import {fakeConstraints, fakeConstraintTemplates} from '@app/testing/fake-data/opa.fake';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
-import {UserMockService} from '@app/testing/services/user-mock.service';
+import {UserMockService} from '@app/testing/services/user-mock';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification/service';
 import {UserService} from '@core/services/user/service';

@@ -13,7 +13,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
+import {ClusterMockService} from '@app/testing/services/cluster-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {ClusterService} from '@core/services/cluster/service';
 import {SharedModule} from '@shared/module';

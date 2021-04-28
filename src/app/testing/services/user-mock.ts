@@ -16,7 +16,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {Observable, of} from 'rxjs';
 import {fakeMember} from '../fake-data/member.fake';
 import {fakeUserGroupConfig} from '../fake-data/userGroupConfig.fake';
-import {DEFAULT_USER_SETTINGS_MOCK} from './settings-mock.service';
+import {DEFAULT_USER_SETTINGS_MOCK} from './settings-mock';
 
 @Injectable()
 export class UserMockService {

@@ -21,11 +21,11 @@ import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/compone
 import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {fakeSSHKeys} from '@app/testing/fake-data/sshkey.fake';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {asyncData} from '@app/testing/services/api-mock.service';
-import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
-import {ProjectMockService} from '@app/testing/services/project-mock.service';
-import {SettingsMockService} from '@app/testing/services/settings-mock.service';
-import {UserMockService} from '@app/testing/services/user-mock.service';
+import {asyncData} from '@app/testing/services/api-mock';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock';
+import {ProjectMockService} from '@app/testing/services/project-mock';
+import {SettingsMockService} from '@app/testing/services/settings-mock';
+import {UserMockService} from '@app/testing/services/user-mock';
 import {ApiService} from '@core/services/api/service';
 import {NotificationService} from '@core/services/notification/service';
 import {ProjectService} from '@core/services/project/service';

@@ -26,14 +26,14 @@ import {CookieService} from 'ngx-cookie-service';
 import {
   DialogTestModule,
   NoopProjectDeleteDialogComponent,
-} from '../testing/components/noop-project-delete-dialog.component';
-import {fakeProject} from '../testing/fake-data/project.fake';
-import {RouterStub, RouterTestingModule} from '../testing/router-stubs';
-import {AppConfigMockService} from '../testing/services/app-config-mock.service';
-import {DatacenterMockService} from '../testing/services/datacenter-mock.service';
-import {ProjectMockService} from '../testing/services/project-mock.service';
-import {SettingsMockService} from '../testing/services/settings-mock.service';
-import {UserMockService} from '../testing/services/user-mock.service';
+} from '@app/testing/components/noop-project-delete-dialog.component';
+import {fakeProject} from '@app/testing/fake-data/project.fake';
+import {RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock';
+import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
+import {ProjectMockService} from '@app/testing/services/project-mock';
+import {SettingsMockService} from '@app/testing/services/settings-mock';
+import {UserMockService} from '@app/testing/services/user-mock';
 import {ProjectComponent} from './component';
 import {ProjectModule} from './module';
 

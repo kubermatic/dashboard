@@ -18,7 +18,7 @@ import {MachineNetworksComponent} from '@app/machine-networks/component';
 import {fakeClusterWithMachineNetwork} from '@app/testing/fake-data/clusterWithMachineNetworks.fake';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {RouterTestingModule} from '@app/testing/router-stubs';
-import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
+import {ClusterMockService} from '@app/testing/services/cluster-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {WizardService} from '@app/wizard/service/wizard';
 import {ClusterService} from '@core/services/cluster/service';

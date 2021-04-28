@@ -17,10 +17,10 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {ApiService} from '@core/services/api/service';
 import {Auth} from '@core/services/auth/service';
 import {DatacenterService} from '@core/services/datacenter/service';
-import {ActivatedRouteStub, RouterStub} from '../testing/router-stubs';
-import {ApiMockService} from '../testing/services/api-mock.service';
-import {AuthMockService} from '../testing/services/auth-mock.service';
-import {DatacenterMockService} from '../testing/services/datacenter-mock.service';
+import {ActivatedRouteStub, RouterStub} from '@app/testing/router-stubs';
+import {ApiMockService} from '@app/testing/services/api-mock';
+import {AuthMockService} from '@app/testing/services/auth-mock';
+import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
 import {DashboardComponent} from './component';
 
 const modules: any[] = [BrowserModule, RouterTestingModule, BrowserAnimationsModule];

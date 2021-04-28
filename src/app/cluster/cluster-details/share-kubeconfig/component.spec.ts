@@ -17,7 +17,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {RouterTestingModule} from '@app/testing/router-stubs';
-import {UserMockService} from '@app/testing/services/user-mock.service';
+import {UserMockService} from '@app/testing/services/user-mock';
 import {ApiService} from '@core/services/api/service';
 import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user/service';

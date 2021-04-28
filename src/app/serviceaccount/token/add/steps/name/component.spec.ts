@@ -17,7 +17,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {fakeServiceAccountToken} from '@app/testing/fake-data/serviceaccount.fake';
 import {RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {ProjectMockService} from '@app/testing/services/project-mock.service';
+import {ProjectMockService} from '@app/testing/services/project-mock';
 import {ProjectService} from '@core/services/project/service';
 import {SharedModule} from '@shared/module';
 import {ServiceAccountTokenNameStepComponent} from './component';
