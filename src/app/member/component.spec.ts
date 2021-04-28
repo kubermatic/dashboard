@@ -18,7 +18,7 @@ import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/components/noop-confirmation-dialog.component';
-import {fakeMembers} from '@app/testing/fake-data/member.fake';
+import {fakeMembers} from '@app/testing/fake-data/member';
 import {RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
 import {asyncData} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';

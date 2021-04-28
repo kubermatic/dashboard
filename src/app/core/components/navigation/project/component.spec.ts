@@ -16,7 +16,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
-import {fakeProjects} from '@app/testing/fake-data/project.fake';
+import {fakeProjects} from '@app/testing/fake-data/project';
 import {RouterTestingModule} from '@app/testing/router-stubs';
 import {ApiMockService} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';

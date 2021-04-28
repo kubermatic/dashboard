@@ -23,22 +23,22 @@ import {
   ServiceAccountTokenPatch,
 } from '@shared/entity/service-account';
 import {SSHKey} from '@shared/entity/ssh-key';
-import {fakeDigitaloceanSizes, fakePacketSizes} from '../fake-data/addNodeModal.fake';
-import {fakeAlibabaInstanceTypes, fakeAlibabaZones, fakeAlibabaVSwitches} from '../fake-data/alibaba.fake';
-import {fakeAnexiaTemplates, fakeAnexiaVlans} from '../fake-data/anexia.fake';
-import {masterVersionsFake} from '../fake-data/cluster-spec.fake';
-import {fakeToken} from '../fake-data/cluster.fake';
-import {fakeMember, fakeMembers} from '../fake-data/member.fake';
-import {machineDeploymentsFake, nodesFake} from '../fake-data/node.fake';
-import {fakeProject, fakeProjects} from '../fake-data/project.fake';
+import {fakeDigitaloceanSizes, fakePacketSizes} from '../fake-data/add-node-modal';
+import {fakeAlibabaInstanceTypes, fakeAlibabaZones, fakeAlibabaVSwitches} from '../fake-data/alibaba';
+import {fakeAnexiaTemplates, fakeAnexiaVlans} from '../fake-data/anexia';
+import {masterVersionsFake} from '../fake-data/cluster-spec';
+import {fakeToken} from '../fake-data/cluster';
+import {fakeMember, fakeMembers} from '../fake-data/member';
+import {machineDeploymentsFake, nodesFake} from '../fake-data/node';
+import {fakeProject, fakeProjects} from '../fake-data/project';
 import {
   fakeServiceAccount,
   fakeServiceAccounts,
   fakeServiceAccountToken,
   fakeServiceAccountTokens,
-} from '../fake-data/serviceaccount.fake';
-import {fakeSSHKeys} from '../fake-data/sshkey.fake';
-import {fakeVSphereNetworks} from '../fake-data/vsphere.fake';
+} from '../fake-data/serviceaccount';
+import {fakeSSHKeys} from '../fake-data/sshkey';
+import {fakeVSphereNetworks} from '../fake-data/vsphere';
 import {EditProject, Project} from '@shared/entity/project';
 import {VSphereNetwork} from '@shared/entity/provider/vsphere';
 import {AlibabaInstanceType, AlibabaZone, AlibabaVSwitch} from '@shared/entity/provider/alibaba';

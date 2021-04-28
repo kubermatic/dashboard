@@ -19,7 +19,7 @@ import {MatDialogMock} from '@app/testing/services/mat-dialog-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {SettingsMockService} from '@app/testing/services/settings-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
-import {fakeConstraintTemplates} from '@app/testing/fake-data/opa.fake';
+import {fakeConstraintTemplates} from '@app/testing/fake-data/opa';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {HistoryService} from '@core/services/history/service';
 import {NotificationService} from '@core/services/notification/service';

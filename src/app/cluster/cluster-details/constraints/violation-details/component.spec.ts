@@ -12,9 +12,9 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeConstraints, fakeViolations} from '@app/testing/fake-data/opa.fake';
-import {fakeProject} from '@app/testing/fake-data/project.fake';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
+import {fakeConstraints, fakeViolations} from '@app/testing/fake-data/opa';
+import {fakeProject} from '@app/testing/fake-data/project';
 import {CoreModule} from '@core/module';
 import {OPAService} from '@core/services/opa/service';
 import {SharedModule} from '@shared/module';

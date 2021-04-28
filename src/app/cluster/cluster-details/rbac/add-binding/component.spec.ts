@@ -13,9 +13,9 @@ import {ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, waitForAsync
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeProject} from '@app/testing/fake-data/project.fake';
-import {fakeBinding, fakeClusterBinding, fakeClusterRoleNames, fakeRoleNames} from '@app/testing/fake-data/rbac.fake';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
+import {fakeProject} from '@app/testing/fake-data/project';
+import {fakeBinding, fakeClusterBinding, fakeClusterRoleNames, fakeRoleNames} from '@app/testing/fake-data/rbac';
 import {asyncData} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';

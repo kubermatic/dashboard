@@ -13,7 +13,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
 import {RouterStub} from '@app/testing/router-stubs';
 import {ClusterMockService} from '@app/testing/services/cluster-mock';
 import {ClusterService} from '@core/services/cluster/service';

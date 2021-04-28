@@ -27,7 +27,7 @@ import {
   DialogTestModule,
   NoopProjectDeleteDialogComponent,
 } from '@app/testing/components/noop-project-delete-dialog.component';
-import {fakeProject} from '@app/testing/fake-data/project.fake';
+import {fakeProject} from '@app/testing/fake-data/project';
 import {RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {DatacenterMockService} from '@app/testing/services/datacenter-mock';

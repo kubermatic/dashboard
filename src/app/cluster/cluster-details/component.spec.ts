@@ -17,8 +17,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeBindings, fakeClusterBindings} from '@app/testing/fake-data/rbac.fake';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
+import {fakeBindings, fakeClusterBindings} from '@app/testing/fake-data/rbac';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
 import {ApiMockService, asyncData} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
@@ -51,7 +51,7 @@ import {MachineNetworksDisplayComponent} from './machine-networks-display/compon
 import {NodeListComponent} from './node-list/component';
 import {RBACComponent} from './rbac/component';
 import {VersionPickerComponent} from './version-picker/component';
-import {nodesFake} from '@app/testing/fake-data/node.fake';
+import {nodesFake} from '@app/testing/fake-data/node';
 
 describe('ClusterDetailsComponent', () => {
   let fixture: ComponentFixture<ClusterDetailsComponent>;

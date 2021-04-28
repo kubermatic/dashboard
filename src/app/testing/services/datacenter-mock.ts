@@ -13,7 +13,7 @@ import {Injectable} from '@angular/core';
 import {Datacenter} from '@shared/entity/datacenter';
 import {find} from 'lodash';
 import {Observable, of} from 'rxjs';
-import {fakeNodeDatacenters} from '../fake-data/datacenter.fake';
+import {fakeNodeDatacenters} from '../fake-data/datacenter';
 
 @Injectable()
 export class DatacenterMockService {

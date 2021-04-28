@@ -14,7 +14,7 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {FormArray} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeClusterWithMachineNetwork} from '@app/testing/fake-data/clusterWithMachineNetworks.fake';
+import {fakeClusterWithMachineNetwork} from '@app/testing/fake-data/cluster-with-machine-networks';
 import {RouterTestingModule} from '@app/testing/router-stubs';
 import {WizardService} from '@app/wizard/service/wizard';
 import {SharedModule} from '@shared/module';

@@ -13,8 +13,8 @@ import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeProject} from '@app/testing/fake-data/project.fake';
-import {fakeServiceAccount} from '@app/testing/fake-data/serviceaccount.fake';
+import {fakeProject} from '@app/testing/fake-data/project';
+import {fakeServiceAccount} from '@app/testing/fake-data/serviceaccount';
 import {asyncData} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';

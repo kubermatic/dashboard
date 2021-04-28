@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {nodesFake} from '../../../testing/fake-data/node.fake';
+import {nodesFake} from '@app/testing/fake-data/node';
 
 import {HealthStatusColor, HealthStatusMessage} from './health-status';
 import {HealthStatusCss, NodeHealthStatus} from './node-health-status';

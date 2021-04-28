@@ -20,11 +20,11 @@ import {SSHKey} from '@shared/entity/ssh-key';
 import {CreateClusterModel} from '@shared/model/CreateClusterModel';
 import {defer, Observable, of, Subject} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
-import {fakeClusters, fakeDigitaloceanCluster} from '../fake-data/cluster.fake';
-import {fakeEvents} from '../fake-data/event.fake';
-import {fakeHealth} from '../fake-data/health.fake';
-import {nodesFake} from '../fake-data/node.fake';
-import {fakeSSHKeys} from '../fake-data/sshkey.fake';
+import {fakeClusters, fakeDigitaloceanCluster} from '../fake-data/cluster';
+import {fakeEvents} from '../fake-data/event';
+import {fakeHealth} from '../fake-data/health';
+import {nodesFake} from '../fake-data/node';
+import {fakeSSHKeys} from '../fake-data/sshkey';
 
 @Injectable()
 export class ClusterMockService {

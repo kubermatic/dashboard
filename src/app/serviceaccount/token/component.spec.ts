@@ -18,7 +18,7 @@ import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/components/noop-confirmation-dialog.component';
 import {NoopTokenDialogComponent, TokenDialogTestModule} from '@app/testing/components/noop-token-dialog.component';
-import {fakeServiceAccount, fakeServiceAccountTokens} from '@app/testing/fake-data/serviceaccount.fake';
+import {fakeServiceAccount, fakeServiceAccountTokens} from '@app/testing/fake-data/serviceaccount';
 import {RouterStub} from '@app/testing/router-stubs';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';

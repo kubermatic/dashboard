@@ -16,7 +16,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
-import {fakeSSHKeys} from '@app/testing/fake-data/sshkey.fake';
+import {fakeSSHKeys} from '@app/testing/fake-data/sshkey';
 import {RouterStub} from '@app/testing/router-stubs';
 import {ActivatedRouteMock} from '@app/testing/services/activate-route-mock';
 import {asyncData} from '@app/testing/services/api-mock';

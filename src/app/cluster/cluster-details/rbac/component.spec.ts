@@ -15,8 +15,8 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeProject} from '@app/testing/fake-data/project.fake';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
+import {fakeProject} from '@app/testing/fake-data/project';
 import {RouterStub} from '@app/testing/router-stubs';
 import {NotificationService} from '@core/services/notification/service';
 import {RBACService} from '@core/services/rbac/service';
@@ -32,7 +32,7 @@ import {
   fakeClusterBindings,
   fakeSimpleBindings,
   fakeSimpleClusterBindings,
-} from '@app/testing/fake-data/rbac.fake';
+} from '@app/testing/fake-data/rbac';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 

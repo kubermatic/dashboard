@@ -12,7 +12,7 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {Observable, of, Subject} from 'rxjs';
 import {Project} from '@shared/entity/project';
-import {fakeProject, fakeProjects} from '../fake-data/project.fake';
+import {fakeProject, fakeProjects} from '../fake-data/project';
 
 @Injectable()
 export class ProjectMockService {

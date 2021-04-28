@@ -19,7 +19,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {NodeService} from '@app/cluster/services/node.service';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
 import {ActivatedRouteStub, RouterStub} from '@app/testing/router-stubs';
 import {ApiMockService} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';

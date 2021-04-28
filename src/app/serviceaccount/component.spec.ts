@@ -17,7 +17,7 @@ import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {ServiceAccountModule} from '@app/serviceaccount/module';
 import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/components/noop-confirmation-dialog.component';
-import {fakeServiceAccounts, fakeServiceAccountTokens} from '@app/testing/fake-data/serviceaccount.fake';
+import {fakeServiceAccounts, fakeServiceAccountTokens} from '@app/testing/fake-data/serviceaccount';
 import {RouterStub} from '@app/testing/router-stubs';
 import {asyncData} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
