@@ -20,7 +20,7 @@ import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {RouterStub} from '@app/testing/router-stubs';
 import {NotificationService} from '@core/services/notification/service';
 import {RBACService} from '@core/services/rbac/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {RBACComponent} from './component';
 import {ClusterService} from '@core/services/cluster/service';

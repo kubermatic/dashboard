@@ -27,7 +27,7 @@ import {ParamsService} from '@core/services/params/service';
 import {ProjectService} from '@core/services/project/service';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {ClusterService} from '@shared/services/cluster.service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {MachineNetworkComponent} from './component';
 
 const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];

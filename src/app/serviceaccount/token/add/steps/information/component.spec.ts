@@ -19,7 +19,7 @@ import {fakeServiceAccountToken} from '@app/testing/fake-data/serviceaccount.fak
 import {RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
 import {ProjectMockService} from '@app/testing/services/project-mock.service';
 import {ProjectService} from '@core/services/project/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {ServiceAccountTokenInformationStepComponent} from './component';
 
 const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];

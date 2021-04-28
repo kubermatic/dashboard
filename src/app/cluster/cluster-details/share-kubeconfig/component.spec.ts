@@ -21,7 +21,7 @@ import {UserMockService} from '@app/testing/services/user-mock.service';
 import {ApiService} from '@core/services/api/service';
 import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {ShareKubeconfigComponent} from './component';
 
 describe('ShareKubeconfigComponent', () => {

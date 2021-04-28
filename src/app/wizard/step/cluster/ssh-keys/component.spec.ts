@@ -27,7 +27,7 @@ import {ApiService} from '@core/services/api/service';
 import {ProjectService} from '@core/services/project/service';
 import {UserService} from '@core/services/user/service';
 import {ClusterService} from '@shared/services/cluster.service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {ClusterSSHKeysComponent} from './component';
 
 describe('ClusterSSHKeys', () => {

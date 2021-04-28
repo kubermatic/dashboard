@@ -28,7 +28,7 @@ import {ProjectSelectorComponent} from '@core/components/navigation/project/comp
 import {ProjectService} from '@core/services/project/service';
 import {SettingsService} from '@core/services/settings/service';
 import {UserService} from '@core/services/user/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {MockComponent} from 'ng2-mock-component';
 import {SidenavComponent} from './component';
 

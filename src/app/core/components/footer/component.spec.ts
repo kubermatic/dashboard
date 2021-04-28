@@ -22,7 +22,7 @@ import {UserMockService} from '@app/testing/services/user-mock.service';
 import {Auth} from '@core/services/auth/service';
 import {ProjectService} from '@core/services/project/service';
 import {UserService} from '@core/services/user/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {FooterComponent} from './component';
 
 const modules: any[] = [BrowserModule, HttpClientModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];

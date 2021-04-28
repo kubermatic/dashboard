@@ -21,7 +21,7 @@ import {ProjectMockService} from '@app/testing/services/project-mock.service';
 import {ApiService} from '@core/services/api/service';
 import {NotificationService} from '@core/services/notification/service';
 import {ProjectService} from '@core/services/project/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {Group} from '@shared/utils/member-utils/member-utils';
 import {AddMemberComponent} from './component';
 

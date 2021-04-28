@@ -21,7 +21,7 @@ import {DatacenterService} from '@core/services/datacenter/service';
 import {ProjectService} from '@core/services/project/service';
 import {SettingsService} from '@core/services/settings/service';
 import {UserService} from '@core/services/user/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {CookieService} from 'ngx-cookie-service';
 import {
   DialogTestModule,

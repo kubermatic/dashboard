@@ -17,7 +17,7 @@ import {fakeConstraints, fakeViolations} from '@app/testing/fake-data/opa.fake';
 import {fakeProject} from '@app/testing/fake-data/project.fake';
 import {CoreModule} from '@core/module';
 import {OPAService} from '@core/services/opa/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {ViolationDetailsComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];

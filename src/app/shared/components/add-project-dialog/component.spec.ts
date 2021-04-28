@@ -22,7 +22,7 @@ import {ProjectMockService} from '@app/testing/services/project-mock.service';
 import {CoreModule} from '@core/module';
 import {ApiService} from '@core/services/api/service';
 import {ProjectService} from '@core/services/project/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {AddProjectDialogComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];

@@ -21,7 +21,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {AnexiaBasicNodeDataComponent} from '@app/node-data/basic/provider/anexia/component';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {AlibabaBasicNodeDataComponent} from './basic/provider/alibaba/component';
 import {AWSBasicNodeDataComponent} from './basic/provider/aws/component';
 import {AzureBasicNodeDataComponent} from './basic/provider/azure/component';

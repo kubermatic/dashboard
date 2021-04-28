@@ -29,7 +29,7 @@ import {Auth} from '@core/services/auth/service';
 import {ProjectService} from '@core/services/project/service';
 import {UserService} from '@core/services/user/service';
 import {Project} from '@shared/entity/project';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {MockComponent} from 'ng2-mock-component';
 import {UserPanelComponent} from '../../user-panel/component';
 import {NavigationComponent} from '../component';

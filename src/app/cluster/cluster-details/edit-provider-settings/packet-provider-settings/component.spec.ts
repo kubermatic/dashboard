@@ -19,7 +19,7 @@ import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {ApiService} from '@core/services/api/service';
 import {ClusterService} from '@core/services/cluster/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {AlibabaProviderSettingsComponent} from '../alibaba-provider-settings/component';
 import {AWSProviderSettingsComponent} from '../aws-provider-settings/component';
 import {AzureProviderSettingsComponent} from '../azure-provider-settings/component';

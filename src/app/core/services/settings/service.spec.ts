@@ -18,7 +18,7 @@ import {RouterTestingModule} from '@app/testing/router-stubs';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
 import {AuthMockService} from '@app/testing/services/auth-mock.service';
 import {Auth} from '@core/services/auth/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {SettingsService} from './service';
 
 describe('SettingsService', () => {

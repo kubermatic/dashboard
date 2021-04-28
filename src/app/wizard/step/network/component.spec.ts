@@ -27,7 +27,7 @@ import {DatacenterService} from '@core/services/datacenter/service';
 import {ProjectService} from '@core/services/project/service';
 import {PresetsService} from '@core/services/wizard/presets.service';
 import {ClusterService} from '@shared/services/cluster.service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {MachineNetworkStepComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule];

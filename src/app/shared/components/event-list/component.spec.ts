@@ -15,7 +15,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {UserMockService} from '@app/testing/services/user-mock.service';
 import {UserService} from '@core/services/user/service';
 import {Event} from '@shared/entity/event';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {EventListComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];

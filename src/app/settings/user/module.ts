@@ -11,7 +11,7 @@
 
 import {NgModule} from '@angular/core';
 
-import {SharedModule} from '../../shared/shared.module';
+import {SharedModule} from '@shared/module';
 
 import {UserSettingsComponent} from './component';
 import {UserSettingsRoutingModule} from './routing';

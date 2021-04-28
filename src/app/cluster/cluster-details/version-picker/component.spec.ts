@@ -35,7 +35,7 @@ import {ClusterService} from '@core/services/cluster/service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {ProjectService} from '@core/services/project/service';
 import {UserService} from '@core/services/user/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {ClusterSecretsComponent} from '../cluster-secrets/component';
 import {MachineDeploymentListComponent} from '../machine-deployment-list/component';
 import {MachineNetworksDisplayComponent} from '../machine-networks-display/component';

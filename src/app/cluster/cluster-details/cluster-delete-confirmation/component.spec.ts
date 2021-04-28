@@ -29,7 +29,7 @@ import {ClusterService} from '@core/services/cluster/service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {NotificationService} from '@core/services/notification/service';
 import {SettingsService} from '@core/services/settings/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {ClusterDeleteConfirmationComponent} from './component';
 

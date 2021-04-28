@@ -17,7 +17,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeClusterWithMachineNetwork} from '@app/testing/fake-data/clusterWithMachineNetworks.fake';
 import {RouterTestingModule} from '@app/testing/router-stubs';
 import {WizardService} from '@app/wizard/service/wizard';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {MachineNetworksComponent} from './component';
 
 const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];

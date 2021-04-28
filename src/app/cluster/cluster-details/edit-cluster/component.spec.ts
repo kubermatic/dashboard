@@ -34,7 +34,7 @@ import {DatacenterService} from '@core/services/datacenter/service';
 import {UserService} from '@core/services/user/service';
 import {SettingsService} from '@core/services/settings/service';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {Subject} from 'rxjs';
 import {AlibabaProviderSettingsComponent} from '../edit-provider-settings/alibaba-provider-settings/component';
 import {AWSProviderSettingsComponent} from '../edit-provider-settings/aws-provider-settings/component';

@@ -39,7 +39,7 @@ import {NotificationService} from '@core/services/notification/service';
 import {ProjectService} from '@core/services/project/service';
 import {SettingsService} from '@core/services/settings/service';
 import {UserService} from '@core/services/user/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {MachineDeploymentHealthStatus} from '@shared/utils/health-status/machine-deployment-health-status';
 import {NodeListComponent} from '../node-list/component';
 import {ClusterPanelComponent} from './cluster-panel/component';

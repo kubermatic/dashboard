@@ -23,7 +23,7 @@ import {ApiService} from '@core/services/api/service';
 import {ClusterService} from '@core/services/cluster/service';
 import {NotificationService} from '@core/services/notification/service';
 import {UserService} from '@core/services/user/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {EditSSHKeysComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];

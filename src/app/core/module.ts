@@ -29,7 +29,7 @@ import {OPAService} from '@core/services/opa/service';
 import {ParamsService} from '@core/services/params/service';
 import {RBACService} from '@core/services/rbac/service';
 import {PresetsService} from '@core/services/wizard/presets.service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {COOKIE, COOKIE_DI_TOKEN} from '../config';
 import {AddMemberComponent} from '../member/add-member/component';
 import {EditMemberComponent} from '../member/edit-member/component';

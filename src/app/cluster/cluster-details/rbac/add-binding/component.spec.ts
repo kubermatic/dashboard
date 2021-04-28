@@ -20,7 +20,7 @@ import {asyncData} from '@app/testing/services/api-mock.service';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {RBACService} from '@core/services/rbac/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {AddBindingComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];

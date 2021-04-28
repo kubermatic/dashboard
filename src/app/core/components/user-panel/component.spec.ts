@@ -24,7 +24,7 @@ import {Auth} from '@core/services/auth/service';
 import {ProjectService} from '@core/services/project/service';
 import {SettingsService} from '@core/services/settings/service';
 import {UserService} from '@core/services/user/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {UserPanelComponent} from './component';
 
 const modules: any[] = [BrowserModule, HttpClientModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];

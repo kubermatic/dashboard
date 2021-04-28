@@ -26,7 +26,7 @@ import {ClusterService} from '@core/services/cluster/service';
 import {ProjectService} from '@core/services/project/service';
 import {UserService} from '@core/services/user/service';
 import {HealthState} from '@shared/entity/health';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {ClusterSecretsComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];

@@ -14,7 +14,7 @@ import {inject, TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {CoreModule} from '@core/module';
 import {ErrorNotificationsInterceptor} from '@core/interceptors';
 

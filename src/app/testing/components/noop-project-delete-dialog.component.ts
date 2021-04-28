@@ -13,7 +13,7 @@ import {Component, NgModule} from '@angular/core';
 import {MatDialogModule} from '@angular/material/dialog';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
-import {SharedModule} from '../../shared/shared.module';
+import {SharedModule} from '@shared/module';
 
 // NoopConfirmDialogComponent is only a workaround to trigger change detection
 @Component({template: ''})

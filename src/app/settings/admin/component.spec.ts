@@ -26,7 +26,7 @@ import {NotificationService} from '@core/services/notification/service';
 import {OPAService} from '@core/services/opa/service';
 import {SettingsService} from '@core/services/settings/service';
 import {UserService} from '@core/services/user/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {AddAdminDialogComponent} from './admins/add-admin-dialog/component';
 import {AdminsComponent} from './admins/component';

@@ -21,7 +21,7 @@ import {Auth} from '@core/services/auth/service';
 import {DatacenterService} from '@core/services/datacenter/service';
 import {ProjectService} from '@core/services/project/service';
 import {UserService} from '@core/services/user/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {KubermaticComponent} from './component';
 import {AppConfigService} from './config.service';
 import {GoogleAnalyticsService} from './google-analytics.service';

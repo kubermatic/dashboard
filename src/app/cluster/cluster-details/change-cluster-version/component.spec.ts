@@ -25,7 +25,7 @@ import {ProjectMockService} from '@app/testing/services/project-mock.service';
 import {ClusterService} from '@core/services/cluster/service';
 import {NotificationService} from '@core/services/notification/service';
 import {ProjectService} from '@core/services/project/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {ChangeClusterVersionComponent} from './component';
 

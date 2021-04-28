@@ -22,7 +22,7 @@ import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification/service';
 import {UserService} from '@core/services/user/service';
 import {OPAService} from '@core/services/opa/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {ConstraintsComponent} from './component';
 import {ViolationDetailsComponent} from './violation-details/component';

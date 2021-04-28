@@ -23,7 +23,7 @@ import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {WizardService} from '@app/wizard/service/wizard';
 import {ClusterService} from '@core/services/cluster/service';
 import {NotificationService} from '@core/services/notification/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {AddMachineNetworkComponent} from './component';
 
 const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];

@@ -28,7 +28,7 @@ import {ApiService} from '@core/services/api/service';
 import {NotificationService} from '@core/services/notification/service';
 import {ProjectService} from '@core/services/project/service';
 import {UserService} from '@core/services/user/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {ServiceAccountModule} from '../module';
 import {ServiceAccountTokenComponent} from './component';
