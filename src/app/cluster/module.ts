@@ -13,6 +13,7 @@ import {NgModule} from '@angular/core';
 import {AddMachineNetworkComponent} from '@app/cluster/cluster-details/add-machine-network/component';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '@app/node-data/config';
 import {NodeDataModule} from '@app/node-data/module';
+import {NodeService} from '@core/services/node';
 import {SharedModule} from '@shared/module';
 import {MachineNetworksModule} from '../machine-networks/module';
 import {ChangeClusterVersionComponent} from './cluster-details/change-cluster-version/component';
@@ -51,7 +52,6 @@ import {ClusterListComponent} from './cluster-list/component';
 import {ExternalClusterDetailsComponent} from './external-cluster-details/component';
 import {ExternalNodeListComponent} from './external-cluster-details/external-node-list/component';
 import {ClusterRoutingModule} from './routing';
-import {NodeService} from './services/node.service';
 
 const components: any[] = [
   ClusterDetailsComponent,

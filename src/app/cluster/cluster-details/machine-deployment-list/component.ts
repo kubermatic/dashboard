@@ -13,7 +13,7 @@ import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, Vi
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
-import {NodeService} from '@app/cluster/services/node.service';
+import {NodeService} from '@core/services/node';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';

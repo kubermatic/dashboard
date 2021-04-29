@@ -22,7 +22,7 @@ import {CoreModule} from '@core/module';
 import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {of} from 'rxjs';
-import {NodeService} from './node.service';
+import {NodeService} from './node';
 
 class MatDialogMock {
   open(): any {
