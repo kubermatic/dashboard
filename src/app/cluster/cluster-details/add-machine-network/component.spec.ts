@@ -20,7 +20,7 @@ import {fakeProject} from '@app/testing/fake-data/project';
 import {RouterTestingModule} from '@app/testing/router-stubs';
 import {ClusterMockService} from '@app/testing/services/cluster-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
-import {WizardService} from '@app/wizard/service/wizard';
+import {WizardService} from '@core/services/wizard/wizard';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
 import {SharedModule} from '@shared/module';

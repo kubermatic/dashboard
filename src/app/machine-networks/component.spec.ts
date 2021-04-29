@@ -16,7 +16,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeClusterWithMachineNetwork} from '@app/testing/fake-data/cluster-with-machine-networks';
 import {RouterTestingModule} from '@app/testing/router-stubs';
-import {WizardService} from '@app/wizard/service/wizard';
+import {WizardService} from '@core/services/wizard/wizard';
 import {SharedModule} from '@shared/module';
 import {MachineNetworksComponent} from './component';
 

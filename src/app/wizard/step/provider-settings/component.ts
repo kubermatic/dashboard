@@ -15,7 +15,7 @@ import {takeUntil} from 'rxjs/operators';
 
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {ClusterService} from '../../../shared/services/cluster.service';
-import {WizardService} from '../../service/wizard';
+import {WizardService} from '@core/services/wizard/wizard';
 import {StepBase} from '../base';
 
 enum Controls {

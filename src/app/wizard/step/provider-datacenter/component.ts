@@ -19,7 +19,7 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
-import {WizardService} from '@app/wizard/service/wizard';
+import {WizardService} from '@core/services/wizard/wizard';
 import {DatacenterService} from '@core/services/datacenter';
 import {Datacenter, getDatacenterProvider} from '@shared/entity/datacenter';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';

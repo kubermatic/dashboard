@@ -10,8 +10,8 @@
 // limitations under the License.
 
 import {AbstractControl} from '@angular/forms';
+import {WizardService} from '@core/services/wizard/wizard';
 import {BaseFormValidator} from '../../shared/validators/base-form.validator';
-import {WizardService} from '../service/wizard';
 import {Directive} from '@angular/core';
 
 @Directive()

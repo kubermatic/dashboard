@@ -10,12 +10,12 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
+import {WizardService} from '@core/services/wizard/wizard';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../node-data/config';
 import {NodeDataModule} from '../node-data/module';
 import {SharedModule} from '@shared/module';
 import {WizardComponent} from './component';
 import {Routing} from './routing';
-import {WizardService} from './service/wizard';
 import {ClusterStepComponent} from './step/cluster/component';
 import {MachineNetworkStepComponent} from './step/network/component';
 import {NodeSettingsStepComponent} from './step/node-settings/component';

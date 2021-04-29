@@ -18,6 +18,7 @@ import {NodeDataService} from '@app/node-data/service/service';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
+import {WizardService} from '@core/services/wizard/wizard';
 import {Cluster} from '@shared/entity/cluster';
 import {Project} from '@shared/entity/project';
 import {SSHKey} from '@shared/entity/ssh-key';
@@ -27,7 +28,6 @@ import {ClusterService as ClusterModelService} from '@shared/services/cluster.se
 import {forkJoin, of, Subject} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
 import {StepRegistry, steps, WizardStep} from './config';
-import {WizardService} from './service/wizard';
 
 @Component({
   selector: 'km-wizard',

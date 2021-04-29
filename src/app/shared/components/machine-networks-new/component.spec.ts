@@ -20,7 +20,7 @@ import {NodeDataService} from '@app/node-data/service/service';
 import {ApiMockService} from '@app/testing/services/api-mock';
 import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
-import {WizardService} from '@app/wizard/service/wizard';
+import {WizardService} from '@core/services/wizard/wizard';
 import {ApiService} from '@core/services/api';
 import {DatacenterService} from '@core/services/datacenter';
 import {ParamsService} from '@core/services/params';

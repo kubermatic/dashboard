@@ -12,11 +12,11 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {MatStepper} from '@angular/material/stepper';
 import {NodeDataService} from '@app/node-data/service/service';
+import {StepRegistry, WizardStep} from '@app/wizard/config';
 import {NodeProvider, OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {ClusterService} from '@shared/services/cluster.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {StepRegistry, WizardStep} from '../config';
 
 @Injectable()
 export class WizardService {

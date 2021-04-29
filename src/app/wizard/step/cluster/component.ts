@@ -23,6 +23,7 @@ import {ApiService} from '@core/services/api';
 import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {SettingsService} from '@core/services/settings';
+import {WizardService} from '@core/services/wizard/wizard';
 import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter} from '@shared/entity/datacenter';
@@ -32,7 +33,6 @@ import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plu
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import {merge} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
 
 enum Controls {
