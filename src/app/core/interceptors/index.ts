@@ -9,9 +9,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AuthInterceptor} from './auth/interceptor';
-import {CheckTokenInterceptor} from './check-token/interceptor';
-import {ErrorNotificationsInterceptor} from './error-notifications/interceptor';
-import {LoaderInterceptor} from './loader/interceptor';
+import {AuthInterceptor} from './auth';
+import {CheckTokenInterceptor} from './check-token';
+import {ErrorNotificationsInterceptor} from './error-notifications';
+import {LoaderInterceptor} from './loader';
 
 export {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor};
