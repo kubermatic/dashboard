@@ -46,8 +46,6 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {NotificationComponent} from '@core/components/notification/component';
-import {EndOfLifeService} from '@core/services/eol';
-import {ClusterSpecService} from '@core/services/cluster-spec';
 import {EventCardComponent} from '@shared/components/event-card/component';
 import {TabCardComponent} from '@shared/components/tab-card/component';
 import {TabComponent} from '@shared/components/tab-card/tab/component';
@@ -172,14 +170,11 @@ const components: any[] = [
   LinkLocationPipe,
 ];
 
-const services: any[] = [ClusterSpecService, EndOfLifeService];
-
 const directives: any[] = [AutofocusDirective, OptionDirective];
 
 @NgModule({
   imports: [...modules],
   declarations: [...components, ...directives],
   exports: [...modules, ...components, ...directives],
-  providers: [...services],
 })
 export class SharedModule {}

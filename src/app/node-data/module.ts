@@ -21,6 +21,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {AnexiaBasicNodeDataComponent} from '@app/node-data/basic/provider/anexia/component';
+import {NodeDataService} from '@core/services/node-data/service';
 import {SharedModule} from '@shared/module';
 import {AlibabaBasicNodeDataComponent} from './basic/provider/alibaba/component';
 import {AWSBasicNodeDataComponent} from './basic/provider/aws/component';
@@ -44,7 +45,6 @@ import {GCPExtendedNodeDataComponent} from './extended/provider/gcp/component';
 import {OpenstackExtendedNodeDataComponent} from './extended/provider/openstack/component';
 import {PacketExtendedNodeDataComponent} from './extended/provider/packet/component';
 import {KubeletVersionNodeDataComponent} from './kubelet-version/component';
-import {NodeDataService} from '@core/services/node-data/service';
 
 const components = [
   AlibabaBasicNodeDataComponent,

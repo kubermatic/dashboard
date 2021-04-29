@@ -22,7 +22,9 @@ import {Auth} from '@core/services/auth/service';
 import {ChangelogManagerService} from '@core/services/changelog/listener';
 import {ChangelogService} from '@core/services/changelog/service';
 import {ClusterService} from '@core/services/cluster';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
+import {EndOfLifeService} from '@core/services/eol';
 import {HistoryService} from '@core/services/history';
 import {LabelService} from '@core/services/label';
 import {OPAService} from '@core/services/opa';
@@ -97,6 +99,8 @@ const services: any[] = [
   OPAService,
   ChangelogService,
   ChangelogManagerService,
+  ClusterSpecService,
+  EndOfLifeService,
 ];
 
 const interceptors: any[] = [
