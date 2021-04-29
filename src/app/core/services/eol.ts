@@ -11,7 +11,7 @@
 
 import {Injectable} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
-import {EndOfLife} from '../model/Config';
+import {EndOfLife} from '@shared/model/Config';
 import {lte, compare} from 'semver';
 
 @Injectable()
