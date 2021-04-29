@@ -32,6 +32,7 @@ import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
+import {EndOfLifeService} from '@core/services/eol';
 import {NodeService} from '@core/services/node';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -72,6 +73,7 @@ describe('VersionPickerComponent', () => {
           {provide: ProjectService, useClass: ProjectMockService},
           MatDialog,
           GoogleAnalyticsService,
+          EndOfLifeService,
         ],
       }).compileComponents();
     })

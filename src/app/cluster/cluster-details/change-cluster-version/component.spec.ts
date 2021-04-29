@@ -23,6 +23,7 @@ import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {ClusterService} from '@core/services/cluster';
+import {EndOfLifeService} from '@core/services/eol';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
@@ -58,6 +59,7 @@ describe('ChangeClusterVersionComponent', () => {
           {provide: AppConfigService, useClass: AppConfigMockService},
           GoogleAnalyticsService,
           NotificationService,
+          EndOfLifeService,
         ],
       }).compileComponents();
     })

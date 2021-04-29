@@ -29,6 +29,7 @@ import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
+import {EndOfLifeService} from '@core/services/eol';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
@@ -65,6 +66,7 @@ describe('ClusterListComponent', () => {
           {provide: DatacenterService, useClass: DatacenterMockService},
           {provide: ProjectService, useClass: ProjectMockService},
           {provide: SettingsService, useClass: SettingsMockService},
+          EndOfLifeService,
         ],
       }).compileComponents();
     })
