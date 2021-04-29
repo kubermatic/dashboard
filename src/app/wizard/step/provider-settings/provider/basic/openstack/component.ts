@@ -21,13 +21,13 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {Auth} from '@core/services/auth/service';
 import {AppConfigService} from '@app/config.service';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {PresetsService} from '@core/services/wizard/presets';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {CloudSpec, Cluster, ClusterSpec, OpenstackCloudSpec} from '@shared/entity/cluster';
 import {OpenstackFloatingIpPool, OpenstackTenant} from '@shared/entity/provider/openstack';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
@@ -101,7 +101,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
     private readonly _appConfigService: AppConfigService,
     private readonly _auth: Auth,
@@ -125,17 +125,17 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
     this.form.valueChanges
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK))
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this._presets.enablePresets(
-          Object.values(this._clusterService.cluster.spec.cloud.openstack).every(value => !value)
+          Object.values(this._clusterSpecService.cluster.spec.cloud.openstack).every(value => !value)
         )
       );
 
-    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK))
-      .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.datacenter).pipe(take(1))))
+    merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+      .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.datacenter).pipe(take(1))))
       .pipe(tap(dc => (this._isFloatingPoolIPEnforced = dc.spec.openstack.enforce_floating_ip)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._formReset.bind(this));
@@ -148,7 +148,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       this.form.get(Controls.ProjectID).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
+      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
 
     merge(
       this.form.get(Controls.Domain).valueChanges,
@@ -217,7 +217,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
   }
 
   onFloatingIPPoolChange(floatingIPPool: string): void {
-    this._clusterService.cluster.spec.cloud.openstack.floatingIpPool = floatingIPPool;
+    this._clusterSpecService.cluster.spec.cloud.openstack.floatingIpPool = floatingIPPool;
   }
 
   getHint(control: Controls): string {
@@ -256,18 +256,18 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
 
   private _hasRequiredBasicCredentials(): boolean {
     return (
-      !!this._clusterService.cluster.spec.cloud.openstack &&
-      !!this._clusterService.cluster.spec.cloud.openstack.domain &&
-      !!this._clusterService.cluster.spec.cloud.openstack.username &&
-      !!this._clusterService.cluster.spec.cloud.openstack.password
+      !!this._clusterSpecService.cluster.spec.cloud.openstack &&
+      !!this._clusterSpecService.cluster.spec.cloud.openstack.domain &&
+      !!this._clusterSpecService.cluster.spec.cloud.openstack.username &&
+      !!this._clusterSpecService.cluster.spec.cloud.openstack.password
     );
   }
 
   private _hasRequiredCredentials(): boolean {
     return (
       this._hasRequiredBasicCredentials() &&
-      (!!this._clusterService.cluster.spec.cloud.openstack.tenant ||
-        !!this._clusterService.cluster.spec.cloud.openstack.tenantID)
+      (!!this._clusterSpecService.cluster.spec.cloud.openstack.tenant ||
+        !!this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
     );
   }
 
@@ -277,7 +277,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       .domain(this.form.get(Controls.Domain).value)
       .username(this.form.get(Controls.Username).value)
       .password(this.form.get(Controls.Password).value)
-      .datacenter(this._clusterService.cluster.spec.cloud.dc)
+      .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .tenants(this._onProjectLoading.bind(this))
       .pipe(map(projects => _.sortBy(projects, p => p.name.toLowerCase())))
       .pipe(
@@ -310,7 +310,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       .password(this.form.get(Controls.Password).value)
       .tenant(this.form.get(Controls.Project).value)
       .tenantID(this.form.get(Controls.ProjectID).value)
-      .datacenter(this._clusterService.cluster.spec.cloud.dc)
+      .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .networks(this._onFloatingIPPoolLoading.bind(this))
       .pipe(
         map(networks => {

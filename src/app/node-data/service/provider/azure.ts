@@ -12,20 +12,20 @@
 import {NodeDataMode} from '@app/node-data/config';
 import {NodeDataService} from '@app/node-data/service/service';
 import {ApiService} from '@core/services/api';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Cluster} from '@shared/entity/cluster';
 import {AzureSizes, AzureZones} from '@shared/entity/provider/azure';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, take, switchMap, tap} from 'rxjs/operators';
 
 export class NodeDataAzureProvider {
   constructor(
     private readonly _nodeDataService: NodeDataService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _presetService: PresetsService,
     private readonly _apiService: ApiService,
     private readonly _projectService: ProjectService,
@@ -43,8 +43,8 @@ export class NodeDataAzureProvider {
 
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._clusterService.clusterChanges
-          .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
+        return this._clusterSpecService.clusterChanges
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
           .pipe(tap(c => (cluster = c)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
           .pipe(tap(dc => (location = dc.spec.azure.location)))
@@ -75,7 +75,7 @@ export class NodeDataAzureProvider {
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(switchMap(_ => this._apiService.getAzureSizes(selectedProject, this._clusterService.cluster.id)))
+          .pipe(switchMap(_ => this._apiService.getAzureSizes(selectedProject, this._clusterSpecService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {
@@ -96,18 +96,18 @@ export class NodeDataAzureProvider {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._datacenterService
-          .getDatacenter(this._clusterService.cluster.spec.cloud.dc)
+          .getDatacenter(this._clusterSpecService.cluster.spec.cloud.dc)
           .pipe(take(1))
-          .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
           .pipe(tap(dc => (location = dc.spec.azure.location)))
           .pipe(
             switchMap(_ =>
               this._presetService
                 .provider(NodeProvider.AZURE)
-                .clientID(this._clusterService.cluster.spec.cloud.azure.clientID)
-                .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
-                .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
-                .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
+                .clientID(this._clusterSpecService.cluster.spec.cloud.azure.clientID)
+                .clientSecret(this._clusterSpecService.cluster.spec.cloud.azure.clientSecret)
+                .subscriptionID(this._clusterSpecService.cluster.spec.cloud.azure.subscriptionID)
+                .tenantID(this._clusterSpecService.cluster.spec.cloud.azure.tenantID)
                 .location(location)
                 .skuName(this._nodeDataService.nodeData.spec.cloud.azure.size)
                 .credential(this._presetService.preset)
@@ -132,7 +132,7 @@ export class NodeDataAzureProvider {
             switchMap(_ =>
               this._apiService.getAzureAvailabilityZones(
                 selectedProject,
-                this._clusterService.cluster.id,
+                this._clusterSpecService.cluster.id,
                 this._nodeDataService.nodeData.spec.cloud.azure.size
               )
             )

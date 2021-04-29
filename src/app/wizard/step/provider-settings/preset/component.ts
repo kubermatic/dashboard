@@ -11,10 +11,10 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Cluster} from '@shared/entity/cluster';
 import {SimplePresetList} from '@shared/entity/preset';
-import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {map, switchMap, takeUntil} from 'rxjs/operators';
@@ -57,7 +57,7 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
   constructor(
     private readonly _presets: PresetsService,
     private readonly _builder: FormBuilder,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterSpecService: ClusterSpecService
   ) {
     super('Preset');
   }
@@ -73,7 +73,7 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
   set selectedPreset(preset: string) {
     this.form.get(Controls.Preset).setValue(preset);
     this._presets.preset = preset;
-    this._clusterService.cluster = {credential: preset} as Cluster;
+    this._clusterSpecService.cluster = {credential: preset} as Cluster;
   }
 
   ngOnInit(): void {
@@ -81,10 +81,10 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
       [Controls.Preset]: new FormControl('', Validators.required),
     });
 
-    this._clusterService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.reset());
+    this._clusterSpecService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.reset());
 
-    this._clusterService.datacenterChanges
-      .pipe(switchMap(dc => this._presets.presets(false, this._clusterService.provider, dc)))
+    this._clusterSpecService.datacenterChanges
+      .pipe(switchMap(dc => this._presets.presets(false, this._clusterSpecService.provider, dc)))
       .pipe(map(presetList => new SimplePresetList(...presetList.items.map(preset => preset.name))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(presetList => {
@@ -100,7 +100,7 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(preset => {
         this._presets.preset = preset;
-        this._clusterService.cluster = {credential: preset} as Cluster;
+        this._clusterSpecService.cluster = {credential: preset} as Cluster;
       });
 
     this._presets.presetStatusChanges.pipe(takeUntil(this._unsubscribe)).subscribe(enable => {

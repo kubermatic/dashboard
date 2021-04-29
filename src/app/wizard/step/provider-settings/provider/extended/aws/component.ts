@@ -11,10 +11,10 @@
 
 import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
 import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
@@ -55,7 +55,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     private readonly _cdr: ChangeDetectorRef,
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterSpecService: ClusterSpecService
   ) {
     super('AWS Provider Extended');
   }
@@ -73,15 +73,17 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
     this.form.valueChanges
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AWS))
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AWS))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
-        this._presets.enablePresets(Object.values(this._clusterService.cluster.spec.cloud.aws).every(value => !value));
+        this._presets.enablePresets(
+          Object.values(this._clusterSpecService.cluster.spec.cloud.aws).every(value => !value)
+        );
       });
 
-    this._clusterService.clusterChanges
+    this._clusterSpecService.clusterChanges
       .pipe(
-        filter(_ => this._clusterService.provider === NodeProvider.AWS),
+        filter(_ => this._clusterSpecService.provider === NodeProvider.AWS),
         debounceTime(this._debounceTime),
         tap(_ => (!this.hasRequiredCredentials() ? this._clearSecurityGroup() : null)),
         switchMap(_ => this._securityGroupObservable()),
@@ -98,7 +100,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       this.form.get(Controls.RoleARN).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
+      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
 
     this.form
       .get(Controls.SecurityGroup)
@@ -107,7 +109,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
         map(form => form[AutocompleteControls.Main]),
         takeUntil(this._unsubscribe)
       )
-      .subscribe(sg => (this._clusterService.cluster.spec.cloud.aws.securityGroupID = sg));
+      .subscribe(sg => (this._clusterSpecService.cluster.spec.cloud.aws.securityGroupID = sg));
   }
 
   ngOnDestroy(): void {
@@ -117,17 +119,17 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
 
   hasRequiredCredentials(): boolean {
     return (
-      !!this._clusterService.cluster.spec.cloud.aws.accessKeyId &&
-      !!this._clusterService.cluster.spec.cloud.aws.secretAccessKey
+      !!this._clusterSpecService.cluster.spec.cloud.aws.accessKeyId &&
+      !!this._clusterSpecService.cluster.spec.cloud.aws.secretAccessKey
     );
   }
 
   private _securityGroupObservable(): Observable<string[]> {
     return this._presets
       .provider(NodeProvider.AWS)
-      .accessKeyID(this._clusterService.cluster.spec.cloud.aws.accessKeyId)
-      .secretAccessKey(this._clusterService.cluster.spec.cloud.aws.secretAccessKey)
-      .securityGroups(this._clusterService.datacenter, () => this._setIsLoadingSecurityGroup(true))
+      .accessKeyID(this._clusterSpecService.cluster.spec.cloud.aws.accessKeyId)
+      .secretAccessKey(this._clusterSpecService.cluster.spec.cloud.aws.secretAccessKey)
+      .securityGroups(this._clusterSpecService.datacenter, () => this._setIsLoadingSecurityGroup(true))
       .pipe(
         map(securityGroups => _.sortBy(securityGroups, sg => sg.toLowerCase())),
         catchError(() => {

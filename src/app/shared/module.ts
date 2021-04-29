@@ -47,6 +47,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {NotificationComponent} from '@core/components/notification/component';
 import {EndOfLifeService} from '@core/services/eol';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {EventCardComponent} from '@shared/components/event-card/component';
 import {TabCardComponent} from '@shared/components/tab-card/component';
 import {TabComponent} from '@shared/components/tab-card/tab/component';
@@ -86,7 +87,6 @@ import {TaintFormComponent} from './components/taint-form/component';
 import {TaintsComponent} from './components/taints/component';
 import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
-import {ClusterService} from './services/cluster.service';
 import {AutocompleteComponent} from '@shared/components/autocomplete/component';
 
 const modules: any[] = [
@@ -172,7 +172,7 @@ const components: any[] = [
   LinkLocationPipe,
 ];
 
-const services: any[] = [ClusterService, EndOfLifeService];
+const services: any[] = [ClusterSpecService, EndOfLifeService];
 
 const directives: any[] = [AutofocusDirective, OptionDirective];
 

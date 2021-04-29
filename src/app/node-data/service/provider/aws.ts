@@ -10,12 +10,12 @@
 // limitations under the License.
 
 import {ApiService} from '@core/services/api';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
 import {AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, take, switchMap, tap} from 'rxjs/operators';
 import {NodeDataMode} from '../../config';
@@ -24,7 +24,7 @@ import {NodeDataService} from '../service';
 export class NodeDataAWSProvider {
   constructor(
     private readonly _nodeDataService: NodeDataService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterDataService: ClusterSpecService,
     private readonly _presetService: PresetsService,
     private readonly _apiService: ApiService,
     private readonly _projectService: ProjectService,
@@ -39,7 +39,7 @@ export class NodeDataAWSProvider {
   flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AWSSize[]> {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._clusterService.datacenterChanges
+        return this._clusterDataService.datacenterChanges
           .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
           .pipe(
             switchMap(dc =>
@@ -63,7 +63,7 @@ export class NodeDataAWSProvider {
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(switchMap(_ => this._apiService.getAWSSizes(selectedProject, this._clusterService.cluster.id)))
+          .pipe(switchMap(_ => this._apiService.getAWSSizes(selectedProject, this._clusterDataService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {
@@ -81,8 +81,8 @@ export class NodeDataAWSProvider {
   subnets(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AWSSubnet[]> {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._clusterService.clusterChanges
-          .pipe(filter(_ => this._clusterService.provider === NodeProvider.AWS))
+        return this._clusterDataService.clusterChanges
+          .pipe(filter(_ => this._clusterDataService.provider === NodeProvider.AWS))
           .pipe(
             switchMap(cluster =>
               this._presetService
@@ -108,7 +108,7 @@ export class NodeDataAWSProvider {
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(switchMap(_ => this._apiService.getAWSSubnets(selectedProject, this._clusterService.cluster.id)))
+          .pipe(switchMap(_ => this._apiService.getAWSSubnets(selectedProject, this._clusterDataService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {

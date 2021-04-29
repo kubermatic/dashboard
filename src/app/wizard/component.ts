@@ -16,6 +16,7 @@ import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {NodeDataService} from '@app/node-data/service/service';
 import {ClusterService} from '@core/services/cluster';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {WizardService} from '@core/services/wizard/wizard';
@@ -24,7 +25,6 @@ import {Project} from '@shared/entity/project';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {CreateClusterModel} from '@shared/model/CreateClusterModel';
 import {NodeData} from '@shared/model/NodeSpecChange';
-import {ClusterService as ClusterModelService} from '@shared/services/cluster.service';
 import {forkJoin, of, Subject} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
 import {StepRegistry, steps, WizardStep} from './config';
@@ -50,7 +50,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     private readonly _projectService: ProjectService,
     private readonly _wizard: WizardService,
     private readonly _notificationService: NotificationService,
-    private readonly _clusterModelService: ClusterModelService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _clusterService: ClusterService,
     private readonly _nodeDataService: NodeDataService,
     private readonly _router: Router,
@@ -104,10 +104,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   create(): void {
     this.creating = true;
     let createdCluster: Cluster;
-    const createCluster = this._getCreateClusterModel(
-      this._clusterModelService.cluster,
-      this._nodeDataService.nodeData
-    );
+    const createCluster = this._getCreateClusterModel(this._clusterSpecService.cluster, this._nodeDataService.nodeData);
 
     this._clusterService
       .create(this.project.id, createCluster)
@@ -123,9 +120,9 @@ export class WizardComponent implements OnInit, OnDestroy {
         switchMap(_ => {
           this.creating = false;
 
-          if (this._clusterModelService.sshKeys.length > 0) {
+          if (this._clusterSpecService.sshKeys.length > 0) {
             return forkJoin(
-              this._clusterModelService.sshKeys.map(key =>
+              this._clusterSpecService.sshKeys.map(key =>
                 this._clusterService.createSSHKey(this.project.id, createdCluster.id, key.id)
               )
             );

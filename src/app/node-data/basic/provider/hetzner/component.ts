@@ -12,10 +12,10 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {NodeDataService} from '@app/node-data/service/service';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {HetznerNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {HetznerTypes, Type} from '@shared/entity/provider/hetzner';
 import {NodeData} from '@shared/model/NodeSpecChange';
-import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {Observable} from 'rxjs';
@@ -73,7 +73,7 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
     private readonly _cdr: ChangeDetectorRef,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterSpecService: ClusterSpecService
   ) {
     super();
   }
@@ -87,7 +87,7 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this._clusterService.clusterChanges
+    this._clusterSpecService.clusterChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
@@ -145,7 +145,7 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
         cloud: {
           hetzner: {
             // network has to be the same as specified in cluster spec
-            network: this._clusterService.cluster.spec.cloud.hetzner.network,
+            network: this._clusterSpecService.cluster.spec.cloud.hetzner.network,
           } as HetznerNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,

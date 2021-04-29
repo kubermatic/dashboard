@@ -19,11 +19,11 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {WizardService} from '@core/services/wizard/wizard';
 import {DatacenterService} from '@core/services/datacenter';
 import {Datacenter, getDatacenterProvider} from '@shared/entity/datacenter';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
 import {filter, switchMap, takeUntil} from 'rxjs/operators';
 import {StepBase} from '../base';
 
@@ -58,7 +58,7 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _dcService: DatacenterService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     wizard: WizardService
   ) {
     super(wizard);
@@ -89,14 +89,14 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
         this._wizard.provider = provider;
       });
 
-    this._clusterService.providerChanges
+    this._clusterSpecService.providerChanges
       .pipe(switchMap(_ => this._dcService.datacenters))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(datacenters => {
         const providerDatacenters: Datacenter[] = [];
         for (const datacenter of datacenters) {
           const provider = getDatacenterProvider(datacenter);
-          const clusterProvider = this._clusterService.provider;
+          const clusterProvider = this._clusterSpecService.provider;
           if (provider === clusterProvider) {
             providerDatacenters.push(datacenter);
           }
@@ -109,7 +109,7 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
       .valueChanges // Allow only non-empty values
       .pipe(filter(value => value))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(datacenter => (this._clusterService.datacenter = datacenter));
+      .subscribe(datacenter => (this._clusterSpecService.datacenter = datacenter));
   }
 
   getLocation(datacenter: Datacenter): string {

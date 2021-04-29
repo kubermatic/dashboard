@@ -22,11 +22,11 @@ import {AuthMockService} from '@app/testing/services/auth-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
 import {WizardService} from '@core/services/wizard/wizard';
-import {ClusterService} from '@shared/services/cluster.service';
 import {SharedModule} from '@shared/module';
 import {MachineNetworkStepComponent} from './component';
 
@@ -43,9 +43,8 @@ describe('MachineNetworkStepComponent', () => {
         declarations: [MachineNetworkStepComponent],
         providers: [
           WizardService,
-          ClusterService,
           NodeDataService,
-          ClusterService,
+          ClusterSpecService,
           PresetsService,
           DatacenterService,
           AppConfigService,

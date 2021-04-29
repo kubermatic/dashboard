@@ -19,6 +19,7 @@ import {
   OnInit,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {SettingsService} from '@core/services/settings';
@@ -26,7 +27,6 @@ import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
-import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {NoIpsLeftValidator} from '@shared/validators/no-ips-left.validator';
 import {merge, of} from 'rxjs';
@@ -86,7 +86,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nameGenerator: NameGeneratorService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
     private readonly _nodeDataService: NodeDataService,
     private readonly _settingsService: SettingsService,
@@ -103,7 +103,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.Count]: this._builder.control(this._nodeDataService.nodeData.count, [
         Validators.required,
         Validators.min(0),
-        NoIpsLeftValidator(this._clusterService.cluster.spec.machineNetworks, this.existingNodesCount),
+        NoIpsLeftValidator(this._clusterSpecService.cluster.spec.machineNetworks, this.existingNodesCount),
       ]),
       [Controls.DynamicConfig]: this._builder.control(this._nodeDataService.nodeData.dynamicConfig),
       [Controls.OperatingSystem]: this._builder.control(this._getDefaultOS(), [Validators.required]),
@@ -128,16 +128,16 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
-    merge(this._clusterService.clusterTypeChanges, this._clusterService.providerChanges)
+    merge(this._clusterSpecService.clusterTypeChanges, this._clusterSpecService.providerChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
 
-    this._clusterService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+    this._clusterSpecService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       delete this._nodeDataService.nodeData.spec.cloud[this.provider];
-      this.provider = this._clusterService.provider;
+      this.provider = this._clusterSpecService.provider;
     });
 
-    merge<string>(this._clusterService.datacenterChanges, of(this._clusterService.datacenter))
+    merge<string>(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))
       .pipe(filter(dc => !!dc))
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(takeUntil(this._unsubscribe))

@@ -15,7 +15,7 @@ import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
 import {HetznerTypes} from '@shared/entity/provider/hetzner';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, take, switchMap, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
@@ -23,7 +23,7 @@ import {NodeDataService} from '../service';
 export class NodeDataHetznerProvider {
   constructor(
     private readonly _nodeDataService: NodeDataService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _presetService: PresetsService,
     private readonly _apiService: ApiService,
     private readonly _projectService: ProjectService
@@ -32,8 +32,8 @@ export class NodeDataHetznerProvider {
   flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<HetznerTypes> {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._clusterService.clusterChanges
-          .pipe(filter(_ => this._clusterService.provider === NodeProvider.HETZNER))
+        return this._clusterSpecService.clusterChanges
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.HETZNER))
           .pipe(
             switchMap(cluster =>
               this._presetService
@@ -57,7 +57,7 @@ export class NodeDataHetznerProvider {
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(switchMap(_ => this._apiService.getHetznerTypes(selectedProject, this._clusterService.cluster.id)))
+          .pipe(switchMap(_ => this._apiService.getHetznerTypes(selectedProject, this._clusterSpecService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {

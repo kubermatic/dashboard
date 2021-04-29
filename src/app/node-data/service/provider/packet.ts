@@ -10,11 +10,11 @@
 // limitations under the License.
 
 import {ApiService} from '@core/services/api';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
 import {PacketSize} from '@shared/entity/provider/packet';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, switchMap, take, tap} from 'rxjs/operators';
 import {NodeDataMode} from '../../config';
@@ -23,7 +23,7 @@ import {NodeDataService} from '../service';
 export class NodeDataPacketProvider {
   constructor(
     private readonly _nodeDataService: NodeDataService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _presetService: PresetsService,
     private readonly _apiService: ApiService,
     private readonly _projectService: ProjectService
@@ -38,8 +38,8 @@ export class NodeDataPacketProvider {
   flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<PacketSize[]> {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._clusterService.clusterChanges
-          .pipe(filter(_ => this._clusterService.provider === NodeProvider.PACKET))
+        return this._clusterSpecService.clusterChanges
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.PACKET))
           .pipe(
             switchMap(cluster =>
               this._presetService
@@ -64,7 +64,7 @@ export class NodeDataPacketProvider {
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(switchMap(_ => this._apiService.getPacketSizes(selectedProject, this._clusterService.cluster.id)))
+          .pipe(switchMap(_ => this._apiService.getPacketSizes(selectedProject, this._clusterSpecService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {

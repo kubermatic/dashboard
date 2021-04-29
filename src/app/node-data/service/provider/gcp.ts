@@ -10,12 +10,12 @@
 // limitations under the License.
 
 import {ApiService} from '@core/services/api';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Cluster} from '@shared/entity/cluster';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '@shared/entity/provider/gcp';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, take, switchMap, tap} from 'rxjs/operators';
 import {NodeDataMode} from '../../config';
@@ -24,7 +24,7 @@ import {NodeDataService} from '../service';
 export class NodeDataGCPProvider {
   constructor(
     private readonly _nodeDataService: NodeDataService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _presetService: PresetsService,
     private readonly _apiService: ApiService,
     private readonly _projectService: ProjectService
@@ -47,8 +47,8 @@ export class NodeDataGCPProvider {
 
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._clusterService.clusterChanges
-          .pipe(filter(_ => this._clusterService.provider === NodeProvider.GCP))
+        return this._clusterSpecService.clusterChanges
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.GCP))
           .pipe(tap(c => (cluster = c)))
           .pipe(
             switchMap(_ =>
@@ -56,7 +56,7 @@ export class NodeDataGCPProvider {
                 .provider(NodeProvider.GCP)
                 .serviceAccount(cluster.spec.cloud.gcp.serviceAccount)
                 .credential(this._presetService.preset)
-                .zones(this._clusterService.datacenter, onLoadingCb)
+                .zones(this._clusterSpecService.datacenter, onLoadingCb)
                 .pipe(
                   catchError(_ => {
                     if (onError) {
@@ -73,7 +73,7 @@ export class NodeDataGCPProvider {
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(switchMap(_ => this._apiService.getGCPZones(selectedProject, this._clusterService.cluster.id)))
+          .pipe(switchMap(_ => this._apiService.getGCPZones(selectedProject, this._clusterSpecService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {
@@ -93,7 +93,7 @@ export class NodeDataGCPProvider {
       case NodeDataMode.Wizard:
         return this._presetService
           .provider(NodeProvider.GCP)
-          .serviceAccount(this._clusterService.cluster.spec.cloud.gcp.serviceAccount)
+          .serviceAccount(this._clusterSpecService.cluster.spec.cloud.gcp.serviceAccount)
           .zone(this._nodeDataService.nodeData.spec.cloud.gcp.zone)
           .credential(this._presetService.preset)
           .diskTypes(onLoadingCb)
@@ -116,7 +116,7 @@ export class NodeDataGCPProvider {
               this._apiService.getGCPDiskTypes(
                 this._nodeDataService.nodeData.spec.cloud.gcp.zone,
                 selectedProject,
-                this._clusterService.cluster.id
+                this._clusterSpecService.cluster.id
               )
             )
           )
@@ -139,7 +139,7 @@ export class NodeDataGCPProvider {
       case NodeDataMode.Wizard:
         return this._presetService
           .provider(NodeProvider.GCP)
-          .serviceAccount(this._clusterService.cluster.spec.cloud.gcp.serviceAccount)
+          .serviceAccount(this._clusterSpecService.cluster.spec.cloud.gcp.serviceAccount)
           .zone(this._nodeDataService.nodeData.spec.cloud.gcp.zone)
           .credential(this._presetService.preset)
           .machineTypes(onLoadingCb)
@@ -162,7 +162,7 @@ export class NodeDataGCPProvider {
               this._apiService.getGCPSizes(
                 this._nodeDataService.nodeData.spec.cloud.gcp.zone,
                 selectedProject,
-                this._clusterService.cluster.id
+                this._clusterSpecService.cluster.id
               )
             )
           )

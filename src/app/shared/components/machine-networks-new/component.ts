@@ -11,10 +11,10 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 import {NodeDataService} from '../../../node-data/service/service';
 import {MachineNetwork} from '../../entity/cluster';
-import {ClusterService} from '../../../shared/services/cluster.service';
 import {BaseFormValidator} from '../../validators/base-form.validator';
 
 enum Controls {
@@ -77,7 +77,7 @@ export class MachineNetworkComponent extends BaseFormValidator implements OnInit
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterSpecService: ClusterSpecService
   ) {
     super();
   }
@@ -111,9 +111,8 @@ export class MachineNetworkComponent extends BaseFormValidator implements OnInit
   }
 
   private _setMachineNetworks(): void {
-    this._clusterService.cluster.spec.machineNetworks = (this._networkArray.value as MachineNetworkSpec[]).map(spec =>
-      new MachineNetworkSpec(spec).toMachineNetwork()
-    );
+    this._clusterSpecService.cluster.spec.machineNetworks = (this._networkArray
+      .value as MachineNetworkSpec[]).map(spec => new MachineNetworkSpec(spec).toMachineNetwork());
   }
 
   private _newEmptyMachineNetwork(): object {

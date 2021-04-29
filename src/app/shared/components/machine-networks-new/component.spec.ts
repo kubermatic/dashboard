@@ -20,13 +20,13 @@ import {NodeDataService} from '@app/node-data/service/service';
 import {ApiMockService} from '@app/testing/services/api-mock';
 import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {WizardService} from '@core/services/wizard/wizard';
 import {ApiService} from '@core/services/api';
 import {DatacenterService} from '@core/services/datacenter';
 import {ParamsService} from '@core/services/params';
 import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
-import {ClusterService} from '@shared/services/cluster.service';
 import {SharedModule} from '@shared/module';
 import {MachineNetworkComponent} from './component';
 
@@ -42,7 +42,7 @@ describe('MachineNetworksComponent', () => {
         imports: [...modules],
         providers: [
           AppConfigService,
-          ClusterService,
+          ClusterSpecService,
           NodeDataService,
           ParamsService,
           PresetsService,

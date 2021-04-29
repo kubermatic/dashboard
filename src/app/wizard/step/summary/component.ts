@@ -11,6 +11,7 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NodeDataService} from '@app/node-data/service/service';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {LabelFormComponent} from '@shared/components/label-form/component';
 import {Cluster} from '@shared/entity/cluster';
@@ -19,7 +20,6 @@ import {SSHKey} from '@shared/entity/ssh-key';
 import {getIpCount} from '@shared/functions/get-ip-count';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
-import {ClusterService} from '@shared/services/cluster.service';
 import {AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -42,7 +42,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _nodeDataService: NodeDataService,
     private readonly _datacenterService: DatacenterService
   ) {}
@@ -60,21 +60,21 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   get provider(): NodeProvider {
-    return this._clusterService.provider;
+    return this._clusterSpecService.provider;
   }
 
   ngOnInit(): void {
     this.nodeData = this._nodeDataService.nodeData;
-    this.cluster = this._clusterService.cluster;
-    this._clusterService.sshKeyChanges
+    this.cluster = this._clusterSpecService.cluster;
+    this._clusterSpecService.sshKeyChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(keys => (this.clusterSSHKeys = keys));
 
-    this._clusterService.admissionPluginsChanges
+    this._clusterSpecService.admissionPluginsChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(plugins => (this.clusterAdmissionPlugins = plugins));
 
-    this._clusterService.datacenterChanges
+    this._clusterSpecService.datacenterChanges
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => {
@@ -113,7 +113,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   displayNoProviderTags(): boolean {
-    const provider = this._clusterService.provider;
+    const provider = this._clusterSpecService.provider;
     switch (provider) {
       case NodeProvider.AWS:
       case NodeProvider.OPENSTACK:
@@ -152,7 +152,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
 
   private _hasProviderOptions(provider: NodeProvider): boolean {
     return (
-      this._clusterService.provider === provider &&
+      this._clusterSpecService.provider === provider &&
       this.cluster.spec.cloud[provider] &&
       Object.values(this.cluster.spec.cloud[provider]).some(val => val)
     );

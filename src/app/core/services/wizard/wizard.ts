@@ -14,7 +14,7 @@ import {MatStepper} from '@angular/material/stepper';
 import {NodeDataService} from '@app/node-data/service/service';
 import {StepRegistry, WizardStep} from '@app/wizard/config';
 import {NodeProvider, OperatingSystem} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -49,7 +49,7 @@ export class WizardService {
     }
 
     handleOSChange(_: OperatingSystem): void {
-      if (this._parent._clusterService.provider !== NodeProvider.VSPHERE) {
+      if (this._parent._clusterSpecService.provider !== NodeProvider.VSPHERE) {
         this._hideStep(StepRegistry.MachineNetwork);
         return;
       }
@@ -74,7 +74,10 @@ export class WizardService {
     }
   })(this);
 
-  constructor(private readonly _clusterService: ClusterService, private readonly _nodeDataService: NodeDataService) {
+  constructor(
+    private readonly _clusterSpecService: ClusterSpecService,
+    private readonly _nodeDataService: NodeDataService
+  ) {
     this._nodeDataService.operatingSystemChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(os => this._stepHandler.handleOSChange(os));
@@ -98,14 +101,14 @@ export class WizardService {
 
   set provider(provider: NodeProvider) {
     this._stepHandler.handleProviderChange(provider);
-    this._clusterService.provider = provider;
+    this._clusterSpecService.provider = provider;
   }
 
   reset(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
 
-    this._clusterService.reset();
+    this._clusterSpecService.reset();
     this._nodeDataService.reset();
 
     this._unsubscribe = new Subject<void>();

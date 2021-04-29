@@ -11,10 +11,10 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
 import {AzureCloudSpec, CloudSpec, Cluster, ClusterSpec} from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
 import {filter, takeUntil} from 'rxjs/operators';
@@ -48,7 +48,7 @@ export class AzureProviderBasicComponent extends BaseFormValidator implements On
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterSpecService: ClusterSpecService
   ) {
     super('Azure Provider Basic');
   }
@@ -62,11 +62,11 @@ export class AzureProviderBasicComponent extends BaseFormValidator implements On
     });
 
     this.form.valueChanges
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this._presets.enablePresets(
-          Object.values(this._clusterService.cluster.spec.cloud.azure).every(value => !value)
+          Object.values(this._clusterSpecService.cluster.spec.cloud.azure).every(value => !value)
         );
       });
 
@@ -74,7 +74,7 @@ export class AzureProviderBasicComponent extends BaseFormValidator implements On
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
-    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
+    merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
 
@@ -85,7 +85,7 @@ export class AzureProviderBasicComponent extends BaseFormValidator implements On
       this.form.get(Controls.SubscriptionID).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(() => (this._clusterService.cluster = this._getCluster()));
+      .subscribe(() => (this._clusterSpecService.cluster = this._getCluster()));
   }
 
   ngOnDestroy(): void {

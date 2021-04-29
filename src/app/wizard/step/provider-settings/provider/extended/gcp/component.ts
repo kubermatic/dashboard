@@ -24,7 +24,7 @@ import {PresetsService} from '@core/services/wizard/presets';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {GCPNetwork, GCPSubnetwork} from '@shared/entity/provider/gcp';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {EMPTY, Observable, onErrorResumeNext} from 'rxjs';
@@ -79,7 +79,7 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super('GCP Provider Extended');
@@ -96,14 +96,16 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
       .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
     this.form.valueChanges
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.GCP))
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.GCP))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
-        this._presets.enablePresets(Object.values(this._clusterService.cluster.spec.cloud.gcp).every(value => !value))
+        this._presets.enablePresets(
+          Object.values(this._clusterSpecService.cluster.spec.cloud.gcp).every(value => !value)
+        )
       );
 
-    this._clusterService.clusterChanges
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.GCP))
+    this._clusterSpecService.clusterChanges
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.GCP))
       .pipe(
         tap(_ => {
           if (!this._hasRequiredCredentials()) {
@@ -125,13 +127,13 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
   }
 
   onNetworkChange(network: string): void {
-    this._clusterService.cluster.spec.cloud.gcp.network = network;
+    this._clusterSpecService.cluster.spec.cloud.gcp.network = network;
     this._clearSubNetwork();
     this._onNetworkChange.emit();
   }
 
   onSubNetworkChange(subNetwork: string): void {
-    this._clusterService.cluster.spec.cloud.gcp.subnetwork = subNetwork;
+    this._clusterSpecService.cluster.spec.cloud.gcp.subnetwork = subNetwork;
   }
 
   getHint(control: Controls): string {
@@ -149,7 +151,8 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
 
   private _hasRequiredCredentials(): boolean {
     return (
-      !!this._clusterService.cluster.spec.cloud.gcp && !!this._clusterService.cluster.spec.cloud.gcp.serviceAccount
+      !!this._clusterSpecService.cluster.spec.cloud.gcp &&
+      !!this._clusterSpecService.cluster.spec.cloud.gcp.serviceAccount
     );
   }
 
@@ -168,7 +171,7 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
   private _networkListObservable(): Observable<GCPNetwork[]> {
     return this._presets
       .provider(NodeProvider.GCP)
-      .serviceAccount(this._clusterService.cluster.spec.cloud.gcp.serviceAccount)
+      .serviceAccount(this._clusterSpecService.cluster.spec.cloud.gcp.serviceAccount)
       .networks(this._onNetworkLoading.bind(this))
       .pipe(map(networks => _.sortBy(networks, n => n.name.toLowerCase())))
       .pipe(
@@ -190,9 +193,9 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
   private _subnetworkListObservable(): Observable<GCPSubnetwork[]> {
     return this._presets
       .provider(NodeProvider.GCP)
-      .serviceAccount(this._clusterService.cluster.spec.cloud.gcp.serviceAccount)
-      .network(this._clusterService.cluster.spec.cloud.gcp.network)
-      .subnetworks(this._clusterService.datacenter, this._onSubNetworkLoading.bind(this))
+      .serviceAccount(this._clusterSpecService.cluster.spec.cloud.gcp.serviceAccount)
+      .network(this._clusterSpecService.cluster.spec.cloud.gcp.network)
+      .subnetworks(this._clusterSpecService.datacenter, this._onSubNetworkLoading.bind(this))
       .pipe(map(networks => _.sortBy(networks, n => n.name.toLowerCase())))
       .pipe(
         catchError(() => {

@@ -14,7 +14,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {takeUntil} from 'rxjs/operators';
 
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
-import {ClusterService} from '../../../shared/services/cluster.service';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {WizardService} from '@core/services/wizard/wizard';
 import {StepBase} from '../base';
 
@@ -49,7 +49,7 @@ export class ProviderSettingsStepComponent extends StepBase implements OnInit, O
 
   constructor(
     private readonly _builder: FormBuilder,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     wizard: WizardService
   ) {
     super(wizard, 'Provider settings');
@@ -58,7 +58,7 @@ export class ProviderSettingsStepComponent extends StepBase implements OnInit, O
   ngOnInit(): void {
     this._init();
 
-    this._clusterService.providerChanges
+    this._clusterSpecService.providerChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(provider => (this.provider = provider));
   }

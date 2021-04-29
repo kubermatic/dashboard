@@ -11,13 +11,13 @@
 
 import {Inject, Injectable} from '@angular/core';
 import {ApiService} from '@core/services/api';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
-import {ClusterService} from '@shared/services/cluster.service';
 import * as _ from 'lodash';
 import {ReplaySubject} from 'rxjs';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../config';
@@ -43,7 +43,7 @@ export class NodeDataService {
     @Inject(NODE_DATA_CONFIG) config: NodeDataConfig,
     private readonly _presetService: PresetsService,
     private readonly _datacenterService: DatacenterService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _apiService: ApiService,
     private readonly _projectService: ProjectService
   ) {
@@ -102,7 +102,7 @@ export class NodeDataService {
 
   readonly alibaba = new NodeDataAlibabaProvider(
     this,
-    this._clusterService,
+    this._clusterSpecService,
     this._presetService,
     this._datacenterService,
     this._apiService,
@@ -110,7 +110,7 @@ export class NodeDataService {
   );
   readonly anexia = new NodeDataAnexiaProvider(
     this,
-    this._clusterService,
+    this._clusterSpecService,
     this._presetService,
     this._datacenterService,
     this._apiService,
@@ -118,7 +118,7 @@ export class NodeDataService {
   );
   readonly aws = new NodeDataAWSProvider(
     this,
-    this._clusterService,
+    this._clusterSpecService,
     this._presetService,
     this._apiService,
     this._projectService,
@@ -126,7 +126,7 @@ export class NodeDataService {
   );
   readonly azure = new NodeDataAzureProvider(
     this,
-    this._clusterService,
+    this._clusterSpecService,
     this._presetService,
     this._apiService,
     this._projectService,
@@ -134,35 +134,35 @@ export class NodeDataService {
   );
   readonly digitalOcean = new NodeDataDigitalOceanProvider(
     this,
-    this._clusterService,
+    this._clusterSpecService,
     this._presetService,
     this._apiService,
     this._projectService
   );
   readonly hetzner = new NodeDataHetznerProvider(
     this,
-    this._clusterService,
+    this._clusterSpecService,
     this._presetService,
     this._apiService,
     this._projectService
   );
   readonly packet = new NodeDataPacketProvider(
     this,
-    this._clusterService,
+    this._clusterSpecService,
     this._presetService,
     this._apiService,
     this._projectService
   );
   readonly gcp = new NodeDataGCPProvider(
     this,
-    this._clusterService,
+    this._clusterSpecService,
     this._presetService,
     this._apiService,
     this._projectService
   );
   readonly openstack = new NodeDataOpenstackProvider(
     this,
-    this._clusterService,
+    this._clusterSpecService,
     this._presetService,
     this._apiService,
     this._projectService

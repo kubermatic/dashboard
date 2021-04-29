@@ -11,9 +11,9 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator} from '@angular/forms';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {WizardService} from '@core/services/wizard/wizard';
 import {Cluster} from '../../../shared/entity/cluster';
-import {ClusterService} from '../../../shared/services/cluster.service';
 import {StepBase} from '../base';
 
 enum Controls {
@@ -46,7 +46,7 @@ export class MachineNetworkStepComponent
 
   constructor(
     wizard: WizardService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _builder: FormBuilder
   ) {
     super(wizard);
@@ -57,7 +57,7 @@ export class MachineNetworkStepComponent
       [Controls.MachineNetwork]: this._builder.control(''),
     });
 
-    this.cluster = this._clusterService.cluster;
+    this.cluster = this._clusterSpecService.cluster;
   }
 
   ngOnDestroy(): void {

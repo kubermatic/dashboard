@@ -10,13 +10,13 @@
 // limitations under the License.
 
 import {ApiService} from '@core/services/api';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Cluster} from '@shared/entity/cluster';
 import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, take, switchMap, tap} from 'rxjs/operators';
 import {NodeDataMode} from '../../config';
@@ -25,7 +25,7 @@ import {NodeDataService} from '../service';
 export class NodeDataAnexiaProvider {
   constructor(
     private readonly _nodeDataService: NodeDataService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _presetService: PresetsService,
     private readonly _datacenterService: DatacenterService,
     private readonly _apiService: ApiService,
@@ -35,8 +35,8 @@ export class NodeDataAnexiaProvider {
   vlans(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AnexiaVlan[]> {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._clusterService.clusterChanges
-          .pipe(filter(_ => this._clusterService.provider === NodeProvider.ANEXIA))
+        return this._clusterSpecService.clusterChanges
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.ANEXIA))
           .pipe(
             switchMap(cluster =>
               this._presetService
@@ -60,7 +60,7 @@ export class NodeDataAnexiaProvider {
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(switchMap(_ => this._apiService.getAnexiaVlans(selectedProject, this._clusterService.cluster.id)))
+          .pipe(switchMap(_ => this._apiService.getAnexiaVlans(selectedProject, this._clusterSpecService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {
@@ -81,8 +81,8 @@ export class NodeDataAnexiaProvider {
 
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._clusterService.clusterChanges
-          .pipe(filter(_ => this._clusterService.provider === NodeProvider.ANEXIA))
+        return this._clusterSpecService.clusterChanges
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.ANEXIA))
           .pipe(tap(c => (cluster = c)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
           .pipe(tap(dc => (location = dc.spec.anexia.location_id)))
@@ -109,13 +109,13 @@ export class NodeDataAnexiaProvider {
         let selectedProject: string;
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
-          .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc)))
+          .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.cluster.spec.cloud.dc)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(dc =>
               this._apiService.getAnexiaTemplates(
                 selectedProject,
-                this._clusterService.cluster.id,
+                this._clusterSpecService.cluster.id,
                 dc.spec.anexia.location_id
               )
             )

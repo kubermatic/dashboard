@@ -10,13 +10,13 @@
 // limitations under the License.
 
 import {ApiService} from '@core/services/api';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Cluster} from '@shared/entity/cluster';
 import {AlibabaInstanceType, AlibabaZone, AlibabaVSwitch} from '@shared/entity/provider/alibaba';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, take, switchMap, tap} from 'rxjs/operators';
 import {NodeDataMode} from '../../config';
@@ -25,7 +25,7 @@ import {NodeDataService} from '../service';
 export class NodeDataAlibabaProvider {
   constructor(
     private readonly _nodeDataService: NodeDataService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _presetService: PresetsService,
     private readonly _datacenterService: DatacenterService,
     private readonly _apiService: ApiService,
@@ -44,8 +44,8 @@ export class NodeDataAlibabaProvider {
 
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._clusterService.clusterChanges
-          .pipe(filter(_ => this._clusterService.provider === NodeProvider.ALIBABA))
+        return this._clusterSpecService.clusterChanges
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.ALIBABA))
           .pipe(tap(c => (cluster = c)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
           .pipe(tap(dc => (region = dc.spec.alibaba.region)))
@@ -75,7 +75,7 @@ export class NodeDataAlibabaProvider {
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(
             switchMap(_ =>
-              this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc).pipe(take(1))
+              this._datacenterService.getDatacenter(this._clusterSpecService.cluster.spec.cloud.dc).pipe(take(1))
             )
           )
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
@@ -83,7 +83,7 @@ export class NodeDataAlibabaProvider {
             switchMap(dc =>
               this._apiService.getAlibabaInstanceTypes(
                 selectedProject,
-                this._clusterService.cluster.id,
+                this._clusterSpecService.cluster.id,
                 dc.spec.alibaba.region
               )
             )
@@ -108,8 +108,8 @@ export class NodeDataAlibabaProvider {
 
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._clusterService.clusterChanges
-          .pipe(filter(_ => this._clusterService.provider === NodeProvider.ALIBABA))
+        return this._clusterSpecService.clusterChanges
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.ALIBABA))
           .pipe(tap(c => (cluster = c)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
           .pipe(tap(dc => (region = dc.spec.alibaba.region)))
@@ -137,11 +137,15 @@ export class NodeDataAlibabaProvider {
         let selectedProject: string;
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
-          .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc)))
+          .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.cluster.spec.cloud.dc)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(dc =>
-              this._apiService.getAlibabaZones(selectedProject, this._clusterService.cluster.id, dc.spec.alibaba.region)
+              this._apiService.getAlibabaZones(
+                selectedProject,
+                this._clusterSpecService.cluster.id,
+                dc.spec.alibaba.region
+              )
             )
           )
           .pipe(
@@ -164,8 +168,8 @@ export class NodeDataAlibabaProvider {
 
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._clusterService.clusterChanges
-          .pipe(filter(_ => this._clusterService.provider === NodeProvider.ALIBABA))
+        return this._clusterSpecService.clusterChanges
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.ALIBABA))
           .pipe(tap(c => (cluster = c)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
           .pipe(tap(dc => (region = dc.spec.alibaba.region)))
@@ -193,13 +197,13 @@ export class NodeDataAlibabaProvider {
         let selectedProject: string;
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
-          .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.cluster.spec.cloud.dc)))
+          .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.cluster.spec.cloud.dc)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(dc =>
               this._apiService.getAlibabaVSwitches(
                 selectedProject,
-                this._clusterService.cluster.id,
+                this._clusterSpecService.cluster.id,
                 dc.spec.alibaba.region
               )
             )

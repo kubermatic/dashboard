@@ -24,9 +24,9 @@ import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
 import {ApiService} from '@core/services/api';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
-import {ClusterService} from '@shared/services/cluster.service';
 import {SharedModule} from '@shared/module';
 import {ClusterSSHKeysComponent} from './component';
 
@@ -43,7 +43,7 @@ describe('ClusterSSHKeys', () => {
         imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
         declarations: [ClusterSSHKeysComponent],
         providers: [
-          ClusterService,
+          ClusterSpecService,
           {provide: ActivatedRoute, useClass: ActivatedRouteMock},
           {provide: ApiService, useValue: apiMock},
           {provide: ProjectService, useClass: ProjectMockService},
