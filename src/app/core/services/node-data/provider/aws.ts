@@ -10,22 +10,21 @@
 // limitations under the License.
 
 import {NodeDataMode} from '@app/node-data/config';
-import {NodeDataService} from '@app/node-data/service/service';
 import {ApiService} from '@core/services/api';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
-import {Cluster} from '@shared/entity/cluster';
-import {AzureSizes, AzureZones} from '@shared/entity/provider/azure';
+import {AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, take, switchMap, tap} from 'rxjs/operators';
+import {NodeDataService} from '../service';
 
-export class NodeDataAzureProvider {
+export class NodeDataAWSProvider {
   constructor(
     private readonly _nodeDataService: NodeDataService,
-    private readonly _clusterSpecService: ClusterSpecService,
+    private readonly _clusterDataService: ClusterSpecService,
     private readonly _presetService: PresetsService,
     private readonly _apiService: ApiService,
     private readonly _projectService: ProjectService,
@@ -33,31 +32,20 @@ export class NodeDataAzureProvider {
   ) {}
 
   set tags(tags: object) {
-    delete this._nodeDataService.nodeData.spec.cloud.azure.tags;
-    this._nodeDataService.nodeData.spec.cloud.azure.tags = tags;
+    delete this._nodeDataService.nodeData.spec.cloud.aws.tags;
+    this._nodeDataService.nodeData.spec.cloud.aws.tags = tags;
   }
 
-  flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AzureSizes[]> {
-    let cluster: Cluster;
-    let location = '';
-
+  flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AWSSize[]> {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._clusterSpecService.clusterChanges
-          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
-          .pipe(tap(c => (cluster = c)))
-          .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
-          .pipe(tap(dc => (location = dc.spec.azure.location)))
+        return this._clusterDataService.datacenterChanges
+          .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
           .pipe(
-            switchMap(_ =>
+            switchMap(dc =>
               this._presetService
-                .provider(NodeProvider.AZURE)
-                .clientID(cluster.spec.cloud.azure.clientID)
-                .clientSecret(cluster.spec.cloud.azure.clientSecret)
-                .subscriptionID(cluster.spec.cloud.azure.subscriptionID)
-                .tenantID(cluster.spec.cloud.azure.tenantID)
-                .location(location)
-                .credential(this._presetService.preset)
+                .provider(NodeProvider.AWS)
+                .region(dc.spec.aws.region)
                 .flavors(onLoadingCb)
                 .pipe(
                   catchError(_ => {
@@ -75,7 +63,7 @@ export class NodeDataAzureProvider {
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(switchMap(_ => this._apiService.getAzureSizes(selectedProject, this._clusterSpecService.cluster.id)))
+          .pipe(switchMap(_ => this._apiService.getAWSSizes(selectedProject, this._clusterDataService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {
@@ -90,35 +78,27 @@ export class NodeDataAzureProvider {
     }
   }
 
-  zones(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AzureZones> {
-    let location = '';
-
+  subnets(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AWSSubnet[]> {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._datacenterService
-          .getDatacenter(this._clusterSpecService.cluster.spec.cloud.dc)
-          .pipe(take(1))
-          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
-          .pipe(tap(dc => (location = dc.spec.azure.location)))
+        return this._clusterDataService.clusterChanges
+          .pipe(filter(_ => this._clusterDataService.provider === NodeProvider.AWS))
           .pipe(
-            switchMap(_ =>
+            switchMap(cluster =>
               this._presetService
-                .provider(NodeProvider.AZURE)
-                .clientID(this._clusterSpecService.cluster.spec.cloud.azure.clientID)
-                .clientSecret(this._clusterSpecService.cluster.spec.cloud.azure.clientSecret)
-                .subscriptionID(this._clusterSpecService.cluster.spec.cloud.azure.subscriptionID)
-                .tenantID(this._clusterSpecService.cluster.spec.cloud.azure.tenantID)
-                .location(location)
-                .skuName(this._nodeDataService.nodeData.spec.cloud.azure.size)
+                .provider(NodeProvider.AWS)
+                .accessKeyID(cluster.spec.cloud.aws.accessKeyId)
+                .secretAccessKey(cluster.spec.cloud.aws.secretAccessKey)
+                .vpc(cluster.spec.cloud.aws.vpcId)
                 .credential(this._presetService.preset)
-                .availabilityZones(onLoadingCb)
+                .subnets(cluster.spec.cloud.dc, onLoadingCb)
                 .pipe(
                   catchError(_ => {
                     if (onError) {
                       onError();
                     }
 
-                    return onErrorResumeNext(of({} as AzureZones));
+                    return onErrorResumeNext(of([]));
                   })
                 )
             )
@@ -128,22 +108,14 @@ export class NodeDataAzureProvider {
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(
-            switchMap(_ =>
-              this._apiService.getAzureAvailabilityZones(
-                selectedProject,
-                this._clusterSpecService.cluster.id,
-                this._nodeDataService.nodeData.spec.cloud.azure.size
-              )
-            )
-          )
+          .pipe(switchMap(_ => this._apiService.getAWSSubnets(selectedProject, this._clusterDataService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {
                 onError();
               }
 
-              return onErrorResumeNext(of({} as AzureZones));
+              return onErrorResumeNext(of([]));
             })
           )
           .pipe(take(1));

@@ -12,6 +12,7 @@
 import {ChangeDetectionStrategy, Component, forwardRef, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {NodeDataService} from '@core/services/node-data/service';
 import * as _ from 'lodash';
 import {merge, of} from 'rxjs';
 import {delay, takeUntil} from 'rxjs/operators';
@@ -23,7 +24,6 @@ import {NodeData} from '../../shared/model/NodeSpecChange';
 import {objectDiff} from '../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../shared/validators/base-form.validator';
 import {NodeDataMode} from '../config';
-import {NodeDataService} from '../service/service';
 
 enum Mode {
   Edit = 'Edit',

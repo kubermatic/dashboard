@@ -10,6 +10,7 @@
 // limitations under the License.
 
 import {Inject, Injectable} from '@angular/core';
+import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '@app/node-data/config';
 import {ApiService} from '@core/services/api';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
@@ -20,7 +21,6 @@ import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import * as _ from 'lodash';
 import {ReplaySubject} from 'rxjs';
-import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../config';
 import {NodeDataAlibabaProvider} from './provider/alibaba';
 import {NodeDataAnexiaProvider} from './provider/anexia';
 import {NodeDataAWSProvider} from './provider/aws';

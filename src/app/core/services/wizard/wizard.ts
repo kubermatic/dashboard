@@ -11,8 +11,8 @@
 
 import {EventEmitter, Injectable} from '@angular/core';
 import {MatStepper} from '@angular/material/stepper';
-import {NodeDataService} from '@app/node-data/service/service';
 import {StepRegistry, WizardStep} from '@app/wizard/config';
+import {NodeDataService} from '@core/services/node-data/service';
 import {NodeProvider, OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {Subject} from 'rxjs';

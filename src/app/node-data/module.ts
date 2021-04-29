@@ -44,7 +44,7 @@ import {GCPExtendedNodeDataComponent} from './extended/provider/gcp/component';
 import {OpenstackExtendedNodeDataComponent} from './extended/provider/openstack/component';
 import {PacketExtendedNodeDataComponent} from './extended/provider/packet/component';
 import {KubeletVersionNodeDataComponent} from './kubelet-version/component';
-import {NodeDataService} from './service/service';
+import {NodeDataService} from '@core/services/node-data/service';
 
 const components = [
   AlibabaBasicNodeDataComponent,

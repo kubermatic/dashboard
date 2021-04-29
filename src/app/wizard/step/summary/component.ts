@@ -10,9 +10,9 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {NodeDataService} from '@app/node-data/service/service';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
+import {NodeDataService} from '@core/services/node-data/service';
 import {LabelFormComponent} from '@shared/components/label-form/component';
 import {Cluster} from '@shared/entity/cluster';
 import {getOperatingSystem, getOperatingSystemLogoClass} from '@shared/entity/node';

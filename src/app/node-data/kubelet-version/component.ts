@@ -14,12 +14,12 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
+import {NodeDataService} from '@core/services/node-data/service';
 import {Cluster, ClusterType, MasterVersion} from '@shared/entity/cluster';
 import {NodeSpec} from '@shared/entity/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {take, switchMap, takeUntil} from 'rxjs/operators';
-import {NodeDataService} from '../service/service';
 
 enum Controls {
   Kubelet = 'kubelet',

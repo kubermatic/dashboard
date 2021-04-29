@@ -44,7 +44,6 @@ import {UserPanelComponent} from './components/user-panel/component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
 import {GlobalModule} from './services/global/module';
 import {NameGeneratorService} from './services/name-generator';
-import {NodeDataService} from './services/node-data';
 import {PageTitleService} from './services/page-title';
 import {PreviousRouteService} from './services/previous-route';
 import {SettingsService} from './services/settings';
@@ -81,7 +80,6 @@ const services: any[] = [
   AuthGuard,
   AuthzGuard,
   DatacenterService,
-  NodeDataService,
   StepsService,
   NameGeneratorService,
   ApiService,

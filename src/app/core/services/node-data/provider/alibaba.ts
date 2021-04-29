@@ -9,6 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {NodeDataMode} from '@app/node-data/config';
 import {ApiService} from '@core/services/api';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
@@ -19,7 +20,6 @@ import {AlibabaInstanceType, AlibabaZone, AlibabaVSwitch} from '@shared/entity/p
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, filter, take, switchMap, tap} from 'rxjs/operators';
-import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
 
 export class NodeDataAlibabaProvider {

@@ -22,6 +22,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
+import {NodeDataService} from '@core/services/node-data/service';
 import {SettingsService} from '@core/services/settings';
 import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
@@ -31,7 +32,6 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {NoIpsLeftValidator} from '@shared/validators/no-ips-left.validator';
 import {merge, of} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {NodeDataService} from './service/service';
 
 enum Controls {
   Name = 'name',

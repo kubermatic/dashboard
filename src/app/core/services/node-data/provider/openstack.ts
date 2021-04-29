@@ -9,6 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {NodeDataMode} from '@app/node-data/config';
 import {ApiService} from '@core/services/api';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {ProjectService} from '@core/services/project';
@@ -17,7 +18,6 @@ import {OpenstackAvailabilityZone, OpenstackFlavor} from '@shared/entity/provide
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, take, switchMap, tap} from 'rxjs/operators';
-import {NodeDataMode} from '../../config';
 import {NodeDataService} from '../service';
 
 export class NodeDataOpenstackProvider {
