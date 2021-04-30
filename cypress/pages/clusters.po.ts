@@ -33,6 +33,10 @@ export class ClustersPage {
     return cy.get('#external-cluster-name-input');
   }
 
+  static getConnectClusterKubeconfigTextarea(): Cypress.Chainable {
+    return cy.get('.monaco-editor textarea:first');
+  }
+
   static getClusterItem(clusterName: string): Cypress.Chainable {
     return cy.get(`#km-clusters-${clusterName}`);
   }

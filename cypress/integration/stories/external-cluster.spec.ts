@@ -16,9 +16,10 @@ import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {View} from '../../utils/view';
 
-describe('Basic Story', () => {
+describe('External Cluster Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
+  const kubeconfig = Cypress.env('KUBECONFIG');
   const projectName = _.uniqueId('e2e-test-project-');
   const clusterName = _.uniqueId('e2e-test-cluster-');
 
@@ -45,7 +46,7 @@ describe('Basic Story', () => {
   });
 
   it('should enter kubeconfig', () => {
-    // TODO
+    ClustersPage.getConnectClusterKubeconfigTextarea().click().focused().type(kubeconfig);
   });
 
   it('should connect cluster', () => {

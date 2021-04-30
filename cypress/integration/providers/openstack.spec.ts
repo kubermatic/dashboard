@@ -26,7 +26,7 @@ xdescribe('OpenStack Provider', () => {
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const projectName = _.uniqueId('e2e-test-project-');
   const clusterName = _.uniqueId('e2e-test-cluster-');
-  const initialMachineDeploymentName = _.uniqueId('e2e-test-md');
+  const initialMachineDeploymentName = _.uniqueId('e2e-test-md-');
   const initialMachineDeploymentReplicas = '0';
 
   it('should login', () => {
