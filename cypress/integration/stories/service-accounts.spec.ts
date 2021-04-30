@@ -15,7 +15,7 @@ import {Condition} from '../../utils/condition';
 import {ServiceAccountsPage} from '../../pages/service-accounts.po';
 import {Group} from '../../utils/member';
 import {View} from '../../utils/view';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
 describe('Service Accounts Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');

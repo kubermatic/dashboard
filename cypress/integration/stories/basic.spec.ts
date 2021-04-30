@@ -19,7 +19,7 @@ import {Group, reloadUsers} from '../../utils/member';
 import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
 describe('Basic Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');

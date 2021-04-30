@@ -18,7 +18,7 @@ import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
 // Re-enable once openstack sys11 db starts working again
 xdescribe('OpenStack Provider', () => {
