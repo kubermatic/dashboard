@@ -18,12 +18,19 @@ import {WizardPage} from './wizard.po';
 export enum ProviderMenuOption {
   EditCluster = 'Edit Cluster',
   ManageSSHKeys = 'Manage SSH keys',
-  RevokeToken = 'Revoke Token',
 }
 
 export class ClustersPage {
   static getAddClusterBtn(): Cypress.Chainable {
     return cy.get('#km-add-cluster-top-btn');
+  }
+
+  static getConnectClusterBtn(): Cypress.Chainable {
+    return cy.get('#km-connect-cluster-top-btn');
+  }
+
+  static getConnectClusterNameInput(): Cypress.Chainable {
+    return cy.get('#external-cluster-name-input');
   }
 
   static getClusterItem(clusterName: string): Cypress.Chainable {

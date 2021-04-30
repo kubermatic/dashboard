@@ -14,12 +14,12 @@ import {Condition} from '../../utils/condition';
 import {View} from '../../utils/view';
 import {UserSettingsPage} from '../../pages/user-settings.po';
 import {ProjectsPage} from '../../pages/projects.po';
-import {prefixedString} from '../../utils/random';
+import * as _ from "lodash";
 
 describe('User Settings Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const projectName = prefixedString('e2e-test-project');
+  const projectName = _.uniqueId('e2e-test-project-');
   const kubermaticEdition = Cypress.env('KUBERMATIC_EDITION');
   const isEnterpriseEdition = kubermaticEdition === 'ee';
   const themePickerAvailability = isEnterpriseEdition ? 'available' : 'not available';

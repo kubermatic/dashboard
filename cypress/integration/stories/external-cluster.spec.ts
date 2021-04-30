@@ -9,23 +9,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import * as _ from 'lodash';
+import {ClustersPage} from '../../pages/clusters.po';
 import {ProjectsPage} from '../../pages/projects.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
-import {ServiceAccountsPage} from '../../pages/service-accounts.po';
-import {Group} from '../../utils/member';
 import {View} from '../../utils/view';
-import * as _ from "lodash";
 
-describe('Service Accounts Story', () => {
+describe('Basic Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const projectName = _.uniqueId('e2e-test-project-');
-  const serviceAccountName = 'test-sa';
-  const tokenName = 'test-token';
+  const clusterName = _.uniqueId('e2e-test-cluster-');
 
   it('should login', () => {
     login(email, password);
+
     cy.url().should(Condition.Include, View.Projects);
   });
 
@@ -37,28 +36,35 @@ describe('Service Accounts Story', () => {
     ProjectsPage.selectProject(projectName);
   });
 
-  it('should go to the service accounts page', () => {
-    ServiceAccountsPage.visit();
+  it('should open connect cluster dialog', () => {
+    ClustersPage.getConnectClusterBtn().click();
   });
 
-  it('should create new service account', () => {
-    ServiceAccountsPage.addServiceAccount(serviceAccountName, Group.Editor);
+  it('should enter name', () => {
+    ClustersPage.getConnectClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
   });
 
-  it('should open token panel for created service account', () => {
-    ServiceAccountsPage.getTableRow(serviceAccountName).click();
+  it('should enter kubeconfig', () => {
+    // TODO
   });
 
-  it('should add token', () => {
-    ServiceAccountsPage.addToken(tokenName);
+  it('should connect cluster', () => {
+    // TODO
+
+    ClustersPage.verifyUrl();
   });
 
-  it('should close token panel for created service account', () => {
-    ServiceAccountsPage.getTableRow(serviceAccountName).click();
+  it('should verify details of connected cluster', () => {
+    // TODO
   });
 
-  it('should delete service account', () => {
-    ServiceAccountsPage.deleteServiceAccount(serviceAccountName);
+  it('should disconnect cluster', () => {
+    // TODO
+  });
+
+  it('should verify that there are no clusters', () => {
+    ClustersPage.visit();
+    ClustersPage.verifyNoClusters();
   });
 
   it('should go to the projects page', () => {
