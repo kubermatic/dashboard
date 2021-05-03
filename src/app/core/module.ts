@@ -45,6 +45,7 @@ import {SidenavComponent} from './components/sidenav/component';
 import {UserPanelComponent} from './components/user-panel/component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
 import {GlobalModule} from './services/global/module';
+import {MLAService} from './services/mla';
 import {NameGeneratorService} from './services/name-generator';
 import {PageTitleService} from './services/page-title';
 import {PreviousRouteService} from './services/previous-route';
@@ -52,7 +53,6 @@ import {SettingsService} from './services/settings';
 import {ThemeInformerService} from './services/theme-informer';
 import {TokenService} from './services/token';
 import {StepsService} from './services/wizard/steps';
-
 const modules: any[] = [
   CommonModule,
   HttpClientModule,
@@ -101,6 +101,7 @@ const services: any[] = [
   ChangelogManagerService,
   ClusterSpecService,
   EndOfLifeService,
+  MLAService,
 ];
 
 const interceptors: any[] = [

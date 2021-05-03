@@ -16,6 +16,8 @@ import {NodeDataModule} from '@app/node-data/module';
 import {NodeService} from '@core/services/node';
 import {SharedModule} from '@shared/module';
 import {MachineNetworksModule} from '../machine-networks/module';
+import {AlertmanagerConfigComponent} from './cluster-details/alertmanager-config/component';
+import {AlertmanagerConfigDialog} from './cluster-details/alertmanager-config/alertmanager-config-dialog/component';
 import {ChangeClusterVersionComponent} from './cluster-details/change-cluster-version/component';
 import {ClusterDeleteConfirmationComponent} from './cluster-details/cluster-delete-confirmation/component';
 import {ClusterSecretsComponent} from './cluster-details/cluster-secrets/component';
@@ -89,6 +91,8 @@ const components: any[] = [
   ViolationDetailsComponent,
   GatekeeperConfigComponent,
   GatekeeperConfigDialog,
+  AlertmanagerConfigComponent,
+  AlertmanagerConfigDialog,
 ];
 
 const dialogs: any[] = [AddMachineNetworkComponent];
