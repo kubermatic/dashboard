@@ -13,7 +13,7 @@ import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {AppConfigService} from '@app/config.service';
 import {ChangelogDialog} from '@core/components/changelog/dialog';
-import {ChangelogService} from '@core/services/changelog/service';
+import {ChangelogService} from '@core/services/changelog';
 import {HistoryService} from '@core/services/history';
 import {UserService} from '@core/services/user';
 import {View} from '@shared/entity/common';

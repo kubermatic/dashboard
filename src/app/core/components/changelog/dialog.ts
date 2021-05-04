@@ -12,7 +12,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {AppConfigService} from '@app/config.service';
-import {ChangelogService} from '@core/services/changelog/service';
+import {ChangelogService} from '@core/services/changelog';
 import {UserService} from '@core/services/user';
 import {UserSettings} from '@shared/entity/settings';
 import {Changelog, ChangelogCategory, ChangelogEntry} from '@shared/model/changelog';
