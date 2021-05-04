@@ -41,6 +41,7 @@ limitations under the License.
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
+          id="external-cluster-confirm-btn"
           (click)="handler()"
           [disabled]="!form.valid || !kubeconfig">
     {{getLabel()}}
