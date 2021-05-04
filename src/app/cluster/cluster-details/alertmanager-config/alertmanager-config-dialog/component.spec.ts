@@ -30,8 +30,7 @@ declare let monaco: any;
 describe('AlertmanagerConfigDialog', () => {
   let fixture: ComponentFixture<AlertmanagerConfigDialog>;
   let component: AlertmanagerConfigDialog;
-  let createAlertmanagerConfigSpy;
-  let patchAlertmanagerConfigSpy;
+  let putAlertmanagerConfigSpy;
 
   beforeEach(
     waitForAsync(() => {
@@ -39,7 +38,7 @@ describe('AlertmanagerConfigDialog', () => {
         putAlertmanagerConfig: jest.fn(),
         refreshAlertmanagerConfig: () => {},
       };
-      createAlertmanagerConfigSpy = mlaMock.putAlertmanagerConfig.mockReturnValue(asyncData(fakeAlertmanagerConfig()));
+      putAlertmanagerConfigSpy = mlaMock.putAlertmanagerConfig.mockReturnValue(asyncData(fakeAlertmanagerConfig()));
 
       TestBed.configureTestingModule({
         imports: [...modules],
@@ -98,7 +97,7 @@ describe('AlertmanagerConfigDialog', () => {
     it('should call createAlertmanagerConfig()', () => {
       component.save();
       fixture.detectChanges();
-      expect(createAlertmanagerConfigSpy).toHaveBeenCalled();
+      expect(putAlertmanagerConfigSpy).toHaveBeenCalled();
     });
   });
 
@@ -137,7 +136,7 @@ describe('AlertmanagerConfigDialog', () => {
     it('should call patchAlertmanagerConfig()', () => {
       component.save();
       fixture.detectChanges();
-      expect(patchAlertmanagerConfigSpy).toHaveBeenCalled();
+      expect(putAlertmanagerConfigSpy).toHaveBeenCalled();
     });
   });
 });
