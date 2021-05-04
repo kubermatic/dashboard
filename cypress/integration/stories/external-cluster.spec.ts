@@ -50,16 +50,17 @@ describe('External Cluster Story', () => {
   });
 
   it('should connect cluster', () => {
-    ClustersPage.getConnectClusterSaveButton().click();
+    ClustersPage.getConnectClusterSaveBtn().click();
     ClustersPage.verifyUrl();
   });
 
   it('should verify details of connected cluster', () => {
-    // TODO
+    ClustersPage.getPrimaryLabel().should(Condition.Contain, 'External');
   });
 
   it('should disconnect cluster', () => {
-    // TODO
+    ClustersPage.getDeleteClusterBtn().click();
+    ClustersPage.getDiscnnectConfirmBtn().click();
   });
 
   it('should verify that there are no clusters', () => {

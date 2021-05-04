@@ -33,8 +33,12 @@ export class ClustersPage {
     return cy.get('#external-cluster-name-input');
   }
 
-  static getConnectClusterSaveButton(): Cypress.Chainable {
+  static getConnectClusterSaveBtn(): Cypress.Chainable {
     return cy.get('#external-cluster-confirm-btn');
+  }
+
+  static getPrimaryLabel(): Cypress.Chainable {
+    return cy.get('span.km-label-primary');
   }
 
   static getConnectClusterKubeconfigTextarea(): Cypress.Chainable {
@@ -47,6 +51,10 @@ export class ClustersPage {
 
   static getDeleteClusterBtn(): Cypress.Chainable {
     return cy.get('#km-delete-cluster-btn');
+  }
+
+  static getDiscnnectConfirmBtn(): Cypress.Chainable {
+    return cy.get('#km-confirmation-dialog-confirm-btn');
   }
 
   static getDeleteDialogInput(): Cypress.Chainable {
