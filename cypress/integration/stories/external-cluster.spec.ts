@@ -51,6 +51,7 @@ describe('External Cluster Story', () => {
       .then($element => {
         $element.text(kubeconfig);
         $element.val(kubeconfig);
+        cy.get($element).type(' ');
       });
   });
 
