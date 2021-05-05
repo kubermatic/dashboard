@@ -15,7 +15,7 @@ import {View} from '../../utils/view';
 import {AdminSettingsPage} from '../../pages/admin-settings.po';
 import {HelpPanel} from '../../pages/help-panel.po';
 
-describe('Admin Settings Story', () => {
+xdescribe('Admin Settings Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const linkLocation = 'Footer';
