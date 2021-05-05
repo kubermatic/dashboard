@@ -54,7 +54,7 @@ describe('External Cluster Story', () => {
         const lastChar = kubeconfig.slice(-1);
         $element.text(subString);
         $element.val(subString);
-        cy.get($element).type(lastChar);
+        cy.get($element).type(lastChar); // TODO type?
       });
   });
 
