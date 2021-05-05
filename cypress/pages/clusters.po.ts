@@ -139,6 +139,10 @@ export class ClustersPage {
     cy.url().should(Condition.Include, View.Clusters);
   }
 
+  static verifyExternalClustersUrl(): void {
+    cy.url().should(Condition.Include, View.ExternalClusters);
+  }
+
   static visit(): void {
     cy.get('#km-nav-item-clusters')
       .click()

@@ -47,20 +47,20 @@ describe('External Cluster Story', () => {
 
   it('should enter kubeconfig', () => {
     const kubeconfig = atob(kubeconfigEncoded);
-    console.log(kubeconfig); // TODO debug only
-
     ClustersPage.getConnectClusterKubeconfigTextarea()
       .click({force: true})
       .then($element => {
-        $element.text(kubeconfig);
-        $element.val(kubeconfig);
-        cy.get($element).type(' ');
+        const subString = kubeconfig.substr(0, kubeconfig.length - 1);
+        const lastChar = kubeconfig.slice(-1);
+        $element.text(subString);
+        $element.val(subString);
+        cy.get($element).type(lastChar);
       });
   });
 
   it('should connect cluster', () => {
     ClustersPage.getConnectClusterSaveBtn().click();
-    ClustersPage.verifyUrl();
+    ClustersPage.verifyExternalClustersUrl();
   });
 
   it('should verify details of connected cluster', () => {

@@ -11,6 +11,7 @@
 
 export enum View {
   Clusters = 'clusters',
+  ExternalClusters = 'clusters/external',
   Projects = 'projects',
   Admin = 'settings',
   Account = 'account',
