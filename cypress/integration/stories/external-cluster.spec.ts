@@ -19,7 +19,7 @@ import {View} from '../../utils/view';
 describe('External Cluster Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const kubeconfig = Cypress.env('KUBECONFIG');
+  const kubeconfigEncoded = Cypress.env('KUBECONFIG_ENCODED');
   const projectName = _.uniqueId('e2e-test-project-');
   const clusterName = _.uniqueId('e2e-test-cluster-');
 
@@ -46,6 +46,9 @@ describe('External Cluster Story', () => {
   });
 
   it('should enter kubeconfig', () => {
+    const kubeconfig = atob(kubeconfigEncoded);
+    console.log(kubeconfig); // TODO debug only
+
     ClustersPage.getConnectClusterKubeconfigTextarea()
       .click({force: true})
       .then($element => {
