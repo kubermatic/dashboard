@@ -112,7 +112,8 @@ export class AWS extends Provider {
       onLoadingCb();
     }
 
-    return this._http.get<AWSSize[]>(this._url, {headers: this._headers});
+    const url = this._url + '?architecture=x64';
+    return this._http.get<AWSSize[]>(url, {headers: this._headers});
   }
 }
 
