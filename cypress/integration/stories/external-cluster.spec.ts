@@ -49,7 +49,13 @@ describe('External Cluster Story', () => {
   it('should enter kubeconfig', () => {
     ClustersPage.getConnectClusterKubeconfigTextarea()
       .click({force: true})
-      .type(kubeconfig, {parseSpecialCharSequences: false});
+      .then($element => {
+        const subString = kubeconfig.substr(0, kubeconfig.length - 1);
+        const lastChar = kubeconfig.slice(-1);
+        $element.text(subString);
+        $element.val(subString);
+        cy.get($element).type(lastChar);
+      });
   });
 
   it('should connect cluster', () => {
