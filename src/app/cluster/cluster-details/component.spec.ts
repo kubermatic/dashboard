@@ -77,7 +77,7 @@ describe('ClusterDetailsComponent', () => {
       opaMock.gatekeeperConfig.mockReturnValue(of(null));
 
       const mlaMock = {alertmanagerConfig: jest.fn()};
-      opaMock.alertmanagerConfig.mockReturnValue(of(null));
+      mlaMock.alertmanagerConfig.mockReturnValue(of(null));
 
       TestBed.configureTestingModule({
         imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
