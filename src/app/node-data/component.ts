@@ -211,8 +211,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       case OperatingSystem.Flatcar:
         return this.isProvider(NodeProvider.AWS, NodeProvider.AZURE, NodeProvider.OPENSTACK, NodeProvider.ANEXIA);
       case OperatingSystem.Ubuntu:
-      case OperatingSystem.CentOS:
         return !this.isProvider(NodeProvider.VSPHERE, NodeProvider.ANEXIA);
+      case OperatingSystem.CentOS:
+        return !this.isProvider(NodeProvider.VSPHERE, NodeProvider.ANEXIA, NodeProvider.GCP);
     }
   }
 
