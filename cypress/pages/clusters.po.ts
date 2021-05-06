@@ -18,12 +18,31 @@ import {WizardPage} from './wizard.po';
 export enum ProviderMenuOption {
   EditCluster = 'Edit Cluster',
   ManageSSHKeys = 'Manage SSH keys',
-  RevokeToken = 'Revoke Token',
 }
 
 export class ClustersPage {
   static getAddClusterBtn(): Cypress.Chainable {
     return cy.get('#km-add-cluster-top-btn');
+  }
+
+  static getConnectClusterBtn(): Cypress.Chainable {
+    return cy.get('#km-connect-cluster-top-btn');
+  }
+
+  static getConnectClusterNameInput(): Cypress.Chainable {
+    return cy.get('#external-cluster-name-input');
+  }
+
+  static getConnectClusterSaveBtn(): Cypress.Chainable {
+    return cy.get('#external-cluster-confirm-btn');
+  }
+
+  static getPrimaryLabel(): Cypress.Chainable {
+    return cy.get('span.km-label-primary');
+  }
+
+  static getConnectClusterKubeconfigTextarea(): Cypress.Chainable {
+    return cy.get('.monaco-editor textarea:first');
   }
 
   static getClusterItem(clusterName: string): Cypress.Chainable {
@@ -32,6 +51,10 @@ export class ClustersPage {
 
   static getDeleteClusterBtn(): Cypress.Chainable {
     return cy.get('#km-delete-cluster-btn');
+  }
+
+  static getDisconnectConfirmBtn(): Cypress.Chainable {
+    return cy.get('#km-confirmation-dialog-confirm-btn');
   }
 
   static getDeleteDialogInput(): Cypress.Chainable {
@@ -114,6 +137,10 @@ export class ClustersPage {
 
   static verifyUrl(): void {
     cy.url().should(Condition.Include, View.Clusters);
+  }
+
+  static verifyExternalClustersUrl(): void {
+    cy.url().should(Condition.Include, View.ExternalClusters);
   }
 
   static visit(): void {

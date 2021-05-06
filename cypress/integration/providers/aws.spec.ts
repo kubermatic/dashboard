@@ -16,16 +16,16 @@ import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
-import {prefixedString} from '../../utils/random';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
+import * as _ from 'lodash';
 
 describe('AWS Provider', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const projectName = prefixedString('e2e-test-project');
-  const clusterName = prefixedString('e2e-test-cluster');
-  const initialMachineDeploymentName = prefixedString('e2e-test-md');
+  const projectName = _.uniqueId('e2e-test-project-');
+  const clusterName = _.uniqueId('e2e-test-cluster-');
+  const initialMachineDeploymentName = _.uniqueId('e2e-test-md-');
   const initialMachineDeploymentReplicas = '0';
 
   it('should login', () => {

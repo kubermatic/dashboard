@@ -28,6 +28,7 @@ limitations under the License.
              [formControlName]="controls.Name"
              type="text"
              autocomplete="off"
+             id="external-cluster-name-input"
              cdkFocusInitial>
       <mat-error *ngIf="form.get(controls.Name).hasError('required')">
         Name is <strong>required</strong>.
@@ -40,6 +41,7 @@ limitations under the License.
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
+          id="external-cluster-confirm-btn"
           (click)="handler()"
           [disabled]="!form.valid || !kubeconfig">
     {{getLabel()}}

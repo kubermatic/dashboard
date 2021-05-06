@@ -19,16 +19,16 @@ import {Endpoint} from '../../utils/endpoint';
 import {RequestType, TrafficMonitor} from '../../utils/monitor';
 import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
-import {prefixedString} from '../../utils/random';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
+import * as _ from 'lodash';
 
-describe('DigitalOcean Provider', () => {
+xdescribe('Machine Deployment Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const projectName = prefixedString('e2e-test-project');
-  const clusterName = prefixedString('e2e-test-cluster');
-  const initialMachineDeploymentName = prefixedString('e2e-test-md');
+  const projectName = _.uniqueId('e2e-test-project-');
+  const clusterName = _.uniqueId('e2e-test-cluster-');
+  const initialMachineDeploymentName = _.uniqueId('e2e-test-md-');
   const initialMachineDeploymentReplicas = '1';
 
   it('should login', () => {

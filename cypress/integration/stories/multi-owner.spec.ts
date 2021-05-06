@@ -14,15 +14,15 @@ import {ProjectsPage} from '../../pages/projects.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {Group, reloadUsers} from '../../utils/member';
-import {prefixedString} from '../../utils/random';
 import {ClustersPage} from '../../pages/clusters.po';
 import {View} from '../../utils/view';
+import * as _ from 'lodash';
 
-describe('Multi owner Story', () => {
+describe('Multi Owner Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const newUserEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
-  const projectName = prefixedString('e2e-test-project');
+  const projectName = _.uniqueId('e2e-test-project-');
 
   it('should login as a first owner', () => {
     login(email, password);

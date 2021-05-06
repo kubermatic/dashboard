@@ -17,16 +17,16 @@ import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {Group, reloadUsers} from '../../utils/member';
 import {Datacenter, Provider} from '../../utils/provider';
-import {prefixedString} from '../../utils/random';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
+import * as _ from 'lodash';
 
 describe('Basic Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const newUserEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
-  let projectName = prefixedString('e2e-test-project');
-  const clusterName = prefixedString('e2e-test-cluster');
+  let projectName = _.uniqueId('e2e-test-project-');
+  const clusterName = _.uniqueId('e2e-test-cluster-');
 
   it('should login', () => {
     login(email, password);

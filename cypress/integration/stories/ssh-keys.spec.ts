@@ -16,15 +16,15 @@ import {WizardPage} from '../../pages/wizard.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {Datacenter, Provider} from '../../utils/provider';
-import {prefixedString} from '../../utils/random';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
+import * as _ from 'lodash';
 
 describe('SSH Key Management Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const projectName = prefixedString('e2e-test-project');
-  const clusterName = prefixedString('e2e-test-cluster');
+  const projectName = _.uniqueId('e2e-test-project-');
+  const clusterName = _.uniqueId('e2e-test-cluster-');
   const sshKeyName = 'test-ssh-key';
   const sshKeyPublic =
     'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCo/3xm3JmJ7rp7I6GNYvjySYlWIGe75Oyr/u2cv5Fv2vsqfsiAP2xvIrJKxQ3+LwZAo0JnTvNQ' +
