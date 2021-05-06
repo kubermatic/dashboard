@@ -87,8 +87,8 @@ export class AlertmanagerConfigDialog implements OnInit, OnDestroy {
     }
   }
 
-  private _getSpec(): number[] {
-    return Array.from(new TextEncoder().encode(this.spec));
+  private _getSpec(): any {
+    return btoa(this.spec);
   }
 
   private _create(alertmanagerConfig: AlertmanagerConfig): void {

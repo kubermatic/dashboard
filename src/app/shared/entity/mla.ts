@@ -14,5 +14,5 @@ export class AlertmanagerConfig {
 }
 
 export class AlertmanagerSpec {
-  config: any;
+  config: string;
 }
