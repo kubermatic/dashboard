@@ -63,44 +63,6 @@ describe('AlertmanagerConfigDialog', () => {
     })
   );
 
-  describe('Add Alertmanager Config Dialog', () => {
-    beforeEach(() => {
-      fixture = TestBed.createComponent(AlertmanagerConfigDialog);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-
-      component.data = {
-        title: 'Add Alertmanager Config',
-        projectId: '123ab4cd5e',
-        clusterId: '4k6txp5sq',
-        mode: Mode.Add,
-        confirmLabel: 'Add',
-      };
-      fixture.detectChanges();
-    });
-
-    it(
-      'should create the add alertmanager config dialog',
-      waitForAsync(() => {
-        expect(component).toBeTruthy();
-      })
-    );
-
-    it('should have correct title: add', () => {
-      expect(document.body.querySelector('km-dialog-title').textContent).toBe('Add Alertmanager Config');
-    });
-
-    it('should have correct button text: add', () => {
-      expect(document.body.querySelector('#km-alertmanager-config-dialog-btn').textContent).toBe(' Add ');
-    });
-
-    it('should call createAlertmanagerConfig()', () => {
-      component.save();
-      fixture.detectChanges();
-      expect(putAlertmanagerConfigSpy).toHaveBeenCalled();
-    });
-  });
-
   describe('Edit Alertmanager Config Dialog', () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(AlertmanagerConfigDialog);

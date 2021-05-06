@@ -30,15 +30,15 @@ describe('AlertmanagerConfigComponent', () => {
   let fixture: ComponentFixture<AlertmanagerConfigComponent>;
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let component: AlertmanagerConfigComponent;
-  let deleteAlertmanagerConfigSpy;
+  let resetAlertmanagerConfigSpy;
 
   beforeEach(
     waitForAsync(() => {
       const mlaMock = {
-        deleteAlertmanagerConfig: jest.fn(),
+        resetAlertmanagerConfig: jest.fn(),
         refreshAlertmanagerConfig: () => {},
       };
-      deleteAlertmanagerConfigSpy = mlaMock.deleteAlertmanagerConfig.mockReturnValue(of(null));
+      resetAlertmanagerConfigSpy = mlaMock.resetAlertmanagerConfig.mockReturnValue(of(null));
 
       TestBed.configureTestingModule({
         imports: [...modules],
@@ -65,40 +65,26 @@ describe('AlertmanagerConfigComponent', () => {
     expect(component).toBeTruthy();
   }));
 
-  it('should open the delete alertmanager config confirmation dialog & call delete()', fakeAsync(() => {
+  it('should open the reset alertmanager config confirmation dialog & call reset()', fakeAsync(() => {
     const waitTime = 15000;
-    component.delete();
+    component.reset();
     noop.detectChanges();
     tick(waitTime);
 
     const dialogTitle = document.body.querySelector('.mat-dialog-title');
-    const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
+    const resetButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
 
-    expect(dialogTitle.textContent).toBe('Delete Alertmanager Config');
-    expect(deleteButton.textContent).toBe(' Delete ');
+    expect(dialogTitle.textContent).toBe('Reset Alertmanager Config');
+    expect(resetButton.textContent).toBe(' Reset ');
 
-    deleteButton.click();
+    resetButton.click();
 
     noop.detectChanges();
     fixture.detectChanges();
     tick(waitTime);
 
-    expect(deleteAlertmanagerConfigSpy).toHaveBeenCalled();
+    expect(resetAlertmanagerConfigSpy).toHaveBeenCalled();
     fixture.destroy();
     flush();
   }));
-
-  xit('should only display add button if no config is defined', () => {
-    component.alertmanagerConfig = undefined;
-    fixture.detectChanges();
-    expect(document.body.querySelector('#km-alertmanager-config-edit-btn')).toBeNull();
-    expect(document.body.querySelector('#km-alertmanager-config-delete-btn')).toBeNull();
-    expect(document.body.querySelector('#km-alertmanager-config-add-btn')).toBeDefined();
-  });
-
-  xit('should hide add button if config is defined', () => {
-    expect(document.body.querySelector('#km-alertmanager-config-edit-btn')).toBeDefined();
-    expect(document.body.querySelector('#km-alertmanager-config-delete-btn')).toBeDefined();
-    expect(document.body.querySelector('#km-alertmanager-config-add-btn')).toBeNull();
-  });
 });

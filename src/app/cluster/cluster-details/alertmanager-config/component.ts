@@ -49,24 +49,6 @@ export class AlertmanagerConfigComponent implements OnDestroy {
     return _.isEmpty(this.alertmanagerConfig) && !this.isClusterRunning;
   }
 
-  hasNoData(): boolean {
-    return _.isEmpty(this.alertmanagerConfig) && this.isClusterRunning;
-  }
-
-  add(): void {
-    const dialogConfig: MatDialogConfig = {
-      data: {
-        title: 'Add Alertmanager Config',
-        projectId: this.projectID,
-        clusterId: this.cluster.id,
-        mode: Mode.Add,
-        confirmLabel: 'Add',
-      },
-    };
-
-    this._matDialog.open(AlertmanagerConfigDialog, dialogConfig);
-  }
-
   edit(): void {
     const dialogConfig: MatDialogConfig = {
       data: {
@@ -82,14 +64,14 @@ export class AlertmanagerConfigComponent implements OnDestroy {
     this._matDialog.open(AlertmanagerConfigDialog, dialogConfig);
   }
 
-  delete(): void {
+  reset(): void {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
       data: {
-        title: 'Delete Alertmanager Config',
-        message: 'Are you sure you want to delete the Alertmanager Config?',
-        confirmLabel: 'Delete',
+        title: 'Reset Alertmanager Config',
+        message: 'Are you sure you want to reset the Alertmanager Config?',
+        confirmLabel: 'Reset',
       },
     };
 
@@ -97,10 +79,10 @@ export class AlertmanagerConfigComponent implements OnDestroy {
       .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(switchMap(_ => this._mlaService.deleteAlertmanagerConfig(this.projectID, this.cluster.id)))
+      .pipe(switchMap(_ => this._mlaService.resetAlertmanagerConfig(this.projectID, this.cluster.id)))
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success('The Alertmanager Config was deleted');
+        this._notificationService.success('The Alertmanager Config was reset');
         this._mlaService.refreshAlertmanagerConfig();
       });
   }

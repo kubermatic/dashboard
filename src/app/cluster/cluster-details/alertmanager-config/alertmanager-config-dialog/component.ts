@@ -30,7 +30,6 @@ export interface AlertmanagerConfigDialogData {
 }
 
 export enum Mode {
-  Add = 'add',
   Edit = 'edit',
 }
 
@@ -71,8 +70,6 @@ export class AlertmanagerConfigDialog implements OnInit, OnDestroy {
     };
 
     switch (this.data.mode) {
-      case Mode.Add:
-        return this._create(alertmanagerConfig);
       case Mode.Edit:
         return this._edit(alertmanagerConfig);
     }
@@ -89,17 +86,6 @@ export class AlertmanagerConfigDialog implements OnInit, OnDestroy {
 
   private _getSpec(): any {
     return btoa(this.spec);
-  }
-
-  private _create(alertmanagerConfig: AlertmanagerConfig): void {
-    this._mlaService
-      .putAlertmanagerConfig(this.data.projectId, this.data.clusterId, alertmanagerConfig)
-      .pipe(take(1))
-      .subscribe(_ => {
-        this._matDialogRef.close(true);
-        this._notificationService.success('The Alertmanager Config was created');
-        this._mlaService.refreshAlertmanagerConfig();
-      });
   }
 
   private _edit(alertmanagerConfig: AlertmanagerConfig): void {

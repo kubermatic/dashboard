@@ -57,7 +57,7 @@ export class MLAService {
     return this._http.put<AlertmanagerConfig>(url, config);
   }
 
-  deleteAlertmanagerConfig(projectId: string, clusterId: string): Observable<any> {
+  resetAlertmanagerConfig(projectId: string, clusterId: string): Observable<any> {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/alertmanager/config`;
     return this._http.delete(url);
   }
