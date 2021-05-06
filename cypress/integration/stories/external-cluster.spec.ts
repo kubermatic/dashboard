@@ -47,7 +47,9 @@ describe('External Cluster Story', () => {
   });
 
   it('should enter kubeconfig', () => {
-    ClustersPage.getConnectClusterKubeconfigTextarea().click({force: true}).type(kubeconfig);
+    ClustersPage.getConnectClusterKubeconfigTextarea()
+      .click({force: true})
+      .type(kubeconfig, {parseSpecialCharSequences: false});
   });
 
   it('should connect cluster', () => {
