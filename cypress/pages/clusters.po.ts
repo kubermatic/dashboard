@@ -53,7 +53,7 @@ export class ClustersPage {
     return cy.get('#km-delete-cluster-btn');
   }
 
-  static getDiscnnectConfirmBtn(): Cypress.Chainable {
+  static getDisconnectConfirmBtn(): Cypress.Chainable {
     return cy.get('#km-confirmation-dialog-confirm-btn');
   }
 

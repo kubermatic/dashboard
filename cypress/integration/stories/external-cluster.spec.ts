@@ -69,7 +69,7 @@ describe('External Cluster Story', () => {
 
   it('should disconnect cluster', () => {
     ClustersPage.getDeleteClusterBtn().click();
-    ClustersPage.getDiscnnectConfirmBtn().click();
+    ClustersPage.getDisconnectConfirmBtn().click();
   });
 
   it('should verify that there are no clusters', () => {
