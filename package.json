@@ -57,7 +57,7 @@
     "jquery": "3.6.0",
     "js-yaml": "3.14.1",
     "lodash": "4.17.21",
-    "modern-normalize": "1.0.0",
+    "modern-normalize": "1.1.0",
     "moment": "2.29.1",
     "ngx-clipboard": "14.0.1",
     "ngx-cookie-service": "11.0.2",
