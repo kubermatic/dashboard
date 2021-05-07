@@ -11,9 +11,9 @@
 
 import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {ClusterService} from '@core/services/cluster/service';
+import {ClusterService} from '@core/services/cluster';
+import {EndOfLifeService} from '@core/services/eol';
 import {Cluster, MasterVersion} from '@shared/entity/cluster';
-import {EndOfLifeService} from '@shared/services/eol.service';
 import {gt, lt} from 'semver';
 import {ChangeClusterVersionComponent} from '../change-cluster-version/component';
 import {take} from 'rxjs/operators';

@@ -16,20 +16,22 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 import {ChangelogDialog} from '@core/components/changelog/dialog';
 import {HelpPanelComponent} from '@core/components/help-panel/component';
-import {ApiService} from '@core/services/api/service';
+import {ApiService} from '@core/services/api';
 import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
 import {Auth} from '@core/services/auth/service';
-import {ChangelogManagerService} from '@core/services/changelog/listener';
-import {ChangelogService} from '@core/services/changelog/service';
-import {ClusterService} from '@core/services/cluster/service';
-import {DatacenterService} from '@core/services/datacenter/service';
-import {HistoryService} from '@core/services/history/service';
-import {LabelService} from '@core/services/label/service';
-import {OPAService} from '@core/services/opa/service';
-import {ParamsService} from '@core/services/params/service';
-import {RBACService} from '@core/services/rbac/service';
-import {PresetsService} from '@core/services/wizard/presets.service';
-import {SharedModule} from '@shared/shared.module';
+import {ChangelogManagerService} from '@core/services/changelog-manager';
+import {ChangelogService} from '@core/services/changelog';
+import {ClusterService} from '@core/services/cluster';
+import {ClusterSpecService} from '@core/services/cluster-spec';
+import {DatacenterService} from '@core/services/datacenter';
+import {EndOfLifeService} from '@core/services/eol';
+import {HistoryService} from '@core/services/history';
+import {LabelService} from '@core/services/label';
+import {OPAService} from '@core/services/opa';
+import {ParamsService} from '@core/services/params';
+import {RBACService} from '@core/services/rbac';
+import {PresetsService} from '@core/services/wizard/presets';
+import {SharedModule} from '@shared/module';
 import {COOKIE, COOKIE_DI_TOKEN} from '../config';
 import {AddMemberComponent} from '../member/add-member/component';
 import {EditMemberComponent} from '../member/edit-member/component';
@@ -43,14 +45,13 @@ import {SidenavComponent} from './components/sidenav/component';
 import {UserPanelComponent} from './components/user-panel/component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
 import {GlobalModule} from './services/global/module';
-import {NameGeneratorService} from './services/name-generator/service';
-import {NodeDataService} from './services/node-data/service';
-import {PageTitleService} from './services/page-title/service';
-import {PreviousRouteService} from './services/previous-route/service';
-import {SettingsService} from './services/settings/service';
-import {ThemeInformerService} from './services/theme-informer/service';
-import {TokenService} from './services/token/service';
-import {StepsService} from './services/wizard/steps.service';
+import {NameGeneratorService} from './services/name-generator';
+import {PageTitleService} from './services/page-title';
+import {PreviousRouteService} from './services/previous-route';
+import {SettingsService} from './services/settings';
+import {ThemeInformerService} from './services/theme-informer';
+import {TokenService} from './services/token';
+import {StepsService} from './services/wizard/steps';
 
 const modules: any[] = [
   CommonModule,
@@ -81,7 +82,6 @@ const services: any[] = [
   AuthGuard,
   AuthzGuard,
   DatacenterService,
-  NodeDataService,
   StepsService,
   NameGeneratorService,
   ApiService,
@@ -99,6 +99,8 @@ const services: any[] = [
   OPAService,
   ChangelogService,
   ChangelogManagerService,
+  ClusterSpecService,
+  EndOfLifeService,
 ];
 
 const interceptors: any[] = [

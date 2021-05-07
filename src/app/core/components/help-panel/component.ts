@@ -11,9 +11,9 @@
 
 import {Component, ElementRef, HostListener, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {ChangelogManagerService} from '@core/services/changelog/listener';
-import {ChangelogService} from '@core/services/changelog/service';
-import {SettingsService} from '@core/services/settings/service';
+import {ChangelogManagerService} from '@core/services/changelog-manager';
+import {ChangelogService} from '@core/services/changelog';
+import {SettingsService} from '@core/services/settings';
 import {slideOut} from '@shared/animations/slide';
 import {AdminSettings, CustomLinkLocation} from '@shared/entity/settings';
 import {Subject} from 'rxjs';

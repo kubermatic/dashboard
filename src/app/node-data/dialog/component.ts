@@ -12,18 +12,18 @@
 import {ChangeDetectionStrategy, Component, forwardRef, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {NodeDataService} from '@core/services/node-data/service';
 import * as _ from 'lodash';
 import {merge, of} from 'rxjs';
 import {delay, takeUntil} from 'rxjs/operators';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {Cluster} from '../../shared/entity/cluster';
 import {getDefaultNodeProviderSpec} from '../../shared/entity/node';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData} from '../../shared/model/NodeSpecChange';
-import {ClusterService} from '../../shared/services/cluster.service';
 import {objectDiff} from '../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../shared/validators/base-form.validator';
 import {NodeDataMode} from '../config';
-import {NodeDataService} from '../service/service';
 
 enum Mode {
   Edit = 'Edit',
@@ -74,7 +74,7 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
   private readonly _initDelay = 250;
 
   get provider(): NodeProvider {
-    return this._clusterService.provider;
+    return this._clusterSpecService.provider;
   }
 
   get existingNodesCount(): number {
@@ -85,7 +85,7 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
     @Inject(MAT_DIALOG_DATA) private _data: DialogDataInput,
     private _dialogRef: MatDialogRef<NodeDataDialogComponent>,
     private readonly _builder: FormBuilder,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _nodeDataService: NodeDataService
   ) {
     super();
@@ -93,13 +93,13 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
 
   ngOnInit() {
     this._nodeDataService.reset();
-    this._clusterService.reset();
+    this._clusterSpecService.reset();
 
     this.form = this._builder.group({
       [Controls.NodeData]: this._builder.control(''),
     });
 
-    this._clusterService.cluster = this._data.initialClusterData;
+    this._clusterSpecService.cluster = this._data.initialClusterData;
     this._nodeDataService.nodeData = this._initNodeData();
     this.mode =
       this._nodeDataService.mode === NodeDataMode.Dialog && !!this._nodeDataService.nodeData.name
@@ -133,7 +133,7 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
       NodeProvider.KUBEVIRT,
       NodeProvider.VSPHERE,
     ];
-    return !blacklist.includes(this._clusterService.provider);
+    return !blacklist.includes(this._clusterSpecService.provider);
   }
 
   onViewChange(): void {
@@ -169,7 +169,7 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
     return {
       spec: {
         cloud: {
-          [this._clusterService.provider]: getDefaultNodeProviderSpec(this._clusterService.provider),
+          [this._clusterSpecService.provider]: getDefaultNodeProviderSpec(this._clusterSpecService.provider),
         },
         operatingSystem: {},
         versions: {},

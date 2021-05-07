@@ -15,10 +15,10 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {RouterStub} from '@app/testing/router-stubs';
-import {AuthMockService} from '@app/testing/services/auth-mock.service';
+import {AuthMockService} from '@app/testing/services/auth-mock';
 import {click} from '@app/testing/utils/click-handler';
 import {Auth} from '@core/services/auth/service';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {PageNotFoundComponent} from './component';
 
 const modules: any[] = [BrowserModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];

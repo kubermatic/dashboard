@@ -12,7 +12,7 @@
 import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
 import {NotificationType} from '@core/components/notification/component';
-import {Notification, NotificationService} from '@core/services/notification/service';
+import {Notification, NotificationService} from '@core/services/notification';
 
 import {slideOut} from '@shared/animations/slide';
 import {Subject} from 'rxjs';

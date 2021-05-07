@@ -16,26 +16,27 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import {NodeService} from '@app/cluster/services/node.service';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
 import {ActivatedRouteStub, RouterStub} from '@app/testing/router-stubs';
-import {ApiMockService} from '@app/testing/services/api-mock.service';
-import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
-import {AuthMockService} from '@app/testing/services/auth-mock.service';
-import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
-import {DatacenterMockService} from '@app/testing/services/datacenter-mock.service';
-import {NodeMockService} from '@app/testing/services/node-mock.service';
-import {ProjectMockService} from '@app/testing/services/project-mock.service';
-import {UserMockService} from '@app/testing/services/user-mock.service';
-import {ApiService} from '@core/services/api/service';
+import {ApiMockService} from '@app/testing/services/api-mock';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock';
+import {AuthMockService} from '@app/testing/services/auth-mock';
+import {ClusterMockService} from '@app/testing/services/cluster-mock';
+import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
+import {NodeMockService} from '@app/testing/services/node-mock';
+import {ProjectMockService} from '@app/testing/services/project-mock';
+import {UserMockService} from '@app/testing/services/user-mock';
+import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
-import {ClusterService} from '@core/services/cluster/service';
-import {DatacenterService} from '@core/services/datacenter/service';
-import {ProjectService} from '@core/services/project/service';
-import {UserService} from '@core/services/user/service';
-import {SharedModule} from '@shared/shared.module';
+import {ClusterService} from '@core/services/cluster';
+import {DatacenterService} from '@core/services/datacenter';
+import {EndOfLifeService} from '@core/services/eol';
+import {NodeService} from '@core/services/node';
+import {ProjectService} from '@core/services/project';
+import {UserService} from '@core/services/user';
+import {SharedModule} from '@shared/module';
 import {ClusterSecretsComponent} from '../cluster-secrets/component';
 import {MachineDeploymentListComponent} from '../machine-deployment-list/component';
 import {MachineNetworksDisplayComponent} from '../machine-networks-display/component';
@@ -72,6 +73,7 @@ describe('VersionPickerComponent', () => {
           {provide: ProjectService, useClass: ProjectMockService},
           MatDialog,
           GoogleAnalyticsService,
+          EndOfLifeService,
         ],
       }).compileComponents();
     })

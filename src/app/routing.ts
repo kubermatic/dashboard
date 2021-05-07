@@ -12,7 +12,7 @@
 import {NgModule} from '@angular/core';
 import {PreloadingStrategy, Route, RouterModule, Routes} from '@angular/router';
 import {Observable, of} from 'rxjs';
-import {DashboardComponent} from './dashboard/dashboard.component';
+import {DashboardComponent} from './dashboard/component';
 
 class SelectedPreloadingStrategy implements PreloadingStrategy {
   preload(route: Route, load: Function): Observable<any> {
@@ -61,7 +61,7 @@ function createRouting(): Routes {
         },
         {
           path: '',
-          loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule),
+          loadChildren: () => import('./pages/module').then(m => m.PagesModule),
         },
       ],
     },

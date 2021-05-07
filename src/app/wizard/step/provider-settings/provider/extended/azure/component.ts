@@ -11,14 +11,14 @@
 
 import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {PresetsService} from '@core/services/wizard/presets.service';
+import {PresetsService} from '@core/services/wizard/presets';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as _ from 'lodash';
-import {DatacenterService} from '@core/services/datacenter/service';
+import {DatacenterService} from '@core/services/datacenter';
 import {Datacenter} from '@shared/entity/datacenter';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 
@@ -65,7 +65,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
     private readonly _builder: FormBuilder,
     private readonly _cdr: ChangeDetectorRef,
     private readonly _presets: PresetsService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService
   ) {
     super('Azure Provider Extended');
@@ -82,11 +82,11 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
     });
 
     this.form.valueChanges
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this._presets.enablePresets(
-          Object.values(this._clusterService.cluster.spec.cloud.azure).every(value => !value)
+          Object.values(this._clusterSpecService.cluster.spec.cloud.azure).every(value => !value)
         );
       });
 
@@ -94,13 +94,13 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
-    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
+    merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
 
-    this._clusterService.clusterChanges
+    this._clusterSpecService.clusterChanges
       .pipe(debounceTime(this._debounceTime))
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
       .pipe(tap(_ => (!this.hasRequiredCredentials() ? this._clearResourceGroup() : null)))
       .pipe(switchMap(_ => this._resourceGroupObservable()))
       .pipe(takeUntil(this._unsubscribe))
@@ -193,7 +193,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
         map(form => form[AutocompleteControls.Main]),
         takeUntil(this._unsubscribe)
       )
-      .subscribe(rg => (this._clusterService.cluster.spec.cloud.azure.resourceGroup = rg));
+      .subscribe(rg => (this._clusterSpecService.cluster.spec.cloud.azure.resourceGroup = rg));
 
     this.form
       .get(Controls.VNetResourceGroup)
@@ -202,7 +202,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
         map(form => form[AutocompleteControls.Main]),
         takeUntil(this._unsubscribe)
       )
-      .subscribe(vrg => (this._clusterService.cluster.spec.cloud.azure.vnetResourceGroup = vrg));
+      .subscribe(vrg => (this._clusterSpecService.cluster.spec.cloud.azure.vnetResourceGroup = vrg));
 
     this.form
       .get(Controls.RouteTable)
@@ -211,7 +211,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
         map(form => form[AutocompleteControls.Main]),
         takeUntil(this._unsubscribe)
       )
-      .subscribe(rt => (this._clusterService.cluster.spec.cloud.azure.routeTable = rt));
+      .subscribe(rt => (this._clusterSpecService.cluster.spec.cloud.azure.routeTable = rt));
 
     this.form
       .get(Controls.SecurityGroup)
@@ -220,7 +220,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
         map(form => form[AutocompleteControls.Main]),
         takeUntil(this._unsubscribe)
       )
-      .subscribe(sg => (this._clusterService.cluster.spec.cloud.azure.securityGroup = sg));
+      .subscribe(sg => (this._clusterSpecService.cluster.spec.cloud.azure.securityGroup = sg));
 
     this.form
       .get(Controls.VNet)
@@ -229,7 +229,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
         map(form => form[AutocompleteControls.Main]),
         takeUntil(this._unsubscribe)
       )
-      .subscribe(v => (this._clusterService.cluster.spec.cloud.azure.vnet = v));
+      .subscribe(v => (this._clusterSpecService.cluster.spec.cloud.azure.vnet = v));
 
     this.form
       .get(Controls.Subnet)
@@ -238,7 +238,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
         map(form => form[AutocompleteControls.Main]),
         takeUntil(this._unsubscribe)
       )
-      .subscribe(s => (this._clusterService.cluster.spec.cloud.azure.subnet = s));
+      .subscribe(s => (this._clusterSpecService.cluster.spec.cloud.azure.subnet = s));
   }
 
   ngOnDestroy(): void {
@@ -248,10 +248,10 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
 
   hasRequiredCredentials(): boolean {
     return (
-      !!this._clusterService.cluster.spec.cloud.azure.subscriptionID &&
-      !!this._clusterService.cluster.spec.cloud.azure.tenantID &&
-      !!this._clusterService.cluster.spec.cloud.azure.clientID &&
-      !!this._clusterService.cluster.spec.cloud.azure.clientSecret
+      !!this._clusterSpecService.cluster.spec.cloud.azure.subscriptionID &&
+      !!this._clusterSpecService.cluster.spec.cloud.azure.tenantID &&
+      !!this._clusterSpecService.cluster.spec.cloud.azure.clientID &&
+      !!this._clusterSpecService.cluster.spec.cloud.azure.clientSecret
     );
   }
 
@@ -263,18 +263,18 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
   private _resourceGroupObservable(): Observable<string[]> {
     let location = '';
     return this._datacenterService
-      .getDatacenter(this._clusterService.cluster.spec.cloud.dc)
+      .getDatacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .pipe(take(1))
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE))
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
       .pipe(tap(dc => (location = dc.spec.azure.location)))
       .pipe(
         switchMap(_dc =>
           this._presets
             .provider(NodeProvider.AZURE)
-            .clientID(this._clusterService.cluster.spec.cloud.azure.clientID)
-            .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
-            .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
-            .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
+            .clientID(this._clusterSpecService.cluster.spec.cloud.azure.clientID)
+            .clientSecret(this._clusterSpecService.cluster.spec.cloud.azure.clientSecret)
+            .subscriptionID(this._clusterSpecService.cluster.spec.cloud.azure.subscriptionID)
+            .tenantID(this._clusterSpecService.cluster.spec.cloud.azure.tenantID)
             .location(location)
             .credential(this._presets.preset)
             .resourceGroups(() => this._setIsLoadingResourceGroups(true))
@@ -308,10 +308,10 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
         switchMap(_dc =>
           this._presets
             .provider(NodeProvider.AZURE)
-            .clientID(this._clusterService.cluster.spec.cloud.azure.clientID)
-            .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
-            .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
-            .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
+            .clientID(this._clusterSpecService.cluster.spec.cloud.azure.clientID)
+            .clientSecret(this._clusterSpecService.cluster.spec.cloud.azure.clientSecret)
+            .subscriptionID(this._clusterSpecService.cluster.spec.cloud.azure.subscriptionID)
+            .tenantID(this._clusterSpecService.cluster.spec.cloud.azure.tenantID)
             .resourceGroup(this.getValueFromInternalForm(Controls.ResourceGroup))
             .location(location)
             .credential(this._presets.preset)
@@ -346,10 +346,10 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
         switchMap(_dc =>
           this._presets
             .provider(NodeProvider.AZURE)
-            .clientID(this._clusterService.cluster.spec.cloud.azure.clientID)
-            .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
-            .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
-            .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
+            .clientID(this._clusterSpecService.cluster.spec.cloud.azure.clientID)
+            .clientSecret(this._clusterSpecService.cluster.spec.cloud.azure.clientSecret)
+            .subscriptionID(this._clusterSpecService.cluster.spec.cloud.azure.subscriptionID)
+            .tenantID(this._clusterSpecService.cluster.spec.cloud.azure.tenantID)
             .resourceGroup(this.getValueFromInternalForm(Controls.ResourceGroup))
             .location(location)
             .credential(this._presets.preset)
@@ -384,10 +384,10 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
         switchMap(_dc =>
           this._presets
             .provider(NodeProvider.AZURE)
-            .clientID(this._clusterService.cluster.spec.cloud.azure.clientID)
-            .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
-            .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
-            .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
+            .clientID(this._clusterSpecService.cluster.spec.cloud.azure.clientID)
+            .clientSecret(this._clusterSpecService.cluster.spec.cloud.azure.clientSecret)
+            .subscriptionID(this._clusterSpecService.cluster.spec.cloud.azure.subscriptionID)
+            .tenantID(this._clusterSpecService.cluster.spec.cloud.azure.tenantID)
             .resourceGroup(this.getValueFromInternalForm(Controls.ResourceGroup))
             .location(location)
             .credential(this._presets.preset)
@@ -417,10 +417,10 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
   private _subnetObservable(): Observable<string[]> {
     return this._presets
       .provider(NodeProvider.AZURE)
-      .clientID(this._clusterService.cluster.spec.cloud.azure.clientID)
-      .clientSecret(this._clusterService.cluster.spec.cloud.azure.clientSecret)
-      .subscriptionID(this._clusterService.cluster.spec.cloud.azure.subscriptionID)
-      .tenantID(this._clusterService.cluster.spec.cloud.azure.tenantID)
+      .clientID(this._clusterSpecService.cluster.spec.cloud.azure.clientID)
+      .clientSecret(this._clusterSpecService.cluster.spec.cloud.azure.clientSecret)
+      .subscriptionID(this._clusterSpecService.cluster.spec.cloud.azure.subscriptionID)
+      .tenantID(this._clusterSpecService.cluster.spec.cloud.azure.tenantID)
       .resourceGroup(this.getValueFromInternalForm(Controls.ResourceGroup))
       .vnet(this.getValueFromInternalForm(Controls.VNet))
       .credential(this._presets.preset)
@@ -446,16 +446,16 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
   }
 
   private _getCredentialChanges(...changes: Observable<any>[]): Observable<any> {
-    return merge(this._clusterService.clusterChanges, ...changes)
+    return merge(this._clusterSpecService.clusterChanges, ...changes)
       .pipe(debounceTime(this._debounceTime))
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE));
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE));
   }
 
   private _getDatacenter(): Observable<Datacenter> {
     return this._datacenterService
-      .getDatacenter(this._clusterService.cluster.spec.cloud.dc)
+      .getDatacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .pipe(take(1))
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AZURE));
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE));
   }
 
   private _enable(enable: boolean, name: string): void {

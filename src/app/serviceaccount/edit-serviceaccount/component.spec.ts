@@ -13,14 +13,14 @@ import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeProject} from '@app/testing/fake-data/project.fake';
-import {fakeServiceAccount} from '@app/testing/fake-data/serviceaccount.fake';
-import {asyncData} from '@app/testing/services/api-mock.service';
+import {fakeProject} from '@app/testing/fake-data/project';
+import {fakeServiceAccount} from '@app/testing/fake-data/serviceaccount';
+import {asyncData} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
-import {ApiService} from '@core/services/api/service';
-import {NotificationService} from '@core/services/notification/service';
-import {SharedModule} from '@shared/shared.module';
+import {ApiService} from '@core/services/api';
+import {NotificationService} from '@core/services/notification';
+import {SharedModule} from '@shared/module';
 import {EditServiceAccountComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];

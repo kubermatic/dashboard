@@ -15,13 +15,13 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ApiService} from '@core/services/api/service';
-import {ClusterService} from '@core/services/cluster/service';
-import {DatacenterService} from '@core/services/datacenter/service';
-import {NotificationService} from '@core/services/notification/service';
-import {ProjectService} from '@core/services/project/service';
-import {SettingsService} from '@core/services/settings/service';
-import {UserService} from '@core/services/user/service';
+import {ApiService} from '@core/services/api';
+import {ClusterService} from '@core/services/cluster';
+import {DatacenterService} from '@core/services/datacenter';
+import {NotificationService} from '@core/services/notification';
+import {ProjectService} from '@core/services/project';
+import {SettingsService} from '@core/services/settings';
+import {UserService} from '@core/services/user';
 import {ExternalClusterDataDialogComponent} from '@shared/components/external-cluster-data-dialog/component';
 import {CloudSpec, Cluster} from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
@@ -38,7 +38,7 @@ import * as _ from 'lodash';
 import {EMPTY, forkJoin, Observable, of, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, distinctUntilChanged, filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-delete-confirmation/component';
-import {PathParam} from '@core/services/params/service';
+import {PathParam} from '@core/services/params';
 
 @Component({
   selector: 'km-cluster-list',

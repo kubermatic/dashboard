@@ -11,8 +11,8 @@
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {NotificationService} from '@core/services/notification/service';
-import {PresetsService} from '@core/services/wizard/presets.service';
+import {NotificationService} from '@core/services/notification';
+import {PresetsService} from '@core/services/wizard/presets';
 import {Preset} from '@shared/entity/preset';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Subject} from 'rxjs';

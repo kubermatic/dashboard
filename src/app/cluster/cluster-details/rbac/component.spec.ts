@@ -15,24 +15,24 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeProject} from '@app/testing/fake-data/project.fake';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
+import {fakeProject} from '@app/testing/fake-data/project';
 import {RouterStub} from '@app/testing/router-stubs';
-import {NotificationService} from '@core/services/notification/service';
-import {RBACService} from '@core/services/rbac/service';
-import {SharedModule} from '@shared/shared.module';
+import {NotificationService} from '@core/services/notification';
+import {RBACService} from '@core/services/rbac';
+import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {RBACComponent} from './component';
-import {ClusterService} from '@core/services/cluster/service';
-import {ClusterMockService} from '@app/testing/services/cluster-mock-service';
+import {ClusterService} from '@core/services/cluster';
+import {ClusterMockService} from '@app/testing/services/cluster-mock';
 import {AppConfigService} from '@app/config.service';
-import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {
   fakeBindings,
   fakeClusterBindings,
   fakeSimpleBindings,
   fakeSimpleClusterBindings,
-} from '@app/testing/fake-data/rbac.fake';
+} from '@app/testing/fake-data/rbac';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 

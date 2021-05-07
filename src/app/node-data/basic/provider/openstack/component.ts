@@ -20,15 +20,15 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {NodeDataService} from '@app/node-data/service/service';
-import {DatacenterService} from '@core/services/datacenter/service';
+import {ClusterSpecService} from '@core/services/cluster-spec';
+import {DatacenterService} from '@core/services/datacenter';
+import {NodeDataService} from '@core/services/node-data/service';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
 import {NodeCloudSpec, NodeSpec, OpenstackNodeSpec} from '@shared/entity/node';
 import {OpenstackAvailabilityZone, OpenstackFlavor} from '@shared/entity/provider/openstack';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
-import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {merge, Observable, of} from 'rxjs';
@@ -116,7 +116,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
     private readonly _cdr: ChangeDetectorRef
   ) {
@@ -150,7 +150,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
         this._nodeDataService.nodeData = this._getNodeData();
       });
 
-    merge<string>(this._clusterService.datacenterChanges, of(this._clusterService.datacenter))
+    merge<string>(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))
       .pipe(filter(dc => !!dc))
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(tap(dc => (this._images = dc.spec.openstack.images)))
@@ -160,7 +160,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
         this._enforceFloatingIP(dc.spec.openstack.enforce_floating_ip);
       });
 
-    merge(this._clusterService.clusterTypeChanges, of(this._clusterService.clusterType))
+    merge(this._clusterSpecService.clusterTypeChanges, of(this._clusterSpecService.clusterType))
       .pipe(filter(clusterType => !!clusterType))
       .pipe(filter(_ => !!this._images))
       .pipe(takeUntil(this._unsubscribe))
@@ -307,7 +307,10 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       return;
     }
 
-    if (!this._nodeDataService.isInWizardMode() && !this._clusterService.cluster.spec.cloud.openstack.floatingIpPool) {
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._clusterSpecService.cluster.spec.cloud.openstack.floatingIpPool
+    ) {
       this.form.get(Controls.UseFloatingIP).setValue(false);
       this.form.get(Controls.UseFloatingIP).disable();
     }

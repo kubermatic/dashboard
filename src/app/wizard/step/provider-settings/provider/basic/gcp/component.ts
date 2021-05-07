@@ -11,10 +11,10 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {PresetsService} from '@core/services/wizard/presets.service';
+import {ClusterSpecService} from '@core/services/cluster-spec';
+import {PresetsService} from '@core/services/wizard/presets';
 import {CloudSpec, Cluster, ClusterSpec, GCPCloudSpec} from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
 import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
@@ -45,7 +45,7 @@ export class GCPProviderBasicComponent extends BaseFormValidator implements OnIn
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterSpecService: ClusterSpecService
   ) {
     super('GCP Provider Basic');
   }
@@ -60,13 +60,15 @@ export class GCPProviderBasicComponent extends BaseFormValidator implements OnIn
       .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
     this.form.valueChanges
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.GCP))
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.GCP))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
-        this._presets.enablePresets(Object.values(this._clusterService.cluster.spec.cloud.gcp).every(value => !value))
+        this._presets.enablePresets(
+          Object.values(this._clusterSpecService.cluster.spec.cloud.gcp).every(value => !value)
+        )
       );
 
-    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
+    merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
 
@@ -74,7 +76,7 @@ export class GCPProviderBasicComponent extends BaseFormValidator implements OnIn
       .get(Controls.ServiceAccoount)
       .valueChanges.pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
+      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
   }
 
   ngOnDestroy(): void {

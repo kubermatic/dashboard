@@ -12,8 +12,8 @@
 import {Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
-import {NotificationService} from '@core/services/notification/service';
-import {OPAService} from '@core/services/opa/service';
+import {NotificationService} from '@core/services/notification';
+import {OPAService} from '@core/services/opa';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {GatekeeperConfig, GVK, MatchEntry, Trace} from '@shared/entity/opa';

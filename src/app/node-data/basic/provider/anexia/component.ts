@@ -19,7 +19,7 @@ import {
   OnInit,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {NodeDataService} from '@app/node-data/service/service';
+import {NodeDataService} from '@core/services/node-data/service';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';

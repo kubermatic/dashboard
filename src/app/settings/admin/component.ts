@@ -10,10 +10,10 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {HistoryService} from '@core/services/history/service';
-import {NotificationService} from '@core/services/notification/service';
-import {SettingsService} from '@core/services/settings/service';
-import {UserService} from '@core/services/user/service';
+import {HistoryService} from '@core/services/history';
+import {NotificationService} from '@core/services/notification';
+import {SettingsService} from '@core/services/settings';
+import {UserService} from '@core/services/user';
 import {Member} from '@shared/entity/member';
 import {AdminSettings} from '@shared/entity/settings';
 import {objectDiff} from '@shared/utils/common-utils';

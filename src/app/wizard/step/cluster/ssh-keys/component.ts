@@ -12,9 +12,9 @@
 import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
-import {ApiService} from '@core/services/api/service';
-import {ProjectService} from '@core/services/project/service';
-import {UserService} from '@core/services/user/service';
+import {ApiService} from '@core/services/api';
+import {ProjectService} from '@core/services/project';
+import {UserService} from '@core/services/user';
 
 import {AddSshKeyDialogComponent} from '@shared/components/add-ssh-key-dialog/component';
 import {View} from '@shared/entity/common';
@@ -22,7 +22,7 @@ import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {GroupConfig} from '@shared/model/Config';
-import {ClusterService} from '@shared/services/cluster.service';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
@@ -59,7 +59,7 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
     private readonly _apiService: ApiService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _dialog: MatDialog,
     private readonly _builder: FormBuilder,
     private readonly _changeDetectorRef: ChangeDetectorRef
@@ -95,7 +95,7 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
 
     this.form.valueChanges
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(() => (this._clusterService.sshKeys = this._getSelectedKeys()));
+      .subscribe(() => (this._clusterSpecService.sshKeys = this._getSelectedKeys()));
   }
 
   ngOnDestroy(): void {

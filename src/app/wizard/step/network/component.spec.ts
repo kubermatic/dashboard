@@ -16,18 +16,18 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '@app/config.service';
 import {NODE_DATA_CONFIG, NodeDataMode} from '@app/node-data/config';
-import {NodeDataService} from '@app/node-data/service/service';
-import {ApiMockService} from '@app/testing/services/api-mock.service';
-import {AuthMockService} from '@app/testing/services/auth-mock.service';
-import {ProjectMockService} from '@app/testing/services/project-mock.service';
-import {WizardService} from '@app/wizard/service/wizard';
-import {ApiService} from '@core/services/api/service';
+import {ApiMockService} from '@app/testing/services/api-mock';
+import {AuthMockService} from '@app/testing/services/auth-mock';
+import {ProjectMockService} from '@app/testing/services/project-mock';
+import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
-import {DatacenterService} from '@core/services/datacenter/service';
-import {ProjectService} from '@core/services/project/service';
-import {PresetsService} from '@core/services/wizard/presets.service';
-import {ClusterService} from '@shared/services/cluster.service';
-import {SharedModule} from '@shared/shared.module';
+import {ClusterSpecService} from '@core/services/cluster-spec';
+import {DatacenterService} from '@core/services/datacenter';
+import {NodeDataService} from '@core/services/node-data/service';
+import {ProjectService} from '@core/services/project';
+import {PresetsService} from '@core/services/wizard/presets';
+import {WizardService} from '@core/services/wizard/wizard';
+import {SharedModule} from '@shared/module';
 import {MachineNetworkStepComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule];
@@ -43,9 +43,8 @@ describe('MachineNetworkStepComponent', () => {
         declarations: [MachineNetworkStepComponent],
         providers: [
           WizardService,
-          ClusterService,
           NodeDataService,
-          ClusterService,
+          ClusterSpecService,
           PresetsService,
           DatacenterService,
           AppConfigService,

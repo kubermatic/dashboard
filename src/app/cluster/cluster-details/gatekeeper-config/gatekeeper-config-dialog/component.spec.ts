@@ -13,13 +13,13 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeGatekeeperConfig} from '@app/testing/fake-data/opa.fake';
-import {asyncData} from '@app/testing/services/api-mock.service';
+import {fakeGatekeeperConfig} from '@app/testing/fake-data/opa';
+import {asyncData} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
-import {NotificationService} from '@core/services/notification/service';
-import {OPAService} from '@core/services/opa/service';
-import {SharedModule} from '@shared/shared.module';
+import {NotificationService} from '@core/services/notification';
+import {OPAService} from '@core/services/opa';
+import {SharedModule} from '@shared/module';
 import {NGX_MONACO_EDITOR_CONFIG, MonacoEditorModule} from 'ngx-monaco-editor';
 import {GatekeeperConfigDialog, Mode} from './component';
 

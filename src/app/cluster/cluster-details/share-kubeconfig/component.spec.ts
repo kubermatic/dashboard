@@ -14,14 +14,14 @@ import {waitForAsync, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeProject} from '@app/testing/fake-data/project.fake';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
+import {fakeProject} from '@app/testing/fake-data/project';
 import {RouterTestingModule} from '@app/testing/router-stubs';
-import {UserMockService} from '@app/testing/services/user-mock.service';
-import {ApiService} from '@core/services/api/service';
+import {UserMockService} from '@app/testing/services/user-mock';
+import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
-import {UserService} from '@core/services/user/service';
-import {SharedModule} from '@shared/shared.module';
+import {UserService} from '@core/services/user';
+import {SharedModule} from '@shared/module';
 import {ShareKubeconfigComponent} from './component';
 
 describe('ShareKubeconfigComponent', () => {

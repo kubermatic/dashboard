@@ -19,20 +19,20 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
-import {ApiService} from '@core/services/api/service';
-import {DatacenterService} from '@core/services/datacenter/service';
-import {NameGeneratorService} from '@core/services/name-generator/service';
-import {SettingsService} from '@core/services/settings/service';
+import {ApiService} from '@core/services/api';
+import {ClusterSpecService} from '@core/services/cluster-spec';
+import {DatacenterService} from '@core/services/datacenter';
+import {NameGeneratorService} from '@core/services/name-generator';
+import {SettingsService} from '@core/services/settings';
+import {WizardService} from '@core/services/wizard/wizard';
 import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter} from '@shared/entity/datacenter';
 import {AdminSettings} from '@shared/entity/settings';
-import {ClusterService} from '@shared/services/cluster.service';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import {merge} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {WizardService} from '../../service/wizard';
 import {StepBase} from '../base';
 
 enum Controls {
@@ -81,7 +81,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     private readonly _builder: FormBuilder,
     private readonly _api: ApiService,
     private readonly _nameGenerator: NameGeneratorService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
     private readonly _settingsService: SettingsService,
     wizard: WizardService
@@ -112,7 +112,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this._enforce(Controls.OPAIntegration, this._settings.opaOptions.enforced);
     });
 
-    this._clusterService.datacenterChanges
+    this._clusterSpecService.datacenterChanges
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((dc: Datacenter) => {
@@ -134,7 +134,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     this.control(Controls.AdmissionPlugins)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(() => (this._clusterService.admissionPlugins = this.form.get(Controls.AdmissionPlugins).value));
+      .subscribe(() => (this._clusterSpecService.admissionPlugins = this.form.get(Controls.AdmissionPlugins).value));
 
     merge(
       this.form.get(Controls.Name).valueChanges,
@@ -144,7 +144,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.OPAIntegration).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
+      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
   }
 
   generateName(): void {
@@ -153,12 +153,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   onLabelsChange(labels: object): void {
     this.labels = labels;
-    this._clusterService.labels = this.labels;
+    this._clusterSpecService.labels = this.labels;
   }
 
   onPodNodeSelectorAdmissionPluginConfigChange(config: object): void {
     this.podNodeSelectorAdmissionPluginConfig = config;
-    this._clusterService.podNodeSelectorAdmissionPluginConfig = this.podNodeSelectorAdmissionPluginConfig;
+    this._clusterSpecService.podNodeSelectorAdmissionPluginConfig = this.podNodeSelectorAdmissionPluginConfig;
   }
 
   isEnforced(control: Controls): boolean {

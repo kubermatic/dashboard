@@ -19,12 +19,12 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {PresetsService} from '@core/services/wizard/presets.service';
+import {ClusterSpecService} from '@core/services/cluster-spec';
+import {PresetsService} from '@core/services/wizard/presets';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {AWSCloudSpec, CloudSpec, Cluster, ClusterSpec} from '@shared/entity/cluster';
 import {AWSVPC} from '@shared/entity/provider/aws';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
@@ -74,7 +74,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super('AWS Provider Basic');
@@ -92,13 +92,15 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
       .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
     this.form.valueChanges
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.AWS))
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AWS))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
-        this._presets.enablePresets(Object.values(this._clusterService.cluster.spec.cloud.aws).every(value => !value))
+        this._presets.enablePresets(
+          Object.values(this._clusterSpecService.cluster.spec.cloud.aws).every(value => !value)
+        )
       );
 
-    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
+    merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
 
@@ -113,7 +115,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
       .get(Controls.VPCID)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .pipe(distinctUntilChanged())
-      .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
+      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
   }
 
   getHint(control: Controls): string {
@@ -128,7 +130,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
   }
 
   onVPCChange(vpcId: string): void {
-    this._clusterService.cluster.spec.cloud.aws.vpcId = vpcId;
+    this._clusterSpecService.cluster.spec.cloud.aws.vpcId = vpcId;
   }
 
   ngOnDestroy(): void {
@@ -138,9 +140,9 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
 
   private _hasRequiredCredentials(): boolean {
     return (
-      !!this._clusterService.cluster.spec.cloud.aws &&
-      !!this._clusterService.cluster.spec.cloud.aws.accessKeyId &&
-      !!this._clusterService.cluster.spec.cloud.aws.secretAccessKey
+      !!this._clusterSpecService.cluster.spec.cloud.aws &&
+      !!this._clusterSpecService.cluster.spec.cloud.aws.accessKeyId &&
+      !!this._clusterSpecService.cluster.spec.cloud.aws.secretAccessKey
     );
   }
 
@@ -159,7 +161,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
       .provider(NodeProvider.AWS)
       .accessKeyID(this.form.get(Controls.AccessKeyID).value)
       .secretAccessKey(this.form.get(Controls.AccessKeySecret).value)
-      .vpcs(this._clusterService.datacenter, this._onVPCLoading.bind(this))
+      .vpcs(this._clusterSpecService.datacenter, this._onVPCLoading.bind(this))
       .pipe(map(vpcs => _.sortBy(vpcs, v => v.name.toLowerCase())))
       .pipe(
         catchError(() => {

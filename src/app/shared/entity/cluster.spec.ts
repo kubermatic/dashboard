@@ -19,7 +19,7 @@ import {
   fakeOpenstackCluster,
   fakePacketCluster,
   fakeVSphereCluster,
-} from '../../testing/fake-data/cluster.fake';
+} from '../../testing/fake-data/cluster';
 
 import {Cluster} from './cluster';
 

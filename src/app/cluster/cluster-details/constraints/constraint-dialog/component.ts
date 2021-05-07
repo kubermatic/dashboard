@@ -12,8 +12,8 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {OPAService} from '@core/services/opa/service';
-import {NotificationService} from '@core/services/notification/service';
+import {OPAService} from '@core/services/opa';
+import {NotificationService} from '@core/services/notification';
 import {Constraint, ConstraintTemplate, ConstraintSpec} from '@shared/entity/opa';
 import {dump, load} from 'js-yaml';
 import * as _ from 'lodash';

@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {fakeInactiveProject, fakeProject} from '../../../testing/fake-data/project.fake';
+import {fakeInactiveProject, fakeProject} from '@app/testing/fake-data/project';
 import {HealthStatusColor} from '../health-status/health-status';
 
 import {ProjectUtils} from './project-utils';

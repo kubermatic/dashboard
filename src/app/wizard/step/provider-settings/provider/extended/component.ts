@@ -11,11 +11,11 @@
 
 import {Component, forwardRef, Input, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '../../../../../shared/validators/base-form.validator';
-import {ClusterService} from '../../../../../shared/services/cluster.service';
 
 enum Controls {
   ProviderExtended = 'providerExtended',
@@ -44,7 +44,7 @@ export class ProviderExtendedComponent extends BaseFormValidator implements OnIn
   readonly Providers = NodeProvider;
   readonly Controls = Controls;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _clusterService: ClusterService) {
+  constructor(private readonly _builder: FormBuilder, private readonly _clusterSpecService: ClusterSpecService) {
     super('Provider Extended');
   }
 
@@ -53,7 +53,7 @@ export class ProviderExtendedComponent extends BaseFormValidator implements OnIn
       [Controls.ProviderExtended]: this._builder.control(''),
     });
 
-    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
+    merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this.form.removeControl(Controls.ProviderExtended);

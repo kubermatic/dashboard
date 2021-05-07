@@ -19,6 +19,7 @@ import {
   OnInit,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {NodeDataService} from '@core/services/node-data/service';
 import * as _ from 'lodash';
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -27,7 +28,6 @@ import {PacketSize} from '../../../../shared/entity/provider/packet';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {compare} from '../../../../shared/utils/common-utils';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
-import {NodeDataService} from '../../../service/service';
 
 enum Controls {
   InstanceType = 'instanceType',

@@ -16,18 +16,18 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
-import {fakeSSHKeys} from '@app/testing/fake-data/sshkey.fake';
+import {fakeSSHKeys} from '@app/testing/fake-data/sshkey';
 import {RouterStub} from '@app/testing/router-stubs';
 import {ActivatedRouteMock} from '@app/testing/services/activate-route-mock';
-import {asyncData} from '@app/testing/services/api-mock.service';
-import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
-import {ProjectMockService} from '@app/testing/services/project-mock.service';
-import {UserMockService} from '@app/testing/services/user-mock.service';
-import {ApiService} from '@core/services/api/service';
-import {ProjectService} from '@core/services/project/service';
-import {UserService} from '@core/services/user/service';
-import {ClusterService} from '@shared/services/cluster.service';
-import {SharedModule} from '@shared/shared.module';
+import {asyncData} from '@app/testing/services/api-mock';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock';
+import {ProjectMockService} from '@app/testing/services/project-mock';
+import {UserMockService} from '@app/testing/services/user-mock';
+import {ApiService} from '@core/services/api';
+import {ClusterSpecService} from '@core/services/cluster-spec';
+import {ProjectService} from '@core/services/project';
+import {UserService} from '@core/services/user';
+import {SharedModule} from '@shared/module';
 import {ClusterSSHKeysComponent} from './component';
 
 describe('ClusterSSHKeys', () => {
@@ -43,7 +43,7 @@ describe('ClusterSSHKeys', () => {
         imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
         declarations: [ClusterSSHKeysComponent],
         providers: [
-          ClusterService,
+          ClusterSpecService,
           {provide: ActivatedRoute, useClass: ActivatedRouteMock},
           {provide: ApiService, useValue: apiMock},
           {provide: ProjectService, useClass: ProjectMockService},

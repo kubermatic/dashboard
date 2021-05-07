@@ -11,8 +11,8 @@
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatSelect, MatSelectChange} from '@angular/material/select';
-import {ProjectService} from '@core/services/project/service';
-import {UserService} from '@core/services/user/service';
+import {ProjectService} from '@core/services/project';
+import {UserService} from '@core/services/user';
 import {Project} from '@shared/entity/project';
 import * as _ from 'lodash';
 import {differenceBy} from 'lodash';

@@ -11,15 +11,15 @@
 
 import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {ClusterService} from '@core/services/cluster/service';
-import {DatacenterService} from '@core/services/datacenter/service';
+import {ClusterService} from '@core/services/cluster';
+import {ClusterSpecService} from '@core/services/cluster-spec';
+import {DatacenterService} from '@core/services/datacenter';
+import {NodeDataService} from '@core/services/node-data/service';
 import {Cluster, ClusterType, MasterVersion} from '@shared/entity/cluster';
 import {NodeSpec} from '@shared/entity/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
-import {ClusterService as ClusterDataService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {take, switchMap, takeUntil} from 'rxjs/operators';
-import {NodeDataService} from '../service/service';
 
 enum Controls {
   Kubelet = 'kubelet',
@@ -55,7 +55,7 @@ export class KubeletVersionNodeDataComponent extends BaseFormValidator implement
   }
 
   constructor(
-    private readonly _clusterDataService: ClusterDataService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterService: ClusterService,
     private readonly _datacenterService: DatacenterService,
@@ -65,7 +65,7 @@ export class KubeletVersionNodeDataComponent extends BaseFormValidator implement
   }
 
   ngOnInit(): void {
-    this._clusterType = this._clusterDataService.clusterType;
+    this._clusterType = this._clusterSpecService.clusterType;
     this.selected = this._nodeDataService.nodeData.spec.versions.kubelet;
 
     this.form = this._builder.group({
@@ -73,12 +73,12 @@ export class KubeletVersionNodeDataComponent extends BaseFormValidator implement
     });
 
     this._datacenterService
-      .getDatacenter(this._clusterDataService.cluster.spec.cloud.dc)
+      .getDatacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .pipe(
         switchMap(_ =>
           this._clusterService.nodeUpgrades(
-            this._clusterDataService.cluster.spec.version,
-            this._clusterDataService.clusterType
+            this._clusterSpecService.cluster.spec.version,
+            this._clusterSpecService.clusterType
           )
         )
       )
@@ -98,7 +98,7 @@ export class KubeletVersionNodeDataComponent extends BaseFormValidator implement
 
   private _setDefaultVersion(upgrades: MasterVersion[]): void {
     this.versions = upgrades.map(upgrade => upgrade.version);
-    const clusterVersion = this._clusterDataService.cluster.spec.version;
+    const clusterVersion = this._clusterSpecService.cluster.spec.version;
 
     // First try to pre-select value that was passed to the component
     if (this.versions.includes(this.selected)) {

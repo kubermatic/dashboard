@@ -11,7 +11,8 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {PresetsService} from '@core/services/wizard/presets.service';
+import {ClusterSpecService} from '@core/services/cluster-spec';
+import {PresetsService} from '@core/services/wizard/presets';
 import {
   AVAILABLE_PACKET_BILLING_CYCLES,
   CloudSpec,
@@ -20,7 +21,6 @@ import {
   PacketCloudSpec,
 } from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
 import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
@@ -57,7 +57,7 @@ export class PacketProviderBasicComponent extends BaseFormValidator implements O
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterSpecService: ClusterSpecService
   ) {
     super('Packet Provider Basic');
   }
@@ -76,7 +76,7 @@ export class PacketProviderBasicComponent extends BaseFormValidator implements O
     });
 
     this.form.valueChanges
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.PACKET))
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.PACKET))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this._presets.enablePresets(Object.values(Controls).every(control => !this.form.get(control).value))
@@ -93,9 +93,9 @@ export class PacketProviderBasicComponent extends BaseFormValidator implements O
     )
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._clusterService.cluster = this._getClusterEntity()));
+      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
 
-    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
+    merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
   }

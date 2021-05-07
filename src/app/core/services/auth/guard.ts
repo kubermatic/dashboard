@@ -16,7 +16,7 @@ import {Member} from '@shared/entity/member';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {from, Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-import {UserService} from '../user/service';
+import {UserService} from '../user';
 import {Auth} from './service';
 
 @Injectable()

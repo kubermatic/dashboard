@@ -15,24 +15,25 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
-import {fakeAWSCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeHealth} from '@app/testing/fake-data/health.fake';
+import {fakeAWSCluster} from '@app/testing/fake-data/cluster';
+import {fakeHealth} from '@app/testing/fake-data/health';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {ApiMockService, asyncData} from '@app/testing/services/api-mock.service';
-import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
-import {AuthMockService} from '@app/testing/services/auth-mock.service';
-import {DatacenterMockService} from '@app/testing/services/datacenter-mock.service';
-import {ProjectMockService} from '@app/testing/services/project-mock.service';
-import {SettingsMockService} from '@app/testing/services/settings-mock.service';
-import {UserMockService} from '@app/testing/services/user-mock.service';
-import {ApiService} from '@core/services/api/service';
+import {ApiMockService, asyncData} from '@app/testing/services/api-mock';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock';
+import {AuthMockService} from '@app/testing/services/auth-mock';
+import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
+import {ProjectMockService} from '@app/testing/services/project-mock';
+import {SettingsMockService} from '@app/testing/services/settings-mock';
+import {UserMockService} from '@app/testing/services/user-mock';
+import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
-import {ClusterService} from '@core/services/cluster/service';
-import {DatacenterService} from '@core/services/datacenter/service';
-import {ProjectService} from '@core/services/project/service';
-import {SettingsService} from '@core/services/settings/service';
-import {UserService} from '@core/services/user/service';
-import {SharedModule} from '@shared/shared.module';
+import {ClusterService} from '@core/services/cluster';
+import {DatacenterService} from '@core/services/datacenter';
+import {EndOfLifeService} from '@core/services/eol';
+import {ProjectService} from '@core/services/project';
+import {SettingsService} from '@core/services/settings';
+import {UserService} from '@core/services/user';
+import {SharedModule} from '@shared/module';
 import {ClusterListComponent} from './component';
 
 describe('ClusterListComponent', () => {
@@ -65,6 +66,7 @@ describe('ClusterListComponent', () => {
           {provide: DatacenterService, useClass: DatacenterMockService},
           {provide: ProjectService, useClass: ProjectMockService},
           {provide: SettingsService, useClass: SettingsMockService},
+          EndOfLifeService,
         ],
       }).compileComponents();
     })

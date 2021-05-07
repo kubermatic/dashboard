@@ -16,16 +16,17 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
-import {fakeProject} from '@app/testing/fake-data/project.fake';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
+import {fakeProject} from '@app/testing/fake-data/project';
 import {RouterStub} from '@app/testing/router-stubs';
-import {AppConfigMockService} from '@app/testing/services/app-config-mock.service';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
-import {ProjectMockService} from '@app/testing/services/project-mock.service';
-import {ClusterService} from '@core/services/cluster/service';
-import {NotificationService} from '@core/services/notification/service';
-import {ProjectService} from '@core/services/project/service';
-import {SharedModule} from '@shared/shared.module';
+import {ProjectMockService} from '@app/testing/services/project-mock';
+import {ClusterService} from '@core/services/cluster';
+import {EndOfLifeService} from '@core/services/eol';
+import {NotificationService} from '@core/services/notification';
+import {ProjectService} from '@core/services/project';
+import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {ChangeClusterVersionComponent} from './component';
 
@@ -58,6 +59,7 @@ describe('ChangeClusterVersionComponent', () => {
           {provide: AppConfigService, useClass: AppConfigMockService},
           GoogleAnalyticsService,
           NotificationService,
+          EndOfLifeService,
         ],
       }).compileComponents();
     })

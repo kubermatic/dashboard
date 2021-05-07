@@ -28,7 +28,7 @@ import {OpenstackSettingsComponent} from '@app/settings/admin/presets/dialog/ste
 import {PacketSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/packet/component';
 import {VSphereSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/vsphere/component';
 import {EditPresetDialogComponent} from '@app/settings/admin/presets/edit-dialog/component';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {AddAdminDialogComponent} from './admins/add-admin-dialog/component';
 import {AdminsComponent} from './admins/component';
 import {AdminSettingsComponent} from './component';

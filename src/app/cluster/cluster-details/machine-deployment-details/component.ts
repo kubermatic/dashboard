@@ -11,13 +11,13 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {NodeService} from '@app/cluster/services/node.service';
 import {AppConfigService} from '@app/config.service';
-import {ApiService} from '@core/services/api/service';
-import {ClusterService} from '@core/services/cluster/service';
-import {DatacenterService} from '@core/services/datacenter/service';
-import {NotificationService} from '@core/services/notification/service';
-import {UserService} from '@core/services/user/service';
+import {ApiService} from '@core/services/api';
+import {ClusterService} from '@core/services/cluster';
+import {DatacenterService} from '@core/services/datacenter';
+import {NodeService} from '@core/services/node';
+import {NotificationService} from '@core/services/notification';
+import {UserService} from '@core/services/user';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {Event} from '@shared/entity/event';
@@ -30,7 +30,7 @@ import {MachineDeploymentHealthStatus} from '@shared/utils/health-status/machine
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {Subject, timer} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
-import {PathParam} from '@core/services/params/service';
+import {PathParam} from '@core/services/params';
 
 @Component({
   selector: 'km-machine-deployment-details',

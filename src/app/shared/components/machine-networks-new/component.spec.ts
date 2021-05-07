@@ -16,18 +16,18 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
 import {AppConfigService} from '@app/config.service';
 import {NODE_DATA_CONFIG, NodeDataMode} from '@app/node-data/config';
-import {NodeDataService} from '@app/node-data/service/service';
-import {ApiMockService} from '@app/testing/services/api-mock.service';
-import {DatacenterMockService} from '@app/testing/services/datacenter-mock.service';
-import {ProjectMockService} from '@app/testing/services/project-mock.service';
-import {WizardService} from '@app/wizard/service/wizard';
-import {ApiService} from '@core/services/api/service';
-import {DatacenterService} from '@core/services/datacenter/service';
-import {ParamsService} from '@core/services/params/service';
-import {ProjectService} from '@core/services/project/service';
-import {PresetsService} from '@core/services/wizard/presets.service';
-import {ClusterService} from '@shared/services/cluster.service';
-import {SharedModule} from '@shared/shared.module';
+import {ApiMockService} from '@app/testing/services/api-mock';
+import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
+import {ProjectMockService} from '@app/testing/services/project-mock';
+import {ClusterSpecService} from '@core/services/cluster-spec';
+import {NodeDataService} from '@core/services/node-data/service';
+import {WizardService} from '@core/services/wizard/wizard';
+import {ApiService} from '@core/services/api';
+import {DatacenterService} from '@core/services/datacenter';
+import {ParamsService} from '@core/services/params';
+import {ProjectService} from '@core/services/project';
+import {PresetsService} from '@core/services/wizard/presets';
+import {SharedModule} from '@shared/module';
 import {MachineNetworkComponent} from './component';
 
 const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
@@ -42,7 +42,7 @@ describe('MachineNetworksComponent', () => {
         imports: [...modules],
         providers: [
           AppConfigService,
-          ClusterService,
+          ClusterSpecService,
           NodeDataService,
           ParamsService,
           PresetsService,

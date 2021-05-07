@@ -17,9 +17,9 @@ import {RandomString} from '@shared/functions/generate-random-string';
 import {CookieService} from 'ngx-cookie-service';
 import {Observable} from 'rxjs';
 import {take, tap} from 'rxjs/operators';
-import {PreviousRouteService} from '../previous-route/service';
-import {TokenService} from '../token/service';
-import {UserService} from '../user/service';
+import {PreviousRouteService} from '../previous-route';
+import {TokenService} from '../token';
+import {UserService} from '../user';
 
 @Injectable()
 export class Auth {

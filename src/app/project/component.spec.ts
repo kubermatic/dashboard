@@ -17,23 +17,23 @@ import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {CoreModule} from '@core/module';
-import {DatacenterService} from '@core/services/datacenter/service';
-import {ProjectService} from '@core/services/project/service';
-import {SettingsService} from '@core/services/settings/service';
-import {UserService} from '@core/services/user/service';
-import {SharedModule} from '@shared/shared.module';
+import {DatacenterService} from '@core/services/datacenter';
+import {ProjectService} from '@core/services/project';
+import {SettingsService} from '@core/services/settings';
+import {UserService} from '@core/services/user';
+import {SharedModule} from '@shared/module';
 import {CookieService} from 'ngx-cookie-service';
 import {
   DialogTestModule,
   NoopProjectDeleteDialogComponent,
-} from '../testing/components/noop-project-delete-dialog.component';
-import {fakeProject} from '../testing/fake-data/project.fake';
-import {RouterStub, RouterTestingModule} from '../testing/router-stubs';
-import {AppConfigMockService} from '../testing/services/app-config-mock.service';
-import {DatacenterMockService} from '../testing/services/datacenter-mock.service';
-import {ProjectMockService} from '../testing/services/project-mock.service';
-import {SettingsMockService} from '../testing/services/settings-mock.service';
-import {UserMockService} from '../testing/services/user-mock.service';
+} from '@app/testing/components/noop-project-delete-dialog.component';
+import {fakeProject} from '@app/testing/fake-data/project';
+import {RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock';
+import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
+import {ProjectMockService} from '@app/testing/services/project-mock';
+import {SettingsMockService} from '@app/testing/services/settings-mock';
+import {UserMockService} from '@app/testing/services/user-mock';
 import {ProjectComponent} from './component';
 import {ProjectModule} from './module';
 

@@ -20,12 +20,12 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {PresetsService} from '@core/services/wizard/presets.service';
+import {ClusterSpecService} from '@core/services/cluster-spec';
+import {PresetsService} from '@core/services/wizard/presets';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {CloudSpec, Cluster, ClusterSpec, VSphereCloudSpec} from '@shared/entity/cluster';
 import {VSphereFolder, VSphereNetwork} from '@shared/entity/provider/vsphere';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
 import {isObjectEmpty} from '@shared/utils/common-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
@@ -96,7 +96,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super('VSphere Provider Extended');
@@ -111,16 +111,16 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     });
 
     this.form.valueChanges
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.VSPHERE))
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.VSPHERE))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterService.cluster.spec.cloud.vsphere)));
+      .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterSpecService.cluster.spec.cloud.vsphere)));
 
     this._presets.presetChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
-    this._clusterService.clusterChanges
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.VSPHERE))
+    this._clusterSpecService.clusterChanges
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.VSPHERE))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._handleClusterChange.bind(this));
 
@@ -134,9 +134,9 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
         this._loadNetworks(networks);
       });
 
-    this._clusterService.clusterChanges
+    this._clusterSpecService.clusterChanges
       .pipe(
-        filter(_ => this._clusterService.provider === NodeProvider.VSPHERE),
+        filter(_ => this._clusterSpecService.provider === NodeProvider.VSPHERE),
         debounceTime(this._debounceTime),
         tap(_ => (!this.hasRequiredCredentials() ? this._clearDatastores() : null)),
         switchMap(_ => this._datastoresObservable()),
@@ -164,7 +164,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .get(Controls.DatastoreCluster)
       .valueChanges.pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._clusterService.cluster = this._getCluster()));
+      .subscribe(_ => (this._clusterSpecService.cluster = this._getCluster()));
 
     this.form
       .get(Controls.Datastore)
@@ -173,7 +173,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
         map(form => form[AutocompleteControls.Main]),
         takeUntil(this._unsubscribe)
       )
-      .subscribe(d => (this._clusterService.cluster.spec.cloud.vsphere.datastore = d));
+      .subscribe(d => (this._clusterSpecService.cluster.spec.cloud.vsphere.datastore = d));
   }
 
   getNetworks(type: string): VSphereNetwork[] {
@@ -181,11 +181,11 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   }
 
   onNetworkChange(network: string): void {
-    this._clusterService.cluster.spec.cloud.vsphere.vmNetName = network;
+    this._clusterSpecService.cluster.spec.cloud.vsphere.vmNetName = network;
   }
 
   onFolderChange(folder: string): void {
-    this._clusterService.cluster.spec.cloud.vsphere.folder = folder;
+    this._clusterSpecService.cluster.spec.cloud.vsphere.folder = folder;
   }
 
   getHint(control: Controls): string {
@@ -248,18 +248,18 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
   hasRequiredCredentials(): boolean {
     return (
-      !!this._clusterService.cluster.spec.cloud.vsphere &&
-      !!this._clusterService.cluster.spec.cloud.vsphere.username &&
-      !!this._clusterService.cluster.spec.cloud.vsphere.password
+      !!this._clusterSpecService.cluster.spec.cloud.vsphere &&
+      !!this._clusterSpecService.cluster.spec.cloud.vsphere.username &&
+      !!this._clusterSpecService.cluster.spec.cloud.vsphere.password
     );
   }
 
   private _networkListObservable(): Observable<VSphereNetwork[]> {
     return this._presets
       .provider(NodeProvider.VSPHERE)
-      .username(this._clusterService.cluster.spec.cloud.vsphere.username)
-      .password(this._clusterService.cluster.spec.cloud.vsphere.password)
-      .datacenter(this._clusterService.datacenter)
+      .username(this._clusterSpecService.cluster.spec.cloud.vsphere.username)
+      .password(this._clusterSpecService.cluster.spec.cloud.vsphere.password)
+      .datacenter(this._clusterSpecService.datacenter)
       .networks(this._onNetworksLoading.bind(this))
       .pipe(map(networks => _.sortBy(networks, n => n.name.toLowerCase())))
       .pipe(
@@ -286,9 +286,9 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   private _folderListObservable(): Observable<VSphereFolder[]> {
     return this._presets
       .provider(NodeProvider.VSPHERE)
-      .username(this._clusterService.cluster.spec.cloud.vsphere.username)
-      .password(this._clusterService.cluster.spec.cloud.vsphere.password)
-      .datacenter(this._clusterService.datacenter)
+      .username(this._clusterSpecService.cluster.spec.cloud.vsphere.username)
+      .password(this._clusterSpecService.cluster.spec.cloud.vsphere.password)
+      .datacenter(this._clusterSpecService.datacenter)
       .folders(this._onFoldersLoading.bind(this))
       .pipe(
         catchError(_ => {
@@ -314,9 +314,9 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   private _datastoresObservable(): Observable<string[]> {
     return this._presets
       .provider(NodeProvider.VSPHERE)
-      .username(this._clusterService.cluster.spec.cloud.vsphere.username)
-      .password(this._clusterService.cluster.spec.cloud.vsphere.password)
-      .datacenter(this._clusterService.datacenter)
+      .username(this._clusterSpecService.cluster.spec.cloud.vsphere.username)
+      .password(this._clusterSpecService.cluster.spec.cloud.vsphere.password)
+      .datacenter(this._clusterSpecService.datacenter)
       .datastores(() => this._setIsLoadingDatastores(true))
       .pipe(
         map(datastores => _.sortBy(datastores, d => d.toLowerCase())),

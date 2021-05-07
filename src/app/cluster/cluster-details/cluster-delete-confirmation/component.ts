@@ -13,9 +13,9 @@ import {Component, DoCheck, ElementRef, Input, OnDestroy, OnInit, ViewChild} fro
 import {FormControl, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {ClusterService} from '@core/services/cluster/service';
-import {NotificationService} from '@core/services/notification/service';
-import {SettingsService} from '@core/services/settings/service';
+import {ClusterService} from '@core/services/cluster';
+import {NotificationService} from '@core/services/notification';
+import {SettingsService} from '@core/services/settings';
 import {Cluster, Finalizer} from '@shared/entity/cluster';
 import {AdminSettings} from '@shared/entity/settings';
 import {Subject} from 'rxjs';

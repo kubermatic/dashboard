@@ -15,11 +15,11 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {fakeServiceAccountToken} from '@app/testing/fake-data/serviceaccount.fake';
+import {fakeServiceAccountToken} from '@app/testing/fake-data/serviceaccount';
 import {RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {ProjectMockService} from '@app/testing/services/project-mock.service';
-import {ProjectService} from '@core/services/project/service';
-import {SharedModule} from '@shared/shared.module';
+import {ProjectMockService} from '@app/testing/services/project-mock';
+import {ProjectService} from '@core/services/project';
+import {SharedModule} from '@shared/module';
 import {ServiceAccountTokenNameStepComponent} from './component';
 
 const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];

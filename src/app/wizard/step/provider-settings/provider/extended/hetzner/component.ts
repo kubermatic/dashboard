@@ -11,11 +11,11 @@
 
 import {ChangeDetectionStrategy, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {PresetsService} from '@core/services/wizard/presets.service';
+import {ClusterSpecService} from '@core/services/cluster-spec';
+import {PresetsService} from '@core/services/wizard/presets';
 import {CloudSpec, Cluster, ClusterSpec, HetznerCloudSpec} from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterService} from '@shared/services/cluster.service';
-import {DatacenterService} from '@core/services/datacenter/service';
+import {DatacenterService} from '@core/services/datacenter';
 import {isObjectEmpty} from '@shared/utils/common-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
@@ -51,7 +51,7 @@ export class HetznerProviderExtendedComponent extends BaseFormValidator implemen
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService
   ) {
     super('Hetzner Provider Extended');
@@ -63,23 +63,23 @@ export class HetznerProviderExtendedComponent extends BaseFormValidator implemen
     });
 
     this.form.valueChanges
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.HETZNER))
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.HETZNER))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterService.cluster.spec.cloud.hetzner)));
+      .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterSpecService.cluster.spec.cloud.hetzner)));
 
     this.form
       .get(Controls.Network)
       .valueChanges.pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._clusterService.cluster = this._getCluster()));
+      .subscribe(_ => (this._clusterSpecService.cluster = this._getCluster()));
 
     this._presets.presetChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
-    merge(this._clusterService.providerChanges, this._clusterService.datacenterChanges)
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.HETZNER))
-      .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterService.datacenter).pipe(take(1))))
+    merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.HETZNER))
+      .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.datacenter).pipe(take(1))))
       .pipe(tap(dc => (this.defaultNetwork = dc.spec.hetzner.network)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());

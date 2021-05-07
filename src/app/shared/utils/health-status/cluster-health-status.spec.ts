@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {fakeHealth, fakeHealthFailed, fakeHealthProvisioning} from '../../../testing/fake-data/health.fake';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
+import {fakeHealth, fakeHealthFailed, fakeHealthProvisioning} from '@app/testing/fake-data/health';
 
 import {ClusterHealthStatus, HealthStatusCss} from './cluster-health-status';
 import {HealthStatusColor, HealthStatusMessage} from './health-status';

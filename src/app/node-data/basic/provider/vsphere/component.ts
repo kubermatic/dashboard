@@ -11,13 +11,13 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {NodeDataService} from '@app/node-data/service/service';
-import {DatacenterService} from '@core/services/datacenter/service';
+import {ClusterSpecService} from '@core/services/cluster-spec';
+import {DatacenterService} from '@core/services/datacenter';
+import {NodeDataService} from '@core/services/node-data/service';
 import {DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
 import {NodeCloudSpec, NodeSpec, VSphereNodeSpec} from '@shared/entity/node';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
-import {ClusterService} from '@shared/services/cluster.service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge, of} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
@@ -57,7 +57,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService
   ) {
     super();
@@ -90,14 +90,14 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
 
-    merge<string>(this._clusterService.datacenterChanges, of(this._clusterService.datacenter))
+    merge<string>(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))
       .pipe(filter(dc => !!dc))
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(tap(dc => (this._templates = dc.spec.vsphere.templates)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._setDefaultTemplate());
 
-    this._clusterService.clusterTypeChanges
+    this._clusterSpecService.clusterTypeChanges
       .pipe(filter(_ => !!this._templates))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._setDefaultTemplate());
