@@ -192,6 +192,7 @@ limitations under the License.
                  type="number"
                  min="0"
                  autocomplete="off"
+                 id="km-project-limit-setting"
                  [disabled]="settings.restrictProjectCreation"
                  [(ngModel)]="settings.userProjectsLimit"
                  (change)="onSettingsChange()">

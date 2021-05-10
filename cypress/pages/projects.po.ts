@@ -107,10 +107,10 @@ export class ProjectsPage {
   }
 
   static addProject(projectName: string): void {
-    this.getAddProjectBtn().should(Condition.NotBe, 'disabled').click();
+    this.getAddProjectBtn().should(Condition.BeEnabled).click();
     this.getAddProjectInput().type(projectName).should(Condition.HaveValue, projectName);
     this.getAddProjectConfirmBtn()
-      .should(Condition.NotBe, 'disabled')
+      .should(Condition.BeEnabled)
       .click()
       .then(() => {
         cy.reload();
@@ -121,10 +121,10 @@ export class ProjectsPage {
 
   static deleteProject(projectName: string): void {
     const retries = 5;
-    this.getDeleteProjectBtn(projectName).should(Condition.NotBe, 'disabled').click();
+    this.getDeleteProjectBtn(projectName).should(Condition.BeEnabled).click();
     cy.get('#km-delete-project-dialog-input').type(projectName).should(Condition.HaveValue, projectName);
     cy.get('#km-delete-project-dialog-confirm-btn')
-      .should(Condition.NotBe, 'disabled')
+      .should(Condition.BeEnabled)
       .click()
       .then(() => {
         TrafficMonitor.newTrafficMonitor()
