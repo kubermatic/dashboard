@@ -13,15 +13,15 @@ import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {View} from '../../utils/view';
 import {AdminSettingsPage} from '../../pages/admin-settings.po';
-import {ProjectsPage} from "../../pages/projects.po";
-import * as _ from "lodash";
+import {ProjectsPage} from '../../pages/projects.po';
+import * as _ from 'lodash';
 
 describe('Project Limit Story', () => {
   const userEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const adminEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  let firstProjectName = _.uniqueId('e2e-test-project-');
-  let secondProjectName = _.uniqueId('e2e-test-project-');
+  const firstProjectName = _.uniqueId('e2e-test-project-');
+  const secondProjectName = _.uniqueId('e2e-test-project-');
 
   it('should login as admin', () => {
     login(adminEmail, password);
@@ -69,7 +69,7 @@ describe('Project Limit Story', () => {
   });
 
   it('set project limit for normal users to 1', () => {
-    AdminSettingsPage.getProjectLimitInput().type("1").should(Condition.HaveValue, "1");
+    AdminSettingsPage.getProjectLimitInput().type('1').should(Condition.HaveValue, '1');
   });
 
   it('should logout', () => {
@@ -89,17 +89,17 @@ describe('Project Limit Story', () => {
     ProjectsPage.getAddProjectBtn().should(Condition.NotBe, 'disabled').click();
     ProjectsPage.getAddProjectInput().type(secondProjectName).should(Condition.HaveValue, secondProjectName);
     ProjectsPage.getAddProjectConfirmBtn()
-        .should(Condition.NotBe, 'disabled')
-        .click()
-        .then(() => {
-          // Project should not be created because of the limit in the API, the dialog should stay open.
-          const timeout = 15000;
-          cy.wait(timeout);
-          ProjectsPage.getAddProjectConfirmBtn().should(Condition.BeEnabled);
-          ProjectsPage.getAddProjectInput().should(Condition.HaveValue, secondProjectName);
-          // Close the dialog.
-          cy.reload();
-        });
+      .should(Condition.NotBe, 'disabled')
+      .click()
+      .then(() => {
+        // Project should not be created because of the limit in the API, the dialog should stay open.
+        const timeout = 15000;
+        cy.wait(timeout);
+        ProjectsPage.getAddProjectConfirmBtn().should(Condition.BeEnabled);
+        ProjectsPage.getAddProjectInput().should(Condition.HaveValue, secondProjectName);
+        // Close the dialog.
+        cy.reload();
+      });
   });
 
   it('should delete first project', () => {
@@ -120,7 +120,7 @@ describe('Project Limit Story', () => {
   });
 
   it('remove project limit', () => {
-    AdminSettingsPage.getProjectLimitInput().type("0").should(Condition.HaveValue, "0");
+    AdminSettingsPage.getProjectLimitInput().type('0').should(Condition.HaveValue, '0');
   });
 
   it('should logout', () => {
