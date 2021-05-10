@@ -76,12 +76,10 @@ export class ProjectsPage {
   }
 
   static visit(): void {
-    cy.get('#km-nav-item-projects')
-      .click()
-      .then(() => {
-        this.waitForRefresh();
-        this.verifyUrl();
-      });
+    cy.visit('/').then(() => {
+      this.waitForRefresh();
+      this.verifyUrl();
+    });
   }
 
   static visitUsingHeader(): void {

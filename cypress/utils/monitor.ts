@@ -121,6 +121,7 @@ export class TrafficMonitor {
 export enum RequestType {
   GET = 'GET',
   POST = 'POST',
+  PATCH = 'PATCH',
 }
 
 export enum ResponseType {

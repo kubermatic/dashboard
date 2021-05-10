@@ -10,6 +10,8 @@
 // limitations under the License.
 
 import {Condition} from '../utils/condition';
+import {Endpoint} from '../utils/endpoint';
+import {RequestType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 import {UserPanel} from './user-panel.po';
 
@@ -46,6 +48,14 @@ export class AdminSettingsPage {
     return cy.get('#km-demo-info-setting');
   }
 
+  static getOPAEnableCheckbox(): Cypress.Chainable {
+    return cy.get('#km-opa-enable-setting');
+  }
+
+  static getOPAEnforceCheckbox(): Cypress.Chainable {
+    return cy.get('#km-opa-enforce-setting');
+  }
+
   static getFooter(): Cypress.Chainable {
     return cy.get('.km-footer');
   }
@@ -55,6 +65,10 @@ export class AdminSettingsPage {
   }
 
   // Utils.
+
+  static waitForSave(): void {
+    TrafficMonitor.newTrafficMonitor().url(Endpoint.AdminSettings).method(RequestType.PATCH).wait();
+  }
 
   static verifyUrl(): void {
     cy.url().should(Condition.Include, View.Admin);
