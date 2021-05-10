@@ -16,7 +16,7 @@ import {AdminSettingsPage} from '../../pages/admin-settings.po';
 import {ProjectsPage} from "../../pages/projects.po";
 
 describe('Project Limit Story', () => {
-  const userEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
+  const userEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const adminEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
 
