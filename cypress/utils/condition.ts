@@ -11,6 +11,7 @@
 
 export enum Condition {
   BeEnabled = 'be.enabled',
+  BeDisabled = 'be.disabled',
   BeChecked = 'be.checked',
   Contain = 'contain',
   Exist = 'exist',

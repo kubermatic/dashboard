@@ -46,6 +46,10 @@ export class AdminSettingsPage {
     return cy.get('#km-demo-info-setting');
   }
 
+  static getRestrictProjectCreationToAdminsCheckbox(): Cypress.Chainable {
+    return cy.get('#km-project-admin-only-setting');
+  }
+
   static getFooter(): Cypress.Chainable {
     return cy.get('.km-footer');
   }
