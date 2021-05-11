@@ -67,7 +67,7 @@ describe('Admin Settings - Resource Quota Story', () => {
     ClustersPage.openWizard();
   });
 
-  it('should make sure replicas count matches admin settings', () => {
+  it('should make sure node sizes match admin settings', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
     WizardPage.getDatacenterBtn(Datacenter.Digitalocean.Frankfurt).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
