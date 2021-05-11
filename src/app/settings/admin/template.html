@@ -130,7 +130,9 @@ limitations under the License.
                  min="0"
                  max="50"
                  autocomplete="off"
+                 id="km-initial-replicas-setting"
                  [(ngModel)]="settings.defaultNodeCount"
+                 (keyup)="onSettingsChange()"
                  (change)="onSettingsChange()">
         </mat-form-field>
         <km-spinner-with-confirmation [isSaved]="isEqual(settings.defaultNodeCount, apiSettings.defaultNodeCount)"></km-spinner-with-confirmation>
@@ -216,6 +218,7 @@ limitations under the License.
                  type="number"
                  min="0"
                  autocomplete="off"
+                 id="km-cpu-resource-quota-setting"
                  [(ngModel)]="settings.machineDeploymentVMResourceQuota.minCPU"
                  (change)="onSettingsChange()">
         </mat-form-field>
@@ -238,6 +241,7 @@ limitations under the License.
                  type="number"
                  min="0"
                  autocomplete="off"
+                 id="km-ram-resource-quota-setting"
                  [(ngModel)]="settings.machineDeploymentVMResourceQuota.minRAM"
                  (change)="onSettingsChange()">
         </mat-form-field>

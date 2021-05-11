@@ -78,8 +78,6 @@ export class CustomLinksFormComponent implements OnDestroy {
     return customLink.get(Controls.Label).value.length !== 0 && customLink.get(Controls.URL).value.length !== 0;
   }
 
-  ngOnInit() {}
-
   ngOnDestroy() {
     this._unsubscribe.next();
     this._unsubscribe.complete();

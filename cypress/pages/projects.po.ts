@@ -59,7 +59,7 @@ export class ProjectsPage {
   // Utils.
 
   static waitForRefresh(): void {
-    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.Projects).wait();
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.Projects).interceptAndWait();
   }
 
   static waitForProject(projectName: string): void {

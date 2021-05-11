@@ -19,6 +19,7 @@ class Alibaba {
     return cy.get('#vSwitchID');
   }
 }
+
 class KubeVirt {
   static getNamespaceInput(): Cypress.Chainable {
     return cy.get('#namespace');
@@ -33,7 +34,22 @@ class KubeVirt {
   }
 }
 
+class DigitalOcean {
+  static getNodeSizesCombobox(): Cypress.Chainable {
+    return cy.get('#km-digitalocean-node-sizes');
+  }
+
+  static getNodeSize(name: string): Cypress.Chainable {
+    return cy.get('#km-digitalocean-node-sizes-panel mat-option').contains(name);
+  }
+}
+
 export class WizardPage {
+  // Providers
+  static readonly kubeVirt = KubeVirt;
+  static readonly alibaba = Alibaba;
+  static readonly digitalocean = DigitalOcean;
+
   static getNextBtn(stepName: WizardStep): Cypress.Chainable {
     return cy.get(`#km-wizard-${stepName}-next-btn`);
   }
@@ -98,10 +114,6 @@ export class WizardPage {
   static getOverlayContainer(): Cypress.Chainable {
     return cy.get('.cdk-overlay-backdrop');
   }
-
-  // Providers
-  static readonly kubeVirt = KubeVirt;
-  static readonly alibaba = Alibaba;
 
   // Utils
 

@@ -18,6 +18,7 @@ export class TrafficMonitor {
   private _asAlias = '';
   private _alias = '';
   private _retry = 1;
+  private _intercepted = false;
 
   private readonly _defaultAlias = 'default';
 
@@ -55,11 +56,28 @@ export class TrafficMonitor {
     return this;
   }
 
-  wait(): Cypress.Chainable {
+  intercept(): TrafficMonitor {
     this._validate();
     this._setDefaults();
 
-    cy.route(this._method, this._url).as(this._asAlias);
+    cy.intercept(this._method, this._url).as(this._asAlias);
+    this._intercepted = true;
+    return this;
+  }
+
+  wait(): Cypress.Chainable {
+    if (!this._intercepted) {
+      throw new Error('Intercept has to be called first');
+    }
+
+    return this._timeout > 0 ? cy.wait(this._alias, {timeout: this._timeout}) : cy.wait(this._alias);
+  }
+
+  interceptAndWait(): Cypress.Chainable {
+    this._validate();
+    this._setDefaults();
+
+    cy.intercept(this._method, this._url).as(this._asAlias);
     return this._timeout > 0 ? cy.wait(this._alias, {timeout: this._timeout}) : cy.wait(this._alias);
   }
 
@@ -73,13 +91,13 @@ export class TrafficMonitor {
     }
 
     this._retry--;
-    return this.wait().then(xhr => {
+    return this.interceptAndWait().then(xhr => {
       try {
         switch (response.type) {
           case ResponseType.LIST:
-            return this._expectArray(response, xhr.responseBody);
+            return this._expectArray(response, xhr.response.body);
           case ResponseType.OBJECT:
-            return this._expectObject(response, xhr.responseBody);
+            return this._expectObject(response, xhr.response.body);
         }
       } catch (err) {
         return this.expect(response);

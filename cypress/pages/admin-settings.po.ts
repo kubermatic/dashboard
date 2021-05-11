@@ -56,6 +56,18 @@ export class AdminSettingsPage {
     return cy.get('#km-opa-enforce-setting');
   }
 
+  static getInitialReplicasInput(): Cypress.Chainable {
+    return cy.get('#km-initial-replicas-setting');
+  }
+
+  static getMinCPUResourceQuotaInput(): Cypress.Chainable {
+    return cy.get('#km-cpu-resource-quota-setting');
+  }
+
+  static getMinRAMResourceQuotaInput(): Cypress.Chainable {
+    return cy.get('#km-ram-resource-quota-setting');
+  }
+
   static getFooter(): Cypress.Chainable {
     return cy.get('.km-footer');
   }
@@ -67,7 +79,7 @@ export class AdminSettingsPage {
   // Utils.
 
   static waitForSave(): void {
-    TrafficMonitor.newTrafficMonitor().url(Endpoint.AdminSettings).method(RequestType.PATCH).wait();
+    TrafficMonitor.newTrafficMonitor().url(Endpoint.AdminSettings).method(RequestType.PATCH).interceptAndWait();
   }
 
   static verifyUrl(): void {
