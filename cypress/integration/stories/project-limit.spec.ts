@@ -26,6 +26,7 @@ describe('Project Limit Story', () => {
 
   it('should login as admin', () => {
     login(adminEmail, password);
+    cy.url().should(Condition.Include, View.Projects);
   });
 
   it('should go to the admin settings', () => {
