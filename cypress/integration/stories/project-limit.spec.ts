@@ -22,6 +22,7 @@ describe('Project Limit Story', () => {
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const firstProjectName = _.uniqueId('e2e-test-project-');
   const secondProjectName = _.uniqueId('e2e-test-project-');
+  const timeout = 10000;
 
   it('should login as admin', () => {
     login(adminEmail, password);
@@ -35,6 +36,7 @@ describe('Project Limit Story', () => {
   it('restrict project creation to admins only', () => {
     AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().click();
     AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().find('input').should(Condition.BeChecked);
+    cy.wait(timeout);
   });
 
   it('should logout', () => {
@@ -66,10 +68,12 @@ describe('Project Limit Story', () => {
   it('remove restriction for project creation to admins only', () => {
     AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().click();
     AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().find('input').should(Condition.NotBeChecked);
+    cy.wait(timeout);
   });
 
   it('set project limit for normal users to 1', () => {
     AdminSettingsPage.getProjectLimitInput().type('1').should(Condition.HaveValue, '1');
+    cy.wait(timeout);
   });
 
   it('should logout', () => {
@@ -93,7 +97,6 @@ describe('Project Limit Story', () => {
       .click()
       .then(() => {
         // Project should not be created because of the limit in the API, the dialog should stay open.
-        const timeout = 15000;
         cy.wait(timeout);
         ProjectsPage.getAddProjectConfirmBtn().should(Condition.BeEnabled);
         ProjectsPage.getAddProjectInput().should(Condition.HaveValue, secondProjectName);
@@ -121,6 +124,7 @@ describe('Project Limit Story', () => {
 
   it('remove project limit', () => {
     AdminSettingsPage.getProjectLimitInput().type('0').should(Condition.HaveValue, '0');
+    cy.wait(timeout);
   });
 
   it('should logout', () => {
