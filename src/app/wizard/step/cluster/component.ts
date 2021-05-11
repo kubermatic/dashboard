@@ -114,6 +114,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this._settings = settings;
       this.form.get(Controls.OPAIntegration).setValue(this._settings.opaOptions.enabled, {emitEvent: false});
       this._enforce(Controls.OPAIntegration, this._settings.opaOptions.enforced);
+      this.form.get(Controls.MLALogging).setValue(this._settings.mlaOptions.loggingEnabled, {emitEvent: false});
+      this._enforce(Controls.MLALogging, this._settings.mlaOptions.loggingEnforced);
+      this.form.get(Controls.MLAMonitoring).setValue(this._settings.mlaOptions.monitoringEnabled, {emitEvent: false});
+      this._enforce(Controls.MLAMonitoring, this._settings.mlaOptions.monitoringEnforced);
     });
 
     this._clusterSpecService.datacenterChanges
@@ -173,6 +177,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         return !!this._datacenterSpec && this._datacenterSpec.spec.enforceAuditLogging;
       case Controls.OPAIntegration:
         return !!this._settings && this._settings.opaOptions.enforced;
+      case Controls.MLALogging:
+        return !!this._settings && this._settings.mlaOptions.loggingEnforced;
+      case Controls.MLAMonitoring:
+        return !!this._settings && this._settings.mlaOptions.monitoringEnforced;
       default:
         return false;
     }

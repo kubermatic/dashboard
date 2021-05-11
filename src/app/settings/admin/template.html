@@ -122,6 +122,50 @@ limitations under the License.
       <div fxLayout="row">
         <div fxFlex="16%"
              fxLayoutAlign=" center"
+             class="entry-label">
+          <span>MLA Logging</span>
+          <div class="km-icon-info km-pointer"
+               matTooltip="Set &quot;MLA Logging&quot; checkbox on cluster creation to enabled by default. Enable &quot;Enforce&quot; to make users unable to edit the checkbox."></div>
+        </div>
+        <div fxFlexAlign=" center"
+             fxLayout="row">
+          <mat-checkbox [(ngModel)]="settings.mlaOptions.loggingEnabled"
+                        (change)="onSettingsChange()"
+                        fxFlexAlign=" center">Enable by Default
+          </mat-checkbox>
+          <mat-checkbox [(ngModel)]="settings.mlaOptions.loggingEnforced"
+                        (change)="onSettingsChange()"
+                        fxFlexAlign=" center">Enforce
+          </mat-checkbox>
+          <km-spinner-with-confirmation [isSaved]="isMLALoggingEqual()"></km-spinner-with-confirmation>
+        </div>
+      </div>
+
+      <div fxLayout="row">
+        <div fxFlex="16%"
+             fxLayoutAlign=" center"
+             class="entry-label">
+          <span>MLA Monitoring</span>
+          <div class="km-icon-info km-pointer"
+               matTooltip="Set &quot;MLA Monitoring&quot; checkbox on cluster creation to enabled by default. Enable &quot;Enforce&quot; to make users unable to edit the checkbox."></div>
+        </div>
+        <div fxFlexAlign=" center"
+             fxLayout="row">
+          <mat-checkbox [(ngModel)]="settings.mlaOptions.monitoringEnabled"
+                        (change)="onSettingsChange()"
+                        fxFlexAlign=" center">Enable by Default
+          </mat-checkbox>
+          <mat-checkbox [(ngModel)]="settings.mlaOptions.monitoringEnforced"
+                        (change)="onSettingsChange()"
+                        fxFlexAlign=" center">Enforce
+          </mat-checkbox>
+          <km-spinner-with-confirmation [isSaved]="isMLAMonitoringEqual()"></km-spinner-with-confirmation>
+        </div>
+      </div>
+
+      <div fxLayout="row">
+        <div fxFlex="16%"
+             fxLayoutAlign=" center"
              class="entry-label">Machine Deployment
         </div>
         <mat-form-field class="input km-no-padding">

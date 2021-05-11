@@ -82,6 +82,8 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this._settings = settings;
       this._enforce('opaIntegration', this._settings.opaOptions.enforced);
+      this._enforce('mlaLogging', this._settings.mlaOptions.loggingEnforced);
+      this._enforce('mlaMonitoring', this._settings.mlaOptions.monitoringEnforced);
     });
 
     this._clusterService.providerSettingsPatchChanges$
@@ -148,8 +150,17 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     return AdmissionPluginUtils.isPodSecurityPolicyEnforced(this.datacenter);
   }
 
-  isOPAEnforced(): boolean {
-    return !!this._settings && this._settings.opaOptions.enforced;
+  isEnforced(field: string): boolean {
+    switch (field) {
+      case 'opaIntegration':
+        return !!this._settings && this._settings.opaOptions.enforced;
+      case 'mlaLogging':
+        return !!this._settings && this._settings.mlaOptions.loggingEnforced;
+      case 'mlaMonitoring':
+        return !!this._settings && this._settings.mlaOptions.monitoringEnforced;
+      default:
+        return false;
+    }
   }
 
   private _enforce(name: string, isEnforced: boolean): void {

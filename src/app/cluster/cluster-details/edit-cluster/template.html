@@ -94,17 +94,26 @@ limitations under the License.
         </div>
       </div>
 
-      <mat-checkbox formControlName="opaIntegration"
-                    class="opa-integration">
+      <mat-checkbox formControlName="opaIntegration">
         OPA Integration
-        <i *ngIf="isOPAEnforced()"
+        <i *ngIf="isEnforced('opaIntegration')"
            class="km-icon-info km-pointer"
            matTooltip="OPA Integration is enforced by your admin."></i>
       </mat-checkbox>
 
-      <mat-checkbox formControlName="mlaLogging">MLA Logging</mat-checkbox>
+      <mat-checkbox formControlName="mlaLogging">
+        MLA Logging
+        <i *ngIf="isEnforced('mlaLogging')"
+           class="km-icon-info km-pointer"
+           matTooltip="MLA Logging is enforced by your admin."></i>
+      </mat-checkbox>
 
-      <mat-checkbox formControlName="mlaMonitoring">MLA Monitoring</mat-checkbox>
+      <mat-checkbox formControlName="mlaMonitoring">
+        MLA Monitoring
+        <i *ngIf="isEnforced('mlaMonitoring')"
+           class="km-icon-info km-pointer"
+           matTooltip="MLA Monitoring is enforced by your admin."></i>
+      </mat-checkbox>
 
       <km-label-form title="Labels"
                      [(labels)]="labels"
