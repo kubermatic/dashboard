@@ -53,6 +53,7 @@ describe('Project Limit Story', () => {
   });
 
   it('should logout', () => {
+    ProjectsPage.visitUsingHeader();
     logout();
   });
 
