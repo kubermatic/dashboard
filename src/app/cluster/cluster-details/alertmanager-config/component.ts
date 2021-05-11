@@ -11,7 +11,7 @@
 
 import {Component, Input, OnDestroy} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {NotificationService} from '@core/services/notification/service';
+import {NotificationService} from '@core/services/notification';
 import {MLAService} from '@core/services/mla';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';

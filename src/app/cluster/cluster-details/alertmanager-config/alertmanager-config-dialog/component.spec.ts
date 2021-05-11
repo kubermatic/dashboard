@@ -14,12 +14,12 @@ import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeAlertmanagerConfig} from '@app/testing/fake-data/mla';
-import {asyncData} from '@app/testing/services/api-mock.service';
+import {asyncData} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
-import {NotificationService} from '@core/services/notification/service';
+import {NotificationService} from '@core/services/notification';
 import {MLAService} from '@core/services/mla';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {NGX_MONACO_EDITOR_CONFIG, MonacoEditorModule} from 'ngx-monaco-editor';
 import {AlertmanagerConfigDialog, Mode} from './component';
 

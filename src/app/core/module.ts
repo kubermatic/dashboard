@@ -25,12 +25,21 @@ import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {EndOfLifeService} from '@core/services/eol';
+import {GlobalModule} from '@core/services/global/module';
 import {HistoryService} from '@core/services/history';
 import {LabelService} from '@core/services/label';
+import {MLAService} from '@core/services/mla';
+import {NameGeneratorService} from '@core/services/name-generator';
 import {OPAService} from '@core/services/opa';
+import {PageTitleService} from '@core/services/page-title';
 import {ParamsService} from '@core/services/params';
+import {PreviousRouteService} from '@core/services/previous-route';
 import {RBACService} from '@core/services/rbac';
+import {SettingsService} from '@core/services/settings';
+import {ThemeInformerService} from '@core/services/theme-informer';
+import {TokenService} from '@core/services/token';
 import {PresetsService} from '@core/services/wizard/presets';
+import {StepsService} from '@core/services/wizard/steps';
 import {SharedModule} from '@shared/module';
 import {COOKIE, COOKIE_DI_TOKEN} from '../config';
 import {AddMemberComponent} from '../member/add-member/component';
@@ -44,15 +53,7 @@ import {NotificationPanelComponent} from './components/notification-panel/compon
 import {SidenavComponent} from './components/sidenav/component';
 import {UserPanelComponent} from './components/user-panel/component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
-import {GlobalModule} from './services/global/module';
-import {MLAService} from './services/mla';
-import {NameGeneratorService} from './services/name-generator';
-import {PageTitleService} from './services/page-title';
-import {PreviousRouteService} from './services/previous-route';
-import {SettingsService} from './services/settings';
-import {ThemeInformerService} from './services/theme-informer';
-import {TokenService} from './services/token';
-import {StepsService} from './services/wizard/steps';
+
 const modules: any[] = [
   CommonModule,
   HttpClientModule,

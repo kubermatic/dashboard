@@ -14,13 +14,13 @@ import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/components/noop-confirmation-dialog.component';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster.fake';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
 import {fakeAlertmanagerConfig} from '@app/testing/fake-data/mla';
-import {fakeProject} from '@app/testing/fake-data/project.fake';
+import {fakeProject} from '@app/testing/fake-data/project';
 import {CoreModule} from '@core/module';
-import {NotificationService} from '@core/services/notification/service';
+import {NotificationService} from '@core/services/notification';
 import {MLAService} from '@core/services/mla';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {AlertmanagerConfigComponent} from './component';
 

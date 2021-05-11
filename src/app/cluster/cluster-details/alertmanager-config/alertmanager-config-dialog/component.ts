@@ -12,7 +12,7 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MLAService} from '@core/services/mla';
-import {NotificationService} from '@core/services/notification/service';
+import {NotificationService} from '@core/services/notification';
 import {AlertmanagerConfig} from '@shared/entity/mla';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
