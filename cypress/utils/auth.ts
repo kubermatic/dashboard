@@ -35,4 +35,6 @@ export function login(email: string, password: string): void {
 
 export function logout(): void {
   UserPanel.logout();
+  DexPage.getLoginBtn().should(Condition.Exist);
+  cy.reload();
 }

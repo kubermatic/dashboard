@@ -29,11 +29,11 @@ export class UserPanel {
   // Utils.
 
   static open(): void {
-    this.getUserPanelMenuBtn().click({force: true});
+    this.getUserPanelMenuBtn().click();
   }
 
   static logout(): void {
     this.open();
-    this.getLogoutBtn().click({force: true});
+    this.getLogoutBtn().click();
   }
 }
