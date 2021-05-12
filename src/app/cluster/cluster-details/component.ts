@@ -26,7 +26,7 @@ import {UserService} from '@core/services/user';
 import {Addon} from '@shared/entity/addon';
 import {Cluster, getClusterProvider, MasterVersion} from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
-import {Datacenter} from '@shared/entity/datacenter';
+import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {Event} from '@shared/entity/event';
 import {Health, HealthState} from '@shared/entity/health';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
@@ -77,6 +77,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<any> = new Subject();
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
+  private _seedSettings: SeedSettings;
 
   constructor(
     private readonly _route: ActivatedRoute,
@@ -122,14 +123,16 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             this._clusterService.sshKeys(this.projectID, this.cluster.id),
             this._clusterService.health(this.projectID, this.cluster.id),
             this._clusterService.events(this.projectID, this.cluster.id),
+            this._datacenterService.seedSettings(this.seed),
           ]);
         })
       )
       .pipe(
-        switchMap(([keys, health, events]) => {
+        switchMap(([keys, health, events, seedSettings]) => {
           this.sshKeys = _.sortBy(keys, k => k.name.toLowerCase());
           this.health = health;
           this.events = events;
+          this._seedSettings = seedSettings;
           this.isClusterAPIRunning = ClusterHealthStatus.isClusterAPIRunning(this.cluster, health);
           this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
           this.clusterHealthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
@@ -145,9 +148,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                     this._clusterService.nodes(this.projectID, this.cluster.id),
                     this._api.getMachineDeployments(this.cluster.id, this.projectID),
                     this._clusterService.metrics(this.projectID, this.cluster.id),
-                    this._mlaService.alertmanagerConfig(this.projectID, this.cluster.id),
                   ]
-                : [of([]), of([]), of([]), of([]), of([])]
+                : [of([]), of([]), of([]), of([])]
+            )
+            .concat(
+              this._canReloadNodes() && this.isMLAEnabled()
+                ? this._mlaService.alertmanagerConfig(this.projectID, this.cluster.id)
+                : of([])
             )
             .concat(
               this._canReloadNodes() && this.isOPAEnabled()
@@ -359,6 +366,19 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   isOPAEnabled(): boolean {
     return !!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled;
+  }
+
+  isMLAEnabledInSeed(): boolean {
+    return !!this._seedSettings && !!this._seedSettings.mla && !!this._seedSettings.mla.user_cluster_mla_enabled;
+  }
+
+  isMLAEnabled(): boolean {
+    return (
+      this.isMLAEnabledInSeed() &&
+      !!this.cluster.spec.mla &&
+      !!this.cluster.spec.mla.loggingEnabled &&
+      !!this.cluster.spec.mla.monitoringEnabled
+    );
   }
 
   ngOnDestroy(): void {

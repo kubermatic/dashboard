@@ -95,10 +95,12 @@ limitations under the License.
                              [value]="cluster.spec.opaIntegration?.enabled">
         </km-property-boolean>
         <km-property-boolean label="MLA Logging"
-                             [value]="cluster.spec.mla?.loggingEnabled">
+                             [value]="cluster.spec.mla?.loggingEnabled"
+                             *ngIf="isMLAEnabled()">
         </km-property-boolean>
         <km-property-boolean label="MLA Monitoring"
-                             [value]="cluster.spec.mla?.monitoringEnabled">
+                             [value]="cluster.spec.mla?.monitoringEnabled"
+                             *ngIf="isMLAEnabled()">
         </km-property-boolean>
         <km-property-boolean *ngIf="nodeData.spec.operatingSystem.ubuntu"
                              label="Upgrade system on the first boot"

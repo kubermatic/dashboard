@@ -146,14 +146,16 @@ limitations under the License.
                  matTooltip="OPA Integration is enforced by your admin."></i>
             </mat-checkbox>
 
-            <mat-checkbox [formControlName]="Controls.MLALogging">
+            <mat-checkbox [formControlName]="Controls.MLALogging"
+                          *ngIf="isMLAEnabled()">
               MLA Logging
               <i *ngIf="isEnforced(Controls.MLALogging)"
                  class="km-icon-info km-pointer"
                  matTooltip="MLA Logging is enforced by your admin."></i>
             </mat-checkbox>
 
-            <mat-checkbox [formControlName]="Controls.MLAMonitoring">
+            <mat-checkbox [formControlName]="Controls.MLAMonitoring"
+                          *ngIf="isMLAEnabled()">
               MLA Monitoring
               <i *ngIf="isEnforced(Controls.MLAMonitoring)"
                  class="km-icon-info km-pointer"

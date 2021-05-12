@@ -19,13 +19,13 @@ import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {Cluster, ClusterPatch, ProviderSettingsPatch} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
-import {Datacenter} from '@shared/entity/datacenter';
+import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings} from '@shared/entity/settings';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {switchMap, takeUntil, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'km-edit-cluster',
@@ -49,6 +49,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
   private readonly _nameMinLen = 3;
   private _settings: AdminSettings;
+  private _seedSettings: SeedSettings;
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -82,8 +83,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this._settings = settings;
       this._enforce('opaIntegration', this._settings.opaOptions.enforced);
-      this._enforce('mlaLogging', this._settings.mlaOptions.loggingEnforced);
-      this._enforce('mlaMonitoring', this._settings.mlaOptions.monitoringEnforced);
+      if (this.isMLAEnabled()) {
+        this._enforce('mlaLogging', this._settings.mlaOptions.loggingEnforced);
+        this._enforce('mlaMonitoring', this._settings.mlaOptions.monitoringEnforced);
+      }
     });
 
     this._clusterService.providerSettingsPatchChanges$
@@ -92,8 +95,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
     this._datacenterService
       .getDatacenter(this.cluster.spec.cloud.dc)
+      .pipe(tap(datacenter => (this.datacenter = datacenter)))
+      .pipe(switchMap(_ => this._datacenterService.seedSettings(this.datacenter.spec.seed)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(datacenter => (this.datacenter = datacenter));
+      .subscribe(seedSettings => (this._seedSettings = seedSettings));
 
     this._apiService
       .getAdmissionPlugins(this.cluster.spec.version)
@@ -144,6 +149,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
   isPluginEnabled(name: string): boolean {
     return AdmissionPluginUtils.isPluginEnabled(this.form.controls.admissionPlugins, name);
+  }
+
+  isMLAEnabled(): boolean {
+    return !!this._seedSettings && !!this._seedSettings.mla && !!this._seedSettings.mla.user_cluster_mla_enabled;
   }
 
   isPodSecurityPolicyEnforced(): boolean {
