@@ -144,11 +144,11 @@ describe('Admin Settings - Opa Integration Story', () => {
     ClustersPage.openWizard();
   });
 
-  it('should make sure opa integration in wizard is disabled and not checked', () => {
+  it('should make sure opa integration in wizard is disabled and checked', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
     WizardPage.getDatacenterBtn(Datacenter.Digitalocean.Frankfurt).click();
     WizardPage.getOPAIntegrationCheckbox().find('input').should(Condition.BeDisabled);
-    WizardPage.getOPAIntegrationCheckbox().find('input').should(Condition.NotBeChecked);
+    WizardPage.getOPAIntegrationCheckbox().find('input').should(Condition.BeChecked);
   });
 
   it('should go to the admin settings', () => {
