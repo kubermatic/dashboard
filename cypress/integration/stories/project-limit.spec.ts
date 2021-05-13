@@ -16,6 +16,8 @@ import {AdminSettingsPage} from '../../pages/admin-settings.po';
 import {ProjectsPage} from '../../pages/projects.po';
 import * as _ from 'lodash';
 import {LoginPage} from "../../pages/login.po";
+import {RequestType, Response, ResponseType, TrafficMonitor} from "../../utils/monitor";
+import {Endpoint} from "../../utils/endpoint";
 
 describe('Project Limit Story', () => {
   const userEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
@@ -98,15 +100,18 @@ describe('Project Limit Story', () => {
     ProjectsPage.getAddProjectBtn().should(Condition.NotBe, 'disabled').click();
     ProjectsPage.getAddProjectInput().type(secondProjectName).should(Condition.HaveValue, secondProjectName);
     ProjectsPage.getAddProjectConfirmBtn().should(Condition.NotBe, 'disabled').click();
-
-    cy.wait(timeout);
-    cy.reload();
-
-    ProjectsPage.waitForProject(firstProjectName);
   });
 
   it('should delete first project', () => {
     ProjectsPage.deleteProject(firstProjectName);
+  });
+
+  it('should verify there are no projects', () => {
+    TrafficMonitor.newTrafficMonitor()
+      .method(RequestType.GET)
+      .url(Endpoint.Projects)
+      .retry(5)
+      .expect(Response.newResponse(ResponseType.LIST).elements(0));
   });
 
   it('should logout', () => {
