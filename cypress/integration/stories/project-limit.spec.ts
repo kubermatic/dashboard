@@ -41,8 +41,6 @@ describe('Project Limit Story', () => {
 
   it('should logout', () => {
     logout();
-    cy.wait(timeout);
-    cy.reload();
   });
 
   it('should login as normal user', () => {
@@ -52,12 +50,12 @@ describe('Project Limit Story', () => {
 
   it('should not be able to create a new project', () => {
     ProjectsPage.getAddProjectBtn().should(Condition.BeDisabled);
+    cy.wait(timeout);
+    cy.reload();
   });
 
   it('should logout', () => {
     logout();
-    cy.wait(timeout);
-    cy.reload();
   });
 
   it('should login as admin', () => {
@@ -82,8 +80,6 @@ describe('Project Limit Story', () => {
 
   it('should logout', () => {
     logout();
-    cy.wait(timeout);
-    cy.reload();
   });
 
   it('should login as normal user', () => {
@@ -117,8 +113,6 @@ describe('Project Limit Story', () => {
 
   it('should logout', () => {
     logout();
-    cy.wait(timeout);
-    cy.reload();
   });
 
   it('should login as admin', () => {
