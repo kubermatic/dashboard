@@ -15,9 +15,9 @@ import {View} from '../../utils/view';
 import {AdminSettingsPage} from '../../pages/admin-settings.po';
 import {ProjectsPage} from '../../pages/projects.po';
 import * as _ from 'lodash';
-import {LoginPage} from "../../pages/login.po";
-import {RequestType, Response, ResponseType, TrafficMonitor} from "../../utils/monitor";
-import {Endpoint} from "../../utils/endpoint";
+import {LoginPage} from '../../pages/login.po';
+import {RequestType, Response, ResponseType, TrafficMonitor} from '../../utils/monitor';
+import {Endpoint} from '../../utils/endpoint';
 
 describe('Project Limit Story', () => {
   const userEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
@@ -26,6 +26,7 @@ describe('Project Limit Story', () => {
   const firstProjectName = _.uniqueId('e2e-test-project-');
   const secondProjectName = _.uniqueId('e2e-test-project-');
   const timeout = 10000;
+  const retries = 5;
 
   it('should login as admin', () => {
     login(adminEmail, password);
@@ -112,7 +113,7 @@ describe('Project Limit Story', () => {
     TrafficMonitor.newTrafficMonitor()
       .method(RequestType.GET)
       .url(Endpoint.Projects)
-      .retry(5)
+      .retry(retries)
       .expect(Response.newResponse(ResponseType.LIST).elements(0));
   });
 
