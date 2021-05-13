@@ -22,7 +22,7 @@ describe('Project Limit Story', () => {
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const firstProjectName = _.uniqueId('e2e-test-project-');
   const secondProjectName = _.uniqueId('e2e-test-project-');
-  const timeout = 10000;
+  const timeout = 5000;
 
   it('should login as admin', () => {
     login(adminEmail, password);
@@ -41,6 +41,8 @@ describe('Project Limit Story', () => {
 
   it('should logout', () => {
     logout();
+    cy.wait(timeout);
+    cy.reload();
   });
 
   it('should login as normal user', () => {
@@ -53,8 +55,9 @@ describe('Project Limit Story', () => {
   });
 
   it('should logout', () => {
-    ProjectsPage.visitUsingHeader();
     logout();
+    cy.wait(timeout);
+    cy.reload();
   });
 
   it('should login as admin', () => {
@@ -79,6 +82,8 @@ describe('Project Limit Story', () => {
 
   it('should logout', () => {
     logout();
+    cy.wait(timeout);
+    cy.reload();
   });
 
   it('should login as normal user', () => {
@@ -112,6 +117,8 @@ describe('Project Limit Story', () => {
 
   it('should logout', () => {
     logout();
+    cy.wait(timeout);
+    cy.reload();
   });
 
   it('should login as admin', () => {
