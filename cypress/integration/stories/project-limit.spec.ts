@@ -100,6 +100,9 @@ describe('Project Limit Story', () => {
     ProjectsPage.getAddProjectBtn().should(Condition.NotBe, 'disabled').click();
     ProjectsPage.getAddProjectInput().type(secondProjectName).should(Condition.HaveValue, secondProjectName);
     ProjectsPage.getAddProjectConfirmBtn().should(Condition.NotBe, 'disabled').click();
+
+    cy.wait(timeout);
+    cy.reload();
   });
 
   it('should delete first project', () => {
