@@ -25,7 +25,7 @@ describe('Project Limit Story', () => {
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const firstProjectName = _.uniqueId('e2e-test-project-');
   const secondProjectName = _.uniqueId('e2e-test-project-');
-  const timeout = 5000;
+  const timeout = 10000;
 
   it('should login as admin', () => {
     login(adminEmail, password);
@@ -75,7 +75,6 @@ describe('Project Limit Story', () => {
   it('remove restriction for project creation to admins only', () => {
     AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().click();
     AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().find('input').should(Condition.NotBeChecked);
-    cy.wait(timeout);
   });
 
   it('set project limit for normal users to 1', () => {
