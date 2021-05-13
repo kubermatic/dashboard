@@ -74,7 +74,7 @@ describe('Project Limit Story', () => {
   });
 
   it('set project limit for normal users to 1', () => {
-    AdminSettingsPage.getProjectLimitInput().type('1').should(Condition.HaveValue, '1');
+    AdminSettingsPage.getProjectLimitInput().clear().type('1').should(Condition.HaveValue, '1');
     cy.wait(timeout);
   });
 
@@ -125,7 +125,7 @@ describe('Project Limit Story', () => {
   });
 
   it('remove project limit', () => {
-    AdminSettingsPage.getProjectLimitInput().type('0').should(Condition.HaveValue, '0');
+    AdminSettingsPage.getProjectLimitInput().clear().type('0').should(Condition.HaveValue, '0');
     cy.wait(timeout);
   });
 

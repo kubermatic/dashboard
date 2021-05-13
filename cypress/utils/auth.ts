@@ -35,6 +35,4 @@ export function login(email: string, password: string): void {
 
 export function logout(): void {
   UserPanel.logout();
-  LoginPage.getLoginBtn().should(Condition.Exist);
-  cy.reload();
 }
