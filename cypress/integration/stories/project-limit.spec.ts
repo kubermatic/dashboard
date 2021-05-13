@@ -97,17 +97,12 @@ describe('Project Limit Story', () => {
   it('should not be able to create second project', () => {
     ProjectsPage.getAddProjectBtn().should(Condition.NotBe, 'disabled').click();
     ProjectsPage.getAddProjectInput().type(secondProjectName).should(Condition.HaveValue, secondProjectName);
-    ProjectsPage.getAddProjectConfirmBtn()
-      .should(Condition.NotBe, 'disabled')
-      .click()
-      .then(() => {
-        // Project should not be created because of the limit in the API, the dialog should stay open.
-        cy.wait(timeout);
-        ProjectsPage.getAddProjectConfirmBtn().should(Condition.BeEnabled);
-        ProjectsPage.getAddProjectInput().should(Condition.HaveValue, secondProjectName);
-        // Close the dialog.
-        cy.reload();
-      });
+    ProjectsPage.getAddProjectConfirmBtn().should(Condition.NotBe, 'disabled').click();
+
+    cy.wait(timeout);
+    cy.reload();
+
+    ProjectsPage.waitForProject(firstProjectName);
   });
 
   it('should delete first project', () => {
