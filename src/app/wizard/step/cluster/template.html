@@ -137,7 +137,8 @@ limitations under the License.
                  matTooltip="Enable to deploy User SSH Key Agent to the cluster. It cannot be changed once the cluster is created."></i>
             </mat-checkbox>
 
-            <mat-checkbox [formControlName]="Controls.OPAIntegration">
+            <mat-checkbox [formControlName]="Controls.OPAIntegration"
+                          id="km-wizard-opa-integration-checkbox">
               OPA Integration
               <i *ngIf="isEnforced(Controls.OPAIntegration)"
                  class="km-icon-info km-pointer"

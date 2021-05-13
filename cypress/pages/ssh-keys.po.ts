@@ -50,7 +50,7 @@ export class SSHKeysPage {
   // Utils.
 
   static waitForRefresh(): void {
-    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.SSHKeys).wait();
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.SSHKeys).interceptAndWait();
   }
 
   static verifyUrl(): void {

@@ -61,7 +61,7 @@ export class ServiceAccountsPage {
   }
 
   static _waitForTokenRefresh(): void {
-    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.Tokens).wait();
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.Tokens).interceptAndWait();
   }
 
   static getTableRow(name: string): Cypress.Chainable {
@@ -71,7 +71,7 @@ export class ServiceAccountsPage {
   // Utils.
 
   static waitForRefresh(): void {
-    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.ServiceAccounts).wait();
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.ServiceAccounts).interceptAndWait();
   }
 
   static verifyUrl(): void {
