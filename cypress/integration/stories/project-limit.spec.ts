@@ -15,6 +15,7 @@ import {View} from '../../utils/view';
 import {AdminSettingsPage} from '../../pages/admin-settings.po';
 import {ProjectsPage} from '../../pages/projects.po';
 import * as _ from 'lodash';
+import {LoginPage} from "../../pages/login.po";
 
 describe('Project Limit Story', () => {
   const userEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
@@ -56,6 +57,8 @@ describe('Project Limit Story', () => {
 
   it('should logout', () => {
     logout();
+    LoginPage.getLoginBtn().should(Condition.Exist);
+    cy.reload();
   });
 
   it('should login as admin', () => {
