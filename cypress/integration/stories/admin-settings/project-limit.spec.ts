@@ -9,17 +9,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {login, logout} from '../../utils/auth';
-import {Condition} from '../../utils/condition';
-import {View} from '../../utils/view';
-import {AdminSettingsPage} from '../../pages/admin-settings.po';
-import {ProjectsPage} from '../../pages/projects.po';
+import {login, logout} from '../../../utils/auth';
+import {Condition} from '../../../utils/condition';
+import {View} from '../../../utils/view';
+import {AdminSettingsPage} from '../../../pages/admin-settings.po';
+import {ProjectsPage} from '../../../pages/projects.po';
 import * as _ from 'lodash';
-import {LoginPage} from '../../pages/login.po';
-import {RequestType, Response, ResponseType, TrafficMonitor} from '../../utils/monitor';
-import {Endpoint} from '../../utils/endpoint';
+import {LoginPage} from '../../../pages/login.po';
+import {RequestType, Response, ResponseType, TrafficMonitor} from '../../../utils/monitor';
+import {Endpoint} from '../../../utils/endpoint';
 
-describe('Project Limit Story', () => {
+describe('Admin Settings - Project Limit Story', () => {
   const userEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const adminEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
