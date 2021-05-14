@@ -77,11 +77,10 @@ describe('Admin Settings - Project Limit Story', () => {
     AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().click();
     AdminSettingsPage.waitForSave();
     AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().find('input').should(Condition.NotBeChecked);
-
   });
 
   it('set project limit for normal users to 1', () => {
-    AdminSettingsPage.getProjectLimitInput().clear().type('1')
+    AdminSettingsPage.getProjectLimitInput().clear().type('1');
     AdminSettingsPage.waitForSave();
     AdminSettingsPage.getProjectLimitInput().should(Condition.HaveValue, '1');
   });
@@ -132,7 +131,7 @@ describe('Admin Settings - Project Limit Story', () => {
   });
 
   it('remove project limit', () => {
-    AdminSettingsPage.getProjectLimitInput().clear().type('0')
+    AdminSettingsPage.getProjectLimitInput().clear().type('0');
     AdminSettingsPage.waitForSave();
     AdminSettingsPage.getProjectLimitInput().should(Condition.HaveValue, '0');
   });
