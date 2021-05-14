@@ -22,4 +22,5 @@ export namespace Endpoint {
   export const ServiceAccounts = '**/serviceaccounts';
   export const Settings = '**/me/settings';
   export const SSHKeys = '**/sshkeys';
+  export const AdminSettings = '**/admin/settings';
 }

@@ -60,7 +60,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
         switchMap(() => this._settingsService.patchAdminSettings(this._getPatch())),
         takeUntil(this._unsubscribe)
       )
-      .subscribe(_ => {});
+      .subscribe();
   }
 
   ngOnDestroy(): void {

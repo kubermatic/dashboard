@@ -40,7 +40,7 @@ describe('Project Limit Story', () => {
   it('restrict project creation to admins only', () => {
     AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().click();
     AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().find('input').should(Condition.BeChecked);
-    cy.wait(timeout);
+    AdminSettingsPage.waitForSave();
   });
 
   it('should logout', () => {
@@ -54,12 +54,14 @@ describe('Project Limit Story', () => {
 
   it('should not be able to create a new project', () => {
     ProjectsPage.getAddProjectBtn().should(Condition.BeDisabled);
-    cy.wait(timeout);
-    cy.reload();
   });
 
   it('should logout', () => {
+    cy.wait(timeout);
+    cy.reload();
+
     logout();
+
     LoginPage.getLoginBtn().should(Condition.Exist);
     cy.reload();
   });
@@ -76,11 +78,12 @@ describe('Project Limit Story', () => {
   it('remove restriction for project creation to admins only', () => {
     AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().click();
     AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().find('input').should(Condition.NotBeChecked);
+    AdminSettingsPage.waitForSave();
   });
 
   it('set project limit for normal users to 1', () => {
     AdminSettingsPage.getProjectLimitInput().clear().type('1').should(Condition.HaveValue, '1');
-    cy.wait(timeout);
+    AdminSettingsPage.waitForSave();
   });
 
   it('should logout', () => {
@@ -100,9 +103,7 @@ describe('Project Limit Story', () => {
     ProjectsPage.getAddProjectBtn().should(Condition.NotBe, 'disabled').click();
     ProjectsPage.getAddProjectInput().type(secondProjectName).should(Condition.HaveValue, secondProjectName);
     ProjectsPage.getAddProjectConfirmBtn().should(Condition.NotBe, 'disabled').click();
-
-    cy.wait(timeout);
-    cy.reload();
+    ProjectsPage.getDialogCloseButton().click();
   });
 
   it('should delete first project', () => {
@@ -132,7 +133,7 @@ describe('Project Limit Story', () => {
 
   it('remove project limit', () => {
     AdminSettingsPage.getProjectLimitInput().clear().type('0').should(Condition.HaveValue, '0');
-    cy.wait(timeout);
+    AdminSettingsPage.waitForSave();
   });
 
   it('should logout', () => {

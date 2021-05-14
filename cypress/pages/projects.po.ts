@@ -56,10 +56,14 @@ export class ProjectsPage {
     return cy.get('#km-edition');
   }
 
+  static getDialogCloseButton(): Cypress.Chainable {
+    return cy.get('#km-close-dialog-btn');
+  }
+
   // Utils.
 
   static waitForRefresh(): void {
-    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.Projects).wait();
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.Projects).interceptAndWait();
   }
 
   static waitForProject(projectName: string): void {
@@ -76,12 +80,10 @@ export class ProjectsPage {
   }
 
   static visit(): void {
-    cy.get('#km-nav-item-projects')
-      .click()
-      .then(() => {
-        this.waitForRefresh();
-        this.verifyUrl();
-      });
+    cy.visit('/').then(() => {
+      this.waitForRefresh();
+      this.verifyUrl();
+    });
   }
 
   static visitUsingHeader(): void {

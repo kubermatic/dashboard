@@ -16,6 +16,5 @@ before(() => {
 });
 
 beforeEach(() => {
-  cy.server();
   Cypress.Cookies.preserveOnce('token', 'nonce');
 });

@@ -22,6 +22,7 @@ limitations under the License.
                [formControlName]="Controls.Size"
                (changed)="onTypeChange($event)"
                [label]="sizeLabel"
+               customId="km-digitalocean-node-sizes"
                inputLabel="Select size..."
                filterBy="slug">
     <div *option="let size">

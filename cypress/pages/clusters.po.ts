@@ -132,7 +132,7 @@ export class ClustersPage {
   // Utils.
 
   static waitForRefresh(): void {
-    TrafficMonitor.newTrafficMonitor().url(Endpoint.Clusters).method(RequestType.GET).wait();
+    TrafficMonitor.newTrafficMonitor().url(Endpoint.Clusters).method(RequestType.GET).interceptAndWait();
   }
 
   static verifyUrl(): void {
