@@ -39,8 +39,8 @@ describe('Admin Settings - Project Limit Story', () => {
 
   it('restrict project creation to admins only', () => {
     AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().click();
-    AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().find('input').should(Condition.BeChecked);
     AdminSettingsPage.waitForSave();
+    AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().find('input').should(Condition.BeChecked);
   });
 
   it('should logout', () => {
@@ -59,9 +59,7 @@ describe('Admin Settings - Project Limit Story', () => {
   it('should logout', () => {
     cy.wait(timeout);
     cy.reload();
-
     logout();
-
     LoginPage.getLoginBtn().should(Condition.Exist);
     cy.reload();
   });
@@ -77,13 +75,15 @@ describe('Admin Settings - Project Limit Story', () => {
 
   it('remove restriction for project creation to admins only', () => {
     AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().click();
-    AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().find('input').should(Condition.NotBeChecked);
     AdminSettingsPage.waitForSave();
+    AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().find('input').should(Condition.NotBeChecked);
+
   });
 
   it('set project limit for normal users to 1', () => {
-    AdminSettingsPage.getProjectLimitInput().clear().type('1').should(Condition.HaveValue, '1');
+    AdminSettingsPage.getProjectLimitInput().clear().type('1')
     AdminSettingsPage.waitForSave();
+    AdminSettingsPage.getProjectLimitInput().should(Condition.HaveValue, '1');
   });
 
   it('should logout', () => {
@@ -132,8 +132,9 @@ describe('Admin Settings - Project Limit Story', () => {
   });
 
   it('remove project limit', () => {
-    AdminSettingsPage.getProjectLimitInput().clear().type('0').should(Condition.HaveValue, '0');
+    AdminSettingsPage.getProjectLimitInput().clear().type('0')
     AdminSettingsPage.waitForSave();
+    AdminSettingsPage.getProjectLimitInput().should(Condition.HaveValue, '0');
   });
 
   it('should logout', () => {
