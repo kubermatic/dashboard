@@ -68,6 +68,14 @@ export class AdminSettingsPage {
     return cy.get('#km-ram-resource-quota-setting');
   }
 
+  static getRestrictProjectCreationToAdminsCheckbox(): Cypress.Chainable {
+    return cy.get('#km-project-admin-only-setting');
+  }
+
+  static getProjectLimitInput(): Cypress.Chainable {
+    return cy.get('#km-project-limit-setting');
+  }
+
   static getFooter(): Cypress.Chainable {
     return cy.get('.km-footer');
   }
