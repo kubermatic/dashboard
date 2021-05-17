@@ -13,19 +13,17 @@ import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
 import {View} from '../../../utils/view';
 import {AdminSettingsPage} from '../../../pages/admin-settings.po';
-import {HelpPanel} from '../../../pages/help-panel.po';
+import {Property, RequestType, Response, ResponseType, TrafficMonitor} from "../../../utils/monitor";
+import {Endpoint} from "../../../utils/endpoint";
 
-describe('Admin Settings - Custom Links Story', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
+describe('Admin Settings - Administrators Story', () => {
+  const userEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
+  const adminEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const linkLocation = 'Footer';
-  const linkLabel = 'Google';
-  const linkURL = 'https://www.google.com/';
-  const demoInfo = 'Demo system';
-  const termsOfService = 'Terms of Service';
+  const retries = 5;
 
-  it('should login', () => {
-    login(email, password);
+  it('should login as admin', () => {
+    login(adminEmail, password);
     cy.url().should(Condition.Include, View.Projects);
   });
 
@@ -33,74 +31,81 @@ describe('Admin Settings - Custom Links Story', () => {
     AdminSettingsPage.visit();
   });
 
-  it('should add custom link', () => {
-    AdminSettingsPage.getLastCustomLinkLocationInput().click();
-    AdminSettingsPage.getLastCustomLinkLocationInput().get('mat-option').contains(linkLocation).click();
-    AdminSettingsPage.getLastCustomLinkLabelInput().type(linkLabel).should(Condition.HaveValue, linkLabel);
-    AdminSettingsPage.getLastCustomLinkURLInput().type(linkURL).should(Condition.HaveValue, linkURL);
+  it('should switch to admins tab', () => {
+    AdminSettingsPage.getAdminsTab().click();
   });
 
-  it('should make sure that API documentation display is enabled', () => {
-    AdminSettingsPage.getApiDocsCheckbox().click();
-    AdminSettingsPage.getApiDocsCheckbox().find('input').should(Condition.BeChecked);
+  it('should have only one admin', () => {
+    TrafficMonitor.newTrafficMonitor()
+      .method(RequestType.GET)
+      .url(Endpoint.Administrators)
+      .retry(retries)
+      .expect(Response.newResponse(ResponseType.LIST).elements(1).property(Property.newProperty('email', adminEmail)));
   });
 
-  it('should make sure that terms of service display is enabled', () => {
-    AdminSettingsPage.getTermsOfServiceCheckbox().click();
-    AdminSettingsPage.getTermsOfServiceCheckbox().find('input').should(Condition.BeChecked);
+  it('should add second admin', () => {
+    AdminSettingsPage.getAddAdminBtn().click();
+    AdminSettingsPage.getAddAdminDialogEmailInput().type(userEmail).should(Condition.HaveValue, userEmail);
+    AdminSettingsPage.getAddAdminDialogSaveBtn().click();
   });
 
-  it('should make sure that demo information display is enabled', () => {
-    AdminSettingsPage.getDemoInfoCheckbox().click();
-    AdminSettingsPage.getDemoInfoCheckbox().find('input').should(Condition.BeChecked);
+  it('should have two admins', () => {
+    TrafficMonitor.newTrafficMonitor()
+      .method(RequestType.GET)
+      .url(Endpoint.Administrators)
+      .retry(retries)
+      .expect(Response.newResponse(ResponseType.LIST).elements(2));
   });
 
-  it('should check if footer contains custom link', () => {
-    AdminSettingsPage.getFooterCustomIcon(linkURL).should(Condition.Exist);
+  it('should logout', () => {
+    logout();
   });
 
-  it('should check if help panel contains API docs', () => {
-    HelpPanel.open();
-    HelpPanel.getAPIDocsBtn().should(Condition.Exist);
+  it('should login as second admin', () => {
+    login(userEmail, password);
+    cy.url().should(Condition.Include, View.Projects);
   });
 
-  it('should check if footer contains terms of service', () => {
-    AdminSettingsPage.getFooter().should(Condition.Contain, termsOfService);
+  it('should go to the admin settings', () => {
+    AdminSettingsPage.visit();
   });
 
-  it('should check if footer contains demo information', () => {
-    AdminSettingsPage.getFooter().should(Condition.Contain, demoInfo);
+  it('should logout', () => {
+    logout();
   });
 
-  it('should delete custom link', () => {
-    AdminSettingsPage.getSecondLastCustomLinkDeleteButton().should(Condition.NotBe, 'disabled').click();
+  it('should login as admin', () => {
+    login(adminEmail, password);
+    cy.url().should(Condition.Include, View.Projects);
   });
 
-  it('should make sure that API documentation display is disabled', () => {
-    AdminSettingsPage.getApiDocsCheckbox().click();
-    AdminSettingsPage.getApiDocsCheckbox().find('input').should(Condition.NotBeChecked);
+  it('should go to the admin settings', () => {
+    AdminSettingsPage.visit();
   });
 
-  it('should make sure that terms of service display is disabled', () => {
-    AdminSettingsPage.getTermsOfServiceCheckbox().click();
-    AdminSettingsPage.getTermsOfServiceCheckbox().find('input').should(Condition.NotBeChecked);
+  it('should switch to admins tab', () => {
+    AdminSettingsPage.getAdminsTab().click();
   });
 
-  it('should make sure that demo information display is disabled', () => {
-    AdminSettingsPage.getDemoInfoCheckbox().click();
-    AdminSettingsPage.getDemoInfoCheckbox().find('input').should(Condition.NotBeChecked);
+  it('should have two admins', () => {
+    TrafficMonitor.newTrafficMonitor()
+      .method(RequestType.GET)
+      .url(Endpoint.Administrators)
+      .retry(retries)
+      .expect(Response.newResponse(ResponseType.LIST).elements(2));
   });
 
-  it('should check if footer does not contain custom link', () => {
-    AdminSettingsPage.getFooterCustomIcon(linkURL).should(Condition.NotExist);
+  it('should remove second admin', () => {
+    AdminSettingsPage.getDeleteAdminBtn(userEmail).click();
+    cy.get('#km-confirmation-dialog-confirm-btn').should(Condition.NotBe, 'disabled').click();
   });
 
-  it('should check if footer does not contain terms of service', () => {
-    AdminSettingsPage.getFooter().should(Condition.NotContain, termsOfService);
-  });
-
-  it('should check if footer does not contain demo information', () => {
-    AdminSettingsPage.getFooter().should(Condition.NotContain, demoInfo);
+  it('should have only one admin', () => {
+    TrafficMonitor.newTrafficMonitor()
+      .method(RequestType.GET)
+      .url(Endpoint.Administrators)
+      .retry(retries)
+      .expect(Response.newResponse(ResponseType.LIST).elements(1).property(Property.newProperty('email', adminEmail)));
   });
 
   it('should logout', () => {

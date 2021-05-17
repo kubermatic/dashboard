@@ -15,6 +15,7 @@ limitations under the License.
   <div fxFlex></div>
   <button mat-icon-button
           matTooltip="Add administrator"
+          id="km-add-admin-btn"
           (click)="add()">
     <i class="km-icon-add"></i>
   </button>
@@ -53,6 +54,7 @@ limitations under the License.
       <div class="km-table-actions"
            fxLayoutAlign="end">
         <button mat-icon-button
+                [attr.id]="'km-admin-delete-' + element.email"
                 (click)="delete(element)"
                 [disabled]="!isDeleteEnabled(element)">
           <i class="km-icon-delete"></i>

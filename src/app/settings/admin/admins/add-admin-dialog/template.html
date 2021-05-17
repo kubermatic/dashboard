@@ -20,6 +20,7 @@ limitations under the License.
       <mat-label>Email*</mat-label>
       <input matInput
              formControlName="email"
+             id="km-add-admin-dialog-email-input"
              type="text"
              autocomplete="off"
              cdkFocusInitial>
@@ -33,6 +34,7 @@ limitations under the License.
   <button mat-flat-button
           type="submit"
           form="add-admin-form"
+          id="km-add-admin-dialog-save-btn"
           [disabled]="!form.valid">
     Save
   </button>
