@@ -85,11 +85,11 @@ export class AdminSettingsPage {
   }
 
   static getAddAdminDialogEmailInput(): Cypress.Chainable {
-    return cy.get('#km-add-admin-dialog-email-input')
+    return cy.get('#km-add-admin-dialog-email-input');
   }
 
   static getAddAdminDialogSaveBtn(): Cypress.Chainable {
-    return cy.get('#km-add-admin-dialog-save-btn')
+    return cy.get('#km-add-admin-dialog-save-btn');
   }
 
   static getDeleteAdminBtn(email: string): Cypress.Chainable {

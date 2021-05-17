@@ -13,14 +13,15 @@ import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
 import {View} from '../../../utils/view';
 import {AdminSettingsPage} from '../../../pages/admin-settings.po';
-import {Property, RequestType, Response, ResponseType, TrafficMonitor} from "../../../utils/monitor";
-import {Endpoint} from "../../../utils/endpoint";
+import {Property, RequestType, Response, ResponseType, TrafficMonitor} from '../../../utils/monitor';
+import {Endpoint} from '../../../utils/endpoint';
 
 describe('Admin Settings - Administrators Story', () => {
   const userEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const adminEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const retries = 5;
+  let adminsCount = 1;
 
   it('should login as admin', () => {
     login(adminEmail, password);
@@ -40,13 +41,18 @@ describe('Admin Settings - Administrators Story', () => {
       .method(RequestType.GET)
       .url(Endpoint.Administrators)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(1).property(Property.newProperty('email', adminEmail)));
+      .expect(
+        Response.newResponse(ResponseType.LIST)
+          .elements(adminsCount)
+          .property(Property.newProperty('email', adminEmail))
+      );
   });
 
   it('should add second admin', () => {
     AdminSettingsPage.getAddAdminBtn().click();
     AdminSettingsPage.getAddAdminDialogEmailInput().type(userEmail).should(Condition.HaveValue, userEmail);
     AdminSettingsPage.getAddAdminDialogSaveBtn().click();
+    adminsCount++;
   });
 
   it('should have two admins', () => {
@@ -54,7 +60,7 @@ describe('Admin Settings - Administrators Story', () => {
       .method(RequestType.GET)
       .url(Endpoint.Administrators)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(2));
+      .expect(Response.newResponse(ResponseType.LIST).elements(adminsCount));
   });
 
   it('should logout', () => {
@@ -92,12 +98,13 @@ describe('Admin Settings - Administrators Story', () => {
       .method(RequestType.GET)
       .url(Endpoint.Administrators)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(2));
+      .expect(Response.newResponse(ResponseType.LIST).elements(adminsCount));
   });
 
   it('should remove second admin', () => {
     AdminSettingsPage.getDeleteAdminBtn(userEmail).click();
     cy.get('#km-confirmation-dialog-confirm-btn').should(Condition.NotBe, 'disabled').click();
+    adminsCount--;
   });
 
   it('should have only one admin', () => {
@@ -105,7 +112,11 @@ describe('Admin Settings - Administrators Story', () => {
       .method(RequestType.GET)
       .url(Endpoint.Administrators)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(1).property(Property.newProperty('email', adminEmail)));
+      .expect(
+        Response.newResponse(ResponseType.LIST)
+          .elements(adminsCount)
+          .property(Property.newProperty('email', adminEmail))
+      );
   });
 
   it('should logout', () => {
