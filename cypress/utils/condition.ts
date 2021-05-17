@@ -15,7 +15,6 @@ export enum Condition {
   BeChecked = 'be.checked',
   Contain = 'contain',
   Exist = 'exist',
-  HaveAttribute = 'have.attr',
   HaveClass = 'have.class',
   HaveLength = 'have.length',
   HaveValue = 'have.value',
