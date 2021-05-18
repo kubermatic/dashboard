@@ -121,6 +121,10 @@ export class AdminsComponent implements OnInit, OnChanges {
       });
   }
 
+  getDeleteId(admin: Admin): string {
+    return `km-admin-delete-${btoa(admin.email)}`;
+  }
+
   isPaginatorVisible(): boolean {
     return this.admins && this.admins.length > 0 && this.paginator && this.admins.length > this.paginator.pageSize;
   }

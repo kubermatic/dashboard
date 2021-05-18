@@ -101,7 +101,7 @@ export class AdminSettingsPage {
   }
 
   static getDeleteAdminBtn(email: string): Cypress.Chainable {
-    return cy.get(`#km-admin-delete-${email}`);
+    return cy.get(`#km-admin-delete-${btoa(email)}`);
   }
 
   // Utils.
