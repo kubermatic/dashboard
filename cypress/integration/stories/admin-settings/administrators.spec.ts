@@ -60,7 +60,9 @@ describe('Admin Settings - Administrators Story', () => {
       .method(RequestType.GET)
       .url(Endpoint.Administrators)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(adminsCount));
+      .expect(
+        Response.newResponse(ResponseType.LIST).elements(adminsCount).property(Property.newProperty('isAdmin', 'true'))
+      );
   });
 
   it('should logout', () => {
@@ -98,7 +100,9 @@ describe('Admin Settings - Administrators Story', () => {
       .method(RequestType.GET)
       .url(Endpoint.Administrators)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(adminsCount));
+      .expect(
+        Response.newResponse(ResponseType.LIST).elements(adminsCount).property(Property.newProperty('isAdmin', 'true'))
+      );
   });
 
   it('should remove second admin', () => {
