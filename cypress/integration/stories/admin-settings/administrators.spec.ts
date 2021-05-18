@@ -24,7 +24,7 @@ describe('Admin Settings - Administrators Story', () => {
   let adminsCount = 1;
 
   it('should login as user to make sure it exists', () => {
-    login(adminEmail, password);
+    login(userEmail, password);
     cy.url().should(Condition.Include, View.Projects);
   });
 
