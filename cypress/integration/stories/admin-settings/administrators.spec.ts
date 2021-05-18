@@ -23,15 +23,6 @@ describe('Admin Settings - Administrators Story', () => {
   const retries = 5;
   let adminsCount = 1;
 
-  it('should login as user to make sure it exists', () => {
-    login(userEmail, password);
-    cy.url().should(Condition.Include, View.Projects);
-  });
-
-  it('should logout', () => {
-    logout();
-  });
-
   it('should login as admin', () => {
     login(adminEmail, password);
     cy.url().should(Condition.Include, View.Projects);
