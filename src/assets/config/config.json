@@ -3,5 +3,5 @@
     "wizard_use_default_user": false,
     "wizard_default_domain_name": "Default"
   },
-  "share_kubeconfig": false
+  "share_kubeconfig": true
 }

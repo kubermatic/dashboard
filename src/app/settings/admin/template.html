@@ -83,10 +83,12 @@ limitations under the License.
              fxLayout="row">
           <mat-checkbox [(ngModel)]="settings.cleanupOptions.Enabled"
                         (change)="onSettingsChange()"
+                        id="km-cleanup-enable-setting"
                         fxFlexAlign=" center">Enable by Default
           </mat-checkbox>
           <mat-checkbox [(ngModel)]="settings.cleanupOptions.Enforced"
                         (change)="onSettingsChange()"
+                        id="km-cleanup-enforce-setting"
                         fxFlexAlign=" center">Enforce
           </mat-checkbox>
           <km-spinner-with-confirmation [isSaved]="isEqual(settings.cleanupOptions, apiSettings.cleanupOptions)"></km-spinner-with-confirmation>
@@ -147,7 +149,8 @@ limitations under the License.
                matTooltip="Show/Hide &quot;Open Dashboard&quot; button on cluster details and allow/block Kubernetes Dashboard access through the API."></div>
         </div>
         <mat-checkbox [(ngModel)]="settings.enableDashboard"
-                      (change)="onSettingsChange()"></mat-checkbox>
+                      (change)="onSettingsChange()"
+                      id="km-enable-kubernetes-dashboard-setting"></mat-checkbox>
         <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableDashboard, apiSettings.enableDashboard)"></km-spinner-with-confirmation>
       </div>
 
@@ -160,7 +163,8 @@ limitations under the License.
                matTooltip="Use OIDC provider as a proxy for kubeconfig download."></div>
         </div>
         <mat-checkbox [(ngModel)]="settings.enableOIDCKubeconfig"
-                      (change)="onSettingsChange()"></mat-checkbox>
+                      (change)="onSettingsChange()"
+                      id="km-enable-oidc-setting"></mat-checkbox>
         <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableOIDCKubeconfig, apiSettings.enableOIDCKubeconfig)"></km-spinner-with-confirmation>
       </div>
 
@@ -173,7 +177,8 @@ limitations under the License.
                matTooltip="Enable/Disable &quot;Connect Cluster&quot; button on the cluster list and allow/block access to the connect cluster feature through the API."></div>
         </div>
         <mat-checkbox [(ngModel)]="settings.enableExternalClusterImport"
-                      (change)="onSettingsChange()"></mat-checkbox>
+                      (change)="onSettingsChange()"
+                      id="km-enable-external-clusters-setting"></mat-checkbox>
         <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableExternalClusterImport, apiSettings.enableExternalClusterImport)"></km-spinner-with-confirmation>
       </div>
 
