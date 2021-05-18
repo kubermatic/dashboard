@@ -24,6 +24,7 @@ limitations under the License.
       </button>
       <div fxFlex></div>
       <button mat-icon-button
+              id="km-share-kubeconfig-btn"
               class="km-share-kubeconfig-btn"
               (click)="shareConfigDialog()"
               [disabled]="!isClusterRunning"
@@ -49,7 +50,8 @@ limitations under the License.
 
         Add Machine Deployment
       </button>
-      <a class="km-connect-kubeconfig-btn"
+      <a class="km-open-kubernetes-dashboard-btn"
+         id="km-open-kubernetes-dashboard-btn"
          [href]="getProxyURL()"
          target="_blank"
          mat-flat-button

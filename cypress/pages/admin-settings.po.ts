@@ -76,6 +76,26 @@ export class AdminSettingsPage {
     return cy.get('#km-project-limit-setting');
   }
 
+  static getCleanupEnableCheckbox(): Cypress.Chainable {
+    return cy.get('#km-cleanup-enable-setting');
+  }
+
+  static getCleanupEnforceCheckbox(): Cypress.Chainable {
+    return cy.get('#km-cleanup-enforce-setting');
+  }
+
+  static getEnableKubernetesDashboardCheckbox(): Cypress.Chainable {
+    return cy.get('#km-enable-kubernetes-dashboard-setting');
+  }
+
+  static getEnableOIDCCheckbox(): Cypress.Chainable {
+    return cy.get('#km-enable-oidc-setting');
+  }
+
+  static getEnableExternalClustersCheckbox(): Cypress.Chainable {
+    return cy.get('#km-enable-external-clusters-setting');
+  }
+
   static getFooter(): Cypress.Chainable {
     return cy.get('.km-footer');
   }

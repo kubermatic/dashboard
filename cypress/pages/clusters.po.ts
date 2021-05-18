@@ -129,6 +129,22 @@ export class ClustersPage {
     return cy.get('#km-close-dialog-btn');
   }
 
+  static getDeleteDialogCleanupLBCheckbox(): Cypress.Chainable {
+    return cy.get('#km-delete-cluster-lb-cleanup');
+  }
+
+  static getDeleteDialogCleanupVolumeCheckbox(): Cypress.Chainable {
+    return cy.get('#km-delete-cluster-volume-cleanup');
+  }
+
+  static getOpenKubernetesDashboardButton(): Cypress.Chainable {
+    return cy.get('#km-open-kubernetes-dashboard-btn');
+  }
+
+  static getShareKubeconfigButton(): Cypress.Chainable {
+    return cy.get('#km-share-kubeconfig-btn');
+  }
+
   // Utils.
 
   static waitForRefresh(): void {
