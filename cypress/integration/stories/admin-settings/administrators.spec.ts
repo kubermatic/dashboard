@@ -13,7 +13,7 @@ import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
 import {View} from '../../../utils/view';
 import {AdminSettingsPage} from '../../../pages/admin-settings.po';
-import {Property, RequestType, Response, ResponseType, TrafficMonitor} from '../../../utils/monitor';
+import {RequestType, Response, ResponseType, TrafficMonitor} from '../../../utils/monitor';
 import {Endpoint} from '../../../utils/endpoint';
 
 describe('Admin Settings - Administrators Story', () => {
@@ -41,11 +41,7 @@ describe('Admin Settings - Administrators Story', () => {
       .method(RequestType.GET)
       .url(Endpoint.Administrators)
       .retry(retries)
-      .expect(
-        Response.newResponse(ResponseType.LIST)
-          .elements(adminsCount)
-          .property(Property.newProperty('email', adminEmail))
-      );
+      .expect(Response.newResponse(ResponseType.LIST).elements(adminsCount));
   });
 
   it('should add second admin', () => {
@@ -60,9 +56,7 @@ describe('Admin Settings - Administrators Story', () => {
       .method(RequestType.GET)
       .url(Endpoint.Administrators)
       .retry(retries)
-      .expect(
-        Response.newResponse(ResponseType.LIST).elements(adminsCount).property(Property.newProperty('isAdmin', 'true'))
-      );
+      .expect(Response.newResponse(ResponseType.LIST).elements(adminsCount));
   });
 
   it('should logout', () => {
@@ -100,9 +94,7 @@ describe('Admin Settings - Administrators Story', () => {
       .method(RequestType.GET)
       .url(Endpoint.Administrators)
       .retry(retries)
-      .expect(
-        Response.newResponse(ResponseType.LIST).elements(adminsCount).property(Property.newProperty('isAdmin', 'true'))
-      );
+      .expect(Response.newResponse(ResponseType.LIST).elements(adminsCount));
   });
 
   it('should remove second admin', () => {
@@ -116,11 +108,7 @@ describe('Admin Settings - Administrators Story', () => {
       .method(RequestType.GET)
       .url(Endpoint.Administrators)
       .retry(retries)
-      .expect(
-        Response.newResponse(ResponseType.LIST)
-          .elements(adminsCount)
-          .property(Property.newProperty('email', adminEmail))
-      );
+      .expect(Response.newResponse(ResponseType.LIST).elements(adminsCount));
   });
 
   it('should logout', () => {
