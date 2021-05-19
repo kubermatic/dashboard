@@ -104,6 +104,26 @@ export class AdminSettingsPage {
     return cy.get(`.km-footer a[href="${url}"]`);
   }
 
+  static getAdminsTab(): Cypress.Chainable {
+    return cy.get('#mat-tab-label-0-1');
+  }
+
+  static getAddAdminBtn(): Cypress.Chainable {
+    return cy.get('#km-add-admin-btn');
+  }
+
+  static getAddAdminDialogEmailInput(): Cypress.Chainable {
+    return cy.get('#km-add-admin-dialog-email-input');
+  }
+
+  static getAddAdminDialogSaveBtn(): Cypress.Chainable {
+    return cy.get('#km-add-admin-dialog-save-btn');
+  }
+
+  static getDeleteAdminBtn(email: string): Cypress.Chainable {
+    return cy.get(`#km-admin-delete-${btoa(email)}`);
+  }
+
   // Utils.
 
   static waitForSave(): void {
