@@ -19,6 +19,7 @@ limitations under the License.
       <input required
              matInput
              [formControlName]="controls.Name"
+             id="km-add-dc-name-input"
              type="text"
              autocomplete="off"
              cdkFocusInitial>
@@ -31,7 +32,8 @@ limitations under the License.
       <mat-label>Provider</mat-label>
       <mat-select required
                   disableOptionCentering
-                  [formControlName]="controls.Provider">
+                  [formControlName]="controls.Provider"
+                  id="km-add-dc-provider-input">
         <mat-select-trigger fxFlex
                             fxLayout="row">
           <span class="km-provider-logo km-provider-logo-{{form.get(controls.Provider).value}} provider-logo-small"></span>
@@ -50,7 +52,8 @@ limitations under the License.
       <mat-label>Seed</mat-label>
       <mat-select required
                   disableOptionCentering
-                  [formControlName]="controls.Seed">
+                  [formControlName]="controls.Seed"
+                  id="km-add-dc-seed-input">
         <mat-option *ngFor="let seed of seeds"
                     [value]="seed">
           {{seed}}
@@ -66,7 +69,8 @@ limitations under the License.
       <mat-label>Country</mat-label>
       <mat-select required
                   disableOptionCentering
-                  [formControlName]="controls.Country">
+                  [formControlName]="controls.Country"
+                  id="km-add-dc-country-input">
         <mat-select-trigger fxFlex
                             fxLayout="row">
           <div fxFlex
@@ -96,6 +100,7 @@ limitations under the License.
       <input required
              matInput
              [formControlName]="controls.Location"
+             id="km-add-dc-location-input"
              type="text"
              autocomplete="off">
       <mat-error *ngIf="form.get(controls.Location).hasError('required')">
@@ -136,6 +141,7 @@ limitations under the License.
 <mat-dialog-actions>
   <button mat-flat-button
           (click)="save()"
+          id="km-add-dc-save-btn"
           [disabled]="!form.valid">
     {{data.confirmLabel}}
   </button>

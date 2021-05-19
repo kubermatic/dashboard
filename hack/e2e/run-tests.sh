@@ -26,6 +26,7 @@ export KIND_CLUSTER_NAME="${SEED_NAME}"
 source hack/e2e/setup-kind-cluster.sh
 source hack/e2e/setup-kubermatic-in-kind.sh
 
+export CYPRESS_SEED_NAME="${SEED_NAME}"
 export CYPRESS_KUBERMATIC_EDITION="${KUBERMATIC_EDITION}"
 export CYPRESS_KUBECONFIG_ENCODED="$(kind get kubeconfig --name="$KIND_CLUSTER_NAME" --internal | yq r - -j -I=0 | base64 -w0)"
 export CYPRESS_RECORD_KEY=7859bcb8-1d2a-4d56-b7f5-ca70b93f944c

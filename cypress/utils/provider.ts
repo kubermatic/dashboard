@@ -43,6 +43,7 @@ export namespace Datacenter {
 
   export enum BringYourOwn {
     Frankfurt = 'Frankfurt',
+    Hamburg = 'Hamburg',
   }
 
   export enum Digitalocean {

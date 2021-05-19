@@ -13,15 +13,23 @@ import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
 import {View} from '../../../utils/view';
 import {AdminSettingsPage} from '../../../pages/admin-settings.po';
-import {ProjectsPage} from "../../../pages/projects.po";
-import * as _ from "lodash";
-import {ClustersPage} from "../../../pages/clusters.po";
+import {ProjectsPage} from '../../../pages/projects.po';
+import * as _ from 'lodash';
+import {ClustersPage} from '../../../pages/clusters.po';
+import {Datacenter, Provider} from '../../../utils/provider';
+import {WizardPage} from '../../../pages/wizard.po';
+import {WizardStep} from '../../../utils/wizard';
 
 describe('Admin Settings - Dynamic Datacenters Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
+  const seedName = Cypress.env('SEED_NAME');
   const projectName = _.uniqueId('e2e-test-project-');
   const clusterName = _.uniqueId('e2e-test-cluster-');
+  const datacenterName = _.uniqueId('e2e-test-datacenter-');
+  const provider = Provider.BringYourOwn;
+  const country = 'Germany';
+  const location = Datacenter.BringYourOwn.Hamburg;
 
   it('should login', () => {
     login(email, password);
@@ -37,11 +45,24 @@ describe('Admin Settings - Dynamic Datacenters Story', () => {
   });
 
   it('should open add datacenter dialog', () => {
-
+    AdminSettingsPage.getAddDatacenterBtn().click();
   });
 
   it('should add new datacenter', () => {
+    AdminSettingsPage.getAddDatacenterNameInput().type(datacenterName).should(Condition.HaveValue, datacenterName);
 
+    AdminSettingsPage.getAddDatacenterProviderInput().click();
+    AdminSettingsPage.getAddDatacenterProviderInput().get(`mat-option .km-provider-logo-${provider}`).click();
+
+    AdminSettingsPage.getAddDatacenterSeedInput().click();
+    AdminSettingsPage.getAddDatacenterSeedInput().get('mat-option').contains(seedName).click();
+
+    AdminSettingsPage.getAddDatacenterCountryInput().click();
+    AdminSettingsPage.getAddDatacenterCountryInput().get('mat-option').contains(country).click();
+
+    AdminSettingsPage.getAddDatacenterLocationInput().type(location).should(Condition.HaveValue, location);
+
+    AdminSettingsPage.getAddDatacenterSaveBtn().click();
   });
 
   it('should go to projects view', () => {
@@ -57,13 +78,13 @@ describe('Admin Settings - Dynamic Datacenters Story', () => {
   });
 
   it('should create a new cluster in the new datacenter', () => {
-    // WizardPage.getProviderBtn(Provider.BringYourOwn).click();
-    // WizardPage.getDatacenterBtn(Datacenter.BringYourOwn.Frankfurt).click();
-    // WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
-    // WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
-    // WizardPage.getCreateBtn().click({force: true});
-    //
-    // ClustersPage.verifyUrl();
+    WizardPage.getProviderBtn(provider).click();
+    WizardPage.getDatacenterBtn(location).click();
+    WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
+    WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
+    WizardPage.getCreateBtn().click({force: true});
+
+    ClustersPage.verifyUrl();
   });
 
   it('should delete created cluster', () => {
@@ -83,6 +104,16 @@ describe('Admin Settings - Dynamic Datacenters Story', () => {
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
   });
+
+  it('should go to the admin settings', () => {
+    AdminSettingsPage.visit();
+  });
+
+  it('should switch to dynamic datacenters tab', () => {
+    AdminSettingsPage.getDynamicDatacentersTab().click();
+  });
+
+  it('should delete created datacenter', () => {});
 
   it('should logout', () => {
     logout();
