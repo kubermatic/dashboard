@@ -104,6 +104,10 @@ export class AdminSettingsPage {
     return cy.get(`.km-footer a[href="${url}"]`);
   }
 
+  static getDynamicDatacentersTab(): Cypress.Chainable {
+    return cy.get('#mat-tab-label-0-0');
+  }
+
   static getAdminsTab(): Cypress.Chainable {
     return cy.get('#mat-tab-label-0-1');
   }
