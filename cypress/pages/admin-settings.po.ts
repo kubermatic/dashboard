@@ -136,6 +136,10 @@ export class AdminSettingsPage {
     return cy.get('#km-add-dc-save-btn');
   }
 
+  static getDeleteDatacenterBtn(name: string): Cypress.Chainable {
+    return cy.get(`#km-datacenter-delete-btn-${name}`);
+  }
+
   static getAdminsTab(): Cypress.Chainable {
     return cy.get('#mat-tab-label-0-1');
   }

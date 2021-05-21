@@ -117,7 +117,10 @@ describe('Admin Settings - Dynamic Datacenters Story', () => {
     AdminSettingsPage.getDynamicDatacentersTab().click();
   });
 
-  it('should delete created datacenter', () => {});
+  it('should delete created datacenter', () => {
+    AdminSettingsPage.getDeleteDatacenterBtn(datacenterName).click();
+    cy.get('#km-confirmation-dialog-confirm-btn').should(Condition.NotBe, 'disabled').click();
+  });
 
   it('should logout', () => {
     logout();
