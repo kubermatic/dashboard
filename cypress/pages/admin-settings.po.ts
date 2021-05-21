@@ -104,6 +104,42 @@ export class AdminSettingsPage {
     return cy.get(`.km-footer a[href="${url}"]`);
   }
 
+  static getDynamicDatacentersTab(): Cypress.Chainable {
+    return cy.get('#mat-tab-label-0-0');
+  }
+
+  static getAddDatacenterBtn(): Cypress.Chainable {
+    return cy.get('#km-admin-settings-add-dc-btn');
+  }
+
+  static getAddDatacenterNameInput(): Cypress.Chainable {
+    return cy.get('#km-add-dc-name-input');
+  }
+
+  static getAddDatacenterProviderInput(): Cypress.Chainable {
+    return cy.get('#km-add-dc-provider-input');
+  }
+
+  static getAddDatacenterSeedInput(): Cypress.Chainable {
+    return cy.get('#km-add-dc-seed-input');
+  }
+
+  static getAddDatacenterCountryInput(): Cypress.Chainable {
+    return cy.get('#km-add-dc-country-input');
+  }
+
+  static getAddDatacenterLocationInput(): Cypress.Chainable {
+    return cy.get('#km-add-dc-location-input');
+  }
+
+  static getAddDatacenterSaveBtn(): Cypress.Chainable {
+    return cy.get('#km-add-dc-save-btn');
+  }
+
+  static getDeleteDatacenterBtn(name: string): Cypress.Chainable {
+    return cy.get(`#km-datacenter-delete-btn-${name}`);
+  }
+
   static getAdminsTab(): Cypress.Chainable {
     return cy.get('#mat-tab-label-0-1');
   }

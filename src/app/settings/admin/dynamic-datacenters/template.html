@@ -115,6 +115,7 @@ limitations under the License.
   <div fxFlex></div>
   <button mat-icon-button
           matTooltip="Add datacenter"
+          id="km-admin-settings-add-dc-btn"
           (click)="add()">
     <i class="km-icon-add"></i>
   </button>
@@ -185,7 +186,8 @@ limitations under the License.
         </button>
 
         <button mat-icon-button
-                (click)="delete(element)">
+                (click)="delete(element)"
+                [attr.id]="'km-datacenter-delete-btn-' + element.metadata.name">
           <i class="km-icon-delete"></i>
         </button>
       </div>
