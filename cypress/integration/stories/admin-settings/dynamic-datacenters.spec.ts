@@ -77,6 +77,10 @@ describe('Admin Settings - Dynamic Datacenters Story', () => {
     ProjectsPage.selectProject(projectName);
   });
 
+  it('should go to wizard', () => {
+    ClustersPage.openWizard();
+  });
+
   it('should create a new cluster in the new datacenter', () => {
     WizardPage.getProviderBtn(provider).click();
     WizardPage.getDatacenterBtn(location).click();
