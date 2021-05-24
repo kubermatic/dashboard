@@ -56,11 +56,13 @@ limitations under the License.
             *ngIf="!first">Back
     </button>
     <button mat-flat-button
+            id="km-settings-preset-next-btn"
             (click)="stepper.next()"
             [disabled]="invalid"
             *ngIf="!last">Next
     </button>
     <button mat-flat-button
+            id="km-settings-preset-create-btn"
             [disabled]="creating || invalid"
             *ngIf="last"
             (click)="save()">Create

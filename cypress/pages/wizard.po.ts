@@ -75,14 +75,7 @@ export class WizardPage {
   }
 
   static getPreset(preset: Preset): Cypress.Chainable {
-    return cy.get('mat-option').then(option => {
-      if (option.find('span').text(preset).length > 0) {
-        return cy.get('mat-option').contains('span', preset);
-      }
-
-      // Fallback to the first option if preset not found
-      return cy.get('mat-option');
-    });
+    return cy.get('#km-wizard-select-preset-panel').contains('span', preset).parent();
   }
 
   static getNodeNameInput(): Cypress.Chainable {
