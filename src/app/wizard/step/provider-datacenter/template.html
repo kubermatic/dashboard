@@ -14,7 +14,11 @@ limitations under the License.
       fxFlex="100%"
       fxLayout="column">
   <div *ngIf="providers.length === 0"
-       class="no-data-warning">You need to deploy a seed cluster before you can create user clusters.</div>
+       class="no-data-warning"
+       fxLayoutAlign="center center">
+    <i class="km-icon-warning"></i>
+    <span>You need to deploy a seed cluster before you can create user clusters.</span>
+  </div>
 
   <ng-container *ngIf="providers.length > 0">
     <mat-card-header class="km-no-padding">
