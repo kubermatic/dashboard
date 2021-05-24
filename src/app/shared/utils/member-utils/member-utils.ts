@@ -21,6 +21,7 @@ export enum Permission {
 
 export enum Group {
   Owner = 'owners',
+  ProjectManager = 'projectmanagers',
   Editor = 'editors',
   Viewer = 'viewers',
 }
@@ -41,6 +42,8 @@ export class MemberUtils {
     switch (groupInternalName) {
       case Group.Owner:
         return 'Owner';
+      case Group.ProjectManager:
+        return 'Project Manager';
       case Group.Editor:
         return 'Editor';
       case Group.Viewer:
