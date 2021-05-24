@@ -22,5 +22,6 @@ describe('MemberUtils', () => {
     expect(MemberUtils.getGroupDisplayName('owners')).toBe('Owner');
     expect(MemberUtils.getGroupDisplayName('editors')).toBe('Editor');
     expect(MemberUtils.getGroupDisplayName('viewers')).toBe('Viewer');
+    expect(MemberUtils.getGroupDisplayName('projectmanagers')).toBe('Project Manager');
   });
 });
