@@ -183,7 +183,7 @@ export class AdminSettingsPage {
 
   static getAddPresetDialogProviderBtn(provider: Provider): Cypress.Chainable {
     return cy
-      .get('.km-provider-logo-' + provider)
+      .get('#km-settings-preset-dialog-provider-' + provider)
       .parent()
       .parent();
   }
