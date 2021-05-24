@@ -75,7 +75,7 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
       for (const datacenter of datacenters) {
         const provider = getDatacenterProvider(datacenter);
         if (!providers.includes(provider)) {
-          //providers.push(provider);
+          providers.push(provider);
         }
       }
 
