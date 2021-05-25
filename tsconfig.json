@@ -18,7 +18,6 @@
     "declaration": false,
     "moduleResolution": "Node",
     "module": "CommonJS",
-    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
