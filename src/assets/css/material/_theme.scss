@@ -213,6 +213,16 @@
       }
     }
 
+    &.mat-quaternary:not([disabled]) {
+      background-color: transparent;
+      border: 1px solid map-get($colors, divider);
+      color: map-get($colors, text);
+
+      &:hover {
+        background-color: map-get($colors, background-hover);
+      }
+    }
+
     &.mat-pure:not([disabled]) {
       background-color: transparent;
       border: none;
@@ -250,6 +260,15 @@
 
       i {
         background-color: #fff;
+      }
+    }
+
+    &.mat-tertiary:not([disabled]) {
+      background-color: transparent;
+      border: 1px solid map-get($colors, divider);
+
+      &:hover {
+        background-color: map-get($colors, background-hover);
       }
     }
   }

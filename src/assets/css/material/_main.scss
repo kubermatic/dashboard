@@ -391,11 +391,16 @@ button {
   &.mat-flat-button,
   &.mat-raised-button {
     font-size: $font-size-subhead;
+    height: 40px;
     line-height: 40px;
     min-width: unset;
 
     &:not(:first-child) {
       margin-left: 10px;
+    }
+
+    i {
+      margin-right: 8px;
     }
   }
 }
