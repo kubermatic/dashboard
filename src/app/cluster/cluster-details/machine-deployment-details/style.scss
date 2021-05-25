@@ -33,20 +33,6 @@
   }
 }
 
-.km-machine-deployment-actions {
-  margin-right: 32px;
-
-  .mat-icon-button {
-    font-size: 20px;
-
-    i {
-      @include size(20px);
-
-      margin-top: -4px;
-    }
-  }
-}
-
 .km-provider-logo-value {
   align-items: center;
   display: flex;
