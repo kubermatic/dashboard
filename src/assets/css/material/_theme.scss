@@ -240,6 +240,18 @@
     &:disabled i {
       background-color: map-get($colors, background-disabled-button);
     }
+
+    &.mat-alternative:not([disabled]) {
+      background-color: map-get($colors, secondary);
+
+      &:hover {
+        background-color: map-get($colors, secondary-hover);
+      }
+
+      i {
+        background-color: #fff;
+      }
+    }
   }
 
   .mat-slide-toggle {
