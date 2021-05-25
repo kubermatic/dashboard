@@ -13,17 +13,26 @@ limitations under the License.
 <form [formGroup]="form"
       fxFlex="100%"
       fxLayout="column">
-  <mat-card-header class="km-no-padding">
-    <mat-card-title class="km-color-primary">Provider</mat-card-title>
-  </mat-card-header>
-  <mat-button-toggle-group group="providerGroup"
-                           [formControlName]="controls.Provider"
-                           fxLayout="row wrap">
-    <mat-button-toggle *ngFor="let provider of providers;"
-                       value="{{provider}}">
-      <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
-    </mat-button-toggle>
-  </mat-button-toggle-group>
+  <div *ngIf="providers.length === 0"
+       class="no-data-warning"
+       fxLayoutAlign="center center">
+    <i class="km-icon-warning"></i>
+    <span>You need to deploy a seed cluster before you can create user clusters.</span>
+  </div>
+
+  <ng-container *ngIf="providers.length > 0">
+    <mat-card-header class="km-no-padding">
+      <mat-card-title class="km-color-primary">Provider</mat-card-title>
+    </mat-card-header>
+    <mat-button-toggle-group group="providerGroup"
+                             [formControlName]="controls.Provider"
+                             fxLayout="row wrap">
+      <mat-button-toggle *ngFor="let provider of providers;"
+                         value="{{provider}}">
+        <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </ng-container>
 
   <ng-container *ngIf="datacenters.length > 0">
     <mat-card-header class="km-no-padding">

@@ -12,6 +12,12 @@
 @import 'variables';
 @import 'mixins';
 
+.no-data-warning {
+  font-size: $font-size-body;
+  padding: 30px;
+  text-align: center;
+}
+
 .km-provider-logo {
   background-position: center;
 }
