@@ -401,6 +401,8 @@ button {
 }
 
 .mat-icon-button {
+  border-radius: $border-radius !important;
+
   &[disabled] {
     * {
       cursor: auto;
