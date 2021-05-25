@@ -11,14 +11,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<button mat-icon-button
-        class="add-button"
-        color="tertiary"
-        matTooltip="Add Binding"
-        *ngIf="isClusterRunning"
-        (click)="addBinding($event)">
-  <i class="km-icon-add"></i>
-</button>
+<div fxLayout="row"
+     class="actions-container">
+  <div fxFlex></div>
+  <button mat-flat-button
+          color="quaternary"
+          *ngIf="isClusterRunning"
+          (click)="addBinding($event)">
+    <i class="km-icon-add"></i>
+    Add Binding
+  </button>
+</div>
 
 <h3>Cluster</h3>
 <table class="km-table"
