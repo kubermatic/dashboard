@@ -249,6 +249,8 @@ export function getEmptyNodeProviderSpec(provider: string): object {
         image: '',
         useFloatingIP: false,
         tags: {},
+        instanceReadyCheckPeriod: '5s',
+        instanceReadyCheckTimeout: '120s',
       } as OpenstackNodeSpec;
     case NodeProvider.VSPHERE:
       return {
