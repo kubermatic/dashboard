@@ -11,21 +11,35 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div *ngIf="!isLoadingData() && !hasNoData()"
-     class="header">
+<div class="header"
+     fxLayoutGap="10px">
   <div fxFlex></div>
-  <button id="km-gatekeeper-config-edit-btn"
-          mat-icon-button
-          matTooltip="Edit Gatekeeper Config"
-          (click)="edit()">
-    <i class="km-icon-edit"></i>
-  </button>
-  <button id="km-gatekeeper-config-delete-btn"
-          mat-icon-button
-          matTooltip="Delete Gatekeeper Config"
-          (click)="delete()">
-    <i class="km-icon-delete"></i>
-  </button>
+  <ng-container *ngIf="hasNoData()">
+    <button id="km-gatekeeper-config-add-btn"
+            (click)="add()"
+            mat-flat-button
+            color="quaternary"
+            [disabled]="!isClusterRunning">
+      <i class="km-icon-add"></i>
+      Add Gatekeeper Config
+    </button>
+  </ng-container>
+  <ng-container *ngIf="!isLoadingData() && !hasNoData()">
+    <button id="km-gatekeeper-config-edit-btn"
+            mat-icon-button
+            color="tertiary"
+            matTooltip="Edit Gatekeeper Config"
+            (click)="edit()">
+      <i class="km-icon-edit"></i>
+    </button>
+    <button id="km-gatekeeper-config-delete-btn"
+            mat-icon-button
+            color="tertiary"
+            matTooltip="Delete Gatekeeper Config"
+            (click)="delete()">
+      <i class="km-icon-delete"></i>
+    </button>
+  </ng-container>
 </div>
 
 <div *ngIf="!isLoadingData() && !hasNoData()"
@@ -172,11 +186,7 @@ limitations under the License.
 
 <div class="km-empty-list-msg no-items"
      *ngIf="hasNoData()">
-  <button id="km-gatekeeper-config-add-btn"
-          (click)="add()"
-          mat-flat-button
-          [disabled]="!isClusterRunning">Add Gatekeeper Config
-  </button>
+  No config found.
 </div>
 
 <km-loader *ngIf="isLoadingData()"></km-loader>
