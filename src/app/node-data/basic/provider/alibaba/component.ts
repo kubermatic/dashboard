@@ -163,17 +163,17 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
 
   onInstanceTypeChange(instanceType: string): void {
     this._nodeDataService.nodeData.spec.cloud.alibaba.instanceType = instanceType;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   onZoneChange(zone: string): void {
     this._nodeDataService.nodeData.spec.cloud.alibaba.zoneID = zone;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   onDiskTypeChange(diskType: string): void {
     this._nodeDataService.nodeData.spec.cloud.alibaba.diskType = diskType;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   getInstanceDisplayNameByID(instanceID: string): string {

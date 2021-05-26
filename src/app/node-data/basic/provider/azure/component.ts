@@ -136,13 +136,13 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
   onSizeChange(size: string): void {
     this._nodeDataService.nodeData.spec.cloud.azure.size = size;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
     this._sizeChanges.emit(!!size);
   }
 
   onZoneChange(zones: string[]): void {
     this._nodeDataService.nodeData.spec.cloud.azure.zones = zones;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   getHint(control: Controls): string {

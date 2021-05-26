@@ -1,9 +1,6 @@
 {
   "extends": "./node_modules/gts/tsconfig-google.json",
-  "angularCompilerOptions": {
-    "annotationsAs": "static fields",
-    "annotateForClosureCompiler": true
-  },
+  "compileOnSave": false,
   "compilerOptions": {
     "outDir": "dist/out-tsc/app",
     "baseUrl": "src",
@@ -14,26 +11,24 @@
       "@assets/*": ["assets/*"],
       "@environments/*": ["environments/*"]
     },
-    "sourceMap": true,
-    "declaration": false,
     "moduleResolution": "Node",
-    "module": "CommonJS",
-    "experimentalDecorators": true,
-    "noUnusedParameters": true,
-    "noUnusedLocals": true,
-    "resolveJsonModule": true,
+    "module": "ES2020",
+    "target": "ES2020",
     "strict": false,
-    "target": "es2020",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    // TODO: Any should be blocked
+    "noImplicitAny": false,
     "lib": [
-      "es2020",
+      "ES2020",
       "dom"
     ]
-  },
-  "include": [
-    "src/*.ts",
-    "src/**/*.ts"
-  ]
+  }
 }

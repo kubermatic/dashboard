@@ -32,7 +32,7 @@ export class NodeDataDigitalOceanProvider {
   set tags(tags: string[]) {
     delete this._nodeDataService.nodeData.spec.cloud.digitalocean.tags;
     this._nodeDataService.nodeData.spec.cloud.digitalocean.tags = tags;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<DigitaloceanSizes> {

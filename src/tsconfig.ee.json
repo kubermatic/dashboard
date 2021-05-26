@@ -1,12 +1,15 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "types": ["node"]
+    "baseUrl": "."
   },
   "files": [
     "main.ts",
     "polyfills.ts"
+  ],
+  "include": [
+    "./*.ts",
+    "./**/*.ts"
   ],
   "exclude": [
     "test*.ts",

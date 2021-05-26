@@ -33,13 +33,13 @@ export class NodeDataGCPProvider {
   set labels(labels: object) {
     delete this._nodeDataService.nodeData.spec.cloud.gcp.labels;
     this._nodeDataService.nodeData.spec.cloud.gcp.labels = labels;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   set tags(tags: string[]) {
     delete this._nodeDataService.nodeData.spec.cloud.gcp.tags;
     this._nodeDataService.nodeData.spec.cloud.gcp.tags = tags;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   zones(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<GCPZone[]> {

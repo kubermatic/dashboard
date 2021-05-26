@@ -31,17 +31,17 @@
               "src/assets/css/root.scss",
               {
                 "input": "src/assets/themes/light.scss",
-                "bundleName": "assets/themes/light",
+                "bundleName": "light",
                 "inject": false
               },
               {
                 "input": "src/assets/themes/dark.scss",
-                "bundleName": "assets/themes/dark",
+                "bundleName": "dark",
                 "inject": false
               },
               {
                 "input": "src/assets/themes/custom.scss",
-                "bundleName": "assets/themes/custom",
+                "bundleName": "custom",
                 "inject": false
               }
             ],
@@ -125,7 +125,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "kubermatic:build",
-            "proxyConfig": "./proxy.conf.js",
+            "proxyConfig": "./proxy.conf.cjs",
             "port": 8000
           },
           "configurations": {
@@ -133,7 +133,7 @@
               "browserTarget": "kubermatic:build:production"
             },
             "local": {
-              "proxyConfig": "./proxy-local.conf.js"
+              "proxyConfig": "./proxy-local.conf.cjs"
             },
             "e2e": {
               "hmr": false,
@@ -142,7 +142,7 @@
             "e2e-local": {
               "hmr": false,
               "browserTarget": "kubermatic:build:e2e-local",
-              "proxyConfig": "./proxy-local.conf.js"
+              "proxyConfig": "./proxy-local.conf.cjs"
             }
           }
         },
@@ -179,7 +179,6 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "kubermatic",
-      "styleext": "scss"
     },
     "@schematics/angular:directive": {
       "prefix": "kubermatic"

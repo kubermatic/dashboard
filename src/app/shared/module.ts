@@ -51,7 +51,6 @@ import {TabCardComponent} from '@shared/components/tab-card/component';
 import {TabComponent} from '@shared/components/tab-card/tab/component';
 import {LinkLocationPipe} from '@shared/pipes/linklocation';
 import {ClipboardModule} from 'ngx-clipboard';
-import {CustomFormsModule} from 'ngx-custom-validators';
 import {FilterPipeModule} from 'ngx-filter-pipe';
 import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {AddProjectDialogComponent} from './components/add-project-dialog/component';
@@ -91,7 +90,6 @@ const modules: any[] = [
   CommonModule,
   FormsModule,
   ReactiveFormsModule,
-  CustomFormsModule,
   FlexLayoutModule,
   MatButtonModule,
   MatIconModule,

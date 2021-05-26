@@ -32,9 +32,9 @@ export class SettingsService {
   private readonly _retryDelayTime = 3; // in seconds
   private _adminSettingsWatch$: Observable<AdminSettings>;
   private _admins$: Observable<Admin[]>;
-  private _adminsRefresh$ = new Subject();
+  private _adminsRefresh$ = new Subject<void>();
   private _customLinks$: Observable<CustomLink[]>;
-  private _customLinksRefresh$ = new Subject();
+  private _customLinksRefresh$ = new Subject<void>();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
   constructor(

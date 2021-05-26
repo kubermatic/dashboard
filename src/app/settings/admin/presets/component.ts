@@ -24,8 +24,7 @@ import {PresetsService} from '@core/services/wizard/presets';
 import {Datacenter} from '@shared/entity/datacenter';
 import {Preset, PresetList} from '@shared/entity/preset';
 import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
-import {merge, of, Subject} from 'rxjs';
-import {Observable} from 'rxjs/Observable';
+import {merge, Observable, of, Subject} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
 
 enum Column {

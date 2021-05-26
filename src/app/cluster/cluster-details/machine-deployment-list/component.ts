@@ -43,7 +43,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
   dataSource = new MatTableDataSource<MachineDeployment>();
   displayedColumns: string[] = ['status', 'name', 'labels', 'replicas', 'ver', 'os', 'created', 'actions'];
 
-  private _unsubscribe: Subject<any> = new Subject();
+  private _unsubscribe: Subject<void> = new Subject<void>();
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
 

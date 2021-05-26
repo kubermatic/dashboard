@@ -9,8 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import version from '@assets/config/version.json';
-
-export function getEditionDirName() {
-  return version.edition === 'Community Edition' ? 'community' : 'enterprise';
+declare module '*.json' {
+  const value: any;
+  export default value;
 }

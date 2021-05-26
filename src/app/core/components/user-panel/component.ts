@@ -29,7 +29,7 @@ import {takeUntil} from 'rxjs/operators';
 export class UserPanelComponent implements OnInit, OnDestroy {
   user: Member;
   private _isOpen = false;
-  private _unsubscribe: Subject<void> = new Subject();
+  private _unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
     private readonly _elementRef: ElementRef,
