@@ -22,17 +22,17 @@ limitations under the License.
         <mat-label>Name*</mat-label>
         <input id="km-edit-cluster-dialog-input"
                matInput
-               formControlName="name"
+               [formControlName]="Controls.Name"
                type="text"
                autocomplete="off"
                cdkFocusInitial>
-        <mat-error *ngIf="form.controls.name.hasError('required')">
+        <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
           Name is <strong>required</strong>.
         </mat-error>
-        <mat-error *ngIf="form.controls.name.hasError('minlength')">
-          Name must be at least {{form.controls.name.getError('minlength').requiredLength}} characters.
+        <mat-error *ngIf="form.get(Controls.Name).hasError('minlength')">
+          Name must be at least {{form.get(Controls.Name).getError('minlength').requiredLength}} characters.
         </mat-error>
-        <mat-error *ngIf="form.controls.name.hasError('pattern')">
+        <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
           Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
         </mat-error>
       </mat-form-field>
@@ -41,7 +41,7 @@ limitations under the License.
            fxLayout="column">
         <mat-form-field>
           <mat-label>Admission Plugins</mat-label>
-          <mat-select formControlName="admissionPlugins"
+          <mat-select [formControlName]="Controls.AdmissionPlugins"
                       multiple
                       panelClass="km-multiple-values-dropdown"
                       disableOptionCentering>
@@ -86,7 +86,7 @@ limitations under the License.
         <div fxLayout="row"
              fxLayoutGap="8px"
              fxLayoutAlign=" center">
-          <mat-checkbox formControlName="auditLogging">Audit Logging</mat-checkbox>
+          <mat-checkbox [formControlName]="Controls.AuditLogging">Audit Logging</mat-checkbox>
           <i *ngIf="!!datacenter.spec.enforceAuditLogging"
              class="km-icon-error km-warning"
              matTooltip="Audit Logging is enforced by your admin in the chosen datacenter.">
@@ -94,25 +94,25 @@ limitations under the License.
         </div>
       </div>
 
-      <mat-checkbox formControlName="opaIntegration">
+      <mat-checkbox [formControlName]="Controls.OPAIntegration">
         OPA Integration
-        <i *ngIf="isEnforced('opaIntegration')"
+        <i *ngIf="isEnforced(Controls.OPAIntegration)"
            class="km-icon-info km-pointer"
            matTooltip="OPA Integration is enforced by your admin."></i>
       </mat-checkbox>
 
-      <mat-checkbox formControlName="mlaLogging"
+      <mat-checkbox [formControlName]="Controls.MLALogging"
                     *ngIf="isMLAEnabled()">
         MLA Logging
-        <i *ngIf="isEnforced('mlaLogging')"
+        <i *ngIf="isEnforced(Controls.MLALogging)"
            class="km-icon-info km-pointer"
            matTooltip="MLA Logging is enforced by your admin."></i>
       </mat-checkbox>
 
-      <mat-checkbox formControlName="mlaMonitoring"
+      <mat-checkbox [formControlName]="Controls.MLAMonitoring"
                     *ngIf="isMLAEnabled()">
         MLA Monitoring
-        <i *ngIf="isEnforced('mlaMonitoring')"
+        <i *ngIf="isEnforced(Controls.MLAMonitoring)"
            class="km-icon-info km-pointer"
            matTooltip="MLA Monitoring is enforced by your admin."></i>
       </mat-checkbox>
@@ -121,7 +121,7 @@ limitations under the License.
                      [(labels)]="labels"
                      [inheritedLabels]="cluster.inheritedLabels"
                      [asyncKeyValidators]=asyncLabelValidators
-                     formControlName="labels"></km-label-form>
+                     [formControlName]="Controls.Labels"></km-label-form>
       <km-edit-provider-settings [cluster]="cluster"
                                  *ngIf="!cluster.spec.cloud.bringyourown"></km-edit-provider-settings>
     </form>

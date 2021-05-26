@@ -22,15 +22,10 @@ export interface AlertmanagerConfigDialogData {
   title: string;
   projectId: string;
   clusterId: string;
-  mode: Mode;
   confirmLabel: string;
 
   // Alertmanager Config has to be specified only if dialog is used in the edit mode.
   alertmanagerConfig?: AlertmanagerConfig;
-}
-
-export enum Mode {
-  Edit = 'edit',
 }
 
 @Component({
@@ -69,22 +64,17 @@ export class AlertmanagerConfigDialog implements OnInit, OnDestroy {
       },
     };
 
-    switch (this.data.mode) {
-      case Mode.Edit:
-        return this._edit(alertmanagerConfig);
-    }
+    this._edit(alertmanagerConfig);
   }
 
   private _initProviderConfigEditor(): void {
-    if (this.data.mode === Mode.Edit) {
-      const spec = this.data.alertmanagerConfig.spec.config;
-      if (!_.isEmpty(spec)) {
-        this.spec = atob(spec);
-      }
+    const spec = this.data.alertmanagerConfig.spec.config;
+    if (!_.isEmpty(spec)) {
+      this.spec = atob(spec);
     }
   }
 
-  private _getSpec(): any {
+  private _getSpec(): string {
     return btoa(this.spec);
   }
 

@@ -21,7 +21,7 @@ import {NotificationService} from '@core/services/notification';
 import {MLAService} from '@core/services/mla';
 import {SharedModule} from '@shared/module';
 import {NGX_MONACO_EDITOR_CONFIG, MonacoEditorModule} from 'ngx-monaco-editor';
-import {AlertmanagerConfigDialog, Mode} from './component';
+import {AlertmanagerConfigDialog} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule];
 
@@ -73,7 +73,6 @@ describe('AlertmanagerConfigDialog', () => {
         title: 'Edit Alertmanager Config',
         projectId: '123ab4cd5e',
         clusterId: '4k6txp5sq',
-        mode: Mode.Edit,
         confirmLabel: 'Edit',
         alertmanagerConfig: fakeAlertmanagerConfig(),
       };

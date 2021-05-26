@@ -19,7 +19,7 @@ import {AlertmanagerConfig} from '@shared/entity/mla';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take} from 'rxjs/operators';
-import {Mode, AlertmanagerConfigDialog} from './alertmanager-config-dialog/component';
+import {AlertmanagerConfigDialog} from './alertmanager-config-dialog/component';
 
 @Component({
   selector: 'km-alertmanager-config',
@@ -56,7 +56,6 @@ export class AlertmanagerConfigComponent implements OnDestroy {
         projectId: this.projectID,
         clusterId: this.cluster.id,
         alertmanagerConfig: this.alertmanagerConfig,
-        mode: Mode.Edit,
         confirmLabel: 'Edit',
       },
     };
