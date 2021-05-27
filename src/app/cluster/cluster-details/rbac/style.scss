@@ -11,12 +11,8 @@
 
 @import 'variables';
 
-.km-toggled-rbac {
-  padding-bottom: 8px;
-
-  mat-card-header {
-    border-radius: $border-radius;
-  }
+.actions-container {
+  padding: 0 30px;
 }
 
 h3 {
@@ -27,18 +23,4 @@ h3 {
   &:first-of-type {
     margin-top: 10px;
   }
-}
-
-.mat-card-title {
-  .km-icon-arrow-down,
-  .km-icon-arrow-up {
-    margin-left: 0;
-    margin-right: 18px;
-  }
-}
-
-.add-button {
-  position: absolute;
-  right: $content-padding;
-  top: $content-padding;
 }

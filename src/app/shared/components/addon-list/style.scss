@@ -17,6 +17,7 @@
 
   border-radius: $border-radius;
   font-size: $font-size-subhead;
+  margin-top: 10px;
   outline: none;
 
   .km-addon-logo-disabled {
@@ -32,10 +33,8 @@
   }
 }
 
-.km-new-addon-container {
-  cursor: pointer;
-
-  &.disabled {
-    cursor: default;
-  }
+.no-data-warning {
+  font-size: $font-size-body;
+  padding: 30px;
+  text-align: center;
 }

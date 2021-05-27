@@ -26,6 +26,7 @@ limitations under the License.
       <button mat-icon-button
               id="km-share-kubeconfig-btn"
               class="km-share-kubeconfig-btn"
+              color="alternative"
               (click)="shareConfigDialog()"
               [disabled]="!isClusterRunning"
               *ngIf="isShareConfigEnabled() | async"
@@ -33,6 +34,7 @@ limitations under the License.
         <i class="km-icon-mask km-icon-share"></i>
       </button>
       <button class="km-download-kubeconfig-btn"
+              color="alternative"
               mat-icon-button
               [disabled]="!isClusterRunning"
               matTooltip="Download config">
@@ -43,11 +45,9 @@ limitations under the License.
         </a>
       </button>
       <button mat-flat-button
-              color="alternative"
               (click)="addNode()"
               [fxHide]="nodeDc?.spec?.provider === 'bringyourown'"
               [disabled]="!isAddMachineDeploymentsEnabled()">
-
         Add Machine Deployment
       </button>
       <a class="km-open-kubernetes-dashboard-btn"
@@ -79,6 +79,7 @@ limitations under the License.
       <div fxFlex></div>
       <div class="km-provider-menu">
         <button mat-icon-button
+                color="tertiary"
                 class="km-provider-menu-btn"
                 [matMenuTriggerFor]="menu">
           <i class="km-icon-mask km-icon-points-menu"></i>
