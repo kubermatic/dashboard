@@ -89,7 +89,7 @@ describe('AlertmanagerConfigDialog', () => {
     });
 
     it('should have correct button text: edit', () => {
-      expect(document.body.querySelector('#km-alertmanager-config-dialog-btn').textContent).toContain(' Edit ');
+      expect(document.body.querySelector('#km-alertmanager-config-dialog-btn').textContent).toContain('Edit');
     });
 
     it('should call patchAlertmanagerConfig()', () => {

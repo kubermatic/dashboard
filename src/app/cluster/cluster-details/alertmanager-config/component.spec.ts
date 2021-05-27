@@ -75,7 +75,7 @@ describe('AlertmanagerConfigComponent', () => {
     const resetButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
 
     expect(dialogTitle.textContent).toBe('Reset Alertmanager Config');
-    expect(resetButton.textContent).toBe(' Reset ');
+    expect(resetButton.textContent).toContain('Reset');
 
     resetButton.click();
 
